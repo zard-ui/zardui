@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://zardui.com
+
+# Sitemaps
+Sitemap: https://zardui.com/sitemap.xml
