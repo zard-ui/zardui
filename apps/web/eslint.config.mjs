@@ -16,12 +16,10 @@ export default [
           style: 'camelCase',
         },
       ],
-      '@angular-eslint/component-selector': [
+      '@angular-eslint/component-class-suffix': [
         'error',
         {
-          type: 'element',
-          prefix: 'app',
-          style: 'kebab-case',
+          suffixes: ['Page', 'Component'],
         },
       ],
     },

@@ -10,6 +10,7 @@
   "importSorter.sortConfiguration.removeUnusedImports": true,
   "importSorter.importStringConfiguration.maximumNumberOfImportExpressionsPerLine.type": "newLineEachExpressionAfterCountLimitExceptIfOnlyOne",
   "importSorter.importStringConfiguration.maximumNumberOfImportExpressionsPerLine.count": 180,
+  "importSorter.importStringConfiguration.hasSemicolon": true,
   "commit-message-editor.view.defaultView": "form",
   "commit-message-editor.dynamicTemplate": [
     "{type}{scope}{breaking_change}: {description}{taskid}"
@@ -113,4 +114,8 @@
       "default": false
     }
   ],
+  "cSpell.words": [
+    "zard"
+  ],
+  "discord.enabled": true,
 }
