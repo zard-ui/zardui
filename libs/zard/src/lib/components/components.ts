@@ -1,1 +1,1 @@
-export * from './test/zard.component';
+export * from './input/input.component';
