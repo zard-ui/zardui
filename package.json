@@ -16,8 +16,11 @@
     "@angular/platform-browser-dynamic": "~19.1.0",
     "@angular/router": "~19.1.0",
     "@tailwindcss/postcss": "^4.0.10",
+    "class-variance-authority": "^0.7.1",
+    "material-icons": "^1.13.14",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
+    "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.10",
     "zone.js": "~0.15.0"
   },

@@ -1,4 +1,5 @@
-/* You can add global styles to this file, and also import other style files */
+@forward 'material-icons/iconfont/material-icons.css';
+
 @forward "tailwindcss";
 @custom-variant dark (&:is(.dark *));
 
@@ -111,7 +112,7 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 }
- 
+
 @layer base {
   * {
     @apply border-border outline-ring/50;
@@ -119,4 +120,8 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.material-icons-outlined {
+  font-size: 1rem;
 }
