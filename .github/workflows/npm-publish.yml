@@ -20,6 +20,8 @@ jobs:
         with:
           node-version: 20
           registry-url: https://registry.npmjs.org/
+      - run: git config --global user.email "zardui.adm@example.com"
+      - run: git config --global user.name "ZardUI"
       - run: npm ci
       - run: npm run build
       - run: npm run test
