@@ -1,3 +1,13 @@
+## 0.0.4 (2025-03-09)
+
+### 🩹 Fixes
+
+- change package name ([bf60a99](https://github.com/zard-ui/zardui/commit/bf60a99))
+
+### ❤️ Thank You
+
+- Henrique Custódia @henriquecustodia
+
 ## 0.0.3 (2025-03-09)
 
 ### 🩹 Fixes
