@@ -1,5 +1,5 @@
 {
-  "name": "@zard/ui",
+  "name": "@ngzard/ui",
   "version": "0.0.3",
   "peerDependencies": {
     "@angular/common": "^19.1.0",
