@@ -6,7 +6,7 @@
     "prepare": "husky",
     "build": "nx run-many --target=build --p=libs/*",
     "test": "nx run-many --target=test --p=libs/*",
-    "release": "nx release"
+    "release": "nx release --yes --verbose"
   },
   "private": true,
   "engines": {
