@@ -3,9 +3,15 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "prepare": "husky"
+    "prepare": "husky",
+    "build": "nx run-many --target=build --p=libs/*",
+    "test": "nx run-many --target=test --p=libs/*",
+    "release": "nx release"
   },
   "private": true,
+  "engines": {
+    "node": "22 || 20"
+  },
   "dependencies": {
     "@angular/animations": "~19.1.0",
     "@angular/common": "~19.1.0",
