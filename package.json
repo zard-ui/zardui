@@ -8,7 +8,6 @@
     "test": "nx run-many --target=test --p=libs/*",
     "release": "nx release --yes --verbose"
   },
-  "private": true,
   "engines": {
     "node": "22 || 20"
   },
