@@ -1,3 +1,13 @@
+## 0.0.3 (2025-03-09)
+
+### 🩹 Fixes
+
+- test ([824600c](https://github.com/zard-ui/zardui/commit/824600c))
+
+### ❤️ Thank You
+
+- Henrique Custódia @henriquecustodia
+
 ## 0.0.2 (2025-03-09)
 
 ### 🩹 Fixes
