@@ -1,0 +1,44 @@
+<div class="component" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <section scrollSpyItem="overview" id="overview">
+    <markdown src="components/{{ componentData.componentName }}/doc/overview.md" clipboard ngPreserveWhitespaces> </markdown>
+  </section>
+
+  <hr />
+
+  <section class="flex flex-col gap-4">
+    <markdown> ## Examples </markdown>
+
+    @for (item of componentData.examples; track $index) {
+      <z-code-box
+        [scrollSpyItem]="item.name"
+        [attr.id]="item.name"
+        path="{{ componentData.componentName }}/demo/{{ item.name }}"
+        [dynamicComponent]="item.component"
+        [onlyDemo]="item.onlyDemo"
+      ></z-code-box>
+    }
+  </section>
+
+  <hr />
+
+  <section scrollSpyItem="api" id="api">
+    <markdown class="api" src="components/{{ componentData.componentName }}/doc/api.md" ngPreserveWhitespaces> </markdown>
+  </section>
+</div>
+
+<div class="anchor">
+  <ul>
+    <li [class.active]="activeAnchor === 'overview'">
+      <span (click)="scrollToAnchor('overview')">Overview</span>
+    </li>
+
+    @for (item of componentData.examples; track $index) {
+      <li [class.active]="activeAnchor === item.name">
+        <span (click)="scrollToAnchor(item.name)">{{ item.name | titlecase }}</span>
+      </li>
+    }
+    <li [class.active]="activeAnchor === 'api'">
+      <span (click)="scrollToAnchor('api')">Api</span>
+    </li>
+  </ul>
+</div>

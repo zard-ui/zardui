@@ -1,0 +1,11 @@
+<div class="shell" [class.open]="sidebarOpen">
+  <!-- <div *ngIf="sidebarOpen" class="background-menu" (click)="sidebarOpen = false"></div> -->
+
+  <!-- <app-sidebar [open]="sidebarOpen" (openChange)="sidebarOpen = $event"></app-sidebar> -->
+
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+
+  <!-- <app-footer></app-footer> -->
+</div>

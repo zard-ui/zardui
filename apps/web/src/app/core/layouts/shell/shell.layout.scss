@@ -1,0 +1,41 @@
+@import "medias";
+
+.shell {
+    // margin-left: 24px;
+    transition: 0.5s ease-in-out;
+
+    // &.open {
+    //     @include min-tablet {
+    //         margin-left: 250px;
+    //     }
+    // }
+
+    @include max-tablet {
+        .background-menu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--fds-color--white);
+            opacity: 0.5;
+            z-index: 2;
+        }
+    }
+
+    .container {
+        padding: 40px;
+        flex: 1;
+        transition: 0.5s ease-in-out;
+
+        @include max-tablet {
+            padding: 24px 16px 24px 24px;
+        }
+
+        @include min-tablet {
+            &:has(.anchor) {
+                margin-right: 150px;
+            }
+        }
+    }
+}

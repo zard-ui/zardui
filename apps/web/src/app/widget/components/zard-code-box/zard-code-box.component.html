@@ -1,0 +1,28 @@
+<div class="code-box">
+  <div class="code-box-demo">
+    <ng-content></ng-content>
+    <ng-container *ngComponentOutlet="dynamicComponent"></ng-container>
+  </div>
+
+  @if (!onlyDemo) {
+    <div class="code-box-body">
+      <markdown class="fmc-table" src="components/{{ path }}.md" ngPreserveWhitespaces> </markdown>
+    </div>
+  }
+  @if (!onlyDemo) {
+    <div class="code-box-actions">
+      <button z-button zType="ghost" (click)="showCodeButton = !showCodeButton">
+        @if (showCodeButton) {
+          <span>Hide code</span>
+        } @else {
+          <span>Show code</span>
+        }
+      </button>
+    </div>
+  }
+  @if (showCodeButton) {
+    <div class="code-box-code language-html">
+      <markdown src="components/{{ path }}.ts" clipboard ngPreserveWhitespaces> </markdown>
+    </div>
+  }
+</div>
