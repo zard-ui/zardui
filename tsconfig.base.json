@@ -15,8 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@zard/*": ["libs/zard/src/index.ts"],
-      "zard": ["lib/src/index.ts"]
+      "@zard/*": ["libs/zard/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
