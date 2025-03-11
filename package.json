@@ -2,17 +2,20 @@
   "name": "@zard/source",
   "version": "0.0.0",
   "license": "MIT",
+  "type": "module",
   "scripts": {
     "prepare": "husky",
     "build": "nx run-many --target=build --p=libs/*",
     "test": "nx run-many --target=test --p=libs/*",
-    "release": "nx release --yes --verbose"
+    "release": "nx release --yes --verbose",
+    "watch:files": "npx tsx scripts/generate-files.cts"
   },
   "engines": {
     "node": "22 || 20"
   },
   "dependencies": {
     "@angular/animations": "~19.1.0",
+    "@angular/cdk": "^19.1.0",
     "@angular/common": "~19.1.0",
     "@angular/compiler": "~19.1.0",
     "@angular/core": "~19.1.0",
@@ -23,6 +26,7 @@
     "@tailwindcss/postcss": "^4.0.10",
     "class-variance-authority": "^0.7.1",
     "material-icons": "^1.13.14",
+    "ngx-markdown": "^19.1.0",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
     "tailwind-merge": "^3.0.2",
