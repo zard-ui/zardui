@@ -1,11 +1,24 @@
-<div class="shell" [class.open]="sidebarOpen">
-  <!-- <div *ngIf="sidebarOpen" class="background-menu" (click)="sidebarOpen = false"></div> -->
+<div class="flex h-full">
+  <div class="hidden md:block fixed left-0 top-0 h-full w-[250px] p-4 border-r border-gray-200 bg-white">
+    <img src="images/zard.svg" alt="logo" class="h-12 mx-auto" />
 
-  <!-- <app-sidebar [open]="sidebarOpen" (openChange)="sidebarOpen = $event"></app-sidebar> -->
-
-  <div class="container">
-    <router-outlet></router-outlet>
+    <div class="mt-8">
+      <ul class="space-y-2">
+        <li class="text-sm">
+          <a z-button zType="ghost" zFull routerLink="/" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }" class="block"> Home </a>
+        </li>
+        <li class="text-sm">
+          <a z-button zType="ghost" zFull routerLink="/components/button" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }" class="block"> Button </a>
+        </li>
+        <li class="text-sm">
+          <a z-button zType="ghost" zFull routerLink="/components/card" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }" class="block"> Card </a>
+        </li>
+      </ul>
+    </div>
   </div>
 
-  <!-- <app-footer></app-footer> -->
+  <div class="p-8 md:ml-[250px] w-full">
+    <router-outlet></router-outlet>
+  </div>
 </div>
+;

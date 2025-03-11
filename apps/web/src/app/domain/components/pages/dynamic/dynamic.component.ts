@@ -1,13 +1,12 @@
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { COMPONENTS } from 'apps/web/src/app/shared/constants/components.constant';
-// eslint-disable-next-line @nx/enforce-module-boundaries
-import { ZardCodeBoxComponent } from 'apps/web/src/app/widget/components/zard-code-box/zard-code-box.component';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
+import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
 
+import { DynamicAnchorComponent } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
@@ -16,11 +15,11 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   templateUrl: './dynamic.component.html',
   styleUrls: ['./dynamic.component.scss'],
   standalone: true,
-  imports: [CommonModule, MarkdownModule, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective],
+  imports: [CommonModule, DynamicAnchorComponent, MarkdownModule, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective],
 })
 export class DynamicComponent {
   activeAnchor?: string;
-  componentData: any;
+  componentData?: ComponentData;
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -33,11 +32,6 @@ export class DynamicComponent {
     this.loadData();
   }
 
-  scrollToAnchor(anchor: string) {
-    this.activeAnchor = anchor;
-    this.viewportScroller.scrollToAnchor(anchor);
-  }
-
   private loadData() {
     this.viewportScroller.scrollToPosition([0, 0]);
     const componentName = this.activatedRoute.snapshot.paramMap.get('componentName');
@@ -46,6 +40,6 @@ export class DynamicComponent {
     const component = COMPONENTS.find(x => x.componentName === componentName);
 
     if (!component) this.router.navigateByUrl('/');
-    this.componentData = component;
+    else this.componentData = component;
   }
 }

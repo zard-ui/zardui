@@ -16,7 +16,7 @@ export class ScrollSpyDirective {
   @HostListener('window:scroll', ['$event'])
   onScroll(event: any) {
     let currentSection: string | undefined;
-    const scrollTop = event.target.scrollingElement.scrollTop;
+    const scrollTop = event.target.scrollingElement.scrollTop + 5;
     const parentOffset = event.target.scrollingElement.offsetTop;
 
     this.items?.forEach(item => {

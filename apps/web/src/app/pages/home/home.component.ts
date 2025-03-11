@@ -1,9 +1,9 @@
-import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 @Component({
   imports: [RouterModule],
-  selector: 'app-home',
+  selector: 'z-home',
   templateUrl: './home.component.html',
 })
 export class HomeComponent {}
