@@ -1,0 +1,16 @@
+<div class="anchor">
+  <ul>
+    <li [class.active]="activeAnchor() === 'overview'">
+      <span (click)="scrollToAnchor('overview')">Overview</span>
+    </li>
+
+    @for (item of componentData()?.examples; track $index) {
+      <li [class.active]="activeAnchor() === item.name">
+        <span (click)="scrollToAnchor(item.name)">{{ item.name | titlecase }}</span>
+      </li>
+    }
+    <li [class.active]="activeAnchor() === 'api'">
+      <span (click)="scrollToAnchor('api')">Api</span>
+    </li>
+  </ul>
+</div>
