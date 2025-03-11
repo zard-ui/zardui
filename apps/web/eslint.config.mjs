@@ -8,20 +8,18 @@ export default [
   {
     files: ['**/*.ts'],
     rules: {
-      '@angular-eslint/directive-selector': [
-        'error',
-        {
-          type: 'attribute',
-          prefix: 'app',
-          style: 'camelCase',
-        },
-      ],
       '@angular-eslint/component-selector': [
         'error',
         {
           type: 'element',
-          prefix: 'app',
+          prefix: 'z',
           style: 'kebab-case',
+        },
+      ],
+      '@angular-eslint/component-class-suffix': [
+        'error',
+        {
+          suffixes: ['Page', 'Component', 'Layout', 'Dialog'],
         },
       ],
     },
@@ -29,6 +27,9 @@ export default [
   {
     files: ['**/*.html'],
     // Override or add rules here
-    rules: {},
+    rules: {
+      '@angular-eslint/template/click-events-have-key-events': 'off',
+      '@angular-eslint/template/interactive-supports-focus': 'off',
+    },
   },
 ];

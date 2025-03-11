@@ -22,8 +22,11 @@
             "input": "apps/web/public"
           }
         ],
-        "styles": ["apps/web/src/styles.scss"],
-        "scripts": []
+        "styles": ["apps/web/public/prismjs/themes/prism-vsc-dark-plus.css", "apps/web/src/styles.scss"],
+        "stylePreprocessorOptions": {
+          "includePaths": ["apps/web/src/scss"]
+        },
+        "scripts": ["node_modules/clipboard/dist/clipboard.min.js", "node_modules/prismjs/prism.js", "node_modules/prismjs/components/prism-typescript.min.js"]
       },
       "configurations": {
         "production": {

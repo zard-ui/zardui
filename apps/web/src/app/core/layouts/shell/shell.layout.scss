@@ -1,0 +1,21 @@
+@use "medias" as *;
+
+.shell {
+    transition: 0.5s ease-in-out;
+
+    .container {
+        padding: 40px;
+        flex: 1;
+        transition: 0.5s ease-in-out;
+
+        @include max-tablet {
+            padding: 24px 16px 24px 24px;
+        }
+
+        @include min-tablet {
+            &:has(.anchor) {
+                margin-right: 150px;
+            }
+        }
+    }
+}

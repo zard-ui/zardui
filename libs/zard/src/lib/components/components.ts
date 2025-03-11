@@ -1,1 +1,2 @@
-export * from './test/zard.component';
+export * from './button/button.component';
+export * from './icon/icon.directive';

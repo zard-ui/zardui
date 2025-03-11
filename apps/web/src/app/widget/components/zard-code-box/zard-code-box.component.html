@@ -1,0 +1,29 @@
+<z-card>
+  <div class="mb-4">
+    <ng-content></ng-content>
+    <ng-container *ngComponentOutlet="dynamicComponent"></ng-container>
+  </div>
+
+  @if (!onlyDemo) {
+    <div class="flex flex-col gap-4 p-4 bg-gray-100 rounded-md">
+      <markdown src="components/{{ path }}.md" ngPreserveWhitespaces> </markdown>
+    </div>
+  }
+  @if (!onlyDemo) {
+    <div class="text-center mt-4">
+      <button z-button zType="ghost" (click)="showCodeButton = !showCodeButton">
+        <span z-icon zType="code"></span>
+        @if (showCodeButton) {
+          <span> Hide code </span>
+        } @else {
+          <span>Show code</span>
+        }
+      </button>
+    </div>
+  }
+  @if (showCodeButton) {
+    <div class="m-2 rounded-md language-html">
+      <markdown src="components/{{ path }}.ts" clipboard ngPreserveWhitespaces> </markdown>
+    </div>
+  }
+</z-card>

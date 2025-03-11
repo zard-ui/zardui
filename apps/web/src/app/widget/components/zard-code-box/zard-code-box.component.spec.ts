@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ZardComponent } from './zard.component';
+import { ZardCodeBoxComponent } from './zard-code-box.component';
 
-describe('ZardComponent', () => {
-  let component: ZardComponent;
-  let fixture: ComponentFixture<ZardComponent>;
+describe('ZardCodeBoxComponent', () => {
+  let component: ZardCodeBoxComponent;
+  let fixture: ComponentFixture<ZardCodeBoxComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ZardComponent],
+      imports: [ZardCodeBoxComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ZardComponent);
+    fixture = TestBed.createComponent(ZardCodeBoxComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
