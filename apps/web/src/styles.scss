@@ -224,7 +224,7 @@ markdown {
   @apply flex flex-col gap-2;
 
   table {
-    @apply w-full caption-bottom text-sm;
+    @apply w-full caption-bottom text-sm block overflow-auto;
 
     thead {
       @apply border-b;
@@ -253,7 +253,7 @@ markdown {
 }
 
 .anchor {
-  @apply border-l border-gray-200 pl-6 fixed right-12 top-10 transition duration-500 ease-in-out;
+  @apply border-l border-gray-200 pl-6 fixed right-12 top-0 transition duration-500 ease-in-out mt-24;
 
   @media (max-width: 768px) {
     @apply right-[-100px];
