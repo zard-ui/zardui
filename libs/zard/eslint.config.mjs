@@ -22,8 +22,16 @@ export default [
   {
     files: ['**/*.ts'],
     rules: {
-      '@angular-eslint/component-selector': [
+      '@angular-eslint/directive-selector': [
         'error',
+        {
+          type: 'attribute',
+          prefix: 'z',
+          style: 'camelCase',
+        },
+      ],
+      '@angular-eslint/component-selector': [
+        'off',
         {
           type: 'element',
           prefix: 'z',
