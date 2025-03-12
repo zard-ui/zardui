@@ -4,6 +4,9 @@
 |-----Figma-----|
 |-----Implementation-----|
 
+## Link to Issue 🔗
+<!-- provide the link to the related issue here -->
+
 ## Type of change 🏗
 - [ ] New feature (non-breaking change that adds functionality)
 - [ ] Bug fix (non-breaking change that fixes an issue)
