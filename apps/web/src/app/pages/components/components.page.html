@@ -1,9 +1,107 @@
-<h1>Components</h1>
+<section class="container mx-auto p-4">
+  <h1 class="text-3xl font-bold mb-4">Components</h1>
 
-<div>
-  <input type="text" z-input placeholder="default" />
-  <input type="text" z-input zType="primary" placeholder="primary" />
-  <input type="text" z-input zType="secondary" placeholder="secondary" />
-  <input type="text" z-input zType="destructive" placeholder="destructive" />
-  <input type="file" z-input />
-</div>
+  <section class="mb-4">
+    <h2 class="scroll-m-20 text-3xl font-bold tracking-tight mb-2">Button</h2>
+    <p class="text-base text-muted-foreground mb-4">Displays a button or a component that looks like a button.</p>
+
+    <div class="bg-white border border-gray-200 p-4 rounded mb-4">
+      <h3 class="mb-4 text-xl font-bold">Type</h3>
+
+      <div class="flex gap-4 flex-wrap">
+        <button z-button>Default</button>
+        <button z-button zType="destructive">Destructive</button>
+        <button z-button zType="outline">Outline</button>
+        <button z-button zType="secondary">Secondary</button>
+        <button z-button zType="ghost">Ghost</button>
+        <button z-button zType="link">Link</button>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 p-4 rounded mb-4">
+      <h3 class="mb-4 text-xl font-bold">Icon</h3>
+
+      <div class="flex gap-4 flex-wrap">
+        <button z-button>
+          <span z-icon zType="favorite"></span>
+        </button>
+
+        <button z-button zType="destructive">
+          <span z-icon zType="delete"></span>
+        </button>
+
+        <button z-button zType="outline">
+          <span z-icon zType="edit"></span>
+        </button>
+
+        <button z-button zType="secondary" (click)="visible = !visible">
+          <span z-icon [zType]="visible ? 'visibility_off' : 'visibility'"></span>
+        </button>
+
+        <button z-button zType="ghost">
+          <span z-icon zType="add"></span>
+        </button>
+
+        <button z-button zType="link">
+          <span z-icon zType="info"></span>
+        </button>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 p-4 rounded mb-4">
+      <h3 class="mb-4 text-xl font-bold">Size</h3>
+
+      <div class="flex gap-4 flex-wrap">
+        <button z-button zSize="sm">Small</button>
+        <button z-button>Default</button>
+        <button z-button zSize="lg">Large</button>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 p-4 rounded mb-4">
+      <h3 class="mb-4 text-xl font-bold">Shape</h3>
+
+      <div class="flex gap-4 flex-wrap">
+        <button z-button>Default</button>
+        <button z-button zShape="circle">Circle</button>
+        <button z-button zShape="square">Square</button>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 p-4 rounded mb-4">
+      <h3 class="mb-4 text-xl font-bold">Full</h3>
+
+      <div class="flex gap-4 flex-wrap">
+        <button z-button zFull>Full Default</button>
+        <button z-button zFull zType="destructive">Full Destructive</button>
+        <button z-button zFull zType="outline">Full Outline</button>
+        <button z-button zFull zType="secondary">Full Secondary</button>
+        <button z-button zFull zType="ghost">Full Ghost</button>
+        <button z-button zFull zType="link">Full Link</button>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 p-4 rounded mb-4">
+      <h3 class="mb-4 text-xl font-bold">Loading</h3>
+
+      <div class="flex gap-4 flex-wrap">
+        <button z-button zLoading zSize="sm">Loading</button>
+        <button z-button zLoading>Loading</button>
+        <button z-button zLoading zShape="circle">Loading</button>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-200 p-4 rounded mb-4">
+      <h3 class="mb-4 text-xl font-bold">Disabled</h3>
+
+      <div class="flex gap-4 flex-wrap">
+        <button z-button disabled>Default</button>
+        <button z-button disabled zType="destructive">Destructive</button>
+        <button z-button disabled zType="outline">Outline</button>
+        <button z-button disabled zType="secondary">Secondary</button>
+        <button z-button disabled zType="ghost">Ghost</button>
+        <button z-button disabled zType="link">Link</button>
+      </div>
+    </div>
+  </section>
+</section>

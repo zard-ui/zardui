@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
-import { ZardInputDirective } from '@zard/components';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardIconDirective } from '@zard/components/icon/icon.directive';
 
 @Component({
-  selector: 'app-components',
-  imports: [ZardInputDirective],
+  selector: 'z-components',
+  imports: [ZardButtonComponent, ZardIconDirective],
   templateUrl: './components.page.html',
   styleUrl: './components.page.scss',
 })
-export class ComponentsPage {}
+export class ComponentsPage {
+  visible = false;
+}
