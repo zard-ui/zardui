@@ -1,6 +1,6 @@
-@forward 'material-icons/iconfont/material-icons.css';
-
 @forward "tailwindcss";
+@forward 'lucide-static/font/lucide.css';
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -37,6 +37,7 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  --font-family: "Geist", sans-serif;
 }
 
 .dark {
@@ -75,6 +76,7 @@
 }
 
 @theme inline {
+  --font-sans: var(--font-family);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -121,6 +123,7 @@
     @apply bg-background text-foreground;
   }
 }
+
 
 .material-icons-outlined {
   font-size: 1rem;
