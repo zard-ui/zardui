@@ -1,10 +1,13 @@
-import { ComponentType } from '@angular/cdk/overlay';
-import { ZardDemoButtonBasicComponent } from '@zard/components/button/demo/basic';
-import { ZardDemoButtonFullComponent } from '@zard/components/button/demo/full';
+import { ZardDemoCheckboxShapeComponent } from '@zard/components/checkbox/demo/shape';
+import { ZardDemoCheckboxBasicComponent } from '@zard/components/checkbox/demo/basic';
 import { ZardDemoButtonLoadingComponent } from '@zard/components/button/demo/loading';
+import { ZardDemoCheckboxSizeComponent } from '@zard/components/checkbox/demo/size';
 import { ZardDemoButtonShapeComponent } from '@zard/components/button/demo/shape';
+import { ZardDemoButtonBasicComponent } from '@zard/components/button/demo/basic';
 import { ZardDemoButtonSizeComponent } from '@zard/components/button/demo/size';
+import { ZardDemoButtonFullComponent } from '@zard/components/button/demo/full';
 import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
+import { ComponentType } from '@angular/cdk/overlay';
 
 export interface ComponentData {
   componentName: string;
@@ -49,6 +52,23 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'basic',
         component: ZardDemoCardBasicComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'checkbox',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoCheckboxBasicComponent,
+      },
+      {
+        name: 'size',
+        component: ZardDemoCheckboxSizeComponent,
+      },
+      {
+        name: 'shape',
+        component: ZardDemoCheckboxShapeComponent,
       },
     ],
   },
