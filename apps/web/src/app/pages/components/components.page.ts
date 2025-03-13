@@ -1,10 +1,9 @@
-import { Component } from '@angular/core';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardIconDirective } from '@zard/components/icon/icon.directive';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'z-components',
-  imports: [ZardButtonComponent, ZardIconDirective],
+  imports: [ZardButtonComponent],
   templateUrl: './components.page.html',
   styleUrl: './components.page.scss',
 })
