@@ -3,18 +3,17 @@ import { cva, VariantProps } from 'class-variance-authority';
 export type zInputIcon = 'email' | 'password' | 'text';
 
 export const inputVariants = cva(
-  'flex h-10 w-full rounded-md border bg-background px-3 py-2 file:border-0 file:bg-transparent file:text-sm file:text-foreground file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+  'flex rounded-md border px-4 font-normal border-input bg-transparent text-base md:text-sm ring-offset-background file:border-0 file:text-foreground file:bg-transparent file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
-      zType: {
-        default: 'border-input text-base focus-visible:ring-ring',
-        primary: 'border-primary text-primary placeholder:text-primary focus-visible:ring-primary',
-        secondary: 'border-secondary text-secondary-foreground placeholder:text-secondary-foreground focus-visible:ring-secondary',
-        destructive: 'border-destructive text-destructive placeholder:text-destructive/50 focus-visible:ring-destructive',
+      zSize: {
+        default: 'h-10 py-2 file:max-md:py-0',
+        small: 'h-9 file:md:py-2 file:max-md:py-1.5',
+        large: 'h-11 py-1 file:md:py-3 file:max-md:py-2.5',
       },
     },
     defaultVariants: {
-      zType: 'default',
+      zSize: 'default',
     },
   },
 );

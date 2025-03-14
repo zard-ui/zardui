@@ -21,8 +21,8 @@ import { inputVariants, ZardInputVariants } from './input.variants';
 export class ZardInputComponent {
   protected elementRef = inject<ElementRef<HTMLInputElement>>(ElementRef);
 
-  readonly zType = input<ZardInputVariants['zType']>('default');
+  readonly zSize = input<ZardInputVariants['zSize']>('default');
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(inputVariants({ zType: this.zType() }), this.class()));
+  protected readonly classes = computed(() => mergeClasses(inputVariants({ zSize: this.zSize() }), this.class()));
 }

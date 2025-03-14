@@ -6,16 +6,15 @@ import { ZardInputComponent } from '../input.component';
   standalone: true,
   imports: [ZardInputComponent],
   template: `
-    <input z-input zType="default" placeholder="Default" />
-    <input z-input zType="primary" placeholder="Primary" />
-    <input z-input zType="secondary" placeholder="Secondary" />
-    <input z-input zType="destructive" placeholder="Destructive" />
+    <input z-input zSize="small" placeholder="small size" />
+    <input z-input zSize="default" placeholder="default size" />
+    <input z-input zSize="large" placeholder="large size" />
   `,
   styles: [
     `
       :host {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 24px;
       }
     `,

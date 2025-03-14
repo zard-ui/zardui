@@ -1,3 +1,3 @@
 **Basic usage**
 
-There are some alternatives for `z-input`: `default`, `primary`, `secondary`, and `destructive`.
+There are some alternatives for `z-input`: `default`, `small`, and `large`.
