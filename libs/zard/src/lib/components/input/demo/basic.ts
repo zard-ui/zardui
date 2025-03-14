@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
-import { ZardInputComponent } from '../input.component';
+import { ZardInputDirective } from '../input.directive';
 
 @Component({
   standalone: true,
-  imports: [ZardInputComponent],
+  imports: [ZardInputDirective],
   template: `
     <input z-input zSize="small" placeholder="small size" />
     <input z-input zSize="default" placeholder="default size" />
