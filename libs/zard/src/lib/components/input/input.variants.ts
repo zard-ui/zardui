@@ -16,6 +16,9 @@ export const inputVariants = cva(
         warning: 'border-yellow-500 focus-visible:ring-yellow-500',
         success: 'border-green-500 focus-visible:ring-green-500',
       },
+      zBorderless: {
+        true: 'border-0 focus-visible:ring-0',
+      },
     },
     defaultVariants: {
       zSize: 'default',
