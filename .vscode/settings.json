@@ -117,4 +117,7 @@
     "zard",
     "Zard"
   ],
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
 }

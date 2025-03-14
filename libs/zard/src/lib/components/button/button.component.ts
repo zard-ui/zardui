@@ -1,10 +1,8 @@
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
-
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardIconDirective } from '../icon/icon.directive';
 import { buttonVariants, ZardButtonVariants } from './button.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',
@@ -14,12 +12,11 @@ import { buttonVariants, ZardButtonVariants } from './button.variants';
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (zLoading()) {
-      <span z-icon zType="cached" class="animate-spin"></span>
+      <span zType="cached" class="icon-loader-circle animate-spin"></span>
     }
 
     <ng-content></ng-content>
   `,
-  imports: [ZardIconDirective],
   host: {
     '[class]': 'classes()',
   },
