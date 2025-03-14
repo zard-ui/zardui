@@ -11,6 +11,11 @@ export const inputVariants = cva(
         small: 'h-9 file:md:py-2 file:max-md:py-1.5',
         large: 'h-11 py-1 file:md:py-3 file:max-md:py-2.5',
       },
+      zStatus: {
+        error: 'border-destructive focus-visible:ring-destructive',
+        warning: 'border-yellow-500 focus-visible:ring-yellow-500',
+        success: 'border-green-500 focus-visible:ring-green-500',
+      },
     },
     defaultVariants: {
       zSize: 'default',

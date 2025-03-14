@@ -6,6 +6,7 @@ import { ZardDemoButtonShapeComponent } from '@zard/components/button/demo/shape
 import { ZardDemoButtonSizeComponent } from '@zard/components/button/demo/size';
 import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
 import { ZardDemoInputBasicComponent } from '@zard/components/input/demo/basic';
+import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
 
 export interface ComponentData {
   componentName: string;
@@ -59,6 +60,10 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'basic',
         component: ZardDemoInputBasicComponent,
+      },
+      {
+        name: 'status',
+        component: ZardDemoInputStatusComponent,
       },
     ],
   },
