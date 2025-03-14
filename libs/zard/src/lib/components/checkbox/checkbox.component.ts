@@ -14,13 +14,7 @@ type OnChangeType = (value: any) => void;
   standalone: true,
   exportAs: 'zCheckbox',
   template: `
-    <span
-      class="flex items-center gap-2"
-      [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'"
-      (click)="onCheckboxChange()"
-      (keydown.enter)="onCheckboxChange()"
-      tabindex="0"
-    >
+    <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onCheckboxChange()">
       <main class="flex relative">
         <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onCheckboxBlur()" name="checkbox" />
         <i
