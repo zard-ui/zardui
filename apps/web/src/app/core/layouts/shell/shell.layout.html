@@ -1,35 +1,6 @@
-<div class="flex h-ful">
-  <header class="fixed top-0 left-0 w-full z-10">
-    <div class="flex items-center justify-between p-4 border-b border-gray-200 bg-white h-16">
-      <img src="images/zard.svg" alt="logo" class="h-8" />
-      <div class="flex items -center space-x-4">
-        <a z-button zType="ghost" zSize="icon" routerLink="https://github.com/zard-ui/zardui" target="_blank">
-          <img src="icons/github.svg" alt="github icon" class="h-4" />
-        </a>
-      </div>
-    </div>
-  </header>
+<app-header></app-header>
 
-  <div class="hidden md:block fixed left-0 top-0 h-full w-[250px] p-4 border-r border-gray-200 bg-white mt-16">
-    <div class="mt-4">
-      <ul class="space-y-2">
-        <li class="text-sm">
-          <a z-button zType="ghost" zFull routerLink="/" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }" class="block"> Home </a>
-        </li>
-        <li class="text-sm">
-          <a z-button zType="ghost" zFull routerLink="/components/button" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }" class="block"> Button </a>
-        </li>
-        <li class="text-sm">
-          <a z-button zType="ghost" zFull routerLink="/components/card" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }" class="block"> Card </a>
-        </li>
-        <li class="text-sm">
-          <a z-button zType="ghost" zFull routerLink="/components/input" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }" class="block"> Input </a>
-        </li>
-      </ul>
-    </div>
-  </div>
-
-  <div class="p-8 md:ml-[250px] w-full mt-16">
-    <router-outlet></router-outlet>
-  </div>
-</div>
+<main class="relative max-w-[90rem] mx-auto px-4 flex-1 min-h-screen">
+  <router-outlet></router-outlet>
+</main>
+<app-footer></app-footer>

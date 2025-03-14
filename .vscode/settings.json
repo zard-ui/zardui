@@ -119,5 +119,7 @@
     "zard",
     "Zard"
   ],
-  "discord.enabled": true,
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
 }

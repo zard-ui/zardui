@@ -32,6 +32,7 @@
     "rxjs": "~7.8.0",
     "tailwind-merge": "^3.0.2",
     "tailwindcss": "^4.0.10",
+    "lucide-static": "^0.479.0",
     "zone.js": "~0.15.0"
   },
   "devDependencies": {
