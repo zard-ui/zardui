@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewEncapsulation, forwardRef, Input, Output, EventEmitter, input, computed } from '@angular/core';
+import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewEncapsulation, forwardRef, Output, EventEmitter, input, computed } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
@@ -15,7 +15,7 @@ type OnChangeType = (value: any) => void;
   template: `
     <span class="flex items-center cursor-pointer gap-2">
       <main class="flex relative">
-        <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled" (change)="onCheckboxChange($event)" (blur)="onCheckboxBlur()" />
+        <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled()" (change)="onCheckboxChange($event)" (blur)="onCheckboxBlur()" />
         <i
           class="icon-check absolute flex items-center justify-center text-primary-foreground opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         ></i>
@@ -36,9 +36,9 @@ type OnChangeType = (value: any) => void;
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardCheckboxComponent implements ControlValueAccessor {
-  @Input() disabled = false;
   @Output() readonly onCheckChange = new EventEmitter<boolean>();
   readonly class = input<ClassValue>('');
+  readonly disabled = input<boolean>(false);
   readonly zType = input<ZardCheckboxVariants['zType']>('default');
   readonly zSize = input<ZardCheckboxVariants['zSize']>('default');
   readonly zShape = input<ZardCheckboxVariants['zShape']>('default');
@@ -64,11 +64,6 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: OnTouchedType): void {
     this.onTouched = fn;
-  }
-
-  setDisabledState(disabled: boolean): void {
-    this.disabled = disabled;
-    this.cdr.markForCheck();
   }
 
   onCheckboxBlur(): void {
