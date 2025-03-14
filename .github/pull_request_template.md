@@ -1,4 +1,5 @@
-## What was done? 📝  <!-- explanation of what was done -->
+## What was done? 📝
+<!-- explanation of what was done -->
 
 ## Screenshots or GIFs 📸
 |-----Figma-----|
