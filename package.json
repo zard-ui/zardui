@@ -27,6 +27,7 @@
     "class-variance-authority": "^0.7.1",
     "material-icons": "^1.13.14",
     "ngx-markdown": "^19.1.0",
+    "clsx": "^2.1.1",
     "postcss": "^8.5.3",
     "rxjs": "~7.8.0",
     "tailwind-merge": "^3.0.2",
