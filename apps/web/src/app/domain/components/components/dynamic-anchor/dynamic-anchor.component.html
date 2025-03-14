@@ -8,8 +8,13 @@
         <a (click)="scrollToAnchor('overview')">Overview</a>
       </li>
 
+      <li [class]="'cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === 'examples' ? 'text-primary !text-base' : '')">
+        <a (click)="scrollToAnchor('examples')">Examples</a>
+      </li>
       @for (item of componentData()?.examples; track $index) {
-        <li [class]="'cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === item.name ? 'text-primary !text-base' : '')">
+        <li
+          [class]="'pl-4 cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === item.name ? 'text-primary !text-base' : '')"
+        >
           <a (click)="scrollToAnchor(item.name)">{{ item.name | titlecase }}</a>
         </li>
       }
