@@ -1,13 +1,14 @@
-import { ZardDemoCheckboxShapeComponent } from '@zard/components/checkbox/demo/shape';
-import { ZardDemoCheckboxBasicComponent } from '@zard/components/checkbox/demo/basic';
-import { ZardDemoButtonLoadingComponent } from '@zard/components/button/demo/loading';
-import { ZardDemoCheckboxSizeComponent } from '@zard/components/checkbox/demo/size';
-import { ZardDemoButtonShapeComponent } from '@zard/components/button/demo/shape';
-import { ZardDemoButtonBasicComponent } from '@zard/components/button/demo/basic';
-import { ZardDemoButtonSizeComponent } from '@zard/components/button/demo/size';
-import { ZardDemoButtonFullComponent } from '@zard/components/button/demo/full';
-import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
 import { ComponentType } from '@angular/cdk/overlay';
+import { ZardDemoButtonBasicComponent } from '@zard/components/button/demo/basic';
+import { ZardDemoButtonFullComponent } from '@zard/components/button/demo/full';
+import { ZardDemoButtonLoadingComponent } from '@zard/components/button/demo/loading';
+import { ZardDemoButtonShapeComponent } from '@zard/components/button/demo/shape';
+import { ZardDemoButtonSizeComponent } from '@zard/components/button/demo/size';
+import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
+import { ZardDemoCheckboxBasicComponent } from '@zard/components/checkbox/demo/basic';
+import { ZardDemoCheckboxDisabledComponent } from '@zard/components/checkbox/demo/disabled';
+import { ZardDemoCheckboxShapeComponent } from '@zard/components/checkbox/demo/shape';
+import { ZardDemoCheckboxSizeComponent } from '@zard/components/checkbox/demo/size';
 
 export interface ComponentData {
   componentName: string;
@@ -69,6 +70,10 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'shape',
         component: ZardDemoCheckboxShapeComponent,
+      },
+      {
+        name: 'disabled',
+        component: ZardDemoCheckboxDisabledComponent,
       },
     ],
   },

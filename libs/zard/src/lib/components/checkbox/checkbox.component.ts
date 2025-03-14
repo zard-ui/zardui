@@ -1,26 +1,33 @@
-import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewEncapsulation, forwardRef, Output, EventEmitter, input, computed } from '@angular/core';
-import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, input, output, ViewEncapsulation } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
+import { mergeClasses, transform } from '../../shared/utils/utils';
 import { checkboxLabelVariants, checkboxVariants, ZardCheckboxVariants } from './checkbox.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
 
 @Component({
-  selector: '[z-checkbox]',
+  selector: 'z-checkbox, [z-checkbox]',
   standalone: true,
   exportAs: 'zCheckbox',
   template: `
-    <span class="flex items-center cursor-pointer gap-2">
+    <span
+      class="flex items-center gap-2"
+      [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'"
+      (click)="onCheckboxChange()"
+      (keydown.enter)="onCheckboxChange()"
+      tabindex="0"
+    >
       <main class="flex relative">
-        <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled()" (change)="onCheckboxChange($event)" (blur)="onCheckboxBlur()" />
+        <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onCheckboxBlur()" name="checkbox" />
         <i
           class="icon-check absolute flex items-center justify-center text-primary-foreground opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         ></i>
       </main>
-      <label [class]="labelClasses()">
+      <label [class]="labelClasses()" for="checkbox">
         <ng-content></ng-content>
       </label>
     </span>
@@ -36,9 +43,9 @@ type OnChangeType = (value: any) => void;
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardCheckboxComponent implements ControlValueAccessor {
-  @Output() readonly onCheckChange = new EventEmitter<boolean>();
+  readonly checkChange = output<boolean>();
   readonly class = input<ClassValue>('');
-  readonly disabled = input<boolean>(false);
+  readonly disabled = input(false, { transform });
   readonly zType = input<ZardCheckboxVariants['zType']>('default');
   readonly zSize = input<ZardCheckboxVariants['zSize']>('default');
   readonly zShape = input<ZardCheckboxVariants['zShape']>('default');
@@ -71,11 +78,12 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
     this.cdr.markForCheck();
   }
 
-  onCheckboxChange(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    this.checked = input.checked;
+  onCheckboxChange(): void {
+    if (this.disabled()) return;
+
+    this.checked = !this.checked;
     this.onChange(this.checked);
-    this.onCheckChange.emit(this.checked);
+    this.checkChange.emit(this.checked);
     this.cdr.markForCheck();
   }
 }

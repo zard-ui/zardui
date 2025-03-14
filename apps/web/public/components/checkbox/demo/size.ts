@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '../checkbox.component';
-import { FormsModule } from '@angular/forms';
 
 @Component({
   standalone: true,
