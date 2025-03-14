@@ -5,7 +5,7 @@ import { ZardInputDirective } from '../input.directive';
 @Component({
   standalone: true,
   imports: [ZardInputDirective],
-  template: ` <input z-input zBorderless placeholder="Borderless" /> `,
+  template: `<input z-input zBorderless placeholder="Borderless" />`,
   styles: [
     `
       :host {

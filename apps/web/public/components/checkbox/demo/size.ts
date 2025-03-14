@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
 
 import { ZardCheckboxComponent } from '../checkbox.component';
 
