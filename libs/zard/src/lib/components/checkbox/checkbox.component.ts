@@ -17,7 +17,7 @@ type OnChangeType = (value: any) => void;
       <main class="flex relative">
         <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled" (change)="onCheckboxChange($event)" (blur)="onCheckboxBlur()" />
         <i
-          class="icon-check absolute flex items-center justify-center text-current text-white opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+          class="icon-check absolute flex items-center justify-center text-primary-foreground opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         ></i>
       </main>
       <label [class]="labelClasses()">

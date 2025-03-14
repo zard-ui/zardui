@@ -1,32 +1,36 @@
 @if (componentData) {
-  <div class="dynamic-component md:mr-[200px]" scrollSpy (scrollSpyChange)="activeAnchor = $event">
-    <section scrollSpyItem="overview" id="overview">
-      <markdown src="components/{{ componentData.componentName }}/doc/overview.md" clipboard ngPreserveWhitespaces> </markdown>
-    </section>
+  <section class="flex flex-col xl:grid xl:grid-cols-[220px_minmax(0,1fr)] gap-6">
+    <app-sidebar></app-sidebar>
+    <main class="dynamic-component" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+      <section class="flex flex-col gap-10">
+        <header class="py-10 first:pt-0" scrollSpyItem="overview" id="overview">
+          <markdown src="components/{{ componentData.componentName }}/doc/overview.md" clipboard ngPreserveWhitespaces> </markdown>
+        </header>
 
-    <hr />
+        <hr />
 
-    <section class="flex flex-col">
-      <markdown> ## Examples </markdown>
+        <main class="flex flex-col">
+          <markdown> ## Examples </markdown>
 
-      @for (item of componentData.examples; track $index) {
-        <z-code-box
-          class="pt-4"
-          [scrollSpyItem]="item.name"
-          [attr.id]="item.name"
-          path="{{ componentData.componentName }}/demo/{{ item.name }}"
-          [dynamicComponent]="item.component"
-          [onlyDemo]="item.onlyDemo"
-        ></z-code-box>
-      }
-    </section>
+          @for (item of componentData.examples; track $index) {
+            <z-code-box
+              class="pt-4"
+              [scrollSpyItem]="item.name"
+              [attr.id]="item.name"
+              path="{{ componentData.componentName }}/demo/{{ item.name }}"
+              [dynamicComponent]="item.component"
+              [onlyDemo]="item.onlyDemo"
+            ></z-code-box>
+          }
+        </main>
 
-    <hr />
+        <hr />
 
-    <section scrollSpyItem="api" id="api">
-      <markdown class="api" src="components/{{ componentData.componentName }}/doc/api.md" ngPreserveWhitespaces> </markdown>
-    </section>
-  </div>
-
-  <z-dynamic-anchor [componentData]="componentData" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+        <footer scrollSpyItem="api" id="api">
+          <markdown class="api" src="components/{{ componentData.componentName }}/doc/api.md" ngPreserveWhitespaces> </markdown>
+        </footer>
+      </section>
+      <z-dynamic-anchor [componentData]="componentData" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+    </main>
+  </section>
 }

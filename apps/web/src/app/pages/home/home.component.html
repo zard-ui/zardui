@@ -1,9 +1,28 @@
-<main class="bg-[var(--bg-color)] grid place-items-center font-sans">
-  <section class="flex flex-col justify-center items-center gap-8">
-    <img src="images/zard.svg" alt="Zard ui Logo" class="w-full max-w-[50%] md:max-w-[30%]" />
-    <h1 class="text-[var(--text-color)] text-center font-semibold text-xl md:text-4xl">
-      The most beautiful component library <br />
-      for angular.
+<section class="grid items-center justify-center h-[80vh]">
+  <section class="flex flex-col justify-center items-center gap-3">
+    <a
+      class="inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground h-8 px-3 text-xs rounded-full not-allowed"
+      >🏗️
+      <div data-orientation="vertical" role="none" class="shrink-0 bg-border w-px mx-2 h-4"></div>
+      in development</a
+    >
+
+    <h1 class="text-center font-bold text-5xl xl:text-7xl">
+      UI library for <br />
+      Design haters
     </h1>
+    <p class="max-w-xl text-balance text-center text-base tracking-tight text-black dark:font-medium dark:text-white md:text-center md:text-lg">
+      free and open-source components built with <b>Angular</b>, <b>Typescript</b> and <b>Tailwind CSS</b>. Perfect for lazy devs
+    </p>
+    <span class="text-sm text-foreground/80 text-center">Ng-zorro + shadcn/ui = zard ui</span>
+    <a z-button routerLink="/components/button" class="group mt-2">
+      Browse Components
+      <i class="icon-chevron-right shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1"></i>
+    </a>
+    <footer class="flex-row gap-4 mx-auto flex items-center mt-4">
+      <img src="icons/angular.svg" class="size-8 invert dark:invert-0" alt="angular logo" />
+      <img src="icons/typescript.svg" class="size-8 invert-0 dark:invert" alt="typescript logo" />
+      <img src="icons/tailwind.svg" class="size-8 invert-0 dark:invert" alt="tailwind css logo" />
+    </footer>
   </section>
-</main>
+</section>

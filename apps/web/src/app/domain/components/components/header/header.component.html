@@ -1,0 +1,70 @@
+<header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+  <nav class="max-w-[90rem] h-16 mx-auto px-4 flex items-center justify-between">
+    <menu class="flex items-center gap-8">
+      <a class="hidden xl:flex items-center gap-4" routerLink="/">
+        <img src="images/zard.svg" alt="logo" class="h-8 dark:invert" />
+        <aside
+          class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80"
+        >
+          alpha
+        </aside>
+      </a>
+      <a class="flex xl:hidden justify-centertems-center" routerLink="/">
+        <i class="icon-align-justify !text-2xl"></i>
+      </a>
+      <nav class="hidden xl:flex gap-6">
+        <a
+          class="transition-colors hover:text-foreground/80 text-foreground/80"
+          routerLink="/docs/instalation"
+          routerLinkActive="!text-foreground font-semibold"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Docs
+        </a>
+        <a
+          class="transition-colors hover:text-foreground/80 text-foreground/80"
+          routerLink="/components/button"
+          routerLinkActive="!text-foreground font-semibold"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Components
+        </a>
+        <a
+          class="transition-colors hover:text-foreground/80 text-foreground/80"
+          routerLink="/blocks"
+          routerLinkActive="!text-foreground font-semibold"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Blocks
+        </a>
+        <a
+          class="transition-colors hover:text-foreground/80 text-foreground/80"
+          routerLink="/themes"
+          routerLinkActive="!text-foreground font-semibold"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          Themes
+        </a>
+      </nav>
+    </menu>
+    <aside class="flex items-center gap-1">
+      <button z-button zType="ghost" zSize="icon" (click)="toggleTheme()">
+        @if (getCurrentTheme() === 'dark') {
+          <i class="icon-moon !text-lg"></i>
+        } @else {
+          <i class="icon-sun !text-lg"></i>
+        }
+      </button>
+      <a z-button zType="ghost" zSize="icon" href="https://github.com/zard-ui/zardui" target="_blank">
+        <img src="icons/github.svg" alt="github icon" class="h-4 dark:invert" />
+      </a>
+      <a z-button zType="ghost" zSize="icon" href="#" target="_blank">
+        <img src="icons/discord.svg" alt="discord icon" class="h-4 dark:invert" />
+      </a>
+
+      <a z-button zType="ghost" zSize="icon" href="#" target="_blank">
+        <img src="icons/twitter.svg" alt="X icon" class="h-4 dark:invert" />
+      </a>
+    </aside>
+  </nav>
+</header>
