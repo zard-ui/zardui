@@ -1,21 +1,14 @@
-import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
-import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { Component } from '@angular/core';
+
+import { HeaderComponent } from '../../../domain/components/components/header/header.component';
+import { FooterComponent } from '../../../domain/components/components/footer/footer.component';
 
 @Component({
   selector: 'z-shell',
   templateUrl: './shell.layout.html',
   styleUrls: ['./shell.layout.scss'],
   standalone: true,
-  imports: [RouterModule, ZardButtonComponent],
+  imports: [RouterModule, HeaderComponent, FooterComponent],
 })
-export class ShellLayout {
-  sidebarOpen = true;
-
-  constructor(private breakpointObserver: BreakpointObserver) {
-    this.breakpointObserver.observe(['(max-width: 961px)']).subscribe((state: BreakpointState) => {
-      this.sidebarOpen = !state.matches;
-    });
-  }
-}
+export class ShellLayout {}

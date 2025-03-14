@@ -1,9 +1,10 @@
-@forward 'material-icons/iconfont/material-icons.css';
-
 @forward "tailwindcss";
+@forward 'lucide-static/font/lucide.css';
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
+  --font-family: "Geist", sans-serif;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -75,6 +76,7 @@
 }
 
 @theme inline {
+  --font-sans: var(--font-family);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -122,10 +124,6 @@
   }
 }
 
-.material-icons-outlined {
-  font-size: 1rem;
-}
-
 html {
   scroll-behavior: smooth;
 }
@@ -141,7 +139,7 @@ markdown {
     @apply my-4 pl-4 border-l-4 border-gray-200;
 
     p {
-      @apply text-gray-500 text-xs;
+      @apply text-muted-foreground text-xs;
     }
   }
 
@@ -185,10 +183,10 @@ markdown {
 }
 
 .dynamic-component {
-  @apply text-primary;
+  @apply relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px];
 
   h1 {
-    @apply text-2xl font-bold;
+    @apply text-3xl font-bold;
   }
 
   h2 {
@@ -200,23 +198,7 @@ markdown {
   }
 
   p {
-    @apply text-base;
-  }
-
-  section {
-    @apply py-10;
-
-    &:first-child {
-      @apply pt-0;
-    }
-  }
-
-  .title {
-    @apply mb-6;
-  }
-
-  .examples {
-    @apply mx-auto grid gap-4;
+    @apply text-base text-muted-foreground;
   }
 }
 
@@ -252,28 +234,6 @@ markdown {
   }
 }
 
-.anchor {
-  @apply border-l border-gray-200 pl-6 fixed right-12 top-0 transition duration-500 ease-in-out mt-24;
-
-  @media (max-width: 768px) {
-    @apply right-[-100px];
-  }
-
-  ul {
-    li {
-      @apply cursor-pointer text-sm text-gray-400;
-
-      &:hover {
-        @apply text-gray-600;
-      }
-    }
-
-    .active {
-      @apply text-primary;
-    }
-  }
-}
-
 pre {
   @apply flex bg-gray-100 my-4 p-3 overflow-auto;
 
@@ -283,7 +243,7 @@ pre {
 }
 
 code {
-  @apply mx-1 px-2 py-1 text-xs bg-white border border-gray-200 rounded whitespace-nowrap;
+  @apply mx-1 px-2 py-1 text-xs bg-muted border border-ring rounded whitespace-nowrap;
 }
 
 ::-webkit-scrollbar {
@@ -291,13 +251,13 @@ code {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-200;
+  @apply bg-background;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300;
+  @apply bg-primary;
 
   &:hover {
-    @apply bg-gray-400;
+    @apply bg-primary/60;
   }
 }

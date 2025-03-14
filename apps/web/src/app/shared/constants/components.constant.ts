@@ -5,6 +5,10 @@ import { ZardDemoButtonLoadingComponent } from '@zard/components/button/demo/loa
 import { ZardDemoButtonShapeComponent } from '@zard/components/button/demo/shape';
 import { ZardDemoButtonSizeComponent } from '@zard/components/button/demo/size';
 import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
+import { ZardDemoCheckboxBasicComponent } from '@zard/components/checkbox/demo/basic';
+import { ZardDemoCheckboxDisabledComponent } from '@zard/components/checkbox/demo/disabled';
+import { ZardDemoCheckboxShapeComponent } from '@zard/components/checkbox/demo/shape';
+import { ZardDemoCheckboxSizeComponent } from '@zard/components/checkbox/demo/size';
 
 export interface ComponentData {
   componentName: string;
@@ -49,6 +53,27 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'basic',
         component: ZardDemoCardBasicComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'checkbox',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoCheckboxBasicComponent,
+      },
+      {
+        name: 'size',
+        component: ZardDemoCheckboxSizeComponent,
+      },
+      {
+        name: 'shape',
+        component: ZardDemoCheckboxShapeComponent,
+      },
+      {
+        name: 'disabled',
+        component: ZardDemoCheckboxDisabledComponent,
       },
     ],
   },
