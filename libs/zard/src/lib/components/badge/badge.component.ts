@@ -8,9 +8,10 @@ import { badgeVariants, ZardBadgeVariants } from './badge.variants';
 @Component({
   selector: 'z-badge',
   exportAs: 'zBadge',
-  template: `<ng-content />`,
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
