@@ -22,14 +22,8 @@ export default [
   {
     files: ['**/*.ts'],
     rules: {
-      '@angular-eslint/component-selector': [
-        'error',
-        {
-          type: 'element',
-          prefix: 'z',
-          style: 'kebab-case',
-        },
-      ],
+      '@angular-eslint/directive-selector': 'off',
+      '@angular-eslint/component-selector': 'off',
     },
   },
   {

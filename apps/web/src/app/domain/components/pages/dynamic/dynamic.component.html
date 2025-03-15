@@ -1,6 +1,6 @@
 @if (componentData) {
   <section class="flex flex-col xl:grid xl:grid-cols-[220px_minmax(0,1fr)] gap-6">
-    <app-sidebar></app-sidebar>
+    <z-sidebar></z-sidebar>
     <main class="dynamic-component" scrollSpy (scrollSpyChange)="activeAnchor = $event">
       <section class="flex flex-col gap-10">
         <header scrollSpyItem="overview" id="overview">
