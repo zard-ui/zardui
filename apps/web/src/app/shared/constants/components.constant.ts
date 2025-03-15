@@ -1,4 +1,6 @@
 import { ComponentType } from '@angular/cdk/overlay';
+import { ZardDemoBadgeBasicComponent } from '@zard/components/badge/demo/basic';
+import { ZardDemoBadgeShapeComponent } from '@zard/components/badge/demo/shape';
 import { ZardDemoButtonBasicComponent } from '@zard/components/button/demo/basic';
 import { ZardDemoButtonFullComponent } from '@zard/components/button/demo/full';
 import { ZardDemoButtonLoadingComponent } from '@zard/components/button/demo/loading';
@@ -74,6 +76,19 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'disabled',
         component: ZardDemoCheckboxDisabledComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'badge',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoBadgeBasicComponent,
+      },
+      {
+        name: 'shape',
+        component: ZardDemoBadgeShapeComponent,
       },
     ],
   },
