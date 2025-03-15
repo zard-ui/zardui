@@ -11,6 +11,7 @@ import { ZardDemoCheckboxShapeComponent } from '@zard/components/checkbox/demo/s
 import { ZardDemoCheckboxSizeComponent } from '@zard/components/checkbox/demo/size';
 import { ZardDemoInputBasicComponent } from '@zard/components/input/demo/basic';
 import { ZardDemoInputBorderlessComponent } from '@zard/components/input/demo/borderless';
+import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
 import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
 import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
 
@@ -87,6 +88,10 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'basic',
         component: ZardDemoInputBasicComponent,
+      },
+      {
+        name: 'size',
+        component: ZardDemoInputSizeComponent,
       },
       {
         name: 'status',
