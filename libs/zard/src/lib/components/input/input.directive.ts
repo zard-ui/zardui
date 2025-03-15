@@ -13,6 +13,7 @@ export class ZardInputDirective implements OnInit {
   private elementRef = inject(ElementRef);
   private renderer = inject(Renderer2);
   private readonly isTextarea = this.elementRef.nativeElement.tagName.toLowerCase() === 'textarea';
+  private readonly nativeElement = this.elementRef.nativeElement;
 
   readonly zSize = input<ZardInputVariants['zSize']>('default');
   readonly zStatus = input<ZardInputVariants['zStatus']>();
@@ -24,15 +25,15 @@ export class ZardInputDirective implements OnInit {
   }
 
   private applyClasses(): void {
-    const baseClasses = inputVariants({
-      zSize: this.zSize(),
-      zStatus: this.zStatus(),
-      zBorderless: this.zBorderless(),
-    });
+    const baseClasses = this.isTextarea
+      ? textAreaVariants()
+      : inputVariants({
+          zSize: this.zSize(),
+          zStatus: this.zStatus(),
+          zBorderless: this.zBorderless(),
+        });
 
-    const elementSpecificClasses = this.isTextarea ? textAreaVariants() : '';
-    const classes = mergeClasses(baseClasses, elementSpecificClasses, this.class());
-
-    this.renderer.setAttribute(this.elementRef.nativeElement, 'class', classes);
+    const classes = mergeClasses(baseClasses, this.class());
+    this.renderer.setAttribute(this.nativeElement, 'class', classes);
   }
 }

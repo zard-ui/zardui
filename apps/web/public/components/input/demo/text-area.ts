@@ -5,7 +5,7 @@ import { ZardInputDirective } from '../input.directive';
 @Component({
   standalone: true,
   imports: [ZardInputDirective],
-  template: `<textarea z-input placeholder="Default"></textarea>`,
+  template: `<textarea z-input rows="6" cols="12" placeholder="Default"></textarea>`,
   styles: [
     `
       :host {
