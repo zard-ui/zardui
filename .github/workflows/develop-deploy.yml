@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repo
-        uses: actions/checkout@alpha
+        uses: actions/checkout@master
 
       - name: Install dependencies
         run: npm install
