@@ -8,8 +8,8 @@ export const inputVariants = cva(
     variants: {
       zSize: {
         default: 'h-10 py-2 file:max-md:py-0',
-        small: 'h-9 file:md:py-2 file:max-md:py-1.5',
-        large: 'h-11 py-1 file:md:py-3 file:max-md:py-2.5',
+        sm: 'h-9 file:md:py-2 file:max-md:py-1.5',
+        lg: 'h-11 py-1 file:md:py-3 file:max-md:py-2.5',
       },
       zStatus: {
         error: 'border-destructive focus-visible:ring-destructive',
@@ -17,7 +17,7 @@ export const inputVariants = cva(
         success: 'border-green-500 focus-visible:ring-green-500',
       },
       zBorderless: {
-        true: 'border-0 focus-visible:ring-0',
+        true: 'border-0 focus-visible:ring-0 focus-visible:ring-offset-0',
       },
     },
     defaultVariants: {

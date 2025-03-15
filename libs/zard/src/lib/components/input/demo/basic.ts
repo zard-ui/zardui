@@ -6,9 +6,9 @@ import { ZardInputDirective } from '../input.directive';
   standalone: true,
   imports: [ZardInputDirective],
   template: `
-    <input z-input zSize="small" placeholder="small size" />
+    <input z-input zSize="sm" placeholder="small size" />
     <input z-input zSize="default" placeholder="default size" />
-    <input z-input zSize="large" placeholder="large size" />
+    <input z-input zSize="lg" placeholder="large size" />
   `,
   styles: [
     `

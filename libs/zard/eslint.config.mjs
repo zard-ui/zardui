@@ -22,22 +22,8 @@ export default [
   {
     files: ['**/*.ts'],
     rules: {
-      '@angular-eslint/directive-selector': [
-        'off',
-        {
-          type: 'attribute',
-          prefix: 'z',
-          style: 'camelCase',
-        },
-      ],
-      '@angular-eslint/component-selector': [
-        'off',
-        {
-          type: 'element',
-          prefix: 'z',
-          style: 'kebab-case',
-        },
-      ],
+      '@angular-eslint/directive-selector': 'off',
+      '@angular-eslint/component-selector': 'off',
     },
   },
   {
