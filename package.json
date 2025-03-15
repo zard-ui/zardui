@@ -8,7 +8,8 @@
     "build": "nx run-many --target=build --p=libs/*",
     "test": "nx run-many --target=test --p=libs/*",
     "release": "nx release --yes --verbose",
-    "watch:files": "npx tsx scripts/generate-files.cts"
+    "watch:files": "npx tsx scripts/generate-files.cts",
+    "build:doc": "npx nx run web:build --configuration=production"
   },
   "engines": {
     "node": "22 || 20"
