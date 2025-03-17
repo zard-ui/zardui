@@ -2,16 +2,14 @@ import { cva, VariantProps } from 'class-variance-authority';
 
 export type zInputIcon = 'email' | 'password' | 'text';
 
-export const textAreaVariants = cva(
-  'flex min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
-);
-
-export const inputBase = cva(
-  'flex rounded-md border px-4 font-normal border-input bg-transparent text-base md:text-sm ring-offset-background file:border-0 file:text-foreground file:bg-transparent file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-);
-
 export const inputVariants = cva('', {
   variants: {
+    zType: {
+      default:
+        'flex rounded-md border px-4 font-normal border-input bg-transparent text-base md:text-sm ring-offset-background file:border-0 file:text-foreground file:bg-transparent file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+      textarea:
+        'flex min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-base ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+    },
     zSize: {
       default: 'h-10 py-2 file:max-md:py-0',
       sm: 'h-9 file:md:py-2 file:max-md:py-1.5',
@@ -27,6 +25,7 @@ export const inputVariants = cva('', {
     },
   },
   defaultVariants: {
+    zType: 'default',
     zSize: 'default',
   },
 });
