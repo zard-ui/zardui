@@ -3,7 +3,7 @@ import { ClassValue } from 'class-variance-authority/dist/types';
 import { Directive, ElementRef, inject, input, OnInit, Renderer2 } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { inputVariants, textAreaVariants, ZardInputVariants } from './input.variants';
+import { inputBase, inputVariants, textAreaVariants, ZardInputVariants } from './input.variants';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',
@@ -25,15 +25,15 @@ export class ZardInputDirective implements OnInit {
   }
 
   private applyClasses(): void {
-    const baseClasses = this.isTextarea
-      ? textAreaVariants()
-      : inputVariants({
-          zSize: this.zSize(),
-          zStatus: this.zStatus(),
-          zBorderless: this.zBorderless(),
-        });
+    const baseClasses = this.isTextarea ? textAreaVariants() : inputBase();
 
-    const classes = mergeClasses(baseClasses, this.class());
+    const variantClasses = inputVariants({
+      zSize: this.zSize(),
+      zStatus: this.zStatus(),
+      zBorderless: this.zBorderless(),
+    });
+
+    const classes = mergeClasses(baseClasses, variantClasses, this.class);
     this.renderer.setAttribute(this.nativeElement, 'class', classes);
   }
 }
