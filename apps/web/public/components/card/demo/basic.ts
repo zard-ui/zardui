@@ -1,10 +1,17 @@
 import { Component } from '@angular/core';
-
-import { ZardCardComponent } from '../card.component';
+import { ZardCardModule } from '@ngzard/ui';
 
 @Component({
-  standalone: true,
-  imports: [ZardCardComponent],
-  template: ` <z-card zTitle="Create project" zDescription="Deploy your new project in one-click."> Body content </z-card> `,
+  imports: [ZardCardModule],
+  template: `
+    <z-card>
+      <z-card-header>
+        <z-card-header-title>Card title</z-card-header-title>
+        <z-card-header-description>Card description</z-card-header-description>
+      </z-card-header>
+
+      <z-card-body> Card content </z-card-body>
+    </z-card>
+  `,
 })
 export class ZardDemoCardBasicComponent {}
