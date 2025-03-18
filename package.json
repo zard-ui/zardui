@@ -4,6 +4,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "start": "concurrently \"npm run watch:files\" \"nx s web\"",
     "prepare": "husky",
     "build": "nx run-many --target=build --p=libs/*",
     "test": "nx run-many --target=test --p=libs/*",
@@ -75,6 +76,7 @@
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
     "typescript": "~5.7.2",
-    "typescript-eslint": "^8.19.0"
+    "typescript-eslint": "^8.19.0",
+    "concurrently": "^7.0.0"
   }
 }
