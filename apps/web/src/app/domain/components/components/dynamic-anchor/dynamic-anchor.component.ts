@@ -14,9 +14,8 @@ export class DynamicAnchorComponent {
   componentData = input<ComponentData | undefined>();
 
   scrollToAnchor(anchor: string) {
-    this.activeAnchor.set(anchor);
     const anchorElement = document.getElementById(anchor);
 
-    this.viewportScroller.scrollToPosition([0, (anchorElement?.offsetTop || 0) - 60]);
+    this.viewportScroller.scrollToPosition([0, anchorElement?.offsetTop || 0]);
   }
 }

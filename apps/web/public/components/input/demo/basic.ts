@@ -1,21 +1,19 @@
 import { Component } from '@angular/core';
 
-import { ZardInputComponent } from '../input.component';
+import { ZardInputDirective } from '../input.directive';
 
 @Component({
   standalone: true,
-  imports: [ZardInputComponent],
+  imports: [ZardInputDirective],
   template: `
-    <input z-input zType="default" placeholder="Default" />
-    <input z-input zType="primary" placeholder="Primary" />
-    <input z-input zType="secondary" placeholder="Secondary" />
-    <input z-input zType="destructive" placeholder="Destructive" />
+    <input z-input placeholder="Basic usage" />
+    <input z-input disabled placeholder="Basic usage" />
   `,
   styles: [
     `
       :host {
         display: flex;
-        flex-wrap: wrap;
+        flex-direction: column;
         gap: 24px;
       }
     `,

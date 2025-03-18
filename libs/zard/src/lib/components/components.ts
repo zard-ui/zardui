@@ -1,3 +1,3 @@
-export * from './input/input.component';
+export * from './input/input.directive';
 export * from './button/button.component';
-export * from './icon/icon.directive';
+export * from './checkbox/checkbox.component';

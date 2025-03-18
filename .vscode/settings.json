@@ -115,7 +115,12 @@
     }
   ],
   "cSpell.words": [
+    "Borderless",
+    "ngzard",
     "zard",
     "Zard"
   ],
+  "[html]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
 }

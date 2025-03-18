@@ -1,21 +1,20 @@
-import { MarkdownModule } from 'ngx-markdown';
-
-import { CommonModule, ViewportScroller } from '@angular/common';
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
 import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
+import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
+import { CommonModule, ViewportScroller } from '@angular/common';
+import { ActivatedRoute, Router } from '@angular/router';
+import { MarkdownModule } from 'ngx-markdown';
+import { Component } from '@angular/core';
 
 import { DynamicAnchorComponent } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
+import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-dynamic',
   templateUrl: './dynamic.component.html',
-  styleUrls: ['./dynamic.component.scss'],
   standalone: true,
-  imports: [CommonModule, DynamicAnchorComponent, MarkdownModule, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective],
+  imports: [CommonModule, DynamicAnchorComponent, MarkdownModule, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, SidebarComponent],
 })
 export class DynamicComponent {
   activeAnchor?: string;
