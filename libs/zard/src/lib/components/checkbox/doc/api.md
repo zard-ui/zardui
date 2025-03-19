@@ -2,7 +2,7 @@
 
 ## [z-checkbox] <span class="api-type-label directive">Directive</span>
 
-> não é um checkbox nativo nem fudendo.
+> z-checkbox is a Directive that brings you a customizable checkbox with minimal configuration
 
 To get a customized checkbox, just pass the following props to the directive.
 
