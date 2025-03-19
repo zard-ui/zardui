@@ -19,8 +19,9 @@ export class HeaderComponent implements OnInit {
     const savedTheme = localStorage.getItem(this.storageKey);
     const html = document.documentElement;
 
-    if (savedTheme === 'dark') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       html.classList.add('dark');
+      localStorage.setItem(this.storageKey, 'dark');
     } else {
       html.classList.remove('dark');
     }
@@ -40,6 +41,6 @@ export class HeaderComponent implements OnInit {
   }
 
   getCurrentTheme(): 'light' | 'dark' {
-    return (localStorage.getItem(this.storageKey) as 'light' | 'dark') || 'light';
+    return localStorage.getItem(this.storageKey) as 'light' | 'dark';
   }
 }
