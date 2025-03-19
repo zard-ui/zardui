@@ -221,7 +221,7 @@ markdown {
     }
 
     tr {
-      @apply border-b transition-colors hover:bg-gray-100 data-[state=selected]:bg-gray-100;
+      @apply border-b transition-colors hover:bg-secondary data-[state=selected]:bg-gray-100;
     }
 
     th {

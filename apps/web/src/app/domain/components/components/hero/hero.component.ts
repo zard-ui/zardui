@@ -1,0 +1,46 @@
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'z-hero',
+  standalone: true,
+  imports: [RouterModule, ZardButtonComponent],
+  template: `
+    <section class="grid items-center justify-center h-[80vh]">
+      <section class="flex flex-col justify-center items-center gap-3">
+        <a
+          class="inline-flex items-center justify-center font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 border border-input bg-background text-foreground shadow-sm hover:bg-accent hover:text-accent-foreground h-8 px-3 text-xs rounded-full not-allowed"
+          >🏗️
+          <div data-orientation="vertical" role="none" class="shrink-0 bg-border w-px mx-2 h-4"></div>
+          In development</a
+        >
+
+        <h1 class="text-center font-bold text-3xl xl:text-6xl">
+          Finally, a real &#64;shadcn/ui <br />
+          alternative for <span class="text-red-600/80 dark:text-red-400">Angular</span>.
+        </h1>
+        <p class="max-w-xl text-balance text-center text-base tracking-tight text-black dark:font-medium dark:text-white md:text-center md:text-lg">
+          Free and open-source components built with <b>Angular</b>, <b>Typescript</b> and <b>Tailwind CSS</b>. No hassle, just results.
+        </p>
+
+        <aside
+          class="inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80"
+        >
+          Style of &#64;shadcn/ui + power of ng-zorro = &#64;ngzard/ui ❤️
+        </aside>
+
+        <a z-button routerLink="/components/button" class="group mt-2">
+          Browse Components
+          <i class="icon-chevron-right shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1"></i>
+        </a>
+        <footer class="flex-row gap-4 mx-auto flex items-center mt-4">
+          <img src="icons/angular.svg" class="size-8 invert dark:invert-0" alt="angular logo" />
+          <img src="icons/typescript.svg" class="size-8 invert-0 dark:invert" alt="typescript logo" />
+          <img src="icons/tailwind.svg" class="size-8 invert-0 dark:invert" alt="tailwind css logo" />
+        </footer>
+      </section>
+    </section>
+  `,
+})
+export class HeroComponent {}
