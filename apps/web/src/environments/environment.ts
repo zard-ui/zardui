@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   appVersion: 'alpha',
   devMode: false,
 };
