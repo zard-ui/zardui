@@ -7,7 +7,7 @@ export const SOCIAL_MEDIAS = [
   },
   {
     name: 'Discord',
-    url: 'https://discord.gg/7eBERppd',
+    url: 'https://discord.com/invite/xEXvCXNw',
     icon: 'icons/discord.svg',
     iconAlt: 'discord icon',
   },
