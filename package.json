@@ -4,13 +4,14 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "concurrently \"npm run watch:files\" \"nx s web\"",
+    "start": "concurrently \"npm run watch:files\" \"npx nx run web:serve --configuration=local  \"",
     "prepare": "husky",
-    "build": "nx run-many --target=build --p=libs/*",
+    "build": "npx nx run web:build --configuration=production",
+    "build:dev": "npx nx run web:build --configuration=development",
+    "publish:build": "nx run-many --target=build --p=libs/*",
     "test": "nx run-many --target=test --p=libs/*",
     "release": "nx release --yes --verbose",
-    "watch:files": "npx tsx scripts/generate-files.cts",
-    "build:doc": "npx nx run web:build --configuration=production"
+    "watch:files": "npx tsx scripts/generate-files.cts"
   },
   "engines": {
     "node": "22 || 20"

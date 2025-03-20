@@ -8,12 +8,16 @@
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:application",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/web",
         "index": "apps/web/src/index.html",
         "browser": "apps/web/src/main.ts",
-        "polyfills": ["zone.js"],
+        "polyfills": [
+          "zone.js"
+        ],
         "tsConfig": "apps/web/tsconfig.app.json",
         "inlineStyleLanguage": "scss",
         "assets": [
@@ -22,11 +26,20 @@
             "input": "apps/web/public"
           }
         ],
-        "styles": ["apps/web/public/prismjs/themes/prism-vsc-dark-plus.css", "apps/web/src/styles.scss"],
+        "styles": [
+          "apps/web/public/prismjs/themes/prism-vsc-dark-plus.css",
+          "apps/web/src/styles.scss"
+        ],
         "stylePreprocessorOptions": {
-          "includePaths": ["apps/web/src/scss"]
+          "includePaths": [
+            "apps/web/src/scss"
+          ]
         },
-        "scripts": ["node_modules/clipboard/dist/clipboard.min.js", "node_modules/prismjs/prism.js", "node_modules/prismjs/components/prism-typescript.min.js"]
+        "scripts": [
+          "node_modules/clipboard/dist/clipboard.min.js",
+          "node_modules/prismjs/prism.js",
+          "node_modules/prismjs/components/prism-typescript.min.js"
+        ]
       },
       "configurations": {
         "production": {
@@ -47,7 +60,24 @@
         "development": {
           "optimization": false,
           "extractLicenses": false,
-          "sourceMap": true
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/web/src/environments/environment.ts",
+              "with": "apps/web/src/environments/environment.development.ts"
+            }
+          ]
+        },
+        "local": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "fileReplacements": [
+            {
+              "replace": "apps/web/src/environments/environment.ts",
+              "with": "apps/web/src/environments/environment.local.ts"
+            }
+          ]
         }
       },
       "defaultConfiguration": "production"
@@ -60,9 +90,12 @@
         },
         "development": {
           "buildTarget": "web:build:development"
+        },
+        "local": {
+          "buildTarget": "web:build:local"
         }
       },
-      "defaultConfiguration": "development"
+      "defaultConfiguration": "local"
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",
@@ -75,7 +108,9 @@
     },
     "test": {
       "executor": "@nx/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}"
+      ],
       "options": {
         "jestConfig": "apps/web/jest.config.ts"
       }
