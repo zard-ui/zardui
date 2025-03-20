@@ -9,7 +9,6 @@ import { MarkdownModule } from 'ngx-markdown';
   selector: 'z-code-box',
   imports: [MarkdownModule, NgComponentOutlet, ZardButtonComponent, ZardCardComponent],
   templateUrl: './zard-code-box.component.html',
-  styleUrl: './zard-code-box.component.scss',
 })
 export class ZardCodeBoxComponent {
   showCodeButton = false;

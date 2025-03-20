@@ -1,15 +1,13 @@
 <aside class="border-grid fixed top-14 z-30 hidden h-[calc(100vh-3.5rem)] w-full shrink-0 border-r md:sticky xl:block">
   <nav class="py-6 pr-4">
-    <ul class="space-y-2">
-      <li class="text-sm">
-        <a z-button zType="ghost" zFull routerLink="/components/button" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }" class="block"> Button </a>
-      </li>
-      <li class="text-sm">
-        <a z-button zType="ghost" zFull routerLink="/components/card" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }" class="block"> Card </a>
-      </li>
-      <li class="text-sm">
-        <a z-button zType="ghost" zFull routerLink="/components/checkbox" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }" class="block"> Checkbox </a>
-      </li>
+    <ul class="grid gap-2">
+      @for (path of sidebarPaths; track $index) {
+        <li class="text-sm">
+          <a z-button zType="ghost" zFull [routerLink]="path.path" class="justify-start" routerLinkActive="bg-accent" [routerLinkActiveOptions]="{ exact: true }">
+            {{ path.name }}
+          </a>
+        </li>
+      }
     </ul>
   </nav>
 </aside>

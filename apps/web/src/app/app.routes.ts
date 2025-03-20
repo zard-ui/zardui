@@ -8,7 +8,10 @@ export const appRoutes: Route[] = [
     component: ShellLayout,
     children: [
       { path: '', loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent) },
-      { path: 'components', loadChildren: async () => (await import('./domain/components/components.routes')).COMPONENTS_ROUTES },
+      {
+        path: 'components',
+        loadChildren: async () => (await import('./domain/components/components.routes')).COMPONENTS_ROUTES,
+      },
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ],
   },

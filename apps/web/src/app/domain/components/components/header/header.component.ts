@@ -1,15 +1,22 @@
 import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { SOCIAL_MEDIAS } from '@zard/shared/constants/medias.constant';
+import { HEADER_PATHS } from '@zard/shared/constants/routes.contant';
+import { environment } from 'apps/web/src/environments/environment';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-header',
+  selector: 'z-header',
   templateUrl: './header.component.html',
   standalone: true,
-  imports: [RouterModule, ZardButtonComponent],
+  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent],
 })
 export class HeaderComponent implements OnInit {
   private readonly storageKey = 'theme';
+  readonly headerPaths = HEADER_PATHS;
+  readonly socialMedias = SOCIAL_MEDIAS;
+  readonly appVersion = environment.appVersion;
 
   ngOnInit(): void {
     this.initTheme();
@@ -19,8 +26,9 @@ export class HeaderComponent implements OnInit {
     const savedTheme = localStorage.getItem(this.storageKey);
     const html = document.documentElement;
 
-    if (savedTheme === 'dark') {
+    if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       html.classList.add('dark');
+      localStorage.setItem(this.storageKey, 'dark');
     } else {
       html.classList.remove('dark');
     }
@@ -40,6 +48,6 @@ export class HeaderComponent implements OnInit {
   }
 
   getCurrentTheme(): 'light' | 'dark' {
-    return (localStorage.getItem(this.storageKey) as 'light' | 'dark') || 'light';
+    return localStorage.getItem(this.storageKey) as 'light' | 'dark';
   }
 }

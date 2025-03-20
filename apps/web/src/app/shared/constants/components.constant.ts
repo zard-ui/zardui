@@ -1,4 +1,6 @@
 import { ComponentType } from '@angular/cdk/overlay';
+import { ZardDemoBadgeBasicComponent } from '@zard/components/badge/demo/basic';
+import { ZardDemoBadgeShapeComponent } from '@zard/components/badge/demo/shape';
 import { ZardDemoButtonBasicComponent } from '@zard/components/button/demo/basic';
 import { ZardDemoButtonFullComponent } from '@zard/components/button/demo/full';
 import { ZardDemoButtonLoadingComponent } from '@zard/components/button/demo/loading';
@@ -9,6 +11,11 @@ import { ZardDemoCheckboxBasicComponent } from '@zard/components/checkbox/demo/b
 import { ZardDemoCheckboxDisabledComponent } from '@zard/components/checkbox/demo/disabled';
 import { ZardDemoCheckboxShapeComponent } from '@zard/components/checkbox/demo/shape';
 import { ZardDemoCheckboxSizeComponent } from '@zard/components/checkbox/demo/size';
+import { ZardDemoInputBasicComponent } from '@zard/components/input/demo/basic';
+import { ZardDemoInputBorderlessComponent } from '@zard/components/input/demo/borderless';
+import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
+import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
+import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
 
 export interface ComponentData {
   componentName: string;
@@ -22,6 +29,19 @@ export interface ExampleData {
 }
 
 export const COMPONENTS: ComponentData[] = [
+  {
+    componentName: 'badge',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoBadgeBasicComponent,
+      },
+      {
+        name: 'shape',
+        component: ZardDemoBadgeShapeComponent,
+      },
+    ],
+  },
   {
     componentName: 'button',
     examples: [
@@ -74,6 +94,31 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'disabled',
         component: ZardDemoCheckboxDisabledComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'input',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoInputBasicComponent,
+      },
+      {
+        name: 'size',
+        component: ZardDemoInputSizeComponent,
+      },
+      {
+        name: 'status',
+        component: ZardDemoInputStatusComponent,
+      },
+      {
+        name: 'borderless',
+        component: ZardDemoInputBorderlessComponent,
+      },
+      {
+        name: 'text-area',
+        component: ZardDemoInputTextAreaComponent,
       },
     ],
   },
