@@ -6,7 +6,8 @@
 
 To get a customized switch, just pass the following props to the directive.
 
-| Property     | Description                                      | Type             | Default    |
-| ------------ | ------------------------------------------------ | ---------------- | ---------- |
-| `[zType]`     | switch type                                      | `default\|destructive`  | `default`  |
-| `[zSize]`     | switch size                                      | `default\|sm\|lg` | `default`  |
+| Property  | Description | Type                   | Default   |
+| --------- | ----------- | ---------------------- | --------- |
+| `[zType]` | switch type | `default\|destructive` | `default` |
+| `[zSize]` | switch size | `default\|sm\|lg`      | `default` |
+| `[zId]`   | switch id   | `string`               |           |

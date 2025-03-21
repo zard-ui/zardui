@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { switchVariants, ZardSwitchVariants } from './switch.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
@@ -13,17 +13,8 @@ type OnChangeType = (value: any) => void;
   standalone: true,
   exportAs: 'zSwitch',
   template: `
-    <span class="flex items-center space-x-2">
-      <button
-        [id]="uniqueId()"
-        type="button"
-        role="switch"
-        [attr.data-state]="status()"
-        [attr.aria-checked]="checked()"
-        [disabled]="disabled()"
-        (click)="onSwitchChange()"
-        [class]="classes()"
-      >
+    <span class="flex items-center space-x-2" (mousedown)="onSwitchChange()">
+      <button [id]="zId()" type="button" role="switch" [attr.data-state]="status()" [attr.aria-checked]="checked()" [disabled]="disabled()" [class]="classes()">
         <span
           [attr.data-size]="zSize()"
           [attr.data-state]="status()"
@@ -31,7 +22,7 @@ type OnChangeType = (value: any) => void;
         ></span>
       </button>
 
-      <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" [for]="uniqueId()">
+      <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" [for]="zId()">
         <ng-content></ng-content>
       </label>
     </span>
@@ -52,6 +43,7 @@ export class ZardSwitchComponent implements ControlValueAccessor {
 
   readonly zType = input<ZardSwitchVariants['zType']>('default');
   readonly zSize = input<ZardSwitchVariants['zSize']>('default');
+  readonly zId = input<string>('');
 
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onChange: OnChangeType = () => {};
