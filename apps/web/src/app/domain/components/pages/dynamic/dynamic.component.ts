@@ -1,26 +1,25 @@
+import { DynamicAnchorComponent } from '@zard/domain/components/components/dynamic-anchor/dynamic-anchor.component';
+import { ZardMarkdownComponent } from '@zard/domain/components/components/markdown/markdown.component';
 import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
+import { SidebarComponent } from '@zard/domain/components/components/sidebar/sidebar.component';
 import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 import { Component } from '@angular/core';
 
-import { ClipboardButtonComponent } from '../../components/clipboard-button/clipboard-button.component';
-import { DynamicAnchorComponent } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
-import { SidebarComponent } from '../../components/sidebar/sidebar.component';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-dynamic',
   templateUrl: './dynamic.component.html',
   standalone: true,
-  imports: [CommonModule, DynamicAnchorComponent, MarkdownModule, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, SidebarComponent],
+  imports: [CommonModule, DynamicAnchorComponent, MarkdownModule, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, SidebarComponent, ZardMarkdownComponent],
 })
 export class DynamicComponent {
   activeAnchor?: string;
   componentData?: ComponentData;
-  clipboardButton = ClipboardButtonComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,

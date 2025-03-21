@@ -83,7 +83,6 @@
   div[class*='language-'],
   pre[class*='language-'] {
     font-size: var(--prism-block-font-size);
-    margin: var(--prism-block-margin-y) var(--prism-block-margin-x);
     overflow: auto;
   }
   

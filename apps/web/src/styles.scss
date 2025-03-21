@@ -139,8 +139,6 @@ html {
 }
 
 markdown {
-  @apply flex flex-col gap-4;
-
   pre {
     @apply rounded-md border border-neutral-300/50 bg-neutral-200/30 dark:border-neutral-800/60 dark:bg-neutral-900/40;
   }
@@ -173,38 +171,6 @@ markdown {
     &.service {
       @apply text-green-500 border-2 border-green-500;
     }
-  }
-}
-
-.markdown-clipboard-button {
-  @apply bg-white/10 border-none rounded text-white cursor-pointer text-xs mt-2 py-1 w-12 transition-all duration-250 ease-out;
-
-  &:hover {
-    @apply bg-white/20;
-  }
-
-  &:active {
-    @apply transform scale-95;
-  }
-
-  &.copied {
-    @apply bg-green-100 text-green-500;
-  }
-}
-
-.dynamic-component {
-  @apply relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px];
-
-  h1 {
-    @apply text-3xl font-bold;
-  }
-
-  h2 {
-    @apply text-xl font-bold;
-  }
-
-  p {
-    @apply text-base text-muted-foreground;
   }
 }
 
@@ -241,7 +207,7 @@ markdown {
 }
 
 pre {
-  @apply flex bg-gray-100 my-4 p-3 overflow-auto;
+  @apply flex bg-gray-100 my-4 p-3;
 
   code {
     @apply bg-transparent border-none;

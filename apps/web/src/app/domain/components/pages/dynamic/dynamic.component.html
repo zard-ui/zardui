@@ -1,22 +1,26 @@
 @if (componentData) {
   <section class="flex flex-col xl:grid xl:grid-cols-[220px_minmax(0,1fr)] gap-6">
     <z-sidebar></z-sidebar>
-    <main class="dynamic-component" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+    <main
+      class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px] [&_h1]:text-3xl [&_h1]:font-bold [&_p]:text-base [&_p]:text-muted-foreground"
+      scrollSpy
+      (scrollSpyChange)="activeAnchor = $event"
+    >
       <section class="flex flex-col gap-10">
         <header scrollSpyItem="overview" id="overview">
-          <markdown src="components/{{ componentData.componentName }}/doc/overview.md" clipboard [clipboardButtonComponent]="clipboardButton" ngPreserveWhitespaces> </markdown>
+          <z-markdown src="components/{{ componentData.componentName }}/doc/overview.md" [codeBox]="true"></z-markdown>
         </header>
 
         <hr />
 
-        <main class="flex flex-col" scrollSpyItem="examples" id="examples">
-          <markdown> ## Examples </markdown>
+        <main class="flex flex-col gap-4" scrollSpyItem="examples" id="examples">
+          <h2 class="text-2xl font-semibold mb-4">Examples</h2>
 
           @for (item of componentData.examples; track $index) {
             <z-code-box
-              class="pt-4"
               [scrollSpyItem]="item.name"
               [attr.id]="item.name"
+              [componentType]="item.name"
               path="{{ componentData.componentName }}/demo/{{ item.name }}"
               [dynamicComponent]="item.component"
               [onlyDemo]="item.onlyDemo"
@@ -27,7 +31,7 @@
         <hr />
 
         <footer scrollSpyItem="api" id="api">
-          <markdown class="api" src="components/{{ componentData.componentName }}/doc/api.md" ngPreserveWhitespaces> </markdown>
+          <z-markdown class="api" src="components/{{ componentData.componentName }}/doc/api.md"></z-markdown>
         </footer>
       </section>
       <z-dynamic-anchor [componentData]="componentData" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
