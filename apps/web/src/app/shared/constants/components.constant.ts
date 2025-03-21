@@ -16,6 +16,9 @@ import { ZardDemoInputBorderlessComponent } from '@zard/components/input/demo/bo
 import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
 import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
 import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
+import { ZardDemoSwitchBasicComponent } from '@zard/components/switch/demo/basic';
+import { ZardDemoSwitchDisabledComponent } from '@zard/components/switch/demo/disabled';
+import { ZardDemoSwitchSizeComponent } from '@zard/components/switch/demo/size';
 
 export interface ComponentData {
   componentName: string;
@@ -119,6 +122,23 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'text-area',
         component: ZardDemoInputTextAreaComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'switch',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoSwitchBasicComponent,
+      },
+      {
+        name: 'size',
+        component: ZardDemoSwitchSizeComponent,
+      },
+      {
+        name: 'disabled',
+        component: ZardDemoSwitchDisabledComponent,
       },
     ],
   },
