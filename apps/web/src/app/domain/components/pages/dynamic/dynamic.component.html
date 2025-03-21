@@ -4,7 +4,7 @@
     <main class="dynamic-component" scrollSpy (scrollSpyChange)="activeAnchor = $event">
       <section class="flex flex-col gap-10">
         <header scrollSpyItem="overview" id="overview">
-          <markdown src="components/{{ componentData.componentName }}/doc/overview.md" clipboard ngPreserveWhitespaces> </markdown>
+          <markdown src="components/{{ componentData.componentName }}/doc/overview.md" clipboard [clipboardButtonComponent]="clipboardButton" ngPreserveWhitespaces> </markdown>
         </header>
 
         <hr />

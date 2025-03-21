@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 import { Component } from '@angular/core';
 
+import { ClipboardButtonComponent } from '../../components/clipboard-button/clipboard-button.component';
 import { DynamicAnchorComponent } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { SidebarComponent } from '../../components/sidebar/sidebar.component';
@@ -19,6 +20,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 export class DynamicComponent {
   activeAnchor?: string;
   componentData?: ComponentData;
+  clipboardButton = ClipboardButtonComponent;
 
   constructor(
     private activatedRoute: ActivatedRoute,

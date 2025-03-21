@@ -23,8 +23,8 @@
     </div>
   }
   @if (showCodeButton) {
-    <div class="m-2 rounded-md language-html">
-      <markdown src="components/{{ path }}.ts" clipboard ngPreserveWhitespaces> </markdown>
+    <div class="rounded-md language-html">
+      <markdown src="components/{{ path }}.ts" clipboard [clipboardButtonComponent]="clipboardButton" ngPreserveWhitespaces> </markdown>
     </div>
   }
 </z-card>
