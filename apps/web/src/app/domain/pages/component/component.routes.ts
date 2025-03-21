@@ -9,6 +9,6 @@ export const COMPONENTS_ROUTES: Routes = [
   },
   {
     path: ':componentName',
-    loadComponent: () => import('./pages/dynamic/dynamic.component').then(m => m.DynamicComponent),
+    loadComponent: () => import('./component.page').then(m => m.ComponentPage),
   },
 ];

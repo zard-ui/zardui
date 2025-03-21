@@ -1,30 +1,33 @@
-<z-card>
-  @if (!onlyDemo) {
-    <div class="flex flex-col gap-4 p-4 bg-secondary rounded-md">
-      <markdown src="components/{{ path }}.md" ngPreserveWhitespaces> </markdown>
-    </div>
+<section>
+  @if (componentType()) {
+    <h3 class="text-xl font-medium first-letter:uppercase">{{ componentType() }}</h3>
   }
-
-  <div class="mt-6">
-    <ng-content></ng-content>
-    <ng-container *ngComponentOutlet="dynamicComponent"></ng-container>
-  </div>
-
-  @if (!onlyDemo) {
-    <div class="text-center mt-4">
-      <button z-button zType="ghost" (click)="showCodeButton = !showCodeButton">
-        <span class="icon-code"></span>
-        @if (showCodeButton) {
-          <span> Hide code </span>
-        } @else {
-          <span>Show code</span>
-        }
+  <main>
+    <nav class="flex gap-4 border-b mb-4">
+      <button z-button zType="ghost" (click)="activeTab.set('preview')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'preview'">
+        Preview
       </button>
-    </div>
-  }
-  @if (showCodeButton) {
-    <div class="m-2 rounded-md language-html">
-      <markdown src="components/{{ path }}.ts" clipboard ngPreserveWhitespaces> </markdown>
-    </div>
-  }
-</z-card>
+      @if (!onlyDemo()) {
+        <button z-button zType="ghost" (click)="activeTab.set('code')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'code'">
+          Code
+        </button>
+      }
+    </nav>
+    @switch (activeTab()) {
+      @case ('preview') {
+        <z-card class="min-h-74 flex justify-center items-center">
+          @if (dynamicComponent()) {
+            <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
+          }
+        </z-card>
+      }
+      @case ('code') {
+        <section>
+          @if (path()) {
+            <z-markdown src="components/{{ path() }}.ts" [codeBox]="true"></z-markdown>
+          }
+        </section>
+      }
+    }
+  </main>
+</section>
