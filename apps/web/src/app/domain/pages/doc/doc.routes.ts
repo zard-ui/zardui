@@ -1,5 +1,5 @@
-import { DEFAULT_DOC } from '@zard/shared/constants/routes.contant';
 import { Routes } from '@angular/router';
+import { DEFAULT_DOC } from '@zard/shared/constants/routes.constant';
 
 export const DOC_ROUTES: Routes = [
   {

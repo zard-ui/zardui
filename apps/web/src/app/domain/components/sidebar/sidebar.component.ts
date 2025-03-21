@@ -1,7 +1,7 @@
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.contant';
-import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
 
 @Component({
   selector: 'z-sidebar',
