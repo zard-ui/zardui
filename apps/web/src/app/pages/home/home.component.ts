@@ -1,6 +1,6 @@
-import { ShowcaseComponent } from '@zard/domain/components/components/showcase/showcase.component';
-import { YoutubeComponent } from '@zard/domain/components/components/youtube/youtube.component';
-import { HeroComponent } from '@zard/domain/components/components/hero/hero.component';
+import { ShowcaseComponent } from '@zard/domain/components/showcase/showcase.component';
+import { YoutubeComponent } from '@zard/domain/components/youtube/youtube.component';
+import { HeroComponent } from '@zard/domain/components/hero/hero.component';
 import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
 

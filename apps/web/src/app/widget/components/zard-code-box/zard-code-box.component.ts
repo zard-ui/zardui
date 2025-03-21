@@ -1,4 +1,4 @@
-import { ZardMarkdownComponent } from '@zard/domain/components/components/markdown/markdown.component';
+import { ZardMarkdownComponent } from '@zard/domain/components/markdown/markdown.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { Component, input, signal } from '@angular/core';

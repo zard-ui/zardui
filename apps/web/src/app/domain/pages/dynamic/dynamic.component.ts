@@ -1,8 +1,8 @@
-import { DynamicAnchorComponent } from '@zard/domain/components/components/dynamic-anchor/dynamic-anchor.component';
-import { ZardMarkdownComponent } from '@zard/domain/components/components/markdown/markdown.component';
+import { DynamicAnchorComponent } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
-import { SidebarComponent } from '@zard/domain/components/components/sidebar/sidebar.component';
+import { ZardMarkdownComponent } from '@zard/domain/components/markdown/markdown.component';
 import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
+import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';

@@ -10,7 +10,7 @@ export const appRoutes: Route[] = [
       { path: '', loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent) },
       {
         path: 'components',
-        loadChildren: async () => (await import('./domain/components/components.routes')).COMPONENTS_ROUTES,
+        loadChildren: async () => (await import('./domain/components.routes')).COMPONENTS_ROUTES,
       },
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ],
