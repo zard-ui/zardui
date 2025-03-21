@@ -1,27 +1,29 @@
-import { ZardDemoCheckboxDisabledComponent } from '@zard/components/checkbox/demo/disabled';
-import { ZardDemoInputBorderlessComponent } from '@zard/components/input/demo/borderless';
-import { ZardDemoSwitchDisabledComponent } from '@zard/components/switch/demo/disabled';
-import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
-import { ZardDemoRadioDisabledComponent } from '@zard/components/radio/demo/disabled';
-import { ZardDemoCheckboxShapeComponent } from '@zard/components/checkbox/demo/shape';
-import { ZardDemoCheckboxBasicComponent } from '@zard/components/checkbox/demo/basic';
-import { ZardDemoButtonLoadingComponent } from '@zard/components/button/demo/loading';
-import { ZardDemoCheckboxSizeComponent } from '@zard/components/checkbox/demo/size';
-import { ZardDemoSwitchBasicComponent } from '@zard/components/switch/demo/basic';
-import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
-import { ZardDemoButtonShapeComponent } from '@zard/components/button/demo/shape';
-import { ZardDemoButtonBasicComponent } from '@zard/components/button/demo/basic';
-import { ZardDemoSwitchSizeComponent } from '@zard/components/switch/demo/size';
-import { ZardDemoRadioBasicComponent } from '@zard/components/radio/demo/basic';
-import { ZardDemoInputBasicComponent } from '@zard/components/input/demo/basic';
-import { ZardDemoButtonSizeComponent } from '@zard/components/button/demo/size';
-import { ZardDemoButtonFullComponent } from '@zard/components/button/demo/full';
-import { ZardDemoBadgeShapeComponent } from '@zard/components/badge/demo/shape';
-import { ZardDemoBadgeBasicComponent } from '@zard/components/badge/demo/basic';
-import { ZardDemoRadioSizeComponent } from '@zard/components/radio/demo/size';
-import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
-import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
 import { ComponentType } from '@angular/cdk/overlay';
+import { ZardDemoBadgeBasicComponent } from '@zard/components/badge/demo/basic';
+import { ZardDemoBadgeShapeComponent } from '@zard/components/badge/demo/shape';
+import { ZardDemoButtonBasicComponent } from '@zard/components/button/demo/basic';
+import { ZardDemoButtonFullComponent } from '@zard/components/button/demo/full';
+import { ZardDemoButtonLoadingComponent } from '@zard/components/button/demo/loading';
+import { ZardDemoButtonShapeComponent } from '@zard/components/button/demo/shape';
+import { ZardDemoButtonSizeComponent } from '@zard/components/button/demo/size';
+import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
+import { ZardDemoCheckboxBasicComponent } from '@zard/components/checkbox/demo/basic';
+import { ZardDemoCheckboxDisabledComponent } from '@zard/components/checkbox/demo/disabled';
+import { ZardDemoCheckboxShapeComponent } from '@zard/components/checkbox/demo/shape';
+import { ZardDemoCheckboxSizeComponent } from '@zard/components/checkbox/demo/size';
+import { ZardDemoInputBasicComponent } from '@zard/components/input/demo/basic';
+import { ZardDemoInputBorderlessComponent } from '@zard/components/input/demo/borderless';
+import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
+import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
+import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
+import { ZardDemoLoaderBasicComponent } from '@zard/components/loader/demo/basic';
+import { ZardDemoLoaderSizeComponent } from '@zard/components/loader/demo/size';
+import { ZardDemoRadioBasicComponent } from '@zard/components/radio/demo/basic';
+import { ZardDemoRadioDisabledComponent } from '@zard/components/radio/demo/disabled';
+import { ZardDemoRadioSizeComponent } from '@zard/components/radio/demo/size';
+import { ZardDemoSwitchBasicComponent } from '@zard/components/switch/demo/basic';
+import { ZardDemoSwitchDisabledComponent } from '@zard/components/switch/demo/disabled';
+import { ZardDemoSwitchSizeComponent } from '@zard/components/switch/demo/size';
 
 export interface ComponentData {
   componentName: string;
@@ -129,19 +131,15 @@ export const COMPONENTS: ComponentData[] = [
     ],
   },
   {
-    componentName: 'switch',
+    componentName: 'loader',
     examples: [
       {
         name: 'basic',
-        component: ZardDemoSwitchBasicComponent,
+        component: ZardDemoLoaderBasicComponent,
       },
       {
         name: 'size',
-        component: ZardDemoSwitchSizeComponent,
-      },
-      {
-        name: 'disabled',
-        component: ZardDemoSwitchDisabledComponent,
+        component: ZardDemoLoaderSizeComponent,
       },
     ],
   },
@@ -159,6 +157,23 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'disabled',
         component: ZardDemoRadioDisabledComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'switch',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoSwitchBasicComponent,
+      },
+      {
+        name: 'size',
+        component: ZardDemoSwitchSizeComponent,
+      },
+      {
+        name: 'disabled',
+        component: ZardDemoSwitchDisabledComponent,
       },
     ],
   },
