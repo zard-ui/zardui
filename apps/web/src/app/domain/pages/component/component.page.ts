@@ -12,12 +12,12 @@ import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directi
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
-  selector: 'z-dynamic',
-  templateUrl: './dynamic.component.html',
+  selector: 'z-component',
+  templateUrl: './component.page.html',
   standalone: true,
   imports: [CommonModule, DynamicAnchorComponent, MarkdownModule, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, SidebarComponent, ZardMarkdownComponent],
 })
-export class DynamicComponent {
+export class ComponentPage {
   activeAnchor?: string;
   componentData?: ComponentData;
 

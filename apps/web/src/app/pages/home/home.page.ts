@@ -14,4 +14,4 @@ import { Component } from '@angular/core';
     <z-youtube></z-youtube>
   `,
 })
-export class HomeComponent {}
+export class HomePage {}
