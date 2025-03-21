@@ -1,6 +1,9 @@
 import { TitleCasePipe, ViewportScroller } from '@angular/common';
 import { Component, inject, input, model } from '@angular/core';
-import { ComponentData } from '@zard/shared/constants/components.constant';
+
+export interface Topic {
+  name: string;
+}
 
 @Component({
   selector: 'z-dynamic-anchor',
@@ -11,7 +14,7 @@ export class DynamicAnchorComponent {
   private viewportScroller = inject(ViewportScroller);
 
   activeAnchor = model<string | undefined>();
-  componentData = input<ComponentData | undefined>();
+  topicData = input<Topic[] | undefined>();
 
   scrollToAnchor(anchor: string) {
     const anchorElement = document.getElementById(anchor);

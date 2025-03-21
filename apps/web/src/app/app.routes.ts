@@ -12,6 +12,10 @@ export const appRoutes: Route[] = [
         path: 'components',
         loadChildren: async () => (await import('./domain/pages/component/component.routes')).COMPONENTS_ROUTES,
       },
+      {
+        path: 'docs',
+        loadChildren: async () => (await import('./domain/pages/doc/doc.routes')).DOC_ROUTES,
+      },
       { path: '**', redirectTo: '', pathMatch: 'full' },
     ],
   },

@@ -1,0 +1,13 @@
+# Instalation
+
+The Card component is used to display content and actions related to a single subject. It provides a structured layout with a title, description, and customizable styling.
+
+<br />
+
+## Testing
+The Card component is used to display content and actions related to a single subject. It provides a structured layout with a title, description, and customizable styling.
+
+<br />
+
+### Bla bla
+The Card component is used to display content and actions related to a single subject. It provides a structured layout with a title, description, and customizable styling.

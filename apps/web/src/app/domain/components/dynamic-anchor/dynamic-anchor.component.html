@@ -11,11 +11,11 @@
       <li [class]="'cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === 'examples' ? 'text-primary !text-base' : '')">
         <a (click)="scrollToAnchor('examples')">Examples</a>
       </li>
-      @for (item of componentData()?.examples; track $index) {
+      @for (topic of topicData(); track $index) {
         <li
-          [class]="'pl-4 cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === item.name ? 'text-primary !text-base' : '')"
+          [class]="'pl-4 cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === topic.name ? 'text-primary !text-base' : '')"
         >
-          <a (click)="scrollToAnchor(item.name)">{{ item.name | titlecase }}</a>
+          <a (click)="scrollToAnchor(topic.name)">{{ topic.name | titlecase }}</a>
         </li>
       }
       <li [class]="'cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === 'api' ? 'text-primary !text-base' : '')">

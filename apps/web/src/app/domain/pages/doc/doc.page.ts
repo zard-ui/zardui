@@ -1,8 +1,8 @@
 import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
 import { ZardMarkdownComponent } from '@zard/domain/components/markdown/markdown.component';
-import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
 import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
+import { DocData, DOCS } from '@zard/shared/constants/docs.constant';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
@@ -12,22 +12,20 @@ import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directi
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
-  selector: 'z-component',
-  templateUrl: './component.page.html',
+  selector: 'z-documentation',
+  templateUrl: './doc.page.html',
   standalone: true,
   imports: [CommonModule, DynamicAnchorComponent, MarkdownModule, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, SidebarComponent, ZardMarkdownComponent],
 })
-export class ComponentPage {
+export class DocPage {
   activeAnchor?: string;
-  componentData?: ComponentData;
-  pageTopics: Topic[] = [];
+  docData?: DocData;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private viewportScroller: ViewportScroller,
   ) {
-    console.log(this.pageTopics);
     this.activatedRoute.params.subscribe(_ => {
       this.loadData();
     });
@@ -36,15 +34,12 @@ export class ComponentPage {
 
   private loadData() {
     this.viewportScroller.scrollToPosition([0, 0]);
-    const componentName = this.activatedRoute.snapshot.paramMap.get('componentName');
-    if (!componentName) this.router.navigateByUrl('/');
+    const docName = this.activatedRoute.snapshot.paramMap.get('docName');
+    if (!docName) this.router.navigateByUrl('/');
 
-    const component = COMPONENTS.find(x => x.componentName === componentName);
-    if (!component) {
-      this.router.navigateByUrl('/');
-    } else {
-      this.componentData = component;
-      this.pageTopics = component.examples.map(example => ({ name: example.name }));
-    }
+    const documentation = DOCS.find((x: DocData) => x.docName === docName);
+
+    if (!documentation) this.router.navigateByUrl('/');
+    else this.docData = documentation;
   }
 }
