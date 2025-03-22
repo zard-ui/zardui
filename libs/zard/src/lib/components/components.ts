@@ -4,3 +4,4 @@ export * from './card/card.component';
 export * from './checkbox/checkbox.component';
 export * from './input/input.directive';
 export * from './switch/switch.component';
+export * from './radio/radio.component';
