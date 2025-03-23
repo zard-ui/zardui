@@ -34,6 +34,10 @@ export const HEADER_PATHS = [
 
 export const SIDEBAR_PATHS = [
   {
+    name: 'Alert',
+    path: '/components/alert',
+  },
+  {
     name: 'Badge',
     path: '/components/badge',
   },

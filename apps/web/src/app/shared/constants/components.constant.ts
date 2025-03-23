@@ -1,4 +1,6 @@
 import { ComponentType } from '@angular/cdk/overlay';
+import { ZardDemoAlertAppearanceComponent } from '@zard/components/alert/demo/appearance';
+import { ZardDemoAlertBasicComponent } from '@zard/components/alert/demo/basic';
 import { ZardDemoBadgeBasicComponent } from '@zard/components/badge/demo/basic';
 import { ZardDemoBadgeShapeComponent } from '@zard/components/badge/demo/shape';
 import { ZardDemoButtonBasicComponent } from '@zard/components/button/demo/basic';
@@ -37,6 +39,19 @@ export interface ExampleData {
 }
 
 export const COMPONENTS: ComponentData[] = [
+  {
+    componentName: 'alert',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoAlertBasicComponent,
+      },
+      {
+        name: 'appearance',
+        component: ZardDemoAlertAppearanceComponent,
+      },
+    ],
+  },
   {
     componentName: 'badge',
     examples: [
