@@ -16,7 +16,7 @@ import { avatarVariants, ZardAvatarImage, ZardAvatarVariants } from './avatar.va
       <img [src]="zImage()?.url" [alt]="zImage()?.alt || 'Avatar'" class="absolute top-0 left-0 object-cover object-center w-full h-full bg-inherit hover:bg-muted/50" />
     }
     @if (!zImage()?.url && zImage()?.fallback) {
-      <span class="text-base ">{{ zImage()?.fallback }}</span>
+      <span class="text-base">{{ zImage()?.fallback }}</span>
     }
   `,
   host: {

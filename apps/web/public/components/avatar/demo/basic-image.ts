@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '../avatar.component';
 
-const EXAMPLE_IMAGE = '/images/rick.svg';
+const EXAMPLE_IMAGE = 'https://github.com/shadcn.png';
 
 @Component({
   standalone: true,

@@ -1,18 +1,17 @@
 import { Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '../avatar.component';
-
-const EXAMPLE_IMAGE = '/images/rick.svg';
+import { EXAMPLE_IMAGE_URL } from './utils';
 
 @Component({
   standalone: true,
   imports: [ZardAvatarComponent],
   template: `
-    <z-avatar [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
-    <z-avatar zType="destructive" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
-    <z-avatar zType="outline" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
-    <z-avatar zType="secondary" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
-    <z-avatar zType="ghost" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
+    <z-avatar [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
+    <z-avatar zType="destructive" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
+    <z-avatar zType="outline" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
+    <z-avatar zType="secondary" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
+    <z-avatar zType="ghost" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
   `,
   styles: [
     `

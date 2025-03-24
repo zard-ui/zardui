@@ -1,16 +1,15 @@
 import { Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '../avatar.component';
-
-const EXAMPLE_IMAGE = '/images/rick.svg';
+import { EXAMPLE_IMAGE_URL } from './utils';
 
 @Component({
   standalone: true,
   imports: [ZardAvatarComponent],
   template: `
-    <z-avatar zSize="sm" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
-    <z-avatar zSize="md" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
-    <z-avatar zSize="lg" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
+    <z-avatar zSize="sm" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
+    <z-avatar zSize="md" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
+    <z-avatar zSize="lg" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
   `,
   styles: [
     `
