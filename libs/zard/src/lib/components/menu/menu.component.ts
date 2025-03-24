@@ -12,7 +12,7 @@ import { menuContainerVariants, menuDropdownVariants, ZardMenuSize, ZardMenuVari
     <div [class]="containerClasses()">
       <ng-content select="[menu-trigger]"></ng-content>
       <div *ngIf="isOpen()" [class]="dropdownClasses()" role="menu">
-        <div class="py-1" role="none">
+        <div class="p-1" role="none">
           <ng-content></ng-content>
         </div>
       </div>

@@ -8,7 +8,7 @@ import { CommonModule } from '@angular/common';
   template: `
     <button
       type="button"
-      class="text-gray-700 block w-full px-4 py-2 text-left text-sm hover:bg-gray-100 hover:text-gray-900"
+      class="text-gray-700 dark:text-gray-200 block w-full px-4 py-2 rounded-sm text-left text-sm hover:bg-gray-100 dark:hover:bg-accent hover:text-gray-900 dark:hover:text-gray-100"
       role="menuitem"
       [class.disabled]="disabled()"
       [disabled]="disabled()"
