@@ -65,4 +65,8 @@ export const SIDEBAR_PATHS = [
     name: 'Switch',
     path: '/components/switch',
   },
+  {
+    name: 'Accordion',
+    path: '/components/accordion',
+  },
 ];

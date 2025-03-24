@@ -16,7 +16,10 @@ import { ZardDemoInputBorderlessComponent } from '@zard/components/input/demo/bo
 import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
 import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
 import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
-import { ZardDemoLoaderBasicComponent } from '@zard/components/loader/demo/basic';
+import { ZardDemoAccordionBasicComponent } from '@zard/components/accordion/demo/basic';
+import { ZardDemoAccordionMultipleComponent } from '@zard/components/accordion/demo/multiple';
+import { ZardDemoAccordionCollapsibleComponent } from '@zard/components/accordion/demo/collapsible';
+import { ZardDemoAccordionDefaultValueComponent } from '@zard/components/accordion/demo/default-value';
 import { ZardDemoLoaderSizeComponent } from '@zard/components/loader/demo/size';
 import { ZardDemoRadioBasicComponent } from '@zard/components/radio/demo/basic';
 import { ZardDemoRadioDisabledComponent } from '@zard/components/radio/demo/disabled';
@@ -24,6 +27,7 @@ import { ZardDemoRadioSizeComponent } from '@zard/components/radio/demo/size';
 import { ZardDemoSwitchBasicComponent } from '@zard/components/switch/demo/basic';
 import { ZardDemoSwitchDisabledComponent } from '@zard/components/switch/demo/disabled';
 import { ZardDemoSwitchSizeComponent } from '@zard/components/switch/demo/size';
+import { ZardDemoLoaderBasicComponent } from '@zard/components/loader/demo/basic';
 
 export interface ComponentData {
   componentName: string;
@@ -174,6 +178,27 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'disabled',
         component: ZardDemoSwitchDisabledComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'accordion',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoAccordionBasicComponent,
+      },
+      {
+        name: 'multiple',
+        component: ZardDemoAccordionMultipleComponent,
+      },
+      {
+        name: 'collapsible',
+        component: ZardDemoAccordionCollapsibleComponent,
+      },
+      {
+        name: 'default-value',
+        component: ZardDemoAccordionDefaultValueComponent,
       },
     ],
   },
