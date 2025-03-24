@@ -1,0 +1,26 @@
+<aside class="hidden xl:block fixed top-24 z-30 w-full shrink-0 border-l md:sticky">
+  <nav class="pl-4">
+    <ul class="grid gap-1">
+      <li class="mb-4">
+        <b class="font-medium text-primary text-lg">On this page</b>
+      </li>
+      <li [class]="'cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === 'overview' ? 'text-primary !text-base' : '')">
+        <a (click)="scrollToAnchor('overview')">Overview</a>
+      </li>
+
+      <li [class]="'cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === 'examples' ? 'text-primary !text-base' : '')">
+        <a (click)="scrollToAnchor('examples')">Examples</a>
+      </li>
+      @for (topic of topicData(); track $index) {
+        <li
+          [class]="'pl-4 cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === topic.name ? 'text-primary !text-base' : '')"
+        >
+          <a (click)="scrollToAnchor(topic.name)">{{ topic.name | titlecase }}</a>
+        </li>
+      }
+      <li [class]="'cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === 'api' ? 'text-primary !text-base' : '')">
+        <a (click)="scrollToAnchor('api')">Api</a>
+      </li>
+    </ul>
+  </nav>
+</aside>

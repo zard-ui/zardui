@@ -1,10 +1,11 @@
 export const DEFAULT_COMPONENT = 'badge';
+export const DEFAULT_DOC = 'installation';
 
 export const HEADER_PATHS = [
   {
     name: 'Docs',
-    path: '/docs/instalation',
-    available: false,
+    path: '/docs',
+    available: true,
     activeClass: '!text-foreground font-semibold',
     class: 'transition-colors hover:text-foreground/80 text-foreground/80 gap-2',
   },
@@ -51,5 +52,17 @@ export const SIDEBAR_PATHS = [
   {
     name: 'Input',
     path: '/components/input',
+  },
+  {
+    name: 'Loader',
+    path: '/components/loader',
+  },
+  {
+    name: 'Radio',
+    path: '/components/radio',
+  },
+  {
+    name: 'Switch',
+    path: '/components/switch',
   },
 ];
