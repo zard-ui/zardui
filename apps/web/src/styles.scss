@@ -1,6 +1,10 @@
 @forward "tailwindcss";
 @forward 'lucide-static/font/lucide.css';
 
+@import '@angular/cdk/overlay-prebuilt.css';
+
+@plugin "tailwindcss-animate";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
