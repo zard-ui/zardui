@@ -16,6 +16,10 @@ import { ZardDemoInputBorderlessComponent } from '@zard/components/input/demo/bo
 import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
 import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
 import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
+import { ZardDemoAvatarBasicComponent } from '@zard/components/avatar/demo/basic';
+import { ZardDemoAvatarBasicWithImageComponent } from '@zard/components/avatar/demo/basic-image';
+import { ZardDemoAvatarSizeComponent } from '@zard/components/avatar/demo/size';
+import { ZardDemoAvatarShapeComponent } from '@zard/components/avatar/demo/shape';
 
 export interface ComponentData {
   componentName: string;
@@ -29,6 +33,27 @@ export interface ExampleData {
 }
 
 export const COMPONENTS: ComponentData[] = [
+  {
+    componentName: 'avatar',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoAvatarBasicComponent,
+      },
+      {
+        name: 'basic-image',
+        component: ZardDemoAvatarBasicWithImageComponent,
+      },
+      {
+        name: 'size',
+        component: ZardDemoAvatarSizeComponent,
+      },
+      {
+        name: 'shape',
+        component: ZardDemoAvatarShapeComponent,
+      },
+    ],
+  },
   {
     componentName: 'badge',
     examples: [
