@@ -1,4 +1,4 @@
-export const DEFAULT_COMPONENT = 'badge';
+export const DEFAULT_COMPONENT = 'alert';
 export const DEFAULT_DOC = 'installation';
 
 export const HEADER_PATHS = [
@@ -33,6 +33,10 @@ export const HEADER_PATHS = [
 ];
 
 export const SIDEBAR_PATHS = [
+  {
+    name: 'Alert',
+    path: '/components/alert',
+  },
   {
     name: 'Badge',
     path: '/components/badge',
