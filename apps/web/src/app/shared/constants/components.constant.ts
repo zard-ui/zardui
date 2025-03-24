@@ -18,6 +18,7 @@ import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status
 import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
 import { ZardDemoLoaderBasicComponent } from '@zard/components/loader/demo/basic';
 import { ZardDemoLoaderSizeComponent } from '@zard/components/loader/demo/size';
+import { ZardMenuDemoComponent } from '@zard/components/menu/demo/basic';
 import { ZardDemoRadioBasicComponent } from '@zard/components/radio/demo/basic';
 import { ZardDemoRadioDisabledComponent } from '@zard/components/radio/demo/disabled';
 import { ZardDemoRadioSizeComponent } from '@zard/components/radio/demo/size';
@@ -140,6 +141,15 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'size',
         component: ZardDemoLoaderSizeComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'menu',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardMenuDemoComponent,
       },
     ],
   },

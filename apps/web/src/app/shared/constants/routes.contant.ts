@@ -58,6 +58,10 @@ export const SIDEBAR_PATHS = [
     path: '/components/loader',
   },
   {
+    name: 'Menu',
+    path: '/components/menu',
+  },
+  {
     name: 'Radio',
     path: '/components/radio',
   },
