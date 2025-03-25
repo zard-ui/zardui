@@ -16,4 +16,4 @@ import { ZardCardModule } from '../card.module';
     </z-card>
   `,
 })
-export class ZardDemoCardBasicComponent {}
+export class ZardDemoCardDefaultComponent {}
