@@ -1,4 +1,5 @@
 import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.contant';
 import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
@@ -7,7 +8,7 @@ import { Component } from '@angular/core';
   selector: 'z-sidebar',
   templateUrl: './sidebar.component.html',
   standalone: true,
-  imports: [RouterModule, ZardButtonComponent],
+  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent],
 })
 export class SidebarComponent {
   readonly sidebarPaths = SIDEBAR_PATHS;

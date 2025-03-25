@@ -1,3 +1,11 @@
+import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
+import { SWITCH } from '@zard/components/switch/demo/switch';
+import { LOADER } from '@zard/components/loader/demo/loader';
+import { BUTTON } from '@zard/components/button/demo/button';
+import { RADIO } from '@zard/components/radio/demo/radio';
+import { INPUT } from '@zard/components/input/demo/input';
+import { BADGE } from '@zard/components/badge/demo/badge';
+import { CARD } from '@zard/components/card/demo/card';
 import { ComponentType } from '@angular/cdk/overlay';
 import { ZardDemoBadgeBasicComponent } from '@zard/components/badge/demo/basic';
 import { ZardDemoBadgeShapeComponent } from '@zard/components/badge/demo/shape';
@@ -36,6 +44,8 @@ export interface ComponentData {
 
 export interface ExampleData {
   name: string;
+  type?: string;
+  column?: boolean;
   component: ComponentType<unknown>;
   onlyDemo?: boolean;
 }
