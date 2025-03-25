@@ -10,14 +10,5 @@ import { ZardButtonComponent } from '../button.component';
     <button z-button zShape="circle">Circle</button>
     <button z-button zShape="square">Square</button>
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-      }
-    `,
-  ],
 })
 export class ZardDemoButtonShapeComponent {}

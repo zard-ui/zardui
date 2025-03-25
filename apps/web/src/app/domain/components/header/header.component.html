@@ -1,5 +1,5 @@
 <header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-  <nav class="max-w-[90rem] h-16 mx-auto px-4 flex items-center justify-between">
+  <nav class="max-w-[90rem] h-16 mx-auto px-4 md:px-6 flex items-center justify-between">
     <menu class="flex items-center gap-8">
       <a class="hidden xl:flex items-center gap-3" routerLink="/">
         <img src="images/zard.svg" alt="logo" class="h-8 dark:invert" />
@@ -10,7 +10,7 @@
       </a>
       <nav class="hidden xl:flex gap-6">
         @for (path of headerPaths; track $index) {
-          <a [class]="path.class" [routerLink]="path.path" [routerLinkActive]="path.activeClass" [routerLinkActiveOptions]="{ exact: true }">
+          <a class="transition-colors hover:text-foreground/80 text-foreground/80 gap-2 font-normal" [routerLink]="path.path" routerLinkActive="text-primary font-semibold">
             {{ path.name }}
             @if (!path.available) {
               <z-badge class="px-1 py-0">soon</z-badge>
