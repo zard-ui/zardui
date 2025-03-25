@@ -1,0 +1,37 @@
+<header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
+  <nav class="max-w-[90rem] h-16 mx-auto px-4 md:px-6 flex items-center justify-between">
+    <menu class="flex items-center gap-8">
+      <a class="hidden xl:flex items-center gap-3" routerLink="/">
+        <img src="images/zard.svg" alt="logo" class="h-8 dark:invert" />
+        <z-badge zType="secondary">{{ appVersion }}</z-badge>
+      </a>
+      <a class="flex xl:hidden justify-centertems-center" routerLink="/">
+        <i class="icon-align-justify !text-2xl"></i>
+      </a>
+      <nav class="hidden xl:flex gap-6">
+        @for (path of headerPaths; track $index) {
+          <a class="transition-colors hover:text-foreground/80 text-foreground/80 gap-2 font-normal" [routerLink]="path.path" routerLinkActive="text-primary font-semibold">
+            {{ path.name }}
+            @if (!path.available) {
+              <z-badge class="px-1 py-0">soon</z-badge>
+            }
+          </a>
+        }
+      </nav>
+    </menu>
+    <aside class="flex items-center gap-1">
+      <button z-button zType="ghost" zSize="icon" (click)="toggleTheme()">
+        @if (getCurrentTheme() === 'dark') {
+          <i class="icon-moon !text-lg"></i>
+        } @else {
+          <i class="icon-sun !text-lg"></i>
+        }
+      </button>
+      @for (media of socialMedias; track $index) {
+        <a z-button zType="ghost" zSize="icon" [href]="media.url" target="_blank">
+          <img [src]="media.icon" [alt]="media.iconAlt" class="h-4 dark:invert" />
+        </a>
+      }
+    </aside>
+  </nav>
+</header>

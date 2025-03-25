@@ -1,6 +1,6 @@
-import { HeaderComponent } from '@zard/domain/components/components/header/header.component';
-import { FooterComponent } from '@zard/domain/components/components/footer/footer.component';
-import { BannerComponent } from '@zard/domain/components/components/banner/banner.component';
+import { HeaderComponent } from '@zard/domain/components/header/header.component';
+import { FooterComponent } from '@zard/domain/components/footer/footer.component';
+import { BannerComponent } from '@zard/domain/components/banner/banner.component';
 import { environment } from 'apps/web/src/environments/environment';
 import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
@@ -19,7 +19,7 @@ import { Component } from '@angular/core';
     }
     <z-header></z-header>
 
-    <main class="relative max-w-[90rem] mx-auto px-4 flex-1 min-h-screen">
+    <main class="relative max-w-[90rem] mx-auto px-4 md:px-6 flex-1 min-h-screen">
       <router-outlet></router-outlet>
     </main>
     <z-footer></z-footer>
