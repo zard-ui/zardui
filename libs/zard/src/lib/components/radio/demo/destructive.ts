@@ -7,10 +7,10 @@ import { ZardRadioComponent } from '../radio.component';
   standalone: true,
   imports: [ZardRadioComponent, FormsModule],
   template: `
-    <span name="radio-disabled" z-radio disabled> Disabled </span>
-    <span name="radio-disabled" z-radio disabled [(ngModel)]="selected" [value]="true"> Disabled Selected </span>
+    <span z-radio name="radio" zType="destructive" [(ngModel)]="val" value="a"></span>
+    <span z-radio name="radio" zType="destructive" [(ngModel)]="val" value="b">Destructive</span>
   `,
 })
-export class ZardDemoRadioDisabledComponent {
-  selected = true;
+export class ZardDemoRadioDestructiveComponent {
+  val = 'b';
 }

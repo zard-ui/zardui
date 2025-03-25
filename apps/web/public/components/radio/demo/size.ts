@@ -11,16 +11,6 @@ import { ZardRadioComponent } from '../radio.component';
     <span name="radio-size" z-radio [(ngModel)]="val" value="default">Default</span>
     <span name="radio-size" z-radio zSize="lg" [(ngModel)]="val" value="large">Large</span>
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 24px;
-      }
-    `,
-  ],
 })
 export class ZardDemoRadioSizeComponent {
   val = 'large';
