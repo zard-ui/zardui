@@ -6,7 +6,7 @@
     scrollSpy
     (scrollSpyChange)="activeAnchor = $event"
   >
-    <section class="flex flex-col gap-10 mx-auto w-full min-w-0 max-w-2xl">
+    <section class="flex flex-col gap-10 mx-auto w-full min-w-0 max-w-2xl mb-10">
       <header scrollSpyItem="overview" id="overview">
         <z-markdown src="components/{{ componentData.componentName }}/doc/overview.md" [codeBox]="true"></z-markdown>
       </header>
@@ -31,7 +31,7 @@
       <hr />
 
       <footer scrollSpyItem="api" id="api">
-        <z-markdown class="api" src="components/{{ componentData.componentName }}/doc/api.md"></z-markdown>
+        <z-markdown src="components/{{ componentData.componentName }}/doc/api.md"></z-markdown>
       </footer>
     </section>
     <z-dynamic-anchor [topicData]="pageTopics" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
