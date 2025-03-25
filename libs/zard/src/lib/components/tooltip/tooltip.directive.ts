@@ -2,7 +2,7 @@ import { Subject, takeUntil } from 'rxjs';
 
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ComponentRef, Directive, ElementRef, inject, input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import { ComponentRef, Directive, ElementRef, inject, input, OnDestroy, OnInit, output, Renderer2 } from '@angular/core';
 
 import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
 import { ZardTooltipComponent } from './tooltip.component';
@@ -28,6 +28,9 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   readonly zTooltip = input<string>('');
   readonly zPosition = input<ZardTooltipPositions>('top');
   readonly zTrigger = input<ZardTooltipTriggers>('hover');
+
+  readonly zOnShow = output<void>();
+  readonly zOnHide = output<void>();
 
   ngOnInit() {
     this.setTriggers();
@@ -57,6 +60,8 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.componentRef.instance.elementRef.nativeElement.addEventListener(
       'animationend',
       () => {
+        this.zOnShow.emit();
+
         switch (this.zTrigger()) {
           case 'click':
             this.componentRef?.instance
@@ -65,10 +70,15 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
               .subscribe(() => this.hide());
             break;
           case 'hover':
-            this.renderer.listen(this.elementRef.nativeElement, 'mouseleave', (event: Event) => {
-              event.preventDefault();
-              this.hide();
-            });
+            this.renderer.listen(
+              this.elementRef.nativeElement,
+              'mouseleave',
+              (event: Event) => {
+                event.preventDefault();
+                this.hide();
+              },
+              { once: true },
+            );
             break;
         }
       },
@@ -77,9 +87,13 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   }
 
   hide(animationDuration = 150) {
-    this.componentRef?.instance.state.set('closed');
+    if (!this.componentRef) return;
+
+    this.componentRef.instance.state.set('closed');
 
     setTimeout(() => {
+      this.zOnHide.emit();
+
       this.overlayRef?.detach();
       this.componentRef?.destroy();
       this.componentRef = undefined;
