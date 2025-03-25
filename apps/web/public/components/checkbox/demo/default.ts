@@ -7,10 +7,10 @@ import { ZardCheckboxComponent } from '../checkbox.component';
   standalone: true,
   imports: [ZardCheckboxComponent, FormsModule],
   template: `
-    <span z-checkbox zShape="circle" [(ngModel)]="checked">Cicle</span>
-    <span z-checkbox zShape="square" [(ngModel)]="checked">Square</span>
+    <span z-checkbox></span>
+    <span z-checkbox [(ngModel)]="checked">Default Checked</span>
   `,
 })
-export class ZardDemoCheckboxShapeComponent {
+export class ZardDemoCheckboxDefaultComponent {
   checked = true;
 }

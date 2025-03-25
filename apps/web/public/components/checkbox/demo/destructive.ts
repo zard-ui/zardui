@@ -7,22 +7,10 @@ import { ZardCheckboxComponent } from '../checkbox.component';
   standalone: true,
   imports: [ZardCheckboxComponent, FormsModule],
   template: `
-    <span z-checkbox></span>
-    <span z-checkbox [(ngModel)]="checked">Default Checked</span>
-    <span z-checkbox zType="destructive">Destructive</span>
+    <span z-checkbox zType="destructive"></span>
     <span z-checkbox zType="destructive" [(ngModel)]="checked">Destructive Checked</span>
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 24px;
-      }
-    `,
-  ],
 })
-export class ZardDemoCheckboxBasicComponent {
+export class ZardDemoCheckboxDestructiveComponent {
   checked = true;
 }

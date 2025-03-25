@@ -15,7 +15,7 @@
     </nav>
     @switch (activeTab()) {
       @case ('preview') {
-        <z-card class="min-h-74 flex justify-center items-center gap-4 [&_ng-component]:flex [&_ng-component]:gap-4">
+        <z-card class="min-h-74 flex justify-center items-center gap-4 [&_ng-component]:flex [&_ng-component]:gap-4 [&_ng-component]:items-center">
           @if (dynamicComponent()) {
             <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
           }

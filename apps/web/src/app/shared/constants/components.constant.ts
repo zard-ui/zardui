@@ -1,11 +1,7 @@
-import { ZardDemoCheckboxDisabledComponent } from '@zard/components/checkbox/demo/disabled';
 import { ZardDemoInputBorderlessComponent } from '@zard/components/input/demo/borderless';
 import { ZardDemoSwitchDisabledComponent } from '@zard/components/switch/demo/disabled';
 import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
 import { ZardDemoRadioDisabledComponent } from '@zard/components/radio/demo/disabled';
-import { ZardDemoCheckboxShapeComponent } from '@zard/components/checkbox/demo/shape';
-import { ZardDemoCheckboxBasicComponent } from '@zard/components/checkbox/demo/basic';
-import { ZardDemoCheckboxSizeComponent } from '@zard/components/checkbox/demo/size';
 import { ZardDemoSwitchBasicComponent } from '@zard/components/switch/demo/basic';
 import { ZardDemoLoaderBasicComponent } from '@zard/components/loader/demo/basic';
 import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
@@ -16,6 +12,7 @@ import { ZardDemoInputBasicComponent } from '@zard/components/input/demo/basic';
 import { ZardDemoRadioSizeComponent } from '@zard/components/radio/demo/size';
 import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
 import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
+import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
 import { BUTTON } from '@zard/components/button/demo/button';
 import { BADGE } from '@zard/components/badge/demo/badge';
 import { ComponentType } from '@angular/cdk/overlay';
@@ -44,27 +41,7 @@ export const COMPONENTS: ComponentData[] = [
       },
     ],
   },
-  {
-    componentName: 'checkbox',
-    examples: [
-      {
-        name: 'basic',
-        component: ZardDemoCheckboxBasicComponent,
-      },
-      {
-        name: 'size',
-        component: ZardDemoCheckboxSizeComponent,
-      },
-      {
-        name: 'shape',
-        component: ZardDemoCheckboxShapeComponent,
-      },
-      {
-        name: 'disabled',
-        component: ZardDemoCheckboxDisabledComponent,
-      },
-    ],
-  },
+  CHECKBOX,
   {
     componentName: 'input',
     examples: [
