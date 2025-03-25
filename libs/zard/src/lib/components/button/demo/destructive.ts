@@ -5,6 +5,6 @@ import { ZardButtonComponent } from '../button.component';
 @Component({
   standalone: true,
   imports: [ZardButtonComponent],
-  template: ` <button z-button zLoading>Default</button> `,
+  template: ` <button z-button zType="destructive">Destructive</button> `,
 })
-export class ZardDemoButtonLoadingComponent {}
+export class ZardDemoButtonDestructiveComponent {}

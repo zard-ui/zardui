@@ -5,23 +5,18 @@ import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text
 import { ZardDemoRadioDisabledComponent } from '@zard/components/radio/demo/disabled';
 import { ZardDemoCheckboxShapeComponent } from '@zard/components/checkbox/demo/shape';
 import { ZardDemoCheckboxBasicComponent } from '@zard/components/checkbox/demo/basic';
-import { ZardDemoButtonLoadingComponent } from '@zard/components/button/demo/loading';
 import { ZardDemoCheckboxSizeComponent } from '@zard/components/checkbox/demo/size';
 import { ZardDemoSwitchBasicComponent } from '@zard/components/switch/demo/basic';
 import { ZardDemoLoaderBasicComponent } from '@zard/components/loader/demo/basic';
 import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
-import { ZardDemoButtonShapeComponent } from '@zard/components/button/demo/shape';
-import { ZardDemoButtonBasicComponent } from '@zard/components/button/demo/basic';
 import { ZardDemoSwitchSizeComponent } from '@zard/components/switch/demo/size';
 import { ZardDemoRadioBasicComponent } from '@zard/components/radio/demo/basic';
 import { ZardDemoLoaderSizeComponent } from '@zard/components/loader/demo/size';
 import { ZardDemoInputBasicComponent } from '@zard/components/input/demo/basic';
-import { ZardDemoButtonSizeComponent } from '@zard/components/button/demo/size';
-import { ZardDemoButtonFullComponent } from '@zard/components/button/demo/full';
-import { ZardDemoBadgeShapeComponent } from '@zard/components/badge/demo/shape';
 import { ZardDemoRadioSizeComponent } from '@zard/components/radio/demo/size';
 import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
 import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
+import { BUTTON } from '@zard/components/button/demo/button';
 import { BADGE } from '@zard/components/badge/demo/badge';
 import { ComponentType } from '@angular/cdk/overlay';
 
@@ -32,37 +27,14 @@ export interface ComponentData {
 
 export interface ExampleData {
   name: string;
+  type?: string;
   component: ComponentType<unknown>;
   onlyDemo?: boolean;
 }
 
 export const COMPONENTS: ComponentData[] = [
   BADGE,
-  {
-    componentName: 'button',
-    examples: [
-      {
-        name: 'basic',
-        component: ZardDemoButtonBasicComponent,
-      },
-      {
-        name: 'size',
-        component: ZardDemoButtonSizeComponent,
-      },
-      {
-        name: 'shape',
-        component: ZardDemoButtonShapeComponent,
-      },
-      {
-        name: 'loading',
-        component: ZardDemoButtonLoadingComponent,
-      },
-      {
-        name: 'full',
-        component: ZardDemoButtonFullComponent,
-      },
-    ],
-  },
+  BUTTON,
   {
     componentName: 'card',
     examples: [
