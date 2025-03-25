@@ -4,5 +4,7 @@ export * from './card/card.component';
 export * from './checkbox/checkbox.component';
 export * from './input/input.directive';
 export * from './loader/loader.component';
+export * from './menu/menu.component';
+export * from './menu/menu-item.component';
 export * from './radio/radio.component';
 export * from './switch/switch.component';
