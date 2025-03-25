@@ -6,6 +6,6 @@
 
 To customize the loader, pass the following props to the component.
 
-| Property  | Description | Type              | Default   |
-| --------- | ----------- | ----------------- | --------- |
-| `[zSize]` | Loader size | `default\|sm\|lg` | `default` |
+| Property  | Description | Type                  | Default   |
+| --------- | ----------- | --------------------- | --------- |
+| `[zSize]` | Loader size | `default \| sm \| lg` | `default` |
