@@ -24,6 +24,7 @@
           path="{{ componentData.componentName }}/demo/{{ item.name }}"
           [dynamicComponent]="item.component"
           [onlyDemo]="item.onlyDemo"
+          [column]="item?.column"
         ></z-code-box>
         }
       </main>

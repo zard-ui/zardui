@@ -1,19 +1,15 @@
-import { ZardDemoInputBorderlessComponent } from '@zard/components/input/demo/borderless';
 import { ZardDemoSwitchDisabledComponent } from '@zard/components/switch/demo/disabled';
-import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
 import { ZardDemoRadioDisabledComponent } from '@zard/components/radio/demo/disabled';
 import { ZardDemoSwitchBasicComponent } from '@zard/components/switch/demo/basic';
 import { ZardDemoLoaderBasicComponent } from '@zard/components/loader/demo/basic';
-import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
 import { ZardDemoSwitchSizeComponent } from '@zard/components/switch/demo/size';
 import { ZardDemoRadioBasicComponent } from '@zard/components/radio/demo/basic';
 import { ZardDemoLoaderSizeComponent } from '@zard/components/loader/demo/size';
-import { ZardDemoInputBasicComponent } from '@zard/components/input/demo/basic';
 import { ZardDemoRadioSizeComponent } from '@zard/components/radio/demo/size';
-import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
 import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
 import { BUTTON } from '@zard/components/button/demo/button';
+import { INPUT } from '@zard/components/input/demo/input';
 import { BADGE } from '@zard/components/badge/demo/badge';
 import { ComponentType } from '@angular/cdk/overlay';
 
@@ -25,6 +21,7 @@ export interface ComponentData {
 export interface ExampleData {
   name: string;
   type?: string;
+  column?: boolean;
   component: ComponentType<unknown>;
   onlyDemo?: boolean;
 }
@@ -42,31 +39,7 @@ export const COMPONENTS: ComponentData[] = [
     ],
   },
   CHECKBOX,
-  {
-    componentName: 'input',
-    examples: [
-      {
-        name: 'basic',
-        component: ZardDemoInputBasicComponent,
-      },
-      {
-        name: 'size',
-        component: ZardDemoInputSizeComponent,
-      },
-      {
-        name: 'status',
-        component: ZardDemoInputStatusComponent,
-      },
-      {
-        name: 'borderless',
-        component: ZardDemoInputBorderlessComponent,
-      },
-      {
-        name: 'text-area',
-        component: ZardDemoInputTextAreaComponent,
-      },
-    ],
-  },
+  INPUT,
   {
     componentName: 'loader',
     examples: [
