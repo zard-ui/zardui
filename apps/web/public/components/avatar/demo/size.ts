@@ -14,7 +14,7 @@ import { ZardAvatarComponent } from '../avatar.component';
 export class ZardDemoAvatarSizeComponent {
   readonly zImageDefault = {
     fallback: 'ZA',
-    url: 'https://github.com/shadcn.png',
+    url: '/images/avatar/imgs/avatar_image.jpg',
     alt: 'ZadUI',
   };
 }

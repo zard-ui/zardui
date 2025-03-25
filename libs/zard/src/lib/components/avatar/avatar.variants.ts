@@ -1,6 +1,6 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const avatarVariants = cva('relative flex flex-row items-center justify-center border-transparent overflow-hidden p-2 box-content hover:bg-primary/90 cursor-default', {
+export const avatarVariants = cva('relative flex flex-row items-center justify-center border-transparent p-2 box-content hover:bg-primary/90 cursor-default', {
   variants: {
     zType: {
       default: 'bg-primary text-primary-foreground hover:bg-primary/90',
@@ -20,6 +20,13 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
       default: 'rounded-md',
       circle: 'rounded-full',
       square: 'rounded-none',
+    },
+    zStatus: {
+      online: 'online',
+      offline: 'offline',
+      doNotDisturb: 'doNotDisturb',
+      away: 'away',
+      invisible: 'invisible',
     },
   },
   defaultVariants: {

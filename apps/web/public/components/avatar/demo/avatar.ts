@@ -1,8 +1,9 @@
-import { ZardDemoAvatarBasicWithImageComponent } from './basic-image';
-import { ZardDemoAvatarShapeComponent } from './shape';
 import { ZardDemoAvatarBasicComponent } from './basic';
-import { ZardDemoAvatarSizeComponent } from './size';
+import { ZardDemoAvatarBasicWithImageComponent } from './basic-image';
 import { ZardDemoAvatarLoadingComponent } from './loading';
+import { ZardDemoAvatarShapeComponent } from './shape';
+import { ZardDemoAvatarSizeComponent } from './size';
+import { ZardDemoAvatarStatusComponent } from './status';
 
 export const AVATAR = {
   componentName: 'avatar',
@@ -23,6 +24,10 @@ export const AVATAR = {
     {
       name: 'shape',
       component: ZardDemoAvatarShapeComponent,
+    },
+    {
+      name: 'status',
+      component: ZardDemoAvatarStatusComponent,
     },
     {
       name: 'loading',

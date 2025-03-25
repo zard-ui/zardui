@@ -7,13 +7,14 @@ import { ZardAvatarComponent } from '../avatar.component';
   imports: [ZardAvatarComponent],
   template: `
     <z-avatar [zImage]="zImageDefault" />
-    <z-avatar zType="destructive" [zImage]="zImageDefault" />
-    <z-avatar zType="outline" [zImage]="zImageDefault" />
-    <z-avatar zType="secondary" [zImage]="zImageDefault" />
-    <z-avatar zType="ghost" [zImage]="zImageDefault" />
+    <z-avatar zStatus="online" [zImage]="zImageDefault" />
+    <z-avatar zStatus="offline" [zImage]="zImageDefault" />
+    <z-avatar zStatus="doNotDisturb" [zImage]="zImageDefault" />
+    <z-avatar zStatus="away" [zImage]="zImageDefault" />
+    <z-avatar zStatus="invisible" [zImage]="zImageDefault" />
   `,
 })
-export class ZardDemoAvatarBasicWithImageComponent {
+export class ZardDemoAvatarStatusComponent {
   readonly zImageDefault = {
     fallback: 'ZA',
     url: '/images/avatar/imgs/avatar_image.jpg',
