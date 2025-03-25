@@ -5,9 +5,6 @@ import { ZardBadgeComponent } from '../badge.component';
 @Component({
   standalone: true,
   imports: [ZardBadgeComponent],
-  template: `
-    <z-badge>Default</z-badge>
-    <z-badge zShape="square">Square</z-badge>
-  `,
+  template: ` <z-badge zType="outline">Default</z-badge> `,
 })
-export class ZardDemoBadgeShapeComponent {}
+export class ZardDemoBadgeOutlineComponent {}

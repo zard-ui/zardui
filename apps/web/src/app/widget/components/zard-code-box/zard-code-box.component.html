@@ -1,9 +1,9 @@
-<section>
+<section class="mb-10">
   @if (componentType()) {
     <h3 class="text-xl font-medium first-letter:uppercase">{{ componentType() }}</h3>
   }
   <main>
-    <nav class="flex gap-4 border-b mb-4">
+    <nav class="flex gap-4 border-b mb-8">
       <button z-button zType="ghost" (click)="activeTab.set('preview')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'preview'">
         Preview
       </button>
@@ -15,7 +15,7 @@
     </nav>
     @switch (activeTab()) {
       @case ('preview') {
-        <z-card class="min-h-74 flex justify-center items-center">
+        <z-card class="min-h-74 flex justify-center items-center gap-4 [&_ng-component]:grid [&_ng-component]:gap-4">
           @if (dynamicComponent()) {
             <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
           }

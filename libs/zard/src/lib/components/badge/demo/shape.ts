@@ -9,14 +9,5 @@ import { ZardBadgeComponent } from '../badge.component';
     <z-badge>Default</z-badge>
     <z-badge zShape="square">Square</z-badge>
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-      }
-    `,
-  ],
 })
 export class ZardDemoBadgeShapeComponent {}
