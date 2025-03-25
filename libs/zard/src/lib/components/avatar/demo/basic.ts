@@ -6,20 +6,15 @@ import { ZardAvatarComponent } from '../avatar.component';
   standalone: true,
   imports: [ZardAvatarComponent],
   template: `
-    <z-avatar [zImage]="{ fallback: 'ZA' }" />
-    <z-avatar zType="destructive" [zImage]="{ fallback: 'ZA' }" />
-    <z-avatar zType="outline" [zImage]="{ fallback: 'ZA' }" />
-    <z-avatar zType="secondary" [zImage]="{ fallback: 'ZA' }" />
-    <z-avatar zType="ghost" [zImage]="{ fallback: 'ZA' }" />
+    <z-avatar [zImage]="zImageDefault" />
+    <z-avatar zType="destructive" [zImage]="zImageDefault" />
+    <z-avatar zType="outline" [zImage]="zImageDefault" />
+    <z-avatar zType="secondary" [zImage]="zImageDefault" />
+    <z-avatar zType="ghost" [zImage]="zImageDefault" />
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-      }
-    `,
-  ],
 })
-export class ZardDemoAvatarBasicComponent {}
+export class ZardDemoAvatarBasicComponent {
+  readonly zImageDefault = {
+    fallback: 'ZA',
+  };
+}

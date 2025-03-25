@@ -1,6 +1,6 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const avatarVariants = cva('relative flex flex-row items-center justify-center border-transparent overflow-hidden p-2 box-content hover:bg-primary/90', {
+export const avatarVariants = cva('relative flex flex-row items-center justify-center border-transparent overflow-hidden p-2 box-content hover:bg-primary/90 cursor-default', {
   variants: {
     zType: {
       default: 'bg-primary text-primary-foreground hover:bg-primary/90',
@@ -36,5 +36,8 @@ export type ZardAvatarImage = {
     alt?: string;
   };
 };
+export type ZardAvatarLoading = {
+  time: number | undefined;
+};
 
-export type ZardAvatarVariants = VariantProps<typeof avatarVariants> & ZardAvatarImage;
+export type ZardAvatarVariants = VariantProps<typeof avatarVariants> & ZardAvatarImage & ZardAvatarLoading;

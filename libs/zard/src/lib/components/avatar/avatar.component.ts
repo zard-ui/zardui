@@ -1,9 +1,6 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
-
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal, ViewEncapsulation } from '@angular/core';
 import { mergeClasses } from '../../shared/utils/utils';
-import { avatarVariants, ZardAvatarImage, ZardAvatarVariants } from './avatar.variants';
+import { avatarVariants, ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants } from './avatar.variants';
 
 @Component({
   selector: 'z-avatar',
@@ -12,10 +9,13 @@ import { avatarVariants, ZardAvatarImage, ZardAvatarVariants } from './avatar.va
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    @if (zImage()?.url) {
+    @if (zLoadingSignal()) {
+      <span zType="cached" class="icon-loader-circle animate-spin"></span>
+    }
+    @if (!zLoadingSignal() && zImage()?.url) {
       <img [src]="zImage()?.url" [alt]="zImage()?.alt || 'Avatar'" class="absolute top-0 left-0 object-cover object-center w-full h-full bg-inherit hover:bg-muted/50" />
     }
-    @if (!zImage()?.url && zImage()?.fallback) {
+    @if (!zLoadingSignal() && zImage()?.fallback) {
       <span class="text-base">{{ zImage()?.fallback }}</span>
     }
   `,
@@ -28,8 +28,19 @@ export class ZardAvatarComponent {
   readonly zSize = input<ZardAvatarVariants['zSize'] | null>('default');
   readonly zShape = input<ZardAvatarVariants['zShape'] | null>('default');
   readonly zImage = input<ZardAvatarImage['zImage'] | null>({ fallback: 'ZA' });
+  readonly zLoading = input<ZardAvatarLoading['time']>(undefined); // input original (imutável)
 
-  readonly class = input<ClassValue>('');
+  readonly class = input<string>('');
 
   protected readonly classes = computed(() => mergeClasses(avatarVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape() }), this.class()));
+
+  protected readonly zLoadingSignal = signal<number | undefined>(this.zLoading()); // Signal mutável
+  constructor() {
+    effect(() => {
+      if (this.zLoading()) {
+        this.zLoadingSignal.set(this.zLoading()); // Sincroniza zLoading inicial
+        setTimeout(() => this.zLoadingSignal.set(undefined), this.zLoading());
+      }
+    });
+  }
 }

@@ -6,10 +6,10 @@
 
 To customize the badge, pass the following props to the component.
 
-| Property   | Description                          | Type                                               | Default    |
-| ---------- | ------------------------------------ | -------------------------------------------------- | ---------- | 
-| `[zType]`  | Avatar type                          | `default\|destructive\|outline\|secondary\|ghost`  | `default`  |
-| `[zSize]`  | Avatar size                          | `default\|sm\|md\|lg\|full                      `  | `default`  |
-| `[zShape]` | Avatar shape                         | `default\|circle\|square                        `  | `default`  |
-| `[zImage]` | Avatar image data                    | `{ fallback: string, url?: string: alt?: string }` |   |
-   
+| Property     | Description         | Type                                                      | Default     |
+| ------------ | ------------------- | --------------------------------------------------------- | ----------- |
+| `[zType]`    | Avatar type         | `default \| destructive \| outline \| secondary \| ghost` | `default`   |
+| `[zSize]`    | Avatar size         | `default \| sm \| md \| lg \| full                      ` | `default`   |
+| `[zShape]`   | Avatar shape        | `default \| circle \| square                            ` | `default`   |
+| `[zLoading]` | Avatar loading time | `undefined \| number                                    ` | `undefined` |
+| `[zImage]`   | Avatar image data   | `{ fallback: string, url?: string: alt?: string }       ` |             |

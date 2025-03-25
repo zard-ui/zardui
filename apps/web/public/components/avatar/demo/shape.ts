@@ -2,24 +2,19 @@ import { Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '../avatar.component';
 
-const EXAMPLE_IMAGE = '/images/rick.svg';
-
 @Component({
   standalone: true,
   imports: [ZardAvatarComponent],
   template: `
-    <z-avatar zShape="default" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
-    <z-avatar zShape="square" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
-    <z-avatar zShape="circle" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE}', alt: '' }" />
+    <z-avatar zShape="default" [zImage]="zImageDefault" />
+    <z-avatar zShape="square" [zImage]="zImageDefault" />
+    <z-avatar zShape="circle" [zImage]="zImageDefault" />
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-      }
-    `,
-  ],
 })
-export class ZardDemoAvatarShapeComponent {}
+export class ZardDemoAvatarShapeComponent {
+  readonly zImageDefault = {
+    fallback: 'ZA',
+    url: 'https://github.com/shadcn.png',
+    alt: 'ZadUI',
+  };
+}

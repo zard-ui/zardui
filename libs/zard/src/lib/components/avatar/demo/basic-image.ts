@@ -1,26 +1,22 @@
 import { Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '../avatar.component';
-import { EXAMPLE_IMAGE_URL } from './utils';
 
 @Component({
   standalone: true,
   imports: [ZardAvatarComponent],
   template: `
-    <z-avatar [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
-    <z-avatar zType="destructive" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
-    <z-avatar zType="outline" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
-    <z-avatar zType="secondary" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
-    <z-avatar zType="ghost" [zImage]="{ fallback: 'ZA', url: '${EXAMPLE_IMAGE_URL}', alt: '' }" />
+    <z-avatar [zImage]="zImageDefault" />
+    <z-avatar zType="destructive" [zImage]="zImageDefault" />
+    <z-avatar zType="outline" [zImage]="zImageDefault" />
+    <z-avatar zType="secondary" [zImage]="zImageDefault" />
+    <z-avatar zType="ghost" [zImage]="zImageDefault" />
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-      }
-    `,
-  ],
 })
-export class ZardDemoAvatarBasicWithImageComponent {}
+export class ZardDemoAvatarBasicWithImageComponent {
+  readonly zImageDefault = {
+    fallback: 'ZA',
+    url: 'https://github.com/shadcn.png',
+    alt: 'ZadUI',
+  };
+}
