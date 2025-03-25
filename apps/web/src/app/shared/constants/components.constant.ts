@@ -1,11 +1,9 @@
-import { ZardDemoSwitchDisabledComponent } from '@zard/components/switch/demo/disabled';
 import { ZardDemoRadioDisabledComponent } from '@zard/components/radio/demo/disabled';
-import { ZardDemoSwitchBasicComponent } from '@zard/components/switch/demo/basic';
-import { ZardDemoSwitchSizeComponent } from '@zard/components/switch/demo/size';
 import { ZardDemoRadioBasicComponent } from '@zard/components/radio/demo/basic';
 import { ZardDemoRadioSizeComponent } from '@zard/components/radio/demo/size';
 import { ZardDemoCardBasicComponent } from '@zard/components/card/demo/basic';
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
+import { SWITCH } from '@zard/components/switch/demo/switch';
 import { LOADER } from '@zard/components/loader/demo/loader';
 import { BUTTON } from '@zard/components/button/demo/button';
 import { INPUT } from '@zard/components/input/demo/input';
@@ -57,21 +55,5 @@ export const COMPONENTS: ComponentData[] = [
       },
     ],
   },
-  {
-    componentName: 'switch',
-    examples: [
-      {
-        name: 'basic',
-        component: ZardDemoSwitchBasicComponent,
-      },
-      {
-        name: 'size',
-        component: ZardDemoSwitchSizeComponent,
-      },
-      {
-        name: 'disabled',
-        component: ZardDemoSwitchDisabledComponent,
-      },
-    ],
-  },
+  SWITCH,
 ];
