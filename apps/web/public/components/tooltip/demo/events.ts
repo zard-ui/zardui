@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardTooltipModule } from '../tooltip.module';
+import { ZardTooltipModule } from '../tooltip';
 
 @Component({
   standalone: true,

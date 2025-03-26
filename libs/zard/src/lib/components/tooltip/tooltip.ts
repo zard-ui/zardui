@@ -1,12 +1,29 @@
-import { take } from 'rxjs';
+import { filter, fromEvent, Subject, take } from 'rxjs';
 
-import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ComponentRef, Directive, ElementRef, inject, input, OnInit, output, Renderer2 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ComponentRef,
+  computed,
+  Directive,
+  ElementRef,
+  inject,
+  input,
+  NgModule,
+  OnDestroy,
+  OnInit,
+  output,
+  Renderer2,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { mergeClasses } from '../../shared/utils/utils';
 import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
-import { ZardTooltipComponent } from './tooltip.component';
+import { tooltipVariants } from './tooltip.variants';
 
 export type ZardTooltipTriggers = 'click' | 'hover';
 
@@ -112,3 +129,58 @@ export class ZardTooltipDirective implements OnInit {
     });
   }
 }
+
+@Component({
+  selector: 'z-tooltip',
+  template: `{{ text() }}`,
+  host: {
+    '[class]': 'classes()',
+    '[attr.data-side]': 'position()',
+    '[attr.data-state]': 'state()',
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardTooltipComponent implements OnInit, OnDestroy {
+  readonly elementRef = inject(ElementRef);
+
+  private position = signal<ZardTooltipPositions>('top');
+  private trigger = signal<ZardTooltipTriggers>('hover');
+  protected text = signal<string>('');
+
+  state = signal<'closed' | 'opened'>('closed');
+
+  private onLoadSubject$ = new Subject<void>();
+  onLoad$ = this.onLoadSubject$.asObservable();
+
+  protected readonly classes = computed(() => mergeClasses(tooltipVariants()));
+
+  ngOnInit(): void {
+    this.onLoadSubject$.next();
+  }
+
+  ngOnDestroy() {
+    this.onLoadSubject$.complete();
+  }
+
+  overlayClickOutside() {
+    return fromEvent<MouseEvent>(document, 'click').pipe(
+      filter(event => {
+        const clickTarget = event.target as HTMLElement;
+        return !this.elementRef.nativeElement.contains(clickTarget);
+      }),
+      takeUntilDestroyed(),
+    );
+  }
+
+  setProps(text: string, position: ZardTooltipPositions, trigger: ZardTooltipTriggers) {
+    this.text.set(text);
+    this.position.set(position);
+    this.trigger.set(trigger);
+  }
+}
+
+@NgModule({
+  imports: [CommonModule, OverlayModule, ZardTooltipComponent, ZardTooltipDirective],
+  exports: [ZardTooltipComponent, ZardTooltipDirective],
+})
+export class ZardTooltipModule {}
