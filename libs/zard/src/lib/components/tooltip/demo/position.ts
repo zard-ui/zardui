@@ -13,14 +13,5 @@ import { ZardTooltipModule } from '../tooltip.module';
     <button z-button zType="outline" zTooltip="Tooltip content" zPosition="right">Right</button>
     <button z-button zType="outline" zTooltip="Tooltip content" zPosition="bottom">Bottom</button>
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-      }
-    `,
-  ],
 })
 export class ZardDemoTooltipPositionComponent {}
