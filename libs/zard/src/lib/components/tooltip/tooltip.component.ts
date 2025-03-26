@@ -1,6 +1,6 @@
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
 
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, OnDestroy, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardTooltipPositions } from './tooltip-positions';
@@ -17,7 +17,7 @@ import { tooltipVariants } from './tooltip.variants';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardTooltipComponent implements OnDestroy {
+export class ZardTooltipComponent implements OnInit, OnDestroy {
   readonly elementRef = inject(ElementRef);
   private readonly destroy$ = new Subject<void>();
 
@@ -26,12 +26,18 @@ export class ZardTooltipComponent implements OnDestroy {
   protected text = signal<string>('');
 
   state = signal<'closed' | 'opened'>('closed');
+  onLoad$ = new Subject<void>();
 
   protected readonly classes = computed(() => mergeClasses(tooltipVariants()));
+
+  ngOnInit(): void {
+    this.onLoad$.next();
+  }
 
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this.onLoad$.complete();
   }
 
   overlayClickOutside() {

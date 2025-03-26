@@ -1,4 +1,4 @@
-import { Subject, takeUntil } from 'rxjs';
+import { Subject, take, takeUntil } from 'rxjs';
 
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -24,6 +24,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private overlayRef?: OverlayRef;
   private componentRef?: ComponentRef<ZardTooltipComponent>;
+  private scrollListenerRef?: () => void;
 
   readonly zTooltip = input<string>('');
   readonly zPosition = input<ZardTooltipPositions>('top');
@@ -32,11 +33,16 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   readonly zOnShow = output<void>();
   readonly zOnHide = output<void>();
 
+  get nativeElement() {
+    return this.elementRef.nativeElement;
+  }
+
+  get overlayElement() {
+    return this.componentRef?.instance.elementRef.nativeElement;
+  }
+
   ngOnInit() {
     this.setTriggers();
-    this.renderer.listen(window, 'scroll', () => {
-      this.hide(0);
-    });
 
     const positionStrategy = this.overlayPositionBuilder.flexibleConnectedTo(this.elementRef).withPositions([TOOLTIP_POSITIONS_MAP[this.zPosition()]]);
     this.overlayRef = this.overlay.create({ positionStrategy });
@@ -57,33 +63,33 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.componentRef.instance.setProps(this.zTooltip(), this.zPosition(), this.zTrigger());
     this.componentRef.instance.state.set('opened');
 
-    this.componentRef.instance.elementRef.nativeElement.addEventListener(
-      'animationend',
-      () => {
-        this.zOnShow.emit();
+    this.componentRef.instance.onLoad$.pipe(take(1)).subscribe(() => {
+      this.zOnShow.emit();
 
-        switch (this.zTrigger()) {
-          case 'click':
-            this.componentRef?.instance
-              .overlayClickOutside()
-              .pipe(takeUntil(this.destroy$))
-              .subscribe(() => this.hide());
-            break;
-          case 'hover':
-            this.renderer.listen(
-              this.elementRef.nativeElement,
-              'mouseleave',
-              (event: Event) => {
-                event.preventDefault();
-                this.hide();
-              },
-              { once: true },
-            );
-            break;
-        }
-      },
-      { once: true },
-    );
+      switch (this.zTrigger()) {
+        case 'click':
+          this.componentRef?.instance
+            .overlayClickOutside()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(() => this.hide());
+          break;
+        case 'hover':
+          this.renderer.listen(
+            this.elementRef.nativeElement,
+            'mouseleave',
+            (event: Event) => {
+              event.preventDefault();
+              this.hide();
+            },
+            { once: true },
+          );
+          break;
+      }
+    });
+
+    this.scrollListenerRef = this.renderer.listen(window, 'scroll', () => {
+      this.hide(0);
+    });
   }
 
   hide(animationDuration = 150) {
@@ -97,11 +103,14 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
       this.overlayRef?.detach();
       this.componentRef?.destroy();
       this.componentRef = undefined;
+
+      if (this.scrollListenerRef) this.scrollListenerRef();
     }, animationDuration);
   }
 
   private setTriggers() {
     const showTrigger = this.zTrigger() === 'click' ? 'click' : 'mouseenter';
+
     this.renderer.listen(this.elementRef.nativeElement, showTrigger, (event: Event) => {
       event.preventDefault();
       this.show();
