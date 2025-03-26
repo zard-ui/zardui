@@ -1,6 +1,7 @@
-import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
+import { filter, fromEvent, Subject } from 'rxjs';
 
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, OnDestroy, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardTooltipPositions } from './tooltip-positions';
@@ -19,25 +20,24 @@ import { tooltipVariants } from './tooltip.variants';
 })
 export class ZardTooltipComponent implements OnInit, OnDestroy {
   readonly elementRef = inject(ElementRef);
-  private readonly destroy$ = new Subject<void>();
 
   private position = signal<ZardTooltipPositions>('top');
   private trigger = signal<ZardTooltipTriggers>('hover');
   protected text = signal<string>('');
 
   state = signal<'closed' | 'opened'>('closed');
-  onLoad$ = new Subject<void>();
+
+  private onLoadSubject$ = new Subject<void>();
+  onLoad$ = this.onLoadSubject$.asObservable();
 
   protected readonly classes = computed(() => mergeClasses(tooltipVariants()));
 
   ngOnInit(): void {
-    this.onLoad$.next();
+    this.onLoadSubject$.next();
   }
 
   ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-    this.onLoad$.complete();
+    this.onLoadSubject$.complete();
   }
 
   overlayClickOutside() {
@@ -46,7 +46,7 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
         const clickTarget = event.target as HTMLElement;
         return !this.elementRef.nativeElement.contains(clickTarget);
       }),
-      takeUntil(this.destroy$),
+      takeUntilDestroyed(),
     );
   }
 

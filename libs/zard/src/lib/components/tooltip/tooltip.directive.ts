@@ -1,8 +1,9 @@
-import { Subject, take, takeUntil } from 'rxjs';
+import { take } from 'rxjs';
 
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { ComponentRef, Directive, ElementRef, inject, input, OnDestroy, OnInit, output, Renderer2 } from '@angular/core';
+import { ComponentRef, Directive, ElementRef, inject, input, OnInit, output, Renderer2 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
 import { ZardTooltipComponent } from './tooltip.component';
@@ -15,13 +16,12 @@ export type ZardTooltipTriggers = 'click' | 'hover';
     style: 'cursor: pointer',
   },
 })
-export class ZardTooltipDirective implements OnInit, OnDestroy {
+export class ZardTooltipDirective implements OnInit {
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private elementRef = inject(ElementRef);
   private overlay = inject(Overlay);
   private renderer = inject(Renderer2);
 
-  private readonly destroy$ = new Subject<void>();
   private overlayRef?: OverlayRef;
   private componentRef?: ComponentRef<ZardTooltipComponent>;
   private scrollListenerRef?: () => void;
@@ -48,11 +48,6 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.overlayRef = this.overlay.create({ positionStrategy });
   }
 
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
   show() {
     if (this.componentRef) return;
 
@@ -70,7 +65,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
         case 'click':
           this.componentRef?.instance
             .overlayClickOutside()
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntilDestroyed())
             .subscribe(() => this.hide());
           break;
         case 'hover':
