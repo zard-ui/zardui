@@ -10,7 +10,6 @@ import { ZardAccordionComponent } from './accordion.component';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  styles: [],
   template: `
     <div [class]="classes()" [attr.data-state]="isOpen() ? 'open' : 'closed'">
       <button

@@ -12,7 +12,7 @@ import { ZardAccordionItemComponent } from './accordion-item.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div [class]="classes()">
+    <div class="flex flex-col" [class]="classes()">
       <ng-content></ng-content>
     </div>
   `,
