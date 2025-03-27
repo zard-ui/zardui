@@ -1,4 +1,4 @@
-import { filter, fromEvent, Subject, take } from 'rxjs';
+import { filter, fromEvent, Subject, take, takeUntil } from 'rxjs';
 
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -19,7 +19,6 @@ import {
   Renderer2,
   signal,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
@@ -33,7 +32,8 @@ export type ZardTooltipTriggers = 'click' | 'hover';
     style: 'cursor: pointer',
   },
 })
-export class ZardTooltipDirective implements OnInit {
+export class ZardTooltipDirective implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private elementRef = inject(ElementRef);
   private overlay = inject(Overlay);
@@ -65,6 +65,11 @@ export class ZardTooltipDirective implements OnInit {
     this.overlayRef = this.overlay.create({ positionStrategy });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   show() {
     if (this.componentRef) return;
 
@@ -82,7 +87,7 @@ export class ZardTooltipDirective implements OnInit {
         case 'click':
           this.componentRef?.instance
             .overlayClickOutside()
-            .pipe(takeUntilDestroyed())
+            .pipe(takeUntil(this.destroy$))
             .subscribe(() => this.hide());
           break;
         case 'hover':
@@ -141,6 +146,7 @@ export class ZardTooltipDirective implements OnInit {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardTooltipComponent implements OnInit, OnDestroy {
+  private readonly destroy$ = new Subject<void>();
   readonly elementRef = inject(ElementRef);
 
   private position = signal<ZardTooltipPositions>('top');
@@ -159,6 +165,8 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
     this.onLoadSubject$.complete();
   }
 
@@ -168,7 +176,7 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
         const clickTarget = event.target as HTMLElement;
         return !this.elementRef.nativeElement.contains(clickTarget);
       }),
-      takeUntilDestroyed(),
+      takeUntil(this.destroy$),
     );
   }
 
