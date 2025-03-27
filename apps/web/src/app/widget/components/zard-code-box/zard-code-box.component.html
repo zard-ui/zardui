@@ -20,7 +20,7 @@
           [class]="column() ? '[&_ng-component]:grid' : '[&_ng-component]:flex'"
         >
           @if (dynamicComponent()) {
-            <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
+            <div [class]="isDefineSizeContainer() ? 'w-full h-full' : ''"><ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container></div>
           }
         </z-card>
       }

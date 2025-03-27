@@ -7,6 +7,7 @@ import { INPUT } from '@zard/components/input/demo/input';
 import { LOADER } from '@zard/components/loader/demo/loader';
 import { RADIO } from '@zard/components/radio/demo/radio';
 import { SWITCH } from '@zard/components/switch/demo/switch';
+import { TABS } from '@zard/components/tabs/demo/tabs';
 import { TOOLTIP } from '@zard/components/tooltip/demo/tooltip';
 
 export interface ComponentData {
@@ -18,8 +19,9 @@ export interface ExampleData {
   name: string;
   type?: string;
   column?: boolean;
+  isDefineSizeContainer?: boolean;
   component: ComponentType<unknown>;
   onlyDemo?: boolean;
 }
 
-export const COMPONENTS: ComponentData[] = [BADGE, BUTTON, CARD, CHECKBOX, INPUT, LOADER, RADIO, SWITCH, TOOLTIP];
+export const COMPONENTS: ComponentData[] = [BADGE, BUTTON, CARD, CHECKBOX, INPUT, LOADER, RADIO, SWITCH, TOOLTIP, TABS];
