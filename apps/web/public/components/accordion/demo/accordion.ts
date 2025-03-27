@@ -10,7 +10,7 @@ export const ACCORDION = {
     {
       name: 'basic',
       component: ZardDemoAccordionBasicComponent,
-      column: true,
+      column: false,
     },
     {
       name: 'collapsible',

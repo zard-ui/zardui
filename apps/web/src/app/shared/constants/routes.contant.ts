@@ -22,7 +22,7 @@ const DOCS_PATH = {
 const COMPONENTS_PATH = {
   title: 'Components',
   data: [
-    { name: 'Accordion', path: '/components', available: false },
+    { name: 'Accordion', path: '/components/accordion', available: true },
     { name: 'Alert', path: '/components', available: false },
     { name: 'Avatar', path: '/components', available: false },
     { name: 'Badge', path: '/components/badge', available: true },

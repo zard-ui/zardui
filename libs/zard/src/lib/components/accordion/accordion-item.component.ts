@@ -1,7 +1,6 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
-import { mergeClasses } from '../../shared/utils/utils';
-import { accordionItemVariants, accordionItemContentVariants, accordionItemTriggerVariants } from './accordion.variants';
+import { ClassValue } from 'class-variance-authority/dist/types';
+
 import { ZardAccordionComponent } from './accordion.component';
 
 @Component({
@@ -11,12 +10,13 @@ import { ZardAccordionComponent } from './accordion.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div [class]="classes()" [attr.data-state]="isOpen() ? 'open' : 'closed'">
+    <div class="border-b" [attr.data-state]="isOpen() ? 'open' : 'closed'">
       <button
         type="button"
         role="button"
-        [id]="'header-' + zValue()"
-        [class]="triggerClasses()"
+        [id]="'accordion-' + zValue()"
+        class="flex w-full items-center justify-between py-4 text-sm font-medium transition-all hover:underline text-left border-none bg-transparent cursor-pointer focus:outline-none"
+        [class]="class()"
         (click)="toggle()"
         (keydown.enter)="toggle()"
         (keydown.space)="toggle()"
@@ -31,8 +31,8 @@ import { ZardAccordionComponent } from './accordion.component';
       </button>
 
       @if (isOpen()) {
-        <div [id]="'content-' + zValue()" [class]="contentClasses()" [attr.data-state]="isOpen() ? 'open' : 'closed'" role="region" [attr.aria-labelledby]="'header-' + zValue()">
-          <div class="p-4">
+        <div [id]="'content-' + zValue()" [attr.data-state]="isOpen() ? 'open' : 'closed'" role="region" [attr.aria-labelledby]="'accordion-' + zValue()">
+          <div class="pb-4 pt-0">
             @if (zDescription()) {
               <p class="text-sm text-muted-foreground mb-2">{{ zDescription() }}</p>
             }
@@ -69,8 +69,4 @@ export class ZardAccordionItemComponent {
       this.setOpen(!this.isOpen());
     }
   }
-
-  protected readonly classes = computed(() => mergeClasses(accordionItemVariants(), this.class()));
-  protected readonly triggerClasses = computed(() => mergeClasses(accordionItemTriggerVariants()));
-  protected readonly contentClasses = computed(() => mergeClasses(accordionItemContentVariants()));
 }
