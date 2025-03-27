@@ -1,6 +1,6 @@
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 
 import { ZardCheckboxComponent } from './checkbox.component';
@@ -32,6 +32,29 @@ class TestHostComponent {}
 })
 class TestHostWithNgModelComponent {
   checked = false;
+}
+
+@Component({
+  standalone: true,
+  imports: [ZardCheckboxComponent, ReactiveFormsModule],
+  template: `
+    <form [formGroup]="form">
+      <span z-checkbox formControlName="termsCheckbox"> Agree to Terms </span>
+      <span z-checkbox formControlName="newsletterCheckbox"> Subscribe to Newsletter </span>
+      <span z-checkbox formControlName="privacyCheckbox" [disabled]="form.get('privacyCheckbox')?.disabled"> Accept Privacy Policy </span>
+    </form>
+  `,
+})
+class TestHostWithReactiveFormsComponent {
+  form: FormGroup;
+
+  constructor(private fb: FormBuilder) {
+    this.form = this.fb.group({
+      termsCheckbox: [false],
+      newsletterCheckbox: [true],
+      privacyCheckbox: [{ value: false, disabled: true }],
+    });
+  }
 }
 
 describe('ZardCheckboxComponent', () => {
@@ -189,5 +212,87 @@ describe('ZardCheckboxComponent', () => {
       await fixtureWithNgModel.whenStable();
       expect(testHostWithNgModelComponent.checked).toBe(true);
     });
+  });
+});
+describe('ZardCheckboxComponent with Reactive Forms', () => {
+  let fixture: ComponentFixture<TestHostWithReactiveFormsComponent>;
+  let component: TestHostWithReactiveFormsComponent;
+  let checkboxElements: HTMLInputElement[];
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestHostWithReactiveFormsComponent, ZardCheckboxComponent, ReactiveFormsModule],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestHostWithReactiveFormsComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+
+    checkboxElements = fixture.debugElement.queryAll(By.css('input[type="checkbox"]')).map(el => el.nativeElement);
+  });
+
+  it('should initialize form controls with correct initial values', () => {
+    const [termsCheckbox, newsletterCheckbox, privacyCheckbox] = checkboxElements;
+
+    expect(termsCheckbox.checked).toBeFalsy();
+    expect(component.form.get('termsCheckbox')?.value).toBeFalsy();
+
+    expect(newsletterCheckbox.checked).toBeTruthy();
+    expect(component.form.get('newsletterCheckbox')?.value).toBeTruthy();
+
+    expect(privacyCheckbox.disabled).toBeTruthy();
+    expect(privacyCheckbox.checked).toBeFalsy();
+  });
+
+  it('should update form control value when checkbox is clicked', () => {
+    const [termsCheckbox, newsletterCheckbox] = checkboxElements;
+
+    termsCheckbox.click();
+    fixture.detectChanges();
+
+    expect(termsCheckbox.checked).toBeTruthy();
+    expect(component.form.get('termsCheckbox')?.value).toBeTruthy();
+
+    newsletterCheckbox.click();
+    fixture.detectChanges();
+
+    expect(newsletterCheckbox.checked).toBeFalsy();
+    expect(component.form.get('newsletterCheckbox')?.value).toBeFalsy();
+  });
+
+  it('should update checkbox when form control value is changed programmatically', () => {
+    const [termsCheckbox, newsletterCheckbox] = checkboxElements;
+
+    component.form.get('termsCheckbox')?.setValue(true);
+    component.form.get('newsletterCheckbox')?.setValue(false);
+    fixture.detectChanges();
+
+    expect(termsCheckbox.checked).toBeTruthy();
+    expect(newsletterCheckbox.checked).toBeFalsy();
+  });
+
+  it('should prevent changes to disabled checkbox', () => {
+    const privacyCheckbox = checkboxElements[2];
+
+    privacyCheckbox.click();
+    fixture.detectChanges();
+
+    expect(privacyCheckbox.checked).toBeFalsy();
+    expect(component.form.get('privacyCheckbox')?.disabled).toBeTruthy();
+  });
+
+  it('should be able to enable and disable form controls', () => {
+    const privacyCheckbox = checkboxElements[2];
+    const privacyControl = component.form.get('privacyCheckbox');
+
+    privacyControl?.enable();
+    fixture.detectChanges();
+
+    expect(privacyCheckbox.disabled).toBeFalsy();
+
+    privacyControl?.disable();
+    fixture.detectChanges();
+
+    expect(privacyCheckbox.disabled).toBeTruthy();
   });
 });
