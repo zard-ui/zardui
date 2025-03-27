@@ -19,7 +19,7 @@ import { Component } from '@angular/core';
     }
     <z-header></z-header>
 
-    <main class="relative max-w-[90rem] mx-auto px-4 flex-1 min-h-screen">
+    <main class="relative max-w-[90rem] mx-auto px-4 md:px-6 flex-1 min-h-screen">
       <router-outlet></router-outlet>
     </main>
     <z-footer></z-footer>

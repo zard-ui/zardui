@@ -10,14 +10,5 @@ import { ZardInputDirective } from '../input.directive';
     <input z-input zSize="default" placeholder="default size" />
     <input z-input zSize="lg" placeholder="large size" />
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-    `,
-  ],
 })
 export class ZardDemoInputSizeComponent {}

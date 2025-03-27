@@ -1,5 +1,5 @@
-import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { ZardRadioComponent } from '../radio.component';
 
@@ -7,19 +7,9 @@ import { ZardRadioComponent } from '../radio.component';
   standalone: true,
   imports: [ZardRadioComponent, FormsModule],
   template: `
-    <span name="radio-disabled" z-radio disabled>Disabled</span>
-    <span name="radio-disabled" z-radio disabled [(ngModel)]="selected" [value]="true">Disabled Selected</span>
+    <span name="radio-disabled" z-radio disabled> Disabled </span>
+    <span name="radio-disabled" z-radio disabled [(ngModel)]="selected" [value]="true"> Disabled Selected </span>
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 24px;
-      }
-    `,
-  ],
 })
 export class ZardDemoRadioDisabledComponent {
   selected = true;
