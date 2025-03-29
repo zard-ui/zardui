@@ -1,6 +1,6 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const avatarVariants = cva('relative flex flex-row items-center justify-center border-transparent p-2 box-content hover:bg-primary/90 cursor-default', {
+export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content hover:bg-primary/90 cursor-default', {
   variants: {
     zType: {
       default: 'bg-primary text-primary-foreground hover:bg-primary/90',
@@ -10,10 +10,10 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
       ghost: 'hover:bg-accent hover:text-accent-foreground shadow-sm shadow-black',
     },
     zSize: {
-      default: 'w-10 h-10',
-      sm: 'w-8 h-8',
-      md: 'w-16 h-16',
-      lg: 'w-35 h-35',
+      default: 'w-12 h-12',
+      sm: 'w-10 h-10',
+      md: 'w-18 h-18',
+      lg: 'w-37 h-37',
       full: 'w-full h-full',
     },
     zShape: {
@@ -27,6 +27,9 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
       doNotDisturb: 'doNotDisturb',
       away: 'away',
       invisible: 'invisible',
+    },
+    zBorder: {
+      true: 'border border-3 border-white',
     },
   },
   defaultVariants: {
@@ -46,5 +49,4 @@ export type ZardAvatarImage = {
 export type ZardAvatarLoading = {
   time: number | undefined;
 };
-
 export type ZardAvatarVariants = VariantProps<typeof avatarVariants> & ZardAvatarImage & ZardAvatarLoading;

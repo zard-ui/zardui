@@ -13,8 +13,10 @@ import { ZardAvatarComponent } from '../avatar.component';
     <z-avatar zType="ghost" [zImage]="zImageDefault" />
   `,
 })
-export class ZardDemoAvatarBasicComponent {
+export class ZardDemoAvatarWithImageComponent {
   readonly zImageDefault = {
     fallback: 'ZA',
+    url: '/images/avatar/imgs/avatar_image.jpg',
+    alt: 'ZadUI',
   };
 }

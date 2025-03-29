@@ -11,5 +11,7 @@ To customize the badge, pass the following props to the component.
 | `[zType]`    | Avatar type         | `default \| destructive \| outline \| secondary \| ghost` | `default`   |
 | `[zSize]`    | Avatar size         | `default \| sm \| md \| lg \| full                      ` | `default`   |
 | `[zShape]`   | Avatar shape        | `default \| circle \| square                            ` | `default`   |
+| `[zStatus]`  | Avatar status       | `online \| offline \| doNotDisturb \| away \| invisible ` |             |
+| `[zBorder]`  | Avatar border       | `boolean                                                ` | `false`     |
 | `[zLoading]` | Avatar loading time | `undefined \| number                                    ` | `undefined` |
 | `[zImage]`   | Avatar image data   | `{ fallback: string, url?: string: alt?: string }       ` |             |
