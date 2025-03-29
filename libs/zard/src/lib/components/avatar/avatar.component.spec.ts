@@ -4,10 +4,9 @@ import { By } from '@angular/platform-browser';
 import { ZardAvatarComponent } from './avatar.component';
 import { ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants } from './avatar.variants';
 
-// Componente de teste host que permite definir inputs via template
 @Component({
-  standalone: true, // Marcado como standalone
-  imports: [ZardAvatarComponent], // Importa o componente ZardAvatar
+  standalone: true,
+  imports: [ZardAvatarComponent],
   template: `
     <z-avatar [zType]="zType" [zSize]="zSize" [zShape]="zShape" [zStatus]="zStatus" [zBorder]="zBorder" [zImage]="zImage" [zLoading]="zLoading" [class]="customClass"> </z-avatar>
   `,
@@ -30,7 +29,7 @@ describe('ZardAvatarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent], // Importado em vez de declarado
+      imports: [TestHostComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -64,7 +63,6 @@ describe('ZardAvatarComponent', () => {
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
 
-      // Verificar classes específicas com base nas variantes
       expect(avatarElement.classList.contains('bg-destructive')).toBeTruthy();
       expect(avatarElement.classList.contains('text-destructive-foreground')).toBeTruthy();
       expect(avatarElement.classList.contains('w-37')).toBeTruthy();
