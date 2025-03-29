@@ -109,15 +109,13 @@ import { avatarVariants, ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants 
   },
 })
 export class ZardAvatarComponent {
-  // Variants
   readonly zType = input<ZardAvatarVariants['zType']>('default');
   readonly zSize = input<ZardAvatarVariants['zSize'] | null>('default');
   readonly zShape = input<ZardAvatarVariants['zShape'] | null>('default');
   readonly zStatus = input<ZardAvatarVariants['zStatus'] | null>(null);
   readonly zBorder = input(false, { transform });
-  // Params
   readonly zImage = input<ZardAvatarImage['zImage'] | null>({ fallback: 'ZA' });
-  readonly zLoading = input<ZardAvatarLoading['time']>(undefined); // input original (imutável)
+  readonly zLoading = input<ZardAvatarLoading['time']>(undefined);
   protected readonly zLoadingSignal = signal<number | undefined>(this.zLoading());
 
   readonly class = input<string>('');
@@ -132,7 +130,7 @@ export class ZardAvatarComponent {
   constructor() {
     effect(() => {
       if (this.zLoading()) {
-        this.zLoadingSignal.set(this.zLoading()); // Sincroniza zLoading inicial
+        this.zLoadingSignal.set(this.zLoading());
         setTimeout(() => this.zLoadingSignal.set(undefined), this.zLoading());
       }
     });
