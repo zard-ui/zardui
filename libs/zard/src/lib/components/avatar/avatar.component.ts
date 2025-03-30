@@ -1,6 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { avatarVariants, ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants } from './avatar.variants';
+import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } from './avatar.variants';
 
 @Component({
   selector: 'z-avatar',
@@ -9,14 +9,15 @@ import { avatarVariants, ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants 
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    @if (zLoadingSignal()) {
-      <span zType="cached" class="icon-loader-circle animate-spin"></span>
-    }
-    @if (!zLoadingSignal() && zImage()?.url) {
-      <img [src]="zImage()?.url" [alt]="zImage()?.alt || 'Avatar'" [class]="imgClasses()" />
-    }
-    @if (!zLoadingSignal() && zImage()?.fallback) {
-      <span class="text-base absolute m-auto z-0">{{ zImage()?.fallback }}</span>
+    @if (zLoading()) {
+      <span class="icon-loader-circle animate-spin {{ zLoading() }}"></span>
+    } @else {
+      @if (zImage()?.fallback) {
+        <span class="text-base absolute m-auto z-0">{{ zImage()?.fallback }}</span>
+      }
+      @if (zImage()?.url) {
+        <img [src]="zImage()?.url" [alt]="zImage()?.alt || 'Avatar'" [class]="imgClasses()" />
+      }
     }
     @if (zStatus()) {
       @switch (zStatus()) {
@@ -31,7 +32,7 @@ import { avatarVariants, ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants 
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] text-green-500 w-5 h-5 z-2"
+            class="absolute -right-[5px] -bottom-[5px] text-green-500 w-5 h-5 z-20"
           >
             <circle cx="12" cy="12" r="10" fill="currentColor" />
           </svg>
@@ -47,7 +48,7 @@ import { avatarVariants, ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants 
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] text-red-500 w-5 h-5 z-2"
+            class="absolute -right-[5px] -bottom-[5px] text-red-500 w-5 h-5 z-20"
           >
             <circle cx="12" cy="12" r="10" fill="currentColor" />
           </svg>
@@ -63,7 +64,7 @@ import { avatarVariants, ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants 
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] text-red-500 w-5 h-5 z-2"
+            class="absolute -right-[5px] -bottom-[5px] text-red-500 w-5 h-5 z-20"
           >
             <circle cx="12" cy="12" r="10" />
             <path d="M8 12h8" fill="currentColor" />
@@ -80,7 +81,7 @@ import { avatarVariants, ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants 
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] text-yellow-400 rotate-y-180 w-5 h-5 z-2"
+            class="absolute -right-[5px] -bottom-[5px] text-yellow-400 rotate-y-180 w-5 h-5 z-20"
           >
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="currentColor" />
           </svg>
@@ -96,7 +97,7 @@ import { avatarVariants, ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants 
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] text-stone-400/90 w-5 h-5 z-2"
+            class="absolute -right-[5px] -bottom-[5px] text-stone-400/90 w-5 h-5 z-20"
           >
             <circle cx="12" cy="12" r="10" fill="currentColor" />
           </svg>
@@ -114,25 +115,13 @@ export class ZardAvatarComponent {
   readonly zShape = input<ZardAvatarVariants['zShape'] | null>('default');
   readonly zStatus = input<ZardAvatarVariants['zStatus'] | null>(null);
   readonly zBorder = input(false, { transform });
+  readonly zLoading = input(false, { transform });
   readonly zImage = input<ZardAvatarImage['zImage'] | null>({ fallback: 'ZA' });
-  readonly zLoading = input<ZardAvatarLoading['time']>(undefined);
-  protected readonly zLoadingSignal = signal<number | undefined>(this.zLoading());
 
   readonly class = input<string>('');
 
   protected readonly containerClasses = computed(() =>
     mergeClasses(avatarVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape(), zBorder: this.zBorder() }), this.class()),
   );
-  protected readonly imgClasses = computed(() =>
-    mergeClasses(avatarVariants({ zType: this.zType(), zShape: this.zShape(), zSize: this.zSize() }), 'relative object-cover object-center w-full h-full z-1'),
-  );
-
-  constructor() {
-    effect(() => {
-      if (this.zLoading()) {
-        this.zLoadingSignal.set(this.zLoading());
-        setTimeout(() => this.zLoadingSignal.set(undefined), this.zLoading());
-      }
-    });
-  }
+  protected readonly imgClasses = computed(() => mergeClasses(imageVariants({ zShape: this.zShape() })));
 }

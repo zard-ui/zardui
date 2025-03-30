@@ -31,10 +31,26 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
     zBorder: {
       true: 'border border-3 border-white',
     },
+    zLoading: {
+      true: 'opacity-100',
+    },
   },
   defaultVariants: {
     zType: 'default',
     zSize: 'default',
+    zShape: 'default',
+  },
+});
+
+export const imageVariants = cva('relative object-cover object-center w-full h-full z-10', {
+  variants: {
+    zShape: {
+      default: 'rounded-md',
+      circle: 'rounded-full',
+      square: 'rounded-none',
+    },
+  },
+  defaultVariants: {
     zShape: 'default',
   },
 });
@@ -46,7 +62,4 @@ export type ZardAvatarImage = {
     alt?: string;
   };
 };
-export type ZardAvatarLoading = {
-  time: number | undefined;
-};
-export type ZardAvatarVariants = VariantProps<typeof avatarVariants> & ZardAvatarImage & ZardAvatarLoading;
+export type ZardAvatarVariants = VariantProps<typeof avatarVariants> & ZardAvatarImage;
