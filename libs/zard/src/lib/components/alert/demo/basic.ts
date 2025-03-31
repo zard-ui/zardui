@@ -1,25 +1,10 @@
 import { Component } from '@angular/core';
 
-import { ZardAlertModule } from '../alert.module';
+import { ZardAlertComponent } from '../alert.component';
 
 @Component({
   standalone: true,
-  imports: [ZardAlertModule],
-  template: `
-    <z-alert>
-      <z-alert-icon class="icon-code-xml" zSize="lg" />
-      <z-alert-title>Hello World!</z-alert-title>
-      <z-alert-description>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda, sint.</z-alert-description>
-    </z-alert>
-  `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-    `,
-  ],
+  imports: [ZardAlertComponent],
+  template: ` <z-alert zIcon="icon-code-xml" zTitle="Hello World!" zDescription="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda, sint." /> `,
 })
 export class ZardDemoAlertBasicComponent {}

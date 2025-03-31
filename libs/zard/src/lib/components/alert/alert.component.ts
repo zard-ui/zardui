@@ -2,55 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, ZardAlertIconVariants, ZardAlertVariants } from './alert.variants';
-
-@Component({
-  selector: 'z-alert-icon',
-  exportAs: 'zAlertIcon',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
-  host: {
-    '[class]': 'classes()',
-  },
-})
-export class ZardAlertIconComponent {
-  readonly class = input<ClassValue>('');
-  readonly zSize = input<ZardAlertIconVariants['zSize']>('sm');
-  protected readonly classes = computed(() => mergeClasses(alertIconVariants({ zSize: this.zSize() }), this.class()));
-}
-
-@Component({
-  selector: 'z-alert-title',
-  standalone: true,
-  exportAs: 'zAlertTitle',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
-  host: {
-    '[class]': 'classes()',
-  },
-})
-export class ZardAlertTitleComponent {
-  readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(alertTitleVariants(), this.class()));
-}
-
-@Component({
-  selector: 'z-alert-description',
-  standalone: true,
-  exportAs: 'zAlertDescription',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
-  host: {
-    '[class]': 'classes()',
-  },
-})
-export class ZardAlertDescriptionComponent {
-  readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(alertDescriptionVariants(), this.class()));
-}
+import { alertVariants, ZardAlertVariants } from './alert.variants';
 
 @Component({
   selector: 'z-alert',
@@ -58,17 +10,14 @@ export class ZardAlertDescriptionComponent {
   exportAs: 'zAlert',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardAlertIconComponent],
   template: `
-    @if (zType() === 'default') {
-      <ng-content select="z-alert-icon" />
-    } @else {
-      <z-alert-icon [class]="iconType()" zSize="sm" />
+    @if (iconName()) {
+      <i [class]="iconName()"></i>
     }
 
-    <div class="flex flex-col gap-1">
-      <ng-content select="z-alert-title" />
-      <ng-content select="z-alert-description" />
+    <div class="flex flex-col gap-1 w-full">
+      <h5 class="font-medium leading-none tracking-tight mt-1">{{ zTitle() }}</h5>
+      <span class="text-sm leading-[1.625]">{{ zDescription() }}</span>
     </div>
   `,
   host: {
@@ -79,20 +28,23 @@ export class ZardAlertDescriptionComponent {
 })
 export class ZardAlertComponent {
   readonly class = input<ClassValue>('');
+  readonly zTitle = input.required<string>();
+  readonly zDescription = input.required<string>();
+  readonly zIcon = input<string>();
   readonly zType = input<ZardAlertVariants['zType']>('default');
   readonly zAppearance = input<ZardAlertVariants['zAppearance']>('outline');
 
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType(), zAppearance: this.zAppearance() }), this.class()));
 
-  protected readonly icons: Record<NonNullable<ZardAlertVariants['zType']>, string> = {
+  protected readonly iconsType: Record<NonNullable<ZardAlertVariants['zType']>, string> = {
     default: '',
-    info: 'info',
-    success: 'circle-check',
-    warning: 'triangle-alert',
-    error: 'circle-x',
+    info: 'icon-info',
+    success: 'icon-circle-check',
+    warning: 'icon-triangle-alert',
+    error: 'icon-circle-x',
   };
 
-  protected readonly iconType = computed(() => {
-    return `icon-${this.icons[this.zType() ?? 'default']}`;
+  protected readonly iconName = computed(() => {
+    return this.zIcon() ?? this.iconsType[this.zType() ?? 'default'];
   });
 }
