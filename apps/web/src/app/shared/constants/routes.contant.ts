@@ -34,6 +34,7 @@ const COMPONENTS_PATH = {
     { name: 'Chart', path: '/components', available: false },
     { name: 'Checkbox', path: '/components/checkbox', available: true },
     { name: 'Confirm Modal', path: '/components', available: false },
+    { name: 'Divider', path: '/components/divider', available: false },
     { name: 'Input', path: '/components/input', available: true },
     { name: 'Modal', path: '/components', available: false },
     { name: 'Progress Bar', path: '/components', available: false },
