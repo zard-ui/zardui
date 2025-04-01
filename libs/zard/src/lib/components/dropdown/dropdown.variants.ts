@@ -1,11 +1,11 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const menuContainerVariants = cva('relative inline-block text-left', {
+export const dropdownContainerVariants = cva('relative inline-block text-left', {
   variants: {},
   defaultVariants: {},
 });
 
-export const menuDropdownVariants = cva('absolute z-10 mt-2 rounded-md ring-1 bg-white dark:bg-black ring-accent ring-opacity-5 dark:ring-opacity-10 focus:outline-none', {
+export const dropdownDropdownVariants = cva('absolute z-10 mt-2 rounded-md ring-1 bg-white dark:bg-black ring-accent ring-opacity-5 dark:ring-opacity-10 focus:outline-none', {
   variants: {
     zSize: {
       default: 'w-56',
@@ -25,5 +25,5 @@ export const menuDropdownVariants = cva('absolute z-10 mt-2 rounded-md ring-1 bg
   },
 });
 
-export type ZardMenuPlacement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
-export type ZardMenuVariants = VariantProps<typeof menuDropdownVariants>;
+export type ZardDropdownPlacement = 'bottom-start' | 'bottom-end' | 'top-start' | 'top-end';
+export type ZardDropdownVariants = VariantProps<typeof dropdownDropdownVariants>;

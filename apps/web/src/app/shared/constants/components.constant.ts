@@ -1,7 +1,7 @@
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
 import { SWITCH } from '@zard/components/switch/demo/switch';
 import { LOADER } from '@zard/components/loader/demo/loader';
-import { MENU } from '@zard/components/menu/demo/menu';
+import { DROPDOWN } from '@zard/components/dropdown/demo/dropdown';
 import { BUTTON } from '@zard/components/button/demo/button';
 import { RADIO } from '@zard/components/radio/demo/radio';
 import { INPUT } from '@zard/components/input/demo/input';
@@ -22,4 +22,4 @@ export interface ExampleData {
   onlyDemo?: boolean;
 }
 
-export const COMPONENTS: ComponentData[] = [BADGE, BUTTON, CARD, CHECKBOX, INPUT, LOADER, MENU, RADIO, SWITCH];
+export const COMPONENTS: ComponentData[] = [BADGE, BUTTON, CARD, CHECKBOX, INPUT, LOADER, DROPDOWN, RADIO, SWITCH];

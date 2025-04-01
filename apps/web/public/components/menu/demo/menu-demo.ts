@@ -1,29 +1,29 @@
 import { Component } from '@angular/core';
 
-import { ZardMenuComponent } from '../menu.component';
-import { ZardMenuItemComponent } from '../menu-item.component';
+import { ZardDropdownComponent } from '../dropdown.component';
+import { ZardDropdownItemComponent } from '../dropdown-item.component';
 import { ZardButtonComponent } from '../../button/button.component';
 
 @Component({
-  selector: 'z-menu-demo',
+  selector: 'z-dropdown-demo',
   standalone: true,
-  imports: [ZardMenuComponent, ZardMenuItemComponent, ZardButtonComponent],
+  imports: [ZardDropdownComponent, ZardDropdownItemComponent, ZardButtonComponent],
   template: `
-    <z-menu [isOpen]="isMenuOpen">
-      <z-button menu-trigger (click)="toggleMenu()"> Options </z-button>
-      <z-menu-item (click)="onEdit()">Edit</z-menu-item>
-      <z-menu-item (click)="onDuplicate()">Duplicate</z-menu-item>
-      <z-menu-item (click)="onArchive()">Archive</z-menu-item>
-      <z-menu-item [disabled]="true">Move (disabled)</z-menu-item>
-      <z-menu-item (click)="onDelete()">Delete</z-menu-item>
-    </z-menu>
+    <z-dropdown [isOpen]="isDropdownOpen">
+      <z-button dropdown-trigger (click)="toggleDropdown()"> Options </z-button>
+      <z-dropdown-item (click)="onEdit()">Edit</z-dropdown-item>
+      <z-dropdown-item (click)="onDuplicate()">Duplicate</z-dropdown-item>
+      <z-dropdown-item (click)="onArchive()">Archive</z-dropdown-item>
+      <z-dropdown-item [disabled]="true">Move (disabled)</z-dropdown-item>
+      <z-dropdown-item (click)="onDelete()">Delete</z-dropdown-item>
+    </z-dropdown>
   `,
 })
-export class ZardMenuDemoComponent {
-  isMenuOpen = false;
+export class ZardDropdownDemoComponent {
+  isDropdownOpen = false;
 
-  toggleMenu() {
-    this.isMenuOpen = !this.isMenuOpen;
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
   }
 
   onEdit() {

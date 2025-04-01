@@ -1,5 +1,5 @@
-# Menu Examples
+# Dropdown Examples
 
-## Default Menu
+## Default Dropdown
 
-A default menu with various options and a disabled item.
+A default dropdown with various options and a disabled item.

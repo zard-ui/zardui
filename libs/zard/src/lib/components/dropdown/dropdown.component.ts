@@ -1,17 +1,17 @@
 import { CommonModule } from '@angular/common';
-import { menuContainerVariants, menuDropdownVariants, ZardMenuVariants } from './menu.variants';
+import { dropdownContainerVariants, dropdownDropdownVariants, ZardDropdownVariants } from './dropdown.variants';
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 @Component({
-  selector: 'z-menu',
+  selector: 'z-dropdown',
   standalone: true,
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="containerClasses()">
-      <ng-content select="[menu-trigger]"></ng-content>
-      <div *ngIf="isOpen()" [class]="dropdownClasses()" role="menu">
+      <ng-content select="[dropdown-trigger]"></ng-content>
+      <div *ngIf="isOpen()" [class]="dropdownClasses()" role="dropdown">
         <div class="p-1" role="none">
           <ng-content></ng-content>
         </div>
@@ -19,14 +19,14 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
     </div>
   `,
 })
-export class ZardMenuComponent {
+export class ZardDropdownComponent {
   readonly isOpen = input<boolean>(false);
-  readonly zSize = input<ZardMenuVariants['zSize']>('default');
-  readonly zPlacement = input<ZardMenuVariants['zPlacement']>('bottom-end');
+  readonly zSize = input<ZardDropdownVariants['zSize']>('default');
+  readonly zPlacement = input<ZardDropdownVariants['zPlacement']>('bottom-end');
 
-  protected containerClasses = computed(() => menuContainerVariants());
+  protected containerClasses = computed(() => dropdownContainerVariants());
   protected dropdownClasses = computed(() =>
-    menuDropdownVariants({
+    dropdownDropdownVariants({
       zSize: this.zSize(),
       zPlacement: this.zPlacement(),
     }),

@@ -1,6 +1,6 @@
 import { ZardDropdownDemoComponent } from './default';
 
-export const MENU = {
+export const DROPDOWN = {
   componentName: 'dropdown',
   componentType: 'dropdown',
   examples: [
