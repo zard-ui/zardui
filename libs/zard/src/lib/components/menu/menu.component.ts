@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
+import { menuContainerVariants, menuDropdownVariants, ZardMenuVariants } from './menu.variants';
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { menuContainerVariants, menuDropdownVariants, ZardMenuSize, ZardMenuVariant } from './menu.variants';
 
 @Component({
   selector: 'z-menu',
@@ -20,10 +20,9 @@ import { menuContainerVariants, menuDropdownVariants, ZardMenuSize, ZardMenuVari
   `,
 })
 export class ZardMenuComponent {
-  isOpen = input<boolean>(false);
-  size = input<ZardMenuSize>('default');
-  variant = input<ZardMenuVariant>('default');
+  readonly isOpen = input<boolean>(false);
+  readonly zSize = input<ZardMenuVariants['zSize']>('default');
 
   protected containerClasses = computed(() => menuContainerVariants());
-  protected dropdownClasses = computed(() => menuDropdownVariants({ size: this.size(), variant: this.variant() }));
+  protected dropdownClasses = computed(() => menuDropdownVariants({ zSize: this.zSize() }));
 }

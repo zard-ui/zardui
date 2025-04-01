@@ -8,45 +8,6 @@ export const HEADER_PATHS = [
   { name: 'Themes', path: '/themes', available: false },
 ];
 
-export const SIDEBAR_PATHS = [
-  {
-    name: 'Badge',
-    path: '/components/badge',
-  },
-  {
-    name: 'Button',
-    path: '/components/button',
-  },
-  {
-    name: 'Card',
-    path: '/components/card',
-  },
-  {
-    name: 'Checkbox',
-    path: '/components/checkbox',
-  },
-  {
-    name: 'Input',
-    path: '/components/input',
-  },
-  {
-    name: 'Loader',
-    path: '/components/loader',
-  },
-  {
-    name: 'Menu',
-    path: '/components/menu',
-  },
-  {
-    name: 'Radio',
-    path: '/components/radio',
-  },
-  {
-    name: 'Switch',
-    path: '/components/switch',
-  },
-];
-
 const DOCS_PATH = {
   title: 'Getting Started',
   data: [
@@ -84,6 +45,7 @@ const COMPONENTS_PATH = {
     { name: 'Tooltip', path: '/components', available: false },
     { name: 'Radio', path: '/components/radio', available: true },
     { name: 'Loader', path: '/components/loader', available: true },
+    { name: 'Menu', path: '/components/menu', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
