@@ -22,7 +22,13 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 export class ZardMenuComponent {
   readonly isOpen = input<boolean>(false);
   readonly zSize = input<ZardMenuVariants['zSize']>('default');
+  readonly zPlacement = input<ZardMenuVariants['zPlacement']>('bottom-end');
 
   protected containerClasses = computed(() => menuContainerVariants());
-  protected dropdownClasses = computed(() => menuDropdownVariants({ zSize: this.zSize() }));
+  protected dropdownClasses = computed(() =>
+    menuDropdownVariants({
+      zSize: this.zSize(),
+      zPlacement: this.zPlacement(),
+    }),
+  );
 }
