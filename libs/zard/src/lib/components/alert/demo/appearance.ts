@@ -18,15 +18,6 @@ import { ZardAlertComponent } from '../alert.component';
       }
     }
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-    `,
-  ],
 })
 export class ZardDemoAlertAppearanceComponent {
   alertAppearanceTypes: Array<'outline' | 'soft' | 'fill'> = ['outline', 'soft', 'fill'];
