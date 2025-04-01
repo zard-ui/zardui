@@ -1,6 +1,7 @@
 export default {
   displayName: 'zard',
-  preset: '../../jest.preset.js',
+  testEnvironment: '@happy-dom/jest-environment',
+  preset: '../../jest.preset.cjs',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   coverageDirectory: '../../coverage/libs/zard',
   transform: {

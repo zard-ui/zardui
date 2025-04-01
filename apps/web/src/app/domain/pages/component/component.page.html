@@ -1,12 +1,12 @@
 @if (componentData) {
-<section class="flex flex-col xl:grid xl:grid-cols-[220px_minmax(0,1fr)] gap-6">
+<section class="flex flex-col xl:grid xl:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:gap-10">
   <z-sidebar></z-sidebar>
   <main
     class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px] [&_h1]:text-3xl [&_h1]:font-bold [&_p]:text-base [&_p]:text-muted-foreground"
     scrollSpy
     (scrollSpyChange)="activeAnchor = $event"
   >
-    <section class="flex flex-col gap-10 overflow-auto">
+    <section class="flex flex-col gap-10 mx-auto w-full min-w-0 max-w-2xl mb-10">
       <header scrollSpyItem="overview" id="overview">
         <z-markdown src="components/{{ componentData.componentName }}/doc/overview.md" [codeBox]="true"></z-markdown>
       </header>
@@ -24,6 +24,7 @@
           path="{{ componentData.componentName }}/demo/{{ item.name }}"
           [dynamicComponent]="item.component"
           [onlyDemo]="item.onlyDemo"
+          [column]="item?.column"
         ></z-code-box>
         }
       </main>
@@ -31,7 +32,7 @@
       <hr />
 
       <footer scrollSpyItem="api" id="api">
-        <z-markdown class="api" src="components/{{ componentData.componentName }}/doc/api.md"></z-markdown>
+        <z-markdown src="components/{{ componentData.componentName }}/doc/api.md"></z-markdown>
       </footer>
     </section>
     <z-dynamic-anchor [topicData]="pageTopics" [activeAnchor]="activeAnchor"></z-dynamic-anchor>

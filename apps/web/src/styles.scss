@@ -1,6 +1,10 @@
 @forward "tailwindcss";
 @forward 'lucide-static/font/lucide.css';
 
+@import '@angular/cdk/overlay-prebuilt.css';
+
+@plugin "tailwindcss-animate";
+
 @custom-variant dark (&:is(.dark *));
 
 :root {
@@ -134,26 +138,55 @@
   }
 }
 
-html {
-  scroll-behavior: smooth;
+@layer utilities {
+  .no-scrollbar::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+  }
+
+  .scroll::-webkit-scrollbar {
+    @apply w-1.5 h-1.5;
+  }
+
+  .scroll::-webkit-scrollbar-track {
+    @apply bg-background;
+  }
+
+  .scroll::-webkit-scrollbar-thumb {
+    @apply bg-primary;
+  
+    &:hover {
+      @apply bg-primary/60;
+    }
+  }
 }
 
 markdown {
   pre {
     @apply rounded-md border border-neutral-300/50 bg-neutral-200/30 dark:border-neutral-800/60 dark:bg-neutral-900/40;
   }
+}
 
-  blockquote {
-    @apply my-4 pl-4 border-l-4 border-gray-200;
-
-    p {
-      @apply text-muted-foreground text-xs;
-    }
-  }
-
+.api {
   h2 {
     &:has(.api-type-label) {
       @apply flex items-center gap-2;
+    }
+  }
+
+    blockquote {
+      @apply my-4 pl-4 border-l-4 border-gray-200;
+
+    p {
+      @apply text-muted-foreground text-sm;
+
+      code {
+        @apply bg-accent rounded-sm border-none font-sans text-primary;
+      }
     }
   }
 
@@ -161,47 +194,57 @@ markdown {
     @apply flex items-center justify-center h-6 px-3 text-xs ml-2 uppercase rounded-md;
 
     &.component {
-      @apply text-primary border-2 border-primary;
+      @apply bg-blue-300/10 text-blue-500 dark:bg-blue-300/10 dark:text-blue-300;
     }
 
     &.directive {
-      @apply text-yellow-500 border-2 border-yellow-500;
+      @apply bg-green-300/10 text-green-500 dark:bg-green-300/10 dark:text-green-300;
     }
 
     &.service {
-      @apply text-green-500 border-2 border-green-500;
+      @apply bg-yellow-300/10 text-yellow-500 dark:bg-yellow-300/10 dark:text-yellow-300;
     }
   }
-}
-
-.api {
-  @apply flex flex-col gap-2;
 
   table {
-    @apply w-full caption-bottom text-sm block overflow-auto;
+    @apply w-full caption-bottom text-sm;
 
     thead {
-      @apply border-b;
+      @apply [&_tr]:text-primary bg-accent;
     }
 
     tbody {
-      @apply last:border-0;
+      @apply [&_tr:last-child]:border-0 bg-accent/20;
     }
 
     tfoot {
-      @apply border-t bg-gray-100 font-medium last:border-b-0;
+      @apply border-t bg-muted/50 font-medium [&>tr]:last:border-b-0;
     }
 
     tr {
-      @apply border-b transition-colors hover:bg-secondary data-[state=selected]:bg-gray-100;
+      @apply border-b transition-colors hover:bg-muted/50;
     }
 
     th {
-      @apply h-12 px-4 text-left align-middle font-medium text-gray-500;
+      @apply h-12 px-4 text-left align-middle font-medium;
     }
 
     td {
       @apply p-4 align-middle;
+
+      &:first-child {
+        code {
+          @apply bg-blue-300/10 text-blue-500 dark:bg-blue-500/10 dark:text-blue-300;
+        }
+      }
+
+      code {
+        @apply bg-accent rounded-sm border-none font-sans;
+      }
+    }
+
+    caption {
+      @apply mt-4 text-sm text-muted-foreground;
     }
   }
 }
@@ -216,21 +259,5 @@ pre {
 
 code {
   @apply mx-1 px-2 py-1 text-xs bg-muted border border-ring rounded whitespace-nowrap;
-}
-
-::-webkit-scrollbar {
-  @apply w-1.5 h-1.5;
-}
-
-::-webkit-scrollbar-track {
-  @apply bg-background;
-}
-
-::-webkit-scrollbar-thumb {
-  @apply bg-primary;
-
-  &:hover {
-    @apply bg-primary/60;
-  }
 }
 
