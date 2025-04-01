@@ -10,7 +10,7 @@ import { ZardButtonComponent } from '../../button/button.component';
   standalone: true,
   imports: [ZardDropdownComponent, ZardDropdownItemComponent, ZardButtonComponent],
   template: `
-    <z-dropdown [isOpen]="isDropdownOpen()" [zSize]="zSize()">
+    <z-dropdown [isOpen]="isDropdownOpen()" [zPlacement]="zPlacement()" [zSize]="zSize()">
       <z-button dropdown-trigger (click)="toggleDropdown()"> Options </z-button>
       <z-dropdown-item (click)="onEdit()">Edit</z-dropdown-item>
       <z-dropdown-item (click)="onDuplicate()">Duplicate</z-dropdown-item>
@@ -23,6 +23,7 @@ import { ZardButtonComponent } from '../../button/button.component';
 export class ZardDropdownDemoComponent {
   readonly isDropdownOpen = signal<boolean>(false);
   readonly zSize = input<ZardDropdownVariants['zSize']>('default');
+  readonly zPlacement = input<ZardDropdownVariants['zPlacement']>('bottom-end');
 
   toggleDropdown() {
     this.isDropdownOpen.set(!this.isDropdownOpen());
