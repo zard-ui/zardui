@@ -24,6 +24,9 @@ import { ZardDemoRadioSizeComponent } from '@zard/components/radio/demo/size';
 import { ZardDemoSwitchBasicComponent } from '@zard/components/switch/demo/basic';
 import { ZardDemoSwitchDisabledComponent } from '@zard/components/switch/demo/disabled';
 import { ZardDemoSwitchSizeComponent } from '@zard/components/switch/demo/size';
+import { ZardDemoProgressBarBasicComponent } from '@zard/components/progress-bar/demo/basic';
+import { ZardDemoProgressBarShapeComponent } from '@zard/components/progress-bar/demo/shape';
+import { ZardDemoProgressBarSizeComponent } from '@zard/components/progress-bar/demo/size';
 
 export interface ComponentData {
   componentName: string;
@@ -174,6 +177,23 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'disabled',
         component: ZardDemoSwitchDisabledComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'progress-bar',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoProgressBarBasicComponent,
+      },
+      {
+        name: 'shape',
+        component: ZardDemoProgressBarShapeComponent,
+      },
+      {
+        name: 'size',
+        component: ZardDemoProgressBarSizeComponent,
       },
     ],
   },
