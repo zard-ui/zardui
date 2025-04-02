@@ -6,10 +6,10 @@
 
 To customize the alert, pass the following props to the component.
 
-| Property         | Description       | Type                                     | Default   |
-| ---------------- | ----------------- | ---------------------------------------- | --------- |
-| `[zTitle]`       | Alert title       | `string`                                 | `''`      |
-| `[zDescription]` | Alert description | `string`                                 | `''`      |
-| `[zIcon]`        | Alert icon        | `string`                                 | `''`      |
-| `[zType]`        | Alert type        | `default\|info\|success\|warning\|error` | `default` |
-| `[zAppearance]`  | Alert appearance  | `outline\|soft\|fill`                    | `outline` |
+| Property         | Description       | Type                                             | Default   |
+| ---------------- | ----------------- | ------------------------------------------------ | --------- |
+| `[zTitle]`       | Alert title       | `string`                                         | `-`       |
+| `[zDescription]` | Alert description | `string`                                         | `-`       |
+| `[zIcon]`        | Alert icon        | `string`                                         | `-`       |
+| `[zType]`        | Alert type        | `default \| info \| success \| warning \| error` | `default` |
+| `[zAppearance]`  | Alert appearance  | `outline \| soft \| fill`                        | `outline` |

@@ -5,6 +5,10 @@ import { ZardAlertComponent } from '../alert.component';
 @Component({
   standalone: true,
   imports: [ZardAlertComponent],
-  template: ` <z-alert zIcon="icon-code-xml" zTitle="Hello World!" zDescription="Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda, sint." /> `,
+  template: ` <z-alert [zIcon]="icon" [zTitle]="title" [zDescription]="description" /> `,
 })
-export class ZardDemoAlertBasicComponent {}
+export class ZardDemoAlertBasicComponent {
+  icon = 'icon-code-xml';
+  title = 'Hello World!';
+  description = 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda, sint.';
+}
