@@ -6,3 +6,4 @@ export * from './input/input.directive';
 export * from './loader/loader.component';
 export * from './radio/radio.component';
 export * from './switch/switch.component';
+export * from './progress-bar/progress-bar.component';

@@ -5,7 +5,9 @@
     "@angular/core": "^19.1.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.0.2"
+    "tailwind-merge": "^3.0.2",
+    "@angular/forms": "~19.1.0",
+    "@angular/common": "~19.1.0"
   },
   "sideEffects": false,
   "publishConfig": {
