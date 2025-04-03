@@ -17,7 +17,9 @@
       @case ('preview') {
         <z-card class="min-h-74 flex justify-center items-center">
           @if (dynamicComponent()) {
-            <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
+            <div class="w-full">
+              <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
+            </div>
           }
         </z-card>
       }

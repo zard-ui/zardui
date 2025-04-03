@@ -27,7 +27,6 @@ export class ComponentPage {
     private router: Router,
     private viewportScroller: ViewportScroller,
   ) {
-    console.log(this.pageTopics);
     this.activatedRoute.params.subscribe(_ => {
       this.loadData();
     });

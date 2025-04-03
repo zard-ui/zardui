@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
-import { ZardCardModule } from '@ngzard/ui';
+
+import { ZardCardModule } from '../card.module';
 
 @Component({
+  standalone: true,
   imports: [ZardCardModule],
   template: `
     <z-card>

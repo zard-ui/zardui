@@ -27,6 +27,7 @@ import { ZardDemoSwitchSizeComponent } from '@zard/components/switch/demo/size';
 import { ZardDemoProgressBarBasicComponent } from '@zard/components/progress-bar/demo/basic';
 import { ZardDemoProgressBarShapeComponent } from '@zard/components/progress-bar/demo/shape';
 import { ZardDemoProgressBarSizeComponent } from '@zard/components/progress-bar/demo/size';
+import { ZardDemoProgressBarIndeterminateComponent } from '@zard/components/progress-bar/demo/indeterminate';
 
 export interface ComponentData {
   componentName: string;
@@ -194,6 +195,10 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'size',
         component: ZardDemoProgressBarSizeComponent,
+      },
+      {
+        name: 'indeterminate',
+        component: ZardDemoProgressBarIndeterminateComponent,
       },
     ],
   },

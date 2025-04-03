@@ -17,10 +17,11 @@ export const containerProgressBarVariants = cva('w-full transition-all', {
       circle: 'rounded-full',
       square: 'rounded-none',
     },
-    zFull: {
-      true: 'w-full',
+    zIndeterminate: {
+      true: 'relative',
     },
   },
+
   defaultVariants: {
     zType: 'default',
     zSize: 'default',
@@ -41,8 +42,8 @@ export const progressBarVariants = cva('h-full transition-all', {
       circle: 'rounded-full ',
       square: 'rounded-none',
     },
-    zFull: {
-      true: 'w-full',
+    zIndeterminate: {
+      true: 'absolute animate-[indeterminate_1.5s_infinite_ease-out]',
     },
   },
   defaultVariants: {
