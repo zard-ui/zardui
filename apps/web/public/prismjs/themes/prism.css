@@ -40,7 +40,7 @@
     --prism-marker-font-size: 0.8em;
   
     /* Font */
-    --prism-font-size: 1em;
+    --prism-font-size: 0.95em;
     --prism-line-height: 2em;
     --prism-font-family: var(--font-family);
     --prism-inline-font-size: var(--prism-font-size);

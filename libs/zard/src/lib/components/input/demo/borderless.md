@@ -1,3 +1,0 @@
-**Borderless**
-
-Borderless input.

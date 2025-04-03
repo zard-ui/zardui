@@ -14,6 +14,7 @@ import { MarkdownModule } from 'ngx-markdown';
 export class ZardCodeBoxComponent {
   readonly componentType = input<string>();
   readonly onlyDemo = input<boolean | undefined>(false);
+  readonly column = input<boolean | undefined>(false);
   readonly path = input<string>();
   readonly dynamicComponent = input<ComponentType<unknown>>();
   activeTab = signal<'preview' | 'code'>('preview');

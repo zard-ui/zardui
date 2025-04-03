@@ -10,14 +10,5 @@ import { ZardButtonComponent } from '../button.component';
     <button z-button>Default</button>
     <button z-button zSize="lg">Large</button>
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-      }
-    `,
-  ],
 })
 export class ZardDemoButtonSizeComponent {}

@@ -6,14 +6,15 @@ import { By } from '@angular/platform-browser';
 
 @Component({
   selector: 'test-host-component',
+  imports: [ZardCardComponent, ZardCardBodyComponent, ZardCardHeaderComponent, ZardCardHeaderTitleComponent, ZardCardHeaderDescriptionComponent],
   template: `
-    <zard-card class="custom-class">
-      <zard-card-header class="custom-class">
-        <zard-card-header-title class="custom-class"> Title </zard-card-header-title>
-        <zard-card-header-description class="custom-class"> Description </zard-card-header-description>
-      </zard-card-header>
-      <zard-card-body class="custom-class"> Body </zard-card-body>
-    </zard-card>
+    <z-card class="custom-class">
+      <z-card-header class="custom-class">
+        <z-card-header-title class="custom-class"> Title </z-card-header-title>
+        <z-card-header-description class="custom-class"> Description </z-card-header-description>
+      </z-card-header>
+      <z-card-body class="custom-class"> Body </z-card-body>
+    </z-card>
   `,
 })
 class TestHostComponent {}
@@ -22,10 +23,6 @@ describe('ZardCardComponents', () => {
   let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [TestHostComponent, ZardCardComponent, ZardCardBodyComponent, ZardCardHeaderComponent, ZardCardHeaderTitleComponent, ZardCardHeaderDescriptionComponent],
-    }).compileComponents();
-
     fixture = TestBed.createComponent(TestHostComponent);
     fixture.detectChanges();
   });

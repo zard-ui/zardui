@@ -1,3 +1,0 @@
-**Disabled**
-
-Disabled checkbox.
