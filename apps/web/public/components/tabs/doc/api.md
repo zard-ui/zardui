@@ -1,12 +1,17 @@
 # API
 
-## [z-tab] <span class="api-type-label directive">Directive</span>
+## [z-tab] <span class="api-type-label component">Component</span>
 
-> z-tab is a Directive that brings you a customizable tab button with minimal configuration
+> z-tab-group is a Component that allows you to create a tabbed interface with customizable navigation and active indicator positions.
 
-To get a customized tab button, just pass the following props to the directive.
+To configure the tab group, pass the following props to the component.
 
-| Property  | Description | Type                   | Default   |
-| --------- | ----------- | ---------------------- | --------- |
-| `[zType]` | tab type    | `default\|destructive` | `default` |
-| `[zSize]` | tab size    | `default\|sm\|lg`      | `default` |
+| Property            | Description                                           | Type                             | Default  |
+| ------------------- | ----------------------------------------------------- | -------------------------------- | -------- |
+| `[zPosition]`       | Position of the tab navigation                        | `top \| bottom \| left \| right` | `top`    |
+| `[zActivePosition]` | Position of the active indicator                      | `top \| bottom \| left \| right` | `bottom` |
+| `[zShowArrow]`      | Whether to show scroll arrows when content overflows  | `true \| false`                  | `true`   |
+| `[zScrollAmount]`   | Whether to show scroll arrows when content overflows  | `number`                         | `100`    |
+| `[zAlignTabs]`      | Alignment of tabs within the navigation               | `start \| center \| end`         | `start`  |
+| `(zOnTabChange)`    | Emits when a new tab is selected or index signal emit | `$event`                         | `$event` |
+| `(zDeselect)`       | Emits when the current tab is deselected              | `$event`                         | `$event` |

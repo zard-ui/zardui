@@ -1,5 +1,7 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
+import { zAlign } from './tabs.component';
+
 export const tabContainerVariants = cva('flex w-full h-full', {
   variants: {
     zPosition: {
@@ -14,7 +16,7 @@ export const tabContainerVariants = cva('flex w-full h-full', {
   },
 });
 
-export const tabNavVariants = cva('flex gap-4 overflow-auto scroll', {
+export const tabNavVariants = cva('flex gap-4 overflow-auto scroll nav-tab-scroll', {
   variants: {
     zPosition: {
       top: 'flex-row border-b mb-4 w-full',
@@ -22,9 +24,15 @@ export const tabNavVariants = cva('flex gap-4 overflow-auto scroll', {
       left: 'flex-col border-r mr-4 h-full min-h-0',
       right: 'flex-col border-l ml-4 h-full min-h-0',
     },
+    zAlignTabs: {
+      start: 'justify-start',
+      center: 'justify-center',
+      end: 'justify-end',
+    },
   },
   defaultVariants: {
     zPosition: 'top',
+    zAlignTabs: 'start',
   },
 });
 
@@ -69,4 +77,4 @@ export const tabButtonVariants = cva('hover:bg-transparent rounded-none flex-shr
   },
 });
 
-export type ZardTabVariants = VariantProps<typeof tabContainerVariants> & VariantProps<typeof tabNavVariants> & VariantProps<typeof tabButtonVariants>;
+export type ZardTabVariants = VariantProps<typeof tabContainerVariants> & VariantProps<typeof tabNavVariants> & VariantProps<typeof tabButtonVariants> & { zAlignTabs: zAlign };

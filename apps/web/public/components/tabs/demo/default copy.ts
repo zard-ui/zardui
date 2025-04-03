@@ -12,36 +12,36 @@ import { ZardTabComponent, ZardTabGroupComponent, zPosition } from '../tabs.comp
         (zDeselect)="onTabChange($event)"
         [zTabsPosition]="currentPosition.tab"
         [zActivePosition]="currentPosition.active"
-        [zShowArrow]="true"
         [zAlignTabs]="'center'"
       >
         <z-tab label="First">
-          <p>Position tab: {{ currentPosition.tab }} e Position active: {{ currentPosition.active }}</p>
+          <p>Conteúdo da primeira tab com position tab: {{ currentPosition.tab }} e position active: {{ currentPosition.active }}</p>
         </z-tab>
         <z-tab label="Second">
-          <p>Content of the second tab</p>
+          <p>Conteúdo da segunda tab</p>
         </z-tab>
         <z-tab label="Third">
-          <p>Content of the third tab</p>
+          <p>Conteúdo da terceira tab</p>
         </z-tab>
-        <z-tab label="Fourth">
-          <p>Content of the fourth tab</p>
+        <z-tab label="Third">
+          <p>Conteúdo da terceira tab</p>
         </z-tab>
-        <z-tab label="Fifth">
-          <p>Content of the fifth tab</p>
+        <z-tab label="Third">
+          <p>Conteúdo da terceira tab</p>
         </z-tab>
-        <z-tab label="Sixth">
-          <p>Content of the sixth tab</p>
+        <z-tab label="Third">
+          <p>Conteúdo da terceira tab</p>
         </z-tab>
       </z-tab-group>
     </div>
   `,
 })
 export class ZardDemoTabsDefaultComponent {
-  currentPosition: { tab: zPosition; active: zPosition } = { tab: 'top', active: 'top' };
-  index = 1;
+  currentPosition: { tab: zPosition; active: zPosition } = { tab: 'left', active: 'top' };
+  index = 0;
   @ViewChild(ZardTabGroupComponent) tabGroup!: ZardTabGroupComponent;
   constructor() {
+    //N vai assim para prd, apenas para demo nesse push
     setInterval(() => {
       const positions: { tab: zPosition; active: zPosition }[] = [
         { tab: 'top', active: 'top' },
