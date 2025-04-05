@@ -1,3 +1,4 @@
+import { DROPDOWN } from '@zard/components/dropdown/demo/dropdown';
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
 import { TOOLTIP } from '@zard/components/tooltip/demo/tooltip';
 import { DIVIDER } from '@zard/components/divider/demo/divider';
@@ -25,4 +26,4 @@ export interface ExampleData {
   onlyDemo?: boolean;
 }
 
-export const COMPONENTS: ComponentData[] = [ALERT, AVATAR, BADGE, BUTTON, CARD, CHECKBOX, DIVIDER, INPUT, LOADER, RADIO, SWITCH, TOOLTIP];
+export const COMPONENTS: ComponentData[] = [ALERT, AVATAR, BADGE, BUTTON, CARD, CHECKBOX, DIVIDER, DROPDOWN, INPUT, LOADER, RADIO, SWITCH, TOOLTIP];

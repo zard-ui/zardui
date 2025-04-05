@@ -46,6 +46,7 @@ const COMPONENTS_PATH = {
     { name: 'Tooltip', path: '/components/tooltip', available: true },
     { name: 'Radio', path: '/components/radio', available: true },
     { name: 'Loader', path: '/components/loader', available: true },
+    { name: 'Dropdown', path: '/components/dropdown', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
