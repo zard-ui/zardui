@@ -24,7 +24,7 @@ const COMPONENTS_PATH = {
   data: [
     { name: 'Accordion', path: '/components', available: false },
     { name: 'Alert', path: '/components', available: false },
-    { name: 'Avatar', path: '/components', available: false },
+    { name: 'Avatar', path: '/components/avatar', available: true },
     { name: 'Badge', path: '/components/badge', available: true },
     { name: 'Breadcrumb', path: '/components', available: false },
     { name: 'Button', path: '/components/button', available: true },
