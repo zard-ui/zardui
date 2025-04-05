@@ -1,4 +1,4 @@
-export const DEFAULT_COMPONENT = 'badge';
+export const DEFAULT_COMPONENT = 'alert';
 export const DEFAULT_DOC = 'installation';
 
 export const HEADER_PATHS = [
@@ -23,8 +23,8 @@ const COMPONENTS_PATH = {
   title: 'Components',
   data: [
     { name: 'Accordion', path: '/components', available: false },
-    { name: 'Alert', path: '/components', available: false },
-    { name: 'Avatar', path: '/components', available: false },
+    { name: 'Alert', path: '/components/alert', available: true },
+    { name: 'Avatar', path: '/components/avatar', available: true },
     { name: 'Badge', path: '/components/badge', available: true },
     { name: 'Breadcrumb', path: '/components', available: false },
     { name: 'Button', path: '/components/button', available: true },
@@ -34,6 +34,7 @@ const COMPONENTS_PATH = {
     { name: 'Chart', path: '/components', available: false },
     { name: 'Checkbox', path: '/components/checkbox', available: true },
     { name: 'Confirm Modal', path: '/components', available: false },
+    { name: 'Divider', path: '/components/divider', available: true },
     { name: 'Input', path: '/components/input', available: true },
     { name: 'Modal', path: '/components', available: false },
     { name: 'Progress Bar', path: '/components', available: false },
@@ -45,6 +46,7 @@ const COMPONENTS_PATH = {
     { name: 'Tooltip', path: '/components/tooltip', available: true },
     { name: 'Radio', path: '/components/radio', available: true },
     { name: 'Loader', path: '/components/loader', available: true },
+    { name: 'Dropdown', path: '/components/dropdown', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
