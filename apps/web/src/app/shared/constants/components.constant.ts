@@ -1,9 +1,11 @@
-import { ACCORDION } from '@zard/components/accordion/demo/accordion';
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
+import { ACCORDION } from '@zard/components/accordion/demo/accordion';
 import { TOOLTIP } from '@zard/components/tooltip/demo/tooltip';
+import { DIVIDER } from '@zard/components/divider/demo/divider';
 import { SWITCH } from '@zard/components/switch/demo/switch';
 import { LOADER } from '@zard/components/loader/demo/loader';
 import { BUTTON } from '@zard/components/button/demo/button';
+import { AVATAR } from '@zard/components/avatar/demo/avatar';
 import { RADIO } from '@zard/components/radio/demo/radio';
 import { INPUT } from '@zard/components/input/demo/input';
 import { BADGE } from '@zard/components/badge/demo/badge';
@@ -23,4 +25,4 @@ export interface ExampleData {
   onlyDemo?: boolean;
 }
 
-export const COMPONENTS: ComponentData[] = [ACCORDION, BADGE, BUTTON, CARD, CHECKBOX, INPUT, LOADER, RADIO, SWITCH, TOOLTIP];
+export const COMPONENTS: ComponentData[] = [AVATAR, ACCORDION, BADGE, BUTTON, CARD, CHECKBOX, DIVIDER, INPUT, LOADER, RADIO, SWITCH, TOOLTIP];
