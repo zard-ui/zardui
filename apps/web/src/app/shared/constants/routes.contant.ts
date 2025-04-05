@@ -1,4 +1,4 @@
-export const DEFAULT_COMPONENT = 'badge';
+export const DEFAULT_COMPONENT = 'alert';
 export const DEFAULT_DOC = 'installation';
 
 export const HEADER_PATHS = [
@@ -23,7 +23,7 @@ const COMPONENTS_PATH = {
   title: 'Components',
   data: [
     { name: 'Accordion', path: '/components', available: false },
-    { name: 'Alert', path: '/components', available: false },
+    { name: 'Alert', path: '/components/alert', available: true },
     { name: 'Avatar', path: '/components/avatar', available: true },
     { name: 'Badge', path: '/components/badge', available: true },
     { name: 'Breadcrumb', path: '/components', available: false },
