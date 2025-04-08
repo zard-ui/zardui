@@ -13,7 +13,7 @@ const DOCS_PATH = {
   data: [
     { name: 'introduction', path: '/docs', available: false },
     { name: 'installation', path: '/docs/installation', available: true },
-    { name: 'theming', path: '/docs', available: false },
+    { name: 'theming', path: '/docs/theming', available: true },
     { name: 'cli', path: '/docs', available: false },
     { name: 'figma', path: '/docs', available: false },
   ],
