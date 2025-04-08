@@ -1,7 +1,8 @@
-import { ClipboardButtonComponent } from '@zard/domain/components/clipboard-button/clipboard-button.component';
-import { Component, computed, ElementRef, input, ViewChild } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 import { MarkdownModule } from 'ngx-markdown';
+
+import { Component, computed, ElementRef, input, ViewChild } from '@angular/core';
+import { ClipboardButtonComponent } from '@zard/domain/components/clipboard-button/clipboard-button.component';
 
 @Component({
   selector: 'z-markdown',

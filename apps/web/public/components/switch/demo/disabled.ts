@@ -1,5 +1,5 @@
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardSwitchComponent } from '../switch.component';
 

@@ -158,7 +158,7 @@
 
   .scroll::-webkit-scrollbar-thumb {
     @apply bg-primary;
-  
+
     &:hover {
       @apply bg-primary/60;
     }

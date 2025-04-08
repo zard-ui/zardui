@@ -8,7 +8,7 @@ export interface DocData {
 
 export const DOCS: DocData[] = [
   {
-    docName: 'installation',
+    docName: 'theming',
     available: true,
     topics: [
       {
