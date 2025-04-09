@@ -8,7 +8,7 @@
         <p>{{ installGuide.description }}</p>
       </header>
       }
-      <main class="flex flex-col gap-4">
+      <main class="overflow-hidden transition-all duration-200 ease-in-out">
         <nav class="flex gap-4 border-b mb-8">
           @if(installGuide.manual.length > 0) {
           <button z-button zType="ghost" (click)="activeTab.set('manual')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'manual'">
@@ -16,15 +16,16 @@
           </button>
           } @if(installGuide.cli.length > 0) {
           <button z-button zType="ghost" (click)="activeTab.set('cli')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'cli'">
-            Cli
+            CLI
           </button>
           }
         </nav>
-        @switch (activeTab()) { @case ('manual') {
-        <z-steps [steps]="installGuide.manual"></z-steps>
-        } @case ('cli') {
-        <z-steps [steps]="installGuide.cli"></z-steps>
-        } }
+        <section class="transition-all" [class]="activeTab() === 'manual' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']">
+          <z-steps [steps]="installGuide.manual"></z-steps>
+        </section>
+        <section class="transition-all" [class]="activeTab() === 'cli' ? 'translate-x-0' : ['translate-x-full', 'sr-only']">
+          <z-steps [steps]="installGuide.manual"></z-steps>
+        </section>
       </main>
     </section>
   </main>
