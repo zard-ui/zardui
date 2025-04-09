@@ -1,0 +1,31 @@
+<section class="flex flex-col xl:grid xl:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:gap-10">
+  <z-sidebar></z-sidebar>
+  <main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px] [&_h1]:text-3xl [&_h1]:font-bold [&_p]:text-base [&_p]:text-muted-foreground">
+    <section class="flex flex-col gap-10 mx-auto w-full min-w-0 max-w-2xl mb-10">
+      @if(installGuide) {
+      <header>
+        <h1>{{ installGuide.title }}</h1>
+        <p>{{ installGuide.description }}</p>
+      </header>
+      }
+      <main class="flex flex-col gap-4">
+        <nav class="flex gap-4 border-b mb-8">
+          @if(installGuide.manual.length > 0) {
+          <button z-button zType="ghost" (click)="activeTab.set('manual')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'manual'">
+            Manual
+          </button>
+          } @if(installGuide.cli.length > 0) {
+          <button z-button zType="ghost" (click)="activeTab.set('cli')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'cli'">
+            Cli
+          </button>
+          }
+        </nav>
+        @switch (activeTab()) { @case ('manual') {
+        <z-steps [steps]="installGuide.manual"></z-steps>
+        } @case ('cli') {
+        <z-steps [steps]="installGuide.cli"></z-steps>
+        } }
+      </main>
+    </section>
+  </main>
+</section>

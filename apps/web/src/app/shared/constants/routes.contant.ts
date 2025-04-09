@@ -1,4 +1,4 @@
-export const DEFAULT_COMPONENT = 'badge';
+export const DEFAULT_COMPONENT = 'alert';
 export const DEFAULT_DOC = 'installation';
 
 export const HEADER_PATHS = [
@@ -13,7 +13,7 @@ const DOCS_PATH = {
   data: [
     { name: 'introduction', path: '/docs', available: false },
     { name: 'installation', path: '/docs/installation', available: true },
-    { name: 'theming', path: '/docs', available: false },
+    { name: 'theming', path: '/docs/theming', available: true },
     { name: 'cli', path: '/docs', available: false },
     { name: 'figma', path: '/docs', available: false },
   ],
@@ -41,11 +41,12 @@ const COMPONENTS_PATH = {
     { name: 'Select', path: '/components', available: false },
     { name: 'Switch', path: '/components/switch', available: true },
     { name: 'Table', path: '/components', available: false },
-    { name: 'Tabs', path: '/components', available: false },
+    { name: 'Tabs', path: '/components/tabs', available: true },
     { name: 'Toast', path: '/components', available: false },
     { name: 'Tooltip', path: '/components/tooltip', available: true },
     { name: 'Radio', path: '/components/radio', available: true },
     { name: 'Loader', path: '/components/loader', available: true },
+    { name: 'Dropdown', path: '/components/dropdown', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
