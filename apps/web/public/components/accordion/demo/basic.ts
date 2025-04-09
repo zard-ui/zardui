@@ -7,7 +7,7 @@ import { ZardAccordionItemComponent } from '../accordion-item.component';
   standalone: true,
   imports: [ZardAccordionComponent, ZardAccordionItemComponent],
   template: `
-    <z-accordion>
+    <z-accordion zDefaultValue="item-2">
       <z-accordion-item zValue="item-1" zTitle="A Study in Scarlet">
         The first case of Sherlock Holmes and Dr. Watson. They investigate a murder in London, which leads to a backstory involving Mormons in the U.S. Introduces Holmes’s
         deductive method.

@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-
-import { ZardAccordionItemComponent } from '../accordion-item.component';
 import { ZardAccordionComponent } from '../accordion.component';
+import { ZardAccordionItemComponent } from '../accordion-item.component';
 
 @Component({
   standalone: true,
   imports: [ZardAccordionComponent, ZardAccordionItemComponent],
   template: `
+    <h3 class="mb-4 text-lg font-medium">Accordion with collapsible items (default)</h3>
     <z-accordion [zCollapsible]="true" zDefaultValue="item-1" class="mb-6">
       <z-accordion-item zValue="item-1" zTitle="Fully collapsible accordion">
         With the default <code>[zCollapsible]="true"</code> setting, you can close this item even if it's the only one open. Try clicking this item to completely collapse the
@@ -18,6 +18,7 @@ import { ZardAccordionComponent } from '../accordion.component';
       <z-accordion-item zValue="item-3" zTitle="Click to expand"> This is yet another item in the collapsible accordion. </z-accordion-item>
     </z-accordion>
 
+    <h3 class="mb-4 text-lg font-medium">Accordion with non-collapsible items</h3>
     <z-accordion [zCollapsible]="false" zDefaultValue="item-1">
       <z-accordion-item zValue="item-1" zTitle="Non-collapsible accordion">
         With <code>[zCollapsible]="false"</code>, at least one item must remain open at all times. Try clicking this item - it won't close if it's the only one open.
