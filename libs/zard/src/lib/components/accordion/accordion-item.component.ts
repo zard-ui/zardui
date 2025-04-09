@@ -10,12 +10,12 @@ import { ZardAccordionComponent } from './accordion.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div class="border-b" [attr.data-state]="isOpen() ? 'open' : 'closed'">
+    <div class="border-b border-border flex flex-1 flex-col cursor-pointer" [attr.data-state]="isOpen() ? 'open' : 'closed'">
       <button
         type="button"
         role="button"
         [id]="'accordion-' + zValue()"
-        class="flex w-full items-center justify-between py-4 text-sm font-medium transition-all hover:underline text-left border-none bg-transparent cursor-pointer focus:outline-none"
+        class="group flex flex-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-ring font-medium items-center justify-between px-0.5 py-4 text-sm w-full"
         [class]="class()"
         (click)="toggle()"
         (keydown.enter)="toggle()"
@@ -24,28 +24,31 @@ import { ZardAccordionComponent } from './accordion.component';
         [attr.aria-controls]="'content-' + zValue()"
         tabindex="0"
       >
-        <div class="flex-1">{{ zTitle() }}</div>
-        <span class="transition-transform duration-200" [class.rotate-180]="isOpen()">
-          <i class="icon-chevron-down !text-lg"></i>
+        <span class="group-hover:underline">
+          {{ zTitle() }}
         </span>
+        <div class="transition-transform duration-200 icon-chevron-down text-lg" [class]="isOpen() ? 'rotate-180' : ''"></div>
       </button>
 
-      @if (isOpen()) {
-        <div [id]="'content-' + zValue()" [attr.data-state]="isOpen() ? 'open' : 'closed'" role="region" [attr.aria-labelledby]="'accordion-' + zValue()">
-          <div class="pb-4 pt-0">
-            @if (zDescription()) {
-              <p class="text-sm text-muted-foreground mb-2">{{ zDescription() }}</p>
-            }
+      <div
+        class="grid text-sm transition-all"
+        [class]="isOpen() ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+        [id]="'content-' + zValue()"
+        [attr.data-state]="isOpen() ? 'open' : 'closed'"
+        role="region"
+        [attr.aria-labelledby]="'accordion-' + zValue()"
+      >
+        <div class="overflow-hidden">
+          <main class="pb-4 pt-1">
             <ng-content></ng-content>
-          </div>
+          </main>
         </div>
-      }
+      </div>
     </div>
   `,
 })
 export class ZardAccordionItemComponent {
   readonly zTitle = input<string>('');
-  readonly zDescription = input<string>('');
   readonly zValue = input<string>('');
   readonly class = input<ClassValue>('');
 

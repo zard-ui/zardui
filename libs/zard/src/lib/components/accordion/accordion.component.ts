@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, QueryList, computed, input, ViewEncapsulation } from '@angular/core';
+import { AfterContentInit, ChangeDetectionStrategy, Component, ContentChildren, QueryList, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ZardAccordionItemComponent } from './accordion-item.component';
@@ -10,7 +10,7 @@ import { ZardAccordionItemComponent } from './accordion-item.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div class="grid min-w-64" [class]="class()">
+    <div class="grid w-full" [class]="class()">
       <ng-content></ng-content>
     </div>
   `,
