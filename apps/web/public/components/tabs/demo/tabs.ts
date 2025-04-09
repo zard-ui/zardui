@@ -1,6 +1,6 @@
-import { ZardDemoTabsAlignComponent } from './align';
-import { ZardDemoTabsDefaultComponent } from './default';
 import { ZardDemoTabsPositiontComponent } from './position';
+import { ZardDemoTabsDefaultComponent } from './default';
+import { ZardDemoTabsAlignComponent } from './align';
 
 export const TABS = {
   componentName: 'tabs',
@@ -9,17 +9,14 @@ export const TABS = {
     {
       name: 'default',
       component: ZardDemoTabsDefaultComponent,
-      isDefineSizeContainer: true,
     },
     {
       name: 'tab position and active position',
       component: ZardDemoTabsPositiontComponent,
-      isDefineSizeContainer: true,
     },
     {
       name: 'tab align',
       component: ZardDemoTabsAlignComponent,
-      isDefineSizeContainer: true,
     },
   ],
 };

@@ -7,9 +7,9 @@ import { ZardTabComponent, ZardTabGroupComponent, zPosition } from '../tabs.comp
   imports: [ZardTabComponent, ZardTabGroupComponent],
   template: `
     <div class="w-full h-[300px]">
-      <z-tab-group [zTabsPosition]="currentPosition.tab" [zActivePosition]="currentPosition.active">
+      <z-tab-group>
         <z-tab label="First">
-          <p>Position tab: {{ currentPosition.tab }} and position active: {{ currentPosition.active }}</p>
+          <p>Position tab</p>
         </z-tab>
         <z-tab label="Second">
           <p>Content of the second tab</p>
@@ -21,19 +21,4 @@ import { ZardTabComponent, ZardTabGroupComponent, zPosition } from '../tabs.comp
     </div>
   `,
 })
-export class ZardDemoTabsPositiontComponent {
-  currentPosition: { tab: zPosition; active: zPosition } = { tab: 'top', active: 'top' };
-  index = 1;
-  constructor() {
-    setInterval(() => {
-      const positions: { tab: zPosition; active: zPosition }[] = [
-        { tab: 'top', active: 'top' },
-        { tab: 'right', active: 'left' },
-        { tab: 'bottom', active: 'top' },
-        { tab: 'left', active: 'left' },
-      ];
-      this.currentPosition = positions[this.index];
-      this.index = (this.index + 1) % positions.length;
-    }, 5000);
-  }
-}
+export class ZardDemoTabsPositiontComponent {}

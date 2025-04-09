@@ -24,11 +24,4 @@ import { zAlign, ZardTabComponent, ZardTabGroupComponent } from '../tabs.compone
 export class ZardDemoTabsAlignComponent {
   currentAlign: zAlign = 'start';
   index = 1;
-  constructor() {
-    setInterval(() => {
-      const positions: zAlign[] = ['start', 'center', 'end'];
-      this.currentAlign = positions[this.index];
-      this.index = (this.index + 1) % positions.length;
-    }, 5000);
-  }
 }
