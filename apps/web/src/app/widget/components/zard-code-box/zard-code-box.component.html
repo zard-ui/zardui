@@ -16,11 +16,11 @@
     @switch (activeTab()) {
       @case ('preview') {
         <z-card
-          class="min-h-74 flex justify-center items-center gap-4 [&_ng-component]:gap-4 [&_ng-component]:items-center"
+          class="w-full min-h-74 content-center [&_ng-component]:justify-center [&_ng-component]:items-center [&_ng-component]:gap-4 [&_ng-component]:my-0"
           [class]="column() ? '[&_ng-component]:grid' : '[&_ng-component]:flex'"
         >
           @if (dynamicComponent()) {
-            <div [class]="isDefineSizeContainer() ? 'w-full h-full' : ''"><ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container></div>
+            <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
           }
         </z-card>
       }

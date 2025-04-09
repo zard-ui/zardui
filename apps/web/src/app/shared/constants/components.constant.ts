@@ -23,7 +23,6 @@ export interface ExampleData {
   name: string;
   type?: string;
   column?: boolean;
-  isDefineSizeContainer?: boolean;
   component: ComponentType<unknown>;
   onlyDemo?: boolean;
 }

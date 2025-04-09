@@ -16,7 +16,6 @@ export class ZardCodeBoxComponent {
   readonly onlyDemo = input<boolean | undefined>(false);
   readonly column = input<boolean | undefined>(false);
   readonly path = input<string>();
-  readonly isDefineSizeContainer = input<boolean>(false);
   readonly dynamicComponent = input<ComponentType<unknown>>();
   activeTab = signal<'preview' | 'code'>('preview');
 }
