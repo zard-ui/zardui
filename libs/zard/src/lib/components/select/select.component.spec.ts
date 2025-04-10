@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SelectComponent } from './select.component';
+import { ZardSelectComponent } from './select.component';
 
-describe('SelectComponent', () => {
-  let component: SelectComponent;
-  let fixture: ComponentFixture<SelectComponent>;
+describe('ZardSelectComponent', () => {
+  let component: ZardSelectComponent;
+  let fixture: ComponentFixture<ZardSelectComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SelectComponent],
+      imports: [ZardSelectComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(SelectComponent);
+    fixture = TestBed.createComponent(ZardSelectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

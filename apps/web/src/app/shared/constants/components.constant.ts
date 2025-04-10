@@ -19,6 +19,7 @@ import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text
 import { ZardDemoSwitchBasicComponent } from '@zard/components/switch/demo/basic';
 import { ZardDemoSwitchDisabledComponent } from '@zard/components/switch/demo/disabled';
 import { ZardDemoSwitchSizeComponent } from '@zard/components/switch/demo/size';
+import { ZardDemoSelectBasicComponent } from '@zard/components/select/demo/basic';
 
 export interface ComponentData {
   componentName: string;
@@ -122,6 +123,15 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'text-area',
         component: ZardDemoInputTextAreaComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'select',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoSelectBasicComponent,
       },
     ],
   },
