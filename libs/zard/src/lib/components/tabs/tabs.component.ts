@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -14,10 +15,9 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { combineLatest, interval, startWith } from 'rxjs';
-import { CommonModule } from '@angular/common';
 
-import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../components';
+import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';

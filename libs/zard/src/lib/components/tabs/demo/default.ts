@@ -1,15 +1,15 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { ZardTabComponent, ZardTabGroupComponent, zPosition } from '../tabs.component';
+import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent],
   template: `
     <div class="w-full h-[300px]">
-      <z-tab-group [zShowArrow]="true" [zAlignTabs]="'center'">
+      <z-tab-group>
         <z-tab label="First">
-          <p>Position tab 1</p>
+          <p>Is the default tab component</p>
         </z-tab>
         <z-tab label="Second">
           <p>Content of the second tab</p>
