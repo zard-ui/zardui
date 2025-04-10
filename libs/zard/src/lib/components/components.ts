@@ -11,3 +11,4 @@ export * from './dropdown/dropdown.component';
 export * from './dropdown/dropdown-item.component';
 export * from './radio/radio.component';
 export * from './switch/switch.component';
+export * from './tabs/tabs.component';
