@@ -1,5 +1,5 @@
-@forward "tailwindcss";
-@forward 'lucide-static/font/lucide.css';
+@import "tailwindcss";
+@import 'lucide-static/font/lucide.css';
 
 @import '@angular/cdk/overlay-prebuilt.css';
 
