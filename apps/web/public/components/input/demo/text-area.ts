@@ -6,18 +6,8 @@ import { ZardInputDirective } from '../input.directive';
   standalone: true,
   imports: [ZardInputDirective],
   template: `
-    <textarea z-input rows="6" cols="12" placeholder="Default"></textarea>
-    <textarea zBorderless z-input rows="6" cols="12" placeholder="Default"></textarea>
+    <textarea z-input rows="8" cols="12" placeholder="Default"></textarea>
+    <textarea zBorderless z-input rows="8" cols="12" placeholder="Borderless"></textarea>
   `,
-
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-    `,
-  ],
 })
 export class ZardDemoInputTextAreaComponent {}

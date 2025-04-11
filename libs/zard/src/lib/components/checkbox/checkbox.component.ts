@@ -1,10 +1,9 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
-
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, input, output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
 import { checkboxLabelVariants, checkboxVariants, ZardCheckboxVariants } from './checkbox.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
@@ -14,7 +13,7 @@ type OnChangeType = (value: any) => void;
   standalone: true,
   exportAs: 'zCheckbox',
   template: `
-    <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onCheckboxChange()">
+    <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (click)="onCheckboxChange()">
       <main class="flex relative">
         <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onCheckboxBlur()" name="checkbox" />
         <i
