@@ -19,7 +19,7 @@
       "@zard/shared/*": ["apps/web/src/app/shared/*"],
       "@zard/domain/*": ["apps/web/src/app/domain/*"],
       "@zard/widget/*": ["apps/web/src/app/widget/*"],
-
+      "@zard/env/*": ["apps/web/src/environments/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

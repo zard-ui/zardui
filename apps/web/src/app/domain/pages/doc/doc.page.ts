@@ -26,7 +26,7 @@ export class DocPage {
     private readonly activatedRoute: ActivatedRoute,
     private readonly viewportScroller: ViewportScroller,
   ) {
-    this.activatedRoute.params.subscribe(_ => {
+    this.activatedRoute.params.subscribe(() => {
       this.loadData();
     });
     this.loadData();

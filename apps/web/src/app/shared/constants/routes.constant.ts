@@ -38,7 +38,7 @@ const COMPONENTS_PATH = {
     { name: 'Input', path: '/components/input', available: true },
     { name: 'Modal', path: '/components', available: false },
     { name: 'Progress Bar', path: '/components', available: false },
-    { name: 'Select', path: '/components', available: false },
+    { name: 'Select', path: '/components/select', available: false },
     { name: 'Switch', path: '/components/switch', available: true },
     { name: 'Table', path: '/components', available: false },
     { name: 'Tabs', path: '/components', available: false },

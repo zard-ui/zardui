@@ -11,6 +11,7 @@ import { INPUT } from '@zard/components/input/demo/input';
 import { BADGE } from '@zard/components/badge/demo/badge';
 import { ALERT } from '@zard/components/alert/demo/alert';
 import { CARD } from '@zard/components/card/demo/card';
+import { SELECT } from '@zard/components/select/demo/select';
 import { ComponentType } from '@angular/cdk/overlay';
 
 export interface ComponentData {
@@ -26,4 +27,4 @@ export interface ExampleData {
   onlyDemo?: boolean;
 }
 
-export const COMPONENTS: ComponentData[] = [ALERT, AVATAR, BADGE, BUTTON, CARD, CHECKBOX, DIVIDER, DROPDOWN, INPUT, LOADER, RADIO, SWITCH, TOOLTIP];
+export const COMPONENTS: ComponentData[] = [ALERT, AVATAR, BADGE, BUTTON, CARD, CHECKBOX, DIVIDER, DROPDOWN, INPUT, LOADER, RADIO, SELECT, SWITCH, TOOLTIP];
