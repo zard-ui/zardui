@@ -41,7 +41,7 @@ const COMPONENTS_PATH = {
     { name: 'Select', path: '/components', available: false },
     { name: 'Switch', path: '/components/switch', available: true },
     { name: 'Table', path: '/components', available: false },
-    { name: 'Tabs', path: '/components', available: false },
+    { name: 'Tabs', path: '/components/tabs', available: true },
     { name: 'Toast', path: '/components', available: false },
     { name: 'Tooltip', path: '/components/tooltip', available: true },
     { name: 'Radio', path: '/components/radio', available: true },
