@@ -12,15 +12,15 @@ export const TABS = {
       component: ZardDemoTabsDefaultComponent,
     },
     {
-      name: 'tab position and active position',
+      name: 'position',
       component: ZardDemoTabsPositiontComponent,
     },
     {
-      name: 'tab align',
+      name: 'align',
       component: ZardDemoTabsAlignComponent,
     },
     {
-      name: 'tab arrow',
+      name: 'arrow',
       component: ZardDemoTabsArrowComponent,
     },
   ],
