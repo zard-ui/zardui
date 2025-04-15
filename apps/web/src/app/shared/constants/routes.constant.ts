@@ -1,4 +1,4 @@
-export const DEFAULT_COMPONENT = 'alert';
+export const DEFAULT_COMPONENT = 'accordion';
 export const DEFAULT_DOC = 'installation';
 
 export const HEADER_PATHS = [
