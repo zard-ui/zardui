@@ -19,7 +19,7 @@
           "zone.js"
         ],
         "tsConfig": "apps/web/tsconfig.app.json",
-        "inlineStyleLanguage": "scss",
+        "inlineStyleLanguage": "css",
         "assets": [
           {
             "glob": "**/*",
@@ -28,11 +28,11 @@
         ],
         "styles": [
           "apps/web/public/prismjs/themes/prism.css",
-          "apps/web/src/styles.scss"
+          "apps/web/src/styles.css"
         ],
         "stylePreprocessorOptions": {
           "includePaths": [
-            "apps/web/src/scss"
+            "apps/web/src/css"
           ]
         },
         "scripts": [
