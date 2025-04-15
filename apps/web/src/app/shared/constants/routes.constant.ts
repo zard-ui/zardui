@@ -22,8 +22,8 @@ const DOCS_PATH = {
 const COMPONENTS_PATH = {
   title: 'Components',
   data: [
-    { name: 'Accordion', path: '/components/accordion', available: true },
-    { name: 'Alert', path: '/components', available: false },
+    { name: 'Accordion', path: '/components/accordion', available: false },
+    { name: 'Alert', path: '/components/alert', available: true },
     { name: 'Avatar', path: '/components/avatar', available: true },
     { name: 'Badge', path: '/components/badge', available: true },
     { name: 'Breadcrumb', path: '/components', available: false },
@@ -38,7 +38,7 @@ const COMPONENTS_PATH = {
     { name: 'Input', path: '/components/input', available: true },
     { name: 'Modal', path: '/components', available: false },
     { name: 'Progress Bar', path: '/components', available: false },
-    { name: 'Select', path: '/components', available: false },
+    { name: 'Select', path: '/components/select', available: true },
     { name: 'Switch', path: '/components/switch', available: true },
     { name: 'Table', path: '/components', available: false },
     { name: 'Tabs', path: '/components/tabs', available: true },
