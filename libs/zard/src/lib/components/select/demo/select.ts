@@ -1,4 +1,4 @@
-import { ZardDemoSelectBasicComponent } from './basic';
+import { ZardDemoSelectBasicComponent } from './default';
 
 export const SELECT = {
   componentName: 'select',
