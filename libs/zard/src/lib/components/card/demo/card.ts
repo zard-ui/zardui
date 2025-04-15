@@ -7,6 +7,7 @@ export const CARD = {
     {
       name: 'default',
       component: ZardDemoCardDefaultComponent,
+      isDefineSizeContainer: false,
     },
   ],
 };
