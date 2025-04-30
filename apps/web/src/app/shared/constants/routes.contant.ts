@@ -52,4 +52,8 @@ export const SIDEBAR_PATHS = [
     name: 'Input',
     path: '/components/input',
   },
+  {
+    name: 'Table',
+    path: '/components/table',
+  },
 ];

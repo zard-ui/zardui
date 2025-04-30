@@ -16,6 +16,7 @@ import { ZardDemoInputBorderlessComponent } from '@zard/components/input/demo/bo
 import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
 import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
 import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
+import { ZardDemoTableBasicComponent } from '@zard/components/table/demo/basic';
 
 export interface ComponentData {
   componentName: string;
@@ -119,6 +120,15 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'text-area',
         component: ZardDemoInputTextAreaComponent,
+      },
+    ],
+  },
+  {
+    componentName: 'table',
+    examples: [
+      {
+        name: 'basic',
+        component: ZardDemoTableBasicComponent,
       },
     ],
   },
