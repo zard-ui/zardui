@@ -50,6 +50,10 @@ export const SIDEBAR_PATHS = [
     path: '/components/checkbox',
   },
   {
+    name: 'Command',
+    path: '/components/command',
+  },
+  {
     name: 'Input',
     path: '/components/input',
   },
