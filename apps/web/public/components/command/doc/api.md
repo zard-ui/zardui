@@ -4,9 +4,9 @@
 
 | Property         | Description         | Type                        | Default                       |
 | ---------------- | ------------------- | --------------------------- | ----------------------------- |
-| `[zSize]`        | Size of the command | `default \| sm \| lg`       | `default`                     |
 | `[zPlaceholder]` | Input placeholder   | `string`                    | `Type a command or search...` |
 | `(zOnChange)`    | Change event        | `output<ZardCommandOption>` | -                             |
+| `(zOnSelect)`    | Selection event     | `output<ZardCommandOption>` | -                             |
 
 ## z-command-option <span class="api-type-label component">Component</span>
 
