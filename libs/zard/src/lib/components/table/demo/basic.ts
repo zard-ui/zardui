@@ -1,37 +1,38 @@
 import { Component } from '@angular/core';
 import { ZardTableComponent } from '../table.component';
+import { ZardTableModule } from '../table.module';
 
 @Component({
   standalone: true,
-  imports: [ZardTableComponent],
+  imports: [ZardTableComponent, ZardTableModule],
   template: `
-    <z-table>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Address</th>
+    <table z-table>
+      <thead z-thead>
+        <tr z-tr>
+          <th z-th>Name</th>
+          <th z-th>Age</th>
+          <th z-th>Address</th>
         </tr>
       </thead>
 
       <tbody>
-        <tr>
-          <td>Michael</td>
-          <td>32</td>
-          <td>Rua 1</td>
+        <tr z-tr>
+          <td z-td>Michael</td>
+          <td z-td>32</td>
+          <td z-td>Rua 1</td>
         </tr>
-        <tr>
-          <td>Jim</td>
-          <td>46</td>
-          <td>Rua 2</td>
+        <tr z-tr>
+          <td z-td>Jim</td>
+          <td z-td>46</td>
+          <td z-td>Rua 2</td>
         </tr>
-        <tr>
-          <td>Dwight</td>
-          <td>29</td>
-          <td>Rua 3</td>
+        <tr z-tr>
+          <td z-td>Dwight</td>
+          <td z-td>29</td>
+          <td z-td>Rua 3</td>
         </tr>
       </tbody>
-    </z-table>
+    </table>
   `,
 })
 export class ZardDemoTableBasicComponent {}
