@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardLoaderComponent } from '../loader.component';
+import { ZardLoaderComponent } from '@zard/loader';
 
 @Component({
   standalone: true,
