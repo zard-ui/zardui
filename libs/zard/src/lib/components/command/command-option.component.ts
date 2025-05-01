@@ -1,4 +1,4 @@
-import { Component, computed, input, model } from '@angular/core';
+import { Component, computed, model } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -37,12 +37,12 @@ import { CommonModule } from '@angular/common';
   `,
 })
 export class ZardCommandOptionComponent {
-  readonly zValue = input.required<any>();
-  readonly zLabel = input.required<any>();
-  readonly zIcon = input<any>();
-  readonly zCommand = input<string>();
-  readonly zShortcut = input<string>();
-  readonly zDisabled = input<boolean>(false);
+  readonly zValue = model.required<any>();
+  readonly zLabel = model.required<any>();
+  readonly zIcon = model<any>();
+  readonly zCommand = model<string>();
+  readonly zShortcut = model<string>();
+  readonly zDisabled = model<boolean>(false);
   readonly zSelected = model<boolean>(false);
 
   protected readonly isStringLabel = computed(() => typeof this.zLabel() === 'string');

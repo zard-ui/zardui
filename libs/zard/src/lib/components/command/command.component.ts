@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { ZardCommandOption } from './command.types';
 import { Component, signal, input, output, ContentChildren, QueryList, HostListener, AfterViewInit, computed, viewChild, effect, ElementRef } from '@angular/core';
+
+import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCommandVariants, commandVariants } from './command.variants';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command',
@@ -19,7 +20,7 @@ import { mergeClasses } from '../../shared/utils/utils';
               #commandInput
               type="text"
               [placeholder]="zPlaceholder()"
-              class="w-full border-0 bg-transparent pl-10 pr-4 py-3 outline-none text-gray-700 dark:text-gray-200 placeholder:text-gray-500 dark:placeholder:text-gray-400"
+              class="w-full border-0 bg-transparent pl-10 pr-4 py-3 outline-none text-sm text-gray-700 dark:text-gray-200 placeholder:text-gray-500 dark:placeholder:text-gray-400"
               (input)="onInputChange($event)"
               (keydown)="onKeyDown($event)"
             />
@@ -33,7 +34,6 @@ import { mergeClasses } from '../../shared/utils/utils';
   `,
 })
 export class ZardCommandComponent implements AfterViewInit {
-  // Input/Output signals
   readonly zSize = input<ZardCommandVariants['zSize']>('default');
   readonly zPlaceholder = input<string>('Type a command or search...');
   readonly zOnChange = output<ZardCommandOption>();
@@ -41,18 +41,15 @@ export class ZardCommandComponent implements AfterViewInit {
   readonly class = input<string>('');
   readonly commandInput = viewChild<ElementRef<HTMLInputElement>>('commandInput');
 
-  // State signals
   private readonly selectedIndex = signal(-1);
   private readonly options = signal<ZardCommandOption[]>([]);
 
-  // Computed values
   protected readonly classes = computed(() => mergeClasses(commandVariants({ zSize: this.zSize() }), this.class()));
 
   @ContentChildren(ZardCommandOptionGroupComponent)
   private readonly groups!: QueryList<ZardCommandOptionGroupComponent>;
 
   constructor() {
-    // Update options selection state when selectedIndex changes
     effect(() => {
       const currentIndex = this.selectedIndex();
       this.updateOptionsSelection(currentIndex);
