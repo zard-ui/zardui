@@ -6,7 +6,7 @@ import { ZardTableModule } from '../table.module';
   standalone: true,
   imports: [ZardTableComponent, ZardTableModule],
   template: `
-    <table z-table>
+    <z-table>
       <thead z-thead>
         <tr z-tr>
           <th z-th>Name</th>
@@ -32,7 +32,7 @@ import { ZardTableModule } from '../table.module';
           <td z-td>Rua 3</td>
         </tr>
       </tbody>
-    </table>
+    </z-table>
   `,
 })
 export class ZardDemoTableBasicComponent {}

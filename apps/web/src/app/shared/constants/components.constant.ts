@@ -17,6 +17,7 @@ import { ZardDemoInputSizeComponent } from '@zard/components/input/demo/size';
 import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status';
 import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
 import { ZardDemoTableBasicComponent } from '@zard/components/table/demo/basic';
+import { ZardDemoTableDynamicComponent } from '@zard/components/table/demo/dynamic';
 
 export interface ComponentData {
   componentName: string;
@@ -129,6 +130,10 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'basic',
         component: ZardDemoTableBasicComponent,
+      },
+      {
+        name: 'dynamic',
+        component: ZardDemoTableDynamicComponent,
       },
     ],
   },
