@@ -43,3 +43,5 @@ Thumbs.db
 
 .angular
 .firebaserc
+.vscode/settings.json
+package-lock.json

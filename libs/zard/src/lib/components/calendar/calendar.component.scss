@@ -1,0 +1,379 @@
+.z-calendar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid var(--z-border-color, #e2e8f0);
+  border-radius: var(--z-border-radius, 0.375rem);
+  background-color: var(--z-bg-color, #ffffff);
+  color: var(--z-text-color, #1a202c);
+  font-family: var(--z-font-family, sans-serif);
+  box-shadow: var(--z-shadow, 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06));
+
+  // Calendar Header
+  .z-calendar-header {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    border-bottom: 1px solid var(--z-border-color, #e2e8f0);
+
+    @media (max-width: 640px) {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .z-calendar-header-title {
+      h2 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+      }
+    }
+
+    .z-calendar-header-controls {
+      display: flex;
+      gap: 1rem;
+
+      @media (max-width: 480px) {
+        flex-direction: column;
+        gap: 0.5rem;
+        width: 100%;
+      }
+    }
+
+    .z-calendar-navigation {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .z-calendar-view-switcher {
+      display: flex;
+      gap: 0.25rem;
+    }
+
+    .z-calendar-nav-btn,
+    .z-calendar-view-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.375rem 0.75rem;
+      border: 1px solid var(--z-border-color, #e2e8f0);
+      border-radius: var(--z-border-radius, 0.375rem);
+      background-color: transparent;
+      color: var(--z-text-color, #1a202c);
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background-color: var(--z-hover-bg, #f7fafc);
+      }
+
+      &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px var(--z-focus-ring, rgba(66, 153, 225, 0.5));
+      }
+
+      &.active {
+        background-color: var(--z-primary-color, #3182ce);
+        border-color: var(--z-primary-color, #3182ce);
+        color: white;
+      }
+    }
+  }
+
+  // Calendar Body
+  .z-calendar-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  // Weekdays Header
+  .z-calendar-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: 600;
+    font-size: 0.875rem;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--z-border-color, #e2e8f0);
+
+    .z-calendar-weekday {
+      padding: 0.5rem;
+
+      .z-calendar-weekday-date {
+        margin-top: 0.25rem;
+        font-size: 0.75rem;
+        color: var(--z-muted-color, #718096);
+      }
+    }
+  }
+
+  // Month View
+  .z-calendar-month-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .z-calendar-month-grid {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .z-calendar-week {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    flex: 1;
+    border-bottom: 1px solid var(--z-border-color, #e2e8f0);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  .z-calendar-day {
+    position: relative;
+    min-height: 5rem;
+    padding: 0.5rem;
+    border-right: 1px solid var(--z-border-color, #e2e8f0);
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      background-color: var(--z-hover-bg, #f7fafc);
+    }
+
+    &.outside-month {
+      color: var(--z-muted-color, #a0aec0);
+    }
+
+    &.today {
+      background-color: var(--z-today-bg, #ebf8ff);
+      font-weight: 600;
+
+      .z-calendar-day-number {
+        color: var(--z-primary-color, #3182ce);
+      }
+    }
+
+    &.selected {
+      background-color: var(--z-selected-bg, #e6fffa);
+
+      .z-calendar-day-number {
+        color: var(--z-primary-dark, #2c5282);
+      }
+    }
+
+    .z-calendar-day-content {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    .z-calendar-day-number {
+      font-size: 0.875rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .z-calendar-day-events {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+      margin-top: auto;
+    }
+
+    .z-calendar-event-indicator {
+      height: 0.25rem;
+      border-radius: 0.125rem;
+      background-color: var(--z-info-color, #4299e1);
+
+      &.status-success {
+        background-color: var(--z-success-color, #48bb78);
+      }
+
+      &.status-warning {
+        background-color: var(--z-warning-color, #ecc94b);
+      }
+
+      &.status-error {
+        background-color: var(--z-error-color, #f56565);
+      }
+
+      &.status-info {
+        background-color: var(--z-info-color, #4299e1);
+      }
+    }
+
+    .z-calendar-more-events {
+      font-size: 0.75rem;
+      color: var(--z-muted-color, #718096);
+      text-align: right;
+      margin-top: 0.125rem;
+    }
+  }
+
+  // Week View
+  .z-calendar-week-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .z-calendar-week-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    flex: 1;
+  }
+
+  .z-calendar-week-day {
+    padding: 0.75rem;
+    border-right: 1px solid var(--z-border-color, #e2e8f0);
+    min-height: 10rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      background-color: var(--z-hover-bg, #f7fafc);
+    }
+
+    &.today {
+      background-color: var(--z-today-bg, #ebf8ff);
+    }
+
+    &.selected {
+      background-color: var(--z-selected-bg, #e6fffa);
+    }
+  }
+
+  // Day View
+  .z-calendar-day-view {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .z-calendar-day-header {
+    padding: 0.75rem;
+    text-align: center;
+    border-bottom: 1px solid var(--z-border-color, #e2e8f0);
+
+    .z-calendar-day-title {
+      font-size: 1.125rem;
+      font-weight: 600;
+    }
+  }
+
+  .z-calendar-day-content {
+    flex: 1;
+    padding: 1rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: var(--z-hover-bg, #f7fafc);
+    }
+
+    &.today {
+      background-color: var(--z-today-bg, #ebf8ff);
+    }
+
+    &.selected {
+      background-color: var(--z-selected-bg, #e6fffa);
+    }
+  }
+
+  // Events
+  .z-calendar-day-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .z-calendar-event {
+    padding: 0.5rem;
+    border-radius: var(--z-border-radius, 0.25rem);
+    background-color: var(--z-info-light, #bee3f8);
+    border-left: 3px solid var(--z-info-color, #4299e1);
+
+    &.status-success {
+      background-color: var(--z-success-light, #c6f6d5);
+      border-left-color: var(--z-success-color, #48bb78);
+    }
+
+    &.status-warning {
+      background-color: var(--z-warning-light, #fefcbf);
+      border-left-color: var(--z-warning-color, #ecc94b);
+    }
+
+    &.status-error {
+      background-color: var(--z-error-light, #fed7d7);
+      border-left-color: var(--z-error-color, #f56565);
+    }
+
+    &.status-info {
+      background-color: var(--z-info-light, #bee3f8);
+      border-left-color: var(--z-info-color, #4299e1);
+    }
+
+    .z-calendar-event-title {
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
+
+    .z-calendar-event-description {
+      font-size: 0.75rem;
+      margin-top: 0.25rem;
+      color: var(--z-text-muted, #4a5568);
+    }
+  }
+
+  .z-calendar-no-events {
+    text-align: center;
+    padding: 2rem;
+    color: var(--z-muted-color, #718096);
+    font-style: italic;
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .z-calendar {
+    .z-calendar-day {
+      min-height: 4rem;
+
+      .z-calendar-day-number {
+        font-size: 0.75rem;
+      }
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  .z-calendar {
+    .z-calendar-day {
+      min-height: 3rem;
+      padding: 0.25rem;
+
+      .z-calendar-day-events {
+        display: none;
+      }
+    }
+
+    .z-calendar-weekday {
+      font-size: 0.75rem;
+      padding: 0.25rem;
+    }
+  }
+}

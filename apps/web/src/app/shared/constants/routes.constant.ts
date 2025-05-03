@@ -28,7 +28,7 @@ const COMPONENTS_PATH = {
     { name: 'Badge', path: '/components/badge', available: true },
     { name: 'Breadcrumb', path: '/components', available: false },
     { name: 'Button', path: '/components/button', available: true },
-    { name: 'Calendar', path: '/components', available: false },
+    { name: 'Calendar', path: '/components/calendar', available: true },
     { name: 'Card', path: '/components/card', available: true },
     { name: 'Carousel', path: '/components', available: false },
     { name: 'Chart', path: '/components', available: false },
