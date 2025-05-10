@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { ZardAvatarComponent, ZardAvatarLoading } from './avatar.component';
-import { ZardAvatarImage, ZardAvatarVariants } from './avatar.variants';
+import { ZardAvatarComponent } from './avatar.component';
+import { ZardAvatarImage, ZardAvatarLoading, ZardAvatarVariants } from './avatar.variants';
 
 @Component({
   standalone: true,
@@ -54,7 +54,7 @@ describe('ZardAvatarComponent', () => {
       expect(avatarComponent.zLoading()).toBeUndefined();
     });
 
-    it.skip('should apply correct classes based on variants', () => {
+    it('should apply correct classes based on variants', () => {
       hostComponent.zType = 'destructive';
       hostComponent.zSize = 'lg';
       hostComponent.zShape = 'circle';
