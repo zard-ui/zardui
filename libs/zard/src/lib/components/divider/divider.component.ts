@@ -1,8 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import { ChangeDetectionStrategy, Component, computed, Input, OnInit, signal, ViewEncapsulation } from '@angular/core';
 
-import { dividerVariants, ZardDividerVariants } from './divider.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { dividerVariants, ZardDividerVariants } from './divider.variants';
 
 @Component({
   selector: 'z-divider',
@@ -10,16 +9,20 @@ import { mergeClasses } from '../../shared/utils/utils';
   exportAs: 'zDivider',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: '',
-  host: {
-    '[attr.role]': `'separator'`,
-    '[attr.aria-orientation]': 'zOrientation',
-    '[class]': 'classes()',
-  },
+  template: '<div [class]="classes()" [attr.aria-orientation]="zOrientationSignal()" role="separator"></div>',
+  host: {},
 })
-export class ZardDividerComponent {
-  readonly zOrientation = input<ZardDividerVariants['zOrientation']>('horizontal');
-  readonly class = input<ClassValue>('');
+export class ZardDividerComponent implements OnInit {
+  @Input() zOrientation: ZardDividerVariants['zOrientation'] = 'horizontal';
+  @Input() class = '';
 
-  protected readonly classes = computed(() => mergeClasses(dividerVariants({ zOrientation: this.zOrientation() }), this.class()));
+  readonly zOrientationSignal = signal<ZardDividerVariants['zOrientation']>('horizontal');
+  private readonly classSignal = signal<string>('');
+
+  protected readonly classes = computed(() => mergeClasses(dividerVariants({ zOrientation: this.zOrientationSignal() }), this.classSignal()));
+
+  ngOnInit(): void {
+    this.zOrientationSignal.set(this.zOrientation || 'horizontal');
+    this.classSignal.set(this.class || '');
+  }
 }

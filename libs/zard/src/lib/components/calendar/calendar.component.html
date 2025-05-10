@@ -1,0 +1,166 @@
+<div class="z-calendar" role="application" aria-label="Calendar">
+  <!-- Calendar Header -->
+  <ng-container *ngIf="config?.headerTemplate; else defaultHeader">
+    <ng-container *ngTemplateOutlet="config.headerTemplate!; context: { $implicit: currentDate, view: currentView }"></ng-container>>
+  </ng-container>
+
+  <ng-template #defaultHeader>
+    <div class="z-calendar-header">
+      <div class="z-calendar-header-title">
+        <h2>{{ formatMonthYear(currentDate) }}</h2>
+      </div>
+
+      <div class="z-calendar-header-controls">
+        <div class="z-calendar-navigation">
+          <button type="button" class="z-calendar-nav-btn" (click)="navigatePrevious()" aria-label="Previous">
+            <span aria-hidden="true">&lt;</span>
+          </button>
+
+          <button type="button" class="z-calendar-nav-btn" (click)="navigateToday()" aria-label="Today">Today</button>
+
+          <button type="button" class="z-calendar-nav-btn" (click)="navigateNext()" aria-label="Next">
+            <span aria-hidden="true">&gt;</span>
+          </button>
+        </div>
+
+        <div class="z-calendar-view-switcher">
+          <button type="button" class="z-calendar-view-btn" [class.active]="currentView === 'month'" (click)="switchView('month')" aria-label="Month view">Month</button>
+
+          <button type="button" class="z-calendar-view-btn" [class.active]="currentView === 'week'" (click)="switchView('week')" aria-label="Week view">Week</button>
+
+          <button type="button" class="z-calendar-view-btn" [class.active]="currentView === 'day'" (click)="switchView('day')" aria-label="Day view">Day</button>
+        </div>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Calendar Body -->
+  <div class="z-calendar-body" [ngSwitch]="currentView">
+    <!-- Month View -->
+    <div *ngSwitchCase="'month'" class="z-calendar-month-view">
+      <div class="z-calendar-weekdays">
+        <div *ngFor="let weekday of weekdays" class="z-calendar-weekday" aria-hidden="true">
+          {{ weekday }}
+        </div>
+      </div>
+
+      <div class="z-calendar-month-grid">
+        <div *ngFor="let week of monthData.weeks" class="z-calendar-week">
+          <div
+            *ngFor="let day of week.days"
+            class="z-calendar-day"
+            [class.outside-month]="!day.isCurrentMonth"
+            [class.today]="day.isToday"
+            [class.selected]="day.isSelected"
+            [class.has-events]="day.events.length > 0"
+            [attr.aria-selected]="day.isSelected"
+            [attr.aria-current]="day.isToday ? 'date' : null"
+            (click)="onDateClick(day.date)"
+          >
+            <ng-container *ngIf="config?.dayCellTemplate; else defaultDayCell">
+              <ng-container *ngTemplateOutlet="config.dayCellTemplate!; context: { $implicit: day }"></ng-container>
+            </ng-container>
+
+            <ng-template #defaultDayCell>
+              <div class="z-calendar-day-content">
+                <span class="z-calendar-day-number">{{ day.date.getDate() }}</span>
+
+                <div *ngIf="day.events.length > 0" class="z-calendar-day-events">
+                  <div
+                    *ngFor="let event of day.events.slice(0, 2)"
+                    class="z-calendar-event-indicator"
+                    [class.status-success]="event.status === 'success'"
+                    [class.status-warning]="event.status === 'warning'"
+                    [class.status-error]="event.status === 'error'"
+                    [class.status-info]="event.status === 'info' || !event.status"
+                    [style.background-color]="event.color || null"
+                    [attr.title]="event.title"
+                  ></div>
+                </div>
+
+                <div *ngIf="day.events.length > 2" class="z-calendar-more-events">+{{ day.events.length - 2 }}</div>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Week View -->
+    <div *ngSwitchCase="'week'" class="z-calendar-week-view">
+      <div class="z-calendar-weekdays">
+        <div *ngFor="let weekday of weekdays; let i = index" class="z-calendar-weekday" aria-hidden="true">
+          {{ weekday }}
+          <div class="z-calendar-weekday-date">
+            {{ weekData.days[i].date.getDate() }}
+          </div>
+        </div>
+      </div>
+
+      <div class="z-calendar-week-grid">
+        <div
+          *ngFor="let day of weekData.days"
+          class="z-calendar-week-day"
+          [class.today]="day.isToday"
+          [class.selected]="day.isSelected"
+          [class.has-events]="day.events.length > 0"
+          [attr.aria-selected]="day.isSelected"
+          [attr.aria-current]="day.isToday ? 'date' : null"
+          (click)="onDateClick(day.date)"
+        >
+          <div class="z-calendar-day-events-list">
+            <div
+              *ngFor="let event of day.events"
+              class="z-calendar-event"
+              [class.status-success]="event.status === 'success'"
+              [class.status-warning]="event.status === 'warning'"
+              [class.status-error]="event.status === 'error'"
+              [class.status-info]="event.status === 'info' || !event.status"
+              [style.background-color]="event.color || null"
+            >
+              <div class="z-calendar-event-time" *ngIf="event.start && event.end">{{ event.start | date: 'shortTime' }} - {{ event.end | date: 'shortTime' }}</div>
+              <div class="z-calendar-event-title">{{ event.title || 'Event' }}</div>
+              <div *ngIf="event.description" class="z-calendar-event-description">{{ event.description }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Day View -->
+    <div *ngSwitchCase="'day'" class="z-calendar-day-view">
+      <div class="z-calendar-day-header">
+        <div class="z-calendar-day-title">
+          {{ formatDate(dayData.date) }}
+        </div>
+      </div>
+
+      <div
+        class="z-calendar-day-content"
+        [class.today]="dayData.isToday"
+        [class.selected]="dayData.isSelected"
+        [attr.aria-selected]="dayData.isSelected"
+        [attr.aria-current]="dayData.isToday ? 'date' : null"
+        (click)="onDateClick(dayData.date)"
+      >
+        <div class="z-calendar-day-events-list">
+          <div *ngIf="dayData.events.length === 0" class="z-calendar-no-events">No events scheduled for this day</div>
+
+          <div
+            *ngFor="let event of dayData.events"
+            class="z-calendar-event"
+            [class.status-success]="event.status === 'success'"
+            [class.status-warning]="event.status === 'warning'"
+            [class.status-error]="event.status === 'error'"
+            [class.status-info]="event.status === 'info' || !event.status"
+            [style.background-color]="event.color || null"
+          >
+            <div class="z-calendar-event-title">{{ event.title || 'Event' }}</div>
+            <div class="z-calendar-event-time" *ngIf="event.start && event.end">{{ event.start | date: 'shortTime' }} - {{ event.end | date: 'shortTime' }}</div>
+            <div *ngIf="event.description" class="z-calendar-event-description">{{ event.description }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
