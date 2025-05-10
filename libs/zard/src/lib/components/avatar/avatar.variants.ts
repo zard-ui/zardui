@@ -33,6 +33,7 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
     },
     zLoading: {
       true: 'opacity-100',
+      time: '1500',
     },
   },
   defaultVariants: {
@@ -62,4 +63,9 @@ export type ZardAvatarImage = {
     alt?: string;
   };
 };
+
+export type ZardAvatarLoading = {
+  time: number | undefined;
+};
+
 export type ZardAvatarVariants = VariantProps<typeof avatarVariants> & ZardAvatarImage;
