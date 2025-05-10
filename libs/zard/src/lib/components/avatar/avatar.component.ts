@@ -1,6 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal, ViewEncapsulation } from '@angular/core';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } from './avatar.variants';
+
+export interface ZardAvatarLoading {
+  time: number | undefined;
+}
 
 @Component({
   selector: 'z-avatar',
@@ -9,8 +13,8 @@ import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } fr
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    @if (zLoading()) {
-      <span class="icon-loader-circle animate-spin {{ zLoading() }}"></span>
+    @if (isLoading()) {
+      <span class="icon-loader-circle animate-spin"></span>
     } @else {
       @if (zImage()?.fallback) {
         <span class="text-base absolute m-auto z-0">{{ zImage()?.fallback }}</span>
@@ -115,10 +119,30 @@ export class ZardAvatarComponent {
   readonly zShape = input<ZardAvatarVariants['zShape'] | null>('default');
   readonly zStatus = input<ZardAvatarVariants['zStatus'] | null>(null);
   readonly zBorder = input(false, { transform });
-  readonly zLoading = input(false, { transform });
+  readonly zLoading = input<ZardAvatarLoading['time']>(undefined);
   readonly zImage = input<ZardAvatarImage['zImage'] | null>({ fallback: 'ZA' });
 
   readonly class = input<string>('');
+
+  private loadingActive = signal<boolean>(false);
+
+  readonly isLoading = computed(() => this.loadingActive());
+
+  constructor() {
+    effect(() => {
+      const loadingTime = this.zLoading();
+
+      if (typeof loadingTime === 'number' && loadingTime > 0) {
+        this.loadingActive.set(true);
+
+        setTimeout(() => {
+          this.loadingActive.set(false);
+        }, loadingTime);
+      } else {
+        this.loadingActive.set(false);
+      }
+    });
+  }
 
   protected readonly containerClasses = computed(() =>
     mergeClasses(avatarVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape(), zBorder: this.zBorder() }), this.class()),
