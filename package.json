@@ -27,6 +27,7 @@
     "@angular/platform-browser-dynamic": "~19.1.0",
     "@angular/router": "~19.1.0",
     "@tailwindcss/postcss": "^4.0.10",
+    "@testing-library/angular": "^17.3.7",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "lucide-static": "^0.479.0",
