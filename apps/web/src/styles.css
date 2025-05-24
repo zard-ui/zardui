@@ -1,14 +1,12 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 @import 'lucide-static/font/lucide.css';
-
-@import '@angular/cdk/overlay-prebuilt.css';
 
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
 
 :root {
-  --font-family: "Geist", sans-serif;
+  --font-family: 'Geist', sans-serif;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
@@ -47,6 +45,8 @@
   --prism-string: oklch(31.08% 0.1012 255.87);
   --prism-function: oklch(50.15% 0.1883 294.99);
   --prism-tag: oklch(54.64% 0.1442 147.32);
+  --prism-linenumber: oklch(0.2329 0 0 / 64.45%);
+  --prism-linehighlight: oklch(0.2578 0 0 / 9%);
 }
 
 .dark {
@@ -87,6 +87,8 @@
   --prism-string: oklch(82.89% 0.087661 252.4582);
   --prism-function: oklch(72.67% 0.1367 299.15);
   --prism-tag: oklch(85.12% 0.1406 150.34);
+  --prism-linenumber: oklch(0.9848 0 0 / 40%);
+  --prism-linehighlight: oklch(0.6214 0 0 / 10%);
 }
 
 @theme inline {
@@ -178,8 +180,8 @@ markdown {
     }
   }
 
-    blockquote {
-      @apply my-4 pl-4 border-l-4 border-gray-200;
+  blockquote {
+    @apply my-4 pl-4 border-l-4 border-gray-200;
 
     p {
       @apply text-muted-foreground text-sm;
@@ -260,4 +262,3 @@ pre {
 code {
   @apply mx-1 px-2 py-1 text-xs bg-muted border border-ring rounded whitespace-nowrap;
 }
-
