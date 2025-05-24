@@ -7,6 +7,6 @@ export function mergeClasses(...inputs: ClassValue[]) {
 }
 
 export function transform(value: boolean | string): boolean {
-  return typeof value === 'string' ? value === '' : value;
+  return typeof value === 'string' ? value === ' ' : value;
 }
 ```

@@ -1,10 +1,8 @@
-```json
-{
+```tsconfig
   "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    }
+      "baseUrl": ".",
+      "paths": {
+        "@/*": ["./*"]
+      }
   }
-}
 ```
