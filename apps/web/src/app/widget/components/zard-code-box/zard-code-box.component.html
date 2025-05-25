@@ -25,7 +25,7 @@
     </section>
     <section class="transition-all" [class]="activeTab() === 'code' ? 'translate-x-0' : ['translate-x-full', 'sr-only']">
       @if (path()) {
-        <z-markdown src="components/{{ path() }}.ts" [codeBox]="true"></z-markdown>
+        <z-markdown src="components/{{ path() }}.ts" [codeBox]="true" [dirLineNumber]="true"></z-markdown>
       }
     </section>
   </main>

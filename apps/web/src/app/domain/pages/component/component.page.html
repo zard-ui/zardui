@@ -7,32 +7,77 @@
     (scrollSpyChange)="activeAnchor = $event"
   >
     <section class="flex flex-col gap-10 mx-auto w-full min-w-0 max-w-2xl mb-10">
-      <header scrollSpyItem="overview" id="overview">
-        <z-markdown src="components/{{ componentData.componentName }}/doc/overview.md" [codeBox]="true"></z-markdown>
+      <header class="flex flex-col gap-5" scrollSpyItem="overview" id="overview">
+        <z-markdown src="components/{{ componentData.componentName }}/doc/overview.md" [dirLineNumber]="false"></z-markdown>
+        <z-code-box
+          [scrollSpyItem]="componentData.examples[0].name"
+          [attr.id]="componentData.examples[0].name"
+          path="{{ componentData.componentName }}/demo/{{ componentData.examples[0].name }}"
+          [dynamicComponent]="componentData.examples[0].component"
+          [onlyDemo]="componentData.examples[0].onlyDemo"
+          [column]="componentData.examples[0]?.column || false"
+        ></z-code-box>
       </header>
 
-      <hr />
+      <main class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
+        <section class="flex flex-col gap-4">
+          <header class="mb-5">
+            <h2 class="text-2xl font-semibold mb-2">Installation</h2>
+            <hr />
+          </header>
+          @if(installGuide) {
+          <main class="overflow-hidden transition-all duration-200 ease-in-out">
+            <nav class="flex gap-4 border-b mb-8">
+              @if(installGuide.manual.length > 0) {
+              <button
+                z-button
+                zType="ghost"
+                (click)="activeTab.set('manual')"
+                class="hover:bg-transparent rounded-none border-b-primary"
+                [class.border-b-2]="activeTab() === 'manual'"
+              >
+                Manual
+              </button>
+              } @if(installGuide.cli.length > 0) {
+              <button z-button zType="ghost" (click)="activeTab.set('cli')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'cli'">
+                CLI
+              </button>
+              }
+            </nav>
+            <section class="transition-all" [class]="activeTab() === 'manual' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']">
+              <z-steps [steps]="installGuide.manual"></z-steps>
+            </section>
+            <section class="transition-all" [class]="activeTab() === 'cli' ? 'translate-x-0' : ['translate-x-full', 'sr-only']">
+              <z-steps [steps]="installGuide.manual"></z-steps>
+            </section>
+          </main>
+          }
+        </section>
 
-      <main class="flex flex-col gap-4" scrollSpyItem="examples" id="examples">
-        <h2 class="text-2xl font-semibold mb-4">Examples</h2>
+        <section class="flex flex-col gap-4">
+          <header class="mb-5">
+            <h2 class="text-2xl font-semibold mb-2">Examples</h2>
+            <hr />
+          </header>
 
-        @for (item of componentData.examples; track $index) {
-        <z-code-box
-          [scrollSpyItem]="item.name"
-          [attr.id]="item.name"
-          [componentType]="item.name"
-          path="{{ componentData.componentName }}/demo/{{ item.name }}"
-          [dynamicComponent]="item.component"
-          [onlyDemo]="item.onlyDemo"
-          [column]="item?.column"
-        ></z-code-box>
-        }
+          @for (item of componentData.examples; track $index) {
+          <z-code-box
+            [scrollSpyItem]="item.name"
+            [attr.id]="item.name"
+            [componentType]="item.name"
+            path="{{ componentData.componentName }}/demo/{{ item.name }}"
+            [dynamicComponent]="item.component"
+            [onlyDemo]="item.onlyDemo"
+            [column]="item?.column"
+          ></z-code-box>
+          }
+        </section>
       </main>
 
       <hr />
 
       <footer scrollSpyItem="api" id="api">
-        <z-markdown src="components/{{ componentData.componentName }}/doc/api.md"></z-markdown>
+        <z-markdown src="components/{{ componentData.componentName }}/doc/api.md" [dirLineNumber]="false"></z-markdown>
       </footer>
     </section>
     <z-dynamic-anchor [topicData]="pageTopics" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
