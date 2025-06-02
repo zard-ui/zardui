@@ -36,7 +36,7 @@ const COMPONENTS_PATH = {
     { name: 'Confirm Modal', path: '/components', available: false },
     { name: 'Divider', path: '/components/divider', available: true },
     { name: 'Input', path: '/components/input', available: true },
-    { name: 'Modal', path: '/components', available: false },
+    { name: 'Dialog', path: '/components/dialog', available: true },
     { name: 'Progress Bar', path: '/components', available: false },
     { name: 'Select', path: '/components/select', available: true },
     { name: 'Switch', path: '/components/switch', available: true },

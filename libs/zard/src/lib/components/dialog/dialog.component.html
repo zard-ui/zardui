@@ -1,0 +1,42 @@
+@if (config.zClosable || config.zClosable === undefined) {
+  <button z-button zType="ghost" zSize="sm" class="absolute right-1 top-1" (click)="onCloseClick()">
+    <i class="icon-x text-sm"></i>
+  </button>
+}
+
+<header class="flex flex-col space-y-1.5 text-center sm:text-left">
+  @if (config.zTitle) {
+    <h4 class="text-lg font-semibold leading-none tracking-tight">{{ config.zTitle }}</h4>
+
+    @if (config.zDescription) {
+      <p class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+    }
+  }
+</header>
+
+<main class="flex flex-col space-y-4">
+  <ng-template cdkPortalOutlet></ng-template>
+  @if (config.zTitleOnContent) {
+    <h5>{{ config.zTitle }}</h5>
+  }
+
+  @if (isStringContent) {
+    <div [innerHTML]="config.zContent"></div>
+  }
+</main>
+
+@if (config.zFooter !== null) {
+  <footer class="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+    @if (config.zCancelText !== null) {
+      <button z-button zType="outline" (click)="onCloseClick()">
+        {{ config.zCancelText || 'Cancel' }}
+      </button>
+    }
+
+    @if (config.zOkText !== null) {
+      <button z-button (click)="onOkClick()">
+        {{ config.zOkText || 'OK' }}
+      </button>
+    }
+  </footer>
+}
