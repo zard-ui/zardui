@@ -1,11 +1,12 @@
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { inject, Injectable, Injector, TemplateRef } from '@angular/core';
+import { inject, Injectable, InjectionToken, Injector, TemplateRef } from '@angular/core';
 
 import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
+export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
 
 @Injectable({
   providedIn: 'root',
@@ -65,7 +66,7 @@ export class ZardDialogService {
         } as any),
       );
     } else if (typeof componentOrTemplateRef !== 'string') {
-      const injector = this.createInjector<T>(dialogRef);
+      const injector = this.createInjector<T>(dialogRef, config);
       const contentRef = dialogContainer.attachComponentPortal<T>(new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector));
       dialogRef.componentInstance = contentRef.instance;
     }
@@ -73,10 +74,13 @@ export class ZardDialogService {
     return dialogRef;
   }
 
-  private createInjector<T>(dialogRef: ZardDialogRef<T>): Injector {
+  private createInjector<T>(dialogRef: ZardDialogRef<T>, config: ZardDialogOptions<T>) {
     return Injector.create({
       parent: this.injector,
-      providers: [{ provide: ZardDialogRef, useValue: dialogRef }],
+      providers: [
+        { provide: ZardDialogRef, useValue: dialogRef },
+        { provide: Z_MODAL_DATA, useValue: config.zData },
+      ],
     });
   }
 }

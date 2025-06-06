@@ -4,7 +4,12 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardDialogModule } from '../dialog.component';
-import { ZardDialogService } from '../dialog.service';
+import { Z_MODAL_DATA, ZardDialogService } from '../dialog.service';
+
+interface iDialogData {
+  name: string;
+  username: string;
+}
 
 @Component({
   selector: 'zard-demo-dialog-basic',
@@ -34,10 +39,16 @@ import { ZardDialogService } from '../dialog.service';
   `,
 })
 export class ZardDemoDialogBasicInputComponent {
+  private zData: iDialogData = inject(Z_MODAL_DATA);
+
   form = new FormGroup({
     name: new FormControl('Pedro Duarte'),
     username: new FormControl('@peduarte'),
   });
+
+  constructor() {
+    if (this.zData) this.form.patchValue(this.zData);
+  }
 }
 
 @Component({
@@ -53,6 +64,10 @@ export class ZardDemoDialogBasicComponent {
       zTitle: 'Edit Profile',
       zDescription: `Make changes to your profile here. Click save when you're done.`,
       zContent: ZardDemoDialogBasicInputComponent,
+      zData: {
+        name: 'Samuel Rizzon',
+        username: '@samuelrizzondev',
+      },
       zOkText: 'Save changes',
       zOnOk: instance => {
         console.log('Form submitted:', instance.form.value);

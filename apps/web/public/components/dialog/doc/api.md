@@ -1,15 +1,26 @@
 # API
 
-## [z-dialog] <span class="api-type-label directive">Directive</span>
+## [ZardDialogService] <span class="api-type-label service">Service</span>
 
-> z-button is a Directive, it accepts all props which are supported by [native button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button).
+> The `ZardDialogService` provides methods to open and close dialogs.
 
-To get a customized button, just pass the following props to the directive.
-
-| Property   | Description          | Type                                                              | Default   |
-| ---------- | -------------------- | ----------------------------------------------------------------- | --------- |
-| `zType`    | button type          | `default \| destructive \| outline \| secondary \| ghost \| link` | `default` |
-| `zSize`    | button size          | `default \| sm \| lg \|icon`                                      | `default` |
-| `zShape`   | button shape         | `default \| circle \| square`                                     | `default` |
-| `zFull`    | button width 100%    | `boolean`                                                         | `false`   |
-| `zLoading` | button loading state | `boolean`                                                         | `false`   |
+| Property            | Description                                             | Type                                    | Default   |
+| ------------------- | ------------------------------------------------------- | --------------------------------------- | --------- |
+| `zAutofocus`        | Sets the autofocus button.                              | `'ok' \| 'cancel' \| 'auto' \| null`    | `'auto'`  |
+| `zCancelIcon`       | Sets the cancel icon.                                   | `string`                                |           |
+| `zCancelText`       | Sets the cancel text.                                   | `string`                                |           |
+| `zClosable`         | Enables closing the dialog.                             | `boolean`                               | `true`    |
+| `zContent`          | Sets the dialog content.                                | `string \| TemplateRef<T> \| Type<T>`   |           |
+| `zData`             | Sets the data for the dialog.                           | `object`                                |           |
+| `zDescription`      | Sets the dialog description.                            | `string`                                |           |
+| `zHideFooter`       | Hides the footer.                                       | `boolean`                               | `false`   |
+| `zMaskClosable`     | Enables closing the dialog by clicking on the mask.     | `boolean`                               | `true`    |
+| `zOkDestructive`    | Marks the OK button as destructive.                     | `boolean`                               | `false`   |
+| `zOkDisabled`       | Disables the OK button.                                 | `boolean`                               | `false`   |
+| `zOkIcon`           | Sets the OK button icon.                                | `string`                                |           |
+| `zOkText`           | Sets the OK button text.                                | `string \| null`                        |           |
+| `zOnCancel`         | Callback for cancel action.                             | `EventEmitter<T> \| OnClickCallback<T>` | `noopFun` |
+| `zOnOk`             | Callback for OK action.                                 | `EventEmitter<T> \| OnClickCallback<T>` | `noopFun` |
+| `zTitle`            | Sets the dialog title.                                  | `string \| TemplateRef<T>`              |           |
+| `zViewContainerRef` | View container reference for dynamic component loading. | `ViewContainerRef`                      |           |
+| `zWidth`            | Sets the dialog width.                                  | `string`                                |           |

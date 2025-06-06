@@ -13,7 +13,6 @@ import {
   EventEmitter,
   inject,
   NgModule,
-  OnInit,
   output,
   signal,
   TemplateRef,
@@ -31,14 +30,14 @@ import { dialogVariants } from './dialog.variants';
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardDialogOptions<T> {
-  zAutofocus?: 'ok' | 'cancel' | 'auto' | null = 'auto';
+  zAutofocus?: 'ok' | 'cancel' | 'auto' | null = 'auto'; // TODO: implement autofocus
   zCancelIcon?: string;
   zCancelText?: string;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
-  zData?: T;
+  zData?: object;
   zDescription?: string;
-  zFooter?: string | TemplateRef<object> | Type<T> | null = null;
+  zHideFooter?: boolean;
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
@@ -47,12 +46,11 @@ export class ZardDialogOptions<T> {
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zTitle?: string | TemplateRef<T>;
-  zTitleOnContent?: boolean;
   zViewContainerRef?: ViewContainerRef;
   zWidth?: string;
 
   // Confirm
-  zIconType?: string = 'question-circle';
+  zIconType?: string = 'question-circle'; // TODO: implement icon type
 }
 
 @Component({
@@ -67,7 +65,7 @@ export class ZardDialogOptions<T> {
     '[style.width]': 'config.zWidth ? config.zWidth : null',
   },
 })
-export class ZardDialogComponent<T> extends BasePortalOutlet implements OnInit {
+export class ZardDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardDialogOptions<T>);
@@ -85,10 +83,6 @@ export class ZardDialogComponent<T> extends BasePortalOutlet implements OnInit {
 
   constructor() {
     super();
-  }
-
-  ngOnInit(): void {
-    console.log('Dialog component initialized:', this.config, this.dialogRef);
   }
 
   getNativeElement(): HTMLElement {
