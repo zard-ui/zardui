@@ -25,7 +25,7 @@
 @if (!config.zHideFooter) {
   <footer class="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
     @if (config.zCancelText !== null) {
-      <button data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()" [attr.cdkFocusInitial]="config.zAutofocus === 'cancel' || null">
+      <button data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
         @if (config.zCancelIcon) {
           <i class="icon-{{ config.zCancelIcon }}"></i>
         }
@@ -35,14 +35,7 @@
     }
 
     @if (config.zOkText !== null) {
-      <button
-        data-testid="z-ok-button"
-        z-button
-        [zType]="config.zOkDestructive ? 'destructive' : 'default'"
-        [disabled]="config.zOkDisabled"
-        (click)="onOkClick()"
-        [attr.cdkFocusInitial]="config.zAutofocus === 'ok' || null"
-      >
+      <button data-testid="z-ok-button" z-button [zType]="config.zOkDestructive ? 'destructive' : 'default'" [disabled]="config.zOkDisabled" (click)="onOkClick()">
         @if (config.zOkIcon) {
           <i class="icon-{{ config.zOkIcon }}"></i>
         }

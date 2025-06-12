@@ -30,7 +30,6 @@ import { dialogVariants } from './dialog.variants';
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardDialogOptions<T> {
-  zAutofocus?: 'ok' | 'cancel' | 'auto' | null = 'auto'; // TODO: implement autofocus
   zCancelIcon?: string;
   zCancelText?: string;
   zClosable?: boolean;
@@ -48,9 +47,6 @@ export class ZardDialogOptions<T> {
   zTitle?: string | TemplateRef<T>;
   zViewContainerRef?: ViewContainerRef;
   zWidth?: string;
-
-  // Confirm
-  zIconType?: string = 'question-circle'; // TODO: implement icon type
 }
 
 @Component({
