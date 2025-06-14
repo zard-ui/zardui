@@ -35,9 +35,12 @@ import { ZardTableModule } from './table.module';
       }
     </table>
   </div>`,
+  host: {
+    '[class.z-ordering-enabled]': 'zOrdering()',
+  },
   styles: [
     `
-      th[zThSortable]:hover {
+      .z-ordering-enabled th[zThSortable]:hover {
         cursor: pointer;
       }
     `,
