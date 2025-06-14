@@ -6,12 +6,12 @@ import { ZardTableModule } from '../table.module';
   standalone: true,
   imports: [ZardTableComponent, ZardTableModule],
   template: `
-    <z-table>
+    <z-table [zOrdering]="true">
       <thead z-thead>
         <tr z-tr>
-          <th z-th>Name</th>
-          <th z-th>Age</th>
-          <th z-th>Address</th>
+          <th z-th zThSortable="name">Name</th>
+          <th z-th zThSortable="age">Age</th>
+          <th z-th zThSortable="address">Address</th>
         </tr>
       </thead>
 
