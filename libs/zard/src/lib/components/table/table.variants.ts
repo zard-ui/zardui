@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-export const tableVariants = cva('w-full caption-bottom text-sm');
+export const tableVariants = cva('w-full caption-bottom text-sm overflow-auto');
 
 export const theadVariants = cva('[&_tr]:border-b');
 
