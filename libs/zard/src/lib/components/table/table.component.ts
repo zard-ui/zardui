@@ -10,7 +10,7 @@ import { ZardTableModule } from './table.module';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div class="rounded-md border">
+    <div z-table-wrapper>
       <table z-table role="table">
         @if (columns().length && data().length) {
           <thead>
@@ -39,7 +39,7 @@ import { ZardTableModule } from './table.module';
     </div>
 
     @if (pagination()) {
-      <div class="flex justify-end gap-2 items-center mt-4">
+      <div z-table-pagination>
         @if (hasPrevPage()) {
           <button z-button zType="outline" zSize="sm" (click)="goPrev()">Previous</button>
         }
