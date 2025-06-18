@@ -1,0 +1,21 @@
+<section class="flex flex-col xl:grid xl:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:gap-10">
+  <z-sidebar></z-sidebar>
+  <main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px] [&_h1]:text-3xl [&_h1]:font-bold [&_p]:text-base [&_p]:text-muted-foreground">
+    <section class="flex flex-col gap-10 mx-auto w-full min-w-0 max-w-2xl mb-10">
+      <header class="grid gap-2">
+        <h1>Installation</h1>
+        <p class="text-base text-muted-foreground">How to install dependencies and structure your app.</p>
+      </header>
+      <main>
+        <header>
+          <h2 class="mt-8 border-b pb-4 text-xl font-semibold">Environments</h2>
+        </header>
+        <section class="grid sm:grid-cols-2 gap-4 mt-8 sm:gap-6">
+          @for(env of angularEnvs; track $index) {
+          <z-env-card [name]="env.name" [path]="env.path" [icon]="env.icon"></z-env-card>
+          }
+        </section>
+      </main>
+    </section>
+  </main>
+</section>

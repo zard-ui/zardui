@@ -22,11 +22,11 @@ export class DocPage {
   docData?: DocData;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private viewportScroller: ViewportScroller,
+    private readonly router: Router,
+    private readonly activatedRoute: ActivatedRoute,
+    private readonly viewportScroller: ViewportScroller,
   ) {
-    this.activatedRoute.params.subscribe(_ => {
+    this.activatedRoute.params.subscribe(() => {
       this.loadData();
     });
     this.loadData();

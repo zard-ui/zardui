@@ -1,7 +1,7 @@
 import { HeaderComponent } from '@zard/domain/components/header/header.component';
 import { FooterComponent } from '@zard/domain/components/footer/footer.component';
 import { BannerComponent } from '@zard/domain/components/banner/banner.component';
-import { environment } from 'apps/web/src/environments/environment';
+import { environment } from '@zard/env/environment';
 import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
 
