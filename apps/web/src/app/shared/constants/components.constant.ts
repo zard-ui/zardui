@@ -20,6 +20,7 @@ import { TOOLTIP } from '@zard/components/tooltip/demo/tooltip';
 export interface ComponentData {
   componentName: string;
   examples: ExampleData[];
+  fullWidth?: boolean;
 }
 
 export interface ExampleData {

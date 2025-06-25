@@ -16,7 +16,11 @@
     <section class="transition-all" [class]="activeTab() === 'preview' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']">
       <z-card
         class="min-h-74 w-full flex justify-center items-center gap-4 [&_ng-component]:gap-4 [&_ng-component]:items-center"
-        [class]="column() ? '[&_ng-component]:grid' : '[&_ng-component]:flex'"
+        [ngClass]="{
+          '[&_ng-component]:grid': column(),
+          '[&_ng-component]:flex': !column(),
+          '[&_ng-component]:w-full': fullWidth(),
+        }"
       >
         @if (dynamicComponent()) {
           <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>

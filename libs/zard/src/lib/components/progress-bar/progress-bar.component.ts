@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
+
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { containerProgressBarVariants, progressBarVariants, ZardContainerProgressBarVariants, ZardProgressBarVariants } from './progress-bar.variants';
@@ -36,6 +37,9 @@ import { containerProgressBarVariants, progressBarVariants, ZardContainerProgres
       </div>
     }
   `,
+  host: {
+    class: 'w-full',
+  },
 })
 export class ZardProgressBarComponent {
   readonly zType = input<ZardProgressBarVariants['zType']>('default');
