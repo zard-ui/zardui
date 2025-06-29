@@ -9,18 +9,27 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
     <z-breadcrumb>
       <z-breadcrumb-list zWrap="wrap" zAlign="start">
         <z-breadcrumb-item>
-          <z-breadcrumb-link zLink="/">Home</z-breadcrumb-link>
+          <z-breadcrumb-link zLink="/"
+            ><div class="icon-house"></div>
+            Home</z-breadcrumb-link
+          >
         </z-breadcrumb-item>
         <z-breadcrumb-separator />
         <z-breadcrumb-item>
-          <z-breadcrumb-link zLink="/components">Components</z-breadcrumb-link>
+          <z-breadcrumb-link zLink="/components"
+            ><div class="icon-puzzle"></div>
+            Components</z-breadcrumb-link
+          >
         </z-breadcrumb-item>
         <z-breadcrumb-separator />
         <z-breadcrumb-item>
-          <z-breadcrumb-page>Breadcrumb</z-breadcrumb-page>
+          <z-breadcrumb-page
+            ><div class="icon-square-library"></div>
+            Breadcrumb</z-breadcrumb-page
+          >
         </z-breadcrumb-item>
       </z-breadcrumb-list>
     </z-breadcrumb>
   `,
 })
-export class ZardDemoBreadcrumbComponent {}
+export class ZardDemoBreadcrumbWithAnIconComponent {}

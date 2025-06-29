@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+
 import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
@@ -6,9 +7,19 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
   imports: [ZardBreadcrumbModule],
   template: `
     <z-breadcrumb>
-      <z-breadcrumb-item>Home</z-breadcrumb-item>
-      <z-breadcrumb-item>User</z-breadcrumb-item>
-      <z-breadcrumb-item>Profile</z-breadcrumb-item>
+      <z-breadcrumb-list zWrap="wrap" zAlign="start">
+        <z-breadcrumb-item>
+          <z-breadcrumb-link zLink="/">Home</z-breadcrumb-link>
+        </z-breadcrumb-item>
+        <z-breadcrumb-separator />
+        <z-breadcrumb-item>
+          <z-breadcrumb-link zLink="/components">Components</z-breadcrumb-link>
+        </z-breadcrumb-item>
+        <z-breadcrumb-separator />
+        <z-breadcrumb-item>
+          <z-breadcrumb-page>Breadcrumb</z-breadcrumb-page>
+        </z-breadcrumb-item>
+      </z-breadcrumb-list>
     </z-breadcrumb>
   `,
 })

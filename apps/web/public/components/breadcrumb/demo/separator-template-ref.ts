@@ -7,20 +7,24 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
   imports: [ZardBreadcrumbModule],
   template: `
     <z-breadcrumb>
-      <z-breadcrumb-list zWrap="wrap" zAlign="start">
+      <z-breadcrumb-list>
         <z-breadcrumb-item>
           <z-breadcrumb-link zLink="/">Home</z-breadcrumb-link>
         </z-breadcrumb-item>
-        <z-breadcrumb-separator />
+        <z-breadcrumb-separator [zSeparator]="customTemplate"> </z-breadcrumb-separator>
         <z-breadcrumb-item>
           <z-breadcrumb-link zLink="/components">Components</z-breadcrumb-link>
         </z-breadcrumb-item>
-        <z-breadcrumb-separator />
+        <z-breadcrumb-separator [zSeparator]="customTemplate"> </z-breadcrumb-separator>
         <z-breadcrumb-item>
           <z-breadcrumb-page>Breadcrumb</z-breadcrumb-page>
         </z-breadcrumb-item>
       </z-breadcrumb-list>
     </z-breadcrumb>
+
+    <ng-template #customTemplate>
+      <span class="icon-badge-info"></span>
+    </ng-template>
   `,
 })
-export class ZardDemoBreadcrumbComponent {}
+export class ZardDemoBreadcrumbCustomSeparatorTemplateRefComponent {}

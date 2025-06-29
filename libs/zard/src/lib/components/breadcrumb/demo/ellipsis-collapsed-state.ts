@@ -7,9 +7,13 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
   imports: [ZardBreadcrumbModule],
   template: `
     <z-breadcrumb>
-      <z-breadcrumb-list zWrap="wrap" zAlign="start">
+      <z-breadcrumb-list>
         <z-breadcrumb-item>
           <z-breadcrumb-link zLink="/">Home</z-breadcrumb-link>
+        </z-breadcrumb-item>
+        <z-breadcrumb-separator />
+        <z-breadcrumb-item>
+          <z-breadcrumb-ellipsis />
         </z-breadcrumb-item>
         <z-breadcrumb-separator />
         <z-breadcrumb-item>
@@ -23,4 +27,4 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
     </z-breadcrumb>
   `,
 })
-export class ZardDemoBreadcrumbComponent {}
+export class ZardDemoBreadcrumbCollapsedComponent {}
