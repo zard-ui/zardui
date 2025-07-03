@@ -1,3 +1,4 @@
+import { BREADCRUMB } from '@zard/components/breadcrumb/demo/breadcrumb';
 import { ACCORDION } from '@zard/components/accordion/demo/accordion';
 import { DROPDOWN } from '@zard/components/dropdown/demo/dropdown';
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
@@ -16,8 +17,6 @@ import { ALERT } from '@zard/components/alert/demo/alert';
 import { TABS } from '@zard/components/tabs/demo/tabs';
 import { CARD } from '@zard/components/card/demo/card';
 import { ComponentType } from '@angular/cdk/overlay';
-
-import { BREADCRUMB } from './../../../../../../libs/zard/src/lib/components/breadcrumb/demo/breadcrumb';
 
 export interface ComponentData {
   componentName: string;

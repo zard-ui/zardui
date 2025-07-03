@@ -1,18 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  Directive,
-  inject,
-  Input,
-  input,
-  OnChanges,
-  Renderer2,
-  SimpleChanges,
-  TemplateRef,
-  ViewContainerRef,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ClassValue } from 'clsx';
 
@@ -133,50 +119,16 @@ export class ZardBreadcrumbPageComponent {
   protected readonly classes = computed(() => mergeClasses(breadcrumbPageVariants({ zType: this.zType() }), this.class()));
 }
 
-@Directive({
-  selector: '[zBreadcrumbTemplateOutlet]',
-  standalone: true,
-})
-export class ZardBreadcrumbTemplateOutletDirective implements OnChanges {
-  @Input('zBreadcrumbTemplateOutlet') content: string | TemplateRef<unknown> | null = null;
-
-  private renderer = inject(Renderer2);
-
-  constructor(public viewContainer: ViewContainerRef) {}
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['content']) {
-      this.viewContainer.clear();
-      this.renderContent();
-    }
-  }
-
-  private renderContent(): void {
-    if (this.content instanceof TemplateRef) {
-      this.viewContainer.createEmbeddedView(this.content);
-    } else if (typeof this.content === 'string') {
-      const element = this.renderer.createElement('span');
-      const text = this.renderer.createText(this.content);
-      this.renderer.appendChild(element, text);
-      const hostEl = this.viewContainer.element.nativeElement;
-      hostEl.parentNode?.insertBefore(element, hostEl);
-    }
-  }
-}
-
 @Component({
   selector: 'z-breadcrumb-separator',
   exportAs: 'zBreadcrumbSeparator',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardBreadcrumbTemplateOutletDirective],
   template: `
     <li aria-hidden="true" role="presentation" [class]="classes()">
-      @if (zSeparator()) {
-        <ng-container *zBreadcrumbTemplateOutlet="zSeparator()"></ng-container>
-      } @else {
-        <ng-content></ng-content>
-      }
+      <ng-content>
+        <div class="icon-chevron-right"></div>
+      </ng-content>
     </li>
   `,
 })

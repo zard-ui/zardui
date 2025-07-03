@@ -1,7 +1,5 @@
-import { ZardDemoBreadcrumbCustomSeparatorContentProjectionComponent } from './separator-content-projection';
-import { ZardDemoBreadcrumbCustomSeparatorTemplateRefComponent } from './separator-template-ref';
-import { ZardDemoBreadcrumbCustomSeparatorStringComponent } from './separator-string';
 import { ZardDemoBreadcrumbCollapsedComponent } from './ellipsis-collapsed-state';
+import { ZardDemoBreadcrumbCustomSeparatorComponent } from './custom-separator';
 import { ZardDemoBreadcrumbWithAnIconComponent } from './with-an-icon';
 import { ZardDemoBreadcrumbRouterLinkComponent } from './router-link';
 import { ZardDemoBreadcrumbComponent } from './default';
@@ -23,16 +21,8 @@ export const BREADCRUMB = {
       component: ZardDemoBreadcrumbRouterLinkComponent,
     },
     {
-      name: 'separator-string',
-      component: ZardDemoBreadcrumbCustomSeparatorStringComponent,
-    },
-    {
-      name: 'separator-template-ref',
-      component: ZardDemoBreadcrumbCustomSeparatorTemplateRefComponent,
-    },
-    {
-      name: 'separator-content-projection',
-      component: ZardDemoBreadcrumbCustomSeparatorContentProjectionComponent,
+      name: 'custom-separator',
+      component: ZardDemoBreadcrumbCustomSeparatorComponent,
     },
     {
       name: 'ellipsis-collapsed-state',

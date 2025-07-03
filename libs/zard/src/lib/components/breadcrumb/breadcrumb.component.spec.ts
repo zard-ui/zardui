@@ -12,7 +12,6 @@ import {
   ZardBreadcrumbPageComponent,
   ZardBreadcrumbSeparatorComponent,
   ZardBreadcrumbEllipsisComponent,
-  ZardBreadcrumbTemplateOutletDirective,
 } from './breadcrumb.component';
 
 @Component({
@@ -31,7 +30,7 @@ import {
     <z-breadcrumb>
       <z-breadcrumb-list>
         <z-breadcrumb-item>
-          <z-breadcrumb-link zLink="/">Home</z-breadcrumb-link>
+          <z-breadcrumb-link zType="underline" zLink="/">Home</z-breadcrumb-link>
         </z-breadcrumb-item>
         <z-breadcrumb-separator>/</z-breadcrumb-separator>
         <z-breadcrumb-item>
@@ -50,17 +49,6 @@ import {
   `,
 })
 class TestHostComponent {}
-
-@Component({
-  standalone: true,
-  selector: 'test-host-template',
-  imports: [ZardBreadcrumbSeparatorComponent],
-  template: `
-    <ng-template #customTemplate>⭐</ng-template>
-    <z-breadcrumb-separator [zSeparator]="customTemplate"></z-breadcrumb-separator>
-  `,
-})
-class TestTemplateHostComponent {}
 
 describe('BreadcrumbComponents Integration', () => {
   let fixture: ComponentFixture<TestHostComponent>;
@@ -189,71 +177,14 @@ describe('BreadcrumbComponents Integration', () => {
     expect(anchor.textContent.trim()).toContain('Home');
   });
 
-  it('should render string separator content correctly', () => {
+  it('should render separator content correctly', () => {
     const separator = fixture.debugElement.query(By.directive(ZardBreadcrumbSeparatorComponent)).nativeElement;
     expect(separator.textContent.trim()).toBe('/');
   });
 
-  it('should render a custom TemplateRef separator', async () => {
-    const testFixture = TestBed.createComponent(TestTemplateHostComponent);
-    testFixture.detectChanges();
-
-    const separator = testFixture.debugElement.query(By.directive(ZardBreadcrumbSeparatorComponent)).nativeElement;
-    expect(separator.textContent.trim()).toBe('⭐');
-  });
-});
-
-@Component({
-  standalone: true,
-  imports: [CommonModule, ZardBreadcrumbTemplateOutletDirective],
-  template: `
-    <ng-template #tpl>Template Content</ng-template>
-    <div *ngIf="show" [zBreadcrumbTemplateOutlet]="content"></div>
-  `,
-})
-class TestHostDirectiveComponent {
-  @ViewChild('tpl', { static: true }) tpl!: TemplateRef<unknown>;
-  content: string | TemplateRef<unknown> | null = null;
-  show = false;
-}
-
-describe('ZardTemplateOutletDirective', () => {
-  let fixture: ComponentFixture<TestHostDirectiveComponent>;
-  let host: TestHostDirectiveComponent;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestHostDirectiveComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestHostDirectiveComponent);
-    host = fixture.componentInstance;
-  });
-
-  it('should render string content as span', () => {
-    host.content = 'Hello World';
-    host.show = true;
-    fixture.detectChanges();
-
-    const span = fixture.nativeElement.querySelector('span');
-    expect(span).toBeTruthy();
-    expect(span.textContent).toBe('Hello World');
-  });
-
-  it('should render TemplateRef content', () => {
-    host.content = host.tpl;
-    host.show = true;
-    fixture.detectChanges();
-
-    expect(fixture.nativeElement.textContent).toContain('Template Content');
-  });
-
-  it('should not render anything when content is null', () => {
-    host.content = null;
-    host.show = true;
-    fixture.detectChanges();
-
-    const span = fixture.nativeElement.querySelector('span');
-    expect(span).toBeNull();
+  it('should have zType set to "underline"', () => {
+    const debug = fixture.debugElement.query(By.directive(ZardBreadcrumbLinkComponent));
+    const instance = debug.componentInstance;
+    expect(instance.zType()).toBe('underline');
   });
 });

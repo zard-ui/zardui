@@ -11,11 +11,15 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
         <z-breadcrumb-item>
           <z-breadcrumb-link zLink="/">Home</z-breadcrumb-link>
         </z-breadcrumb-item>
-        <z-breadcrumb-separator [zSeparator]="'->'"> </z-breadcrumb-separator>
+        <z-breadcrumb-separator>
+          <div class="icon-move-right"></div>
+        </z-breadcrumb-separator>
         <z-breadcrumb-item>
           <z-breadcrumb-link zLink="/components">Components</z-breadcrumb-link>
         </z-breadcrumb-item>
-        <z-breadcrumb-separator [zSeparator]="'->'"> </z-breadcrumb-separator>
+        <z-breadcrumb-separator>
+          <div class="icon-move-right"></div>
+        </z-breadcrumb-separator>
         <z-breadcrumb-item>
           <z-breadcrumb-page>Breadcrumb</z-breadcrumb-page>
         </z-breadcrumb-item>
@@ -23,4 +27,4 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
     </z-breadcrumb>
   `,
 })
-export class ZardDemoBreadcrumbCustomSeparatorStringComponent {}
+export class ZardDemoBreadcrumbCustomSeparatorComponent {}
