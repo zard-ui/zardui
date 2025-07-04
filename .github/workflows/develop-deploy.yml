@@ -22,6 +22,4 @@ jobs:
         with:
           args: deploy --only hosting --project=zard-dev
         env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
-
-      
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.DEV_DEPLOY_CREDENTIALS }}
