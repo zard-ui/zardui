@@ -28,6 +28,10 @@ Please read the [contributing guide](/CONTRIBUTING.md).
 Licensed under the [MIT license](/LICENSE.md).
 
 ## Get In Touch
-<p>Help us on this journey and be part of our community.</p>
-<img src="https://dcbadge.limes.pink/api/server/https://discord.com/invite/xEXvCXNw" alt="discord" />
+<p>Click on one of the icons and Help us on this journey and be part of our community.</p>
+
+<a href="https://chat.whatsapp.com/Dctdh6Huhvm24OX6js5XKT" target="_blank">
+  <img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="whatsapp" />
+</a>
+<img src="https://dcbadge.limes.pink/api/server/https://discord.com/invite/yP8Uj9rAX9" alt="discord" />
 
