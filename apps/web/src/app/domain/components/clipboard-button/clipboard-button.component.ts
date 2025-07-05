@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'z-clipboard-button',
-  template: `<button z-button zType="outline" zSize="icon" class="h-7 w-7 relative top-2" (click)="onClick()">
+  template: `<button z-button zType="outline" zSize="icon" class="h-7 w-7 relative top-2 right-2 bg-secondary/80 dark:bg-secondary/60" (click)="onClick()">
     @if (clipState()) {
       <i class="icon-check"></i>
     } @else {

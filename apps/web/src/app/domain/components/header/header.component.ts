@@ -5,12 +5,13 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { environment } from '@zard/env/environment';
 import { SOCIAL_MEDIAS } from '@zard/shared/constants/medias.constant';
 import { HEADER_PATHS } from '@zard/shared/constants/routes.constant';
+import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
 
 @Component({
   selector: 'z-header',
   templateUrl: './header.component.html',
   standalone: true,
-  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent],
+  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent],
 })
 export class HeaderComponent implements OnInit {
   private readonly storageKey = 'theme';

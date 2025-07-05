@@ -27,7 +27,7 @@ import { ZardMarkdownComponent } from '../markdown/markdown.component';
               <a z-button zType="link" class="p-0" [href]="stepProps()?.url?.href" target="_blank">{{ stepProps()?.url?.text }}</a>
             }
             @if (stepProps()?.file) {
-              <z-markdown [src]="'documentation/install' + stepProps()?.file" [codeBox]="true"></z-markdown>
+              <z-markdown [src]="'documentation/install' + stepProps()?.file?.path" [dirLineNumber]="definedLineNumber()" [codeBox]="true"></z-markdown>
             }
           </section>
         </main>
@@ -40,4 +40,12 @@ import { ZardMarkdownComponent } from '../markdown/markdown.component';
 export class StepComponent {
   readonly stepProps = input<Step>();
   readonly position = input<number>();
+
+  definedLineNumber(): boolean {
+    if (!this.stepProps()?.file?.lineNumber) {
+      return false;
+    }
+
+    return this.stepProps()?.file?.lineNumber as boolean;
+  }
 }

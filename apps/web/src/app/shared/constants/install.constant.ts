@@ -7,7 +7,10 @@ export interface Step {
     external?: boolean;
   };
   path?: string;
-  file?: string;
+  file?: {
+    path: string;
+    lineNumber: boolean;
+  };
 }
 
 export interface Installation {
@@ -32,7 +35,10 @@ export const installations: Installation[] = [
           href: 'https://angular.dev/installation',
           external: true,
         },
-        file: '/angular/install.md',
+        file: {
+          path: '/angular/install.md',
+          lineNumber: false,
+        },
       },
       {
         title: 'Add Tailwind CSS',
@@ -46,12 +52,18 @@ export const installations: Installation[] = [
       {
         title: 'Add dependencies',
         subtitle: 'Add the following dependencies to your project:',
-        file: '/angular/dependencies.md',
+        file: {
+          path: '/angular/dependencies.md',
+          lineNumber: false,
+        },
       },
       {
         title: 'Configure path aliases',
         subtitle: 'Configure the path aliases in your tsconfig.json file.',
-        file: '/angular/tsconfig.md',
+        file: {
+          path: '/angular/tsconfig.md',
+          lineNumber: true,
+        },
       },
       {
         title: 'Configure styles',
@@ -60,13 +72,19 @@ export const installations: Installation[] = [
           text: 'theming section.',
           href: '/docs/theming',
         },
-        file: '/angular/theming.md',
+        file: {
+          path: '/angular/theming.md',
+          lineNumber: true,
+        },
       },
       {
         title: 'Add a cn helper',
         subtitle: 'Create a folder called lib inside your app folder',
         path: 'lib/utils.ts',
-        file: '/angular/helper.md',
+        file: {
+          path: '/angular/helper.md',
+          lineNumber: true,
+        },
       },
       {
         title: "That's it",
@@ -82,7 +100,10 @@ export const installations: Installation[] = [
           href: 'https://angular.dev/installation',
           external: true,
         },
-        file: '/angular/install.md',
+        file: {
+          path: '/angular/install.md',
+          lineNumber: false,
+        },
       },
       {
         title: 'Add Tailwind CSS',
@@ -96,12 +117,18 @@ export const installations: Installation[] = [
       {
         title: 'Add dependencies',
         subtitle: 'Add the following dependencies to your project:',
-        file: '/angular/dependencies.md',
+        file: {
+          path: '/angular/dependencies.md',
+          lineNumber: false,
+        },
       },
       {
         title: 'Configure path aliases',
         subtitle: 'Configure the path aliases in your tsconfig.json file.',
-        file: '/angular/tsconfig.md',
+        file: {
+          path: '/angular/tsconfig.md',
+          lineNumber: true,
+        },
       },
       {
         title: 'Configure styles',
@@ -110,13 +137,19 @@ export const installations: Installation[] = [
           text: 'theming section.',
           href: '/docs/theming',
         },
-        file: '/angular/theming.md',
+        file: {
+          path: '/angular/theming.md',
+          lineNumber: true,
+        },
       },
       {
         title: 'Add a cn helper',
         subtitle: 'Create a folder called lib inside your app folder',
         path: 'lib/utils.ts',
-        file: '/angular/helper.md',
+        file: {
+          path: '/angular/helper.md',
+          lineNumber: true,
+        },
       },
       {
         title: "That's it",

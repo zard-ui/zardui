@@ -22,6 +22,4 @@ jobs:
         with:
           args: deploy --only hosting --project=zard-dev
         env:
-          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
-
-      
+          GOOGLE_APPLICATION_CREDENTIALS: ${{ secrets.DEV_DEPLOY_CREDENTIALS }}

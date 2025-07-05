@@ -1,0 +1,59 @@
+<button (click)="sidebarState.set(true)" aria-label="Toggle Menu">
+  <a class="flex xl:hidden justify-centertems-center">
+    <i class="icon-align-justify !text-2xl"></i>
+  </a>
+  <span class="sr-only">Toggle Menu</span>
+</button>
+
+@if (sidebarState()) {
+  <main class="relative z-[99]">
+    <aside role="backdrop" class="fixed inset-0 z-50 bg-black/80 animate-in fade-in w-full h-screen" (click)="sidebarState.set(false)"></aside>
+
+    <nav
+      class="fixed z-50 p-5 shadow-lg transition ease-in-out inset-y-0 left-0 h-screen w-3/4 sm:max-w-sm pr-0 border-l bg-background dark:bg-background/95 backdrop-blur"
+      [class]="sidebarState() ? 'animate-in slide-in-from-left ' : 'animate-out slide-out-to-left'"
+    >
+      <header class="flex items-center justify-between">
+        <a class="flex items-center gap-1" routerLink="/" (click)="sidebarState.set(false)">
+          <img src="images/zard.svg" alt="Logo" class="mr-2 h-8 dark:invert" />
+          <z-badge zType="secondary">{{ appVersion }}</z-badge>
+        </a>
+        <button (click)="sidebarState.set(false)" z-button zType="ghost" aria-label="Close">
+          <i class="icon-x !text-lg"></i>
+          <span class="sr-only">Close</span>
+        </button>
+      </header>
+
+      <main class="relative overflow-hidden h-[calc(100vh-8rem)] py-2">
+        <menu class="h-full overflow-auto">
+          <nav class="grid gap-8 pt-4">
+            @for (doc of sidebarPaths; track $index) {
+              <ul class="grid gap-2 pr-5">
+                <h1 class="px-2 font-semibold">{{ doc.title }}</h1>
+                @for (path of doc.data; track $index) {
+                  <li class="text-sm">
+                    <a
+                      z-button
+                      zType="ghost"
+                      zFull
+                      [routerLink]="path.path"
+                      class="justify-between px-2 py-1 font-normal capitalize"
+                      routerLinkActive="bg-accent font-semibold"
+                      [routerLinkActiveOptions]="{ exact: true }"
+                      (click)="isAvailable(path.available)"
+                    >
+                      {{ path.name }}
+                      @if (!path.available) {
+                        <z-badge zType="secondary" class="px-1 py-0">soon</z-badge>
+                      }
+                    </a>
+                  </li>
+                }
+              </ul>
+            }
+          </nav>
+        </menu>
+      </main>
+    </nav>
+  </main>
+}

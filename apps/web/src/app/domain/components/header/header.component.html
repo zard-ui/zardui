@@ -5,9 +5,9 @@
         <img src="images/zard.svg" alt="logo" class="h-8 dark:invert" />
         <z-badge zType="secondary">{{ appVersion }}</z-badge>
       </a>
-      <a class="flex xl:hidden justify-centertems-center" routerLink="/">
-        <i class="icon-align-justify !text-2xl"></i>
-      </a>
+      <aside class="block xl:hidden">
+        <z-mobile-nav></z-mobile-nav>
+      </aside>
       <nav class="hidden xl:flex gap-6">
         @for (path of headerPaths; track $index) {
           <a class="transition-colors hover:text-foreground/80 text-foreground/80 gap-2 font-normal" [routerLink]="path.path" routerLinkActive="text-primary font-semibold">

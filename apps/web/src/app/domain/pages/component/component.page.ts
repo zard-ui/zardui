@@ -6,29 +6,42 @@ import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.compon
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
+import { Installation, installations } from '@zard/shared/constants/install.constant';
+import { StepsComponent } from '@zard/domain/components/steps/steps.component';
 
 @Component({
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [CommonModule, DynamicAnchorComponent, MarkdownModule, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, SidebarComponent, ZardMarkdownComponent],
+  imports: [
+    CommonModule,
+    DynamicAnchorComponent,
+    StepsComponent,
+    MarkdownModule,
+    ZardCodeBoxComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    SidebarComponent,
+    ZardMarkdownComponent,
+  ],
 })
 export class ComponentPage {
   activeAnchor?: string;
   componentData?: ComponentData;
   pageTopics: Topic[] = [];
+  activeTab = signal<'manual' | 'cli'>('manual');
+  installGuide!: Installation | undefined;
 
   constructor(
     private activatedRoute: ActivatedRoute,
     private router: Router,
     private viewportScroller: ViewportScroller,
   ) {
-    console.log(this.pageTopics);
-    this.activatedRoute.params.subscribe(_ => {
+    this.activatedRoute.params.subscribe(() => {
       this.loadData();
     });
     this.loadData();
@@ -36,6 +49,12 @@ export class ComponentPage {
 
   private loadData() {
     this.viewportScroller.scrollToPosition([0, 0]);
+
+    const guideName = `angular`;
+
+    const installGuide = installations.find(x => x.environment === guideName);
+    this.installGuide = installGuide;
+
     const componentName = this.activatedRoute.snapshot.paramMap.get('componentName');
     if (!componentName) this.router.navigateByUrl('/');
 

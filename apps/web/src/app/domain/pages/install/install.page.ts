@@ -21,7 +21,7 @@ export class InstallPage {
     private router: Router,
     private viewportScroller: ViewportScroller,
   ) {
-    this.activatedRoute.params.subscribe(_ => {
+    this.activatedRoute.params.subscribe(() => {
       this.loadData();
     });
   }
