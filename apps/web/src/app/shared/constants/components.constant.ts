@@ -40,6 +40,7 @@ export const COMPONENTS: ComponentData[] = [
   BREADCRUMB,
   CARD,
   CHECKBOX,
+  DIALOG,
   DIVIDER,
   DROPDOWN,
   INPUT,
