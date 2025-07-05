@@ -14,7 +14,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
           cache: 'npm'
 
       - name: Install dependencies
@@ -28,4 +28,5 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.DEV_DEPLOY_CREDENTIALS }}'
-          projectId: zard-dev
+          projectId: '${{ secrets.FIREBASE_DEV_ID }}'
+          channelId: live

@@ -32,15 +32,14 @@ export interface ExampleData {
 }
 
 export const COMPONENTS: ComponentData[] = [
-  ACCORDION,
   ALERT,
+  ACCORDION,
   AVATAR,
   BADGE,
-  BREADCRUMB,
   BUTTON,
+  BREADCRUMB,
   CARD,
   CHECKBOX,
-  DIALOG,
   DIVIDER,
   DROPDOWN,
   INPUT,
