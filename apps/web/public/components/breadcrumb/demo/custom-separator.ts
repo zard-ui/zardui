@@ -25,10 +25,6 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
         </z-breadcrumb-item>
       </z-breadcrumb-list>
     </z-breadcrumb>
-
-    <ng-template #customTemplate>
-      <span class="icon-badge-info"></span>
-    </ng-template>
   `,
 })
 export class ZardDemoBreadcrumbCustomSeparatorComponent {}
