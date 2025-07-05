@@ -28,5 +28,5 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.DEV_DEPLOY_CREDENTIALS }}'
-          projectId: zard-dev
+          projectId: '${{ secrets.FIREBASE_DEV_ID }}'
           channelId: live
