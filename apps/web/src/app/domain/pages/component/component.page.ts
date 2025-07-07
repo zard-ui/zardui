@@ -12,6 +12,7 @@ import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directi
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 import { Installation, installations } from '@zard/shared/constants/install.constant';
 import { StepsComponent } from '@zard/domain/components/steps/steps.component';
+import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
 
 @Component({
   selector: 'z-component',

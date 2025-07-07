@@ -5,10 +5,11 @@ import { Component, input, signal } from '@angular/core';
 import { ComponentType } from '@angular/cdk/overlay';
 import { NgComponentOutlet } from '@angular/common';
 import { MarkdownModule } from 'ngx-markdown';
+import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
 
 @Component({
   selector: 'z-code-box',
-  imports: [MarkdownModule, NgComponentOutlet, ZardButtonComponent, ZardCardComponent, ZardMarkdownComponent],
+  imports: [MarkdownModule, NgComponentOutlet, ZardButtonComponent, ZardCardComponent, ZardMarkdownComponent, MarkdownRendererComponent],
   templateUrl: './zard-code-box.component.html',
 })
 export class ZardCodeBoxComponent {
