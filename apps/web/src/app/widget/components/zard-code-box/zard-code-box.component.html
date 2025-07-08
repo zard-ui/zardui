@@ -21,6 +21,7 @@
           '[&_ng-component]:flex': !column(),
           '[&_ng-component]:w-full': fullWidth(),
         }"
+        [class]="column() ? '[&_ng-component]:grid' : '[&_ng-component]:flex'"
       >
         @if (dynamicComponent()) {
           <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>

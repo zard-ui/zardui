@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { buttonVariants, ZardButtonVariants } from './button.variants';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
+
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { buttonVariants, ZardButtonVariants } from './button.variants';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',
@@ -34,14 +35,6 @@ export class ZardButtonComponent {
   readonly zLoading = input(false, { transform });
 
   protected readonly classes = computed(() =>
-    mergeClasses(
-      buttonVariants({ zType: this.zType(), zSize: this.iconOnly() ? 'icon' : this.zSize(), zShape: this.zShape(), zFull: this.zFull(), zLoading: this.zLoading() }),
-      this.class(),
-    ),
+    mergeClasses(buttonVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape(), zFull: this.zFull(), zLoading: this.zLoading() }), this.class()),
   );
-
-  private iconOnly(): boolean {
-    const childNodes = Array.from((this.elementRef?.nativeElement as HTMLButtonElement)?.childNodes || []);
-    return childNodes.every(node => !['#text', 'SPAN'].includes(node.nodeName));
-  }
 }

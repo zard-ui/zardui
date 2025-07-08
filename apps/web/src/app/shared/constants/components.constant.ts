@@ -3,9 +3,11 @@ import { ACCORDION } from '@zard/components/accordion/demo/accordion';
 import { ALERT } from '@zard/components/alert/demo/alert';
 import { AVATAR } from '@zard/components/avatar/demo/avatar';
 import { BADGE } from '@zard/components/badge/demo/badge';
+import { BREADCRUMB } from '@zard/components/breadcrumb/demo/breadcrumb';
 import { BUTTON } from '@zard/components/button/demo/button';
 import { CARD } from '@zard/components/card/demo/card';
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
+import { DIALOG } from '@zard/components/dialog/demo/dialog';
 import { DIVIDER } from '@zard/components/divider/demo/divider';
 import { DROPDOWN } from '@zard/components/dropdown/demo/dropdown';
 import { INPUT } from '@zard/components/input/demo/input';
@@ -32,13 +34,15 @@ export interface ExampleData {
 }
 
 export const COMPONENTS: ComponentData[] = [
-  ACCORDION,
   ALERT,
+  ACCORDION,
   AVATAR,
   BADGE,
   BUTTON,
+  BREADCRUMB,
   CARD,
   CHECKBOX,
+  DIALOG,
   DIVIDER,
   DROPDOWN,
   INPUT,
