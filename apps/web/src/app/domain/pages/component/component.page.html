@@ -16,6 +16,7 @@
           [dynamicComponent]="componentData.examples[0].component"
           [onlyDemo]="componentData.examples[0].onlyDemo"
           [column]="componentData.examples[0]?.column || false"
+          [fullWidth]="componentData.fullWidth || false"
         ></z-code-box>
       </header>
 
@@ -69,6 +70,7 @@
             [dynamicComponent]="item.component"
             [onlyDemo]="item.onlyDemo"
             [column]="item?.column"
+            [fullWidth]="componentData.fullWidth || false"
           ></z-code-box>
           }
         </section>
