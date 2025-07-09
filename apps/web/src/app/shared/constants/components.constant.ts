@@ -1,9 +1,10 @@
-import { ACCORDION } from '@zard/components/accordion/demo/accordion';
 import { BREADCRUMB } from '@zard/components/breadcrumb/demo/breadcrumb';
+import { ACCORDION } from '@zard/components/accordion/demo/accordion';
 import { DROPDOWN } from '@zard/components/dropdown/demo/dropdown';
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
 import { TOOLTIP } from '@zard/components/tooltip/demo/tooltip';
 import { DIVIDER } from '@zard/components/divider/demo/divider';
+import { TOGGLE } from '@zard/components/toggle/demo/toggle';
 import { SWITCH } from '@zard/components/switch/demo/switch';
 import { SELECT } from '@zard/components/select/demo/select';
 import { LOADER } from '@zard/components/loader/demo/loader';
@@ -49,5 +50,6 @@ export const COMPONENTS: ComponentData[] = [
   SELECT,
   SWITCH,
   TABS,
+  TOGGLE,
   TOOLTIP,
 ];
