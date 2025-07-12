@@ -40,6 +40,7 @@ const COMPONENTS_PATH = {
     { name: 'Dialog', path: '/components/dialog', available: true },
     { name: 'Progress Bar', path: '/components/progress-bar', available: true },
     { name: 'Select', path: '/components/select', available: true },
+    { name: 'Slider', path: '/components/slider', available: true },
     { name: 'Switch', path: '/components/switch', available: true },
     { name: 'Table', path: '/components', available: false },
     { name: 'Tabs', path: '/components/tabs', available: true },
