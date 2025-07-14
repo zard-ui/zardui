@@ -1,38 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
+import { ZardTableDataSource } from '../table';
 import { ZardTableComponent } from '../table.component';
+import { mockFetchUsers } from '../table.mockApi';
 import { ZardTableModule } from '../table.module';
 
 @Component({
   standalone: true,
   imports: [ZardTableComponent, ZardTableModule],
-  template: `
-    <z-table [zOrdering]="true">
-      <thead z-thead>
-        <tr z-tr>
-          <th z-th zThSortable="name">Name</th>
-          <th z-th zThSortable="age">Age</th>
-          <th z-th zThSortable="address">Address</th>
-        </tr>
-      </thead>
-
-      <tbody>
-        <tr z-tr>
-          <td z-td>Michael</td>
-          <td z-td>32</td>
-          <td z-td>Rua 1</td>
-        </tr>
-        <tr z-tr>
-          <td z-td>Jim</td>
-          <td z-td>46</td>
-          <td z-td>Rua 2</td>
-        </tr>
-        <tr z-tr>
-          <td z-td>Dwight</td>
-          <td z-td>29</td>
-          <td z-td>Rua 3</td>
-        </tr>
-      </tbody>
-    </z-table>
-  `,
+  template: ` <z-table [columns]="columns" [dataSource]="dataSource()"></z-table> `,
 })
-export class ZardDemoTableBasicComponent {}
+export class ZardDemoTableBasicComponent implements OnInit {
+  dataSource = signal<ZardTableDataSource<Record<string, string | number>>>({ data: [] });
+
+  columns = [
+    { header: 'Name', accessor: 'name' },
+    { header: 'Age', accessor: 'age' },
+    { header: 'Email', accessor: 'email' },
+  ];
+
+  ngOnInit(): void {
+    mockFetchUsers({ pageIndex: 0, pageSize: 5, totalItems: 0 }).then(response => {
+      this.dataSource.set({
+        data: response.data,
+      });
+    });
+  }
+}
