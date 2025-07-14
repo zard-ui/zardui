@@ -1,3 +1,51 @@
-**Dynamic usage**
+**Pagination**
 
-This usage demonstrates the dynamic capabilities of the table component, enabling the creation of powerful and flexible data grids. By simply passing an array of columns and data, you can easily customize the structure and content of the table, making it ideal for use cases with dynamic or real-time data. Powered by TanStack Table, this approach offers advanced features like sorting, pagination, and filtering, all while maintaining simplicity in implementation.
+This usage demonstrates how to integrate **pagination** into your table component.
+
+To enable pagination, set the `[pagination]` input to `true`.  
+
+When enabled, the table will display pagination controls and emit state changes via the `(stateChange)` event whenever the user navigates pages.
+
+You should listen to this event and fetch the corresponding page of data from your API or data source based on the emitted state.
+
+
+```html
+<z-table
+  [columns]="columns"
+  [dataSource]="dataSource()"
+  [pagination]="true"
+  (stateChange)="onStateChange($event)"
+></z-table>
+```
+
+### Output (emitted by the table)
+
+```ts
+interface TableState {
+  pageIndex: number;
+  pageSize: number;
+  totalItems: number;
+  first?: boolean;
+  last?: boolean;
+}
+```
+
+### Intput (what the table expects to receive)
+
+```ts
+interface ZardTableDataSource<T> {
+  data: T[];
+  meta?: {
+    pagination?: {
+      totalItems: number;
+      pageSize: number;
+      pageIndex: number;
+      first?: boolean;
+      last?: boolean;
+    };
+  };
+}
+```
+
+Note: You are free to transform `TableState` into any query shape your API expects —
+just make sure to return a `ZardTableDataSource<T>` back to the table.

@@ -1,18 +1,21 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, output, ViewEncapsulation } from '@angular/core';
 import { ZardButtonComponent } from '../components';
+import { TableState, ZardTableDataSource } from './table';
 import { ZardTableModule } from './table.module';
+import { ZardTableService } from './table.service';
 
 @Component({
   selector: 'z-table',
   exportAs: 'zTable',
   imports: [ZardTableModule, ZardButtonComponent],
+  providers: [ZardTableService],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     <div z-table-wrapper>
       <table z-table role="table">
-        @if (columns().length && data().length) {
+        @if (columns().length && dataSource().data.length) {
           <thead>
             <tr z-tr>
               @for (column of columns(); track column.accessor) {
@@ -24,7 +27,7 @@ import { ZardTableModule } from './table.module';
           </thead>
 
           <tbody>
-            @for (row of paginatedData(); track row) {
+            @for (row of dataSource().data; track row) {
               <tr z-tr>
                 @for (column of columns(); track column.accessor) {
                   <td z-td>{{ row[column.accessor] }}</td>
@@ -40,12 +43,8 @@ import { ZardTableModule } from './table.module';
 
     @if (pagination()) {
       <div z-table-pagination>
-        @if (hasPrevPage()) {
-          <button z-button zType="outline" zSize="sm" (click)="goPrev()">Previous</button>
-        }
-        @if (hasNextPage()) {
-          <button z-button zType="outline" zSize="sm" (click)="goNext()">Next</button>
-        }
+        <button z-button zType="outline" zSize="sm" (click)="goPrev()" [disabled]="disablePrev()">Previous</button>
+        <button z-button zType="outline" zSize="sm" (click)="goNext()" [disabled]="disableNext()">Next</button>
       </div>
     }
   `,
@@ -62,39 +61,34 @@ import { ZardTableModule } from './table.module';
 })
 export class ZardTableComponent {
   readonly columns = input<{ header: string; accessor: string }[]>([]);
-  readonly data = input<Array<Record<string, string | number>>>([]);
+  readonly dataSource = input<ZardTableDataSource<Record<string, string | number>>>({ data: [] });
+
+  readonly pagination = input<boolean>();
+
   readonly zOrdering = input(false);
-  readonly pagination = input<number>();
   readonly isOrderingEnabled = computed(() => this.zOrdering());
 
-  readonly startSlice = signal(0);
+  readonly stateChange = output<TableState>();
 
-  readonly pageSize = computed(() => this.pagination() ?? 0);
+  readonly disableNext = computed(() => !this.tableService.hasNextPage());
+  readonly disablePrev = computed(() => !this.tableService.hasPrevPage());
 
-  readonly endSlice = computed(() => this.startSlice() + this.pageSize());
-
-  readonly paginatedData = computed(() => {
-    if (!this.pagination()) return this.data();
-    return this.data().slice(this.startSlice(), this.endSlice());
-  });
-
-  readonly hasNextPage = computed(() => {
-    return this.pageSize() > 0 && this.endSlice() < this.data().length;
-  });
-
-  readonly hasPrevPage = computed(() => {
-    return this.pageSize() > 0 && this.startSlice() > 0;
-  });
+  constructor(private readonly tableService: ZardTableService) {
+    effect(() => {
+      const meta = this.dataSource().meta?.pagination;
+      if (meta) {
+        this.tableService.updateState(meta);
+      }
+    });
+  }
 
   goNext() {
-    if (this.hasNextPage()) {
-      this.startSlice.update(start => start + this.pageSize());
-    }
+    this.tableService.nextPage();
+    this.stateChange.emit(this.tableService.tableState());
   }
 
   goPrev() {
-    if (this.hasPrevPage()) {
-      this.startSlice.update(start => Math.max(0, start - this.pageSize()));
-    }
+    this.tableService.prevPage();
+    this.stateChange.emit(this.tableService.tableState());
   }
 }
