@@ -4,7 +4,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "concurrently \"npm run watch:files\" \"npx nx run web:serve --configuration=local  \"",
+    "start": "concurrently \"npm run watch:files\" \"npx nx run web:serve --configuration=local --port=4222  \"",
     "prepare": "husky",
     "build": "npx nx run web:build --configuration=production",
     "build:dev": "npx nx run web:build --configuration=development",

@@ -1,17 +1,18 @@
-import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
-import { ZardMarkdownComponent } from '@zard/domain/components/markdown/markdown.component';
-import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
-import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
-import { CommonModule, ViewportScroller } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
+
+import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { ZardMarkdownComponent } from '@zard/domain/components/markdown/markdown.component';
+import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
+import { StepsComponent } from '@zard/domain/components/steps/steps.component';
+import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
+import { Installation, installations } from '@zard/shared/constants/install.constant';
+import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
 
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
-import { Installation, installations } from '@zard/shared/constants/install.constant';
-import { StepsComponent } from '@zard/domain/components/steps/steps.component';
 
 @Component({
   selector: 'z-component',
