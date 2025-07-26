@@ -2,9 +2,15 @@
 
 ## `<z-progress-bar>` <span class="api-type-label component">Component</span>
 
-> `z-progress-bar` is a component that accepts all properties supported by a native `<div>`.
+The `z-progress-bar` component is a flexible and customizable progress bar that allows full styling control using class-variance-authority (CVA). It provides several configuration options for size, shape, type, and more.
 
-To customize the progress bar, pass the following props to the component.
+### **Usage**
+
+```html
+<z-progress-bar [progress]="50" [zType]="'accent'" [zSize]="'lg'" [zShape]="'circle'" />
+```
+
+### **Properties**
 
 | Property           | Description                          | Type                                     | Default     |
 | ------------------ | ------------------------------------ | ---------------------------------------- | ----------- |
@@ -16,3 +22,11 @@ To customize the progress bar, pass the following props to the component.
 | `[class]`          | Custom classes for the container.    | `string`                                 | `''`        |
 | `[barClass]`       | Custom classes for the progress bar. | `string`                                 | `''`        |
 | `[zIndeterminate]` | Define loading infinity state.       | `boolean`                                | `false`     |
+
+### **Styling**
+
+The component supports full customization via CSS utility classes and CVA variants. Users can pass additional styles using `[class]` for the container and `[barClass]` for the progress bar.
+
+```html
+<z-progress-bar [progress]="75" [class]="'border border-gray-500'" [barClass]="'shadow-lg bg-green-500'" />
+```
