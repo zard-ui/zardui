@@ -19,6 +19,7 @@ import { ALERT } from '@zard/components/alert/demo/alert';
 import { TABS } from '@zard/components/tabs/demo/tabs';
 import { CARD } from '@zard/components/card/demo/card';
 import { ComponentType } from '@angular/cdk/overlay';
+import { TOGGLE } from '@zard/components/toggle/demo/toggle';
 
 export interface ComponentData {
   componentName: string;
@@ -54,5 +55,6 @@ export const COMPONENTS: ComponentData[] = [
   SLIDER,
   SWITCH,
   TABS,
+  TOGGLE,
   TOOLTIP,
 ];
