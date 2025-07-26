@@ -18,6 +18,7 @@ import { SELECT } from '@zard/components/select/demo/select';
 import { SWITCH } from '@zard/components/switch/demo/switch';
 import { TABS } from '@zard/components/tabs/demo/tabs';
 import { TOOLTIP } from '@zard/components/tooltip/demo/tooltip';
+import { TOGGLE } from '@zard/components/toggle/demo/toggle';
 
 export interface ComponentData {
   componentName: string;
@@ -52,5 +53,6 @@ export const COMPONENTS: ComponentData[] = [
   SELECT,
   SWITCH,
   TABS,
+  TOGGLE,
   TOOLTIP,
 ];
