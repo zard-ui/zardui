@@ -1,89 +1,154 @@
+import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ZardCardBodyComponent, ZardCardComponent, ZardCardHeaderComponent, ZardCardHeaderDescriptionComponent, ZardCardHeaderTitleComponent } from './card.component';
-
-import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-@Component({
-  selector: 'test-host-component',
-  imports: [ZardCardComponent, ZardCardBodyComponent, ZardCardHeaderComponent, ZardCardHeaderTitleComponent, ZardCardHeaderDescriptionComponent],
-  template: `
-    <z-card class="custom-class">
-      <z-card-header class="custom-class">
-        <z-card-header-title class="custom-class"> Title </z-card-header-title>
-        <z-card-header-description class="custom-class"> Description </z-card-header-description>
-      </z-card-header>
-      <z-card-body class="custom-class"> Body </z-card-body>
-    </z-card>
-  `,
-})
-class TestHostComponent {}
+import { ZardCardComponent } from './card.component';
 
-describe('ZardCardComponents', () => {
-  let fixture: ComponentFixture<TestHostComponent>;
+describe('ZardCardComponent', () => {
+  let component: ZardCardComponent;
+  let fixture: ComponentFixture<ZardCardComponent>;
+  let debugElement: DebugElement;
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(TestHostComponent);
+    await TestBed.configureTestingModule({
+      imports: [ZardCardComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ZardCardComponent);
+    component = fixture.componentInstance;
+    debugElement = fixture.debugElement;
     fixture.detectChanges();
   });
 
-  it('should create all components', () => {
-    const card = fixture.debugElement.query(By.directive(ZardCardComponent));
-    const cardBody = fixture.debugElement.query(By.directive(ZardCardBodyComponent));
-    const cardHeader = fixture.debugElement.query(By.directive(ZardCardHeaderComponent));
-    const cardHeaderTitle = fixture.debugElement.query(By.directive(ZardCardHeaderTitleComponent));
-    const cardHeaderDescription = fixture.debugElement.query(By.directive(ZardCardHeaderDescriptionComponent));
-
-    expect(card).toBeTruthy();
-    expect(cardBody).toBeTruthy();
-    expect(cardHeader).toBeTruthy();
-    expect(cardHeaderTitle).toBeTruthy();
-    expect(cardHeaderDescription).toBeTruthy();
+  it('should create', () => {
+    expect(component).toBeTruthy();
   });
 
-  it('should have default classes for ZardCardComponent', () => {
-    const card = fixture.debugElement.query(By.directive(ZardCardComponent)).nativeElement;
-    expect(card.classList).toContain('block');
-    expect(card.classList).toContain('rounded-lg');
-    expect(card.classList).toContain('border');
-    expect(card.classList).toContain('bg-card');
-    expect(card.classList).toContain('text-card-foreground');
-    expect(card.classList).toContain('shadow-sm');
-    expect(card.classList).toContain('w-full');
-    expect(card.classList).toContain('p-6');
-    expect(card.classList).toContain('custom-class');
+  it('should render with default card classes', () => {
+    const cardElement = debugElement.nativeElement;
+    expect(cardElement.classList.contains('rounded-lg')).toBeTruthy();
+    expect(cardElement.classList.contains('border')).toBeTruthy();
+    expect(cardElement.classList.contains('bg-card')).toBeTruthy();
+    expect(cardElement.classList.contains('text-card-foreground')).toBeTruthy();
+    expect(cardElement.classList.contains('shadow-sm')).toBeTruthy();
   });
 
-  it('should have default classes for ZardCardBodyComponent', () => {
-    const cardBody = fixture.debugElement.query(By.directive(ZardCardBodyComponent)).nativeElement;
-    expect(cardBody.classList).toContain('block');
-    expect(cardBody.classList).toContain('mt-6');
-    expect(cardBody.classList).toContain('custom-class');
+  it('should apply custom classes', () => {
+    fixture.componentRef.setInput('class', 'custom-class');
+    fixture.detectChanges();
+
+    const cardElement = debugElement.nativeElement;
+    expect(cardElement.classList.contains('custom-class')).toBeTruthy();
   });
 
-  it('should have default classes for ZardCardHeaderComponent', () => {
-    const cardHeader = fixture.debugElement.query(By.directive(ZardCardHeaderComponent)).nativeElement;
-    expect(cardHeader.classList).toContain('flex');
-    expect(cardHeader.classList).toContain('flex-col');
-    expect(cardHeader.classList).toContain('space-y-1.5');
-    expect(cardHeader.classList).toContain('pb-0');
-    expect(cardHeader.classList).toContain('gap-1.5');
-    expect(cardHeader.classList).toContain('custom-class');
+  it('should render title when provided', () => {
+    fixture.componentRef.setInput('zTitle', 'Test Title');
+    fixture.detectChanges();
+
+    const titleElement = debugElement.query(By.css('.text-2xl.font-semibold'));
+    expect(titleElement).toBeTruthy();
+    expect(titleElement.nativeElement.textContent.trim()).toBe('Test Title');
   });
 
-  it('should have default classes for ZardCardHeaderTitleComponent', () => {
-    const cardHeaderTitle = fixture.debugElement.query(By.directive(ZardCardHeaderTitleComponent)).nativeElement;
-    expect(cardHeaderTitle.classList).toContain('text-2xl');
-    expect(cardHeaderTitle.classList).toContain('font-semibold');
-    expect(cardHeaderTitle.classList).toContain('leading-none');
-    expect(cardHeaderTitle.classList).toContain('tracking-tight');
-    expect(cardHeaderTitle.classList).toContain('custom-class');
+  it('should not render header when title is not provided', () => {
+    const headerElement = debugElement.query(By.css('.flex.flex-col.space-y-1\\.5.pb-0.gap-1\\.5'));
+    expect(headerElement).toBeFalsy();
   });
 
-  it('should have default classes for ZardCardHeaderDescriptionComponent', () => {
-    const cardHeaderDescription = fixture.debugElement.query(By.directive(ZardCardHeaderDescriptionComponent)).nativeElement;
-    expect(cardHeaderDescription.classList).toContain('text-sm');
-    expect(cardHeaderDescription.classList).toContain('text-muted-foreground');
-    expect(cardHeaderDescription.classList).toContain('custom-class');
+  it('should render description when both title and description are provided', () => {
+    fixture.componentRef.setInput('zTitle', 'Test Title');
+    fixture.componentRef.setInput('zDescription', 'Test Description');
+    fixture.detectChanges();
+
+    const descriptionElement = debugElement.query(By.css('.text-sm.text-muted-foreground'));
+    expect(descriptionElement).toBeTruthy();
+    expect(descriptionElement.nativeElement.textContent.trim()).toBe('Test Description');
+  });
+
+  it('should not render description when only description is provided without title', () => {
+    fixture.componentRef.setInput('zDescription', 'Test Description');
+    fixture.detectChanges();
+
+    const descriptionElement = debugElement.query(By.css('.text-sm.text-muted-foreground'));
+    expect(descriptionElement).toBeFalsy();
+  });
+
+  it('should render body content with correct classes', () => {
+    const bodyElement = debugElement.query(By.css('.block.mt-6'));
+    expect(bodyElement).toBeTruthy();
+  });
+
+  it('should render ng-content in body', () => {
+    @Component({
+      selector: 'test-host',
+      standalone: true,
+      imports: [ZardCardComponent],
+      template: `<z-card>Test Content</z-card>`,
+    })
+    class TestHostComponent {}
+
+    const hostFixture = TestBed.createComponent(TestHostComponent);
+    hostFixture.detectChanges();
+
+    const bodyElement = hostFixture.debugElement.query(By.css('.block.mt-6'));
+    expect(bodyElement.nativeElement.textContent).toContain('Test Content');
+  });
+
+  it('should support template ref for title', () => {
+    @Component({
+      selector: 'test-host',
+      standalone: true,
+      imports: [ZardCardComponent],
+      template: `
+        <z-card [zTitle]="titleTemplate">
+          <ng-template #titleTemplate>
+            <span class="custom-title">Custom Title Template</span>
+          </ng-template>
+        </z-card>
+      `,
+    })
+    class TestHostComponent {}
+
+    const hostFixture = TestBed.createComponent(TestHostComponent);
+    hostFixture.detectChanges();
+
+    const customTitleElement = hostFixture.debugElement.query(By.css('.custom-title'));
+    expect(customTitleElement).toBeTruthy();
+    expect(customTitleElement.nativeElement.textContent).toBe('Custom Title Template');
+  });
+
+  it('should support template ref for description', () => {
+    @Component({
+      selector: 'test-host',
+      standalone: true,
+      imports: [ZardCardComponent],
+      template: `
+        <z-card zTitle="Title" [zDescription]="descriptionTemplate">
+          <ng-template #descriptionTemplate>
+            <span class="custom-description">Custom Description Template</span>
+          </ng-template>
+        </z-card>
+      `,
+    })
+    class TestHostComponent {}
+
+    const hostFixture = TestBed.createComponent(TestHostComponent);
+    hostFixture.detectChanges();
+
+    const customDescriptionElement = hostFixture.debugElement.query(By.css('.custom-description'));
+    expect(customDescriptionElement).toBeTruthy();
+    expect(customDescriptionElement.nativeElement.textContent).toBe('Custom Description Template');
+  });
+
+  it('should have correct CSS classes structure when fully populated', () => {
+    fixture.componentRef.setInput('zTitle', 'Test Title');
+    fixture.componentRef.setInput('zDescription', 'Test Description');
+    fixture.detectChanges();
+
+    const headerElement = debugElement.query(By.css('.flex.flex-col.space-y-1\\.5.pb-0.gap-1\\.5'));
+    const bodyElement = debugElement.query(By.css('.block.mt-6'));
+
+    expect(headerElement).toBeTruthy();
+    expect(bodyElement).toBeTruthy();
   });
 });

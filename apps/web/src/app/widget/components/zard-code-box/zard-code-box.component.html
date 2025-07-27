@@ -20,6 +20,7 @@
           '[&_ng-component]:grid': column(),
           '[&_ng-component]:flex': !column(),
           '[&_ng-component]:w-full': fullWidth(),
+          '[&_div:first-child]:w-full': fullWidth(),
         }"
         [class]="column() ? '[&_ng-component]:grid' : '[&_ng-component]:flex'"
       >

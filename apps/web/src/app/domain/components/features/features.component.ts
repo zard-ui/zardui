@@ -1,11 +1,10 @@
-import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardCardModule } from '@zard/components/card/card.module';
-import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
+import { ZardInputDirective } from '@zard/components/input/input.directive';
 
 @Component({
   selector: 'z-features',
@@ -17,37 +16,17 @@ import { Component } from '@angular/core';
       </header>
 
       <main class="grid grid-cols-1 sm:grid-cols-2 gap-6 w-full">
-        <z-card>
-          <z-card-body class="h-[200px] flex justify-center items-center">
-            <button z-button>Button</button>
-          </z-card-body>
-          <z-card-header class="mt-4 pt-4">
-            <z-card-header-title>Button</z-card-header-title>
-          </z-card-header>
+        <z-card zTitle="Button">
+          <button z-button>Button</button>
         </z-card>
         <z-card>
-          <z-card-body class="h-[200px] flex justify-center items-center">
-            <z-badge>Badge</z-badge>
-          </z-card-body>
-          <z-card-header class="mt-4 pt-4">
-            <z-card-header-title>Badge</z-card-header-title>
-          </z-card-header>
+          <z-badge>Badge</z-badge>
         </z-card>
         <z-card>
-          <z-card-body class="h-[200px] flex justify-center items-center">
-            <span z-checkbox>Checkbox</span>
-          </z-card-body>
-          <z-card-header class="mt-4 pt-4">
-            <z-card-header-title>Checkbox</z-card-header-title>
-          </z-card-header>
+          <span z-checkbox>Checkbox</span>
         </z-card>
         <z-card>
-          <z-card-body class="h-[200px] flex justify-center items-center">
-            <input z-input placeholder="Input" />
-          </z-card-body>
-          <z-card-header class="mt-4 pt-4">
-            <z-card-header-title>Input</z-card-header-title>
-          </z-card-header>
+          <input z-input placeholder="Input" />
         </z-card>
       </main>
       <footer class="flex justify-center mt-8">
@@ -58,6 +37,6 @@ import { Component } from '@angular/core';
       </footer>
     </section>
   `,
-  imports: [RouterModule, ZardCardComponent, ZardButtonComponent, ZardCardModule, ZardBadgeComponent, ZardCheckboxComponent, ZardInputDirective],
+  imports: [RouterModule, ZardCardComponent, ZardButtonComponent, ZardCardComponent, ZardBadgeComponent, ZardCheckboxComponent, ZardInputDirective],
 })
 export class FeaturesComponent {}
