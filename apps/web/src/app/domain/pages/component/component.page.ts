@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ZardMarkdownComponent } from '@zard/domain/components/markdown/markdown.component';
 import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
-import { StepsComponent } from '@zard/domain/components/steps/steps.component';
 import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
 import { Installation, installations } from '@zard/shared/constants/install.constant';
 import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
@@ -18,17 +17,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [
-    CommonModule,
-    DynamicAnchorComponent,
-    StepsComponent,
-    MarkdownModule,
-    ZardCodeBoxComponent,
-    ScrollSpyDirective,
-    ScrollSpyItemDirective,
-    SidebarComponent,
-    ZardMarkdownComponent,
-  ],
+  imports: [CommonModule, DynamicAnchorComponent, MarkdownModule, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, SidebarComponent, ZardMarkdownComponent],
 })
 export class ComponentPage {
   activeAnchor?: string;

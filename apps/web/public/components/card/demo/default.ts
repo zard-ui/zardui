@@ -1,19 +1,10 @@
 import { Component } from '@angular/core';
 
-import { ZardCardModule } from '../card.module';
+import { ZardCardComponent } from '../card.component';
 
 @Component({
   standalone: true,
-  imports: [ZardCardModule],
-  template: `
-    <z-card>
-      <z-card-header>
-        <z-card-header-title>Card title</z-card-header-title>
-        <z-card-header-description>Card description</z-card-header-description>
-      </z-card-header>
-
-      <z-card-body> Card content </z-card-body>
-    </z-card>
-  `,
+  imports: [ZardCardComponent],
+  template: ` <z-card zTitle="Card title" zDescription="Card description"> Card content </z-card> `,
 })
 export class ZardDemoCardDefaultComponent {}
