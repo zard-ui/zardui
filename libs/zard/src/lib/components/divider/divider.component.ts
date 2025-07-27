@@ -13,7 +13,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   template: '',
   host: {
     '[attr.role]': `'separator'`,
-    '[attr.aria-orientation]': 'zOrientation',
+    '[attr.aria-orientation]': 'zOrientation()',
     '[class]': 'classes()',
   },
 })

@@ -2,8 +2,7 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
 
-import { ZardTooltipDirective } from './tooltip';
-import { ZardTooltipModule } from './tooltip.module';
+import { ZardTooltipDirective, ZardTooltipModule } from './tooltip';
 
 @Component({
   template: `
