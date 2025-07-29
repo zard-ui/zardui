@@ -3,7 +3,7 @@ import { TableState } from './table';
 
 export class ZardTableService {
   private readonly state = signal<TableState>({
-    pageSize: 10,
+    pageSize: 5,
     pageIndex: 0,
     totalItems: 0,
   });
@@ -35,21 +35,24 @@ export class ZardTableService {
 
   nextPage() {
     if (!this.hasNextPage()) return;
-    this.state.update(currentState => ({
-      ...currentState,
-      pageIndex: currentState.pageIndex + 1,
-    }));
+    const { pageIndex } = this.state();
+    this.updateState({ pageIndex: pageIndex + 1 });
   }
 
   prevPage() {
     if (!this.hasPrevPage()) return;
-    this.state.update(currentState => ({
-      ...currentState,
-      pageIndex: currentState.pageIndex - 1,
-    }));
+    const { pageIndex } = this.state();
+    this.updateState({ pageIndex: pageIndex - 1 });
+  }
+
+  setSorting(field: string) {
+    const current = this.state();
+    const direction = current.field === field && current.direction === 'asc' ? 'desc' : 'asc';
+
+    this.updateState({ field, direction, pageIndex: 0 });
   }
 
   resetPage() {
-    this.state.update(state => ({ ...state, pageIndex: 0 }));
+    this.updateState({ pageIndex: 0 });
   }
 }

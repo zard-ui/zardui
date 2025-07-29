@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, effect, input, output, ViewEncapsulation } from '@angular/core';
 import { ZardButtonComponent } from '../components';
 import { TableState, ZardTableDataSource } from './table';
+import { ZardTableSortIconComponent } from './table-sort-icon.component';
 import { ZardTableModule } from './table.module';
 import { ZardTableService } from './table.service';
 
 @Component({
   selector: 'z-table',
   exportAs: 'zTable',
-  imports: [ZardTableModule, ZardButtonComponent],
+  imports: [ZardTableModule, ZardButtonComponent, ZardTableSortIconComponent],
   providers: [ZardTableService],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -19,9 +20,16 @@ import { ZardTableService } from './table.service';
           <thead>
             <tr z-tr>
               @for (column of columns(); track column.accessor) {
-                <th z-th zThSortable="column.accessor" scope="col">
-                  {{ column.header }}
-                </th>
+                @if (column.sortable) {
+                  <th z-th scope="col" sortable (click)="toggleSort(column.accessor)" tabindex="0" role="button" [attr.aria-label]="'Sort by ' + column.header">
+                    {{ column.header }}
+                    <z-table-sort-icon [direction]="sortDirectionMap()[column.accessor]"></z-table-sort-icon>
+                  </th>
+                } @else {
+                  <th z-th scope="col">
+                    {{ column.header }}
+                  </th>
+                }
               }
             </tr>
           </thead>
@@ -53,31 +61,36 @@ import { ZardTableService } from './table.service';
   },
   styles: [
     `
-      .z-ordering-enabled th[zthsortable]:hover {
+      th[sortable]:hover {
         cursor: pointer;
       }
     `,
   ],
 })
 export class ZardTableComponent {
-  readonly columns = input<{ header: string; accessor: string }[]>([]);
+  readonly columns = input<{ header: string; accessor: string; sortable?: boolean }[]>([]);
   readonly dataSource = input<ZardTableDataSource<Record<string, string | number>>>({ data: [] });
 
   readonly pagination = input<boolean>();
-
-  readonly zOrdering = input(false);
-  readonly isOrderingEnabled = computed(() => this.zOrdering());
-
-  readonly stateChange = output<TableState>();
-
   readonly disableNext = computed(() => !this.tableService.hasNextPage());
   readonly disablePrev = computed(() => !this.tableService.hasPrevPage());
 
+  readonly zOrdering = input<boolean>(false);
+  readonly direction = computed(() => this.tableService.tableState().direction);
+  readonly sortField = computed(() => this.tableService.tableState().field);
+  readonly sortDirectionMap = computed(() => ({ [this.sortField() ?? '']: this.direction() ?? null }));
+
+  readonly stateChange = output<TableState>();
+
   constructor(private readonly tableService: ZardTableService) {
     effect(() => {
-      const meta = this.dataSource().meta?.pagination;
+      const meta = this.dataSource().meta;
+
       if (meta) {
-        this.tableService.updateState(meta);
+        this.tableService.updateState({
+          ...meta.pagination,
+          ...meta.sorting,
+        });
       }
     });
   }
@@ -90,5 +103,12 @@ export class ZardTableComponent {
   goPrev() {
     this.tableService.prevPage();
     this.stateChange.emit(this.tableService.tableState());
+  }
+
+  toggleSort(field: string) {
+    if (this.zOrdering()) {
+      this.tableService.setSorting(field);
+      this.stateChange.emit(this.tableService.tableState());
+    }
   }
 }

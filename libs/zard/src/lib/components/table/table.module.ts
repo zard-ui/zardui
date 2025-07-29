@@ -10,7 +10,6 @@ import {
   ZardTheadDirective,
   ZardTrDirective,
 } from './table.directive';
-import { ZThSortableDirective } from './zThSortable.directive';
 
 const directives = [
   ZardTableDirective,
@@ -19,7 +18,6 @@ const directives = [
   ZardTrDirective,
   ZardThDirective,
   ZardTdDirective,
-  ZThSortableDirective,
   ZardTableWrapperDirective,
   ZardTablePaginationDirective,
 ];
