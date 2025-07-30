@@ -1,19 +1,8 @@
 {
+  "includeCoAuthoredBy": false,
   "permissions": {
-    "allow": [
-      "Bash(npm run test:*)",
-      "Bash(git push:*)",
-      "Bash(gh pr create:*)",
-      "Bash(npm test:*)",
-      "Bash(npx nx test:*)",
-      "Bash(cat:*)",
-      "Bash(git add:*)",
-      "Bash(git rm:*)"
-    ],
+    "allow": ["Bash(npm run test:*)", "Bash(git push:*)", "Bash(gh pr create:*)", "Bash(npm test:*)", "Bash(npx nx test:*)", "Bash(cat:*)", "Bash(git add:*)", "Bash(git rm:*)"],
     "deny": []
   },
-  "enabledMcpjsonServers": [
-    "playwright",
-    "ESLint"
-  ]
+  "enabledMcpjsonServers": ["playwright", "ESLint"]
 }
