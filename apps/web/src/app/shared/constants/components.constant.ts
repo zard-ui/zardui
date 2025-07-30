@@ -20,6 +20,7 @@ import { TABS } from '@zard/components/tabs/demo/tabs';
 import { CARD } from '@zard/components/card/demo/card';
 import { ComponentType } from '@angular/cdk/overlay';
 import { TOGGLE } from '@zard/components/toggle/demo/toggle';
+import { POPOVER } from '@zard/components/popover/demo/popover';
 
 export interface ComponentData {
   componentName: string;
@@ -49,6 +50,7 @@ export const COMPONENTS: ComponentData[] = [
   DROPDOWN,
   INPUT,
   LOADER,
+  POPOVER,
   PROGRESS_BAR,
   RADIO,
   SELECT,
