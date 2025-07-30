@@ -7,10 +7,30 @@
       "Bash(gh pr create:*)",
       "Bash(npm install:*)",
       "Bash(npm run build:*)",
+      "Bash(node:*)",
+      "Bash(npm start)",
+      "Bash(npx playwright:*)",
+      "Bash(mkdir:*)",
+      "WebFetch(domain:localhost)",
+      "WebFetch(domain:ui.shadcn.com)",
+      "Bash(npm test)",
+      "mcp__shadcn-mcp__get_component",
+      "mcp__shadcn-mcp__get_component_demo",
+      "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_evaluate",
+      "Bash(rm:*)",
+      "mcp__playwright__browser_press_key"
       "Bash(node:*)"
     ],
     "allow": ["Bash(npm run test:*)", "Bash(git push:*)", "Bash(gh pr create:*)", "Bash(npm test:*)", "Bash(npx nx test:*)", "Bash(cat:*)", "Bash(git add:*)", "Bash(git rm:*)"],
     "deny": []
   },
+  "enabledMcpjsonServers": [
+    "shadcn-mcp",
+    "playwright"
+  ]
   "enabledMcpjsonServers": ["playwright", "ESLint"]
 }

@@ -1,52 +1,28 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const selectVariants = cva(
-  'flex w-full items-center justify-between rounded-md border font-normal border-input bg-transparent ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+export const selectTriggerVariants = cva(
+  'flex w-fit items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none cursor-pointer focus-visible:ring-[3px] focus-visible:border-ring focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
     variants: {
-      zSize: {
-        default: 'h-10 px-4 py-2 text-base md:text-sm',
-        sm: 'h-9 px-3 py-1.5 text-sm',
-        lg: 'h-11 px-5 py-2.5 text-base',
-      },
-      zStatus: {
-        default: '',
-        error: 'border-destructive focus-visible:ring-destructive',
-        warning: 'border-yellow-500 focus-visible:ring-yellow-500',
-        success: 'border-green-500 focus-visible:ring-green-500',
-      },
-      zBorderless: {
-        true: 'border-0 focus-visible:ring-0 focus-visible:ring-offset-0',
-      },
-      zFullWidth: {
-        true: 'w-full',
-        false: 'w-auto',
+      size: {
+        default: 'h-9',
+        sm: 'h-8',
       },
     },
     defaultVariants: {
-      zSize: 'default',
-      zStatus: 'default',
-      zFullWidth: false,
+      size: 'default',
     },
   },
 );
 
-export const selectOptionVariants = cva('relative flex w-full cursor-pointer select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-base md:text-sm outline-none', {
-  variants: {
-    zSelected: {
-      true: 'bg-accent text-accent-foreground',
-      false: 'hover:bg-accent/30',
-    },
-    zDisabled: {
-      true: 'pointer-events-none opacity-50',
-      false: '',
-    },
-  },
-  defaultVariants: {
-    zSelected: false,
-    zDisabled: false,
-  },
-});
+export const selectContentVariants = cva(
+  'absolute top-full left-0 z-[9999] w-full max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-lg mt-1 animate-in fade-in-0 zoom-in-95',
+);
 
-export type ZardSelectVariants = VariantProps<typeof selectVariants>;
-export type ZardSelectOptionVariants = VariantProps<typeof selectOptionVariants>;
+export const selectItemVariants = cva(
+  'relative flex w-full cursor-pointer items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed data-[disabled]:hover:bg-transparent data-[disabled]:hover:text-current [&_svg:not([class*="text-"])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+);
+
+export type ZardSelectTriggerVariants = VariantProps<typeof selectTriggerVariants>;
+export type ZardSelectContentVariants = VariantProps<typeof selectContentVariants>;
+export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;

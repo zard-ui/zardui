@@ -15,4 +15,7 @@ export * from './radio/radio.component';
 export * from './switch/switch.component';
 export * from './progress-bar/progress-bar.component';
 export * from './tabs/tabs.component';
+export * from './select/select.component';
+export * from './select/select-item.component';
+export * from './select/select.variants';
 export * from './popover/popover.component';
