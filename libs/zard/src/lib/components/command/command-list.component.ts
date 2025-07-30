@@ -12,7 +12,7 @@ import { commandListVariants } from './command.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div [class]="classes()" role="listbox">
+    <div [class]="classes()" role="listbox" id="command-list">
       <ng-content></ng-content>
     </div>
   `,

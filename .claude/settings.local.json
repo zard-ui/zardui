@@ -17,13 +17,9 @@
       "Bash(npm run build:*)",
       "Bash(rm:*)",
       "Bash(npx eslint:*)",
-      "Bash(git commit:*)",
       "Bash(find:*)"
     ],
     "deny": []
   },
-  "enabledMcpjsonServers": [
-    "playwright",
-    "ESLint"
-  ]
+  "enabledMcpjsonServers": ["playwright", "ESLint"]
 }

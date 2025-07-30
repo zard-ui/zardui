@@ -1,4 +1,5 @@
 import { ClassValue } from 'class-variance-authority/dist/types';
+import { Subject, switchMap, takeUntil, timer } from 'rxjs';
 
 import {
   ChangeDetectionStrategy,
@@ -10,6 +11,7 @@ import {
   inject,
   input,
   OnDestroy,
+  OnInit,
   Output,
   signal,
   ViewChild,
@@ -18,8 +20,8 @@ import {
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardCommandComponent } from './command.component';
 import { ZardCommandJsonComponent } from './command-json.component';
+import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
 
 @Component({
@@ -31,19 +33,7 @@ import { commandInputVariants } from './command.variants';
   encapsulation: ViewEncapsulation.None,
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
-      <svg
-        class="mr-2 h-4 w-4 shrink-0 opacity-50"
-        xmlns="http://www.w3.org/2000/svg"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <circle cx="11" cy="11" r="8"></circle>
-        <path d="m21 21-4.35-4.35"></path>
-      </svg>
+      <div class="icon-search mr-2 h-4 w-4 shrink-0 opacity-50 flex items-center justify-center"></div>
       <input
         #searchInput
         [class]="classes()"
@@ -57,6 +47,7 @@ import { commandInputVariants } from './command.variants';
         role="combobox"
         [attr.aria-expanded]="true"
         [attr.aria-haspopup]="'listbox'"
+        [attr.aria-controls]="'command-list'"
         [attr.aria-label]="'Search commands'"
         [attr.aria-describedby]="'command-instructions'"
       />
@@ -70,7 +61,7 @@ import { commandInputVariants } from './command.variants';
     },
   ],
 })
-export class ZardCommandInputComponent implements ControlValueAccessor, OnDestroy {
+export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
   private readonly jsonCommandComponent = inject(ZardCommandJsonComponent, { optional: true });
   @ViewChild('searchInput', { static: true }) searchInput!: ElementRef<HTMLInputElement>;
@@ -81,7 +72,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnDestro
   @Output() readonly valueChange = new EventEmitter<string>();
 
   readonly searchTerm = signal('');
-  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
+  private searchSubject = new Subject<string>();
+  private destroy$ = new Subject<void>();
 
   protected readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
 
@@ -92,38 +84,41 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnDestro
     // ControlValueAccessor implementation - intentionally empty
   };
 
+  ngOnInit(): void {
+    // Set up debounced search stream - always send to subject
+    this.searchSubject
+      .pipe(
+        switchMap(value => {
+          // If empty, emit immediately, otherwise debounce
+          return value === '' ? timer(0) : timer(150);
+        }),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => {
+        // Get the current value from the signal to ensure we have the latest
+        const currentValue = this.searchTerm();
+        this.updateParentComponents(currentValue);
+      });
+  }
+
   onInput(event: Event) {
     const target = event.target as HTMLInputElement;
     const value = target.value;
     this.searchTerm.set(value);
 
-    // For immediate UI feedback, update the parent components without debounce for empty values
-    if (value === '') {
-      if (this.commandComponent) {
-        this.commandComponent.onSearch(value);
-      } else if (this.jsonCommandComponent) {
-        this.jsonCommandComponent.onSearch(value);
-      }
-      this.onChange(value);
-      this.valueChange.emit(value);
-    } else {
-      // Clear previous debounce timer
-      if (this.debounceTimer) {
-        clearTimeout(this.debounceTimer);
-      }
+    // Always send to subject - let the stream handle timing
+    this.searchSubject.next(value);
+  }
 
-      // Debounce the search to improve performance for non-empty values
-      this.debounceTimer = setTimeout(() => {
-        // Send search to appropriate parent component
-        if (this.commandComponent) {
-          this.commandComponent.onSearch(value);
-        } else if (this.jsonCommandComponent) {
-          this.jsonCommandComponent.onSearch(value);
-        }
-        this.onChange(value);
-        this.valueChange.emit(value);
-      }, 150); // 150ms debounce
+  private updateParentComponents(value: string): void {
+    // Send search to appropriate parent component
+    if (this.commandComponent) {
+      this.commandComponent.onSearch(value);
+    } else if (this.jsonCommandComponent) {
+      this.jsonCommandComponent.onSearch(value);
     }
+    this.onChange(value);
+    this.valueChange.emit(value);
   }
 
   onKeyDown(event: KeyboardEvent) {
@@ -160,9 +155,9 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnDestro
   }
 
   ngOnDestroy(): void {
-    // Clean up debounce timer
-    if (this.debounceTimer) {
-      clearTimeout(this.debounceTimer);
-    }
+    // Complete subjects to clean up subscriptions
+    this.destroy$.next();
+    this.destroy$.complete();
+    this.searchSubject.complete();
   }
 }
