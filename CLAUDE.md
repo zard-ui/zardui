@@ -133,3 +133,25 @@ export class Zard[Name]Component {
 - Build order managed by Nx dependency graph
 - Web app depends on library builds (`dependsOn: ["^build"]`)
 - Library packages built independently for publishing
+
+## Padrões de Commit
+
+Ao fazer commits neste projeto, use sempre os seguintes padrões de commit:
+
+- 📦 refactor: mudanças de código que não corrigem bugs nem adicionam features
+- ✨ feat: nova funcionalidade
+- 🐛 fix: correção de bug
+- 💄 style: mudanças que não afetam o significado do código (formatação, etc)
+- 🏗️ build: mudanças no sistema de build ou dependências
+- 🔧 ci: mudanças em configurações de CI
+- ✏️ docs: apenas mudanças de documentação
+- 🚀 perf: mudanças que melhoram performance
+- 🧪 test: adição ou correção de testes
+- 🌐 i18n: internacionalização e localização
+- 📈 analytics: analytics
+- 🗃️ database: mudanças relacionadas ao banco de dados
+
+**Importante**:
+
+- Use apenas a primeira linha do commit, sem descrições adicionais.
+- Não precisa dividir os arquivos em vários commits e fazer um commit para cada arquivo. Pode agrupar e fazer commits mais gerais.
