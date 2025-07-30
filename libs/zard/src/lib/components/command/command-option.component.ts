@@ -96,6 +96,9 @@ export class ZardCommandOptionComponent {
   }
 
   focus() {
-    this.elementRef.nativeElement.focus();
+    const element = this.elementRef.nativeElement;
+    element.focus();
+    // Scroll element into view if needed
+    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }

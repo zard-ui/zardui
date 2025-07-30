@@ -30,6 +30,10 @@ import { commandVariants, ZardCommandVariants } from './command.variants';
   encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()">
+      <div id="command-instructions" class="sr-only">Use arrow keys to navigate, Enter to select, Escape to clear selection.</div>
+      <div id="command-status" class="sr-only" aria-live="polite" aria-atomic="true">
+        {{ statusMessage() }}
+      </div>
       <z-command-input [placeholder]="config().placeholder || 'Type a command or search...'" (input)="onSearch($any($event.target).value)"> </z-command-input>
       <z-command-list>
         <z-command-empty>{{ config().emptyText || 'No results found.' }}</z-command-empty>
@@ -112,6 +116,21 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
       .filter(group => group.visibleOptions.length > 0);
   });
 
+  // Status message for screen readers
+  protected readonly statusMessage = computed(() => {
+    const searchTerm = this.searchTerm();
+    const filteredGroups = this.filteredGroups();
+    const totalOptions = filteredGroups.reduce((acc, group) => acc + group.visibleOptions.length, 0);
+
+    if (searchTerm === '') return '';
+
+    if (totalOptions === 0) {
+      return `No results found for "${searchTerm}"`;
+    }
+
+    return `${totalOptions} result${totalOptions === 1 ? '' : 's'} found for "${searchTerm}"`;
+  });
+
   private onChange = (_value: unknown) => {
     // ControlValueAccessor implementation
   };
@@ -170,6 +189,7 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
         event.preventDefault();
         const nextIndex = currentIndex < flatOptions.length - 1 ? currentIndex + 1 : 0;
         this.selectedIndex.set(nextIndex);
+        this.scrollToSelectedOption();
         break;
       }
 
@@ -177,6 +197,7 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
         event.preventDefault();
         const prevIndex = currentIndex > 0 ? currentIndex - 1 : flatOptions.length - 1;
         this.selectedIndex.set(prevIndex);
+        this.scrollToSelectedOption();
         break;
       }
 
@@ -248,5 +269,18 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
 
   setDisabledState(_isDisabled: boolean): void {
     // Implementation if needed for form control disabled state
+  }
+
+  private scrollToSelectedOption(): void {
+    const selectedIndex = this.selectedIndex();
+    if (selectedIndex < 0) return;
+
+    // Use a timeout to ensure DOM is updated
+    setTimeout(() => {
+      const selectedElement = document.querySelector(`z-command-option.bg-accent`);
+      if (selectedElement) {
+        selectedElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }, 0);
   }
 }

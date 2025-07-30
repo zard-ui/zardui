@@ -1,6 +1,20 @@
 import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { ChangeDetectionStrategy, Component, computed, ElementRef, EventEmitter, forwardRef, inject, input, Output, signal, ViewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  EventEmitter,
+  forwardRef,
+  inject,
+  input,
+  OnDestroy,
+  Output,
+  signal,
+  ViewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
@@ -40,6 +54,11 @@ import { commandInputVariants } from './command.variants';
         autocomplete="off"
         autocorrect="off"
         spellcheck="false"
+        role="combobox"
+        [attr.aria-expanded]="true"
+        [attr.aria-haspopup]="'listbox'"
+        [attr.aria-label]="'Search commands'"
+        [attr.aria-describedby]="'command-instructions'"
       />
     </div>
   `,
@@ -51,7 +70,7 @@ import { commandInputVariants } from './command.variants';
     },
   ],
 })
-export class ZardCommandInputComponent implements ControlValueAccessor {
+export class ZardCommandInputComponent implements ControlValueAccessor, OnDestroy {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
   private readonly jsonCommandComponent = inject(ZardCommandJsonComponent, { optional: true });
   @ViewChild('searchInput', { static: true }) searchInput!: ElementRef<HTMLInputElement>;
@@ -62,6 +81,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
   @Output() readonly valueChange = new EventEmitter<string>();
 
   readonly searchTerm = signal('');
+  private debounceTimer: ReturnType<typeof setTimeout> | null = null;
 
   protected readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
 
@@ -76,14 +96,34 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
     const target = event.target as HTMLInputElement;
     const value = target.value;
     this.searchTerm.set(value);
-    // Send search to appropriate parent component
-    if (this.commandComponent) {
-      this.commandComponent.onSearch(value);
-    } else if (this.jsonCommandComponent) {
-      this.jsonCommandComponent.onSearch(value);
+
+    // For immediate UI feedback, update the parent components without debounce for empty values
+    if (value === '') {
+      if (this.commandComponent) {
+        this.commandComponent.onSearch(value);
+      } else if (this.jsonCommandComponent) {
+        this.jsonCommandComponent.onSearch(value);
+      }
+      this.onChange(value);
+      this.valueChange.emit(value);
+    } else {
+      // Clear previous debounce timer
+      if (this.debounceTimer) {
+        clearTimeout(this.debounceTimer);
+      }
+
+      // Debounce the search to improve performance for non-empty values
+      this.debounceTimer = setTimeout(() => {
+        // Send search to appropriate parent component
+        if (this.commandComponent) {
+          this.commandComponent.onSearch(value);
+        } else if (this.jsonCommandComponent) {
+          this.jsonCommandComponent.onSearch(value);
+        }
+        this.onChange(value);
+        this.valueChange.emit(value);
+      }, 150); // 150ms debounce
     }
-    this.onChange(value);
-    this.valueChange.emit(value);
   }
 
   onKeyDown(event: KeyboardEvent) {
@@ -117,5 +157,12 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
 
   setDisabledState(_isDisabled: boolean): void {
     // Implementation if needed for form control disabled state
+  }
+
+  ngOnDestroy(): void {
+    // Clean up debounce timer
+    if (this.debounceTimer) {
+      clearTimeout(this.debounceTimer);
+    }
   }
 }

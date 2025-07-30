@@ -277,23 +277,15 @@ describe('ZardCommandComponent', () => {
   });
 
   it('should update filtered options reactively', () => {
-    const spy = jasmine.createSpy('filteredOptionsSpy');
-
-    // Subscribe to changes in filteredOptions
-    const subscription =
-      component.filteredOptions.subscribe?.(spy) ||
-      (() => {
-        spy(component.filteredOptions());
-      })();
+    const initialOptions = component.filteredOptions();
 
     const input = fixture.nativeElement.querySelector('input');
     input.value = 'test';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    expect(spy).toHaveBeenCalled();
-    if (subscription && typeof subscription === 'function') {
-      subscription();
-    }
+    const filteredOptions = component.filteredOptions();
+    expect(filteredOptions.length).toBeLessThanOrEqual(initialOptions.length);
+    expect(component.searchTerm()).toBe('test');
   });
 });

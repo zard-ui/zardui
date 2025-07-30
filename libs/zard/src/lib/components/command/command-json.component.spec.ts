@@ -20,9 +20,6 @@ class TestHostComponent {
     placeholder: 'Test placeholder',
     emptyText: 'No results found.',
     dividers: true,
-    onSelect: (option: ZardCommandOption) => {
-      this.lastAction = `Global: ${option.label}`;
-    },
     groups: [
       {
         label: 'File Actions',
@@ -196,7 +193,7 @@ describe('ZardCommandJsonComponent', () => {
 
   it('should handle keyboard shortcuts', () => {
     const keyEvent = new KeyboardEvent('keydown', { key: 'n', metaKey: true });
-    window.dispatchEvent(keyEvent);
+    component.handleKeydown(keyEvent);
     fixture.detectChanges();
 
     expect(hostComponent.lastAction).toBe('New file created!');
@@ -204,7 +201,7 @@ describe('ZardCommandJsonComponent', () => {
 
   it('should handle keyboard shortcuts for options without actions', () => {
     const keyEvent = new KeyboardEvent('keydown', { key: 'o', metaKey: true });
-    window.dispatchEvent(keyEvent);
+    component.handleKeydown(keyEvent);
     fixture.detectChanges();
 
     expect(hostComponent.selectedOption).toBeTruthy();

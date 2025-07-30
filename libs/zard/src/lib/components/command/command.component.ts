@@ -54,6 +54,10 @@ export interface ZardCommandConfig {
   encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()">
+      <div id="command-instructions" class="sr-only">Use arrow keys to navigate, Enter to select, Escape to clear selection.</div>
+      <div id="command-status" class="sr-only" aria-live="polite" aria-atomic="true">
+        {{ statusMessage() }}
+      </div>
       <ng-content></ng-content>
     </div>
   `,
@@ -98,6 +102,20 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
       const command = option.zCommand()?.toLowerCase() || '';
       return label.includes(searchTerm) || command.includes(searchTerm);
     });
+  });
+
+  // Status message for screen readers
+  protected readonly statusMessage = computed(() => {
+    const searchTerm = this.searchTerm();
+    const filteredCount = this.filteredOptions().length;
+
+    if (searchTerm === '') return '';
+
+    if (filteredCount === 0) {
+      return `No results found for "${searchTerm}"`;
+    }
+
+    return `${filteredCount} result${filteredCount === 1 ? '' : 's'} found for "${searchTerm}"`;
   });
 
   private onChange = (_value: unknown) => {
