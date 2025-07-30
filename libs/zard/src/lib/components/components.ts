@@ -18,3 +18,4 @@ export * from './tabs/tabs.component';
 export * from './select/select.component';
 export * from './select/select-item.component';
 export * from './select/select.variants';
+export * from './popover/popover.component';
