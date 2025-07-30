@@ -1,8 +1,27 @@
 {
   "includeCoAuthoredBy": false,
   "permissions": {
-    "allow": ["Bash(npm run test:*)", "Bash(git push:*)", "Bash(gh pr create:*)", "Bash(npm test:*)", "Bash(npx nx test:*)", "Bash(cat:*)", "Bash(git add:*)", "Bash(git rm:*)"],
+    "allow": [
+      "Bash(npm run test:*)",
+      "Bash(git push:*)",
+      "Bash(gh pr create:*)",
+      "Bash(npm test:*)",
+      "Bash(npx nx test:*)",
+      "Bash(cat:*)",
+      "Bash(git add:*)",
+      "Bash(git rm:*)",
+      "Bash(mkdir:*)",
+      "mcp__ESLint__lint-files",
+      "Bash(sed:*)",
+      "WebFetch(domain:angular.dev)",
+      "Bash(npm run build:*)",
+      "Bash(rm:*)",
+      "Bash(npx eslint:*)"
+    ],
     "deny": []
   },
-  "enabledMcpjsonServers": ["playwright", "ESLint"]
+  "enabledMcpjsonServers": [
+    "playwright",
+    "ESLint"
+  ]
 }
