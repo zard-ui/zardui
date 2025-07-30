@@ -1,35 +1,33 @@
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { NgIf } from '@angular/common';
 import {
+  ChangeDetectionStrategy,
   Component,
-  Input,
-  Output,
-  EventEmitter,
-  forwardRef,
-  ContentChildren,
-  QueryList,
-  ViewChild,
+  computed,
   ElementRef,
-  Renderer2,
+  forwardRef,
   HostListener,
-  ChangeDetectorRef,
-  DestroyRef,
   inject,
-  AfterContentInit,
-  AfterViewInit,
+  input,
   OnDestroy,
+  OnInit,
+  output,
+  signal,
+  TemplateRef,
+  ViewChild,
+  ViewContainerRef,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { SelectOptionComponent } from './select-option/select-option.component';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ZardSelectVariants } from './select.variants';
-import { FocusMonitor } from '@angular/cdk/a11y';
-import { trigger, state, style, transition, animate } from '@angular/animations';
-import { NgIf } from '@angular/common';
+
+import { mergeClasses } from '../../shared/utils/utils';
+import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
 
 @Component({
-  selector: 'z-select',
-  templateUrl: './select.component.html',
-  styleUrls: ['./select.component.scss'],
-  imports: [NgIf],
+  selector: 'z-select, [z-select]',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [NgIf, OverlayModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -37,242 +35,373 @@ import { NgIf } from '@angular/common';
       multi: true,
     },
   ],
-  animations: [
-    trigger('dropdownAnimation', [
-      state(
-        'void',
-        style({
-          opacity: 0,
-          transform: 'translateY(-8px)',
-        }),
-      ),
-      state(
-        '*',
-        style({
-          opacity: 1,
-          transform: 'translateY(0)',
-        }),
-      ),
-      transition('void => *', [animate('150ms cubic-bezier(0.4, 0, 0.2, 1)')]),
-      transition('* => void', [animate('100ms cubic-bezier(0.4, 0, 0.2, 1)')]),
-    ]),
-  ],
+  host: {
+    '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
+    class: 'relative inline-block',
+  },
+  template: `
+    <!-- Select Trigger -->
+    <button
+      type="button"
+      [class]="triggerClasses()"
+      [disabled]="disabled()"
+      (click)="toggle()"
+      (keydown)="onTriggerKeydown($event)"
+      [attr.aria-expanded]="isOpen()"
+      [attr.aria-haspopup]="'listbox'"
+      [attr.data-state]="isOpen() ? 'open' : 'closed'"
+      [attr.data-placeholder]="!selectedValue() ? '' : null"
+    >
+      <span class="flex items-center gap-2">
+        <span *ngIf="selectedValue(); else placeholderTemplate">{{ selectedLabel() }}</span>
+        <ng-template #placeholderTemplate>
+          <span class="text-muted-foreground">{{ placeholder() }}</span>
+        </ng-template>
+      </span>
+      <svg
+        class="h-4 w-4 opacity-50 transition-transform"
+        [class.rotate-180]="isOpen()"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="m6 9 6 6 6-6" />
+      </svg>
+    </button>
+
+    <!-- Template for overlay content -->
+    <ng-template #dropdownTemplate>
+      <div [class]="contentClasses()" role="listbox" [attr.data-state]="'open'" (keydown)="onDropdownKeydown($event)" tabindex="-1">
+        <div class="p-1">
+          <ng-content></ng-content>
+        </div>
+      </div>
+    </ng-template>
+  `,
 })
-export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, AfterViewInit, OnDestroy {
-  private destroyRef = inject(DestroyRef);
-  private focusMonitor = inject(FocusMonitor);
-  private renderer = inject(Renderer2);
-  private cdr = inject(ChangeDetectorRef);
+export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
+  private elementRef = inject(ElementRef);
+  private overlay = inject(Overlay);
+  private overlayPositionBuilder = inject(OverlayPositionBuilder);
+  private viewContainerRef = inject(ViewContainerRef);
 
-  @Input() label?: string;
-  @Input() placeholder = 'Selecione uma opção';
-  @Input() disabled = false;
-  @Input() required = false;
-  @Input() name?: string;
-  @Input() id?: string;
-  @Input() zSize: ZardSelectVariants['zSize'] = 'default';
-  @Input() zStatus?: ZardSelectVariants['zStatus'] = 'default';
-  @Input() zBorderless = false;
-  @Input() zFullWidth = false;
-  @Input() errorMessage?: string;
+  @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate!: TemplateRef<any>;
 
-  @Output() opened = new EventEmitter<void>();
-  @Output() closed = new EventEmitter<void>();
-  @Output() selectionChanged = new EventEmitter<any>();
+  private overlayRef?: OverlayRef;
+  private portal?: TemplatePortal;
 
-  @ViewChild('selectTrigger') selectTrigger!: ElementRef;
-  @ViewChild('dropdown') dropdown!: ElementRef;
-  @ContentChildren(SelectOptionComponent) options!: QueryList<SelectOptionComponent>;
+  readonly size = input<ZardSelectTriggerVariants['size']>('default');
+  readonly disabled = input<boolean>(false);
+  readonly placeholder = input<string>('Select an option...');
+  readonly class = input<string>('');
 
-  isOpen = false;
-  selectedValue: any = null;
-  selectedLabel = '';
-  touched = false;
+  readonly selectionChange = output<string>();
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onChange: any = () => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  onTouched: any = () => {};
+  readonly isOpen = signal(false);
+  readonly selectedValue = signal<string>('');
+  readonly selectedLabel = signal<string>('');
+  readonly focusedIndex = signal<number>(-1);
 
-  ngAfterViewInit(): void {
-    this.focusMonitor.monitor(this.selectTrigger.nativeElement).pipe(takeUntilDestroyed(this.destroyRef)).subscribe();
-  }
-
-  ngAfterContentInit(): void {
-    this.updateSelectedLabel();
-    this.updateSelectedState();
-
-    this.options.changes.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.updateSelectedLabel();
-      this.updateSelectedState();
-    });
-
-    this.options.forEach(option => {
-      option.optionSelected.subscribe((selectedOption: SelectOptionComponent) => {
-        this.selectOption(selectedOption);
-      });
-    });
-  }
-
-  writeValue(value: any): void {
-    this.selectedValue = value;
-    this.updateSelectedLabel();
-    this.updateSelectedState();
-    this.cdr.markForCheck();
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled = isDisabled;
-    this.cdr.markForCheck();
-  }
-
-  toggleDropdown(): void {
-    if (this.disabled) return;
-
-    this.isOpen = !this.isOpen;
-
-    if (this.isOpen) {
-      this.opened.emit();
-      setTimeout(() => {
-        this.positionDropdown();
-        document.addEventListener('click', this.onClickOutside);
-      });
-    } else {
-      this.closed.emit();
-      document.removeEventListener('click', this.onClickOutside);
-    }
-
-    if (!this.touched) {
-      this.touched = true;
-      this.onTouched();
-    }
-  }
-
-  private positionDropdown(): void {
-    if (!this.dropdown) return;
-
-    const triggerRect = this.selectTrigger.nativeElement.getBoundingClientRect();
-    const dropdownElement = this.dropdown.nativeElement;
-
-    this.renderer.setStyle(dropdownElement, 'width', `${triggerRect.width}px`);
-  }
-
-  onClickOutside = (event: MouseEvent): void => {
-    if (!this.selectTrigger.nativeElement.contains(event.target) && (!this.dropdown || !this.dropdown.nativeElement.contains(event.target))) {
-      this.isOpen = false;
-      document.removeEventListener('click', this.onClickOutside);
-      this.cdr.markForCheck();
-      this.closed.emit();
-    }
+  private onChange = (_value: string) => {
+    // ControlValueAccessor onChange callback
+  };
+  private onTouched = () => {
+    // ControlValueAccessor onTouched callback
   };
 
-  selectOption(option: SelectOptionComponent): void {
-    if (option.disabled) return;
+  protected readonly triggerClasses = computed(() =>
+    mergeClasses(
+      selectTriggerVariants({
+        size: this.size(),
+      }),
+      this.class(),
+    ),
+  );
 
-    console.log('Selecionando opção:', option);
+  protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
 
-    this.selectedValue = option.value;
-    this.selectedLabel = option.label;
-    this.updateSelectedState();
-    console.log('Valor selecionado:', this.selectedValue, 'Label selecionado:', this.selectedLabel); // Verifique o valor atualizado
-
-    this.onChange(option.value);
-    this.isOpen = false;
-    document.removeEventListener('click', this.onClickOutside);
-    this.selectionChanged.emit(option.value);
-    this.cdr.markForCheck();
+  ngOnInit() {
+    // Delay overlay creation to ensure element is rendered
+    setTimeout(() => {
+      this.createOverlay();
+    });
   }
 
-  updateSelectedLabel(): void {
-    if (this.options) {
-      const selectedOption = this.options.find(option => option.value === this.selectedValue);
-      if (selectedOption) {
-        this.selectedLabel = selectedOption.label;
-      } else {
-        this.selectedLabel = '';
-      }
-      this.cdr.markForCheck();
+  ngOnDestroy() {
+    this.destroyOverlay();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event) {
+    if (!this.elementRef.nativeElement.contains(event.target as Node)) {
+      this.close();
     }
   }
 
-  updateSelectedState(): void {
-    if (this.options) {
-      console.log(this.options);
-      this.options.forEach(option => {
-        option.selected = option.value === this.selectedValue;
-      });
-      this.cdr.markForCheck();
-    }
-  }
-
-  @HostListener('keydown', ['$event'])
-  handleKeyDown(event: KeyboardEvent): void {
-    if (this.disabled) return;
-
+  onTriggerKeydown(event: KeyboardEvent) {
     switch (event.key) {
       case 'Enter':
       case ' ':
+      case 'ArrowDown':
+      case 'ArrowUp':
         event.preventDefault();
-        this.toggleDropdown();
+        if (!this.isOpen()) {
+          this.open();
+        }
         break;
       case 'Escape':
-        if (this.isOpen) {
+        if (this.isOpen()) {
           event.preventDefault();
-          this.isOpen = false;
-          this.closed.emit();
+          this.close();
         }
         break;
+    }
+  }
+
+  onDropdownKeydown(event: KeyboardEvent) {
+    const items = this.getSelectItems();
+
+    switch (event.key) {
       case 'ArrowDown':
-        if (this.isOpen && this.options.length > 0) {
-          event.preventDefault();
-          this.focusNextOption();
-        }
+        event.preventDefault();
+        this.navigateItems(1, items);
         break;
       case 'ArrowUp':
-        if (this.isOpen && this.options.length > 0) {
-          event.preventDefault();
-          this.focusPreviousOption();
-        }
+        event.preventDefault();
+        this.navigateItems(-1, items);
+        break;
+      case 'Enter':
+      case ' ':
+        event.preventDefault();
+        this.selectFocusedItem(items);
+        break;
+      case 'Escape':
+        event.preventDefault();
+        this.close();
+        this.focusButton();
+        break;
+      case 'Home':
+        event.preventDefault();
+        this.focusFirstItem(items);
+        break;
+      case 'End':
+        event.preventDefault();
+        this.focusLastItem(items);
         break;
     }
   }
 
-  private focusNextOption(): void {
-    const options = this.options.toArray();
-    const enabledOptions = options.filter(opt => !opt.disabled);
-    if (enabledOptions.length === 0) return;
-
-    const currentIndex = enabledOptions.findIndex(opt => opt.value === this.selectedValue);
-    const nextIndex = currentIndex < 0 || currentIndex === enabledOptions.length - 1 ? 0 : currentIndex + 1;
-
-    const nextOption = enabledOptions[nextIndex];
-    this.selectOption(nextOption);
+  toggle() {
+    if (this.disabled()) return;
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
+    this.isOpen() ? this.close() : this.open();
   }
 
-  private focusPreviousOption(): void {
-    const options = this.options.toArray();
-    const enabledOptions = options.filter(opt => !opt.disabled);
-    if (enabledOptions.length === 0) return;
+  open() {
+    if (this.isOpen()) return;
 
-    const currentIndex = enabledOptions.findIndex(opt => opt.value === this.selectedValue);
-    const prevIndex = currentIndex <= 0 ? enabledOptions.length - 1 : currentIndex - 1;
-
-    const prevOption = enabledOptions[prevIndex];
-    this.selectOption(prevOption);
-  }
-
-  ngOnDestroy(): void {
-    document.removeEventListener('click', this.onClickOutside);
-    if (this.selectTrigger) {
-      this.focusMonitor.stopMonitoring(this.selectTrigger.nativeElement);
+    // Create overlay if it doesn't exist
+    if (!this.overlayRef) {
+      this.createOverlay();
     }
+
+    if (!this.overlayRef) return;
+
+    this.portal = new TemplatePortal(this.dropdownTemplate, this.viewContainerRef);
+    this.overlayRef.attach(this.portal);
+    this.isOpen.set(true);
+
+    // Focus dropdown after opening and position on selected item
+    setTimeout(() => {
+      this.focusDropdown();
+      this.focusSelectedItem();
+    }, 0);
+  }
+
+  close() {
+    if (this.overlayRef?.hasAttached()) {
+      this.overlayRef.detach();
+    }
+    this.isOpen.set(false);
+    this.focusedIndex.set(-1);
+    this.onTouched();
+  }
+
+  selectItem(value: string, label: string) {
+    this.selectedValue.set(value);
+    this.selectedLabel.set(label);
+    this.onChange(value);
+    this.selectionChange.emit(value);
+    this.close();
+
+    // Return focus to the button after selection
+    setTimeout(() => {
+      this.focusButton();
+    }, 0);
+  }
+
+  private createOverlay() {
+    if (this.overlayRef) return; // Already created
+
+    try {
+      const positionStrategy = this.overlayPositionBuilder
+        .flexibleConnectedTo(this.elementRef)
+        .withPositions([
+          {
+            originX: 'start',
+            originY: 'bottom',
+            overlayX: 'start',
+            overlayY: 'top',
+            offsetY: 4,
+          },
+          {
+            originX: 'start',
+            originY: 'top',
+            overlayX: 'start',
+            overlayY: 'bottom',
+            offsetY: -4,
+          },
+        ])
+        .withPush(false);
+
+      const elementWidth = this.elementRef.nativeElement.offsetWidth || 200;
+
+      this.overlayRef = this.overlay.create({
+        positionStrategy,
+        hasBackdrop: false,
+        scrollStrategy: this.overlay.scrollStrategies.reposition(),
+        minWidth: elementWidth,
+        maxHeight: 384, // max-h-96 equivalent
+      });
+    } catch (error) {
+      console.error('Error creating overlay:', error);
+    }
+  }
+
+  private destroyOverlay() {
+    if (this.overlayRef) {
+      this.overlayRef.dispose();
+      this.overlayRef = undefined;
+    }
+  }
+
+  private getSelectItems(): HTMLElement[] {
+    if (!this.overlayRef?.hasAttached()) return [];
+    const dropdownElement = this.overlayRef.overlayElement;
+    return Array.from(dropdownElement.querySelectorAll('z-select-item, [z-select-item]')).filter((item: Element) => !item.hasAttribute('data-disabled')) as HTMLElement[];
+  }
+
+  private navigateItems(direction: number, items: HTMLElement[]) {
+    if (items.length === 0) return;
+
+    const currentIndex = this.focusedIndex();
+    let nextIndex = currentIndex + direction;
+
+    if (nextIndex < 0) {
+      nextIndex = items.length - 1;
+    } else if (nextIndex >= items.length) {
+      nextIndex = 0;
+    }
+
+    this.focusedIndex.set(nextIndex);
+    this.updateItemFocus(items, nextIndex);
+  }
+
+  private selectFocusedItem(items: HTMLElement[]) {
+    const currentIndex = this.focusedIndex();
+    if (currentIndex >= 0 && currentIndex < items.length) {
+      const item = items[currentIndex];
+      const value = item.getAttribute('value') || '';
+      const label = item.textContent?.trim() || '';
+      this.selectItem(value, label);
+    }
+  }
+
+  private focusFirstItem(items: HTMLElement[]) {
+    if (items.length > 0) {
+      this.focusedIndex.set(0);
+      this.updateItemFocus(items, 0);
+    }
+  }
+
+  private focusLastItem(items: HTMLElement[]) {
+    if (items.length > 0) {
+      const lastIndex = items.length - 1;
+      this.focusedIndex.set(lastIndex);
+      this.updateItemFocus(items, lastIndex);
+    }
+  }
+
+  private updateItemFocus(items: HTMLElement[], focusedIndex: number) {
+    items.forEach((item, index) => {
+      if (index === focusedIndex) {
+        item.focus();
+        item.setAttribute('aria-selected', 'true');
+      } else {
+        item.removeAttribute('aria-selected');
+      }
+    });
+  }
+
+  private focusDropdown() {
+    if (this.overlayRef?.hasAttached()) {
+      const dropdownElement = this.overlayRef.overlayElement.querySelector('[role="listbox"]') as HTMLElement;
+      if (dropdownElement) {
+        dropdownElement.focus();
+      }
+    }
+  }
+
+  private focusButton() {
+    const button = this.elementRef.nativeElement.querySelector('button');
+    if (button) {
+      button.focus();
+    }
+  }
+
+  private focusSelectedItem() {
+    const items = this.getSelectItems();
+    if (items.length === 0) return;
+
+    // Find the index of the currently selected item
+    const selectedValue = this.selectedValue();
+    let selectedIndex = -1;
+
+    if (selectedValue) {
+      selectedIndex = items.findIndex(item => item.getAttribute('value') === selectedValue);
+    }
+
+    // If no item is selected, focus the first item
+    if (selectedIndex === -1) {
+      selectedIndex = 0;
+    }
+
+    this.focusedIndex.set(selectedIndex);
+    this.updateItemFocus(items, selectedIndex);
+  }
+
+  // ControlValueAccessor implementation
+  writeValue(value: string | null): void {
+    const stringValue = value || '';
+    this.selectedValue.set(stringValue);
+  }
+
+  registerOnChange(fn: (value: string) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(): void {
+    // The disabled state is handled by the disabled input
   }
 }
