@@ -5,6 +5,7 @@ import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/f
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCommandComponent } from './command.component';
+import { ZardCommandJsonComponent } from './command-json.component';
 import { commandInputVariants } from './command.variants';
 
 @Component({
@@ -52,6 +53,7 @@ import { commandInputVariants } from './command.variants';
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
+  private readonly jsonCommandComponent = inject(ZardCommandJsonComponent, { optional: true });
   @ViewChild('searchInput', { static: true }) searchInput!: ElementRef<HTMLInputElement>;
 
   readonly placeholder = input<string>('Type a command or search...');
@@ -74,16 +76,31 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
     const target = event.target as HTMLInputElement;
     const value = target.value;
     this.searchTerm.set(value);
+    // Send search to appropriate parent component
     if (this.commandComponent) {
       this.commandComponent.onSearch(value);
+    } else if (this.jsonCommandComponent) {
+      this.jsonCommandComponent.onSearch(value);
     }
     this.onChange(value);
     this.valueChange.emit(value);
   }
 
-  onKeyDown(_event: KeyboardEvent) {
-    // Keyboard navigation can be handled by parent command component
-    // This is just for basic input handling
+  onKeyDown(event: KeyboardEvent) {
+    // Let parent command component handle navigation keys
+    if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
+      event.preventDefault(); // Prevent default input behavior
+      event.stopPropagation(); // Stop the event from bubbling up
+
+      // Try both types of parent components
+      if (this.commandComponent) {
+        this.commandComponent.onKeyDown(event);
+      } else if (this.jsonCommandComponent) {
+        this.jsonCommandComponent.handleKeydown(event);
+      }
+      return;
+    }
+    // Handle other keys as needed
   }
 
   writeValue(value: string): void {

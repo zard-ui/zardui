@@ -34,9 +34,9 @@ import { commandVariants, ZardCommandVariants } from './command.variants';
       <z-command-list>
         <z-command-empty>{{ config().emptyText || 'No results found.' }}</z-command-empty>
 
-        @for (group of filteredGroups(); track group.label; let index = $index) {
+        @for (group of filteredGroups(); track group.label; let groupIndex = $index) {
           <z-command-option-group [zLabel]="group.label">
-            @for (option of group.visibleOptions; track option.value) {
+            @for (option of group.visibleOptions; track option.value; let optionIndex = $index) {
               <z-command-option
                 [zLabel]="option.label"
                 [zValue]="option.value"
@@ -44,13 +44,14 @@ import { commandVariants, ZardCommandVariants } from './command.variants';
                 [zShortcut]="option.shortcut || ''"
                 [zCommand]="option.command || ''"
                 [zDisabled]="option.disabled || false"
+                [class]="getOptionClasses(groupIndex, optionIndex)"
                 (click)="onOptionClick(option)"
               >
               </z-command-option>
             }
           </z-command-option-group>
 
-          @if (config().dividers !== false && shouldShowDivider(index)) {
+          @if (config().dividers !== false && shouldShowDivider(groupIndex)) {
             <z-command-divider></z-command-divider>
           }
         }
@@ -80,6 +81,7 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
 
   // Search functionality
   readonly searchTerm = signal('');
+  readonly selectedIndex = signal(-1);
 
   protected readonly classes = computed(() => mergeClasses(commandVariants({ size: this.size() }), this.class()));
 
@@ -119,6 +121,7 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
 
   onSearch(searchTerm: string) {
     this.searchTerm.set(searchTerm);
+    this.selectedIndex.set(-1); // Reset selection when searching
   }
 
   shouldShowDivider(currentIndex: number): boolean {
@@ -145,15 +148,52 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
     this.zOnSelect.emit(option);
   }
 
-  // Handle keyboard shortcuts
-  @HostListener('window:keydown', ['$event'])
+  // Handle keyboard navigation and shortcuts
+  @HostListener('keydown', ['$event'])
   handleKeydown(event: KeyboardEvent) {
+    // Handle global shortcuts (Ctrl/Cmd + key)
     if (event.metaKey || event.ctrlKey) {
       const matchingOption = this.findOptionByKey(event.key.toLowerCase());
       if (matchingOption) {
         event.preventDefault();
         this.onOptionClick(matchingOption);
+        return;
       }
+    }
+
+    // Handle keyboard navigation
+    const flatOptions = this.getFlatOptions();
+    const currentIndex = this.selectedIndex();
+
+    switch (event.key) {
+      case 'ArrowDown': {
+        event.preventDefault();
+        const nextIndex = currentIndex < flatOptions.length - 1 ? currentIndex + 1 : 0;
+        this.selectedIndex.set(nextIndex);
+        break;
+      }
+
+      case 'ArrowUp': {
+        event.preventDefault();
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : flatOptions.length - 1;
+        this.selectedIndex.set(prevIndex);
+        break;
+      }
+
+      case 'Enter':
+        event.preventDefault();
+        if (currentIndex >= 0 && currentIndex < flatOptions.length) {
+          const selectedOption = flatOptions[currentIndex];
+          if (!selectedOption.disabled) {
+            this.onOptionClick(selectedOption);
+          }
+        }
+        break;
+
+      case 'Escape':
+        event.preventDefault();
+        this.selectedIndex.set(-1);
+        break;
     }
   }
 
@@ -163,6 +203,34 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
       if (option) return option;
     }
     return undefined;
+  }
+
+  private getFlatOptions(): ZardCommandOption[] {
+    const filteredGroups = this.filteredGroups();
+    const flatOptions: ZardCommandOption[] = [];
+
+    filteredGroups.forEach(group => {
+      flatOptions.push(...group.visibleOptions);
+    });
+
+    return flatOptions;
+  }
+
+  getOptionClasses(groupIndex: number, optionIndex: number): string {
+    const flatIndex = this.getFlatOptionIndex(groupIndex, optionIndex);
+    const isSelected = flatIndex === this.selectedIndex();
+    return isSelected ? 'bg-accent text-accent-foreground' : '';
+  }
+
+  private getFlatOptionIndex(groupIndex: number, optionIndex: number): number {
+    const filteredGroups = this.filteredGroups();
+    let flatIndex = 0;
+
+    for (let i = 0; i < groupIndex; i++) {
+      flatIndex += filteredGroups[i].visibleOptions.length;
+    }
+
+    return flatIndex + optionIndex;
   }
 
   // ControlValueAccessor implementation

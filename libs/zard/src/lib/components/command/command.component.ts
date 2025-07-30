@@ -8,6 +8,7 @@ import {
   ContentChildren,
   EventEmitter,
   forwardRef,
+  HostListener,
   input,
   Output,
   QueryList,
@@ -116,6 +117,7 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
   onSearch(searchTerm: string) {
     this.searchTerm.set(searchTerm);
     this.selectedIndex.set(-1);
+    this.updateSelectedOption();
   }
 
   selectOption(option: ZardCommandOptionComponent) {
@@ -131,6 +133,63 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
     this.onChange(commandOption.value);
     this.zOnChange.emit(commandOption);
     this.zOnSelect.emit(commandOption);
+  }
+
+  @HostListener('keydown', ['$event'])
+  onKeyDown(event: KeyboardEvent) {
+    const filteredOptions = this.filteredOptions();
+    if (filteredOptions.length === 0) return;
+
+    const currentIndex = this.selectedIndex();
+
+    switch (event.key) {
+      case 'ArrowDown': {
+        event.preventDefault();
+        const nextIndex = currentIndex < filteredOptions.length - 1 ? currentIndex + 1 : 0;
+        this.selectedIndex.set(nextIndex);
+        this.updateSelectedOption();
+        break;
+      }
+
+      case 'ArrowUp': {
+        event.preventDefault();
+        const prevIndex = currentIndex > 0 ? currentIndex - 1 : filteredOptions.length - 1;
+        this.selectedIndex.set(prevIndex);
+        this.updateSelectedOption();
+        break;
+      }
+
+      case 'Enter':
+        event.preventDefault();
+        if (currentIndex >= 0 && currentIndex < filteredOptions.length) {
+          const selectedOption = filteredOptions[currentIndex];
+          if (!selectedOption.zDisabled()) {
+            this.selectOption(selectedOption);
+          }
+        }
+        break;
+
+      case 'Escape':
+        event.preventDefault();
+        this.selectedIndex.set(-1);
+        this.updateSelectedOption();
+        break;
+    }
+  }
+
+  private updateSelectedOption() {
+    const filteredOptions = this.filteredOptions();
+    const selectedIndex = this.selectedIndex();
+
+    // Clear previous selection
+    filteredOptions.forEach(option => option.setSelected(false));
+
+    // Set new selection
+    if (selectedIndex >= 0 && selectedIndex < filteredOptions.length) {
+      const selectedOption = filteredOptions[selectedIndex];
+      selectedOption.setSelected(true);
+      selectedOption.focus();
+    }
   }
 
   // ControlValueAccessor implementation

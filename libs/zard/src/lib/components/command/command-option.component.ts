@@ -18,6 +18,7 @@ import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants }
         [class]="classes()"
         [attr.role]="'option'"
         [attr.aria-selected]="isSelected()"
+        [attr.data-selected]="isSelected()"
         [attr.data-disabled]="zDisabled()"
         [attr.tabindex]="0"
         (click)="onClick()"
@@ -50,7 +51,11 @@ export class ZardCommandOptionComponent {
 
   readonly isSelected = signal(false);
 
-  protected readonly classes = computed(() => mergeClasses(commandItemVariants({ variant: this.variant() }), this.class()));
+  protected readonly classes = computed(() => {
+    const baseClasses = commandItemVariants({ variant: this.variant() });
+    const selectedClasses = this.isSelected() ? 'bg-accent text-accent-foreground' : '';
+    return mergeClasses(baseClasses, selectedClasses, this.class());
+  });
 
   protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants({})));
 

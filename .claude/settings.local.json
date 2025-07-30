@@ -16,7 +16,8 @@
       "WebFetch(domain:angular.dev)",
       "Bash(npm run build:*)",
       "Bash(rm:*)",
-      "Bash(npx eslint:*)"
+      "Bash(npx eslint:*)",
+      "Bash(git commit:*)"
     ],
     "deny": []
   },
