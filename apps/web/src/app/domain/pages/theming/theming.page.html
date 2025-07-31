@@ -1,0 +1,240 @@
+<main class="relative flex items-stretch text-sm sm:text-base xl:w-full" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <section class="flex min-w-0 flex-1 flex-col">
+    <div class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 sm:gap-12 lg:gap-16 px-4 sm:px-6 lg:px-8 text-neutral-800 dark:text-neutral-300">
+      <!-- Hero Section -->
+      <header class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="introduction" id="introduction">
+        <div class="flex flex-col gap-4 sm:gap-6">
+          <h1 class="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-bold tracking-tight">Theming</h1>
+          <p class="text-lg sm:text-xl text-muted-foreground">Using OKLCH colors and TailwindCSS v4 for theming in ZardUI.</p>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <p class="text-sm sm:text-base text-muted-foreground">
+            ZardUI components are built with a modern OKLCH color system. We use a simple
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">background</code> and
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">foreground</code> convention for colors.
+          </p>
+        </div>
+      </header>
+
+      <!-- Convention Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="convention" id="convention">
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Convention</h2>
+          <p class="text-base sm:text-lg text-muted-foreground">
+            We use a simple <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">background</code> and
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">foreground</code> convention for colors. The
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">background</code> variable is used for the component background and the
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">foreground</code> variable is used for the text color.
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center justify-between">
+              <h3 class="text-base sm:text-lg font-semibold">Background and foreground</h3>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <div class="flex items-center gap-3">
+                <div class="h-8 w-8 sm:h-10 sm:w-10 rounded-md bg-background border border-border flex items-center justify-center">
+                  <div class="h-4 w-4 sm:h-6 sm:w-6 rounded bg-primary"></div>
+                </div>
+                <div class="flex flex-col">
+                  <code class="text-xs sm:text-sm">background</code>
+                  <p class="text-xs text-muted-foreground">Component background color</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-3">
+                <div class="h-8 w-8 sm:h-10 sm:w-10 rounded-md bg-primary flex items-center justify-center">
+                  <div class="h-4 w-4 sm:h-6 sm:w-6 rounded bg-primary-foreground"></div>
+                </div>
+                <div class="flex flex-col">
+                  <code class="text-xs sm:text-sm">foreground</code>
+                  <p class="text-xs text-muted-foreground">Component text color</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-lg border p-4 sm:p-6">
+          <h3 class="text-base sm:text-lg font-semibold mb-4">Given the following OKLCH variables:</h3>
+          <z-markdown-renderer markdownUrl="/documentation/theming/convention-example.md"></z-markdown-renderer>
+          <p class="text-xs sm:text-sm text-muted-foreground mt-4">
+            The <code class="bg-muted px-1.5 py-0.5 rounded text-xs">primary</code> variable is the background color and the
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs">primary-foreground</code> variable is the text color.
+          </p>
+        </div>
+      </section>
+
+      <!-- CSS Variables Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="css-variables" id="css-variables">
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">OKLCH CSS Variables</h2>
+          <p class="text-base sm:text-lg text-muted-foreground">
+            You can use OKLCH CSS variables to theme your components. This provides better color accuracy and perceptual uniformity compared to other color spaces.
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+          <h3 class="text-base sm:text-lg font-semibold mb-4">TailwindCSS v4 OKLCH Theme Configuration</h3>
+          <z-markdown-renderer markdownUrl="/documentation/theming/css-variables-v4.md"></z-markdown-renderer>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <p class="text-xs sm:text-base text-muted-foreground">
+            Copy and paste the above into your <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">src/styles.css</code> file. TailwindCSS v4 uses the
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">&#64;theme</code>
+            directive for CSS-first configuration.
+          </p>
+        </div>
+
+        <div class="rounded-lg bg-blue-50 border border-blue-200 p-4 sm:p-6 dark:bg-blue-950 dark:border-blue-800">
+          <div class="flex items-start gap-3">
+            <div class="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold">i</div>
+            <div class="flex flex-col gap-2">
+              <h4 class="text-sm sm:text-base font-semibold text-blue-900 dark:text-blue-100">TailwindCSS v4 + OKLCH</h4>
+              <p class="text-xs sm:text-sm text-blue-800 dark:text-blue-200">
+                With TailwindCSS v4, all OKLCH configuration is now done directly in CSS using the &#64;theme directive. This provides better color accuracy and no more JavaScript
+                config files needed.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Base Colors Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="base-colors" id="base-colors">
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">ZardUI Base Colors</h2>
+          <p class="text-base sm:text-lg text-muted-foreground">
+            Choose from one of the ZardUI base color themes. Each theme uses OKLCH color space and provides a complete set of color tokens that work together harmoniously in both
+            light and dark modes.
+          </p>
+        </div>
+
+        <div class="flex flex-col gap-4 sm:gap-6">
+          <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="h-6 w-6 sm:h-8 sm:w-8 rounded bg-zinc-900 dark:bg-zinc-100"></div>
+              <h3 class="text-base sm:text-lg font-semibold">Zinc (Default)</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4">A modern, neutral color palette with subtle blue undertones using OKLCH color space.</p>
+            <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-zinc.md"></z-markdown-renderer>
+          </div>
+
+          <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="h-6 w-6 sm:h-8 sm:w-8 rounded bg-slate-900 dark:bg-slate-100"></div>
+              <h3 class="text-base sm:text-lg font-semibold">Slate</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4">A cool, professional color palette with blue-gray undertones in OKLCH format.</p>
+            <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-slate.md"></z-markdown-renderer>
+          </div>
+
+          <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="h-6 w-6 sm:h-8 sm:w-8 rounded bg-stone-900 dark:bg-stone-100"></div>
+              <h3 class="text-base sm:text-lg font-semibold">Stone</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4">A warm, earthy color palette with brown undertones optimized in OKLCH.</p>
+            <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-stone.md"></z-markdown-renderer>
+          </div>
+
+          <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="h-6 w-6 sm:h-8 sm:w-8 rounded bg-gray-900 dark:bg-gray-100"></div>
+              <h3 class="text-base sm:text-lg font-semibold">Gray</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4">A pure, neutral color palette without any color undertones in OKLCH format.</p>
+            <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-gray.md"></z-markdown-renderer>
+          </div>
+
+          <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="h-6 w-6 sm:h-8 sm:w-8 rounded bg-neutral-900 dark:bg-neutral-100"></div>
+              <h3 class="text-base sm:text-lg font-semibold">Neutral</h3>
+            </div>
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4">Similar to Gray but with very subtle warm undertones using OKLCH color space.</p>
+            <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-neutral.md"></z-markdown-renderer>
+          </div>
+        </div>
+
+        <div class="rounded-lg bg-green-50 border border-green-200 p-4 sm:p-6 dark:bg-green-950 dark:border-green-800">
+          <div class="flex items-start gap-3">
+            <div class="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-green-600 text-white text-xs font-bold">💡</div>
+            <div class="flex flex-col gap-2">
+              <h4 class="text-sm sm:text-base font-semibold text-green-900 dark:text-green-100">Choosing a ZardUI Base Color</h4>
+              <p class="text-xs sm:text-sm text-green-800 dark:text-green-200">
+                Start with one of these OKLCH-based themes and customize from there. Each provides excellent contrast ratios and accessibility out of the box. You can always
+                override specific colors later while keeping the foundation solid.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Adding New Colors Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="adding-new-colors" id="adding-new-colors">
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Adding new OKLCH colors</h2>
+          <p class="text-base sm:text-lg text-muted-foreground">
+            With TailwindCSS v4, adding new OKLCH colors is simpler than ever. Just add them to your
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">&#64;theme</code> configuration and they'll be available as utilities.
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+          <h3 class="text-base sm:text-lg font-semibold mb-4">Add OKLCH colors to your theme</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-4">
+            Simply extend your existing <code class="bg-muted px-1.5 py-0.5 rounded text-xs">&#64;theme</code>
+            configuration with OKLCH values:
+          </p>
+          <z-markdown-renderer markdownUrl="/documentation/theming/adding-colors-v4.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+          <h3 class="text-base sm:text-lg font-semibold mb-4">Use OKLCH colors in your Angular components</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-4">Once defined, the OKLCH color becomes available as utilities automatically:</p>
+          <z-markdown-renderer markdownUrl="/documentation/theming/adding-colors-usage.md"></z-markdown-renderer>
+        </div>
+      </section>
+
+      <!-- Angular Integration Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="angular-integration" id="angular-integration">
+        <div class="flex flex-col gap-4">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Angular Integration</h2>
+          <p class="text-base sm:text-lg text-muted-foreground">
+            ZardUI components work seamlessly with Angular and TailwindCSS v4. All OKLCH color tokens are available as utility classes in your templates.
+          </p>
+        </div>
+
+        <div class="rounded-lg border p-4 sm:p-6">
+          <h3 class="text-base sm:text-lg font-semibold mb-4">Using OKLCH colors in Angular Templates</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-4">You can use all the OKLCH color variables directly in your Angular templates:</p>
+          <z-markdown-renderer markdownUrl="/documentation/theming/angular-templates-usage.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg bg-blue-50 border border-blue-200 p-4 sm:p-6 dark:bg-blue-950 dark:border-blue-800">
+          <div class="flex items-start gap-3">
+            <div class="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded-full bg-blue-600 text-white text-xs font-bold">✨</div>
+            <div class="flex flex-col gap-2">
+              <h4 class="text-sm sm:text-base font-semibold text-blue-900 dark:text-blue-100">Automatic OKLCH Color Generation</h4>
+              <p class="text-xs sm:text-sm text-blue-800 dark:text-blue-200">
+                With TailwindCSS v4's <code class="bg-blue-100 dark:bg-blue-900 px-1.5 py-0.5 rounded text-xs">--color-*</code> namespace, all your OKLCH theme colors automatically
+                generate <code class="bg-blue-100 dark:bg-blue-900 px-1.5 py-0.5 rounded text-xs">bg-*</code>,
+                <code class="bg-blue-100 dark:bg-blue-900 px-1.5 py-0.5 rounded text-xs">text-*</code>,
+                <code class="bg-blue-100 dark:bg-blue-900 px-1.5 py-0.5 rounded text-xs">border-*</code> and other utilities.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Sidebar Navigation -->
+  <section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
+    <z-dynamic-anchor [topicData]="pageTopics()" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+  </section>
+</main>

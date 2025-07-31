@@ -13,9 +13,13 @@ const DOCS_PATH = {
   data: [
     { name: 'introduction', path: '/docs/introduction', available: true },
     { name: 'installation', path: '/docs/installation', available: true },
+    { name: 'components.json', path: '/docs', available: false },
     { name: 'theming', path: '/docs/theming', available: true },
+    { name: 'dark mode', path: '/docs', available: false },
     { name: 'CLI', path: '/docs/cli', available: true },
     { name: 'figma', path: '/docs/figma', available: true },
+    { name: 'change log', path: '/docs', available: false },
+    { name: 'About and credits', path: '/docs', available: false },
   ],
 };
 

@@ -19,7 +19,9 @@
       "Bash(npx ts-node:*)",
       "Bash(curl:*)",
       "Bash(kill:*)",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "mcp__ESLint__lint-files",
+      "WebFetch(domain:github.com)"
     ]
   },
   "enableAllProjectMcpServers": true,

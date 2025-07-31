@@ -24,6 +24,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/introduction/introduction.page').then(m => m.IntroductionPage),
       },
       {
+        path: 'theming',
+        loadComponent: () => import('./domain/pages/theming/theming.page').then(m => m.ThemingPage),
+      },
+      {
         path: 'installation',
         loadChildren: async () => (await import('./domain/pages/enviroments/enviroments.routes')).ENVIRONMENTS_ROUTES,
       },
