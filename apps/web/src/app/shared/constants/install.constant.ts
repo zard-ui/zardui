@@ -11,6 +11,7 @@ export interface Step {
     path: string;
     lineNumber: boolean;
   };
+  expandable?: boolean;
 }
 
 export interface Installation {

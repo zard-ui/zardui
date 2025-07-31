@@ -1,23 +1,45 @@
 @if (componentData) {
-<section class="flex flex-col xl:grid xl:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:gap-10">
-  <z-sidebar></z-sidebar>
-  <main
-    class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px] [&_h1]:text-3xl [&_h1]:font-bold [&_p]:text-base [&_p]:text-muted-foreground"
-    scrollSpy
-    (scrollSpyChange)="activeAnchor = $event"
-  >
-    <section class="flex flex-col gap-10 mx-auto w-full min-w-0 max-w-2xl mb-10">
+<main class="relative flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <section class="flex min-w-0 flex-1 flex-col">
+    <div class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 text-neutral-800 md:px-0 dark:text-neutral-300">
       <header class="flex flex-col gap-5" scrollSpyItem="overview" id="overview">
-        <z-markdown src="components/{{ componentData.componentName }}/doc/overview.md" [dirLineNumber]="false"></z-markdown>
+        <app-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/overview.md"></app-markdown-renderer>
+        <z-code-box
+          [scrollSpyItem]="componentData.examples[0].name"
+          [attr.id]="componentData.examples[0].name"
+          path="{{ componentData.componentName }}/demo/{{ componentData.examples[0].name }}"
+          [dynamicComponent]="componentData.examples[0].component"
+          [onlyDemo]="componentData.examples[0].onlyDemo"
+          [column]="componentData.examples[0].column || false"
+        ></z-code-box>
       </header>
 
-      <main class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
+      <div class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
+        <section class="flex flex-col gap-4">
+          <header class="mb-3">
+            <h2 class="text-2xl font-semibold mb-2">Installation</h2>
+            <div class="overflow-hidden transition-all duration-200 ease-in-out">
+              <nav class="flex gap-4 mb-4">
+                @if(installGuide?.cli) {
+                <button class="rounded-none text-base" (click)="activeTab.set('cli')" [class.font-semibold]="activeTab() === 'cli'">CLI</button>
+                } @if(installGuide?.manual) {
+                <button class="rounded-none text-base" (click)="activeTab.set('manual')" [class.font-semibold]="activeTab() === 'manual'">Manual</button>
+                }
+              </nav>
+              <section class="transition-all" [class]="activeTab() === 'cli' ? 'translate-x-0' : '-translate-x-full sr-only'">
+                <z-steps [steps]="installGuide?.cli"></z-steps>
+              </section>
+              <section class="transition-all" [class]="activeTab() === 'manual' ? 'translate-x-0' : 'translate-x-full sr-only'">
+                <z-steps [steps]="installGuide?.manual"></z-steps>
+              </section>
+            </div>
+          </header>
+        </section>
+
         <section class="flex flex-col gap-4">
           <header class="mb-5">
             <h2 class="text-2xl font-semibold mb-2">Examples</h2>
-            <hr />
           </header>
-
           @for (item of componentData.examples; track $index) {
           <z-code-box
             [scrollSpyItem]="item.name"
@@ -26,20 +48,19 @@
             path="{{ componentData.componentName }}/demo/{{ item.name }}"
             [dynamicComponent]="item.component"
             [onlyDemo]="item.onlyDemo"
-            [column]="item?.column"
-            [fullWidth]="componentData.fullWidth || false"
+            [column]="item.column"
           ></z-code-box>
           }
         </section>
-      </main>
-
-      <hr />
+      </div>
 
       <footer scrollSpyItem="api" id="api">
-        <z-markdown src="components/{{ componentData.componentName }}/doc/api.md" [dirLineNumber]="false"></z-markdown>
+        <app-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/api.md"></app-markdown-renderer>
       </footer>
-    </section>
+    </div>
+  </section>
+  <section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
     <z-dynamic-anchor [topicData]="pageTopics" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
-  </main>
-</section>
+  </section>
+</main>
 }

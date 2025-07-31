@@ -29,9 +29,14 @@ export class HeaderComponent implements OnInit {
 
     if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
       html.classList.add('dark');
+      html.setAttribute('data-theme', 'dark'); // ← Adicione isso
+      html.style.colorScheme = 'dark';
       localStorage.setItem(this.storageKey, 'dark');
     } else {
       html.classList.remove('dark');
+      html.setAttribute('data-theme', 'light'); // ← Adicione isso
+      html.style.colorScheme = 'light';
+      localStorage.setItem(this.storageKey, 'light'); // ← Salve light também
     }
   }
 
@@ -41,14 +46,18 @@ export class HeaderComponent implements OnInit {
 
     if (isDark) {
       html.classList.remove('dark');
+      html.setAttribute('data-theme', 'light'); // ← Adicione isso
+      html.style.colorScheme = 'light';
       localStorage.setItem(this.storageKey, 'light');
     } else {
       html.classList.add('dark');
+      html.setAttribute('data-theme', 'dark'); // ← Adicione isso
+      html.style.colorScheme = 'dark';
       localStorage.setItem(this.storageKey, 'dark');
     }
   }
 
   getCurrentTheme(): 'light' | 'dark' {
-    return localStorage.getItem(this.storageKey) as 'light' | 'dark';
+    return (localStorage.getItem(this.storageKey) as 'light' | 'dark') || 'light';
   }
 }

@@ -3,26 +3,21 @@
     <h3 class="text-xl font-medium first-letter:uppercase">{{ componentType() }}</h3>
   }
   <main class="overflow-hidden transition-all duration-200 ease-in-out">
-    <nav class="flex gap-4 border-b mb-8">
-      <button z-button zType="ghost" (click)="activeTab.set('preview')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'preview'">
-        Preview
-      </button>
+    <nav class="flex gap-4 mb-4">
+      <button class="rounded-none text-base" (click)="activeTab.set('preview')" [class.font-semibold]="activeTab() === 'preview'">Preview</button>
       @if (!onlyDemo()) {
-        <button z-button zType="ghost" (click)="activeTab.set('code')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'code'">
-          Code
-        </button>
+        <button class="rounded-none text-base" (click)="activeTab.set('code')" [class.font-semibold]="activeTab() === 'code'">Code</button>
       }
     </nav>
     <section class="transition-all" [class]="activeTab() === 'preview' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']">
       <z-card
         class="min-h-74 w-full flex justify-center items-center gap-4 [&_ng-component]:gap-4 [&_ng-component]:items-center"
-        [ngClass]="{
+        [class]="{
           '[&_ng-component]:grid': column(),
           '[&_ng-component]:flex': !column(),
           '[&_ng-component]:w-full': fullWidth(),
           '[&_div:first-child]:w-full': fullWidth(),
         }"
-        [class]="column() ? '[&_ng-component]:grid' : '[&_ng-component]:flex'"
       >
         @if (dynamicComponent()) {
           <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
@@ -30,8 +25,8 @@
       </z-card>
     </section>
     <section class="transition-all" [class]="activeTab() === 'code' ? 'translate-x-0' : ['translate-x-full', 'sr-only']">
-      @if (path()) {
-        <z-markdown src="components/{{ path() }}.ts" [codeBox]="true" [dirLineNumber]="true"></z-markdown>
+      @if (markdownUrl()) {
+        <app-markdown-renderer [markdownUrl]="markdownUrl()"></app-markdown-renderer>
       }
     </section>
   </main>
