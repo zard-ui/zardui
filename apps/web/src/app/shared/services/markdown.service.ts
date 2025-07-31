@@ -25,7 +25,7 @@ export class MarkdownService {
             node.properties = {
               ...node.properties,
               style: [],
-              class: ['text-4xl', 'font-semibold', 'scroll-m-20', 'tracking-tight', 'sm:text-3xl', 'xl:text-4xl'],
+              class: ['text-4xl', 'font-semibold', 'text-foreground', 'scroll-m-20', 'tracking-tight', 'sm:text-3xl', 'xl:text-4xl', 'mb-2'],
             };
           }
 

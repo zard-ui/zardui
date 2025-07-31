@@ -17,13 +17,27 @@
       <div class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
         <section class="flex flex-col gap-4">
           <header class="mb-3">
-            <h2 class="text-2xl font-semibold mb-2">Installation</h2>
+            <h2 class="text-2xl font-semibold mb-5">Installation</h2>
             <div class="overflow-hidden transition-all duration-200 ease-in-out">
               <nav class="flex gap-4 mb-4">
                 @if(installGuide?.cli) {
-                <button class="rounded-none text-base" (click)="activeTab.set('cli')" [class.font-semibold]="activeTab() === 'cli'">CLI</button>
+                <button
+                  class="text-base cursor-pointer"
+                  (click)="activeTab.set('cli')"
+                  [class.font-semibold]="activeTab() === 'cli'"
+                  [class.text-foreground]="activeTab() === 'cli'"
+                >
+                  Preview
+                </button>
                 } @if(installGuide?.manual) {
-                <button class="rounded-none text-base" (click)="activeTab.set('manual')" [class.font-semibold]="activeTab() === 'manual'">Manual</button>
+                <button
+                  class="text-base cursor-pointer"
+                  (click)="activeTab.set('manual')"
+                  [class.font-semibold]="activeTab() === 'manual'"
+                  [class.text-foreground]="activeTab() === 'manual'"
+                >
+                  Code
+                </button>
                 }
               </nav>
               <section class="transition-all" [class]="activeTab() === 'cli' ? 'translate-x-0' : '-translate-x-full sr-only'">
@@ -37,9 +51,7 @@
         </section>
 
         <section class="flex flex-col gap-4">
-          <header class="mb-5">
-            <h2 class="text-2xl font-semibold mb-2">Examples</h2>
-          </header>
+          <h2 class="text-2xl font-semibold mb-5">Examples</h2>
           @for (item of componentData.examples; track $index) {
           <z-code-box
             [scrollSpyItem]="item.name"

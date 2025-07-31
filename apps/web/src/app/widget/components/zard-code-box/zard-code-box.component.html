@@ -1,17 +1,26 @@
 <section class="mb-10">
   @if (componentType()) {
-    <h3 class="text-xl font-medium first-letter:uppercase">{{ componentType() }}</h3>
+    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">{{ componentType() }}</h3>
   }
   <main class="overflow-hidden transition-all duration-200 ease-in-out">
     <nav class="flex gap-4 mb-4">
-      <button class="rounded-none text-base" (click)="activeTab.set('preview')" [class.font-semibold]="activeTab() === 'preview'">Preview</button>
+      <button
+        class="text-base cursor-pointer"
+        (click)="activeTab.set('preview')"
+        [class.font-semibold]="activeTab() === 'preview'"
+        [class.text-foreground]="activeTab() === 'preview'"
+      >
+        Preview
+      </button>
       @if (!onlyDemo()) {
-        <button class="rounded-none text-base" (click)="activeTab.set('code')" [class.font-semibold]="activeTab() === 'code'">Code</button>
+        <button class="text-base cursor-pointer" (click)="activeTab.set('code')" [class.font-semibold]="activeTab() === 'code'" [class.text-foreground]="activeTab() === 'code'">
+          Code
+        </button>
       }
     </nav>
     <section class="transition-all" [class]="activeTab() === 'preview' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']">
       <z-card
-        class="min-h-74 w-full flex justify-center items-center gap-4 [&_ng-component]:gap-4 [&_ng-component]:items-center"
+        class="h-[450px] p-10 w-full flex justify-center items-center gap-4 [&_ng-component]:min-w-80 [&_ng-component]:gap-4 [&_ng-component]:items-center"
         [class]="{
           '[&_ng-component]:grid': column(),
           '[&_ng-component]:flex': !column(),

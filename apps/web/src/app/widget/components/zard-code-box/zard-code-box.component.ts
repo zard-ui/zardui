@@ -1,4 +1,3 @@
-import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { NgComponentOutlet } from '@angular/common';
 import { Component, input, signal, computed } from '@angular/core';
@@ -7,7 +6,7 @@ import { MarkdownRendererComponent } from '@zard/domain/components/render/markdo
 
 @Component({
   selector: 'z-code-box',
-  imports: [NgComponentOutlet, ZardButtonComponent, ZardCardComponent, MarkdownRendererComponent],
+  imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent],
   templateUrl: './zard-code-box.component.html',
 })
 export class ZardCodeBoxComponent {
