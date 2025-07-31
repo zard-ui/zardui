@@ -1,24 +1,43 @@
-<aside class="hidden xl:block fixed top-24 z-30 w-full shrink-0 md:sticky">
-  <nav class="pl-4">
-    <ul class="grid gap-1">
-      <li class="mb-4">
-        <b class="font-medium">On this page</b>
-      </li>
-      <li [class]="'cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === 'overview' ? 'text-primary' : '')">
-        <a (click)="scrollToAnchor('overview')">Overview</a>
-      </li>
+<aside class="hidden xl:block no-scrollbar overflow-y-auto px-8">
+  <ul class="flex flex-col gap-2 p-2 text-sm">
+    <li class="flex shrink-0 items-center h-8 text-[0.8rem] outline-hidden text-muted-foreground font-medium">
+      <p class="text-muted-foreground bg-background sticky top-0 h-6 text-xs">On this page</p>
+    </li>
+    <li>
+      <a
+        [class]="
+          'text-muted-foreground hover:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6 ' +
+          (activeAnchor() === 'overview' ? 'text-foreground' : '')
+        "
+        (click)="scrollToAnchor('overview')"
+        >Overview</a
+      >
+    </li>
 
-      <li [class]="'cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === 'examples' ? 'text-primary' : '')">
-        <a (click)="scrollToAnchor('examples')">Examples</a>
+    <li>
+      <a
+        [class]="
+          'text-muted-foreground hover:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6 ' +
+          (activeAnchor() === 'examples' ? 'text-primary' : '')
+        "
+        (click)="scrollToAnchor('examples')"
+        >Examples</a
+      >
+    </li>
+    @for (topic of topicData(); track $index) {
+      <li [class]="'pl-4 cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === topic.name ? 'text-primary' : '')">
+        <a (click)="scrollToAnchor(topic.name)">{{ topic.name | titlecase }}</a>
       </li>
-      @for (topic of topicData(); track $index) {
-        <li [class]="'pl-4 cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === topic.name ? 'text-primary' : '')">
-          <a (click)="scrollToAnchor(topic.name)">{{ topic.name | titlecase }}</a>
-        </li>
-      }
-      <li [class]="'cursor-pointer transition-colors hover:text-foreground text-muted-foreground text-sm ' + (activeAnchor() === 'api' ? 'text-primary' : '')">
-        <a (click)="scrollToAnchor('api')">Api</a>
-      </li>
-    </ul>
-  </nav>
+    }
+    <li>
+      <a
+        [class]="
+          'text-muted-foreground hover:text-foreground text-[0.8rem] no-underline transition-colors data-[depth=3]:pl-4 data-[depth=4]:pl-6 ' +
+          (activeAnchor() === 'api' ? 'text-primary' : '')
+        "
+        (click)="scrollToAnchor('api')"
+        >Api</a
+      >
+    </li>
+  </ul>
 </aside>

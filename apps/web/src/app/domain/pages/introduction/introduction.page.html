@@ -1,0 +1,314 @@
+<main class="relative flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <section class="flex min-w-0 flex-1 flex-col">
+    <div class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-12 px-4 text-neutral-800 md:px-0 dark:text-neutral-300">
+      <!-- Hero Section -->
+      <header class="flex flex-col gap-8" scrollSpyItem="overview" id="overview">
+        <div class="flex flex-col gap-6">
+          <h1 class="text-4xl font-semibold scroll-m-20 tracking-tight sm:text-3xl xl:text-4xl">Beautifully designed components</h1>
+          <p class="text-base leading-7 text-muted-foreground">
+            Built for Angular developers who value both aesthetics and functionality. ZardUI bridges the gap between beautiful design and practical implementation.
+          </p>
+        </div>
+      </header>
+
+      <!-- Why ZardUI Section -->
+      <section class="flex flex-col gap-8" scrollSpyItem="why-zardui" id="why-zardui">
+        <div class="flex flex-col gap-4">
+          <h2 class="text-3xl font-bold tracking-tight">Why ZardUI?</h2>
+          <p class="text-base leading-7 text-muted-foreground">Finally, a component library that doesn't force you to choose between beauty and functionality.</p>
+        </div>
+
+        <div class="grid gap-4 md:grid-cols-2">
+          <div class="group relative overflow-hidden rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+              </svg>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">Beautiful & Practical</h3>
+            <p class="mt-2 text-sm text-muted-foreground">Meticulously crafted components that look stunning out of the box while remaining highly functional and accessible.</p>
+          </div>
+
+          <div class="group relative overflow-hidden rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">Community First</h3>
+            <p class="mt-2 text-sm text-muted-foreground">Built by Angular developers who understand your needs. Real-world solutions to real problems.</p>
+          </div>
+
+          <div class="group relative overflow-hidden rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">Modern Angular</h3>
+            <p class="mt-2 text-sm text-muted-foreground">Leveraging the latest Angular features including standalone components, signals, and best practices.</p>
+          </div>
+
+          <div class="group relative overflow-hidden rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10">
+              <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z"
+                />
+              </svg>
+            </div>
+            <h3 class="mt-4 text-lg font-semibold">Infinitely Customizable</h3>
+            <p class="mt-2 text-sm text-muted-foreground">Built with TailwindCSS for seamless customization. Make every component truly yours.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CLI Section -->
+      <section class="flex flex-col gap-8" scrollSpyItem="cli" id="cli">
+        <div class="flex flex-col gap-4">
+          <h2 class="text-3xl font-bold tracking-tight">Powerful CLI</h2>
+          <p class="text-base leading-7 text-muted-foreground">
+            Our command-line interface makes adding components to your project effortless. No more copy-pasting code or hunting through documentation.
+          </p>
+        </div>
+
+        <div class="relative overflow-x-auto no-scrollbar rounded-lg bg-code px-4 py-3 text-sm mb-4 group">
+          <div class="flex flex-col gap-4">
+            <div class="flex items-center gap-2">
+              <div class="flex h-6 w-6 items-center justify-center rounded bg-primary text-primary-foreground text-xs font-mono">$</div>
+              <code class="font-mono text-sm">npx zardui add button</code>
+            </div>
+            <div class="pl-8 text-sm text-muted-foreground">
+              ✓ Installing dependencies...<br />
+              ✓ Adding button component...<br />
+              ✓ Updating imports...<br />
+              ✓ Done! Button component is ready to use.
+            </div>
+          </div>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-3">
+          <div class="flex flex-col gap-3">
+            <h3 class="text-base font-semibold">Smart Installation</h3>
+            <p class="text-base leading-7 text-muted-foreground">
+              Automatically handles dependencies, imports, and configuration. Just specify what you need, and we'll handle the rest.
+            </p>
+          </div>
+          <div class="flex flex-col gap-3">
+            <h3 class="text-base font-semibold">Project Integration</h3>
+            <p class="text-base leading-7 text-muted-foreground">Seamlessly integrates with your existing Angular project structure. Respects your conventions and coding style.</p>
+          </div>
+          <div class="flex flex-col gap-3">
+            <h3 class="text-base font-semibold">Developer Friendly</h3>
+            <p class="text-base leading-7 text-muted-foreground">
+              Clear feedback, helpful error messages, and intuitive commands. Designed to enhance your development workflow, not complicate it.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI Ready Section -->
+      <section class="flex flex-col gap-8" scrollSpyItem="ai-ready" id="ai-ready">
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center gap-3">
+            <h2 class="text-3xl font-bold tracking-tight">AI Ready</h2>
+            <span class="rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary"> Future Ready </span>
+          </div>
+          <p class="text-base leading-7 text-muted-foreground">
+            ZardUI components are designed with AI development in mind. Clear patterns, consistent APIs, and comprehensive documentation make it easy for AI tools to understand and
+            work with our components.
+          </p>
+        </div>
+
+        <div class="grid gap-6 md:grid-cols-2">
+          <div class="flex flex-col gap-4 rounded-lg border p-6">
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                />
+              </svg>
+              <h3 class="text-base font-semibold">Predictable Patterns</h3>
+            </div>
+            <p class="text-base leading-7 text-muted-foreground">
+              Consistent naming conventions, standardized props, and logical component hierarchies that AI can easily understand and generate code for.
+            </p>
+          </div>
+
+          <div class="flex flex-col gap-4 rounded-lg border p-6">
+            <div class="flex items-center gap-2">
+              <svg class="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.832 18.477 19.246 18 17.5 18c-1.746 0-3.332.477-4.5 1.253"
+                />
+              </svg>
+              <h3 class="text-base font-semibold">Rich Documentation</h3>
+            </div>
+            <p class="text-base leading-7 text-muted-foreground">
+              Comprehensive examples, clear API references, and usage patterns that provide AI tools with the context they need to generate accurate code.
+            </p>
+          </div>
+        </div>
+
+        <!-- <div class="rounded-lg bg-gradient-to-r from-primary/5 to-primary/10 p-6 border border-primary/20">
+          <div class="flex items-start gap-4">
+            <div
+              class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-bold">
+              AI</div>
+            <div class="flex flex-col gap-2">
+              <h3 class="text-base font-semibold">Perfect for AI Code Generation</h3>
+              <p class="text-base leading-7 text-muted-foreground">
+                Whether you're using GitHub Copilot, ChatGPT, or any other AI coding assistant, ZardUI's clear patterns
+                and comprehensive documentation ensure accurate, helpful
+                code suggestions every time.
+              </p>
+            </div>
+          </div>
+        </div> -->
+      </section>
+
+      <!-- Open Source Philosophy -->
+      <section class="flex flex-col gap-8" scrollSpyItem="open-source" id="open-source">
+        <div class="flex flex-col gap-4">
+          <div class="flex items-center gap-3">
+            <h2 class="text-3xl font-bold tracking-tight">Open Source Philosophy</h2>
+            <span class="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700 dark:bg-green-900/30 dark:text-green-400">100% Free</span>
+          </div>
+          <p class="text-base leading-7 text-muted-foreground">Built by the community, for the community. No corporate overlords, no paywalls, no compromises.</p>
+        </div>
+
+        <!-- Our Commitments -->
+        <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div class="group relative overflow-hidden rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="mt-4 text-base font-semibold">Community Owned</h3>
+            <p class="mt-2 text-sm text-muted-foreground">
+              Governed by developers, not corporations. Every decision is made transparently with the community's best interests at heart.
+            </p>
+          </div>
+
+          <div class="group relative overflow-hidden rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="mt-4 text-base font-semibold">Forever Free</h3>
+            <p class="mt-2 text-sm text-muted-foreground">Every component, every feature, always free. No premium tiers, no hidden costs, no "pro" versions.</p>
+          </div>
+
+          <div class="group relative overflow-hidden rounded-lg border bg-card p-6 transition-all hover:shadow-lg">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 class="mt-4 text-base font-semibold">Built in Public</h3>
+            <p class="mt-2 text-sm text-muted-foreground">All development happens in the open. Watch us build, contribute your ideas, and shape the future together.</p>
+          </div>
+        </div>
+
+        <!-- What We Stand Against -->
+        <div class="rounded-lg bg-destructive/5 p-6">
+          <h3 class="mb-4 text-lg font-semibold flex items-center gap-2">
+            <svg class="h-5 w-5 text-destructive" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+            </svg>
+            What We Stand Against
+          </h3>
+          <div class="grid gap-3 md:grid-cols-3">
+            <div class="flex items-start gap-3">
+              <svg class="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              <div>
+                <p class="font-medium text-sm">Corporate Control</p>
+                <p class="text-xs text-muted-foreground">No single entity will ever own or control ZardUI</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              <div>
+                <p class="font-medium text-sm">Vendor Lock-in</p>
+                <p class="text-xs text-muted-foreground">Your code is yours, take it wherever you need</p>
+              </div>
+            </div>
+            <div class="flex items-start gap-3">
+              <svg class="h-4 w-4 text-destructive mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+              <div>
+                <p class="font-medium text-sm">Artificial Limitations</p>
+                <p class="text-xs text-muted-foreground">No paywalls or "premium" features</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Support Section -->
+        <div class="relative overflow-hidden rounded-lg border border-dashed border-border p-8">
+          <div class="relative z-10">
+            <div class="flex flex-col items-center text-center gap-4">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-primary/10">
+                <svg class="h-6 w-6 text-primary" fill="currentColor" viewBox="0 0 24 24">
+                  <path
+                    d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                  />
+                </svg>
+              </div>
+              <h3 class="text-xl font-semibold">Support Open Source</h3>
+              <p class="text-base leading-7 text-muted-foreground max-w-2xl">
+                Love what we're building? Support ZardUI through contributions, sponsorships, or simply spreading the word. Every bit helps us maintain our commitment to the
+                community.
+              </p>
+              <div class="flex gap-3">
+                <a
+                  href="https://github.com/zard-ui/zardui"
+                  class="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90"
+                >
+                  <svg class="mr-2 h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                    <path
+                      d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                    />
+                  </svg>
+                  Star on GitHub
+                </a>
+                <a
+                  href="/sponsors"
+                  class="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground"
+                >
+                  Become a Sponsor
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+  <section class="sticky top-20 z-30 ml-auto hidden max-h-[calc(100vh-5rem)] w-72 flex-col gap-4 overflow-y-auto pb-8 xl:flex">
+    <z-dynamic-anchor [topicData]="pageTopics()" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+  </section>
+</main>

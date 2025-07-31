@@ -1,0 +1,191 @@
+<main class="relative flex items-stretch text-sm sm:text-base xl:w-full" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <section class="flex min-w-0 flex-1 flex-col">
+    <div
+      class="mx-auto flex w-full max-w-4xl min-w-0 flex-1 flex-col gap-12 sm:gap-16 lg:gap-20 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 text-neutral-800 dark:text-neutral-300"
+    >
+      <!-- Hero Section -->
+      <header class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="introduction" id="introduction">
+        <div class="flex flex-col gap-6 sm:gap-8">
+          <h1 class="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-bold tracking-tight">Dark Mode</h1>
+          <p class="text-lg sm:text-xl text-muted-foreground leading-relaxed">Implementing dark mode in ZardUI using TailwindCSS v4 custom variants and our DarkMode service.</p>
+        </div>
+
+        <div class="flex flex-col gap-6">
+          <p class="text-sm sm:text-base text-muted-foreground leading-relaxed">
+            ZardUI uses a robust dark mode system with <code class="bg-muted px-2 py-1 rounded text-xs sm:text-sm font-mono">&#64;custom-variant dark</code> and the
+            <code class="bg-muted px-2 py-1 rounded text-xs sm:text-sm font-mono">DarkModeService</code> for seamless theme switching.
+          </p>
+        </div>
+      </header>
+
+      <!-- Custom Variants Section -->
+      <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="custom-variants" id="custom-variants">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">TailwindCSS v4 Custom Variants</h2>
+          <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">
+            ZardUI leverages TailwindCSS v4's custom variants feature to create a powerful dark mode system that works with the class-based approach
+            <code class="bg-muted px-2 py-1 rounded text-xs sm:text-sm font-mono">.dark</code>.
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Custom Variant Configuration</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">
+            The <code class="bg-muted px-2 py-1 rounded text-xs font-mono">&#64;custom-variant dark</code> directive enables dark mode styles when the
+            <code class="bg-muted px-2 py-1 rounded text-xs font-mono">.dark</code> class is present:
+          </p>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/custom-variants.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg bg-purple-50 border border-purple-200 p-6 sm:p-8 dark:bg-purple-950 dark:border-purple-800">
+          <div class="flex items-start gap-4">
+            <div class="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-purple-600 text-white text-sm font-bold shrink-0 mt-1">?</div>
+            <div class="flex flex-col gap-3">
+              <h4 class="text-sm sm:text-base font-semibold text-purple-900 dark:text-purple-100">Why Custom Variants?</h4>
+              <p class="text-xs sm:text-sm text-purple-800 dark:text-purple-200 leading-relaxed">
+                The <code class="bg-purple-100 dark:bg-purple-900 px-2 py-1 rounded text-xs font-mono">&#64;custom-variant dark (&:is(.dark *))</code>
+                approach provides better performance and more reliable dark mode detection compared to media queries, allowing users to manually toggle themes regardless of system
+                preferences.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- DarkMode Service Section -->
+      <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="darkmode-service" id="darkmode-service">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">ZardUI DarkMode Service</h2>
+          <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">
+            Our <code class="bg-muted px-2 py-1 rounded text-xs sm:text-sm font-mono">DarkModeService</code> provides the simplest and most reliable way to implement dark mode in
+            any Angular project. This is the same service ZardUI uses internally.
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Service Features</h3>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/service-features.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Service Implementation</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">
+            The complete <code class="bg-muted px-2 py-1 rounded text-xs font-mono">DarkModeService</code> implementation:
+          </p>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/service-implementation.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg bg-green-50 border border-green-200 p-6 sm:p-8 dark:bg-green-950 dark:border-green-800">
+          <div class="flex items-start gap-4">
+            <div class="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-green-600 text-white text-sm font-bold shrink-0 mt-1">✓</div>
+            <div class="flex flex-col gap-3">
+              <h4 class="text-sm sm:text-base font-semibold text-green-900 dark:text-green-100">Universal Implementation</h4>
+              <p class="text-xs sm:text-sm text-green-800 dark:text-green-200 leading-relaxed">
+                This DarkMode service works in <strong>any Angular project</strong>, not just ZardUI. It's framework-agnostic and can be easily adapted for other frameworks like
+                React or Vue.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Implementation Section -->
+      <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="implementation" id="implementation">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Implementation Guide</h2>
+          <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">
+            Follow these steps to implement dark mode in your project using the ZardUI approach. This method provides the most reliable and performant dark mode experience.
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Step 1: Configure TailwindCSS v4</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">
+            Add the custom variant to your <code class="bg-muted px-2 py-1 rounded text-xs font-mono">src/styles.css</code>:
+          </p>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/step-1-tailwind.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Step 2: Add the DarkMode Service</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">
+            Create or copy the <code class="bg-muted px-2 py-1 rounded text-xs font-mono">DarkModeService</code> to your project:
+          </p>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/step-2-service.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Step 3: Initialize in Your App</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">Initialize the service in your main component or app component:</p>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/step-3-initialization.md"></z-markdown-renderer>
+        </div>
+      </section>
+
+      <!-- Usage Examples Section -->
+      <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="usage-examples" id="usage-examples">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Usage Examples</h2>
+          <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">See how to use the DarkMode service in your components and create theme toggle buttons.</p>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Creating a Theme Toggle</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">Build a theme toggle button like the one used in ZardUI:</p>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/theme-toggle.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Using Dark Mode Classes</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">Apply dark mode styles to your components:</p>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/dark-classes.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Conditional Logic</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">Use the service for conditional logic based on current theme:</p>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/conditional-logic.md"></z-markdown-renderer>
+        </div>
+      </section>
+
+      <!-- Angular Integration Section -->
+      <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="angular-integration" id="angular-integration">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Angular Integration</h2>
+          <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">
+            The ZardUI DarkMode service integrates seamlessly with Angular's dependency injection system and works perfectly with Angular's reactive patterns.
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Service Injection</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">How to inject and use the DarkMode service in your Angular components:</p>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/angular-injection.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+          <h3 class="text-base sm:text-lg font-semibold mb-6">Reactive Theme Switching</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-6 leading-relaxed">Using the service with Angular's reactive features:</p>
+          <z-markdown-renderer markdownUrl="/documentation/dark-mode/reactive-theming.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg bg-blue-50 border border-blue-200 p-6 sm:p-8 dark:bg-blue-950 dark:border-blue-800">
+          <div class="flex items-start gap-4">
+            <div class="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-blue-600 text-white text-sm font-bold shrink-0 mt-1">i</div>
+            <div class="flex flex-col gap-3">
+              <h4 class="text-sm sm:text-base font-semibold text-blue-900 dark:text-blue-100">Best Practices</h4>
+              <p class="text-xs sm:text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                Initialize the service once in your app component, use <code class="bg-blue-100 dark:bg-blue-900 px-2 py-1 rounded text-xs font-mono">providedIn: 'root'</code>
+                for singleton behavior, and leverage the service's methods for consistent theme management across your entire application.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Sidebar Navigation -->
+  <section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
+    <z-dynamic-anchor [topicData]="pageTopics()" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+  </section>
+</main>

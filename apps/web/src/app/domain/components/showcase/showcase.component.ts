@@ -30,7 +30,7 @@ import { ZardInputDirective } from '@zard/components/input/input.directive';
         </z-card>
       </main>
       <footer class="flex justify-center mt-8">
-        <a z-button zType="ghost" routerLink="/components/button" class="group"
+        <a z-button zType="ghost" routerLink="/docs/components/accordion" class="group"
           >View all
           <i class="icon-chevron-right shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1"></i>
         </a>

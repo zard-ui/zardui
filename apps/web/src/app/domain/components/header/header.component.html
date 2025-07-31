@@ -1,16 +1,16 @@
-<header class="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur">
-  <nav class="max-w-[90rem] h-16 mx-auto px-4 md:px-6 flex items-center justify-between">
+<header class="bg-background sticky top-0 z-50 w-full">
+  <nav class="max-w-[var(--breakpoint-2xl)] h-16 mx-auto px-4 flex items-center justify-between">
     <menu class="flex items-center gap-8">
       <a class="hidden xl:flex items-center gap-3" routerLink="/">
-        <img src="images/zard.svg" alt="logo" class="h-8 dark:invert" />
+        <img src="images/zard.svg" alt="logo" class="h-6 dark:invert" />
         <z-badge zType="secondary">{{ appVersion }}</z-badge>
       </a>
       <aside class="block xl:hidden">
         <z-mobile-nav></z-mobile-nav>
       </aside>
-      <nav class="hidden xl:flex gap-6">
+      <nav class="items-center gap-0.5 hidden lg:flex">
         @for (path of headerPaths; track $index) {
-          <a class="transition-colors hover:text-foreground/80 text-foreground/80 gap-2 font-normal" [routerLink]="path.path" routerLinkActive="text-primary font-semibold">
+          <a z-button zType="ghost" [routerLink]="path.path">
             {{ path.name }}
             @if (!path.available) {
               <z-badge class="px-1 py-0">soon</z-badge>
@@ -19,19 +19,27 @@
         }
       </nav>
     </menu>
-    <aside class="flex items-center gap-1">
-      <button z-button zType="ghost" zSize="icon" (click)="toggleTheme()">
+    <aside class="ml-auto flex items-center md:flex-1 md:justify-end h-[16px]">
+      <z-doc-researcher></z-doc-researcher>
+      <z-divider zOrientation="vertical"></z-divider>
+      @if (githubData) {
+        <a z-button class="flex" zType="ghost" zSize="sm" [href]="githubData.url" target="_blank">
+          <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />
+
+          @let repoStars = $repoStars | async;
+          @if (repoStars) {
+            <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars }}</span>
+          }
+        </a>
+      }
+      <z-divider zOrientation="vertical"></z-divider>
+      <button z-button zType="ghost" zSize="sm" (click)="toggleTheme()">
         @if (getCurrentTheme() === 'dark') {
           <i class="icon-moon !text-lg"></i>
         } @else {
           <i class="icon-sun !text-lg"></i>
         }
       </button>
-      @for (media of socialMedias; track $index) {
-        <a z-button zType="ghost" zSize="icon" [href]="media.url" target="_blank">
-          <img [src]="media.icon" [alt]="media.iconAlt" class="h-4 dark:invert" />
-        </a>
-      }
     </aside>
   </nav>
 </header>

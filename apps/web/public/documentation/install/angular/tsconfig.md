@@ -1,4 +1,4 @@
-```tsconfig
+```json showLineNumbers
   "compilerOptions": {
       "baseUrl": ".",
       "paths": {

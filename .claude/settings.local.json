@@ -1,50 +1,38 @@
 {
-  "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
-      "Bash(npm run test:*)",
-      "Bash(git push:*)",
-      "Bash(gh pr create:*)",
-      "Bash(npm test:*)",
-      "Bash(npx nx test:*)",
+      "Bash(npm start)",
+      "Bash(npx nx lint:*)",
+      "Bash(rm:*)",
+      "Bash(echo:*)",
+      "Bash(ls:*)",
+      "Bash(find:*)",
+      "Bash(npx tsx:*)",
+      "Bash(npx tsc:*)",
       "Bash(cat:*)",
       "Bash(git add:*)",
-      "Bash(git rm:*)",
-      "Bash(mkdir:*)",
-      "mcp__ESLint__lint-files",
-      "Bash(sed:*)",
-      "WebFetch(domain:angular.dev)",
-      "Bash(npm run build:*)",
-      "Bash(rm:*)",
-      "Bash(npx eslint:*)",
-      "Bash(find:*)"
-    ],
-      "Bash(npm install:*)",
-      "Bash(npm run build:*)",
-      "Bash(node:*)",
-      "Bash(npm start)",
-      "Bash(npx playwright:*)",
-      "Bash(mkdir:*)",
-      "WebFetch(domain:localhost)",
-      "WebFetch(domain:ui.shadcn.com)",
-      "Bash(npm test)",
-      "mcp__shadcn-mcp__get_component",
-      "mcp__shadcn-mcp__get_component_demo",
+      "Bash(npm run build:dev:*)",
       "mcp__playwright__browser_navigate",
+      "mcp__playwright__browser_install",
+      "WebFetch(domain:ui.shadcn.com)",
+      "Bash(npm run:*)",
+      "Bash(npx ts-node:*)",
+      "Bash(curl:*)",
+      "Bash(kill:*)",
+      "Bash(git commit:*)",
+      "WebFetch(domain:github.com)",
       "mcp__playwright__browser_click",
-      "mcp__playwright__browser_snapshot",
       "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_hover",
+      "mcp__playwright__browser_press_key",
+      "mcp__playwright__browser_wait_for",
       "mcp__playwright__browser_evaluate",
-      "Bash(rm:*)",
-      "mcp__playwright__browser_press_key"
-      "Bash(node:*)"
-    ],
-    "allow": ["Bash(npm run test:*)", "Bash(git push:*)", "Bash(gh pr create:*)", "Bash(npm test:*)", "Bash(npx nx test:*)", "Bash(cat:*)", "Bash(git add:*)", "Bash(git rm:*)"],
-    "deny": []
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_close",
+      "mcp__ESLint__lint-files"
+    ]
   },
-  "enabledMcpjsonServers": [
-    "shadcn-mcp",
-    "playwright"
-  ]
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": ["playwright", "ESLint"]
 }

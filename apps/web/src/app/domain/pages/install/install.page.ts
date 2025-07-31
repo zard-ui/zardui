@@ -1,16 +1,15 @@
-import { Installation, installations } from '@zard/shared/constants/install.constant';
-import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
+import { CommonModule, ViewportScroller } from '@angular/common';
+import { Component, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { StepsComponent } from '@zard/domain/components/steps/steps.component';
-import { CommonModule, ViewportScroller } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Component, signal } from '@angular/core';
+import { Installation, installations } from '@zard/shared/constants/install.constant';
 
 @Component({
   selector: 'z-install',
   templateUrl: './install.page.html',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, StepsComponent, ZardButtonComponent],
+  imports: [CommonModule, StepsComponent, ZardButtonComponent],
 })
 export class InstallPage {
   activeTab = signal<'manual' | 'cli'>('manual');
