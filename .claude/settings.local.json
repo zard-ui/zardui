@@ -21,7 +21,8 @@
       "Bash(kill:*)",
       "Bash(git commit:*)",
       "mcp__ESLint__lint-files",
-      "WebFetch(domain:github.com)"
+      "WebFetch(domain:github.com)",
+      "Bash(mkdir:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -28,6 +28,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/theming/theming.page').then(m => m.ThemingPage),
       },
       {
+        path: 'dark-mode',
+        loadComponent: () => import('./domain/pages/dark-mode/dark-mode.page').then(m => m.DarkmodePage),
+      },
+      {
         path: 'installation',
         loadChildren: async () => (await import('./domain/pages/enviroments/enviroments.routes')).ENVIRONMENTS_ROUTES,
       },

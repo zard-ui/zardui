@@ -15,7 +15,7 @@ const DOCS_PATH = {
     { name: 'installation', path: '/docs/installation', available: true },
     { name: 'components.json', path: '/docs', available: false },
     { name: 'theming', path: '/docs/theming', available: true },
-    { name: 'dark mode', path: '/docs', available: false },
+    { name: 'dark mode', path: '/docs/dark-mode', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
     { name: 'figma', path: '/docs/figma', available: true },
     { name: 'change log', path: '/docs', available: false },
