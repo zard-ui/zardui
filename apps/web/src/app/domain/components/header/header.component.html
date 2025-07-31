@@ -19,7 +19,14 @@
         }
       </nav>
     </menu>
-    <aside class="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
+    <aside class="ml-auto flex items-center md:flex-1 md:justify-end h-[16px]">
+      @if (githubData) {
+        <a z-button class="w-16 flex" zType="ghost" zSize="icon" [href]="githubData.url" target="_blank">
+          <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />
+          <span class="text-muted-foreground text-xs tabular-nums">{{ $repoStars | async }}</span>
+        </a>
+      }
+      <z-divider zOrientation="vertical"></z-divider>
       <button z-button zType="ghost" zSize="icon" (click)="toggleTheme()">
         @if (getCurrentTheme() === 'dark') {
           <i class="icon-moon !text-lg"></i>
@@ -27,11 +34,6 @@
           <i class="icon-sun !text-lg"></i>
         }
       </button>
-      @for (media of socialMedias; track $index) {
-        <a z-button zType="ghost" zSize="icon" [href]="media.url" target="_blank">
-          <img [src]="media.icon" [alt]="media.iconAlt" class="h-4 dark:invert" />
-        </a>
-      }
     </aside>
   </nav>
 </header>
