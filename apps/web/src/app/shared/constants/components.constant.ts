@@ -21,6 +21,7 @@ import { TABS } from '@zard/components/tabs/demo/tabs';
 import { CARD } from '@zard/components/card/demo/card';
 import { ComponentType } from '@angular/cdk/overlay';
 import { TOGGLE } from '@zard/components/toggle/demo/toggle';
+import { TOGGLE_GROUP } from '@zard/components/toggle-group/demo/toggle-group';
 import { POPOVER } from '@zard/components/popover/demo/popover';
 import { COMMAND } from '@zard/components/command/demo/command';
 import { TOAST } from '@zard/components/toast/demo/toast';
@@ -64,5 +65,6 @@ export const COMPONENTS: ComponentData[] = [
   TABS,
   TOAST,
   TOGGLE,
+  TOGGLE_GROUP,
   TOOLTIP,
 ];
