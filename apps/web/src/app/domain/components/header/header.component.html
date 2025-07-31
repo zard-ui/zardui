@@ -1,8 +1,8 @@
-<header class="bg-background sticky top-0 z-50 w-full mt-5">
+<header class="bg-background sticky top-0 z-50 w-full">
   <nav class="max-w-[var(--breakpoint-2xl)] h-16 mx-auto px-4 flex items-center justify-between">
     <menu class="flex items-center gap-8">
       <a class="hidden xl:flex items-center gap-3" routerLink="/">
-        <img src="images/zard.svg" alt="logo" class="h-8 dark:invert" />
+        <img src="images/zard.svg" alt="logo" class="h-6 dark:invert" />
         <z-badge zType="secondary">{{ appVersion }}</z-badge>
       </a>
       <aside class="block xl:hidden">
@@ -23,13 +23,17 @@
       <z-doc-researcher></z-doc-researcher>
       <z-divider zOrientation="vertical"></z-divider>
       @if (githubData) {
-        <a z-button class="w-16 flex" zType="ghost" zSize="icon" [href]="githubData.url" target="_blank">
+        <a z-button class="flex" zType="ghost" zSize="sm" [href]="githubData.url" target="_blank">
           <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />
-          <span class="text-muted-foreground text-xs tabular-nums">{{ $repoStars | async }}</span>
+
+          @let repoStars = $repoStars | async;
+          @if (repoStars) {
+            <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars }}</span>
+          }
         </a>
       }
       <z-divider zOrientation="vertical"></z-divider>
-      <button z-button zType="ghost" zSize="icon" (click)="toggleTheme()">
+      <button z-button zType="ghost" zSize="sm" (click)="toggleTheme()">
         @if (getCurrentTheme() === 'dark') {
           <i class="icon-moon !text-lg"></i>
         } @else {

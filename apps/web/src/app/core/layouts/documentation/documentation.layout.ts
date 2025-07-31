@@ -1,10 +1,10 @@
-import { HeaderComponent } from '@zard/domain/components/header/header.component';
-import { FooterComponent } from '@zard/domain/components/footer/footer.component';
-import { BannerComponent } from '@zard/domain/components/banner/banner.component';
-import { environment } from '@zard/env/environment';
-import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { BannerComponent } from '@zard/domain/components/banner/banner.component';
+import { FooterComponent } from '@zard/domain/components/footer/footer.component';
+import { HeaderComponent } from '@zard/domain/components/header/header.component';
 import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
+import { environment } from '@zard/env/environment';
 
 @Component({
   selector: 'z-documentation',
@@ -20,7 +20,7 @@ import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.compon
     }
     <z-header></z-header>
 
-    <main class="flex items-start px-2 max-w-[var(--breakpoint-2xl)] min-h-min mx-auto mt-8 relative">
+    <main class="flex items-start max-w-[var(--breakpoint-2xl)] min-h-min mx-auto mt-8 relative">
       <z-sidebar></z-sidebar>
       <section class="flex-1 min-w-0">
         <router-outlet></router-outlet>

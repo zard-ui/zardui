@@ -20,14 +20,19 @@
       "Bash(curl:*)",
       "Bash(kill:*)",
       "Bash(git commit:*)",
-      "mcp__ESLint__lint-files",
       "WebFetch(domain:github.com)",
-      "Bash(mkdir:*)"
+      "mcp__playwright__browser_click",
+      "mcp__playwright__browser_take_screenshot",
+      "mcp__playwright__browser_hover",
+      "mcp__playwright__browser_press_key",
+      "mcp__playwright__browser_wait_for",
+      "mcp__playwright__browser_evaluate",
+      "mcp__playwright__browser_resize",
+      "mcp__playwright__browser_snapshot",
+      "mcp__playwright__browser_close",
+      "mcp__ESLint__lint-files"
     ]
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "playwright",
-    "ESLint"
-  ]
+  "enabledMcpjsonServers": ["playwright", "ESLint"]
 }

@@ -1,13 +1,14 @@
-// src/app/services/markdown.service.ts
-import { Injectable } from '@angular/core';
-import { unified } from 'unified';
+import rehypePrettyCode from 'rehype-pretty-code';
+import rehypeSlug from 'rehype-slug';
+import rehypeStringify from 'rehype-stringify';
+import remarkGfm from 'remark-gfm';
 import remarkParse from 'remark-parse';
 import remarkRehype from 'remark-rehype';
-import rehypeStringify from 'rehype-stringify';
-import rehypeSlug from 'rehype-slug';
+import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
-import remarkGfm from 'remark-gfm';
-import rehypePrettyCode from 'rehype-pretty-code';
+
+// src/app/services/markdown.service.ts
+import { Injectable } from '@angular/core';
 import { transformerCopyButton } from '@rehype-pretty/transformers';
 
 @Injectable({
@@ -17,6 +18,20 @@ export class MarkdownService {
   private processor: any;
   private initialized = false;
 
+  private extractTextContent(node: any): string {
+    if (!node) return '';
+
+    if (node.type === 'text') {
+      return node.value || '';
+    }
+
+    if (node.children && Array.isArray(node.children)) {
+      return node.children.map((child: any) => this.extractTextContent(child)).join('');
+    }
+
+    return '';
+  }
+
   private rehypeTailwindClasses() {
     return () => {
       return (tree: any) => {
@@ -25,7 +40,7 @@ export class MarkdownService {
             node.properties = {
               ...node.properties,
               style: [],
-              class: ['text-4xl', 'font-semibold', 'text-foreground', 'scroll-m-20', 'tracking-tight', 'sm:text-3xl', 'xl:text-4xl', 'mb-2'],
+              class: ['text-4xl', 'font-semibold', 'scroll-m-20', 'tracking-tight', 'sm:text-3xl', 'xl:text-4xl'],
             };
           }
 
@@ -33,7 +48,7 @@ export class MarkdownService {
             node.properties = {
               ...node.properties,
               style: [],
-              class: ['text-[1.05rem]', 'text-muted-foreground', 'text-balance', 'sm:text-base'],
+              class: ['text-base', 'leading-7', 'text-muted-foreground', '[&:not(:first-child)]:mt-6'],
             };
           }
 
@@ -41,28 +56,27 @@ export class MarkdownService {
             node.properties = {
               ...node.properties,
               style: [],
-              class: [
-                'relative',
-                'overflow-auto',
-                'scrollbar-custom',
-                'max-h-[50dvh]',
-                'p-3',
-                'border',
-                'rounded-md',
-                'border-neutral-300/50',
-                'bg-neutral-200/30',
-                'dark:border-neutral-800/60',
-                'dark:bg-neutral-900/40',
-                'mb-8',
-              ],
+              class: ['relative', 'overflow-x-auto', 'no-scrollbar', 'rounded-lg', 'bg-code', 'px-4', 'py-3', 'text-sm', 'mb-4', 'group', '[&>code]:bg-transparent'],
             };
           }
 
           if (node.tagName === 'code') {
-            node.properties = {
-              ...node.properties,
-              class: ['font-sans', 'text-[.95em]', 'leading-[1.9]'],
-            };
+            // Check if this code is inside a pre (code block) or standalone (inline code)
+            const isInPre = parent && parent.tagName === 'pre';
+
+            if (isInPre) {
+              // Code inside pre blocks - no additional styling, let syntax highlighting handle it
+              node.properties = {
+                ...node.properties,
+                class: ['font-mono', 'text-sm'],
+              };
+            } else {
+              // Inline code styling
+              node.properties = {
+                ...node.properties,
+                class: ['relative', 'rounded', 'bg-muted', 'px-[0.3rem]', 'py-[0.2rem]', 'font-mono', 'text-sm', 'font-semibold'],
+              };
+            }
           }
 
           if (node.tagName === 'button') {
@@ -90,7 +104,26 @@ export class MarkdownService {
 
             node.properties = {
               ...node.properties,
-              className: ['bg-secondary/80', 'dark:bg-secondary/60', 'rounded-md', 'border', 'border-input', 'cursor-pointer', 'h-8', 'w-8', 'top-2', 'right-2', 'absolute'],
+              className: [
+                'absolute',
+                'right-4',
+                'top-3',
+                'z-10',
+                'h-6',
+                'w-6',
+                'text-muted-foreground',
+                'hover:text-foreground',
+                'transition-all',
+                'hover:bg-muted',
+                'cursor-pointer',
+                'rounded-md',
+                'bg-transparent',
+                'p-1',
+                'text-xs',
+                'flex',
+                'items-center',
+                'justify-center',
+              ],
             };
 
             node.children = replaceSpanClasses(node.children, classMapping);
@@ -247,10 +280,9 @@ export class MarkdownService {
                 'text-left',
                 'align-middle',
                 'font-medium',
-                'first:[&_code]:bg-blue-300/10',
-                'first:[&_code]:text-blue-500',
-                'first:[&_code]:dark:bg-blue-500/10',
-                'first:[&_code]:dark:text-blue-300',
+                'first:[&_code]:bg-blue-500/10',
+                'first:[&_code]:text-blue-600',
+                'first:[&_code]:dark:text-blue-400',
                 '[&_code]:bg-accent',
                 '[&_code]:rounded-sm',
                 '[&_code]:border-none',

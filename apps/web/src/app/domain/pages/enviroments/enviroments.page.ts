@@ -1,4 +1,3 @@
-import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
 import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component } from '@angular/core';
 
@@ -8,7 +7,7 @@ import { EnvCardComponent } from '../../components/env-card/env-card.component';
   selector: 'z-enviroments',
   templateUrl: './enviroments.page.html',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, EnvCardComponent],
+  imports: [CommonModule, EnvCardComponent],
 })
 export class EnviromentsPage {
   protected readonly angularEnvs = [

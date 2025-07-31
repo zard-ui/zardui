@@ -1,7 +1,7 @@
+import { CommonModule } from '@angular/common';
+import { Component, input, signal } from '@angular/core';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { Step } from '@zard/shared/constants/install.constant';
-import { Component, input, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { MarkdownRendererComponent } from '../render/markdown-renderer.component';
 
@@ -19,18 +19,17 @@ import { MarkdownRendererComponent } from '../render/markdown-renderer.component
             <p>
               {{ stepProps()?.subtitle }}
 
-              @if (!stepProps()?.url?.external) {
-                <a z-button zType="link" class="p-0" [href]="stepProps()?.url?.href">{{ stepProps()?.url?.text }}</a>
+              @if (stepProps()?.url) {
+                <a z-button zType="link" class="p-0" [href]="stepProps()?.url?.href" [target]="stepProps()?.url?.external ? '_blank' : '_self'">{{ stepProps()?.url?.text }}</a>
               }
             </p>
-            @if (stepProps()?.url?.external) {
-              <a z-button zType="link" class="p-0" [href]="stepProps()?.url?.href" target="_blank">{{ stepProps()?.url?.text }}</a>
-            }
             @if (stepProps()?.file?.path) {
               @if (stepProps()?.expandable) {
                 <div class="space-y-3">
                   <div class="flex items-center justify-between py-2">
                     <button
+                      z-button
+                      zType="outline"
                       class="flex items-center text-sm font-medium transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
                       (click)="toggleExpanded()"
                     >

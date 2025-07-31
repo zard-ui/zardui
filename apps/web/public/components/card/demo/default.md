@@ -8,6 +8,6 @@ import { ZardCardComponent } from '../card.component';
   imports: [ZardCardComponent],
   template: ` <z-card zTitle="Card title" zDescription="Card description"> Card content </z-card> `,
 })
-export class ZardDemoCardDefaultComponent {}
+export class ZardDemoCardDefaultComponent { }
 
 ```
