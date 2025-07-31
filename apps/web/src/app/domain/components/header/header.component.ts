@@ -11,12 +11,13 @@ import { GithubService } from '@zard/shared/services/github.service';
 import { ZardDividerComponent } from '@zard/components/components';
 import type { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
+import { DocResearcherComponent } from '../doc-researcher/doc-researcher.component';
 
 @Component({
   selector: 'z-header',
   templateUrl: './header.component.html',
   standalone: true,
-  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe],
+  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe, DocResearcherComponent],
 })
 export class HeaderComponent implements OnInit {
   readonly headerPaths = HEADER_PATHS;
@@ -27,6 +28,10 @@ export class HeaderComponent implements OnInit {
   readonly $repoStars: Observable<number> = this.githubService.getStarsCount();
   ngOnInit(): void {
     this.darkmodeService.initTheme();
+
+    this.githubService.getContributors().subscribe(contributors => {
+      console.log('Contributors:', contributors);
+    });
   }
 
   toggleTheme(): void {

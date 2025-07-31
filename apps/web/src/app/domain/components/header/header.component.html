@@ -20,6 +20,8 @@
       </nav>
     </menu>
     <aside class="ml-auto flex items-center md:flex-1 md:justify-end h-[16px]">
+      <z-doc-researcher></z-doc-researcher>
+      <z-divider zOrientation="vertical"></z-divider>
       @if (githubData) {
         <a z-button class="w-16 flex" zType="ghost" zSize="icon" [href]="githubData.url" target="_blank">
           <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />

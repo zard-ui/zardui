@@ -31,7 +31,7 @@ const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardDialogOptions<T> {
   zCancelIcon?: string;
-  zCancelText?: string;
+  zCancelText?: string | null;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
   zData?: object;
