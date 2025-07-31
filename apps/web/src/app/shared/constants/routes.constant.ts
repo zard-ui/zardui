@@ -49,7 +49,7 @@ const COMPONENTS_PATH = {
     { name: 'Toggle', path: '/docs/components/toggle', available: true },
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
     { name: 'Radio', path: '/docs/components/radio', available: true },
-    { name: 'Loader', path: '/components/loader', available: true },
+    { name: 'Loader', path: '/docs/components/loader', available: true },
     { name: 'Dropdown', path: '/docs/components/dropdown', available: true },
     { name: 'Popover', path: '/docs/components/popover', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),

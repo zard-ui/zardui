@@ -1,19 +1,17 @@
 import { RouterModule } from '@angular/router';
-import { Component } from '@angular/core';
-import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
+import { Component, signal } from '@angular/core';
+import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-introduction',
   standalone: true,
-  imports: [RouterModule, SidebarComponent],
-  template: `
-    <section class="elative flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full">
-      <main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px] [&_h1]:text-3xl [&_h1]:font-bold [&_p]:text-base [&_p]:text-muted-foreground">
-        <section class="flex flex-col gap-10">
-          <h1>teste</h1>
-        </section>
-      </main>
-    </section>
-  `,
+  imports: [RouterModule, DynamicAnchorComponent, ScrollSpyDirective, ScrollSpyItemDirective],
+  templateUrl: './introduction.page.html',
 })
-export class IntroductionPage {}
+export class IntroductionPage {
+  activeAnchor?: string;
+
+  readonly pageTopics = signal<Topic[]>([{ name: 'why-zardui' }, { name: 'cli' }, { name: 'ai-ready' }, { name: 'open-source' }]);
+}
