@@ -3,7 +3,7 @@
   <section class="flex min-w-0 flex-1 flex-col">
     <div class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 text-neutral-800 md:px-0 dark:text-neutral-300">
       <header class="flex flex-col gap-5" scrollSpyItem="overview" id="overview">
-        <app-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/overview.md"></app-markdown-renderer>
+        <z-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/overview.md"></z-markdown-renderer>
         <z-code-box
           [scrollSpyItem]="componentData.examples[0].name"
           [attr.id]="componentData.examples[0].name"
@@ -55,7 +55,7 @@
       </div>
 
       <footer scrollSpyItem="api" id="api">
-        <app-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/api.md"></app-markdown-renderer>
+        <z-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/api.md"></z-markdown-renderer>
       </footer>
     </div>
   </section>

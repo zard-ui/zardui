@@ -26,7 +26,7 @@
     </section>
     <section class="transition-all" [class]="activeTab() === 'code' ? 'translate-x-0' : ['translate-x-full', 'sr-only']">
       @if (markdownUrl()) {
-        <app-markdown-renderer [markdownUrl]="markdownUrl()"></app-markdown-renderer>
+        <z-markdown-renderer [markdownUrl]="markdownUrl()"></z-markdown-renderer>
       }
     </section>
   </main>

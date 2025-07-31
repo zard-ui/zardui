@@ -40,12 +40,12 @@ import { MarkdownRendererComponent } from '../render/markdown-renderer.component
                   </div>
                   @if (isExpanded()) {
                     <div class="overflow-hidden transition-all duration-200 ease-in-out animate-in slide-in-from-top-1">
-                      <app-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></app-markdown-renderer>
+                      <z-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></z-markdown-renderer>
                     </div>
                   }
                 </div>
               } @else {
-                <app-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></app-markdown-renderer>
+                <z-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></z-markdown-renderer>
               }
             }
           </section>
