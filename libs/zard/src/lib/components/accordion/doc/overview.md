@@ -1,3 +1,3 @@
 # Accordion
 
-The Accordion is a collapsible component that organizes content into stacked, interactive headings.
+A vertically stacked set of interactive headings that each reveal a section of content.

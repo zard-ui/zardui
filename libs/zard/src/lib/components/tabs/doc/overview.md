@@ -1,3 +1,3 @@
 # Tab
 
-A set of layered sections of content that are displayed one at a time.
+A set of layered sections of content—known as tab panels—that are displayed one at a time.

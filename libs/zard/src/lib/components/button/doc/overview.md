@@ -1,3 +1,3 @@
 # Button
 
-The Button allows users to make a choice with a click or tap. Its container can include just text or a combination of text with an icon.
+Displays a button or a component that looks like a button.

@@ -1,3 +1,3 @@
 # Avatar
 
-The Avatar is a visual element used to show avatar photo.
+An image element with a fallback for representing the user.

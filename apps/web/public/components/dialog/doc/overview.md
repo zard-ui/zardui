@@ -1,7 +1,3 @@
 # Dialog
 
-The Zard Dialog component is a versatile modal dialog that can be used to display information, confirm actions, or gather user input. It supports various configurations such as size, position, and content type.
-
-```ts
-import { ZardDialogModule } from '@zard/dialog';
-```
+A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.
