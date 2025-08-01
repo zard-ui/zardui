@@ -30,11 +30,24 @@ export const MOCK_USERS: Array<Record<string, string | number>> = [
 ];
 
 export function mockFetchUsers(state: TableState): Promise<ZardTableDataSource<Record<string, string | number>>> {
-  const { pageIndex, pageSize, field, direction } = state;
+  const { pageIndex, pageSize, field, direction, search } = state;
   const start = pageIndex * pageSize;
   const end = start + pageSize;
+  const filterFields = ['name', 'email'];
 
-  const sortedUsers = [...MOCK_USERS].sort((a, b) => {
+  let filtered = MOCK_USERS;
+  if (search && search.trim() !== '') {
+    const lowerSearch = search.toLowerCase();
+    filtered = MOCK_USERS.filter(user =>
+      filterFields.some(key => {
+        const val = user[key];
+        return val != null && String(val).toLowerCase().includes(lowerSearch);
+      }),
+    );
+  }
+
+  // Ordena os dados filtrados
+  const sorted = [...filtered].sort((a, b) => {
     const valA = a[field ?? 'name'];
     const valB = b[field ?? 'name'];
 
@@ -45,21 +58,25 @@ export function mockFetchUsers(state: TableState): Promise<ZardTableDataSource<R
     return direction === 'desc' ? -compare : compare;
   });
 
-  const paginatedUsers = sortedUsers.slice(start, end);
+  // Paginacao sobre os dados filtrados e ordenados
+  const paginated = sorted.slice(start, end);
 
   return Promise.resolve({
-    data: paginatedUsers,
+    data: paginated,
     meta: {
       pagination: {
-        totalItems: MOCK_USERS.length,
+        totalItems: filtered.length, // total de itens depois do filtro
         pageSize,
         pageIndex,
         first: pageIndex === 0,
-        last: end >= MOCK_USERS.length,
+        last: end >= filtered.length,
       },
       sorting: {
-        field: field ?? 'id',
+        field: field ?? 'name',
         direction: direction ?? 'asc',
+      },
+      filtering: {
+        search: search ?? '',
       },
     },
   });

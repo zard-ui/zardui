@@ -6,6 +6,7 @@ export interface ZardTableDataSource<T> {
 export interface TableMeta {
   pagination?: TablePagination;
   sorting?: TableSorting;
+  filtering?: TableFiltering;
 }
 
 export interface TablePagination {
@@ -21,6 +22,10 @@ export interface TableSorting {
   direction?: 'asc' | 'desc';
 }
 
+export interface TableFiltering {
+  search?: string;
+}
+
 export interface TableState {
   pageSize: number;
   pageIndex: number;
@@ -30,4 +35,6 @@ export interface TableState {
 
   field?: string;
   direction?: 'asc' | 'desc';
+
+  search?: string;
 }

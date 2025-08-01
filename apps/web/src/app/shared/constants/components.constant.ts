@@ -18,6 +18,7 @@ import { ZardDemoInputStatusComponent } from '@zard/components/input/demo/status
 import { ZardDemoInputTextAreaComponent } from '@zard/components/input/demo/text-area';
 import { ZardDemoTableBasicComponent } from '@zard/components/table/demo/basic';
 import { ZardDemoTableDynamicComponent } from '@zard/components/table/demo/dynamic';
+import { ZardDemoTableFilteredComponent } from '@zard/components/table/demo/filtered';
 import { ZardDemoTableOrderedComponent } from '@zard/components/table/demo/ordered';
 
 export interface ComponentData {
@@ -139,6 +140,10 @@ export const COMPONENTS: ComponentData[] = [
       {
         name: 'ordered',
         component: ZardDemoTableOrderedComponent,
+      },
+      {
+        name: 'filtered',
+        component: ZardDemoTableFilteredComponent,
       },
     ],
   },

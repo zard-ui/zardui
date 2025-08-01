@@ -106,3 +106,16 @@ export class ZardTablePaginationDirective {
   readonly class = input<ClassValue>('');
   protected readonly classes = computed(() => mergeClasses(tableVariants.pagination(), this.class()));
 }
+
+@Directive({
+  selector: 'div[z-table-filtering]',
+  standalone: true,
+  exportAs: 'zTableFiltering',
+  host: {
+    '[class]': 'classes()',
+  },
+})
+export class ZardTableFilteringDirective {
+  readonly class = input<ClassValue>('');
+  protected readonly classes = computed(() => mergeClasses(tableVariants.filtering(), this.class()));
+}

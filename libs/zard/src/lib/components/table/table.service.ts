@@ -52,6 +52,10 @@ export class ZardTableService {
     this.updateState({ field, direction, pageIndex: 0 });
   }
 
+  setFiltering(search: string) {
+    this.updateState({ search, pageIndex: 0 });
+  }
+
   resetPage() {
     this.updateState({ pageIndex: 0 });
   }

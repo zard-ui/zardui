@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, effect, input, output, ViewEncapsulation } from '@angular/core';
-import { ZardButtonComponent } from '../components';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime } from 'rxjs';
+import { ZardButtonComponent, ZardInputDirective } from '../components';
 import { TableState, ZardTableDataSource } from './table';
 import { ZardTableSortIconComponent } from './table-sort-icon.component';
 import { ZardTableModule } from './table.module';
@@ -8,12 +10,18 @@ import { ZardTableService } from './table.service';
 @Component({
   selector: 'z-table',
   exportAs: 'zTable',
-  imports: [ZardTableModule, ZardButtonComponent, ZardTableSortIconComponent],
+  imports: [ZardTableModule, ZardButtonComponent, ZardTableSortIconComponent, ZardInputDirective, ReactiveFormsModule],
   providers: [ZardTableService],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
+    @if (filtering()) {
+      <div z-table-filtering role="search">
+        <label for="inputSearch" class="sr-only">{{ inputPlaceholder() }}</label>
+        <input z-input type="text" [placeholder]="inputPlaceholder()" [formControl]="searchControl" id="inputSearch" />
+      </div>
+    }
     <div z-table-wrapper>
       <table z-table role="table">
         @if (columns().length && dataSource().data.length) {
@@ -68,7 +76,7 @@ import { ZardTableService } from './table.service';
   ],
 })
 export class ZardTableComponent {
-  readonly columns = input<{ header: string; accessor: string; sortable?: boolean }[]>([]);
+  readonly columns = input<{ header: string; accessor: string; sortable?: boolean; filterable?: boolean }[]>([]);
   readonly dataSource = input<ZardTableDataSource<Record<string, string | number>>>({ data: [] });
 
   readonly pagination = input<boolean>();
@@ -80,6 +88,18 @@ export class ZardTableComponent {
   readonly sortField = computed(() => this.tableService.tableState().field);
   readonly sortDirectionMap = computed(() => ({ [this.sortField() ?? '']: this.direction() ?? null }));
 
+  readonly filtering = input<boolean>(false);
+  readonly searchControl = new FormControl();
+
+  readonly filterableColumns = computed(() => this.columns().filter(col => col.filterable));
+
+  readonly inputPlaceholder = computed(
+    () =>
+      `Filter by ${this.filterableColumns()
+        .map(col => col.header)
+        .join(', ')}`,
+  );
+
   readonly stateChange = output<TableState>();
 
   constructor(private readonly tableService: ZardTableService) {
@@ -90,8 +110,13 @@ export class ZardTableComponent {
         this.tableService.updateState({
           ...meta.pagination,
           ...meta.sorting,
+          ...meta.filtering,
         });
       }
+    });
+
+    this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(query => {
+      this.filter(query);
     });
   }
 
@@ -108,6 +133,13 @@ export class ZardTableComponent {
   toggleSort(field: string) {
     if (this.zOrdering()) {
       this.tableService.setSorting(field);
+      this.stateChange.emit(this.tableService.tableState());
+    }
+  }
+
+  filter(searchItem: string) {
+    if (this.filtering() && searchItem !== this.tableService.tableState().search) {
+      this.tableService.setFiltering(searchItem ?? '');
       this.stateChange.emit(this.tableService.tableState());
     }
   }

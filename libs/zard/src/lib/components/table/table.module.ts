@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 
 import {
   ZardTableDirective,
+  ZardTableFilteringDirective,
   ZardTablePaginationDirective,
   ZardTableWrapperDirective,
   ZardTbodyDirective,
@@ -20,6 +21,7 @@ const directives = [
   ZardTdDirective,
   ZardTableWrapperDirective,
   ZardTablePaginationDirective,
+  ZardTableFilteringDirective,
 ];
 
 @NgModule({
