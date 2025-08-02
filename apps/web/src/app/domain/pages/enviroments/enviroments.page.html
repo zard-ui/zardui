@@ -1,20 +1,59 @@
-<section class="relative flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full">
-  <main class="flex min-w-0 flex-1 flex-col [&_h1]:text-3xl [&_h1]:font-bold [&_p]:text-base [&_p]:text-muted-foreground">
-    <section class="flex flex-col gap-10 mx-auto w-full min-w-0 max-w-2xl mb-10">
-      <header class="grid gap-2">
-        <h1>Installation</h1>
-        <p class="text-base text-muted-foreground">How to install dependencies and structure your app.</p>
+<main class="relative flex items-stretch text-sm sm:text-base xl:w-full" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <section class="flex min-w-0 flex-1 flex-col">
+    <div
+      class="mx-auto flex w-full max-w-4xl min-w-0 flex-1 flex-col gap-12 sm:gap-16 lg:gap-20 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 text-neutral-800 dark:text-neutral-300"
+    >
+      <!-- Hero Section -->
+      <header class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="introduction" id="introduction">
+        <div class="flex flex-col gap-6 sm:gap-8">
+          <h1 class="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-bold tracking-tight">Installation</h1>
+          <p class="text-lg sm:text-xl text-muted-foreground leading-relaxed">How to install dependencies and structure your app.</p>
+        </div>
       </header>
-      <main>
-        <header>
-          <h2 class="mt-8 border-b pb-4 text-xl font-semibold">Environments</h2>
-        </header>
-        <section class="grid sm:grid-cols-2 gap-4 mt-8 sm:gap-6">
-          @for(env of angularEnvs; track $index) {
-          <z-env-card [name]="env.name" [path]="env.path" [icon]="env.icon"></z-env-card>
+
+      <!-- Environments Section -->
+      <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="environments" id="environments">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Pick Your Framework</h2>
+          <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">Choose your preferred development environment to get started with ZardUI.</p>
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2">
+          @for(env of environments; track $index) {
+          <div class="relative">
+            <z-env-card
+              [name]="env.name"
+              [path]="env.path"
+              [icon]="env.icon"
+              [disabled]="!env.available"
+              [class]="!env.available ? 'opacity-50 pointer-events-none' : ''"
+            ></z-env-card>
+            @if (!env.available) {
+            <div class="absolute inset-0 flex items-center justify-center bg-background/80 rounded-xl">
+              <span class="bg-muted text-muted-foreground text-xs px-2 py-1 rounded-full font-medium"> Coming Soon </span>
+            </div>
+            }
+          </div>
           }
-        </section>
-      </main>
-    </section>
-  </main>
-</section>
+        </div>
+
+        <div class="rounded-lg bg-blue-50 border border-blue-200 p-6 sm:p-8 dark:bg-blue-950 dark:border-blue-800">
+          <div class="flex items-start gap-4">
+            <div class="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-blue-600 text-white text-sm font-bold shrink-0 mt-1">i</div>
+            <div class="flex flex-col gap-3">
+              <h4 class="text-sm sm:text-base font-semibold text-blue-900 dark:text-blue-100">Framework Support</h4>
+              <p class="text-xs sm:text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
+                Angular is available now with full documentation and examples. Analog and Nx support are coming soon with dedicated guides and configurations.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Sidebar Navigation -->
+  <section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
+    <z-dynamic-anchor [topicData]="pageTopics()" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+  </section>
+</main>
