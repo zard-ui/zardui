@@ -1,0 +1,181 @@
+<main class="relative flex items-stretch text-sm sm:text-base xl:w-full" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <section class="flex min-w-0 flex-1 flex-col">
+    <div
+      class="mx-auto flex w-full max-w-4xl min-w-0 flex-1 flex-col gap-12 sm:gap-16 lg:gap-20 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 text-neutral-800 dark:text-neutral-300"
+    >
+      <!-- Hero Section -->
+      <header class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="introduction" id="introduction">
+        <div class="flex flex-col gap-6 sm:gap-8">
+          <h1 class="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-bold tracking-tight">About & Credits</h1>
+          <p class="text-lg sm:text-xl text-muted-foreground leading-relaxed">Learn more about ZardUI, our team, and the amazing contributors who make this project possible.</p>
+        </div>
+
+        <div class="flex flex-col gap-6">
+          <p class="text-sm sm:text-base text-muted-foreground leading-relaxed">
+            ZardUI is an open-source Angular component library built with
+            <code class="bg-muted px-2 py-1 rounded text-xs sm:text-sm font-mono">TailwindCSS</code>, inspired by
+            <code class="bg-muted px-2 py-1 rounded text-xs sm:text-sm font-mono">shadcn/ui</code>. Our mission is to provide developers with beautiful, accessible, and highly
+            customizable components that accelerate development while maintaining design consistency.
+          </p>
+        </div>
+      </header>
+
+      <!-- Founders Section -->
+      <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="founders" id="founders">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Founders</h2>
+          <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">
+            Meet the visionaries behind ZardUI who started this journey to create exceptional developer experiences.
+          </p>
+        </div>
+
+        @if (founders$ | async; as founders) {
+        <div class="grid gap-8 sm:grid-cols-2">
+          @for (founder of founders; track founder.login) {
+          <div class="rounded-lg border bg-card p-6 sm:p-8 text-card-foreground shadow-sm">
+            <div class="flex items-start gap-6">
+              <z-avatar
+                [zImage]="{ url: founder.avatar_url, alt: founder.name + ' avatar', fallback: founder.name.substring(0, 2).toUpperCase() }"
+                zSize="lg"
+                class="shrink-0"
+              ></z-avatar>
+              <div class="flex flex-col gap-3">
+                <div>
+                  <h3 class="text-lg font-semibold">{{ founder.name }}</h3>
+                  <p class="text-sm text-muted-foreground">{{ founder.role }}</p>
+                </div>
+                <p class="text-sm leading-relaxed">{{ founder.description }}</p>
+                <div class="flex items-center gap-4">
+                  <a [href]="founder.html_url" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-sm text-primary hover:underline">
+                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                      <path
+                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                      />
+                    </svg>
+                    GitHub Profile
+                  </a>
+                  <span class="text-xs text-muted-foreground">{{ founder.contributions }} contributions</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+        } @else {
+        <div class="grid gap-8 sm:grid-cols-2">
+          @for (item of [1, 2]; track $index) {
+          <div class="rounded-lg border bg-card p-6 sm:p-8 animate-pulse">
+            <div class="flex items-start gap-6">
+              <div class="h-16 w-16 rounded-full bg-muted shrink-0"></div>
+              <div class="flex flex-col gap-3 flex-1">
+                <div class="h-6 bg-muted rounded w-3/4"></div>
+                <div class="h-4 bg-muted rounded w-1/2"></div>
+                <div class="h-16 bg-muted rounded"></div>
+              </div>
+            </div>
+          </div>
+          }
+        </div>
+        }
+      </section>
+
+      <!-- Contributors Section -->
+      <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="contributors" id="contributors">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Contributors</h2>
+          <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">A huge thank you to all the amazing developers who have contributed to making ZardUI better.</p>
+        </div>
+
+        @if (contributors$ | async; as contributors) {
+        <div class="flex flex-wrap gap-4">
+          @for (contributor of contributors; track contributor.login) { @if (!isFounder(contributor.login)) {
+          <div class="relative" [zTooltip]="contributor.login + ' (' + contributor.contributions + ' contributions)'" zPosition="top" zTrigger="hover">
+            <a [href]="contributor.html_url" target="_blank" rel="noopener noreferrer" class="block transition-transform hover:scale-110">
+              <z-avatar
+                [zImage]="{ url: contributor.avatar_url, alt: contributor.login + ' avatar', fallback: contributor.login.substring(0, 2).toUpperCase() }"
+                zSize="md"
+                class="ring-2 ring-background hover:ring-primary/20 transition-all"
+              ></z-avatar>
+            </a>
+          </div>
+          } }
+        </div>
+        } @else {
+        <div class="flex flex-wrap gap-4">
+          @for (item of [1, 2, 3, 4, 5, 6, 7, 8]; track $index) {
+          <div class="animate-pulse">
+            <div class="h-12 w-12 rounded-full bg-muted"></div>
+          </div>
+          }
+        </div>
+        }
+      </section>
+
+      <!-- Credits Section -->
+      <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="credits" id="credits">
+        <div class="flex flex-col gap-6">
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Credits & Acknowledgments</h2>
+          <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">ZardUI wouldn't be possible without these amazing projects and communities.</p>
+        </div>
+
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+          <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+            <h3 class="text-base sm:text-lg font-semibold mb-3">shadcn/ui</h3>
+            <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">The design philosophy and component patterns that inspired ZardUI's architecture and aesthetic.</p>
+          </div>
+
+          <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+            <h3 class="text-base sm:text-lg font-semibold mb-3">TailwindCSS</h3>
+            <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              The utility-first CSS framework that powers ZardUI's styling system and enables rapid customization.
+            </p>
+          </div>
+
+          <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+            <h3 class="text-base sm:text-lg font-semibold mb-3">Angular</h3>
+            <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              The powerful framework that provides the foundation for ZardUI's reactive and performant components.
+            </p>
+          </div>
+
+          <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+            <h3 class="text-base sm:text-lg font-semibold mb-3">Nx</h3>
+            <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">The monorepo toolkit that enables ZardUI's scalable development workflow and build optimization.</p>
+          </div>
+
+          <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+            <h3 class="text-base sm:text-lg font-semibold mb-3">CVA</h3>
+            <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              Class Variance Authority provides type-safe styling variants that make ZardUI components highly customizable.
+            </p>
+          </div>
+
+          <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
+            <h3 class="text-base sm:text-lg font-semibold mb-3">Open Source Community</h3>
+            <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+              The amazing developers worldwide who contribute ideas, feedback, and improvements to make ZardUI better.
+            </p>
+          </div>
+        </div>
+
+        <div class="rounded-lg bg-green-50 border border-green-200 p-6 sm:p-8 dark:bg-green-950 dark:border-green-800">
+          <div class="flex items-start gap-4">
+            <div class="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-green-600 text-white text-sm font-bold shrink-0 mt-1">❤️</div>
+            <div class="flex flex-col gap-3">
+              <h4 class="text-sm sm:text-base font-semibold text-green-900 dark:text-green-100">Contributing</h4>
+              <p class="text-xs sm:text-sm text-green-800 dark:text-green-200 leading-relaxed">
+                Want to be part of the ZardUI community? We welcome contributions of all kinds - from bug reports and feature requests to code contributions and documentation
+                improvements. Check out our GitHub repository to get started!
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Sidebar Navigation -->
+  <section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
+    <z-dynamic-anchor [topicData]="pageTopics()" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+  </section>
+</main>
