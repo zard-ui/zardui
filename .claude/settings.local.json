@@ -30,9 +30,13 @@
       "mcp__playwright__browser_resize",
       "mcp__playwright__browser_snapshot",
       "mcp__playwright__browser_close",
-      "mcp__ESLint__lint-files"
+      "mcp__ESLint__lint-files",
+      "Bash(npx nx build:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["playwright", "ESLint"]
+  "enabledMcpjsonServers": [
+    "playwright",
+    "ESLint"
+  ]
 }
