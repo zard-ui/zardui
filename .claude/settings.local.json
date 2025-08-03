@@ -39,7 +39,8 @@
       "Bash(mv:*)",
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(npx nx test:*)",
-      "Bash(grep:*)"
+      "Bash(grep:*)",
+      "Bash(npm test)"
     ]
   },
   "enableAllProjectMcpServers": true,
