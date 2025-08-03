@@ -37,9 +37,14 @@
       "Bash(npm install:*)",
       "Bash(mkdir:*)",
       "Bash(mv:*)",
-      "WebFetch(domain:docs.anthropic.com)"
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(npx nx test:*)",
+      "Bash(grep:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["playwright", "ESLint"]
+  "enabledMcpjsonServers": [
+    "playwright",
+    "ESLint"
+  ]
 }

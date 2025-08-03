@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { ToggleGroupValue, ZardToggleGroupComponent } from './toggle-group.component';
+import { ZardToggleGroupComponent, ZardToggleGroupItem } from './toggle-group.component';
 
 describe('ZardToggleGroupComponent', () => {
   let component: ZardToggleGroupComponent;
   let fixture: ComponentFixture<ZardToggleGroupComponent>;
 
-  const mockToggleItems: ToggleGroupValue[] = [
-    { label: 'Bold', value: 'bold', checked: false },
-    { label: 'Italic', value: 'italic', checked: true },
-    { label: 'Underline', value: 'underline', checked: false },
+  const mockToggleItems: ZardToggleGroupItem[] = [
+    { label: 'Bold', value: 'bold', ariaLabel: 'Toggle bold' },
+    { label: 'Italic', value: 'italic', ariaLabel: 'Toggle italic' },
+    { label: 'Underline', value: 'underline', ariaLabel: 'Toggle underline' },
   ];
 
   beforeEach(async () => {
@@ -26,8 +26,8 @@ describe('ZardToggleGroupComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render toggle buttons based on zValue input', () => {
-    fixture.componentRef.setInput('zValue', mockToggleItems);
+  it('should render toggle buttons based on items input', () => {
+    fixture.componentRef.setInput('items', mockToggleItems);
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
@@ -37,8 +37,10 @@ describe('ZardToggleGroupComponent', () => {
     expect(buttons[2].textContent.trim()).toBe('Underline');
   });
 
-  it('should set aria-pressed attribute correctly', () => {
-    fixture.componentRef.setInput('zValue', mockToggleItems);
+  it('should set aria-pressed attribute correctly for multiple type', () => {
+    fixture.componentRef.setInput('items', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'multiple');
+    fixture.componentRef.setInput('defaultValue', ['italic']);
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
@@ -47,8 +49,10 @@ describe('ZardToggleGroupComponent', () => {
     expect(buttons[2].getAttribute('aria-pressed')).toBe('false');
   });
 
-  it('should set data-state attribute correctly', () => {
-    fixture.componentRef.setInput('zValue', mockToggleItems);
+  it('should set data-state attribute correctly for single type', () => {
+    fixture.componentRef.setInput('items', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'single');
+    fixture.componentRef.setInput('defaultValue', 'italic');
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
@@ -58,37 +62,37 @@ describe('ZardToggleGroupComponent', () => {
   });
 
   it('should toggle item when clicked', () => {
-    fixture.componentRef.setInput('zValue', mockToggleItems);
+    fixture.componentRef.setInput('items', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'multiple');
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
     const firstButton = buttons[0];
 
-    jest.spyOn(component.onClick, 'emit');
-    jest.spyOn(component.onChange, 'emit');
+    jest.spyOn(component.valueChange, 'emit');
 
     firstButton.click();
 
-    expect(component.onClick.emit).toHaveBeenCalled();
-    expect(component.onChange.emit).toHaveBeenCalled();
+    expect(component.valueChange.emit).toHaveBeenCalledWith(['bold']);
   });
 
-  it('should emit onHover when mouse enters button', () => {
-    fixture.componentRef.setInput('zValue', mockToggleItems);
+  it('should handle single type selection', () => {
+    fixture.componentRef.setInput('items', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'single');
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
     const firstButton = buttons[0];
 
-    jest.spyOn(component.onHover, 'emit');
+    jest.spyOn(component.valueChange, 'emit');
 
-    firstButton.dispatchEvent(new MouseEvent('mouseenter'));
+    firstButton.click();
 
-    expect(component.onHover.emit).toHaveBeenCalled();
+    expect(component.valueChange.emit).toHaveBeenCalledWith('bold');
   });
 
   it('should apply size classes correctly', () => {
-    fixture.componentRef.setInput('zValue', mockToggleItems);
+    fixture.componentRef.setInput('items', mockToggleItems);
     fixture.componentRef.setInput('zSize', 'lg');
     fixture.detectChanges();
 
@@ -97,26 +101,25 @@ describe('ZardToggleGroupComponent', () => {
   });
 
   it('should work with reactive forms', () => {
-    const formControl = new FormControl(mockToggleItems);
+    const formControl = new FormControl<string | string[] | null>(null);
 
-    fixture.componentRef.setInput('zValue', mockToggleItems);
+    fixture.componentRef.setInput('items', mockToggleItems);
+    fixture.componentRef.setInput('zMode', 'multiple');
     fixture.detectChanges();
 
-    component.registerOnChange((value: ToggleGroupValue[]) => {
+    component.registerOnChange((value: string | string[]) => {
       formControl.setValue(value);
     });
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
     buttons[0].click();
 
-    expect(formControl.value).toBeDefined();
+    expect(formControl.value).toEqual(['bold']);
   });
 
   it('should handle disabled state', () => {
-    fixture.componentRef.setInput('zValue', mockToggleItems);
-    fixture.detectChanges();
-
-    component.setDisabledState(true);
+    fixture.componentRef.setInput('items', mockToggleItems);
+    fixture.componentRef.setInput('disabled', true);
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
@@ -126,28 +129,54 @@ describe('ZardToggleGroupComponent', () => {
   });
 
   it('should not toggle when disabled', () => {
-    fixture.componentRef.setInput('zValue', mockToggleItems);
+    fixture.componentRef.setInput('items', mockToggleItems);
+    fixture.componentRef.setInput('disabled', true);
     fixture.detectChanges();
 
-    component.setDisabledState(true);
-    fixture.detectChanges();
-
-    jest.spyOn(component.onClick, 'emit');
-    jest.spyOn(component.onChange, 'emit');
+    jest.spyOn(component.valueChange, 'emit');
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
     buttons[0].click();
 
-    expect(component.onClick.emit).not.toHaveBeenCalled();
-    expect(component.onChange.emit).not.toHaveBeenCalled();
+    expect(component.valueChange.emit).not.toHaveBeenCalled();
   });
 
   it('should apply custom classes', () => {
-    fixture.componentRef.setInput('zValue', mockToggleItems);
+    fixture.componentRef.setInput('items', mockToggleItems);
     fixture.componentRef.setInput('class', 'custom-class');
     fixture.detectChanges();
 
     const container = fixture.nativeElement.querySelector('[role="group"]');
     expect(container.className).toContain('custom-class');
+  });
+
+  it('should render icons when provided', () => {
+    const itemsWithIcons: ZardToggleGroupItem[] = [
+      { value: 'bold', icon: 'icon-bold', ariaLabel: 'Toggle bold' },
+      { value: 'italic', icon: 'icon-italic', ariaLabel: 'Toggle italic' },
+    ];
+
+    fixture.componentRef.setInput('items', itemsWithIcons);
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button');
+    expect(buttons[0].querySelector('.icon-bold')).toBeTruthy();
+    expect(buttons[1].querySelector('.icon-italic')).toBeTruthy();
+  });
+
+  it('should render both icon and label when provided', () => {
+    const itemsWithIconsAndLabels: ZardToggleGroupItem[] = [{ value: 'bold', icon: 'icon-bold', label: 'Bold', ariaLabel: 'Toggle bold' }];
+
+    fixture.componentRef.setInput('items', itemsWithIconsAndLabels);
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('button');
+    const icon = button.querySelector('.icon-bold');
+    const textSpan = button.querySelector('span:not([class*="icon"])');
+
+    expect(icon).toBeTruthy();
+    expect(icon.classList.contains('shrink-0')).toBeTruthy();
+    expect(textSpan).toBeTruthy();
+    expect(textSpan.textContent.trim()).toBe('Bold');
   });
 });

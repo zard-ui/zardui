@@ -4,17 +4,18 @@ import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { toggleGroupVariants, toggleGroupItemVariants, ZardToggleGroupVariants } from './toggle-group.variants';
+import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
 
-export interface ToggleGroupValue {
-  label?: string;
+export interface ZardToggleGroupItem {
   value: string;
-  checked: boolean;
-  content?: string;
+  label?: string;
+  icon?: string;
+  disabled?: boolean;
+  ariaLabel?: string;
 }
 
 type OnTouchedType = () => void;
-type OnChangeType = (value: ToggleGroupValue[]) => void;
+type OnChangeType = (value: string | string[]) => void;
 
 @Component({
   selector: 'z-toggle-group',
@@ -23,18 +24,26 @@ type OnChangeType = (value: ToggleGroupValue[]) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <div [class]="classes()" role="group">
-      @for (item of currentValue(); track item.value) {
+    <div [class]="classes()" role="group" [attr.data-orientation]="'horizontal'">
+      @for (item of items(); track item.value; let i = $index) {
         <button
           type="button"
-          [attr.aria-pressed]="item.checked"
-          [attr.data-state]="item.checked ? 'on' : 'off'"
-          [class]="getItemClasses(item.checked)"
-          [disabled]="disabled()"
+          [attr.aria-pressed]="isItemPressed(item.value)"
+          [attr.data-state]="isItemPressed(item.value) ? 'on' : 'off'"
+          [attr.aria-label]="item.ariaLabel"
+          [class]="getItemClasses(i, items().length)"
+          [disabled]="disabled() || item.disabled"
           (click)="toggleItem(item)"
-          (mouseenter)="onHover.emit()"
-          [innerHTML]="item.content || item.label || item.value"
-        ></button>
+        >
+          @if (item.icon) {
+            <span [class]="item.icon + ' w-4 h-4 shrink-0'"></span>
+          }
+          @if (item.label) {
+            <span>{{ item.label }}</span>
+          } @else if (!item.icon) {
+            <span>{{ item.value }}</span>
+          }
+        </button>
       }
     </div>
   `,
@@ -47,24 +56,80 @@ type OnChangeType = (value: ToggleGroupValue[]) => void;
   ],
 })
 export class ZardToggleGroupComponent implements ControlValueAccessor {
-  readonly zValue = input<ToggleGroupValue[]>([]);
-  readonly zDefault = input<ToggleGroupValue[]>([]);
-  readonly zSize = input<ZardToggleGroupVariants['zSize']>('md');
+  readonly zMode = input<'single' | 'multiple'>('multiple');
+  readonly zType = input<'default' | 'outline'>('default');
+  readonly zSize = input<'sm' | 'md' | 'lg'>('md');
+  readonly value = input<string | string[]>();
+  readonly defaultValue = input<string | string[]>();
+  readonly disabled = input<boolean>(false);
   readonly class = input<ClassValue>('');
+  readonly items = input<ZardToggleGroupItem[]>([]);
 
-  readonly onClick = output<ToggleGroupValue[]>();
-  readonly onHover = output<void>();
-  readonly onChange = output<ToggleGroupValue[]>();
+  readonly valueChange = output<string | string[]>();
 
-  private internalValue = signal<ToggleGroupValue[]>([]);
-  protected disabled = signal<boolean>(false);
+  private internalValue = signal<string | string[] | undefined>(undefined);
 
-  protected readonly classes = computed(() => mergeClasses(toggleGroupVariants({ zSize: this.zSize() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(
+      toggleGroupVariants({
+        zType: this.zType(),
+        zSize: this.zSize(),
+      }),
+      this.class(),
+    ),
+  );
 
-  protected readonly currentValue = computed(() => (this.internalValue().length > 0 ? this.internalValue() : this.zValue()));
+  protected readonly currentValue = computed(() => {
+    const internal = this.internalValue();
+    const input = this.value();
+    const defaultVal = this.defaultValue();
 
-  protected getItemClasses(checked: boolean): string {
-    return mergeClasses(toggleGroupItemVariants({ zSize: this.zSize() }), checked ? 'bg-accent text-accent-foreground' : 'bg-transparent');
+    if (internal !== undefined) return internal;
+    if (input !== undefined) return input;
+    if (defaultVal !== undefined) return defaultVal;
+
+    return this.zMode() === 'single' ? '' : [];
+  });
+
+  protected getItemClasses(index: number, total: number): string {
+    const baseClasses = toggleGroupItemVariants({
+      zType: this.zType(),
+      zSize: this.zSize(),
+    });
+
+    const positionClasses = [];
+
+    // Add rounded corners for first and last items
+    if (index === 0) {
+      positionClasses.push('first:rounded-l-md');
+    }
+    if (index === total - 1) {
+      positionClasses.push('last:rounded-r-md');
+    }
+
+    // Handle borders for outline variant
+    if (this.zType() === 'outline') {
+      if (index === 0) {
+        // First item gets full border
+        positionClasses.push('border-l');
+      } else {
+        // Other items don't get left border (connects to previous)
+        positionClasses.push('border-l-0');
+      }
+    }
+
+    // Focus z-index
+    positionClasses.push('focus:z-10', 'focus-visible:z-10');
+
+    return mergeClasses(baseClasses, ...positionClasses);
+  }
+
+  protected isItemPressed(itemValue: string): boolean {
+    const current = this.currentValue();
+    if (this.zMode() === 'single') {
+      return current === itemValue;
+    }
+    return Array.isArray(current) && current.includes(itemValue);
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
@@ -72,27 +137,31 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onChangeFn: OnChangeType = () => {};
 
-  constructor() {
-    // Initialize with zDefault if zValue is empty
-    this.internalValue.set(this.zValue().length > 0 ? this.zValue() : this.zDefault());
-  }
-
-  toggleItem(item: ToggleGroupValue) {
-    if (this.disabled()) return;
+  toggleItem(item: ZardToggleGroupItem) {
+    if (this.disabled() || item.disabled) return;
 
     const currentValue = this.currentValue();
-    const updatedValue = currentValue.map(valueItem => (valueItem.value === item.value ? { ...valueItem, checked: !valueItem.checked } : valueItem));
+    let newValue: string | string[];
 
-    this.internalValue.set(updatedValue);
+    if (this.zMode() === 'single') {
+      newValue = currentValue === item.value ? '' : item.value;
+    } else {
+      const currentArray = Array.isArray(currentValue) ? currentValue : [];
+      if (currentArray.includes(item.value)) {
+        newValue = currentArray.filter(v => v !== item.value);
+      } else {
+        newValue = [...currentArray, item.value];
+      }
+    }
 
-    this.onClick.emit(updatedValue);
-    this.onChange.emit(updatedValue);
-    this.onChangeFn(updatedValue);
+    this.internalValue.set(newValue);
+    this.valueChange.emit(newValue);
+    this.onChangeFn(newValue);
     this.onTouched();
   }
 
-  writeValue(value: ToggleGroupValue[]): void {
-    if (value) {
+  writeValue(value: string | string[]): void {
+    if (value !== undefined) {
       this.internalValue.set(value);
     }
   }
@@ -105,7 +174,8 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+  setDisabledState(_isDisabled: boolean): void {
+    // Note: disabled state is handled through the disabled input
+    // This method is required by ControlValueAccessor interface
   }
 }

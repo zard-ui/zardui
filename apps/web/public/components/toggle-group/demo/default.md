@@ -1,3 +1,4 @@
+```angular-ts showLineNumbers
 import { Component } from '@angular/core';
 
 import { ZardToggleGroupComponent, ZardToggleGroupItem } from '../toggle-group.component';
@@ -31,3 +32,5 @@ export default class ToggleGroupDefaultComponent {
     console.log('Toggle group changed:', value);
   }
 }
+
+```
