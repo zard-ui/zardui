@@ -41,7 +41,7 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'about',
-        loadChildren: async () => (await import('./domain/pages/about/about.routes')).ABOUT_ROUTES,
+        loadComponent: async () => import('./domain/pages/about/about.page').then(m => m.AboutPage),
       },
     ],
   },
