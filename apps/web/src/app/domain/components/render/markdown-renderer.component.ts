@@ -1,10 +1,10 @@
-// markdown-renderer.component.ts
-import { Component, Input, OnChanges, SimpleChanges, OnInit } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { MarkdownService } from '@zard/shared/services/markdown.service';
+import { HttpClient } from '@angular/common/http';
+// markdown-renderer.component.ts
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ZardLoaderComponent } from '@zard/components/components';
+import { MarkdownService } from '@zard/shared/services/markdown.service';
 
 @Component({
   selector: 'z-markdown-renderer',
@@ -16,7 +16,7 @@ import { ZardLoaderComponent } from '@zard/components/components';
           <span class="ml-2 text-gray-600">Loading...</span>
         </div>
       } @else if (error) {
-        <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700"><strong>Erro:</strong> {{ error }}</div>
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-red-700">{{ error }}</div>
       } @else {
         <main class="relative">
           <div class="" [innerHTML]="processedHtml"></div>
