@@ -6,7 +6,7 @@ import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-a
 import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
 import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
 import { CalloutComponent } from '@zard/domain/components/callout/callout.component';
-import { ResourceCardComponent, type ResourceLink, type ResourceBadge } from '@zard/domain/components/resource-card/resource-card.component';
+import { ResourceCardComponent } from '@zard/domain/components/resource-card/resource-card.component';
 
 @Component({
   selector: 'z-figma',

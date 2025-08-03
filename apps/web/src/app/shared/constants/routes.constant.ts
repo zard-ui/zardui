@@ -19,7 +19,7 @@ const DOCS_PATH = {
     { name: 'CLI', path: '/docs/cli', available: true },
     { name: 'figma', path: '/docs/figma', available: true },
     { name: 'change log', path: '/docs', available: false },
-    { name: 'About and credits', path: '/docs/about', available: true },
+    { name: 'About & credits', path: '/docs/about', available: true },
   ],
 };
 

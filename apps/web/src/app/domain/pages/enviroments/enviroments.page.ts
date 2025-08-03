@@ -1,11 +1,12 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal, type OnInit } from '@angular/core';
 
 import { EnvCardComponent } from '../../components/env-card/env-card.component';
 import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
 import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
 import { ZardBadgeComponent, ZardAlertComponent } from '@zard/components/components';
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'z-enviroments',
@@ -13,21 +14,20 @@ import { ZardBadgeComponent, ZardAlertComponent } from '@zard/components/compone
   standalone: true,
   imports: [CommonModule, EnvCardComponent, DynamicAnchorComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardBadgeComponent, ZardAlertComponent],
 })
-export class EnviromentsPage {
-  activeAnchor?: string;
+export class EnviromentsPage implements OnInit {
   protected readonly environments = [
     { name: 'angular', icon: 'angular.svg', path: '/docs/installation/angular', available: true },
     { name: 'nx', icon: 'nx.svg', path: '/docs/installation/nx', available: false },
     { name: 'analog.js', icon: 'analog.svg', path: '/docs/installation/analog', available: false },
   ];
-
   readonly pageTopics = signal<Topic[]>([{ name: 'introduction' }, { name: 'environments' }]);
+  private readonly titleService = inject(Title);
+  private readonly viewportScroller = inject(ViewportScroller);
+  private readonly title = 'Installation - zard/ui';
+  activeAnchor?: string;
 
-  constructor(private viewportScroller: ViewportScroller) {
-    this.loadData();
-  }
-
-  private loadData() {
+  ngOnInit(): void {
     this.viewportScroller.scrollToPosition([0, 0]);
+    this.titleService.setTitle(this.title);
   }
 }
