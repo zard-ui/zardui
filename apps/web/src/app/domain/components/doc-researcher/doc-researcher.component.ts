@@ -13,7 +13,7 @@ import { CommandDocComponent } from '../doc-command/doc-command.component';
       z-button
       zType="ghost"
       class="relative h-8 w-full justify-start pl-4 shadow-none sm:pr-12 md:w-40 lg:w-56 xl:w-64 bg-muted/50 text-muted-foreground dark:bg-muted/50 hover:bg-secondary/80"
-      (click)="openDialog()"
+      (click)="openCommandDialog()"
     >
       <span class="hidden lg:inline-flex">Search documentation...</span>
       <span class="inline-flex lg:hidden">Search...</span>
@@ -35,11 +35,16 @@ import { CommandDocComponent } from '../doc-command/doc-command.component';
 export class DocResearcherComponent {
   private dialogService = inject(ZardDialogService);
 
-  openDialog() {
+  openCommandDialog() {
     this.dialogService.create({
       zContent: CommandDocComponent,
+      zClosable: false,
+      zHideFooter: true,
       zOkText: null,
       zCancelText: null,
+      zMaskClosable: true,
+      zWidth: '500px',
+      zCustomClasses: '!p-0 !gap-0 !border-0 !bg-transparent !shadow-none',
     });
   }
 }

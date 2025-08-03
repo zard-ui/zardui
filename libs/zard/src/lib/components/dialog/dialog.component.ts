@@ -34,6 +34,7 @@ export class ZardDialogOptions<T> {
   zCancelText?: string | null;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
+  zCustomClasses?: string;
   zData?: object;
   zDescription?: string;
   zHideFooter?: boolean;
@@ -66,7 +67,7 @@ export class ZardDialogComponent<T> extends BasePortalOutlet {
   private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardDialogOptions<T>);
 
-  protected readonly classes = computed(() => mergeClasses(dialogVariants()));
+  protected readonly classes = computed(() => mergeClasses(dialogVariants(), this.config.zCustomClasses));
   public dialogRef?: ZardDialogRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
