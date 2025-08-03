@@ -1,21 +1,22 @@
 <main class="relative flex items-stretch text-sm sm:text-base xl:w-full" scrollSpy (scrollSpyChange)="activeAnchor = $event">
   <section class="flex min-w-0 flex-1 flex-col">
-    <div
-      class="mx-auto flex w-full max-w-4xl min-w-0 flex-1 flex-col gap-12 sm:gap-16 lg:gap-20 px-4 sm:px-6 lg:px-8 py-8 sm:py-12 lg:py-16 text-neutral-800 dark:text-neutral-300"
-    >
+    <div class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-12 px-4 text-neutral-800 md:px-0 dark:text-neutral-300">
       <!-- Hero Section -->
-      <header class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="introduction" id="introduction">
-        <div class="flex flex-col gap-6 sm:gap-8">
-          <h1 class="text-2xl sm:text-3xl lg:text-5xl xl:text-6xl font-bold tracking-tight">Installation</h1>
-          <p class="text-lg sm:text-xl text-muted-foreground leading-relaxed">How to install dependencies and structure your app.</p>
+      <header class="flex flex-col gap-8" scrollSpyItem="introduction" id="introduction">
+        <div class="flex flex-col gap-6">
+          <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">Installation</h1>
+          <p class="text-base leading-7 text-muted-foreground">How to install dependencies and structure your app.</p>
         </div>
       </header>
 
       <!-- Environments Section -->
       <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="environments" id="environments">
         <div class="flex flex-col gap-6">
-          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Pick Your Framework</h2>
-          <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">Choose your preferred development environment to get started with ZardUI.</p>
+          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Pick Your Environment</h2>
+          <p class="leading-relaxed">
+            Start by selecting your environment of choice. Then, follow the instructions to install the dependencies and structure your app. zard/ui is designed to work seamlessly
+            with Angular projects.
+          </p>
         </div>
 
         <div class="grid gap-6 sm:grid-cols-2">
@@ -30,24 +31,20 @@
             ></z-env-card>
             @if (!env.available) {
             <div class="absolute inset-0 flex items-center justify-center bg-background/80 rounded-xl">
-              <span class="bg-muted text-muted-foreground text-xs px-2 py-1 rounded-full font-medium"> Coming Soon </span>
+              <z-badge zType="secondary">Coming Soon</z-badge>
             </div>
+
             }
           </div>
           }
         </div>
-
-        <div class="rounded-lg bg-blue-50 border border-blue-200 p-6 sm:p-8 dark:bg-blue-950 dark:border-blue-800">
-          <div class="flex items-start gap-4">
-            <div class="flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-blue-600 text-white text-sm font-bold shrink-0 mt-1">i</div>
-            <div class="flex flex-col gap-3">
-              <h4 class="text-sm sm:text-base font-semibold text-blue-900 dark:text-blue-100">Framework Support</h4>
-              <p class="text-xs sm:text-sm text-blue-800 dark:text-blue-200 leading-relaxed">
-                Angular is available now with full documentation and examples. Analog and Nx support are coming soon with dedicated guides and configurations.
-              </p>
-            </div>
-          </div>
-        </div>
+        <z-alert
+          zTitle="Framework Support"
+          class="dark:text-blue-100 dark:bg-blue-950 border dark:border-blue-800"
+          zDescription="Angular is available now with full documentation and examples. Analog and Nx support are coming soon with dedicated guides and configurations."
+          zType="info"
+          zAppearance="fill"
+        />
       </section>
     </div>
   </section>
