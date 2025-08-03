@@ -8,6 +8,7 @@ export * from './checkbox/checkbox.component';
 export * from './divider/divider.component';
 export * from './input/input.directive';
 export * from './accordion/accordion.component';
+export * from './accordion/accordion-item.component';
 export * from './loader/loader.component';
 export * from './dropdown/dropdown.component';
 export * from './dropdown/dropdown-item.component';
