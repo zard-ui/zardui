@@ -7,6 +7,7 @@ import { TOOLTIP } from '@zard/components/tooltip/demo/tooltip';
 import { DIVIDER } from '@zard/components/divider/demo/divider';
 import { SWITCH } from '@zard/components/switch/demo/switch';
 import { SLIDER } from '@zard/components/slider/demo/slider';
+import { TABLE } from '@zard/components/table/demo/table';
 import { SELECT } from '@zard/components/select/demo/select';
 import { LOADER } from '@zard/components/loader/demo/loader';
 import { DIALOG } from '@zard/components/dialog/demo/dialog';
@@ -59,6 +60,7 @@ export const COMPONENTS: ComponentData[] = [
   SELECT,
   SLIDER,
   SWITCH,
+  TABLE,
   TABS,
   TOAST,
   TOGGLE,
