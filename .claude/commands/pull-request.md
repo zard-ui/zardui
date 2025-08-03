@@ -1,32 +1,36 @@
 Generate a pull request description for a component using the project's PR template.
 
-# Command Claude
+Use the following template to create a pull request description for a new component in the Zard UI library. Ensure to fill in the sections with relevant information about the component, its features, and any changes made.
 
-This command generates a comprehensive pull request description for component changes based on the `.github/pull_request_template.md` template. You should return using markdown format.
+```markdown
+## What was done? 📝
 
-## What it does:
+<!-- explanation of what was done -->
 
-1. Analyzes the current git changes and component modifications
-2. Generates a structured PR description following the project template
-3. Includes relevant sections like:
-   - What was done
-   - Screenshots/Implementation details
-   - Link to related issue
-   - Type of change checkboxes
-   - Breaking changes (if any)
-   - Testing checklist
+## Screenshots or GIFs 📸
 
-## Usage:
+|-----Figma-----|
+|-----Implementation-----|
 
-When you want to create a pull request for component changes, use this command to generate a well-structured description that follows the project's standards and includes all necessary information for reviewers.
+## Link to Issue 🔗
 
-## Template Structure:
+<!-- provide the link to the related issue here -->
 
-The generated description will follow this format:
+## Type of change 🏗
 
-- **What was done**: Clear explanation of changes
-- **Screenshots or GIFs**: Placeholder for visual comparisons
-- **Link to Issue**: Connection to related GitHub issue
-- **Type of change**: Checkboxes for categorizing the PR
-- **Breaking change**: Documentation of any breaking changes
-- **Checklist**: Browser compatibility and testing verification
+- [ ] New feature (non-breaking change that adds functionality)
+- [ ] Bug fix (non-breaking change that fixes an issue)
+- [ ] Refactor (non-breaking change that improves the code or technical debt)
+- [ ] Chore (none of the above, such as upgrading libraries)
+
+## Breaking change 🚨
+
+<!-- describe here the breaking changes -->
+
+## Checklist 🧐
+
+- [ ] Tested on Chrome
+- [ ] Tested on Safari
+- [ ] Tested Responsiveness
+- [ ] No errors in the console
+```

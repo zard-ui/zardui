@@ -1,14 +1,47 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import {
-  ZardTableComponent,
-  ZardTableHeaderComponent,
   ZardTableBodyComponent,
-  ZardTableRowComponent,
-  ZardTableHeadComponent,
-  ZardTableCellComponent,
   ZardTableCaptionComponent,
+  ZardTableCellComponent,
+  ZardTableComponent,
+  ZardTableHeadComponent,
+  ZardTableHeaderComponent,
+  ZardTableRowComponent,
 } from './table.component';
+
+@Component({
+  selector: 'test-striped-table',
+  standalone: true,
+  imports: [ZardTableComponent],
+  template: `<table z-table zType="striped"></table>`,
+})
+class TestStripedTableComponent {}
+
+@Component({
+  selector: 'test-bordered-table',
+  standalone: true,
+  imports: [ZardTableComponent],
+  template: `<table z-table zType="bordered"></table>`,
+})
+class TestBorderedTableComponent {}
+
+@Component({
+  selector: 'test-compact-table',
+  standalone: true,
+  imports: [ZardTableComponent],
+  template: `<table z-table zSize="compact"></table>`,
+})
+class TestCompactTableComponent {}
+
+@Component({
+  selector: 'test-comfortable-table',
+  standalone: true,
+  imports: [ZardTableComponent],
+  template: `<table z-table zSize="comfortable"></table>`,
+})
+class TestComfortableTableComponent {}
 
 describe('TableComponents', () => {
   describe('ZardTableComponent', () => {
@@ -17,7 +50,7 @@ describe('TableComponents', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [ZardTableComponent],
+        imports: [ZardTableComponent, TestStripedTableComponent, TestBorderedTableComponent, TestCompactTableComponent, TestComfortableTableComponent],
       }).compileComponents();
 
       fixture = TestBed.createComponent(ZardTableComponent);
@@ -37,32 +70,32 @@ describe('TableComponents', () => {
     });
 
     it('should apply striped variant classes', () => {
-      component.zType.set('striped');
-      fixture.detectChanges();
-      const compiled = fixture.nativeElement;
+      const stripedFixture = TestBed.createComponent(TestStripedTableComponent);
+      stripedFixture.detectChanges();
+      const compiled = stripedFixture.nativeElement.querySelector('table');
       expect(compiled.getAttribute('class')).toContain('[&_tbody_tr:nth-child(odd)]:bg-muted/50');
     });
 
     it('should apply bordered variant classes', () => {
-      component.zType.set('bordered');
-      fixture.detectChanges();
-      const compiled = fixture.nativeElement;
+      const borderedFixture = TestBed.createComponent(TestBorderedTableComponent);
+      borderedFixture.detectChanges();
+      const compiled = borderedFixture.nativeElement.querySelector('table');
       expect(compiled.getAttribute('class')).toContain('border');
       expect(compiled.getAttribute('class')).toContain('border-border');
     });
 
     it('should apply compact size classes', () => {
-      component.zSize.set('compact');
-      fixture.detectChanges();
-      const compiled = fixture.nativeElement;
+      const compactFixture = TestBed.createComponent(TestCompactTableComponent);
+      compactFixture.detectChanges();
+      const compiled = compactFixture.nativeElement.querySelector('table');
       expect(compiled.getAttribute('class')).toContain('[&_td]:py-2');
       expect(compiled.getAttribute('class')).toContain('[&_th]:py-2');
     });
 
     it('should apply comfortable size classes', () => {
-      component.zSize.set('comfortable');
-      fixture.detectChanges();
-      const compiled = fixture.nativeElement;
+      const comfortableFixture = TestBed.createComponent(TestComfortableTableComponent);
+      comfortableFixture.detectChanges();
+      const compiled = comfortableFixture.nativeElement.querySelector('table');
       expect(compiled.getAttribute('class')).toContain('[&_td]:py-4');
       expect(compiled.getAttribute('class')).toContain('[&_th]:py-4');
     });

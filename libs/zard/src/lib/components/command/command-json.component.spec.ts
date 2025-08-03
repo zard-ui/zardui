@@ -66,6 +66,9 @@ class TestHostComponent {
         ],
       },
     ],
+    onSelect: (option: ZardCommandOption) => {
+      this.lastAction = `Global: ${option.label}`;
+    },
   };
 
   onSelect(option: ZardCommandOption) {
@@ -116,11 +119,14 @@ describe('ZardCommandJsonComponent', () => {
     expect(firstOption.textContent).toContain('⌘N');
   });
 
-  it('should filter options based on search', () => {
+  it('should filter options based on search', async () => {
     const input = fixture.nativeElement.querySelector('input');
 
     input.value = 'file';
     input.dispatchEvent(new Event('input'));
+
+    // Wait for debounced search to complete
+    await new Promise(resolve => setTimeout(resolve, 200));
     fixture.detectChanges();
 
     const filteredGroups = component.filteredGroups();
@@ -128,11 +134,14 @@ describe('ZardCommandJsonComponent', () => {
     expect(filteredGroups[0].visibleOptions.length).toBe(3); // All file-related options
   });
 
-  it('should filter by command property', () => {
+  it('should filter by command property', async () => {
     const input = fixture.nativeElement.querySelector('input');
 
     input.value = 'search files';
     input.dispatchEvent(new Event('input'));
+
+    // Wait for debounced search to complete
+    await new Promise(resolve => setTimeout(resolve, 200));
     fixture.detectChanges();
 
     const filteredGroups = component.filteredGroups();
@@ -140,11 +149,14 @@ describe('ZardCommandJsonComponent', () => {
     expect(filteredGroups[0].visibleOptions[0].label).toBe('Search File');
   });
 
-  it('should hide empty groups during search', () => {
+  it('should hide empty groups during search', async () => {
     const input = fixture.nativeElement.querySelector('input');
 
     input.value = 'nonexistent';
     input.dispatchEvent(new Event('input'));
+
+    // Wait for debounced search to complete
+    await new Promise(resolve => setTimeout(resolve, 200));
     fixture.detectChanges();
 
     const filteredGroups = component.filteredGroups();
@@ -152,12 +164,17 @@ describe('ZardCommandJsonComponent', () => {
   });
 
   it('should execute option action when clicked', () => {
+    // Reset lastAction to ensure we can test both individual and global actions
+    hostComponent.lastAction = '';
+
     const firstOption = fixture.nativeElement.querySelector('z-command-option');
 
     firstOption.click();
     fixture.detectChanges();
 
-    expect(hostComponent.lastAction).toBe('New file created!');
+    // The global onSelect should be called after the individual action
+    // So we expect the global callback to overwrite the individual action's result
+    expect(hostComponent.lastAction).toBe('Global: New File');
   });
 
   it('should emit zOnSelect and zOnChange events', () => {
@@ -192,11 +209,16 @@ describe('ZardCommandJsonComponent', () => {
   });
 
   it('should handle keyboard shortcuts', () => {
+    // Reset lastAction to ensure we can test both individual and global actions
+    hostComponent.lastAction = '';
+
     const keyEvent = new KeyboardEvent('keydown', { key: 'n', metaKey: true });
     component.handleKeydown(keyEvent);
     fixture.detectChanges();
 
-    expect(hostComponent.lastAction).toBe('New file created!');
+    // The global onSelect should be called after the individual action
+    // So we expect the global callback to overwrite the individual action's result
+    expect(hostComponent.lastAction).toBe('Global: New File');
   });
 
   it('should handle keyboard shortcuts for options without actions', () => {
@@ -208,7 +230,7 @@ describe('ZardCommandJsonComponent', () => {
     expect(hostComponent.selectedOption?.value).toBe('open');
   });
 
-  it('should hide dividers during search', () => {
+  it('should hide dividers during search', async () => {
     const input = fixture.nativeElement.querySelector('input');
 
     // Initially should have dividers
@@ -218,6 +240,9 @@ describe('ZardCommandJsonComponent', () => {
     // After search, dividers should be hidden
     input.value = 'file';
     input.dispatchEvent(new Event('input'));
+
+    // Wait for debounced search to complete
+    await new Promise(resolve => setTimeout(resolve, 200));
     fixture.detectChanges();
 
     const visibleDividers = fixture.nativeElement.querySelectorAll('z-command-divider > div');
@@ -232,11 +257,14 @@ describe('ZardCommandJsonComponent', () => {
     expect(dividers.length).toBe(expectedDividers);
   });
 
-  it('should render empty text when no results', () => {
+  it('should render empty text when no results', async () => {
     const input = fixture.nativeElement.querySelector('input');
 
     input.value = 'nonexistent';
     input.dispatchEvent(new Event('input'));
+
+    // Wait for debounced search to complete
+    await new Promise(resolve => setTimeout(resolve, 200));
     fixture.detectChanges();
 
     const emptyElement = fixture.nativeElement.querySelector('z-command-empty');
