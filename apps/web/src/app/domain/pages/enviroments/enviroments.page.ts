@@ -5,12 +5,13 @@ import { EnvCardComponent } from '../../components/env-card/env-card.component';
 import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
 import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
+import { ZardBadgeComponent, ZardAlertComponent } from '@zard/components/components';
 
 @Component({
   selector: 'z-enviroments',
   templateUrl: './enviroments.page.html',
   standalone: true,
-  imports: [CommonModule, EnvCardComponent, DynamicAnchorComponent, ScrollSpyDirective, ScrollSpyItemDirective],
+  imports: [CommonModule, EnvCardComponent, DynamicAnchorComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardBadgeComponent, ZardAlertComponent],
 })
 export class EnviromentsPage {
   activeAnchor?: string;
