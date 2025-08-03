@@ -33,7 +33,11 @@
       "mcp__playwright__browser_close",
       "mcp__ESLint__lint-files",
       "Bash(npx nx build:*)",
-      "WebFetch(domain:raw.githubusercontent.com)"
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(npm install:*)",
+      "Bash(mkdir:*)",
+      "Bash(mv:*)",
+      "WebFetch(domain:docs.anthropic.com)"
     ]
   },
   "enableAllProjectMcpServers": true,
