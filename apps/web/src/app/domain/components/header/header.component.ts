@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, HostListener, ViewChild } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
@@ -20,6 +20,8 @@ import { DocResearcherComponent } from '../doc-researcher/doc-researcher.compone
   imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe, DocResearcherComponent],
 })
 export class HeaderComponent implements OnInit {
+  @ViewChild(DocResearcherComponent) docResearcher!: DocResearcherComponent;
+
   readonly headerPaths = HEADER_PATHS;
   readonly githubData = SOCIAL_MEDIAS.find(media => media.name === 'GitHub');
   readonly appVersion = environment.appVersion;
@@ -37,5 +39,14 @@ export class HeaderComponent implements OnInit {
 
   getCurrentTheme(): 'light' | 'dark' {
     return this.darkmodeService.getCurrentTheme();
+  }
+
+  @HostListener('window:keydown', ['$event'])
+  handleKeyboardShortcut(event: KeyboardEvent) {
+    // Handle Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+    if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      this.docResearcher.openCommandDialog();
+    }
   }
 }

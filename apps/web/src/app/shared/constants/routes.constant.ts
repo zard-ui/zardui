@@ -11,15 +11,15 @@ export const HEADER_PATHS = [
 const DOCS_PATH = {
   title: 'Getting Started',
   data: [
-    { name: 'introduction', path: '/docs/introduction', available: true },
-    { name: 'installation', path: '/docs/installation', available: true },
-    { name: 'components.json', path: '/docs', available: false },
-    { name: 'theming', path: '/docs/theming', available: true },
-    { name: 'dark mode', path: '/docs/dark-mode', available: true },
+    { name: 'Introduction', path: '/docs/introduction', available: true },
+    { name: 'Installation', path: '/docs/installation', available: true },
+    { name: 'Components.json', path: '/docs', available: false },
+    { name: 'Theming', path: '/docs/theming', available: true },
+    { name: 'Dark Mode', path: '/docs/dark-mode', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
-    { name: 'figma', path: '/docs/figma', available: true },
-    { name: 'change log', path: '/docs', available: false },
-    { name: 'About & credits', path: '/docs/about', available: true },
+    { name: 'Figma', path: '/docs/figma', available: true },
+    { name: 'Changelog', path: '/docs', available: false },
+    { name: 'About & Credits', path: '/docs/about', available: true },
   ],
 };
 
@@ -48,7 +48,7 @@ const COMPONENTS_PATH = {
     { name: 'Switch', path: '/docs/components/switch', available: true },
     { name: 'Table', path: '/docs/components', available: false },
     { name: 'Tabs', path: '/docs/components/tabs', available: true },
-    { name: 'Toast', path: '/docs/components', available: false },
+    { name: 'Toast', path: '/docs/components/toast', available: true },
     { name: 'Toggle', path: '/docs/components/toggle', available: true },
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
     { name: 'Radio', path: '/docs/components/radio', available: true },

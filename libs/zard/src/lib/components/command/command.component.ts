@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ContentChild,
   ContentChildren,
   EventEmitter,
   forwardRef,
@@ -18,6 +19,7 @@ import {
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { commandVariants, ZardCommandVariants } from './command.variants';
 
@@ -75,6 +77,7 @@ export interface ZardCommandConfig {
   ],
 })
 export class ZardCommandComponent implements ControlValueAccessor, AfterContentInit {
+  @ContentChild(ZardCommandInputComponent) commandInput?: ZardCommandInputComponent;
   @ContentChildren(ZardCommandOptionComponent, { descendants: true })
   optionComponents!: QueryList<ZardCommandOptionComponent>;
 
@@ -92,15 +95,17 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
 
   // Computed signal for filtered options - this will automatically update when searchTerm changes
   readonly filteredOptions = computed(() => {
+    const searchTerm = this.searchTerm();
+
     if (!this.optionComponents) return [];
 
-    const searchTerm = this.searchTerm().toLowerCase();
-    if (searchTerm === '') return this.optionComponents.toArray();
+    const lowerSearchTerm = searchTerm.toLowerCase().trim();
+    if (lowerSearchTerm === '') return this.optionComponents.toArray();
 
     return this.optionComponents.filter(option => {
       const label = option.zLabel().toLowerCase();
       const command = option.zCommand()?.toLowerCase() || '';
-      return label.includes(searchTerm) || command.includes(searchTerm);
+      return label.includes(lowerSearchTerm) || command.includes(lowerSearchTerm);
     });
   });
 
@@ -225,5 +230,12 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
 
   setDisabledState(_isDisabled: boolean): void {
     // Implementation if needed for form control disabled state
+  }
+
+  /**
+   * Focus the command input
+   */
+  focus(): void {
+    this.commandInput?.focus();
   }
 }
