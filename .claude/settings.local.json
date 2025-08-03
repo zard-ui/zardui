@@ -41,8 +41,5 @@
     ]
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "playwright",
-    "ESLint"
-  ]
+  "enabledMcpjsonServers": ["playwright", "ESLint"]
 }
