@@ -1,19 +1,16 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
-import { Component, inject, signal, type OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { DynamicAnchorComponent, type Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { StepsComponent } from '@zard/domain/components/steps/steps.component';
-import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
 import { Installation, installations } from '@zard/shared/constants/install.constant';
 
 @Component({
   selector: 'z-install',
   templateUrl: './install.page.html',
   standalone: true,
-  imports: [CommonModule, StepsComponent, DynamicAnchorComponent, ScrollSpyDirective, ScrollSpyItemDirective],
+  imports: [CommonModule, StepsComponent, DynamicAnchorComponent],
 })
 export class InstallPage implements OnInit {
   private readonly titleService = inject(Title);
