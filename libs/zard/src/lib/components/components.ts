@@ -34,5 +34,6 @@ export * from './command/command-empty.component';
 export * from './command/command-option.component';
 export * from './command/command-option-group.component';
 export * from './command/command-divider.component';
+export * from './command/command.module';
 export * from './tooltip/tooltip';
 export * from './toast/toast.component';

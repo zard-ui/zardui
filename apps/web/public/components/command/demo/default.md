@@ -1,25 +1,12 @@
 ```angular-ts showLineNumbers
 import { Component, HostListener } from '@angular/core';
 
-import { ZardCommandDividerComponent } from '../command-divider.component';
-import { ZardCommandEmptyComponent } from '../command-empty.component';
-import { ZardCommandInputComponent } from '../command-input.component';
-import { ZardCommandListComponent } from '../command-list.component';
-import { ZardCommandOptionGroupComponent } from '../command-option-group.component';
-import { ZardCommandOptionComponent } from '../command-option.component';
-import { ZardCommandComponent, ZardCommandOption } from '../command.component';
+import { ZardCommandModule } from '../command.module';
+import { ZardCommandOption } from '../command.component';
 
 @Component({
   standalone: true,
-  imports: [
-    ZardCommandComponent,
-    ZardCommandInputComponent,
-    ZardCommandListComponent,
-    ZardCommandEmptyComponent,
-    ZardCommandOptionComponent,
-    ZardCommandOptionGroupComponent,
-    ZardCommandDividerComponent,
-  ],
+  imports: [ZardCommandModule],
   template: `
     <z-command class="md:min-w-[500px]" (zOnSelect)="handleCommand($event)">
       <z-command-input placeholder="Search actions, files, and more..."></z-command-input>

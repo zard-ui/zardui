@@ -1,12 +1,12 @@
 ```angular-ts showLineNumbers
 import { Component, signal } from '@angular/core';
 
-import { ZardCommandJsonComponent } from '../command-json.component';
 import { ZardCommandConfig } from '../command.component';
+import { ZardCommandModule } from '../command.module';
 
 @Component({
   standalone: true,
-  imports: [ZardCommandJsonComponent],
+  imports: [ZardCommandModule],
   template: `
     <div class="space-y-4">
       <z-command-json [config]="commandConfig" class="md:min-w-[500px]"></z-command-json>
@@ -89,8 +89,6 @@ export class ZardDemoCommandJsonComponent {
       },
     ],
   };
-
-  readonly configJson = JSON.stringify(this.commandConfig, null, 2);
 
   private showNotification(message: string) {
     console.log(`🔔 ${message}`);

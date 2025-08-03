@@ -124,8 +124,11 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
   onKeyDown(event: KeyboardEvent) {
     // Let parent command component handle navigation keys
     if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
-      event.preventDefault(); // Prevent default input behavior
-      event.stopPropagation(); // Stop the event from bubbling up
+      // For Escape key, don't stop propagation to allow document listener to work
+      if (event.key !== 'Escape') {
+        event.preventDefault(); // Prevent default input behavior
+        event.stopPropagation(); // Stop the event from bubbling up
+      }
 
       // Try both types of parent components
       if (this.commandComponent) {
@@ -152,6 +155,13 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
   setDisabledState(_isDisabled: boolean): void {
     // Implementation if needed for form control disabled state
+  }
+
+  /**
+   * Focus the input element
+   */
+  focus(): void {
+    this.searchInput.nativeElement.focus();
   }
 
   ngOnDestroy(): void {
