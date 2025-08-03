@@ -26,12 +26,9 @@ export class HeaderComponent implements OnInit {
   private readonly githubService = inject(GithubService);
   private readonly darkmodeService = inject(DarkModeService);
   readonly $repoStars: Observable<number> = this.githubService.getStarsCount();
+
   ngOnInit(): void {
     this.darkmodeService.initTheme();
-
-    this.githubService.getContributors().subscribe(contributors => {
-      console.log('Contributors:', contributors);
-    });
   }
 
   toggleTheme(): void {
