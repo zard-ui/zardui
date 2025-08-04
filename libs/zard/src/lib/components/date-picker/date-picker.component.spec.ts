@@ -57,4 +57,37 @@ describe('ZardDatePickerComponent', () => {
     const button = compiled.querySelector('button');
     expect(button?.disabled).toBe(true);
   });
+
+  it('should format date using custom zFormat', () => {
+    const testDate = new Date(2024, 0, 15); // January 15, 2024
+    fixture.componentRef.setInput('value', testDate);
+    fixture.componentRef.setInput('zFormat', 'MM/dd/yyyy');
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('button');
+    expect(button?.textContent?.trim()).toContain('01/15/2024');
+  });
+
+  it('should format date using European format', () => {
+    const testDate = new Date(2024, 0, 15); // January 15, 2024
+    fixture.componentRef.setInput('value', testDate);
+    fixture.componentRef.setInput('zFormat', 'dd-MM-yyyy');
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('button');
+    expect(button?.textContent?.trim()).toContain('15-01-2024');
+  });
+
+  it('should format date with day names', () => {
+    const testDate = new Date(2024, 0, 15); // January 15, 2024 (Monday)
+    fixture.componentRef.setInput('value', testDate);
+    fixture.componentRef.setInput('zFormat', 'EEE, MMM d');
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('button');
+    expect(button?.textContent?.trim()).toContain('Mon, Jan 15');
+  });
 });
