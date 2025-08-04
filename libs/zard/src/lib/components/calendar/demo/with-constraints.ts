@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 
 import { ZardCalendarComponent } from '../calendar.component';
 
+const DAYS_IN_FUTURE = 30;
+const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
+
 @Component({
   standalone: true,
   imports: [ZardCalendarComponent],
@@ -22,7 +25,7 @@ import { ZardCalendarComponent } from '../calendar.component';
 })
 export class ZardDemoCalendarWithConstraintsComponent {
   minDate = new Date();
-  maxDate = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days from now
+  maxDate = new Date(Date.now() + DAYS_IN_FUTURE * MILLISECONDS_PER_DAY);
 
   constructor() {
     // Set min date to today
