@@ -12,6 +12,7 @@ import { SELECT } from '@zard/components/select/demo/select';
 import { LOADER } from '@zard/components/loader/demo/loader';
 import { DIALOG } from '@zard/components/dialog/demo/dialog';
 import { BUTTON } from '@zard/components/button/demo/button';
+import { CALENDAR } from '@zard/components/calendar/demo/calendar';
 import { AVATAR } from '@zard/components/avatar/demo/avatar';
 import { RADIO } from '@zard/components/radio/demo/radio';
 import { INPUT } from '@zard/components/input/demo/input';
@@ -47,6 +48,7 @@ export const COMPONENTS: ComponentData[] = [
   BADGE,
   BUTTON,
   BREADCRUMB,
+  CALENDAR,
   CARD,
   CHECKBOX,
   COMMAND,

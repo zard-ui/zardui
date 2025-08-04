@@ -12,6 +12,7 @@ import { selectItemVariants } from './select.variants';
   imports: [NgIf],
   host: {
     '[class]': 'classes()',
+    '[attr.value]': 'value()',
     role: 'option',
     tabindex: '-1',
     '[attr.data-disabled]': 'disabled() ? "" : null',
