@@ -25,7 +25,7 @@
 </main>
 
 @if (!config.zHideFooter) {
-  <footer class="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+  <footer class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-0 sm:space-x-2">
     @if (config.zCancelText !== null) {
       <button data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
         @if (config.zCancelIcon) {
