@@ -93,6 +93,10 @@ export type { ZardCalendarVariants };
   `,
 })
 export class ZardCalendarComponent {
+  // Public method to reset navigation (useful for date-picker)
+  resetNavigation(): void {
+    this.navigationDate.set(null);
+  }
   readonly class = input<ClassValue>('');
   readonly zSize = input<ZardCalendarVariants['zSize']>('default');
   readonly value = input<Date | null>(null);
@@ -102,8 +106,26 @@ export class ZardCalendarComponent {
 
   readonly dateChange = output<Date>();
 
-  private readonly currentDate = signal(new Date());
+  private readonly navigationDate = signal<Date | null>(null);
   private readonly selectedDate = signal<Date | null>(new Date());
+
+  // Computed current date that uses navigation date if set, otherwise selected value's month
+  private readonly currentDate = computed(() => {
+    const navigation = this.navigationDate();
+    if (navigation) {
+      // If user has navigated manually, use that
+      return navigation;
+    }
+
+    const value = this.value();
+    if (value) {
+      // If there's a selected value but no manual navigation, show that month
+      return new Date(value.getFullYear(), value.getMonth(), 1);
+    }
+
+    // Default to today if no selected value and no navigation
+    return new Date();
+  });
 
   readonly weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
   readonly months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -189,7 +211,7 @@ export class ZardCalendarComponent {
 
     const current = this.currentDate();
     const newDate = new Date(current.getFullYear(), parsedMonth, 1);
-    this.currentDate.set(newDate);
+    this.navigationDate.set(newDate);
   }
 
   protected onYearChange(year: string): void {
@@ -206,7 +228,7 @@ export class ZardCalendarComponent {
 
     const current = this.currentDate();
     const newDate = new Date(parsedYear, current.getMonth(), 1);
-    this.currentDate.set(newDate);
+    this.navigationDate.set(newDate);
   }
 
   protected readonly calendarDays = computed(() => {
@@ -271,13 +293,13 @@ export class ZardCalendarComponent {
   protected previousMonth() {
     const current = this.currentDate();
     const previous = new Date(current.getFullYear(), current.getMonth() - 1, 1);
-    this.currentDate.set(previous);
+    this.navigationDate.set(previous);
   }
 
   protected nextMonth() {
     const current = this.currentDate();
     const next = new Date(current.getFullYear(), current.getMonth() + 1, 1);
-    this.currentDate.set(next);
+    this.navigationDate.set(next);
   }
 
   protected isPreviousDisabled(): boolean {

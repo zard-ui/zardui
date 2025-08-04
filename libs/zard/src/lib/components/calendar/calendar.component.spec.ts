@@ -110,7 +110,7 @@ describe('ZardCalendarComponent', () => {
   describe('Navigation', () => {
     it('should navigate to previous month', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(initialDate);
+      component['navigationDate'].set(initialDate);
       fixture.detectChanges();
 
       component['previousMonth']();
@@ -122,7 +122,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should navigate to next month', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(initialDate);
+      component['navigationDate'].set(initialDate);
       fixture.detectChanges();
 
       component['nextMonth']();
@@ -137,7 +137,7 @@ describe('ZardCalendarComponent', () => {
       const currentDate = new Date(2024, 5, 15); // June 15, 2024
 
       fixture.componentRef.setInput('minDate', minDate);
-      component['currentDate'].set(currentDate);
+      component['navigationDate'].set(currentDate);
       fixture.detectChanges();
 
       expect(component['isPreviousDisabled']()).toBe(true);
@@ -148,7 +148,7 @@ describe('ZardCalendarComponent', () => {
       const currentDate = new Date(2024, 5, 15); // June 15, 2024
 
       fixture.componentRef.setInput('maxDate', maxDate);
-      component['currentDate'].set(currentDate);
+      component['navigationDate'].set(currentDate);
       fixture.detectChanges();
 
       expect(component['isNextDisabled']()).toBe(true);
@@ -166,7 +166,7 @@ describe('ZardCalendarComponent', () => {
   describe('Month and Year Selection', () => {
     it('should change month when valid month index is provided', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(initialDate);
+      component['navigationDate'].set(initialDate);
       fixture.detectChanges();
 
       component['onMonthChange']('2'); // March (index 2)
@@ -178,7 +178,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should not change month when invalid month index is provided', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(initialDate);
+      component['navigationDate'].set(initialDate);
       fixture.detectChanges();
 
       component['onMonthChange']('invalid');
@@ -191,7 +191,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should change year when valid year is provided', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(initialDate);
+      component['navigationDate'].set(initialDate);
       fixture.detectChanges();
 
       component['onYearChange']('2025');
@@ -203,7 +203,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should not change year when invalid year is provided', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(initialDate);
+      component['navigationDate'].set(initialDate);
       fixture.detectChanges();
 
       component['onYearChange']('invalid');
@@ -217,7 +217,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should return correct current month name', () => {
       const date = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(date);
+      component['navigationDate'].set(date);
       fixture.detectChanges();
 
       expect(component['getCurrentMonthName']()).toBe('Jun');
@@ -225,7 +225,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should return correct current year', () => {
       const date = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(date);
+      component['navigationDate'].set(date);
       fixture.detectChanges();
 
       expect(component['getCurrentYear']()).toBe(2024);
@@ -235,7 +235,7 @@ describe('ZardCalendarComponent', () => {
   describe('Calendar Days Generation', () => {
     it('should generate calendar days for current month', () => {
       const date = new Date(2024, 0, 1); // January 2024
-      component['currentDate'].set(date);
+      component['navigationDate'].set(date);
       fixture.detectChanges();
 
       const calendarDays = component['calendarDays']();
@@ -248,7 +248,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should mark today correctly', () => {
       const today = new Date();
-      component['currentDate'].set(new Date(today.getFullYear(), today.getMonth(), 1));
+      component['navigationDate'].set(new Date(today.getFullYear(), today.getMonth(), 1));
       fixture.detectChanges();
 
       const calendarDays = component['calendarDays']();
@@ -263,7 +263,7 @@ describe('ZardCalendarComponent', () => {
     it('should mark selected date correctly', () => {
       const selectedDate = new Date(2024, 0, 15);
       fixture.componentRef.setInput('value', selectedDate);
-      component['currentDate'].set(new Date(2024, 0, 1));
+      component['navigationDate'].set(new Date(2024, 0, 1));
       fixture.detectChanges();
 
       const calendarDays = component['calendarDays']();
@@ -281,7 +281,7 @@ describe('ZardCalendarComponent', () => {
 
       fixture.componentRef.setInput('minDate', minDate);
       fixture.componentRef.setInput('maxDate', maxDate);
-      component['currentDate'].set(new Date(2024, 0, 1));
+      component['navigationDate'].set(new Date(2024, 0, 1));
       fixture.detectChanges();
 
       const calendarDays = component['calendarDays']();
@@ -457,7 +457,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should compute current month value correctly', () => {
       const date = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(date);
+      component['navigationDate'].set(date);
       fixture.detectChanges();
 
       expect(component['currentMonthValue']()).toBe('5');
@@ -465,7 +465,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should compute current year value correctly', () => {
       const date = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(date);
+      component['navigationDate'].set(date);
       fixture.detectChanges();
 
       expect(component['currentYearValue']()).toBe('2024');
@@ -473,7 +473,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should compute current month year correctly', () => {
       const date = new Date(2024, 5, 1); // June 2024
-      component['currentDate'].set(date);
+      component['navigationDate'].set(date);
       fixture.detectChanges();
 
       expect(component['currentMonthYear']()).toBe('June 2024');

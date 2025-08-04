@@ -14,6 +14,7 @@ import { DIALOG } from '@zard/components/dialog/demo/dialog';
 import { BUTTON } from '@zard/components/button/demo/button';
 import { CALENDAR } from '@zard/components/calendar/demo/calendar';
 import { AVATAR } from '@zard/components/avatar/demo/avatar';
+import { DATE_PICKER } from '@zard/components/date-picker/demo/date-picker';
 import { RADIO } from '@zard/components/radio/demo/radio';
 import { INPUT } from '@zard/components/input/demo/input';
 import { BADGE } from '@zard/components/badge/demo/badge';
@@ -52,6 +53,7 @@ export const COMPONENTS: ComponentData[] = [
   CARD,
   CHECKBOX,
   COMMAND,
+  DATE_PICKER,
   DIALOG,
   DIVIDER,
   DROPDOWN,
