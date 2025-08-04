@@ -17,6 +17,7 @@ import { RADIO } from '@zard/components/radio/demo/radio';
 import { INPUT } from '@zard/components/input/demo/input';
 import { BADGE } from '@zard/components/badge/demo/badge';
 import { ALERT } from '@zard/components/alert/demo/alert';
+import { ALERT_DIALOG } from '@zard/components/alert-dialog/demo/alert-dialog';
 import { TABS } from '@zard/components/tabs/demo/tabs';
 import { CARD } from '@zard/components/card/demo/card';
 import { ComponentType } from '@angular/cdk/overlay';
@@ -42,6 +43,7 @@ export interface ExampleData {
 
 export const COMPONENTS: ComponentData[] = [
   ALERT,
+  ALERT_DIALOG,
   ACCORDION,
   AVATAR,
   BADGE,
