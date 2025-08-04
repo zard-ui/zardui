@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, input, output, signal, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
@@ -14,6 +14,7 @@ export interface CalendarDay {
   isToday: boolean;
   isSelected: boolean;
   isDisabled: boolean;
+  id?: string;
 }
 
 export type { ZardCalendarVariants };
@@ -25,9 +26,14 @@ export type { ZardCalendarVariants };
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   imports: [ZardButtonComponent, ZardSelectComponent, ZardSelectItemComponent],
-  host: {},
+  host: {
+    '(keydown)': 'onKeyDown($event)',
+    '[attr.tabindex]': '0',
+    '[attr.role]': '"grid"',
+    '[attr.aria-label]': '"Calendar"',
+  },
   template: `
-    <div [class]="classes()">
+    <div [class]="classes()" #calendarContainer>
       <!-- Navigation Header -->
       <div [class]="navClasses()">
         <button
@@ -39,7 +45,7 @@ export type { ZardCalendarVariants };
           aria-label="Previous month"
           [class]="navButtonClasses()"
         >
-          <i class="icon-chevron-left w-4 h-4"></i>
+          <i class="icon-chevron-left"></i>
         </button>
 
         <!-- Month and Year Selectors -->
@@ -60,29 +66,32 @@ export type { ZardCalendarVariants };
         </div>
 
         <button z-button zType="ghost" [zSize]="navButtonSize()" (click)="nextMonth()" [disabled]="isNextDisabled()" aria-label="Next month" [class]="navButtonClasses()">
-          <i class="icon-chevron-right w-4 h-4"></i>
+          <i class="icon-chevron-right"></i>
         </button>
       </div>
 
       <!-- Weekdays Header -->
-      <div class="grid grid-cols-7 text-center">
+      <div class="grid grid-cols-7 text-center" role="row">
         @for (weekday of weekdays; track $index) {
-          <div [class]="weekdayClasses()">
+          <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
           </div>
         }
       </div>
 
       <!-- Calendar Days Grid -->
-      <div class="grid grid-cols-7 gap-0 mt-2">
-        @for (day of calendarDays(); track day.date.getTime()) {
-          <div [class]="dayContainerClasses()">
+      <div class="grid grid-cols-7 gap-0 mt-2" role="rowgroup">
+        @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
+          <div [class]="dayContainerClasses()" role="gridcell">
             <button
+              [id]="getDayId(i)"
               [class]="dayButtonClasses(day)"
               (click)="selectDate(day.date)"
               [disabled]="day.isDisabled"
               [attr.aria-selected]="day.isSelected"
               [attr.aria-label]="getDayAriaLabel(day)"
+              [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
+              role="button"
             >
               {{ day.date.getDate() }}
             </button>
@@ -93,6 +102,8 @@ export type { ZardCalendarVariants };
   `,
 })
 export class ZardCalendarComponent {
+  @ViewChild('calendarContainer', { static: true }) private calendarContainer!: ElementRef<HTMLElement>;
+
   // Public method to reset navigation (useful for date-picker)
   resetNavigation(): void {
     this.navigationDate.set(null);
@@ -108,6 +119,7 @@ export class ZardCalendarComponent {
 
   private readonly navigationDate = signal<Date | null>(null);
   private readonly selectedDate = signal<Date | null>(new Date());
+  private readonly focusedDayIndex = signal<number>(-1);
 
   // Computed current date that uses navigation date if set, otherwise selected value's month
   private readonly currentDate = computed(() => {
@@ -354,6 +366,220 @@ export class ZardCalendarComponent {
     if (day.isDisabled) labels.push('Disabled');
 
     return labels.join(', ');
+  }
+
+  protected getDayId(index: number): string {
+    return `calendar-day-${index}`;
+  }
+
+  protected getFocusedDayIndex(): number {
+    const focused = this.focusedDayIndex();
+    if (focused >= 0) return focused;
+
+    // Default focus to selected date or today
+    const days = this.calendarDays();
+    const selectedIndex = days.findIndex(day => day.isSelected);
+    if (selectedIndex >= 0) return selectedIndex;
+
+    const todayIndex = days.findIndex(day => day.isToday && day.isCurrentMonth);
+    if (todayIndex >= 0) return todayIndex;
+
+    // Fall back to first enabled day of current month
+    const firstCurrentMonthIndex = days.findIndex(day => day.isCurrentMonth && !day.isDisabled);
+    return firstCurrentMonthIndex >= 0 ? firstCurrentMonthIndex : 0;
+  }
+
+  onKeyDown(event: KeyboardEvent): void {
+    if (this.disabled()) return;
+
+    const days = this.calendarDays();
+    if (days.length === 0) return;
+
+    const currentIndex = this.getFocusedDayIndex();
+    let newIndex: number | null = null;
+
+    switch (event.key) {
+      case 'ArrowLeft':
+        event.preventDefault();
+        newIndex = this.navigate(currentIndex, -1, days);
+        break;
+      case 'ArrowRight':
+        event.preventDefault();
+        newIndex = this.navigate(currentIndex, 1, days);
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        newIndex = this.navigate(currentIndex, -7, days);
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        newIndex = this.navigate(currentIndex, 7, days);
+        break;
+      case 'Home':
+        event.preventDefault();
+        newIndex = this.findEnabledInRange(Math.floor(currentIndex / 7) * 7, Math.floor(currentIndex / 7) * 7 + 6, days);
+        break;
+      case 'End':
+        event.preventDefault();
+        newIndex = this.findEnabledInRange(Math.floor(currentIndex / 7) * 7 + 6, Math.floor(currentIndex / 7) * 7, days, true);
+        break;
+      case 'PageUp':
+        event.preventDefault();
+        if (event.ctrlKey) {
+          this.navigateYear(-1);
+        } else {
+          this.previousMonth();
+        }
+        this.resetFocusAfterNavigation();
+        return;
+      case 'PageDown':
+        event.preventDefault();
+        if (event.ctrlKey) {
+          this.navigateYear(1);
+        } else {
+          this.nextMonth();
+        }
+        this.resetFocusAfterNavigation();
+        return;
+      case 'Enter':
+      case ' ': {
+        event.preventDefault();
+        const focusedDay = days[currentIndex];
+        if (focusedDay && !focusedDay.isDisabled) {
+          this.selectDate(focusedDay.date);
+        }
+        return;
+      }
+      default:
+        return;
+    }
+
+    if (newIndex !== null && newIndex !== currentIndex) {
+      this.setFocus(newIndex);
+    }
+  }
+
+  private navigate(currentIndex: number, step: number, days: CalendarDay[]): number | null {
+    const targetIndex = currentIndex + step;
+
+    // If within bounds, find enabled day
+    if (targetIndex >= 0 && targetIndex < days.length) {
+      return this.findEnabledInRange(targetIndex, currentIndex, days);
+    }
+
+    // Handle month boundaries
+    const dayOfWeek = currentIndex % 7;
+
+    if (step === -1) {
+      // Going left - navigate to previous month, focus last day
+      this.previousMonth();
+      setTimeout(() => this.resetFocusAfterNavigation('last'), 0);
+    } else if (step === 1) {
+      // Going right - navigate to next month, focus first day
+      this.nextMonth();
+      setTimeout(() => this.resetFocusAfterNavigation('first'), 0);
+    } else if (step === -7) {
+      // Going up - navigate to previous month, preserve column
+      this.previousMonth();
+      setTimeout(() => this.resetFocusAfterNavigation('lastWeek', dayOfWeek), 0);
+    } else if (step === 7) {
+      // Going down - navigate to next month, preserve column
+      this.nextMonth();
+      setTimeout(() => this.resetFocusAfterNavigation('firstWeek', dayOfWeek), 0);
+    }
+
+    return null;
+  }
+
+  private findEnabledInRange(start: number, fallback: number, days: CalendarDay[], reverse = false): number {
+    const clampedStart = Math.max(0, Math.min(start, days.length - 1));
+    const clampedFallback = Math.max(0, Math.min(fallback, days.length - 1));
+
+    if (!reverse) {
+      // Search forward from start
+      for (let i = clampedStart; i < days.length; i++) {
+        if (!days[i].isDisabled) return i;
+      }
+      // Search backward from start
+      for (let i = clampedStart - 1; i >= 0; i--) {
+        if (!days[i].isDisabled) return i;
+      }
+    } else {
+      // Search backward from start
+      for (let i = clampedStart; i >= 0; i--) {
+        if (!days[i].isDisabled) return i;
+      }
+      // Search forward from start
+      for (let i = clampedStart + 1; i < days.length; i++) {
+        if (!days[i].isDisabled) return i;
+      }
+    }
+
+    return clampedFallback;
+  }
+
+  private setFocus(index: number): void {
+    this.focusedDayIndex.set(index);
+    setTimeout(() => {
+      const dayElement = this.calendarContainer.nativeElement.querySelector(`#${this.getDayId(index)}`) as HTMLElement;
+      dayElement?.focus();
+    }, 0);
+  }
+
+  private navigateYear(direction: number): void {
+    const current = this.currentDate();
+    const newDate = new Date(current.getFullYear() + direction, current.getMonth(), 1);
+    this.navigationDate.set(newDate);
+  }
+
+  private resetFocusAfterNavigation(position = 'default', dayOfWeek = -1): void {
+    setTimeout(() => {
+      const days = this.calendarDays();
+      let targetIndex = -1;
+
+      switch (position) {
+        case 'first':
+          // Focus first enabled day
+          targetIndex = days.findIndex(day => !day.isDisabled);
+          break;
+        case 'last':
+          // Focus last enabled day
+          for (let i = days.length - 1; i >= 0; i--) {
+            if (!days[i].isDisabled) {
+              targetIndex = i;
+              break;
+            }
+          }
+          break;
+        case 'firstWeek':
+          // Focus same day of week in first week
+          if (dayOfWeek >= 0 && dayOfWeek < 7) {
+            targetIndex = this.findEnabledInRange(dayOfWeek, 0, days);
+          }
+          break;
+        case 'lastWeek':
+          // Focus same day of week in last week
+          if (dayOfWeek >= 0) {
+            const lastWeekStart = Math.floor((days.length - 1) / 7) * 7;
+            const targetIdx = Math.min(lastWeekStart + dayOfWeek, days.length - 1);
+            targetIndex = this.findEnabledInRange(targetIdx, days.length - 1, days);
+          }
+          break;
+        default: {
+          // Default priority: selected > today > first enabled
+          const selectedIndex = days.findIndex(day => day.isSelected);
+          const todayIndex = days.findIndex(day => day.isToday && day.isCurrentMonth);
+          const firstEnabledIndex = days.findIndex(day => day.isCurrentMonth && !day.isDisabled);
+
+          targetIndex = selectedIndex >= 0 ? selectedIndex : todayIndex >= 0 ? todayIndex : firstEnabledIndex >= 0 ? firstEnabledIndex : 0;
+          break;
+        }
+      }
+
+      if (targetIndex >= 0) {
+        this.setFocus(targetIndex);
+      }
+    }, 0);
   }
 
   private isSameDay(date1: Date, date2: Date): boolean {
