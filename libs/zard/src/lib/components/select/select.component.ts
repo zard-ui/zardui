@@ -100,14 +100,20 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   readonly size = input<ZardSelectTriggerVariants['size']>('default');
   readonly disabled = input<boolean>(false);
   readonly placeholder = input<string>('Select an option...');
+  readonly value = input<string>('');
+  readonly label = input<string>('');
   readonly class = input<string>('');
 
   readonly selectionChange = output<string>();
 
   readonly isOpen = signal(false);
-  readonly selectedValue = signal<string>('');
-  readonly selectedLabel = signal<string>('');
+  private readonly _selectedValue = signal<string>('');
+  private readonly _selectedLabel = signal<string>('');
   readonly focusedIndex = signal<number>(-1);
+
+  // Use computed to derive the effective selected value from input or internal state
+  readonly selectedValue = computed(() => this.value() || this._selectedValue());
+  readonly selectedLabel = computed(() => this.label() || this._selectedLabel());
 
   private onChange = (_value: string) => {
     // ControlValueAccessor onChange callback
@@ -131,6 +137,11 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
     // Delay overlay creation to ensure element is rendered
     setTimeout(() => {
       this.createOverlay();
+      // Also initialize the label if we have a value input
+      const inputValue = this.value();
+      if (inputValue) {
+        // Label is now provided via input, no need to extract from DOM
+      }
     });
   }
 
@@ -235,8 +246,13 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   }
 
   selectItem(value: string, label: string) {
-    this.selectedValue.set(value);
-    this.selectedLabel.set(label);
+    if (value === undefined || value === null || value === '') {
+      console.warn('Attempted to select item with invalid value:', { value, label });
+      return;
+    }
+
+    this._selectedValue.set(value);
+    this._selectedLabel.set(label || value); // Fallback to value if label is empty
     this.onChange(value);
     this.selectionChange.emit(value);
     this.close();
@@ -318,8 +334,14 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
     const currentIndex = this.focusedIndex();
     if (currentIndex >= 0 && currentIndex < items.length) {
       const item = items[currentIndex];
-      const value = item.getAttribute('value') || '';
+      const value = item.getAttribute('value');
       const label = item.textContent?.trim() || '';
+
+      if (value === null || value === undefined) {
+        console.warn('No value attribute found on selected item:', item);
+        return;
+      }
+
       this.selectItem(value, label);
     }
   }
@@ -390,7 +412,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   // ControlValueAccessor implementation
   writeValue(value: string | null): void {
     const stringValue = value || '';
-    this.selectedValue.set(stringValue);
+    this._selectedValue.set(stringValue);
   }
 
   registerOnChange(fn: (value: string) => void): void {

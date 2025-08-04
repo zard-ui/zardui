@@ -6,7 +6,7 @@
 
 To get a customized radio button, just pass the following props to the directive.
 
-| Property     | Description                                      | Type             | Default    |
-| ------------ | ------------------------------------------------ | ---------------- | ---------- |
-| `[zType]`     | radio type                                      | `default\|destructive`  | `default`  |
-| `[zSize]`     | radio size                                      | `default\|sm\|lg` | `default`  |
+| Property  | Description | Type                   | Default   |
+| --------- | ----------- | ---------------------- | --------- |
+| `[zType]` | radio type  | `default\|destructive` | `default` |
+| `[zSize]` | radio size  | `default\|sm\|lg`      | `default` |
