@@ -1,7 +1,6 @@
 import { ZardDemoDatePickerDefaultComponent } from './default';
+import { ZardDatePickerFormatsComponent } from './formats';
 import { ZardDemoDatePickerSizesComponent } from './sizes';
-import { ZardDemoDatePickerVariantsComponent } from './variants';
-import { ZardDemoDatePickerWithConstraintsComponent } from './with-constraints';
 
 export const DATE_PICKER = {
   componentName: 'date-picker',
@@ -12,16 +11,12 @@ export const DATE_PICKER = {
       component: ZardDemoDatePickerDefaultComponent,
     },
     {
-      name: 'variants',
-      component: ZardDemoDatePickerVariantsComponent,
-    },
-    {
       name: 'sizes',
       component: ZardDemoDatePickerSizesComponent,
     },
     {
-      name: 'with-constraints',
-      component: ZardDemoDatePickerWithConstraintsComponent,
+      name: 'formats',
+      component: ZardDatePickerFormatsComponent,
     },
   ],
 };

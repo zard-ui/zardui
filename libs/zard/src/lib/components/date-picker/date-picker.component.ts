@@ -1,4 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, input, output, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
@@ -46,8 +47,11 @@ export type { ZardDatePickerVariants };
       </z-popover>
     </ng-template>
   `,
+  providers: [DatePipe],
 })
 export class ZardDatePickerComponent {
+  private readonly datePipe = inject(DatePipe);
+
   @ViewChild('calendarTemplate', { static: true }) calendarTemplate!: TemplateRef<unknown>;
   @ViewChild('popoverDirective', { static: true }) popoverDirective!: ZardPopoverDirective;
   @ViewChild('calendar', { static: false }) calendar!: ZardCalendarComponent;
@@ -57,6 +61,7 @@ export class ZardDatePickerComponent {
   readonly zSize = input<ZardDatePickerVariants['zSize']>('default');
   readonly value = input<Date | null>(null);
   readonly placeholder = input<string>('Pick a date');
+  readonly zFormat = input<string>('MMMM d, yyyy');
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = input<boolean>(false);
@@ -101,7 +106,7 @@ export class ZardDatePickerComponent {
     if (!date) {
       return this.placeholder();
     }
-    return this.formatDate(date);
+    return this.formatDate(date, this.zFormat());
   });
 
   protected onDateChange(date: Date): void {
@@ -121,15 +126,7 @@ export class ZardDatePickerComponent {
     }
   }
 
-  private formatDate(date: Date): string {
-    // Simple date formatting without external dependencies
-    // Format: "January 15, 2024"
-    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
-
-    const month = months[date.getMonth()];
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    return `${month} ${day}, ${year}`;
+  private formatDate(date: Date, format: string): string {
+    return this.datePipe.transform(date, format) || '';
   }
 }
