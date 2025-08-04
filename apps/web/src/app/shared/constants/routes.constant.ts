@@ -39,6 +39,7 @@ const COMPONENTS_PATH = {
     { name: 'Checkbox', path: '/docs/components/checkbox', available: true },
     { name: 'Command', path: '/docs/components/command', available: true },
     { name: 'Confirm Dialog', path: '/docs/components', available: false },
+    { name: 'Date Picker', path: '/docs/components/date-picker', available: true },
     { name: 'Divider', path: '/docs/components/divider', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Dialog', path: '/docs/components/dialog', available: true },

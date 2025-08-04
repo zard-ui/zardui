@@ -5,6 +5,7 @@ export * from './breadcrumb/breadcrumb.component';
 export * from './button/button.component';
 export * from './calendar/calendar.component';
 export * from './card/card.component';
+export * from './date-picker/date-picker.component';
 export * from './checkbox/checkbox.component';
 export * from './divider/divider.component';
 export * from './input/input.directive';

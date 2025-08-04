@@ -63,6 +63,7 @@ const POPOVER_POSITIONS_MAP = {
 
 @Directive({
   selector: '[zPopover]',
+  exportAs: 'zPopover',
   standalone: true,
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
@@ -206,9 +207,24 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
         const clickTarget = event.target as HTMLElement;
         const overlayElement = this.overlayRef?.overlayElement;
 
-        if (!this.nativeElement.contains(clickTarget) && overlayElement && !overlayElement.contains(clickTarget)) {
-          this.hide();
+        // Check if click is on the trigger element
+        if (this.nativeElement.contains(clickTarget)) {
+          return;
         }
+
+        // Check if click is within the popover overlay
+        if (overlayElement && overlayElement.contains(clickTarget)) {
+          return;
+        }
+
+        // Check if click is within any CDK overlay (for select dropdowns, etc.)
+        const isInCdkOverlay = clickTarget.closest('.cdk-overlay-container') !== null;
+        if (isInCdkOverlay) {
+          return;
+        }
+
+        // If none of the above, it's truly an outside click - hide the popover
+        this.hide();
       });
     });
   }

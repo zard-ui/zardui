@@ -1,0 +1,60 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ZardDatePickerComponent } from './date-picker.component';
+
+describe('ZardDatePickerComponent', () => {
+  let component: ZardDatePickerComponent;
+  let fixture: ComponentFixture<ZardDatePickerComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ZardDatePickerComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(ZardDatePickerComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should display placeholder when no date is selected', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('button');
+    expect(button?.textContent?.trim()).toContain('Pick a date');
+  });
+
+  it('should format and display selected date', () => {
+    const testDate = new Date(2024, 0, 15); // January 15, 2024
+    fixture.componentRef.setInput('value', testDate);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('button');
+    expect(button?.textContent?.trim()).toContain('January 15, 2024');
+  });
+
+  it('should emit dateChange when calendar date is selected', () => {
+    const testDate = new Date(2024, 0, 15);
+    let emittedDate: Date | null = null;
+
+    component.dateChange.subscribe(date => {
+      emittedDate = date;
+    });
+
+    component['onDateChange'](testDate);
+
+    expect(emittedDate).toEqual(testDate);
+  });
+
+  it('should apply disabled state', () => {
+    fixture.componentRef.setInput('disabled', true);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector('button');
+    expect(button?.disabled).toBe(true);
+  });
+});
