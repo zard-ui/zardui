@@ -42,6 +42,7 @@ const COMPONENTS_PATH = {
     { name: 'Divider', path: '/docs/components/divider', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Dialog', path: '/docs/components/dialog', available: true },
+    { name: 'Pagination', path: '/docs/components/pagination', available: true },
     { name: 'Progress Bar', path: '/docs/components/progress-bar', available: true },
     { name: 'Select', path: '/docs/components/select', available: true },
     { name: 'Slider', path: '/docs/components/slider', available: true },
