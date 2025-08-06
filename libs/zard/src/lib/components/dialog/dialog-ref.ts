@@ -1,4 +1,4 @@
-import { Subject, takeUntil } from 'rxjs';
+import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { OverlayRef } from '@angular/cdk/overlay';
 import { EventEmitter } from '@angular/core';
@@ -35,6 +35,13 @@ export class ZardDialogRef<T = any, R = any> {
         { once: true },
       );
     }
+
+    fromEvent<KeyboardEvent>(document, 'keydown')
+      .pipe(
+        filter(event => event.key === 'Escape'),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => this.close());
   }
 
   close(result?: R) {

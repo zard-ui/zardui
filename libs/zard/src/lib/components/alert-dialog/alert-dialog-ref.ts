@@ -1,4 +1,4 @@
-import { filter, Observable, Subject } from 'rxjs';
+import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 
 import { OverlayRef } from '@angular/cdk/overlay';
 
@@ -6,6 +6,7 @@ import { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } fro
 
 export class ZardAlertDialogRef<T = unknown, R = unknown> {
   componentInstance?: T;
+  private destroy$ = new Subject<void>();
   private readonly afterClosedSubject: Subject<R | undefined> = new Subject();
 
   constructor(
@@ -22,16 +23,24 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     });
 
     this.handleMaskClick();
+
+    fromEvent<KeyboardEvent>(document, 'keydown')
+      .pipe(
+        filter(event => event.key === 'Escape'),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => this.close());
   }
 
   close(dialogResult?: R): void {
     this.containerInstance.state.set('close');
 
-    // Dar tempo para a animação de saída
     setTimeout(() => {
       this.overlayRef.dispose();
       this.afterClosedSubject.next(dialogResult);
       this.afterClosedSubject.complete();
+      this.destroy$.next();
+      this.destroy$.complete();
     }, 200);
   }
 
