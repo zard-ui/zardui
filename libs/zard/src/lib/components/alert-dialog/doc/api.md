@@ -1,29 +1,5 @@
 # Alert Dialog API
 
-## ZardAlertDialogService
-
-The `ZardAlertDialogService` provides methods to programmatically create and display alert dialogs.
-
-### Methods
-
-#### `confirm(config: ZardAlertDialogOptions<T>): ZardAlertDialogRef<T>`
-
-Creates a confirmation dialog with OK and Cancel buttons.
-
-#### `warning(config: ZardAlertDialogOptions<T>): ZardAlertDialogRef<T>`
-
-Creates a warning dialog with only an OK button and warning styling.
-
-#### `info(config: ZardAlertDialogOptions<T>): ZardAlertDialogRef<T>`
-
-Creates an informational dialog with only an OK button.
-
-#### `create(config: ZardAlertDialogOptions<T>): ZardAlertDialogRef<T>`
-
-Creates a custom dialog with full configuration options.
-
-## ZardAlertDialogOptions
-
 Configuration options for creating alert dialogs.
 
 | Property            | Type                                      | Default      | Description                                       |
@@ -45,20 +21,3 @@ Configuration options for creating alert dialogs.
 | `zOnCancel`         | `EventEmitter<T> \| OnClickCallback<T>`   | -            | Cancel button click handler                       |
 | `zData`             | `object`                                  | -            | Data to pass to custom content components         |
 | `zViewContainerRef` | `ViewContainerRef`                        | -            | View container for rendering custom content       |
-
-## ZardAlertDialogRef
-
-Reference to an opened dialog, returned by service methods.
-
-### Methods
-
-| Method                | Return Type       | Description                              |
-| --------------------- | ----------------- | ---------------------------------------- |
-| `close(result?: any)` | `void`            | Closes the dialog with result            |
-| `afterClosed()`       | `Observable<any>` | Observable that emits when dialog closes |
-
-### Properties
-
-| Property            | Type | Description                          |
-| ------------------- | ---- | ------------------------------------ |
-| `componentInstance` | `T`  | Instance of custom content component |
