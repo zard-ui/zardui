@@ -1,12 +1,12 @@
-<div class="flex flex-col gap-4 p-6">
+<div class="flex flex-col gap-4 p-6" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   @if (config.zTitle || config.zDescription) {
     <header class="flex flex-col gap-2 text-center sm:text-left">
       @if (config.zTitle) {
-        <h2 data-testid="z-alert-title" class="text-lg font-semibold">{{ config.zTitle }}</h2>
+        <h2 data-testid="z-alert-title" [id]="titleId()" class="text-lg font-semibold">{{ config.zTitle }}</h2>
       }
 
       @if (config.zDescription) {
-        <p data-testid="z-alert-description" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+        <p data-testid="z-alert-description" [id]="descriptionId()" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
       }
     </header>
   }

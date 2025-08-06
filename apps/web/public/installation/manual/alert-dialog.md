@@ -4,10 +4,12 @@
 import { ClassValue } from 'clsx';
 import { filter, fromEvent, takeUntil } from 'rxjs';
 
+import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ComponentRef,
@@ -17,6 +19,7 @@ import {
   EventEmitter,
   inject,
   NgModule,
+  OnDestroy,
   output,
   signal,
   TemplateRef,
@@ -59,7 +62,7 @@ export class ZardAlertDialogOptions<T> {
   selector: 'z-alert-dialog',
   exportAs: 'zAlertDialog',
   standalone: true,
-  imports: [OverlayModule, PortalModule, ZardButtonComponent, CommonModule],
+  imports: [OverlayModule, PortalModule, ZardButtonComponent, CommonModule, A11yModule],
   templateUrl: './alert-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -67,6 +70,10 @@ export class ZardAlertDialogOptions<T> {
     '[class]': 'classes()',
     '[attr.data-state]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
+    'role': 'alertdialog',
+    '[attr.aria-modal]': 'true',
+    '[attr.aria-labelledby]': 'titleId()',
+    '[attr.aria-describedby]': 'descriptionId()',
   },
   styles: [
     `
@@ -90,7 +97,7 @@ export class ZardAlertDialogOptions<T> {
     `,
   ],
 })
-export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
+export class ZardAlertDialogComponent<T> extends BasePortalOutlet implements AfterViewInit, OnDestroy {
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardAlertDialogOptions<T>);
@@ -104,6 +111,11 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
     ),
   );
 
+  protected readonly titleId = computed(() => this.config.zTitle ? `alert-dialog-title-${this.generateId()}` : null);
+  protected readonly descriptionId = computed(() => this.config.zDescription ? `alert-dialog-description-${this.generateId()}` : null);
+  
+  private alertDialogId = Math.random().toString(36).substring(2, 15);
+
   public alertDialogRef?: ZardAlertDialogRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
@@ -116,6 +128,18 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   constructor() {
     super();
+  }
+
+  private generateId(): string {
+    return this.alertDialogId;
+  }
+
+  ngAfterViewInit(): void {
+    // Focus management is handled by cdkTrapFocus directive
+  }
+
+  ngOnDestroy(): void {
+    // Cleanup is handled by cdkTrapFocus directive
   }
 
   getNativeElement(): HTMLElement {
@@ -159,7 +183,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 }
 
 @NgModule({
-  imports: [CommonModule, ZardButtonComponent, ZardAlertDialogComponent, OverlayModule, PortalModule],
+  imports: [CommonModule, ZardButtonComponent, ZardAlertDialogComponent, OverlayModule, PortalModule, A11yModule],
   providers: [ZardAlertDialogService],
 })
 export class ZardAlertDialogModule {}
@@ -284,15 +308,15 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 ### <img src="/icons/angular.svg" class="w-4 h-4 inline mr-2" alt="Angular HTML">alert-dialog.component.html
 
 ```angular-html showLineNumbers
-<div class="flex flex-col gap-4 p-6">
+<div class="flex flex-col gap-4 p-6" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   @if (config.zTitle || config.zDescription) {
     <header class="flex flex-col gap-2 text-center sm:text-left">
       @if (config.zTitle) {
-        <h2 data-testid="z-alert-title" class="text-lg font-semibold">{{ config.zTitle }}</h2>
+        <h2 data-testid="z-alert-title" [id]="titleId()" class="text-lg font-semibold">{{ config.zTitle }}</h2>
       }
 
       @if (config.zDescription) {
-        <p data-testid="z-alert-description" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+        <p data-testid="z-alert-description" [id]="descriptionId()" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
       }
     </header>
   }
