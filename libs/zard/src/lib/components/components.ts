@@ -21,6 +21,7 @@ export * from './dropdown/dropdown-trigger.directive';
 export * from './dropdown/dropdown.service';
 export * from './dropdown/dropdown.module';
 export * from './radio/radio.component';
+export * from './segmented/segmented.component';
 export * from './switch/switch.component';
 export * from './progress-bar/progress-bar.component';
 export * from './table/table.component';

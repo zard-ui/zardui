@@ -1,8 +1,7 @@
 ```angular-ts showLineNumbers
-import { Component } from "@angular/core";
+import { Component } from '@angular/core';
 
-import { ZardSkeletonComponent } from "../skeleton.component";
-
+import { ZardSkeletonComponent } from '../skeleton.component';
 
 @Component({
   standalone: true,

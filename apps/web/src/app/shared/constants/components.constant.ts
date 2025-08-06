@@ -22,6 +22,7 @@ import { AVATAR } from '@zard/components/avatar/demo/avatar';
 import { TOAST } from '@zard/components/toast/demo/toast';
 import { TABLE } from '@zard/components/table/demo/table';
 import { RADIO } from '@zard/components/radio/demo/radio';
+import { SEGMENTED } from '@zard/components/segmented/demo/segmented';
 import { INPUT } from '@zard/components/input/demo/input';
 import { BADGE } from '@zard/components/badge/demo/badge';
 import { ALERT } from '@zard/components/alert/demo/alert';
@@ -63,6 +64,7 @@ export const COMPONENTS: ComponentData[] = [
   POPOVER,
   PROGRESS_BAR,
   RADIO,
+  SEGMENTED,
   SELECT,
   SLIDER,
   SKELETON,
