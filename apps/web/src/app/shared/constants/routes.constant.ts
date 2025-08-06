@@ -55,6 +55,7 @@ const COMPONENTS_PATH = {
     { name: 'Toggle Group', path: '/docs/components/toggle-group', available: true },
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
     { name: 'Radio', path: '/docs/components/radio', available: true },
+    { name: 'Segmented', path: '/docs/components/segmented', available: true },
     { name: 'Loader', path: '/docs/components/loader', available: true },
     { name: 'Dropdown', path: '/docs/components/dropdown', available: true },
     { name: 'Popover', path: '/docs/components/popover', available: true },
