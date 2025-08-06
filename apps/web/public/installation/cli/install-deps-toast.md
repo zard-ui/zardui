@@ -1,3 +1,3 @@
 ```bash
-npm install ngx-sonner
+npm install class-variance-authority
 ```

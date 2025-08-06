@@ -34,9 +34,10 @@ const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardDialogOptions<T> {
   zCancelIcon?: string;
-  zCancelText?: string;
+  zCancelText?: string | null;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
+  zCustomClasses?: string;
   zData?: object;
   zDescription?: string;
   zHideFooter?: boolean;
@@ -69,7 +70,7 @@ export class ZardDialogComponent<T> extends BasePortalOutlet {
   private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardDialogOptions<T>);
 
-  protected readonly classes = computed(() => mergeClasses(dialogVariants()));
+  protected readonly classes = computed(() => mergeClasses(dialogVariants(), this.config.zCustomClasses));
   public dialogRef?: ZardDialogRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
@@ -138,7 +139,7 @@ export class ZardDialogModule {}
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const dialogVariants = cva(
-  'fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[state=closed]:slide-out-to-left-1/2 data-[state=closed]:slide-out-to-top-[48%] sm:rounded-lg',
+  'fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg rounded-lg max-w-[calc(100%-2rem)] sm:max-w-[425px] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out',
 );
 export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
@@ -147,7 +148,7 @@ export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 ### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dialog-ref.ts
 
 ```angular-ts showLineNumbers
-import { Subject, takeUntil } from 'rxjs';
+import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { OverlayRef } from '@angular/cdk/overlay';
 import { EventEmitter } from '@angular/core';
@@ -184,6 +185,13 @@ export class ZardDialogRef<T = any, R = any> {
         { once: true },
       );
     }
+
+    fromEvent<KeyboardEvent>(document, 'keydown')
+      .pipe(
+        filter(event => event.key === 'Escape'),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => this.close());
   }
 
   close(result?: R) {
@@ -224,15 +232,17 @@ export class ZardDialogRef<T = any, R = any> {
   </button>
 }
 
-<header class="flex flex-col space-y-1.5 text-center sm:text-left">
-  @if (config.zTitle) {
-    <h4 data-testid="z-title" class="text-lg font-semibold leading-none tracking-tight">{{ config.zTitle }}</h4>
+@if (config.zTitle || config.zDescription) {
+  <header class="flex flex-col space-y-1.5 text-center sm:text-left">
+    @if (config.zTitle) {
+      <h4 data-testid="z-title" class="text-lg font-semibold leading-none tracking-tight">{{ config.zTitle }}</h4>
 
-    @if (config.zDescription) {
-      <p data-testid="z-description" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+      @if (config.zDescription) {
+        <p data-testid="z-description" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+      }
     }
-  }
-</header>
+  </header>
+}
 
 <main class="flex flex-col space-y-4">
   <ng-template cdkPortalOutlet></ng-template>
@@ -243,7 +253,7 @@ export class ZardDialogRef<T = any, R = any> {
 </main>
 
 @if (!config.zHideFooter) {
-  <footer class="flex flex-col-reverse sm:flex-row sm:justify-end sm:space-x-2">
+  <footer class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-0 sm:space-x-2">
     @if (config.zCancelText !== null) {
       <button data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
         @if (config.zCancelIcon) {

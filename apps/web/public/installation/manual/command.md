@@ -8,6 +8,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ContentChild,
   ContentChildren,
   EventEmitter,
   forwardRef,
@@ -21,6 +22,7 @@ import {
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { commandVariants, ZardCommandVariants } from './command.variants';
 
@@ -78,6 +80,7 @@ export interface ZardCommandConfig {
   ],
 })
 export class ZardCommandComponent implements ControlValueAccessor, AfterContentInit {
+  @ContentChild(ZardCommandInputComponent) commandInput?: ZardCommandInputComponent;
   @ContentChildren(ZardCommandOptionComponent, { descendants: true })
   optionComponents!: QueryList<ZardCommandOptionComponent>;
 
@@ -95,15 +98,17 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
 
   // Computed signal for filtered options - this will automatically update when searchTerm changes
   readonly filteredOptions = computed(() => {
+    const searchTerm = this.searchTerm();
+
     if (!this.optionComponents) return [];
 
-    const searchTerm = this.searchTerm().toLowerCase();
-    if (searchTerm === '') return this.optionComponents.toArray();
+    const lowerSearchTerm = searchTerm.toLowerCase().trim();
+    if (lowerSearchTerm === '') return this.optionComponents.toArray();
 
     return this.optionComponents.filter(option => {
       const label = option.zLabel().toLowerCase();
       const command = option.zCommand()?.toLowerCase() || '';
-      return label.includes(searchTerm) || command.includes(searchTerm);
+      return label.includes(lowerSearchTerm) || command.includes(lowerSearchTerm);
     });
   });
 
@@ -228,6 +233,13 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
 
   setDisabledState(_isDisabled: boolean): void {
     // Implementation if needed for form control disabled state
+  }
+
+  /**
+   * Focus the command input
+   */
+  focus(): void {
+    this.commandInput?.focus();
   }
 }
 
@@ -540,8 +552,11 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
   onKeyDown(event: KeyboardEvent) {
     // Let parent command component handle navigation keys
     if (['ArrowDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
-      event.preventDefault(); // Prevent default input behavior
-      event.stopPropagation(); // Stop the event from bubbling up
+      // For Escape key, don't stop propagation to allow document listener to work
+      if (event.key !== 'Escape') {
+        event.preventDefault(); // Prevent default input behavior
+        event.stopPropagation(); // Stop the event from bubbling up
+      }
 
       // Try both types of parent components
       if (this.commandComponent) {
@@ -568,6 +583,13 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
   setDisabledState(_isDisabled: boolean): void {
     // Implementation if needed for form control disabled state
+  }
+
+  /**
+   * Focus the input element
+   */
+  focus(): void {
+    this.searchInput.nativeElement.focus();
   }
 
   ngOnDestroy(): void {
@@ -1075,6 +1097,41 @@ export class ZardCommandOptionComponent {
     element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
+
+```
+
+### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command.module.ts
+
+```angular-ts showLineNumbers
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ZardCommandDividerComponent } from './command-divider.component';
+import { ZardCommandEmptyComponent } from './command-empty.component';
+import { ZardCommandInputComponent } from './command-input.component';
+import { ZardCommandJsonComponent } from './command-json.component';
+import { ZardCommandListComponent } from './command-list.component';
+import { ZardCommandOptionGroupComponent } from './command-option-group.component';
+import { ZardCommandOptionComponent } from './command-option.component';
+import { ZardCommandComponent } from './command.component';
+
+const COMMAND_COMPONENTS = [
+  ZardCommandComponent,
+  ZardCommandInputComponent,
+  ZardCommandListComponent,
+  ZardCommandEmptyComponent,
+  ZardCommandOptionComponent,
+  ZardCommandOptionGroupComponent,
+  ZardCommandDividerComponent,
+  ZardCommandJsonComponent,
+];
+
+@NgModule({
+  imports: [CommonModule, FormsModule, ...COMMAND_COMPONENTS],
+  exports: [...COMMAND_COMPONENTS],
+})
+export class ZardCommandModule {}
 
 ```
 
