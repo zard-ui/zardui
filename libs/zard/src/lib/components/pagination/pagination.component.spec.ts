@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { Component } from '@angular/core';
 
 import {
-  ZardPaginationComponent,
+  ZardPaginationBasicComponent,
   ZardPaginationContentComponent,
   ZardPaginationItemComponent,
   ZardPaginationLinkComponent,
@@ -17,7 +17,7 @@ import {
   selector: 'test-pagination-host',
   standalone: true,
   imports: [
-    ZardPaginationComponent,
+    ZardPaginationBasicComponent,
     ZardPaginationContentComponent,
     ZardPaginationItemComponent,
     ZardPaginationLinkComponent,
@@ -26,7 +26,7 @@ import {
     ZardPaginationEllipsisComponent,
   ],
   template: `
-    <z-pagination>
+    <z-pagination-basic>
       <z-pagination-content>
         <z-pagination-item>
           <z-pagination-previous [zLink]="'/prev'" />
@@ -44,7 +44,7 @@ import {
           <z-pagination-next [zLink]="'/next'" />
         </z-pagination-item>
       </z-pagination-content>
-    </z-pagination>
+    </z-pagination-basi>
   `,
 })
 class TestPaginationHostComponent {}
@@ -68,7 +68,7 @@ describe('ZardPagination Integration', () => {
   });
 
   it('should render all pagination components', () => {
-    expect(fixture.debugElement.query(By.directive(ZardPaginationComponent))).toBeTruthy();
+    expect(fixture.debugElement.query(By.directive(ZardPaginationBasicComponent))).toBeTruthy();
     expect(fixture.debugElement.query(By.directive(ZardPaginationContentComponent))).toBeTruthy();
     expect(fixture.debugElement.query(By.directive(ZardPaginationItemComponent))).toBeTruthy();
     expect(fixture.debugElement.query(By.directive(ZardPaginationLinkComponent))).toBeTruthy();

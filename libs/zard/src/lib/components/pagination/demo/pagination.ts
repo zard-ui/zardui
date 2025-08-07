@@ -1,3 +1,4 @@
+import { ZardDemoPaginationBasicComponent } from './basic';
 import { ZardDemoPaginationComponent } from './default';
 
 export const PAGINATION = {
@@ -7,6 +8,10 @@ export const PAGINATION = {
     {
       name: 'default',
       component: ZardDemoPaginationComponent,
+    },
+    {
+      name: 'basic',
+      component: ZardDemoPaginationBasicComponent,
     },
   ],
 };

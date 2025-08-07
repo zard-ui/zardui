@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 
 import {
+  ZardPaginationBasicComponent,
   ZardPaginationComponent,
   ZardPaginationContentComponent,
   ZardPaginationEllipsisComponent,
@@ -11,13 +12,14 @@ import {
 } from './pagination.component';
 
 const components = [
-  ZardPaginationComponent,
+  ZardPaginationBasicComponent,
   ZardPaginationContentComponent,
   ZardPaginationItemComponent,
   ZardPaginationLinkComponent,
   ZardPaginationPreviousComponent,
   ZardPaginationNextComponent,
   ZardPaginationEllipsisComponent,
+  ZardPaginationComponent,
 ];
 
 @NgModule({

@@ -1,7 +1,7 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const paginationVariants = cva('mx-auto flex w-full justify-center');
-export type ZardPaginationVariants = VariantProps<typeof paginationVariants>;
+export const paginationBasicVariants = cva('mx-auto flex w-full justify-center');
+export type ZardPaginationBasicVariants = VariantProps<typeof paginationBasicVariants>;
 
 export const paginationContentVariants = cva('flex flex-row items-center gap-1');
 export type ZardPaginationContentVariants = VariantProps<typeof paginationContentVariants>;
@@ -40,3 +40,6 @@ export type ZardPaginationNextVariants = VariantProps<typeof paginationNextVaria
 
 export const paginationEllipsisVariants = cva('flex size-9 items-center justify-center');
 export type ZardPaginationEllipsisVariants = VariantProps<typeof paginationEllipsisVariants>;
+
+export const paginationVariants = cva('mx-auto flex w-full justify-center');
+export type ZardPaginationVariants = VariantProps<typeof paginationVariants>;
