@@ -1,8 +1,8 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
 import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
 import { CalloutComponent } from '@zard/domain/components/callout/callout.component';
@@ -21,7 +21,14 @@ export class FigmaPage implements OnInit {
 
   activeAnchor?: string;
 
-  readonly pageTopics = signal<Topic[]>([{ name: 'introduction' }, { name: 'paid' }, { name: 'free' }, { name: 'future' }]);
+  readonly navigationConfig: NavigationConfig = {
+    items: [
+      { id: 'overview', label: 'Overview', type: 'core' },
+      { id: 'paid', label: 'Paid', type: 'custom' },
+      { id: 'free', label: 'Free', type: 'custom' },
+      { id: 'future', label: 'Future', type: 'custom' },
+    ],
+  };
 
   readonly paidResources = [
     {

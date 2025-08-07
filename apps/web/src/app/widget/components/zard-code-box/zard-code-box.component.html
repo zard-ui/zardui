@@ -1,6 +1,6 @@
 <section class="mb-10">
   @if (componentType()) {
-    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">{{ componentType() }}</h3>
+    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">{{ componentType()! | hyphenToSpace }}</h3>
   }
   <main class="overflow-hidden transition-all duration-200 ease-in-out">
     <nav class="flex gap-4 mb-4">

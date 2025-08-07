@@ -2,7 +2,7 @@ import { CommonModule, ViewportScroller } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { StepsComponent } from '@zard/domain/components/steps/steps.component';
 import { Installation, installations } from '@zard/shared/constants/install.constant';
 
@@ -17,7 +17,9 @@ export class InstallPage implements OnInit {
   private readonly viewportScroller = inject(ViewportScroller);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  readonly pageTopics = signal<Topic[]>([{ name: 'introduction' }, { name: 'founders' }, { name: 'contributors' }, { name: 'credits' }]);
+  readonly navigationConfig: NavigationConfig = {
+    items: [{ id: 'overview', label: 'Overview', type: 'core' }],
+  };
   activeAnchor?: string;
 
   activeTab = signal<'manual' | 'cli'>('cli');

@@ -3,10 +3,11 @@ import { NgComponentOutlet } from '@angular/common';
 import { Component, input, signal, computed } from '@angular/core';
 import { ComponentType } from '@angular/cdk/overlay';
 import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
+import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
 
 @Component({
   selector: 'z-code-box',
-  imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent],
+  imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent, HyphenToSpacePipe],
   templateUrl: './zard-code-box.component.html',
 })
 export class ZardCodeBoxComponent {
