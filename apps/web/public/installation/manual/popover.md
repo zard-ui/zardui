@@ -3,25 +3,25 @@
 ```angular-ts showLineNumbers
 import { Subject } from 'rxjs';
 
-import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayPositionBuilder, OverlayRef, ConnectedPosition } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
-    ChangeDetectionStrategy,
-    Component,
-    computed,
-    Directive,
-    effect,
-    ElementRef,
-    inject,
-    input,
-    OnDestroy,
-    OnInit,
-    output,
-    Renderer2,
-    signal,
-    TemplateRef,
-    ViewContainerRef
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  Directive,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  output,
+  Renderer2,
+  signal,
+  TemplateRef,
+  ViewContainerRef,
 } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
@@ -79,7 +79,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly viewContainerRef = inject(ViewContainerRef);
 
   private overlayRef?: OverlayRef;
-  private scrollListenerRef?: () => void;
+  private scrollListenerRefs: (() => void)[] = [];
   private documentClickListenerRef?: () => void;
 
   readonly zTrigger = input<ZardPopoverTrigger>('click');
@@ -141,9 +141,8 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
       this.setupOutsideClickListener();
     }
 
-    this.scrollListenerRef = this.renderer.listen(window, 'scroll', () => {
-      this.updatePosition();
-    });
+    // Listen for scroll events on window and all scrollable ancestors
+    this.setupScrollListeners();
   }
 
   hide() {
@@ -153,10 +152,9 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.isVisible.set(false);
     this.zVisibleChange.emit(false);
 
-    if (this.scrollListenerRef) {
-      this.scrollListenerRef();
-      this.scrollListenerRef = undefined;
-    }
+    // Clean up all scroll listeners
+    this.scrollListenerRefs.forEach(cleanup => cleanup());
+    this.scrollListenerRefs = [];
 
     if (this.documentClickListenerRef) {
       this.documentClickListenerRef();
@@ -193,20 +191,12 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   private createOverlay() {
-    const positionConfig = POPOVER_POSITIONS_MAP[this.zPlacement()];
     const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(this.nativeElement)
-      .withPositions([
-        {
-          originX: positionConfig.originX,
-          originY: positionConfig.originY,
-          overlayX: positionConfig.overlayX,
-          overlayY: positionConfig.overlayY,
-          offsetX: positionConfig.offsetX || 0,
-          offsetY: positionConfig.offsetY || 0,
-        },
-      ])
-      .withPush(true);
+      .withPositions(this.getPositions())
+      .withPush(true)
+      .withFlexibleDimensions(true)
+      .withViewportMargin(8);
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
@@ -215,8 +205,100 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     });
   }
 
+  private getPositions(): ConnectedPosition[] {
+    const placement = this.zPlacement();
+    const positions: ConnectedPosition[] = [];
+
+    // Primary position
+    const primaryConfig = POPOVER_POSITIONS_MAP[placement];
+    positions.push({
+      originX: primaryConfig.originX as any,
+      originY: primaryConfig.originY as any,
+      overlayX: primaryConfig.overlayX as any,
+      overlayY: primaryConfig.overlayY as any,
+      offsetX: primaryConfig.offsetX || 0,
+      offsetY: primaryConfig.offsetY || 0,
+    });
+
+    // Fallback positions for better positioning when primary doesn't fit
+    switch (placement) {
+      case 'bottom':
+        // Try top if bottom doesn't fit
+        positions.push({
+          originX: 'center',
+          originY: 'top',
+          overlayX: 'center',
+          overlayY: 'bottom',
+          offsetX: 0,
+          offsetY: -8,
+        });
+        break;
+      case 'top':
+        // Try bottom if top doesn't fit
+        positions.push({
+          originX: 'center',
+          originY: 'bottom',
+          overlayX: 'center',
+          overlayY: 'top',
+          offsetX: 0,
+          offsetY: 8,
+        });
+        break;
+      case 'right':
+        // Try left if right doesn't fit
+        positions.push({
+          originX: 'start',
+          originY: 'center',
+          overlayX: 'end',
+          overlayY: 'center',
+          offsetX: -8,
+          offsetY: 0,
+        });
+        break;
+      case 'left':
+        // Try right if left doesn't fit
+        positions.push({
+          originX: 'end',
+          originY: 'center',
+          overlayX: 'start',
+          overlayY: 'center',
+          offsetX: 8,
+          offsetY: 0,
+        });
+        break;
+    }
+
+    return positions;
+  }
+
+  private setupScrollListeners() {
+    // Listen for scroll events on window
+    this.scrollListenerRefs.push(this.renderer.listen(window, 'scroll', () => this.updatePosition(), { passive: true }));
+
+    // Listen for scroll events on all scrollable ancestor elements
+    let element = this.nativeElement.parentElement;
+    while (element && element !== document.body) {
+      const computedStyle = getComputedStyle(element);
+      const isScrollable =
+        computedStyle.overflow === 'auto' ||
+        computedStyle.overflow === 'scroll' ||
+        computedStyle.overflowY === 'auto' ||
+        computedStyle.overflowY === 'scroll' ||
+        computedStyle.overflowX === 'auto' ||
+        computedStyle.overflowX === 'scroll';
+
+      if (isScrollable) {
+        this.scrollListenerRefs.push(this.renderer.listen(element, 'scroll', () => this.updatePosition(), { passive: true }));
+      }
+
+      element = element.parentElement;
+    }
+  }
+
   private updatePosition() {
-    this.overlayRef?.updatePosition();
+    if (this.overlayRef && this.isVisible()) {
+      this.overlayRef.updatePosition();
+    }
   }
 
   private setupOutsideClickListener() {

@@ -26,10 +26,6 @@ export class ZardDemoComboboxDefaultComponent {
     { value: 'svelte', label: 'Svelte' },
     { value: 'ember', label: 'Ember.js' },
     { value: 'nextjs', label: 'Next.js' },
-    { value: 'nuxtjs', label: 'Nuxt.js' },
-    { value: 'remix', label: 'Remix' },
-    { value: 'astro', label: 'Astro' },
-    { value: 'gatsby', label: 'Gatsby' },
   ];
 
   onSelect(option: ZardComboboxOption) {
