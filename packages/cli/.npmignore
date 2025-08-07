@@ -1,0 +1,30 @@
+# Source files
+src/
+tsconfig.json
+tsup.config.ts
+
+# Development files
+node_modules/
+*.log
+.DS_Store
+.env*
+
+# Test files
+test/
+tests/
+*.test.ts
+*.spec.ts
+
+# Build tools
+.vscode/
+.idea/
+
+# Git
+.git/
+.gitignore
+
+# Only include dist and package files
+!dist/
+!package.json
+!README.md
+!LICENSE
