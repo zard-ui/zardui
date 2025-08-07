@@ -105,9 +105,9 @@ export class MarkdownService {
             node.properties = {
               ...node.properties,
               className: [
-                'absolute',
+                'fixed',
+                '[&_span]:bg-transparent!',
                 'right-4',
-                'top-3',
                 'z-10',
                 'h-6',
                 'w-6',
@@ -117,12 +117,13 @@ export class MarkdownService {
                 'hover:bg-muted',
                 'cursor-pointer',
                 'rounded-md',
-                'bg-transparent',
+                'bg-secondary',
                 'p-1',
-                'text-xs',
+                'text-sm',
                 'flex',
                 'items-center',
                 'justify-center',
+                'mt-[-3px]',
               ],
             };
 
