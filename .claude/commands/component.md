@@ -6,12 +6,15 @@ Usage: `/component [component-name]`
 Example: `/component table` creates a table component
 
 ## Overview
+
 This command creates a complete ZardUI component named "$ARGUMENTS" with proper file structure, TypeScript patterns, and documentation setup.
 
 **Component to create: $ARGUMENTS**
 
 ### Design Philosophy
+
 ZardUI follows the **shadcn/ui and ng-zorro developer experience standards**:
+
 - **Intuitive API design** with clear, predictable prop names
 - **Consistent component patterns** across the entire library
 - **Excellent TypeScript support** with full type safety
@@ -22,7 +25,9 @@ ZardUI follows the **shadcn/ui and ng-zorro developer experience standards**:
 ## Component Architecture Requirements
 
 ### File Structure
+
 Each component must follow this exact pattern:
+
 ```
 libs/zard/src/lib/components/[component-name]/
 ├── [component-name].component.ts     # Main component
@@ -37,6 +42,7 @@ libs/zard/src/lib/components/[component-name]/
 ```
 
 ### Component Template
+
 ```typescript
 @Component({
   selector: 'z-[name], [element][z-[name]]',
@@ -54,8 +60,8 @@ export class Zard[Name]Component {
   readonly zType = input<Zard[Name]Variants['zType']>('default');
   readonly zSize = input<Zard[Name]Variants['zSize']>('default');
   // Add other variant inputs as needed
-  
-  protected readonly classes = computed(() => 
+
+  protected readonly classes = computed(() =>
     mergeClasses([name]Variants({
       zType: this.zType(),
       zSize: this.zSize()
@@ -65,6 +71,7 @@ export class Zard[Name]Component {
 ```
 
 ### Required Patterns (Following shadcn/ui & ng-zorro Standards)
+
 - **Standalone components** with `standalone: true`
 - **Signal-based inputs** using `input()` function for modern Angular patterns
 - **CVA (Class Variance Authority)** for type-safe styling variants like shadcn/ui
@@ -79,12 +86,15 @@ export class Zard[Name]Component {
 - **Consistent variant naming** across all components (`default`, `secondary`, `destructive`, etc.)
 
 ### Demo Structure
+
 Demo folder must contain:
+
 - `[component].ts` - Main demo export with examples array
 - `default.ts` - Default example component
 - Additional variant demo components (e.g., `secondary.ts`, `outline.ts`)
 
 Demo export structure:
+
 ```typescript
 export const [COMPONENT_NAME] = {
   componentName: '[component-name]',
@@ -100,6 +110,7 @@ export const [COMPONENT_NAME] = {
 ```
 
 ### Export Requirements
+
 1. Export component in `libs/zard/src/lib/components/components.ts`
 2. Create demo components following the structure above
 3. Write documentation in `doc/overview.md` and `doc/api.md`
@@ -110,11 +121,13 @@ export const [COMPONENT_NAME] = {
 5. File watcher automatically syncs demo/doc to web app
 
 ### Testing
+
 - Co-located `.spec.ts` files next to components
 - Use Jest with `@happy-dom/jest-environment`
 - Angular testing utilities: TestBed, ComponentFixture
 
 ### Development Workflow (shadcn/ui & ng-zorro Quality Standards)
+
 1. **Research component patterns** - Study how shadcn/ui and ng-zorro implement similar components
 2. Create component in `libs/zard/src/lib/components/[name]/`
 3. Export in `libs/zard/src/lib/components/components.ts`
@@ -133,6 +146,7 @@ export const [COMPONENT_NAME] = {
 9. File watcher syncs automatically to web app
 
 ### Quality Checklist (Match shadcn/ui & ng-zorro Standards)
+
 - [ ] Component API is intuitive and predictable
 - [ ] All variants work correctly and look polished
 - [ ] TypeScript types are comprehensive and helpful
@@ -143,6 +157,7 @@ export const [COMPONENT_NAME] = {
 - [ ] Performance is optimized (OnPush, computed signals)
 
 ### Documentation System Integration
+
 ```typescript
 // In components.constant.ts
 import { [COMPONENT_NAME] } from '@zard/components/[component-name]/demo/[component-name]';

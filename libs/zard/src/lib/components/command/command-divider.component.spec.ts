@@ -2,13 +2,13 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { ZardCommandComponent } from './command.component';
 import { ZardCommandDividerComponent } from './command-divider.component';
+import { ZardCommandEmptyComponent } from './command-empty.component';
 import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandListComponent } from './command-list.component';
-import { ZardCommandEmptyComponent } from './command-empty.component';
-import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
+import { ZardCommandOptionComponent } from './command-option.component';
+import { ZardCommandComponent } from './command.component';
 
 @Component({
   selector: 'test-host-component',
@@ -74,23 +74,29 @@ describe('ZardCommandDividerComponent', () => {
     expect(dividerElement.getAttribute('role')).toBe('separator');
   });
 
-  it('should hide divider during search', () => {
+  it('should hide divider during search', async () => {
     const input = fixture.nativeElement.querySelector('input');
 
     input.value = 'option';
     input.dispatchEvent(new Event('input'));
+
+    // Wait for debounced search to complete
+    await new Promise(resolve => setTimeout(resolve, 200));
     fixture.detectChanges();
 
     const dividerElement = fixture.nativeElement.querySelector('z-command-divider div');
     expect(dividerElement).toBeFalsy();
   });
 
-  it('should show divider when search is cleared', () => {
+  it('should show divider when search is cleared', async () => {
     const input = fixture.nativeElement.querySelector('input');
 
     // Search first
     input.value = 'option';
     input.dispatchEvent(new Event('input'));
+
+    // Wait for debounced search to complete
+    await new Promise(resolve => setTimeout(resolve, 200));
     fixture.detectChanges();
 
     let dividerElement = fixture.nativeElement.querySelector('z-command-divider div');
@@ -99,6 +105,9 @@ describe('ZardCommandDividerComponent', () => {
     // Clear search
     input.value = '';
     input.dispatchEvent(new Event('input'));
+
+    // Wait for debounced search to complete (immediate for empty values)
+    await new Promise(resolve => setTimeout(resolve, 50));
     fixture.detectChanges();
 
     dividerElement = fixture.nativeElement.querySelector('z-command-divider div');
@@ -128,15 +137,19 @@ describe('ZardCommandDividerComponent', () => {
     expect(dividerElement.className).toContain('test-divider');
   });
 
-  it('should respond to search term changes reactively', () => {
+  it('should respond to search term changes reactively', async () => {
     const input = fixture.nativeElement.querySelector('input');
 
     // Multiple search changes
     const searchTerms = ['opt1', 'opt2', 'nonexistent', ''];
 
-    searchTerms.forEach(term => {
+    for (const term of searchTerms) {
       input.value = term;
       input.dispatchEvent(new Event('input'));
+
+      // Wait for debounced search to complete
+      const delay = term === '' ? 50 : 200;
+      await new Promise(resolve => setTimeout(resolve, delay));
       fixture.detectChanges();
 
       const dividerElement = fixture.nativeElement.querySelector('z-command-divider div');
@@ -145,6 +158,6 @@ describe('ZardCommandDividerComponent', () => {
       } else {
         expect(dividerElement).toBeFalsy(); // Should hide during search
       }
-    });
+    }
   });
 });

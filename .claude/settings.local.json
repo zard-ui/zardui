@@ -37,9 +37,19 @@
       "Bash(npm install:*)",
       "Bash(mkdir:*)",
       "Bash(mv:*)",
-      "WebFetch(domain:docs.anthropic.com)"
+      "WebFetch(domain:docs.anthropic.com)",
+      "Bash(npx nx test:*)",
+      "Bash(grep:*)",
+      "Bash(npm test)",
+      "WebFetch(domain:gist.github.com)",
+      "Bash(npm test:*)",
+      "WebFetch(domain:angular.dev)",
+      "Bash(npx nx format:write:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": ["playwright", "ESLint"]
+  "enabledMcpjsonServers": [
+    "playwright",
+    "ESLint"
+  ]
 }
