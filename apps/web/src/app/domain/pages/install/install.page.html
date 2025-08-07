@@ -1,22 +1,26 @@
-<section class="flex flex-col xl:grid xl:grid-cols-[220px_minmax(0,1fr)] md:gap-6 lg:gap-10">
-  <z-sidebar></z-sidebar>
-  <main class="relative py-6 lg:gap-10 lg:py-8 xl:grid xl:grid-cols-[1fr_300px] [&_h1]:text-3xl [&_h1]:font-bold [&_p]:text-base [&_p]:text-muted-foreground">
-    <section class="flex flex-col gap-10 mx-auto w-full min-w-0 max-w-2xl mb-10">
+<section class="relative flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full">
+  <main class="flex min-w-0 flex-1 flex-col">
+    <section class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 text-neutral-800 md:px-0 dark:text-neutral-300">
       @if(installGuide) {
-      <header>
-        <h1>{{ installGuide.title }}</h1>
-        <p>{{ installGuide.description }}</p>
+      <header class="flex flex-col gap-4 sm:gap-2">
+        <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">{{ installGuide.title }}</h1>
+        <p class="text-base leading-7 text-muted-foreground">{{ installGuide.description }}</p>
       </header>
       }
       <main class="overflow-hidden transition-all duration-200 ease-in-out">
-        <nav class="flex gap-4 border-b mb-8">
-          @if(installGuide.manual.length > 0) {
-          <button z-button zType="ghost" (click)="activeTab.set('manual')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'manual'">
-            Manual
-          </button>
-          } @if(installGuide.cli.length > 0) {
-          <button z-button zType="ghost" (click)="activeTab.set('cli')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'cli'">
+        <nav class="flex gap-4 mb-4">
+          @if(installGuide.cli.length > 0) {
+          <button class="text-base cursor-pointer" (click)="activeTab.set('cli')" [class.font-semibold]="activeTab() === 'cli'" [class.text-foreground]="activeTab() === 'cli'">
             CLI
+          </button>
+          } @if(installGuide.manual.length > 0) {
+          <button
+            class="text-base cursor-pointer"
+            (click)="activeTab.set('manual')"
+            [class.font-semibold]="activeTab() === 'manual'"
+            [class.text-foreground]="activeTab() === 'manual'"
+          >
+            Manual
           </button>
           }
         </nav>
@@ -24,9 +28,12 @@
           <z-steps [steps]="installGuide.manual"></z-steps>
         </section>
         <section class="transition-all" [class]="activeTab() === 'cli' ? 'translate-x-0' : ['translate-x-full', 'sr-only']">
-          <z-steps [steps]="installGuide.manual"></z-steps>
+          <z-steps [steps]="installGuide.cli"></z-steps>
         </section>
       </main>
     </section>
   </main>
+  <section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
+    <z-dynamic-anchor [navigation]="navigationConfig" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+  </section>
 </section>

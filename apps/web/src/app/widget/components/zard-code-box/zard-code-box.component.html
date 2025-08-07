@@ -1,27 +1,27 @@
 <section class="mb-10">
   @if (componentType()) {
-    <h3 class="text-xl font-medium first-letter:uppercase">{{ componentType() }}</h3>
+    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">{{ componentType()! | hyphenToSpace }}</h3>
   }
   <main class="overflow-hidden transition-all duration-200 ease-in-out">
-    <nav class="flex gap-4 border-b mb-8">
-      <button z-button zType="ghost" (click)="activeTab.set('preview')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'preview'">
+    <nav class="flex gap-4 mb-4">
+      <button
+        class="text-base cursor-pointer"
+        (click)="activeTab.set('preview')"
+        [class.font-semibold]="activeTab() === 'preview'"
+        [class.text-foreground]="activeTab() === 'preview'"
+      >
         Preview
       </button>
       @if (!onlyDemo()) {
-        <button z-button zType="ghost" (click)="activeTab.set('code')" class="hover:bg-transparent rounded-none border-b-primary" [class.border-b-2]="activeTab() === 'code'">
+        <button class="text-base cursor-pointer" (click)="activeTab.set('code')" [class.font-semibold]="activeTab() === 'code'" [class.text-foreground]="activeTab() === 'code'">
           Code
         </button>
       }
     </nav>
     <section class="transition-all" [class]="activeTab() === 'preview' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']">
       <z-card
-        class="min-h-74 w-full flex justify-center items-center gap-4 [&_ng-component]:gap-4 [&_ng-component]:items-center"
-        [ngClass]="{
-          '[&_ng-component]:grid': column(),
-          '[&_ng-component]:flex': !column(),
-          '[&_ng-component]:w-full': fullWidth(),
-        }"
-        [class]="column() ? '[&_ng-component]:grid' : '[&_ng-component]:flex'"
+        class="min-h-[450px] p-10 w-full flex justify-center items-center gap-4 [&_ng-component]:min-w-80 [&_ng-component]:gap-4 [&_ng-component]:items-center [&_ng-component]:justify-center"
+        [class]="cardClasses()"
       >
         @if (dynamicComponent()) {
           <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
@@ -29,8 +29,8 @@
       </z-card>
     </section>
     <section class="transition-all" [class]="activeTab() === 'code' ? 'translate-x-0' : ['translate-x-full', 'sr-only']">
-      @if (path()) {
-        <z-markdown src="components/{{ path() }}.ts" [codeBox]="true" [dirLineNumber]="true"></z-markdown>
+      @if (markdownUrl()) {
+        <z-markdown-renderer [markdownUrl]="markdownUrl()"></z-markdown-renderer>
       }
     </section>
   </main>

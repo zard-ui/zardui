@@ -1,16 +1,21 @@
 import { Component } from '@angular/core';
 
-import { ZardSelectModule } from '../select.module';
+import { ZardSelectItemComponent } from '../select-item.component';
+import { ZardSelectComponent } from '../select.component';
 
 @Component({
   standalone: true,
-  imports: [ZardSelectModule],
+  imports: [ZardSelectComponent, ZardSelectItemComponent],
   template: `
-    <z-select zStatus="success" placeholder="Selecione uma opção">
-      <z-select-option label="Opção 1" value="1" />
-      <z-select-option label="Opção 2" value="2" />
-      <z-select-option label="Opção 3" value="3" />
-    </z-select>
+    <div class="flex flex-col gap-4">
+      <z-select placeholder="Selecione uma fruta">
+        <z-select-item value="apple">Apple</z-select-item>
+        <z-select-item value="banana">Banana</z-select-item>
+        <z-select-item value="blueberry">Blueberry</z-select-item>
+        <z-select-item value="grapes">Grapes</z-select-item>
+        <z-select-item value="pineapple" disabled>Pineapple</z-select-item>
+      </z-select>
+    </div>
   `,
 })
 export class ZardDemoSelectBasicComponent {}

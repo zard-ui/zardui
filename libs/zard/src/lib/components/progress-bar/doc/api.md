@@ -6,10 +6,6 @@ The `z-progress-bar` component is a flexible and customizable progress bar that 
 
 ### **Usage**
 
-```html
-<z-progress-bar [progress]="50" [zType]="'accent'" [zSize]="'lg'" [zShape]="'circle'" />
-```
-
 ### **Properties**
 
 | Property           | Description                          | Type                                     | Default     |
@@ -22,11 +18,3 @@ The `z-progress-bar` component is a flexible and customizable progress bar that 
 | `[class]`          | Custom classes for the container.    | `string`                                 | `''`        |
 | `[barClass]`       | Custom classes for the progress bar. | `string`                                 | `''`        |
 | `[zIndeterminate]` | Define loading infinity state.       | `boolean`                                | `false`     |
-
-### **Styling**
-
-The component supports full customization via CSS utility classes and CVA variants. Users can pass additional styles using `[class]` for the container and `[barClass]` for the progress bar.
-
-```html
-<z-progress-bar [progress]="75" [class]="'border border-gray-500'" [barClass]="'shadow-lg bg-green-500'" />
-```

@@ -1,3 +1,26 @@
-**Status**
+```angular-ts showLineNumbers
+import { Component } from '@angular/core';
 
-Change the shape of `z-progress-bar` with `zShape`, which could be `default`, `circle` and `square`.
+import { ZardProgressBarComponent } from '../progress-bar.component';
+
+@Component({
+  standalone: true,
+  imports: [ZardProgressBarComponent],
+  template: `
+    <z-progress-bar [progress]="50" [zShape]="'default'"></z-progress-bar>
+    <z-progress-bar [progress]="50" [zShape]="'circle'"></z-progress-bar>
+    <z-progress-bar [progress]="50" [zShape]="'square'"></z-progress-bar>
+  `,
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+    `,
+  ],
+})
+export class ZardDemoProgressBarShapeComponent {}
+
+```

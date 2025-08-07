@@ -2,9 +2,11 @@
 
 ## `<z-progress-bar>` <span class="api-type-label component">Component</span>
 
-> `z-progress-bar` is a component that accepts all properties supported by a native `<div>`.
+The `z-progress-bar` component is a flexible and customizable progress bar that allows full styling control using class-variance-authority (CVA). It provides several configuration options for size, shape, type, and more.
 
-To customize the progress bar, pass the following props to the component.
+### **Usage**
+
+### **Properties**
 
 | Property           | Description                          | Type                                     | Default     |
 | ------------------ | ------------------------------------ | ---------------------------------------- | ----------- |

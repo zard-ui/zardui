@@ -1,22 +1,32 @@
+import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 import { ZardInputDirective } from './input.directive';
 
+@Component({
+  template: `<input z-input />`,
+  standalone: true,
+  imports: [ZardInputDirective],
+})
+class TestHostComponent {}
+
 describe('InputComponent', () => {
-  let component: ZardInputDirective;
-  let fixture: ComponentFixture<ZardInputDirective>;
+  let fixture: ComponentFixture<TestHostComponent>;
+  let inputElement: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ZardInputDirective],
+      imports: [TestHostComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ZardInputDirective);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    inputElement = fixture.debugElement.query(By.directive(ZardInputDirective));
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    expect(component).toBeTruthy();
+    expect(inputElement).toBeTruthy();
+    expect(inputElement.injector.get(ZardInputDirective)).toBeTruthy();
   });
 });

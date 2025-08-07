@@ -6,8 +6,8 @@
 
 To get a customized input, just pass the following props to the directive.
 
-| Property      | Description                        | Type          | Default |
-|--------------|------------------------------------|--------------|---------|
-| `[zSize]`     | input size   | `default\|small\|large`      | `default`    |
-| `[zStatus]`     | input status   | `error\|warning\|success`      | `null`    |
-| `[zBorderless]`     | input without border   | `boolean`      | `false`    |
+| Property        | Description          | Type                      | Default   |
+| --------------- | -------------------- | ------------------------- | --------- |
+| `[zSize]`       | input size           | `default\|small\|large`   | `default` |
+| `[zStatus]`     | input status         | `error\|warning\|success` | `null`    |
+| `[zBorderless]` | input without border | `boolean`                 | `false`   |

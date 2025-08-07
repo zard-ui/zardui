@@ -1,26 +1,31 @@
-import { Installation, installations } from '@zard/shared/constants/install.constant';
-import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { StepsComponent } from '@zard/domain/components/steps/steps.component';
 import { CommonModule, ViewportScroller } from '@angular/common';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Component, signal } from '@angular/core';
+import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { StepsComponent } from '@zard/domain/components/steps/steps.component';
+import { Installation, installations } from '@zard/shared/constants/install.constant';
 
 @Component({
   selector: 'z-install',
   templateUrl: './install.page.html',
   standalone: true,
-  imports: [CommonModule, SidebarComponent, StepsComponent, ZardButtonComponent],
+  imports: [CommonModule, StepsComponent, DynamicAnchorComponent],
 })
-export class InstallPage {
-  activeTab = signal<'manual' | 'cli'>('manual');
+export class InstallPage implements OnInit {
+  private readonly titleService = inject(Title);
+  private readonly viewportScroller = inject(ViewportScroller);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  readonly navigationConfig: NavigationConfig = {
+    items: [{ id: 'overview', label: 'Overview', type: 'core' }],
+  };
+  activeAnchor?: string;
+
+  activeTab = signal<'manual' | 'cli'>('cli');
   installGuide!: Installation;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private viewportScroller: ViewportScroller,
-  ) {
+  ngOnInit(): void {
     this.activatedRoute.params.subscribe(() => {
       this.loadData();
     });
@@ -34,5 +39,16 @@ export class InstallPage {
     const installGuide = installations.find(x => x.environment === guideName);
     if (!installGuide) this.router.navigateByUrl('/');
     else this.installGuide = installGuide;
+
+    this.setPageTitle();
+  }
+
+  setPageTitle() {
+    const environmentName = this.installGuide?.title;
+    if (environmentName) {
+      const capitalizedText = environmentName[0].toUpperCase() + environmentName.slice(1);
+      const pageTitle = `${capitalizedText} - zard/ui`;
+      this.titleService.setTitle(pageTitle);
+    }
   }
 }

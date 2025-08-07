@@ -1,6 +1,5 @@
 import { Step } from '@zard/shared/constants/install.constant';
 import { Component, input } from '@angular/core';
-import { MarkdownModule } from 'ngx-markdown';
 
 import { StepComponent } from '../step/step.component';
 
@@ -16,7 +15,7 @@ import { StepComponent } from '../step/step.component';
     }
   `,
   standalone: true,
-  imports: [StepComponent, MarkdownModule],
+  imports: [StepComponent],
 })
 export class StepsComponent {
   readonly steps = input<Step[]>();

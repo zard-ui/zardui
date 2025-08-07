@@ -1,9 +1,9 @@
+import { CommonModule } from '@angular/common';
+import { Component, input, signal } from '@angular/core';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { Step } from '@zard/shared/constants/install.constant';
-import { Component, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
-import { ZardMarkdownComponent } from '../markdown/markdown.component';
+import { MarkdownRendererComponent } from '../render/markdown-renderer.component';
 
 @Component({
   selector: 'z-step',
@@ -19,15 +19,33 @@ import { ZardMarkdownComponent } from '../markdown/markdown.component';
             <p>
               {{ stepProps()?.subtitle }}
 
-              @if (!stepProps()?.url?.external) {
-                <a z-button zType="link" class="p-0" [href]="stepProps()?.url?.href">{{ stepProps()?.url?.text }}</a>
+              @if (stepProps()?.url) {
+                <a z-button zType="link" class="p-0" [href]="stepProps()?.url?.href" [target]="stepProps()?.url?.external ? '_blank' : '_self'">{{ stepProps()?.url?.text }}</a>
               }
             </p>
-            @if (stepProps()?.url?.external) {
-              <a z-button zType="link" class="p-0" [href]="stepProps()?.url?.href" target="_blank">{{ stepProps()?.url?.text }}</a>
-            }
-            @if (stepProps()?.file) {
-              <z-markdown [src]="'documentation/install' + stepProps()?.file?.path" [dirLineNumber]="definedLineNumber()" [codeBox]="true"></z-markdown>
+            @if (stepProps()?.file?.path) {
+              @if (stepProps()?.expandable) {
+                <div class="space-y-3">
+                  <div class="flex items-center justify-between py-2">
+                    <button
+                      z-button
+                      zType="outline"
+                      class="flex items-center text-sm font-medium transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                      (click)="toggleExpanded()"
+                    >
+                      <i [class]="'icon-' + (isExpanded() ? 'chevron-down' : 'chevron-right') + ' w-4 h-4 mr-1 transition-transform'"></i>
+                      {{ isExpanded() ? 'Hide' : 'Show' }} {{ getExpandButtonText() }}
+                    </button>
+                  </div>
+                  @if (isExpanded()) {
+                    <div class="overflow-hidden transition-all duration-200 ease-in-out animate-in slide-in-from-top-1">
+                      <z-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></z-markdown-renderer>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <z-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></z-markdown-renderer>
+              }
             }
           </section>
         </main>
@@ -35,17 +53,28 @@ import { ZardMarkdownComponent } from '../markdown/markdown.component';
     }
   `,
   standalone: true,
-  imports: [CommonModule, ZardMarkdownComponent, ZardButtonComponent],
+  imports: [CommonModule, ZardButtonComponent, MarkdownRendererComponent],
 })
 export class StepComponent {
   readonly stepProps = input<Step>();
   readonly position = input<number>();
+  readonly isExpanded = signal(false);
 
-  definedLineNumber(): boolean {
-    if (!this.stepProps()?.file?.lineNumber) {
-      return false;
+  toggleExpanded() {
+    this.isExpanded.update(value => !value);
+  }
+
+  getExpandButtonText(): string {
+    const title = this.stepProps()?.title?.toLowerCase() || '';
+
+    if (title.includes('component') || title.includes('files')) {
+      return 'component files';
+    } else if (title.includes('code')) {
+      return 'code';
+    } else if (title.includes('util')) {
+      return 'utility code';
     }
 
-    return this.stepProps()?.file?.lineNumber as boolean;
+    return 'code';
   }
 }

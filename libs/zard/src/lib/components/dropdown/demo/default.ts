@@ -1,47 +1,97 @@
-import { Component, input, signal } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { ZardDropdownVariants } from '../dropdown.variants';
-import { ZardDropdownComponent } from '../dropdown.component';
-import { ZardDropdownItemComponent } from '../dropdown-item.component';
 import { ZardButtonComponent } from '../../button/button.component';
+import { ZardDividerComponent } from '../../divider/divider.component';
+import { ZardDropdownModule } from '../dropdown.module';
 
 @Component({
   selector: 'z-dropdown-demo',
   standalone: true,
-  imports: [ZardDropdownComponent, ZardDropdownItemComponent, ZardButtonComponent],
+  imports: [ZardDropdownModule, ZardButtonComponent, ZardDividerComponent],
   template: `
-    <z-dropdown [isOpen]="isDropdownOpen()" [zPlacement]="zPlacement()" [zSize]="zSize()">
-      <z-button dropdown-trigger (click)="toggleDropdown()"> Options </z-button>
-      <z-dropdown-item (click)="onEdit()">Edit</z-dropdown-item>
-      <z-dropdown-item (click)="onDuplicate()">Duplicate</z-dropdown-item>
-      <z-dropdown-item (click)="onArchive()">Archive</z-dropdown-item>
-      <z-dropdown-item [disabled]="true">Move (disabled)</z-dropdown-item>
-      <z-dropdown-item (click)="onDelete()">Delete</z-dropdown-item>
-    </z-dropdown>
+    <z-button z-dropdown [zDropdownMenu]="menu" zType="outline"> Open </z-button>
+
+    <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-56">
+      <z-dropdown-menu-label>My Account</z-dropdown-menu-label>
+
+      <z-dropdown-menu-item (click)="onProfile()">
+        Profile
+        <z-dropdown-menu-shortcut>⇧⌘P</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+
+      <z-dropdown-menu-item (click)="onBilling()">
+        Billing
+        <z-dropdown-menu-shortcut>⌘B</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+
+      <z-dropdown-menu-item (click)="onSettings()">
+        Settings
+        <z-dropdown-menu-shortcut>⌘S</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+
+      <z-dropdown-menu-item (click)="onKeyboardShortcuts()">
+        Keyboard shortcuts
+        <z-dropdown-menu-shortcut>⌘K</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+
+      <z-divider zSpacing="sm" class="-mx-1"></z-divider>
+
+      <z-dropdown-menu-item (click)="onTeam()">Team</z-dropdown-menu-item>
+
+      <z-dropdown-menu-item (click)="onNewTeam()">
+        New Team
+        <z-dropdown-menu-shortcut>⌘+T</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+
+      <z-divider zSpacing="sm" class="-mx-1"></z-divider>
+
+      <z-dropdown-menu-item (click)="onGitHub()">GitHub</z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="onSupport()">Support</z-dropdown-menu-item>
+      <z-dropdown-menu-item disabled="true">API</z-dropdown-menu-item>
+
+      <z-divider zSpacing="sm" class="-mx-1"></z-divider>
+
+      <z-dropdown-menu-item (click)="onLogout()">
+        Log out
+        <z-dropdown-menu-shortcut>⇧⌘Q</z-dropdown-menu-shortcut>
+      </z-dropdown-menu-item>
+    </z-dropdown-menu-content>
   `,
 })
 export class ZardDropdownDemoComponent {
-  readonly isDropdownOpen = signal<boolean>(false);
-  readonly zSize = input<ZardDropdownVariants['zSize']>('default');
-  readonly zPlacement = input<ZardDropdownVariants['zPlacement']>('bottom-end');
-
-  toggleDropdown() {
-    this.isDropdownOpen.set(!this.isDropdownOpen());
+  onProfile() {
+    console.log('Profile clicked');
   }
 
-  onEdit() {
-    console.log('Edit clicked');
+  onBilling() {
+    console.log('Billing clicked');
   }
 
-  onDuplicate() {
-    console.log('Duplicate clicked');
+  onSettings() {
+    console.log('Settings clicked');
   }
 
-  onArchive() {
-    console.log('Archive clicked');
+  onKeyboardShortcuts() {
+    console.log('Keyboard shortcuts clicked');
   }
 
-  onDelete() {
-    console.log('Delete clicked');
+  onTeam() {
+    console.log('Team clicked');
+  }
+
+  onNewTeam() {
+    console.log('New Team clicked');
+  }
+
+  onGitHub() {
+    console.log('GitHub clicked');
+  }
+
+  onSupport() {
+    console.log('Support clicked');
+  }
+
+  onLogout() {
+    console.log('Log out clicked');
   }
 }

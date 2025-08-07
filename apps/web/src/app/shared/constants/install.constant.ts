@@ -11,6 +11,7 @@ export interface Step {
     path: string;
     lineNumber: boolean;
   };
+  expandable?: boolean;
 }
 
 export interface Installation {
@@ -36,7 +37,7 @@ export const installations: Installation[] = [
           external: true,
         },
         file: {
-          path: '/angular/install.md',
+          path: '/documentation/setup/angular/manual/install.md',
           lineNumber: false,
         },
       },
@@ -53,7 +54,7 @@ export const installations: Installation[] = [
         title: 'Add dependencies',
         subtitle: 'Add the following dependencies to your project:',
         file: {
-          path: '/angular/dependencies.md',
+          path: '/documentation/setup/angular/manual/dependencies.md',
           lineNumber: false,
         },
       },
@@ -61,7 +62,7 @@ export const installations: Installation[] = [
         title: 'Configure path aliases',
         subtitle: 'Configure the path aliases in your tsconfig.json file.',
         file: {
-          path: '/angular/tsconfig.md',
+          path: '/documentation/setup/angular/manual/tsconfig.md',
           lineNumber: true,
         },
       },
@@ -73,16 +74,25 @@ export const installations: Installation[] = [
           href: '/docs/theming',
         },
         file: {
-          path: '/angular/theming.md',
+          path: '/documentation/setup/angular/manual/styles.md',
           lineNumber: true,
         },
       },
       {
-        title: 'Add a cn helper',
+        title: 'Add a lib helper',
         subtitle: 'Create a folder called lib inside your app folder',
-        path: 'lib/utils.ts',
+        path: 'shared/utils/merge-classes.ts',
         file: {
-          path: '/angular/helper.md',
+          path: '/documentation/setup/angular/manual/helpers.md',
+          lineNumber: true,
+        },
+      },
+      {
+        title: 'Create a components.json file',
+        subtitle: 'Create a components.json file in the root of your project.',
+        path: 'shared/utils/merge-classes.ts',
+        file: {
+          path: '/documentation/setup/angular/manual/config.md',
           lineNumber: true,
         },
       },
@@ -101,59 +111,26 @@ export const installations: Installation[] = [
           external: true,
         },
         file: {
-          path: '/angular/install.md',
+          path: '/documentation/setup/angular/cli/install.md',
           lineNumber: false,
         },
       },
       {
-        title: 'Add Tailwind CSS',
-        subtitle: 'Components are styled using Tailwind CSS. You need to install Tailwind CSS in your project.',
-        url: {
-          text: 'Follow the Tailwind CSS installation instructions to get started.',
-          href: 'https://tailwindcss.com/docs/installation/framework-guides/angular',
-          external: true,
-        },
-      },
-      {
-        title: 'Add dependencies',
-        subtitle: 'Add the following dependencies to your project:',
+        title: 'Add Zard/ui',
+        subtitle: 'prepare your entire project using the zard/ui cli:',
         file: {
-          path: '/angular/dependencies.md',
+          path: '/documentation/setup/angular/cli/add-zard-ui.md',
           lineNumber: false,
-        },
-      },
-      {
-        title: 'Configure path aliases',
-        subtitle: 'Configure the path aliases in your tsconfig.json file.',
-        file: {
-          path: '/angular/tsconfig.md',
-          lineNumber: true,
-        },
-      },
-      {
-        title: 'Configure styles',
-        subtitle: 'Add the following to your styles.css file. You can learn more about using CSS variables for theming in the',
-        url: {
-          text: 'theming section.',
-          href: '/docs/theming',
-        },
-        file: {
-          path: '/angular/theming.md',
-          lineNumber: true,
-        },
-      },
-      {
-        title: 'Add a cn helper',
-        subtitle: 'Create a folder called lib inside your app folder',
-        path: 'lib/utils.ts',
-        file: {
-          path: '/angular/helper.md',
-          lineNumber: true,
         },
       },
       {
         title: "That's it",
         subtitle: 'You can now start adding components to your project.',
+        url: {
+          text: 'Open the components page and select what component you want to install',
+          href: '/docs/components',
+          external: false,
+        },
       },
     ],
   },

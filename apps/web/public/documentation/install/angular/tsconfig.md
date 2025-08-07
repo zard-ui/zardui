@@ -1,8 +1,0 @@
-```tsconfig
-  "compilerOptions": {
-      "baseUrl": ".",
-      "paths": {
-        "@/*": ["./*"]
-      }
-  }
-```

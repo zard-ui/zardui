@@ -1,0 +1,174 @@
+<main class="relative flex items-stretch text-sm sm:text-base xl:w-full" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <section class="flex min-w-0 flex-1 flex-col">
+    <div class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-12 px-4 text-neutral-800 md:px-0 dark:text-neutral-300">
+      <!-- Hero Section -->
+      <header class="flex flex-col gap-8" scrollSpyItem="overview" id="overview">
+        <div class="flex flex-col gap-6">
+          <h1 class="text-4xl font-semibold scroll-m-20 tracking-tight sm:text-3xl xl:text-4xl">Theming</h1>
+          <p class="text-base leading-7 text-muted-foreground">Using CSS Variables and OKLCH colors for theming.</p>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <p class="text-sm sm:text-base text-muted-foreground">You can choose between using CSS variables (recommended) or utility classes for theming.</p>
+        </div>
+      </header>
+
+      <!-- CSS Variables Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="css-variables" id="css-variables">
+        <div class="flex flex-col gap-4">
+          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">CSS Variables</h2>
+          <z-markdown-renderer markdownUrl="/documentation/theming/css-variables-intro.md"></z-markdown-renderer>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+          <h3 class="text-base sm:text-lg font-semibold mb-4">TailwindCSS v4 Configuration</h3>
+          <p class="text-xs sm:text-sm text-muted-foreground mb-4">
+            Copy and paste the following into your
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">src/styles.css</code> file:
+          </p>
+          <z-markdown-renderer markdownUrl="/documentation/theming/css-variables-v4.md"></z-markdown-renderer>
+        </div>
+      </section>
+
+      <!-- Utility Classes Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="utility-classes" id="utility-classes">
+        <div class="flex flex-col gap-4">
+          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Utility classes</h2>
+          <z-markdown-renderer markdownUrl="/documentation/theming/utility-classes-intro.md"></z-markdown-renderer>
+        </div>
+      </section>
+
+      <!-- Convention Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="convention" id="convention">
+        <div class="flex flex-col gap-4">
+          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Convention</h2>
+          <p class="text-base sm:text-lg text-muted-foreground">
+            We use a simple <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">background</code> and
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">foreground</code> convention for colors. The
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">background</code> variable is used for the component background and the
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">foreground</code> variable is used for the text color.
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-card p-4 sm:p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="text-base sm:text-lg font-semibold">Background and foreground</h3>
+          </div>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 sm:h-10 sm:w-10 rounded-md bg-background border border-border flex items-center justify-center">
+                <div class="h-4 w-4 sm:h-6 sm:w-6 rounded bg-primary"></div>
+              </div>
+              <div class="flex flex-col">
+                <code class="text-xs sm:text-sm">background</code>
+                <p class="text-xs text-muted-foreground">Component background color</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="h-8 w-8 sm:h-10 sm:w-10 rounded-md bg-primary flex items-center justify-center">
+                <div class="h-4 w-4 sm:h-6 sm:w-6 rounded bg-primary-foreground"></div>
+              </div>
+              <div class="flex flex-col">
+                <code class="text-xs sm:text-sm">foreground</code>
+                <p class="text-xs text-muted-foreground">Component text color</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="rounded-lg border p-4 sm:p-6">
+          <h3 class="text-base sm:text-lg font-semibold mb-4">Given the following OKLCH variables:</h3>
+          <z-markdown-renderer markdownUrl="/documentation/theming/convention-example.md"></z-markdown-renderer>
+          <p class="text-xs sm:text-sm text-muted-foreground mt-4">
+            The <code class="bg-muted px-1.5 py-0.5 rounded text-xs">primary</code> variable is the background color and the
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs">primary-foreground</code> variable is the text color.
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+          <p class="text-xs sm:text-sm text-muted-foreground">
+            <strong>Note:</strong> The <code class="bg-muted px-1.5 py-0.5 rounded text-xs">background</code> suffix is omitted when the variable is used for the background color
+            of the component.
+          </p>
+        </div>
+      </section>
+
+      <!-- Variables List Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="variables-list" id="variables-list">
+        <div class="flex flex-col gap-4">
+          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">List of variables</h2>
+          <p class="text-base sm:text-lg text-muted-foreground">Here's the list of variables available for customization:</p>
+        </div>
+
+        <z-accordion zType="single" [zCollapsible]="true" class="w-full">
+          <z-accordion-item zValue="variables" zTitle="Show all variables">
+            <z-markdown-renderer markdownUrl="/documentation/theming/variables-list.md"></z-markdown-renderer>
+          </z-accordion-item>
+        </z-accordion>
+      </section>
+
+      <!-- Adding New Colors Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="adding-new-colors" id="adding-new-colors">
+        <div class="flex flex-col gap-4">
+          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Adding new colors</h2>
+          <p class="text-base sm:text-lg text-muted-foreground">
+            To add new colors, you need to add them to your CSS file using the TailwindCSS v4
+            <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">&#64;theme</code> directive.
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+          <z-markdown-renderer markdownUrl="/documentation/theming/adding-colors-example.md"></z-markdown-renderer>
+        </div>
+      </section>
+
+      <!-- Base Colors Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="base-colors" id="base-colors">
+        <div class="flex flex-col gap-4">
+          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Base Colors</h2>
+          <p class="text-base sm:text-lg text-muted-foreground">For reference, here's a list of the base colors that are available.</p>
+        </div>
+
+        <z-accordion zType="multiple" [zCollapsible]="true" class="w-full">
+          <z-accordion-item zValue="neutral" zTitle="Neutral">
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4">A modern, neutral color palette with subtle blue undertones using OKLCH color space.</p>
+            <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-neutral.md"></z-markdown-renderer>
+          </z-accordion-item>
+
+          <z-accordion-item zValue="stone" zTitle="Stone">
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4">A warm, earthy color palette with brown undertones optimized in OKLCH.</p>
+            <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-stone.md"></z-markdown-renderer>
+          </z-accordion-item>
+
+          <z-accordion-item zValue="zinc" zTitle="Zinc">
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4">A modern, neutral color palette with subtle blue undertones using OKLCH color space.</p>
+            <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-zinc.md"></z-markdown-renderer>
+          </z-accordion-item>
+
+          <z-accordion-item zValue="gray" zTitle="Gray">
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4">A pure, neutral color palette without any color undertones in OKLCH format.</p>
+            <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-gray.md"></z-markdown-renderer>
+          </z-accordion-item>
+
+          <z-accordion-item zValue="slate" zTitle="Slate">
+            <p class="text-xs sm:text-sm text-muted-foreground mb-4">A cool, professional color palette with blue-gray undertones in OKLCH format.</p>
+            <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-slate.md"></z-markdown-renderer>
+          </z-accordion-item>
+        </z-accordion>
+      </section>
+
+      <!-- Other Color Formats Section -->
+      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="other-formats" id="other-formats">
+        <div class="flex flex-col gap-4">
+          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Other color formats</h2>
+          <z-markdown-renderer markdownUrl="/documentation/theming/other-color-formats.md"></z-markdown-renderer>
+        </div>
+      </section>
+    </div>
+  </section>
+
+  <!-- Sidebar Navigation -->
+  <section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
+    <z-dynamic-anchor [navigation]="navigationConfig" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+  </section>
+</main>

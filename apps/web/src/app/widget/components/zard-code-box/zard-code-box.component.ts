@@ -1,15 +1,13 @@
-import { MarkdownModule } from 'ngx-markdown';
-
-import { ComponentType } from '@angular/cdk/overlay';
-import { CommonModule, NgComponentOutlet } from '@angular/common';
-import { Component, input, signal } from '@angular/core';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardMarkdownComponent } from '@zard/domain/components/markdown/markdown.component';
+import { NgComponentOutlet } from '@angular/common';
+import { Component, input, signal, computed } from '@angular/core';
+import { ComponentType } from '@angular/cdk/overlay';
+import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
+import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
 
 @Component({
   selector: 'z-code-box',
-  imports: [CommonModule, MarkdownModule, NgComponentOutlet, ZardButtonComponent, ZardCardComponent, ZardMarkdownComponent],
+  imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent, HyphenToSpacePipe],
   templateUrl: './zard-code-box.component.html',
 })
 export class ZardCodeBoxComponent {
@@ -20,4 +18,26 @@ export class ZardCodeBoxComponent {
   readonly path = input<string>();
   readonly dynamicComponent = input<ComponentType<unknown>>();
   activeTab = signal<'preview' | 'code'>('preview');
+
+  readonly markdownUrl = computed(() => {
+    const pathValue = this.path();
+    if (!pathValue) return '';
+    return `components/${pathValue}.md`;
+  });
+
+  readonly cardClasses = computed(() => {
+    const classes = [];
+
+    if (this.column()) {
+      classes.push('[&_ng-component]:grid');
+    } else {
+      classes.push('[&_ng-component]:flex');
+    }
+
+    if (this.fullWidth()) {
+      classes.push('[&_ng-component]:w-full', '[&_div:first-child]:w-full');
+    }
+
+    return classes.join(' ');
+  });
 }
