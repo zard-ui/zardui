@@ -4,11 +4,11 @@ import { existsSync, promises as fs } from 'fs';
 import path from 'path';
 import prompts from 'prompts';
 
-import { Config, getConfig, resolveConfigPaths, type } from '../utils/config.js';
+import { Config, getConfig, resolveConfigPaths } from '../utils/config.js';
 import { fetchComponentFromGithub } from '../utils/fetch-component.js';
 import { getProjectInfo } from '../utils/get-project-info.js';
 import { logger, spinner } from '../utils/logger.js';
-import { ComponentRegistry, getAllComponentNames, getRegistryComponent, type } from '../utils/registry.js';
+import { ComponentRegistry, getAllComponentNames, getRegistryComponent } from '../utils/registry.js';
 
 export const add = new Command()
   .name('add')

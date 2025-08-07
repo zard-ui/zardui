@@ -48,7 +48,13 @@
       "Bash(git pull:*)",
       "Bash(git fetch:*)",
       "Bash(git merge:*)",
-      "Bash(git stash:*)"
+      "Bash(git stash:*)",
+      "Bash(chmod:*)",
+      "Bash(./dist/index.js --help)",
+      "Bash(./dist/index.js init:*)",
+      "Bash(npm pack:*)",
+      "Bash(./dist/index.js --version)",
+      "Bash(./node_modules/.bin/ngzard:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
