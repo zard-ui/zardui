@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add avatar
+npx @ngzard/ui add avatar
 ```

@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add switch
+npx @ngzard/ui add switch
 ```

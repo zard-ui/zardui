@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add card
+npx @ngzard/ui add card
 ```

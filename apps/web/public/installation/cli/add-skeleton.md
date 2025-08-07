@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add skeleton
+npx @ngzard/ui add skeleton
 ```

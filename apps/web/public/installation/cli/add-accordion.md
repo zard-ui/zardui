@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add accordion
+npx @ngzard/ui add accordion
 ```

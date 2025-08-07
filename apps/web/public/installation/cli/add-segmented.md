@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add segmented
+npx @ngzard/ui add segmented
 ```

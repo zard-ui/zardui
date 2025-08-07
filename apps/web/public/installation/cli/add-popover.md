@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add popover
+npx @ngzard/ui add popover
 ```

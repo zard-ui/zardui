@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add slider
+npx @ngzard/ui add slider
 ```

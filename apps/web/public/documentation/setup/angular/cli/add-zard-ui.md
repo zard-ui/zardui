@@ -1,3 +1,3 @@
 ```bash
-npx ngzard@latest init
+npx @ngzard/ui init
 ```

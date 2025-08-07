@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add tabs
+npx @ngzard/ui add tabs
 ```

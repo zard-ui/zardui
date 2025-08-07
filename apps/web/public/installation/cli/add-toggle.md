@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add toggle
+npx @ngzard/ui add toggle
 ```

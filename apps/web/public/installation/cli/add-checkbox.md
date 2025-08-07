@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add checkbox
+npx @ngzard/ui add checkbox
 ```

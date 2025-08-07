@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add dialog
+npx @ngzard/ui add dialog
 ```

@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add alert
+npx @ngzard/ui add alert
 ```

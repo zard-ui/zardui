@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add breadcrumb
+npx @ngzard/ui add breadcrumb
 ```

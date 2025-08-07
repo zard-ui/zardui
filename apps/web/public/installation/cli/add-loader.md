@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add loader
+npx @ngzard/ui add loader
 ```

@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add toast
+npx @ngzard/ui add toast
 ```

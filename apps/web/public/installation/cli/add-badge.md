@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add badge
+npx @ngzard/ui add badge
 ```

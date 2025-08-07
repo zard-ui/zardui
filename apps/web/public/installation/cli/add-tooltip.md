@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add tooltip
+npx @ngzard/ui add tooltip
 ```

@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add radio
+npx @ngzard/ui add radio
 ```

@@ -131,7 +131,7 @@ npm install ${packages}
 
 function generateCliAddComponentMarkdown(componentName: string): string {
   return `\`\`\`bash
-npx zardui-cli add ${componentName}
+npx @ngzard/ui add ${componentName}
 \`\`\``;
 }
 

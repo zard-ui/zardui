@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add dropdown
+npx @ngzard/ui add dropdown
 ```

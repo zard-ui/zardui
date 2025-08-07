@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add divider
+npx @ngzard/ui add divider
 ```

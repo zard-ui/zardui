@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add progress-bar
+npx @ngzard/ui add progress-bar
 ```

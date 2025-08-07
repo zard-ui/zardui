@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add input
+npx @ngzard/ui add input
 ```
