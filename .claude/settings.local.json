@@ -44,7 +44,11 @@
       "WebFetch(domain:gist.github.com)",
       "Bash(npm test:*)",
       "WebFetch(domain:angular.dev)",
-      "Bash(npx nx format:write:*)"
+      "Bash(npx nx format:write:*)",
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
+      "Bash(git merge:*)",
+      "Bash(git stash:*)"
     ]
   },
   "enableAllProjectMcpServers": true,
