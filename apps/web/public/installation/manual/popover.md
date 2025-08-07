@@ -7,20 +7,21 @@ import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overla
 import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  Directive,
-  ElementRef,
-  inject,
-  input,
-  OnDestroy,
-  OnInit,
-  output,
-  Renderer2,
-  signal,
-  TemplateRef,
-  ViewContainerRef,
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    Directive,
+    effect,
+    ElementRef,
+    inject,
+    input,
+    OnDestroy,
+    OnInit,
+    output,
+    Renderer2,
+    signal,
+    TemplateRef,
+    ViewContainerRef
 } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
@@ -66,6 +67,7 @@ const POPOVER_POSITIONS_MAP = {
 
 @Directive({
   selector: '[zPopover]',
+  exportAs: 'zPopover',
   standalone: true,
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
@@ -94,13 +96,27 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     return this.zOrigin()?.nativeElement || this.elementRef.nativeElement;
   }
 
+  constructor() {
+    // Watch for changes to zVisible input
+    // Using untracked for isVisible to avoid circular dependencies
+    effect(() => {
+      const visible = this.zVisible();
+
+      // Defer DOM manipulation to avoid change detection issues
+      setTimeout(() => {
+        const currentlyVisible = this.isVisible();
+        if (visible && !currentlyVisible) {
+          this.show();
+        } else if (!visible && currentlyVisible) {
+          this.hide();
+        }
+      });
+    });
+  }
+
   ngOnInit() {
     this.setupTriggers();
     this.createOverlay();
-
-    if (this.zVisible()) {
-      this.show();
-    }
   }
 
   ngOnDestroy() {
@@ -209,9 +225,24 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
         const clickTarget = event.target as HTMLElement;
         const overlayElement = this.overlayRef?.overlayElement;
 
-        if (!this.nativeElement.contains(clickTarget) && overlayElement && !overlayElement.contains(clickTarget)) {
-          this.hide();
+        // Check if click is on the trigger element
+        if (this.nativeElement.contains(clickTarget)) {
+          return;
         }
+
+        // Check if click is within the popover overlay
+        if (overlayElement && overlayElement.contains(clickTarget)) {
+          return;
+        }
+
+        // Check if click is within any CDK overlay (for select dropdowns, etc.)
+        const isInCdkOverlay = clickTarget.closest('.cdk-overlay-container') !== null;
+        if (isInCdkOverlay) {
+          return;
+        }
+
+        // If none of the above, it's truly an outside click - hide the popover
+        this.hide();
       });
     });
   }

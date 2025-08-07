@@ -8,6 +8,7 @@ import {
   Component,
   computed,
   Directive,
+  effect,
   ElementRef,
   inject,
   input,
@@ -92,13 +93,27 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     return this.zOrigin()?.nativeElement || this.elementRef.nativeElement;
   }
 
+  constructor() {
+    // Watch for changes to zVisible input
+    // Using untracked for isVisible to avoid circular dependencies
+    effect(() => {
+      const visible = this.zVisible();
+
+      // Defer DOM manipulation to avoid change detection issues
+      setTimeout(() => {
+        const currentlyVisible = this.isVisible();
+        if (visible && !currentlyVisible) {
+          this.show();
+        } else if (!visible && currentlyVisible) {
+          this.hide();
+        }
+      });
+    });
+  }
+
   ngOnInit() {
     this.setupTriggers();
     this.createOverlay();
-
-    if (this.zVisible()) {
-      this.show();
-    }
   }
 
   ngOnDestroy() {

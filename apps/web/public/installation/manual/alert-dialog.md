@@ -9,7 +9,6 @@ import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ComponentRef,
@@ -19,7 +18,6 @@ import {
   EventEmitter,
   inject,
   NgModule,
-  OnDestroy,
   output,
   signal,
   TemplateRef,
@@ -70,7 +68,7 @@ export class ZardAlertDialogOptions<T> {
     '[class]': 'classes()',
     '[attr.data-state]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
-    'role': 'alertdialog',
+    role: 'alertdialog',
     '[attr.aria-modal]': 'true',
     '[attr.aria-labelledby]': 'titleId()',
     '[attr.aria-describedby]': 'descriptionId()',
@@ -97,7 +95,7 @@ export class ZardAlertDialogOptions<T> {
     `,
   ],
 })
-export class ZardAlertDialogComponent<T> extends BasePortalOutlet implements AfterViewInit, OnDestroy {
+export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardAlertDialogOptions<T>);
@@ -111,9 +109,8 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet implements Aft
     ),
   );
 
-  protected readonly titleId = computed(() => this.config.zTitle ? `alert-dialog-title-${this.generateId()}` : null);
-  protected readonly descriptionId = computed(() => this.config.zDescription ? `alert-dialog-description-${this.generateId()}` : null);
-  
+  protected readonly titleId = computed(() => (this.config.zTitle ? `alert-dialog-title-${this.generateId()}` : null));
+  protected readonly descriptionId = computed(() => (this.config.zDescription ? `alert-dialog-description-${this.generateId()}` : null));
   private alertDialogId = Math.random().toString(36).substring(2, 15);
 
   public alertDialogRef?: ZardAlertDialogRef<T>;
@@ -132,14 +129,6 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet implements Aft
 
   private generateId(): string {
     return this.alertDialogId;
-  }
-
-  ngAfterViewInit(): void {
-    // Focus management is handled by cdkTrapFocus directive
-  }
-
-  ngOnDestroy(): void {
-    // Cleanup is handled by cdkTrapFocus directive
   }
 
   getNativeElement(): HTMLElement {

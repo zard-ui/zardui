@@ -6,6 +6,7 @@ import { ACCORDION } from '@zard/components/accordion/demo/accordion';
 import { SKELETON } from '@zard/components/skeleton/demo/skeleton';
 import { DROPDOWN } from '@zard/components/dropdown/demo/dropdown';
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
+import { COMBOBOX } from '@zard/components/combobox/demo/combobox';
 import { CALENDAR } from '@zard/components/calendar/demo/calendar';
 import { TOOLTIP } from '@zard/components/tooltip/demo/tooltip';
 import { POPOVER } from '@zard/components/popover/demo/popover';
@@ -56,6 +57,7 @@ export const COMPONENTS: ComponentData[] = [
   CALENDAR,
   CARD,
   CHECKBOX,
+  COMBOBOX,
   COMMAND,
   DATE_PICKER,
   DIALOG,

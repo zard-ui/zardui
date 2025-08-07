@@ -5,6 +5,7 @@ import { ClassValue } from 'class-variance-authority/dist/types';
 
 import {
   AfterContentInit,
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -17,6 +18,7 @@ import {
   Output,
   QueryList,
   signal,
+  ViewChildren,
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -79,10 +81,19 @@ export interface ZardCommandConfig {
     },
   ],
 })
-export class ZardCommandComponent implements ControlValueAccessor, AfterContentInit {
+export class ZardCommandComponent implements ControlValueAccessor, AfterContentInit, AfterViewInit {
   @ContentChild(ZardCommandInputComponent) commandInput?: ZardCommandInputComponent;
   @ContentChildren(ZardCommandOptionComponent, { descendants: true })
-  optionComponents!: QueryList<ZardCommandOptionComponent>;
+  contentOptionComponents!: QueryList<ZardCommandOptionComponent>;
+  @ViewChildren(ZardCommandOptionComponent)
+  viewOptionComponents!: QueryList<ZardCommandOptionComponent>;
+
+  // Combined options from both content projection and view children
+  protected readonly optionComponents = computed(() => {
+    const contentOptions = this.contentOptionComponents?.toArray() || [];
+    const viewOptions = this.viewOptionComponents?.toArray() || [];
+    return [...contentOptions, ...viewOptions];
+  });
 
   readonly size = input<ZardCommandVariants['size']>('default');
   readonly class = input<ClassValue>('');
@@ -99,13 +110,14 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
   // Computed signal for filtered options - this will automatically update when searchTerm changes
   readonly filteredOptions = computed(() => {
     const searchTerm = this.searchTerm();
+    const allOptions = this.optionComponents();
 
-    if (!this.optionComponents) return [];
+    if (!allOptions || allOptions.length === 0) return [];
 
     const lowerSearchTerm = searchTerm.toLowerCase().trim();
-    if (lowerSearchTerm === '') return this.optionComponents.toArray();
+    if (lowerSearchTerm === '') return allOptions;
 
-    return this.optionComponents.filter(option => {
+    return allOptions.filter(option => {
       const label = option.zLabel().toLowerCase();
       const command = option.zCommand()?.toLowerCase() || '';
       return label.includes(lowerSearchTerm) || command.includes(lowerSearchTerm);
@@ -135,8 +147,15 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
 
   ngAfterContentInit() {
     // No need to manually update filtered options - computed signal handles this
-    this.optionComponents.changes.subscribe(() => {
-      // When options change, the computed signal will automatically recalculate
+    this.contentOptionComponents?.changes.subscribe(() => {
+      // When content options change, the computed signal will automatically recalculate
+    });
+  }
+
+  ngAfterViewInit() {
+    // Subscribe to view children changes as well
+    this.viewOptionComponents?.changes.subscribe(() => {
+      // When view options change, the computed signal will automatically recalculate
     });
   }
 
@@ -219,7 +238,7 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
   }
 
   // ControlValueAccessor implementation
-  writeValue(_value: unknown): void {
+  writeValue(): void {
     // Implementation if needed for form control integration
   }
 
@@ -231,7 +250,7 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
     this.onTouched = fn;
   }
 
-  setDisabledState(_isDisabled: boolean): void {
+  setDisabledState(): void {
     // Implementation if needed for form control disabled state
   }
 

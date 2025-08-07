@@ -38,6 +38,7 @@ const COMPONENTS_PATH = {
     { name: 'Carousel', path: '/docs/components', available: false },
     { name: 'Chart', path: '/docs/components', available: false },
     { name: 'Checkbox', path: '/docs/components/checkbox', available: true },
+    { name: 'Combobox', path: '/docs/components/combobox', available: true },
     { name: 'Command', path: '/docs/components/command', available: true },
     { name: 'Confirm Dialog', path: '/docs/components', available: false },
     { name: 'Date Picker', path: '/docs/components/date-picker', available: true },
