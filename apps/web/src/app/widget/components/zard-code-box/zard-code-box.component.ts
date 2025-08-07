@@ -24,4 +24,20 @@ export class ZardCodeBoxComponent {
     if (!pathValue) return '';
     return `components/${pathValue}.md`;
   });
+
+  readonly cardClasses = computed(() => {
+    const classes = [];
+
+    if (this.column()) {
+      classes.push('[&_ng-component]:grid');
+    } else {
+      classes.push('[&_ng-component]:flex');
+    }
+
+    if (this.fullWidth()) {
+      classes.push('[&_ng-component]:w-full', '[&_div:first-child]:w-full');
+    }
+
+    return classes.join(' ');
+  });
 }
