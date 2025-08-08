@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { Step } from '../constants/install.constant';
 
 @Injectable({
@@ -88,6 +89,7 @@ export class DynamicInstallationService {
       'dialog',
       'divider',
       'loader',
+      'pagination',
       'popover',
       'progress-bar',
       'radio',
@@ -117,6 +119,7 @@ export class DynamicInstallationService {
       'dropdown',
       'input',
       'loader',
+      'pagination',
       'popover',
       'progress-bar',
       'radio',
