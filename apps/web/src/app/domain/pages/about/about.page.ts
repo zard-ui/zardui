@@ -1,10 +1,10 @@
 import { CommonModule, ViewportScroller } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Title } from '@angular/platform-browser';
 
-import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
 import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
 import { FoundersComponent, FounderData } from '@zard/domain/components/founders/founders.component';
@@ -52,7 +52,14 @@ export class AboutPage implements OnInit {
     },
   };
 
-  readonly pageTopics = signal<Topic[]>([{ name: 'introduction' }, { name: 'founders' }, { name: 'contributors' }, { name: 'credits' }]);
+  readonly navigationConfig: NavigationConfig = {
+    items: [
+      { id: 'overview', label: 'Overview', type: 'core' },
+      { id: 'founders', label: 'Founders', type: 'custom' },
+      { id: 'contributors', label: 'Contributors', type: 'custom' },
+      { id: 'credits', label: 'Credits', type: 'custom' },
+    ],
+  };
 
   readonly creditItems = [
     {

@@ -28,6 +28,7 @@ const COMPONENTS_PATH = {
   data: [
     { name: 'Accordion', path: '/docs/components/accordion', available: true },
     { name: 'Alert', path: '/docs/components/alert', available: true },
+    { name: 'Alert Dialog', path: '/docs/components/alert-dialog', available: true },
     { name: 'Avatar', path: '/docs/components/avatar', available: true },
     { name: 'Badge', path: '/docs/components/badge', available: true },
     { name: 'Breadcrumb', path: '/docs/components/breadcrumb', available: true },

@@ -1,27 +1,38 @@
-# @zard/cli
+# @ngzard/ui
 
-A command line interface for adding ZardUI components to your Angular projects.
+Beautiful Angular components built with TailwindCSS v4. Add modern, accessible components to your Angular apps with a single command.
+
+## 🚀 Quick Start
+
+```bash
+# Init the CLI
+npx @ngzard/ui@latest init
+```
+
+## ✨ Features
+
+- 🎨 **Beautiful Components** - Modern, accessible UI components
+- ⚡ **TailwindCSS v4** - Latest CSS framework with native cascade layers  
+- 🔧 **TypeScript First** - Built for modern Angular with full type safety
+- 🎯 **Angular Focused** - Designed specifically for the Angular ecosystem
+- 📱 **Responsive** - Mobile-first components that work everywhere
+- 🌙 **Dark Mode** - Built-in dark mode support
+- 🧩 **Modular** - Add only the components you need
 
 ## Installation
 
-```bash
-npm install -g @zard/cli
-```
-
-## Usage
-
-Use the `zard` command to add components to your Angular project:
+Use the `ngzard` to add components to your Angular project:
 
 ```bash
 # Initialize your project
-zard init
+npx @ngzard/ui@latest init
 
 # Add components to your project
-zard add button
-zard add button card dialog
+npx @ngzard/ui@latest add button
+npx @ngzard/ui@latest add button card dialog
 
 # Add all components
-zard add --all
+npx @ngzard/ui@latest add --all
 ```
 
 ## Commands
@@ -31,7 +42,7 @@ zard add --all
 Initialize your project and install dependencies for ZardUI components.
 
 ```bash
-zard init
+npx @ngzard/ui@latest init
 ```
 
 This will:
@@ -50,22 +61,22 @@ This will:
 Add components to your project.
 
 ```bash
-zard add [components...]
+npx @ngzard/ui@latest add [components...]
 ```
 
 **Examples:**
 ```bash
 # Add a single component
-zard add button
+npx @ngzard/ui@latest add button
 
-# Add multiple components
-zard add button card badge
+# Add multiple components  
+npx @ngzard/ui@latest add button card badge
 
 # Add all components
-zard add --all
+npx @ngzard/ui@latest add --all
 
 # Interactive selection
-zard add
+npx @ngzard/ui@latest add
 ```
 
 **Options:**
@@ -101,14 +112,12 @@ zard add
 
 ## Configuration
 
-The CLI stores configuration in `zard.config.json`:
+The CLI stores configuration in `components.json`:
 
 ```json
 {
   "style": "css",
-  "tsx": false,
   "tailwind": {
-    "config": "tailwind.config.js",
     "css": "src/styles.css",
     "baseColor": "slate",
     "cssVariables": true
@@ -122,7 +131,7 @@ The CLI stores configuration in `zard.config.json`:
 
 ## Requirements
 
-- Angular 17+ 
+- Angular 19+ 
 - Node.js 20 or 22
 - TypeScript project
 
@@ -160,7 +169,7 @@ ZardUI CLI is built specifically for Tailwind CSS v4, using the new inline confi
 ## Troubleshooting
 
 ### "Configuration not found"
-Run `zard init` first to initialize your project.
+Run `npx @ngzard/ui@latest init` first to initialize your project.
 
 ### "Not an Angular project"
 Make sure you're in the root directory of an Angular project with a `package.json` that includes `@angular/core`.

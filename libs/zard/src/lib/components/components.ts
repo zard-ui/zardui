@@ -1,4 +1,7 @@
 export * from './alert/alert.component';
+export * from './alert-dialog/alert-dialog.component';
+export * from './alert-dialog/alert-dialog.service';
+export * from './alert-dialog/alert-dialog-ref';
 export * from './avatar/avatar.component';
 export * from './badge/badge.component';
 export * from './breadcrumb/breadcrumb.component';

@@ -1,4 +1,4 @@
-import { DynamicAnchorComponent, Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
 import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
 import { CommonModule, ViewportScroller } from '@angular/common';
@@ -24,7 +24,14 @@ export class ComponentPage {
   private readonly viewportScroller = inject(ViewportScroller);
   activeAnchor?: string;
   componentData?: ComponentData;
-  pageTopics: Topic[] = [];
+  navigationConfig: NavigationConfig = {
+    items: [
+      { id: 'overview', label: 'Overview', type: 'core' },
+      { id: 'installation', label: 'Installation', type: 'core' },
+      { id: 'examples', label: 'Examples', type: 'core', children: [] },
+      { id: 'api', label: 'API', type: 'core' },
+    ],
+  };
   activeTab = signal<'manual' | 'cli'>('cli');
   installGuide!: { manual: Step[]; cli: Step[] } | undefined;
 
@@ -55,7 +62,15 @@ export class ComponentPage {
     }
 
     this.componentData = component;
-    this.pageTopics = component.examples.map(example => ({ name: example.name }));
+
+    const examplesItem = this.navigationConfig.items.find(item => item.id === 'examples');
+    if (examplesItem) {
+      examplesItem.children = component.examples.map(example => ({
+        id: example.name,
+        label: example.name,
+        type: 'custom' as const,
+      }));
+    }
     this.setPageTitle();
 
     this.installGuide = this.dynamicInstallationService.generateInstallationSteps(componentName);

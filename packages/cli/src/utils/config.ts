@@ -6,11 +6,9 @@ import { logger } from './logger.js';
 
 const configSchema = z.object({
   $schema: z.string().optional(),
-  style: z.enum(['css', 'scss']).default('css'),
-  tsx: z.boolean().default(false),
+  style: z.enum(['css']).default('css'), // Only CSS for TailwindV4
   tailwind: z
     .object({
-      config: z.string().default('tailwind.config.js'),
       css: z.string().default('src/styles.css'),
       baseColor: z.string().default('slate'),
       cssVariables: z.boolean().default(true),
@@ -28,9 +26,7 @@ export type Config = z.infer<typeof configSchema>;
 
 export const DEFAULT_CONFIG: Config = {
   style: 'css',
-  tsx: false,
   tailwind: {
-    config: 'tailwind.config.js',
     css: 'src/styles.css',
     baseColor: 'slate',
     cssVariables: true,
@@ -42,7 +38,7 @@ export const DEFAULT_CONFIG: Config = {
 };
 
 export async function getConfig(cwd: string): Promise<Config | null> {
-  const configPath = path.resolve(cwd, 'zard.config.json');
+  const configPath = path.resolve(cwd, 'components.json');
 
   if (!(await fs.pathExists(configPath))) {
     return null;
@@ -61,7 +57,6 @@ export async function resolveConfigPaths(cwd: string, config: Config) {
   return {
     ...config,
     resolvedPaths: {
-      tailwindConfig: path.resolve(cwd, config.tailwind.config),
       tailwindCss: path.resolve(cwd, config.tailwind.css),
       components: path.resolve(cwd, config.aliases.components),
       utils: path.resolve(cwd, config.aliases.utils),

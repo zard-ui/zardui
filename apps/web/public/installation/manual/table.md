@@ -145,6 +145,7 @@ export class ZardTableCaptionComponent {
 
   protected readonly classes = computed(() => mergeClasses(tableCaptionVariants(), this.class()));
 }
+
 ```
 
 ### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">table.variants.ts
@@ -174,53 +175,35 @@ export const tableVariants = cva(
   },
 );
 
-export const tableHeaderVariants = cva(
-  '[&_tr]:border-b',
-  {
-    variants: {},
-    defaultVariants: {},
-  },
-);
+export const tableHeaderVariants = cva('[&_tr]:border-b', {
+  variants: {},
+  defaultVariants: {},
+});
 
-export const tableBodyVariants = cva(
-  '[&_tr:last-child]:border-0',
-  {
-    variants: {},
-    defaultVariants: {},
-  },
-);
+export const tableBodyVariants = cva('[&_tr:last-child]:border-0', {
+  variants: {},
+  defaultVariants: {},
+});
 
-export const tableRowVariants = cva(
-  'border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted',
-  {
-    variants: {},
-    defaultVariants: {},
-  },
-);
+export const tableRowVariants = cva('border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted', {
+  variants: {},
+  defaultVariants: {},
+});
 
-export const tableHeadVariants = cva(
-  'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
-  {
-    variants: {},
-    defaultVariants: {},
-  },
-);
+export const tableHeadVariants = cva('h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]', {
+  variants: {},
+  defaultVariants: {},
+});
 
-export const tableCellVariants = cva(
-  'p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
-  {
-    variants: {},
-    defaultVariants: {},
-  },
-);
+export const tableCellVariants = cva('p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]', {
+  variants: {},
+  defaultVariants: {},
+});
 
-export const tableCaptionVariants = cva(
-  'mt-4 text-sm text-muted-foreground',
-  {
-    variants: {},
-    defaultVariants: {},
-  },
-);
+export const tableCaptionVariants = cva('mt-4 text-sm text-muted-foreground', {
+  variants: {},
+  defaultVariants: {},
+});
 
 export type ZardTableVariants = VariantProps<typeof tableVariants>;
 export type ZardTableHeaderVariants = VariantProps<typeof tableHeaderVariants>;
@@ -229,6 +212,7 @@ export type ZardTableRowVariants = VariantProps<typeof tableRowVariants>;
 export type ZardTableHeadVariants = VariantProps<typeof tableHeadVariants>;
 export type ZardTableCellVariants = VariantProps<typeof tableCellVariants>;
 export type ZardTableCaptionVariants = VariantProps<typeof tableCaptionVariants>;
+
 ```
 
 ### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">table.module.ts
@@ -262,4 +246,6 @@ const TABLE_COMPONENTS = [
   exports: [...TABLE_COMPONENTS],
 })
 export class ZardTableModule {}
+
 ```
+

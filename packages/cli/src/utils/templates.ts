@@ -29,8 +29,9 @@ export const POSTCSS_CONFIG = `{
 `;
 
 export const STYLES_WITH_VARIABLES = `@import 'tailwindcss';
-
 @plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
   --background: oklch(1 0 0);
