@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { Step } from '../constants/install.constant';
 
 @Injectable({
@@ -82,9 +83,11 @@ export class DynamicInstallationService {
       'badge',
       'breadcrumb',
       'button',
+      'calendar',
       'card',
       'checkbox',
       'command',
+      'date-picker',
       'dialog',
       'divider',
       'loader',
@@ -92,9 +95,11 @@ export class DynamicInstallationService {
       'progress-bar',
       'radio',
       'select',
+      'skeleton',
       'slider',
       'switch',
       'toggle',
+      'toggle-group',
     ];
 
     return utilsComponents.includes(componentName);
@@ -109,9 +114,11 @@ export class DynamicInstallationService {
       'badge',
       'breadcrumb',
       'button',
+      'calendar',
       'card',
       'checkbox',
       'command',
+      'date-picker',
       'dialog',
       'divider',
       'dropdown',
@@ -121,11 +128,13 @@ export class DynamicInstallationService {
       'progress-bar',
       'radio',
       'select',
+      'skeleton',
       'slider',
       'switch',
       'tabs',
       'toggle',
       'tooltip',
+      'toggle-group',
     ];
 
     return componentsWithDeps.includes(componentName);
