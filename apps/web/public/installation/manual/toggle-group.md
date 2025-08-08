@@ -233,4 +233,3 @@ export type ZardToggleGroupVariants = VariantProps<typeof toggleGroupVariants>;
 export type ZardToggleGroupItemVariants = VariantProps<typeof toggleGroupItemVariants>;
 
 ```
-
