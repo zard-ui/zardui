@@ -708,4 +708,3 @@ export type ZardCalendarDayVariants = VariantProps<typeof calendarDayVariants>;
 export type ZardCalendarDayButtonVariants = VariantProps<typeof calendarDayButtonVariants>;
 
 ```
-

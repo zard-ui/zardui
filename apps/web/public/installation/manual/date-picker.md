@@ -164,4 +164,3 @@ export { datePickerVariants };
 export type ZardDatePickerVariants = VariantProps<typeof datePickerVariants>;
 
 ```
-
