@@ -1,18 +1,18 @@
+import * as commentJson from 'comment-json';
 import { Command } from 'commander';
 import { existsSync } from 'fs';
-import fs from 'fs-extra';
-import path from 'path';
 import prompts from 'prompts';
 import { execa } from 'execa';
+import fs from 'fs-extra';
 import chalk from 'chalk';
-import ora from 'ora';
+import path from 'path';
 import { z } from 'zod';
-import * as commentJson from 'comment-json';
+import ora from 'ora';
 
+import { UTILS, POSTCSS_CONFIG, STYLES_WITH_VARIABLES } from '../utils/templates.js';
 import { DEFAULT_CONFIG, type Config } from '../utils/config.js';
 import { getProjectInfo } from '../utils/get-project-info.js';
 import { logger, spinner } from '../utils/logger.js';
-import { UTILS, POSTCSS_CONFIG, STYLES_WITH_VARIABLES } from '../utils/templates.js';
 
 export const init = new Command()
   .name('init')
@@ -231,17 +231,19 @@ async function setupTailwind(cwd: string, config: Config) {
   }
 }
 
-async function createUtils(cwd: string, config: Config) {
+export async function createUtils(cwd: string, config: Config) {
   const utilsPath = path.join(cwd, config.aliases.utils);
 
   if (!existsSync(utilsPath)) {
     await fs.mkdir(utilsPath, { recursive: true });
   }
 
-  const mergeClassesPath = path.join(utilsPath, 'merge-classes.ts');
+  for (const [fileName, content] of Object.entries(UTILS)) {
+    const filePath = path.join(utilsPath, `${fileName}.ts`);
 
-  if (!existsSync(mergeClassesPath)) {
-    await fs.writeFile(mergeClassesPath, UTILS.mergeClasses, 'utf8');
+    if (!existsSync(filePath)) {
+      await fs.writeFile(filePath, content.trim(), 'utf8');
+    }
   }
 }
 
