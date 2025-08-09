@@ -1,18 +1,18 @@
+import * as commentJson from 'comment-json';
 import { Command } from 'commander';
 import { existsSync } from 'fs';
-import fs from 'fs-extra';
-import path from 'path';
 import prompts from 'prompts';
 import { execa } from 'execa';
+import fs from 'fs-extra';
 import chalk from 'chalk';
-import ora from 'ora';
+import path from 'path';
 import { z } from 'zod';
-import * as commentJson from 'comment-json';
+import ora from 'ora';
 
+import { UTILS, POSTCSS_CONFIG, STYLES_WITH_VARIABLES } from '../utils/templates.js';
 import { DEFAULT_CONFIG, type Config } from '../utils/config.js';
 import { getProjectInfo } from '../utils/get-project-info.js';
 import { logger, spinner } from '../utils/logger.js';
-import { UTILS, POSTCSS_CONFIG, STYLES_WITH_VARIABLES } from '../utils/templates.js';
 
 export const init = new Command()
   .name('init')
@@ -44,7 +44,7 @@ export const init = new Command()
       const { proceed } = await prompts({
         type: 'confirm',
         name: 'proceed',
-        message: 'Write configuration to zard.config.json?',
+        message: 'Write configuration to components.json?',
         initial: true,
       });
 
@@ -54,7 +54,7 @@ export const init = new Command()
     }
 
     const configSpinner = spinner('Writing configuration...').start();
-    await fs.writeFile(path.resolve(cwd, 'zard.config.json'), JSON.stringify(config, null, 2), 'utf8');
+    await fs.writeFile(path.resolve(cwd, 'components.json'), JSON.stringify(config, null, 2), 'utf8');
     configSpinner.succeed();
 
     const dependenciesSpinner = spinner('Installing dependencies...').start();
@@ -79,7 +79,7 @@ export const init = new Command()
     logger.success('ZardUI has been initialized successfully!');
     logger.break();
     logger.info('You can now add components using:');
-    logger.info(chalk.bold('  npx zard add [component]'));
+    logger.info(chalk.bold('  npx @ngzard/ui add [component]'));
     logger.break();
   });
 
@@ -88,35 +88,10 @@ async function promptForConfig(cwd: string, projectInfo: any): Promise<Config> {
 
   const options = await prompts([
     {
-      type: 'toggle',
-      name: 'typescript',
-      message: `Would you like to use ${highlight('TypeScript')}? (recommended)`,
-      initial: projectInfo.hasTypeScript,
-      active: 'yes',
-      inactive: 'no',
-    },
-    {
-      type: 'select',
-      name: 'style',
-      message: `Which ${highlight('style')} would you like to use?`,
-      choices: [
-        { title: 'CSS', value: 'css' },
-        { title: 'SCSS', value: 'scss' },
-      ],
-    },
-    {
       type: 'text',
       name: 'tailwindCss',
       message: `Where is your ${highlight('global CSS')} file?`,
       initial: projectInfo.hasNx ? 'apps/[app]/src/styles.css' : 'src/styles.css',
-    },
-    {
-      type: 'toggle',
-      name: 'tailwindCssVariables',
-      message: `Would you like to use ${highlight('CSS variables')} for colors?`,
-      initial: true,
-      active: 'yes',
-      inactive: 'no',
     },
     {
       type: 'text',
@@ -132,14 +107,39 @@ async function promptForConfig(cwd: string, projectInfo: any): Promise<Config> {
     },
   ]);
 
+  // Verify CSS file exists
+  const cssPath = path.join(cwd, options.tailwindCss);
+  if (!existsSync(cssPath)) {
+    logger.error(`CSS file not found at: ${options.tailwindCss}`);
+    logger.error('Please ensure your CSS file exists before continuing.');
+    process.exit(1);
+  }
+
+  // Check if CSS file has existing content
+  const existingContent = await fs.readFile(cssPath, 'utf8');
+  let shouldOverwrite = false;
+
+  if (existingContent.trim().length > 0) {
+    const { overwrite } = await prompts({
+      type: 'confirm',
+      name: 'overwrite',
+      message: `Your CSS file already has content. This will overwrite everything with ZardUI theme configuration. Continue?`,
+      initial: false,
+    });
+
+    if (!overwrite) {
+      logger.info('Installation cancelled.');
+      process.exit(0);
+    }
+    shouldOverwrite = true;
+  }
+
   const config = configSchema.parse({
-    style: options.style,
-    tsx: false,
+    style: 'css', // Fixed to CSS for TailwindV4
     tailwind: {
-      config: 'tailwind.config.js', // Not used in v4 but keep for compatibility
       css: options.tailwindCss,
       baseColor: 'slate',
-      cssVariables: options.tailwindCssVariables,
+      cssVariables: true, // Always true for ZardUI theme
     },
     aliases: {
       components: options.components,
@@ -151,10 +151,8 @@ async function promptForConfig(cwd: string, projectInfo: any): Promise<Config> {
 }
 
 const configSchema = z.object({
-  style: z.enum(['css', 'scss']),
-  tsx: z.boolean(),
+  style: z.enum(['css']), // Only CSS for TailwindV4
   tailwind: z.object({
-    config: z.string(),
     css: z.string(),
     baseColor: z.string(),
     cssVariables: z.boolean(),
@@ -215,33 +213,25 @@ async function setupTailwind(cwd: string, config: Config) {
     }
   }
 
-  // Update styles.css with Tailwind v4 configuration
+  // Always apply ZardUI theme configuration to styles.css
   const stylesPath = path.join(cwd, config.tailwind.css);
-
-  if (config.tailwind.cssVariables && existsSync(stylesPath)) {
-    const currentStyles = await fs.readFile(stylesPath, 'utf8');
-
-    // Check if already has Tailwind import
-    if (!currentStyles.includes('@import "tailwindcss"') && !currentStyles.includes("@import 'tailwindcss'")) {
-      await fs.writeFile(stylesPath, STYLES_WITH_VARIABLES, 'utf8');
-    }
-  } else if (config.tailwind.cssVariables) {
-    // Create styles.css if it doesn't exist
-    await fs.writeFile(stylesPath, STYLES_WITH_VARIABLES, 'utf8');
-  }
+  await fs.writeFile(stylesPath, STYLES_WITH_VARIABLES, 'utf8');
+  logger.info('Applied ZardUI theme configuration to your CSS file');
 }
 
-async function createUtils(cwd: string, config: Config) {
+export async function createUtils(cwd: string, config: Config) {
   const utilsPath = path.join(cwd, config.aliases.utils);
 
   if (!existsSync(utilsPath)) {
     await fs.mkdir(utilsPath, { recursive: true });
   }
 
-  const mergeClassesPath = path.join(utilsPath, 'merge-classes.ts');
+  for (const [fileName, content] of Object.entries(UTILS)) {
+    const filePath = path.join(utilsPath, `${fileName}.ts`);
 
-  if (!existsSync(mergeClassesPath)) {
-    await fs.writeFile(mergeClassesPath, UTILS.mergeClasses, 'utf8');
+    if (!existsSync(filePath)) {
+      await fs.writeFile(filePath, content.trim(), 'utf8');
+    }
   }
 }
 

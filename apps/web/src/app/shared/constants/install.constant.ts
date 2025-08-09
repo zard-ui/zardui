@@ -88,8 +88,8 @@ export const installations: Installation[] = [
         },
       },
       {
-        title: 'Create a zard.config.json file',
-        subtitle: 'Create a zard.config.json file in the root of your project.',
+        title: 'Create a components.json file',
+        subtitle: 'Create a components.json file in the root of your project.',
         path: 'shared/utils/merge-classes.ts',
         file: {
           path: '/documentation/setup/angular/manual/config.md',

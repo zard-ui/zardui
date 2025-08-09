@@ -1,6 +1,6 @@
 <section class="mb-10">
   @if (componentType()) {
-    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">{{ componentType() }}</h3>
+    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">{{ componentType()! | hyphenToSpace }}</h3>
   }
   <main class="overflow-hidden transition-all duration-200 ease-in-out">
     <nav class="flex gap-4 mb-4">
@@ -20,13 +20,8 @@
     </nav>
     <section class="transition-all" [class]="activeTab() === 'preview' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']">
       <z-card
-        class="h-[450px] p-10 w-full flex justify-center items-center gap-4 [&_ng-component]:min-w-80 [&_ng-component]:gap-4 [&_ng-component]:items-center"
-        [class]="{
-          '[&_ng-component]:grid': column(),
-          '[&_ng-component]:flex': !column(),
-          '[&_ng-component]:w-full': fullWidth(),
-          '[&_div:first-child]:w-full': fullWidth(),
-        }"
+        class="min-h-[450px] p-10 w-full flex justify-center items-center gap-4 [&_ng-component]:min-w-80 [&_ng-component]:gap-4 [&_ng-component]:items-center [&_ng-component]:justify-center"
+        [class]="cardClasses()"
       >
         @if (dynamicComponent()) {
           <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>

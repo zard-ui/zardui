@@ -40,7 +40,21 @@
       "WebFetch(domain:docs.anthropic.com)",
       "Bash(npx nx test:*)",
       "Bash(grep:*)",
-      "Bash(npm test)"
+      "Bash(npm test)",
+      "WebFetch(domain:gist.github.com)",
+      "Bash(npm test:*)",
+      "WebFetch(domain:angular.dev)",
+      "Bash(npx nx format:write:*)",
+      "Bash(git pull:*)",
+      "Bash(git fetch:*)",
+      "Bash(git merge:*)",
+      "Bash(git stash:*)",
+      "Bash(chmod:*)",
+      "Bash(./dist/index.js --help)",
+      "Bash(./dist/index.js init:*)",
+      "Bash(npm pack:*)",
+      "Bash(./dist/index.js --version)",
+      "Bash(./node_modules/.bin/ngzard:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

@@ -58,6 +58,9 @@ function transformContent(content: string, config: Config): string {
   // Transform the shared utils import
   transformed = transformed.replace(/from ['"]\.\.\/\.\.\/shared\/utils\/utils['"]/g, `from '@shared/utils/merge-classes'`);
 
+  // Transform the shared utils import (number)
+  transformed = transformed.replace(/from ['"]\.\.\/\.\.\/shared\/utils\/number['"]/g, `from '@shared/utils/number'`);
+
   // Transform relative component imports
   const componentImportRegex = /from ['"]\.\.\/([\w-]+)['"]/g;
   transformed = transformed.replace(componentImportRegex, `from '@shared/components/$1'`);

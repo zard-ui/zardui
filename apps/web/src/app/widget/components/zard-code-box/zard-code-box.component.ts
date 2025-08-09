@@ -3,10 +3,11 @@ import { NgComponentOutlet } from '@angular/common';
 import { Component, input, signal, computed } from '@angular/core';
 import { ComponentType } from '@angular/cdk/overlay';
 import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
+import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
 
 @Component({
   selector: 'z-code-box',
-  imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent],
+  imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent, HyphenToSpacePipe],
   templateUrl: './zard-code-box.component.html',
 })
 export class ZardCodeBoxComponent {
@@ -22,5 +23,21 @@ export class ZardCodeBoxComponent {
     const pathValue = this.path();
     if (!pathValue) return '';
     return `components/${pathValue}.md`;
+  });
+
+  readonly cardClasses = computed(() => {
+    const classes = [];
+
+    if (this.column()) {
+      classes.push('[&_ng-component]:grid');
+    } else {
+      classes.push('[&_ng-component]:flex');
+    }
+
+    if (this.fullWidth()) {
+      classes.push('[&_ng-component]:w-full', '[&_div:first-child]:w-full');
+    }
+
+    return classes.join(' ');
   });
 }

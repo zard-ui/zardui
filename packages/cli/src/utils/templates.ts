@@ -6,7 +6,7 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 `,
-  mergeClasses: `import { twMerge } from 'tailwind-merge';
+  'merge-classes': `import { twMerge } from 'tailwind-merge';
 import { ClassValue, clsx } from 'clsx';
 
 export function mergeClasses(...inputs: ClassValue[]) {
@@ -16,6 +16,20 @@ export function mergeClasses(...inputs: ClassValue[]) {
 export function transform(value: boolean | string): boolean {
   return typeof value === 'string' ? value === '' : value;
 }
+`,
+  number: `function clamp(value: number, [min, max]: [number, number]): number {
+  return Math.min(max, Math.max(min, value));
+}
+
+function roundToStep(value: number, min: number, step: number): number {
+  return Math.round((value - min) / step) * step + min;
+}
+
+function convertValueToPercentage(value: number, min: number, max: number): number {
+  return ((value - min) / (max - min)) * 100;
+}
+
+export { clamp, roundToStep, convertValueToPercentage };
 `,
 };
 
@@ -29,8 +43,9 @@ export const POSTCSS_CONFIG = `{
 `;
 
 export const STYLES_WITH_VARIABLES = `@import 'tailwindcss';
-
 @plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
 
 :root {
   --background: oklch(1 0 0);
