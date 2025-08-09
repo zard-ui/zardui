@@ -12,7 +12,7 @@
               'text-muted-foreground hover:text-foreground text-[0.8rem] no-underline transition-colors cursor-pointer ' + (activeAnchor() === item.id ? 'text-primary' : '')
             "
             (click)="scrollToAnchor(item.id)"
-            >{{ item.label | hyphenToSpace | titlecase }}</a
+            >{{ item.label | hyphenToSpace }}</a
           >
 
           @if (item.children && item.children.length > 0) {
