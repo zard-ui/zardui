@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add pagination
+npx @ngzard/ui@latest add pagination
 ```

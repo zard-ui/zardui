@@ -1,38 +1,34 @@
 # API
 
-## [z-pagination] <span class="api-type-label component">Component</span>
+## [`z-pagination`] <span class="api-type-label component">Component</span>
 
-> Pagination with page navigation, next and previous buttons.
+> Pagination component with previous, next, and numbered page navigation. Supports two-way binding with `[(ngModel)]` and form integration via `ControlValueAccessor`.
 
 ### Properties
 
-| Property       | Description        | Type                             | Default  |
-| -------------- | ------------------ | -------------------------------- | -------- |
-| `[class]`      | Custom CSS classes | `string`                         | `''`     |
-| `[zSize]`      | Toggle size        | `'sm' \| 'md' \| 'lg' \|'icon' ` | `'icon'` |
-| `[zPageIndex]` | Page Index         | `number`                         | `1`      |
-| `[zTotal]`     | Total pages        | `number`                         | `1`      |
+| Property       | Description                     | Type                             | Default  |
+| -------------- | ------------------------------- | -------------------------------- | -------- |
+| `[class]`      | Custom CSS classes              | `string`                         | `''`     |
+| `[zSize]`      | Button size                     | `'sm' \| 'md' \| 'lg' \| 'icon'` | `'icon'` |
+| `[zPageIndex]` | Current page index (1-based)    | `number`                         | `1`      |
+| `[zTotal]`     | Total number of pages           | `number`                         | `1`      |
+| `[zDisabled]`  | Disables pagination interaction | `boolean`                        | `false`  |
 
 ### Events
 
-| Event           | Description                         | Payload  |
-| --------------- | ----------------------------------- | -------- |
-| `(zPageChange)` | Emitted when the page value changes | `number` |
+| Event                | Description                           | Payload  |
+| -------------------- | ------------------------------------- | -------- |
+| `(zPageIndexChange)` | Emitted when the current page changes | `number` |
 
-## [z-pagination-basic] <span class="api-type-label component">Component</span>
+### Forms
 
-> Pagination with page navigation, next and previous links.
+This component implements `ControlValueAccessor`, so it can be used with `[(ngModel)]` and Reactive Forms.
 
-### Properties
+---
 
-| Property  | Description        | Type                             | Default  |
-| --------- | ------------------ | -------------------------------- | -------- |
-| `[class]` | Custom CSS classes | `string`                         | `''`     |
-| `[zSize]` | Toggle size        | `'sm' \| 'md' \| 'lg' \|'icon' ` | `'icon'` |
+## [`z-pagination-content`] <span class="api-type-label component">Component</span>
 
-## [z-pagination-content] <span class="api-type-label component">Component</span>
-
-> Wrapper for pagination items. Used to group elements such as buttons, links, etc.
+> Container for pagination content (buttons and ellipsis).
 
 ### Properties
 
@@ -40,9 +36,11 @@
 | --------- | ------------------ | -------- | ------- |
 | `[class]` | Custom CSS classes | `string` | `''`    |
 
-## [z-pagination-item] <span class="api-type-label component">Component</span>
+---
 
-> Represents a pagination item. May contain buttons, links, or arbitrary content.
+## [`z-pagination-item`] <span class="api-type-label component">Component</span>
+
+> Wraps a pagination button or ellipsis.
 
 ### Properties
 
@@ -50,63 +48,56 @@
 | --------- | ------------------ | -------- | ------- |
 | `[class]` | Custom CSS classes | `string` | `''`    |
 
-## [z-pagination-button] <span class="api-type-label component">Component</span>
+---
 
-> A paging button with active and disabled state support.
+## [`z-pagination-button`] <span class="api-type-label component">Component</span>
+
+> Pagination button with support for active and disabled states.
 
 ### Properties
 
-| Property      | Description                  | Type                                   | Default  |
-| ------------- | ---------------------------- | -------------------------------------- | -------- |
-| `[zDisabled]` | Se o botão está desabilitado | `boolean`                              | `false`  |
-| `[zActive]`   | Se o botão está ativo        | `boolean`                              | `false`  |
-| `[zSize]`     | Tamanho do botão             | `'sm'` \| `'md'` \| `'lg'` \| `'icon'` | `'icon'` |
-| `[class]`     | Custom CSS classes           | `string`                               | `''`     |
+| Property      | Description                            | Type                                   | Default  |
+| ------------- | -------------------------------------- | -------------------------------------- | -------- |
+| `[zDisabled]` | Whether the button is disabled         | `boolean`                              | `false`  |
+| `[zActive]`   | Whether the button is currently active | `boolean`                              | `false`  |
+| `[zSize]`     | Button size                            | `'sm'` \| `'md'` \| `'lg'` \| `'icon'` | `'icon'` |
+| `[class]`     | Custom CSS classes                     | `string`                               | `''`     |
 
 ### Events
 
-| Event      | Description                                                 |
-| ---------- | ----------------------------------------------------------- |
-| `(zClick)` | Emite quando clicado (se não estiver desabilitado ou ativo) |
+| Event      | Description                                      |
+| ---------- | ------------------------------------------------ |
+| `(zClick)` | Emitted when clicked (if not disabled or active) |
 
-## [z-pagination-link] <span class="api-type-label component">Component</span>
+---
 
-> A paging link using `RouterLink`, with active state support.
+## [`z-pagination-previous`] <span class="api-type-label component">Component</span>
 
-### Properties
-
-| Property    | Description          | Type                                   | Default  |
-| ----------- | -------------------- | -------------------------------------- | -------- |
-| `[zLink]`   | Caminho de navegação | `string`                               | `'/'`    |
-| `[zActive]` | Se o link está ativo | `boolean`                              | `false`  |
-| `[zSize]`   | Tamanho do link      | `'sm'` \| `'md'` \| `'lg'` \| `'icon'` | `'icon'` |
-| `[class]`   | Custom CSS classes   | `string`                               | `''`     |
-
-## [z-pagination-previous] <span class="api-type-label component">Component</span>
-
-> Link to navigate to the previous page.
+> Button to go to the previous page.
 
 ### Properties
 
-| Property  | Description                | Type     | Default |
-| --------- | -------------------------- | -------- | ------- |
-| `[zLink]` | Caminho da página anterior | `string` | `'/'`   |
-| `[class]` | Custom CSS classes         | `string` | `''`    |
+| Property  | Description        | Type     | Default |
+| --------- | ------------------ | -------- | ------- |
+| `[class]` | Custom CSS classes | `string` | `''`    |
 
-## [z-pagination-next] <span class="api-type-label component">Component</span>
+---
 
-> Link to navigate to the next page.
+## [`z-pagination-next`] <span class="api-type-label component">Component</span>
+
+> Button to go to the next page.
 
 ### Properties
 
-| Property  | Description               | Type     | Default |
-| --------- | ------------------------- | -------- | ------- |
-| `[zLink]` | Caminho da próxima página | `string` | `'/'`   |
-| `[class]` | Custom CSS classes        | `string` | `''`    |
+| Property  | Description        | Type     | Default |
+| --------- | ------------------ | -------- | ------- |
+| `[class]` | Custom CSS classes | `string` | `''`    |
 
-## [z-pagination-ellipsis] <span class="api-type-label component">Component</span>
+---
 
-> Visual indicator of omitted pages (…).
+## [`z-pagination-ellipsis`] <span class="api-type-label component">Component</span>
+
+> Visual ellipsis ("…") for omitted pages.
 
 ### Properties
 

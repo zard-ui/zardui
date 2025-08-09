@@ -1,130 +1,155 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { By } from '@angular/platform-browser';
 import { Component } from '@angular/core';
 
-import {
-  ZardPaginationBasicComponent,
-  ZardPaginationContentComponent,
-  ZardPaginationItemComponent,
-  ZardPaginationLinkComponent,
-  ZardPaginationPreviousComponent,
-  ZardPaginationNextComponent,
-  ZardPaginationEllipsisComponent,
-} from './pagination.component';
+import { ZardPaginationComponent } from './pagination.component';
 
 @Component({
-  selector: 'test-pagination-host',
+  selector: 'test-host-component',
   standalone: true,
-  imports: [
-    ZardPaginationBasicComponent,
-    ZardPaginationContentComponent,
-    ZardPaginationItemComponent,
-    ZardPaginationLinkComponent,
-    ZardPaginationPreviousComponent,
-    ZardPaginationNextComponent,
-    ZardPaginationEllipsisComponent,
-  ],
-  template: `
-    <z-pagination-basic>
-      <z-pagination-content>
-        <z-pagination-item>
-          <z-pagination-previous [zLink]="'/prev'" />
-        </z-pagination-item>
-        <z-pagination-item>
-          <z-pagination-link [zLink]="'/'" [zActive]="true">1</z-pagination-link>
-        </z-pagination-item>
-        <z-pagination-item>
-          <z-pagination-ellipsis />
-        </z-pagination-item>
-        <z-pagination-item>
-          <z-pagination-link [zLink]="'/3'">3</z-pagination-link>
-        </z-pagination-item>
-        <z-pagination-item>
-          <z-pagination-next [zLink]="'/next'" />
-        </z-pagination-item>
-      </z-pagination-content>
-    </z-pagination-basi>
-  `,
+  imports: [ZardPaginationComponent],
+  template: ` <z-pagination [zPageIndex]="pageIndex" [zTotal]="totalPages" [zSize]="'default'" (zPageIndexChange)="onPageChange($event)" [class]="customClass"></z-pagination> `,
 })
-class TestPaginationHostComponent {}
+class TestHostComponent {
+  pageIndex = 1;
+  totalPages = 5;
+  lastEmittedPage: number | null = null;
+  customClass = 'custom-pagination-class';
 
-describe('ZardPagination Integration', () => {
-  let fixture: ComponentFixture<TestPaginationHostComponent>;
-  let component: TestPaginationHostComponent;
+  onPageChange(page: number) {
+    this.lastEmittedPage = page;
+    this.pageIndex = page;
+  }
+}
+
+describe('ZardPaginationComponent Integration (Jest)', () => {
+  let fixture: ComponentFixture<TestHostComponent>;
+  let hostComponent: TestHostComponent;
+  let nativeEl: HTMLElement;
+
+  const getButtons = (): NodeListOf<HTMLButtonElement> => nativeEl.querySelectorAll('z-pagination-button > button');
+
+  const getPrevButton = (): HTMLButtonElement | null => getButtons()[0] ?? null;
+
+  const getNextButton = (): HTMLButtonElement | null => {
+    const buttons = getButtons();
+    return buttons[buttons.length - 1] ?? null;
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestPaginationHostComponent, RouterTestingModule],
+      imports: [TestHostComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TestPaginationHostComponent);
-    component = fixture.componentInstance;
+    fixture = TestBed.createComponent(TestHostComponent);
+    hostComponent = fixture.componentInstance;
+    nativeEl = fixture.nativeElement;
     fixture.detectChanges();
   });
 
   it('should create the host component', () => {
-    expect(component).toBeTruthy();
+    expect(hostComponent).toBeTruthy();
   });
 
-  it('should render all pagination components', () => {
-    expect(fixture.debugElement.query(By.directive(ZardPaginationBasicComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardPaginationContentComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardPaginationItemComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardPaginationLinkComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardPaginationPreviousComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardPaginationNextComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardPaginationEllipsisComponent))).toBeTruthy();
+  it('should render the correct number of page buttons (including prev and next)', () => {
+    const pageButtons = nativeEl.querySelectorAll('z-pagination-button');
+    // prev + next + page buttons
+    expect(pageButtons.length).toBe(hostComponent.totalPages + 2);
   });
 
-  it('pagination <nav> should have aria-label="pagination"', () => {
-    const nav = fixture.debugElement.query(By.css('nav')).nativeElement;
-    expect(nav.getAttribute('aria-label')).toBe('pagination');
+  it('should highlight the current page using aria-current', () => {
+    const activeButton = Array.from(getButtons()).find(btn => btn.getAttribute('aria-current') === 'page');
+
+    expect(activeButton).toBeTruthy();
+    expect(activeButton!.textContent?.trim()).toBe(hostComponent.pageIndex.toString());
   });
 
-  it('pagination-link with zActive should have aria-current="page" and data-active', () => {
-    const anchors = fixture.debugElement.queryAll(By.css('a'));
-    const activeAnchor = anchors.find(a => a.nativeElement.textContent.trim() === '1');
+  it('should emit zPageIndexChange when clicking a different page button', () => {
+    const page3Button = Array.from(getButtons()).find(btn => btn.textContent?.trim() === '3');
+    expect(page3Button).toBeTruthy();
 
-    expect(activeAnchor?.nativeElement.getAttribute('aria-current')).toBe('page');
-    expect(activeAnchor?.nativeElement.getAttribute('data-active')).toBe('true');
-  });
-  it('should render projected content correctly', () => {
-    const anchors = fixture.debugElement.queryAll(By.css('a'));
-    const page1 = anchors.find(a => a.nativeElement.textContent.includes('1'));
-    const page3 = anchors.find(a => a.nativeElement.textContent.includes('3'));
+    page3Button!.click();
+    fixture.detectChanges();
 
-    expect(page1?.nativeElement.textContent.trim()).toBe('1');
-    expect(page3?.nativeElement.textContent.trim()).toBe('3');
+    expect(hostComponent.lastEmittedPage).toBe(3);
+    expect(hostComponent.pageIndex).toBe(3);
   });
 
-  it('should render previous and next buttons correctly', () => {
-    const previous = fixture.debugElement.query(By.directive(ZardPaginationPreviousComponent)).nativeElement;
-    const next = fixture.debugElement.query(By.directive(ZardPaginationNextComponent)).nativeElement;
+  it('should not emit zPageIndexChange when clicking the active page button', () => {
+    const activeButton = Array.from(getButtons()).find(btn => btn.getAttribute('aria-current') === 'page');
+    expect(activeButton).toBeTruthy();
 
-    expect(previous.textContent).toContain('Previous');
-    expect(next.textContent).toContain('Next');
+    hostComponent.lastEmittedPage = null;
+    activeButton!.click();
+    fixture.detectChanges();
+
+    expect(hostComponent.lastEmittedPage).toBeNull();
   });
 
-  it('pagination-ellipsis should render icon and sr-only text', () => {
-    const ellipsis = fixture.debugElement.query(By.directive(ZardPaginationEllipsisComponent));
-    const span = ellipsis.nativeElement.querySelector('span.icon-ellipsis');
-    const srOnly = ellipsis.nativeElement.querySelector('span.sr-only');
+  describe('Previous button behavior', () => {
+    it('should disable "Previous" button on first page and not emit', () => {
+      const prevBtn = getPrevButton();
+      expect(prevBtn).toBeTruthy();
+      expect(prevBtn!.getAttribute('aria-disabled')).toBe('true');
 
-    expect(span).toBeTruthy();
-    expect(srOnly.textContent).toBe('More pages');
+      hostComponent.lastEmittedPage = null;
+      prevBtn!.click();
+      fixture.detectChanges();
+
+      expect(hostComponent.lastEmittedPage).toBeNull();
+    });
+
+    it('should enable "Previous" button on page > 1 and emit page change', () => {
+      hostComponent.pageIndex = 2;
+      fixture.detectChanges();
+
+      const prevBtn = getPrevButton();
+      expect(prevBtn).toBeTruthy();
+      expect(prevBtn!.getAttribute('aria-disabled')).toBeNull();
+
+      hostComponent.lastEmittedPage = null;
+      prevBtn!.click();
+      fixture.detectChanges();
+
+      expect(hostComponent.lastEmittedPage).toBe(1);
+    });
   });
 
-  it('should render correct href attributes in links', () => {
-    const links = fixture.debugElement.queryAll(By.directive(ZardPaginationLinkComponent));
-    const hrefs = links.map(el => el.nativeElement.querySelector('a').getAttribute('href'));
+  describe('Next button behavior', () => {
+    it('should disable "Next" button on last page and not emit', () => {
+      hostComponent.pageIndex = hostComponent.totalPages;
+      fixture.detectChanges();
 
-    expect(hrefs).toContain('/');
-    expect(hrefs).toContain('/3');
+      const nextBtn = getNextButton();
+      expect(nextBtn).toBeTruthy();
+      expect(nextBtn!.getAttribute('aria-disabled')).toBe('true');
+
+      hostComponent.lastEmittedPage = null;
+      nextBtn!.click();
+      fixture.detectChanges();
+
+      expect(hostComponent.lastEmittedPage).toBeNull();
+    });
+
+    it('should enable "Next" button on page < total and emit page change', () => {
+      hostComponent.pageIndex = hostComponent.totalPages - 1;
+      fixture.detectChanges();
+
+      const nextBtn = getNextButton();
+      expect(nextBtn).toBeTruthy();
+      expect(nextBtn!.getAttribute('aria-disabled')).toBeNull();
+
+      hostComponent.lastEmittedPage = null;
+      nextBtn!.click();
+      fixture.detectChanges();
+
+      expect(hostComponent.lastEmittedPage).toBe(hostComponent.totalPages);
+    });
   });
 
-  it('should have default class applied to pagination container', () => {
-    const nav = fixture.debugElement.query(By.css('nav'));
-    expect(nav.nativeElement.className).toContain('');
+  it('should apply custom class to pagination root element', () => {
+    const paginationHost = nativeEl.querySelector('z-pagination');
+
+    expect(paginationHost).toBeTruthy();
+    expect(paginationHost!.classList).toContain(hostComponent.customClass);
   });
 });

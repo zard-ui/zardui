@@ -1,30 +1,14 @@
 ### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">pagination.component.ts
 
 ```angular-ts showLineNumbers
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, forwardRef, input, linkedSignal, output, ViewEncapsulation } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ClassValue } from 'clsx';
 
-import { paginationBasicVariants, paginationButtonVariants, paginationContentVariants, paginationEllipsisVariants, paginationItemVariants, paginationLinkVariants, paginationNextVariants, paginationPreviousVariants, paginationVariants, ZardPaginationButtonVariants, ZardPaginationLinkVariants, } from './pagination.variants';
+import { paginationContentVariants, paginationEllipsisVariants, paginationItemVariants, paginationNextVariants, paginationPreviousVariants, paginationVariants, } from './pagination.variants';
+import { buttonVariants, ZardButtonVariants } from '../button/button.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
-
-@Component({
-  selector: 'z-pagination-basic',
-  exportAs: 'zPaginationBasic',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: `
-    <nav aria-label="pagination-basic" role="navigation" data-slot="pagination-basic" [class]="classes()">
-      <ng-content></ng-content>
-    </nav>
-  `,
-})
-export class ZardPaginationBasicComponent {
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(paginationBasicVariants(), this.class()));
-}
 
 @Component({
   selector: 'z-pagination-content',
@@ -32,15 +16,17 @@ export class ZardPaginationBasicComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <ul data-slot="pagination-content" [class]="classes()">
+    <div [attr.aria-label]="ariaLabel()" role="navigation" data-slot="pagination-content" [class]="classes()">
       <ng-content></ng-content>
-    </ul>
+    </div>
   `,
 })
 export class ZardPaginationContentComponent {
+  readonly ariaLabel = input<string>('pagination-content');
+
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(paginationContentVariants(), this.class()));
+  protected readonly classes = computed(() =>  mergeClasses(paginationContentVariants(), this.class()));
 }
 
 @Component({
@@ -49,15 +35,15 @@ export class ZardPaginationContentComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <li data-slot="pagination-item" [class]="classes()">
+    <div data-slot="pagination-item" [class]="classes()">
       <ng-content></ng-content>
-    </li>
+    </div>
   `,
 })
 export class ZardPaginationItemComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(paginationItemVariants(), this.class()));
+  protected readonly classes = computed(() =>  mergeClasses(paginationItemVariants(), this.class()));
 }
 
 @Component({
@@ -82,44 +68,22 @@ export class ZardPaginationItemComponent {
 export class ZardPaginationButtonComponent {
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zActive = input(false, { transform: booleanAttribute });
-  readonly zSize = input<ZardPaginationButtonVariants['zSize']>('icon');
+  readonly zSize = input<ZardButtonVariants['zSize']>('icon');
 
   readonly class = input<ClassValue>('');
-
   readonly zClick = output<void>();
 
-  private readonly zType = computed<ZardPaginationButtonVariants['zType']>(() => (this.zActive() ? 'outline' : 'ghost'));
+  protected readonly classes = computed(() => mergeClasses(buttonVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()) );
 
-  protected readonly classes = computed(() => mergeClasses(paginationButtonVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()));
+  private readonly zType = computed<ZardButtonVariants['zType']>(() =>
+    (this.zActive() ? 'outline' : 'ghost')
+  );
 
   handleClick() {
-    if (this.zDisabled() || this.zActive()) return;
-    this.zClick.emit();
+    if (!this.zDisabled() && !this.zActive()) {
+      this.zClick.emit();
+    }
   }
-}
-
-@Component({
-  selector: 'z-pagination-link',
-  exportAs: 'zPaginationLink',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  imports: [RouterLink],
-  template: `
-    <a [attr.aria-current]="zActive() ? 'page' : undefined" data-slot="pagination-link" [attr.data-active]="zActive() || null" [routerLink]="zLink()" [class]="classes()">
-      <ng-content></ng-content>
-    </a>
-  `,
-})
-export class ZardPaginationLinkComponent {
-  readonly zLink = input<string>('/');
-  readonly zActive = input(false, { transform: booleanAttribute });
-  readonly zSize = input<ZardPaginationLinkVariants['zSize']>('icon');
-
-  readonly class = input<ClassValue>('');
-
-  private readonly zType = computed<ZardPaginationLinkVariants['zType']>(() => (this.zActive() ? 'outline' : 'ghost'));
-
-  protected readonly classes = computed(() => mergeClasses(paginationLinkVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()));
 }
 
 @Component({
@@ -127,17 +91,15 @@ export class ZardPaginationLinkComponent {
   exportAs: 'zPaginationPrevious',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardPaginationLinkComponent],
+  imports: [ZardPaginationButtonComponent],
   template: `
-    <z-pagination-link aria-label="Go to previous page" [zLink]="zLink()" [zSize]="'md'" [class]="classes()">
+    <z-pagination-button aria-label="Go to previous page" [class]="classes()" [zSize]="'default'">
       <div class="icon-chevron-left"></div>
       <span class="hidden sm:block">Previous</span>
-    </z-pagination-link>
+    </z-pagination-button>
   `,
 })
 export class ZardPaginationPreviousComponent {
-  readonly zLink = input<string>('/');
-
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(paginationPreviousVariants(), this.class()));
@@ -148,17 +110,15 @@ export class ZardPaginationPreviousComponent {
   exportAs: 'zPaginationNext',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardPaginationLinkComponent],
+  imports: [ZardPaginationButtonComponent],
   template: `
-    <z-pagination-link [zLink]="zLink()" [zSize]="'md'" aria-label="Go to next page" [class]="classes()">
+    <z-pagination-button aria-label="Go to next page" [class]="classes()" [zSize]="'default'">
       <span class="hidden sm:block">Next</span>
       <div class="icon-chevron-right"></div>
-    </z-pagination-link>
+    </z-pagination-button>
   `,
 })
 export class ZardPaginationNextComponent {
-  readonly zLink = input<string>('/');
-
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(paginationNextVariants(), this.class()));
@@ -184,79 +144,125 @@ export class ZardPaginationEllipsisComponent {
 }
 
 @Component({
- selector: 'z-pagination',
+  selector: 'z-pagination',
   exportAs: 'zPagination',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ ZardPaginationBasicComponent,
+  imports: [
     ZardPaginationContentComponent,
     ZardPaginationItemComponent,
-    ZardPaginationButtonComponent
+    ZardPaginationButtonComponent,
   ],
   template: `
-    <z-pagination-basic>
-      <z-pagination-content>
+    <z-pagination-content>
+      <z-pagination-item>
+        <z-pagination-button
+          aria-label="Go to previous page"
+          [zSize]="zSize()"
+          [zDisabled]="disabled() || currentPage() === 1"
+          (zClick)="goToPrevious()"
+        >
+          <div class="icon-chevron-left"></div>
+        </z-pagination-button>
+      </z-pagination-item>
+
+      @for (page of pages(); track page) {
         <z-pagination-item>
           <z-pagination-button
-            aria-label="Go to previous page"
             [zSize]="zSize()"
-            [zDisabled]="zPageIndex() === 1"
-            (zClick)="goToPage(zPageIndex() - 1)"
-          >
-            <div class="icon-chevron-left"></div>
-          </z-pagination-button>
-        </z-pagination-item>
-        @for(page of visiblePages(); track page) {
-          <z-pagination-item>
-          <z-pagination-button
-            [zSize]="zSize()"
-            [zActive]="page === zPageIndex()"
+            [zActive]="page === currentPage()"
+            [zDisabled]="disabled()"
             (zClick)="goToPage(page)"
           >
             {{ page }}
           </z-pagination-button>
         </z-pagination-item>
-        }
-        <z-pagination-item>
-          <z-pagination-button
-            aria-label="Go to next page"
-            [zSize]="zSize()"
-            [zDisabled]="zPageIndex() === zTotal()"
-            (zClick)="goToPage(zPageIndex() + 1)"
-          >
-            <div class="icon-chevron-right"></div>
-          </z-pagination-button>
-        </z-pagination-item>
-      </z-pagination-content>
-    </z-pagination-basic>
+      }
+
+      <z-pagination-item>
+        <z-pagination-button
+          aria-label="Go to next page"
+          [zSize]="zSize()"
+          [zDisabled]="disabled() || currentPage() === zTotal()"
+          (zClick)="goToNext()"
+        >
+          <div class="icon-chevron-right"></div>
+        </z-pagination-button>
+      </z-pagination-item>
+    </z-pagination-content>
   `,
-   host: {
+  host: {
     '[class]': 'classes()',
-   },
+  },
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ZardPaginationComponent),
+      multi: true,
+    },
+  ],
 })
-export class ZardPaginationComponent {
+export class ZardPaginationComponent implements ControlValueAccessor {
   readonly zPageIndex = input<number>(1);
   readonly zTotal = input<number>(1);
-  readonly zSize = input<ZardPaginationButtonVariants['zSize']>('icon');
+  readonly zSize = input<ZardButtonVariants['zSize']>('icon');
+  readonly zDisabled = input(false, { transform: booleanAttribute });
 
   readonly class = input<ClassValue>('');
 
-  readonly zPageChange = output<number>();
+  readonly zPageIndexChange = output<number>();
 
-  protected readonly classes = computed(() => mergeClasses(paginationVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(paginationVariants(), this.class())
+  );
 
-  readonly visiblePages = computed<number[]>(() => {
-    const length = Math.max(0, this.zTotal());
-    return Array.from({ length }, (_, i) => 1 + i);
+  protected readonly disabled = linkedSignal(() => {
+    return this.zDisabled()
   });
 
-  goToPage(page: number): void {
-    const current = this.zPageIndex();
-    const total = this.zTotal();
+  readonly currentPage = linkedSignal(this.zPageIndex);
 
-    if (page !== current && page >= 1 && page <= total) {
-      this.zPageChange.emit(page);
+  readonly pages = computed<number[]>(() =>
+    Array.from({ length: Math.max(0, this.zTotal()) }, (_, i) => i + 1)
+  );
+
+  goToPage(page: number): void {
+    if (this.disabled()) return;
+    if (page !== this.currentPage() && page >= 1 && page <= this.zTotal()) {
+      this.currentPage.set(page);
+      this.zPageIndexChange.emit(page);
+      this.onChange(page);
+      this.onTouched();
     }
+  }
+
+  goToPrevious() {
+    this.goToPage(this.currentPage() - 1);
+  }
+
+  goToNext() {
+    this.goToPage(this.currentPage() + 1);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private onChange: (value: number) => void = () => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private onTouched: () => void = () => {};
+
+  writeValue(value: number): void {
+    this.currentPage.set(value);
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
   }
 }
 
@@ -268,60 +274,11 @@ export class ZardPaginationComponent {
 import { cva, VariantProps } from 'class-variance-authority';
 
 
-export const paginationBasicVariants = cva('mx-auto flex w-full justify-center');
-export type ZardPaginationBasicVariants = VariantProps<typeof paginationBasicVariants>;
-
 export const paginationContentVariants = cva('flex flex-row items-center gap-1');
 export type ZardPaginationContentVariants = VariantProps<typeof paginationContentVariants>;
 
 export const paginationItemVariants = cva('');
 export type ZardPaginationItemVariants = VariantProps<typeof paginationItemVariants>;
-
-export const paginationButtonVariants = cva(
-  'inline-flex items-center justify-center gap-2 shrink-0 whitespace-nowrap rounded-md text-sm font-medium transition-all outline-none disabled:pointer-events-none disabled:opacity-50 [&>div[class^=icon-]]:pointer-events-none [&>div[class^=icon-]]:shrink-0 [&>div[class^=icon-]:not([class*="text-"])]:!text-base focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
-  {
-    variants: {
-      zType: {
-        outline: 'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-      },
-      zSize: {
-        sm: 'h-8 rounded-md gap-1.5 px-3 has-[>div[class^=icon-]]:px-2.5',
-        md: 'h-9 px-4 py-2 has-[>div[class^=icon-]]:px-3',
-        lg: 'h-10 rounded-md px-6 has-[>div[class^=icon-]]:px-4',
-        icon: 'size-9',
-      },
-    },
-    defaultVariants: {
-      zType: 'ghost',
-      zSize: 'md',
-    },
-  },
-);
-export type ZardPaginationButtonVariants = VariantProps<typeof paginationButtonVariants>;
-
-export const paginationLinkVariants = cva(
-  'inline-flex items-center justify-center gap-2 shrink-0 whitespace-nowrap rounded-md text-sm font-medium transition-all outline-none disabled:pointer-events-none disabled:opacity-50 [&>div[class^=icon-]]:pointer-events-none [&>div[class^=icon-]]:shrink-0 [&>div[class^=icon-]:not([class*="text-"])]:!text-base focus-visible:ring-[3px] focus-visible:ring-ring/50 focus-visible:border-ring aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
-  {
-    variants: {
-      zType: {
-        outline: 'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
-        ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
-      },
-      zSize: {
-        sm: 'h-8 rounded-md gap-1.5 px-3 has-[>div[class^=icon-]]:px-2.5',
-        md: 'h-9 px-4 py-2 has-[>div[class^=icon-]]:px-3',
-        lg: 'h-10 rounded-md px-6 has-[>div[class^=icon-]]:px-4',
-        icon: 'size-9',
-      },
-    },
-    defaultVariants: {
-      zType: 'ghost',
-      zSize: 'md',
-    },
-  },
-);
-export type ZardPaginationLinkVariants = VariantProps<typeof paginationLinkVariants>;
 
 export const paginationPreviousVariants = cva('gap-1 px-2.5 sm:pl-2.5');
 export type ZardPaginationPreviousVariants = VariantProps<typeof paginationPreviousVariants>;
@@ -334,6 +291,5 @@ export type ZardPaginationEllipsisVariants = VariantProps<typeof paginationEllip
 
 export const paginationVariants = cva('mx-auto flex w-full justify-center');
 export type ZardPaginationVariants = VariantProps<typeof paginationVariants>;
-
 
 ```
