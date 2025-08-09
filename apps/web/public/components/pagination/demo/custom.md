@@ -3,7 +3,6 @@ import { Component, signal } from '@angular/core';
 
 import { ZardPaginationModule } from '../pagination.module';
 
-
 @Component({
   standalone: true,
   imports: [ZardPaginationModule],
@@ -13,12 +12,9 @@ import { ZardPaginationModule } from '../pagination.module';
         <z-pagination-previous (click)="goToPrevious()" />
       </z-pagination-item>
 
-      @for(page of pages(); track page ) {
+      @for (page of pages(); track page) {
         <z-pagination-item>
-          <z-pagination-button
-            [zActive]="page === currentPage()"
-            (click)="goToPage(page)"
-          >
+          <z-pagination-button [zActive]="page === currentPage()" (click)="goToPage(page)">
             {{ page }}
           </z-pagination-button>
         </z-pagination-item>

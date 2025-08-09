@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 
 import { ZardPaginationModule } from '../pagination.module';
 
-
 @Component({
   standalone: true,
   imports: [ZardPaginationModule, FormsModule],

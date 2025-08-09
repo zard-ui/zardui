@@ -10,6 +10,7 @@
     "build:dev": "npx nx run web:build --configuration=development",
     "publish:build": "nx run-many --target=build --p=libs/*",
     "test": "nx run-many --target=test --p=libs/*",
+    "test:watch": "nx run-many --target=test --p=libs/* --watch",
     "release": "nx release --yes --verbose",
     "watch:files": "npx tsx scripts/generate-files.cts",
     "convert:demos": "npx tsx scripts/convert-demos-to-md.cts",
