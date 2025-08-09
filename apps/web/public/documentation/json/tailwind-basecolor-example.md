@@ -1,0 +1,7 @@
+```json
+{
+  "tailwind": {
+    "baseColor": "slate"
+  }
+}
+```

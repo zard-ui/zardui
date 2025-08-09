@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
+import { RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'z-sidebar',
@@ -21,7 +21,7 @@ import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
                     zType="ghost"
                     zFull
                     [routerLink]="path.path"
-                    class="justify-between px-2 py-1 font-normal capitalize max-w-48"
+                    class="justify-between px-2 py-1 font-normal max-w-48"
                     routerLinkActive="bg-accent font-semibold"
                     [routerLinkActiveOptions]="{ exact: true }"
                   >
