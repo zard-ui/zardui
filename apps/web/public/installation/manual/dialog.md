@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dialog.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dialog.component.ts" copyButton showLineNumbers
 import { filter, fromEvent, takeUntil } from 'rxjs';
 
 import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
@@ -133,9 +133,9 @@ export class ZardDialogModule {}
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dialog.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dialog.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const dialogVariants = cva(
@@ -145,9 +145,9 @@ export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dialog-ref.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dialog-ref.ts" copyButton showLineNumbers
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
 
 import { OverlayRef } from '@angular/cdk/overlay';
@@ -223,9 +223,9 @@ export class ZardDialogRef<T = any, R = any> {
 
 ```
 
-### <img src="/icons/angular.svg" class="w-4 h-4 inline mr-2" alt="Angular HTML">dialog.component.html
 
-```angular-html showLineNumbers
+
+```angular-html title="dialog.component.html" copyButton showLineNumbers
 @if (config.zClosable || config.zClosable === undefined) {
   <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1" (click)="onCloseClick()">
     <i class="icon-x text-sm"></i>
@@ -278,9 +278,9 @@ export class ZardDialogRef<T = any, R = any> {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dialog.service.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dialog.service.ts" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { inject, Injectable, InjectionToken, Injector, TemplateRef } from '@angular/core';

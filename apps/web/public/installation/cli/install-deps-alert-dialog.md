@@ -1,3 +1,3 @@
-```bash
-npm install class-variance-authority clsx @angular/cdk rxjs
+```bash title="Terminal" copyButton
+npm install rxjs
 ```

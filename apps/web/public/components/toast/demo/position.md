@@ -1,4 +1,4 @@
-```angular-ts showLineNumbers
+```angular-ts showLineNumbers copyButton
 import { toast } from 'ngx-sonner';
 
 import { ChangeDetectionStrategy, Component } from '@angular/core';

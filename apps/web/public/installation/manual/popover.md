@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">popover.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="popover.component.ts" copyButton showLineNumbers
 import { Subject } from 'rxjs';
 
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
@@ -382,9 +382,9 @@ export class ZardPopoverComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">popover.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="popover.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const popoverVariants = cva(

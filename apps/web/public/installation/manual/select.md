@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">select.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="select.component.ts" copyButton showLineNumbers
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { NgIf } from '@angular/common';
@@ -433,9 +433,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">select.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="select.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const selectTriggerVariants = cva(
@@ -468,9 +468,9 @@ export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">select-item.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="select-item.component.ts" copyButton showLineNumbers
 import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input } from '@angular/core';
 

@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">date-picker.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="date-picker.component.ts" copyButton showLineNumbers
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
 
@@ -136,9 +136,9 @@ export class ZardDatePickerComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">date-picker.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="date-picker.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 const datePickerVariants = cva('', {

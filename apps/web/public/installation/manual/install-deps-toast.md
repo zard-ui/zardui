@@ -1,3 +1,3 @@
-```bash
-npm install class-variance-authority
+```bash title="Terminal" copyButton
+npm install ngx-sonner
 ```

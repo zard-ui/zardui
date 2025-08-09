@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">alert.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="alert.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
@@ -54,9 +54,9 @@ export class ZardAlertComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">alert.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="alert.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const alertVariants = cva('relative flex gap-2 w-full rounded-lg p-4', {

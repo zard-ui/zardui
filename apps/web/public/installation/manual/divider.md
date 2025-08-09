@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">divider.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="divider.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
@@ -38,9 +38,9 @@ export class ZardDividerComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">divider.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="divider.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const dividerVariants = cva('bg-border block', {

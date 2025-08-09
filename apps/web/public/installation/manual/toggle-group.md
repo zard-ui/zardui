@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">toggle-group.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="toggle-group.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
@@ -185,9 +185,9 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">toggle-group.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="toggle-group.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const toggleGroupVariants = cva('flex w-fit items-center rounded-md', {
@@ -233,3 +233,4 @@ export type ZardToggleGroupVariants = VariantProps<typeof toggleGroupVariants>;
 export type ZardToggleGroupItemVariants = VariantProps<typeof toggleGroupItemVariants>;
 
 ```
+

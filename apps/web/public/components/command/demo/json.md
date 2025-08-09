@@ -1,4 +1,4 @@
-```angular-ts showLineNumbers
+```angular-ts showLineNumbers copyButton
 import { Component, signal } from '@angular/core';
 
 import { ZardCommandConfig } from '../command.component';

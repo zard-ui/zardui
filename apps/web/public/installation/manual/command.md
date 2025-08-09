@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="command.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import {
@@ -267,9 +267,9 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="command.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const commandVariants = cva('flex h-full w-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground', {
@@ -344,9 +344,9 @@ export type ZardCommandItemVariants = VariantProps<typeof commandItemVariants>;
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command-divider.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="command-divider.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -390,9 +390,9 @@ export class ZardCommandDividerComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command-empty.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="command-empty.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -445,9 +445,9 @@ export class ZardCommandEmptyComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command-input.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="command-input.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 import { Subject, switchMap, takeUntil, timer } from 'rxjs';
 
@@ -624,9 +624,9 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command-json.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="command-json.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, EventEmitter, forwardRef, HostListener, input, Output, signal, ViewEncapsulation } from '@angular/core';
@@ -916,9 +916,9 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command-list.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="command-list.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -946,9 +946,9 @@ export class ZardCommandListComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command-option-group.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="command-option-group.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { AfterContentInit, ChangeDetectionStrategy, Component, computed, ContentChildren, inject, input, QueryList, ViewEncapsulation } from '@angular/core';
@@ -1012,9 +1012,9 @@ export class ZardCommandOptionGroupComponent implements AfterContentInit {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command-option.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="command-option.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
@@ -1122,9 +1122,9 @@ export class ZardCommandOptionComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">command.module.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="command.module.ts" copyButton showLineNumbers
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';

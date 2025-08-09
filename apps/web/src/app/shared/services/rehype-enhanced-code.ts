@@ -63,10 +63,10 @@ function createCopyButton(codeContent: string, hasTitle = false): any {
     tagName: 'button',
     properties: {
       class: [
-        hasTitle ?? 'absolute',
+        hasTitle ? '' : 'absolute',
         'top-3',
-        hasTitle ?? 'right-3', // Left if has title, right if no title
-        hasTitle ?? 'z-20',
+        hasTitle ? '' : 'right-3',
+        hasTitle ? '' : 'z-20',
         hasTitle && 'ml-auto',
         'flex',
         'h-6',

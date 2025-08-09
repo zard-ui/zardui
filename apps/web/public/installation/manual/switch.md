@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">switch.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="switch.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ClassValue } from 'class-variance-authority/dist/types';
@@ -88,9 +88,9 @@ export class ZardSwitchComponent implements ControlValueAccessor {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">switch.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="switch.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const switchVariants = cva(

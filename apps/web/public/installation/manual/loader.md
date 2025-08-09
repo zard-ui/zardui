@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">loader.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="loader.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
@@ -59,9 +59,9 @@ export class ZardLoaderComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">loader.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="loader.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const loaderVariants = cva('', {

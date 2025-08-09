@@ -46,6 +46,14 @@ export class MarkdownService {
             };
           }
 
+          if (node.tagName === 'h3') {
+            node.properties = {
+              ...node.properties,
+              style: [],
+              class: ['w-full', 'text-base', 'font-semibold'],
+            };
+          }
+
           if (node.tagName === 'p') {
             node.properties = {
               ...node.properties,
@@ -66,95 +74,6 @@ export class MarkdownService {
                 class: ['relative', 'rounded', 'bg-muted', 'px-[0.3rem]', 'py-[0.2rem]', 'font-mono', 'text-sm', 'font-semibold'],
               };
             }
-          }
-
-          if (node.tagName === 'h3') {
-            const headingText = node.children
-              .filter((child: { type: string }) => child.type === 'text')
-              .map((child: { value: any }) => child.value)
-              .join('');
-
-            let icon = null;
-            if (headingText.endsWith('.component.ts')) {
-              icon = {
-                type: 'element',
-                tagName: 'img',
-                properties: {
-                  src: '/icons/angular-component.svg',
-                  class: 'w-5 h-5 inline mr-2',
-                  alt: 'Angular',
-                },
-                children: [],
-              };
-            } else if (headingText.endsWith('.service.ts')) {
-              icon = {
-                type: 'element',
-                tagName: 'img',
-                properties: {
-                  src: '/icons/angular-service.svg',
-                  class: 'w-5 h-5 inline mr-2',
-                  alt: 'Angular',
-                },
-                children: [],
-              };
-            } else if (headingText.endsWith('.directive.ts')) {
-              icon = {
-                type: 'element',
-                tagName: 'img',
-                properties: {
-                  src: '/icons/angular-directive.svg',
-                  class: 'w-5 h-5 inline mr-2',
-                  alt: 'Angular',
-                },
-                children: [],
-              };
-            } else if (headingText.endsWith('.html')) {
-              icon = {
-                type: 'element',
-                tagName: 'img',
-                properties: {
-                  src: '/icons/html.svg',
-                  class: 'w-5 h-5 inline mr-2',
-                  alt: 'HTML',
-                },
-                children: [],
-              };
-            } else if (headingText.endsWith('.ts') && !headingText.includes('.component.') && !headingText.includes('.service.') && !headingText.includes('.directive.')) {
-              // Apenas .ts "puro" - sem outros sufixos específicos do Angular
-              icon = {
-                type: 'element',
-                tagName: 'img',
-                properties: {
-                  src: '/icons/ts-blue.svg',
-                  class: 'w-5 h-5 inline mr-2',
-                  alt: 'TypeScript',
-                },
-                children: [],
-              };
-            }
-
-            // Adiciona a classe ao h3
-            node.properties = {
-              ...node.properties,
-              class: ['w-full', 'text-base', 'font-semibold'],
-            };
-
-            // Se tiver ícone, insere como primeiro filho do h3
-            if (icon) {
-              node.children.unshift(icon);
-            }
-
-            // Cria o wrapper
-            const wrapper = {
-              type: 'element',
-              tagName: 'div',
-              properties: {
-                class: ['overflow-auto', 'my-4'],
-              },
-              children: [node],
-            };
-
-            parent.children[index] = wrapper;
           }
 
           if (node.tagName === 'figcaption') {
@@ -206,7 +125,7 @@ export class MarkdownService {
           if (node.tagName === 'tr') {
             node.properties = {
               ...node.properties,
-              class: ['order-b', 'transition-colors', 'hover:bg-muted/50'],
+              class: ['transition-colors', 'hover:bg-muted/50'],
             };
           }
 

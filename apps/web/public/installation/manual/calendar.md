@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">calendar.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="calendar.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, input, output, signal, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
@@ -598,9 +598,9 @@ export class ZardCalendarComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">calendar.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="calendar.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const calendarVariants = cva('bg-background p-3 w-fit rounded-lg border', {

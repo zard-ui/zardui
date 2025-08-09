@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">segmented.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="segmented.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import {
@@ -179,9 +179,9 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, Aft
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">segmented.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="segmented.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const segmentedVariants = cva('inline-flex items-center justify-center rounded-md bg-muted p-1 text-muted-foreground', {
