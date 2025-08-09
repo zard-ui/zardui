@@ -13,16 +13,7 @@ import { ZardFormModule } from '../form.module';
 @Component({
   selector: 'zard-demo-form-complex',
   standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    ZardButtonComponent,
-    ZardInputDirective,
-    ZardCheckboxComponent,
-    ZardSelectComponent,
-    ZardSelectItemComponent,
-    ZardFormModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardCheckboxComponent, ZardSelectComponent, ZardSelectItemComponent, ZardFormModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
