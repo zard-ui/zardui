@@ -4,13 +4,13 @@ import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-hea
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'z-cli',
-  templateUrl: './cli.page.html',
+  selector: 'z-json',
+  templateUrl: './json.page.html',
   standalone: true,
   imports: [DocContentComponent, DocHeadingComponent],
 })
-export class CliPage {
-  readonly title = 'CLI - zard/ui';
+export class JsonPage {
+  readonly title = 'components.json - zard/ui';
 
   readonly navigationConfig: NavigationConfig = {
     items: [

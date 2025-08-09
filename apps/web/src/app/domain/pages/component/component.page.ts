@@ -1,7 +1,9 @@
-import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
 import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
-import { CommonModule, ViewportScroller } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Component, inject, signal } from '@angular/core';
 
@@ -17,11 +19,10 @@ import { Title } from '@angular/platform-browser';
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [CommonModule, DynamicAnchorComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
+  imports: [CommonModule, DocContentComponent, DocHeadingComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
 })
 export class ComponentPage {
   private readonly titleService = inject(Title);
-  private readonly viewportScroller = inject(ViewportScroller);
   activeAnchor?: string;
   componentData?: ComponentData;
   navigationConfig: NavigationConfig = {
@@ -47,8 +48,6 @@ export class ComponentPage {
   }
 
   private loadData() {
-    this.viewportScroller.scrollToPosition([0, 0]);
-
     const componentName = this.activatedRoute.snapshot.paramMap.get('componentName');
     if (!componentName) {
       this.router.navigateByUrl('/');

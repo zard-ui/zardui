@@ -1,21 +1,19 @@
 import { RouterModule } from '@angular/router';
-import { Component, inject, type OnInit } from '@angular/core';
-import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { Component } from '@angular/core';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
-import { Title } from '@angular/platform-browser';
-import { ViewportScroller } from '@angular/common';
 
 @Component({
   selector: 'z-introduction',
   standalone: true,
-  imports: [RouterModule, DynamicAnchorComponent, ScrollSpyDirective, ScrollSpyItemDirective],
+  imports: [RouterModule, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective],
   templateUrl: './introduction.page.html',
 })
-export class IntroductionPage implements OnInit {
-  private readonly titleService = inject(Title);
-  private readonly viewportScroller = inject(ViewportScroller);
-  private readonly title = 'Introduction - zard/ui';
+export class IntroductionPage {
+  readonly title = 'Introduction - zard/ui';
   activeAnchor?: string;
 
   readonly navigationConfig: NavigationConfig = {
@@ -27,9 +25,4 @@ export class IntroductionPage implements OnInit {
       { id: 'open-source', label: 'Open Source', type: 'custom' },
     ],
   };
-
-  ngOnInit() {
-    this.viewportScroller.scrollToPosition([0, 0]);
-    this.titleService.setTitle(this.title);
-  }
 }

@@ -1,32 +1,36 @@
-<aside class="hidden xl:block no-scrollbar overflow-y-auto px-8">
-  <ul class="flex flex-col gap-2 p-2 text-sm">
-    <li class="flex shrink-0 items-center h-8 text-[0.8rem] outline-hidden text-muted-foreground font-medium">
-      <p class="text-muted-foreground bg-background sticky top-0 h-6 text-xs">On this page</p>
-    </li>
-
-    @for (item of navigation().items; track item.id) {
-      <li>
-        <a
-          [class]="'text-muted-foreground hover:text-foreground text-[0.8rem] no-underline transition-colors cursor-pointer ' + (activeAnchor() === item.id ? 'text-primary' : '')"
-          (click)="scrollToAnchor(item.id)"
-          >{{ item.label | hyphenToSpace | titlecase }}</a
-        >
-
-        @if (item.children && item.children.length > 0) {
-          @for (child of item.children; track child.id) {
-            <div class="ml-4 mt-1">
-              <a
-                [class]="
-                  'text-muted-foreground hover:text-foreground text-[0.8rem] no-underline transition-colors cursor-pointer block py-1 ' +
-                  (activeAnchor() === child.id ? 'text-primary' : '')
-                "
-                (click)="scrollToAnchor(child.id)"
-                >{{ child.label | hyphenToSpace | titlecase }}</a
-              >
-            </div>
-          }
-        }
+<section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
+  <aside class="hidden xl:block no-scrollbar overflow-y-auto px-8">
+    <ul class="flex flex-col gap-2 p-2 text-sm">
+      <li class="flex shrink-0 items-center h-8 text-[0.8rem] outline-hidden text-muted-foreground font-medium">
+        <p class="text-muted-foreground bg-background sticky top-0 h-6 text-xs">On this page</p>
       </li>
-    }
-  </ul>
-</aside>
+
+      @for (item of navigation().items; track item.id) {
+        <li>
+          <a
+            [class]="
+              'text-muted-foreground hover:text-foreground text-[0.8rem] no-underline transition-colors cursor-pointer ' + (activeAnchor() === item.id ? 'text-primary' : '')
+            "
+            (click)="scrollToAnchor(item.id)"
+            >{{ item.label | hyphenToSpace | titlecase }}</a
+          >
+
+          @if (item.children && item.children.length > 0) {
+            @for (child of item.children; track child.id) {
+              <div class="ml-4 mt-1">
+                <a
+                  [class]="
+                    'text-muted-foreground hover:text-foreground text-[0.8rem] no-underline transition-colors cursor-pointer block py-1 ' +
+                    (activeAnchor() === child.id ? 'text-primary' : '')
+                  "
+                  (click)="scrollToAnchor(child.id)"
+                  >{{ child.label | hyphenToSpace | titlecase }}</a
+                >
+              </div>
+            }
+          }
+        </li>
+      }
+    </ul>
+  </aside>
+</section>

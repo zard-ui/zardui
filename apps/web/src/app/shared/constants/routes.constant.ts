@@ -13,7 +13,7 @@ const DOCS_PATH = {
   data: [
     { name: 'Introduction', path: '/docs/introduction', available: true },
     { name: 'Installation', path: '/docs/installation', available: true },
-    { name: 'Components.json', path: '/docs', available: false },
+    { name: 'Components.json', path: '/docs/components-json', available: true },
     { name: 'Theming', path: '/docs/theming', available: true },
     { name: 'Dark Mode', path: '/docs/dark-mode', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },

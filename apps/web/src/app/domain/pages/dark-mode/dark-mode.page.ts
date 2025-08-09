@@ -1,22 +1,20 @@
 import { RouterModule } from '@angular/router';
-import { Component, inject, type OnInit } from '@angular/core';
-import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { Component } from '@angular/core';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { ViewportScroller } from '@angular/common';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'z-darkmode',
   standalone: true,
-  imports: [RouterModule, DynamicAnchorComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
+  imports: [RouterModule, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
   templateUrl: './dark-mode.page.html',
 })
-export class DarkmodePage implements OnInit {
-  private readonly titleService = inject(Title);
-  private readonly viewportScroller = inject(ViewportScroller);
-  private readonly title = 'Dark Mode - zard/ui';
+export class DarkmodePage {
+  readonly title = 'Dark Mode - zard/ui';
   activeAnchor?: string;
 
   readonly navigationConfig: NavigationConfig = {
@@ -29,9 +27,4 @@ export class DarkmodePage implements OnInit {
       { id: 'angular-integration', label: 'Angular Integration', type: 'custom' },
     ],
   };
-
-  ngOnInit(): void {
-    this.viewportScroller.scrollToPosition([0, 0]);
-    this.titleService.setTitle(this.title);
-  }
 }

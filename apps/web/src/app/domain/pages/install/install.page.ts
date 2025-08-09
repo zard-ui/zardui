@@ -1,8 +1,10 @@
-import { CommonModule, ViewportScroller } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { StepsComponent } from '@zard/domain/components/steps/steps.component';
 import { Installation, installations } from '@zard/shared/constants/install.constant';
 
@@ -10,11 +12,10 @@ import { Installation, installations } from '@zard/shared/constants/install.cons
   selector: 'z-install',
   templateUrl: './install.page.html',
   standalone: true,
-  imports: [CommonModule, StepsComponent, DynamicAnchorComponent],
+  imports: [CommonModule, StepsComponent, DocContentComponent, DocHeadingComponent],
 })
 export class InstallPage implements OnInit {
   private readonly titleService = inject(Title);
-  private readonly viewportScroller = inject(ViewportScroller);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
   readonly navigationConfig: NavigationConfig = {
@@ -32,7 +33,6 @@ export class InstallPage implements OnInit {
   }
 
   private loadData() {
-    this.viewportScroller.scrollToPosition([0, 0]);
     const guideName = this.activatedRoute.snapshot.paramMap.get('envName');
     if (!guideName) this.router.navigateByUrl('/');
 

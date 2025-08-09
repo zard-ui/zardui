@@ -1,56 +1,35 @@
-<main class="relative flex items-stretch text-sm sm:text-base xl:w-full" scrollSpy (scrollSpyChange)="activeAnchor = $event">
-  <section class="flex min-w-0 flex-1 flex-col">
-    <div class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-12 px-4 text-neutral-800 md:px-0 dark:text-neutral-300">
-      <!-- Hero Section -->
-      <header class="flex flex-col gap-8" scrollSpyItem="overview" id="overview">
-        <div class="flex flex-col gap-6">
-          <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">Installation</h1>
-          <p class="text-base leading-7 text-muted-foreground">How to install dependencies and structure your app.</p>
-        </div>
-      </header>
+<z-content [title]="title" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <z-doc-heading title="Installation" description="How to install dependencies and structure your app." scrollSpyItem="overview" id="overview"> </z-doc-heading>
 
-      <!-- Environments Section -->
-      <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="environments" id="environments">
-        <div class="flex flex-col gap-6">
-          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Pick Your Environment</h2>
-          <p class="leading-relaxed">
-            Start by selecting your environment of choice. Then, follow the instructions to install the dependencies and structure your app. zard/ui is designed to work seamlessly
-            with Angular projects.
-          </p>
-        </div>
-
-        <div class="grid gap-6 sm:grid-cols-2">
-          @for(env of environments; track $index) {
-          <div class="relative">
-            <z-env-card
-              [name]="env.name"
-              [path]="env.path"
-              [icon]="env.icon"
-              [disabled]="!env.available"
-              [class]="!env.available ? 'opacity-50 pointer-events-none' : ''"
-            ></z-env-card>
-            @if (!env.available) {
-            <div class="absolute inset-0 flex items-center justify-center bg-background/80 rounded-xl">
-              <z-badge zType="secondary">Coming Soon</z-badge>
-            </div>
-
-            }
-          </div>
-          }
-        </div>
-        <z-alert
-          zTitle="Framework Support"
-          class="dark:text-blue-100 dark:bg-blue-950 border dark:border-blue-800"
-          zDescription="Angular is available now with full documentation and examples. Analog and Nx support are coming soon with dedicated guides and configurations."
-          zType="info"
-          zAppearance="fill"
-        />
-      </section>
+  <!-- Environments Section -->
+  <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="environments" id="environments">
+    <div class="flex flex-col gap-6">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Pick Your Environment</h2>
+      <p class="leading-relaxed">
+        Start by selecting your environment of choice. Then, follow the instructions to install the dependencies and structure your app. zard/ui is designed to work seamlessly with
+        Angular projects.
+      </p>
     </div>
-  </section>
 
-  <!-- Sidebar Navigation -->
-  <section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
-    <z-dynamic-anchor [navigation]="navigationConfig" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+    <div class="grid gap-6 sm:grid-cols-2">
+      @for(env of environments; track $index) {
+      <div class="relative">
+        <z-env-card [name]="env.name" [path]="env.path" [icon]="env.icon" [disabled]="!env.available" [class]="!env.available ? 'opacity-50 pointer-events-none' : ''"></z-env-card>
+        @if (!env.available) {
+        <div class="absolute inset-0 flex items-center justify-center bg-background/80 rounded-xl">
+          <z-badge zType="secondary">Coming Soon</z-badge>
+        </div>
+
+        }
+      </div>
+      }
+    </div>
+    <z-alert
+      zTitle="Framework Support"
+      class="dark:text-blue-100 dark:bg-blue-950 border dark:border-blue-800"
+      zDescription="Angular is available now with full documentation and examples. Analog and Nx support are coming soon with dedicated guides and configurations."
+      zType="info"
+      zAppearance="fill"
+    />
   </section>
-</main>
+</z-content>

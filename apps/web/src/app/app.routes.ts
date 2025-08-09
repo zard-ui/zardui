@@ -1,8 +1,8 @@
 import { Route } from '@angular/router';
 
-import { ShellLayout } from './core/layouts/shell/shell.layout';
 import { DocumentationLayout } from './core/layouts/documentation/documentation.layout';
 import { DEFAULT_DOC } from './shared/constants/routes.constant';
+import { ShellLayout } from './core/layouts/shell/shell.layout';
 
 export const appRoutes: Route[] = [
   {
@@ -24,6 +24,14 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/introduction/introduction.page').then(m => m.IntroductionPage),
       },
       {
+        path: 'installation',
+        loadChildren: async () => (await import('./domain/pages/enviroments/enviroments.routes')).ENVIRONMENTS_ROUTES,
+      },
+      {
+        path: 'components-json',
+        loadComponent: () => import('./domain/pages/json/json.page').then(m => m.JsonPage),
+      },
+      {
         path: 'theming',
         loadComponent: () => import('./domain/pages/theming/theming.page').then(m => m.ThemingPage),
       },
@@ -32,8 +40,8 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/dark-mode/dark-mode.page').then(m => m.DarkmodePage),
       },
       {
-        path: 'installation',
-        loadChildren: async () => (await import('./domain/pages/enviroments/enviroments.routes')).ENVIRONMENTS_ROUTES,
+        path: 'cli',
+        loadComponent: () => import('./domain/pages/cli/cli.page').then(m => m.CliPage),
       },
       {
         path: 'components',

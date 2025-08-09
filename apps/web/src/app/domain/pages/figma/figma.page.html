@@ -1,63 +1,49 @@
-<main class="relative flex items-stretch text-sm sm:text-base xl:w-full" scrollSpy (scrollSpyChange)="activeAnchor = $event">
-  <section class="flex min-w-0 flex-1 flex-col">
-    <div class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-12 px-4 text-neutral-800 md:px-0 dark:text-neutral-300">
-      <!-- Hero Section -->
-      <header class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="overview" id="overview">
-        <div class="flex flex-col gap-6 sm:gap-8">
-          <h1 class="text-4xl font-semibold scroll-m-20 tracking-tight sm:text-3xl xl:text-4xl">Figma</h1>
-          <p class="text-base leading-7 text-muted-foreground">Every component recreated in Figma. With customizable props, typography and icons.</p>
-        </div>
+<z-content [title]="title" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <z-doc-heading title="Figma" description="Every component recreated in Figma. With customizable props, typography and icons." scrollSpyItem="overview" id="overview">
+  </z-doc-heading>
 
-        <z-callout variant="info" title="Important Note" icon="!">
-          ZardUI design is completely based on shadcn/ui and now we don't have our own style guide in Figma, but this is planned for the future. For now you can use the resources
-          created by the community for shadcn/ui listed below.
-        </z-callout>
+  <z-callout variant="info" title="Important Note" icon="!">
+    ZardUI design is completely based on shadcn/ui and now we don't have our own style guide in Figma, but this is planned for the future. For now you can use the resources created
+    by the community for shadcn/ui listed below.
+  </z-callout>
 
-        <z-callout variant="muted" title="Community Contributions" icon="?">
-          The Figma files listed below are contributed by the community. If you have any questions or feedback, please reach out to the respective Figma file maintainers.
-        </z-callout>
-      </header>
+  <z-callout variant="muted" title="Community Contributions" icon="?">
+    The Figma files listed below are contributed by the community. If you have any questions or feedback, please reach out to the respective Figma file maintainers.
+  </z-callout>
 
-      <!-- Paid Resources Section -->
-      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="paid" id="paid">
-        <div class="flex flex-col gap-4">
-          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Paid</h2>
-        </div>
+  <!-- Paid Resources Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="paid" id="paid">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Paid</h2>
+    </div>
 
-        <div class="flex flex-col gap-6">
-          @for (resource of paidResources; track resource.title) {
-          <z-resource-card [title]="resource.title" [author]="resource.author" [description]="resource.description" [badges]="resource.badges" [links]="resource.links">
-          </z-resource-card>
-          }
-        </div>
-      </section>
-
-      <!-- Free Resources Section -->
-      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="free" id="free">
-        <div class="flex flex-col gap-4">
-          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Free</h2>
-        </div>
-
-        <div class="flex flex-col gap-6">
-          @for (resource of freeResources; track resource.title) {
-          <z-resource-card [title]="resource.title" [author]="resource.author" [description]="resource.description" [badges]="resource.badges" [links]="resource.links">
-          </z-resource-card>
-          }
-        </div>
-      </section>
-
-      <!-- Future Plans Section -->
-      <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="future" id="future">
-        <z-callout variant="gradient" title="ZardUI Design System - Coming Soon" icon="🎨">
-          We're working on creating our own comprehensive Figma design system specifically for ZardUI. This will include all components, patterns, and guidelines tailored to the
-          Angular ecosystem. Stay tuned for updates!
-        </z-callout>
-      </section>
+    <div class="flex flex-col gap-6">
+      @for (resource of paidResources; track resource.title) {
+      <z-resource-card [title]="resource.title" [author]="resource.author" [description]="resource.description" [badges]="resource.badges" [links]="resource.links">
+      </z-resource-card>
+      }
     </div>
   </section>
 
-  <!-- Sidebar Navigation -->
-  <section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
-    <z-dynamic-anchor [navigation]="navigationConfig" [activeAnchor]="activeAnchor"></z-dynamic-anchor>
+  <!-- Free Resources Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="free" id="free">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Free</h2>
+    </div>
+
+    <div class="flex flex-col gap-6">
+      @for (resource of freeResources; track resource.title) {
+      <z-resource-card [title]="resource.title" [author]="resource.author" [description]="resource.description" [badges]="resource.badges" [links]="resource.links">
+      </z-resource-card>
+      }
+    </div>
   </section>
-</main>
+
+  <!-- Future Plans Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="future" id="future">
+    <z-callout variant="gradient" title="ZardUI Design System - Coming Soon" icon="🎨">
+      We're working on creating our own comprehensive Figma design system specifically for ZardUI. This will include all components, patterns, and guidelines tailored to the
+      Angular ecosystem. Stay tuned for updates!
+    </z-callout>
+  </section>
+</z-content>
