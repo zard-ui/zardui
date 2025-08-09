@@ -47,3 +47,8 @@ export * from './combobox/combobox.component';
 export * from './tooltip/tooltip';
 export * from './toast/toast.component';
 export * from './toggle-group/toggle-group.component';
+export * from './form/form-field.component';
+export * from './form/form-label.component';
+export * from './form/form-control.component';
+export * from './form/form-message.component';
+export * from './form/form.module';
