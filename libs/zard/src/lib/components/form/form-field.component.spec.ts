@@ -21,7 +21,8 @@ describe('ZardFormFieldComponent', () => {
 
   it('should apply default classes', () => {
     const element = fixture.nativeElement as HTMLElement;
-    expect(element.className).toContain('space-y-2');
+    expect(element.className).toContain('grid');
+    expect(element.className).toContain('gap-2');
   });
 
   it('should apply custom classes', () => {

@@ -21,7 +21,7 @@ describe('ZardFormControlComponent', () => {
 
   it('should apply default classes', () => {
     const element = fixture.nativeElement as HTMLElement;
-    expect(element.className).toContain('relative');
+    expect(element.className).toBe('');
   });
 
   it('should apply custom classes', () => {
