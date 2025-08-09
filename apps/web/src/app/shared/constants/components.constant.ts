@@ -1,5 +1,6 @@
 import { TOGGLE_GROUP } from '@zard/components/toggle-group/demo/toggle-group';
 import { PROGRESS_BAR } from '@zard/components/progress-bar/demo/progress-bar';
+import { PAGINATION } from '@zard/components/pagination/demo/pagination';
 import { DATE_PICKER } from '@zard/components/date-picker/demo/date-picker';
 import { BREADCRUMB } from '@zard/components/breadcrumb/demo/breadcrumb';
 import { ACCORDION } from '@zard/components/accordion/demo/accordion';
@@ -65,6 +66,7 @@ export const COMPONENTS: ComponentData[] = [
   DROPDOWN,
   INPUT,
   LOADER,
+  PAGINATION,
   POPOVER,
   PROGRESS_BAR,
   RADIO,
