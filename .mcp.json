@@ -8,6 +8,12 @@
       "type": "stdio",
       "command": "npx",
       "args": ["@eslint/mcp@latest"]
+    },
+    "zardui": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["./mcp/dist/index.js"],
+      "cwd": "/Users/shrizzon/@samuelrizzondev/projects/zardui"
     }
   }
 }

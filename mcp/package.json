@@ -1,0 +1,58 @@
+{
+  "name": "@zardui/mcp-server",
+  "version": "1.0.0",
+  "description": "Model Context Protocol server for ZardUI Angular component library - provides AI assistants with comprehensive access to ZardUI components",
+  "type": "module",
+  "main": "dist/index.js",
+  "bin": {
+    "zardui-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "clean": "rm -rf dist",
+    "dev": "tsx watch src/index.ts",
+    "start": "node dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepublishOnly": "npm run clean && npm run build"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "zardui",
+    "angular",
+    "components",
+    "ui",
+    "tailwindcss",
+    "ai",
+    "claude",
+    "assistant"
+  ],
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.17.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.0"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zard-ui/zardui.git",
+    "directory": "mcp"
+  },
+  "homepage": "https://zardui.com",
+  "bugs": {
+    "url": "https://github.com/zard-ui/zardui/issues"
+  },
+  "author": "ZardUI Team",
+  "license": "MIT"
+}
