@@ -1,4 +1,4 @@
-```css
+```css title="src/styles.css" copyButton
 :root {
   --radius: 0.65rem;
   --background: oklch(1 0 0);

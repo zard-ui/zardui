@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add combobox
+npx @ngzard/ui add combobox
 ```

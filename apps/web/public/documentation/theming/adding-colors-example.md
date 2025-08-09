@@ -1,4 +1,4 @@
-```css
+```css title="src/styles.css"
 /* Add to your src/styles.css */
 @theme {
   --color-warning: oklch(0.84 0.16 84);
@@ -14,7 +14,5 @@
 You can now use the `warning` utility class in your Angular components:
 
 ```html
-<div class="bg-warning text-warning-foreground">
-  Warning message
-</div>
+<div class="bg-warning text-warning-foreground">Warning message</div>
 ```

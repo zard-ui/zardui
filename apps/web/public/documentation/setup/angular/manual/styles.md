@@ -1,6 +1,6 @@
-```css showLineNumbers
-@import "tailwindcss";
-@import "lucide-static/font/lucide.css";
+```css title="src/styles.css" showLineNumbers copyButton
+@import 'tailwindcss';
+@import 'lucide-static/font/lucide.css';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));

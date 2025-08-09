@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add date-picker
+npx @ngzard/ui add date-picker
 ```

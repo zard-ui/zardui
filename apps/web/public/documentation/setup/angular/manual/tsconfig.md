@@ -1,4 +1,4 @@
-```json showLineNumbers
+```json title="tsconfig.json" copyButton showLineNumbers
   "compileOnSave": false,
   "compilerOptions": {
     "outDir": "./dist/out-tsc",

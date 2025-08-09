@@ -3,7 +3,7 @@
 ```angular-ts showLineNumbers
 import { Subject } from 'rxjs';
 
-import { Overlay, OverlayPositionBuilder, OverlayRef, ConnectedPosition } from '@angular/cdk/overlay';
+import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
@@ -79,7 +79,6 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly viewContainerRef = inject(ViewContainerRef);
 
   private overlayRef?: OverlayRef;
-  private scrollListenerRefs: (() => void)[] = [];
   private documentClickListenerRef?: () => void;
 
   readonly zTrigger = input<ZardPopoverTrigger>('click');
@@ -140,9 +139,6 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     if (this.zOverlayClickable() && this.zTrigger() === 'click') {
       this.setupOutsideClickListener();
     }
-
-    // Listen for scroll events on window and all scrollable ancestors
-    this.setupScrollListeners();
   }
 
   hide() {
@@ -151,10 +147,6 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.overlayRef?.detach();
     this.isVisible.set(false);
     this.zVisibleChange.emit(false);
-
-    // Clean up all scroll listeners
-    this.scrollListenerRefs.forEach(cleanup => cleanup());
-    this.scrollListenerRefs = [];
 
     if (this.documentClickListenerRef) {
       this.documentClickListenerRef();
@@ -201,7 +193,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.overlayRef = this.overlay.create({
       positionStrategy,
       hasBackdrop: false,
-      scrollStrategy: this.overlay.scrollStrategies.reposition(),
+      scrollStrategy: this.overlay.scrollStrategies.close(),
     });
   }
 
@@ -232,6 +224,24 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
           offsetX: 0,
           offsetY: -8,
         });
+        // If neither top nor bottom work, try right
+        positions.push({
+          originX: 'end',
+          originY: 'center',
+          overlayX: 'start',
+          overlayY: 'center',
+          offsetX: 8,
+          offsetY: 0,
+        });
+        // Finally try left
+        positions.push({
+          originX: 'start',
+          originY: 'center',
+          overlayX: 'end',
+          overlayY: 'center',
+          offsetX: -8,
+          offsetY: 0,
+        });
         break;
       case 'top':
         // Try bottom if top doesn't fit
@@ -242,6 +252,24 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
           overlayY: 'top',
           offsetX: 0,
           offsetY: 8,
+        });
+        // If neither top nor bottom work, try right
+        positions.push({
+          originX: 'end',
+          originY: 'center',
+          overlayX: 'start',
+          overlayY: 'center',
+          offsetX: 8,
+          offsetY: 0,
+        });
+        // Finally try left
+        positions.push({
+          originX: 'start',
+          originY: 'center',
+          overlayX: 'end',
+          overlayY: 'center',
+          offsetX: -8,
+          offsetY: 0,
         });
         break;
       case 'right':
@@ -254,6 +282,24 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
           offsetX: -8,
           offsetY: 0,
         });
+        // If neither left nor right work, try bottom
+        positions.push({
+          originX: 'center',
+          originY: 'bottom',
+          overlayX: 'center',
+          overlayY: 'top',
+          offsetX: 0,
+          offsetY: 8,
+        });
+        // Finally try top
+        positions.push({
+          originX: 'center',
+          originY: 'top',
+          overlayX: 'center',
+          overlayY: 'bottom',
+          offsetX: 0,
+          offsetY: -8,
+        });
         break;
       case 'left':
         // Try right if left doesn't fit
@@ -265,40 +311,28 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
           offsetX: 8,
           offsetY: 0,
         });
+        // If neither left nor right work, try bottom
+        positions.push({
+          originX: 'center',
+          originY: 'bottom',
+          overlayX: 'center',
+          overlayY: 'top',
+          offsetX: 0,
+          offsetY: 8,
+        });
+        // Finally try top
+        positions.push({
+          originX: 'center',
+          originY: 'top',
+          overlayX: 'center',
+          overlayY: 'bottom',
+          offsetX: 0,
+          offsetY: -8,
+        });
         break;
     }
 
     return positions;
-  }
-
-  private setupScrollListeners() {
-    // Listen for scroll events on window
-    this.scrollListenerRefs.push(this.renderer.listen(window, 'scroll', () => this.updatePosition(), { passive: true }));
-
-    // Listen for scroll events on all scrollable ancestor elements
-    let element = this.nativeElement.parentElement;
-    while (element && element !== document.body) {
-      const computedStyle = getComputedStyle(element);
-      const isScrollable =
-        computedStyle.overflow === 'auto' ||
-        computedStyle.overflow === 'scroll' ||
-        computedStyle.overflowY === 'auto' ||
-        computedStyle.overflowY === 'scroll' ||
-        computedStyle.overflowX === 'auto' ||
-        computedStyle.overflowX === 'scroll';
-
-      if (isScrollable) {
-        this.scrollListenerRefs.push(this.renderer.listen(element, 'scroll', () => this.updatePosition(), { passive: true }));
-      }
-
-      element = element.parentElement;
-    }
-  }
-
-  private updatePosition() {
-    if (this.overlayRef && this.isVisible()) {
-      this.overlayRef.updatePosition();
-    }
   }
 
   private setupOutsideClickListener() {

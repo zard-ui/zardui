@@ -1,3 +1,3 @@
 ```bash
-npx zardui-cli add calendar
+npx @ngzard/ui add calendar
 ```

@@ -1,4 +1,4 @@
-```json
+```json title="components.json"
 {
   "style": "css",
   "tailwind": {

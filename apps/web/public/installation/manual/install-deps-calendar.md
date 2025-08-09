@@ -1,3 +1,3 @@
 ```bash
-npm install class-variance-authority clsx
+npm install class-variance-authority
 ```
