@@ -28,7 +28,6 @@
     "@angular/platform-browser": "~19.1.0",
     "@angular/platform-browser-dynamic": "~19.1.0",
     "@angular/router": "~19.1.0",
-    "@rehype-pretty/transformers": "^0.13.2",
     "@shikijs/rehype": "^3.7.0",
     "@tailwindcss/postcss": "^4.0.10",
     "class-variance-authority": "^0.7.1",

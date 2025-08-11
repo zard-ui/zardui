@@ -1,8 +1,5 @@
-import { transformerCopyButton } from '@rehype-pretty/transformers';
 import rehypePrettyCode from 'rehype-pretty-code';
-import rehypeCodeTitles from 'rehype-code-titles';
 import rehypeStringify from 'rehype-stringify';
-// src/app/services/markdown.service.ts
 import { Injectable } from '@angular/core';
 import remarkRehype from 'remark-rehype';
 import { visit } from 'unist-util-visit';
@@ -191,7 +188,6 @@ export class MarkdownService {
       .use(remarkGfm)
       .use(remarkRehype)
       .use(rehypeSlug)
-      .use(rehypeCodeTitles, {})
       .use(rehypePrettyCode, {
         theme: {
           dark: 'github-dark',
