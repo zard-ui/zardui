@@ -24,7 +24,7 @@ import { Component } from '@angular/core';
           Free and open-source components built with <b>Angular</b>, <b>Typescript</b> and <b>Tailwind CSS</b>. No hassle, just results.
         </p>
         <z-badge zType="secondary"> Style of &#64;shadcn/ui + power of ng-zorro = &#64;zard/ui ❤️ </z-badge>
-        <a z-button routerLink="/components" class="group mt-2">
+        <a z-button routerLink="/docs/components" class="group mt-2">
           Browse Components
           <i class="icon-chevron-right shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1"></i>
         </a>

@@ -1,3 +1,3 @@
-```bash
-npx zardui-cli add date-picker
+```bash title="Terminal" copyButton
+npx @ngzard/ui add date-picker
 ```

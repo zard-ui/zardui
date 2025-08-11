@@ -1,4 +1,4 @@
-```angular-ts showLineNumbers
+```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
 import { ZardSliderComponent } from '../slider.component';

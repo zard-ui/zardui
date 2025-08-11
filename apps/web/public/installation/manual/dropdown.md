@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dropdown.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dropdown.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
@@ -280,9 +280,9 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dropdown.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dropdown.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const dropdownContentVariants = cva('bg-popover text-popover-foreground z-50 min-w-[200px] overflow-y-auto rounded-md border py-1 px-1 shadow-md');
@@ -326,9 +326,9 @@ export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariant
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dropdown-item.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dropdown-item.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
@@ -388,9 +388,9 @@ export class ZardDropdownMenuItemComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dropdown-label.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dropdown-label.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -425,9 +425,9 @@ export class ZardDropdownMenuLabelComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dropdown-menu-content.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dropdown-menu-content.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { Component, computed, input, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
@@ -458,9 +458,9 @@ export class ZardDropdownMenuContentComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dropdown-shortcut.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dropdown-shortcut.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -486,9 +486,9 @@ export class ZardDropdownMenuShortcutComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dropdown-trigger.directive.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dropdown-trigger.directive.ts" copyButton showLineNumbers
 import { Directive, ElementRef, HostListener, inject, input, OnInit, ViewContainerRef } from '@angular/core';
 
 import { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
@@ -593,9 +593,9 @@ export class ZardDropdownDirective implements OnInit {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dropdown.module.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dropdown.module.ts" copyButton showLineNumbers
 import { OverlayModule } from '@angular/cdk/overlay';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
@@ -624,9 +624,9 @@ export class ZardDropdownModule {}
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">dropdown.service.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="dropdown.service.ts" copyButton showLineNumbers
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { ElementRef, inject, Injectable, signal, TemplateRef, ViewContainerRef } from '@angular/core';

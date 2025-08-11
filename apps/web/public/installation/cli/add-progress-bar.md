@@ -1,3 +1,3 @@
-```bash
-npx zardui-cli add progress-bar
+```bash title="Terminal" copyButton
+npx @ngzard/ui add progress-bar
 ```

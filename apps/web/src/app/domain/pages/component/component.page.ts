@@ -1,27 +1,28 @@
-import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
 import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DynamicInstallationService } from '@zard/shared/services/dynamic-installation.service';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
 import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
-import { CommonModule, ViewportScroller } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
+import { StepsComponent } from '@zard/domain/components/steps/steps.component';
+import { Step } from '@zard/shared/constants/install.constant';
 import { Component, inject, signal } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { CommonModule } from '@angular/common';
 
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
-import { StepsComponent } from '@zard/domain/components/steps/steps.component';
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { Step } from '@zard/shared/constants/install.constant';
-import { DynamicInstallationService } from '@zard/shared/services/dynamic-installation.service';
-import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [CommonModule, DynamicAnchorComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
+  imports: [CommonModule, DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
 })
 export class ComponentPage {
   private readonly titleService = inject(Title);
-  private readonly viewportScroller = inject(ViewportScroller);
   activeAnchor?: string;
   componentData?: ComponentData;
   navigationConfig: NavigationConfig = {
@@ -47,8 +48,6 @@ export class ComponentPage {
   }
 
   private loadData() {
-    this.viewportScroller.scrollToPosition([0, 0]);
-
     const componentName = this.activatedRoute.snapshot.paramMap.get('componentName');
     if (!componentName) {
       this.router.navigateByUrl('/');

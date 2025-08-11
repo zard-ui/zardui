@@ -1,4 +1,4 @@
-```json showLineNumbers
+```json title="components.json" showLineNumbers copyButton
 {
   "style": "css",
   "tailwind": {

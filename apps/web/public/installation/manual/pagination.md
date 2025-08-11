@@ -1,14 +1,20 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">pagination.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="pagination.component.ts" copyButton showLineNumbers
 import { booleanAttribute, ChangeDetectionStrategy, Component, computed, forwardRef, input, linkedSignal, output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ClassValue } from 'clsx';
 
-import { paginationContentVariants, paginationEllipsisVariants, paginationItemVariants, paginationNextVariants, paginationPreviousVariants, paginationVariants, } from './pagination.variants';
+import {
+  paginationContentVariants,
+  paginationEllipsisVariants,
+  paginationItemVariants,
+  paginationNextVariants,
+  paginationPreviousVariants,
+  paginationVariants,
+} from './pagination.variants';
 import { buttonVariants, ZardButtonVariants } from '../button/button.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-
 
 @Component({
   selector: 'z-pagination-content',
@@ -26,7 +32,7 @@ export class ZardPaginationContentComponent {
 
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() =>  mergeClasses(paginationContentVariants(), this.class()));
+  protected readonly classes = computed(() => mergeClasses(paginationContentVariants(), this.class()));
 }
 
 @Component({
@@ -43,7 +49,7 @@ export class ZardPaginationContentComponent {
 export class ZardPaginationItemComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() =>  mergeClasses(paginationItemVariants(), this.class()));
+  protected readonly classes = computed(() => mergeClasses(paginationItemVariants(), this.class()));
 }
 
 @Component({
@@ -73,11 +79,9 @@ export class ZardPaginationButtonComponent {
   readonly class = input<ClassValue>('');
   readonly zClick = output<void>();
 
-  protected readonly classes = computed(() => mergeClasses(buttonVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()) );
+  protected readonly classes = computed(() => mergeClasses(buttonVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()));
 
-  private readonly zType = computed<ZardButtonVariants['zType']>(() =>
-    (this.zActive() ? 'outline' : 'ghost')
-  );
+  private readonly zType = computed<ZardButtonVariants['zType']>(() => (this.zActive() ? 'outline' : 'ghost'));
 
   handleClick() {
     if (!this.zDisabled() && !this.zActive()) {
@@ -148,44 +152,25 @@ export class ZardPaginationEllipsisComponent {
   exportAs: 'zPagination',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [
-    ZardPaginationContentComponent,
-    ZardPaginationItemComponent,
-    ZardPaginationButtonComponent,
-  ],
+  imports: [ZardPaginationContentComponent, ZardPaginationItemComponent, ZardPaginationButtonComponent],
   template: `
     <z-pagination-content>
       <z-pagination-item>
-        <z-pagination-button
-          aria-label="Go to previous page"
-          [zSize]="zSize()"
-          [zDisabled]="disabled() || currentPage() === 1"
-          (zClick)="goToPrevious()"
-        >
+        <z-pagination-button aria-label="Go to previous page" [zSize]="zSize()" [zDisabled]="disabled() || currentPage() === 1" (zClick)="goToPrevious()">
           <div class="icon-chevron-left"></div>
         </z-pagination-button>
       </z-pagination-item>
 
       @for (page of pages(); track page) {
         <z-pagination-item>
-          <z-pagination-button
-            [zSize]="zSize()"
-            [zActive]="page === currentPage()"
-            [zDisabled]="disabled()"
-            (zClick)="goToPage(page)"
-          >
+          <z-pagination-button [zSize]="zSize()" [zActive]="page === currentPage()" [zDisabled]="disabled()" (zClick)="goToPage(page)">
             {{ page }}
           </z-pagination-button>
         </z-pagination-item>
       }
 
       <z-pagination-item>
-        <z-pagination-button
-          aria-label="Go to next page"
-          [zSize]="zSize()"
-          [zDisabled]="disabled() || currentPage() === zTotal()"
-          (zClick)="goToNext()"
-        >
+        <z-pagination-button aria-label="Go to next page" [zSize]="zSize()" [zDisabled]="disabled() || currentPage() === zTotal()" (zClick)="goToNext()">
           <div class="icon-chevron-right"></div>
         </z-pagination-button>
       </z-pagination-item>
@@ -212,19 +197,15 @@ export class ZardPaginationComponent implements ControlValueAccessor {
 
   readonly zPageIndexChange = output<number>();
 
-  protected readonly classes = computed(() =>
-    mergeClasses(paginationVariants(), this.class())
-  );
+  protected readonly classes = computed(() => mergeClasses(paginationVariants(), this.class()));
 
   protected readonly disabled = linkedSignal(() => {
-    return this.zDisabled()
+    return this.zDisabled();
   });
 
   readonly currentPage = linkedSignal(this.zPageIndex);
 
-  readonly pages = computed<number[]>(() =>
-    Array.from({ length: Math.max(0, this.zTotal()) }, (_, i) => i + 1)
-  );
+  readonly pages = computed<number[]>(() => Array.from({ length: Math.max(0, this.zTotal()) }, (_, i) => i + 1));
 
   goToPage(page: number): void {
     if (this.disabled()) return;
@@ -268,11 +249,10 @@ export class ZardPaginationComponent implements ControlValueAccessor {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">pagination.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="pagination.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
-
 
 export const paginationContentVariants = cva('flex flex-row items-center gap-1');
 export type ZardPaginationContentVariants = VariantProps<typeof paginationContentVariants>;
@@ -293,3 +273,37 @@ export const paginationVariants = cva('mx-auto flex w-full justify-center');
 export type ZardPaginationVariants = VariantProps<typeof paginationVariants>;
 
 ```
+
+
+
+```angular-ts title="pagination.module.ts" copyButton showLineNumbers
+import { NgModule } from '@angular/core';
+
+import {
+  ZardPaginationButtonComponent,
+  ZardPaginationComponent,
+  ZardPaginationContentComponent,
+  ZardPaginationEllipsisComponent,
+  ZardPaginationItemComponent,
+  ZardPaginationNextComponent,
+  ZardPaginationPreviousComponent,
+} from './pagination.component';
+
+const components = [
+  ZardPaginationContentComponent,
+  ZardPaginationItemComponent,
+  ZardPaginationButtonComponent,
+  ZardPaginationPreviousComponent,
+  ZardPaginationNextComponent,
+  ZardPaginationEllipsisComponent,
+  ZardPaginationComponent,
+];
+
+@NgModule({
+  imports: components,
+  exports: components,
+})
+export class ZardPaginationModule {}
+
+```
+

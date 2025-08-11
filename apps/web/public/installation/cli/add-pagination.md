@@ -1,3 +1,3 @@
-```bash
-npx @ngzard/ui@latest add pagination
+```bash title="Terminal" copyButton
+npx @ngzard/ui add pagination
 ```

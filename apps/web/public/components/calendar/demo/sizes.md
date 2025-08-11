@@ -1,4 +1,4 @@
-```angular-ts showLineNumbers
+```angular-ts showLineNumbers copyButton
 import { Component, computed, signal } from '@angular/core';
 
 import { ZardSelectItemComponent } from '../../select/select-item.component';

@@ -1,4 +1,4 @@
-```typescript showLineNumbers
+```typescript title="utils/merge-classes.ts" copyButton showLineNumbers
 import { twMerge } from 'tailwind-merge';
 import { ClassValue, clsx } from 'clsx';
 

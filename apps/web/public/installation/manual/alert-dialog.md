@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">alert-dialog.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="alert-dialog.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'clsx';
 import { filter, fromEvent, takeUntil } from 'rxjs';
 
@@ -179,9 +179,9 @@ export class ZardAlertDialogModule {}
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">alert-dialog.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="alert-dialog.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg transition-all duration-200 ease-out rounded-lg sm:max-w-lg', {
@@ -201,9 +201,9 @@ export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">alert-dialog-ref.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="alert-dialog-ref.ts" copyButton showLineNumbers
 import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 
 import { OverlayRef } from '@angular/cdk/overlay';
@@ -294,9 +294,9 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 ```
 
-### <img src="/icons/angular.svg" class="w-4 h-4 inline mr-2" alt="Angular HTML">alert-dialog.component.html
 
-```angular-html showLineNumbers
+
+```angular-html title="alert-dialog.component.html" copyButton showLineNumbers
 <div class="flex flex-col gap-4 p-6" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   @if (config.zTitle || config.zDescription) {
     <header class="flex flex-col gap-2 text-center sm:text-left">
@@ -335,9 +335,9 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">alert-dialog.service.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="alert-dialog.service.ts" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { inject, Injectable, InjectionToken, Injector, TemplateRef } from '@angular/core';

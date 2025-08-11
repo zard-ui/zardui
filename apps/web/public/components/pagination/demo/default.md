@@ -1,9 +1,8 @@
-```angular-ts showLineNumbers
+```angular-ts showLineNumbers copyButton
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 
 import { ZardPaginationModule } from '../pagination.module';
-
 
 @Component({
   standalone: true,

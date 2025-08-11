@@ -1,3 +1,3 @@
-```bash
-npx zardui-cli add calendar
+```bash title="Terminal" copyButton
+npx @ngzard/ui add calendar
 ```

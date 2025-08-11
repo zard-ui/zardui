@@ -1,3 +1,3 @@
-```bash
-npx zardui-cli add combobox
+```bash title="Terminal" copyButton
+npx @ngzard/ui add combobox
 ```

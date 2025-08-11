@@ -1,4 +1,4 @@
-```angular-ts showLineNumbers
+```angular-ts showLineNumbers copyButton
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 
