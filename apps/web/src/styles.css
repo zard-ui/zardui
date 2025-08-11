@@ -166,6 +166,16 @@
     scrollbar-width: none;
   }
 
+  .scrollbar-hide::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+
+  .scrollbar-hide {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
   .scroll::-webkit-scrollbar {
     @apply w-1.5 h-1.5;
   }
@@ -215,25 +225,9 @@ code[data-line-numbers-max-digits='4'] > [data-line]::before {
 code[data-theme*=' '],
 code[data-theme*=' '] span {
   color: var(--shiki-light);
-  background-color: var(--color-code);
 }
 
 [data-theme='dark'] code[data-theme*=' '],
 [data-theme='dark'] code[data-theme*=' '] span {
   color: var(--shiki-dark);
-  background-color: var(--color-code);
-}
-
-.rehype-pretty-copied {
-  .icon-clipboard {
-    display: none;
-  }
-
-  .icon-check {
-    display: block;
-  }
-}
-
-.icon-check {
-  display: none;
 }

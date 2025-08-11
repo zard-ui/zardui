@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">select.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="select.component.ts" copyButton showLineNumbers
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { NgIf } from '@angular/common';
@@ -103,14 +103,20 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   readonly size = input<ZardSelectTriggerVariants['size']>('default');
   readonly disabled = input<boolean>(false);
   readonly placeholder = input<string>('Select an option...');
+  readonly value = input<string>('');
+  readonly label = input<string>('');
   readonly class = input<string>('');
 
   readonly selectionChange = output<string>();
 
   readonly isOpen = signal(false);
-  readonly selectedValue = signal<string>('');
-  readonly selectedLabel = signal<string>('');
+  private readonly _selectedValue = signal<string>('');
+  private readonly _selectedLabel = signal<string>('');
   readonly focusedIndex = signal<number>(-1);
+
+  // Use computed to derive the effective selected value from input or internal state
+  readonly selectedValue = computed(() => this.value() || this._selectedValue());
+  readonly selectedLabel = computed(() => this.label() || this._selectedLabel());
 
   private onChange = (_value: string) => {
     // ControlValueAccessor onChange callback
@@ -134,6 +140,11 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
     // Delay overlay creation to ensure element is rendered
     setTimeout(() => {
       this.createOverlay();
+      // Also initialize the label if we have a value input
+      const inputValue = this.value();
+      if (inputValue) {
+        // Label is now provided via input, no need to extract from DOM
+      }
     });
   }
 
@@ -238,8 +249,13 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   }
 
   selectItem(value: string, label: string) {
-    this.selectedValue.set(value);
-    this.selectedLabel.set(label);
+    if (value === undefined || value === null || value === '') {
+      console.warn('Attempted to select item with invalid value:', { value, label });
+      return;
+    }
+
+    this._selectedValue.set(value);
+    this._selectedLabel.set(label || value); // Fallback to value if label is empty
     this.onChange(value);
     this.selectionChange.emit(value);
     this.close();
@@ -321,8 +337,14 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
     const currentIndex = this.focusedIndex();
     if (currentIndex >= 0 && currentIndex < items.length) {
       const item = items[currentIndex];
-      const value = item.getAttribute('value') || '';
+      const value = item.getAttribute('value');
       const label = item.textContent?.trim() || '';
+
+      if (value === null || value === undefined) {
+        console.warn('No value attribute found on selected item:', item);
+        return;
+      }
+
       this.selectItem(value, label);
     }
   }
@@ -393,7 +415,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   // ControlValueAccessor implementation
   writeValue(value: string | null): void {
     const stringValue = value || '';
-    this.selectedValue.set(stringValue);
+    this._selectedValue.set(stringValue);
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -411,18 +433,19 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">select.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="select.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const selectTriggerVariants = cva(
-  'flex w-fit items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 text-sm whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none cursor-pointer focus-visible:ring-[3px] focus-visible:border-ring focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+  'flex w-fit items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none cursor-pointer focus-visible:ring-[3px] focus-visible:border-ring focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
     variants: {
       size: {
-        default: 'h-9',
-        sm: 'h-8',
+        sm: 'h-8 text-xs',
+        default: 'h-9 text-sm',
+        lg: 'h-10 text-base',
       },
     },
     defaultVariants: {
@@ -445,9 +468,9 @@ export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">select-item.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="select-item.component.ts" copyButton showLineNumbers
 import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input } from '@angular/core';
 
@@ -462,6 +485,7 @@ import { selectItemVariants } from './select.variants';
   imports: [NgIf],
   host: {
     '[class]': 'classes()',
+    '[attr.value]': 'value()',
     role: 'option',
     tabindex: '-1',
     '[attr.data-disabled]': 'disabled() ? "" : null',

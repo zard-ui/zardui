@@ -1,4 +1,4 @@
-```angular-ts showLineNumbers
+```angular-ts showLineNumbers copyButton
 import { Component, inject } from '@angular/core';
 
 import { ZardButtonComponent } from '../../components';

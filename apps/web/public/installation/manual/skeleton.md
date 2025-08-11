@@ -1,9 +1,8 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">skeleton.component.ts
 
-```angular-ts showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
 
+```angular-ts title="skeleton.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { skeletonVariants } from './skeleton.variants';
@@ -26,12 +25,13 @@ export class ZardSkeletonComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">skeleton.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="skeleton.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const skeletonVariants = cva('bg-accent animate-pulse rounded-md');
 export type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;
 
 ```
+

@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">tooltip.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="tooltip.ts" copyButton showLineNumbers
 import { filter, fromEvent, Subject, take, takeUntil } from 'rxjs';
 
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
@@ -198,9 +198,9 @@ export class ZardTooltipModule {}
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">tooltip.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="tooltip.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const tooltipVariants = cva(
@@ -210,9 +210,9 @@ export type ZardTooltipVariants = VariantProps<typeof tooltipVariants>;
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">tooltip-positions.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="tooltip-positions.ts" copyButton showLineNumbers
 import { ConnectedPosition } from '@angular/cdk/overlay';
 
 export const TOOLTIP_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {

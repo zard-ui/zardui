@@ -1,10 +1,11 @@
-import { CommonModule, ViewportScroller } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { Title } from '@angular/platform-browser';
 
-import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
 import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
 import { FoundersComponent, FounderData } from '@zard/domain/components/founders/founders.component';
@@ -21,7 +22,8 @@ import { Contributor, GithubService } from '../../../shared/services/github.serv
   standalone: true,
   imports: [
     CommonModule,
-    DynamicAnchorComponent,
+    DocContentComponent,
+    DocHeadingComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
     FoundersComponent,
@@ -31,11 +33,9 @@ import { Contributor, GithubService } from '../../../shared/services/github.serv
     CreditCardComponent,
   ],
 })
-export class AboutPage implements OnInit {
+export class AboutPage {
   private readonly githubService = inject(GithubService);
-  private readonly viewportScroller = inject(ViewportScroller);
-  private readonly titleService = inject(Title);
-  private readonly title = 'About - zard/ui';
+  readonly title = 'About - zard/ui';
 
   activeAnchor?: string;
   contributors$: Observable<Contributor[]> = this.githubService.getContributors();
@@ -102,11 +102,6 @@ export class AboutPage implements OnInit {
           .sort((a, b) => b.contributions - a.contributions),
       ),
     );
-  }
-
-  ngOnInit() {
-    this.viewportScroller.scrollToPosition([0, 0]);
-    this.titleService.setTitle(this.title);
   }
 
   isFounder(login: string): boolean {

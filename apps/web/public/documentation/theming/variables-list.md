@@ -1,6 +1,6 @@
 Here's the complete list of OKLCH variables available for customization in ZardUI:
 
-```css
+```css title="src/styles.css" copyButton
 :root {
   --radius: 0.625rem;
   --background: oklch(1 0 0);

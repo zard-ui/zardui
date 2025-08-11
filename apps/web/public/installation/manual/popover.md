@@ -1,9 +1,9 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">popover.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="popover.component.ts" copyButton showLineNumbers
 import { Subject } from 'rxjs';
 
-import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
@@ -11,6 +11,7 @@ import {
   Component,
   computed,
   Directive,
+  effect,
   ElementRef,
   inject,
   input,
@@ -66,6 +67,7 @@ const POPOVER_POSITIONS_MAP = {
 
 @Directive({
   selector: '[zPopover]',
+  exportAs: 'zPopover',
   standalone: true,
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
@@ -77,7 +79,6 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly viewContainerRef = inject(ViewContainerRef);
 
   private overlayRef?: OverlayRef;
-  private scrollListenerRef?: () => void;
   private documentClickListenerRef?: () => void;
 
   readonly zTrigger = input<ZardPopoverTrigger>('click');
@@ -94,13 +95,27 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     return this.zOrigin()?.nativeElement || this.elementRef.nativeElement;
   }
 
+  constructor() {
+    // Watch for changes to zVisible input
+    // Using untracked for isVisible to avoid circular dependencies
+    effect(() => {
+      const visible = this.zVisible();
+
+      // Defer DOM manipulation to avoid change detection issues
+      setTimeout(() => {
+        const currentlyVisible = this.isVisible();
+        if (visible && !currentlyVisible) {
+          this.show();
+        } else if (!visible && currentlyVisible) {
+          this.hide();
+        }
+      });
+    });
+  }
+
   ngOnInit() {
     this.setupTriggers();
     this.createOverlay();
-
-    if (this.zVisible()) {
-      this.show();
-    }
   }
 
   ngOnDestroy() {
@@ -124,10 +139,6 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     if (this.zOverlayClickable() && this.zTrigger() === 'click') {
       this.setupOutsideClickListener();
     }
-
-    this.scrollListenerRef = this.renderer.listen(window, 'scroll', () => {
-      this.updatePosition();
-    });
   }
 
   hide() {
@@ -136,11 +147,6 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.overlayRef?.detach();
     this.isVisible.set(false);
     this.zVisibleChange.emit(false);
-
-    if (this.scrollListenerRef) {
-      this.scrollListenerRef();
-      this.scrollListenerRef = undefined;
-    }
 
     if (this.documentClickListenerRef) {
       this.documentClickListenerRef();
@@ -177,30 +183,156 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   private createOverlay() {
-    const positionConfig = POPOVER_POSITIONS_MAP[this.zPlacement()];
     const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(this.nativeElement)
-      .withPositions([
-        {
-          originX: positionConfig.originX,
-          originY: positionConfig.originY,
-          overlayX: positionConfig.overlayX,
-          overlayY: positionConfig.overlayY,
-          offsetX: positionConfig.offsetX || 0,
-          offsetY: positionConfig.offsetY || 0,
-        },
-      ])
-      .withPush(true);
+      .withPositions(this.getPositions())
+      .withPush(true)
+      .withFlexibleDimensions(true)
+      .withViewportMargin(8);
 
     this.overlayRef = this.overlay.create({
       positionStrategy,
       hasBackdrop: false,
-      scrollStrategy: this.overlay.scrollStrategies.reposition(),
+      scrollStrategy: this.overlay.scrollStrategies.close(),
     });
   }
 
-  private updatePosition() {
-    this.overlayRef?.updatePosition();
+  private getPositions(): ConnectedPosition[] {
+    const placement = this.zPlacement();
+    const positions: ConnectedPosition[] = [];
+
+    // Primary position
+    const primaryConfig = POPOVER_POSITIONS_MAP[placement];
+    positions.push({
+      originX: primaryConfig.originX as any,
+      originY: primaryConfig.originY as any,
+      overlayX: primaryConfig.overlayX as any,
+      overlayY: primaryConfig.overlayY as any,
+      offsetX: primaryConfig.offsetX || 0,
+      offsetY: primaryConfig.offsetY || 0,
+    });
+
+    // Fallback positions for better positioning when primary doesn't fit
+    switch (placement) {
+      case 'bottom':
+        // Try top if bottom doesn't fit
+        positions.push({
+          originX: 'center',
+          originY: 'top',
+          overlayX: 'center',
+          overlayY: 'bottom',
+          offsetX: 0,
+          offsetY: -8,
+        });
+        // If neither top nor bottom work, try right
+        positions.push({
+          originX: 'end',
+          originY: 'center',
+          overlayX: 'start',
+          overlayY: 'center',
+          offsetX: 8,
+          offsetY: 0,
+        });
+        // Finally try left
+        positions.push({
+          originX: 'start',
+          originY: 'center',
+          overlayX: 'end',
+          overlayY: 'center',
+          offsetX: -8,
+          offsetY: 0,
+        });
+        break;
+      case 'top':
+        // Try bottom if top doesn't fit
+        positions.push({
+          originX: 'center',
+          originY: 'bottom',
+          overlayX: 'center',
+          overlayY: 'top',
+          offsetX: 0,
+          offsetY: 8,
+        });
+        // If neither top nor bottom work, try right
+        positions.push({
+          originX: 'end',
+          originY: 'center',
+          overlayX: 'start',
+          overlayY: 'center',
+          offsetX: 8,
+          offsetY: 0,
+        });
+        // Finally try left
+        positions.push({
+          originX: 'start',
+          originY: 'center',
+          overlayX: 'end',
+          overlayY: 'center',
+          offsetX: -8,
+          offsetY: 0,
+        });
+        break;
+      case 'right':
+        // Try left if right doesn't fit
+        positions.push({
+          originX: 'start',
+          originY: 'center',
+          overlayX: 'end',
+          overlayY: 'center',
+          offsetX: -8,
+          offsetY: 0,
+        });
+        // If neither left nor right work, try bottom
+        positions.push({
+          originX: 'center',
+          originY: 'bottom',
+          overlayX: 'center',
+          overlayY: 'top',
+          offsetX: 0,
+          offsetY: 8,
+        });
+        // Finally try top
+        positions.push({
+          originX: 'center',
+          originY: 'top',
+          overlayX: 'center',
+          overlayY: 'bottom',
+          offsetX: 0,
+          offsetY: -8,
+        });
+        break;
+      case 'left':
+        // Try right if left doesn't fit
+        positions.push({
+          originX: 'end',
+          originY: 'center',
+          overlayX: 'start',
+          overlayY: 'center',
+          offsetX: 8,
+          offsetY: 0,
+        });
+        // If neither left nor right work, try bottom
+        positions.push({
+          originX: 'center',
+          originY: 'bottom',
+          overlayX: 'center',
+          overlayY: 'top',
+          offsetX: 0,
+          offsetY: 8,
+        });
+        // Finally try top
+        positions.push({
+          originX: 'center',
+          originY: 'top',
+          overlayX: 'center',
+          overlayY: 'bottom',
+          offsetX: 0,
+          offsetY: -8,
+        });
+        break;
+    }
+
+    return positions;
   }
 
   private setupOutsideClickListener() {
@@ -209,9 +341,24 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
         const clickTarget = event.target as HTMLElement;
         const overlayElement = this.overlayRef?.overlayElement;
 
-        if (!this.nativeElement.contains(clickTarget) && overlayElement && !overlayElement.contains(clickTarget)) {
-          this.hide();
+        // Check if click is on the trigger element
+        if (this.nativeElement.contains(clickTarget)) {
+          return;
         }
+
+        // Check if click is within the popover overlay
+        if (overlayElement && overlayElement.contains(clickTarget)) {
+          return;
+        }
+
+        // Check if click is within any CDK overlay (for select dropdowns, etc.)
+        const isInCdkOverlay = clickTarget.closest('.cdk-overlay-container') !== null;
+        if (isInCdkOverlay) {
+          return;
+        }
+
+        // If none of the above, it's truly an outside click - hide the popover
+        this.hide();
       });
     });
   }
@@ -235,9 +382,9 @@ export class ZardPopoverComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">popover.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="popover.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const popoverVariants = cva(

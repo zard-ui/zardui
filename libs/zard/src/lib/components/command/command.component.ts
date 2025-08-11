@@ -91,11 +91,16 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
   readonly searchTerm = signal('');
   readonly selectedIndex = signal(-1);
 
+  // Signal to trigger updates when optionComponents change
+  private readonly optionsUpdateTrigger = signal(0);
+
   protected readonly classes = computed(() => mergeClasses(commandVariants({ size: this.size() }), this.class()));
 
-  // Computed signal for filtered options - this will automatically update when searchTerm changes
+  // Computed signal for filtered options - this will automatically update when searchTerm or options change
   readonly filteredOptions = computed(() => {
     const searchTerm = this.searchTerm();
+    // Include the trigger signal to make this computed reactive to option changes
+    this.optionsUpdateTrigger();
 
     if (!this.optionComponents) return [];
 
@@ -131,10 +136,20 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
   };
 
   ngAfterContentInit() {
-    // No need to manually update filtered options - computed signal handles this
+    // Trigger initial update
+    this.triggerOptionsUpdate();
+
+    // Subscribe to option changes and trigger updates
     this.optionComponents.changes.subscribe(() => {
-      // When options change, the computed signal will automatically recalculate
+      this.triggerOptionsUpdate();
     });
+  }
+
+  /**
+   * Trigger an update to the filteredOptions computed signal
+   */
+  private triggerOptionsUpdate(): void {
+    this.optionsUpdateTrigger.update(value => value + 1);
   }
 
   onSearch(searchTerm: string) {
@@ -230,6 +245,13 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
 
   setDisabledState(_isDisabled: boolean): void {
     // Implementation if needed for form control disabled state
+  }
+
+  /**
+   * Refresh the options list - useful when options are added/removed dynamically
+   */
+  refreshOptions(): void {
+    this.triggerOptionsUpdate();
   }
 
   /**

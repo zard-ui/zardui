@@ -1,3 +1,3 @@
-```bash
-npx ngzard@latest init
+```bash title="Terminal" copyButton
+npx @ngzard/ui init
 ```

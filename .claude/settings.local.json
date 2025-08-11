@@ -54,7 +54,9 @@
       "Bash(./dist/index.js init:*)",
       "Bash(npm pack:*)",
       "Bash(./dist/index.js --version)",
-      "Bash(./node_modules/.bin/ngzard:*)"
+      "Bash(./node_modules/.bin/ngzard:*)",
+      "Bash(git rebase:*)",
+      "Bash(git rm:*)"
     ]
   },
   "enableAllProjectMcpServers": true,

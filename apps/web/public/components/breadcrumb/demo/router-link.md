@@ -1,4 +1,4 @@
-```angular-ts showLineNumbers
+```angular-ts showLineNumbers copyButton
 import { RouterLink } from '@angular/router';
 import { Component } from '@angular/core';
 

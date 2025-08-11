@@ -1,3 +1,3 @@
-```bash
-npx zardui-cli add toggle-group
+```bash title="Terminal" copyButton
+npx @ngzard/ui add toggle-group
 ```

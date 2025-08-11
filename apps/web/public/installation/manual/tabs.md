@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">tabs.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="tabs.component.ts" copyButton showLineNumbers
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -283,9 +283,9 @@ export class ZardTabGroupComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">tabs.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="tabs.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 import { zAlign } from './tabs.component';

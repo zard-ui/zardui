@@ -1,3 +1,3 @@
-```bash
-npx zardui-cli add alert-dialog
+```bash title="Terminal" copyButton
+npx @ngzard/ui add alert-dialog
 ```

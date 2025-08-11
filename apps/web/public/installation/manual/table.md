@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">table.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="table.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -148,9 +148,9 @@ export class ZardTableCaptionComponent {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">table.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="table.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const tableVariants = cva(
@@ -215,9 +215,9 @@ export type ZardTableCaptionVariants = VariantProps<typeof tableCaptionVariants>
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">table.module.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="table.module.ts" copyButton showLineNumbers
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 

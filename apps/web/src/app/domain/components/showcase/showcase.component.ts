@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardCardComponent } from '@zard/components/card/card.component';
+import { RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'z-showcase',
@@ -37,6 +37,6 @@ import { ZardInputDirective } from '@zard/components/input/input.directive';
       </footer>
     </section>
   `,
-  imports: [RouterModule, ZardCardComponent, ZardButtonComponent, ZardCardComponent, ZardBadgeComponent, ZardCheckboxComponent, ZardInputDirective],
+  imports: [RouterModule, ZardCardComponent, ZardButtonComponent, ZardBadgeComponent, ZardCheckboxComponent, ZardInputDirective],
 })
 export class ShowcaseComponent {}

@@ -173,3 +173,8 @@ export const COMPONENTS: ComponentData[] = [
 // In routes.constant.ts COMPONENTS_PATH.data
 { name: '[Component Name]', path: '/docs/components/[component-name]', available: true },
 ```
+
+# Icon patterns
+
+- We use `lucide-static` icons for consistency
+- Use `icon-[iconName]` for icon inputs

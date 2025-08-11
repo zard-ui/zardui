@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">slider.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="slider.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -391,9 +391,9 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">slider.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="slider.variants.ts" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const sliderVariants = cva(

@@ -1,4 +1,4 @@
-```css
+```css title="src/styles.css" copyButton
 @layer base {
   :root {
     --background: 0 0% 100%;

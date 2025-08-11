@@ -1,19 +1,32 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">segmented.component.ts
 
-```angular-ts showLineNumbers
-import { AfterContentInit, ChangeDetectionStrategy, Component, computed, ContentChildren, forwardRef, input, OnInit, output, QueryList, signal, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
+```angular-ts title="segmented.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
+import {
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ContentChildren,
+  forwardRef,
+  input,
+  OnInit,
+  output,
+  QueryList,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import { mergeClasses } from '../../shared/utils/utils';
-import { segmentedVariants, segmentedItemVariants, ZardSegmentedVariants } from './segmented.variants';
+import { segmentedItemVariants, segmentedVariants, ZardSegmentedVariants } from './segmented.variants';
 
 export interface SegmentedOption {
   value: string;
   label: string;
   disabled?: boolean;
 }
-
 @Component({
   selector: 'z-segmented-item',
   standalone: true,
@@ -94,7 +107,9 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, Aft
   protected readonly selectedValue = signal<string>('');
   protected readonly items = signal<ZardSegmentedItemComponent[]>([]);
 
-  private onChange = (_value: string) => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private onChange: (value: string) => void = () => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onTouched = () => {};
 
   ngOnInit() {
@@ -161,11 +176,12 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, Aft
     // Handled by zDisabled input
   }
 }
+
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">segmented.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="segmented.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const segmentedVariants = cva('inline-flex items-center justify-center rounded-md bg-muted p-1 text-muted-foreground', {
@@ -204,5 +220,6 @@ export const segmentedItemVariants = cva(
 
 export type ZardSegmentedVariants = VariantProps<typeof segmentedVariants>;
 export type ZardSegmentedItemVariants = VariantProps<typeof segmentedItemVariants>;
+
 ```
 

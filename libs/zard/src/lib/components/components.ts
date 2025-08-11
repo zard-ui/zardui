@@ -43,6 +43,7 @@ export * from './command/command-option.component';
 export * from './command/command-option-group.component';
 export * from './command/command-divider.component';
 export * from './command/command.module';
+export * from './combobox/combobox.component';
 export * from './tooltip/tooltip';
 export * from './toast/toast.component';
 export * from './toggle-group/toggle-group.component';

@@ -1,15 +1,14 @@
 import rehypePrettyCode from 'rehype-pretty-code';
-import rehypeSlug from 'rehype-slug';
 import rehypeStringify from 'rehype-stringify';
-import remarkGfm from 'remark-gfm';
-import remarkParse from 'remark-parse';
-import remarkRehype from 'remark-rehype';
-import { unified } from 'unified';
-import { visit } from 'unist-util-visit';
-
-// src/app/services/markdown.service.ts
 import { Injectable } from '@angular/core';
-import { transformerCopyButton } from '@rehype-pretty/transformers';
+import remarkRehype from 'remark-rehype';
+import { visit } from 'unist-util-visit';
+import remarkParse from 'remark-parse';
+import rehypeSlug from 'rehype-slug';
+import remarkGfm from 'remark-gfm';
+import { unified } from 'unified';
+
+import { rehypeEnhancedCode, rehypeCodeTabs } from './rehype-enhanced-code';
 
 @Injectable({
   providedIn: 'root',
@@ -44,6 +43,14 @@ export class MarkdownService {
             };
           }
 
+          if (node.tagName === 'h3') {
+            node.properties = {
+              ...node.properties,
+              style: [],
+              class: ['w-full', 'text-base', 'font-semibold'],
+            };
+          }
+
           if (node.tagName === 'p') {
             node.properties = {
               ...node.properties,
@@ -52,26 +59,13 @@ export class MarkdownService {
             };
           }
 
-          if (node.tagName === 'pre') {
-            node.properties = {
-              ...node.properties,
-              style: [],
-              class: ['relative', 'overflow-x-auto', 'no-scrollbar', 'rounded-lg', 'bg-code', 'px-4', 'py-3', 'text-sm', 'mb-4', 'group', '[&>code]:bg-transparent'],
-            };
-          }
-
+          // Inline code styling (pre/code blocks are handled by our custom plugin)
           if (node.tagName === 'code') {
             // Check if this code is inside a pre (code block) or standalone (inline code)
             const isInPre = parent && parent.tagName === 'pre';
 
-            if (isInPre) {
-              // Code inside pre blocks - no additional styling, let syntax highlighting handle it
-              node.properties = {
-                ...node.properties,
-                class: ['font-mono', 'text-sm'],
-              };
-            } else {
-              // Inline code styling
+            if (!isInPre) {
+              // Only style inline code - block code is handled by rehypeEnhancedCode
               node.properties = {
                 ...node.properties,
                 class: ['relative', 'rounded', 'bg-muted', 'px-[0.3rem]', 'py-[0.2rem]', 'font-mono', 'text-sm', 'font-semibold'],
@@ -79,144 +73,11 @@ export class MarkdownService {
             }
           }
 
-          if (node.tagName === 'button') {
-            const replaceSpanClasses = (children: any[], mapping: Record<string, string>) => {
-              return (
-                children?.map(child => {
-                  if (child.tagName === 'span' && child.properties?.className) {
-                    return {
-                      ...child,
-                      properties: {
-                        ...child.properties,
-                        className: child.properties.className.map((cls: string) => mapping[cls] || cls),
-                      },
-                    };
-                  }
-                  return child;
-                }) || []
-              );
-            };
-
-            const classMapping: Record<string, string> = {
-              ready: 'icon-clipboard',
-              success: 'icon-check',
-            };
-
+          if (node.tagName === 'figcaption') {
             node.properties = {
               ...node.properties,
-              className: [
-                'fixed',
-                '[&_span]:bg-transparent!',
-                'right-4',
-                'z-10',
-                'h-6',
-                'w-6',
-                'text-muted-foreground',
-                'hover:text-foreground',
-                'transition-all',
-                'hover:bg-muted',
-                'cursor-pointer',
-                'rounded-md',
-                'bg-secondary',
-                'p-1',
-                'text-sm',
-                'flex',
-                'items-center',
-                'justify-center',
-                'mt-[-3px]',
-              ],
+              class: ['sr-only'],
             };
-
-            node.children = replaceSpanClasses(node.children, classMapping);
-          }
-
-          if (node.tagName === 'h3') {
-            const headingText = node.children
-              .filter((child: { type: string }) => child.type === 'text')
-              .map((child: { value: any }) => child.value)
-              .join('');
-
-            let icon = null;
-            if (headingText.endsWith('.component.ts')) {
-              icon = {
-                type: 'element',
-                tagName: 'img',
-                properties: {
-                  src: '/icons/angular-component.svg',
-                  class: 'w-5 h-5 inline mr-2',
-                  alt: 'Angular',
-                },
-                children: [],
-              };
-            } else if (headingText.endsWith('.service.ts')) {
-              icon = {
-                type: 'element',
-                tagName: 'img',
-                properties: {
-                  src: '/icons/angular-service.svg',
-                  class: 'w-5 h-5 inline mr-2',
-                  alt: 'Angular',
-                },
-                children: [],
-              };
-            } else if (headingText.endsWith('.directive.ts')) {
-              icon = {
-                type: 'element',
-                tagName: 'img',
-                properties: {
-                  src: '/icons/angular-directive.svg',
-                  class: 'w-5 h-5 inline mr-2',
-                  alt: 'Angular',
-                },
-                children: [],
-              };
-            } else if (headingText.endsWith('.html')) {
-              icon = {
-                type: 'element',
-                tagName: 'img',
-                properties: {
-                  src: '/icons/html.svg',
-                  class: 'w-5 h-5 inline mr-2',
-                  alt: 'HTML',
-                },
-                children: [],
-              };
-            } else if (headingText.endsWith('.ts') && !headingText.includes('.component.') && !headingText.includes('.service.') && !headingText.includes('.directive.')) {
-              // Apenas .ts "puro" - sem outros sufixos específicos do Angular
-              icon = {
-                type: 'element',
-                tagName: 'img',
-                properties: {
-                  src: '/icons/ts-blue.svg',
-                  class: 'w-5 h-5 inline mr-2',
-                  alt: 'TypeScript',
-                },
-                children: [],
-              };
-            }
-
-            // Adiciona a classe ao h3
-            node.properties = {
-              ...node.properties,
-              class: ['w-full', 'text-base', 'font-semibold'],
-            };
-
-            // Se tiver ícone, insere como primeiro filho do h3
-            if (icon) {
-              node.children.unshift(icon);
-            }
-
-            // Cria o wrapper
-            const wrapper = {
-              type: 'element',
-              tagName: 'div',
-              properties: {
-                class: ['overflow-auto', 'my-4'],
-              },
-              children: [node],
-            };
-
-            parent.children[index] = wrapper;
           }
 
           if (node.tagName === 'table' && parent) {
@@ -261,7 +122,7 @@ export class MarkdownService {
           if (node.tagName === 'tr') {
             node.properties = {
               ...node.properties,
-              class: ['order-b', 'transition-colors', 'hover:bg-muted/50'],
+              class: ['transition-colors', 'hover:bg-muted/50'],
             };
           }
 
@@ -324,21 +185,19 @@ export class MarkdownService {
 
     this.processor = unified()
       .use(remarkParse, { fragment: true })
+      .use(remarkGfm)
       .use(remarkRehype)
       .use(rehypeSlug)
-      .use(remarkGfm)
       .use(rehypePrettyCode, {
         theme: {
           dark: 'github-dark',
           light: 'github-light',
         },
-        transformers: [
-          transformerCopyButton({
-            visibility: 'always',
-            feedbackDuration: 3_000,
-          }),
-        ],
+        keepBackground: false,
+        // Remove the default copy button transformer since we'll handle it in our custom plugin
       })
+      .use(rehypeEnhancedCode) // Our custom plugin for enhanced code blocks
+      .use(rehypeCodeTabs) // Our custom plugin for code tabs
       .use(this.rehypeTailwindClasses())
       .use(rehypeStringify);
 

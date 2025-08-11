@@ -1,7 +1,8 @@
 import { RouterModule } from '@angular/router';
-import { Component, inject, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { Component } from '@angular/core';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
@@ -10,12 +11,20 @@ import { ZardAccordionComponent, ZardAccordionItemComponent } from '@zard/compon
 @Component({
   selector: 'z-theming',
   standalone: true,
-  imports: [RouterModule, DynamicAnchorComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent, ZardAccordionComponent, ZardAccordionItemComponent],
+  imports: [
+    RouterModule,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    MarkdownRendererComponent,
+    ZardAccordionComponent,
+    ZardAccordionItemComponent,
+  ],
   templateUrl: './theming.page.html',
 })
-export class ThemingPage implements OnInit {
-  private titleService = inject(Title);
-  private title = 'Theming - zard/ui';
+export class ThemingPage {
+  readonly title = 'Theming - zard/ui';
   activeAnchor?: string;
 
   readonly navigationConfig: NavigationConfig = {
@@ -30,8 +39,4 @@ export class ThemingPage implements OnInit {
       { id: 'other-formats', label: 'Other Formats', type: 'custom' },
     ],
   };
-
-  ngOnInit(): void {
-    this.titleService.setTitle(this.title);
-  }
 }

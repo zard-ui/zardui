@@ -1,6 +1,6 @@
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">alert-dialog.component.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="alert-dialog.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'clsx';
 import { filter, fromEvent, takeUntil } from 'rxjs';
 
@@ -9,7 +9,6 @@ import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   ComponentRef,
@@ -19,7 +18,6 @@ import {
   EventEmitter,
   inject,
   NgModule,
-  OnDestroy,
   output,
   signal,
   TemplateRef,
@@ -70,7 +68,7 @@ export class ZardAlertDialogOptions<T> {
     '[class]': 'classes()',
     '[attr.data-state]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
-    'role': 'alertdialog',
+    role: 'alertdialog',
     '[attr.aria-modal]': 'true',
     '[attr.aria-labelledby]': 'titleId()',
     '[attr.aria-describedby]': 'descriptionId()',
@@ -97,7 +95,7 @@ export class ZardAlertDialogOptions<T> {
     `,
   ],
 })
-export class ZardAlertDialogComponent<T> extends BasePortalOutlet implements AfterViewInit, OnDestroy {
+export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardAlertDialogOptions<T>);
@@ -111,9 +109,8 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet implements Aft
     ),
   );
 
-  protected readonly titleId = computed(() => this.config.zTitle ? `alert-dialog-title-${this.generateId()}` : null);
-  protected readonly descriptionId = computed(() => this.config.zDescription ? `alert-dialog-description-${this.generateId()}` : null);
-  
+  protected readonly titleId = computed(() => (this.config.zTitle ? `alert-dialog-title-${this.generateId()}` : null));
+  protected readonly descriptionId = computed(() => (this.config.zDescription ? `alert-dialog-description-${this.generateId()}` : null));
   private alertDialogId = Math.random().toString(36).substring(2, 15);
 
   public alertDialogRef?: ZardAlertDialogRef<T>;
@@ -132,14 +129,6 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet implements Aft
 
   private generateId(): string {
     return this.alertDialogId;
-  }
-
-  ngAfterViewInit(): void {
-    // Focus management is handled by cdkTrapFocus directive
-  }
-
-  ngOnDestroy(): void {
-    // Cleanup is handled by cdkTrapFocus directive
   }
 
   getNativeElement(): HTMLElement {
@@ -190,9 +179,9 @@ export class ZardAlertDialogModule {}
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">alert-dialog.variants.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="alert-dialog.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg transition-all duration-200 ease-out rounded-lg sm:max-w-lg', {
@@ -212,9 +201,9 @@ export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">alert-dialog-ref.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="alert-dialog-ref.ts" copyButton showLineNumbers
 import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 
 import { OverlayRef } from '@angular/cdk/overlay';
@@ -305,9 +294,9 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 ```
 
-### <img src="/icons/angular.svg" class="w-4 h-4 inline mr-2" alt="Angular HTML">alert-dialog.component.html
 
-```angular-html showLineNumbers
+
+```angular-html title="alert-dialog.component.html" copyButton showLineNumbers
 <div class="flex flex-col gap-4 p-6" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   @if (config.zTitle || config.zDescription) {
     <header class="flex flex-col gap-2 text-center sm:text-left">
@@ -346,9 +335,9 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 ```
 
-### <img src="/icons/typescript.svg" class="w-4 h-4 inline mr-2" alt="TypeScript">alert-dialog.service.ts
 
-```angular-ts showLineNumbers
+
+```angular-ts title="alert-dialog.service.ts" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { inject, Injectable, InjectionToken, Injector, TemplateRef } from '@angular/core';

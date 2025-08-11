@@ -1,24 +1,20 @@
-import { CommonModule, ViewportScroller } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-
-import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
+import { ResourceCardComponent } from '@zard/domain/components/resource-card/resource-card.component';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
 import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
 import { CalloutComponent } from '@zard/domain/components/callout/callout.component';
-import { ResourceCardComponent } from '@zard/domain/components/resource-card/resource-card.component';
+import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'z-figma',
   templateUrl: './figma.page.html',
   standalone: true,
-  imports: [CommonModule, DynamicAnchorComponent, ScrollSpyDirective, ScrollSpyItemDirective, CalloutComponent, ResourceCardComponent],
+  imports: [DocContentComponent, DocHeadingComponent, CalloutComponent, ResourceCardComponent, ScrollSpyDirective, ScrollSpyItemDirective],
 })
-export class FigmaPage implements OnInit {
-  private readonly titleService = inject(Title);
-  private readonly viewportScroller = inject(ViewportScroller);
-  private readonly title = 'Figma - zard/ui';
-
+export class FigmaPage {
+  readonly title = 'Figma - zard/ui';
   activeAnchor?: string;
 
   readonly navigationConfig: NavigationConfig = {
@@ -68,9 +64,4 @@ export class FigmaPage implements OnInit {
       ],
     },
   ];
-
-  ngOnInit() {
-    this.viewportScroller.scrollToPosition([0, 0]);
-    this.titleService.setTitle(this.title);
-  }
 }

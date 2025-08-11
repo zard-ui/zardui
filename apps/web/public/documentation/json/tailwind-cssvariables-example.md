@@ -1,0 +1,7 @@
+```json
+{
+  "tailwind": {
+    "cssVariables": true
+  }
+}
+```
