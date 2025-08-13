@@ -1,4 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, output, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  HostListener,
+  input,
+  OnInit,
+  output,
+  QueryList,
+  signal,
+  ViewChild,
+  ViewChildren,
+  ViewEncapsulation,
+} from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
 import { ZardButtonComponent, ZardInputDirective } from '../components';
@@ -16,12 +31,78 @@ import { ZardTableService } from './table.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    @if (filtering()) {
-      <div z-table-filtering role="search">
-        <label for="inputSearch" class="sr-only">{{ inputPlaceholder() }}</label>
-        <input z-input type="text" [placeholder]="inputPlaceholder()" [formControl]="searchControl" id="inputSearch" />
+    <div z-toolbar>
+      <div z-toolbar-item>
+        @if (filtering()) {
+          <div z-table-filtering role="search">
+            <label for="inputSearch" class="sr-only">{{ inputPlaceholder() }}</label>
+            <input z-input type="text" [placeholder]="inputPlaceholder()" [formControl]="searchControl" id="inputSearch" />
+          </div>
+        }
       </div>
-    }
+
+      <div z-toolbar-item>
+        @if (enableColumnSelector()) {
+          <details #detailsRef z-details (toggle)="onDetailsToggle($event)">
+            <summary #summaryRef z-summary role="button" tabindex="0" aria-haspopup="menu" [attr.aria-expanded]="isDetailsOpen()" aria-controls="dropdown-list-id">
+              Columns
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-chevron-down-icon lucide-chevron-down"
+              >
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </summary>
+
+            <ul tabindex="-1" z-dropdown-ul role="menu" id="dropdown-list-id" aria-orientation="vertical" (keydown)="onMenuKeydown($event)">
+              @for (column of columns(); track column.accessor) {
+                <li z-dropdown-li role="none">
+                  <label for="{{ column.accessor }}" z-dropdown-li-label role="menuitemcheckbox" [attr.aria-checked]="visibleColumns()[column.accessor]" tabindex="-1">
+                    <input
+                      #firstCheckbox
+                      #checkboxInputs
+                      tabindex="-1"
+                      z-dropdown-checkbox
+                      type="checkbox"
+                      id="{{ column.accessor }}"
+                      name="{{ column.accessor }}"
+                      [checked]="visibleColumns()[column.accessor]"
+                      (change)="toggleShowColumns(column.accessor)"
+                      (keydown)="onCheckboxKeydown($event, column.accessor)"
+                    />
+                    <span z-dropdown-check-icon-wrapper>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        width="15"
+                        height="15"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="lucide lucide-check-icon lucide-check"
+                      >
+                        <path d="M20 6 9 17l-5-5" />
+                      </svg>
+                    </span>
+                    {{ column.header }}
+                  </label>
+                </li>
+              }
+            </ul>
+          </details>
+        }
+      </div>
+    </div>
     <div z-table-wrapper>
       <table z-table role="table">
         @if (columns().length && dataSource().data.length) {
@@ -29,12 +110,21 @@ import { ZardTableService } from './table.service';
             <tr z-tr>
               @for (column of columns(); track column.accessor) {
                 @if (column.sortable) {
-                  <th z-th scope="col" sortable (click)="toggleSort(column.accessor)" tabindex="0" role="button" [attr.aria-label]="'Sort by ' + column.header">
+                  <th
+                    z-th
+                    scope="col"
+                    sortable
+                    (click)="toggleSort(column.accessor)"
+                    tabindex="0"
+                    role="button"
+                    [attr.aria-label]="'Sort by ' + column.header"
+                    [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'"
+                  >
                     {{ column.header }}
                     <z-table-sort-icon [direction]="sortDirectionMap()[column.accessor]"></z-table-sort-icon>
                   </th>
                 } @else {
-                  <th z-th scope="col">
+                  <th z-th scope="col" [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'">
                     {{ column.header }}
                   </th>
                 }
@@ -46,7 +136,9 @@ import { ZardTableService } from './table.service';
             @for (row of dataSource().data; track row) {
               <tr z-tr>
                 @for (column of columns(); track column.accessor) {
-                  <td z-td>{{ row[column.accessor] }}</td>
+                  <td z-td [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'">
+                    {{ row[column.accessor] }}
+                  </td>
                 }
               </tr>
             }
@@ -75,7 +167,7 @@ import { ZardTableService } from './table.service';
     `,
   ],
 })
-export class ZardTableComponent {
+export class ZardTableComponent implements OnInit {
   readonly columns = input<{ header: string; accessor: string; sortable?: boolean; filterable?: boolean }[]>([]);
   readonly dataSource = input<ZardTableDataSource<Record<string, string | number>>>({ data: [] });
 
@@ -90,9 +182,7 @@ export class ZardTableComponent {
 
   readonly filtering = input<boolean>(false);
   readonly searchControl = new FormControl();
-
   readonly filterableColumns = computed(() => this.columns().filter(col => col.filterable));
-
   readonly inputPlaceholder = computed(
     () =>
       `Filter by ${this.filterableColumns()
@@ -100,7 +190,17 @@ export class ZardTableComponent {
         .join(', ')}`,
   );
 
+  readonly enableColumnSelector = input<boolean>(false);
+  readonly visibleColumns = computed(() => this.tableService.visibleColumns());
+  readonly isDetailsOpen = signal(false);
+
   readonly stateChange = output<TableState>();
+
+  @ViewChild('detailsRef') detailsElementRef!: ElementRef<HTMLDetailsElement>;
+  @ViewChild('summaryRef') summaryElementRef!: ElementRef<HTMLElement>;
+  @ViewChildren('checkboxInputs', { read: ElementRef }) checkboxInputs!: QueryList<ElementRef<HTMLInputElement>>;
+  @ViewChildren('firstCheckbox') checkboxes!: QueryList<ElementRef<HTMLInputElement>>;
+  firstCheckbox!: ElementRef<HTMLInputElement>;
 
   constructor(private readonly tableService: ZardTableService) {
     effect(() => {
@@ -118,6 +218,10 @@ export class ZardTableComponent {
     this.searchControl.valueChanges.pipe(debounceTime(300)).subscribe(query => {
       this.filter(query);
     });
+  }
+
+  ngOnInit() {
+    this.tableService.setInitialVisibleColumns(this.columns().map(c => c.accessor));
   }
 
   goNext() {
@@ -141,6 +245,88 @@ export class ZardTableComponent {
     if (this.filtering() && searchItem !== this.tableService.tableState().search) {
       this.tableService.setFiltering(searchItem ?? '');
       this.stateChange.emit(this.tableService.tableState());
+    }
+  }
+
+  toggleShowColumns(accessor: string) {
+    this.tableService.toggleColumn(accessor);
+    this.closeDetails();
+    this.summaryElementRef?.nativeElement?.focus();
+  }
+
+  onCheckboxKeydown(event: KeyboardEvent, accessor: string) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      this.toggleShowColumns(accessor);
+    }
+  }
+
+  onDetailsToggle(event: Event) {
+    const detailsElement = event.target as HTMLDetailsElement;
+    this.isDetailsOpen.set(detailsElement.open);
+
+    if (detailsElement.open) {
+      requestAnimationFrame(() => {
+        this.checkboxes.first?.nativeElement.focus();
+      });
+    }
+  }
+
+  private isDetailsOpenAndAvailable(): boolean {
+    const details = this.detailsElementRef?.nativeElement;
+    return details && details.open;
+  }
+
+  @HostListener('document:keydown', ['$event'])
+  handleKeydown(event: KeyboardEvent) {
+    if (event.key === 'Escape' && this.isDetailsOpenAndAvailable()) {
+      this.closeDetails();
+      this.summaryElementRef?.nativeElement?.focus();
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClick(event: MouseEvent) {
+    const details = this.detailsElementRef?.nativeElement;
+    if (this.isDetailsOpenAndAvailable() && !details.contains(event.target as Node)) {
+      this.closeDetails();
+    }
+  }
+
+  @HostListener('document:focusout', ['$event'])
+  onFocusOut(event: FocusEvent) {
+    const details = this.detailsElementRef?.nativeElement;
+    const relatedTarget = event.relatedTarget as HTMLElement | null;
+    if (this.isDetailsOpenAndAvailable() && (!relatedTarget || !details.contains(relatedTarget))) {
+      this.closeDetails();
+    }
+  }
+
+  closeDetails() {
+    const details = this.detailsElementRef?.nativeElement;
+    if (details && details.open) {
+      details.open = false;
+      this.isDetailsOpen.set(false);
+    }
+  }
+
+  onMenuKeydown(event: KeyboardEvent) {
+    const inputs = this.checkboxInputs.toArray();
+    const currentIndex = inputs.findIndex(input => input.nativeElement === document.activeElement);
+
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      return;
+    }
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      const nextIndex = (currentIndex + 1) % inputs.length;
+      inputs[nextIndex].nativeElement.focus();
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      const prevIndex = (currentIndex - 1 + inputs.length) % inputs.length;
+      inputs[prevIndex].nativeElement.focus();
     }
   }
 }

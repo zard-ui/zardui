@@ -6,6 +6,7 @@ export class ZardTableService {
     pageSize: 5,
     pageIndex: 0,
     totalItems: 0,
+    visibleColumns: {},
   });
 
   readonly hasPrevPage = computed(() => {
@@ -21,6 +22,8 @@ export class ZardTableService {
 
   readonly tableState = this.state.asReadonly();
 
+  readonly visibleColumns = computed(() => this.state().visibleColumns ?? {});
+
   updateState(patch: Partial<TableState>): void {
     this.state.update(currentState => {
       const newPageIndex = patch.pageIndex ?? currentState.pageIndex;
@@ -31,6 +34,29 @@ export class ZardTableService {
         pageIndex: Math.max(0, newPageIndex),
       };
     });
+  }
+
+  setInitialVisibleColumns(columns: string[]) {
+    this.state.update(current => {
+      if (current.visibleColumns && Object.keys(current.visibleColumns).length > 0) {
+        return current;
+      }
+
+      return {
+        ...current,
+        visibleColumns: Object.fromEntries(columns.map(c => [c, true])),
+      };
+    });
+  }
+
+  toggleColumn(accessor: string) {
+    this.state.update(prev => ({
+      ...prev,
+      visibleColumns: {
+        ...(prev.visibleColumns ?? {}),
+        [accessor]: !prev.visibleColumns?.[accessor],
+      },
+    }));
   }
 
   nextPage() {

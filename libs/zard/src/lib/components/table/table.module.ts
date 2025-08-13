@@ -1,6 +1,13 @@
 import { NgModule } from '@angular/core';
 
 import {
+  ZardDetailsDirective,
+  ZardDropdownCheckboxDirective,
+  ZardDropdownCheckIconWrapperDirective,
+  ZardDropdownLiDirective,
+  ZardDropdownLiLabelDirective,
+  ZardDropdownUlDirective,
+  ZardSummaryDirective,
   ZardTableDirective,
   ZardTableFilteringDirective,
   ZardTablePaginationDirective,
@@ -9,6 +16,7 @@ import {
   ZardTdDirective,
   ZardThDirective,
   ZardTheadDirective,
+  ZardToolbarDirective,
   ZardTrDirective,
 } from './table.directive';
 
@@ -22,6 +30,14 @@ const directives = [
   ZardTableWrapperDirective,
   ZardTablePaginationDirective,
   ZardTableFilteringDirective,
+  ZardSummaryDirective,
+  ZardDetailsDirective,
+  ZardDropdownUlDirective,
+  ZardDropdownLiDirective,
+  ZardDropdownCheckIconWrapperDirective,
+  ZardDropdownCheckboxDirective,
+  ZardToolbarDirective,
+  ZardDropdownLiLabelDirective,
 ];
 
 @NgModule({

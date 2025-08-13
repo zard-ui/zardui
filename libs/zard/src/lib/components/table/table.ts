@@ -37,4 +37,6 @@ export interface TableState {
   direction?: 'asc' | 'desc';
 
   search?: string;
+
+  visibleColumns?: Record<string, boolean>;
 }
