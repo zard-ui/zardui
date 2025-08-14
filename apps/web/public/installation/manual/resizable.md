@@ -1,19 +1,21 @@
+
+
 ```angular-ts title="resizable.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import {
-    AfterContentInit,
-    ChangeDetectionStrategy,
-    Component,
-    computed,
-    contentChildren,
-    ElementRef,
-    EventEmitter,
-    inject,
-    input,
-    Output,
-    signal,
-    ViewEncapsulation
+  AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  ElementRef,
+  EventEmitter,
+  inject,
+  input,
+  Output,
+  signal,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -48,8 +50,8 @@ export class ZardResizableComponent implements AfterContentInit {
   @Output() readonly zResize = new EventEmitter<ZardResizeEvent>();
   @Output() readonly zResizeEnd = new EventEmitter<ZardResizeEvent>();
 
-  protected readonly panels = contentChildren(ZardResizablePanelComponent);
-  protected readonly panelSizes = signal<number[]>([]);
+  readonly panels = contentChildren(ZardResizablePanelComponent);
+  readonly panelSizes = signal<number[]>([]);
   protected readonly isResizing = signal(false);
   protected readonly activeHandleIndex = signal<number | null>(null);
 
@@ -59,16 +61,35 @@ export class ZardResizableComponent implements AfterContentInit {
     this.initializePanelSizes();
   }
 
+  convertToPercentage(value: number | string, containerSize: number): number {
+    if (typeof value === 'number') {
+      return value;
+    }
+
+    if (typeof value === 'string') {
+      if (value.endsWith('%')) {
+        return parseFloat(value);
+      }
+      if (value.endsWith('px')) {
+        const pixels = parseFloat(value);
+        return (pixels / containerSize) * 100;
+      }
+    }
+
+    return parseFloat(value.toString()) || 0;
+  }
+
   private initializePanelSizes(): void {
     const panels = this.panels();
     const totalPanels = panels.length;
 
     if (totalPanels === 0) return;
 
+    const containerSize = this.getContainerSize();
     const sizes = panels.map(panel => {
       const defaultSize = panel.zDefaultSize();
       if (defaultSize !== undefined) {
-        return defaultSize;
+        return this.convertToPercentage(defaultSize, containerSize);
       }
       return 100 / totalPanels;
     });
@@ -120,10 +141,10 @@ export class ZardResizableComponent implements AfterContentInit {
 
     if (!leftPanel || !rightPanel) return;
 
-    const leftMin = leftPanel.zMin() || 0;
-    const leftMax = leftPanel.zMax() || 100;
-    const rightMin = rightPanel.zMin() || 0;
-    const rightMax = rightPanel.zMax() || 100;
+    const leftMin = this.convertToPercentage(leftPanel.zMin() || 0, containerSize);
+    const leftMax = this.convertToPercentage(leftPanel.zMax() || 100, containerSize);
+    const rightMin = this.convertToPercentage(rightPanel.zMin() || 0, containerSize);
+    const rightMax = this.convertToPercentage(rightPanel.zMax() || 100, containerSize);
 
     let newLeftSize = startSizes[handleIndex] + deltaPercentage;
     let newRightSize = startSizes[handleIndex + 1] - deltaPercentage;
@@ -160,7 +181,7 @@ export class ZardResizableComponent implements AfterContentInit {
     this.zResizeEnd.emit({ sizes, layout: this.zLayout() || 'horizontal' });
   }
 
-  private updatePanelStyles(): void {
+  updatePanelStyles(): void {
     const panels = this.panels();
     const sizes = this.panelSizes();
     const layout = this.zLayout();
@@ -190,10 +211,10 @@ export class ZardResizableComponent implements AfterContentInit {
     }
   }
 
-  private getContainerSize(): number {
+  getContainerSize(): number {
     const element = this.elementRef.nativeElement as HTMLElement;
     const layout = this.zLayout();
-    return layout === 'vertical' ? element.offsetHeight : element.offsetWidth;
+    return layout === 'vertical' ? element.clientHeight : element.clientWidth;
   }
 
   collapsePanel(index: number): void {
@@ -206,7 +227,8 @@ export class ZardResizableComponent implements AfterContentInit {
     const isCollapsed = sizes[index] === 0;
 
     if (isCollapsed) {
-      const defaultSize = panel.zDefaultSize() || 100 / panels.length;
+      const containerSize = this.getContainerSize();
+      const defaultSize = this.convertToPercentage(panel.zDefaultSize() || 100 / panels.length, containerSize);
       sizes[index] = defaultSize;
 
       const totalOthers = sizes.reduce((sum, size, i) => (i !== index ? sum + size : sum), 0);
@@ -239,46 +261,42 @@ export class ZardResizableComponent implements AfterContentInit {
 
 ```
 
+
+
 ```angular-ts title="resizable.variants.ts" copyButton showLineNumbers
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, VariantProps } from 'class-variance-authority';
 
-export const resizableVariants = cva(
-  'flex h-full w-full data-[layout=vertical]:flex-col',
-  {
-    variants: {
-      zLayout: {
-        horizontal: '',
-        vertical: '',
-      },
+export const resizableVariants = cva('flex h-full w-full data-[layout=vertical]:flex-col', {
+  variants: {
+    zLayout: {
+      horizontal: '',
+      vertical: '',
     },
-    defaultVariants: {
-      zLayout: 'horizontal',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    zLayout: 'horizontal',
+  },
+});
 
-export const resizablePanelVariants = cva(
-  'relative overflow-hidden',
-  {
-    variants: {
-      zCollapsed: {
-        true: 'hidden',
-        false: '',
-      },
+export const resizablePanelVariants = cva('relative overflow-hidden flex-shrink-0 h-full', {
+  variants: {
+    zCollapsed: {
+      true: 'hidden',
+      false: '',
     },
-    defaultVariants: {
-      zCollapsed: false,
-    },
-  }
-);
+  },
+  defaultVariants: {
+    zCollapsed: false,
+  },
+});
 
 export const resizableHandleVariants = cva(
-  'relative flex items-center justify-center bg-border transition-colors hover:bg-border/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1',
+  'group relative flex flex-shrink-0 items-center justify-center bg-border transition-colors hover:bg-border/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1',
   {
     variants: {
       zLayout: {
-        horizontal: 'w-px cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2',
-        vertical: 'h-px w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-1 after:-translate-y-1/2',
+        horizontal: 'w-[1px] min-w-[1px] cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2',
+        vertical: 'h-[1px] min-h-[1px] w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-4 after:-translate-y-1/2',
       },
       zDisabled: {
         true: 'cursor-default pointer-events-none opacity-50',
@@ -289,20 +307,38 @@ export const resizableHandleVariants = cva(
       zLayout: 'horizontal',
       zDisabled: false,
     },
-  }
+  },
 );
+
+export const resizableHandleIndicatorVariants = cva('absolute z-10 bg-muted-foreground/30 transition-colors group-hover:bg-muted-foreground/50 rounded-full', {
+  variants: {
+    zLayout: {
+      vertical: 'w-8 h-px',
+      horizontal: 'w-px h-8',
+    },
+  },
+  defaultVariants: {
+    zLayout: 'horizontal',
+  },
+});
 
 export type ZardResizableVariants = VariantProps<typeof resizableVariants>;
 export type ZardResizablePanelVariants = VariantProps<typeof resizablePanelVariants>;
 export type ZardResizableHandleVariants = VariantProps<typeof resizableHandleVariants>;
+
 ```
+
+
 
 ```angular-ts title="index.ts" copyButton showLineNumbers
 export * from './resizable.component';
 export * from './resizable-panel.component';
 export * from './resizable-handle.component';
 export * from './resizable.variants';
+
 ```
+
+
 
 ```angular-ts title="resizable-handle.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
@@ -311,7 +347,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardResizableComponent } from './resizable.component';
-import { resizableHandleVariants } from './resizable.variants';
+import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
 
 @Component({
   selector: 'z-resizable-handle',
@@ -321,9 +357,7 @@ import { resizableHandleVariants } from './resizable.variants';
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (zWithHandle()) {
-      <div class="z-10 flex h-4 w-3 items-center justify-center rounded-sm border bg-border [&[data-layout=vertical]]:rotate-90">
-        <span class="icon-grip-vertical h-2.5 w-2.5"></span>
-      </div>
+      <div [class]="handleClasses()"></div>
     }
   `,
   host: {
@@ -358,6 +392,8 @@ export class ZardResizableHandleComponent {
     ),
   );
 
+  protected readonly handleClasses = computed(() => resizableHandleIndicatorVariants({ zLayout: this.layout() }));
+
   handleMouseDown(event: MouseEvent): void {
     if (this.zDisabled() || !this.resizable) return;
     this.resizable.startResize(this.zHandleIndex(), event);
@@ -373,7 +409,6 @@ export class ZardResizableHandleComponent {
 
     const panels = this.resizable.panels();
     const handleIndex = this.zHandleIndex();
-    const sizes = [...this.resizable['panelSizes']()];
     const layout = this.layout();
 
     let delta = 0;
@@ -423,17 +458,18 @@ export class ZardResizableHandleComponent {
 
     const panels = this.resizable.panels();
     const handleIndex = this.zHandleIndex();
-    const sizes = [...this.resizable['panelSizes']()];
+    const sizes = [...this.resizable.panelSizes()];
 
     const leftPanel = panels[handleIndex];
     const rightPanel = panels[handleIndex + 1];
 
     if (!leftPanel || !rightPanel) return;
 
-    const leftMin = leftPanel.zMin() || 0;
-    const leftMax = leftPanel.zMax() || 100;
-    const rightMin = rightPanel.zMin() || 0;
-    const rightMax = rightPanel.zMax() || 100;
+    const containerSize = this.resizable.getContainerSize();
+    const leftMin = this.resizable.convertToPercentage(leftPanel.zMin() || 0, containerSize);
+    const leftMax = this.resizable.convertToPercentage(leftPanel.zMax() || 100, containerSize);
+    const rightMin = this.resizable.convertToPercentage(rightPanel.zMin() || 0, containerSize);
+    const rightMax = this.resizable.convertToPercentage(rightPanel.zMax() || 100, containerSize);
 
     let newLeftSize = sizes[handleIndex] + delta;
     let newRightSize = sizes[handleIndex + 1] - delta;
@@ -448,8 +484,8 @@ export class ZardResizableHandleComponent {
       sizes[handleIndex] = newLeftSize;
       sizes[handleIndex + 1] = newRightSize;
 
-      this.resizable['panelSizes'].set(sizes);
-      this.resizable['updatePanelStyles']();
+      this.resizable.panelSizes.set(sizes);
+      this.resizable.updatePanelStyles();
       this.resizable.zResize.emit({
         sizes,
         layout: this.resizable.zLayout() || 'horizontal',
@@ -462,17 +498,18 @@ export class ZardResizableHandleComponent {
 
     const panels = this.resizable.panels();
     const handleIndex = this.zHandleIndex();
-    const sizes = [...this.resizable['panelSizes']()];
+    const sizes = [...this.resizable.panelSizes()];
 
     const leftPanel = panels[handleIndex];
     const rightPanel = panels[handleIndex + 1];
 
     if (!leftPanel || !rightPanel) return;
 
-    const leftMin = leftPanel.zMin() || 0;
-    const leftMax = leftPanel.zMax() || 100;
-    const rightMin = rightPanel.zMin() || 0;
-    const rightMax = rightPanel.zMax() || 100;
+    const containerSize = this.resizable.getContainerSize();
+    const leftMin = this.resizable.convertToPercentage(leftPanel.zMin() || 0, containerSize);
+    const leftMax = this.resizable.convertToPercentage(leftPanel.zMax() || 100, containerSize);
+    const rightMin = this.resizable.convertToPercentage(rightPanel.zMin() || 0, containerSize);
+    const rightMax = this.resizable.convertToPercentage(rightPanel.zMax() || 100, containerSize);
 
     const totalSize = sizes[handleIndex] + sizes[handleIndex + 1];
 
@@ -494,6 +531,8 @@ export class ZardResizableHandleComponent {
 }
 
 ```
+
+
 
 ```angular-ts title="resizable-panel.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
@@ -518,9 +557,9 @@ import { resizablePanelVariants } from './resizable.variants';
 export class ZardResizablePanelComponent {
   readonly elementRef = inject(ElementRef);
 
-  readonly zDefaultSize = input<number | undefined>(undefined);
-  readonly zMin = input<number>(10);
-  readonly zMax = input<number>(100);
+  readonly zDefaultSize = input<number | string | undefined>(undefined);
+  readonly zMin = input<number | string>(0);
+  readonly zMax = input<number | string>(100);
   readonly zCollapsible = input(false, { transform });
   readonly zResizable = input(true, { transform });
   readonly class = input<ClassValue>('');
@@ -536,3 +575,4 @@ export class ZardResizablePanelComponent {
 }
 
 ```
+

@@ -1,6 +1,6 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const resizableVariants = cva('flex h-full w-full data-[layout=vertical]:flex-col', {
+export const resizableVariants = cva('flex h-full w-full data-[layout=vertical]:flex-col overflow-hidden', {
   variants: {
     zLayout: {
       horizontal: '',
