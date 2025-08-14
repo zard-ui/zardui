@@ -47,3 +47,6 @@ export * from './combobox/combobox.component';
 export * from './tooltip/tooltip';
 export * from './toast/toast.component';
 export * from './toggle-group/toggle-group.component';
+export * from './resizable/resizable.component';
+export * from './resizable/resizable-panel.component';
+export * from './resizable/resizable-handle.component';
