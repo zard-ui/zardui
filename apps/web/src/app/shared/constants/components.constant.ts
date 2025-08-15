@@ -1,4 +1,5 @@
 import { TOGGLE_GROUP } from '@zard/components/toggle-group/demo/toggle-group';
+import { RESIZABLE } from '@zard/components/resizable/demo/resizable';
 import { PROGRESS_BAR } from '@zard/components/progress-bar/demo/progress-bar';
 import { PAGINATION } from '@zard/components/pagination/demo/pagination';
 import { DATE_PICKER } from '@zard/components/date-picker/demo/date-picker';
@@ -70,6 +71,7 @@ export const COMPONENTS: ComponentData[] = [
   POPOVER,
   PROGRESS_BAR,
   RADIO,
+  RESIZABLE,
   SEGMENTED,
   SELECT,
   SLIDER,

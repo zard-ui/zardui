@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { ZardAvatarComponent } from '@zard/components/components';
+import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { SOCIAL_MEDIAS } from '@zard/shared/constants/medias.constant';
 
 export interface FounderData {
