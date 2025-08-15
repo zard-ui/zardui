@@ -80,7 +80,9 @@ export const add = new Command()
 
       component.dependencies?.forEach(dep => dependenciesToInstall.add(dep));
 
-      if (component.registryDependencies) {
+      // Skip registryDependencies resolution when installing all components
+      // since all dependencies will be installed anyway
+      if (component.registryDependencies && !options.all) {
         for (const dep of component.registryDependencies) {
           const depComponent = getRegistryComponent(dep);
           if (depComponent && !componentsToInstall.find(c => c.name === dep)) {

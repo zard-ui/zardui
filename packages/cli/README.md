@@ -86,28 +86,77 @@ npx @ngzard/ui@latest add
 - `-a, --all` - Add all available components
 - `-p, --path <path>` - Custom path for components
 
+### `registry`
+
+Generate or update the component registry with latest components from the library.
+
+```bash
+npx @ngzard/ui@latest registry
+```
+
+**Options:**
+- `-c, --cwd <path>` - Specify working directory
+- `--dry-run` - Show what would be updated without making changes
+
+### `validate`
+
+Validate the registry against the actual component library to ensure consistency.
+
+```bash
+npx @ngzard/ui@latest validate
+```
+
+**Options:**
+- `-c, --cwd <path>` - Specify working directory
+- `--fix` - Automatically fix issues found during validation
+- `--detailed` - Show detailed information about each component
+
+### `optimize`
+
+Optimize the registry by removing redundant dependencies that are already peerDependencies.
+
+```bash
+npx @ngzard/ui@latest optimize
+```
+
+**Options:**
+- `-c, --cwd <path>` - Specify working directory
+- `--dry-run` - Show what would be optimized without making changes
+
 ## Available Components
 
 - `accordion` - Collapsible content panels
 - `alert` - Alert messages with variants
+- `alert-dialog` - Modal alert dialogs
 - `avatar` - User profile pictures with fallbacks
 - `badge` - Small status indicators
 - `breadcrumb` - Navigation breadcrumbs
 - `button` - Interactive buttons with variants
+- `calendar` - Date selection calendar
 - `card` - Content containers
 - `checkbox` - Form checkboxes
+- `combobox` - Searchable select inputs
+- `command` - Command palette interface
+- `date-picker` - Date picker inputs
 - `dialog` - Modal dialogs
 - `divider` - Visual separators
 - `dropdown` - Dropdown menus
 - `input` - Form inputs
 - `loader` - Loading indicators
+- `pagination` - Page navigation controls
+- `popover` - Floating content containers
 - `progress-bar` - Progress indicators
 - `radio` - Radio button inputs
+- `segmented` - Segmented controls
 - `select` - Select dropdowns
+- `skeleton` - Loading placeholder skeletons
 - `slider` - Range sliders
 - `switch` - Toggle switches
+- `table` - Data tables
 - `tabs` - Tabbed interfaces
+- `toast` - Notification toasts
 - `toggle` - Toggle buttons
+- `toggle-group` - Toggle button groups
 - `tooltip` - Hover tooltips
 
 ## Configuration

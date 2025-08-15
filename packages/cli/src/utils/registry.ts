@@ -12,7 +12,6 @@ export type ComponentRegistry = {
 export const registry: ComponentRegistry[] = [
   {
     name: 'button',
-    dependencies: ['class-variance-authority'],
     files: [
       {
         name: 'button.component.ts',
@@ -26,7 +25,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'card',
-    dependencies: ['class-variance-authority'],
     files: [
       {
         name: 'card.component.ts',
@@ -40,7 +38,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'badge',
-    dependencies: ['class-variance-authority'],
     files: [
       {
         name: 'badge.component.ts',
@@ -54,7 +51,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'alert',
-    dependencies: ['class-variance-authority'],
     files: [
       {
         name: 'alert.component.ts',
@@ -68,7 +64,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'avatar',
-    dependencies: ['class-variance-authority'],
     files: [
       {
         name: 'avatar.component.ts',
@@ -82,7 +77,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'checkbox',
-    dependencies: ['class-variance-authority', '@angular/forms'],
     files: [
       {
         name: 'checkbox.component.ts',
@@ -96,7 +90,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'dialog',
-    dependencies: ['class-variance-authority', '@angular/cdk'],
     registryDependencies: ['button'],
     files: [
       {
@@ -123,7 +116,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'dropdown',
-    dependencies: ['class-variance-authority', '@angular/cdk'],
     files: [
       {
         name: 'dropdown.component.ts',
@@ -134,6 +126,30 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'dropdown-label.component.ts',
+        content: '',
+      },
+      {
+        name: 'dropdown-menu-content.component.ts',
+        content: '',
+      },
+      {
+        name: 'dropdown-shortcut.component.ts',
+        content: '',
+      },
+      {
+        name: 'dropdown-trigger.directive.ts',
+        content: '',
+      },
+      {
+        name: 'dropdown.module.ts',
+        content: '',
+      },
+      {
+        name: 'dropdown.service.ts',
+        content: '',
+      },
+      {
         name: 'dropdown.variants.ts',
         content: '',
       },
@@ -141,7 +157,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'input',
-    dependencies: ['class-variance-authority', '@angular/forms'],
     files: [
       {
         name: 'input.directive.ts',
@@ -155,14 +170,13 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'select',
-    dependencies: ['class-variance-authority', '@angular/forms', '@angular/cdk'],
     files: [
       {
         name: 'select.component.ts',
         content: '',
       },
       {
-        name: 'select-option/select-option.component.ts',
+        name: 'select-item.component.ts',
         content: '',
       },
       {
@@ -173,7 +187,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'switch',
-    dependencies: ['class-variance-authority', '@angular/forms'],
     files: [
       {
         name: 'switch.component.ts',
@@ -187,7 +200,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tabs',
-    dependencies: ['class-variance-authority'],
+    registryDependencies: ['button'],
     files: [
       {
         name: 'tabs.component.ts',
@@ -201,7 +214,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'toggle',
-    dependencies: ['class-variance-authority'],
     files: [
       {
         name: 'toggle.component.ts',
@@ -215,7 +227,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tooltip',
-    dependencies: ['class-variance-authority', '@angular/cdk'],
     files: [
       {
         name: 'tooltip.ts',
@@ -233,7 +244,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'accordion',
-    dependencies: ['class-variance-authority', '@angular/cdk'],
     files: [
       {
         name: 'accordion.component.ts',
@@ -247,7 +257,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'breadcrumb',
-    dependencies: ['class-variance-authority', '@angular/router'],
     files: [
       {
         name: 'breadcrumb.component.ts',
@@ -265,7 +274,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'divider',
-    dependencies: ['class-variance-authority'],
     files: [
       {
         name: 'divider.component.ts',
@@ -279,7 +287,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'loader',
-    dependencies: ['class-variance-authority'],
     files: [
       {
         name: 'loader.component.ts',
@@ -293,7 +300,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'progress-bar',
-    dependencies: ['class-variance-authority'],
     files: [
       {
         name: 'progress-bar.component.ts',
@@ -307,7 +313,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'radio',
-    dependencies: ['class-variance-authority', '@angular/forms'],
     files: [
       {
         name: 'radio.component.ts',
@@ -321,7 +326,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'slider',
-    dependencies: ['class-variance-authority', '@angular/forms'],
     files: [
       {
         name: 'slider.component.ts',
@@ -329,6 +333,219 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'slider.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'alert-dialog',
+    registryDependencies: ['button'],
+    files: [
+      {
+        name: 'alert-dialog-ref.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog.component.html',
+        content: '',
+      },
+      {
+        name: 'alert-dialog.component.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog.service.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'calendar',
+    registryDependencies: ['button', 'select'],
+    files: [
+      {
+        name: 'calendar.component.ts',
+        content: '',
+      },
+      {
+        name: 'calendar.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'combobox',
+    registryDependencies: ['button', 'command', 'popover'],
+    files: [
+      {
+        name: 'combobox.component.ts',
+        content: '',
+      },
+      {
+        name: 'combobox.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'command',
+    files: [
+      {
+        name: 'command-divider.component.ts',
+        content: '',
+      },
+      {
+        name: 'command-empty.component.ts',
+        content: '',
+      },
+      {
+        name: 'command-input.component.ts',
+        content: '',
+      },
+      {
+        name: 'command-json.component.ts',
+        content: '',
+      },
+      {
+        name: 'command-list.component.ts',
+        content: '',
+      },
+      {
+        name: 'command-option-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'command-option.component.ts',
+        content: '',
+      },
+      {
+        name: 'command.component.ts',
+        content: '',
+      },
+      {
+        name: 'command.module.ts',
+        content: '',
+      },
+      {
+        name: 'command.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'date-picker',
+    registryDependencies: ['button', 'calendar', 'popover'],
+    files: [
+      {
+        name: 'date-picker.component.ts',
+        content: '',
+      },
+      {
+        name: 'date-picker.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'pagination',
+    files: [
+      {
+        name: 'pagination.component.ts',
+        content: '',
+      },
+      {
+        name: 'pagination.module.ts',
+        content: '',
+      },
+      {
+        name: 'pagination.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'popover',
+    files: [
+      {
+        name: 'popover.component.ts',
+        content: '',
+      },
+      {
+        name: 'popover.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'segmented',
+    files: [
+      {
+        name: 'segmented.component.ts',
+        content: '',
+      },
+      {
+        name: 'segmented.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'skeleton',
+    files: [
+      {
+        name: 'skeleton.component.ts',
+        content: '',
+      },
+      {
+        name: 'skeleton.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'table',
+    files: [
+      {
+        name: 'table.component.ts',
+        content: '',
+      },
+      {
+        name: 'table.module.ts',
+        content: '',
+      },
+      {
+        name: 'table.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'toast',
+    dependencies: ['ngx-sonner'],
+    files: [
+      {
+        name: 'toast.component.ts',
+        content: '',
+      },
+      {
+        name: 'toast.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'toggle-group',
+    files: [
+      {
+        name: 'toggle-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'toggle-group.variants.ts',
         content: '',
       },
     ],
