@@ -6,7 +6,8 @@ import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-hea
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { ZardAccordionComponent, ZardAccordionItemComponent } from '@zard/components/components';
+import { ZardAccordionComponent } from '@zard/components/accordion/accordion.component';
+import { ZardAccordionItemComponent } from '@zard/components/accordion/accordion-item.component';
 
 @Component({
   selector: 'z-theming',

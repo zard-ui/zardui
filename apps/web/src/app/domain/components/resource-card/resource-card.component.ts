@@ -1,5 +1,5 @@
 import { Component, input } from '@angular/core';
-import { ZardBadgeComponent } from '@zard/components/components';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 
 export interface ResourceLink {
   url: string;
