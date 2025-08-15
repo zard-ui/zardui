@@ -87,7 +87,14 @@ export const add = new Command()
           const depComponent = getRegistryComponent(dep);
           if (depComponent && !componentsToInstall.find(c => c.name === dep)) {
             // Check if the dependency component already exists
-            const depTargetDir = options.path ? path.resolve(cwd, options.path, dep) : path.resolve(resolvedConfig.resolvedPaths.components, dep);
+            let depTargetDir;
+            if (dep === 'string-template-outlet') {
+              depTargetDir = options.path
+                ? path.resolve(cwd, options.path, 'core/directives/string-template-outlet')
+                : path.resolve(resolvedConfig.resolvedPaths.components, 'core/directives/string-template-outlet');
+            } else {
+              depTargetDir = options.path ? path.resolve(cwd, options.path, dep) : path.resolve(resolvedConfig.resolvedPaths.components, dep);
+            }
 
             if (!existsSync(depTargetDir)) {
               componentsToInstall.push(depComponent);
@@ -121,7 +128,15 @@ export const add = new Command()
       const componentSpinner = spinner(`Installing ${component.name}...`).start();
 
       try {
-        const targetDir = options.path ? path.resolve(cwd, options.path, component.name) : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
+        // Special handling for core directives
+        let targetDir;
+        if (component.name === 'string-template-outlet') {
+          targetDir = options.path
+            ? path.resolve(cwd, options.path, 'core/directives/string-template-outlet')
+            : path.resolve(resolvedConfig.resolvedPaths.components, 'core/directives/string-template-outlet');
+        } else {
+          targetDir = options.path ? path.resolve(cwd, options.path, component.name) : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
+        }
 
         await installComponent(component, targetDir, resolvedConfig, options.overwrite);
         componentSpinner.succeed(`Added ${component.name}`);

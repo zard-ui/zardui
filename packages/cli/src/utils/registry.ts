@@ -25,6 +25,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'card',
+    registryDependencies: ['string-template-outlet'],
     files: [
       {
         name: 'card.component.ts',
@@ -546,6 +547,15 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'toggle-group.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'string-template-outlet',
+    files: [
+      {
+        name: 'string-template-outlet.directive.ts',
         content: '',
       },
     ],
