@@ -29,7 +29,14 @@ export class ZardDemoTableBasicComponent implements OnInit {
   ];
 
   ngOnInit(): void {
-    this.onStateChange({ pageIndex: 0, pageSize: 5, totalItems: 0, search: '', field: 'id', direction: 'asc' });
+    this.onStateChange({
+      pageIndex: 0,
+      pageSize: 5,
+      totalItems: 0,
+      search: '',
+      field: 'id',
+      direction: 'asc',
+    });
   }
 
   onStateChange(state: TableState) {

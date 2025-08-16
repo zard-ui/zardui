@@ -7,9 +7,9 @@
 
 To customize the table, pass the following props to the component.
 
-| Property                     | Description                                                                | Type                                                                 | Default   |
-| ---------------------------- | ---------------------------------------------------------------------------| ------------------------------------------------------------------- | --------- |
-| `[columns]`                  | Defines table columns                                                      | `{ header: string; accessor: string; sortable?: boolean; filterable?: boolean }[]` | `[]` |
+| Property       | Description           | Type               | Default |
+| -------------- | ------------------- | ----------------- | ------- |
+| `[columns]`    | Defines table columns | ColumnConfig[]    | `[]`    |
 | `[dataSource]`               | Table data and optional metadata for pagination, sorting, filtering        | `ZardTableDataSource<T>`                                            | `{ data: [] }` |
 | `[enableFiltering]`          | Shows global filter input for columns marked `filterable`                  | `boolean`                                                           | `false`   |
 | `[enableColumnSelector]`     | Enables column visibility dropdown                                         | `boolean`                                                           | `false`   |
@@ -24,7 +24,7 @@ To customize the table, pass the following props to the component.
 | -------------------- | --------------------------------------------------------------------------- | ----------- |
 | `(stateChange)`      | Emits the current table state on pagination, sorting, or filtering changes  | `TableState`|
 
----
+
 
 ### Interfaces
 
@@ -54,3 +54,11 @@ interface TableState {
   first?: boolean;
   last?: boolean;
 }
+
+interface ColumnConfig {
+  header: string;
+  accessor: string;
+  sortable?: boolean;
+  filterable?: boolean;
+}
+
