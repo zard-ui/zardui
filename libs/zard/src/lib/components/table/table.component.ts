@@ -36,7 +36,7 @@ import { ZardTableService } from './table.service';
         @if (filtering()) {
           <div z-table-filtering role="search">
             <label for="inputSearch" class="sr-only">{{ inputPlaceholder() }}</label>
-            <input z-input type="text" [placeholder]="inputPlaceholder()" [formControl]="searchControl" id="inputSearch" />
+            <input z-input type="text" zSize="default" class="w-full min-w-0 max-w-sm" [placeholder]="inputPlaceholder()" [formControl]="searchControl" id="inputSearch" />
           </div>
         }
       </div>
