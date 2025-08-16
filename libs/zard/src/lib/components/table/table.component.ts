@@ -33,7 +33,7 @@ import { ZardTableService } from './table.service';
   template: `
     <div z-toolbar>
       <div z-toolbar-item>
-        @if (filtering()) {
+        @if (enableFiltering()) {
           <div z-table-filtering role="search">
             <label for="inputSearch" class="sr-only">{{ inputPlaceholder() }}</label>
             <input z-input type="text" zSize="default" class="w-full min-w-0 max-w-sm" [placeholder]="inputPlaceholder()" [formControl]="searchControl" id="inputSearch" />
@@ -149,16 +149,13 @@ import { ZardTableService } from './table.service';
       </table>
     </div>
 
-    @if (pagination()) {
+    @if (enablePagination()) {
       <div z-table-pagination>
         <button z-button zType="outline" zSize="sm" (click)="goPrev()" [disabled]="disablePrev()">Previous</button>
         <button z-button zType="outline" zSize="sm" (click)="goNext()" [disabled]="disableNext()">Next</button>
       </div>
     }
   `,
-  host: {
-    '[class.z-ordering-enabled]': 'zOrdering()',
-  },
   styles: [
     `
       th[sortable]:hover {
@@ -171,16 +168,16 @@ export class ZardTableComponent implements OnInit {
   readonly columns = input<{ header: string; accessor: string; sortable?: boolean; filterable?: boolean }[]>([]);
   readonly dataSource = input<ZardTableDataSource<Record<string, string | number>>>({ data: [] });
 
-  readonly pagination = input<boolean>();
+  readonly enablePagination = input<boolean>();
   readonly disableNext = computed(() => !this.tableService.hasNextPage());
   readonly disablePrev = computed(() => !this.tableService.hasPrevPage());
 
-  readonly zOrdering = input<boolean>(false);
+  readonly enableOrdering = input<boolean>(false);
   readonly direction = computed(() => this.tableService.tableState().direction);
   readonly sortField = computed(() => this.tableService.tableState().field);
   readonly sortDirectionMap = computed(() => ({ [this.sortField() ?? '']: this.direction() ?? null }));
 
-  readonly filtering = input<boolean>(false);
+  readonly enableFiltering = input<boolean>(false);
   readonly searchControl = new FormControl();
   readonly filterableColumns = computed(() => this.columns().filter(col => col.filterable));
   readonly inputPlaceholder = computed(
@@ -235,14 +232,14 @@ export class ZardTableComponent implements OnInit {
   }
 
   toggleSort(field: string) {
-    if (this.zOrdering()) {
+    if (this.enableOrdering()) {
       this.tableService.setSorting(field);
       this.stateChange.emit(this.tableService.tableState());
     }
   }
 
   filter(searchItem: string) {
-    if (this.filtering() && searchItem !== this.tableService.tableState().search) {
+    if (this.enableFiltering() && searchItem !== this.tableService.tableState().search) {
       this.tableService.setFiltering(searchItem ?? '');
       this.stateChange.emit(this.tableService.tableState());
     }
