@@ -95,7 +95,7 @@ export class ZardTableWrapperDirective {
 }
 
 @Directive({
-  selector: 'div[z-table-pagination]',
+  selector: 'nav[z-table-pagination]',
   standalone: true,
   exportAs: 'zTablePagination',
   host: {

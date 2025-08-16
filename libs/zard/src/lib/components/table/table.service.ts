@@ -20,6 +20,13 @@ export class ZardTableService {
     return last !== undefined ? !last : (pageIndex + 1) * pageSize < totalItems;
   });
 
+  readonly currentPage = computed(() => this.state().pageIndex + 1);
+
+  readonly totalPages = computed(() => {
+    const { totalItems, pageSize } = this.state();
+    return pageSize > 0 ? Math.ceil(totalItems / pageSize) : 1;
+  });
+
   readonly tableState = this.state.asReadonly();
 
   readonly visibleColumns = computed(() => this.state().visibleColumns ?? {});

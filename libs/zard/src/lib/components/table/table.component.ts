@@ -36,7 +36,22 @@ import { ZardTableService } from './table.service';
         @if (enableFiltering()) {
           <div z-table-filtering role="search">
             <label for="inputSearch" class="sr-only">{{ inputPlaceholder() }}</label>
-            <input z-input type="text" zSize="default" class="w-full min-w-0 max-w-sm" [placeholder]="inputPlaceholder()" [formControl]="searchControl" id="inputSearch" />
+            <input
+              z-input
+              aria-controls="table-id"
+              type="search"
+              zSize="default"
+              class="w-full min-w-0 max-w-sm"
+              [placeholder]="inputPlaceholder()"
+              [formControl]="searchControl"
+              id="inputSearch"
+              aria-describedby="searchHint"
+            />
+            <span id="searchHint" class="sr-only"> Results will update automatically as you type </span>
+
+            <div aria-live="polite" class="sr-only">
+              {{ searchSummary() }}
+            </div>
           </div>
         }
       </div>
@@ -44,7 +59,7 @@ import { ZardTableService } from './table.service';
       <div z-toolbar-item>
         @if (enableColumnSelector()) {
           <details #detailsRef z-details (toggle)="onDetailsToggle($event)">
-            <summary #summaryRef z-summary role="button" tabindex="0" aria-haspopup="menu" [attr.aria-expanded]="isDetailsOpen()" aria-controls="dropdown-list-id">
+            <summary #summaryRef z-summary role="button" id="columns-summary" aria-haspopup="true" [attr.aria-expanded]="isDetailsOpen()" aria-controls="dropdown-list-id">
               Columns
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -62,14 +77,13 @@ import { ZardTableService } from './table.service';
               </svg>
             </summary>
 
-            <ul tabindex="-1" z-dropdown-ul role="menu" id="dropdown-list-id" aria-orientation="vertical" (keydown)="onMenuKeydown($event)">
+            <ul tabindex="-1" z-dropdown-ul id="dropdown-list-id" aria-orientation="vertical" (keydown)="onMenuKeydown($event)" aria-labelledby="columns-summary">
               @for (column of columns(); track column.accessor) {
-                <li z-dropdown-li role="none">
-                  <label for="{{ column.accessor }}" z-dropdown-li-label role="menuitemcheckbox" [attr.aria-checked]="visibleColumns()[column.accessor]" tabindex="-1">
+                <li z-dropdown-li role="menuitemcheckbox" [attr.aria-checked]="visibleColumns()[column.accessor]" [attr.aria-labelledby]="column.accessor + '-label'">
+                  <label id="{{ column.accessor }}-label" for="{{ column.accessor }}" z-dropdown-li-label>
                     <input
                       #firstCheckbox
                       #checkboxInputs
-                      tabindex="-1"
                       z-dropdown-checkbox
                       type="checkbox"
                       id="{{ column.accessor }}"
@@ -104,7 +118,7 @@ import { ZardTableService } from './table.service';
       </div>
     </div>
     <div z-table-wrapper>
-      <table z-table role="table">
+      <table z-table role="table" id="table-id">
         @if (columns().length && dataSource().data.length) {
           <thead>
             <tr z-tr>
@@ -115,9 +129,12 @@ import { ZardTableService } from './table.service';
                     scope="col"
                     sortable
                     (click)="toggleSort(column.accessor)"
+                    (keydown.enter)="toggleSort(column.accessor)"
+                    (keydown.space)="toggleSort(column.accessor); $event.preventDefault()"
                     tabindex="0"
                     role="button"
-                    [attr.aria-label]="'Sort by ' + column.header"
+                    [attr.aria-label]="'Sort by ' + column.header + (sortDirectionMap()[column.accessor] ? ', ' + sortDirectionMap()[column.accessor] + ' order' : '')"
+                    [attr.aria-sort]="sortDirectionMap()[column.accessor] ? sortDirectionMap()[column.accessor] : 'none'"
                     [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'"
                   >
                     {{ column.header }}
@@ -147,13 +164,15 @@ import { ZardTableService } from './table.service';
           <ng-content></ng-content>
         }
       </table>
+      <div aria-live="polite" class="sr-only">Table sorted by {{ sortField() }} in {{ direction() }} order</div>
     </div>
 
     @if (enablePagination()) {
-      <div z-table-pagination>
-        <button z-button zType="outline" zSize="sm" (click)="goPrev()" [disabled]="disablePrev()">Previous</button>
-        <button z-button zType="outline" zSize="sm" (click)="goNext()" [disabled]="disableNext()">Next</button>
-      </div>
+      <nav z-table-pagination role="navigation" aria-label="Table pagination">
+        <span class="sr-only">{{ pageSummary() }}</span>
+        <button z-button zType="outline" zSize="sm" (click)="goPrev()" [disabled]="disablePrev()" [attr.aria-label]="'Go to previous page'">Previous</button>
+        <button z-button zType="outline" zSize="sm" (click)="goNext()" [disabled]="disableNext()" [attr.aria-label]="'Go to next page'">Next</button>
+      </nav>
     }
   `,
   styles: [
@@ -187,6 +206,15 @@ export class ZardTableComponent implements OnInit {
         .join(', ')}`,
   );
 
+  readonly searchSummary = computed(() => {
+    const { search, totalItems } = this.tableService.tableState();
+    return search ? `${totalItems} resultados encontrados` : 'Nenhum filtro aplicado';
+  });
+
+  readonly pageSummary = computed(() => {
+    return `Page ${this.tableService.currentPage()} of ${this.tableService.totalPages()}`;
+  });
+
   readonly enableColumnSelector = input<boolean>(false);
   readonly visibleColumns = computed(() => this.tableService.visibleColumns());
   readonly isDetailsOpen = signal(false);
@@ -196,8 +224,8 @@ export class ZardTableComponent implements OnInit {
   @ViewChild('detailsRef') detailsElementRef!: ElementRef<HTMLDetailsElement>;
   @ViewChild('summaryRef') summaryElementRef!: ElementRef<HTMLElement>;
   @ViewChildren('checkboxInputs', { read: ElementRef }) checkboxInputs!: QueryList<ElementRef<HTMLInputElement>>;
-  @ViewChildren('firstCheckbox') checkboxes!: QueryList<ElementRef<HTMLInputElement>>;
-  firstCheckbox!: ElementRef<HTMLInputElement>;
+
+  openedByKeyboard = signal(false);
 
   constructor(private readonly tableService: ZardTableService) {
     effect(() => {
@@ -247,8 +275,6 @@ export class ZardTableComponent implements OnInit {
 
   toggleShowColumns(accessor: string) {
     this.tableService.toggleColumn(accessor);
-    this.closeDetails();
-    this.summaryElementRef?.nativeElement?.focus();
   }
 
   onCheckboxKeydown(event: KeyboardEvent, accessor: string) {
@@ -258,15 +284,25 @@ export class ZardTableComponent implements OnInit {
     }
   }
 
+  @HostListener('keydown', ['$event'])
+  onSummaryKeydown(event: KeyboardEvent) {
+    if (event.target === this.summaryElementRef?.nativeElement && (event.key === 'Enter' || event.key === ' ')) {
+      this.openedByKeyboard.set(true);
+    }
+  }
+
   onDetailsToggle(event: Event) {
     const detailsElement = event.target as HTMLDetailsElement;
+
     this.isDetailsOpen.set(detailsElement.open);
 
-    if (detailsElement.open) {
+    if (detailsElement.open && this.openedByKeyboard()) {
       requestAnimationFrame(() => {
-        this.checkboxes.first?.nativeElement.focus();
+        this.checkboxInputs.first?.nativeElement.focus();
       });
     }
+
+    this.openedByKeyboard.set(false);
   }
 
   private isDetailsOpenAndAvailable(): boolean {
@@ -311,19 +347,33 @@ export class ZardTableComponent implements OnInit {
     const inputs = this.checkboxInputs.toArray();
     const currentIndex = inputs.findIndex(input => input.nativeElement === document.activeElement);
 
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      return;
-    }
-
-    if (event.key === 'ArrowDown') {
-      event.preventDefault();
-      const nextIndex = (currentIndex + 1) % inputs.length;
-      inputs[nextIndex].nativeElement.focus();
-    } else if (event.key === 'ArrowUp') {
-      event.preventDefault();
-      const prevIndex = (currentIndex - 1 + inputs.length) % inputs.length;
-      inputs[prevIndex].nativeElement.focus();
+    switch (event.key) {
+      case 'Tab':
+        event.preventDefault();
+        this.closeDetails();
+        this.summaryElementRef?.nativeElement?.focus();
+        break;
+      case 'ArrowDown':
+        event.preventDefault();
+        inputs[(currentIndex + 1) % inputs.length].nativeElement.focus();
+        break;
+      case 'ArrowUp':
+        event.preventDefault();
+        inputs[(currentIndex - 1 + inputs.length) % inputs.length].nativeElement.focus();
+        break;
+      case 'Home':
+        event.preventDefault();
+        inputs[0].nativeElement.focus();
+        break;
+      case 'End':
+        event.preventDefault();
+        inputs[inputs.length - 1].nativeElement.focus();
+        break;
+      case 'Escape':
+        event.preventDefault();
+        this.closeDetails();
+        this.summaryElementRef?.nativeElement?.focus();
+        break;
     }
   }
 }
