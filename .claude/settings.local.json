@@ -56,8 +56,12 @@
       "Bash(./dist/index.js --version)",
       "Bash(./node_modules/.bin/ngzard:*)",
       "Bash(git rebase:*)",
-      "Bash(git rm:*)"
-    ]
+      "Bash(git rm:*)",
+      "Bash(npx nx run:*)",
+      "Bash(sed:*)",
+      "mcp__ide__getDiagnostics"
+    ],
+    "defaultMode": "acceptEdits"
   },
   "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
