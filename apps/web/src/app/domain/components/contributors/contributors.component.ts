@@ -1,7 +1,7 @@
-import { CommonModule } from '@angular/common';
-import { Component, input } from '@angular/core';
-import { ZardAvatarComponent } from '@zard/components/components';
+import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardTooltipModule } from '@zard/components/tooltip/tooltip';
+import { Component, input } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 export interface Contributor {
   login: string;

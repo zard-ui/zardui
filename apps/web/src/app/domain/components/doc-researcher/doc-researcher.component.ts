@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
-import { ZardButtonComponent } from '@zard/components/components';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDialogService } from '@zard/components/dialog/dialog.service';
+import { Component, inject } from '@angular/core';
 
 import { CommandDocComponent } from '../doc-command/doc-command.component';
 

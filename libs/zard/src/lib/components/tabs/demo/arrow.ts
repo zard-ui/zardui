@@ -1,6 +1,6 @@
+import { ZardButtonComponent } from '../../button/button.component';
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../components';
 import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({

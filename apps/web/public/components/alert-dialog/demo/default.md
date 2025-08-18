@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
+import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { Component, inject } from '@angular/core';
 
-import { ZardButtonComponent } from '../../components';
 import { ZardAlertDialogService } from '../alert-dialog.service';
 
 @Component({

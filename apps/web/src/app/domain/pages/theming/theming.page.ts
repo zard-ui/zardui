@@ -1,12 +1,14 @@
+import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { ZardAccordionItemComponent } from '@zard/components/accordion/accordion-item.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
+import { ZardAccordionComponent } from '@zard/components/accordion/accordion.component';
 import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
+
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { ZardAccordionComponent, ZardAccordionItemComponent } from '@zard/components/components';
 
 @Component({
   selector: 'z-theming',

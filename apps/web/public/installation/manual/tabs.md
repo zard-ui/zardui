@@ -20,7 +20,7 @@ import { combineLatest, interval, startWith } from 'rxjs';
 import { CommonModule } from '@angular/common';
 
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
-import { ZardButtonComponent } from '../components';
+import { ZardButtonComponent } from '../button/button.component';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';

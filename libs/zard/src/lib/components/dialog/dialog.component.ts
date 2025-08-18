@@ -1,8 +1,3 @@
-import { filter, fromEvent, takeUntil } from 'rxjs';
-
-import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,12 +15,16 @@ import {
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
+import { filter, fromEvent, takeUntil } from 'rxjs';
+import { CommonModule } from '@angular/common';
 
+import { ZardButtonComponent } from '../button/button.component';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../components';
-import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
+import { ZardDialogRef } from './dialog-ref';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;

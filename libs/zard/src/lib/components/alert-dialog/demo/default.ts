@@ -1,6 +1,6 @@
+import { ZardButtonComponent } from '../../button/button.component';
 import { Component, inject } from '@angular/core';
 
-import { ZardButtonComponent } from '../../components';
 import { ZardAlertDialogService } from '../alert-dialog.service';
 
 @Component({
