@@ -5,6 +5,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  contentChildren,
   ElementRef,
   forwardRef,
   HostListener,
@@ -21,6 +22,7 @@ import {
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardSelectItemComponent } from './select-item.component';
 import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
 
 @Component({
@@ -41,7 +43,6 @@ import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants
     class: 'relative inline-block w-full',
   },
   template: `
-    <!-- Select Trigger -->
     <button
       type="button"
       [class]="triggerClasses()"
@@ -59,24 +60,9 @@ import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants
           <span class="text-muted-foreground">{{ placeholder() }}</span>
         </ng-template>
       </span>
-      <svg
-        class="h-4 w-4 opacity-50 transition-transform"
-        [class.rotate-180]="isOpen()"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="m6 9 6 6 6-6" />
-      </svg>
+      <i class="icon-chevron-down size-4 opacity-50"></i>
     </button>
 
-    <!-- Template for overlay content -->
     <ng-template #dropdownTemplate>
       <div [class]="contentClasses()" role="listbox" [attr.data-state]="'open'" (keydown)="onDropdownKeydown($event)" tabindex="-1">
         <div class="p-1">
@@ -93,6 +79,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   private viewContainerRef = inject(ViewContainerRef);
 
   @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate!: TemplateRef<any>;
+
+  readonly selectItems = contentChildren(ZardSelectItemComponent);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -113,7 +101,24 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
   // Use computed to derive the effective selected value from input or internal state
   readonly selectedValue = computed(() => this.value() || this._selectedValue());
-  readonly selectedLabel = computed(() => this.label() || this._selectedLabel());
+
+  // Compute the label based on selected value and available items
+  readonly selectedLabel = computed(() => {
+    const manualLabel = this.label();
+    if (manualLabel) return manualLabel;
+
+    const currentValue = this.selectedValue();
+    if (!currentValue) return '';
+
+    const items = this.selectItems();
+    const matchingItem = items.find(item => item.value() === currentValue);
+
+    if (matchingItem) {
+      return matchingItem.elementRef.nativeElement.textContent?.trim() || currentValue;
+    }
+
+    return this._selectedLabel() || currentValue;
+  });
 
   private onChange = (_value: string) => {
     // ControlValueAccessor onChange callback
@@ -137,10 +142,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
     // Delay overlay creation to ensure element is rendered
     setTimeout(() => {
       this.createOverlay();
-      // Also initialize the label if we have a value input
       const inputValue = this.value();
       if (inputValue) {
-        // Label is now provided via input, no need to extract from DOM
+        this._selectedValue.set(inputValue);
       }
     });
   }
@@ -293,6 +297,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
         positionStrategy,
         hasBackdrop: false,
         scrollStrategy: this.overlay.scrollStrategies.reposition(),
+        width: elementWidth,
         minWidth: elementWidth,
         maxHeight: 384, // max-h-96 equivalent
       });

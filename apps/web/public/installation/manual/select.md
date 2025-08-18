@@ -5,21 +5,21 @@ import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@ang
 import { TemplatePortal } from '@angular/cdk/portal';
 import { NgIf } from '@angular/common';
 import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  ElementRef,
-  forwardRef,
-  HostListener,
-  inject,
-  input,
-  OnDestroy,
-  OnInit,
-  output,
-  signal,
-  TemplateRef,
-  ViewChild,
-  ViewContainerRef,
+    ChangeDetectionStrategy,
+    Component,
+    computed,
+    ElementRef,
+    forwardRef,
+    HostListener,
+    inject,
+    input,
+    OnDestroy,
+    OnInit,
+    output,
+    signal,
+    TemplateRef,
+    ViewChild,
+    ViewContainerRef
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -140,10 +140,11 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
     // Delay overlay creation to ensure element is rendered
     setTimeout(() => {
       this.createOverlay();
-      // Also initialize the label if we have a value input
+      // Initialize the internal value and label if we have a value input
       const inputValue = this.value();
       if (inputValue) {
-        // Label is now provided via input, no need to extract from DOM
+        this._selectedValue.set(inputValue);
+        this.updateLabelForValue(inputValue);
       }
     });
   }
@@ -416,6 +417,27 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   writeValue(value: string | null): void {
     const stringValue = value || '';
     this._selectedValue.set(stringValue);
+
+    // Find and set the label for the given value
+    if (stringValue) {
+      setTimeout(() => {
+        this.updateLabelForValue(stringValue);
+      });
+    }
+  }
+
+  private updateLabelForValue(value: string): void {
+    // Find the select-item with the matching value and get its label
+    const items = Array.from(this.elementRef.nativeElement.querySelectorAll('z-select-item, [z-select-item]')) as HTMLElement[];
+    const matchingItem = items.find(item => item.getAttribute('value') === value);
+
+    if (matchingItem) {
+      const label = matchingItem.textContent?.trim() || value;
+      this._selectedLabel.set(label);
+    } else {
+      // If no matching item found, use the value as label
+      this._selectedLabel.set(value);
+    }
   }
 
   registerOnChange(fn: (value: string) => void): void {
