@@ -1,4 +1,3 @@
-// Core Components
 export * from './lib/components/core/directives/string-template-outlet/string-template-outlet.directive';
 export * from './lib/components/alert/alert.component';
 export * from './lib/components/avatar/avatar.component';
