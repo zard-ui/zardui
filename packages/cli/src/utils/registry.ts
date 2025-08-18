@@ -25,7 +25,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'card',
-    registryDependencies: ['string-template-outlet'],
     files: [
       {
         name: 'card.component.ts',
@@ -201,7 +200,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tabs',
-    registryDependencies: ['button'],
     files: [
       {
         name: 'tabs.component.ts',
@@ -343,7 +341,7 @@ export const registry: ComponentRegistry[] = [
     registryDependencies: ['button'],
     files: [
       {
-        name: 'alert-dialog-ref.ts',
+        name: 'alert-dialog.component.ts',
         content: '',
       },
       {
@@ -351,11 +349,11 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'alert-dialog.component.ts',
+        name: 'alert-dialog.service.ts',
         content: '',
       },
       {
-        name: 'alert-dialog.service.ts',
+        name: 'alert-dialog-ref.ts',
         content: '',
       },
       {
@@ -366,7 +364,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'calendar',
-    registryDependencies: ['button', 'select'],
     files: [
       {
         name: 'calendar.component.ts',
@@ -380,7 +377,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'combobox',
-    registryDependencies: ['button', 'command', 'popover'],
+    registryDependencies: ['input', 'popover'],
     files: [
       {
         name: 'combobox.component.ts',
@@ -396,11 +393,7 @@ export const registry: ComponentRegistry[] = [
     name: 'command',
     files: [
       {
-        name: 'command-divider.component.ts',
-        content: '',
-      },
-      {
-        name: 'command-empty.component.ts',
+        name: 'command.component.ts',
         content: '',
       },
       {
@@ -408,15 +401,11 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'command-json.component.ts',
-        content: '',
-      },
-      {
         name: 'command-list.component.ts',
         content: '',
       },
       {
-        name: 'command-option-group.component.ts',
+        name: 'command-empty.component.ts',
         content: '',
       },
       {
@@ -424,7 +413,15 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'command.component.ts',
+        name: 'command-option-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'command-divider.component.ts',
+        content: '',
+      },
+      {
+        name: 'command-json.component.ts',
         content: '',
       },
       {
@@ -439,7 +436,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'date-picker',
-    registryDependencies: ['button', 'calendar', 'popover'],
+    registryDependencies: ['calendar', 'input'],
     files: [
       {
         name: 'date-picker.component.ts',
@@ -452,7 +449,25 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'form',
+    files: [
+      {
+        name: 'form.component.ts',
+        content: '',
+      },
+      {
+        name: 'form.module.ts',
+        content: '',
+      },
+      {
+        name: 'form.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'pagination',
+    registryDependencies: ['button'],
     files: [
       {
         name: 'pagination.component.ts',
@@ -477,6 +492,27 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'popover.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'resizable',
+    files: [
+      {
+        name: 'resizable.component.ts',
+        content: '',
+      },
+      {
+        name: 'resizable-panel.component.ts',
+        content: '',
+      },
+      {
+        name: 'resizable-handle.component.ts',
+        content: '',
+      },
+      {
+        name: 'resizable.variants.ts',
         content: '',
       },
     ],
@@ -540,6 +576,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'toggle-group',
+    registryDependencies: ['toggle'],
     files: [
       {
         name: 'toggle-group.component.ts',
@@ -547,15 +584,6 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'toggle-group.variants.ts',
-        content: '',
-      },
-    ],
-  },
-  {
-    name: 'string-template-outlet',
-    files: [
-      {
-        name: 'string-template-outlet.directive.ts',
         content: '',
       },
     ],

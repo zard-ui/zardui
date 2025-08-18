@@ -1,6 +1,6 @@
 {
   "name": "@zard/source",
-  "version": "0.0.0",
+  "version": "1.0.0-beta.1",
   "license": "MIT",
   "type": "module",
   "scripts": {
@@ -10,6 +10,7 @@
     "build:dev": "npx nx run web:build --configuration=development",
     "publish:build": "nx run-many --target=build --p=libs/*",
     "test": "nx run-many --target=test --p=libs/*",
+    "test:watch": "nx run-many --target=test --p=libs/* --watch",
     "release": "nx release --yes --verbose",
     "watch:files": "npx tsx scripts/generate-files.cts",
     "convert:demos": "npx tsx scripts/convert-demos-to-md.cts",
@@ -32,6 +33,9 @@
     "@tailwindcss/postcss": "^4.0.10",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
+    "embla-carousel": "^8.6.0",
+    "embla-carousel-angular": "^19.0.0",
+    "embla-carousel-autoplay": "^8.6.0",
     "lucide-static": "^0.479.0",
     "ngx-sonner": "^3.1.0",
     "postcss": "^8.5.3",

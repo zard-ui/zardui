@@ -19,7 +19,7 @@ import { Component } from '@angular/core';
     }
     <z-header></z-header>
 
-    <main class="flex flex-col px-2 max-w-[var(--breakpoint-2xl)] mx-auto mt-4">
+    <main class="flex flex-col">
       <router-outlet></router-outlet>
     </main>
     <z-footer></z-footer>

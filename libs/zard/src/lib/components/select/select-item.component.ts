@@ -22,21 +22,7 @@ import { selectItemVariants } from './select.variants';
   },
   template: `
     <span class="absolute right-2 flex size-3.5 items-center justify-center">
-      <svg
-        *ngIf="isSelected()"
-        class="size-4"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="m9 12 2 2 4-4" />
-      </svg>
+      <i *ngIf="isSelected()" class="icon-check size-2 contents"></i>
     </span>
     <ng-content></ng-content>
   `,
@@ -47,7 +33,7 @@ export class ZardSelectItemComponent {
   readonly class = input<string>('');
 
   private select = inject(ZardSelectComponent, { optional: true });
-  private elementRef = inject(ElementRef);
+  readonly elementRef = inject(ElementRef);
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
 

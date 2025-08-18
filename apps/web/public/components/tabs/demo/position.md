@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
+import { ZardButtonComponent } from '../../button/button.component';
 import { Component } from '@angular/core';
 
 import { ZardTabComponent, ZardTabGroupComponent, zPosition } from '../tabs.component';
-import { ZardButtonComponent } from '../../button/button.component';
 
 @Component({
   standalone: true,

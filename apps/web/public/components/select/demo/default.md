@@ -1,24 +1,25 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { ZardSelectItemComponent } from '../select-item.component';
 import { ZardSelectComponent } from '../select.component';
 
 @Component({
   standalone: true,
-  imports: [ZardSelectComponent, ZardSelectItemComponent],
+  imports: [FormsModule, ZardSelectComponent, ZardSelectItemComponent],
   template: `
-    <div class="flex flex-col gap-4">
-      <z-select placeholder="Selecione uma fruta">
-        <z-select-item value="apple">Apple</z-select-item>
-        <z-select-item value="banana">Banana</z-select-item>
-        <z-select-item value="blueberry">Blueberry</z-select-item>
-        <z-select-item value="grapes">Grapes</z-select-item>
-        <z-select-item value="pineapple" disabled>Pineapple</z-select-item>
-      </z-select>
-    </div>
+    <z-select placeholder="Selecione uma fruta" [(ngModel)]="defaultValue">
+      <z-select-item value="apple">Apple</z-select-item>
+      <z-select-item value="banana">Banana</z-select-item>
+      <z-select-item value="blueberry">Blueberry</z-select-item>
+      <z-select-item value="grapes">Grapes</z-select-item>
+      <z-select-item value="pineapple" disabled>Pineapple</z-select-item>
+    </z-select>
   `,
 })
-export class ZardDemoSelectBasicComponent {}
+export class ZardDemoSelectBasicComponent {
+  defaultValue = 'apple';
+}
 
 ```

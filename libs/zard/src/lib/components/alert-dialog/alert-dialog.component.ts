@@ -1,10 +1,3 @@
-import { ClassValue } from 'clsx';
-import { filter, fromEvent, takeUntil } from 'rxjs';
-
-import { A11yModule } from '@angular/cdk/a11y';
-import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,12 +16,18 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
+import { filter, fromEvent, takeUntil } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { A11yModule } from '@angular/cdk/a11y';
+import { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardAlertDialogRef } from './alert-dialog-ref';
-import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants, ZardAlertDialogVariants } from './alert-dialog.variants';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardAlertDialogService } from './alert-dialog.service';
+import { ZardAlertDialogRef } from './alert-dialog-ref';
+import { mergeClasses } from '../../shared/utils/utils';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;

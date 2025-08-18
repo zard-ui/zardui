@@ -2,9 +2,9 @@ import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic
 import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
 import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
-import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 

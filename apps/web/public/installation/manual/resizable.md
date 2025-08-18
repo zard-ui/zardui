@@ -214,7 +214,7 @@ export class ZardResizableComponent implements AfterContentInit {
   getContainerSize(): number {
     const element = this.elementRef.nativeElement as HTMLElement;
     const layout = this.zLayout();
-    return layout === 'vertical' ? element.clientHeight : element.clientWidth;
+    return layout === 'vertical' ? element.offsetHeight : element.offsetWidth;
   }
 
   collapsePanel(index: number): void {
@@ -266,7 +266,7 @@ export class ZardResizableComponent implements AfterContentInit {
 ```angular-ts title="resizable.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const resizableVariants = cva('flex h-full w-full data-[layout=vertical]:flex-col', {
+export const resizableVariants = cva('flex h-full w-full data-[layout=vertical]:flex-col overflow-hidden', {
   variants: {
     zLayout: {
       horizontal: '',

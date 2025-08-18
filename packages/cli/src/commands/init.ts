@@ -166,20 +166,20 @@ const configSchema = z.object({
 async function installDependencies(cwd: string, config: Config) {
   const projectInfo = await getProjectInfo(cwd);
 
+  // Determine CDK version based on Angular version
   let cdkVersion = '@angular/cdk';
   if (projectInfo.angularVersion) {
     const majorVersion = parseInt(projectInfo.angularVersion.split('.')[0]);
-
-    if (majorVersion < 19) {
-      logger.error(`ZardUI requires Angular 19 or higher. Found Angular ${projectInfo.angularVersion}.`);
-      logger.error('Please upgrade your Angular project to version 19 or higher.');
-      process.exit(1);
+    if (majorVersion === 19) {
+      cdkVersion = '@angular/cdk@^19.0.0';
+    } else if (majorVersion === 18) {
+      cdkVersion = '@angular/cdk@^18.0.0';
+    } else if (majorVersion === 17) {
+      cdkVersion = '@angular/cdk@^17.0.0';
     }
-
-    cdkVersion = `@angular/cdk@^${majorVersion}.0.0`;
   }
 
-  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-static'];
+  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-angular'];
 
   const devDeps = ['tailwindcss', '@tailwindcss/postcss', 'postcss', 'tailwindcss-animate'];
 

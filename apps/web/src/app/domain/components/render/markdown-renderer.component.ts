@@ -1,10 +1,10 @@
-import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
 // markdown-renderer.component.ts
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
 import { MarkdownService } from '@zard/shared/services/markdown.service';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { HttpClient } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'z-markdown-renderer',

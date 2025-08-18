@@ -1,17 +1,18 @@
 import { Component, inject, OnInit, HostListener, ViewChild } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { environment } from '@zard/env/environment';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { DarkModeService } from '@zard/shared/services/darkmode.service';
 import { SOCIAL_MEDIAS } from '@zard/shared/constants/medias.constant';
 import { HEADER_PATHS } from '@zard/shared/constants/routes.constant';
-import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
-import { DarkModeService } from '@zard/shared/services/darkmode.service';
 import { GithubService } from '@zard/shared/services/github.service';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import type { Observable } from 'rxjs';
+import { environment } from '@zard/env/environment';
+import { RouterModule } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
+import type { Observable } from 'rxjs';
+
 import { DocResearcherComponent } from '../doc-researcher/doc-researcher.component';
+import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
 
 @Component({
   selector: 'z-header',
@@ -19,7 +20,7 @@ import { DocResearcherComponent } from '../doc-researcher/doc-researcher.compone
   standalone: true,
   imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe, DocResearcherComponent],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   @ViewChild(DocResearcherComponent) docResearcher!: DocResearcherComponent;
 
   readonly headerPaths = HEADER_PATHS;
@@ -28,10 +29,6 @@ export class HeaderComponent implements OnInit {
   private readonly githubService = inject(GithubService);
   private readonly darkmodeService = inject(DarkModeService);
   readonly $repoStars: Observable<number> = this.githubService.getStarsCount();
-
-  ngOnInit(): void {
-    this.darkmodeService.initTheme();
-  }
 
   toggleTheme(): void {
     this.darkmodeService.toggleTheme();
@@ -43,7 +40,6 @@ export class HeaderComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   handleKeyboardShortcut(event: KeyboardEvent) {
-    // Handle Cmd+K (Mac) or Ctrl+K (Windows/Linux)
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
       event.preventDefault();
       this.docResearcher.openCommandDialog();

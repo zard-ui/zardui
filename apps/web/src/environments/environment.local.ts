@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  appVersion: 'alpha',
+  appVersion: 'beta',
   devMode: true,
   package: '@ngzard/ui',
 };
