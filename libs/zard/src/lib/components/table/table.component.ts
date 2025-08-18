@@ -16,7 +16,8 @@ import {
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
-import { ZardButtonComponent, ZardInputDirective } from '../components';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardInputDirective } from '../input/input.directive';
 import { TableState, ZardTableDataSource } from './table';
 import { ZardTableSortIconComponent } from './table-sort-icon.component';
 import { ZardTheadDirective } from './table.directive';

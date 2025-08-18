@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ZardButtonDirective } from './button.component';
+import { ZardButtonComponent } from './button.component';
 
 describe('ButtonComponent', () => {
-  let component: ZardButtonDirective;
-  let fixture: ComponentFixture<ZardButtonDirective>;
+  let component: ZardButtonComponent;
+  let fixture: ComponentFixture<ZardButtonComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ZardButtonDirective],
+      imports: [ZardButtonComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ZardButtonDirective);
+    fixture = TestBed.createComponent(ZardButtonComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

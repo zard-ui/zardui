@@ -117,10 +117,20 @@
   "cSpell.words": [
     "Borderless",
     "ngzard",
+    "testid",
     "zard",
     "Zard"
   ],
   "[html]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "[markdown]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[css]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 }

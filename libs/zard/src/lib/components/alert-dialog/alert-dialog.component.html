@@ -1,0 +1,35 @@
+<div class="flex flex-col gap-4 p-6" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
+  @if (config.zTitle || config.zDescription) {
+    <header class="flex flex-col gap-2 text-center sm:text-left">
+      @if (config.zTitle) {
+        <h2 data-testid="z-alert-title" [id]="titleId()" class="text-lg font-semibold">{{ config.zTitle }}</h2>
+      }
+
+      @if (config.zDescription) {
+        <p data-testid="z-alert-description" [id]="descriptionId()" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+      }
+    </header>
+  }
+
+  <main>
+    <ng-template cdkPortalOutlet></ng-template>
+
+    @if (isStringContent) {
+      <div data-testid="z-alert-content" [innerHTML]="config.zContent"></div>
+    }
+  </main>
+
+  <footer class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+    @if (config.zCancelText !== null) {
+      <button data-testid="z-alert-cancel-button" z-button zType="outline" (click)="onCancelClick()">
+        {{ config.zCancelText || 'Cancel' }}
+      </button>
+    }
+
+    @if (config.zOkText !== null) {
+      <button data-testid="z-alert-ok-button" z-button [zType]="config.zOkDestructive ? 'destructive' : 'default'" [disabled]="config.zOkDisabled" (click)="onOkClick()">
+        {{ config.zOkText || 'Continue' }}
+      </button>
+    }
+  </footer>
+</div>

@@ -1,3 +1,19 @@
-**Size**
+```angular-ts showLineNumbers copyButton
+import { FormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
 
-Zard supports a default checkbox size, as well as a default and large size. These sizes can be applied to the checkbox using the `zSize` directive.
+import { ZardCheckboxComponent } from '../checkbox.component';
+
+@Component({
+  standalone: true,
+  imports: [ZardCheckboxComponent, FormsModule],
+  template: `
+    <span z-checkbox>Default</span>
+    <span z-checkbox zSize="lg" [(ngModel)]="checked">Large</span>
+  `,
+})
+export class ZardDemoCheckboxSizeComponent {
+  checked = true;
+}
+
+```

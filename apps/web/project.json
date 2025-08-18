@@ -19,7 +19,7 @@
           "zone.js"
         ],
         "tsConfig": "apps/web/tsconfig.app.json",
-        "inlineStyleLanguage": "scss",
+        "inlineStyleLanguage": "css",
         "assets": [
           {
             "glob": "**/*",
@@ -27,19 +27,14 @@
           }
         ],
         "styles": [
-          "apps/web/public/prismjs/themes/prism-vsc-dark-plus.css",
-          "apps/web/src/styles.scss"
+          "apps/web/src/styles.css"
         ],
         "stylePreprocessorOptions": {
           "includePaths": [
-            "apps/web/src/scss"
+            "apps/web/src/css"
           ]
         },
-        "scripts": [
-          "node_modules/clipboard/dist/clipboard.min.js",
-          "node_modules/prismjs/prism.js",
-          "node_modules/prismjs/components/prism-typescript.min.js"
-        ]
+        "scripts": []
       },
       "configurations": {
         "production": {

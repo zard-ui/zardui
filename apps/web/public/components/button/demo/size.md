@@ -1,3 +1,17 @@
-**Size**
+```angular-ts showLineNumbers copyButton
+import { Component } from '@angular/core';
 
-Zard supports a default button size, as well as a small and large size. These sizes can be applied to the button using the `zSize` directive.
+import { ZardButtonComponent } from '../button.component';
+
+@Component({
+  standalone: true,
+  imports: [ZardButtonComponent],
+  template: `
+    <button z-button zSize="sm">Small</button>
+    <button z-button>Default</button>
+    <button z-button zSize="lg">Large</button>
+  `,
+})
+export class ZardDemoButtonSizeComponent {}
+
+```

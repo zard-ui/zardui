@@ -1,3 +1,13 @@
-**Borderless**
+```angular-ts showLineNumbers copyButton
+import { Component } from '@angular/core';
 
-Borderless input.
+import { ZardInputDirective } from '../input.directive';
+
+@Component({
+  standalone: true,
+  imports: [ZardInputDirective],
+  template: `<input z-input zBorderless placeholder="Borderless" />`,
+})
+export class ZardDemoInputBorderlessComponent {}
+
+```

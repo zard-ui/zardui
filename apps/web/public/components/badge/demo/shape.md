@@ -1,3 +1,16 @@
-**Shape**
+```angular-ts showLineNumbers copyButton
+import { Component } from '@angular/core';
 
-Zard supports a default badge shape, as well as a circle and square shape. These shapes can be applied to the badge using the `zShape` directive.
+import { ZardBadgeComponent } from '../badge.component';
+
+@Component({
+  standalone: true,
+  imports: [ZardBadgeComponent],
+  template: `
+    <z-badge>Default</z-badge>
+    <z-badge zShape="square">Square</z-badge>
+  `,
+})
+export class ZardDemoBadgeShapeComponent {}
+
+```

@@ -1,3 +1,13 @@
-**Full**
+```angular-ts showLineNumbers copyButton
+import { Component } from '@angular/core';
 
-`zFull` property will make the button fit to its parent width.
+import { ZardButtonComponent } from '../button.component';
+
+@Component({
+  standalone: true,
+  imports: [ZardButtonComponent],
+  template: ` <button z-button zFull>Default</button> `,
+})
+export class ZardDemoButtonFullComponent {}
+
+```

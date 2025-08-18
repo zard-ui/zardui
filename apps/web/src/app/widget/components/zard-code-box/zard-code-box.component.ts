@@ -1,19 +1,43 @@
-import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ComponentType } from '@angular/cdk/overlay';
 import { NgComponentOutlet } from '@angular/common';
-import { Component, Input } from '@angular/core';
-import { MarkdownModule } from 'ngx-markdown';
+import { Component, input, signal, computed } from '@angular/core';
+import { ComponentType } from '@angular/cdk/overlay';
+import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
+import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
 
 @Component({
   selector: 'z-code-box',
-  imports: [MarkdownModule, NgComponentOutlet, ZardButtonComponent, ZardCardComponent],
+  imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent, HyphenToSpacePipe],
   templateUrl: './zard-code-box.component.html',
 })
 export class ZardCodeBoxComponent {
-  showCodeButton = false;
+  readonly componentType = input<string>();
+  readonly onlyDemo = input<boolean | undefined>(false);
+  readonly fullWidth = input<boolean | undefined>(false);
+  readonly column = input<boolean | undefined>(false);
+  readonly path = input<string>();
+  readonly dynamicComponent = input<ComponentType<unknown>>();
+  activeTab = signal<'preview' | 'code'>('preview');
 
-  @Input() path?: string;
-  @Input() onlyDemo?: boolean;
-  @Input() dynamicComponent!: ComponentType<unknown>;
+  readonly markdownUrl = computed(() => {
+    const pathValue = this.path();
+    if (!pathValue) return '';
+    return `components/${pathValue}.md`;
+  });
+
+  readonly cardClasses = computed(() => {
+    const classes = [];
+
+    if (this.column()) {
+      classes.push('[&_ng-component]:grid');
+    } else {
+      classes.push('[&_ng-component]:flex');
+    }
+
+    if (this.fullWidth()) {
+      classes.push('[&_ng-component]:w-full', '[&_div:first-child]:w-full');
+    }
+
+    return classes.join(' ');
+  });
 }

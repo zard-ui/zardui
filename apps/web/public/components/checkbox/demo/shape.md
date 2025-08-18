@@ -1,3 +1,19 @@
-**Shape**
+```angular-ts showLineNumbers copyButton
+import { FormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
 
-Zard supports a default checkbox shape, as well as a circle and square shape. These shapes can be applied to the checkbox using the `zShape` directive.
+import { ZardCheckboxComponent } from '../checkbox.component';
+
+@Component({
+  standalone: true,
+  imports: [ZardCheckboxComponent, FormsModule],
+  template: `
+    <span z-checkbox zShape="circle" [(ngModel)]="checked">Cicle</span>
+    <span z-checkbox zShape="square" [(ngModel)]="checked">Square</span>
+  `,
+})
+export class ZardDemoCheckboxShapeComponent {
+  checked = true;
+}
+
+```

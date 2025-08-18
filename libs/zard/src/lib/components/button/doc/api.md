@@ -6,10 +6,10 @@
 
 To get a customized button, just pass the following props to the directive.
 
-| Property     | Description                                      | Type             | Default    |
-| ------------ | ------------------------------------------------ | ---------------- | ---------- |
-| `[zType]`     | button type                                      | `default\|destructive\|outline\|secondary\|ghost\|link` | `default`  |
-| `[zSize]`     | button size                                      | `default\|sm\|lg\|icon` | `default`  |
-| `[zShape]`    | button shape                                     | `default\|circle\|square` | `default`  |
-| `[zFull]`     | button width 100%                                | `boolean`        | `false`    |
-| `[zLoading]`  | button loading state                             | `boolean`        | `false`    |
+| Property   | Description          | Type                                                              | Default   |
+| ---------- | -------------------- | ----------------------------------------------------------------- | --------- |
+| `zType`    | button type          | `default \| destructive \| outline \| secondary \| ghost \| link` | `default` |
+| `zSize`    | button size          | `default \| sm \| lg \|icon`                                      | `default` |
+| `zShape`   | button shape         | `default \| circle \| square`                                     | `default` |
+| `zFull`    | button width 100%    | `boolean`                                                         | `false`   |
+| `zLoading` | button loading state | `boolean`                                                         | `false`   |

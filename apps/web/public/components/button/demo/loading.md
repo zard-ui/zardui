@@ -1,3 +1,13 @@
-**Loading**
+```angular-ts showLineNumbers copyButton
+import { Component } from '@angular/core';
 
- A loading indicator can be added to a button by setting the `zLoading` property on the `z-button`.
+import { ZardButtonComponent } from '../button.component';
+
+@Component({
+  standalone: true,
+  imports: [ZardButtonComponent],
+  template: ` <button z-button zLoading>Default</button> `,
+})
+export class ZardDemoButtonLoadingComponent {}
+
+```

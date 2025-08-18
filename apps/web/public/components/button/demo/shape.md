@@ -1,3 +1,17 @@
-**Shape**
+```angular-ts showLineNumbers copyButton
+import { Component } from '@angular/core';
 
-Zard supports a default button shape, as well as a circle and square shape. These shapes can be applied to the button using the `zShape` directive.
+import { ZardButtonComponent } from '../button.component';
+
+@Component({
+  standalone: true,
+  imports: [ZardButtonComponent],
+  template: `
+    <button z-button>Default</button>
+    <button z-button zShape="circle">Circle</button>
+    <button z-button zShape="square">Square</button>
+  `,
+})
+export class ZardDemoButtonShapeComponent {}
+
+```

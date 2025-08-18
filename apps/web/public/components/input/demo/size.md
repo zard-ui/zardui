@@ -1,3 +1,17 @@
-**Size input**
+```angular-ts showLineNumbers copyButton
+import { Component } from '@angular/core';
 
-There are some alternatives for `z-input`: `default`, `sm`, and `lg`.
+import { ZardInputDirective } from '../input.directive';
+
+@Component({
+  standalone: true,
+  imports: [ZardInputDirective],
+  template: `
+    <input z-input zSize="sm" placeholder="small size" />
+    <input z-input zSize="default" placeholder="default size" />
+    <input z-input zSize="lg" placeholder="large size" />
+  `,
+})
+export class ZardDemoInputSizeComponent {}
+
+```

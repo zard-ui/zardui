@@ -1,7 +1,3 @@
 # Badge
 
-The Badge is a visual element used to highlight important information. It can be used to display statuses, notifications, or labels.
-
-```ts
-import { ZardBadgeComponent } from '@zard/badge';
-```
+Displays a badge or a component that looks like a badge.

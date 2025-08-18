@@ -6,6 +6,7 @@
 > Supports dynamic column selection, sorting, filtering, and pagination.
 
 ## Usage
+
 ### Basic Table
 
 ```html
@@ -36,7 +37,7 @@
 ### With Data Binding
 
 ```html
- <z-table
+<z-table
   [columns]="columns"
   [dataSource]="dataSource()"
   [enableFiltering]="true"
@@ -49,29 +50,26 @@
 ></z-table>
 ```
 
-
-
-
 To customize the table, pass the following props to the component.
 
-| Property              | Description                                                       | Type                                      | Default   |
-| --------------------- | ----------------------------------------------------------------- | ----------------------------------------- | --------- |
-| `zType`               | Table type                                                       | `default \| striped \| bordered`          | `default` |
-| `zSize`               | Table size                                                       | `default \| compact \| comfortable`       | `default` |
-| `[columns]`           | Defines table columns                                            | `ColumnConfig[]`                          | `[]`      |
-| `[dataSource]`        | Table data and optional metadata for pagination, sorting, filtering | `ZardTableDataSource<T>`                 | `{ data: [] }` |
-| `[enableFiltering]`   | Shows global filter input for columns marked `filterable`         | `boolean`                                 | `false`   |
-| `[enableColumnSelector]` | Enables column visibility dropdown                             | `boolean`                                 | `false`   |
-| `[enablePagination]`  | Shows pagination controls and emits page changes                  | `boolean`                                 | `false`   |
-| `[enableOrdering]`    | Allows sorting by columns marked `sortable`                       | `boolean`                                 | `false`   |
+| Property                 | Description                                                         | Type                                | Default        |
+| ------------------------ | ------------------------------------------------------------------- | ----------------------------------- | -------------- |
+| `zType`                  | Table type                                                          | `default \| striped \| bordered`    | `default`      |
+| `zSize`                  | Table size                                                          | `default \| compact \| comfortable` | `default`      |
+| `[columns]`              | Defines table columns                                               | `ColumnConfig[]`                    | `[]`           |
+| `[dataSource]`           | Table data and optional metadata for pagination, sorting, filtering | `ZardTableDataSource<T>`            | `{ data: [] }` |
+| `[enableFiltering]`      | Shows global filter input for columns marked `filterable`           | `boolean`                           | `false`        |
+| `[enableColumnSelector]` | Enables column visibility dropdown                                  | `boolean`                           | `false`        |
+| `[enablePagination]`     | Shows pagination controls and emits page changes                    | `boolean`                           | `false`        |
+| `[enableOrdering]`       | Allows sorting by columns marked `sortable`                         | `boolean`                           | `false`        |
 
 ---
 
 ### Outputs
 
-| Event           | Description                                                                 | Type         |
-| --------------- | --------------------------------------------------------------------------- | ------------ |
-| `(stateChange)` | Emits the current table state on pagination, sorting, or filtering changes  | `TableState` |
+| Event           | Description                                                                | Type         |
+| --------------- | -------------------------------------------------------------------------- | ------------ |
+| `(stateChange)` | Emits the current table state on pagination, sorting, or filtering changes | `TableState` |
 
 ---
 
@@ -110,3 +108,4 @@ interface ColumnConfig {
   sortable?: boolean;
   filterable?: boolean;
 }
+```

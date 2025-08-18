@@ -1,0 +1,66 @@
+@if (componentData) {
+<z-content [title]="componentData.componentName" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <div class="flex flex-col gap-5" scrollSpyItem="overview" id="overview">
+    <z-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/overview.md"></z-markdown-renderer>
+    <z-code-box
+      [scrollSpyItem]="componentData.examples[0].name"
+      [attr.id]="componentData.examples[0].name"
+      path="{{ componentData.componentName }}/demo/{{ componentData.examples[0].name }}"
+      [dynamicComponent]="componentData.examples[0].component"
+      [onlyDemo]="componentData.examples[0].onlyDemo"
+      [column]="componentData.examples[0].column || false"
+    ></z-code-box>
+  </div>
+
+  <div class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
+    <section class="flex flex-col gap-4" scrollSpyItem="installation" id="installation">
+      <header class="mb-3">
+        <h2 class="text-2xl font-semibold mb-5">Installation</h2>
+        <div class="overflow-hidden transition-all duration-200 ease-in-out">
+          <nav class="flex gap-4 mb-4">
+            @if(installGuide?.cli) {
+            <button class="text-base cursor-pointer" (click)="activeTab.set('cli')" [class.font-semibold]="activeTab() === 'cli'" [class.text-foreground]="activeTab() === 'cli'">
+              CLI
+            </button>
+            } @if(installGuide?.manual) {
+            <button
+              class="text-base cursor-pointer"
+              (click)="activeTab.set('manual')"
+              [class.font-semibold]="activeTab() === 'manual'"
+              [class.text-foreground]="activeTab() === 'manual'"
+            >
+              Manual
+            </button>
+            }
+          </nav>
+          <section class="transition-all" [class]="activeTab() === 'cli' ? 'translate-x-0' : '-translate-x-full sr-only'">
+            <z-steps [steps]="installGuide?.cli"></z-steps>
+          </section>
+          <section class="transition-all" [class]="activeTab() === 'manual' ? 'translate-x-0' : 'translate-x-full sr-only'">
+            <z-steps [steps]="installGuide?.manual"></z-steps>
+          </section>
+        </div>
+      </header>
+    </section>
+
+    <section class="flex flex-col gap-4">
+      <h2 class="text-2xl font-semibold mb-5">Examples</h2>
+      @for (item of componentData.examples; track $index) {
+      <z-code-box
+        [scrollSpyItem]="item.name"
+        [attr.id]="item.name"
+        [componentType]="item.name"
+        path="{{ componentData.componentName }}/demo/{{ item.name }}"
+        [dynamicComponent]="item.component"
+        [onlyDemo]="item.onlyDemo"
+        [column]="item.column"
+      ></z-code-box>
+      }
+    </section>
+  </div>
+
+  <footer scrollSpyItem="api" id="api">
+    <z-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/api.md"></z-markdown-renderer>
+  </footer>
+</z-content>
+}
