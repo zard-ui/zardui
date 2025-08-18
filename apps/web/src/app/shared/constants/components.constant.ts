@@ -32,6 +32,7 @@ import { ALERT } from '@zard/components/alert/demo/alert';
 import { ALERT_DIALOG } from '@zard/components/alert-dialog/demo/alert-dialog';
 import { TABS } from '@zard/components/tabs/demo/tabs';
 import { CARD } from '@zard/components/card/demo/card';
+import { FORM } from '@zard/components/form/demo/form';
 import { ComponentType } from '@angular/cdk/overlay';
 
 export interface ComponentData {
@@ -65,6 +66,7 @@ export const COMPONENTS: ComponentData[] = [
   DIALOG,
   DIVIDER,
   DROPDOWN,
+  FORM,
   INPUT,
   LOADER,
   PAGINATION,

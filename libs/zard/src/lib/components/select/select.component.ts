@@ -38,7 +38,7 @@ import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants
   host: {
     '[attr.data-disabled]': 'disabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    class: 'relative inline-block',
+    class: 'relative inline-block w-full',
   },
   template: `
     <!-- Select Trigger -->
