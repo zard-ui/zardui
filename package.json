@@ -1,6 +1,6 @@
 {
   "name": "@zard/source",
-  "version": "0.0.0",
+  "version": "1.0.0-beta.1",
   "license": "MIT",
   "type": "module",
   "scripts": {
