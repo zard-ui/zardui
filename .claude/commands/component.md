@@ -111,7 +111,7 @@ export const [COMPONENT_NAME] = {
 
 ### Export Requirements
 
-1. Export component in `libs/zard/src/index.ts` (main library entry point)
+1. Export component in `libs/zard/src/lib/components/components.ts`
 2. Create demo components following the structure above
 3. Write documentation in `doc/overview.md` and `doc/api.md`
 4. **Add to documentation system**:
@@ -130,7 +130,7 @@ export const [COMPONENT_NAME] = {
 
 1. **Research component patterns** - Study how shadcn/ui and ng-zorro implement similar components
 2. Create component in `libs/zard/src/lib/components/[name]/`
-3. Export in `libs/zard/src/index.ts` (main library entry point)
+3. Export in `libs/zard/src/lib/components/components.ts`
 4. **Create comprehensive demos** showing all variants and use cases
 5. **Write thorough documentation** in doc/ folder with:
    - Clear usage examples

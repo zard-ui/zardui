@@ -25,7 +25,7 @@ import {
 } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
+import { ZardButtonComponent } from '../components';
 import { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants, ZardAlertDialogVariants } from './alert-dialog.variants';

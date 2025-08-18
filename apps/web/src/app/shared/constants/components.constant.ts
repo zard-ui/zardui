@@ -1,5 +1,4 @@
 import { TOGGLE_GROUP } from '@zard/components/toggle-group/demo/toggle-group';
-import { RESIZABLE } from '@zard/components/resizable/demo/resizable';
 import { PROGRESS_BAR } from '@zard/components/progress-bar/demo/progress-bar';
 import { PAGINATION } from '@zard/components/pagination/demo/pagination';
 import { DATE_PICKER } from '@zard/components/date-picker/demo/date-picker';
@@ -32,7 +31,6 @@ import { ALERT } from '@zard/components/alert/demo/alert';
 import { ALERT_DIALOG } from '@zard/components/alert-dialog/demo/alert-dialog';
 import { TABS } from '@zard/components/tabs/demo/tabs';
 import { CARD } from '@zard/components/card/demo/card';
-import { FORM } from '@zard/components/form/demo/form';
 import { ComponentType } from '@angular/cdk/overlay';
 
 export interface ComponentData {
@@ -66,14 +64,12 @@ export const COMPONENTS: ComponentData[] = [
   DIALOG,
   DIVIDER,
   DROPDOWN,
-  FORM,
   INPUT,
   LOADER,
   PAGINATION,
   POPOVER,
   PROGRESS_BAR,
   RADIO,
-  RESIZABLE,
   SEGMENTED,
   SELECT,
   SLIDER,

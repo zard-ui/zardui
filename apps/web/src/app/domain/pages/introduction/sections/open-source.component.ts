@@ -1,5 +1,4 @@
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardBadgeComponent, ZardCardComponent } from '@zard/components/components';
 import { Component } from '@angular/core';
 
 interface OpenSourceFeature {

@@ -8,7 +8,7 @@ import { HEADER_PATHS } from '@zard/shared/constants/routes.constant';
 import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
 import { DarkModeService } from '@zard/shared/services/darkmode.service';
 import { GithubService } from '@zard/shared/services/github.service';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
+import { ZardDividerComponent } from '@zard/components/components';
 import type { Observable } from 'rxjs';
 import { AsyncPipe } from '@angular/common';
 import { DocResearcherComponent } from '../doc-researcher/doc-researcher.component';

@@ -79,7 +79,7 @@ component-name/
 ## Component Development Workflow
 
 1. **Create component** in `libs/zard/src/lib/components/[name]/`
-2. **Export component** in `libs/zard/src/index.ts` (main library entry point)
+2. **Export component** in `libs/zard/src/lib/components/components.ts`
 3. **Add demo components** in `demo/` folder following existing patterns
 4. **Write documentation** in `doc/overview.md` and `doc/api.md`
 5. **File watcher automatically syncs** demo/doc to web app
@@ -117,7 +117,8 @@ export class Zard[Name]Component {
 
 ## Key Files to Understand
 
-- `libs/zard/src/index.ts` - Library entry point and component exports
+- `libs/zard/src/index.ts` - Library entry point
+- `libs/zard/src/lib/components/components.ts` - Component exports
 - `scripts/generate-files.cts` - Documentation sync automation
 - `apps/web/src/app/shared/constants/components.constant.ts` - Component registry
 - `apps/web/src/app/widget/components/zard-code-box/` - Demo renderer

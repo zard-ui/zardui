@@ -38,13 +38,7 @@ async function fetchFromGitHubAPI(filePath: string): Promise<string> {
 
 export async function fetchComponentFromGithub(componentName: string, fileName: string, config: Config): Promise<string> {
   try {
-    // Special handling for core directives
-    let filePath;
-    if (componentName === 'string-template-outlet') {
-      filePath = `libs/zard/src/lib/components/core/directives/string-template-outlet/${fileName}`;
-    } else {
-      filePath = `libs/zard/src/lib/components/${componentName}/${fileName}`;
-    }
+    const filePath = `libs/zard/src/lib/components/${componentName}/${fileName}`;
 
     // Add staggered delay based on component order to avoid hitting rate limits
     const randomDelay = Math.random() * 2000 + 1000; // 1-3 seconds
@@ -57,7 +51,7 @@ export async function fetchComponentFromGithub(componentName: string, fileName: 
   }
 }
 
-function transformContent(content: string, _config: Config): string {
+function transformContent(content: string, config: Config): string {
   // Minimal transformations - just fix the essential imports
   let transformed = content;
 

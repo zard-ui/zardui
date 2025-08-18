@@ -1,4 +1,5 @@
 import { ShowcaseComponent } from '@zard/domain/components/showcase/showcase.component';
+import { BenefitsComponent } from '@zard/domain/components/benefits/benefits.component';
 import { YoutubeComponent } from '@zard/domain/components/youtube/youtube.component';
 import { HeroComponent } from '@zard/domain/components/hero/hero.component';
 import { RouterModule } from '@angular/router';
@@ -9,10 +10,11 @@ import { ViewportScroller } from '@angular/common';
 @Component({
   selector: 'z-home',
   standalone: true,
-  imports: [RouterModule, HeroComponent, ShowcaseComponent, YoutubeComponent],
+  imports: [RouterModule, HeroComponent, ShowcaseComponent, BenefitsComponent, YoutubeComponent],
   template: `
     <z-hero></z-hero>
     <z-showcase></z-showcase>
+    <z-benefits></z-benefits>
     <z-youtube></z-youtube>
   `,
 })

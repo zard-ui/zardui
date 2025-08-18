@@ -57,13 +57,9 @@
       "Bash(./node_modules/.bin/ngzard:*)",
       "Bash(git rebase:*)",
       "Bash(git rm:*)",
-      "Bash(npx tsup:*)",
-      "Bash(./dist/index.js registry:*)",
-      "Bash(./dist/index.js add --help)",
-      "Bash(./dist/index.js validate:*)",
-      "Bash(node:*)",
-      "Bash(./dist/index.js optimize --help)",
-      "Bash(./dist/index.js optimize:*)"
+      "Bash(npx nx run:*)",
+      "Bash(sed:*)",
+      "mcp__ide__getDiagnostics"
     ],
     "defaultMode": "acceptEdits"
   },

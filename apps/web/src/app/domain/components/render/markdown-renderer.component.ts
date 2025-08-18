@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 // markdown-renderer.component.ts
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
+import { ZardLoaderComponent } from '@zard/components/components';
 import { MarkdownService } from '@zard/shared/services/markdown.service';
 
 @Component({

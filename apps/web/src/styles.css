@@ -147,7 +147,6 @@
   .container {
     @apply mx-auto w-full max-w-screen-2xl px-2 md:px-6 lg:px-8;
   }
-
 }
 
 @utility scrollbar-custom {
@@ -230,4 +229,25 @@ code[data-theme*=' '] span {
 [data-theme='dark'] code[data-theme*=' '],
 [data-theme='dark'] code[data-theme*=' '] span {
   color: var(--shiki-dark);
+}
+.embla {
+  overflow: hidden;
+}
+
+.embla__container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+}
+
+.embla__slide {
+  flex: 0 0 auto;
+  min-width: 0;
+}
+.showcase-carousel .embla__slide {
+  flex: 0 0 312px;
+}
+@media (max-width: 1023px) {
+  .showcase-carousel .embla__slide {
+    flex: 0 0 calc(344px / 1.2);
+  }
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, input } from '@angular/core';
-import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
+import { ZardAvatarComponent } from '@zard/components/components';
 import { ZardTooltipModule } from '@zard/components/tooltip/tooltip';
 
 export interface Contributor {

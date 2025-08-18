@@ -80,21 +80,12 @@ export const add = new Command()
 
       component.dependencies?.forEach(dep => dependenciesToInstall.add(dep));
 
-      // Skip registryDependencies resolution when installing all components
-      // since all dependencies will be installed anyway
-      if (component.registryDependencies && !options.all) {
+      if (component.registryDependencies) {
         for (const dep of component.registryDependencies) {
           const depComponent = getRegistryComponent(dep);
           if (depComponent && !componentsToInstall.find(c => c.name === dep)) {
             // Check if the dependency component already exists
-            let depTargetDir;
-            if (dep === 'string-template-outlet') {
-              depTargetDir = options.path
-                ? path.resolve(cwd, options.path, 'core/directives/string-template-outlet')
-                : path.resolve(resolvedConfig.resolvedPaths.components, 'core/directives/string-template-outlet');
-            } else {
-              depTargetDir = options.path ? path.resolve(cwd, options.path, dep) : path.resolve(resolvedConfig.resolvedPaths.components, dep);
-            }
+            const depTargetDir = options.path ? path.resolve(cwd, options.path, dep) : path.resolve(resolvedConfig.resolvedPaths.components, dep);
 
             if (!existsSync(depTargetDir)) {
               componentsToInstall.push(depComponent);
@@ -128,15 +119,7 @@ export const add = new Command()
       const componentSpinner = spinner(`Installing ${component.name}...`).start();
 
       try {
-        // Special handling for core directives
-        let targetDir;
-        if (component.name === 'string-template-outlet') {
-          targetDir = options.path
-            ? path.resolve(cwd, options.path, 'core/directives/string-template-outlet')
-            : path.resolve(resolvedConfig.resolvedPaths.components, 'core/directives/string-template-outlet');
-        } else {
-          targetDir = options.path ? path.resolve(cwd, options.path, component.name) : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
-        }
+        const targetDir = options.path ? path.resolve(cwd, options.path, component.name) : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
 
         await installComponent(component, targetDir, resolvedConfig, options.overwrite);
         componentSpinner.succeed(`Added ${component.name}`);
