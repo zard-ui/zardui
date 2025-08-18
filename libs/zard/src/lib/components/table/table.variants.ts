@@ -79,11 +79,11 @@ export const tableVariants = {
 
   dropdownUl: cva('border absolute z-10 right-0 w-max rounded-md p-1 flex flex-col gap-2 bg-white dark:bg-neutral-800'),
 
-  dropdownLi: cva('hover:bg-neutral-100 dark:hover:bg-neutral-700 :focus-within:bg-neutral-100 dark:focus-within:bg-neutral-700  px-4 py-1 rounded-md'),
+  dropdownLi: cva('hover:bg-neutral-200 dark:hover:bg-neutral-700 focus-within:bg-neutral-200 dark:focus-within:bg-neutral-700 px-4 py-1 rounded-md'),
 
   dropdownLiLabel: cva('flex items-center gap-1 cursor-pointer'),
 
-  dropdownCheckbox: cva('peer appearance-none w-5 h-5 :focus:visible focus:outline-none'),
+  dropdownCheckbox: cva('peer appearance-none w-5 h-5 focus:visible focus:outline-none'),
 
   dropdownCheckIconWrapper: cva('absolute peer-checked:opacity-100 opacity-0'),
 
