@@ -57,7 +57,7 @@ const COMPONENTS_PATH = {
     { name: 'Toggle Group', path: '/docs/components/toggle-group', available: true },
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
     { name: 'Menu', path: '/docs/components', available: false },
-    { name: 'Resizable', path: '/docs/components', available: false },
+    { name: 'Resizable', path: '/docs/components/resizable', available: true },
     { name: 'Sheet', path: '/docs/components', available: false },
     { name: 'Sidebar', path: '/docs/components', available: false },
     { name: 'Radio', path: '/docs/components/radio', available: true },
