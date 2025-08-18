@@ -1,20 +1,72 @@
 import { cva } from 'class-variance-authority';
 
 export const tableVariants = {
-  tWrapper: cva('w-full border rounded-md overflow-auto'),
+  tWrapper: cva('w-full overflow-auto', {
+    variants: {
+      zType: {
+        default: '',
+        striped: '',
+        bordered: 'border rounded-md',
+      },
+    },
+    defaultVariants: {
+      zType: 'default',
+    },
+  }),
 
-  table: cva('w-full text-sm'),
+  table: cva('w-full', {
+    variants: {
+      zSize: {
+        default: 'text-base',
+        compact: 'text-sm',
+        comfortable: 'text-lg',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
+    },
+  }),
 
-  thead: cva(''),
+  thead: cva('bg-neutral-200 dark:bg-neutral-900'),
 
-  tbody: cva(''),
+  tr: cva('transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700', {
+    variants: {
+      zType: {
+        default: 'border-b',
+        striped: 'odd:bg-neutral-100 dark:odd:bg-neutral-800',
+        bordered: 'border-b last:border-0',
+      },
+    },
+    defaultVariants: {
+      zType: 'default',
+    },
+  }),
 
-  tr: cva('border-b transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-900'),
+  th: cva('text-left', {
+    variants: {
+      zSize: {
+        default: 'p-4',
+        compact: 'p-3',
+        comfortable: 'p-6',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
+    },
+  }),
 
-  th: cva('p-4 text-left '),
-
-  td: cva('p-4 '),
-
+  td: cva('', {
+    variants: {
+      zSize: {
+        default: 'p-4',
+        compact: 'p-3',
+        comfortable: 'p-6',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
+    },
+  }),
   toolbar: cva('flex justify-between items-center w-full'),
 
   toolbarItem: cva('min-w-[1px]'),

@@ -13,7 +13,10 @@ import { tableVariants } from './table.variants';
 })
 export class ZardTableDirective {
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(tableVariants.table(), this.class()));
+  readonly zType = input<'default' | 'striped' | 'bordered'>('default');
+  readonly zSize = input<'default' | 'compact' | 'comfortable'>('default');
+
+  protected readonly classes = computed(() => mergeClasses(tableVariants.table({ zSize: this.zSize() }), this.class()));
 }
 
 @Directive({
@@ -26,20 +29,8 @@ export class ZardTableDirective {
 })
 export class ZardTheadDirective {
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(tableVariants.thead(), this.class()));
-}
 
-@Directive({
-  selector: 'tbody[z-tbody]',
-  standalone: true,
-  exportAs: 'zTbody',
-  host: {
-    '[class]': 'classes()',
-  },
-})
-export class ZardTbodyDirective {
-  readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(tableVariants.tbody(), this.class()));
+  protected readonly classes = computed(() => mergeClasses(tableVariants.thead(), this.class()));
 }
 
 @Directive({
@@ -52,7 +43,8 @@ export class ZardTbodyDirective {
 })
 export class ZardTrDirective {
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(tableVariants.tr(), this.class()));
+  readonly zType = input<'default' | 'striped' | 'bordered'>('default');
+  protected readonly classes = computed(() => mergeClasses(tableVariants.tr({ zType: this.zType() }), this.class()));
 }
 
 @Directive({
@@ -65,7 +57,10 @@ export class ZardTrDirective {
 })
 export class ZardThDirective {
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(tableVariants.th(), this.class()));
+  readonly zType = input<'default' | 'striped' | 'bordered'>('default');
+  readonly zSize = input<'default' | 'compact' | 'comfortable'>('default');
+
+  protected readonly classes = computed(() => mergeClasses(tableVariants.th({ zSize: this.zSize() }), this.class()));
 }
 
 @Directive({
@@ -78,7 +73,10 @@ export class ZardThDirective {
 })
 export class ZardTdDirective {
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(tableVariants.td(), this.class()));
+  readonly zType = input<'default' | 'striped' | 'bordered'>('default');
+  readonly zSize = input<'default' | 'compact' | 'comfortable'>('default');
+
+  protected readonly classes = computed(() => mergeClasses(tableVariants.td({ zSize: this.zSize() }), this.class()));
 }
 
 @Directive({
@@ -91,7 +89,9 @@ export class ZardTdDirective {
 })
 export class ZardTableWrapperDirective {
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(tableVariants.tWrapper(), this.class()));
+  readonly zType = input<'default' | 'striped' | 'bordered'>('default');
+
+  protected readonly classes = computed(() => mergeClasses(tableVariants.tWrapper({ zType: this.zType() }), this.class()));
 }
 
 @Directive({

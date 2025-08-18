@@ -12,18 +12,14 @@ import {
   ZardTableFilteringDirective,
   ZardTablePaginationDirective,
   ZardTableWrapperDirective,
-  ZardTbodyDirective,
   ZardTdDirective,
   ZardThDirective,
-  ZardTheadDirective,
   ZardToolbarDirective,
   ZardTrDirective,
 } from './table.directive';
 
 const directives = [
   ZardTableDirective,
-  ZardTheadDirective,
-  ZardTbodyDirective,
   ZardTrDirective,
   ZardThDirective,
   ZardTdDirective,

@@ -19,13 +19,14 @@ import { debounceTime } from 'rxjs';
 import { ZardButtonComponent, ZardInputDirective } from '../components';
 import { TableState, ZardTableDataSource } from './table';
 import { ZardTableSortIconComponent } from './table-sort-icon.component';
+import { ZardTheadDirective } from './table.directive';
 import { ZardTableModule } from './table.module';
 import { ZardTableService } from './table.service';
 
 @Component({
   selector: 'z-table',
   exportAs: 'zTable',
-  imports: [ZardTableModule, ZardButtonComponent, ZardTableSortIconComponent, ZardInputDirective, ReactiveFormsModule],
+  imports: [ZardTableModule, ZardButtonComponent, ZardTableSortIconComponent, ZardInputDirective, ReactiveFormsModule, ZardTheadDirective],
   providers: [ZardTableService],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -117,15 +118,17 @@ import { ZardTableService } from './table.service';
         }
       </div>
     </div>
-    <div z-table-wrapper>
-      <table z-table role="table" id="table-id">
+    <div z-table-wrapper [zType]="zType()">
+      <table z-table role="table" id="table-id" [zSize]="zSize()" [zType]="zType()">
         @if (columns().length && dataSource().data.length) {
-          <thead>
+          <thead z-thead>
             <tr z-tr>
               @for (column of columns(); track column.accessor) {
                 @if (column.sortable) {
                   <th
                     z-th
+                    [zSize]="zSize()"
+                    [zType]="zType()"
                     scope="col"
                     sortable
                     (click)="toggleSort(column.accessor)"
@@ -141,7 +144,7 @@ import { ZardTableService } from './table.service';
                     <z-table-sort-icon [direction]="sortDirectionMap()[column.accessor]"></z-table-sort-icon>
                   </th>
                 } @else {
-                  <th z-th scope="col" [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'">
+                  <th z-th [zSize]="zSize()" [zType]="zType()" scope="col" [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'">
                     {{ column.header }}
                   </th>
                 }
@@ -151,9 +154,9 @@ import { ZardTableService } from './table.service';
 
           <tbody>
             @for (row of dataSource().data; track row) {
-              <tr z-tr>
+              <tr z-tr [zType]="zType()">
                 @for (column of columns(); track column.accessor) {
-                  <td z-td [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'">
+                  <td z-td [zSize]="zSize()" [zType]="zType()" [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'">
                     {{ row[column.accessor] }}
                   </td>
                 }
@@ -186,6 +189,9 @@ import { ZardTableService } from './table.service';
 export class ZardTableComponent implements OnInit {
   readonly columns = input<{ header: string; accessor: string; sortable?: boolean; filterable?: boolean }[]>([]);
   readonly dataSource = input<ZardTableDataSource<Record<string, string | number>>>({ data: [] });
+
+  readonly zType = input<'default' | 'striped' | 'bordered'>('default');
+  readonly zSize = input<'default' | 'compact' | 'comfortable'>('default');
 
   readonly enablePagination = input<boolean>();
   readonly disableNext = computed(() => !this.tableService.hasNextPage());

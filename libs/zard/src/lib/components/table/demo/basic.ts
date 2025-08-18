@@ -16,6 +16,8 @@ import { ZardTableModule } from '../table.module';
       [enablePagination]="true"
       [enableOrdering]="true"
       (stateChange)="onStateChange($event)"
+      zSize="default"
+      zType="default"
     ></z-table>
   `,
 })
