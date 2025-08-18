@@ -18,77 +18,72 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="py-24 pl-4">
-      <header class="text-start mb-16 max-w-4xl mx-auto pl-6">
+      <header class="grid items-center justify-center mb-16 text-center">
         <h2 class="text-3xl sm:text-4xl xl:text-6xl font-bold tracking-tight mb-4">Beautiful Components</h2>
         <p class="text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed pr-4 md:pr-0">
           Production-ready components that you can copy and paste into your apps. Accessible, customizable, and open source.
         </p>
       </header>
 
-      <main class="mb-12 pr-4 md:pr-0">
-        <div class="">
-          <div class="relative overflow-hidden">
-            <z-carousel class="max-w-4xl mx-auto showcase-carousel" [itemsPerView]="3.2" [infinite]="false" [showNavigation]="true" [showDots]="false">
-              @for (component of showcaseComponents(); track component.type; let i = $index) {
-                <z-carousel-item class="md:pr-6 first:ml-[calc(50%-298px/2)] md:first:ml-[calc(50%-865px/2)]">
-                  <z-card
-                    [zTitle]="component.title"
-                    [class]="'h-[340px] w-[94%] md:w-72 flex flex-col pb-6 ' + component.bgClass + (component.isCtaCard ? ' cursor-pointer' : '')"
-                    (click)="component.isCtaCard ? navigateToComponents() : null"
-                  >
-                    <div class="flex items-center justify-center flex-1 p-8 min-h-[200px]">
-                      <div class="w-full flex items-center justify-center">
-                        @switch (component.type) {
-                          @case ('button') {
-                            <z-button>Click me</z-button>
-                          }
-                          @case ('badge') {
-                            <z-badge>New</z-badge>
-                          }
-                          @case ('input') {
-                            <input z-input placeholder="Enter your email..." class="max-w-48" />
-                          }
-                          @case ('checkbox') {
-                            <z-checkbox>Accept terms</z-checkbox>
-                          }
-                          @case ('switch') {
-                            <z-switch></z-switch>
-                          }
-                          @case ('progress') {
-                            <z-progress-bar [progress]="65"></z-progress-bar>
-                          }
-                          @case ('avatar') {
-                            <z-avatar [zImage]="{ url: 'https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff', alt: 'John Doe', fallback: 'JD' }"></z-avatar>
-                          }
-                          @case ('tooltip') {
-                            <button
-                              zTooltip="This is a helpful tooltip!"
-                              class="bg-primary text-primary-foreground px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105"
-                            >
-                              Hover me
-                            </button>
-                          }
-                          @case ('cta') {
-                            <div class="text-center">
-                              <div class="flex items-center justify-center p-2 rounded-2xl bg-white/10 backdrop-blur-sm">
-                                <i class="icon-arrow-right text-xl"></i>
-                              </div>
-
-                              <div>
-                                <h3 class="text-xl font-semibold mb-2">View All</h3>
-                                <p class="text-sm text-primary-foreground/80 leading-relaxed">30+ components<br />ready to use</p>
-                              </div>
-                            </div>
-                          }
+      <main class="mb-24 pr-4 md:pr-0">
+        <div class="relative overflow-hidden">
+          <z-carousel class="max-w-4xl mx-auto showcase-carousel" [itemsPerView]="3.2" [infinite]="false" [showNavigation]="true" [showDots]="false">
+            @for (component of showcaseComponents(); track component.type; let i = $index) {
+              <z-carousel-item class="md:pr-6">
+                <z-card
+                  [zTitle]="component.title"
+                  [class]="'h-[340px] w-[94%] md:w-72 flex flex-col pb-6 ' + component.bgClass + (component.isCtaCard ? ' cursor-pointer' : '')"
+                  (click)="component.isCtaCard ? navigateToComponents() : null"
+                >
+                  <div class="flex items-center justify-center flex-1 p-8 min-h-[200px]">
+                    <div class="w-full flex items-center justify-center">
+                      @switch (component.type) {
+                        @case ('button') {
+                          <z-button>Click me</z-button>
                         }
-                      </div>
+                        @case ('badge') {
+                          <z-badge>New</z-badge>
+                        }
+                        @case ('input') {
+                          <input z-input placeholder="Enter your email..." class="max-w-48" />
+                        }
+                        @case ('checkbox') {
+                          <z-checkbox>Accept terms</z-checkbox>
+                        }
+                        @case ('switch') {
+                          <z-switch></z-switch>
+                        }
+                        @case ('progress') {
+                          <z-progress-bar [progress]="65"></z-progress-bar>
+                        }
+                        @case ('avatar') {
+                          <z-avatar [zImage]="{ url: 'https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff', alt: 'John Doe', fallback: 'JD' }"></z-avatar>
+                        }
+                        @case ('tooltip') {
+                          <button zTooltip="This is a helpful tooltip!" class="bg-primary text-primary-foreground px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105">
+                            Hover me
+                          </button>
+                        }
+                        @case ('cta') {
+                          <div class="text-center">
+                            <div class="flex items-center justify-center p-2 rounded-2xl bg-white/10 backdrop-blur-sm">
+                              <i class="icon-arrow-right text-xl"></i>
+                            </div>
+
+                            <div>
+                              <h3 class="text-xl font-semibold mb-2">View All</h3>
+                              <p class="text-sm text-primary-foreground/80 leading-relaxed">30+ components<br />ready to use</p>
+                            </div>
+                          </div>
+                        }
+                      }
                     </div>
-                    <p [class]="component.textClass + ' text-sm'">{{ component.description }}</p>
-                  </z-card>
-                </z-carousel-item>
-              }
-            </z-carousel>
-          </div>
+                  </div>
+                  <p [class]="component.textClass + ' text-sm'">{{ component.description }}</p>
+                </z-card>
+              </z-carousel-item>
+            }
+          </z-carousel>
         </div>
       </main>
     </section>

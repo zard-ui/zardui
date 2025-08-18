@@ -21,8 +21,7 @@ import { carouselVariants, carouselContentVariants, carouselViewportVariants, ty
         </div>
       </div>
 
-      <!-- Navigation buttons below carousel -->
-      <div *ngIf="showNavigation()" class="flex justify-center gap-4 mt-4">
+      <div *ngIf="showNavigation()" class="flex justify-center gap-4 mt-4 mb-8">
         <button
           (click)="scrollToPrev()"
           [disabled]="!canScrollPrev()"
