@@ -1,6 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+# Usage in App Component
 
+The service is initialized in the root component of the application to ensure the theme is applied as soon as the application loads.
+
+```typescript
+// app.component.ts
+import { Component, inject, OnInit } from '@angular/core';
 import { DarkModeService } from './shared/services/darkmode.service';
 
 @Component({
@@ -15,3 +19,4 @@ export class AppComponent implements OnInit {
     this.darkmodeService.initTheme();
   }
 }
+```

@@ -20,7 +20,7 @@ import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
   standalone: true,
   imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe, DocResearcherComponent],
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
   @ViewChild(DocResearcherComponent) docResearcher!: DocResearcherComponent;
 
   readonly headerPaths = HEADER_PATHS;
@@ -29,10 +29,6 @@ export class HeaderComponent implements OnInit {
   private readonly githubService = inject(GithubService);
   private readonly darkmodeService = inject(DarkModeService);
   readonly $repoStars: Observable<number> = this.githubService.getStarsCount();
-
-  ngOnInit(): void {
-    this.darkmodeService.initTheme();
-  }
 
   toggleTheme(): void {
     this.darkmodeService.toggleTheme();
@@ -44,7 +40,6 @@ export class HeaderComponent implements OnInit {
 
   @HostListener('window:keydown', ['$event'])
   handleKeyboardShortcut(event: KeyboardEvent) {
-    // Handle Cmd+K (Mac) or Ctrl+K (Windows/Linux)
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
       event.preventDefault();
       this.docResearcher.openCommandDialog();
