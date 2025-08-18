@@ -1,14 +1,14 @@
-import { Command } from 'commander';
-import { execa } from 'execa';
 import { existsSync, promises as fs } from 'fs';
-import path from 'path';
+import { Command } from 'commander';
 import prompts from 'prompts';
+import { execa } from 'execa';
+import path from 'path';
 
+import { ComponentRegistry, getAllComponentNames, getRegistryComponent } from '../utils/registry.js';
 import { Config, getConfig, resolveConfigPaths } from '../utils/config.js';
 import { fetchComponentFromGithub } from '../utils/fetch-component.js';
 import { getProjectInfo } from '../utils/get-project-info.js';
 import { logger, spinner } from '../utils/logger.js';
-import { ComponentRegistry, getAllComponentNames, getRegistryComponent } from '../utils/registry.js';
 
 export const add = new Command()
   .name('add')
@@ -80,7 +80,7 @@ export const add = new Command()
 
       component.dependencies?.forEach(dep => dependenciesToInstall.add(dep));
 
-      if (component.registryDependencies) {
+      if (component.registryDependencies && !options.all) {
         for (const dep of component.registryDependencies) {
           const depComponent = getRegistryComponent(dep);
           if (depComponent && !componentsToInstall.find(c => c.name === dep)) {

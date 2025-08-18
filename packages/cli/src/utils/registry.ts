@@ -11,6 +11,15 @@ export type ComponentRegistry = {
 
 export const registry: ComponentRegistry[] = [
   {
+    name: 'core',
+    files: [
+      {
+        name: 'directives/string-template-outlet/string-template-outlet.directive.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'button',
     files: [
       {
@@ -25,6 +34,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'card',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'card.component.ts',
