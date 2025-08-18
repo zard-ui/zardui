@@ -5,12 +5,12 @@ interface FileIconMapping {
 }
 
 const FILE_ICONS: FileIconMapping = {
-  'component.ts': '/icons/angular-component.svg',
-  'service.ts': '/icons/angular-service.svg',
-  'directive.ts': '/icons/angular-directive.svg',
-  'guard.ts': '/icons/angular-service.svg',
-  'pipe.ts': '/icons/angular-service.svg',
-  'module.ts': '/icons/angular.svg',
+  'component.ts': '/icons/angular-file.svg',
+  'service.ts': '/icons/angular-file.svg',
+  'directive.ts': '/icons/angular-file.svg',
+  'guard.ts': '/icons/angular-file.svg',
+  'pipe.ts': '/icons/angular-file.svg',
+  'module.ts': '/icons/angular-file.svg',
 
   ts: '/icons/typescript.svg',
   html: '/icons/html.svg',
@@ -30,7 +30,7 @@ const LANGUAGE_ICONS: FileIconMapping = {
   bash: 'icon-terminal',
   shell: 'icon-terminal',
   sh: 'icon-terminal',
-  angular: '/icons/angular.svg',
+  angular: '/icons/angular-file.svg',
   ts: '/icons/typescript.svg',
   js: '/icons/typescript.svg',
 };
