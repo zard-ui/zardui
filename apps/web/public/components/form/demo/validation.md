@@ -1,4 +1,4 @@
-```angular-ts showLineNumbers
+```angular-ts showLineNumbers copyButton
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';

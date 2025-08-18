@@ -39,7 +39,7 @@ import { cva, VariantProps } from 'class-variance-authority';
 
 export type zInputIcon = 'email' | 'password' | 'text';
 
-export const inputVariants = cva('', {
+export const inputVariants = cva('w-full', {
   variants: {
     zType: {
       default:

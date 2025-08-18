@@ -1,9 +1,6 @@
 import { NgModule } from '@angular/core';
 
-import { ZardFormControlComponent } from './form-control.component';
-import { ZardFormFieldComponent } from './form-field.component';
-import { ZardFormLabelComponent } from './form-label.component';
-import { ZardFormMessageComponent } from './form-message.component';
+import { ZardFormControlComponent, ZardFormFieldComponent, ZardFormLabelComponent, ZardFormMessageComponent } from './form.component';
 
 const FORM_COMPONENTS = [ZardFormFieldComponent, ZardFormLabelComponent, ZardFormControlComponent, ZardFormMessageComponent];
 

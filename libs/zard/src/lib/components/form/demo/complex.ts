@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, signal, ViewEncapsulation } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardCheckboxComponent } from '../../checkbox/checkbox.component';
@@ -9,6 +9,18 @@ import { ZardSelectItemComponent } from '../../select/select-item.component';
 import { ZardSelectComponent } from '../../select/select.component';
 import { ZardFormModule } from '../form.module';
 
+interface FormData {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  country: string;
+  company: string;
+  message: string;
+  newsletter: boolean;
+  terms: boolean;
+}
+
 @Component({
   selector: 'zard-demo-form-complex',
   standalone: true,
@@ -16,94 +28,101 @@ import { ZardFormModule } from '../form.module';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <form [formGroup]="complexForm" (ngSubmit)="onSubmit()" class="space-y-6 max-w-lg">
-      <div class="grid grid-cols-2 gap-4">
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()" class="space-y-6 max-w-lg">
+      <!-- Name Fields Row -->
+      <div class="flex gap-4 items-start">
         <z-form-field>
-          <label z-form-label zRequired>First Name</label>
-          <z-form-control>
-            <input z-input type="text" placeholder="John" formControlName="firstName" />
+          <label z-form-label zRequired for="firstName">First Name</label>
+          <z-form-control [errorMessage]="isFieldInvalid('firstName') ? 'First name is required' : ''">
+            <input z-input id="firstName" type="text" placeholder="John" formControlName="firstName" />
           </z-form-control>
         </z-form-field>
 
         <z-form-field>
-          <label z-form-label zRequired>Last Name</label>
-          <z-form-control>
-            <input z-input type="text" placeholder="Doe" formControlName="lastName" />
+          <label z-form-label zRequired for="lastName">Last Name</label>
+          <z-form-control [errorMessage]="isFieldInvalid('lastName') ? 'Last name is required' : ''">
+            <input z-input id="lastName" type="text" placeholder="Doe" formControlName="lastName" />
           </z-form-control>
         </z-form-field>
       </div>
 
+      <!-- Email Field -->
       <z-form-field>
-        <label z-form-label zRequired>Email</label>
-        <z-form-control>
-          <input z-input type="email" placeholder="john.doe@example.com" formControlName="email" />
+        <label z-form-label zRequired for="email">Email</label>
+        <z-form-control [errorMessage]="isFieldInvalid('email') ? getEmailError() : ''">
+          <input z-input id="email" type="email" placeholder="john.doe@example.com" formControlName="email" />
         </z-form-control>
       </z-form-field>
 
+      <!-- Phone Field -->
       <z-form-field>
-        <label z-form-label>Phone Number</label>
-        <z-form-control>
-          <input z-input type="tel" placeholder="+1 (555) 123-4567" formControlName="phone" />
+        <label z-form-label for="phone">Phone Number</label>
+        <z-form-control helpText="Include country code if outside US">
+          <input z-input id="phone" type="tel" placeholder="+1 (555) 123-4567" formControlName="phone" />
         </z-form-control>
-        <z-form-message>Include country code if outside US.</z-form-message>
       </z-form-field>
 
+      <!-- Country Selector -->
       <z-form-field>
-        <label z-form-label zRequired>Country</label>
-        <z-form-control>
-          <z-select formControlName="country" placeholder="Select your country">
-            <z-select-item value="us">United States</z-select-item>
-            <z-select-item value="ca">Canada</z-select-item>
-            <z-select-item value="uk">United Kingdom</z-select-item>
-            <z-select-item value="au">Australia</z-select-item>
-            <z-select-item value="de">Germany</z-select-item>
-            <z-select-item value="fr">France</z-select-item>
-            <z-select-item value="jp">Japan</z-select-item>
-            <z-select-item value="br">Brazil</z-select-item>
+        <label z-form-label zRequired for="country">Country</label>
+        <z-form-control [errorMessage]="isFieldInvalid('country') ? 'Please select a country' : ''">
+          <z-select id="country" formControlName="country" placeholder="Select your country">
+            @for (country of countries; track country.value) {
+              <z-select-item [value]="country.value">{{ country.label }}</z-select-item>
+            }
           </z-select>
         </z-form-control>
       </z-form-field>
 
+      <!-- Company Field -->
       <z-form-field>
-        <label z-form-label>Company</label>
-        <z-form-control>
-          <input z-input type="text" placeholder="Your company name" formControlName="company" />
+        <label z-form-label for="company">Company</label>
+        <z-form-control helpText="Optional: Where do you work?">
+          <input z-input id="company" type="text" placeholder="Your company name" formControlName="company" />
         </z-form-control>
-        <z-form-message>Optional: Where do you work?</z-form-message>
       </z-form-field>
 
+      <!-- Message Field -->
       <z-form-field>
-        <label z-form-label>Message</label>
-        <z-form-control>
-          <textarea z-input rows="4" placeholder="Tell us about your project or inquiry..." formControlName="message"></textarea>
+        <label z-form-label for="message">Message</label>
+        <z-form-control
+          [errorMessage]="isFieldInvalid('message') ? 'Message is too long (max 500 characters)' : ''"
+          [helpText]="!isFieldInvalid('message') ? messageLength() + '/500 characters' : ''"
+        >
+          <textarea z-input id="message" rows="4" placeholder="Tell us about your project or inquiry..." formControlName="message"></textarea>
         </z-form-control>
-        <z-form-message>{{ messageControl.value?.length || 0 }}/500 characters</z-form-message>
       </z-form-field>
 
+      <!-- Newsletter Checkbox -->
       <z-form-field>
-        <z-form-control class="flex items-center space-x-2">
-          <z-checkbox formControlName="newsletter" />
-          <label z-form-label class="!mb-0">Subscribe to newsletter</label>
+        <z-form-control helpText="Get updates about new features and releases" class="flex flex-col">
+          <div class="flex items-center space-x-2">
+            <z-checkbox id="newsletter" formControlName="newsletter" />
+            <label z-form-label class="!mb-0" for="newsletter">Subscribe to newsletter</label>
+          </div>
         </z-form-control>
-        <z-form-message>Get updates about new features and releases.</z-form-message>
       </z-form-field>
 
+      <!-- Terms Checkbox -->
       <z-form-field>
-        <z-form-control class="flex items-center space-x-2">
-          <z-checkbox formControlName="terms" zRequired />
-          <label z-form-label class="!mb-0" zRequired>I agree to the terms and conditions</label>
+        <z-form-control [errorMessage]="isFieldInvalid('terms') ? 'You must accept the terms and conditions' : ''" class="flex flex-col">
+          <div class="flex items-center space-x-2">
+            <z-checkbox id="terms" formControlName="terms" />
+            <label z-form-label class="!mb-0" zRequired for="terms">I agree to the terms and conditions</label>
+          </div>
         </z-form-control>
-        @if (termsControl.invalid && termsControl.touched) {
-          <z-form-message zType="error">You must accept the terms and conditions.</z-form-message>
-        }
       </z-form-field>
 
+      <!-- Action Buttons -->
       <div class="flex gap-2 pt-4">
-        <button z-button zType="default" type="submit" [disabled]="complexForm.invalid">Submit Form</button>
-        <button z-button zType="outline" type="button" (click)="reset()">Reset</button>
+        <button z-button zType="default" type="submit" [disabled]="isSubmitting()">
+          {{ isSubmitting() ? 'Submitting...' : 'Submit Form' }}
+        </button>
+        <button z-button zType="outline" type="button" (click)="resetForm()">Reset</button>
       </div>
 
-      @if (submitted) {
+      <!-- Success Message -->
+      @if (showSuccess()) {
         <div class="p-4 bg-green-50 border border-green-200 rounded-md">
           <z-form-message zType="success">✓ Form submitted successfully! We'll get back to you soon.</z-form-message>
         </div>
@@ -112,45 +131,86 @@ import { ZardFormModule } from '../form.module';
   `,
 })
 export class ZardDemoFormComplexComponent {
-  submitted = false;
+  private readonly fb = inject(FormBuilder);
 
-  complexForm = new FormGroup({
-    firstName: new FormControl('', [Validators.required]),
-    lastName: new FormControl('', [Validators.required]),
-    email: new FormControl('', [Validators.required, Validators.email]),
-    phone: new FormControl(''),
-    country: new FormControl('', [Validators.required]),
-    company: new FormControl(''),
-    message: new FormControl('', [Validators.maxLength(500)]),
-    newsletter: new FormControl(false),
-    terms: new FormControl(false, [Validators.requiredTrue]),
+  readonly showSuccess = signal(false);
+  readonly isSubmitting = signal(false);
+
+  readonly countries = [
+    { value: 'us', label: 'United States' },
+    { value: 'ca', label: 'Canada' },
+    { value: 'uk', label: 'United Kingdom' },
+    { value: 'au', label: 'Australia' },
+    { value: 'de', label: 'Germany' },
+    { value: 'fr', label: 'France' },
+    { value: 'jp', label: 'Japan' },
+    { value: 'br', label: 'Brazil' },
+  ] as const;
+
+  readonly form = this.fb.nonNullable.group({
+    firstName: ['', [Validators.required, Validators.minLength(2)]],
+    lastName: ['', [Validators.required, Validators.minLength(2)]],
+    email: ['', [Validators.required, Validators.email]],
+    phone: [''],
+    country: ['', Validators.required],
+    company: [''],
+    message: ['', Validators.maxLength(500)],
+    newsletter: [false],
+    terms: [false, Validators.requiredTrue],
   });
 
-  get messageControl() {
-    return this.complexForm.get('message')!;
+  readonly messageLength = signal(0);
+
+  constructor() {
+    // Track message length
+    this.form.controls.message.valueChanges.subscribe(value => {
+      this.messageLength.set(value?.length || 0);
+    });
   }
 
-  get termsControl() {
-    return this.complexForm.get('terms')!;
+  isFieldInvalid(fieldName: keyof FormData): boolean {
+    const field = this.form.get(fieldName);
+    return !!(field?.invalid && (field?.dirty || field?.touched));
   }
 
-  onSubmit() {
-    if (this.complexForm.valid) {
-      this.submitted = true;
-      console.log('Complex form submitted:', this.complexForm.value);
-
-      // Hide success message after 5 seconds
-      setTimeout(() => {
-        this.submitted = false;
-      }, 5000);
-    } else {
-      // Mark all fields as touched to show validation errors
-      this.complexForm.markAllAsTouched();
+  getEmailError(): string {
+    const email = this.form.get('email');
+    if (email?.hasError('required')) {
+      return 'Email is required';
     }
+    if (email?.hasError('email')) {
+      return 'Please enter a valid email address';
+    }
+    return '';
   }
 
-  reset() {
-    this.complexForm.reset();
-    this.submitted = false;
+  async handleSubmit(): Promise<void> {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+
+    this.isSubmitting.set(true);
+
+    await this.simulateApiCall();
+
+    this.isSubmitting.set(false);
+    this.showSuccess.set(true);
+
+    console.log('Form submitted:', this.form.getRawValue());
+
+    setTimeout(() => {
+      this.showSuccess.set(false);
+    }, 5000);
+  }
+
+  resetForm(): void {
+    this.form.reset();
+    this.showSuccess.set(false);
+    this.messageLength.set(0);
+  }
+
+  private simulateApiCall(): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, 1000));
   }
 }
