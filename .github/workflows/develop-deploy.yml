@@ -2,7 +2,7 @@ name: "Documentation Deploy to DEV"
 on:
   push:
     branches:
-      - alpha
+      - beta
 
 jobs:
   build:
