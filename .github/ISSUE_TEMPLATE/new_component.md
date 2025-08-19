@@ -18,7 +18,6 @@ assignees: []
 
 - shadcn/ui: [Link]
 - ng-zorro: [Link]
-- ng-spartan: [Link]
 
 ### 📦 Expected API
 
