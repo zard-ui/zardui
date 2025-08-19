@@ -1,28 +1,43 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import {
-  ZardTableComponent,
-  ZardTableHeaderComponent,
-  ZardTableBodyComponent,
-  ZardTableRowComponent,
-  ZardTableHeadComponent,
-  ZardTableCellComponent,
-  ZardTableCaptionComponent,
-} from './table.component';
+  ZardDetailsDirective,
+  ZardDropdownCheckboxDirective,
+  ZardDropdownCheckIconWrapperDirective,
+  ZardDropdownLiDirective,
+  ZardDropdownLiLabelDirective,
+  ZardDropdownUlDirective,
+  ZardSummaryDirective,
+  ZardTableDirective,
+  ZardTableFilteringDirective,
+  ZardTablePaginationDirective,
+  ZardTableWrapperDirective,
+  ZardTdDirective,
+  ZardThDirective,
+  ZardToolbarDirective,
+  ZardTrDirective,
+} from './table.directive';
 
-const TABLE_COMPONENTS = [
-  ZardTableComponent,
-  ZardTableHeaderComponent,
-  ZardTableBodyComponent,
-  ZardTableRowComponent,
-  ZardTableHeadComponent,
-  ZardTableCellComponent,
-  ZardTableCaptionComponent,
+const directives = [
+  ZardTableDirective,
+  ZardTrDirective,
+  ZardThDirective,
+  ZardTdDirective,
+  ZardTableWrapperDirective,
+  ZardTablePaginationDirective,
+  ZardTableFilteringDirective,
+  ZardSummaryDirective,
+  ZardDetailsDirective,
+  ZardDropdownUlDirective,
+  ZardDropdownLiDirective,
+  ZardDropdownCheckIconWrapperDirective,
+  ZardDropdownCheckboxDirective,
+  ZardToolbarDirective,
+  ZardDropdownLiLabelDirective,
 ];
 
 @NgModule({
-  imports: [CommonModule, ...TABLE_COMPONENTS],
-  exports: [...TABLE_COMPONENTS],
+  imports: directives,
+  exports: directives,
 })
 export class ZardTableModule {}

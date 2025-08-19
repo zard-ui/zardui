@@ -1,5 +1,6 @@
-import { ZardDemoTableSimpleComponent } from './simple';
+import { ZardDemoTableBasicComponent } from './basic';
 import { ZardDemoTablePaymentsComponent } from './payments';
+import { ZardDemoTableSimpleComponent } from './simple';
 
 export const TABLE = {
   componentName: 'table',
@@ -12,6 +13,10 @@ export const TABLE = {
     {
       name: 'payments',
       component: ZardDemoTablePaymentsComponent,
+    },
+    {
+      name: 'basic',
+      component: ZardDemoTableBasicComponent,
     },
   ],
 };

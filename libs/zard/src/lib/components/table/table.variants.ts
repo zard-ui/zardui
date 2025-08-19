@@ -1,61 +1,91 @@
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-export const tableVariants = cva(
-  'w-full caption-bottom text-sm [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:text-left [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pr-0 [&_th>[role=checkbox]]:translate-y-[2px] [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pr-0 [&_td>[role=checkbox]]:translate-y-[2px] [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground',
-  {
+export const tableVariants = {
+  tWrapper: cva('w-full overflow-auto', {
     variants: {
       zType: {
         default: '',
-        striped: '[&_tbody_tr:nth-child(odd)]:bg-muted/50',
-        bordered: 'border border-border',
-      },
-      zSize: {
-        default: '',
-        compact: '[&_td]:py-2 [&_th]:py-2',
-        comfortable: '[&_td]:py-4 [&_th]:py-4',
+        striped: '',
+        bordered: 'border rounded-md',
       },
     },
     defaultVariants: {
       zType: 'default',
+    },
+  }),
+
+  table: cva('w-full', {
+    variants: {
+      zSize: {
+        default: 'text-base',
+        compact: 'text-sm',
+        comfortable: 'text-lg',
+      },
+    },
+    defaultVariants: {
       zSize: 'default',
     },
-  },
-);
+  }),
 
-export const tableHeaderVariants = cva('[&_tr]:border-b', {
-  variants: {},
-  defaultVariants: {},
-});
+  thead: cva('bg-neutral-200 dark:bg-neutral-900'),
 
-export const tableBodyVariants = cva('[&_tr:last-child]:border-0', {
-  variants: {},
-  defaultVariants: {},
-});
+  tr: cva('transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700', {
+    variants: {
+      zType: {
+        default: 'border-b',
+        striped: 'odd:bg-neutral-100 dark:odd:bg-neutral-800',
+        bordered: 'border-b last:border-0',
+      },
+    },
+    defaultVariants: {
+      zType: 'default',
+    },
+  }),
 
-export const tableRowVariants = cva('border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted', {
-  variants: {},
-  defaultVariants: {},
-});
+  th: cva('text-left', {
+    variants: {
+      zSize: {
+        default: 'p-4',
+        compact: 'p-3',
+        comfortable: 'p-6',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
+    },
+  }),
 
-export const tableHeadVariants = cva('h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]', {
-  variants: {},
-  defaultVariants: {},
-});
+  td: cva('', {
+    variants: {
+      zSize: {
+        default: 'p-4',
+        compact: 'p-3',
+        comfortable: 'p-6',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
+    },
+  }),
+  toolbar: cva('flex justify-between items-center w-full'),
 
-export const tableCellVariants = cva('p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]', {
-  variants: {},
-  defaultVariants: {},
-});
+  toolbarItem: cva('min-w-[1px]'),
 
-export const tableCaptionVariants = cva('mt-4 text-sm text-muted-foreground', {
-  variants: {},
-  defaultVariants: {},
-});
+  filtering: cva('mb-4'),
 
-export type ZardTableVariants = VariantProps<typeof tableVariants>;
-export type ZardTableHeaderVariants = VariantProps<typeof tableHeaderVariants>;
-export type ZardTableBodyVariants = VariantProps<typeof tableBodyVariants>;
-export type ZardTableRowVariants = VariantProps<typeof tableRowVariants>;
-export type ZardTableHeadVariants = VariantProps<typeof tableHeadVariants>;
-export type ZardTableCellVariants = VariantProps<typeof tableCellVariants>;
-export type ZardTableCaptionVariants = VariantProps<typeof tableCaptionVariants>;
+  details: cva('relative inline-block text-sm font-medium'),
+
+  summary: cva('h-10 flex items-center border gap-2 px-4 py-2 mb-4 rounded-md cursor-pointer'),
+
+  dropdownUl: cva('border absolute z-10 right-0 w-max rounded-md p-1 flex flex-col gap-2 bg-white dark:bg-neutral-800'),
+
+  dropdownLi: cva('hover:bg-neutral-200 dark:hover:bg-neutral-700 focus-within:bg-neutral-200 dark:focus-within:bg-neutral-700 px-4 py-1 rounded-md'),
+
+  dropdownLiLabel: cva('flex items-center gap-1 cursor-pointer'),
+
+  dropdownCheckbox: cva('peer appearance-none w-5 h-5 focus:visible focus:outline-none'),
+
+  dropdownCheckIconWrapper: cva('absolute peer-checked:opacity-100 opacity-0'),
+
+  pagination: cva('flex justify-end gap-2 items-center mt-4'),
+};

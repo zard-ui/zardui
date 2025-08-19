@@ -1,15 +1,9 @@
 # API
 
-## [z-table] <span class="api-type-label directive">Directive</span>
+## [z-table] <span class="api-type-label component">Component</span>
 
-> `z-table` is a directive that accepts all properties supported by a native `<table>`. It automatically styles all nested table elements (`thead`, `tbody`, `tr`, `th`, `td`, `caption`) without requiring additional directives.
-
-To customize the table, pass the following props to the directive.
-
-| Property | Description | Type                                | Default   |
-| -------- | ----------- | ----------------------------------- | --------- |
-| `zType`  | Table type  | `default \| striped \| bordered`    | `default` |
-| `zSize`  | Table size  | `default \| compact \| comfortable` | `default` |
+> `z-table` displays data in a structured table format with styling variants and semantic HTML.  
+> Supports dynamic column selection, sorting, filtering, and pagination.
 
 ## Usage
 
@@ -17,18 +11,24 @@ To customize the table, pass the following props to the directive.
 
 ```html
 <table z-table>
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Status</th>
+  <thead z-thead>
+    <tr z-tr>
+      <th z-th>Name</th>
+      <th z-th>Age</th>
     </tr>
   </thead>
   <tbody>
-    <tr>
-      <td>John Doe</td>
-      <td>john@example.com</td>
-      <td>Active</td>
+    <tr z-tr>
+      <td z-td>Douglas</td>
+      <td z-td>19</td>
+    </tr>
+    <tr z-tr>
+      <td z-td>Lucas</td>
+      <td z-td>25</td>
+    </tr>
+    <tr z-tr>
+      <td z-td>Claudia</td>
+      <td z-td>22</td>
     </tr>
   </tbody>
 </table>
@@ -37,48 +37,75 @@ To customize the table, pass the following props to the directive.
 ### With Data Binding
 
 ```html
-<table z-table zType="striped">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Age</th>
-    </tr>
-  </thead>
-  <tbody>
-    @for (person of people; track person.id) {
-    <tr>
-      <td>{{ person.name }}</td>
-      <td>{{ person.age }}</td>
-    </tr>
-    }
-  </tbody>
-</table>
+<z-table
+  [columns]="columns"
+  [dataSource]="dataSource()"
+  [enableFiltering]="true"
+  [enableColumnSelector]="true"
+  [enablePagination]="true"
+  [enableOrdering]="true"
+  (stateChange)="onStateChange($event)"
+  zSize="compact"
+  zType="bordered"
+></z-table>
 ```
 
-## Optional Sub-Components
+To customize the table, pass the following props to the component.
 
-For more granular control, you can use individual table components:
+| Property                 | Description                                                         | Type                                | Default        |
+| ------------------------ | ------------------------------------------------------------------- | ----------------------------------- | -------------- |
+| `zType`                  | Table type                                                          | `default \| striped \| bordered`    | `default`      |
+| `zSize`                  | Table size                                                          | `default \| compact \| comfortable` | `default`      |
+| `[columns]`              | Defines table columns                                               | `ColumnConfig[]`                    | `[]`           |
+| `[dataSource]`           | Table data and optional metadata for pagination, sorting, filtering | `ZardTableDataSource<T>`            | `{ data: [] }` |
+| `[enableFiltering]`      | Shows global filter input for columns marked `filterable`           | `boolean`                           | `false`        |
+| `[enableColumnSelector]` | Enables column visibility dropdown                                  | `boolean`                           | `false`        |
+| `[enablePagination]`     | Shows pagination controls and emits page changes                    | `boolean`                           | `false`        |
+| `[enableOrdering]`       | Allows sorting by columns marked `sortable`                         | `boolean`                           | `false`        |
 
-### [z-table-header] <span class="api-type-label component">Component</span>
+---
 
-> `thead[z-table-header]` applies styles to table header sections.
+### Outputs
 
-### [z-table-body] <span class="api-type-label component">Component</span>
+| Event           | Description                                                                | Type         |
+| --------------- | -------------------------------------------------------------------------- | ------------ |
+| `(stateChange)` | Emits the current table state on pagination, sorting, or filtering changes | `TableState` |
 
-> `tbody[z-table-body]` applies styles to table body sections.
+---
 
-### [z-table-row] <span class="api-type-label component">Component</span>
+### Interfaces
 
-> `tr[z-table-row]` applies styles to table rows.
+```ts
+interface ZardTableDataSource<T> {
+  data: T[];
+  meta?: {
+    pagination?: {
+      totalItems: number;
+      pageSize: number;
+      pageIndex: number;
+      first?: boolean;
+      last?: boolean;
+    };
+    filtering?: { search?: string };
+    sorting?: { field: string; direction: 'asc' | 'desc' };
+  };
+}
 
-### [z-table-head] <span class="api-type-label component">Component</span>
+interface TableState {
+  pageIndex: number;
+  pageSize: number;
+  totalItems: number;
+  search?: string;
+  field?: string;
+  direction?: 'asc' | 'desc';
+  first?: boolean;
+  last?: boolean;
+}
 
-> `th[z-table-head]` applies styles to table header cells.
-
-### [z-table-cell] <span class="api-type-label component">Component</span>
-
-> `td[z-table-cell]` applies styles to table data cells.
-
-### [z-table-caption] <span class="api-type-label component">Component</span>
-
-> `caption[z-table-caption]` applies styles to table captions.
+interface ColumnConfig {
+  header: string;
+  accessor: string;
+  sortable?: boolean;
+  filterable?: boolean;
+}
+```
