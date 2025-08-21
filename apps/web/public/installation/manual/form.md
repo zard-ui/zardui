@@ -1,9 +1,8 @@
-
-
 ```angular-ts title="form.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { formFieldVariants, formControlVariants, formLabelVariants, formMessageVariants, ZardFormMessageVariants } from './form.variants';
@@ -96,8 +95,6 @@ export class ZardFormMessageComponent {
 
 ```
 
-
-
 ```angular-ts title="form.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -134,8 +131,6 @@ export type ZardFormMessageVariants = VariantProps<typeof formMessageVariants>;
 
 ```
 
-
-
 ```angular-ts title="form.module.ts" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
@@ -150,4 +145,3 @@ const FORM_COMPONENTS = [ZardFormFieldComponent, ZardFormLabelComponent, ZardFor
 export class ZardFormModule {}
 
 ```
-
