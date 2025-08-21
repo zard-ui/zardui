@@ -4,6 +4,7 @@
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { formFieldVariants, formControlVariants, formLabelVariants, formMessageVariants, ZardFormMessageVariants } from './form.variants';
@@ -29,15 +30,31 @@ export class ZardFormFieldComponent {
   selector: 'z-form-control, [z-form-control]',
   exportAs: 'zFormControl',
   standalone: true,
+  imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: '<ng-content></ng-content>',
+  template: `
+    <div class="relative">
+      <ng-content></ng-content>
+    </div>
+    @if (errorMessage() || helpText()) {
+      <div class="mt-1.5 min-h-[1.25rem]">
+        @if (errorMessage()) {
+          <p class="text-sm text-red-500">{{ errorMessage() }}</p>
+        } @else if (helpText()) {
+          <p class="text-sm text-muted-foreground">{{ helpText() }}</p>
+        }
+      </div>
+    }
+  `,
   host: {
     '[class]': 'classes()',
   },
 })
 export class ZardFormControlComponent {
   readonly class = input<ClassValue>('');
+  readonly errorMessage = input<string>('');
+  readonly helpText = input<string>('');
 
   protected readonly classes = computed(() => mergeClasses(formControlVariants(), this.class()));
 }
