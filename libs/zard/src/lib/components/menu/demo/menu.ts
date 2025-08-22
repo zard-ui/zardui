@@ -1,11 +1,11 @@
 import { ZardDemoMenuDefaultComponent } from './default';
 import { ZardDemoMenuHorizontalComponent } from './horizontal';
 import { ZardDemoMenuInlineComponent } from './inline';
-import { ZardDemoMenuVerticalComponent } from './vertical';
 
 export const MENU = {
   componentName: 'menu',
   componentType: 'Menu',
+  fullWidth: true,
   examples: [
     {
       name: 'default',
@@ -14,10 +14,6 @@ export const MENU = {
     {
       name: 'horizontal',
       component: ZardDemoMenuHorizontalComponent,
-    },
-    {
-      name: 'vertical',
-      component: ZardDemoMenuVerticalComponent,
     },
     {
       name: 'inline',

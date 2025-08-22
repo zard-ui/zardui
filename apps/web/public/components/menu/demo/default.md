@@ -1,40 +1,69 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardMenuDividerDirective } from '../menu-divider.directive';
-import { ZardMenuGroupComponent } from '../menu-group.component';
-import { ZardMenuItemDirective } from '../menu-item.directive';
-import { ZardMenuComponent } from '../menu.component';
-import { ZardSubmenuComponent } from '../submenu.component';
+import { ZardDividerComponent } from '../../divider/divider.component';
+import { ZardMenuModule } from '../menu.module';
 
 @Component({
   selector: 'zard-demo-menu-default',
   standalone: true,
-  imports: [ZardMenuComponent, ZardMenuItemDirective, ZardSubmenuComponent, ZardMenuGroupComponent, ZardMenuDividerDirective],
+  imports: [ZardMenuModule, ZardDividerComponent],
+  host: {
+    class: 'w-full',
+  },
   template: `
     <ul z-menu>
-      <li z-menu-item zKey="1" zIcon="home">Home</li>
-      <li z-menu-item zKey="2" zIcon="users">About</li>
-      <ul z-submenu zKey="sub1" zTitle="Services" zIcon="package">
-        <li z-menu-item zKey="3" [zLevel]="2">Web Development</li>
-        <li z-menu-item zKey="4" [zLevel]="2">Mobile Apps</li>
-        <ul z-submenu zKey="sub2" zTitle="Cloud Services" [zLevel]="2">
-          <li z-menu-item zKey="5" [zLevel]="3">AWS</li>
-          <li z-menu-item zKey="6" [zLevel]="3">Azure</li>
-          <li z-menu-item zKey="7" [zLevel]="3">Google Cloud</li>
+      <li z-menu-item (click)="navigate('home')">
+        <i class="icon-layout-dashboard mr-2"></i>
+        Home
+      </li>
+      <li z-menu-item (click)="navigate('about')">
+        <i class="icon-users mr-2"></i>
+        About
+      </li>
+      <li z-submenu zTitle="Services" zIcon="package">
+        <ul>
+          <li z-menu-item (click)="navigate('web-development')">Web Development</li>
+          <li z-menu-item (click)="navigate('mobile-apps')">Mobile Apps</li>
+          <li z-submenu zTitle="Cloud Services">
+            <ul>
+              <li z-menu-item (click)="navigate('aws')">AWS</li>
+              <li z-menu-item (click)="navigate('azure')">Azure</li>
+              <li z-menu-item (click)="navigate('google-cloud')">Google Cloud</li>
+            </ul>
+          </li>
         </ul>
-      </ul>
-      <li z-menu-divider></li>
-      <z-menu-group zTitle="Resources">
-        <li z-menu-item zKey="8" zIcon="book">Documentation</li>
-        <li z-menu-item zKey="9" zIcon="file-text">Blog</li>
-      </z-menu-group>
-      <li z-menu-divider></li>
-      <li z-menu-item zKey="10" zIcon="settings">Settings</li>
-      <li z-menu-item zKey="11" zIcon="log-out" [zDisabled]="true">Logout</li>
+      </li>
+      <z-divider></z-divider>
+      <li z-menu-group zTitle="Resources">
+        <ul>
+          <li z-menu-item (click)="navigate('documentation')">
+            <i class="icon-book mr-2"></i>
+            Documentation
+          </li>
+          <li z-menu-item (click)="navigate('blog')">
+            <i class="icon-file-text mr-2"></i>
+            Blog
+          </li>
+        </ul>
+      </li>
+      <z-divider></z-divider>
+      <li z-menu-item (click)="navigate('settings')">
+        <i class="icon-settings mr-2"></i>
+        Settings
+      </li>
+      <li z-menu-item [zDisabled]="true">
+        <i class="icon-log-out mr-2"></i>
+        Logout
+      </li>
     </ul>
   `,
 })
-export class ZardDemoMenuDefaultComponent {}
+export class ZardDemoMenuDefaultComponent {
+  navigate(route: string) {
+    console.log('Navigate to:', route);
+    // router.navigate([route]) ou qualquer lógica de navegação
+  }
+}
 
 ```

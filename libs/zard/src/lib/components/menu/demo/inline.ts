@@ -1,14 +1,12 @@
 import { Component, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardMenuItemDirective } from '../menu-item.directive';
-import { ZardMenuComponent } from '../menu.component';
-import { ZardSubmenuComponent } from '../submenu.component';
+import { ZardMenuModule } from '../menu.module';
 
 @Component({
   selector: 'zard-demo-menu-inline',
   standalone: true,
-  imports: [ZardMenuComponent, ZardMenuItemDirective, ZardSubmenuComponent, ZardButtonComponent],
+  imports: [ZardMenuModule, ZardButtonComponent],
   template: `
     <div style="width: 256px;">
       <button z-button zType="outline" (click)="toggleCollapsed()" class="mb-4">

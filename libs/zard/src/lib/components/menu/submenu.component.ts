@@ -1,101 +1,80 @@
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ConnectedOverlayPositionChange, ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
-import { CommonModule } from '@angular/common';
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  effect,
-  ElementRef,
-  HostListener,
-  inject,
-  input,
-  output,
-  signal,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, ElementRef, HostListener, inject, input, signal, ViewChild, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { submenuContentVariants, submenuTitleVariants, submenuVariants, ZardSubmenuVariants } from './menu.variants';
 import { ZardSubmenuService } from './submenu.service';
 
 @Component({
-  selector: 'ul[z-submenu]',
+  selector: 'li[z-submenu]',
   exportAs: 'zSubmenu',
   standalone: true,
-  imports: [CommonModule, OverlayModule],
+  imports: [OverlayModule],
   providers: [ZardSubmenuService],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  styleUrls: ['./submenu-levels.css'],
   template: `
-    <li [class]="classes()" [attr.data-key]="zKey()">
-      <div
-        #titleElement
-        [class]="titleClasses()"
-        (click)="toggle()"
-        (keydown)="onTitleKeydown($event)"
-        [attr.aria-expanded]="isOpen()"
-        [attr.aria-haspopup]="true"
-        [attr.aria-disabled]="zDisabled()"
-        [tabindex]="tabIndex()"
-        role="menuitem"
-      >
-        @if (zIcon()) {
-          <span [class]="'icon-' + zIcon() + ' mr-2 h-4 w-4'"></span>
-        }
-        <span>{{ zTitle() }}</span>
-        @if (mode() === 'horizontal') {
-          <i class="icon-chevron-down relative top-[1px] ml-1 h-3 w-3 transition-transform duration-300 group-data-[state=open]:rotate-180"></i>
-        } @else if (mode() !== 'inline') {
-          <i class="icon-chevron-right ml-auto h-4 w-4 transition-transform duration-300" [class.rotate-90]="isOpen()"></i>
-        } @else {
-          <i class="icon-chevron-right ml-auto h-4 w-4 transition-transform duration-300" [class.rotate-90]="isOpen()"></i>
-        }
+    <div
+      #titleElement
+      [class]="titleClasses()"
+      (click)="toggle()"
+      (keydown)="onTitleKeydown($event)"
+      [attr.aria-expanded]="isOpen()"
+      [attr.aria-haspopup]="true"
+      [attr.aria-disabled]="zDisabled()"
+      [tabindex]="tabIndex()"
+      role="menuitem"
+    >
+      @if (zIcon()) {
+        <span [class]="'icon-' + zIcon() + ' mr-2'"></span>
+      }
+      <span>{{ zTitle() }}</span>
+      @if (mode() === 'horizontal') {
+        <i class="icon-chevron-down ml-1 transition-transform duration-300 group-data-[state=open]:rotate-180"></i>
+      } @else if (mode() !== 'inline') {
+        <i class="icon-chevron-right ml-auto transition-transform duration-300" [class.rotate-90]="isOpen()"></i>
+      } @else {
+        <i class="icon-chevron-right ml-auto transition-transform duration-300" [class.rotate-90]="isOpen()"></i>
+      }
+    </div>
+
+    @if (mode() === 'inline') {
+      <div [class]="contentClasses()" role="menu">
+        <ng-content></ng-content>
       </div>
+    }
 
-      @if (mode() === 'inline') {
-        <ul [class]="contentClasses()" role="menu">
+    @if (mode() !== 'inline') {
+      <ng-template
+        cdkConnectedOverlay
+        [cdkConnectedOverlayOrigin]="titleElement"
+        [cdkConnectedOverlayOpen]="isOpen()"
+        [cdkConnectedOverlayPositions]="overlayPositions()"
+        [cdkConnectedOverlayPush]="true"
+        [cdkConnectedOverlayViewportMargin]="8"
+        (positionChange)="onPositionChange($event)"
+      >
+        <div [class]="contentClasses()" role="menu" (keydown)="onKeydown($event)" (mouseenter)="onSubmenuMouseEnter()" (mouseleave)="onSubmenuMouseLeave()">
           <ng-content></ng-content>
-        </ul>
-      }
-
-      @if (mode() !== 'inline') {
-        <ng-template
-          cdkConnectedOverlay
-          [cdkConnectedOverlayOrigin]="titleElement"
-          [cdkConnectedOverlayOpen]="isOpen()"
-          [cdkConnectedOverlayPositions]="overlayPositions()"
-          [cdkConnectedOverlayPush]="true"
-          [cdkConnectedOverlayViewportMargin]="8"
-          [cdkConnectedOverlayFlexibleDimensions]="true"
-          (positionChange)="onPositionChange($event)"
-        >
-          <ul [class]="contentClasses()" role="menu" (keydown)="onKeydown($event)" (mouseenter)="onSubmenuMouseEnter()" (mouseleave)="onSubmenuMouseLeave()">
-            <ng-content></ng-content>
-          </ul>
-        </ng-template>
-      }
-    </li>
+        </div>
+      </ng-template>
+    }
   `,
   host: {
     '[attr.data-submenu]': 'true',
-    class: 'w-full',
+    '[class]': 'classes()',
   },
 })
-export class ZardSubmenuComponent implements AfterViewInit {
+export class ZardSubmenuComponent {
   private elementRef = inject(ElementRef);
   private submenuService = inject(ZardSubmenuService);
 
   @ViewChild('titleElement', { read: ElementRef, static: false }) titleElement?: ElementRef;
 
-  readonly zKey = input<string>('');
   readonly zTitle = input<string>('');
   readonly zIcon = input<string>('');
-  readonly zOpen = input(false, { transform });
   readonly zDisabled = input(false, { transform });
   readonly zPopupOffset = input<[number, number]>([0, 0]);
   readonly zLevel = input<number>(1);
@@ -104,8 +83,6 @@ export class ZardSubmenuComponent implements AfterViewInit {
   readonly effectiveLevel = computed(() => this.zLevel() || this.submenuService.level());
 
   readonly class = input<ClassValue>('');
-
-  readonly zOpenChange = output<boolean>();
 
   readonly isOpen = signal(false);
   readonly mode = signal<ZardSubmenuVariants['zMode']>('vertical');
@@ -161,23 +138,14 @@ export class ZardSubmenuComponent implements AfterViewInit {
         zMode: this.mode(),
         zOpen: this.isOpen(),
         zCollapsed: this.collapsed(),
+        zLevel: this.effectiveLevel() as 1 | 2 | 3 | 4,
       }),
-      // Add position-specific classes for non-inline menus
-      this.mode() !== 'inline' ? `z-submenu-placement-${this.overlayPosition()}` : '',
-      // Add level-based z-index for nested submenus
-      this.mode() !== 'inline' ? `z-submenu-level-${this.effectiveLevel()}` : '',
     ),
   );
 
   protected readonly tabIndex = computed(() => {
     return this.zDisabled() ? -1 : 0;
   });
-
-  ngAfterViewInit() {
-    if (this.zOpen()) {
-      this.isOpen.set(true);
-    }
-  }
 
   @HostListener('mouseenter')
   onMouseEnter() {
@@ -201,7 +169,6 @@ export class ZardSubmenuComponent implements AfterViewInit {
     if (this.zDisabled()) return;
 
     this.submenuService.toggleOpen();
-    this.zOpenChange.emit(this.isOpen());
   }
 
   open() {
@@ -211,15 +178,6 @@ export class ZardSubmenuComponent implements AfterViewInit {
 
   close() {
     this.submenuService.forceClose();
-    // this.zOpenChange.emit(false);
-  }
-
-  setOpen(open: boolean) {
-    if (open) {
-      this.open();
-    } else {
-      this.close();
-    }
   }
 
   setMode(mode: ZardSubmenuVariants['zMode']) {
@@ -268,13 +226,13 @@ export class ZardSubmenuComponent implements AfterViewInit {
 
   onSubmenuMouseEnter() {
     if (this.mode() !== 'inline' && !this.zDisabled()) {
-      this.submenuService.setMouseEnterOverlayState(true);
+      this.submenuService.setMouseEnterTitleOrOverlayState(true);
     }
   }
 
   onSubmenuMouseLeave() {
     if (this.mode() !== 'inline' && !this.zDisabled()) {
-      this.submenuService.setMouseEnterOverlayState(false);
+      this.submenuService.setMouseEnterTitleOrOverlayState(false);
     }
   }
 

@@ -1,31 +1,36 @@
 import { Component } from '@angular/core';
 
-import { ZardMenuDividerDirective } from '../menu-divider.directive';
-import { ZardMenuItemDirective } from '../menu-item.directive';
-import { ZardMenuComponent } from '../menu.component';
-import { ZardSubmenuComponent } from '../submenu.component';
+import { ZardMenuModule } from '../menu.module';
 
 @Component({
   selector: 'zard-demo-menu-horizontal',
   standalone: true,
-  imports: [ZardMenuComponent, ZardMenuItemDirective, ZardSubmenuComponent, ZardMenuDividerDirective],
+  imports: [ZardMenuModule],
   template: `
     <ul z-menu zMode="horizontal">
-      <li z-menu-item zKey="1" zIcon="home">Home</li>
-      <li z-menu-item zKey="2" zIcon="info">About</li>
-      <ul z-submenu zKey="sub1" zTitle="Products" zIcon="package">
-        <li z-menu-item zKey="3">Product A</li>
-        <li z-menu-item zKey="4">Product B</li>
-        <li z-menu-item zKey="5">Product C</li>
-      </ul>
-      <ul z-submenu zKey="sub2" zTitle="Services" zIcon="settings">
-        <li z-menu-item zKey="6">Consulting</li>
-        <li z-menu-item zKey="7">Support</li>
-        <li z-menu-item zKey="8">Training</li>
-      </ul>
+      <li z-menu-item (click)="navigate('home')">Home</li>
+      <li z-menu-item (click)="navigate('about')">About</li>
+      <li z-submenu zTitle="Products" zIcon="package">
+        <ul>
+          <li z-menu-item (click)="navigate('product-a')">Product A</li>
+          <li z-menu-item (click)="navigate('product-b')">Product B</li>
+          <li z-menu-item (click)="navigate('product-c')">Product C</li>
+        </ul>
+      </li>
+      <li z-submenu zTitle="Services" zIcon="settings">
+        <ul>
+          <li z-menu-item (click)="navigate('consulting')">Consulting</li>
+          <li z-menu-item (click)="navigate('support')">Support</li>
+          <li z-menu-item (click)="navigate('training')">Training</li>
+        </ul>
+      </li>
       <li z-menu-divider></li>
-      <li z-menu-item zKey="9" zIcon="phone">Contact</li>
+      <li z-menu-item (click)="navigate('contact')">Contact</li>
     </ul>
   `,
 })
-export class ZardDemoMenuHorizontalComponent {}
+export class ZardDemoMenuHorizontalComponent {
+  navigate(route: string) {
+    console.log('Navigate to:', route);
+  }
+}
