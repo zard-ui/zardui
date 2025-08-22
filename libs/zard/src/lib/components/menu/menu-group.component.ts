@@ -6,32 +6,28 @@ import { mergeClasses } from '../../shared/utils/utils';
 import { menuGroupTitleVariants, menuGroupVariants, ZardMenuGroupVariants } from './menu.variants';
 
 @Component({
-  selector: 'z-menu-group',
+  selector: 'li[z-menu-group]',
   exportAs: 'zMenuGroup',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <li [class]="classes()" role="presentation">
-      @if (zTitle()) {
-        <div [class]="titleClasses()">{{ zTitle() }}</div>
-      }
-      <ul role="group">
-        <ng-content></ng-content>
-      </ul>
-    </li>
+    @if (zTitle()) {
+      <div [class]="titleClasses()">{{ zTitle() }}</div>
+    }
+    <ng-content></ng-content>
   `,
   host: {
-    '[attr.data-menu-group]': 'true',
+    '[class]': 'classes()',
+    role: 'presentation',
   },
 })
 export class ZardMenuGroupComponent {
   readonly zTitle = input<string>('');
   readonly zLevel = input<number>(1);
-
   readonly class = input<ClassValue>('');
 
-  private mode = computed(() => 'vertical' as ZardMenuGroupVariants['zMode']);
+  private readonly mode = computed(() => 'vertical' as ZardMenuGroupVariants['zMode']);
 
   protected readonly classes = computed(() =>
     mergeClasses(

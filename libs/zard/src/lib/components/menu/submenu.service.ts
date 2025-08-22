@@ -1,44 +1,28 @@
-import { Injectable, signal, inject, DestroyRef } from '@angular/core';
+import { Injectable, signal, inject, computed, effect } from '@angular/core';
 import { Subject, combineLatest } from 'rxjs';
-import { map, auditTime, distinctUntilChanged, startWith } from 'rxjs/operators';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { auditTime, map } from 'rxjs/operators';
 import { ZardMenuVariants } from './menu.variants';
 
 @Injectable()
 export class ZardSubmenuService {
   private readonly parentService = inject(ZardSubmenuService, { optional: true, skipSelf: true });
-  private readonly destroyRef = inject(DestroyRef);
 
-  // Subjects for RxJS-based state management
-  private readonly mouseEnterTitle$ = new Subject<boolean>();
-  private readonly mouseEnterOverlay$ = new Subject<boolean>();
-  private readonly childOpen$ = new Subject<boolean>();
-
-  // Signals for basic state
+  // Core state signals
   private readonly _mode = signal<ZardMenuVariants['zMode']>('vertical');
-  private readonly _isOpen = signal(false);
   private readonly _level = signal<number>(1);
+  private readonly _childOpen = signal(false);
+  private readonly _manualOpen = signal(false);
 
-  // Computed observables following ng-zorro pattern
-  private readonly isCurrentSubMenuOpen$ = combineLatest([this.mouseEnterTitle$.pipe(startWith(false)), this.mouseEnterOverlay$.pipe(startWith(false))]).pipe(
-    map(([titleHover, overlayHover]) => titleHover || overlayHover),
-    distinctUntilChanged(),
-  );
-
-  private readonly isChildSubMenuOpen$ = this.childOpen$.pipe(startWith(false), distinctUntilChanged());
-
-  // Combined state with debouncing like ng-zorro
-  readonly shouldOpen$ = combineLatest([this.isChildSubMenuOpen$, this.isCurrentSubMenuOpen$]).pipe(
-    map(([isChildOpen, isCurrentOpen]) => isChildOpen || isCurrentOpen),
-    auditTime(150), // Debounce like ng-zorro
-    distinctUntilChanged(),
-    takeUntilDestroyed(this.destroyRef),
-  );
+  // RxJS-based mouse state management (ng-zorro pattern)
+  private readonly isMouseEnterTitleOrOverlay$ = new Subject<boolean>();
+  private readonly _isOpen = signal(false);
 
   // Read-only signals
   readonly mode = this._mode.asReadonly();
-  readonly isOpen = this._isOpen.asReadonly();
   readonly level = this._level.asReadonly();
+
+  // Computed state for determining if submenu should be open
+  readonly isOpen = computed(() => this._isOpen());
 
   constructor() {
     // Set level based on parent service
@@ -49,47 +33,66 @@ export class ZardSubmenuService {
       this._level.set(1);
     }
 
-    // Subscribe to the combined state
-    this.shouldOpen$.subscribe(shouldOpen => {
-      this._isOpen.set(shouldOpen);
-      // Notify parent service
+    // Setup RxJS stream for mouse hover with debouncing (ng-zorro pattern)
+    const isCurrentSubmenuOpen$ = this.isMouseEnterTitleOrOverlay$.pipe(map(value => value));
+
+    const isChildSubMenuOpen$ = new Subject<boolean>();
+
+    // Subscribe to child open state changes
+    effect(() => {
+      isChildSubMenuOpen$.next(this._childOpen());
+    });
+
+    // Combine mouse enter state with child submenu state and apply debouncing
+    const isSubMenuOpenWithDebounce$ = combineLatest([isChildSubMenuOpen$, isCurrentSubmenuOpen$]).pipe(
+      map(([isChildSubMenuOpen, isCurrentSubmenuOpen]) => {
+        if (this._mode() === 'inline') {
+          return this._manualOpen();
+        }
+        return isChildSubMenuOpen || isCurrentSubmenuOpen || this._manualOpen();
+      }),
+      auditTime(150), // 150ms debounce like ng-zorro
+    );
+
+    // Subscribe to the debounced stream and update the signal
+    isSubMenuOpenWithDebounce$.subscribe(isOpen => {
+      this._isOpen.set(isOpen);
+    });
+
+    // Effect to notify parent when this submenu's state changes
+    effect(() => {
+      const isOpen = this.isOpen();
       if (this.parentService) {
-        this.parentService.setChildOpen(shouldOpen);
+        this.parentService.setChildOpen(isOpen);
       }
     });
   }
 
   updateMode(mode: ZardMenuVariants['zMode']): void {
     this._mode.set(mode);
-  }
-
-  // Methods following ng-zorro pattern
-  setMouseEnterTitleOrOverlayState(value: boolean): void {
-    if (this._mode() !== 'inline') {
-      this.mouseEnterTitle$.next(value);
+    if (mode === 'inline') {
+      this.isMouseEnterTitleOrOverlay$.next(false);
     }
   }
 
-  setMouseEnterOverlayState(value: boolean): void {
+  setMouseEnterTitleOrOverlayState(value: boolean): void {
     if (this._mode() !== 'inline') {
-      this.mouseEnterOverlay$.next(value);
+      this.isMouseEnterTitleOrOverlay$.next(value);
     }
   }
 
   setChildOpen(open: boolean): void {
-    this.childOpen$.next(open);
+    this._childOpen.set(open);
   }
 
-  // Manual open/close for click interactions
   toggleOpen(): void {
-    const currentOpen = this._isOpen();
-    this._isOpen.set(!currentOpen);
-    this.mouseEnterTitle$.next(!currentOpen);
+    const currentOpen = this._manualOpen();
+    this._manualOpen.set(!currentOpen);
   }
 
   forceClose(): void {
     this._isOpen.set(false);
-    this.mouseEnterTitle$.next(false);
-    this.mouseEnterOverlay$.next(false);
+    this._manualOpen.set(false);
+    this.isMouseEnterTitleOrOverlay$.next(false);
   }
 }
