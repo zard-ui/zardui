@@ -42,7 +42,7 @@ export class HeaderComponent {
   handleKeyboardShortcut(event: KeyboardEvent) {
     if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === 'k') {
       event.preventDefault();
-      this.docResearcher.openCommandDialog();
+      this.docResearcher().openCommandDialog();
     }
   }
 }

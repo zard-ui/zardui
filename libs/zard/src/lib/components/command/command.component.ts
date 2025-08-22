@@ -75,7 +75,7 @@ export interface ZardCommandConfig {
     },
   ],
 })
-export class ZardCommandComponent implements ControlValueAccessor, AfterContentInit {
+export class ZardCommandComponent implements ControlValueAccessor {
   readonly commandInput = contentChild(ZardCommandInputComponent);
   readonly optionComponents = contentChildren(ZardCommandOptionComponent, { descendants: true });
 
@@ -133,7 +133,7 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
     // ControlValueAccessor implementation
   };
 
-  ngAfterContentInit() {
+  constructor() {
     effect(() => {
       this.triggerOptionsUpdate();
     });

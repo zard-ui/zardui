@@ -87,7 +87,7 @@ export class ZardSegmentedItemComponent {
     },
   ],
 })
-export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, AfterContentInit {
+export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
   private readonly itemComponents = contentChildren(ZardSegmentedItemComponent);
 
   readonly class = input<ClassValue>('');
@@ -107,21 +107,17 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, Aft
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onTouched = () => {};
 
+  constructor() {
+    effect(() => {
+      this.items.set(this.itemComponents());
+    });
+  }
+
   ngOnInit() {
     // Initialize with default value
     if (this.zDefaultValue()) {
       this.selectedValue.set(this.zDefaultValue());
     }
-  }
-
-  ngAfterContentInit() {
-    effect(() => {
-      const components = this.itemComponents(); // readonly array
-      this.items.set(components); // atualiza o signal
-    });
-  }
-  private updateItems() {
-    this.items.set(this.itemComponents());
   }
 
   protected readonly classes = computed(() => mergeClasses(segmentedVariants({ zSize: this.zSize() }), this.class()));
