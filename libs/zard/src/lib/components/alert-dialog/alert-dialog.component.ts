@@ -12,7 +12,7 @@ import {
   signal,
   TemplateRef,
   Type,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
@@ -113,7 +113,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 
-  @ViewChild(CdkPortalOutlet, { static: true }) portalOutlet!: CdkPortalOutlet;
+  readonly portalOutlet = viewChild.required(CdkPortalOutlet);
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
@@ -132,18 +132,18 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   }
 
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
-    if (this.portalOutlet?.hasAttached()) {
+    if (this.portalOutlet()?.hasAttached()) {
       throw Error('Attempting to attach alert dialog content after content is already attached');
     }
-    return this.portalOutlet?.attachComponentPortal(portal);
+    return this.portalOutlet()?.attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
-    if (this.portalOutlet?.hasAttached()) {
+    if (this.portalOutlet()?.hasAttached()) {
       throw Error('Attempting to attach alert dialog content after content is already attached');
     }
 
-    return this.portalOutlet?.attachTemplatePortal(portal);
+    return this.portalOutlet()?.attachTemplatePortal(portal);
   }
 
   onOkClick() {

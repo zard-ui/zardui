@@ -1,23 +1,22 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
-
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
-  ContentChildren,
+  contentChildren,
+  effect,
   forwardRef,
   input,
   OnInit,
   output,
-  QueryList,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { segmentedItemVariants, segmentedVariants, ZardSegmentedVariants } from './segmented.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export interface SegmentedOption {
   value: string;
@@ -89,8 +88,7 @@ export class ZardSegmentedItemComponent {
   ],
 })
 export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, AfterContentInit {
-  @ContentChildren(ZardSegmentedItemComponent)
-  private readonly itemComponents!: QueryList<ZardSegmentedItemComponent>;
+  private readonly itemComponents = contentChildren(ZardSegmentedItemComponent);
 
   readonly class = input<ClassValue>('');
   readonly zSize = input<ZardSegmentedVariants['zSize']>('default');
@@ -102,7 +100,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, Aft
   readonly zChange = output<string>();
 
   protected readonly selectedValue = signal<string>('');
-  protected readonly items = signal<ZardSegmentedItemComponent[]>([]);
+  protected readonly items = signal<readonly ZardSegmentedItemComponent[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onChange: (value: string) => void = () => {};
@@ -117,14 +115,13 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, Aft
   }
 
   ngAfterContentInit() {
-    this.updateItems();
-    this.itemComponents.changes.subscribe(() => {
-      this.updateItems();
+    effect(() => {
+      const components = this.itemComponents(); // readonly array
+      this.items.set(components); // atualiza o signal
     });
   }
-
   private updateItems() {
-    this.items.set(this.itemComponents.toArray());
+    this.items.set(this.itemComponents());
   }
 
   protected readonly classes = computed(() => mergeClasses(segmentedVariants({ zSize: this.zSize() }), this.class()));

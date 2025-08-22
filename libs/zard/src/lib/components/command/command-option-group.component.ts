@@ -1,11 +1,10 @@
+import { AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { AfterContentInit, ChangeDetectionStrategy, Component, computed, ContentChildren, inject, input, QueryList, ViewEncapsulation } from '@angular/core';
-
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardCommandComponent } from './command.component';
-import { ZardCommandOptionComponent } from './command-option.component';
 import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
+import { ZardCommandOptionComponent } from './command-option.component';
+import { ZardCommandComponent } from './command.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-option-group',
@@ -31,8 +30,7 @@ import { commandGroupHeadingVariants, commandGroupVariants } from './command.var
 export class ZardCommandOptionGroupComponent implements AfterContentInit {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
 
-  @ContentChildren(ZardCommandOptionComponent, { descendants: true })
-  optionComponents!: QueryList<ZardCommandOptionComponent>;
+  readonly optionComponents = contentChildren(ZardCommandOptionComponent, { descendants: true });
 
   readonly zLabel = input.required<string>();
   readonly class = input<ClassValue>('');
@@ -51,7 +49,7 @@ export class ZardCommandOptionGroupComponent implements AfterContentInit {
     if (searchTerm === '') return true;
 
     // Check if any option in this group is in the filtered list
-    return this.optionComponents.some(option => filteredOptions.includes(option));
+    return this.optionComponents().some(option => filteredOptions.includes(option));
   });
 
   ngAfterContentInit() {

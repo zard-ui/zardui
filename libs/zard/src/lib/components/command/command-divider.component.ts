@@ -28,7 +28,7 @@ export class ZardCommandDividerComponent {
   protected readonly shouldShow = computed(() => {
     if (!this.commandComponent) return true;
 
-    const searchTerm = this.commandComponent.searchTerm();
+    const searchTerm = this.commandComponent().searchTerm();
 
     // If no search, always show dividers
     if (searchTerm === '') return true;

@@ -1,6 +1,3 @@
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,14 +13,16 @@ import {
   output,
   signal,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { TemplatePortal } from '@angular/cdk/portal';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardSelectItemComponent } from './select-item.component';
 import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
+import { ZardSelectItemComponent } from './select-item.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-select, [z-select]',
@@ -79,7 +78,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private viewContainerRef = inject(ViewContainerRef);
 
-  @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate!: TemplateRef<any>;
+  readonly dropdownTemplate = viewChild.required<TemplateRef<any>>('dropdownTemplate');
 
   readonly selectItems = contentChildren(ZardSelectItemComponent);
 
@@ -230,7 +229,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
     if (!this.overlayRef) return;
 
-    this.portal = new TemplatePortal(this.dropdownTemplate, this.viewContainerRef);
+    this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
     this.overlayRef.attach(this.portal);
     this.isOpen.set(true);
 

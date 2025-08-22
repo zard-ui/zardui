@@ -1,6 +1,6 @@
 import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { Component, computed, input, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, computed, input, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { dropdownContentVariants } from './dropdown.variants';
@@ -19,7 +19,7 @@ import { dropdownContentVariants } from './dropdown.variants';
   `,
 })
 export class ZardDropdownMenuContentComponent {
-  @ViewChild('contentTemplate', { static: true }) contentTemplate!: TemplateRef<unknown>;
+  readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('contentTemplate');
 
   readonly class = input<ClassValue>('');
 

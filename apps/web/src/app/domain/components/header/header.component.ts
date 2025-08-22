@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, HostListener, ViewChild } from '@angular/core';
+import { Component, inject, OnInit, HostListener, viewChild } from '@angular/core';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
@@ -21,7 +21,7 @@ import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
   imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe, DocResearcherComponent],
 })
 export class HeaderComponent {
-  @ViewChild(DocResearcherComponent) docResearcher!: DocResearcherComponent;
+  readonly docResearcher = viewChild.required(DocResearcherComponent);
 
   readonly headerPaths = HEADER_PATHS;
   readonly githubData = SOCIAL_MEDIAS.find(media => media.name === 'GitHub');
