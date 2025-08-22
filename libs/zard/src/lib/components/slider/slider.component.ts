@@ -22,7 +22,7 @@ import {
 import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ClassValue } from 'class-variance-authority/dist/types';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 
 import { sliderOrientationVariants, sliderRangeVariants, sliderThumbVariants, sliderTrackVariants, sliderVariants } from './slider.variants';
 import { clamp, roundToStep, convertValueToPercentage } from '../../shared/utils/number';
@@ -36,7 +36,7 @@ type OnChangeType = (value: number) => void;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <span #track data-slot="slider-track" [attr.data-orientation]="orientation()" [class]="classes()">
       <ng-content></ng-content>
@@ -65,7 +65,7 @@ export class ZSliderTrackComponent {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <span
       data-slot="slider-range"
@@ -92,7 +92,7 @@ export class ZSliderRangeComponent {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <span
       #thumb
@@ -139,7 +139,7 @@ export class ZSliderThumbComponent {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, ZSliderTrackComponent, ZSliderRangeComponent, ZSliderThumbComponent],
+  imports: [ZSliderTrackComponent, ZSliderRangeComponent, ZSliderThumbComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

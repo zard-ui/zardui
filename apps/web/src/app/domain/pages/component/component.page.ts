@@ -10,7 +10,6 @@ import { Step } from '@zard/shared/constants/install.constant';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
 
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
@@ -19,7 +18,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [CommonModule, DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
+  imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
 })
 export class ComponentPage {
   private readonly titleService = inject(Title);

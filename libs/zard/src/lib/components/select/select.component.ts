@@ -1,6 +1,6 @@
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { NgIf } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -29,7 +29,7 @@ import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants
   selector: 'z-select, [z-select]',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf, OverlayModule],
+  imports: [OverlayModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -55,10 +55,11 @@ import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants
       [attr.data-placeholder]="!selectedValue() ? '' : null"
     >
       <span class="flex items-center gap-2">
-        <span *ngIf="selectedValue(); else placeholderTemplate">{{ selectedLabel() }}</span>
-        <ng-template #placeholderTemplate>
+        @if (selectedValue()) {
+          <span>{{ selectedLabel() }}</span>
+        } @else {
           <span class="text-muted-foreground">{{ placeholder() }}</span>
-        </ng-template>
+        }
       </span>
       <i class="icon-chevron-down size-4 opacity-50"></i>
     </button>

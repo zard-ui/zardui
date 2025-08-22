@@ -25,7 +25,7 @@ export type zAlign = 'center' | 'start' | 'end';
 @Component({
   selector: 'z-tab',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <ng-template #content>
       <ng-content></ng-content>

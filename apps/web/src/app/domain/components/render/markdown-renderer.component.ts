@@ -4,7 +4,6 @@ import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
 import { MarkdownService } from '@zard/shared/services/markdown.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'z-markdown-renderer',
@@ -25,7 +24,7 @@ import { CommonModule } from '@angular/common';
     </div>
   `,
   standalone: true,
-  imports: [CommonModule, ZardLoaderComponent],
+  imports: [ZardLoaderComponent],
 })
 export class MarkdownRendererComponent implements OnChanges, OnInit {
   @Input() markdownUrl!: string;

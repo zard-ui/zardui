@@ -56,7 +56,7 @@ export class ZardAlertDialogOptions<T> {
   selector: 'z-alert-dialog',
   exportAs: 'zAlertDialog',
   standalone: true,
-  imports: [OverlayModule, PortalModule, ZardButtonComponent, CommonModule, A11yModule],
+  imports: [OverlayModule, PortalModule, ZardButtonComponent, A11yModule],
   templateUrl: './alert-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

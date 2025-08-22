@@ -1,4 +1,3 @@
-import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -9,7 +8,7 @@ import { selectItemVariants } from './select.variants';
   selector: 'z-select-item, [z-select-item]',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf],
+  imports: [],
   host: {
     '[class]': 'classes()',
     '[attr.value]': 'value()',
@@ -22,7 +21,9 @@ import { selectItemVariants } from './select.variants';
   },
   template: `
     <span class="absolute right-2 flex size-3.5 items-center justify-center">
-      <i *ngIf="isSelected()" class="icon-check size-2 contents"></i>
+      @if (isSelected()) {
+        <i class="icon-check size-2 contents"></i>
+      }
     </span>
     <ng-content></ng-content>
   `,

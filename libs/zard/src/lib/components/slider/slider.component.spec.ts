@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { CommonModule } from '@angular/common';
+
 import { By } from '@angular/platform-browser';
 import { Component } from '@angular/core';
 
@@ -8,7 +8,7 @@ import { ZardSliderComponent, ZSliderRangeComponent, ZSliderThumbComponent, ZSli
 @Component({
   selector: 'test-slider-host',
   standalone: true,
-  imports: [CommonModule, ZardSliderComponent],
+  imports: [ZardSliderComponent],
   template: ` <z-slider [zMin]="min" [zMax]="max" [zStep]="step" [zValue]="value" [zOrientation]="orientation" [zDisabled]="disabled" [zDefault]="default"></z-slider> `,
 })
 class TestHostComponent {
