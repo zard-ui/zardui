@@ -4,6 +4,7 @@ import { toast } from 'ngx-sonner';
 import { ZardButtonComponent } from '../../button/button.component';
 
 @Component({
+  selector: 'zard-demo-toast-success',
   standalone: true,
   imports: [ZardButtonComponent],
   template: ` <button z-button zType="outline" (click)="showToast()">Show Success Toast</button> `,
