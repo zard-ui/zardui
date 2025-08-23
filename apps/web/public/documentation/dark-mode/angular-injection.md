@@ -15,7 +15,7 @@ import { DarkModeService } from '../services/darkmode.service';
       <p>Current theme: {{ getCurrentTheme() }}</p>
       <button (click)="toggleTheme()">Toggle Theme</button>
     </div>
-  `
+  `,
 })
 export class MyComponent {
   private darkModeService = inject(DarkModeService);
@@ -38,10 +38,10 @@ import { DarkModeService } from '../services/darkmode.service';
 
 @Component({
   selector: 'app-my-component',
-  template: `<!-- template -->`
+  template: `<!-- template -->`,
 })
 export class MyComponent {
-  constructor(private darkModeService: DarkModeService) {}
+  private readonly darkModeService = inject(DarkModeService);
 
   toggleTheme(): void {
     this.darkModeService.toggleTheme();
@@ -58,7 +58,7 @@ import { DarkModeService } from '../services/darkmode.service';
 @Component({
   selector: 'app-standalone',
   template: `<!-- template -->`,
-  standalone: true
+  standalone: true,
 })
 export class StandaloneComponent {
   protected darkModeService = inject(DarkModeService);
@@ -73,7 +73,7 @@ import { DarkModeService } from '../services/darkmode.service';
 
 @Directive({
   selector: '[appThemeAware]',
-  standalone: true
+  standalone: true,
 })
 export class ThemeAwareDirective implements OnInit {
   private darkModeService = inject(DarkModeService);

@@ -1,5 +1,5 @@
 // markdown-renderer.component.ts
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
 import { MarkdownService } from '@zard/shared/services/markdown.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
@@ -27,18 +27,16 @@ import { HttpClient } from '@angular/common/http';
   imports: [ZardLoaderComponent],
 })
 export class MarkdownRendererComponent implements OnChanges, OnInit {
+  private readonly markdownService = inject(MarkdownService);
+  private readonly sanitizer = inject(DomSanitizer);
+  private readonly http = inject(HttpClient);
+
   @Input() markdownUrl!: string;
   @Input() theme: 'light' | 'dark' = 'light';
 
   processedHtml: SafeHtml = '';
   loading = false;
   error: string | null = null;
-
-  constructor(
-    private markdownService: MarkdownService,
-    private sanitizer: DomSanitizer,
-    private http: HttpClient,
-  ) {}
 
   ngOnInit() {
     if (this.markdownUrl) {

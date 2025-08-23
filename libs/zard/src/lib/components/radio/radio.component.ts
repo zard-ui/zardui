@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, input, output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ClassValue } from 'class-variance-authority/dist/types';
 import { NgClass } from '@angular/common';
@@ -48,6 +48,8 @@ type OnChangeType = (value: unknown) => void;
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardRadioComponent implements ControlValueAccessor {
+  private cdr = inject(ChangeDetectorRef);
+
   readonly radioChange = output<boolean>();
   readonly class = input<ClassValue>('');
   readonly disabled = input(false, { transform });
@@ -76,8 +78,6 @@ export class ZardRadioComponent implements ControlValueAccessor {
   });
 
   checked = false;
-
-  constructor(private cdr: ChangeDetectorRef) {}
 
   writeValue(val: unknown): void {
     this.checked = val === this.value();

@@ -22,6 +22,9 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 })
 export class ComponentPage {
   private readonly titleService = inject(Title);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly dynamicInstallationService = inject(DynamicInstallationService);
   activeAnchor?: string;
   componentData?: ComponentData;
   navigationConfig: NavigationConfig = {
@@ -35,11 +38,7 @@ export class ComponentPage {
   activeTab = signal<'manual' | 'cli'>('cli');
   installGuide!: { manual: Step[]; cli: Step[] } | undefined;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private dynamicInstallationService: DynamicInstallationService,
-  ) {
+  constructor() {
     this.activatedRoute.params.subscribe(() => {
       this.loadData();
     });

@@ -1,12 +1,12 @@
-import { Component, computed, effect, signal } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { BannerComponent } from '@zard/domain/components/banner/banner.component';
-import { FooterComponent } from '@zard/domain/components/footer/footer.component';
-import { HeaderComponent } from '@zard/domain/components/header/header.component';
 import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
+import { HeaderComponent } from '@zard/domain/components/header/header.component';
+import { FooterComponent } from '@zard/domain/components/footer/footer.component';
+import { BannerComponent } from '@zard/domain/components/banner/banner.component';
 import { ZardToastComponent } from '@zard/components/toast/toast.component';
+import { Component, computed, effect, inject, signal } from '@angular/core';
 import { DarkModeService } from '@zard/shared/services/darkmode.service';
 import { environment } from '@zard/env/environment';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'z-documentation',
@@ -35,13 +35,14 @@ import { environment } from '@zard/env/environment';
   imports: [RouterModule, HeaderComponent, FooterComponent, BannerComponent, SidebarComponent, ZardToastComponent],
 })
 export class DocumentationLayout {
+  private readonly darkModeService = inject(DarkModeService);
   readonly isDevEnv = !environment.production;
   readonly isDevMode = environment.devMode;
 
   private readonly themeSignal = signal<'light' | 'dark'>('light');
   readonly currentTheme = computed(() => this.themeSignal());
 
-  constructor(private readonly darkModeService: DarkModeService) {
+  constructor() {
     // Initialize theme signal with current theme
     this.themeSignal.set(this.darkModeService.getCurrentTheme());
 
