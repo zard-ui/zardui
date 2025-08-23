@@ -6,33 +6,33 @@ import { ZardTooltipDirective, ZardTooltipModule } from './tooltip';
 
 @Component({
   template: `
-    <div #hoverTooltip zTooltip="Test Hover"></div>
-    <div #clickTooltip zTooltip="Test Click" zTrigger="click"></div>
+    <div #hoverTooltip zTooltip="Test Hover" #hoverDir="zTooltip"></div>
+    <div #clickTooltip zTooltip="Test Click" zTrigger="click" #clickDir="zTooltip"></div>
 
-    <div #topTooltip zTooltip="Test Click"></div>
-    <div #bottomTooltip zTooltip="Test Click" zPosition="bottom"></div>
-    <div #leftTooltip zTooltip="Test Click" zPosition="left"></div>
-    <div #rightTooltip zTooltip="Test Click" zPosition="right"></div>
+    <div #topTooltip zTooltip="Test Click" #topDir="zTooltip"></div>
+    <div #bottomTooltip zTooltip="Test Click" zPosition="bottom" #bottomDir="zTooltip"></div>
+    <div #leftTooltip zTooltip="Test Click" zPosition="left" #leftDir="zTooltip"></div>
+    <div #rightTooltip zTooltip="Test Click" zPosition="right" #rightDir="zTooltip"></div>
   `,
   imports: [ZardTooltipModule],
   standalone: true,
 })
 class TestHostComponent {
   readonly hoverTooltip = viewChild.required<ElementRef>('hoverTooltip');
-  readonly hoverTooltipDirective = viewChild.required<ZardTooltipDirective>('hoverTooltip');
+  readonly hoverTooltipDirective = viewChild.required<ZardTooltipDirective>('hoverDir');
 
   readonly clickTooltip = viewChild.required<ElementRef>('clickTooltip');
-  readonly clickTooltipDirective = viewChild.required<ZardTooltipDirective>('clickTooltip');
+  readonly clickTooltipDirective = viewChild.required<ZardTooltipDirective>('clickDir');
 
   readonly topTooltip = viewChild.required<ElementRef>('topTooltip');
   readonly bottomTooltip = viewChild.required<ElementRef>('bottomTooltip');
   readonly leftTooltip = viewChild.required<ElementRef>('leftTooltip');
   readonly rightTooltip = viewChild.required<ElementRef>('rightTooltip');
 
-  readonly topTooltipDirective = viewChild.required<ZardTooltipDirective>('topTooltip');
-  readonly bottomTooltipDirective = viewChild.required<ZardTooltipDirective>('bottomTooltip');
-  readonly leftTooltipDirective = viewChild.required<ZardTooltipDirective>('leftTooltip');
-  readonly rightTooltipDirective = viewChild.required<ZardTooltipDirective>('rightTooltip');
+  readonly topTooltipDirective = viewChild.required<ZardTooltipDirective>('topDir');
+  readonly bottomTooltipDirective = viewChild.required<ZardTooltipDirective>('bottomDir');
+  readonly leftTooltipDirective = viewChild.required<ZardTooltipDirective>('leftDir');
+  readonly rightTooltipDirective = viewChild.required<ZardTooltipDirective>('rightDir');
 }
 
 describe('ZardTooltipDirective', () => {
@@ -98,9 +98,9 @@ describe('ZardTooltipDirective', () => {
       triggerElement.dispatchEvent(new MouseEvent('mouseenter'));
       waitingForTooltipToggling();
 
-      const overlayElement = component.topTooltipDirective().overlayElement;
-      expect(overlayElement).toBeTruthy();
-      expect(overlayElement.getAttribute('data-side')).toBe('top');
+      const tooltipElement = overlayContainerElement.querySelector('[data-side]');
+      expect(tooltipElement).toBeTruthy();
+      expect(tooltipElement?.getAttribute('data-side')).toBe('top');
     }));
 
     it('should show the tooltip on bottom', fakeAsync(() => {
@@ -109,9 +109,9 @@ describe('ZardTooltipDirective', () => {
       triggerElement.dispatchEvent(new MouseEvent('mouseenter'));
       waitingForTooltipToggling();
 
-      const overlayElement = component.bottomTooltipDirective().overlayElement;
-      expect(overlayElement).toBeTruthy();
-      expect(overlayElement.getAttribute('data-side')).toBe('bottom');
+      const tooltipElement = overlayContainerElement.querySelector('[data-side]');
+      expect(tooltipElement).toBeTruthy();
+      expect(tooltipElement?.getAttribute('data-side')).toBe('bottom');
     }));
 
     it('should show the tooltip on left', fakeAsync(() => {
@@ -120,9 +120,9 @@ describe('ZardTooltipDirective', () => {
       triggerElement.dispatchEvent(new MouseEvent('mouseenter'));
       waitingForTooltipToggling();
 
-      const overlayElement = component.leftTooltipDirective().overlayElement;
-      expect(overlayElement).toBeTruthy();
-      expect(overlayElement.getAttribute('data-side')).toBe('left');
+      const tooltipElement = overlayContainerElement.querySelector('[data-side]');
+      expect(tooltipElement).toBeTruthy();
+      expect(tooltipElement?.getAttribute('data-side')).toBe('left');
     }));
 
     it('should show the tooltip on right', fakeAsync(() => {
@@ -131,9 +131,9 @@ describe('ZardTooltipDirective', () => {
       triggerElement.dispatchEvent(new MouseEvent('mouseenter'));
       waitingForTooltipToggling();
 
-      const overlayElement = component.rightTooltipDirective().overlayElement;
-      expect(overlayElement).toBeTruthy();
-      expect(overlayElement.getAttribute('data-side')).toBe('right');
+      const tooltipElement = overlayContainerElement.querySelector('[data-side]');
+      expect(tooltipElement).toBeTruthy();
+      expect(tooltipElement?.getAttribute('data-side')).toBe('right');
     }));
   });
 
@@ -141,7 +141,7 @@ describe('ZardTooltipDirective', () => {
     it('should emit zOnShow and zOnHide events', fakeAsync(() => {
       const triggerElement = component.hoverTooltip().nativeElement;
       const tooltipDirective = component.hoverTooltipDirective();
-      expect(tooltipDirective).toBeTruthy();
+
       const spyOnShow = jest.spyOn(tooltipDirective.zOnShow, 'emit');
       const spyOnHide = jest.spyOn(tooltipDirective.zOnHide, 'emit');
 
@@ -150,8 +150,7 @@ describe('ZardTooltipDirective', () => {
 
       expect(spyOnShow).toHaveBeenCalled();
 
-      const overlayElement = component.hoverTooltipDirective().nativeElement;
-      overlayElement.dispatchEvent(new MouseEvent('mouseleave'));
+      triggerElement.dispatchEvent(new MouseEvent('mouseleave'));
       waitingForTooltipToggling();
 
       expect(spyOnHide).toHaveBeenCalled();

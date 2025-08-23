@@ -28,6 +28,7 @@ export type ZardTooltipTriggers = 'click' | 'hover';
 
 @Directive({
   selector: '[zTooltip]',
+  exportAs: 'zTooltip',
   host: {
     style: 'cursor: pointer',
   },

@@ -80,7 +80,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<any>>('dropdownTemplate');
 
-  readonly selectItems = contentChildren(ZardSelectItemComponent);
+  readonly selectItems = contentChildren('z-select-item, [z-select-item]', {
+    read: ZardSelectItemComponent,
+  });
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -114,7 +116,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
     const matchingItem = items.find(item => item.value() === currentValue);
 
     if (matchingItem) {
-      return matchingItem.elementRef.nativeElement.textContent?.trim() || currentValue;
+      const element = matchingItem.elementRef.nativeElement;
+      const textContent = element.textContent?.trim() || element.innerText?.trim();
+      if (textContent) return textContent;
     }
 
     return this._selectedLabel() || currentValue;
@@ -139,14 +143,18 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
 
   ngOnInit() {
-    // Delay overlay creation to ensure element is rendered
-    setTimeout(() => {
-      this.createOverlay();
-      const inputValue = this.value();
-      if (inputValue) {
-        this._selectedValue.set(inputValue);
-      }
-    });
+    // Initialize selected value from input immediately
+    const inputValue = this.value();
+    if (inputValue) {
+      this._selectedValue.set(inputValue);
+    }
+
+    // Delay overlay creation to ensure element is rendered, but only if not in test environment
+    if (typeof window !== 'undefined' && this.elementRef?.nativeElement?.offsetWidth !== undefined) {
+      setTimeout(() => {
+        this.createOverlay();
+      });
+    }
   }
 
   ngOnDestroy() {

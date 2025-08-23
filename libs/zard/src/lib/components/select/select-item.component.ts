@@ -43,7 +43,8 @@ export class ZardSelectItemComponent {
   onClick() {
     if (this.disabled() || !this.select) return;
 
-    const label = this.elementRef.nativeElement.textContent?.trim() || '';
+    const element = this.elementRef.nativeElement;
+    const label = element.textContent?.trim() || element.innerText?.trim() || '';
     this.select.selectItem(this.value(), label);
   }
 }
