@@ -1,7 +1,3 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
-
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,10 +11,13 @@ import {
   output,
   signal,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { ClassValue } from 'class-variance-authority/dist/types';
+import { TemplatePortal } from '@angular/cdk/portal';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { dropdownContentVariants } from './dropdown.variants';
@@ -54,7 +53,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private viewContainerRef = inject(ViewContainerRef);
 
-  @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate!: TemplateRef<unknown>;
+  readonly dropdownTemplate = viewChild.required<TemplateRef<unknown>>('dropdownTemplate');
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -137,7 +136,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 
     if (!this.overlayRef) return;
 
-    this.portal = new TemplatePortal(this.dropdownTemplate, this.viewContainerRef);
+    this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
     this.overlayRef.attach(this.portal);
     this.isOpen.set(true);
     this.openChange.emit(true);

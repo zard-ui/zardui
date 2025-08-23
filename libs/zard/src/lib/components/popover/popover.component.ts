@@ -2,7 +2,7 @@ import { Subject } from 'rxjs';
 
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { CommonModule } from '@angular/common';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -364,7 +364,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 @Component({
   selector: 'z-popover',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `<ng-content></ng-content>`,
   host: {
     '[class]': 'classes()',

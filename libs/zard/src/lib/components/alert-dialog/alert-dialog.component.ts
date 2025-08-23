@@ -12,14 +12,13 @@ import {
   signal,
   TemplateRef,
   Type,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { filter, fromEvent, takeUntil } from 'rxjs';
-import { CommonModule } from '@angular/common';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClassValue } from 'clsx';
 
@@ -56,7 +55,7 @@ export class ZardAlertDialogOptions<T> {
   selector: 'z-alert-dialog',
   exportAs: 'zAlertDialog',
   standalone: true,
-  imports: [OverlayModule, PortalModule, ZardButtonComponent, CommonModule, A11yModule],
+  imports: [OverlayModule, PortalModule, ZardButtonComponent, A11yModule],
   templateUrl: './alert-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -113,7 +112,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 
-  @ViewChild(CdkPortalOutlet, { static: true }) portalOutlet!: CdkPortalOutlet;
+  readonly portalOutlet = viewChild.required(CdkPortalOutlet);
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
@@ -132,18 +131,18 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   }
 
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
-    if (this.portalOutlet?.hasAttached()) {
+    if (this.portalOutlet()?.hasAttached()) {
       throw Error('Attempting to attach alert dialog content after content is already attached');
     }
-    return this.portalOutlet?.attachComponentPortal(portal);
+    return this.portalOutlet()?.attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
-    if (this.portalOutlet?.hasAttached()) {
+    if (this.portalOutlet()?.hasAttached()) {
       throw Error('Attempting to attach alert dialog content after content is already attached');
     }
 
-    return this.portalOutlet?.attachTemplatePortal(portal);
+    return this.portalOutlet()?.attachTemplatePortal(portal);
   }
 
   onOkClick() {
@@ -168,7 +167,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 }
 
 @NgModule({
-  imports: [CommonModule, ZardButtonComponent, ZardAlertDialogComponent, OverlayModule, PortalModule, A11yModule],
+  imports: [ZardButtonComponent, ZardAlertDialogComponent, OverlayModule, PortalModule, A11yModule],
   providers: [ZardAlertDialogService],
 })
 export class ZardAlertDialogModule {}

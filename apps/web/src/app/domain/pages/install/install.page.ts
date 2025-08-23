@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -12,7 +11,7 @@ import { Installation, installations } from '@zard/shared/constants/install.cons
   selector: 'z-install',
   templateUrl: './install.page.html',
   standalone: true,
-  imports: [CommonModule, StepsComponent, DocContentComponent, DocHeadingComponent],
+  imports: [StepsComponent, DocContentComponent, DocHeadingComponent],
 })
 export class InstallPage implements OnInit {
   private readonly titleService = inject(Title);

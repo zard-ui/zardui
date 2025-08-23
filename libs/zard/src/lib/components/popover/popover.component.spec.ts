@@ -1,5 +1,5 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { Component, DebugElement, TemplateRef, ViewChild } from '@angular/core';
+import { Component, DebugElement, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -19,7 +19,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from './popover.component'
   imports: [ZardPopoverDirective, ZardPopoverComponent],
 })
 class TestComponent {
-  @ViewChild('popoverContent') popoverContent!: TemplateRef<unknown>;
+  readonly popoverContent = viewChild.required<TemplateRef<unknown>>('popoverContent');
   trigger: 'click' | 'hover' | null = 'click';
   placement: 'top' | 'bottom' | 'left' | 'right' = 'bottom';
 }
@@ -272,7 +272,7 @@ describe('ZardPopoverComponent standalone', () => {
   imports: [ZardPopoverDirective, ZardPopoverComponent],
 })
 class HoverTestComponent {
-  @ViewChild('popoverContent') popoverContent!: TemplateRef<unknown>;
+  readonly popoverContent = viewChild.required<TemplateRef<unknown>>('popoverContent');
 }
 
 describe('ZardPopoverComponent with hover trigger', () => {

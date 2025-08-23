@@ -1,6 +1,3 @@
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { NgIf } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,20 +13,22 @@ import {
   output,
   signal,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { TemplatePortal } from '@angular/cdk/portal';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardSelectItemComponent } from './select-item.component';
 import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
+import { ZardSelectItemComponent } from './select-item.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-select, [z-select]',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf, OverlayModule],
+  imports: [OverlayModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -55,10 +54,11 @@ import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants
       [attr.data-placeholder]="!selectedValue() ? '' : null"
     >
       <span class="flex items-center gap-2">
-        <span *ngIf="selectedValue(); else placeholderTemplate">{{ selectedLabel() }}</span>
-        <ng-template #placeholderTemplate>
+        @if (selectedValue()) {
+          <span>{{ selectedLabel() }}</span>
+        } @else {
           <span class="text-muted-foreground">{{ placeholder() }}</span>
-        </ng-template>
+        }
       </span>
       <i class="icon-chevron-down size-4 opacity-50"></i>
     </button>
@@ -78,9 +78,11 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private viewContainerRef = inject(ViewContainerRef);
 
-  @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate!: TemplateRef<any>;
+  readonly dropdownTemplate = viewChild.required<TemplateRef<any>>('dropdownTemplate');
 
-  readonly selectItems = contentChildren(ZardSelectItemComponent);
+  readonly selectItems = contentChildren('z-select-item, [z-select-item]', {
+    read: ZardSelectItemComponent,
+  });
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -114,7 +116,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
     const matchingItem = items.find(item => item.value() === currentValue);
 
     if (matchingItem) {
-      return matchingItem.elementRef.nativeElement.textContent?.trim() || currentValue;
+      const element = matchingItem.elementRef.nativeElement;
+      const textContent = element.textContent?.trim() || element.innerText?.trim();
+      if (textContent) return textContent;
     }
 
     return this._selectedLabel() || currentValue;
@@ -139,14 +143,18 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
 
   ngOnInit() {
-    // Delay overlay creation to ensure element is rendered
-    setTimeout(() => {
-      this.createOverlay();
-      const inputValue = this.value();
-      if (inputValue) {
-        this._selectedValue.set(inputValue);
-      }
-    });
+    // Initialize selected value from input immediately
+    const inputValue = this.value();
+    if (inputValue) {
+      this._selectedValue.set(inputValue);
+    }
+
+    // Delay overlay creation to ensure element is rendered, but only if not in test environment
+    if (typeof window !== 'undefined' && this.elementRef?.nativeElement?.offsetWidth !== undefined) {
+      setTimeout(() => {
+        this.createOverlay();
+      });
+    }
   }
 
   ngOnDestroy() {
@@ -229,7 +237,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
     if (!this.overlayRef) return;
 
-    this.portal = new TemplatePortal(this.dropdownTemplate, this.viewContainerRef);
+    this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
     this.overlayRef.attach(this.portal);
     this.isOpen.set(true);
 

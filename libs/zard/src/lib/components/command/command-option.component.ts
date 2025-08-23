@@ -1,10 +1,9 @@
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
-
+import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardCommandComponent } from './command.component';
-import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
 
 @Component({
   selector: 'z-command-option',

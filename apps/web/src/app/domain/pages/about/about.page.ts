@@ -1,18 +1,17 @@
-import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
-import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
-import { FoundersComponent, FounderData } from '@zard/domain/components/founders/founders.component';
-import { FoundersLoadingComponent } from '@zard/domain/components/founders/founders-loading.component';
-import { ContributorsComponent } from '@zard/domain/components/contributors/contributors.component';
 import { ContributorsLoadingComponent } from '@zard/domain/components/contributors/contributors-loading.component';
+import { FoundersLoadingComponent } from '@zard/domain/components/founders/founders-loading.component';
+import { FoundersComponent, FounderData } from '@zard/domain/components/founders/founders.component';
+import { ContributorsComponent } from '@zard/domain/components/contributors/contributors.component';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
 import { CreditCardComponent } from '@zard/domain/components/credit-card/credit-card.component';
+import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
+import { Component, inject } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
 
 import { Contributor, GithubService } from '../../../shared/services/github.service';
 
