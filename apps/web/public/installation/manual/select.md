@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="select.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -444,6 +446,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
 ```
 
+
+
 ```angular-ts title="select.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -464,7 +468,7 @@ export const selectTriggerVariants = cva(
 );
 
 export const selectContentVariants = cva(
-  'absolute top-full left-0 z-[9999] w-full max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-lg mt-1 animate-in fade-in-0 zoom-in-95',
+  'z-[9999] max-h-96 min-w-[8rem] overflow-x-hidden overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95',
 );
 
 export const selectItemVariants = cva(
@@ -476,6 +480,8 @@ export type ZardSelectContentVariants = VariantProps<typeof selectContentVariant
 export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 ```
+
+
 
 ```angular-ts title="select-item.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input } from '@angular/core';
@@ -530,3 +536,4 @@ export class ZardSelectItemComponent {
 }
 
 ```
+

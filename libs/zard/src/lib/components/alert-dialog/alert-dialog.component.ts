@@ -19,7 +19,6 @@ import {
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { filter, fromEvent, takeUntil } from 'rxjs';
-import { CommonModule } from '@angular/common';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClassValue } from 'clsx';
 
@@ -168,7 +167,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 }
 
 @NgModule({
-  imports: [CommonModule, ZardButtonComponent, ZardAlertDialogComponent, OverlayModule, PortalModule, A11yModule],
+  imports: [ZardButtonComponent, ZardAlertDialogComponent, OverlayModule, PortalModule, A11yModule],
   providers: [ZardAlertDialogService],
 })
 export class ZardAlertDialogModule {}

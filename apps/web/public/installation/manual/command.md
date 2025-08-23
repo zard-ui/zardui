@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="command.component.ts" copyButton showLineNumbers
 import {
   AfterContentInit,
@@ -259,6 +261,8 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
 ```
 
+
+
 ```angular-ts title="command.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -334,6 +338,8 @@ export type ZardCommandItemVariants = VariantProps<typeof commandItemVariants>;
 
 ```
 
+
+
 ```angular-ts title="command-divider.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
@@ -376,6 +382,8 @@ export class ZardCommandDividerComponent {
 }
 
 ```
+
+
 
 ```angular-ts title="command-empty.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -428,6 +436,8 @@ export class ZardCommandEmptyComponent {
 }
 
 ```
+
+
 
 ```angular-ts title="command-input.component.ts" copyButton showLineNumbers
 import {
@@ -604,6 +614,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 }
 
 ```
+
+
 
 ```angular-ts title="command-json.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
@@ -895,6 +907,8 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
 
 ```
 
+
+
 ```angular-ts title="command-list.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
@@ -922,6 +936,8 @@ export class ZardCommandListComponent {
 }
 
 ```
+
+
 
 ```angular-ts title="command-option-group.component.ts" copyButton showLineNumbers
 import { AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
@@ -984,6 +1000,8 @@ export class ZardCommandOptionGroupComponent implements AfterContentInit {
 }
 
 ```
+
+
 
 ```angular-ts title="command-option.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
@@ -1092,18 +1110,19 @@ export class ZardCommandOptionComponent {
 
 ```
 
-```angular-ts title="command.module.ts" copyButton showLineNumbers
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
-import { ZardCommandDividerComponent } from './command-divider.component';
-import { ZardCommandEmptyComponent } from './command-empty.component';
-import { ZardCommandInputComponent } from './command-input.component';
-import { ZardCommandJsonComponent } from './command-json.component';
-import { ZardCommandListComponent } from './command-list.component';
+
+```angular-ts title="command.module.ts" copyButton showLineNumbers
+import { FormsModule } from '@angular/forms';
+import { NgModule } from '@angular/core';
+
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
+import { ZardCommandDividerComponent } from './command-divider.component';
 import { ZardCommandOptionComponent } from './command-option.component';
+import { ZardCommandInputComponent } from './command-input.component';
+import { ZardCommandEmptyComponent } from './command-empty.component';
+import { ZardCommandListComponent } from './command-list.component';
+import { ZardCommandJsonComponent } from './command-json.component';
 import { ZardCommandComponent } from './command.component';
 
 const COMMAND_COMPONENTS = [
@@ -1118,9 +1137,10 @@ const COMMAND_COMPONENTS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, FormsModule, ...COMMAND_COMPONENTS],
+  imports: [FormsModule, ...COMMAND_COMPONENTS],
   exports: [...COMMAND_COMPONENTS],
 })
 export class ZardCommandModule {}
 
 ```
+

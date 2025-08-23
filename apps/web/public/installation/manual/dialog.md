@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="dialog.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -19,7 +21,6 @@ import {
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { filter, fromEvent, takeUntil } from 'rxjs';
-import { CommonModule } from '@angular/common';
 
 import { ZardButtonComponent } from '../button/button.component';
 import { mergeClasses } from '../../shared/utils/utils';
@@ -123,12 +124,26 @@ export class ZardDialogComponent<T> extends BasePortalOutlet {
 }
 
 @NgModule({
-  imports: [CommonModule, ZardButtonComponent, ZardDialogComponent, OverlayModule, PortalModule],
+  imports: [ZardButtonComponent, ZardDialogComponent, OverlayModule, PortalModule],
   providers: [ZardDialogService],
 })
 export class ZardDialogModule {}
 
 ```
+
+
+
+```angular-ts title="dialog.variants.ts" copyButton showLineNumbers
+import { cva, VariantProps } from 'class-variance-authority';
+
+export const dialogVariants = cva(
+  'fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg rounded-lg max-w-[calc(100%-2rem)] sm:max-w-[425px] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out',
+);
+export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
+
+```
+
+
 
 ```angular-ts title="dialog-ref.ts" copyButton showLineNumbers
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
@@ -206,6 +221,8 @@ export class ZardDialogRef<T = any, R = any> {
 
 ```
 
+
+
 ```angular-html title="dialog.component.html" copyButton showLineNumbers
 @if (config.zClosable || config.zClosable === undefined) {
   <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1" (click)="onCloseClick()">
@@ -258,6 +275,8 @@ export class ZardDialogRef<T = any, R = any> {
 }
 
 ```
+
+
 
 ```angular-ts title="dialog.service.ts" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
@@ -348,3 +367,4 @@ export class ZardDialogService {
 }
 
 ```
+

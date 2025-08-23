@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="accordion.component.ts" copyButton showLineNumbers
 import { AfterContentInit, ChangeDetectionStrategy, Component, contentChildren, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
@@ -86,6 +88,8 @@ export class ZardAccordionComponent implements AfterContentInit {
 
 ```
 
+
+
 ```angular-ts title="accordion-item.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
@@ -164,3 +168,4 @@ export class ZardAccordionItemComponent {
 }
 
 ```
+

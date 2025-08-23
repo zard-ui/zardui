@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="slider.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -389,6 +391,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
 ```
 
+
+
 ```angular-ts title="slider.variants.ts" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -466,3 +470,4 @@ export const sliderOrientationVariants = cva('absolute', {
 export type SliderOrientationVariants = VariantProps<typeof sliderOrientationVariants>;
 
 ```
+

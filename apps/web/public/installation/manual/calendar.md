@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="calendar.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, input, output, signal, viewChild, ViewEncapsulation } from '@angular/core';
 
@@ -595,6 +597,8 @@ export class ZardCalendarComponent {
 
 ```
 
+
+
 ```angular-ts title="calendar.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -703,3 +707,4 @@ export type ZardCalendarDayVariants = VariantProps<typeof calendarDayVariants>;
 export type ZardCalendarDayButtonVariants = VariantProps<typeof calendarDayButtonVariants>;
 
 ```
+

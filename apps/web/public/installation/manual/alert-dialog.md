@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="alert-dialog.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -20,7 +22,6 @@ import {
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { filter, fromEvent, takeUntil } from 'rxjs';
-import { CommonModule } from '@angular/common';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ClassValue } from 'clsx';
 
@@ -169,12 +170,14 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 }
 
 @NgModule({
-  imports: [CommonModule, ZardButtonComponent, ZardAlertDialogComponent, OverlayModule, PortalModule, A11yModule],
+  imports: [ZardButtonComponent, ZardAlertDialogComponent, OverlayModule, PortalModule, A11yModule],
   providers: [ZardAlertDialogService],
 })
 export class ZardAlertDialogModule {}
 
 ```
+
+
 
 ```angular-ts title="alert-dialog.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
@@ -195,6 +198,8 @@ export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)
 export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
 ```
+
+
 
 ```angular-ts title="alert-dialog-ref.ts" copyButton showLineNumbers
 import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
@@ -287,6 +292,8 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 ```
 
+
+
 ```angular-html title="alert-dialog.component.html" copyButton showLineNumbers
 <div class="flex flex-col gap-4 p-6" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   @if (config.zTitle || config.zDescription) {
@@ -325,6 +332,8 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 </div>
 
 ```
+
+
 
 ```angular-ts title="alert-dialog.service.ts" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
@@ -464,3 +473,4 @@ export class ZardAlertDialogService {
 }
 
 ```
+

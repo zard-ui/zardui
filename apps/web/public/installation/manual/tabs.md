@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="tabs.component.ts" copyButton showLineNumbers
 import {
   afterNextRender,
@@ -274,6 +276,8 @@ export class ZardTabGroupComponent {
 
 ```
 
+
+
 ```angular-ts title="tabs.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -357,3 +361,4 @@ export const tabButtonVariants = cva('hover:bg-transparent rounded-none flex-shr
 export type ZardTabVariants = VariantProps<typeof tabContainerVariants> & VariantProps<typeof tabNavVariants> & VariantProps<typeof tabButtonVariants> & { zAlignTabs: zAlign };
 
 ```
+
