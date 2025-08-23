@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="form.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
@@ -29,15 +27,31 @@ export class ZardFormFieldComponent {
   selector: 'z-form-control, [z-form-control]',
   exportAs: 'zFormControl',
   standalone: true,
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: '<ng-content></ng-content>',
+  template: `
+    <div class="relative">
+      <ng-content></ng-content>
+    </div>
+    @if (errorMessage() || helpText()) {
+      <div class="mt-1.5 min-h-[1.25rem]">
+        @if (errorMessage()) {
+          <p class="text-sm text-red-500">{{ errorMessage() }}</p>
+        } @else if (helpText()) {
+          <p class="text-sm text-muted-foreground">{{ helpText() }}</p>
+        }
+      </div>
+    }
+  `,
   host: {
     '[class]': 'classes()',
   },
 })
 export class ZardFormControlComponent {
   readonly class = input<ClassValue>('');
+  readonly errorMessage = input<string>('');
+  readonly helpText = input<string>('');
 
   protected readonly classes = computed(() => mergeClasses(formControlVariants(), this.class()));
 }
@@ -80,8 +94,6 @@ export class ZardFormMessageComponent {
 
 ```
 
-
-
 ```angular-ts title="form.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -118,8 +130,6 @@ export type ZardFormMessageVariants = VariantProps<typeof formMessageVariants>;
 
 ```
 
-
-
 ```angular-ts title="form.module.ts" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
@@ -134,4 +144,3 @@ const FORM_COMPONENTS = [ZardFormFieldComponent, ZardFormLabelComponent, ZardFor
 export class ZardFormModule {}
 
 ```
-

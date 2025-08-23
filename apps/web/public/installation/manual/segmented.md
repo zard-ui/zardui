@@ -1,26 +1,23 @@
-
-
 ```angular-ts title="segmented.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
-
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
-  ContentChildren,
+  contentChildren,
+  effect,
   forwardRef,
   input,
   OnInit,
   output,
-  QueryList,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { segmentedItemVariants, segmentedVariants, ZardSegmentedVariants } from './segmented.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export interface SegmentedOption {
   value: string;
@@ -91,9 +88,8 @@ export class ZardSegmentedItemComponent {
     },
   ],
 })
-export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, AfterContentInit {
-  @ContentChildren(ZardSegmentedItemComponent)
-  private readonly itemComponents!: QueryList<ZardSegmentedItemComponent>;
+export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
+  private readonly itemComponents = contentChildren(ZardSegmentedItemComponent);
 
   readonly class = input<ClassValue>('');
   readonly zSize = input<ZardSegmentedVariants['zSize']>('default');
@@ -105,29 +101,24 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, Aft
   readonly zChange = output<string>();
 
   protected readonly selectedValue = signal<string>('');
-  protected readonly items = signal<ZardSegmentedItemComponent[]>([]);
+  protected readonly items = signal<readonly ZardSegmentedItemComponent[]>([]);
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onChange: (value: string) => void = () => {};
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onTouched = () => {};
 
+  constructor() {
+    effect(() => {
+      this.items.set(this.itemComponents());
+    });
+  }
+
   ngOnInit() {
     // Initialize with default value
     if (this.zDefaultValue()) {
       this.selectedValue.set(this.zDefaultValue());
     }
-  }
-
-  ngAfterContentInit() {
-    this.updateItems();
-    this.itemComponents.changes.subscribe(() => {
-      this.updateItems();
-    });
-  }
-
-  private updateItems() {
-    this.items.set(this.itemComponents.toArray());
   }
 
   protected readonly classes = computed(() => mergeClasses(segmentedVariants({ zSize: this.zSize() }), this.class()));
@@ -179,8 +170,6 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit, Aft
 
 ```
 
-
-
 ```angular-ts title="segmented.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -222,4 +211,3 @@ export type ZardSegmentedVariants = VariantProps<typeof segmentedVariants>;
 export type ZardSegmentedItemVariants = VariantProps<typeof segmentedItemVariants>;
 
 ```
-

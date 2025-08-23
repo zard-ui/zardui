@@ -1,10 +1,4 @@
-
-
 ```angular-ts title="dropdown.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
-
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,10 +12,13 @@ import {
   output,
   signal,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { ClassValue } from 'class-variance-authority/dist/types';
+import { TemplatePortal } from '@angular/cdk/portal';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { dropdownContentVariants } from './dropdown.variants';
@@ -57,7 +54,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private viewContainerRef = inject(ViewContainerRef);
 
-  @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate!: TemplateRef<unknown>;
+  readonly dropdownTemplate = viewChild.required<TemplateRef<unknown>>('dropdownTemplate');
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -140,7 +137,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 
     if (!this.overlayRef) return;
 
-    this.portal = new TemplatePortal(this.dropdownTemplate, this.viewContainerRef);
+    this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
     this.overlayRef.attach(this.portal);
     this.isOpen.set(true);
     this.openChange.emit(true);
@@ -280,8 +277,6 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 
 ```
 
-
-
 ```angular-ts title="dropdown.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -325,8 +320,6 @@ export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>
 export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariants>;
 
 ```
-
-
 
 ```angular-ts title="dropdown-item.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
@@ -388,8 +381,6 @@ export class ZardDropdownMenuItemComponent {
 
 ```
 
-
-
 ```angular-ts title="dropdown-label.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
@@ -425,12 +416,10 @@ export class ZardDropdownMenuLabelComponent {
 
 ```
 
-
-
 ```angular-ts title="dropdown-menu-content.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { Component, computed, input, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Component, computed, input, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { dropdownContentVariants } from './dropdown.variants';
@@ -449,7 +438,7 @@ import { dropdownContentVariants } from './dropdown.variants';
   `,
 })
 export class ZardDropdownMenuContentComponent {
-  @ViewChild('contentTemplate', { static: true }) contentTemplate!: TemplateRef<unknown>;
+  readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('contentTemplate');
 
   readonly class = input<ClassValue>('');
 
@@ -457,8 +446,6 @@ export class ZardDropdownMenuContentComponent {
 }
 
 ```
-
-
 
 ```angular-ts title="dropdown-shortcut.component.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
@@ -485,8 +472,6 @@ export class ZardDropdownMenuShortcutComponent {
 }
 
 ```
-
-
 
 ```angular-ts title="dropdown-trigger.directive.ts" copyButton showLineNumbers
 import { Directive, ElementRef, HostListener, inject, input, OnInit, ViewContainerRef } from '@angular/core';
@@ -532,7 +517,7 @@ export class ZardDropdownDirective implements OnInit {
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
-      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate, this.viewContainerRef);
+      this.dropdownService.toggle(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
     }
   }
 
@@ -542,7 +527,7 @@ export class ZardDropdownDirective implements OnInit {
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
-      this.dropdownService.open(this.elementRef, menuContent.contentTemplate, this.viewContainerRef);
+      this.dropdownService.open(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
     }
   }
 
@@ -579,21 +564,19 @@ export class ZardDropdownDirective implements OnInit {
   private toggleDropdown() {
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
-      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate, this.viewContainerRef);
+      this.dropdownService.toggle(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
     }
   }
 
   private openDropdown() {
     const menuContent = this.zDropdownMenu();
     if (menuContent && !this.dropdownService.isOpen()) {
-      this.dropdownService.open(this.elementRef, menuContent.contentTemplate, this.viewContainerRef);
+      this.dropdownService.open(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
     }
   }
 }
 
 ```
-
-
 
 ```angular-ts title="dropdown.module.ts" copyButton showLineNumbers
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -623,8 +606,6 @@ const DROPDOWN_COMPONENTS = [
 export class ZardDropdownModule {}
 
 ```
-
-
 
 ```angular-ts title="dropdown.service.ts" copyButton showLineNumbers
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
@@ -830,4 +811,3 @@ export class ZardDropdownService {
 }
 
 ```
-

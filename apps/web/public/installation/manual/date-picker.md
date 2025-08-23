@@ -1,8 +1,6 @@
-
-
 ```angular-ts title="date-picker.component.ts" copyButton showLineNumbers
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
@@ -55,9 +53,9 @@ export type { ZardDatePickerVariants };
 export class ZardDatePickerComponent {
   private readonly datePipe = inject(DatePipe);
 
-  @ViewChild('calendarTemplate', { static: true }) calendarTemplate!: TemplateRef<unknown>;
-  @ViewChild('popoverDirective', { static: true }) popoverDirective!: ZardPopoverDirective;
-  @ViewChild('calendar', { static: false }) calendar!: ZardCalendarComponent;
+  readonly calendarTemplate = viewChild.required<TemplateRef<unknown>>('calendarTemplate');
+  readonly popoverDirective = viewChild.required<ZardPopoverDirective>('popoverDirective');
+  readonly calendar = viewChild.required<ZardCalendarComponent>('calendar');
 
   readonly class = input<ClassValue>('');
   readonly zType = input<ZardDatePickerVariants['zType']>('outline');
@@ -115,15 +113,15 @@ export class ZardDatePickerComponent {
   protected onDateChange(date: Date): void {
     this.dateChange.emit(date);
     // Close popover after selection using direct method call
-    this.popoverDirective.hide();
+    this.popoverDirective().hide();
   }
 
   protected onPopoverVisibilityChange(visible: boolean): void {
     if (visible) {
       // Reset calendar navigation when opening to show correct month/year
       setTimeout(() => {
-        if (this.calendar) {
-          this.calendar.resetNavigation();
+        if (this.calendar()) {
+          this.calendar().resetNavigation();
         }
       });
     }
@@ -135,8 +133,6 @@ export class ZardDatePickerComponent {
 }
 
 ```
-
-
 
 ```angular-ts title="date-picker.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
@@ -164,4 +160,3 @@ export { datePickerVariants };
 export type ZardDatePickerVariants = VariantProps<typeof datePickerVariants>;
 
 ```
-

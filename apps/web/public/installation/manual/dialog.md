@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="dialog.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -15,7 +13,7 @@ import {
   signal,
   TemplateRef,
   Type,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
@@ -74,7 +72,7 @@ export class ZardDialogComponent<T> extends BasePortalOutlet {
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 
-  @ViewChild(CdkPortalOutlet, { static: true }) portalOutlet!: CdkPortalOutlet;
+  readonly portalOutlet = viewChild.required(CdkPortalOutlet);
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
@@ -89,18 +87,18 @@ export class ZardDialogComponent<T> extends BasePortalOutlet {
   }
 
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
-    if (this.portalOutlet?.hasAttached()) {
+    if (this.portalOutlet()?.hasAttached()) {
       throw Error('Attempting to attach modal content after content is already attached');
     }
-    return this.portalOutlet?.attachComponentPortal(portal);
+    return this.portalOutlet()?.attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
-    if (this.portalOutlet?.hasAttached()) {
+    if (this.portalOutlet()?.hasAttached()) {
       throw Error('Attempting to attach modal content after content is already attached');
     }
 
-    return this.portalOutlet?.attachTemplatePortal(portal);
+    return this.portalOutlet()?.attachTemplatePortal(portal);
   }
 
   onOkClick() {
@@ -131,20 +129,6 @@ export class ZardDialogComponent<T> extends BasePortalOutlet {
 export class ZardDialogModule {}
 
 ```
-
-
-
-```angular-ts title="dialog.variants.ts" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
-
-export const dialogVariants = cva(
-  'fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg rounded-lg max-w-[calc(100%-2rem)] sm:max-w-[425px] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out',
-);
-export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
-
-```
-
-
 
 ```angular-ts title="dialog-ref.ts" copyButton showLineNumbers
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
@@ -222,8 +206,6 @@ export class ZardDialogRef<T = any, R = any> {
 
 ```
 
-
-
 ```angular-html title="dialog.component.html" copyButton showLineNumbers
 @if (config.zClosable || config.zClosable === undefined) {
   <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1" (click)="onCloseClick()">
@@ -276,8 +258,6 @@ export class ZardDialogRef<T = any, R = any> {
 }
 
 ```
-
-
 
 ```angular-ts title="dialog.service.ts" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
@@ -368,4 +348,3 @@ export class ZardDialogService {
 }
 
 ```
-

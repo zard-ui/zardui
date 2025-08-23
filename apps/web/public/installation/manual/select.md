@@ -1,36 +1,35 @@
-
-
 ```angular-ts title="select.component.ts" copyButton showLineNumbers
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { NgIf } from '@angular/common';
 import {
-    ChangeDetectionStrategy,
-    Component,
-    computed,
-    ElementRef,
-    forwardRef,
-    HostListener,
-    inject,
-    input,
-    OnDestroy,
-    OnInit,
-    output,
-    signal,
-    TemplateRef,
-    ViewChild,
-    ViewContainerRef
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  ElementRef,
+  forwardRef,
+  HostListener,
+  inject,
+  input,
+  OnDestroy,
+  OnInit,
+  output,
+  signal,
+  TemplateRef,
+  viewChild,
+  ViewContainerRef,
 } from '@angular/core';
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { TemplatePortal } from '@angular/cdk/portal';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
+import { ZardSelectItemComponent } from './select-item.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-select, [z-select]',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf, OverlayModule],
+  imports: [OverlayModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -44,7 +43,6 @@ import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants
     class: 'relative inline-block w-full',
   },
   template: `
-    <!-- Select Trigger -->
     <button
       type="button"
       [class]="triggerClasses()"
@@ -57,29 +55,15 @@ import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants
       [attr.data-placeholder]="!selectedValue() ? '' : null"
     >
       <span class="flex items-center gap-2">
-        <span *ngIf="selectedValue(); else placeholderTemplate">{{ selectedLabel() }}</span>
-        <ng-template #placeholderTemplate>
+        @if (selectedValue()) {
+          <span>{{ selectedLabel() }}</span>
+        } @else {
           <span class="text-muted-foreground">{{ placeholder() }}</span>
-        </ng-template>
+        }
       </span>
-      <svg
-        class="h-4 w-4 opacity-50 transition-transform"
-        [class.rotate-180]="isOpen()"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="m6 9 6 6 6-6" />
-      </svg>
+      <i class="icon-chevron-down size-4 opacity-50"></i>
     </button>
 
-    <!-- Template for overlay content -->
     <ng-template #dropdownTemplate>
       <div [class]="contentClasses()" role="listbox" [attr.data-state]="'open'" (keydown)="onDropdownKeydown($event)" tabindex="-1">
         <div class="p-1">
@@ -95,7 +79,11 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private viewContainerRef = inject(ViewContainerRef);
 
-  @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate!: TemplateRef<any>;
+  readonly dropdownTemplate = viewChild.required<TemplateRef<any>>('dropdownTemplate');
+
+  readonly selectItems = contentChildren('z-select-item, [z-select-item]', {
+    read: ZardSelectItemComponent,
+  });
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -116,7 +104,26 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
   // Use computed to derive the effective selected value from input or internal state
   readonly selectedValue = computed(() => this.value() || this._selectedValue());
-  readonly selectedLabel = computed(() => this.label() || this._selectedLabel());
+
+  // Compute the label based on selected value and available items
+  readonly selectedLabel = computed(() => {
+    const manualLabel = this.label();
+    if (manualLabel) return manualLabel;
+
+    const currentValue = this.selectedValue();
+    if (!currentValue) return '';
+
+    const items = this.selectItems();
+    const matchingItem = items.find(item => item.value() === currentValue);
+
+    if (matchingItem) {
+      const element = matchingItem.elementRef.nativeElement;
+      const textContent = element.textContent?.trim() || element.innerText?.trim();
+      if (textContent) return textContent;
+    }
+
+    return this._selectedLabel() || currentValue;
+  });
 
   private onChange = (_value: string) => {
     // ControlValueAccessor onChange callback
@@ -137,16 +144,18 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
 
   ngOnInit() {
-    // Delay overlay creation to ensure element is rendered
-    setTimeout(() => {
-      this.createOverlay();
-      // Initialize the internal value and label if we have a value input
-      const inputValue = this.value();
-      if (inputValue) {
-        this._selectedValue.set(inputValue);
-        this.updateLabelForValue(inputValue);
-      }
-    });
+    // Initialize selected value from input immediately
+    const inputValue = this.value();
+    if (inputValue) {
+      this._selectedValue.set(inputValue);
+    }
+
+    // Delay overlay creation to ensure element is rendered, but only if not in test environment
+    if (typeof window !== 'undefined' && this.elementRef?.nativeElement?.offsetWidth !== undefined) {
+      setTimeout(() => {
+        this.createOverlay();
+      });
+    }
   }
 
   ngOnDestroy() {
@@ -229,7 +238,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
     if (!this.overlayRef) return;
 
-    this.portal = new TemplatePortal(this.dropdownTemplate, this.viewContainerRef);
+    this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
     this.overlayRef.attach(this.portal);
     this.isOpen.set(true);
 
@@ -297,6 +306,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
         positionStrategy,
         hasBackdrop: false,
         scrollStrategy: this.overlay.scrollStrategies.reposition(),
+        width: elementWidth,
         minWidth: elementWidth,
         maxHeight: 384, // max-h-96 equivalent
       });
@@ -417,27 +427,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   writeValue(value: string | null): void {
     const stringValue = value || '';
     this._selectedValue.set(stringValue);
-
-    // Find and set the label for the given value
-    if (stringValue) {
-      setTimeout(() => {
-        this.updateLabelForValue(stringValue);
-      });
-    }
-  }
-
-  private updateLabelForValue(value: string): void {
-    // Find the select-item with the matching value and get its label
-    const items = Array.from(this.elementRef.nativeElement.querySelectorAll('z-select-item, [z-select-item]')) as HTMLElement[];
-    const matchingItem = items.find(item => item.getAttribute('value') === value);
-
-    if (matchingItem) {
-      const label = matchingItem.textContent?.trim() || value;
-      this._selectedLabel.set(label);
-    } else {
-      // If no matching item found, use the value as label
-      this._selectedLabel.set(value);
-    }
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -454,8 +443,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 }
 
 ```
-
-
 
 ```angular-ts title="select.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
@@ -490,10 +477,7 @@ export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 ```
 
-
-
 ```angular-ts title="select-item.component.ts" copyButton showLineNumbers
-import { NgIf } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -504,7 +488,7 @@ import { selectItemVariants } from './select.variants';
   selector: 'z-select-item, [z-select-item]',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf],
+  imports: [],
   host: {
     '[class]': 'classes()',
     '[attr.value]': 'value()',
@@ -517,21 +501,9 @@ import { selectItemVariants } from './select.variants';
   },
   template: `
     <span class="absolute right-2 flex size-3.5 items-center justify-center">
-      <svg
-        *ngIf="isSelected()"
-        class="size-4"
-        xmlns="http://www.w3.org/2000/svg"
-        width="24"
-        height="24"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        stroke-width="2"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path d="m9 12 2 2 4-4" />
-      </svg>
+      @if (isSelected()) {
+        <i class="icon-check size-2 contents"></i>
+      }
     </span>
     <ng-content></ng-content>
   `,
@@ -542,7 +514,7 @@ export class ZardSelectItemComponent {
   readonly class = input<string>('');
 
   private select = inject(ZardSelectComponent, { optional: true });
-  private elementRef = inject(ElementRef);
+  readonly elementRef = inject(ElementRef);
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
 
@@ -551,10 +523,10 @@ export class ZardSelectItemComponent {
   onClick() {
     if (this.disabled() || !this.select) return;
 
-    const label = this.elementRef.nativeElement.textContent?.trim() || '';
+    const element = this.elementRef.nativeElement;
+    const label = element.textContent?.trim() || element.innerText?.trim() || '';
     this.select.selectItem(this.value(), label);
   }
 }
 
 ```
-

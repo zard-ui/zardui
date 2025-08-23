@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="alert-dialog.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -15,7 +13,7 @@ import {
   signal,
   TemplateRef,
   Type,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
@@ -59,7 +57,7 @@ export class ZardAlertDialogOptions<T> {
   selector: 'z-alert-dialog',
   exportAs: 'zAlertDialog',
   standalone: true,
-  imports: [OverlayModule, PortalModule, ZardButtonComponent, CommonModule, A11yModule],
+  imports: [OverlayModule, PortalModule, ZardButtonComponent, A11yModule],
   templateUrl: './alert-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -116,7 +114,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 
-  @ViewChild(CdkPortalOutlet, { static: true }) portalOutlet!: CdkPortalOutlet;
+  readonly portalOutlet = viewChild.required(CdkPortalOutlet);
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
@@ -135,18 +133,18 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   }
 
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
-    if (this.portalOutlet?.hasAttached()) {
+    if (this.portalOutlet()?.hasAttached()) {
       throw Error('Attempting to attach alert dialog content after content is already attached');
     }
-    return this.portalOutlet?.attachComponentPortal(portal);
+    return this.portalOutlet()?.attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
-    if (this.portalOutlet?.hasAttached()) {
+    if (this.portalOutlet()?.hasAttached()) {
       throw Error('Attempting to attach alert dialog content after content is already attached');
     }
 
-    return this.portalOutlet?.attachTemplatePortal(portal);
+    return this.portalOutlet()?.attachTemplatePortal(portal);
   }
 
   onOkClick() {
@@ -178,8 +176,6 @@ export class ZardAlertDialogModule {}
 
 ```
 
-
-
 ```angular-ts title="alert-dialog.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -199,8 +195,6 @@ export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)
 export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
 ```
-
-
 
 ```angular-ts title="alert-dialog-ref.ts" copyButton showLineNumbers
 import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
@@ -293,8 +287,6 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 ```
 
-
-
 ```angular-html title="alert-dialog.component.html" copyButton showLineNumbers
 <div class="flex flex-col gap-4 p-6" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   @if (config.zTitle || config.zDescription) {
@@ -333,8 +325,6 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 </div>
 
 ```
-
-
 
 ```angular-ts title="alert-dialog.service.ts" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
@@ -474,4 +464,3 @@ export class ZardAlertDialogService {
 }
 
 ```
-

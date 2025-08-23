@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="slider.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -10,7 +8,7 @@ import {
   input,
   output,
   signal,
-  ViewChild,
+  viewChild,
   ViewEncapsulation,
   numberAttribute,
   booleanAttribute,
@@ -25,7 +23,7 @@ import {
 import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ClassValue } from 'class-variance-authority/dist/types';
-import { CommonModule, DOCUMENT } from '@angular/common';
+import { DOCUMENT } from '@angular/common';
 
 import { sliderOrientationVariants, sliderRangeVariants, sliderThumbVariants, sliderTrackVariants, sliderVariants } from './slider.variants';
 import { clamp, roundToStep, convertValueToPercentage } from '../../shared/utils/number';
@@ -39,7 +37,7 @@ type OnChangeType = (value: number) => void;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <span #track data-slot="slider-track" [attr.data-orientation]="orientation()" [class]="classes()">
       <ng-content></ng-content>
@@ -56,10 +54,10 @@ export class ZSliderTrackComponent {
 
   protected readonly classes = computed(() => mergeClasses(sliderTrackVariants({ zOrientation: this.orientation() }), this.class()));
 
-  @ViewChild('track', { static: true }) private readonly trackEl!: ElementRef<HTMLElement>;
+  private readonly trackEl = viewChild.required<ElementRef<HTMLElement>>('track');
 
   get nativeElement(): HTMLElement {
-    return this.trackEl.nativeElement;
+    return this.trackEl().nativeElement;
   }
 }
 
@@ -68,7 +66,7 @@ export class ZSliderTrackComponent {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <span
       data-slot="slider-range"
@@ -95,7 +93,7 @@ export class ZSliderRangeComponent {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <span
       #thumb
@@ -129,10 +127,10 @@ export class ZSliderThumbComponent {
   protected readonly classes = computed(() => mergeClasses(sliderThumbVariants(), this.class()));
   protected readonly orientationClasses = computed(() => mergeClasses(sliderOrientationVariants({ zOrientation: this.orientation() })));
 
-  @ViewChild('thumb', { static: true }) private readonly thumbEl!: ElementRef<HTMLElement>;
+  private readonly thumbEl = viewChild.required<ElementRef<HTMLElement>>('thumb');
 
   get nativeElement(): HTMLElement {
-    return this.thumbEl.nativeElement;
+    return this.thumbEl().nativeElement;
   }
 }
 
@@ -142,7 +140,7 @@ export class ZSliderThumbComponent {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [CommonModule, ZSliderTrackComponent, ZSliderRangeComponent, ZSliderThumbComponent],
+  imports: [ZSliderTrackComponent, ZSliderRangeComponent, ZSliderThumbComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -193,8 +191,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
   readonly onSlide = output<number>();
 
-  @ViewChild(ZSliderThumbComponent, { static: true }) thumbRef!: ElementRef<HTMLElement>;
-  @ViewChild(ZSliderTrackComponent, { static: true }) trackRef!: ElementRef<HTMLElement>;
+  readonly thumbRef = viewChild.required(ZSliderThumbComponent);
+  readonly trackRef = viewChild.required(ZSliderTrackComponent);
 
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private cdr = inject(ChangeDetectorRef);
@@ -235,8 +233,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
         if (this.disabled()) return;
 
         const target = event.target as HTMLElement;
-        const isThumb = this.thumbRef.nativeElement.contains(target);
-        const isTrack = this.trackRef.nativeElement.contains(target);
+        const isThumb = this.thumbRef().nativeElement.contains(target);
+        const isTrack = this.trackRef().nativeElement.contains(target);
 
         if (isTrack && !isThumb) {
           const coord = this.zOrientation() === 'vertical' ? event.clientY : event.clientX;
@@ -244,7 +242,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
           this.updateSliderFromPercentage(clickPercentage);
           this.onTouched();
           requestAnimationFrame(() => {
-            this.thumbRef.nativeElement.focus();
+            this.thumbRef().nativeElement.focus();
           });
         }
       }),
@@ -391,8 +389,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
 ```
 
-
-
 ```angular-ts title="slider.variants.ts" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -470,4 +466,3 @@ export const sliderOrientationVariants = cva('absolute', {
 export type SliderOrientationVariants = VariantProps<typeof sliderOrientationVariants>;
 
 ```
-
