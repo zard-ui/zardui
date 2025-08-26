@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, inject } from '@angular/core';
 
-import { ZardButtonComponent } from '../components';
+import { ZardButtonComponent } from '../button/button.component';
 import { ZardDialogModule } from './dialog.component';
 import { ZardDialogService } from './dialog.service';
 

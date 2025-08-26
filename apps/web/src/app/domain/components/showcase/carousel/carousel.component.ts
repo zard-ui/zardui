@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, computed, contentChildren, inject, input, signal, viewChild } from '@angular/core';
 import EmblaCarousel, { type EmblaCarouselType, type EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
-import { NgFor, NgIf } from '@angular/common';
+
 import { twMerge } from 'tailwind-merge';
 import { clsx } from 'clsx';
 
@@ -11,7 +11,7 @@ import { carouselVariants, carouselContentVariants, carouselViewportVariants, ty
   selector: 'z-carousel',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgFor, NgIf],
+  imports: [],
   host: { '[class]': 'classes()' },
   template: `
     <div class="w-full">
@@ -21,39 +21,43 @@ import { carouselVariants, carouselContentVariants, carouselViewportVariants, ty
         </div>
       </div>
 
-      <div *ngIf="showNavigation()" class="flex justify-center gap-4 mt-4 mb-8">
-        <button
-          (click)="scrollToPrev()"
-          [disabled]="!canScrollPrev()"
-          class="flex h-10 w-10 items-center justify-center rounded-full bg-background text-foreground shadow-md hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 border border-border"
-          aria-label="Previous slide"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m15 18-6-6 6-6" />
-          </svg>
-        </button>
-
-        <button
-          (click)="scrollToNext()"
-          [disabled]="!canScrollNext()"
-          class="flex h-10 w-10 items-center justify-center rounded-full bg-background text-foreground shadow-md hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 border border-border"
-          aria-label="Next slide"
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="m9 18 6-6-6-6" />
-          </svg>
-        </button>
-      </div>
+      @if (showNavigation()) {
+        <div class="flex justify-center gap-4 mt-4 mb-8">
+          <button
+            (click)="scrollToPrev()"
+            [disabled]="!canScrollPrev()"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-background text-foreground shadow-md hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 border border-border"
+            aria-label="Previous slide"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m15 18-6-6 6-6" />
+            </svg>
+          </button>
+          <button
+            (click)="scrollToNext()"
+            [disabled]="!canScrollNext()"
+            class="flex h-10 w-10 items-center justify-center rounded-full bg-background text-foreground shadow-md hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 border border-border"
+            aria-label="Next slide"
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m9 18 6-6-6-6" />
+            </svg>
+          </button>
+        </div>
+      }
 
       <!-- Dots indicator -->
-      <div *ngIf="showDots()" class="flex justify-center gap-2 mt-4">
-        <button
-          *ngFor="let _ of dotsArray(); let i = index"
-          (click)="scrollToSlide(i)"
-          [class]="'w-2 h-2 rounded-full transition-all duration-200 border-0 p-0 ' + (currentSlide() === i ? 'bg-primary' : 'bg-muted-foreground/30')"
-          [attr.aria-label]="'Go to slide ' + (i + 1)"
-        ></button>
-      </div>
+      @if (showDots()) {
+        <div class="flex justify-center gap-2 mt-4">
+          @for (_ of dotsArray(); track _; let i = $index) {
+            <button
+              (click)="scrollToSlide(i)"
+              [class]="'w-2 h-2 rounded-full transition-all duration-200 border-0 p-0 ' + (currentSlide() === i ? 'bg-primary' : 'bg-muted-foreground/30')"
+              [attr.aria-label]="'Go to slide ' + (i + 1)"
+            ></button>
+          }
+        </div>
+      }
     </div>
   `,
 })

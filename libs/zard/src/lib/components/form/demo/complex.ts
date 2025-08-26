@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, signal, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
@@ -24,7 +23,7 @@ interface FormData {
 @Component({
   selector: 'zard-demo-form-complex',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardCheckboxComponent, ZardSelectComponent, ZardSelectItemComponent, ZardFormModule],
+  imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardCheckboxComponent, ZardSelectComponent, ZardSelectItemComponent, ZardFormModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `

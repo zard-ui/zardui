@@ -1,6 +1,3 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
-import { Subject, switchMap, takeUntil, timer } from 'rxjs';
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -14,15 +11,17 @@ import {
   OnInit,
   Output,
   signal,
-  ViewChild,
+  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ClassValue } from 'class-variance-authority/dist/types';
+import { Subject, switchMap, takeUntil, timer } from 'rxjs';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCommandJsonComponent } from './command-json.component';
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-input',
@@ -64,7 +63,7 @@ import { commandInputVariants } from './command.variants';
 export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
   private readonly jsonCommandComponent = inject(ZardCommandJsonComponent, { optional: true });
-  @ViewChild('searchInput', { static: true }) searchInput!: ElementRef<HTMLInputElement>;
+  readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
   readonly placeholder = input<string>('Type a command or search...');
   readonly class = input<ClassValue>('');
@@ -161,7 +160,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
    * Focus the input element
    */
   focus(): void {
-    this.searchInput.nativeElement.focus();
+    this.searchInput().nativeElement.focus();
   }
 
   ngOnDestroy(): void {

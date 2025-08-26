@@ -1,7 +1,6 @@
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardTooltipModule } from '@zard/components/tooltip/tooltip';
 import { Component, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 export interface Contributor {
   login: string;
@@ -13,7 +12,7 @@ export interface Contributor {
 @Component({
   selector: 'z-contributors',
   standalone: true,
-  imports: [CommonModule, ZardAvatarComponent, ZardTooltipModule],
+  imports: [ZardAvatarComponent, ZardTooltipModule],
   template: `
     <div class="flex flex-wrap gap-4">
       @for (contributor of contributors(); track contributor.login) {

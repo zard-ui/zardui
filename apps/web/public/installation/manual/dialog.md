@@ -15,13 +15,12 @@ import {
   signal,
   TemplateRef,
   Type,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { filter, fromEvent, takeUntil } from 'rxjs';
-import { CommonModule } from '@angular/common';
 
 import { ZardButtonComponent } from '../button/button.component';
 import { mergeClasses } from '../../shared/utils/utils';
@@ -74,7 +73,7 @@ export class ZardDialogComponent<T> extends BasePortalOutlet {
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 
-  @ViewChild(CdkPortalOutlet, { static: true }) portalOutlet!: CdkPortalOutlet;
+  readonly portalOutlet = viewChild.required(CdkPortalOutlet);
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
@@ -89,18 +88,18 @@ export class ZardDialogComponent<T> extends BasePortalOutlet {
   }
 
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
-    if (this.portalOutlet?.hasAttached()) {
+    if (this.portalOutlet()?.hasAttached()) {
       throw Error('Attempting to attach modal content after content is already attached');
     }
-    return this.portalOutlet?.attachComponentPortal(portal);
+    return this.portalOutlet()?.attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
-    if (this.portalOutlet?.hasAttached()) {
+    if (this.portalOutlet()?.hasAttached()) {
       throw Error('Attempting to attach modal content after content is already attached');
     }
 
-    return this.portalOutlet?.attachTemplatePortal(portal);
+    return this.portalOutlet()?.attachTemplatePortal(portal);
   }
 
   onOkClick() {
@@ -125,7 +124,7 @@ export class ZardDialogComponent<T> extends BasePortalOutlet {
 }
 
 @NgModule({
-  imports: [CommonModule, ZardButtonComponent, ZardDialogComponent, OverlayModule, PortalModule],
+  imports: [ZardButtonComponent, ZardDialogComponent, OverlayModule, PortalModule],
   providers: [ZardDialogService],
 })
 export class ZardDialogModule {}

@@ -14,25 +14,25 @@ import { ZardFormModule } from '../form.module';
   template: `
     <form class="space-y-6 max-w-sm">
       <z-form-field>
-        <label z-form-label zRequired for="fullName">Full Name</label>
+        <label z-form-label zRequired [for]="idFullName">Full Name</label>
         <z-form-control>
-          <input z-input type="text" id="fullName" placeholder="Enter your full name" [(ngModel)]="fullName" name="fullName" />
+          <input z-input type="text" [id]="idFullName" placeholder="Enter your full name" [(ngModel)]="fullName" name="fullName" />
         </z-form-control>
         <z-form-message>This is your display name.</z-form-message>
       </z-form-field>
 
       <z-form-field>
-        <label z-form-label zRequired for="email">Email</label>
+        <label z-form-label zRequired [for]="idEmail">Email</label>
         <z-form-control>
-          <input z-input type="email" id="email" placeholder="Enter your email" [(ngModel)]="email" name="email" />
+          <input z-input type="email" [id]="idEmail" placeholder="Enter your email" [(ngModel)]="email" name="email" />
         </z-form-control>
         <z-form-message>We'll never share your email with anyone else.</z-form-message>
       </z-form-field>
 
       <z-form-field>
-        <label z-form-label for="bio">Bio</label>
+        <label z-form-label [for]="idBio">Bio</label>
         <z-form-control>
-          <textarea z-input id="bio" placeholder="Tell us about yourself" rows="3" [(ngModel)]="bio" name="bio"></textarea>
+          <textarea z-input [id]="idBio" placeholder="Tell us about yourself" rows="3" [(ngModel)]="bio" name="bio"></textarea>
         </z-form-control>
         <z-form-message>Optional: Brief description about yourself.</z-form-message>
       </z-form-field>
@@ -42,6 +42,10 @@ import { ZardFormModule } from '../form.module';
   `,
 })
 export class ZardDemoFormDefaultComponent {
+  protected readonly idFullName = 'fullName' + Math.random();
+  protected readonly idEmail = 'email' + Math.random();
+  protected readonly idBio = 'bio' + Math.random();
+
   fullName = '';
   email = '';
   bio = '';

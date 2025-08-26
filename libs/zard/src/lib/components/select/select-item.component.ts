@@ -1,15 +1,19 @@
-import { NgIf } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input, linkedSignal } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardSelectComponent } from './select.component';
 import { selectItemVariants } from './select.variants';
+
+// Interface to avoid circular dependency
+interface SelectHost {
+  selectedValue(): string;
+  selectItem(value: string, label: string): void;
+}
 
 @Component({
   selector: 'z-select-item, [z-select-item]',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf],
+  imports: [],
   host: {
     '[class]': 'classes()',
     '[attr.value]': 'value()',
@@ -22,7 +26,9 @@ import { selectItemVariants } from './select.variants';
   },
   template: `
     <span class="absolute right-2 flex size-3.5 items-center justify-center">
-      <i *ngIf="isSelected()" class="icon-check size-2 contents"></i>
+      @if (isSelected()) {
+        <i class="icon-check size-2 contents"></i>
+      }
     </span>
     <ng-content></ng-content>
   `,
@@ -32,17 +38,23 @@ export class ZardSelectItemComponent {
   readonly disabled = input(false, { transform });
   readonly class = input<string>('');
 
-  private select = inject(ZardSelectComponent, { optional: true });
+  private select: SelectHost | null = null;
   readonly elementRef = inject(ElementRef);
+  readonly label = linkedSignal(() => {
+    const element = this.elementRef?.nativeElement;
+    return (element?.textContent || element?.innerText)?.trim() ?? '';
+  });
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
 
   protected readonly isSelected = computed(() => this.select?.selectedValue() === this.value());
 
+  setSelectHost(selectHost: SelectHost) {
+    this.select = selectHost;
+  }
+
   onClick() {
     if (this.disabled() || !this.select) return;
-
-    const label = this.elementRef.nativeElement.textContent?.trim() || '';
-    this.select.selectItem(this.value(), label);
+    this.select.selectItem(this.value(), this.label());
   }
 }

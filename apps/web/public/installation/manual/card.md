@@ -78,7 +78,6 @@ export type ZardCardBodyVariants = VariantProps<typeof cardBodyVariants>;
 
 ```angular-ts title="index.ts" copyButton showLineNumbers
 export * from './card.component';
-export * from './card.module';
 
 ```
 

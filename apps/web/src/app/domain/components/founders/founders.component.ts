@@ -1,7 +1,6 @@
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { SOCIAL_MEDIAS } from '@zard/shared/constants/medias.constant';
 import { Component, input } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 export interface FounderData {
   login: string;
@@ -15,7 +14,7 @@ export interface FounderData {
 @Component({
   selector: 'z-founders',
   standalone: true,
-  imports: [CommonModule, ZardAvatarComponent],
+  imports: [ZardAvatarComponent],
   template: `
     <div class="flex flex-col gap-6">
       @for (founder of founders(); track founder.login) {

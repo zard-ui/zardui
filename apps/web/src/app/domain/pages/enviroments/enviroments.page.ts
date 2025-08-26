@@ -5,7 +5,7 @@ import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.
 import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
-import { CommonModule } from '@angular/common';
+
 import { Component } from '@angular/core';
 
 import { EnvCardComponent } from '../../components/env-card/env-card.component';
@@ -54,7 +54,7 @@ import { EnvCardComponent } from '../../components/env-card/env-card.component';
     </z-content>
   `,
   standalone: true,
-  imports: [CommonModule, EnvCardComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardBadgeComponent, ZardAlertComponent],
+  imports: [EnvCardComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardBadgeComponent, ZardAlertComponent],
 })
 export class EnviromentsPage {
   protected readonly environments = [

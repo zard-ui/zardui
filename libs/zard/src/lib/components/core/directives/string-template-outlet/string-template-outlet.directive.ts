@@ -1,4 +1,4 @@
-import { Directive, EmbeddedViewRef, Input, OnChanges, SimpleChange, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, EmbeddedViewRef, inject, Input, OnChanges, SimpleChange, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 
 export function isTemplateRef<T>(value: TemplateRef<T> | unknown): value is TemplateRef<T> {
   return value instanceof TemplateRef;
@@ -9,6 +9,9 @@ export function isTemplateRef<T>(value: TemplateRef<T> | unknown): value is Temp
   exportAs: 'zStringTemplateOutlet',
 })
 export class ZardStringTemplateOutletDirective<_T = unknown> implements OnChanges {
+  private viewContainer = inject(ViewContainerRef);
+  private templateRef = inject(TemplateRef<unknown>);
+
   private embeddedViewRef: EmbeddedViewRef<unknown> | null = null;
   private context = new ZardStringTemplateOutletContext();
   @Input() zStringTemplateOutletContext: any | null = null;
@@ -36,11 +39,6 @@ export class ZardStringTemplateOutletDirective<_T = unknown> implements OnChange
       }
     }
   }
-
-  constructor(
-    private viewContainer: ViewContainerRef,
-    private templateRef: TemplateRef<unknown>,
-  ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
     const { zStringTemplateOutletContext, zStringTemplateOutlet } = changes;

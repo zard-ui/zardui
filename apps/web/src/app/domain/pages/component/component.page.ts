@@ -10,7 +10,6 @@ import { Step } from '@zard/shared/constants/install.constant';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';
-import { CommonModule } from '@angular/common';
 
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
@@ -19,10 +18,13 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [CommonModule, DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
+  imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
 })
 export class ComponentPage {
   private readonly titleService = inject(Title);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly dynamicInstallationService = inject(DynamicInstallationService);
   activeAnchor?: string;
   componentData?: ComponentData;
   navigationConfig: NavigationConfig = {
@@ -36,11 +38,7 @@ export class ComponentPage {
   activeTab = signal<'manual' | 'cli'>('cli');
   installGuide!: { manual: Step[]; cli: Step[] } | undefined;
 
-  constructor(
-    private activatedRoute: ActivatedRoute,
-    private router: Router,
-    private dynamicInstallationService: DynamicInstallationService,
-  ) {
+  constructor() {
     this.activatedRoute.params.subscribe(() => {
       this.loadData();
     });

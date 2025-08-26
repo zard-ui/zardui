@@ -1,7 +1,6 @@
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { formFieldVariants, formControlVariants, formLabelVariants, formMessageVariants, ZardFormMessageVariants } from './form.variants';
@@ -27,7 +26,7 @@ export class ZardFormFieldComponent {
   selector: 'z-form-control, [z-form-control]',
   exportAs: 'zFormControl',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
