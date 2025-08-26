@@ -78,9 +78,8 @@ export * from './lib/components/table/table.module';
 export * from './lib/components/tooltip/tooltip';
 
 // Menu
-export * from './lib/components/menu/menu.component';
+export * from './lib/components/menu/menu-content.directive';
 export * from './lib/components/menu/menu-item.directive';
-export * from './lib/components/menu/submenu.component';
-export * from './lib/components/menu/menu-group.component';
-export * from './lib/components/menu/menu-divider.directive';
+export * from './lib/components/menu/menu.directive';
+export * from './lib/components/menu/menu.variants';
 export * from './lib/components/menu/menu.module';

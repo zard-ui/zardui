@@ -1,68 +1,118 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
+import { ZardButtonComponent } from '../../button/button.component';
 import { ZardDividerComponent } from '../../divider/divider.component';
 import { ZardMenuModule } from '../menu.module';
 
 @Component({
   selector: 'zard-demo-menu-default',
   standalone: true,
-  imports: [ZardMenuModule, ZardDividerComponent],
-  host: {
-    class: 'w-full',
-  },
+  imports: [ZardMenuModule, ZardButtonComponent, ZardDividerComponent],
   template: `
-    <ul z-menu>
-      <li z-menu-item (click)="navigate('home')">
-        <i class="icon-layout-dashboard mr-2"></i>
-        Home
-      </li>
-      <li z-menu-item (click)="navigate('about')">
-        <i class="icon-users mr-2"></i>
-        About
-      </li>
-      <li z-submenu zTitle="Services" zIcon="package">
-        <ul>
-          <li z-menu-item (click)="navigate('web-development')">Web Development</li>
-          <li z-menu-item (click)="navigate('mobile-apps')">Mobile Apps</li>
-          <li z-submenu zTitle="Cloud Services">
-            <ul>
-              <li z-menu-item (click)="navigate('aws')">AWS</li>
-              <li z-menu-item (click)="navigate('azure')">Azure</li>
-              <li z-menu-item (click)="navigate('google-cloud')">Google Cloud</li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-      <z-divider></z-divider>
-      <li z-menu-group zTitle="Resources">
-        <ul>
-          <li z-menu-item (click)="navigate('documentation')">
-            <i class="icon-book mr-2"></i>
-            Documentation
-          </li>
-          <li z-menu-item (click)="navigate('blog')">
-            <i class="icon-file-text mr-2"></i>
-            Blog
-          </li>
-        </ul>
-      </li>
-      <z-divider></z-divider>
-      <li z-menu-item (click)="navigate('settings')">
-        <i class="icon-settings mr-2"></i>
-        Settings
-      </li>
-      <li z-menu-item [zDisabled]="true">
-        <i class="icon-log-out mr-2"></i>
-        Logout
-      </li>
-    </ul>
+    <nav class="flex items-center justify-between p-4">
+      <div class="flex items-center space-x-6">
+        <div class="flex items-center space-x-1">
+          <div class="relative">
+            <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="productsMenu">
+              Products
+              <i class="icon-chevron-down ml-1"></i>
+            </button>
+
+            <ng-template #productsMenu>
+              <div z-menu-content class="w-48">
+                <button z-menu-item (click)="log('Analytics')">Analytics</button>
+                <button z-menu-item (click)="log('Dashboard')">Dashboard</button>
+                <button z-menu-item (click)="log('Reports')">Reports</button>
+                <button z-menu-item (click)="log('Insights')">Insights</button>
+              </div>
+            </ng-template>
+          </div>
+
+          <div class="relative">
+            <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="solutionsMenu">
+              Solutions
+              <i class="icon-chevron-down ml-1"></i>
+            </button>
+
+            <ng-template #solutionsMenu>
+              <div z-menu-content class="w-80 p-2">
+                <div class="grid gap-1">
+                  <button z-menu-item (click)="log('For Startups')" class="flex flex-col items-start h-auto py-3">
+                    <div class="text-sm font-medium">For Startups</div>
+                    <div class="text-xs text-muted-foreground mt-1">Get started quickly with our startup-friendly tools</div>
+                  </button>
+
+                  <button z-menu-item (click)="log('For Enterprise')" class="flex flex-col items-start h-auto py-3">
+                    <div class="text-sm font-medium">For Enterprise</div>
+                    <div class="text-xs text-muted-foreground mt-1">Scale your business with enterprise-grade features</div>
+                  </button>
+
+                  <button z-menu-item (click)="log('For Agencies')" class="flex flex-col items-start h-auto py-3">
+                    <div class="text-sm font-medium">For Agencies</div>
+                    <div class="text-xs text-muted-foreground mt-1">Manage multiple clients with our agency tools</div>
+                  </button>
+                </div>
+              </div>
+            </ng-template>
+          </div>
+
+          <div class="relative">
+            <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="resourcesMenu">
+              Resources
+              <i class="icon-chevron-down ml-1"></i>
+            </button>
+
+            <ng-template #resourcesMenu>
+              <div z-menu-content class="w-56">
+                <button z-menu-item (click)="log('Blog')">
+                  <i class="icon-book-open mr-2"></i>
+                  Blog
+                </button>
+
+                <button z-menu-item (click)="log('Documentation')">
+                  <i class="icon-file-text mr-2"></i>
+                  Documentation
+                </button>
+
+                <button z-menu-item z-menu [zMenuTriggerFor]="helpSubmenu" class="justify-between">
+                  <div class="flex items-center">
+                    <i class="icon-info mr-2"></i>
+                    Help & Support
+                  </div>
+                  <i class="icon-chevron-right"></i>
+                </button>
+
+                <z-divider zSpacing="sm"></z-divider>
+
+                <button z-menu-item (click)="log('Community')">
+                  <i class="icon-users mr-2"></i>
+                  Community
+                </button>
+              </div>
+            </ng-template>
+
+            <ng-template #helpSubmenu>
+              <div z-menu-content class="w-48">
+                <button z-menu-item (click)="log('Getting Started')">Getting Started</button>
+                <button z-menu-item (click)="log('Tutorials')">Tutorials</button>
+                <button z-menu-item (click)="log('FAQ')">FAQ</button>
+
+                <z-divider zSpacing="sm"></z-divider>
+
+                <button z-menu-item (click)="log('Contact Support')">Contact Support</button>
+                <button z-menu-item (click)="log('Live Chat')">Live Chat</button>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+      </div>
+    </nav>
   `,
 })
 export class ZardDemoMenuDefaultComponent {
-  navigate(route: string) {
-    console.log('Navigate to:', route);
-    // router.navigate([route]) ou qualquer lógica de navegação
+  log(item: string) {
+    console.log('Navigate to:', item);
   }
 }
 

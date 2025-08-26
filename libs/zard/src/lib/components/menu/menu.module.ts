@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 
-import { ZardDividerComponent } from '../divider/divider.component';
-import { ZardMenuGroupComponent } from './menu-group.component';
+import { ZardMenuContentDirective } from './menu-content.directive';
 import { ZardMenuItemDirective } from './menu-item.directive';
-import { ZardMenuComponent } from './menu.component';
-import { ZardSubmenuComponent } from './submenu.component';
+import { ZardMenuDirective } from './menu.directive';
 
-const MENU_COMPONENTS = [ZardMenuComponent, ZardMenuItemDirective, ZardSubmenuComponent, ZardMenuGroupComponent, ZardDividerComponent];
+const MENU_COMPONENTS = [ZardMenuContentDirective, ZardMenuItemDirective, ZardMenuDirective];
 
 @NgModule({
-  imports: [...MENU_COMPONENTS],
-  exports: MENU_COMPONENTS,
+  imports: [MENU_COMPONENTS],
+  exports: [MENU_COMPONENTS],
 })
 export class ZardMenuModule {}

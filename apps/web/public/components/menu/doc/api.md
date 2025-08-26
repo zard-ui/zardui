@@ -1,66 +1,36 @@
-# Menu API
+# Menu API Reference
 
-## z-menu
+## Directives
 
-The main menu container component.
+### z-menu
 
-| Property             | Type                                             | Default      | Description                                |
-| -------------------- | ------------------------------------------------ | ------------ | ------------------------------------------ |
-| `zMode`              | `"horizontal" \| "vertical" \| "inline"`         | `"vertical"` | The display mode of the menu               |
-| `zTheme`             | `"light" \| "dark"`                              | `"light"`    | The theme style of the menu                |
-| `zInlineCollapsed`   | `boolean`                                        | `false`      | Whether the inline menu is collapsed       |
-| `zSelectable`        | `boolean`                                        | `true`       | Whether menu items can be selected         |
-| `zOpenKeys`          | `string[]`                                       | `[]`         | Array of currently opened submenu keys     |
-| `zSelectedKeys`      | `string[]`                                       | `[]`         | Array of currently selected menu item keys |
-| `(zOpenChange)`      | `EventEmitter<string[]>`                         | -            | Emitted when submenu open state changes    |
-| `(zSelectionChange)` | `EventEmitter<string[]>`                         | -            | Emitted when menu item selection changes   |
-| `(zItemClick)`       | `EventEmitter<{key: string, item: HTMLElement}>` | -            | Emitted when a menu item is clicked        |
-| `class`              | `ClassValue`                                     | `''`         | Additional CSS classes                     |
+The trigger directive that opens the menu when interacted with.
 
-## z-menu-item
+| Input           | Type               | Default  | Description                              |
+| --------------- | ------------------ | -------- | ---------------------------------------- |
+| zMenuTriggerFor | TemplateRef        | required | Reference to the menu template           |
+| zDisabled       | boolean            | false    | Whether the trigger is disabled          |
+| zTrigger        | 'click' \| 'hover' | 'click'  | How the menu is triggered                |
+| zHoverDelay     | number             | 100      | Delay in ms before closing on hover exit |
 
-Directive for menu items.
+### z-menu-content
 
-| Property    | Type               | Default | Description                         |
-| ----------- | ------------------ | ------- | ----------------------------------- |
-| `zKey`      | `string`           | `''`    | Unique identifier for the menu item |
-| `zDisabled` | `boolean`          | `false` | Whether the menu item is disabled   |
-| `zSelected` | `boolean`          | `false` | Whether the menu item is selected   |
-| `zTitle`    | `string`           | `''`    | Title text for the menu item        |
-| `zIcon`     | `string`           | `''`    | Icon to display in the menu item    |
-| `zLevel`    | `1 \| 2 \| 3 \| 4` | `1`     | Nesting level for indentation       |
-| `class`     | `ClassValue`       | `''`    | Additional CSS classes              |
+Container directive for menu items.
 
-## z-submenu
+| Input | Type       | Default | Description            |
+| ----- | ---------- | ------- | ---------------------- |
+| class | ClassValue | ''      | Additional CSS classes |
 
-Component for creating nested submenus.
+### z-menu-item
 
-| Property        | Type                    | Default  | Description                             |
-| --------------- | ----------------------- | -------- | --------------------------------------- |
-| `zKey`          | `string`                | `''`     | Unique identifier for the submenu       |
-| `zTitle`        | `string`                | `''`     | Title text for the submenu              |
-| `zIcon`         | `string`                | `''`     | Icon to display in the submenu header   |
-| `zOpen`         | `boolean`               | `false`  | Whether the submenu is open             |
-| `zDisabled`     | `boolean`               | `false`  | Whether the submenu is disabled         |
-| `zPopupOffset`  | `[number, number]`      | `[0, 0]` | Offset for popup positioning [x, y]     |
-| `zLevel`        | `number`                | `1`      | Nesting level for indentation           |
-| `(zOpenChange)` | `EventEmitter<boolean>` | -        | Emitted when submenu open state changes |
-| `class`         | `ClassValue`            | `''`     | Additional CSS classes                  |
+Individual menu item directive.
 
-## z-menu-group
+| Input     | Type       | Default | Description                    |
+| --------- | ---------- | ------- | ------------------------------ |
+| zDisabled | boolean    | false   | Whether the item is disabled   |
+| zInset    | boolean    | false   | Add left padding for alignment |
+| class     | ClassValue | ''      | Additional CSS classes         |
 
-Component for grouping related menu items.
-
-| Property | Type         | Default | Description                   |
-| -------- | ------------ | ------- | ----------------------------- |
-| `zTitle` | `string`     | `''`    | Title text for the menu group |
-| `zLevel` | `number`     | `1`     | Nesting level for indentation |
-| `class`  | `ClassValue` | `''`    | Additional CSS classes        |
-
-## z-menu-divider
-
-Directive for visual separation between menu items.
-
-| Property | Type         | Default | Description            |
-| -------- | ------------ | ------- | ---------------------- |
-| `class`  | `ClassValue` | `''`    | Additional CSS classes |
+| Output            | Type         | Description                |
+| ----------------- | ------------ | -------------------------- |
+| menuItemTriggered | EventEmitter | Emits when item is clicked |
