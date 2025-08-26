@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input, linkedSignal } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { selectItemVariants } from './select.variants';
@@ -40,6 +40,10 @@ export class ZardSelectItemComponent {
 
   private select: SelectHost | null = null;
   readonly elementRef = inject(ElementRef);
+  readonly label = linkedSignal(() => {
+    const element = this.elementRef?.nativeElement;
+    return (element?.textContent || element?.innerText)?.trim() ?? '';
+  });
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
 
@@ -51,9 +55,6 @@ export class ZardSelectItemComponent {
 
   onClick() {
     if (this.disabled() || !this.select) return;
-
-    const element = this.elementRef.nativeElement;
-    const label = element.textContent?.trim() || element.innerText?.trim() || '';
-    this.select.selectItem(this.value(), label);
+    this.select.selectItem(this.value(), this.label());
   }
 }

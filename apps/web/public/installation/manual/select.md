@@ -103,19 +103,15 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   readonly isOpen = signal(false);
   private readonly _selectedValue = signal<string>('');
   private readonly _selectedLabel = linkedSignal(() => {
-  const items = this.selectItems();
-  const currentValue = this.selectedValue();
-
-  if (items.length > 0 && currentValue && !this.label()) {
-    const matchingItem = items.find(item => item.value() === currentValue);
-    if (matchingItem) {
-      const element = matchingItem.elementRef.nativeElement;
-      const textContent = element.textContent?.trim() || element.innerText?.trim();
-      return textContent ?? '';
+    const currentValue = this.selectedValue();
+    if (!this.label() && currentValue) {
+      const matchingItem = this.selectItems()?.find(item => item.value() === currentValue);
+      if (matchingItem) {
+       return matchingItem.label();
+      }
     }
-  }
-  return '';
-});
+    return '';
+  });
   readonly focusedIndex = signal<number>(-1);
 
   // Use computed to derive the effective selected value from input or internal state
@@ -489,7 +485,7 @@ export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 
 ```angular-ts title="select-item.component.ts" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input, linkedSignal } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { selectItemVariants } from './select.variants';
@@ -531,6 +527,10 @@ export class ZardSelectItemComponent {
 
   private select: SelectHost | null = null;
   readonly elementRef = inject(ElementRef);
+  readonly label = linkedSignal(() => {
+    const element = this.elementRef?.nativeElement;
+    return (element?.textContent || element?.innerText)?.trim() ?? '';
+  });
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
 
@@ -542,10 +542,7 @@ export class ZardSelectItemComponent {
 
   onClick() {
     if (this.disabled() || !this.select) return;
-
-    const element = this.elementRef.nativeElement;
-    const label = element.textContent?.trim() || element.innerText?.trim() || '';
-    this.select.selectItem(this.value(), label);
+    this.select.selectItem(this.value(), this.label());
   }
 }
 
