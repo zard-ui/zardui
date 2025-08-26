@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="select.component.ts" copyButton showLineNumbers
 import {
   AfterContentInit,
@@ -86,8 +88,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
   readonly selectItems = contentChildren(ZardSelectItemComponent);
 
-  readonly selectItems = contentChildren(ZardSelectItemComponent);
-
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
 
@@ -107,7 +107,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     if (!this.label() && currentValue) {
       const matchingItem = this.selectItems()?.find(item => item.value() === currentValue);
       if (matchingItem) {
-       return matchingItem.label();
+        return matchingItem.label();
       }
     }
     return '';
@@ -447,6 +447,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
 ```
 
+
+
 ```angular-ts title="select.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -479,6 +481,8 @@ export type ZardSelectContentVariants = VariantProps<typeof selectContentVariant
 export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 ```
+
+
 
 ```angular-ts title="select-item.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input, linkedSignal } from '@angular/core';
@@ -543,3 +547,4 @@ export class ZardSelectItemComponent {
 }
 
 ```
+

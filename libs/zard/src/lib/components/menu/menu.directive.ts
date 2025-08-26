@@ -30,7 +30,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
   private readonly elementRef = inject(ElementRef);
 
-  private closeTimeout: number | null = null;
+  private closeTimeout: ReturnType<typeof setTimeout> | null = null;
   private readonly cleanupFunctions: Array<() => void> = [];
 
   readonly zMenuTriggerFor = input.required();
@@ -65,7 +65,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
       this.cdkTrigger.open();
     });
 
-    this.addEventListenerWithCleanup(element, 'mouseleave', event => this.scheduleCloseIfNeeded(event));
+    this.addEventListenerWithCleanup(element, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
   }
 
   private setupMenuOpenListener(): void {
@@ -122,7 +122,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
     return document.querySelector(ZardMenuDirective.MENU_OVERLAY_SELECTOR);
   }
 
-  private addEventListenerWithCleanup(element: Element, eventType: string, handler: (event: any) => void): void {
+  private addEventListenerWithCleanup(element: Element, eventType: string, handler: (event: MouseEvent | Event) => void): void {
     element.addEventListener(eventType, handler);
     this.cleanupFunctions.push(() => element.removeEventListener(eventType, handler));
   }

@@ -1,9 +1,142 @@
 
 
+```angular-ts title="menu.directive.ts" copyButton showLineNumbers
+import { BooleanInput } from '@angular/cdk/coercion';
+import { CdkMenuTrigger } from '@angular/cdk/menu';
+import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit } from '@angular/core';
+
+export type ZardMenuPlacement = 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft' | 'topCenter' | 'topRight';
+export type ZardMenuTrigger = 'click' | 'hover';
+
+@Directive({
+  selector: '[z-menu]',
+  standalone: true,
+  hostDirectives: [
+    {
+      directive: CdkMenuTrigger,
+      inputs: ['cdkMenuTriggerFor: zMenuTriggerFor'],
+    },
+  ],
+  host: {
+    role: 'button',
+    '[attr.aria-haspopup]': "'menu'",
+    '[attr.aria-expanded]': 'cdkTrigger.isOpen()',
+    '[attr.data-state]': "cdkTrigger.isOpen() ? 'open': 'closed'",
+    '[attr.data-disabled]': "zDisabled() ? '' : undefined",
+    '[style.cursor]': "'pointer'",
+  },
+})
+export class ZardMenuDirective implements OnInit, OnDestroy {
+  private static readonly MENU_OVERLAY_SELECTOR = '.cdk-overlay-container .cdk-overlay-pane:last-child';
+  private static readonly MENU_CONTENT_SELECTOR = '.cdk-overlay-pane [z-menu-content]';
+
+  protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
+  private readonly elementRef = inject(ElementRef);
+
+  private closeTimeout: ReturnType<typeof setTimeout> | null = null;
+  private readonly cleanupFunctions: Array<() => void> = [];
+
+  readonly zMenuTriggerFor = input.required();
+  readonly zDisabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
+  readonly zTrigger = input<ZardMenuTrigger>('click');
+  readonly zHoverDelay = input<number>(100);
+
+  ngOnInit(): void {
+    if (this.zTrigger() === 'hover') {
+      this.initializeHoverBehavior();
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.cancelScheduledClose();
+    this.cleanupFunctions.forEach(cleanup => cleanup());
+    this.cleanupFunctions.length = 0;
+  }
+
+  private initializeHoverBehavior(): void {
+    this.setupTriggerListeners();
+    this.setupMenuOpenListener();
+  }
+
+  private setupTriggerListeners(): void {
+    const element = this.elementRef.nativeElement;
+
+    this.addEventListenerWithCleanup(element, 'mouseenter', () => {
+      if (this.zDisabled()) return;
+
+      this.cancelScheduledClose();
+      this.cdkTrigger.open();
+    });
+
+    this.addEventListenerWithCleanup(element, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
+  }
+
+  private setupMenuOpenListener(): void {
+    const subscription = this.cdkTrigger.opened.subscribe(() => {
+      setTimeout(() => this.setupMenuContentListeners(), 0);
+    });
+
+    this.cleanupFunctions.push(() => subscription.unsubscribe());
+  }
+
+  private setupMenuContentListeners(): void {
+    const overlay = this.getMenuOverlay();
+    if (!overlay) return;
+
+    this.addEventListenerWithCleanup(overlay, 'mouseenter', () => this.cancelScheduledClose());
+    this.addEventListenerWithCleanup(overlay, 'mouseleave', event => this.handleMenuLeave(event));
+  }
+
+  private handleMenuLeave(event: Event): void {
+    this.scheduleCloseIfNeeded(event as MouseEvent);
+  }
+
+  private scheduleCloseIfNeeded(event: MouseEvent): void {
+    if (this.shouldKeepMenuOpen(event.relatedTarget as Element)) {
+      return;
+    }
+
+    this.scheduleMenuClose();
+  }
+
+  private shouldKeepMenuOpen(relatedTarget: Element | null): boolean {
+    if (!relatedTarget) return false;
+
+    const isMovingToTrigger = this.elementRef.nativeElement.contains(relatedTarget);
+    const isMovingToMenu = relatedTarget.closest(ZardMenuDirective.MENU_CONTENT_SELECTOR);
+
+    return isMovingToTrigger || !!isMovingToMenu;
+  }
+
+  private scheduleMenuClose(): void {
+    this.closeTimeout = setTimeout(() => {
+      this.cdkTrigger.close();
+    }, this.zHoverDelay());
+  }
+
+  private cancelScheduledClose(): void {
+    if (this.closeTimeout) {
+      clearTimeout(this.closeTimeout);
+      this.closeTimeout = null;
+    }
+  }
+
+  private getMenuOverlay(): Element | null {
+    return document.querySelector(ZardMenuDirective.MENU_OVERLAY_SELECTOR);
+  }
+
+  private addEventListenerWithCleanup(element: Element, eventType: string, handler: (event: MouseEvent | Event) => void): void {
+    element.addEventListener(eventType, handler);
+    this.cleanupFunctions.push(() => element.removeEventListener(eventType, handler));
+  }
+}
+
+```
+
+
+
 ```angular-ts title="menu.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
-
-export const menuVariants = cva('flex flex-col space-y-1 p-1');
 
 export const menuContentVariants = cva(
   'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-2 text-popover-foreground shadow-lg animate-in data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
@@ -24,66 +157,21 @@ export const menuItemVariants = cva(
   },
 );
 
-export const menuGroupVariants = cva('');
-
-export const menuLabelVariants = cva('px-2 py-1.5 text-sm font-semibold', {
-  variants: {
-    inset: {
-      true: 'pl-8',
-      false: '',
-    },
-  },
-  defaultVariants: {
-    inset: false,
-  },
-});
-
-export const menuSeparatorVariants = cva('-mx-1 my-1 h-px bg-muted');
-
-export const menuShortcutVariants = cva('ml-auto text-xs tracking-widest text-muted-foreground');
-
-export const menuCheckboxItemVariants = cva(
-  'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-);
-
-export const menuRadioItemVariants = cva(
-  'relative flex cursor-default select-none items-center rounded-sm py-1.5 pl-8 pr-2 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50',
-);
-
-export const menuSubContentVariants = cva(
-  'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-1 text-popover-foreground shadow-lg data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
-);
-
-export const menuSubTriggerVariants = cva('flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus:bg-accent data-[state=open]:bg-accent', {
-  variants: {
-    inset: {
-      true: 'pl-8',
-      false: '',
-    },
-  },
-  defaultVariants: {
-    inset: false,
-  },
-});
-
-export type ZardMenuVariants = VariantProps<typeof menuVariants>;
 export type ZardMenuContentVariants = VariantProps<typeof menuContentVariants>;
 export type ZardMenuItemVariants = VariantProps<typeof menuItemVariants>;
-export type ZardMenuLabelVariants = VariantProps<typeof menuLabelVariants>;
-export type ZardMenuSubTriggerVariants = VariantProps<typeof menuSubTriggerVariants>;
 
 ```
 
 
 
-```angular-ts title="menu-directive.ts" copyButton showLineNumbers
+```angular-ts title="menu-content.directive.ts" copyButton showLineNumbers
 import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { CdkMenu, CdkMenuGroup } from '@angular/cdk/menu';
+import { CdkMenu } from '@angular/cdk/menu';
 import { computed, Directive, input } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { menuContentVariants, menuGroupVariants, menuVariants } from './menu.variants';
+import { menuContentVariants } from './menu.variants';
 
 @Directive({
   selector: '[z-menu-content]',
@@ -101,44 +189,17 @@ export class ZardMenuContentDirective {
   protected readonly classes = computed(() => mergeClasses(menuContentVariants(), this.class()));
 }
 
-@Directive({
-  selector: '[z-menu-group]',
-  standalone: true,
-  hostDirectives: [CdkMenuGroup],
-  host: {
-    role: 'group',
-    '[class]': 'classes()',
-  },
-})
-export class ZardMenuGroupDirective {
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(menuGroupVariants(), this.class()));
-}
-
-@Directive({
-  selector: 'z-menu, [z-menu],[z-submenu]',
-  standalone: true,
-  hostDirectives: [CdkMenu],
-  host: {
-    '[class]': 'classes()',
-  },
-})
-export class ZardMenuDirective {
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(menuVariants(), this.class()));
-}
-
 ```
 
 
 
 ```angular-ts title="menu-item.directive.ts" copyButton showLineNumbers
+import { ClassValue } from 'class-variance-authority/dist/types';
+
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuItem } from '@angular/cdk/menu';
 import { booleanAttribute, computed, Directive, effect, inject, input, signal } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+
 import { mergeClasses } from '../../shared/utils/utils';
 import { menuItemVariants, ZardMenuItemVariants } from './menu.variants';
 
@@ -169,15 +230,13 @@ import { menuItemVariants, ZardMenuItemVariants } from './menu.variants';
 export class ZardMenuItemDirective {
   private readonly cdkMenuItem = inject(CdkMenuItem, { host: true });
 
-  readonly disabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
-  readonly inset = input<ZardMenuItemVariants['inset']>(false);
+  readonly zDisabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
+  readonly zInset = input<ZardMenuItemVariants['inset']>(false);
   readonly class = input<ClassValue>('');
-
-  // readonly onSelect = outputFromObservable(this.cdkMenuItem.triggered);
 
   private readonly isFocused = signal(false);
 
-  protected readonly disabledState = computed(() => this.disabled());
+  protected readonly disabledState = computed(() => this.zDisabled());
 
   protected readonly isOpenState = signal(false);
 
@@ -186,7 +245,7 @@ export class ZardMenuItemDirective {
   protected readonly classes = computed(() =>
     mergeClasses(
       menuItemVariants({
-        inset: this.inset(),
+        inset: this.zInset(),
       }),
       this.class(),
     ),
@@ -194,13 +253,13 @@ export class ZardMenuItemDirective {
 
   constructor() {
     effect(() => {
-      this.cdkMenuItem.disabled = this.disabled();
+      this.cdkMenuItem.disabled = this.zDisabled();
       this.isOpenState.set(this.cdkMenuItem.isMenuOpen());
     });
   }
 
   onFocus(): void {
-    if (!this.disabled()) {
+    if (!this.zDisabled()) {
       this.isFocused.set(true);
     }
   }
@@ -214,7 +273,7 @@ export class ZardMenuItemDirective {
 
     if (!(event.pointerType === 'mouse')) return;
 
-    if (!this.disabled()) {
+    if (!this.zDisabled()) {
       const item = event.currentTarget;
       (item as HTMLElement)?.focus({ preventScroll: true });
     }
@@ -225,197 +284,14 @@ export class ZardMenuItemDirective {
 
 
 
-```angular-ts title="menu-trigger.directive.ts" copyButton showLineNumbers
-import { BooleanInput, NumberInput } from '@angular/cdk/coercion';
-import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { booleanAttribute, computed, Directive, effect, inject, input, numberAttribute, SimpleChange, untracked } from '@angular/core';
-
-export type ZardMenuAlign = 'start' | 'center' | 'end';
-export type ZardMenuSide = 'top' | 'right' | 'bottom' | 'left';
-
-@Directive({
-  selector: '[zMenuTrigger]',
-  standalone: true,
-  hostDirectives: [
-    {
-      directive: CdkMenuTrigger,
-      inputs: ['cdkMenuTriggerFor: menuTriggerFor', 'cdkMenuPosition: menuPosition'],
-    },
-  ],
-  host: {
-    role: 'menuitem',
-    '[attr.aria-haspopup]': "'menu'",
-    '[attr.aria-expanded]': 'cdkTrigger.isOpen()',
-    '[attr.data-state]': "cdkTrigger.isOpen() ? 'open': 'closed'",
-    '[attr.data-disabled]': "disabled() ? '' : undefined",
-
-    '(pointerdown)': 'onPointerDown($event)',
-  },
-})
-export class ZardMenuTriggerDirective {
-  protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
-
-  readonly zMenuTriggerFor = input.required();
-
-  readonly side = input<ZardMenuSide>();
-  readonly align = input<ZardMenuAlign>();
-  readonly sideOffset = input<number, NumberInput>(NaN, {
-    transform: numberAttribute,
-  });
-
-  readonly alignOffset = input<number, NumberInput>(NaN, {
-    transform: numberAttribute,
-  });
-
-  readonly disabled = input<boolean, BooleanInput>(false, {
-    transform: booleanAttribute,
-  });
-
-  private enablePositions = false;
-
-  // TODO
-  private readonly positions = computed(() => this.computePositions());
-
-  private computePositions() {
-    if (this.align() || this.sideOffset() || this.alignOffset() || this.side()) {
-      this.enablePositions = true;
-    }
-
-    const side = this.side() || 'bottom';
-    const align = this.align() || 'center';
-    const sideOffset = this.sideOffset() || 0;
-    const alignOffset = this.alignOffset() || 0;
-
-    let originX: 'start' | 'center' | 'end' = 'center';
-    let originY: 'top' | 'center' | 'bottom' = 'center';
-    let overlayX: 'start' | 'center' | 'end' = 'center';
-    let overlayY: 'top' | 'center' | 'bottom' = 'center';
-    let offsetX = 0;
-    let offsetY = 0;
-
-    switch (side) {
-      case 'top':
-        originY = 'top';
-        overlayY = 'bottom';
-        offsetY = -sideOffset;
-        break;
-      case 'bottom':
-        originY = 'bottom';
-        overlayY = 'top';
-        offsetY = sideOffset;
-        break;
-      case 'left':
-        originX = 'start';
-        overlayX = 'end';
-        offsetX = -sideOffset;
-        break;
-      case 'right':
-        originX = 'end';
-        overlayX = 'start';
-        offsetX = sideOffset;
-        break;
-    }
-
-    switch (align) {
-      case 'start':
-        if (side === 'top' || side === 'bottom') {
-          originX = 'start';
-          overlayX = 'start';
-          offsetX = alignOffset;
-        } else {
-          originY = 'top';
-          overlayY = 'top';
-          offsetY = alignOffset;
-        }
-        break;
-      case 'end':
-        if (side === 'top' || side === 'bottom') {
-          originX = 'end';
-          overlayX = 'end';
-          offsetX = -alignOffset;
-        } else {
-          originY = 'bottom';
-          overlayY = 'bottom';
-          offsetY = -alignOffset;
-        }
-        break;
-      case 'center':
-      default:
-        if (side === 'top' || side === 'bottom') {
-          originX = 'center';
-          overlayX = 'center';
-        } else {
-          originY = 'center';
-          overlayY = 'center';
-        }
-        break;
-    }
-
-    return {
-      originX,
-      originY,
-      overlayX,
-      overlayY,
-      offsetX,
-      offsetY,
-    };
-  }
-
-  constructor() {
-    this.onMenuPositionEffect();
-  }
-
-  /** @ignore */
-  onPointerDown($event: MouseEvent) {
-    // only call handler if it's the left button (mousedown gets triggered by all mouse buttons)
-    // but not when the control key is pressed (avoiding MacOS right click)
-    if (!this.disabled() && $event.button === 0 && !$event.ctrlKey) {
-      /* empty */
-      if (!this.cdkTrigger.isOpen()) {
-        // prevent trigger focusing when opening
-        // this allows the content to be given focus without competition
-        $event.preventDefault();
-      }
-    }
-  }
-
-  private onMenuPositionEffect() {
-    effect(() => {
-      const positions = this.positions();
-
-      untracked(() => {
-        if (this.enablePositions) {
-          this.setMenuPositions([positions]);
-        }
-      });
-    });
-  }
-
-  private setMenuPositions(positions: CdkMenuTrigger['menuPosition']) {
-    const prevMenuPosition = this.cdkTrigger.menuPosition;
-    this.cdkTrigger.menuPosition = positions;
-    this.fireNgOnChanges('menuPosition', this.cdkTrigger.menuPosition, prevMenuPosition);
-  }
-
-  private fireNgOnChanges<K extends keyof CdkMenuTrigger, V extends CdkMenuTrigger[K]>(input: K, currentValue: V, previousValue: V, firstChange = false) {
-    this.cdkTrigger.ngOnChanges({
-      [input]: new SimpleChange(previousValue, currentValue, firstChange),
-    });
-  }
-}
-
-```
-
-
-
 ```angular-ts title="menu.module.ts" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
-import { ZardMenuContentDirective, ZardMenuDirective, ZardMenuGroupDirective } from './menu-directive';
+import { ZardMenuContentDirective } from './menu-content.directive';
 import { ZardMenuItemDirective } from './menu-item.directive';
-import { ZardMenuTriggerDirective } from './menu-trigger.directive';
+import { ZardMenuDirective } from './menu.directive';
 
-const MENU_COMPONENTS = [ZardMenuDirective, ZardMenuGroupDirective, ZardMenuContentDirective, ZardMenuItemDirective, ZardMenuTriggerDirective];
+const MENU_COMPONENTS = [ZardMenuContentDirective, ZardMenuItemDirective, ZardMenuDirective];
 
 @NgModule({
   imports: [MENU_COMPONENTS],

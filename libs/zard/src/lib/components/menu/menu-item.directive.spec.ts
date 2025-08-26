@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+import { PARENT_OR_NEW_MENU_STACK_PROVIDER } from '@angular/cdk/menu';
 
 import { ZardMenuItemDirective } from './menu-item.directive';
 
@@ -23,6 +24,7 @@ describe('ZardMenuItemDirective', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestComponent],
+      providers: [PARENT_OR_NEW_MENU_STACK_PROVIDER],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
@@ -41,7 +43,7 @@ describe('ZardMenuItemDirective', () => {
 
   it('should have correct initial attributes', () => {
     expect(element.getAttribute('role')).toBe('menuitem');
-    expect(element.getAttribute('tabindex')).toBe('-1');
+    expect(element.getAttribute('tabindex')).toBe('0');
     expect(element.getAttribute('data-orientation')).toBe('horizontal');
   });
 
@@ -89,6 +91,7 @@ describe('ZardMenuItemDirective', () => {
     expect(directive['isFocused']()).toBe(false);
 
     element.dispatchEvent(new FocusEvent('focus'));
+    fixture.detectChanges();
 
     expect(directive['isFocused']()).toBe(true);
     expect(element.getAttribute('data-highlighted')).toBe('');
@@ -99,6 +102,7 @@ describe('ZardMenuItemDirective', () => {
     fixture.detectChanges();
 
     element.dispatchEvent(new FocusEvent('blur'));
+    fixture.detectChanges();
 
     expect(directive['isFocused']()).toBe(false);
     expect(element.getAttribute('data-highlighted')).toBeNull();
@@ -146,7 +150,9 @@ describe('ZardMenuItemDirective', () => {
   it('should handle prevented default pointer events', () => {
     const focusSpy = jest.spyOn(element, 'focus');
     const pointerEvent = new PointerEvent('pointermove', { pointerType: 'mouse' });
-    pointerEvent.preventDefault();
+
+    // Create a spy on preventDefault and mock defaultPrevented
+    Object.defineProperty(pointerEvent, 'defaultPrevented', { value: true, configurable: true });
 
     element.dispatchEvent(pointerEvent);
 

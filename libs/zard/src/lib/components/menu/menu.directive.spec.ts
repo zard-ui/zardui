@@ -1,3 +1,4 @@
+import { PARENT_OR_NEW_MENU_STACK_PROVIDER } from '@angular/cdk/menu';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
@@ -26,6 +27,7 @@ describe('ZardMenuDirective', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestComponent],
+      providers: [PARENT_OR_NEW_MENU_STACK_PROVIDER],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
@@ -80,7 +82,9 @@ describe('ZardMenuDirective', () => {
     fixture.detectChanges();
 
     const cdkTrigger = directive['cdkTrigger'];
-    jest.spyOn(cdkTrigger, 'open');
+    jest.spyOn(cdkTrigger, 'open').mockImplementation(() => {
+      // Mock implementation for testing
+    });
 
     directive.ngOnInit();
 
@@ -129,6 +133,11 @@ describe('ZardMenuDirective', () => {
     component.trigger = 'hover';
     fixture.detectChanges();
 
+    const cdkTrigger = directive['cdkTrigger'];
+    jest.spyOn(cdkTrigger, 'open').mockImplementation(() => {
+      // Mock implementation for testing
+    });
+
     directive.ngOnInit();
     directive['scheduleMenuClose']();
 
@@ -158,8 +167,11 @@ describe('ZardMenuDirective', () => {
 
   it('should determine if menu should stay open based on related target', () => {
     const mockTriggerElement = document.createElement('div');
+    const mockOverlayPane = document.createElement('div');
+    mockOverlayPane.className = 'cdk-overlay-pane';
     const mockMenuElement = document.createElement('div');
     mockMenuElement.setAttribute('z-menu-content', '');
+    mockOverlayPane.appendChild(mockMenuElement);
 
     jest.spyOn(directive['elementRef'].nativeElement, 'contains').mockImplementation(element => element === mockTriggerElement);
 
