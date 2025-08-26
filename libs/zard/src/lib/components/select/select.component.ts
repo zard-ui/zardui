@@ -10,6 +10,7 @@ import {
   HostListener,
   inject,
   input,
+  linkedSignal,
   OnDestroy,
   OnInit,
   output,
@@ -98,7 +99,20 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
   readonly isOpen = signal(false);
   private readonly _selectedValue = signal<string>('');
-  private readonly _selectedLabel = signal<string>('');
+  private readonly _selectedLabel = linkedSignal(() => {
+    const items = this.selectItems();
+    const currentValue = this.selectedValue();
+
+    if (items.length > 0 && currentValue && !this.label()) {
+      const matchingItem = items.find(item => item.value() === currentValue);
+      if (matchingItem) {
+        const element = matchingItem.elementRef.nativeElement;
+        const textContent = element.textContent?.trim() || element.innerText?.trim();
+        return textContent ?? '';
+      }
+    }
+    return '';
+  });
   readonly focusedIndex = signal<number>(-1);
 
   // Use computed to derive the effective selected value from input or internal state
@@ -129,25 +143,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   );
 
   protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
-
-  constructor() {
-    // Effect to update label when items are available and value changes
-    effect(() => {
-      const items = this.selectItems();
-      const currentValue = this.selectedValue();
-
-      if (items.length > 0 && currentValue && !this.label()) {
-        const matchingItem = items.find(item => item.value() === currentValue);
-        if (matchingItem && !this._selectedLabel()) {
-          const element = matchingItem.elementRef.nativeElement;
-          const textContent = element.textContent?.trim() || element.innerText?.trim();
-          if (textContent) {
-            this._selectedLabel.set(textContent);
-          }
-        }
-      }
-    });
-  }
 
   ngOnInit() {
     // Initialize selected value from input immediately
