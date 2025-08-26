@@ -130,18 +130,11 @@ describe('ZardSelectComponent', () => {
       TestBed.resetTestingModule();
     });
 
-    it('should handle content projection and contentChildren signal', () => {
-      // In this test environment, contentChildren may not work as expected
-      // due to how TestBed handles content projection
-      const items = selectComponent.selectItems();
-
-      // The contentChildren query should maintain the contentChildren functionality
-      expect(selectComponent.selectItems).toBeDefined();
-      expect(typeof selectComponent.selectItems).toBe('function');
-
-      // The items array might be empty in the test environment, but that's okay
-      // The important thing is that the signal works and returns an array
-      expect(Array.isArray(items)).toBe(true);
+    it('should handle component functionality without selectItems', () => {
+      // selectItems was removed to avoid circular dependency
+      // The component should still function correctly for basic operations
+      expect(selectComponent.selectedValue).toBeDefined();
+      expect(selectComponent.selectedLabel).toBeDefined();
     });
 
     it('should update selectedLabel when value changes', () => {

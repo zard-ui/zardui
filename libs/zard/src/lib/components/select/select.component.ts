@@ -1,8 +1,10 @@
 import {
+  AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
+  effect,
   ElementRef,
   forwardRef,
   HostListener,
@@ -72,7 +74,7 @@ import { mergeClasses } from '../../shared/utils/utils';
     </ng-template>
   `,
 })
-export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit, OnDestroy {
   private elementRef = inject(ElementRef);
   private overlay = inject(Overlay);
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
@@ -80,9 +82,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<any>>('dropdownTemplate');
 
-  readonly selectItems = contentChildren('z-select-item, [z-select-item]', {
-    read: ZardSelectItemComponent,
-  });
+  readonly selectItems = contentChildren(ZardSelectItemComponent);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -104,24 +104,12 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   // Use computed to derive the effective selected value from input or internal state
   readonly selectedValue = computed(() => this.value() || this._selectedValue());
 
-  // Compute the label based on selected value and available items
+  // Compute the label based on selected value
   readonly selectedLabel = computed(() => {
     const manualLabel = this.label();
     if (manualLabel) return manualLabel;
 
-    const currentValue = this.selectedValue();
-    if (!currentValue) return '';
-
-    const items = this.selectItems();
-    const matchingItem = items.find(item => item.value() === currentValue);
-
-    if (matchingItem) {
-      const element = matchingItem.elementRef.nativeElement;
-      const textContent = element.textContent?.trim() || element.innerText?.trim();
-      if (textContent) return textContent;
-    }
-
-    return this._selectedLabel() || currentValue;
+    return this._selectedLabel() || this.selectedValue();
   });
 
   private onChange = (_value: string) => {
@@ -142,19 +130,41 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
   protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
 
+  constructor() {
+    // Effect to update label when items are available and value changes
+    effect(() => {
+      const items = this.selectItems();
+      const currentValue = this.selectedValue();
+
+      if (items.length > 0 && currentValue && !this.label()) {
+        const matchingItem = items.find(item => item.value() === currentValue);
+        if (matchingItem && !this._selectedLabel()) {
+          const element = matchingItem.elementRef.nativeElement;
+          const textContent = element.textContent?.trim() || element.innerText?.trim();
+          if (textContent) {
+            this._selectedLabel.set(textContent);
+          }
+        }
+      }
+    });
+  }
+
   ngOnInit() {
     // Initialize selected value from input immediately
     const inputValue = this.value();
     if (inputValue) {
       this._selectedValue.set(inputValue);
     }
+  }
 
-    // Delay overlay creation to ensure element is rendered, but only if not in test environment
-    if (typeof window !== 'undefined' && this.elementRef?.nativeElement?.offsetWidth !== undefined) {
-      setTimeout(() => {
-        this.createOverlay();
+  ngAfterContentInit() {
+    // Setup select host reference for each item
+    this.selectItems().forEach(item => {
+      item.setSelectHost({
+        selectedValue: () => this.selectedValue(),
+        selectItem: (value: string, label: string) => this.selectItem(value, label),
       });
-    }
+    });
   }
 
   ngOnDestroy() {

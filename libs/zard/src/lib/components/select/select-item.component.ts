@@ -1,8 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardSelectComponent } from './select.component';
 import { selectItemVariants } from './select.variants';
+
+// Interface to avoid circular dependency
+interface SelectHost {
+  selectedValue(): string;
+  selectItem(value: string, label: string): void;
+}
 
 @Component({
   selector: 'z-select-item, [z-select-item]',
@@ -33,12 +38,16 @@ export class ZardSelectItemComponent {
   readonly disabled = input(false, { transform });
   readonly class = input<string>('');
 
-  private select = inject(ZardSelectComponent, { optional: true });
+  private select: SelectHost | null = null;
   readonly elementRef = inject(ElementRef);
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
 
   protected readonly isSelected = computed(() => this.select?.selectedValue() === this.value());
+
+  setSelectHost(selectHost: SelectHost) {
+    this.select = selectHost;
+  }
 
   onClick() {
     if (this.disabled() || !this.select) return;
