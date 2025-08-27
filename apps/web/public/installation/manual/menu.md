@@ -5,6 +5,8 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
 import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit } from '@angular/core';
 
+import { ZardMenuManagerService } from './menu-manager.service';
+
 export type ZardMenuPlacement = 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft' | 'topCenter' | 'topRight';
 export type ZardMenuTrigger = 'click' | 'hover';
 
@@ -32,6 +34,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
   private readonly elementRef = inject(ElementRef);
+  private readonly menuManager = inject(ZardMenuManagerService);
 
   private closeTimeout: ReturnType<typeof setTimeout> | null = null;
   private readonly cleanupFunctions: Array<() => void> = [];
@@ -49,6 +52,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.cancelScheduledClose();
+    this.menuManager.unregisterHoverMenu(this);
     this.cleanupFunctions.forEach(cleanup => cleanup());
     this.cleanupFunctions.length = 0;
   }
@@ -65,6 +69,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
       if (this.zDisabled()) return;
 
       this.cancelScheduledClose();
+      this.menuManager.registerHoverMenu(this);
       this.cdkTrigger.open();
     });
 
@@ -72,23 +77,26 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private setupMenuOpenListener(): void {
-    const subscription = this.cdkTrigger.opened.subscribe(() => {
+    const openSubscription = this.cdkTrigger.opened.subscribe(() => {
       setTimeout(() => this.setupMenuContentListeners(), 0);
     });
 
-    this.cleanupFunctions.push(() => subscription.unsubscribe());
+    const closeSubscription = this.cdkTrigger.closed.subscribe(() => {
+      this.menuManager.unregisterHoverMenu(this);
+    });
+
+    this.cleanupFunctions.push(
+      () => openSubscription.unsubscribe(),
+      () => closeSubscription.unsubscribe(),
+    );
   }
 
   private setupMenuContentListeners(): void {
-    const overlay = this.getMenuOverlay();
-    if (!overlay) return;
-
-    this.addEventListenerWithCleanup(overlay, 'mouseenter', () => this.cancelScheduledClose());
-    this.addEventListenerWithCleanup(overlay, 'mouseleave', event => this.handleMenuLeave(event));
-  }
-
-  private handleMenuLeave(event: Event): void {
-    this.scheduleCloseIfNeeded(event as MouseEvent);
+    const overlays = this.getAllMenuOverlays();
+    overlays.forEach(overlay => {
+      this.addEventListenerWithCleanup(overlay, 'mouseenter', () => this.cancelScheduledClose());
+      this.addEventListenerWithCleanup(overlay, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
+    });
   }
 
   private scheduleCloseIfNeeded(event: MouseEvent): void {
@@ -103,9 +111,34 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
     if (!relatedTarget) return false;
 
     const isMovingToTrigger = this.elementRef.nativeElement.contains(relatedTarget);
-    const isMovingToMenu = relatedTarget.closest(ZardMenuDirective.MENU_CONTENT_SELECTOR);
+    const isMovingToAnyMenu = this.isMovingToMenuHierarchy(relatedTarget);
+    const isMovingToOtherTrigger = relatedTarget.matches('[z-menu]') && !this.elementRef.nativeElement.contains(relatedTarget);
 
-    return isMovingToTrigger || !!isMovingToMenu;
+    if (isMovingToOtherTrigger) {
+      return false;
+    }
+
+    return isMovingToTrigger || isMovingToAnyMenu;
+  }
+
+  private isMovingToMenuHierarchy(relatedTarget: Element): boolean {
+    // Check if moving to any menu content (including nested submenus)
+    const isMovingToMenuContent = !!relatedTarget.closest(ZardMenuDirective.MENU_CONTENT_SELECTOR);
+
+    // Check if moving to any CDK overlay that contains menu content
+    const isMovingToMenuOverlay = !!relatedTarget.closest('.cdk-overlay-pane');
+
+    // Also check if the target is within any menu trigger that might have submenus
+    const isMovingToSubMenuTrigger = !!relatedTarget.closest('[z-menu]');
+
+    return isMovingToMenuContent || (isMovingToMenuOverlay && this.hasMenuContentInOverlay(relatedTarget)) || isMovingToSubMenuTrigger;
+  }
+
+  private hasMenuContentInOverlay(element: Element): boolean {
+    const overlay = element.closest('.cdk-overlay-pane');
+    if (!overlay) return false;
+
+    return !!overlay.querySelector('[z-menu-content]');
   }
 
   private scheduleMenuClose(): void {
@@ -125,9 +158,18 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
     return document.querySelector(ZardMenuDirective.MENU_OVERLAY_SELECTOR);
   }
 
+  private getAllMenuOverlays(): Element[] {
+    return Array.from(document.querySelectorAll('.cdk-overlay-container .cdk-overlay-pane')).filter(overlay => overlay.querySelector('[z-menu-content]'));
+  }
+
   private addEventListenerWithCleanup(element: Element, eventType: string, handler: (event: MouseEvent | Event) => void): void {
     element.addEventListener(eventType, handler);
     this.cleanupFunctions.push(() => element.removeEventListener(eventType, handler));
+  }
+
+  close(): void {
+    this.cancelScheduledClose();
+    this.cdkTrigger.close();
   }
 }
 
@@ -178,8 +220,6 @@ import { menuContentVariants } from './menu.variants';
   standalone: true,
   hostDirectives: [CdkMenu],
   host: {
-    role: 'menu',
-    '[attr.aria-orientation]': '"vertical"',
     '[class]': 'classes()',
   },
 })
@@ -198,7 +238,7 @@ import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuItem } from '@angular/cdk/menu';
-import { booleanAttribute, computed, Directive, effect, inject, input, signal } from '@angular/core';
+import { booleanAttribute, computed, Directive, effect, inject, input, signal, untracked } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { menuItemVariants, ZardMenuItemVariants } from './menu.variants';
@@ -213,8 +253,6 @@ import { menuItemVariants, ZardMenuItemVariants } from './menu.variants';
     },
   ],
   host: {
-    role: 'menuitem',
-    tabindex: '-1',
     '[class]': 'classes()',
     '[attr.data-orientation]': "'horizontal'",
     '[attr.data-state]': 'isOpenState()',
@@ -238,7 +276,7 @@ export class ZardMenuItemDirective {
 
   protected readonly disabledState = computed(() => this.zDisabled());
 
-  protected readonly isOpenState = signal(false);
+  protected readonly isOpenState = computed(() => this.cdkMenuItem.isMenuOpen());
 
   protected readonly highlightedState = computed(() => this.isFocused());
 
@@ -253,8 +291,10 @@ export class ZardMenuItemDirective {
 
   constructor() {
     effect(() => {
-      this.cdkMenuItem.disabled = this.zDisabled();
-      this.isOpenState.set(this.cdkMenuItem.isMenuOpen());
+      const disabled = this.zDisabled();
+      untracked(() => {
+        this.cdkMenuItem.disabled = disabled;
+      });
     });
   }
 
@@ -277,6 +317,58 @@ export class ZardMenuItemDirective {
       const item = event.currentTarget;
       (item as HTMLElement)?.focus({ preventScroll: true });
     }
+  }
+}
+
+```
+
+
+
+```angular-ts title="menu-manager.service.ts" copyButton showLineNumbers
+import { Injectable } from '@angular/core';
+
+import { ZardMenuDirective } from './menu.directive';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ZardMenuManagerService {
+  private activeHoverMenu: ZardMenuDirective | null = null;
+  private menuHierarchy = new Map<ZardMenuDirective, ZardMenuDirective[]>();
+
+  registerHoverMenu(menu: ZardMenuDirective): void {
+    if (this.activeHoverMenu && this.activeHoverMenu !== menu && !this.isMenuInHierarchy(this.activeHoverMenu, menu)) {
+      this.activeHoverMenu.close();
+    }
+    this.activeHoverMenu = menu;
+  }
+
+  unregisterHoverMenu(menu: ZardMenuDirective): void {
+    if (this.activeHoverMenu === menu) {
+      this.activeHoverMenu = null;
+    }
+    this.menuHierarchy.delete(menu);
+  }
+
+  closeActiveMenu(): void {
+    if (this.activeHoverMenu) {
+      this.activeHoverMenu.close();
+      this.activeHoverMenu = null;
+    }
+  }
+
+  addToHierarchy(parent: ZardMenuDirective, child: ZardMenuDirective): void {
+    if (!this.menuHierarchy.has(parent)) {
+      this.menuHierarchy.set(parent, []);
+    }
+    this.menuHierarchy.get(parent)?.push(child);
+  }
+
+  private isMenuInHierarchy(parent: ZardMenuDirective, child: ZardMenuDirective): boolean {
+    const children = this.menuHierarchy.get(parent);
+    if (!children) return false;
+
+    return children.includes(child) || children.some(c => this.isMenuInHierarchy(c, child));
   }
 }
 

@@ -23,7 +23,7 @@ import { ZardMenuModule } from '../menu.module';
                 <button z-menu-item (click)="log('Analytics')">Analytics</button>
                 <button z-menu-item (click)="log('Dashboard')">Dashboard</button>
                 <button z-menu-item (click)="log('Reports')">Reports</button>
-                <button z-menu-item (click)="log('Insights')">Insights</button>
+                <button z-menu-item zDisabled (click)="log('Insights')">Insights</button>
               </div>
             </ng-template>
           </div>

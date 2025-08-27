@@ -11,8 +11,6 @@ import { menuContentVariants } from './menu.variants';
   standalone: true,
   hostDirectives: [CdkMenu],
   host: {
-    role: 'menu',
-    '[attr.aria-orientation]': '"vertical"',
     '[class]': 'classes()',
   },
 })

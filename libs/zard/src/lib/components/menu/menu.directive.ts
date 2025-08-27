@@ -2,6 +2,8 @@ import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
 import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit } from '@angular/core';
 
+import { ZardMenuManagerService } from './menu-manager.service';
+
 export type ZardMenuPlacement = 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft' | 'topCenter' | 'topRight';
 export type ZardMenuTrigger = 'click' | 'hover';
 
@@ -29,6 +31,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
   private readonly elementRef = inject(ElementRef);
+  private readonly menuManager = inject(ZardMenuManagerService);
 
   private closeTimeout: ReturnType<typeof setTimeout> | null = null;
   private readonly cleanupFunctions: Array<() => void> = [];
@@ -46,8 +49,14 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.cancelScheduledClose();
+    this.menuManager.unregisterHoverMenu(this);
     this.cleanupFunctions.forEach(cleanup => cleanup());
     this.cleanupFunctions.length = 0;
+  }
+
+  close(): void {
+    this.cancelScheduledClose();
+    this.cdkTrigger.close();
   }
 
   private initializeHoverBehavior(): void {
@@ -62,6 +71,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
       if (this.zDisabled()) return;
 
       this.cancelScheduledClose();
+      this.menuManager.registerHoverMenu(this);
       this.cdkTrigger.open();
     });
 
@@ -69,23 +79,33 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private setupMenuOpenListener(): void {
-    const subscription = this.cdkTrigger.opened.subscribe(() => {
+    const openSubscription = this.cdkTrigger.opened.subscribe(() => {
       setTimeout(() => this.setupMenuContentListeners(), 0);
     });
 
-    this.cleanupFunctions.push(() => subscription.unsubscribe());
+    const closeSubscription = this.cdkTrigger.closed.subscribe(() => {
+      this.menuManager.unregisterHoverMenu(this);
+    });
+
+    this.cleanupFunctions.push(
+      () => openSubscription.unsubscribe(),
+      () => closeSubscription.unsubscribe(),
+    );
   }
 
   private setupMenuContentListeners(): void {
-    const overlay = this.getMenuOverlay();
+    const overlay = document.querySelector(ZardMenuDirective.MENU_OVERLAY_SELECTOR);
     if (!overlay) return;
 
     this.addEventListenerWithCleanup(overlay, 'mouseenter', () => this.cancelScheduledClose());
-    this.addEventListenerWithCleanup(overlay, 'mouseleave', event => this.handleMenuLeave(event));
+    this.addEventListenerWithCleanup(overlay, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
   }
 
-  private handleMenuLeave(event: Event): void {
-    this.scheduleCloseIfNeeded(event as MouseEvent);
+  private cancelScheduledClose(): void {
+    if (this.closeTimeout) {
+      clearTimeout(this.closeTimeout);
+      this.closeTimeout = null;
+    }
   }
 
   private scheduleCloseIfNeeded(event: MouseEvent): void {
@@ -101,6 +121,11 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
     const isMovingToTrigger = this.elementRef.nativeElement.contains(relatedTarget);
     const isMovingToMenu = relatedTarget.closest(ZardMenuDirective.MENU_CONTENT_SELECTOR);
+    const isMovingToOtherTrigger = relatedTarget.matches('[z-menu]') && !this.elementRef.nativeElement.contains(relatedTarget);
+
+    if (isMovingToOtherTrigger) {
+      return false;
+    }
 
     return isMovingToTrigger || !!isMovingToMenu;
   }
@@ -109,17 +134,6 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
     this.closeTimeout = setTimeout(() => {
       this.cdkTrigger.close();
     }, this.zHoverDelay());
-  }
-
-  private cancelScheduledClose(): void {
-    if (this.closeTimeout) {
-      clearTimeout(this.closeTimeout);
-      this.closeTimeout = null;
-    }
-  }
-
-  private getMenuOverlay(): Element | null {
-    return document.querySelector(ZardMenuDirective.MENU_OVERLAY_SELECTOR);
   }
 
   private addEventListenerWithCleanup(element: Element, eventType: string, handler: (event: MouseEvent | Event) => void): void {
