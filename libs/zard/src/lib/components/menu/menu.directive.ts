@@ -42,7 +42,11 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   readonly zHoverDelay = input<number>(100);
 
   ngOnInit(): void {
-    if (this.zTrigger() === 'hover') {
+    const isMobile = this.isMobileDevice();
+
+    // If trigger is hover but device is mobile, skip hover behavior
+    // The CDK MenuTrigger will handle click by default
+    if (this.zTrigger() === 'hover' && !isMobile) {
       this.initializeHoverBehavior();
     }
   }
@@ -136,8 +140,22 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
     }, this.zHoverDelay());
   }
 
-  private addEventListenerWithCleanup(element: Element, eventType: string, handler: (event: MouseEvent | Event) => void): void {
-    element.addEventListener(eventType, handler);
-    this.cleanupFunctions.push(() => element.removeEventListener(eventType, handler));
+  private addEventListenerWithCleanup(element: Element, eventType: string, handler: (event: MouseEvent | Event) => void, options?: AddEventListenerOptions): void {
+    element.addEventListener(eventType, handler, options);
+    this.cleanupFunctions.push(() => element.removeEventListener(eventType, handler, options));
+  }
+
+  private isMobileDevice(): boolean {
+    // Check for touch support
+    const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+
+    // Check for mobile user agent
+    const mobileRegex = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i;
+    const isMobileUA = mobileRegex.test(navigator.userAgent);
+
+    // Check viewport width for small screens
+    const isSmallScreen = window.innerWidth <= 768;
+
+    return hasTouch && (isMobileUA || isSmallScreen);
   }
 }
