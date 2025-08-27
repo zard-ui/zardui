@@ -224,22 +224,17 @@ describe('ZardButtonComponent', () => {
 
 ## 🌿 Branch Strategy
 
-### Trunk-Based Development
+### Simple GitHub Flow
 
-We follow **Trunk-Based Development** with short-lived feature branches:
+Following the **proposed workflow**, we use a simplified flow:
 
-#### Main Branches
+#### Main Branch
 
-- **`master`** - 🚀 **Production**
-
-  - Protected branch, maintainers only
-  - Updates via PRs from `beta` branch
-  - Automatic deployment to production
-
-- **`beta`** - 🧪 **Development**
-  - Integration and testing branch
-  - Deployed at: `https://dev.zardui.com/`
-  - All features are tested here first
+- **`master`** - 🚀 **Single main branch**
+  - Receives direct PRs
+  - Automatic squash merge
+  - Automatic release via tags
+  - Continuous deployment to production
 
 #### Feature Branches
 
@@ -247,61 +242,75 @@ Naming convention:
 
 ```bash
 feat/#<issue-number>-<descriptive-name>
-# Example: feat/#42-button-component
+# Example: feat/#42-button-loading
+bugfix/#<issue-number>-<descriptive-name>
+# Example: bugfix/#43-input-focus-bug
 ```
 
 ## 🔄 Contribution Workflow
 
-### Step by Step
+### Simple GitHub Flow (Based on Proposed Workflow)
 
-1. **📋 Find or create an issue** on GitHub
-2. **🏷️ Assign the issue to yourself** (prevents duplication)
-3. **🌿 Create your branch** from `beta`:
+1. **📋 Fork the repository**
+2. **🌿 Create branch** directly from `master`:
    ```bash
-   git checkout beta
-   git pull origin beta
+   git checkout master
+   git pull origin master
    git checkout -b feat/#123-new-feature
    ```
-4. **💻 Develop your feature** following the patterns
-5. **🧪 Run tests**:
+3. **💻 Develop** with as many commits as you want
+4. **🧪 Run tests**:
    ```bash
    npm test
    npm run test:watch  # during development
    ```
-6. **📝 Make commits** following conventional commits
-7. **🚀 Open a Pull Request** to `beta`
-8. **👁️ Wait for review** from maintainers
-9. **✅ After approval**, automatic deployment to dev environment
+5. **🚀 Open PR to `master`**
+6. **👁️ Review + Merge** = Automatic release
+7. **✅ Automatic squash merge** transforms multiple commits into 1 clean commit
 
 ### PR Checklist
 
-- [ ] Tests passing
-- [ ] Code follows project patterns
-- [ ] Documentation updated (if necessary)
-- [ ] Demos working correctly
-- [ ] No lint/typecheck warnings
-- [ ] Related issue linked
+- [ ] **Tests passing** - `npm test`
+- [ ] **Code follows project patterns**
+- [ ] **Documentation updated** (if necessary)
+- [ ] **Demos working correctly**
+- [ ] **No lint/typecheck warnings**
+- [ ] **Related issue linked**
+- [ ] **Conventional commit** in PR title
+- [ ] **Squash merge** will be applied automatically
 
 ## 📋 Commit Patterns
 
-We use **Conventional Commits** for automated releases:
+### Conventional Commits for Automated Releases
+
+We use **Conventional Commits** as specified in CLAUDE.md:
 
 ```bash
-📦 refactor: code changes without bugs/features
+📦 refactor: code changes that don't fix bugs or add features
 ✨ feat: new functionality
 🐛 fix: bug correction
-💄 style: formatting (no logic changes)
-🏗️ build: build system/dependencies
-🔧 ci: CI configurations
-✏️ docs: documentation only
+💄 style: changes that don't affect code meaning (formatting, etc)
+🏗️ build: build system or dependencies changes
+🔧 ci: CI configuration changes
+✏️ docs: documentation only changes
 🚀 perf: performance improvements
-🧪 test: adding/correcting tests
-🌐 i18n: internationalization
-📈 analytics: analytics and metrics
+🧪 test: adding or correcting tests
+🌐 i18n: internationalization and localization
+📈 analytics: analytics
 🗃️ database: database-related changes
 ```
 
-### Examples
+### Automatic Versioning
+
+```bash
+# Examples of how commits affect versioning:
+feat(button): add loading state    # Minor: v19.3.4 → v19.4.0
+fix(input): resolve focus bug      # Patch: v19.1.0 → v19.1.1
+feat!(card): support to angular 20 # Major: v19.1.0 → v20.0.0
+docs: update examples              # No release
+```
+
+### Practical Examples
 
 ```bash
 ✨ feat: add button component with variants
@@ -341,6 +350,31 @@ npm run test:watch        # 👁️ Tests in watch mode
 - [TailwindCSS v4](https://tailwindcss.com/docs)
 - [CVA Documentation](https://cva.style/)
 - [Conventional Commits](https://www.conventionalcommits.org/)
+
+## 🚀 Automatic Release System
+
+### Release Cycle
+
+- **Monday-Thursday**: Development and PRs
+- **Friday**: Code freeze + automatic release
+- **Versioning**: Based on conventional commits
+
+### How It Works
+
+```bash
+1. PR with "feat(button): add loading state" is merged
+2. Semantic Release detects conventional commit
+3. Auto bump: v19.3.4 → v19.4.0
+4. Creates tag v19.4.0
+5. Publishes @zard/ui@19.4.0 to npm
+6. Automatic release notes
+```
+
+### Version Support
+
+- **Current + Previous**: Angular 20 + 19 actively supported
+- **LTS**: Angular 18 with extended support (bug fixes only)
+- **Migration**: When Angular 21 is released, create migration branch
 
 ---
 
