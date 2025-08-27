@@ -115,24 +115,22 @@ describe('ZardCalendarComponent', () => {
   describe('Navigation', () => {
     it('should navigate to previous month', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(initialDate);
+      component['value'].set(initialDate);
 
       component['previousMonth']();
 
-      const currentDate = component['currentDate']();
-      expect(currentDate.getMonth()).toBe(4); // May
-      expect(currentDate.getFullYear()).toBe(2024);
+      expect(component['currentMonthValue']()).toBe('4'); // May
+      expect(component['currentYearValue']()).toBe('2024');
     });
 
     it('should navigate to next month', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(initialDate);
+      component['value'].set(initialDate);
 
       component['nextMonth']();
 
-      const currentDate = component['currentDate']();
-      expect(currentDate.getMonth()).toBe(6); // July
-      expect(currentDate.getFullYear()).toBe(2024);
+      expect(component['currentMonthValue']()).toBe('6'); // July
+      expect(component['currentYearValue']()).toBe('2024');
     });
 
     it('should disable previous button when minDate prevents navigation', () => {
@@ -144,7 +142,7 @@ describe('ZardCalendarComponent', () => {
         value: () => minDate,
         writable: true,
       });
-      component['navigationDate'].set(currentDate);
+      component['value'].set(currentDate);
 
       expect(component['isPreviousDisabled']()).toBe(true);
     });
@@ -158,7 +156,7 @@ describe('ZardCalendarComponent', () => {
         value: () => maxDate,
         writable: true,
       });
-      component['navigationDate'].set(currentDate);
+      component['value'].set(currentDate);
 
       expect(component['isNextDisabled']()).toBe(true);
     });
@@ -167,18 +165,17 @@ describe('ZardCalendarComponent', () => {
   describe('Month and Year Selection', () => {
     it('should change month when valid month index is provided', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(initialDate);
+      component['value'].set(initialDate);
 
       component['onMonthChange']('2'); // March (index 2)
 
-      const currentDate = component['currentDate']();
-      expect(currentDate.getMonth()).toBe(2);
-      expect(currentDate.getFullYear()).toBe(2024);
+      expect(component['currentMonthValue']()).toBe('2');
+      expect(component['currentYearValue']()).toBe('2024');
     });
 
     it('should not change month when invalid month index is provided', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(initialDate);
+      component['value'].set(initialDate);
 
       component['onMonthChange']('invalid');
       component['onMonthChange']('12'); // Invalid month
@@ -190,47 +187,45 @@ describe('ZardCalendarComponent', () => {
 
     it('should change year when valid year is provided', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(initialDate);
+      component['value'].set(initialDate);
 
       component['onYearChange']('2025');
 
-      const currentDate = component['currentDate']();
-      expect(currentDate.getFullYear()).toBe(2025);
-      expect(currentDate.getMonth()).toBe(5); // Should remain June
+      expect(component['currentYearValue']()).toBe('2025');
+      expect(component['currentMonthValue']()).toBe('5'); // Should remain June
     });
 
     it('should not change year when invalid year is provided', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(initialDate);
+      component['value'].set(initialDate);
 
       component['onYearChange']('invalid');
       component['onYearChange']('1899'); // Too old (below 1900)
       component['onYearChange']('2101'); // Too new (above 2100)
       component['onYearChange'](''); // Empty string
 
-      const currentDate = component['currentDate']();
-      expect(currentDate.getFullYear()).toBe(2024); // Should remain 2024
+      expect(component['currentYearValue']()).toBe('2024'); // Should remain 2024
     });
 
     it('should return correct current month name', () => {
       const date = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(date);
+      component['value'].set(date);
 
-      expect(component['getCurrentMonthName']()).toBe('Jun');
+      expect(component['currentMonthName']()).toBe('Jun');
     });
 
     it('should return correct current year', () => {
       const date = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(date);
+      component['value'].set(date);
 
-      expect(component['getCurrentYear']()).toBe(2024);
+      expect(component['currentYearValue']()).toBe('2024');
     });
   });
 
   describe('Calendar Days Generation', () => {
     it('should generate calendar days for current month', () => {
       const date = new Date(2024, 0, 1); // January 2024
-      component['navigationDate'].set(date);
+      component['value'].set(date);
 
       const calendarDays = component['calendarDays']();
       expect(calendarDays.length).toBeGreaterThan(0);
@@ -242,7 +237,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should mark today correctly', () => {
       const today = new Date();
-      component['navigationDate'].set(new Date(today.getFullYear(), today.getMonth(), 1));
+      component['value'].set(new Date(today.getFullYear(), today.getMonth(), 1));
 
       const calendarDays = component['calendarDays']();
       const todayDay = calendarDays.find(day => day.isToday);
@@ -255,12 +250,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should mark selected date correctly', () => {
       const selectedDate = new Date(2024, 0, 15);
-      // Mock value signal
-      Object.defineProperty(component, 'value', {
-        value: () => selectedDate,
-        writable: true,
-      });
-      component['navigationDate'].set(new Date(2024, 0, 1));
+      component['value'].set(selectedDate);
 
       const calendarDays = component['calendarDays']();
       const selectedDay = calendarDays.find(day => day.isSelected);
@@ -399,13 +389,14 @@ describe('ZardCalendarComponent', () => {
   });
 
   describe('Focus Management', () => {
-    it('should reset navigation correctly', () => {
+    it('should reset navigation to current value on reset', () => {
       const testDate = new Date(2024, 5, 15);
-      component['navigationDate'].set(testDate);
+      component['value'].set(testDate);
 
+      component['previousMonth']();
       component.resetNavigation();
 
-      expect(component['navigationDate']()).toBeNull();
+      expect(component['currentDate']().getTime()).toEqual(testDate.getTime());
     });
   });
 
@@ -422,21 +413,21 @@ describe('ZardCalendarComponent', () => {
 
     it('should compute current month value correctly', () => {
       const date = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(date);
+      component['value'].set(date);
 
       expect(component['currentMonthValue']()).toBe('5');
     });
 
     it('should compute current year value correctly', () => {
       const date = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(date);
+      component['value'].set(date);
 
       expect(component['currentYearValue']()).toBe('2024');
     });
 
     it('should compute current month year correctly', () => {
       const date = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(date);
+      component['value'].set(date);
 
       expect(component['currentMonthYear']()).toBe('June 2024');
     });
@@ -445,7 +436,7 @@ describe('ZardCalendarComponent', () => {
   describe('Keyboard Navigation', () => {
     it('should handle arrow key navigation', () => {
       const initialDate = new Date(2024, 0, 15); // January 15, 2024
-      component['navigationDate'].set(initialDate);
+      component['value'].set(initialDate);
 
       const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
       jest.spyOn(event, 'preventDefault');
@@ -457,7 +448,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should handle Home and End keys', () => {
       const initialDate = new Date(2024, 0, 15); // January 15, 2024
-      component['navigationDate'].set(initialDate);
+      component['value'].set(initialDate);
 
       const homeEvent = new KeyboardEvent('keydown', { key: 'Home' });
       const endEvent = new KeyboardEvent('keydown', { key: 'End' });
@@ -474,7 +465,7 @@ describe('ZardCalendarComponent', () => {
 
     it('should handle PageUp and PageDown for month navigation', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(initialDate);
+      component['value'].set(initialDate);
 
       const pageUpEvent = new KeyboardEvent('keydown', { key: 'PageUp' });
       jest.spyOn(pageUpEvent, 'preventDefault');
@@ -483,12 +474,12 @@ describe('ZardCalendarComponent', () => {
 
       expect(pageUpEvent.preventDefault).toHaveBeenCalled();
       // Should navigate to previous month (May)
-      expect(component['currentDate']().getMonth()).toBe(4);
+      expect(component['currentMonthValue']()).toBe('4');
     });
 
     it('should handle Ctrl+PageUp and Ctrl+PageDown for year navigation', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
-      component['navigationDate'].set(initialDate);
+      component['value'].set(initialDate);
 
       const ctrlPageUpEvent = new KeyboardEvent('keydown', {
         key: 'PageUp',
@@ -500,17 +491,13 @@ describe('ZardCalendarComponent', () => {
 
       expect(ctrlPageUpEvent.preventDefault).toHaveBeenCalled();
       // Should navigate to previous year (2023)
-      expect(component['currentDate']().getFullYear()).toBe(2023);
+      expect(component['currentYearValue']()).toBe('2023');
     });
 
     it('should handle Enter and Space for date selection', () => {
       const initialDate = new Date(2024, 0, 15);
-      // Mock value signal
-      Object.defineProperty(component, 'value', {
-        value: () => initialDate,
-        writable: true,
-      });
-      component['navigationDate'].set(new Date(2024, 0, 1));
+      component['value'].set(initialDate);
+      component['value'].set(new Date(2024, 0, 1));
 
       const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
 
