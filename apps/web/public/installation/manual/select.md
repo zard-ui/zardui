@@ -107,7 +107,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     if (!this.label() && currentValue) {
       const matchingItem = this.selectItems()?.find(item => item.value() === currentValue);
       if (matchingItem) {
-       return matchingItem.label();
+        return matchingItem.label();
       }
     }
     return '';

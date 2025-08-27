@@ -5,25 +5,29 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## Project Overview
 
 ZardUI is an Angular component library built with TailwindCSS, inspired by shadcn/ui. It's an Nx monorepo with two main projects:
+
 - `libs/zard/` - The publishable Angular component library
 - `apps/web/` - Documentation website and component showcase
 
 ## Essential Commands
 
 ### Development
+
 ```bash
 npm start                    # Start dev server with file watcher (port 4222)
 npm run watch:files         # Watch and sync demo/doc files only
 ```
 
 ### Building
+
 ```bash
 npm run build              # Build production web app
-npm run build:dev          # Build development web app  
+npm run build:dev          # Build development web app
 npm run publish:build      # Build all library packages for publishing
 ```
 
 ### Testing
+
 ```bash
 npm test                   # Run tests for all libraries
 npx nx test zard           # Run tests for specific library
@@ -31,6 +35,7 @@ npx nx test zard --watch   # Run tests in watch mode
 ```
 
 ### Release
+
 ```bash
 npm run release            # Automated release with conventional commits
 ```
@@ -38,12 +43,15 @@ npm run release            # Automated release with conventional commits
 ## Architecture Overview
 
 ### Monorepo Structure
+
 - **Nx workspace** with dependency graph and caching
 - **Conventional commits** for automated releases
 - **Path aliases**: `@zard/*` → `libs/zard/src/lib/*`
 
 ### Component Architecture
+
 Components follow modern Angular patterns:
+
 - **Standalone components** with `standalone: true`
 - **Signal-based inputs** using `input()` function
 - **CVA (Class Variance Authority)** for type-safe styling variants
@@ -51,7 +59,9 @@ Components follow modern Angular patterns:
 - **Host binding** for dynamic classes: `host: { '[class]': 'classes()' }`
 
 ### Component File Structure
+
 Each component follows this pattern:
+
 ```
 component-name/
 ├── component-name.component.ts     # Main component
@@ -66,11 +76,13 @@ component-name/
 ```
 
 ### Documentation System
+
 - **Automated file sync**: `scripts/generate-files.cts` watches component `demo/` and `doc/` folders
 - **Real-time updates**: File watcher copies changes to `apps/web/public/components/`
 - **Dynamic rendering**: Web app uses `NgComponentOutlet` for live demos
 
 ### Styling System
+
 - **TailwindCSS v4** with PostCSS
 - **Class merging**: `tailwind-merge` for conflict resolution
 - **Conditional classes**: `clsx` utility
@@ -86,6 +98,7 @@ component-name/
 6. **Test component** with `npx nx test zard --watch`
 
 ### Component Template
+
 ```typescript
 @Component({
   selector: 'z-[name], [z-[name]]',
@@ -98,8 +111,8 @@ export class Zard[Name]Component {
   readonly variant = input<Zard[Name]Variants['variant']>('default');
   readonly size = input<Zard[Name]Variants['size']>('default');
   readonly class = input<string>('');
-  
-  protected readonly classes = computed(() => 
+
+  protected readonly classes = computed(() =>
     mergeClasses([name]Variants({
       variant: this.variant(),
       size: this.size()
@@ -134,24 +147,34 @@ export class Zard[Name]Component {
 - Web app depends on library builds (`dependsOn: ["^build"]`)
 - Library packages built independently for publishing
 
-## Padrões de Commit
+# Commit Message Format
 
-Ao fazer commits neste projeto, use sempre os seguintes padrões de commit:
+- Use a single line for the commit message.
+- Start with an emoji to indicate the type of change.
+- Use the following emojis for different types of changes:
+  - 📦 refactor: code changes that do not fix bugs or add features
+  - 📝 docs: documentation changes
+  - 🐛 fix: bug fixes
+  - ✨ feat: new features
+  - 🚀 perf: performance improvements
+  - 🔧 chore: maintenance tasks
+  - 🧪 test: adding or updating tests
+  - 🌐 i18n: internationalization and localization
+  - 📈 analytics: analytics-related changes
+  - 🗃️ database: database-related changes
+- Use the present tense for the commit message.
+- Keep the message concise and descriptive.
 
-- 📦 refactor: mudanças de código que não corrigem bugs nem adicionam features
-- ✨ feat: nova funcionalidade
-- 🐛 fix: correção de bug
-- 💄 style: mudanças que não afetam o significado do código (formatação, etc)
-- 🏗️ build: mudanças no sistema de build ou dependências
-- 🔧 ci: mudanças em configurações de CI
-- ✏️ docs: apenas mudanças de documentação
-- 🚀 perf: mudanças que melhoram performance
-- 🧪 test: adição ou correção de testes
-- 🌐 i18n: internacionalização e localização
-- 📈 analytics: analytics
-- 🗃️ database: mudanças relacionadas ao banco de dados
+# Sample Commit Message
 
-**Importante**:
+✨ feat(popover): add popover component
+📦 refactor(command): improve command component structure
+🐛 fix(command): resolve input focus issue in command input
+🔧 chore: update dependencies and improve build process
+🧪 test(command): add unit tests for command component
 
-- Use apenas a primeira linha do commit, sem descrições adicionais.
-- Não precisa dividir os arquivos em vários commits e fazer um commit para cada arquivo. Pode agrupar e fazer commits mais gerais.
+## Important:
+
+- Use only the first line of the commit, no additional descriptions.
+- You don't need to split the files into several commits and make a commit for each file. You can group them together and make more general commits.
+- Always use the `docs/angular-llm.txt` file to use Angular's best practices.

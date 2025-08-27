@@ -76,3 +76,10 @@ export * from './lib/components/table/table.module';
 
 // Tooltip
 export * from './lib/components/tooltip/tooltip';
+
+// Menu
+export * from './lib/components/menu/menu-content.directive';
+export * from './lib/components/menu/menu-item.directive';
+export * from './lib/components/menu/menu.directive';
+export * from './lib/components/menu/menu.variants';
+export * from './lib/components/menu/menu.module';
