@@ -90,7 +90,8 @@
           "buildTarget": "web:build:local"
         }
       },
-      "defaultConfiguration": "production"
+      "defaultConfiguration": "production",
+      "continuous": true
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",

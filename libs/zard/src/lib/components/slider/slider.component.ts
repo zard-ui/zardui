@@ -18,11 +18,11 @@ import {
   SimpleChanges,
   OnDestroy,
   OnChanges,
+  DOCUMENT,
 } from '@angular/core';
 import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { ClassValue } from 'class-variance-authority/dist/types';
-import { DOCUMENT } from '@angular/common';
 
 import { sliderOrientationVariants, sliderRangeVariants, sliderThumbVariants, sliderTrackVariants, sliderVariants } from './slider.variants';
 import { clamp, roundToStep, convertValueToPercentage } from '../../shared/utils/number';

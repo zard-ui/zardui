@@ -13,7 +13,6 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { combineLatest, interval, startWith } from 'rxjs';
-import { CommonModule } from '@angular/common';
 
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
@@ -40,7 +39,7 @@ export class ZardTabComponent {
 @Component({
   selector: 'z-tab-group',
   standalone: true,
-  imports: [CommonModule, ZardButtonComponent],
+  imports: [ZardButtonComponent],
   template: `
     <div class="tab-group" [ngClass]="containerClasses()">
       @if (navBeforeContent()) {

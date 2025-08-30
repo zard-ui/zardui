@@ -57,7 +57,7 @@
     "@angular-devkit/build-angular": "20.1.6",
     "@angular-devkit/core": "20.1.6",
     "@angular-devkit/schematics": "20.1.6",
-    "@angular/cli": "~19.1.0",
+    "@angular/cli": "~20.1.0",
     "@angular/compiler-cli": "20.1.8",
     "@angular/language-service": "20.1.8",
     "@eslint/js": "^9.8.0",
@@ -70,15 +70,15 @@
     "@nx/web": "21.4.1",
     "@nx/workspace": "21.4.1",
     "@schematics/angular": "20.1.6",
-    "@swc-node/register": "~1.9.1",
-    "@swc/core": "~1.5.7",
+    "@swc-node/register": "^1.11.1",
+    "@swc/core": "^1.13.5",
     "@swc/helpers": "~0.5.11",
     "@types/jest": "^29.5.14",
     "@types/node": "18.16.9",
-    "@typescript-eslint/utils": "8.29.0",
+    "@typescript-eslint/utils": "^8.33.1",
     "angular-eslint": "20.0.0",
     "concurrently": "^7.0.0",
-    "eslint": "^9.8.0",
+    "eslint": "^9.28.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.2.3",
     "happy-dom": "^17.4.4",
@@ -97,6 +97,6 @@
     "ts-node": "10.9.1",
     "tslib": "^2.3.0",
     "typescript": "5.8.3",
-    "typescript-eslint": "8.29.0"
+    "typescript-eslint": "^8.33.1"
   }
 }
