@@ -2,7 +2,7 @@
 
 ```angular-ts title="skeleton.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { skeletonVariants } from './skeleton.variants';

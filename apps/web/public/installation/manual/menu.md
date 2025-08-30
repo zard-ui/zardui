@@ -197,7 +197,7 @@ export type ZardMenuItemVariants = VariantProps<typeof menuItemVariants>;
 
 
 ```angular-ts title="menu-content.directive.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { CdkMenu } from '@angular/cdk/menu';
 import { computed, Directive, input } from '@angular/core';
@@ -224,7 +224,7 @@ export class ZardMenuContentDirective {
 
 
 ```angular-ts title="menu-item.directive.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuItem } from '@angular/cdk/menu';

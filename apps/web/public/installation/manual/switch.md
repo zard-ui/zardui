@@ -3,7 +3,7 @@
 ```angular-ts title="switch.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { switchVariants, ZardSwitchVariants } from './switch.variants';
 import { mergeClasses } from '../../shared/utils/utils';
