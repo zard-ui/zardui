@@ -14,8 +14,7 @@
     "release": "nx release --yes --verbose",
     "watch:files": "npx tsx scripts/generate-files.cts",
     "convert:demos": "npx tsx scripts/convert-demos-to-md.cts",
-    "generate:installation": "npx tsx scripts/generate-installation-guides.cts",
-    "test:no-cache": "nx run-many --target=test --p=libs/* --jest-args=\"--no-cache\""
+    "generate:installation": "npx tsx scripts/generate-installation-guides.cts"
   },
   "engines": {
     "node": "22 || 20"
