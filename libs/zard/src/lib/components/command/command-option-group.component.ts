@@ -1,5 +1,5 @@
 import { AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
 import { ZardCommandOptionComponent } from './command-option.component';

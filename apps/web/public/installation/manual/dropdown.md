@@ -19,7 +19,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 import { TemplatePortal } from '@angular/cdk/portal';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -328,7 +328,7 @@ export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariant
 
 
 ```angular-ts title="dropdown-item.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
 
@@ -390,7 +390,7 @@ export class ZardDropdownMenuItemComponent {
 
 
 ```angular-ts title="dropdown-label.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -427,7 +427,7 @@ export class ZardDropdownMenuLabelComponent {
 
 
 ```angular-ts title="dropdown-menu-content.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { Component, computed, input, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 
@@ -460,7 +460,7 @@ export class ZardDropdownMenuContentComponent {
 
 
 ```angular-ts title="dropdown-shortcut.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 

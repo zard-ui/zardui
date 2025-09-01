@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { ZardCommandJsonComponent } from './command-json.component';
 import { ZardCommandComponent } from './command.component';

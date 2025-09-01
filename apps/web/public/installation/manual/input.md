@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="input.directive.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { computed, Directive, ElementRef, inject, input } from '@angular/core';
 

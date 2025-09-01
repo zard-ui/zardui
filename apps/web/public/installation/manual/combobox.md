@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="combobox.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import {
   ChangeDetectionStrategy,

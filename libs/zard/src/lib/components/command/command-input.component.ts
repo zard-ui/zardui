@@ -15,7 +15,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 import { Subject, switchMap, takeUntil, timer } from 'rxjs';
 
 import { ZardCommandJsonComponent } from './command-json.component';

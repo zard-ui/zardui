@@ -18,7 +18,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { commandVariants, ZardCommandVariants } from './command.variants';
 import { ZardCommandOptionComponent } from './command-option.component';
@@ -342,7 +342,7 @@ export type ZardCommandItemVariants = VariantProps<typeof commandItemVariants>;
 
 ```angular-ts title="command-divider.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { commandSeparatorVariants } from './command.variants';
 import { ZardCommandComponent } from './command.component';
@@ -387,7 +387,7 @@ export class ZardCommandDividerComponent {
 
 ```angular-ts title="command-empty.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { ZardCommandJsonComponent } from './command-json.component';
 import { ZardCommandComponent } from './command.component';
@@ -457,7 +457,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 import { Subject, switchMap, takeUntil, timer } from 'rxjs';
 
 import { ZardCommandJsonComponent } from './command-json.component';
@@ -618,7 +618,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
 
 ```angular-ts title="command-json.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, EventEmitter, forwardRef, HostListener, input, Output, signal, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -910,7 +910,7 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
 
 
 ```angular-ts title="command-list.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -941,7 +941,7 @@ export class ZardCommandListComponent {
 
 ```angular-ts title="command-option-group.component.ts" copyButton showLineNumbers
 import { AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
 import { ZardCommandOptionComponent } from './command-option.component';
@@ -1005,7 +1005,7 @@ export class ZardCommandOptionGroupComponent implements AfterContentInit {
 
 ```angular-ts title="command-option.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
