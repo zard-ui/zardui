@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ZardAccordionComponent } from './accordion.component';
@@ -48,6 +48,8 @@ import { ZardAccordionComponent } from './accordion.component';
   `,
 })
 export class ZardAccordionItemComponent {
+  private cdr = inject(ChangeDetectorRef);
+
   readonly zTitle = input<string>('');
   readonly zValue = input<string>('');
   readonly class = input<ClassValue>('');
@@ -55,8 +57,6 @@ export class ZardAccordionItemComponent {
   private isOpenSignal = signal(false);
 
   accordion?: ZardAccordionComponent;
-
-  constructor(private cdr: ChangeDetectorRef) {}
 
   isOpen = computed(() => this.isOpenSignal());
 

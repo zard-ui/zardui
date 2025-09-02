@@ -1,27 +1,26 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
-
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
-  ContentChild,
-  ContentChildren,
+  contentChild,
+  contentChildren,
+  effect,
   EventEmitter,
   forwardRef,
   HostListener,
   input,
   Output,
-  QueryList,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardCommandInputComponent } from './command-input.component';
-import { ZardCommandOptionComponent } from './command-option.component';
 import { commandVariants, ZardCommandVariants } from './command.variants';
+import { ZardCommandOptionComponent } from './command-option.component';
+import { ZardCommandInputComponent } from './command-input.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export interface ZardCommandOption {
   value: unknown;
@@ -76,10 +75,9 @@ export interface ZardCommandConfig {
     },
   ],
 })
-export class ZardCommandComponent implements ControlValueAccessor, AfterContentInit {
-  @ContentChild(ZardCommandInputComponent) commandInput?: ZardCommandInputComponent;
-  @ContentChildren(ZardCommandOptionComponent, { descendants: true })
-  optionComponents!: QueryList<ZardCommandOptionComponent>;
+export class ZardCommandComponent implements ControlValueAccessor {
+  readonly commandInput = contentChild(ZardCommandInputComponent);
+  readonly optionComponents = contentChildren(ZardCommandOptionComponent, { descendants: true });
 
   readonly size = input<ZardCommandVariants['size']>('default');
   readonly class = input<ClassValue>('');
@@ -102,12 +100,12 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
     // Include the trigger signal to make this computed reactive to option changes
     this.optionsUpdateTrigger();
 
-    if (!this.optionComponents) return [];
+    if (!this.optionComponents()) return [];
 
     const lowerSearchTerm = searchTerm.toLowerCase().trim();
-    if (lowerSearchTerm === '') return this.optionComponents.toArray();
+    if (lowerSearchTerm === '') return this.optionComponents();
 
-    return this.optionComponents.filter(option => {
+    return this.optionComponents().filter(option => {
       const label = option.zLabel().toLowerCase();
       const command = option.zCommand()?.toLowerCase() || '';
       return label.includes(lowerSearchTerm) || command.includes(lowerSearchTerm);
@@ -135,12 +133,8 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
     // ControlValueAccessor implementation
   };
 
-  ngAfterContentInit() {
-    // Trigger initial update
-    this.triggerOptionsUpdate();
-
-    // Subscribe to option changes and trigger updates
-    this.optionComponents.changes.subscribe(() => {
+  constructor() {
+    effect(() => {
       this.triggerOptionsUpdate();
     });
   }
@@ -258,6 +252,6 @@ export class ZardCommandComponent implements ControlValueAccessor, AfterContentI
    * Focus the command input
    */
   focus(): void {
-    this.commandInput?.focus();
+    this.commandInput()?.focus();
   }
 }

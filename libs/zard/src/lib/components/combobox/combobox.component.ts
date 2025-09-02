@@ -1,6 +1,5 @@
 import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -45,7 +44,6 @@ export interface ZardComboboxGroup {
   exportAs: 'zCombobox',
   standalone: true,
   imports: [
-    CommonModule,
     FormsModule,
     ZardButtonComponent,
     ZardCommandComponent,

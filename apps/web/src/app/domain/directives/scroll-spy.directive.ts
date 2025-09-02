@@ -1,4 +1,4 @@
-import { ContentChildren, Directive, EventEmitter, HostListener, Output, QueryList } from '@angular/core';
+import { contentChildren, Directive, EventEmitter, HostListener, Output } from '@angular/core';
 
 import { ScrollSpyItemDirective } from './scroll-spy-item.directive';
 
@@ -10,8 +10,7 @@ export class ScrollSpyDirective {
   @Output() public scrollSpyChange = new EventEmitter<string>();
   private currentSection?: string;
 
-  @ContentChildren(ScrollSpyItemDirective, { descendants: true })
-  items?: QueryList<ScrollSpyItemDirective>;
+  readonly items = contentChildren(ScrollSpyItemDirective, { descendants: true });
 
   @HostListener('window:scroll', ['$event'])
   onScroll(event: any) {
@@ -19,7 +18,7 @@ export class ScrollSpyDirective {
     const scrollTop = event.target.scrollingElement.scrollTop;
     const parentOffset = event.target.scrollingElement.offsetTop;
 
-    this.items?.forEach(item => {
+    this.items()?.forEach(item => {
       if (item.elementRef.nativeElement.offsetTop - parentOffset <= scrollTop) {
         currentSection = item.scrollSpyItem;
       }

@@ -1,15 +1,14 @@
 
 
 ```angular-ts title="calendar.component.ts" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, ElementRef, input, output, signal, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, input, output, signal, viewChild, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
+import { calendarDayButtonVariants, calendarDayVariants, calendarNavVariants, calendarVariants, calendarWeekdayVariants, ZardCalendarVariants } from './calendar.variants';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
-import { calendarDayButtonVariants, calendarDayVariants, calendarNavVariants, calendarVariants, calendarWeekdayVariants, ZardCalendarVariants } from './calendar.variants';
-
+import { ZardButtonComponent } from '../button/button.component';
 import type { ClassValue } from '../../shared/utils/utils';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export interface CalendarDay {
   date: Date;
@@ -105,7 +104,7 @@ export type { ZardCalendarVariants };
   `,
 })
 export class ZardCalendarComponent {
-  @ViewChild('calendarContainer', { static: true }) private calendarContainer!: ElementRef<HTMLElement>;
+  private readonly calendarContainer = viewChild.required<ElementRef<HTMLElement>>('calendarContainer');
 
   // Public method to reset navigation (useful for date-picker)
   resetNavigation(): void {
@@ -524,7 +523,7 @@ export class ZardCalendarComponent {
   private setFocus(index: number): void {
     this.focusedDayIndex.set(index);
     setTimeout(() => {
-      const dayElement = this.calendarContainer.nativeElement.querySelector(`#${this.getDayId(index)}`) as HTMLElement;
+      const dayElement = this.calendarContainer()?.nativeElement.querySelector(`#${this.getDayId(index)}`) as HTMLElement;
       dayElement?.focus();
     }, 0);
   }

@@ -1,11 +1,6 @@
 
 
 ```angular-ts title="tooltip.ts" copyButton showLineNumbers
-import { filter, fromEvent, Subject, take, takeUntil } from 'rxjs';
-
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,15 +17,19 @@ import {
   Renderer2,
   signal,
 } from '@angular/core';
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { filter, fromEvent, Subject, take, takeUntil } from 'rxjs';
+import { ComponentPortal } from '@angular/cdk/portal';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
+import { mergeClasses } from '../../shared/utils/utils';
 import { tooltipVariants } from './tooltip.variants';
 
 export type ZardTooltipTriggers = 'click' | 'hover';
 
 @Directive({
   selector: '[zTooltip]',
+  exportAs: 'zTooltip',
   host: {
     style: 'cursor: pointer',
   },
@@ -191,7 +190,7 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
 }
 
 @NgModule({
-  imports: [CommonModule, OverlayModule, ZardTooltipComponent, ZardTooltipDirective],
+  imports: [OverlayModule, ZardTooltipComponent, ZardTooltipDirective],
   exports: [ZardTooltipComponent, ZardTooltipDirective],
 })
 export class ZardTooltipModule {}

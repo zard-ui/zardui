@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardAvatarComponent } from '../avatar.component';
 
 @Component({
+  selector: 'zard-demo-avatar-with-image',
   standalone: true,
   imports: [ZardAvatarComponent],
   template: `

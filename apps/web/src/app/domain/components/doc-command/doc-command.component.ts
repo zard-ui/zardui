@@ -1,5 +1,5 @@
 import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/command/command.component';
-import { AfterViewInit, Component, inject, ViewChild, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, inject, viewChild, OnDestroy } from '@angular/core';
 import { ZardCommandModule } from '@zard/components/command/command.module';
 import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
 import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
@@ -32,7 +32,7 @@ import { Router } from '@angular/router';
   `,
 })
 export class CommandDocComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('commandRef') commandComponent!: ZardCommandComponent;
+  readonly commandComponent = viewChild.required<ZardCommandComponent>('commandRef');
   private router = inject(Router);
   private dialogRef = inject(ZardDialogRef);
   private escapeListener?: (event: KeyboardEvent) => void;
@@ -43,7 +43,7 @@ export class CommandDocComponent implements AfterViewInit, OnDestroy {
   ngAfterViewInit() {
     // Focus the command input when the component is initialized
     setTimeout(() => {
-      this.commandComponent.focus();
+      this.commandComponent().focus();
     }, 0);
 
     // Add document-level escape listener

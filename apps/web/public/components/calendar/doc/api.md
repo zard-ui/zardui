@@ -15,9 +15,10 @@
 
 ### Outputs
 
-| Name         | Type                 | Description                     |
-| ------------ | -------------------- | ------------------------------- |
-| `dateChange` | `EventEmitter<Date>` | Emitted when a date is selected |
+| Name          | Type                         | Description                                        |
+| ------------- | ---------------------------- | -------------------------------------------------- |
+| `valueChange` | `EventEmitter<Date \| null>` | Emitted when the date value is changed             |
+| `dateChange`  | `EventEmitter<Date>`         | Proxy of `valueChange` with filter for null values |
 
 ### CSS Custom Properties
 

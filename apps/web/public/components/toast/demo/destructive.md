@@ -1,11 +1,11 @@
 ```angular-ts showLineNumbers copyButton
-import { toast } from 'ngx-sonner';
-
 import { Component } from '@angular/core';
+import { toast } from 'ngx-sonner';
 
 import { ZardButtonComponent } from '../../button/button.component';
 
 @Component({
+  selector: 'zard-demo-toast-destructive',
   standalone: true,
   imports: [ZardButtonComponent],
   template: ` <button z-button zType="outline" (click)="showToast()">Show Error Toast</button> `,

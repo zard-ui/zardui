@@ -1,35 +1,37 @@
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { NgIf } from '@angular/common';
 import {
+  AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
+  effect,
   ElementRef,
   forwardRef,
   HostListener,
   inject,
   input,
+  linkedSignal,
   OnDestroy,
   OnInit,
   output,
   signal,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { TemplatePortal } from '@angular/cdk/portal';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardSelectItemComponent } from './select-item.component';
 import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
+import { ZardSelectItemComponent } from './select-item.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-select, [z-select]',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [NgIf, OverlayModule],
+  imports: [OverlayModule],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -55,10 +57,11 @@ import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants
       [attr.data-placeholder]="!selectedValue() ? '' : null"
     >
       <span class="flex items-center gap-2">
-        <span *ngIf="selectedValue(); else placeholderTemplate">{{ selectedLabel() }}</span>
-        <ng-template #placeholderTemplate>
+        @if (selectedValue()) {
+          <span>{{ selectedLabel() }}</span>
+        } @else {
           <span class="text-muted-foreground">{{ placeholder() }}</span>
-        </ng-template>
+        }
       </span>
       <i class="icon-chevron-down size-4 opacity-50"></i>
     </button>
@@ -72,13 +75,13 @@ import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants
     </ng-template>
   `,
 })
-export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit, OnDestroy {
   private elementRef = inject(ElementRef);
   private overlay = inject(Overlay);
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private viewContainerRef = inject(ViewContainerRef);
 
-  @ViewChild('dropdownTemplate', { static: true }) dropdownTemplate!: TemplateRef<any>;
+  readonly dropdownTemplate = viewChild.required<TemplateRef<any>>('dropdownTemplate');
 
   readonly selectItems = contentChildren(ZardSelectItemComponent);
 
@@ -96,28 +99,27 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
   readonly isOpen = signal(false);
   private readonly _selectedValue = signal<string>('');
-  private readonly _selectedLabel = signal<string>('');
+  private readonly _selectedLabel = linkedSignal(() => {
+    const currentValue = this.selectedValue();
+    if (!this.label() && currentValue) {
+      const matchingItem = this.selectItems()?.find(item => item.value() === currentValue);
+      if (matchingItem) {
+        return matchingItem.label();
+      }
+    }
+    return '';
+  });
   readonly focusedIndex = signal<number>(-1);
 
   // Use computed to derive the effective selected value from input or internal state
   readonly selectedValue = computed(() => this.value() || this._selectedValue());
 
-  // Compute the label based on selected value and available items
+  // Compute the label based on selected value
   readonly selectedLabel = computed(() => {
     const manualLabel = this.label();
     if (manualLabel) return manualLabel;
 
-    const currentValue = this.selectedValue();
-    if (!currentValue) return '';
-
-    const items = this.selectItems();
-    const matchingItem = items.find(item => item.value() === currentValue);
-
-    if (matchingItem) {
-      return matchingItem.elementRef.nativeElement.textContent?.trim() || currentValue;
-    }
-
-    return this._selectedLabel() || currentValue;
+    return this._selectedLabel() || this.selectedValue();
   });
 
   private onChange = (_value: string) => {
@@ -139,13 +141,20 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
   protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
 
   ngOnInit() {
-    // Delay overlay creation to ensure element is rendered
-    setTimeout(() => {
-      this.createOverlay();
-      const inputValue = this.value();
-      if (inputValue) {
-        this._selectedValue.set(inputValue);
-      }
+    // Initialize selected value from input immediately
+    const inputValue = this.value();
+    if (inputValue) {
+      this._selectedValue.set(inputValue);
+    }
+  }
+
+  ngAfterContentInit() {
+    // Setup select host reference for each item
+    this.selectItems().forEach(item => {
+      item.setSelectHost({
+        selectedValue: () => this.selectedValue(),
+        selectItem: (value: string, label: string) => this.selectItem(value, label),
+      });
     });
   }
 
@@ -229,7 +238,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, OnDest
 
     if (!this.overlayRef) return;
 
-    this.portal = new TemplatePortal(this.dropdownTemplate, this.viewContainerRef);
+    this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
     this.overlayRef.attach(this.portal);
     this.isOpen.set(true);
 
