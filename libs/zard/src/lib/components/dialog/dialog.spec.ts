@@ -1,6 +1,7 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, inject } from '@angular/core';
+import { Component, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardDialogModule } from './dialog.component';
@@ -26,6 +27,7 @@ class DialogTestHostComponent {
 describe('ZardDialogComponent', () => {
   let component: DialogTestHostComponent;
   let fixture: ComponentFixture<DialogTestHostComponent>;
+  let platformId: object;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -34,6 +36,7 @@ describe('ZardDialogComponent', () => {
 
     fixture = TestBed.createComponent(DialogTestHostComponent);
     component = fixture.componentInstance;
+    platformId = TestBed.inject(PLATFORM_ID);
     fixture.detectChanges();
   });
 
@@ -48,54 +51,85 @@ describe('ZardDialogComponent', () => {
       openDialog();
 
       const dialogElement = document.querySelector('z-dialog');
-      expect(dialogElement).toBeTruthy();
+      if (isPlatformBrowser(platformId)) {
+        expect(dialogElement).toBeTruthy();
+      } else {
+        // In SSR environment, dialog should not be created
+        expect(dialogElement).toBeNull();
+      }
     });
 
     it('should display the dialog title, description and content', () => {
       openDialog();
 
       const dialogElement = document.querySelector('z-dialog');
-      expect(dialogElement).toBeTruthy();
 
-      const titleElement = dialogElement?.querySelector('[data-testid="z-title"]');
-      expect(titleElement).toBeTruthy();
-      expect(titleElement?.textContent).toContain('Test Dialog');
+      if (isPlatformBrowser(platformId)) {
+        expect(dialogElement).toBeTruthy();
 
-      const descriptionElement = dialogElement?.querySelector('[data-testid="z-description"]');
-      expect(descriptionElement).toBeTruthy();
-      expect(descriptionElement?.textContent).toContain('This is a test dialog.');
+        const titleElement = dialogElement?.querySelector('[data-testid="z-title"]');
+        expect(titleElement).toBeTruthy();
+        expect(titleElement?.textContent).toContain('Test Dialog');
 
-      const contentElement = dialogElement?.querySelector('[data-testid="z-content"]');
-      expect(contentElement).toBeTruthy();
-      expect(contentElement?.textContent).toContain('Teste');
+        const descriptionElement = dialogElement?.querySelector('[data-testid="z-description"]');
+        expect(descriptionElement).toBeTruthy();
+        expect(descriptionElement?.textContent).toContain('This is a test dialog.');
+
+        const contentElement = dialogElement?.querySelector('[data-testid="z-content"]');
+        expect(contentElement).toBeTruthy();
+        expect(contentElement?.textContent).toContain('Teste');
+      } else {
+        // In SSR environment, dialog should not be created
+        expect(dialogElement).toBeNull();
+      }
     });
 
-    it('should close the dialog when the cancel button is clicked', () => {
+    it('should close the dialog when the cancel button is clicked', async () => {
       openDialog();
 
       const dialogElement = document.querySelector('z-dialog');
-      expect(dialogElement).toBeTruthy();
 
-      const cancelButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-cancel-button"]');
-      expect(cancelButton).toBeTruthy();
-      cancelButton?.click();
-      fixture.detectChanges();
+      if (isPlatformBrowser(platformId)) {
+        expect(dialogElement).toBeTruthy();
 
-      expect(document.querySelector('z-dialog')).toBeNull();
+        const cancelButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-cancel-button"]');
+        expect(cancelButton).toBeTruthy();
+        cancelButton?.click();
+        fixture.detectChanges();
+
+        // Wait for animation to complete
+        await new Promise(resolve => setTimeout(resolve, 250));
+        fixture.detectChanges();
+
+        expect(document.querySelector('z-dialog')).toBeNull();
+      } else {
+        // In SSR environment, dialog should not be created
+        expect(dialogElement).toBeNull();
+      }
     });
 
-    it('should close the dialog when the ok button is clicked', () => {
+    it('should close the dialog when the ok button is clicked', async () => {
       openDialog();
 
       const dialogElement = document.querySelector('z-dialog');
-      expect(dialogElement).toBeTruthy();
 
-      const okButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-ok-button"]');
-      expect(okButton).toBeTruthy();
-      okButton?.click();
-      fixture.detectChanges();
+      if (isPlatformBrowser(platformId)) {
+        expect(dialogElement).toBeTruthy();
 
-      expect(document.querySelector('z-dialog')).toBeNull();
+        const okButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-ok-button"]');
+        expect(okButton).toBeTruthy();
+        okButton?.click();
+        fixture.detectChanges();
+
+        // Wait for animation to complete
+        await new Promise(resolve => setTimeout(resolve, 250));
+        fixture.detectChanges();
+
+        expect(document.querySelector('z-dialog')).toBeNull();
+      } else {
+        // In SSR environment, dialog should not be created
+        expect(dialogElement).toBeNull();
+      }
     });
   });
 
@@ -103,13 +137,19 @@ describe('ZardDialogComponent', () => {
     openDialog();
 
     const dialogElement = document.querySelector('z-dialog');
-    expect(dialogElement).toBeTruthy();
 
-    const closeButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-close-header-button"]');
-    expect(closeButton).toBeTruthy();
-    closeButton?.click();
-    fixture.detectChanges();
+    if (isPlatformBrowser(platformId)) {
+      expect(dialogElement).toBeTruthy();
 
-    expect(document.querySelector('z-dialog')).toBeNull();
+      const closeButton = dialogElement?.querySelector<HTMLButtonElement>('[data-testid="z-close-header-button"]');
+      expect(closeButton).toBeTruthy();
+      closeButton?.click();
+      fixture.detectChanges();
+
+      expect(document.querySelector('z-dialog')).toBeNull();
+    } else {
+      // In SSR environment, dialog should not be created
+      expect(dialogElement).toBeNull();
+    }
   });
 });

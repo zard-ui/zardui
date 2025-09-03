@@ -15,11 +15,13 @@ import {
   OnDestroy,
   OnInit,
   output,
+  PLATFORM_ID,
   Renderer2,
   signal,
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { popoverVariants } from './popover.variants';
@@ -74,6 +76,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
   private readonly renderer = inject(Renderer2);
   private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
   private overlayRef?: OverlayRef;
   private documentClickListenerRef?: () => void;
@@ -180,18 +183,20 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   private createOverlay() {
-    const positionStrategy = this.overlayPositionBuilder
-      .flexibleConnectedTo(this.nativeElement)
-      .withPositions(this.getPositions())
-      .withPush(true)
-      .withFlexibleDimensions(true)
-      .withViewportMargin(8);
+    if (isPlatformBrowser(this.platformId)) {
+      const positionStrategy = this.overlayPositionBuilder
+        .flexibleConnectedTo(this.nativeElement)
+        .withPositions(this.getPositions())
+        .withPush(true)
+        .withFlexibleDimensions(true)
+        .withViewportMargin(8);
 
-    this.overlayRef = this.overlay.create({
-      positionStrategy,
-      hasBackdrop: false,
-      scrollStrategy: this.overlay.scrollStrategies.close(),
-    });
+      this.overlayRef = this.overlay.create({
+        positionStrategy,
+        hasBackdrop: false,
+        scrollStrategy: this.overlay.scrollStrategies.close(),
+      });
+    }
   }
 
   private getPositions(): ConnectedPosition[] {
