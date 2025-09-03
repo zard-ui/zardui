@@ -9,12 +9,14 @@ import {
   OnDestroy,
   OnInit,
   output,
+  PLATFORM_ID,
   signal,
   TemplateRef,
   viewChild,
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ClassValue } from 'class-variance-authority/dist/types';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -52,6 +54,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private overlay = inject(Overlay);
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private viewContainerRef = inject(ViewContainerRef);
+  private platformId = inject(PLATFORM_ID);
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<unknown>>('dropdownTemplate');
 
@@ -159,36 +162,38 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private createOverlay() {
     if (this.overlayRef) return;
 
-    try {
-      const positionStrategy = this.overlayPositionBuilder
-        .flexibleConnectedTo(this.elementRef)
-        .withPositions([
-          {
-            originX: 'start',
-            originY: 'bottom',
-            overlayX: 'start',
-            overlayY: 'top',
-            offsetY: 4,
-          },
-          {
-            originX: 'start',
-            originY: 'top',
-            overlayX: 'start',
-            overlayY: 'bottom',
-            offsetY: -4,
-          },
-        ])
-        .withPush(false);
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        const positionStrategy = this.overlayPositionBuilder
+          .flexibleConnectedTo(this.elementRef)
+          .withPositions([
+            {
+              originX: 'start',
+              originY: 'bottom',
+              overlayX: 'start',
+              overlayY: 'top',
+              offsetY: 4,
+            },
+            {
+              originX: 'start',
+              originY: 'top',
+              overlayX: 'start',
+              overlayY: 'bottom',
+              offsetY: -4,
+            },
+          ])
+          .withPush(false);
 
-      this.overlayRef = this.overlay.create({
-        positionStrategy,
-        hasBackdrop: false,
-        scrollStrategy: this.overlay.scrollStrategies.reposition(),
-        minWidth: 200,
-        maxHeight: 400,
-      });
-    } catch (error) {
-      console.error('Error creating overlay:', error);
+        this.overlayRef = this.overlay.create({
+          positionStrategy,
+          hasBackdrop: false,
+          scrollStrategy: this.overlay.scrollStrategies.reposition(),
+          minWidth: 200,
+          maxHeight: 400,
+        });
+      } catch (error) {
+        console.error('Error creating overlay:', error);
+      }
     }
   }
 
