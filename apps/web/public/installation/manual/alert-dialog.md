@@ -334,7 +334,8 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 ```angular-ts title="alert-dialog.service.ts" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { inject, Injectable, InjectionToken, Injector, TemplateRef } from '@angular/core';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
@@ -348,6 +349,7 @@ export const Z_ALERT_MODAL_DATA = new InjectionToken<unknown>('Z_ALERT_MODAL_DAT
 export class ZardAlertDialogService {
   private overlay = inject(Overlay);
   private injector = inject(Injector);
+  private platformId = inject(PLATFORM_ID);
 
   create<T>(config: ZardAlertDialogOptions<T>): ZardAlertDialogRef<T> {
     return this.open<T>(config.zContent, config);
@@ -394,6 +396,11 @@ export class ZardAlertDialogService {
 
   private open<T>(componentOrTemplateRef: ContentType<T>, config: ZardAlertDialogOptions<T>) {
     const overlayRef = this.createOverlay();
+    
+    if (!overlayRef) {
+      // Return a mock alert dialog ref for SSR environments
+      return new ZardAlertDialogRef(undefined as any, config, undefined as any);
+    }
 
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
 
@@ -403,14 +410,17 @@ export class ZardAlertDialogService {
     return alertDialogRef;
   }
 
-  private createOverlay() {
-    const overlayConfig = new OverlayConfig({
-      hasBackdrop: true,
-      backdropClass: 'cdk-overlay-dark-backdrop',
-      positionStrategy: this.overlay.position().global(),
-    });
+  private createOverlay(): OverlayRef | undefined {
+    if (isPlatformBrowser(this.platformId)) {
+      const overlayConfig = new OverlayConfig({
+        hasBackdrop: true,
+        backdropClass: 'cdk-overlay-dark-backdrop',
+        positionStrategy: this.overlay.position().global(),
+      });
 
-    return this.overlay.create(overlayConfig);
+      return this.overlay.create(overlayConfig);
+    }
+    return undefined;
   }
 
   private attachAlertDialogContainer<T>(overlayRef: OverlayRef, config: ZardAlertDialogOptions<T>) {

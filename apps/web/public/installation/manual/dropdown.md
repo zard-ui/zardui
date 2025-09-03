@@ -10,12 +10,14 @@ import {
   OnDestroy,
   OnInit,
   output,
+  PLATFORM_ID,
   signal,
   TemplateRef,
   viewChild,
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import type { ClassValue } from 'clsx';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -53,6 +55,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private overlay = inject(Overlay);
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
   private viewContainerRef = inject(ViewContainerRef);
+  private platformId = inject(PLATFORM_ID);
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<unknown>>('dropdownTemplate');
 
@@ -160,36 +163,38 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private createOverlay() {
     if (this.overlayRef) return;
 
-    try {
-      const positionStrategy = this.overlayPositionBuilder
-        .flexibleConnectedTo(this.elementRef)
-        .withPositions([
-          {
-            originX: 'start',
-            originY: 'bottom',
-            overlayX: 'start',
-            overlayY: 'top',
-            offsetY: 4,
-          },
-          {
-            originX: 'start',
-            originY: 'top',
-            overlayX: 'start',
-            overlayY: 'bottom',
-            offsetY: -4,
-          },
-        ])
-        .withPush(false);
+    if (isPlatformBrowser(this.platformId)) {
+      try {
+        const positionStrategy = this.overlayPositionBuilder
+          .flexibleConnectedTo(this.elementRef)
+          .withPositions([
+            {
+              originX: 'start',
+              originY: 'bottom',
+              overlayX: 'start',
+              overlayY: 'top',
+              offsetY: 4,
+            },
+            {
+              originX: 'start',
+              originY: 'top',
+              overlayX: 'start',
+              overlayY: 'bottom',
+              offsetY: -4,
+            },
+          ])
+          .withPush(false);
 
-      this.overlayRef = this.overlay.create({
-        positionStrategy,
-        hasBackdrop: false,
-        scrollStrategy: this.overlay.scrollStrategies.reposition(),
-        minWidth: 200,
-        maxHeight: 400,
-      });
-    } catch (error) {
-      console.error('Error creating overlay:', error);
+        this.overlayRef = this.overlay.create({
+          positionStrategy,
+          hasBackdrop: false,
+          scrollStrategy: this.overlay.scrollStrategies.reposition(),
+          minWidth: 200,
+          maxHeight: 400,
+        });
+      } catch (error) {
+        console.error('Error creating overlay:', error);
+      }
     }
   }
 
@@ -609,7 +614,8 @@ export class ZardDropdownModule {}
 ```angular-ts title="dropdown.service.ts" copyButton showLineNumbers
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { ElementRef, inject, Injectable, signal, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ElementRef, inject, Injectable, PLATFORM_ID, signal, TemplateRef, ViewContainerRef } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -617,6 +623,7 @@ import { ElementRef, inject, Injectable, signal, TemplateRef, ViewContainerRef }
 export class ZardDropdownService {
   private overlay = inject(Overlay);
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
+  private platformId = inject(PLATFORM_ID);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -710,7 +717,7 @@ export class ZardDropdownService {
   }
 
   private setupKeyboardNavigation() {
-    if (!this.overlayRef?.hasAttached()) return;
+    if (!this.overlayRef?.hasAttached() || !isPlatformBrowser(this.platformId)) return;
 
     const dropdownElement = this.overlayRef.overlayElement.querySelector('[role="menu"]') as HTMLElement;
     if (!dropdownElement) return;

@@ -146,10 +146,10 @@ export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
 
 ```angular-ts title="dialog-ref.ts" copyButton showLineNumbers
+import { EventEmitter, Inject, inject, PLATFORM_ID } from '@angular/core';
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-
+import { isPlatformBrowser } from '@angular/common';
 import { OverlayRef } from '@angular/cdk/overlay';
-import { EventEmitter } from '@angular/core';
 
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
@@ -167,11 +167,12 @@ export class ZardDialogRef<T = any, R = any> {
     private overlayRef: OverlayRef,
     private config: ZardDialogOptions<T>,
     private containerInstance: ZardDialogComponent<T>,
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
     this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
 
-    if (this.config.zMaskClosable || this.config.zMaskClosable === undefined) {
+    if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
       this.containerInstance.getNativeElement().addEventListener(
         'animationend',
         () => {
@@ -184,12 +185,14 @@ export class ZardDialogRef<T = any, R = any> {
       );
     }
 
-    fromEvent<KeyboardEvent>(document, 'keydown')
-      .pipe(
-        filter(event => event.key === 'Escape'),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(() => this.close());
+    if (isPlatformBrowser(this.platformId)) {
+      fromEvent<KeyboardEvent>(document, 'keydown')
+        .pipe(
+          filter(event => event.key === 'Escape'),
+          takeUntil(this.destroy$),
+        )
+        .subscribe(() => this.close());
+    }
   }
 
   close(result?: R) {
@@ -279,12 +282,13 @@ export class ZardDialogRef<T = any, R = any> {
 
 
 ```angular-ts title="dialog.service.ts" copyButton showLineNumbers
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { inject, Injectable, InjectionToken, Injector, TemplateRef } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
-import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
+import { ZardDialogRef } from './dialog-ref';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
@@ -295,6 +299,7 @@ export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
 export class ZardDialogService {
   private overlay = inject(Overlay);
   private injector = inject(Injector);
+  private platformId = inject(PLATFORM_ID);
 
   create<T>(config: ZardDialogOptions<T>): ZardDialogRef<T> {
     return this.open<T>(config.zContent as ComponentType<T>, config);
@@ -302,6 +307,11 @@ export class ZardDialogService {
 
   private open<T>(componentOrTemplateRef: ContentType<T>, config: ZardDialogOptions<T>) {
     const overlayRef = this.createOverlay();
+
+    if (!overlayRef) {
+      // Return a mock dialog ref for SSR environments
+      return new ZardDialogRef(undefined as any, config, undefined as any, this.platformId);
+    }
 
     const dialogContainer = this.attachDialogContainer<T>(overlayRef, config);
 
@@ -311,13 +321,16 @@ export class ZardDialogService {
     return dialogRef;
   }
 
-  private createOverlay() {
-    const overlayConfig = new OverlayConfig({
-      hasBackdrop: true,
-      positionStrategy: this.overlay.position().global(),
-    });
+  private createOverlay(): OverlayRef | undefined {
+    if (isPlatformBrowser(this.platformId)) {
+      const overlayConfig = new OverlayConfig({
+        hasBackdrop: true,
+        positionStrategy: this.overlay.position().global(),
+      });
 
-    return this.overlay.create(overlayConfig);
+      return this.overlay.create(overlayConfig);
+    }
+    return undefined;
   }
 
   private attachDialogContainer<T>(overlayRef: OverlayRef, config: ZardDialogOptions<T>) {
@@ -337,7 +350,7 @@ export class ZardDialogService {
   }
 
   private attachDialogContent<T>(componentOrTemplateRef: ContentType<T>, dialogContainer: ZardDialogComponent<T>, overlayRef: OverlayRef, config: ZardDialogOptions<T>) {
-    const dialogRef = new ZardDialogRef<T>(overlayRef, config, dialogContainer);
+    const dialogRef = new ZardDialogRef<T>(overlayRef, config, dialogContainer, this.platformId);
 
     if (componentOrTemplateRef instanceof TemplateRef) {
       dialogContainer.attachTemplatePortal(

@@ -1,7 +1,8 @@
 ```angular-ts title="menu.directive.ts" copyButton showLineNumbers
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { ZardMenuManagerService } from './menu-manager.service';
 
@@ -33,6 +34,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
   private readonly elementRef = inject(ElementRef);
   private readonly menuManager = inject(ZardMenuManagerService);
+  private readonly platformId = inject(PLATFORM_ID);
 
   private closeTimeout: ReturnType<typeof setTimeout> | null = null;
   private readonly cleanupFunctions: Array<() => void> = [];
@@ -142,11 +144,17 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private addEventListenerWithCleanup(element: Element, eventType: string, handler: (event: MouseEvent | Event) => void, options?: AddEventListenerOptions): void {
-    element.addEventListener(eventType, handler, options);
-    this.cleanupFunctions.push(() => element.removeEventListener(eventType, handler, options));
+    if (isPlatformBrowser(this.platformId)) {
+      element.addEventListener(eventType, handler, options);
+      this.cleanupFunctions.push(() => element.removeEventListener(eventType, handler, options));
+    }
   }
 
   private isMobileDevice(): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      return false; // Default to desktop behavior on server
+    }
+
     // Check for touch support
     const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
