@@ -17,7 +17,8 @@ import { inputVariants, ZardInputVariants } from './input.variants';
   },
 })
 export class ZardInputDirective {
-  private readonly isTextarea = inject(ElementRef).nativeElement.tagName.toLowerCase() === 'textarea';
+  readonly elementRef = inject(ElementRef);
+  private readonly isTextarea = this.elementRef.nativeElement.tagName.toLowerCase() === 'textarea';
 
   readonly zBorderless = input(false, { transform });
   readonly zSize = input<ZardInputVariants['zSize']>('default');
@@ -58,7 +59,7 @@ export const inputVariants = cva('w-full', {
       success: 'border-green-500 focus-visible:ring-green-500',
     },
     zBorderless: {
-      true: 'border-0 focus-visible:ring-0 focus-visible:ring-offset-0',
+      true: 'flex-1 bg-transparent border-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 px-0 py-0',
     },
   },
   defaultVariants: {

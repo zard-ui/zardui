@@ -26,7 +26,7 @@ import { alertDialogVariants, ZardAlertDialogVariants } from './alert-dialog.var
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { ZardAlertDialogRef } from './alert-dialog-ref';
-import { mergeClasses } from '../../shared/utils/utils';
+import { generateId, mergeClasses } from '../../shared/utils/utils';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -104,9 +104,9 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
     ),
   );
 
-  protected readonly titleId = computed(() => (this.config.zTitle ? `alert-dialog-title-${this.generateId()}` : null));
-  protected readonly descriptionId = computed(() => (this.config.zDescription ? `alert-dialog-description-${this.generateId()}` : null));
-  private alertDialogId = Math.random().toString(36).substring(2, 15);
+  private alertDialogId = generateId('alert-dialog');
+  protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
+  protected readonly descriptionId = computed(() => (this.config.zDescription ? `${this.alertDialogId}-description` : null));
 
   public alertDialogRef?: ZardAlertDialogRef<T>;
 
@@ -120,10 +120,6 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   constructor() {
     super();
-  }
-
-  private generateId(): string {
-    return this.alertDialogId;
   }
 
   getNativeElement(): HTMLElement {
