@@ -4,7 +4,6 @@ import {
   Component,
   computed,
   contentChildren,
-  effect,
   ElementRef,
   forwardRef,
   HostListener,
@@ -24,8 +23,11 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
 
 import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardSelectItemComponent } from './select-item.component';
-import { mergeClasses } from '../../shared/utils/utils';
+
+type OnTouchedType = () => void;
+type OnChangeType = (value: string) => void;
 
 @Component({
   selector: 'z-select, [z-select]',
@@ -40,7 +42,7 @@ import { mergeClasses } from '../../shared/utils/utils';
     },
   ],
   host: {
-    '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     class: 'relative inline-block w-full',
   },
@@ -48,7 +50,7 @@ import { mergeClasses } from '../../shared/utils/utils';
     <button
       type="button"
       [class]="triggerClasses()"
-      [disabled]="disabled()"
+      [disabled]="zDisabled()"
       (click)="toggle()"
       (keydown)="onTriggerKeydown($event)"
       [attr.aria-expanded]="isOpen()"
@@ -60,7 +62,7 @@ import { mergeClasses } from '../../shared/utils/utils';
         @if (selectedValue()) {
           <span>{{ selectedLabel() }}</span>
         } @else {
-          <span class="text-muted-foreground">{{ placeholder() }}</span>
+          <span class="text-muted-foreground">{{ zPlaceholder() }}</span>
         }
       </span>
       <i class="icon-chevron-down size-4 opacity-50"></i>
@@ -88,21 +90,21 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
 
-  readonly size = input<ZardSelectTriggerVariants['size']>('default');
-  readonly disabled = input<boolean>(false);
-  readonly placeholder = input<string>('Select an option...');
-  readonly value = input<string>('');
-  readonly label = input<string>('');
+  readonly zSize = input<ZardSelectTriggerVariants['zSize']>('default');
+  readonly zDisabled = input(false, { transform });
+  readonly zPlaceholder = input<string>('Select an option...');
+  readonly zValue = input<string>('');
+  readonly zLabel = input<string>('');
   readonly class = input<string>('');
 
-  readonly selectionChange = output<string>();
+  readonly zSelectionChange = output<string>();
 
   readonly isOpen = signal(false);
   private readonly _selectedValue = signal<string>('');
   private readonly _selectedLabel = linkedSignal(() => {
     const currentValue = this.selectedValue();
-    if (!this.label() && currentValue) {
-      const matchingItem = this.selectItems()?.find(item => item.value() === currentValue);
+    if (!this.zLabel() && currentValue) {
+      const matchingItem = this.selectItems()?.find(item => item.zValue() === currentValue);
       if (matchingItem) {
         return matchingItem.label();
       }
@@ -112,27 +114,28 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   readonly focusedIndex = signal<number>(-1);
 
   // Use computed to derive the effective selected value from input or internal state
-  readonly selectedValue = computed(() => this.value() || this._selectedValue());
+  readonly selectedValue = computed(() => this.zValue() || this._selectedValue());
 
   // Compute the label based on selected value
   readonly selectedLabel = computed(() => {
-    const manualLabel = this.label();
+    const manualLabel = this.zLabel();
     if (manualLabel) return manualLabel;
 
     return this._selectedLabel() || this.selectedValue();
   });
 
-  private onChange = (_value: string) => {
+  private onChange: OnChangeType = (_value: string) => {
     // ControlValueAccessor onChange callback
   };
-  private onTouched = () => {
+
+  private onTouched: OnTouchedType = () => {
     // ControlValueAccessor onTouched callback
   };
 
   protected readonly triggerClasses = computed(() =>
     mergeClasses(
       selectTriggerVariants({
-        size: this.size(),
+        zSize: this.zSize(),
       }),
       this.class(),
     ),
@@ -142,7 +145,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
   ngOnInit() {
     // Initialize selected value from input immediately
-    const inputValue = this.value();
+    const inputValue = this.zValue();
     if (inputValue) {
       this._selectedValue.set(inputValue);
     }
@@ -223,7 +226,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   }
 
   toggle() {
-    if (this.disabled()) return;
+    if (this.zDisabled()) return;
     // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this.isOpen() ? this.close() : this.open();
   }
@@ -267,7 +270,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     this._selectedValue.set(value);
     this._selectedLabel.set(label || value); // Fallback to value if label is empty
     this.onChange(value);
-    this.selectionChange.emit(value);
+    this.zSelectionChange.emit(value);
     this.close();
 
     // Return focus to the button after selection

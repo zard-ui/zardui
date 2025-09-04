@@ -45,7 +45,6 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   readonly zHoverDelay = input<number>(100);
 
   ngOnInit(): void {
-    // Check if device is mobile/touch device
     const isMobile = this.isMobileDevice();
 
     // If trigger is hover but device is mobile, skip hover behavior
