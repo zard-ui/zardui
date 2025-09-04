@@ -396,7 +396,7 @@ export class ZardAlertDialogService {
 
   private open<T>(componentOrTemplateRef: ContentType<T>, config: ZardAlertDialogOptions<T>) {
     const overlayRef = this.createOverlay();
-    
+
     if (!overlayRef) {
       // Return a mock alert dialog ref for SSR environments
       return new ZardAlertDialogRef(undefined as any, config, undefined as any);

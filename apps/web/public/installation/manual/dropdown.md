@@ -1,4 +1,8 @@
+
+
 ```angular-ts title="dropdown.component.ts" copyButton showLineNumbers
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,14 +21,11 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import type { ClassValue } from 'clsx';
-import { TemplatePortal } from '@angular/cdk/portal';
-
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { dropdownContentVariants } from './dropdown.variants';
 
+import type { ClassValue } from 'clsx';
+import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'z-dropdown-menu',
   exportAs: 'zDropdownMenu',
@@ -282,6 +283,8 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 
 ```
 
+
+
 ```angular-ts title="dropdown.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -325,6 +328,8 @@ export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>
 export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariants>;
 
 ```
+
+
 
 ```angular-ts title="dropdown-item.component.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
@@ -386,6 +391,8 @@ export class ZardDropdownMenuItemComponent {
 
 ```
 
+
+
 ```angular-ts title="dropdown-label.component.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -421,6 +428,8 @@ export class ZardDropdownMenuLabelComponent {
 
 ```
 
+
+
 ```angular-ts title="dropdown-menu-content.component.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -452,6 +461,8 @@ export class ZardDropdownMenuContentComponent {
 
 ```
 
+
+
 ```angular-ts title="dropdown-shortcut.component.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -477,6 +488,8 @@ export class ZardDropdownMenuShortcutComponent {
 }
 
 ```
+
+
 
 ```angular-ts title="dropdown-trigger.directive.ts" copyButton showLineNumbers
 import { Directive, ElementRef, HostListener, inject, input, OnInit, ViewContainerRef } from '@angular/core';
@@ -583,6 +596,8 @@ export class ZardDropdownDirective implements OnInit {
 
 ```
 
+
+
 ```angular-ts title="dropdown.module.ts" copyButton showLineNumbers
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
@@ -610,6 +625,8 @@ const DROPDOWN_COMPONENTS = [
 export class ZardDropdownModule {}
 
 ```
+
+
 
 ```angular-ts title="dropdown.service.ts" copyButton showLineNumbers
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
@@ -817,3 +834,4 @@ export class ZardDropdownService {
 }
 
 ```
+
