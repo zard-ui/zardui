@@ -1,12 +1,28 @@
 # API
 
-## [z-select] <span class="api-type-label component">Component</span>
+### z-select
 
-> z-select is a Component.
+> A customizable select component that allows single value selection.
 
-To get a customized select, just pass the following props to the directive.
+| Input           | Description                   | Type                        | Default                 |
+| --------------- | ----------------------------- | --------------------------- | ----------------------- |
+| `[class]`       | Custom CSS classes            | `string`                    | `''`                    |
+| `[zSize]`       | Sets the select size          | `'default' \| 'sm' \| 'lg'` | `'default'`             |
+| `[placeholder]` | Placeholder text              | `string`                    | `'Select an option...'` |
+| `[value]`       | Selected value                | `string`                    | `''`                    |
+| `[label]`       | Optional label for the select | `string`                    | `''`                    |
+| `[disabled]`    | Disables the select           | `boolean`                   | `false`                 |
 
-| Property        | Description        | Type              | Default   |
-| --------------- | ------------------ | ----------------- | --------- |
-| `[zBorderless]` | select borderless  | `boolean`         | `false`   |
-| `[zSize]`       | select size status | `default\|sm\|lg` | `default` |
+| Output              | Description                             | Payload  |
+| ------------------- | --------------------------------------- | -------- |
+| `(selectionChange)` | Emitted when the selected value changes | `string` |
+
+### z-select-item
+
+> Represents an individual item inside a `z-select` component.
+
+| Input        | Description                         | Type      | Default |
+| ------------ | ----------------------------------- | --------- | ------- |
+| `[class]`    | Custom CSS classes                  | `string`  | `''`    |
+| `[value]`    | The value associated with this item | `string`  | `''`    |
+| `[disabled]` | Disables selection for this item    | `boolean` | `false` |
