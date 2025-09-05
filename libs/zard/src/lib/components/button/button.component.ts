@@ -35,6 +35,15 @@ export class ZardButtonComponent {
   readonly zLoading = input(false, { transform });
 
   protected readonly classes = computed(() =>
-    mergeClasses(buttonVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape(), zFull: this.zFull(), zLoading: this.zLoading() }), this.class()),
+    mergeClasses(
+      buttonVariants({
+        zType: this.zType(),
+        zSize: this.zSize(),
+        zShape: this.zShape(),
+        zFull: this.zFull(),
+        zLoading: this.zLoading(),
+      }),
+      this.class(),
+    ),
   );
 }
