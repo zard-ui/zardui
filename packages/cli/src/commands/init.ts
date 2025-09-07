@@ -8,11 +8,12 @@ import path from 'path';
 import { z } from 'zod';
 import ora from 'ora';
 
-import { UTILS, POSTCSS_CONFIG, STYLES_WITH_VARIABLES } from '../utils/templates.js';
+import { UTILS, POSTCSS_CONFIG } from '../utils/templates.js';
 import { DEFAULT_CONFIG, type Config } from '../utils/config.js';
 import { getProjectInfo } from '../utils/get-project-info.js';
 import { logger, spinner } from '../utils/logger.js';
 import { installPackages, getPackageManager } from '../utils/package-manager.js';
+import { getAvailableThemes, getThemeContent, getThemeDisplayName } from '../utils/themes.js';
 
 export const init = new Command()
   .name('init')
@@ -91,6 +92,16 @@ async function promptForConfig(cwd: string, projectInfo: any): Promise<Config> {
 
   const options = await prompts([
     {
+      type: 'select',
+      name: 'theme',
+      message: `Choose a ${highlight('theme')} for your components:`,
+      choices: getAvailableThemes().map(theme => ({
+        title: getThemeDisplayName(theme),
+        value: theme,
+      })),
+      initial: 0, // neutral as default
+    },
+    {
       type: 'text',
       name: 'tailwindCss',
       message: `Where is your ${highlight('global CSS')} file?`,
@@ -141,13 +152,14 @@ async function promptForConfig(cwd: string, projectInfo: any): Promise<Config> {
     style: 'css', // Fixed to CSS for TailwindV4
     tailwind: {
       css: options.tailwindCss,
-      baseColor: 'slate',
+      baseColor: options.theme,
       cssVariables: true, // Always true for ZardUI theme
     },
     aliases: {
       components: options.components,
       utils: options.utils,
     },
+    theme: options.theme, // Store selected theme
   });
 
   return config;
@@ -164,6 +176,7 @@ const configSchema = z.object({
     components: z.string(),
     utils: z.string(),
   }),
+  theme: z.string().optional(), // Selected theme
 });
 
 async function installDependencies(cwd: string, config: Config) {
@@ -215,10 +228,12 @@ async function setupTailwind(cwd: string, config: Config) {
     }
   }
 
-  // Always apply ZardUI theme configuration to styles.css
+  // Apply selected theme to styles.css
   const stylesPath = path.join(cwd, config.tailwind.css);
-  await fs.writeFile(stylesPath, STYLES_WITH_VARIABLES, 'utf8');
-  logger.info('Applied ZardUI theme configuration to your CSS file');
+  const selectedTheme = config.theme || 'neutral';
+  const themeContent = getThemeContent(selectedTheme);
+  await fs.writeFile(stylesPath, themeContent, 'utf8');
+  logger.info(`Applied ${getThemeDisplayName(selectedTheme)} theme configuration to your CSS file`);
 }
 
 export async function createUtils(cwd: string, config: Config) {

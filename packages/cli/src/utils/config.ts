@@ -20,6 +20,7 @@ const configSchema = z.object({
       utils: z.string().default('src/app/shared/utils'),
     })
     .default({}),
+  theme: z.string().optional(), // Selected theme
 });
 
 export type Config = z.infer<typeof configSchema>;
