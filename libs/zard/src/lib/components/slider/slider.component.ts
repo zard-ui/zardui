@@ -18,8 +18,8 @@ import {
   SimpleChanges,
   OnDestroy,
   OnChanges,
-  DOCUMENT,
 } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
@@ -247,8 +247,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
       }),
     );
 
-    const pointerMove$ = fromEvent<PointerEvent>(this.document, 'pointermove');
-    const pointerUp$ = fromEvent<PointerEvent>(this.document, 'pointerup');
+    const pointerMove$ = fromEvent<PointerEvent>(this.document as Document, 'pointermove');
+    const pointerUp$ = fromEvent<PointerEvent>(this.document as Document, 'pointerup');
 
     pointerDown$
       .pipe(
