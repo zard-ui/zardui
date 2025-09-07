@@ -4,6 +4,7 @@ declare global {
   interface Window {
     switchCodeTab: (event: Event, tabIndex: number) => void;
     copyCodeToClipboard: (button: HTMLButtonElement, code: string) => void;
+    toggleExpandableCode: (button: HTMLButtonElement) => void;
   }
 }
 
@@ -40,6 +41,41 @@ window.switchCodeTab = function (event: Event, tabIndex: number) {
       content.classList.remove('block');
     }
   });
+};
+
+// Function to toggle expandable code visibility
+window.toggleExpandableCode = function (button: HTMLButtonElement) {
+  const overlay = button.closest('.expandable-overlay') as HTMLElement;
+  const wrapper = overlay?.closest('.expandable-wrapper') as HTMLElement;
+  
+  if (!overlay || !wrapper) return;
+  
+  // Add fade out animation to overlay
+  overlay.style.opacity = '0';
+  overlay.style.transform = 'scale(0.95)';
+  
+  // Remove overlay after animation completes
+  setTimeout(() => {
+    overlay.remove();
+    
+    // Add a subtle entrance animation to the revealed content
+    wrapper.style.transform = 'scale(0.98)';
+    wrapper.style.opacity = '0.7';
+    
+    // Animate to full visibility
+    requestAnimationFrame(() => {
+      wrapper.style.transition = 'all 0.3s ease-out';
+      wrapper.style.transform = 'scale(1)';
+      wrapper.style.opacity = '1';
+      
+      // Clean up transition after animation
+      setTimeout(() => {
+        wrapper.style.transition = '';
+        wrapper.style.transform = '';
+        wrapper.style.opacity = '';
+      }, 300);
+    });
+  }, 300);
 };
 
 // Copy code function with visual feedback

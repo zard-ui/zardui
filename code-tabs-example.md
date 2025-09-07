@@ -6,17 +6,15 @@ Este arquivo demonstra como usar a nova funcionalidade de **code tabs** no markd
 
 Para criar tabs de código, use a sintaxe `tab="nome"` nos blocos de código consecutivos:
 
-````markdown
+```markdown
 ```bash tab="npm"
 npm install @zard/ui
 ```
-````
 
 ```bash tab="yarn"
 yarn add @zard/ui
 ```
-
-````
+```
 
 ## 📦 Instalação de Pacotes
 
@@ -24,7 +22,7 @@ Você pode instalar o ZardUI usando diferentes package managers:
 
 ```bash tab="npm"
 npm install @zard/ui
-````
+```
 
 ```bash tab="pnpm"
 pnpm add @zard/ui
@@ -50,7 +48,7 @@ import { ZardButtonComponent } from '@zard/ui';
   selector: 'app-example',
   standalone: true,
   imports: [ZardButtonComponent],
-  template: `<z-button>Click me</z-button>`,
+  template: `<z-button>Click me</z-button>`
 })
 export class ExampleComponent {}
 ```
@@ -80,19 +78,19 @@ Configuração do Tailwind para diferentes formatos:
 ```javascript tab="CommonJS"
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./src/**/*.{html,ts}'],
+  content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {},
   },
   plugins: [],
-};
+}
 ```
 
 ```typescript tab="TypeScript"
 import type { Config } from 'tailwindcss';
 
 const config: Config = {
-  content: ['./src/**/*.{html,ts}'],
+  content: ["./src/**/*.{html,ts}"],
   theme: {
     extend: {},
   },
@@ -179,11 +177,11 @@ import { Component } from '@angular/core';
       <p>Este é um exemplo de componente Angular</p>
       <button class="btn-primary">Clique aqui</button>
     </div>
-  `,
+  `
 })
 export class ExemploComponent {
   title = 'Meu Componente';
-
+  
   onClick() {
     console.log('Botão clicado!');
   }
@@ -210,7 +208,7 @@ export const databaseConfig: DatabaseConfig = {
   database: process.env.DB_NAME || 'myapp',
   username: process.env.DB_USER || 'admin',
   password: process.env.DB_PASSWORD || 'password',
-  ssl: process.env.NODE_ENV === 'production',
+  ssl: process.env.NODE_ENV === 'production'
 };
 
 export function createConnection(config: DatabaseConfig) {
@@ -249,7 +247,6 @@ echo "Build concluído com sucesso!"
 ## ✨ Características
 
 ### Code Tabs
-
 - ✅ **Automático**: Detecta automaticamente blocos consecutivos com `tab="nome"`
 - ✅ **Interativo**: Botões clicáveis para alternar entre tabs
 - ✅ **Responsivo**: Interface adaptável com Tailwind CSS
@@ -257,7 +254,6 @@ echo "Build concluído com sucesso!"
 - ✅ **Flexível**: Suporta qualquer linguagem e número de tabs
 
 ### Code Expandables
-
 - ✅ **Expandable**: Use `expandable="true"` para criar code blocks recolhíveis
 - ✅ **Títulos Customizados**: Use `expandableTitle="Seu Título"` para personalizar o texto do expandable
 - ✅ **Combinável**: Funciona junto com títulos de arquivo, copy buttons e outros recursos
@@ -267,30 +263,23 @@ echo "Build concluído com sucesso!"
 ## 📖 Como Usar Expandables
 
 ### Sintaxe Básica
-
-````markdown
+```markdown
 ```typescript expandable="true" title="meu-arquivo.ts"
 // Seu código aqui
 ```
-````
-
-````
+```
 
 ### Sintaxe com Título Customizado
 ```markdown
 ```typescript expandable="true" expandableTitle="🔧 Configuração Avançada" title="config.ts"
 // Seu código aqui
-````
-
-````
+```
+```
 
 ### Sintaxe com Copy Button
 ```markdown
 ```bash expandable="true" expandableTitle="📦 Scripts" copyButton title="script.sh"
 #!/bin/bash
 echo "Hello World"
-````
-
 ```
-
 ```

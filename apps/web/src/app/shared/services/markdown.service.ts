@@ -211,8 +211,8 @@ export class MarkdownService {
         keepBackground: false,
         // Remove the default copy button transformer since we'll handle it in our custom plugin
       })
+      .use(rehypeCodeTabs) // Our custom plugin for code tabs (BEFORE rehypeEnhancedCode)
       .use(rehypeEnhancedCode) // Our custom plugin for enhanced code blocks
-      .use(rehypeCodeTabs) // Our custom plugin for code tabs
       .use(this.rehypeTailwindClasses())
       .use(rehypeStringify);
 
