@@ -3,7 +3,7 @@
 ```angular-ts title="popover.component.ts" copyButton showLineNumbers
 import { Subject } from 'rxjs';
 
-import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { ConnectedPosition, createOverlayRef, Overlay, OverlayContainer, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 
 import {
@@ -14,6 +14,8 @@ import {
   effect,
   ElementRef,
   inject,
+  Injectable,
+  Injector,
   input,
   OnDestroy,
   OnInit,
@@ -65,9 +67,18 @@ const POPOVER_POSITIONS_MAP = {
   },
 } as const;
 
+@Injectable({ providedIn: 'root' })
+class CustomOverlayContainer extends OverlayContainer {
+  protected override _createContainer() {
+    super._createContainer();
+    this._containerElement.classList.add('z-10!');
+  }
+}
+
 @Directive({
   selector: '[zPopover]',
   exportAs: 'zPopover',
+  providers: [{ provide: OverlayContainer, useExisting: CustomOverlayContainer }],
   standalone: true,
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
@@ -77,6 +88,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
   private readonly renderer = inject(Renderer2);
   private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly injector = inject(Injector);
 
   private overlayRef?: OverlayRef;
   private documentClickListenerRef?: () => void;
@@ -190,10 +202,10 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
       .withFlexibleDimensions(true)
       .withViewportMargin(8);
 
-    this.overlayRef = this.overlay.create({
+    this.overlayRef = createOverlayRef(this.injector, {
       positionStrategy,
       hasBackdrop: false,
-      scrollStrategy: this.overlay.scrollStrategies.close(),
+      scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
   }
 
