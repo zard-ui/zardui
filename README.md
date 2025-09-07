@@ -1,6 +1,6 @@
 # Zard
 
-Component Library Based on Shadcn/ui and using ng-zorro dev experience for develop an <b>beautiful</b>, <b>easy to use</b> and <b>completly free</b> and <b>open source</b> component library for angular.
+Modern Angular component library inspired by shadcn/ui, built with TailwindCSS and designed for developers who value <b>beautiful</b>, <b>accessible</b>, and <b>completely free</b> open source components.
 
 <a alt="Zard Ui logo" href="https://www.zardui.com/" target="_blank" rel="noreferrer">
   <img align="center" width=100% src="https://www.zardui.com/images/github_banner.png"/>
@@ -23,7 +23,24 @@ Visit https://www.zardui.com/docs to view the documentation
 
 ## Contributing
 
-Please read the [contributing guide](/CONTRIBUTING.md).
+We follow a **simple GitHub Flow** with automated releases. Please read our [contributing guide](/CONTRIBUTING.md) to get started.
+
+### Quick Start for Contributors
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feat/#123-your-feature`
+3. Develop with as many commits as you want
+4. Open a PR to `master`
+5. After review + merge = automatic release!
+
+### Development Commands
+
+```bash
+npm start          # Start dev server (port 4222)
+npm test           # Run all tests
+npm run build      # Build production
+npm run release    # Automated release
+```
 
 ## License
 

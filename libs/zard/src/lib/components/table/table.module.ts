@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import {
@@ -22,7 +21,7 @@ const TABLE_COMPONENTS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, ...TABLE_COMPONENTS],
+  imports: [...TABLE_COMPONENTS],
   exports: [...TABLE_COMPONENTS],
 })
 export class ZardTableModule {}

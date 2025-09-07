@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="resizable.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import {
   AfterContentInit,
@@ -341,7 +341,7 @@ export * from './resizable.variants';
 
 
 ```angular-ts title="resizable-handle.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
@@ -535,7 +535,7 @@ export class ZardResizableHandleComponent {
 
 
 ```angular-ts title="resizable-panel.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
 

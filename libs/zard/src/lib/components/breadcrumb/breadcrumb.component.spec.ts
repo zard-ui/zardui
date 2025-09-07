@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
-import { CommonModule } from '@angular/common';
+
 import { By } from '@angular/platform-browser';
 
 import {

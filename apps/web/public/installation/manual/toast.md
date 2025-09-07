@@ -3,7 +3,7 @@
 ```angular-ts title="toast.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { NgxSonnerToaster } from 'ngx-sonner';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { toastVariants, ZardToastVariants } from './toast.variants';

@@ -1,4 +1,4 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
 

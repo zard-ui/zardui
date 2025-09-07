@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="card.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
@@ -78,7 +78,6 @@ export type ZardCardBodyVariants = VariantProps<typeof cardBodyVariants>;
 
 ```angular-ts title="index.ts" copyButton showLineNumbers
 export * from './card.component';
-export * from './card.module';
 
 ```
 

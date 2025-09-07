@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="table.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -218,7 +218,6 @@ export type ZardTableCaptionVariants = VariantProps<typeof tableCaptionVariants>
 
 
 ```angular-ts title="table.module.ts" copyButton showLineNumbers
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
 import {
@@ -242,7 +241,7 @@ const TABLE_COMPONENTS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, ...TABLE_COMPONENTS],
+  imports: [...TABLE_COMPONENTS],
   exports: [...TABLE_COMPONENTS],
 })
 export class ZardTableModule {}

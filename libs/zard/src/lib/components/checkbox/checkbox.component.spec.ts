@@ -1,7 +1,7 @@
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, inject } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { Component } from '@angular/core';
 
 import { ZardCheckboxComponent } from './checkbox.component';
 
@@ -46,9 +46,10 @@ class TestHostWithNgModelComponent {
   `,
 })
 class TestHostWithReactiveFormsComponent {
+  private fb = inject(FormBuilder);
   form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor() {
     this.form = this.fb.group({
       termsCheckbox: [false],
       newsletterCheckbox: [true],

@@ -1,9 +1,9 @@
 
 
 ```angular-ts title="checkbox.component.ts" copyButton showLineNumbers
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, input, output, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { checkboxLabelVariants, checkboxVariants, ZardCheckboxVariants } from './checkbox.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -39,6 +39,8 @@ type OnChangeType = (value: any) => void;
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardCheckboxComponent implements ControlValueAccessor {
+  private cdr = inject(ChangeDetectorRef);
+
   readonly checkChange = output<boolean>();
   readonly class = input<ClassValue>('');
   readonly disabled = input(false, { transform });
@@ -53,8 +55,6 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
   protected readonly classes = computed(() => mergeClasses(checkboxVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape() }), this.class()));
   protected readonly labelClasses = computed(() => mergeClasses(checkboxLabelVariants({ zSize: this.zSize() })));
   checked = false;
-
-  constructor(private cdr: ChangeDetectorRef) {}
 
   writeValue(val: boolean): void {
     this.checked = val;

@@ -3,14 +3,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ContentChildren,
+  contentChildren,
   ElementRef,
   input,
   output,
-  QueryList,
   signal,
   TemplateRef,
-  ViewChild,
+  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { combineLatest, interval, startWith } from 'rxjs';
@@ -25,7 +24,7 @@ export type zAlign = 'center' | 'start' | 'end';
 @Component({
   selector: 'z-tab',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <ng-template #content>
       <ng-content></ng-content>
@@ -35,7 +34,7 @@ export type zAlign = 'center' | 'start' | 'end';
 })
 export class ZardTabComponent {
   label = input.required<string>();
-  @ViewChild('content', { static: true }) contentTemplate!: TemplateRef<unknown>;
+  readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('content');
 }
 
 @Component({
@@ -83,7 +82,7 @@ export class ZardTabComponent {
       <div class="tab-content flex-1">
         @for (tab of tabs(); track $index; let index = $index) {
           @if (activeTabIndex() === index) {
-            <ng-container [ngTemplateOutlet]="tab.contentTemplate"></ng-container>
+            <ng-container [ngTemplateOutlet]="tab.contentTemplate()"></ng-container>
           }
         }
       </div>
@@ -148,11 +147,10 @@ export class ZardTabComponent {
   ],
 })
 export class ZardTabGroupComponent {
-  @ContentChildren(ZardTabComponent, { descendants: true })
-  private readonly tabComponents!: QueryList<ZardTabComponent>;
-  @ViewChild('tabNav', { static: false }) private readonly tabsContainer!: ElementRef;
+  private readonly tabComponents = contentChildren(ZardTabComponent, { descendants: true });
+  private readonly tabsContainer = viewChild.required<ElementRef>('tabNav');
 
-  protected readonly tabs = signal<ZardTabComponent[]>([]);
+  protected readonly tabs = computed(() => this.tabComponents());
   protected readonly activeTabIndex = signal<number>(0);
   protected readonly hasScrollSignal = signal<boolean>(false);
 
@@ -182,7 +180,6 @@ export class ZardTabGroupComponent {
 
   constructor() {
     afterNextRender(() => {
-      this.updateTabs();
       if (this.tabs().length > 0) {
         this.setActiveTab(0);
       }
@@ -193,13 +190,9 @@ export class ZardTabGroupComponent {
     });
   }
 
-  private updateTabs() {
-    this.tabs.set(this.tabComponents.toArray());
-  }
-
   private hasScroll(): boolean {
-    if (this.tabsContainer && this.tabsContainer.nativeElement && this.zShowArrow()) {
-      const navElement: HTMLElement = this.tabsContainer.nativeElement;
+    if (this.tabsContainer && this.tabsContainer().nativeElement && this.zShowArrow()) {
+      const navElement: HTMLElement = this.tabsContainer().nativeElement;
       return navElement.scrollWidth > navElement.clientWidth || navElement.scrollHeight > navElement.clientHeight;
     }
     return false;
@@ -256,7 +249,7 @@ export class ZardTabGroupComponent {
   });
 
   protected scrollNav(direction: 'left' | 'right' | 'up' | 'down') {
-    const container = this.tabsContainer.nativeElement;
+    const container = this.tabsContainer().nativeElement;
     const scrollAmount = this.zScrollAmount();
     if (direction === 'left') {
       container.scrollLeft -= scrollAmount;
