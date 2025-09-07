@@ -59,7 +59,8 @@
       "Bash(git rm:*)",
       "Bash(npx nx run:*)",
       "Bash(sed:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Bash(git switch:*)"
     ],
     "defaultMode": "acceptEdits"
   },
