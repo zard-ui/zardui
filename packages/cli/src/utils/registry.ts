@@ -598,6 +598,35 @@ export const registry: ComponentRegistry[] = [
       },
     ],
   },
+  {
+    name: 'menu',
+    files: [
+      {
+        name: 'menu.directive.ts',
+        content: '',
+      },
+      {
+        name: 'menu.variants.ts',
+        content: '',
+      },
+      {
+        name: 'menu-content.directive.ts',
+        content: '',
+      },
+      {
+        name: 'menu-item.directive.ts',
+        content: '',
+      },
+      {
+        name: 'menu-manager.service.ts',
+        content: '',
+      },
+      {
+        name: 'menu.module.ts',
+        content: '',
+      },
+    ],
+  },
 ];
 
 export function getRegistryComponent(name: string): ComponentRegistry | undefined {

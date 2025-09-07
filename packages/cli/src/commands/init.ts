@@ -2,7 +2,6 @@ import * as commentJson from 'comment-json';
 import { Command } from 'commander';
 import { existsSync } from 'fs';
 import prompts from 'prompts';
-import { execa } from 'execa';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import path from 'path';
@@ -13,6 +12,7 @@ import { UTILS, POSTCSS_CONFIG, STYLES_WITH_VARIABLES } from '../utils/templates
 import { DEFAULT_CONFIG, type Config } from '../utils/config.js';
 import { getProjectInfo } from '../utils/get-project-info.js';
 import { logger, spinner } from '../utils/logger.js';
+import { installPackages, getPackageManager } from '../utils/package-manager.js';
 
 export const init = new Command()
   .name('init')
@@ -78,8 +78,11 @@ export const init = new Command()
     logger.break();
     logger.success('ZardUI has been initialized successfully!');
     logger.break();
+    const packageManager = await getPackageManager(cwd);
+    const runCommand = packageManager === 'npm' ? 'npx' : packageManager === 'yarn' ? 'yarn dlx' : `${packageManager}x`;
+
     logger.info('You can now add components using:');
-    logger.info(chalk.bold('  npx @ngzard/ui add [component]'));
+    logger.info(chalk.bold(`  ${runCommand} @ngzard/ui add [component]`));
     logger.break();
   });
 
@@ -180,21 +183,20 @@ async function installDependencies(cwd: string, config: Config) {
   }
 
   const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-angular'];
-
   const devDeps = ['tailwindcss', '@tailwindcss/postcss', 'postcss', 'tailwindcss-animate'];
 
   try {
-    await execa('npm', ['install', ...deps], { cwd });
+    await installPackages(deps, cwd, false);
   } catch (error) {
-    // If installation fails due to peer deps, retry with --legacy-peer-deps
+    // If installation fails due to peer deps, retry with --legacy-peer-deps (npm only)
     logger.warn('Installation failed, retrying with --legacy-peer-deps...');
-    await execa('npm', ['install', '--legacy-peer-deps', ...deps], { cwd });
+    await installPackages(deps, cwd, false, true);
   }
 
   try {
-    await execa('npm', ['install', '-D', ...devDeps], { cwd });
+    await installPackages(devDeps, cwd, true);
   } catch (error) {
-    await execa('npm', ['install', '-D', '--legacy-peer-deps', ...devDeps], { cwd });
+    await installPackages(devDeps, cwd, true, true);
   }
 }
 
