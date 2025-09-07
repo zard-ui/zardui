@@ -1,3 +1,5 @@
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,13 +17,11 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { ClassValue } from 'class-variance-authority/dist/types';
-import { TemplatePortal } from '@angular/cdk/portal';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { dropdownContentVariants } from './dropdown.variants';
 
+import type { ClassValue } from 'clsx';
 @Component({
   selector: 'z-dropdown-menu',
   exportAs: 'zDropdownMenu',

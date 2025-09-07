@@ -1,3 +1,5 @@
+import { Subject, switchMap, takeUntil, timer } from 'rxjs';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,14 +17,13 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
-import { Subject, switchMap, takeUntil, timer } from 'rxjs';
 
+import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCommandJsonComponent } from './command-json.component';
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
+import type { ClassValue } from 'clsx';
 @Component({
   selector: 'z-command-input',
   exportAs: 'zCommandInput',

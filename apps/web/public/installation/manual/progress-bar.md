@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="progress-bar.component.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
