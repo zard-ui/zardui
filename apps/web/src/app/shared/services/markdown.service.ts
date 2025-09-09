@@ -43,6 +43,14 @@ export class MarkdownService {
             };
           }
 
+          if (node.tagName === 'h2') {
+            node.properties = {
+              ...node.properties,
+              style: [],
+              class: ['scroll-m-28', 'font-heading', 'text-xl', 'font-medium', 'tracking-tight', '[&:not(:first-child)]:mt-6'],
+            };
+          }
+
           if (node.tagName === 'h3') {
             node.properties = {
               ...node.properties,
@@ -56,6 +64,13 @@ export class MarkdownService {
               ...node.properties,
               style: [],
               class: ['text-base', 'leading-7', 'text-muted-foreground', '[&:not(:first-child)]:mt-6'],
+            };
+          }
+
+          if (node.tagName === 'ul') {
+            node.properties = {
+              ...node.properties,
+              class: ['list-disc'],
             };
           }
 

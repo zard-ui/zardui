@@ -8,12 +8,12 @@ import path from 'path';
 import { z } from 'zod';
 import ora from 'ora';
 
-import { UTILS, POSTCSS_CONFIG } from '../utils/templates.js';
+import { getAvailableThemes, getThemeContent, getThemeDisplayName } from '../utils/themes.js';
+import { installPackages, getPackageManager } from '../utils/package-manager.js';
 import { DEFAULT_CONFIG, type Config } from '../utils/config.js';
+import { UTILS, POSTCSS_CONFIG } from '../utils/templates.js';
 import { getProjectInfo } from '../utils/get-project-info.js';
 import { logger, spinner } from '../utils/logger.js';
-import { installPackages, getPackageManager } from '../utils/package-manager.js';
-import { getAvailableThemes, getThemeContent, getThemeDisplayName } from '../utils/themes.js';
 
 export const init = new Command()
   .name('init')
@@ -195,7 +195,7 @@ async function installDependencies(cwd: string, config: Config) {
     }
   }
 
-  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-angular'];
+  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-static'];
   const devDeps = ['tailwindcss', '@tailwindcss/postcss', 'postcss', 'tailwindcss-animate'];
 
   try {

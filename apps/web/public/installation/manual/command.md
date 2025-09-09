@@ -343,7 +343,6 @@ export type ZardCommandItemVariants = VariantProps<typeof commandItemVariants>;
 ```angular-ts title="command-divider.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
-
 import { commandSeparatorVariants } from './command.variants';
 import { ZardCommandComponent } from './command.component';
 import { mergeClasses } from '../../shared/utils/utils';

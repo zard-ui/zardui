@@ -17,8 +17,9 @@ const DOCS_PATH = {
     { name: 'Theming', path: '/docs/theming', available: true },
     { name: 'Dark Mode', path: '/docs/dark-mode', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
+    { name: 'Blocks', path: '/docs', available: false },
     { name: 'Figma', path: '/docs/figma', available: true },
-    { name: 'Changelog', path: '/docs', available: false },
+    { name: 'Changelog', path: '/docs/changelog', available: true },
     { name: 'About & Credits', path: '/docs/about', available: true },
   ],
 };

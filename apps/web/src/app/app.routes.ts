@@ -55,6 +55,10 @@ export const appRoutes: Route[] = [
         path: 'figma',
         loadComponent: async () => import('./domain/pages/figma/figma.page').then(m => m.FigmaPage),
       },
+      {
+        path: 'changelog',
+        loadComponent: async () => import('./domain/pages/change-log/change-log.page').then(m => m.ChangeLogPage),
+      },
     ],
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },

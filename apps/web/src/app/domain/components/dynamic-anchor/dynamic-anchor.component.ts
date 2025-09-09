@@ -23,8 +23,17 @@ export class DynamicAnchorComponent {
 
   activeAnchor = model<string | undefined>();
   navigation = input<NavigationConfig>({ items: [] });
+  onAnchorClick = input<((anchorId: string) => void | Promise<void>) | null>(null);
 
-  scrollToAnchor(anchor: string) {
+  async scrollToAnchor(anchor: string) {
+    // Se há um callback customizado, usa ele
+    const customCallback = this.onAnchorClick();
+    if (customCallback) {
+      await customCallback(anchor);
+      return;
+    }
+
+    // Comportamento padrão
     const anchorElement = document.getElementById(anchor);
 
     if (anchorElement) {
