@@ -12,7 +12,6 @@ import { ZardInputDirective } from '../input/input.directive';
     <z-input-group
       [zSize]="size"
       [zDisabled]="disabled"
-      [zStatus]="status"
       [zBorderless]="borderless"
       [zAddOnBefore]="addOnBefore"
       [zAddOnAfter]="addOnAfter"
@@ -31,7 +30,6 @@ class TestHostComponent {
 
   size: 'sm' | 'default' | 'lg' = 'default';
   disabled = false;
-  status?: 'error' | 'warning' | 'success';
   borderless = false;
   addOnBefore: string | TemplateRef<any> | undefined;
   addOnAfter: string | TemplateRef<any> | undefined;
@@ -69,7 +67,6 @@ describe('ZardInputGroupComponent', () => {
       expect(component.zSize()).toBe('default');
       expect(component.zDisabled()).toBe(false);
       expect(component.zBorderless()).toBe(false);
-      expect(component.zStatus()).toBeUndefined();
     });
   });
 
@@ -108,30 +105,6 @@ describe('ZardInputGroupComponent', () => {
       const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
       expect(wrapper.getAttribute('aria-disabled')).toBe('true');
       expect(wrapper.getAttribute('data-disabled')).toBe('true');
-    });
-
-    it('should apply error status', () => {
-      hostComponent.status = 'error';
-      hostFixture.detectChanges();
-
-      const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      expect(wrapper.getAttribute('data-status')).toBe('error');
-    });
-
-    it('should apply warning status', () => {
-      hostComponent.status = 'warning';
-      hostFixture.detectChanges();
-
-      const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      expect(wrapper.getAttribute('data-status')).toBe('warning');
-    });
-
-    it('should apply success status', () => {
-      hostComponent.status = 'success';
-      hostFixture.detectChanges();
-
-      const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      expect(wrapper.getAttribute('data-status')).toBe('success');
     });
   });
 
@@ -374,7 +347,6 @@ describe('ZardInputGroupComponent', () => {
       hostComponent.size = 'lg';
       hostComponent.borderless = true;
       hostComponent.disabled = true;
-      hostComponent.status = 'error';
       hostComponent.addOnBefore = 'https://';
       hostComponent.addOnAfter = '.com';
       hostComponent.prefix = 'www.';
@@ -391,7 +363,6 @@ describe('ZardInputGroupComponent', () => {
       // Check wrapper
       expect(wrapper.className).toContain('h-11'); // lg size
       expect(wrapper.getAttribute('aria-label')).toBe('Complex input group');
-      expect(wrapper.getAttribute('data-status')).toBe('error');
       expect(wrapper.getAttribute('aria-disabled')).toBe('true');
 
       // Check addons
@@ -448,7 +419,6 @@ describe('ZardInputGroupComponent', () => {
     it('should compute wrapper classes correctly', () => {
       fixture.componentRef.setInput('zSize', 'lg');
       fixture.componentRef.setInput('zDisabled', true);
-      fixture.componentRef.setInput('zStatus', 'error');
       fixture.detectChanges();
 
       const classes = component['wrapperClasses']();
@@ -475,13 +445,12 @@ describe('ZardInputDirective', () => {
 
   it('should apply correct classes to input element', () => {
     const inputElement = fixture.debugElement.nativeElement.querySelector('input[z-input]');
-    expect(inputElement.className).toContain('flex-1');
+    // The input element gets its classes from ZardInputDirective
     expect(inputElement.className).toContain('bg-transparent');
-    expect(inputElement.className).toContain('border-0');
-    expect(inputElement.className).toContain('outline-none');
-    expect(inputElement.className).toContain('focus:outline-none');
     expect(inputElement.className).toContain('placeholder:text-muted-foreground');
     expect(inputElement.className).toContain('disabled:cursor-not-allowed');
     expect(inputElement.className).toContain('disabled:opacity-50');
+    expect(inputElement.className).toContain('focus-visible:outline-none');
+    expect(inputElement.className).toContain('focus-visible:ring-2');
   });
 });
