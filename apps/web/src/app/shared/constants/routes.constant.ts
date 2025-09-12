@@ -42,6 +42,7 @@ const COMPONENTS_PATH = {
     { name: 'Command', path: '/docs/components/command', available: true },
     { name: 'Date Picker', path: '/docs/components/date-picker', available: true },
     { name: 'Divider', path: '/docs/components/divider', available: true },
+    { name: 'Empty', path: '/docs/components/empty', available: true },
     { name: 'Form', path: '/docs/components/form', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Dialog', path: '/docs/components/dialog', available: true },

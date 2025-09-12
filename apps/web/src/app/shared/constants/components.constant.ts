@@ -34,6 +34,7 @@ import { TABS } from '@zard/components/tabs/demo/tabs';
 import { CARD } from '@zard/components/card/demo/card';
 import { FORM } from '@zard/components/form/demo/form';
 import { MENU } from '@zard/components/menu/demo/menu';
+import { EMPTY } from '@zard/components/empty/demo/empty';
 import { ComponentType } from '@angular/cdk/overlay';
 
 export interface ComponentData {
@@ -67,6 +68,7 @@ export const COMPONENTS: ComponentData[] = [
   DIALOG,
   DIVIDER,
   DROPDOWN,
+  EMPTY,
   FORM,
   INPUT,
   LOADER,
