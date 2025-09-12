@@ -1,6 +1,5 @@
 import { ZardDemoInputGroupBorderlessComponent } from './borderless';
 import { ZardDemoInputGroupDefaultComponent } from './default';
-import { ZardDemoInputGroupStatusComponent } from './status';
 import { ZardDemoInputGroupSizeComponent } from './size';
 
 export const INPUT_GROUP = {
@@ -15,11 +14,6 @@ export const INPUT_GROUP = {
     {
       name: 'size',
       component: ZardDemoInputGroupSizeComponent,
-      column: true,
-    },
-    {
-      name: 'status',
-      component: ZardDemoInputGroupStatusComponent,
       column: true,
     },
     {

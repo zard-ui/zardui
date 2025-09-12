@@ -9,7 +9,6 @@
 | `zSize`                 | `'sm' \| 'default' \| 'lg'`         | `'default'` | Size of the input group and all its elements   |
 | `zDisabled`             | `boolean`                           | `false`     | Disable the entire input group                 |
 | `zBorderless`           | `boolean`                           | `false`     | Remove borders and background for a clean look |
-| `zStatus`               | `'error' \| 'warning' \| 'success'` | `undefined` | Apply status styling to the input group        |
 | `zAddOnBefore`          | `string \| TemplateRef<void>`       | `undefined` | Content to display before the input            |
 | `zAddOnAfter`           | `string \| TemplateRef<void>`       | `undefined` | Content to display after the input             |
 | `zPrefix`               | `string \| TemplateRef<void>`       | `undefined` | Prefix content inside the input (left)         |

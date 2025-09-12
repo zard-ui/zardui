@@ -21,7 +21,6 @@ import { generateId, mergeClasses } from '../../shared/utils/utils';
       [attr.aria-describedby]="zAriaDescribedBy()"
       [attr.aria-disabled]="zDisabled()"
       [attr.data-disabled]="zDisabled()"
-      [attr.data-status]="zStatus()"
     >
       @if (zAddOnBefore()) {
         <div [class]="addonBeforeClasses()" [id]="addonBeforeId()" [attr.aria-label]="zAddOnBeforeAriaLabel()" [attr.aria-disabled]="zDisabled()">
@@ -64,7 +63,6 @@ export class ZardInputGroupComponent {
   readonly zSuffix = input<string | TemplateRef<void>>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zBorderless = input(false, { transform: booleanAttribute });
-  readonly zStatus = input<'error' | 'warning' | 'success'>();
   readonly zAriaLabel = input<string>();
   readonly zAriaLabelledBy = input<string>();
   readonly zAriaDescribedBy = input<string>();
@@ -86,7 +84,6 @@ export class ZardInputGroupComponent {
     inputGroupVariants({
       zSize: this.zSize(),
       zDisabled: this.zDisabled(),
-      zStatus: this.zStatus(),
     }),
   );
 
@@ -132,7 +129,6 @@ export class ZardInputGroupComponent {
         zHasAddonAfter: Boolean(this.zAddOnAfter()),
         zDisabled: this.zDisabled(),
         zBorderless: this.zBorderless(),
-        zStatus: this.zStatus(),
       }),
       'relative',
     );

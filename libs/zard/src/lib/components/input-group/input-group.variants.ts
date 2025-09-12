@@ -13,11 +13,6 @@ export const inputGroupVariants = cva(
         true: 'opacity-50 cursor-not-allowed',
         false: '',
       },
-      zStatus: {
-        error: '[&_.addon]:border-destructive [&_.addon]:text-destructive',
-        warning: '[&_.addon]:border-warning [&_.addon]:text-warning',
-        success: '[&_.addon]:border-green-500 [&_.addon]:text-green-600',
-      },
     },
     defaultVariants: {
       zSize: 'default',
@@ -108,11 +103,6 @@ export const inputGroupInputVariants = cva(
         true: 'border-0 bg-transparent shadow-none',
         false: '',
       },
-      zStatus: {
-        error: 'border-destructive focus-within:ring-destructive',
-        warning: 'border-yellow-500 focus-within:ring-yellow-500',
-        success: 'border-green-500 focus-within:ring-green-500',
-      },
     },
     compoundVariants: [
       {
@@ -154,7 +144,6 @@ export const inputGroupInputVariants = cva(
       zHasAddonAfter: false,
       zDisabled: false,
       zBorderless: false,
-      zStatus: undefined,
     },
   },
 );
