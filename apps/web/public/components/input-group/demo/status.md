@@ -8,13 +8,13 @@ import { ZardInputDirective } from '../../input/input.directive';
   standalone: true,
   imports: [ZardInputGroupComponent, ZardInputDirective],
   template: `
-    <z-input-group zAddOnBefore="$" zSuffix="USD" [zStatus]="'error'">
+    <z-input-group zAddOnBefore="$" zSuffix="USD" zStatus="error">
       <input z-input type="number" placeholder="Error" />
     </z-input-group>
-    <z-input-group zAddOnBefore="$" zSuffix="USD" [zStatus]="'warning'">
+    <z-input-group zAddOnBefore="$" zSuffix="USD" zStatus="warning">
       <input z-input type="number" placeholder="Warning" />
     </z-input-group>
-    <z-input-group zAddOnBefore="$" zSuffix="USD" [zStatus]="'success'">
+    <z-input-group zAddOnBefore="$" zSuffix="USD" zStatus="success">
       <input z-input type="number" placeholder="Success" />
     </z-input-group>
   `,

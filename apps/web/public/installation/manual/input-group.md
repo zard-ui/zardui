@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="input-group.component.ts" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { inputGroupAddonVariants, inputGroupAffixVariants, inputGroupInputVariants, inputGroupVariants, ZardInputGroupVariants } from './input-group.variants';
@@ -65,8 +65,8 @@ export class ZardInputGroupComponent {
   readonly zAddOnAfter = input<string | TemplateRef<void>>();
   readonly zPrefix = input<string | TemplateRef<void>>();
   readonly zSuffix = input<string | TemplateRef<void>>();
-  readonly zDisabled = input(false);
-  readonly zBorderless = input(false);
+  readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zBorderless = input(false, { transform: booleanAttribute });
   readonly zStatus = input<'error' | 'warning' | 'success'>();
   readonly zAriaLabel = input<string>();
   readonly zAriaLabelledBy = input<string>();
@@ -98,6 +98,7 @@ export class ZardInputGroupComponent {
       zSize: this.zSize(),
       zPosition: 'before',
       zDisabled: this.zDisabled(),
+      zBorderless: this.zBorderless(),
     }),
   );
 
@@ -106,6 +107,7 @@ export class ZardInputGroupComponent {
       zSize: this.zSize(),
       zPosition: 'after',
       zDisabled: this.zDisabled(),
+      zBorderless: this.zBorderless(),
     }),
   );
 
@@ -190,11 +192,16 @@ export const inputGroupAddonVariants = cva(
         true: 'cursor-not-allowed opacity-50 pointer-events-none',
         false: '',
       },
+      zBorderless: {
+        true: 'border-0 shadow-none',
+        false: '',
+      },
     },
     defaultVariants: {
       zSize: 'default',
       zPosition: 'before',
       zDisabled: false,
+      zBorderless: false,
     },
   },
 );

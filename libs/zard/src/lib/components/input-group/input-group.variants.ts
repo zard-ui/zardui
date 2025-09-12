@@ -43,11 +43,16 @@ export const inputGroupAddonVariants = cva(
         true: 'cursor-not-allowed opacity-50 pointer-events-none',
         false: '',
       },
+      zBorderless: {
+        true: 'border-0 shadow-none',
+        false: '',
+      },
     },
     defaultVariants: {
       zSize: 'default',
       zPosition: 'before',
       zDisabled: false,
+      zBorderless: false,
     },
   },
 );
