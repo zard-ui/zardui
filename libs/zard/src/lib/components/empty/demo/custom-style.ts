@@ -6,9 +6,9 @@ import { ZardEmptyComponent } from '../empty.component';
   imports: [ZardEmptyComponent],
   template: `
     <z-empty
-      zImage="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
       [zImageStyle]="{
         borderRadius: '12px',
+        backgroundColor: '#fdfdfd',
         boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
         padding: '16px',
       }"
