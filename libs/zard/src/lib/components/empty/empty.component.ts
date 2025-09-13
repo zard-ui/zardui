@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { NgStyle } from '@angular/common';
 
 @Component({
   selector: 'z-empty',
@@ -7,13 +8,15 @@ import { ZardStringTemplateOutletDirective } from '../core/directives/string-tem
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardStringTemplateOutletDirective],
+  imports: [ZardStringTemplateOutletDirective, NgStyle],
   template: `
     @if (zImage()) {
       @if (isTemplate(zImage())) {
-        <ng-container *zStringTemplateOutlet="zImage()"></ng-container>
+        <div [ngStyle]="zImageStyle()">
+          <ng-container *zStringTemplateOutlet="zImage()"></ng-container>
+        </div>
       } @else {
-        <img class="mx-auto w-40" [src]="zImage()" alt="Empty" />
+        <img class="mx-auto w-40" [src]="zImage()" alt="Empty" [ngStyle]="zImageStyle()" />
       }
     } @else {
       <!-- Default Illustration -->
@@ -34,6 +37,7 @@ import { ZardStringTemplateOutletDirective } from '../core/directives/string-tem
 })
 export class ZardEmptyComponent {
   readonly zImage = input<string | TemplateRef<unknown>>();
+  readonly zImageStyle = input<Record<string, string>>({});
 
   isTemplate(value: string | TemplateRef<unknown> | undefined): value is TemplateRef<unknown> {
     return value instanceof TemplateRef;

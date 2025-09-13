@@ -9,6 +9,7 @@ unavailable.
 
 To customize the empty, pass the following props to the component.
 
-| Property   | Description                         | Type                             | Default |
-|------------|-------------------------------------|----------------------------------|---------|
-| `[zImage]` | custom image (string or template)   | `string \| TemplateRef<unknown>` | `-`     |
+| Property        | Description                       | Type                             | Default |
+|-----------------|-----------------------------------|----------------------------------|---------|
+| `[zImage]`      | custom image (string or template) | `string \| TemplateRef<unknown>` | `-`     |
+| `[zImageStyle]` | custom styles for image           | `Record<string, string>`         | `{}`    |

@@ -13,19 +13,17 @@ import { ZardStringTemplateOutletDirective } from '../core/directives/string-tem
   imports: [ZardStringTemplateOutletDirective],
   template: `
     @if (zImage()) {
-      @if (isTemplate(zImage())) {
-        <ng-container *zStringTemplateOutlet="zImage()"></ng-container>
-      } @else {
-        <img class="mx-auto w-40" [src]="zImage()" alt="Empty" />
-      }
+      <img class="mx-auto w-40" [src]="zImage()" alt="Empty" />
     } @else {
       <!-- Default Illustration -->
       <svg class="w-16 h-10 mx-auto" width="64" height="41" viewBox="0 0 64 41" xmlns="http://www.w3.org/2000/svg">
         <g transform="translate(0 1)" fill="none" fill-rule="evenodd">
-          <ellipse class="fill-gray-200 dark:fill-white dark:fill-opacity-10" cx="32" cy="33" rx="32" ry="7" />
+          <ellipse class="fill-gray-100 dark:fill-gray-800 dark:fill-opacity-10" cx="32" cy="33" rx="32" ry="7" />
           <g class="fill-gray-100 dark:fill-gray-800 stroke-gray-300 dark:stroke-gray-700" fill-rule="nonzero">
-            <path d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z" />
+            <path class="fill-transparent"
+                  d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z" />
             <path
+              class="fill-gray-50 dark:fill-gray-800"
               d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
             />
           </g>
@@ -35,9 +33,9 @@ import { ZardStringTemplateOutletDirective } from '../core/directives/string-tem
   `,
 })
 export class ZardEmptyComponent {
-  readonly zImage = input<string | TemplateRef<unknown> | null>(null);
+  readonly zImage = input<string | TemplateRef<unknown>>();
 
-  isTemplate(value: string | TemplateRef<unknown> | null): value is TemplateRef<unknown> {
+  isTemplate(value: string | TemplateRef<unknown> | undefined): value is TemplateRef<unknown> {
     return value instanceof TemplateRef;
   }
 }
