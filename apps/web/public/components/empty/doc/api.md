@@ -14,3 +14,4 @@ To customize the empty, pass the following props to the component.
 | `[zImage]`       | custom image (string or template)       | `string \| TemplateRef<unknown>` | `-`       |
 | `[zImageStyle]`  | custom styles for image                 | `Record<string, string>`         | `{}`      |
 | `[zDescription]` | custom description (string or template) | `string \| TemplateRef<unknown>` | `No data` |
+| `[zSize]`        | component size                          | `default \| small`               | `default` |
