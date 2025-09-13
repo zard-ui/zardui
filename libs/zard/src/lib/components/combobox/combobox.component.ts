@@ -1,4 +1,4 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import {
   ChangeDetectionStrategy,
@@ -14,7 +14,7 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
@@ -23,9 +23,9 @@ import { ZardCommandInputComponent } from '../command/command-input.component';
 import { ZardCommandListComponent } from '../command/command-list.component';
 import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
 import { ZardCommandOptionComponent } from '../command/command-option.component';
-import { ZardCommandComponent, ZardCommandOption } from '../command/command.component';
+import { ZardCommandComponent, type ZardCommandOption } from '../command/command.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
-import { comboboxVariants, ZardComboboxVariants } from './combobox.variants';
+import { comboboxVariants, type ZardComboboxVariants } from './combobox.variants';
 
 export interface ZardComboboxOption {
   value: string;

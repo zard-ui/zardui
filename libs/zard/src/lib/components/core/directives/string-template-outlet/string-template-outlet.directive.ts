@@ -1,4 +1,4 @@
-import { Directive, EmbeddedViewRef, inject, Input, OnChanges, SimpleChange, SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
+import { Directive, EmbeddedViewRef, inject, Input, type OnChanges, SimpleChange, type SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
 
 export function isTemplateRef<T>(value: TemplateRef<T> | unknown): value is TemplateRef<T> {
   return value instanceof TemplateRef;

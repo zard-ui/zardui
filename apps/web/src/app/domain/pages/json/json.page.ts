@@ -1,4 +1,4 @@
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';

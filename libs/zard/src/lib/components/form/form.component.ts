@@ -1,9 +1,9 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { formFieldVariants, formControlVariants, formLabelVariants, formMessageVariants, ZardFormMessageVariants } from './form.variants';
+import { formFieldVariants, formControlVariants, formLabelVariants, formMessageVariants, type ZardFormMessageVariants } from './form.variants';
 
 @Component({
   selector: 'z-form-field, [z-form-field]',

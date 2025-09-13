@@ -1,5 +1,5 @@
 import { ResourceCardComponent } from '@zard/domain/components/resource-card/resource-card.component';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
 import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';

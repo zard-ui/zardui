@@ -1,6 +1,6 @@
 import { Component, input, signal } from '@angular/core';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { Step } from '@zard/shared/constants/install.constant';
+import type { Step } from '@zard/shared/constants/install.constant';
 
 import { MarkdownRendererComponent } from '../render/markdown-renderer.component';
 

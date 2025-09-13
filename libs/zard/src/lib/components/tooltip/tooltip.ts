@@ -8,8 +8,8 @@ import {
   inject,
   input,
   NgModule,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   Renderer2,
   signal,
@@ -18,7 +18,7 @@ import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@ang
 import { filter, fromEvent, Subject, take, takeUntil } from 'rxjs';
 import { ComponentPortal } from '@angular/cdk/portal';
 
-import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
+import { TOOLTIP_POSITIONS_MAP, type ZardTooltipPositions } from './tooltip-positions';
 import { mergeClasses } from '../../shared/utils/utils';
 import { tooltipVariants } from './tooltip.variants';
 

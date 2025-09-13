@@ -20,9 +20,9 @@ import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, Templ
 import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
 import { filter, fromEvent, takeUntil } from 'rxjs';
 import { A11yModule } from '@angular/cdk/a11y';
-import { ClassValue } from 'clsx';
+import type { ClassValue } from 'clsx';
 
-import { alertDialogVariants, ZardAlertDialogVariants } from './alert-dialog.variants';
+import { alertDialogVariants, type ZardAlertDialogVariants } from './alert-dialog.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { ZardAlertDialogRef } from './alert-dialog-ref';

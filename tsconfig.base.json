@@ -8,6 +8,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "importHelpers": true,
+    "verbatimModuleSyntax": true,
     "target": "es2015",
     "module": "esnext",
     "lib": ["es2020", "dom"],

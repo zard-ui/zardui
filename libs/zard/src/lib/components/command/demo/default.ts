@@ -1,7 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 
 import { ZardCommandModule } from '../command.module';
-import { ZardCommandOption } from '../command.component';
+import type { ZardCommandOption } from '../command.component';
 
 @Component({
   standalone: true,

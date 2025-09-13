@@ -1,9 +1,9 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { buttonVariants, ZardButtonVariants } from './button.variants';
+import { buttonVariants, type ZardButtonVariants } from './button.variants';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',

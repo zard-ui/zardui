@@ -1,4 +1,17 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, computed, contentChildren, inject, input, signal, viewChild } from '@angular/core';
+import {
+  type AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  ElementRef,
+  type OnInit,
+  computed,
+  contentChildren,
+  inject,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 import EmblaCarousel, { type EmblaCarouselType, type EmblaOptionsType } from 'embla-carousel';
 import Autoplay from 'embla-carousel-autoplay';
 

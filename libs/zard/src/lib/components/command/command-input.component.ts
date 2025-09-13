@@ -7,15 +7,15 @@ import {
   forwardRef,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   Output,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 import { Subject, switchMap, takeUntil, timer } from 'rxjs';
 
 import { ZardCommandJsonComponent } from './command-json.component';

@@ -1,5 +1,5 @@
 import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ZardAccordionItemComponent } from '@zard/components/accordion/accordion-item.component';
 import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';

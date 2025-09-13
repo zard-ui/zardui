@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostListener, inject, input, OnInit, ViewContainerRef } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
 
 import { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';

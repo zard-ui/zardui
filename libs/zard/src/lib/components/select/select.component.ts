@@ -1,18 +1,17 @@
 import {
-  AfterContentInit,
+  type AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
-  effect,
   ElementRef,
   forwardRef,
   HostListener,
   inject,
   input,
   linkedSignal,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   signal,
   TemplateRef,
@@ -20,10 +19,10 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
 
-import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
+import { selectContentVariants, selectTriggerVariants, type ZardSelectTriggerVariants } from './select.variants';
 import { ZardSelectItemComponent } from './select-item.component';
 import { mergeClasses } from '../../shared/utils/utils';
 

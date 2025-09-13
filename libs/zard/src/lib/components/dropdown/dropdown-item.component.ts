@@ -1,10 +1,10 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardDropdownService } from './dropdown.service';
-import { dropdownItemVariants, ZardDropdownItemVariants } from './dropdown.variants';
+import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',

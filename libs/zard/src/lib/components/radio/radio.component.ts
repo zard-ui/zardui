@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 import { NgClass } from '@angular/common';
 
-import { radioLabelVariants, radioVariants, ZardRadioVariants } from './radio.variants';
+import { radioLabelVariants, radioVariants, type ZardRadioVariants } from './radio.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 
 type OnTouchedType = () => unknown;

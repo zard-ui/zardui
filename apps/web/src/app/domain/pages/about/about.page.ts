@@ -1,8 +1,8 @@
 import { ContributorsLoadingComponent } from '@zard/domain/components/contributors/contributors-loading.component';
 import { FoundersLoadingComponent } from '@zard/domain/components/founders/founders-loading.component';
-import { FoundersComponent, FounderData } from '@zard/domain/components/founders/founders.component';
+import { FoundersComponent, type FounderData } from '@zard/domain/components/founders/founders.component';
 import { ContributorsComponent } from '@zard/domain/components/contributors/contributors.component';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
 import { CreditCardComponent } from '@zard/domain/components/credit-card/credit-card.component';
@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
-import { Contributor, GithubService } from '../../../shared/services/github.service';
+import { type Contributor, GithubService } from '../../../shared/services/github.service';
 
 @Component({
   selector: 'z-about',

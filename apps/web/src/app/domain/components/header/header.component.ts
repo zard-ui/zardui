@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, HostListener, viewChild } from '@angular/core';
+import { Component, inject, HostListener, viewChild } from '@angular/core';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';

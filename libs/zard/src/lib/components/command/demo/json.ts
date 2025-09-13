@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 
-import { ZardCommandConfig } from '../command.component';
+import type { ZardCommandConfig } from '../command.component';
 import { ZardCommandModule } from '../command.module';
 
 @Component({

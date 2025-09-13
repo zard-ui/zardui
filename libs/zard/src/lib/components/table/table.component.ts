@@ -1,4 +1,4 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -11,7 +11,7 @@ import {
   tableHeadVariants,
   tableCellVariants,
   tableCaptionVariants,
-  ZardTableVariants,
+  type ZardTableVariants,
 } from './table.variants';
 
 @Component({
