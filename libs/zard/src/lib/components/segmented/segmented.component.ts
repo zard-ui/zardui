@@ -1,21 +1,8 @@
-import {
-  AfterContentInit,
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  contentChildren,
-  effect,
-  forwardRef,
-  input,
-  OnInit,
-  output,
-  signal,
-  ViewEncapsulation,
-} from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, forwardRef, input, type OnInit, output, signal, ViewEncapsulation } from '@angular/core';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
-import { segmentedItemVariants, segmentedVariants, ZardSegmentedVariants } from './segmented.variants';
+import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
 export interface SegmentedOption {

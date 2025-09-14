@@ -1,6 +1,6 @@
-import { BooleanInput } from '@angular/cdk/coercion';
+import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, inject, input, type OnDestroy, type OnInit } from '@angular/core';
 
 import { ZardMenuManagerService } from './menu-manager.service';
 

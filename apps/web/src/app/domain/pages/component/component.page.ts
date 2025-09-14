@@ -1,12 +1,11 @@
 import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
 import { ZardCodeBoxComponent } from '@zard/widget/components/zard-code-box/zard-code-box.component';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { DynamicInstallationService } from '@zard/shared/services/dynamic-installation.service';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
+import { type ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
 import { StepsComponent } from '@zard/domain/components/steps/steps.component';
-import { Step } from '@zard/shared/constants/install.constant';
+import type { Step } from '@zard/shared/constants/install.constant';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Title } from '@angular/platform-browser';

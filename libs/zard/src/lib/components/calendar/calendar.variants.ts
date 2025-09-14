@@ -1,4 +1,4 @@
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const calendarVariants = cva('bg-background p-3 w-fit rounded-lg border', {
   variants: {

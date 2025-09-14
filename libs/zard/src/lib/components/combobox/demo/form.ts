@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardComboboxComponent, ZardComboboxOption } from '../combobox.component';
+import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.component';
 
 @Component({
   selector: 'zard-demo-combobox-form',

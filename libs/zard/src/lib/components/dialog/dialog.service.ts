@@ -1,4 +1,4 @@
-import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
+import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { inject, Injectable, InjectionToken, Injector, TemplateRef } from '@angular/core';
 

@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { alertVariants, ZardAlertVariants } from './alert.variants';
+import { alertVariants, type ZardAlertVariants } from './alert.variants';
 
 @Component({
   selector: 'z-alert',

@@ -1,9 +1,9 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { containerProgressBarVariants, progressBarVariants, ZardContainerProgressBarVariants, ZardProgressBarVariants } from './progress-bar.variants';
+import { containerProgressBarVariants, progressBarVariants, type ZardContainerProgressBarVariants, type ZardProgressBarVariants } from './progress-bar.variants';
 
 @Component({
   selector: 'z-progress-bar',

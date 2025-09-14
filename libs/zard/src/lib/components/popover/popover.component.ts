@@ -1,6 +1,6 @@
 import { Subject } from 'rxjs';
 
-import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { type ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 
 import {
@@ -12,8 +12,8 @@ import {
   ElementRef,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   Renderer2,
   signal,

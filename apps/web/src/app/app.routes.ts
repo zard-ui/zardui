@@ -1,4 +1,4 @@
-import { Route } from '@angular/router';
+import type { Route } from '@angular/router';
 
 import { DocumentationLayout } from './core/layouts/documentation/documentation.layout';
 import { DEFAULT_DOC } from './shared/constants/routes.constant';

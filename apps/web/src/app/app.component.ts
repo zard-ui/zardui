@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, type OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { DarkModeService } from './shared/services/darkmode.service';

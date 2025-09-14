@@ -1,7 +1,7 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import {
-  AfterContentInit,
+  type AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -17,7 +17,7 @@ import {
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
-import { resizableVariants, ZardResizableVariants } from './resizable.variants';
+import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
 
 export interface ZardResizeEvent {
   sizes: number[];

@@ -12,16 +12,16 @@ import {
   numberAttribute,
   booleanAttribute,
   forwardRef,
-  AfterViewInit,
+  type AfterViewInit,
   computed,
   linkedSignal,
-  SimpleChanges,
-  OnDestroy,
-  OnChanges,
+  type SimpleChanges,
+  type OnDestroy,
+  type OnChanges,
 } from '@angular/core';
 import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 import { DOCUMENT } from '@angular/common';
 
 import { sliderOrientationVariants, sliderRangeVariants, sliderThumbVariants, sliderTrackVariants, sliderVariants } from './slider.variants';

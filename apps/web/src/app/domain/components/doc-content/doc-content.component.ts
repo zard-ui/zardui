@@ -1,5 +1,5 @@
-import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { Component, inject, OnInit, input } from '@angular/core';
+import { DynamicAnchorComponent, type NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { Component, inject, type OnInit, input } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
 import { Title } from '@angular/platform-browser';
 

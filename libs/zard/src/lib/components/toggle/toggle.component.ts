@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, forwardRef, HostListener, ViewEncapsulation, signal, computed, input, output, linkedSignal } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'clsx';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import type { ClassValue } from 'clsx';
 
-import { toggleVariants, ZardToggleVariants } from './toggle.variants';
+import { toggleVariants, type ZardToggleVariants } from './toggle.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 
 type OnTouchedType = () => void;

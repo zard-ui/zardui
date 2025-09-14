@@ -34,7 +34,7 @@ import { TABS } from '@zard/components/tabs/demo/tabs';
 import { CARD } from '@zard/components/card/demo/card';
 import { FORM } from '@zard/components/form/demo/form';
 import { MENU } from '@zard/components/menu/demo/menu';
-import { ComponentType } from '@angular/cdk/overlay';
+import type { ComponentType } from '@angular/cdk/overlay';
 
 export interface ComponentData {
   componentName: string;

@@ -1,8 +1,8 @@
 // markdown-renderer.component.ts
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, inject, Input, type OnChanges, type OnInit, type SimpleChanges } from '@angular/core';
 import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
 import { MarkdownService } from '@zard/shared/services/markdown.service';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 import { HttpClient } from '@angular/common/http';
 
 @Component({

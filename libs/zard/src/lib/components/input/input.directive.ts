@@ -1,9 +1,9 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import { computed, Directive, ElementRef, inject, input } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { inputVariants, ZardInputVariants } from './input.variants';
+import { inputVariants, type ZardInputVariants } from './input.variants';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',

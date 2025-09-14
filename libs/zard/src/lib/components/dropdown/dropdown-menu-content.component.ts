@@ -1,4 +1,4 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import { Component, computed, input, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 

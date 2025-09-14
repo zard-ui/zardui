@@ -1,11 +1,11 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, type OnInit, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { StepsComponent } from '@zard/domain/components/steps/steps.component';
-import { Installation, installations } from '@zard/shared/constants/install.constant';
+import { type Installation, installations } from '@zard/shared/constants/install.constant';
 
 @Component({
   selector: 'z-install',

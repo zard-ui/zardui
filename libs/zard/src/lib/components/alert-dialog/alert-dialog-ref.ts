@@ -2,7 +2,7 @@ import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
+import { type OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
 export class ZardAlertDialogRef<T = unknown, R = unknown> {
   componentInstance?: T;

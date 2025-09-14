@@ -1,7 +1,7 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ChangeDetectionStrategy, Component, computed, EventEmitter, forwardRef, HostListener, input, Output, signal, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCommandDividerComponent } from './command-divider.component';
@@ -10,8 +10,8 @@ import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandListComponent } from './command-list.component';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
 import { ZardCommandOptionComponent } from './command-option.component';
-import { ZardCommandConfig, ZardCommandOption } from './command.component';
-import { commandVariants, ZardCommandVariants } from './command.variants';
+import type { ZardCommandConfig, ZardCommandOption } from './command.component';
+import { commandVariants, type ZardCommandVariants } from './command.variants';
 
 @Component({
   selector: 'z-command-json',

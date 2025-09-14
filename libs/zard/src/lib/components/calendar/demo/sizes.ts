@@ -2,7 +2,7 @@ import { Component, computed, signal } from '@angular/core';
 
 import { ZardSelectItemComponent } from '../../select/select-item.component';
 import { ZardSelectComponent } from '../../select/select.component';
-import { ZardCalendarComponent, ZardCalendarVariants } from '../calendar.component';
+import { ZardCalendarComponent, type ZardCalendarVariants } from '../calendar.component';
 
 @Component({
   standalone: true,

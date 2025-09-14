@@ -1,7 +1,7 @@
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { NgComponentOutlet } from '@angular/common';
 import { Component, input, signal, computed } from '@angular/core';
-import { ComponentType } from '@angular/cdk/overlay';
+import type { ComponentType } from '@angular/cdk/overlay';
 import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
 import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
 
