@@ -4,7 +4,8 @@
     "outDir": "../../dist/out-tsc",
     "module": "esnext",
     "target": "es2022",
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "verbatimModuleSyntax": false
   },
   "files": ["src/test-setup.ts"],
   "include": ["jest.config.ts", "src/**/*.test.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]

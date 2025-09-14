@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { ZardToggleGroupComponent, ZardToggleGroupItem } from './toggle-group.component';
+import { ZardToggleGroupComponent, type ZardToggleGroupItem } from './toggle-group.component';
 
 describe('ZardToggleGroupComponent', () => {
   let component: ZardToggleGroupComponent;
