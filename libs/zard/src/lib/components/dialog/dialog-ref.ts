@@ -10,15 +10,15 @@ const enum eTriggerAction {
   OK = 'ok',
 }
 
-export class ZardDialogRef<T = any, R = any> {
+export class ZardDialogRef<T = any, R = any, U = any> {
   private destroy$ = new Subject<void>();
   protected result?: R;
   componentInstance: T | null = null;
 
   constructor(
     private overlayRef: OverlayRef,
-    private config: ZardDialogOptions<T>,
-    private containerInstance: ZardDialogComponent<T>,
+    private config: ZardDialogOptions<T, U>,
+    private containerInstance: ZardDialogComponent<T, U>,
     @Inject(PLATFORM_ID) private platformId: object,
   ) {
     this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
@@ -61,7 +61,7 @@ export class ZardDialogRef<T = any, R = any> {
       trigger.emit(this.getContentComponent());
     } else if (typeof trigger === 'function') {
       const result = trigger(this.getContentComponent()) as R;
-      this.closeWhitResult(result);
+      this.closeWithResult(result);
     } else this.close();
   }
 
@@ -69,7 +69,7 @@ export class ZardDialogRef<T = any, R = any> {
     return this.componentInstance as T;
   }
 
-  private closeWhitResult(result: R): void {
+  private closeWithResult(result: R): void {
     if (result !== false) this.close(result);
   }
 }

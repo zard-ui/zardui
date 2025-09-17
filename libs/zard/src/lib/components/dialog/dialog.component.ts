@@ -27,13 +27,13 @@ import { ZardDialogRef } from './dialog-ref';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
-export class ZardDialogOptions<T> {
+export class ZardDialogOptions<T, U> {
   zCancelIcon?: string;
   zCancelText?: string | null;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
   zCustomClasses?: string;
-  zData?: object;
+  zData?: U;
   zDescription?: string;
   zHideFooter?: boolean;
   zMaskClosable?: boolean;
@@ -52,7 +52,57 @@ export class ZardDialogOptions<T> {
   selector: 'z-dialog',
   exportAs: 'zDialog',
   imports: [OverlayModule, PortalModule, ZardButtonComponent],
-  templateUrl: './dialog.component.html',
+  template: `
+    @if (config.zClosable || config.zClosable === undefined) {
+      <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1" (click)="onCloseClick()">
+        <i class="icon-x text-sm"></i>
+      </button>
+    }
+
+    @if (config.zTitle || config.zDescription) {
+      <header class="flex flex-col space-y-1.5 text-center sm:text-left">
+        @if (config.zTitle) {
+          <h4 data-testid="z-title" class="text-lg font-semibold leading-none tracking-tight">{{ config.zTitle }}</h4>
+
+          @if (config.zDescription) {
+            <p data-testid="z-description" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+          }
+        }
+      </header>
+    }
+
+    <main class="flex flex-col space-y-4">
+      <ng-template cdkPortalOutlet></ng-template>
+
+      @if (isStringContent) {
+        <div data-testid="z-content" [innerHTML]="config.zContent"></div>
+      }
+    </main>
+
+    @if (!config.zHideFooter) {
+      <footer class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-0 sm:space-x-2">
+        @if (config.zCancelText !== null) {
+          <button data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
+            @if (config.zCancelIcon) {
+              <i class="icon-{{ config.zCancelIcon }}"></i>
+            }
+
+            {{ config.zCancelText || 'Cancel' }}
+          </button>
+        }
+
+        @if (config.zOkText !== null) {
+          <button data-testid="z-ok-button" z-button [zType]="config.zOkDestructive ? 'destructive' : 'default'" [disabled]="config.zOkDisabled" (click)="onOkClick()">
+            @if (config.zOkIcon) {
+              <i class="icon-{{ config.zOkIcon }}"></i>
+            }
+
+            {{ config.zOkText || 'OK' }}
+          </button>
+        }
+      </footer>
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
@@ -60,10 +110,10 @@ export class ZardDialogOptions<T> {
     '[style.width]': 'config.zWidth ? config.zWidth : null',
   },
 })
-export class ZardDialogComponent<T> extends BasePortalOutlet {
+export class ZardDialogComponent<T, U> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
   private readonly overlayRef = inject(OverlayRef);
-  protected readonly config = inject(ZardDialogOptions<T>);
+  protected readonly config = inject(ZardDialogOptions<T, U>);
 
   protected readonly classes = computed(() => mergeClasses(dialogVariants(), this.config.zCustomClasses));
   public dialogRef?: ZardDialogRef<T>;
