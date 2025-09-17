@@ -10,10 +10,13 @@ import {
   EventEmitter,
   inject,
   input,
+  OnDestroy,
   Output,
+  PLATFORM_ID,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
@@ -36,8 +39,10 @@ export interface ZardResizeEvent {
     '[attr.data-layout]': 'zLayout()',
   },
 })
-export class ZardResizableComponent implements AfterContentInit {
+export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
+  private readonly platformId = inject(PLATFORM_ID);
+  private listeners: (() => void)[] = [];
 
   readonly zLayout = input<ZardResizableVariants['zLayout']>('horizontal');
   readonly zLazy = input(false, { transform });
@@ -112,16 +117,27 @@ export class ZardResizableComponent implements AfterContentInit {
 
     const handleEnd = () => {
       this.endResize();
-      document.removeEventListener('mousemove', handleMove);
-      document.removeEventListener('touchmove', handleMove);
-      document.removeEventListener('mouseup', handleEnd);
-      document.removeEventListener('touchend', handleEnd);
+      if (isPlatformBrowser(this.platformId)) {
+        document.removeEventListener('mousemove', handleMove);
+        document.removeEventListener('touchmove', handleMove);
+        document.removeEventListener('mouseup', handleEnd);
+        document.removeEventListener('touchend', handleEnd);
+      }
     };
 
-    document.addEventListener('mousemove', handleMove);
-    document.addEventListener('touchmove', handleMove);
-    document.addEventListener('mouseup', handleEnd);
-    document.addEventListener('touchend', handleEnd);
+    if (isPlatformBrowser(this.platformId)) {
+      document.addEventListener('mousemove', handleMove);
+      document.addEventListener('touchmove', handleMove);
+      document.addEventListener('mouseup', handleEnd);
+      document.addEventListener('touchend', handleEnd);
+
+      this.listeners.push(() => {
+        document.removeEventListener('mousemove', handleMove);
+        document.removeEventListener('touchmove', handleMove);
+        document.removeEventListener('mouseup', handleEnd);
+        document.removeEventListener('touchend', handleEnd);
+      });
+    }
   }
 
   private handleResize(event: MouseEvent | TouchEvent, handleIndex: number, startPosition: number, startSizes: number[]): void {
@@ -253,5 +269,9 @@ export class ZardResizableComponent implements AfterContentInit {
     this.panelSizes.set(sizes);
     this.updatePanelStyles();
     this.zResize.emit({ sizes, layout: this.zLayout() || 'horizontal' });
+  }
+
+  ngOnDestroy(): void {
+    this.listeners.forEach(cleanup => cleanup());
   }
 }
