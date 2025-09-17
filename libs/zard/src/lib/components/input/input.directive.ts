@@ -1,4 +1,4 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { computed, Directive, ElementRef, inject, input } from '@angular/core';
 
@@ -14,7 +14,8 @@ import { inputVariants, ZardInputVariants } from './input.variants';
   },
 })
 export class ZardInputDirective {
-  private readonly isTextarea = inject(ElementRef).nativeElement.tagName.toLowerCase() === 'textarea';
+  readonly elementRef = inject(ElementRef);
+  private readonly isTextarea = this.elementRef.nativeElement.tagName.toLowerCase() === 'textarea';
 
   readonly zBorderless = input(false, { transform });
   readonly zSize = input<ZardInputVariants['zSize']>('default');

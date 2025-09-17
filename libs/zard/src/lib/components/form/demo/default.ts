@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
+import { generateId } from '../../../shared/utils/utils';
 import { ZardFormModule } from '../form.module';
 
 @Component({
@@ -42,9 +43,9 @@ import { ZardFormModule } from '../form.module';
   `,
 })
 export class ZardDemoFormDefaultComponent {
-  protected readonly idFullName = 'fullName' + Math.random();
-  protected readonly idEmail = 'email' + Math.random();
-  protected readonly idBio = 'bio' + Math.random();
+  protected readonly idFullName = generateId('fullName');
+  protected readonly idEmail = generateId('email');
+  protected readonly idBio = generateId('bio');
 
   fullName = '';
   email = '';

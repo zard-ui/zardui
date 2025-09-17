@@ -1,9 +1,10 @@
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { inject, Injectable, InjectionToken, Injector, TemplateRef } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
-import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
+import { ZardDialogRef } from './dialog-ref';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
@@ -14,6 +15,7 @@ export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
 export class ZardDialogService {
   private overlay = inject(Overlay);
   private injector = inject(Injector);
+  private platformId = inject(PLATFORM_ID);
 
   create<T, U>(config: ZardDialogOptions<T, U>): ZardDialogRef<T> {
     return this.open<T, U>(config.zContent as ComponentType<T>, config);
@@ -21,6 +23,11 @@ export class ZardDialogService {
 
   private open<T, U>(componentOrTemplateRef: ContentType<T>, config: ZardDialogOptions<T, U>) {
     const overlayRef = this.createOverlay();
+
+    if (!overlayRef) {
+      // Return a mock dialog ref for SSR environments
+      return new ZardDialogRef(undefined as any, config, undefined as any, this.platformId);
+    }
 
     const dialogContainer = this.attachDialogContainer<T, U>(overlayRef, config);
 
@@ -30,13 +37,16 @@ export class ZardDialogService {
     return dialogRef;
   }
 
-  private createOverlay() {
-    const overlayConfig = new OverlayConfig({
-      hasBackdrop: true,
-      positionStrategy: this.overlay.position().global(),
-    });
+  private createOverlay(): OverlayRef | undefined {
+    if (isPlatformBrowser(this.platformId)) {
+      const overlayConfig = new OverlayConfig({
+        hasBackdrop: true,
+        positionStrategy: this.overlay.position().global(),
+      });
 
-    return this.overlay.create(overlayConfig);
+      return this.overlay.create(overlayConfig);
+    }
+    return undefined;
   }
 
   private attachDialogContainer<T, U>(overlayRef: OverlayRef, config: ZardDialogOptions<T, U>) {
@@ -56,7 +66,7 @@ export class ZardDialogService {
   }
 
   private attachDialogContent<T, U>(componentOrTemplateRef: ContentType<T>, dialogContainer: ZardDialogComponent<T, U>, overlayRef: OverlayRef, config: ZardDialogOptions<T, U>) {
-    const dialogRef = new ZardDialogRef<T>(overlayRef, config, dialogContainer);
+    const dialogRef = new ZardDialogRef<T>(overlayRef, config, dialogContainer, this.platformId);
 
     if (componentOrTemplateRef instanceof TemplateRef) {
       dialogContainer.attachTemplatePortal(

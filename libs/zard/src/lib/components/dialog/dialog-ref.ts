@@ -1,7 +1,7 @@
+import { EventEmitter, Inject, inject, PLATFORM_ID } from '@angular/core';
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-
+import { isPlatformBrowser } from '@angular/common';
 import { OverlayRef } from '@angular/cdk/overlay';
-import { EventEmitter } from '@angular/core';
 
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
@@ -19,11 +19,12 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     private overlayRef: OverlayRef,
     private config: ZardDialogOptions<T, U>,
     private containerInstance: ZardDialogComponent<T, U>,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
 
-    if (this.config.zMaskClosable || this.config.zMaskClosable === undefined) {
+    if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
       this.containerInstance.getNativeElement().addEventListener(
         'animationend',
         () => {
@@ -36,12 +37,14 @@ export class ZardDialogRef<T = any, R = any, U = any> {
       );
     }
 
-    fromEvent<KeyboardEvent>(document, 'keydown')
-      .pipe(
-        filter(event => event.key === 'Escape'),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(() => this.close());
+    if (isPlatformBrowser(this.platformId)) {
+      fromEvent<KeyboardEvent>(document, 'keydown')
+        .pipe(
+          filter(event => event.key === 'Escape'),
+          takeUntil(this.destroy$),
+        )
+        .subscribe(() => this.close());
+    }
   }
 
   close(result?: R) {

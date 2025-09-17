@@ -14,9 +14,11 @@ import {
   OnDestroy,
   OnInit,
   output,
+  PLATFORM_ID,
   Renderer2,
   signal,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { filter, fromEvent, Subject, take, takeUntil } from 'rxjs';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -40,6 +42,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private elementRef = inject(ElementRef);
   private overlay = inject(Overlay);
   private renderer = inject(Renderer2);
+  private platformId = inject(PLATFORM_ID);
 
   private overlayRef?: OverlayRef;
   private componentRef?: ComponentRef<ZardTooltipComponent>;
@@ -63,8 +66,10 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   ngOnInit() {
     this.setTriggers();
 
-    const positionStrategy = this.overlayPositionBuilder.flexibleConnectedTo(this.elementRef).withPositions([TOOLTIP_POSITIONS_MAP[this.zPosition()]]);
-    this.overlayRef = this.overlay.create({ positionStrategy });
+    if (isPlatformBrowser(this.platformId)) {
+      const positionStrategy = this.overlayPositionBuilder.flexibleConnectedTo(this.elementRef).withPositions([TOOLTIP_POSITIONS_MAP[this.zPosition()]]);
+      this.overlayRef = this.overlay.create({ positionStrategy });
+    }
   }
 
   ngOnDestroy(): void {

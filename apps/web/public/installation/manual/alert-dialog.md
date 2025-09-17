@@ -29,7 +29,7 @@ import { alertDialogVariants, ZardAlertDialogVariants } from './alert-dialog.var
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { ZardAlertDialogRef } from './alert-dialog-ref';
-import { mergeClasses } from '../../shared/utils/utils';
+import { generateId, mergeClasses } from '../../shared/utils/utils';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -107,9 +107,9 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
     ),
   );
 
-  protected readonly titleId = computed(() => (this.config.zTitle ? `alert-dialog-title-${this.generateId()}` : null));
-  protected readonly descriptionId = computed(() => (this.config.zDescription ? `alert-dialog-description-${this.generateId()}` : null));
-  private alertDialogId = Math.random().toString(36).substring(2, 15);
+  private alertDialogId = generateId('alert-dialog');
+  protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
+  protected readonly descriptionId = computed(() => (this.config.zDescription ? `${this.alertDialogId}-description` : null));
 
   public alertDialogRef?: ZardAlertDialogRef<T>;
 
@@ -123,10 +123,6 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   constructor() {
     super();
-  }
-
-  private generateId(): string {
-    return this.alertDialogId;
   }
 
   getNativeElement(): HTMLElement {
@@ -338,7 +334,8 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 ```angular-ts title="alert-dialog.service.ts" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { inject, Injectable, InjectionToken, Injector, TemplateRef } from '@angular/core';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
@@ -352,6 +349,7 @@ export const Z_ALERT_MODAL_DATA = new InjectionToken<unknown>('Z_ALERT_MODAL_DAT
 export class ZardAlertDialogService {
   private overlay = inject(Overlay);
   private injector = inject(Injector);
+  private platformId = inject(PLATFORM_ID);
 
   create<T>(config: ZardAlertDialogOptions<T>): ZardAlertDialogRef<T> {
     return this.open<T>(config.zContent, config);
@@ -398,6 +396,11 @@ export class ZardAlertDialogService {
 
   private open<T>(componentOrTemplateRef: ContentType<T>, config: ZardAlertDialogOptions<T>) {
     const overlayRef = this.createOverlay();
+    
+    if (!overlayRef) {
+      // Return a mock alert dialog ref for SSR environments
+      return new ZardAlertDialogRef(undefined as any, config, undefined as any);
+    }
 
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
 
@@ -407,14 +410,17 @@ export class ZardAlertDialogService {
     return alertDialogRef;
   }
 
-  private createOverlay() {
-    const overlayConfig = new OverlayConfig({
-      hasBackdrop: true,
-      backdropClass: 'cdk-overlay-dark-backdrop',
-      positionStrategy: this.overlay.position().global(),
-    });
+  private createOverlay(): OverlayRef | undefined {
+    if (isPlatformBrowser(this.platformId)) {
+      const overlayConfig = new OverlayConfig({
+        hasBackdrop: true,
+        backdropClass: 'cdk-overlay-dark-backdrop',
+        positionStrategy: this.overlay.position().global(),
+      });
 
-    return this.overlay.create(overlayConfig);
+      return this.overlay.create(overlayConfig);
+    }
+    return undefined;
   }
 
   private attachAlertDialogContainer<T>(overlayRef: OverlayRef, config: ZardAlertDialogOptions<T>) {
