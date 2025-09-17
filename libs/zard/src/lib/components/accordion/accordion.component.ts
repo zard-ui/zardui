@@ -1,7 +1,8 @@
 import { AfterContentInit, ChangeDetectionStrategy, Component, contentChildren, input, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
 
 import { ZardAccordionItemComponent } from './accordion-item.component';
+
+import type { ClassValue } from 'clsx';
 
 @Component({
   selector: 'z-accordion',

@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="menu.directive.ts" copyButton showLineNumbers
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
@@ -45,7 +43,6 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   readonly zHoverDelay = input<number>(100);
 
   ngOnInit(): void {
-    // Check if device is mobile/touch device
     const isMobile = this.isMobileDevice();
 
     // If trigger is hover but device is mobile, skip hover behavior
@@ -166,8 +163,6 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
 ```
 
-
-
 ```angular-ts title="menu.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -195,10 +190,8 @@ export type ZardMenuItemVariants = VariantProps<typeof menuItemVariants>;
 
 ```
 
-
-
 ```angular-ts title="menu-content.directive.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { CdkMenu } from '@angular/cdk/menu';
 import { computed, Directive, input } from '@angular/core';
@@ -222,10 +215,8 @@ export class ZardMenuContentDirective {
 
 ```
 
-
-
 ```angular-ts title="menu-item.directive.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuItem } from '@angular/cdk/menu';
@@ -313,8 +304,6 @@ export class ZardMenuItemDirective {
 
 ```
 
-
-
 ```angular-ts title="menu-manager.service.ts" copyButton showLineNumbers
 import { Injectable } from '@angular/core';
 
@@ -349,8 +338,6 @@ export class ZardMenuManagerService {
 
 ```
 
-
-
 ```angular-ts title="menu.module.ts" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
@@ -367,4 +354,3 @@ const MENU_COMPONENTS = [ZardMenuContentDirective, ZardMenuItemDirective, ZardMe
 export class ZardMenuModule {}
 
 ```
-
