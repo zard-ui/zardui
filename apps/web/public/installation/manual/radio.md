@@ -7,7 +7,7 @@ import type { ClassValue } from 'clsx';
 import { NgClass } from '@angular/common';
 
 import { radioLabelVariants, radioVariants, ZardRadioVariants } from './radio.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import { generateId, mergeClasses, transform } from '../../shared/utils/utils';
 
 type OnTouchedType = () => unknown;
 type OnChangeType = (value: unknown) => void;
@@ -59,7 +59,7 @@ export class ZardRadioComponent implements ControlValueAccessor {
   readonly zType = input<ZardRadioVariants['zType']>('default');
   readonly zSize = input<ZardRadioVariants['zSize']>('default');
   readonly name = input<string>('radio');
-  readonly zId = input<string>(`radio-${Math.random().toString(36).substring(2, 15)}`);
+  readonly zId = input<string>(generateId('radio'));
   readonly value = input<unknown>(null);
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onChange: OnChangeType = () => {};

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
+import { generateId } from '../../../shared/utils/utils';
 import { ZardCardComponent } from '../card.component';
 
 @Component({
@@ -40,6 +41,6 @@ import { ZardCardComponent } from '../card.component';
   `,
 })
 export class ZardDemoCardDefaultComponent {
-  protected readonly idEmail = 'email' + Math.random();
-  protected readonly idPassword = 'password' + Math.random();
+  protected readonly idEmail = generateId('email');
+  protected readonly idPassword = generateId('password');
 }
