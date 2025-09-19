@@ -1,33 +1,37 @@
+
+
 ```angular-ts title="slider.component.ts" copyButton showLineNumbers
+import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+
+import { DOCUMENT } from '@angular/common';
 import {
+  AfterViewInit,
+  booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   ElementRef,
+  forwardRef,
   inject,
   input,
+  linkedSignal,
+  numberAttribute,
+  OnChanges,
+  OnDestroy,
   output,
   signal,
+  SimpleChanges,
   viewChild,
   ViewEncapsulation,
-  numberAttribute,
-  booleanAttribute,
-  forwardRef,
-  AfterViewInit,
-  computed,
-  linkedSignal,
-  SimpleChanges,
-  OnDestroy,
-  OnChanges,
 } from '@angular/core';
-import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import type { ClassValue } from 'clsx';
-import { DOCUMENT } from '@angular/common';
 
-import { sliderOrientationVariants, sliderRangeVariants, sliderThumbVariants, sliderTrackVariants, sliderVariants } from './slider.variants';
-import { clamp, roundToStep, convertValueToPercentage } from '../../shared/utils/number';
+import { clamp, convertValueToPercentage, roundToStep } from '../../shared/utils/number';
 import { mergeClasses } from '../../shared/utils/utils';
+import { sliderOrientationVariants, sliderRangeVariants, sliderThumbVariants, sliderTrackVariants, sliderVariants } from './slider.variants';
+
+import type { ClassValue } from 'clsx';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: number) => void;
@@ -389,6 +393,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
 ```
 
+
+
 ```angular-ts title="slider.variants.ts" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -466,3 +472,4 @@ export const sliderOrientationVariants = cva('absolute', {
 export type SliderOrientationVariants = VariantProps<typeof sliderOrientationVariants>;
 
 ```
+
