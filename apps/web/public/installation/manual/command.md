@@ -1,6 +1,7 @@
+
+
 ```angular-ts title="command.component.ts" copyButton showLineNumbers
 import {
-  AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -16,12 +17,13 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import type { ClassValue } from 'clsx';
 
-import { commandVariants, ZardCommandVariants } from './command.variants';
-import { ZardCommandOptionComponent } from './command-option.component';
-import { ZardCommandInputComponent } from './command-input.component';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardCommandInputComponent } from './command-input.component';
+import { ZardCommandOptionComponent } from './command-option.component';
+import { commandVariants, ZardCommandVariants } from './command.variants';
+
+import type { ClassValue } from 'clsx';
 
 export interface ZardCommandOption {
   value: unknown;
@@ -259,6 +261,8 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
 ```
 
+
+
 ```angular-ts title="command.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -334,14 +338,16 @@ export type ZardCommandItemVariants = VariantProps<typeof commandItemVariants>;
 
 ```
 
+
+
 ```angular-ts title="command-divider.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
-import type { ClassValue } from 'clsx';
 
-import { commandSeparatorVariants } from './command.variants';
-import { ZardCommandComponent } from './command.component';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardCommandComponent } from './command.component';
+import { commandSeparatorVariants } from './command.variants';
 
+import type { ClassValue } from 'clsx';
 @Component({
   selector: 'z-command-divider',
   exportAs: 'zCommandDivider',
@@ -377,14 +383,17 @@ export class ZardCommandDividerComponent {
 
 ```
 
+
+
 ```angular-ts title="command-empty.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
-import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCommandJsonComponent } from './command-json.component';
 import { ZardCommandComponent } from './command.component';
 import { commandEmptyVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import type { ClassValue } from 'clsx';
 
 @Component({
   selector: 'z-command-empty',
@@ -429,7 +438,11 @@ export class ZardCommandEmptyComponent {
 
 ```
 
+
+
 ```angular-ts title="command-input.component.ts" copyButton showLineNumbers
+import { Subject, switchMap, takeUntil, timer } from 'rxjs';
+
 import {
   ChangeDetectionStrategy,
   Component,
@@ -447,14 +460,13 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import type { ClassValue } from 'clsx';
-import { Subject, switchMap, takeUntil, timer } from 'rxjs';
 
+import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCommandJsonComponent } from './command-json.component';
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
+import type { ClassValue } from 'clsx';
 @Component({
   selector: 'z-command-input',
   exportAs: 'zCommandInput',
@@ -604,6 +616,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 }
 
 ```
+
+
 
 ```angular-ts title="command-json.component.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
@@ -895,6 +909,8 @@ export class ZardCommandJsonComponent implements ControlValueAccessor {
 
 ```
 
+
+
 ```angular-ts title="command-list.component.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -923,14 +939,17 @@ export class ZardCommandListComponent {
 
 ```
 
+
+
 ```angular-ts title="command-option-group.component.ts" copyButton showLineNumbers
 import { AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
-import type { ClassValue } from 'clsx';
 
-import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
-import { mergeClasses } from '../../shared/utils/utils';
+import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
+
+import type { ClassValue } from 'clsx';
 
 @Component({
   selector: 'z-command-option-group',
@@ -985,13 +1004,16 @@ export class ZardCommandOptionGroupComponent implements AfterContentInit {
 
 ```
 
+
+
 ```angular-ts title="command-option.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
-import type { ClassValue } from 'clsx';
 
-import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardCommandComponent } from './command.component';
+import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
+
+import type { ClassValue } from 'clsx';
 
 @Component({
   selector: 'z-command-option',
@@ -1092,6 +1114,8 @@ export class ZardCommandOptionComponent {
 
 ```
 
+
+
 ```angular-ts title="command.module.ts" copyButton showLineNumbers
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -1123,3 +1147,4 @@ const COMMAND_COMPONENTS = [
 export class ZardCommandModule {}
 
 ```
+
