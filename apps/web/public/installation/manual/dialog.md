@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="dialog.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -181,8 +179,6 @@ export class ZardDialogModule {}
 
 ```
 
-
-
 ```angular-ts title="dialog.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -192,8 +188,6 @@ export const dialogVariants = cva(
 export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
 ```
-
-
 
 ```angular-ts title="dialog-ref.ts" copyButton showLineNumbers
 import { EventEmitter, Inject, inject, PLATFORM_ID } from '@angular/core';
@@ -273,8 +267,6 @@ export class ZardDialogRef<T = any, R = any, U = any> {
 }
 
 ```
-
-
 
 ```angular-ts title="dialog.service.ts" copyButton showLineNumbers
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
@@ -375,4 +367,3 @@ export class ZardDialogService {
 }
 
 ```
-
