@@ -1,9 +1,9 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
-import { inputGroupAddonVariants, inputGroupAffixVariants, inputGroupInputVariants, inputGroupVariants, ZardInputGroupVariants } from './input-group.variants';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { inputGroupAddonVariants, inputGroupAffixVariants, inputGroupInputVariants, inputGroupVariants, ZardInputGroupVariants } from './input-group.variants';
 
 @Component({
   selector: 'z-input-group',
