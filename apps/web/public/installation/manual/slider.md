@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="slider.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -24,7 +22,7 @@ import {
 } from '@angular/core';
 import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 import { DOCUMENT } from '@angular/common';
 
 import { sliderOrientationVariants, sliderRangeVariants, sliderThumbVariants, sliderTrackVariants, sliderVariants } from './slider.variants';
@@ -391,8 +389,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
 ```
 
-
-
 ```angular-ts title="slider.variants.ts" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -470,4 +466,3 @@ export const sliderOrientationVariants = cva('absolute', {
 export type SliderOrientationVariants = VariantProps<typeof sliderOrientationVariants>;
 
 ```
-

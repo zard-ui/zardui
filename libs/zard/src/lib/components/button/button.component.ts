@@ -1,4 +1,4 @@
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
 
@@ -35,6 +35,15 @@ export class ZardButtonComponent {
   readonly zLoading = input(false, { transform });
 
   protected readonly classes = computed(() =>
-    mergeClasses(buttonVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape(), zFull: this.zFull(), zLoading: this.zLoading() }), this.class()),
+    mergeClasses(
+      buttonVariants({
+        zType: this.zType(),
+        zSize: this.zSize(),
+        zShape: this.zShape(),
+        zFull: this.zFull(),
+        zLoading: this.zLoading(),
+      }),
+      this.class(),
+    ),
   );
 }

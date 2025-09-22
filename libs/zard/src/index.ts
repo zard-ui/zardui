@@ -11,6 +11,8 @@ export * from './lib/components/date-picker/date-picker.component';
 export * from './lib/components/divider/divider.component';
 export * from './lib/components/empty/empty.component';
 export * from './lib/components/input/input.directive';
+export * from './lib/components/input-group/input-group.component';
+export * from './lib/components/input-group/input-group.variants';
 export * from './lib/components/loader/loader.component';
 export * from './lib/components/radio/radio.component';
 export * from './lib/components/segmented/segmented.component';

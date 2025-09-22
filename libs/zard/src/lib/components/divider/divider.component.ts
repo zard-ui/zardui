@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { dividerVariants, ZardDividerVariants } from './divider.variants';
 import { mergeClasses } from '../../shared/utils/utils';

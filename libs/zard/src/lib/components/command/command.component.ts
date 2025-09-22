@@ -1,5 +1,4 @@
 import {
-  AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -15,12 +14,13 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
 
-import { commandVariants, ZardCommandVariants } from './command.variants';
-import { ZardCommandOptionComponent } from './command-option.component';
-import { ZardCommandInputComponent } from './command-input.component';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardCommandInputComponent } from './command-input.component';
+import { ZardCommandOptionComponent } from './command-option.component';
+import { commandVariants, ZardCommandVariants } from './command.variants';
+
+import type { ClassValue } from 'clsx';
 
 export interface ZardCommandOption {
   value: unknown;

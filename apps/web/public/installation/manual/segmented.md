@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="segmented.component.ts" copyButton showLineNumbers
 import {
   AfterContentInit,
@@ -16,7 +14,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { segmentedItemVariants, segmentedVariants, ZardSegmentedVariants } from './segmented.variants';
 import { mergeClasses } from '../../shared/utils/utils';
@@ -172,8 +170,6 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
 
 ```
 
-
-
 ```angular-ts title="segmented.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -215,4 +211,3 @@ export type ZardSegmentedVariants = VariantProps<typeof segmentedVariants>;
 export type ZardSegmentedItemVariants = VariantProps<typeof segmentedItemVariants>;
 
 ```
-

@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { switchVariants, ZardSwitchVariants } from './switch.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+import { mergeClasses, generateId } from '../../shared/utils/utils';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
@@ -52,7 +52,7 @@ export class ZardSwitchComponent implements ControlValueAccessor {
 
   protected readonly classes = computed(() => mergeClasses(switchVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()));
 
-  protected readonly uniqueId = signal<string>(`switch-${crypto.randomUUID()}`);
+  protected readonly uniqueId = signal<string>(generateId('switch'));
   protected checked = signal<boolean>(true);
   protected status = computed(() => (this.checked() ? 'checked' : 'unchecked'));
   protected disabled = signal(false);

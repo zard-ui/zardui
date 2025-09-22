@@ -1,6 +1,7 @@
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { ElementRef, inject, Injectable, signal, TemplateRef, ViewContainerRef } from '@angular/core';
+import { ElementRef, inject, Injectable, PLATFORM_ID, signal, TemplateRef, ViewContainerRef } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root',
@@ -8,6 +9,7 @@ import { ElementRef, inject, Injectable, signal, TemplateRef, ViewContainerRef }
 export class ZardDropdownService {
   private overlay = inject(Overlay);
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
+  private platformId = inject(PLATFORM_ID);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -101,7 +103,7 @@ export class ZardDropdownService {
   }
 
   private setupKeyboardNavigation() {
-    if (!this.overlayRef?.hasAttached()) return;
+    if (!this.overlayRef?.hasAttached() || !isPlatformBrowser(this.platformId)) return;
 
     const dropdownElement = this.overlayRef.overlayElement.querySelector('[role="menu"]') as HTMLElement;
     if (!dropdownElement) return;

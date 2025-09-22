@@ -45,6 +45,7 @@ const COMPONENTS_PATH = {
     { name: 'Empty', path: '/docs/components/empty', available: true },
     { name: 'Form', path: '/docs/components/form', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
+    { name: 'Input Group', path: '/docs/components/input-group', available: true },
     { name: 'Dialog', path: '/docs/components/dialog', available: true },
     { name: 'Pagination', path: '/docs/components/pagination', available: true },
     { name: 'Progress Bar', path: '/docs/components/progress-bar', available: true },

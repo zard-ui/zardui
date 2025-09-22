@@ -1,9 +1,8 @@
-
-
 ```angular-ts title="menu.directive.ts" copyButton showLineNumbers
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit } from '@angular/core';
+import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { ZardMenuManagerService } from './menu-manager.service';
 
@@ -35,6 +34,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
   private readonly elementRef = inject(ElementRef);
   private readonly menuManager = inject(ZardMenuManagerService);
+  private readonly platformId = inject(PLATFORM_ID);
 
   private closeTimeout: ReturnType<typeof setTimeout> | null = null;
   private readonly cleanupFunctions: Array<() => void> = [];
@@ -45,7 +45,6 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   readonly zHoverDelay = input<number>(100);
 
   ngOnInit(): void {
-    // Check if device is mobile/touch device
     const isMobile = this.isMobileDevice();
 
     // If trigger is hover but device is mobile, skip hover behavior
@@ -145,11 +144,17 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private addEventListenerWithCleanup(element: Element, eventType: string, handler: (event: MouseEvent | Event) => void, options?: AddEventListenerOptions): void {
-    element.addEventListener(eventType, handler, options);
-    this.cleanupFunctions.push(() => element.removeEventListener(eventType, handler, options));
+    if (isPlatformBrowser(this.platformId)) {
+      element.addEventListener(eventType, handler, options);
+      this.cleanupFunctions.push(() => element.removeEventListener(eventType, handler, options));
+    }
   }
 
   private isMobileDevice(): boolean {
+    if (!isPlatformBrowser(this.platformId)) {
+      return false; // Default to desktop behavior on server
+    }
+
     // Check for touch support
     const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
@@ -165,8 +170,6 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 }
 
 ```
-
-
 
 ```angular-ts title="menu.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
@@ -195,10 +198,8 @@ export type ZardMenuItemVariants = VariantProps<typeof menuItemVariants>;
 
 ```
 
-
-
 ```angular-ts title="menu-content.directive.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { CdkMenu } from '@angular/cdk/menu';
 import { computed, Directive, input } from '@angular/core';
@@ -222,10 +223,8 @@ export class ZardMenuContentDirective {
 
 ```
 
-
-
 ```angular-ts title="menu-item.directive.ts" copyButton showLineNumbers
-import { ClassValue } from 'class-variance-authority/dist/types';
+import type { ClassValue } from 'clsx';
 
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuItem } from '@angular/cdk/menu';
@@ -313,8 +312,6 @@ export class ZardMenuItemDirective {
 
 ```
 
-
-
 ```angular-ts title="menu-manager.service.ts" copyButton showLineNumbers
 import { Injectable } from '@angular/core';
 
@@ -349,8 +346,6 @@ export class ZardMenuManagerService {
 
 ```
 
-
-
 ```angular-ts title="menu.module.ts" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
@@ -367,4 +362,3 @@ const MENU_COMPONENTS = [ZardMenuContentDirective, ZardMenuItemDirective, ZardMe
 export class ZardMenuModule {}
 
 ```
-

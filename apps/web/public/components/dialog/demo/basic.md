@@ -68,7 +68,7 @@ export class ZardDemoDialogBasicComponent {
       zData: {
         name: 'Samuel Rizzon',
         username: '@samuelrizzondev',
-      },
+      } as iDialogData,
       zOkText: 'Save changes',
       zOnOk: instance => {
         console.log('Form submitted:', instance.form.value);
