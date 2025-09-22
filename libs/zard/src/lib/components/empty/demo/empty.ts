@@ -4,6 +4,7 @@ import { ZardDemoEmptyCustomTemplateComponent } from './custom-template';
 import { ZardDemoEmptyCustomStyleComponent } from './custom-style';
 import { ZardDemoEmptySizeComponent } from './size';
 import { ZardDemoEmptyWithOtherComponent } from './with-other-components';
+import { ZardDemoEmptyWithoutDescriptionComponent } from './without-description';
 
 export const EMPTY = {
   componentName: 'empty',
@@ -12,6 +13,10 @@ export const EMPTY = {
     {
       name: 'default',
       component: ZardDemoEmptyDefaultComponent,
+    },
+    {
+      name: 'size',
+      component: ZardDemoEmptySizeComponent,
     },
     {
       name: 'custom-image',
@@ -26,8 +31,8 @@ export const EMPTY = {
       component: ZardDemoEmptyCustomStyleComponent,
     },
     {
-      name: 'size',
-      component: ZardDemoEmptySizeComponent,
+      name: 'without-description',
+      component: ZardDemoEmptyWithoutDescriptionComponent,
     },
     {
       name: 'with-other-components',
