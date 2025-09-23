@@ -3,10 +3,11 @@
 ```angular-ts title="checkbox.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import type { ClassValue } from 'clsx';
 
-import { checkboxLabelVariants, checkboxVariants, ZardCheckboxVariants } from './checkbox.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { checkboxLabelVariants, checkboxVariants, ZardCheckboxVariants } from './checkbox.variants';
+
+import type { ClassValue } from 'clsx';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
