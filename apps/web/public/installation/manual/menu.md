@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="menu.directive.ts" copyButton showLineNumbers
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
@@ -171,6 +173,8 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
 ```
 
+
+
 ```angular-ts title="menu.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -198,6 +202,8 @@ export type ZardMenuItemVariants = VariantProps<typeof menuItemVariants>;
 
 ```
 
+
+
 ```angular-ts title="menu-content.directive.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -222,6 +228,8 @@ export class ZardMenuContentDirective {
 }
 
 ```
+
+
 
 ```angular-ts title="menu-item.directive.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
@@ -312,6 +320,8 @@ export class ZardMenuItemDirective {
 
 ```
 
+
+
 ```angular-ts title="menu-manager.service.ts" copyButton showLineNumbers
 import { Injectable } from '@angular/core';
 
@@ -346,6 +356,8 @@ export class ZardMenuManagerService {
 
 ```
 
+
+
 ```angular-ts title="menu.module.ts" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
@@ -362,3 +374,4 @@ const MENU_COMPONENTS = [ZardMenuContentDirective, ZardMenuItemDirective, ZardMe
 export class ZardMenuModule {}
 
 ```
+

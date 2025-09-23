@@ -1,23 +1,13 @@
-```angular-ts title="segmented.component.ts" copyButton showLineNumbers
-import {
-  AfterContentInit,
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  contentChildren,
-  effect,
-  forwardRef,
-  input,
-  OnInit,
-  output,
-  signal,
-  ViewEncapsulation,
-} from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import type { ClassValue } from 'clsx';
 
-import { segmentedItemVariants, segmentedVariants, ZardSegmentedVariants } from './segmented.variants';
+
+```angular-ts title="segmented.component.ts" copyButton showLineNumbers
+import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, forwardRef, input, OnInit, output, signal, ViewEncapsulation } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import { mergeClasses } from '../../shared/utils/utils';
+import { segmentedItemVariants, segmentedVariants, ZardSegmentedVariants } from './segmented.variants';
+
+import type { ClassValue } from 'clsx';
 
 export interface SegmentedOption {
   value: string;
@@ -170,6 +160,8 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
 
 ```
 
+
+
 ```angular-ts title="segmented.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -211,3 +203,4 @@ export type ZardSegmentedVariants = VariantProps<typeof segmentedVariants>;
 export type ZardSegmentedItemVariants = VariantProps<typeof segmentedItemVariants>;
 
 ```
+

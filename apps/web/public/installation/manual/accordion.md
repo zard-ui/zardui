@@ -1,8 +1,11 @@
+
+
 ```angular-ts title="accordion.component.ts" copyButton showLineNumbers
 import { AfterContentInit, ChangeDetectionStrategy, Component, contentChildren, input, ViewEncapsulation } from '@angular/core';
-import type { ClassValue } from 'clsx';
 
 import { ZardAccordionItemComponent } from './accordion-item.component';
+
+import type { ClassValue } from 'clsx';
 
 @Component({
   selector: 'z-accordion',
@@ -86,11 +89,14 @@ export class ZardAccordionComponent implements AfterContentInit {
 
 ```
 
+
+
 ```angular-ts title="accordion-item.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
-import type { ClassValue } from 'clsx';
 
 import { ZardAccordionComponent } from './accordion.component';
+
+import type { ClassValue } from 'clsx';
 
 @Component({
   selector: 'z-accordion-item',
@@ -164,3 +170,4 @@ export class ZardAccordionItemComponent {
 }
 
 ```
+

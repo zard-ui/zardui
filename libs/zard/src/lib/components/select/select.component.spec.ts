@@ -1,16 +1,16 @@
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { ZardSelectComponent } from './select.component';
 import { ZardSelectItemComponent } from './select-item.component';
+import { ZardSelectComponent } from './select.component';
 
 @Component({
   template: `
-    <z-select [value]="value()" [label]="label()" [placeholder]="placeholder()" [disabled]="disabled()">
-      <z-select-item value="option1">Option 1</z-select-item>
-      <z-select-item value="option2">Option 2</z-select-item>
-      <z-select-item value="option3">Option 3</z-select-item>
+    <z-select [zValue]="value()" [zLabel]="label()" [zPlaceholder]="placeholder()" [zDisabled]="disabled()">
+      <z-select-item zValue="option1">Option 1</z-select-item>
+      <z-select-item zValue="option2">Option 2</z-select-item>
+      <z-select-item zValue="option3">Option 3</z-select-item>
     </z-select>
   `,
   standalone: true,
@@ -26,9 +26,9 @@ class TestHostComponent {
 @Component({
   template: `
     <z-select [formControl]="control">
-      <z-select-item value="apple">Apple</z-select-item>
-      <z-select-item value="banana">Banana</z-select-item>
-      <z-select-item value="orange">Orange</z-select-item>
+      <z-select-item zValue="apple">Apple</z-select-item>
+      <z-select-item zValue="banana">Banana</z-select-item>
+      <z-select-item zValue="orange">Orange</z-select-item>
     </z-select>
   `,
   standalone: true,
@@ -64,8 +64,8 @@ describe('ZardSelectComponent', () => {
     it('should initialize with default values', () => {
       expect(component.selectedValue()).toBe('');
       expect(component.selectedLabel()).toBe('');
-      expect(component.placeholder()).toBe('Select an option...');
-      expect(component.disabled()).toBe(false);
+      expect(component.zPlaceholder()).toBe('Select an option...');
+      expect(component.zDisabled()).toBe(false);
     });
 
     describe('keyboard navigation', () => {
