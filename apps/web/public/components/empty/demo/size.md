@@ -6,8 +6,9 @@ import { ZardEmptyComponent } from '../empty.component';
   standalone: true,
   imports: [ZardEmptyComponent],
   template: `
-    <z-empty zSize="small" zDescription="small" />
+    <z-empty zSize="sm" zDescription="small" />
     <z-empty zDescription="default" />
+    <z-empty zSize="lg" zDescription="large" />
   `,
 })
 export class ZardDemoEmptySizeComponent {}
