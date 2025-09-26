@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ZardTableComponent } from '../table.component';
+import { ZardTableModule } from '../table.module';
 
 interface Person {
   key: string;
@@ -11,9 +12,9 @@ interface Person {
 
 @Component({
   standalone: true,
-  imports: [ZardTableComponent],
+  imports: [ZardTableComponent, ZardTableModule],
   template: `
-    <table z-table>
+    <z-table zSize="comfortable">
       <caption>
         A list of your recent invoices.
       </caption>
@@ -33,7 +34,7 @@ interface Person {
           </tr>
         }
       </tbody>
-    </table>
+    </z-table>
   `,
 })
 export class ZardDemoTableSimpleComponent {

@@ -1,4 +1,4 @@
-import { computed, Directive, input } from '@angular/core';
+import { computed, Directive, effect, ElementRef, input, OnDestroy, Renderer2 } from '@angular/core';
 import { ClassValue } from 'clsx';
 import { mergeClasses } from '../../shared/utils/utils';
 import { tableVariants } from './table.variants';
@@ -11,72 +11,52 @@ import { tableVariants } from './table.variants';
     '[class]': 'classes()',
   },
 })
-export class ZardTableDirective {
-  readonly class = input<ClassValue>('');
+export class ZardTableDirective implements OnDestroy {
   readonly zType = input<'default' | 'striped' | 'bordered'>('default');
   readonly zSize = input<'default' | 'compact' | 'comfortable'>('default');
+  readonly userClass = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(tableVariants.table({ zSize: this.zSize() }), this.class()));
-}
+  readonly classes = computed(() => mergeClasses(tableVariants.table({ zSize: this.zSize() }), this.userClass()));
 
-@Directive({
-  selector: 'thead[z-thead]',
-  standalone: true,
-  exportAs: 'zThead',
-  host: {
-    '[class]': 'classes()',
-  },
-})
-export class ZardTheadDirective {
-  readonly class = input<ClassValue>('');
+  private mo: MutationObserver;
 
-  protected readonly classes = computed(() => mergeClasses(tableVariants.thead(), this.class()));
-}
+  constructor(
+    private host: ElementRef<HTMLTableElement>,
+    private renderer: Renderer2,
+  ) {
+    const nativeEl = this.host.nativeElement;
 
-@Directive({
-  selector: 'tr[z-tr]',
-  standalone: true,
-  exportAs: 'zTr',
-  host: {
-    '[class]': 'classes()',
-  },
-})
-export class ZardTrDirective {
-  readonly class = input<ClassValue>('');
-  readonly zType = input<'default' | 'striped' | 'bordered'>('default');
-  protected readonly classes = computed(() => mergeClasses(tableVariants.tr({ zType: this.zType() }), this.class()));
-}
+    effect(() => {
+      this.applyClassesToChildren();
+    });
 
-@Directive({
-  selector: 'th[z-th]',
-  standalone: true,
-  exportAs: 'zTh',
-  host: {
-    '[class]': 'classes()',
-  },
-})
-export class ZardThDirective {
-  readonly class = input<ClassValue>('');
-  readonly zType = input<'default' | 'striped' | 'bordered'>('default');
-  readonly zSize = input<'default' | 'compact' | 'comfortable'>('default');
+    this.mo = new MutationObserver(() => this.applyClassesToChildren());
+    this.mo.observe(nativeEl, { childList: true, subtree: true });
+  }
 
-  protected readonly classes = computed(() => mergeClasses(tableVariants.th({ zSize: this.zSize() }), this.class()));
-}
+  ngOnDestroy(): void {
+    this.mo.disconnect();
+  }
 
-@Directive({
-  selector: 'td[z-td]',
-  standalone: true,
-  exportAs: 'zTd',
-  host: {
-    '[class]': 'classes()',
-  },
-})
-export class ZardTdDirective {
-  readonly class = input<ClassValue>('');
-  readonly zType = input<'default' | 'striped' | 'bordered'>('default');
-  readonly zSize = input<'default' | 'compact' | 'comfortable'>('default');
+  private applyClassesToChildren() {
+    const host = this.host.nativeElement;
 
-  protected readonly classes = computed(() => mergeClasses(tableVariants.td({ zSize: this.zSize() }), this.class()));
+    const addClasses = (el: HTMLElement, classValue?: string) => {
+      if (!classValue) return;
+      classValue
+        .split(' ')
+        .filter(Boolean)
+        .forEach(c => this.renderer.addClass(el, c));
+    };
+
+    host.querySelectorAll('thead').forEach(el => addClasses(el as HTMLElement, tableVariants.thead()));
+
+    host.querySelectorAll('tr').forEach(el => addClasses(el as HTMLElement, tableVariants.tr({ zType: this.zType() })));
+
+    host.querySelectorAll('th').forEach(el => addClasses(el as HTMLElement, tableVariants.th({ zSize: this.zSize() })));
+
+    host.querySelectorAll('td').forEach(el => addClasses(el as HTMLElement, tableVariants.td({ zSize: this.zSize() })));
+  }
 }
 
 @Directive({
