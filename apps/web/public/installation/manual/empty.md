@@ -2,7 +2,7 @@
 
 ```angular-ts title="empty.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
-import { ClassValue } from 'clsx';
+import type { ClassValue } from 'clsx';
 import { NgStyle } from '@angular/common';
 
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';

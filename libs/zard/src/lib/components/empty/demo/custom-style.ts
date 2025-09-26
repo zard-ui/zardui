@@ -4,15 +4,6 @@ import { ZardEmptyComponent } from '../empty.component';
 @Component({
   standalone: true,
   imports: [ZardEmptyComponent],
-  template: `
-    <z-empty
-      [zImageStyle]="{
-        borderRadius: '12px',
-        backgroundColor: '#fdfdfd',
-        boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-        padding: '16px',
-      }"
-    />
-  `,
+  template: ` <z-empty class="rounded-xl bg-[#fdfdfd] shadow-[0_4px_12px_rgba(0,0,0,0.08)] p-4" /> `,
 })
 export class ZardDemoEmptyCustomStyleComponent {}
