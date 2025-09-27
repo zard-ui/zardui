@@ -3,7 +3,6 @@
 ```angular-ts title="empty.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
-import { NgStyle } from '@angular/common';
 
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { emptyVariants, ZardEmptyVariants } from './empty.variants';
@@ -15,22 +14,22 @@ import { mergeClasses } from '../../shared/utils/utils';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardStringTemplateOutletDirective, NgStyle],
+  imports: [ZardStringTemplateOutletDirective],
   host: {
     '[class]': 'classes()',
   },
   template: `
     @if (zImage()) {
       @if (isTemplate(zImage())) {
-        <div [ngStyle]="zImageStyle()">
+        <div class="flex justify-center items-center">
           <ng-container *zStringTemplateOutlet="zImage()"></ng-container>
         </div>
       } @else {
-        <img [src]="zImage()" alt="Empty" [ngStyle]="zImageStyle()" />
+        <img [src]="zImage()" alt="Empty" class="mx-auto" />
       }
     } @else {
       <!-- Default Illustration -->
-      <div [ngStyle]="zImageStyle()">
+      <div class="flex justify-center items-center">
         <svg viewBox="0 0 64 41" xmlns="http://www.w3.org/2000/svg">
           <g transform="translate(0 1)" fill="none" fill-rule="evenodd">
             <ellipse class="fill-gray-100 dark:fill-gray-800 dark:fill-opacity-10" cx="32" cy="33" rx="32" ry="7" />
@@ -58,7 +57,6 @@ import { mergeClasses } from '../../shared/utils/utils';
 })
 export class ZardEmptyComponent {
   readonly zImage = input<string | TemplateRef<unknown>>();
-  readonly zImageStyle = input<Record<string, string>>({});
   readonly zDescription = input<string | TemplateRef<unknown>>('No data');
   readonly zSize = input<ZardEmptyVariants['zSize']>('default');
   readonly class = input<ClassValue>('');
@@ -81,7 +79,8 @@ export const emptyVariants = cva('flex flex-col items-center justify-center text
   variants: {
     zSize: {
       default: 'text-sm [&_img]:w-40 [&_svg]:w-16 [&_svg]:h-10',
-      small: 'text-xs [&_img]:w-28 [&_svg]:w-12 [&_svg]:h-8',
+      sm: 'text-xs [&_img]:w-28 [&_svg]:w-12 [&_svg]:h-8',
+      lg: 'text-base [&_img]:w-52 [&_svg]:w-20 [&_svg]:h-12',
     },
   },
   defaultVariants: {
