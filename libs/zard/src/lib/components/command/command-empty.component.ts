@@ -32,16 +32,14 @@ export class ZardCommandEmptyComponent {
   protected readonly shouldShow = computed(() => {
     // Check traditional command component
     if (this.commandComponent) {
-      const searchTerm = this.commandComponent.searchTerm();
       const filteredOptions = this.commandComponent.filteredOptions();
-      return searchTerm.length > 0 && filteredOptions.length === 0;
+      return filteredOptions.length === 0;
     }
 
     // Check JSON command component
     if (this.jsonCommandComponent) {
-      const searchTerm = this.jsonCommandComponent.searchTerm();
       const filteredGroups = this.jsonCommandComponent.filteredGroups();
-      return searchTerm.length > 0 && filteredGroups.length === 0;
+      return filteredGroups.length === 0;
     }
 
     return false;
