@@ -124,26 +124,27 @@ import { ZardTableService } from './table.service';
           <thead>
             <tr>
               @for (column of columns(); track column.accessor) {
-                @if (column.sortable) {
-                  <th
-                    scope="col"
-                    sortable
-                    (click)="toggleSort(column.accessor)"
-                    (keydown.enter)="toggleSort(column.accessor)"
-                    (keydown.space)="toggleSort(column.accessor); $event.preventDefault()"
-                    tabindex="0"
-                    role="button"
-                    [attr.aria-label]="'Sort by ' + column.header + (sortDirectionMap()[column.accessor] ? ', ' + sortDirectionMap()[column.accessor] + ' order' : '')"
-                    [attr.aria-sort]="sortDirectionMap()[column.accessor] ? sortDirectionMap()[column.accessor] : 'none'"
-                    [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'"
-                  >
-                    {{ column.header }}
-                    <z-table-sort-icon [direction]="sortDirectionMap()[column.accessor]"></z-table-sort-icon>
-                  </th>
-                } @else {
-                  <th scope="col" [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'">
-                    {{ column.header }}
-                  </th>
+                @if (visibleColumns()[column.accessor]) {
+                  @if (column.sortable) {
+                    <th
+                      scope="col"
+                      sortable
+                      (click)="toggleSort(column.accessor)"
+                      (keydown.enter)="toggleSort(column.accessor)"
+                      (keydown.space)="toggleSort(column.accessor); $event.preventDefault()"
+                      tabindex="0"
+                      role="button"
+                      [attr.aria-label]="'Sort by ' + column.header + (sortDirectionMap()[column.accessor] ? ', ' + sortDirectionMap()[column.accessor] + ' order' : '')"
+                      [attr.aria-sort]="sortDirectionMap()[column.accessor] ? sortDirectionMap()[column.accessor] : 'none'"
+                    >
+                      {{ column.header }}
+                      <z-table-sort-icon [direction]="sortDirectionMap()[column.accessor]"></z-table-sort-icon>
+                    </th>
+                  } @else {
+                    <th scope="col">
+                      {{ column.header }}
+                    </th>
+                  }
                 }
               }
             </tr>
@@ -153,9 +154,11 @@ import { ZardTableService } from './table.service';
             @for (row of dataSource().data; track row) {
               <tr>
                 @for (column of columns(); track column.accessor) {
-                  <td [style.display]="visibleColumns()[column.accessor] ? 'table-cell' : 'none'">
-                    {{ row[column.accessor] }}
-                  </td>
+                  @if (visibleColumns()[column.accessor]) {
+                    <td>
+                      {{ row[column.accessor] }}
+                    </td>
+                  }
                 }
               </tr>
             }

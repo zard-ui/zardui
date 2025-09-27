@@ -14,7 +14,7 @@ export const tableVariants = {
     },
   }),
 
-  table: cva('w-full', {
+  table: cva('table-fixed w-full', {
     variants: {
       zSize: {
         default: 'text-base',
