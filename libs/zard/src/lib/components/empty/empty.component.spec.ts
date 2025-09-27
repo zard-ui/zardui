@@ -5,7 +5,7 @@ import { ZardEmptyComponent } from './empty.component';
 
 @Component({
   template: `
-    <z-empty [zImage]="image" [zImageStyle]="imageStyle" [zDescription]="description" [zSize]="size" [class]="customClass"></z-empty>
+    <z-empty [zImage]="image" [zDescription]="description" [zSize]="size" [class]="customClass"></z-empty>
 
     <ng-template #tpl>Template Content</ng-template>
   `,
@@ -14,9 +14,8 @@ import { ZardEmptyComponent } from './empty.component';
 })
 class TestHostComponent {
   image?: string | TemplateRef<unknown>;
-  imageStyle: Record<string, string> = {};
   description: string | TemplateRef<unknown> = 'No data';
-  size: 'default' | 'small' = 'default';
+  size: 'default' | 'sm' | 'lg' = 'default';
   customClass = '';
 
   @ViewChild('tpl', { static: true }) tpl!: TemplateRef<unknown>;
@@ -87,8 +86,8 @@ describe('ZardEmptyComponent', () => {
     expect(templateContent).toContain('Template Content');
   });
 
-  it('should apply small variant classes when zSize="small"', () => {
-    host.size = 'small';
+  it('should apply small variant classes when zSize="sm"', () => {
+    host.size = 'sm';
     fixture.detectChanges();
 
     const comp = fixture.debugElement.query(By.css('z-empty'));
