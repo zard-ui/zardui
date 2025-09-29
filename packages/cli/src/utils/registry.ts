@@ -107,10 +107,6 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'dialog.component.html',
-        content: '',
-      },
-      {
         name: 'dialog.service.ts',
         content: '',
       },
