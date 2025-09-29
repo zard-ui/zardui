@@ -1,8 +1,8 @@
 import { Component, computed, signal } from '@angular/core';
 
+import { ZardCalendarComponent, ZardCalendarVariants } from '../calendar.component';
 import { ZardSelectItemComponent } from '../../select/select-item.component';
 import { ZardSelectComponent } from '../../select/select.component';
-import { ZardCalendarComponent, ZardCalendarVariants } from '../calendar.component';
 
 @Component({
   standalone: true,
@@ -11,10 +11,10 @@ import { ZardCalendarComponent, ZardCalendarVariants } from '../calendar.compone
     <div class="space-y-6">
       <div class="flex items-center gap-4">
         <label class="text-sm font-medium">Size:</label>
-        <z-select [value]="selectedSize() || 'default'" [label]="sizeLabel()" (selectionChange)="onSizeChange($event)" class="min-w-[120px]">
-          <z-select-item value="sm">Small</z-select-item>
-          <z-select-item value="default">Default</z-select-item>
-          <z-select-item value="lg">Large</z-select-item>
+        <z-select [zValue]="selectedSize() || 'default'" [zLabel]="sizeLabel()" (zSelectionChange)="onSizeChange($event)" class="min-w-[120px]">
+          <z-select-item zValue="sm">Small</z-select-item>
+          <z-select-item zValue="default">Default</z-select-item>
+          <z-select-item zValue="lg">Large</z-select-item>
         </z-select>
       </div>
 

@@ -16,10 +16,10 @@ interface SelectHost {
   imports: [],
   host: {
     '[class]': 'classes()',
-    '[attr.value]': 'value()',
+    '[attr.value]': 'zValue()',
     role: 'option',
     tabindex: '-1',
-    '[attr.data-disabled]': 'disabled() ? "" : null',
+    '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-selected]': 'isSelected() ? "" : null',
     '[attr.aria-selected]': 'isSelected()',
     '(click)': 'onClick()',
@@ -34,8 +34,8 @@ interface SelectHost {
   `,
 })
 export class ZardSelectItemComponent {
-  readonly value = input.required<string>();
-  readonly disabled = input(false, { transform });
+  readonly zValue = input.required<string>();
+  readonly zDisabled = input(false, { transform });
   readonly class = input<string>('');
 
   private select: SelectHost | null = null;
@@ -47,14 +47,14 @@ export class ZardSelectItemComponent {
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
 
-  protected readonly isSelected = computed(() => this.select?.selectedValue() === this.value());
+  protected readonly isSelected = computed(() => this.select?.selectedValue() === this.zValue());
 
   setSelectHost(selectHost: SelectHost) {
     this.select = selectHost;
   }
 
   onClick() {
-    if (this.disabled() || !this.select) return;
-    this.select.selectItem(this.value(), this.label());
+    if (this.zDisabled() || !this.select) return;
+    this.select.selectItem(this.zValue(), this.label());
   }
 }

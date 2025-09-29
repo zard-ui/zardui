@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject, signal, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardCheckboxComponent } from '../../checkbox/checkbox.component';
-import { ZardInputDirective } from '../../input/input.directive';
 import { ZardSelectItemComponent } from '../../select/select-item.component';
+import { ZardCheckboxComponent } from '../../checkbox/checkbox.component';
 import { ZardSelectComponent } from '../../select/select.component';
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardInputDirective } from '../../input/input.directive';
 import { ZardFormModule } from '../form.module';
 
 interface FormData {
@@ -67,7 +67,7 @@ interface FormData {
         <z-form-control [errorMessage]="isFieldInvalid('country') ? 'Please select a country' : ''">
           <z-select id="country" formControlName="country" placeholder="Select your country">
             @for (country of countries; track country.value) {
-              <z-select-item [value]="country.value">{{ country.label }}</z-select-item>
+              <z-select-item [zValue]="country.value">{{ country.label }}</z-select-item>
             }
           </z-select>
         </z-form-control>
