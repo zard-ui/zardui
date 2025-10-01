@@ -15,6 +15,11 @@
         "outputPath": "dist/apps/web",
         "index": "apps/web/src/index.html",
         "browser": "apps/web/src/main.ts",
+        "server": "apps/web/src/main.server.ts",
+        "prerender": true,
+        "ssr": {
+          "entry": "apps/web/server.ts"
+        },
         "polyfills": [
           "zone.js"
         ],

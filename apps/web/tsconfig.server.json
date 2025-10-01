@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "outDir": "../../dist/apps/web/server",
+    "types": ["node"]
+  },
+  "files": ["src/main.server.ts", "server.ts"]
+}

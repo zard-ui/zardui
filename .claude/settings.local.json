@@ -60,7 +60,8 @@
       "Bash(npx nx run:*)",
       "Bash(sed:*)",
       "mcp__ide__getDiagnostics",
-      "Bash(git log:*)"
+      "Bash(git log:*)",
+      "Bash(npx ng add:*)"
     ],
     "defaultMode": "acceptEdits"
   },
