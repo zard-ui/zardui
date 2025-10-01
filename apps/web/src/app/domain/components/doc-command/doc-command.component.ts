@@ -1,5 +1,6 @@
+import { isPlatformBrowser } from '@angular/common';
 import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/command/command.component';
-import { AfterViewInit, Component, inject, viewChild, OnDestroy } from '@angular/core';
+import { AfterViewInit, Component, inject, viewChild, OnDestroy, PLATFORM_ID } from '@angular/core';
 import { ZardCommandModule } from '@zard/components/command/command.module';
 import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
 import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
@@ -32,15 +33,20 @@ import { Router } from '@angular/router';
   `,
 })
 export class CommandDocComponent implements AfterViewInit, OnDestroy {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private readonly router = inject(Router);
+  private readonly dialogRef = inject(ZardDialogRef);
+
   readonly commandComponent = viewChild.required<ZardCommandComponent>('commandRef');
-  private router = inject(Router);
-  private dialogRef = inject(ZardDialogRef);
   private escapeListener?: (event: KeyboardEvent) => void;
 
   readonly gettingStartedItems = SIDEBAR_PATHS[0].data.filter(item => item.available);
   readonly componentItems = SIDEBAR_PATHS[1].data.filter(item => item.available);
 
   ngAfterViewInit() {
+    if (!this.isBrowser) return;
+
     // Focus the command input when the component is initialized
     setTimeout(() => {
       this.commandComponent().focus();
@@ -57,6 +63,8 @@ export class CommandDocComponent implements AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    if (!this.isBrowser) return;
+
     // Clean up the escape listener
     if (this.escapeListener) {
       document.removeEventListener('keydown', this.escapeListener);

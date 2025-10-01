@@ -22,6 +22,15 @@ export default [
           suffixes: ['Page', 'Component', 'Layout', 'Dialog'],
         },
       ],
+      '@nx/enforce-module-boundaries': 'off',
+    },
+  },
+  {
+    files: ['**/demo/**/*.ts', '**/sections/**/*.ts', '**/public/**/*.ts'],
+    rules: {
+      '@angular-eslint/component-selector': 'off',
+      '@angular-eslint/component-class-suffix': 'off',
+      '@angular-eslint/prefer-inject': 'off',
     },
   },
   {
@@ -30,6 +39,7 @@ export default [
     rules: {
       '@angular-eslint/template/click-events-have-key-events': 'off',
       '@angular-eslint/template/interactive-supports-focus': 'off',
+      'prettier/prettier': 'warn',
     },
   },
 ];

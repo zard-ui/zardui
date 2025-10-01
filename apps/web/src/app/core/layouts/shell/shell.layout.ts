@@ -1,9 +1,9 @@
-import { HeaderComponent } from '@zard/domain/components/header/header.component';
-import { FooterComponent } from '@zard/domain/components/footer/footer.component';
-import { BannerComponent } from '@zard/domain/components/banner/banner.component';
-import { environment } from '@zard/env/environment';
-import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { BannerComponent } from '../../../domain/components/banner/banner.component';
+import { FooterComponent } from '../../../domain/components/footer/footer.component';
+import { HeaderComponent } from '../../../domain/components/header/header.component';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'z-shell',

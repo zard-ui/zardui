@@ -1,5 +1,5 @@
-import { TitleCasePipe, ViewportScroller } from '@angular/common';
-import { Component, inject, input, model } from '@angular/core';
+import { isPlatformBrowser, TitleCasePipe, ViewportScroller } from '@angular/common';
+import { Component, inject, input, model, PLATFORM_ID } from '@angular/core';
 import { HyphenToSpacePipe } from '@zard/shared/pipes/hyphen-to-space.pipe';
 
 export interface NavigationItem {
@@ -19,13 +19,17 @@ export interface NavigationConfig {
   templateUrl: './dynamic-anchor.component.html',
 })
 export class DynamicAnchorComponent {
-  private viewportScroller = inject(ViewportScroller);
+  private readonly viewportScroller = inject(ViewportScroller);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
 
   activeAnchor = model<string | undefined>();
   navigation = input<NavigationConfig>({ items: [] });
   onAnchorClick = input<((anchorId: string) => void | Promise<void>) | null>(null);
 
   async scrollToAnchor(anchor: string) {
+    if (!this.isBrowser) return;
+
     // Se há um callback customizado, usa ele
     const customCallback = this.onAnchorClick();
     if (customCallback) {

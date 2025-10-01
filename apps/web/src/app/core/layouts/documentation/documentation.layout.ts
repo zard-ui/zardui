@@ -1,12 +1,13 @@
-import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
-import { HeaderComponent } from '@zard/domain/components/header/header.component';
-import { FooterComponent } from '@zard/domain/components/footer/footer.component';
-import { BannerComponent } from '@zard/domain/components/banner/banner.component';
-import { ZardToastComponent } from '@zard/components/toast/toast.component';
-import { Component, computed, effect, inject, signal } from '@angular/core';
-import { DarkModeService } from '@zard/shared/services/darkmode.service';
-import { environment } from '@zard/env/environment';
+import { isPlatformBrowser } from '@angular/common';
+import { Component, computed, effect, inject, PLATFORM_ID, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { ZardToastComponent } from '@zard/components/toast/toast.component';
+import { BannerComponent } from '../../../domain/components/banner/banner.component';
+import { FooterComponent } from '../../../domain/components/footer/footer.component';
+import { HeaderComponent } from '../../../domain/components/header/header.component';
+import { SidebarComponent } from '../../../domain/components/sidebar/sidebar.component';
+import { DarkModeService } from '../../../shared/services/darkmode.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'z-documentation',
@@ -35,6 +36,8 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule, HeaderComponent, FooterComponent, BannerComponent, SidebarComponent, ZardToastComponent],
 })
 export class DocumentationLayout {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly darkModeService = inject(DarkModeService);
   readonly isDevEnv = !environment.production;
   readonly isDevMode = environment.devMode;
@@ -47,20 +50,22 @@ export class DocumentationLayout {
     this.themeSignal.set(this.darkModeService.getCurrentTheme());
 
     // Watch for theme changes by observing the document's class changes
-    effect(() => {
-      const observer = new MutationObserver(() => {
-        const newTheme = this.darkModeService.getCurrentTheme();
-        if (newTheme !== this.themeSignal()) {
-          this.themeSignal.set(newTheme);
-        }
-      });
+    if (this.isBrowser) {
+      effect(() => {
+        const observer = new MutationObserver(() => {
+          const newTheme = this.darkModeService.getCurrentTheme();
+          if (newTheme !== this.themeSignal()) {
+            this.themeSignal.set(newTheme);
+          }
+        });
 
-      observer.observe(document.documentElement, {
-        attributes: true,
-        attributeFilter: ['class', 'data-theme'],
-      });
+        observer.observe(document.documentElement, {
+          attributes: true,
+          attributeFilter: ['class', 'data-theme'],
+        });
 
-      return () => observer.disconnect();
-    });
+        return () => observer.disconnect();
+      });
+    }
   }
 }

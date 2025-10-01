@@ -1,4 +1,4 @@
-import { Directive, ElementRef, HostBinding, Input } from '@angular/core';
+import { Directive, ElementRef, HostBinding, inject, Input } from '@angular/core';
 
 @Directive({
   selector: '[scrollSpyItem]',
@@ -8,5 +8,5 @@ export class ScrollSpyItemDirective {
   @Input() @HostBinding('class.active') active = false;
   @Input() scrollSpyItem?: string;
 
-  constructor(public elementRef: ElementRef) {}
+  readonly elementRef = inject(ElementRef);
 }

@@ -278,7 +278,7 @@ export function rehypeEnhancedCode() {
         const hasShowLineNumbers = originalMeta.includes('showLineNumbers');
         const hasCopyButton = originalMeta.includes('copyButton');
         const hasTitle = originalMeta.includes('title');
-        
+
         // Check for expandable parameter
         const expandableMatch = originalMeta.match(/expandable="([^"]+)"/);
         const isExpandable = expandableMatch && (expandableMatch[1] === 'true' || expandableMatch[1] === 'on');
@@ -313,7 +313,9 @@ export function rehypeEnhancedCode() {
           type: 'element',
           tagName: 'div',
           properties: {
-            class: ['group', 'relative', 'my-6', 'overflow-hidden', 'rounded-lg', 'border', 'bg-neutral-200/30', 'dark:bg-neutral-900/40', isExpandable ? 'min-h-32' : ''].filter(Boolean),
+            class: ['group', 'relative', 'my-6', 'overflow-hidden', 'rounded-lg', 'border', 'bg-neutral-200/30', 'dark:bg-neutral-900/40', isExpandable ? 'min-h-32' : ''].filter(
+              Boolean,
+            ),
           },
           children: [],
         };
@@ -389,37 +391,35 @@ export function rehypeEnhancedCode() {
 // Plugin for handling code tabs - processes BEFORE rehypeEnhancedCode
 export function rehypeCodeTabs() {
   return (tree: any) => {
-    let processed = new Set<any>();
-    
+    const processed = new Set<any>();
+
     visit(tree, 'element', (node: any, index: number | undefined, parent: any) => {
       if (index === undefined || !parent || processed.has(node)) return;
-      
+
       // Look for figure elements with rehype-pretty-code-figure
-      if (node.tagName === 'figure' && 
-          node.properties?.['data-rehype-pretty-code-figure'] !== undefined) {
-        
+      if (node.tagName === 'figure' && node.properties?.['data-rehype-pretty-code-figure'] !== undefined) {
         // Look for pre > code with tab syntax in meta
         const preNode = node.children?.find((child: any) => child.tagName === 'pre');
         const codeNode = preNode?.children?.[0];
-        
+
         if (!codeNode || codeNode.tagName !== 'code') return;
-        
+
         const meta = codeNode.data?.meta || '';
         const tabMatch = meta.match(/tab="([^"]+)"/);
-        
+
         if (!tabMatch) return;
-        
+
         // This is a tab - look for subsequent tab siblings
         const tabGroup = [node];
         const tabLabels = [tabMatch[1]];
-        
+
         // Look ahead for consecutive tab blocks, skipping non-figure elements
         let nextIndex = index + 1;
-        let elementsToRemove = []; // Track empty elements to remove
-        
+        const elementsToRemove = []; // Track empty elements to remove
+
         while (nextIndex < parent.children.length) {
           const nextNode = parent.children[nextIndex];
-          
+
           // Skip empty text nodes or paragraphs between code blocks
           if (nextNode.tagName !== 'figure') {
             // Check if this is an empty text node or paragraph that we should skip
@@ -427,8 +427,12 @@ export function rehypeCodeTabs() {
               elementsToRemove.push(nextIndex);
               nextIndex++;
               continue;
-            } else if (nextNode.tagName === 'p' && (!nextNode.children || nextNode.children.length === 0 || 
-                      (nextNode.children.length === 1 && nextNode.children[0].type === 'text' && nextNode.children[0].value?.trim() === ''))) {
+            } else if (
+              nextNode.tagName === 'p' &&
+              (!nextNode.children ||
+                nextNode.children.length === 0 ||
+                (nextNode.children.length === 1 && nextNode.children[0].type === 'text' && nextNode.children[0].value?.trim() === ''))
+            ) {
               elementsToRemove.push(nextIndex);
               nextIndex++;
               continue;
@@ -437,29 +441,29 @@ export function rehypeCodeTabs() {
               break;
             }
           }
-          
+
           // Check if this figure has rehype-pretty-code-figure
           if (nextNode.properties?.['data-rehype-pretty-code-figure'] === undefined) {
             break;
           }
-          
+
           const nextPreNode = nextNode.children?.find((child: any) => child.tagName === 'pre');
           const nextCodeNode = nextPreNode?.children?.[0];
-          
+
           if (!nextCodeNode || nextCodeNode.tagName !== 'code') break;
-          
+
           const nextMeta = nextCodeNode.data?.meta || '';
           const nextTabMatch = nextMeta.match(/tab="([^"]+)"/);
-          
+
           if (!nextTabMatch) break;
-          
+
           // This is another tab in the group
           tabGroup.push(nextNode);
           tabLabels.push(nextTabMatch[1]);
           processed.add(nextNode);
           nextIndex++;
         }
-        
+
         // Remove empty elements between tabs if we're creating a tab group
         if (tabGroup.length > 1 && elementsToRemove.length > 0) {
           // Remove in reverse order to maintain correct indices
@@ -473,15 +477,15 @@ export function rehypeCodeTabs() {
             }
           }
         }
-        
+
         // If we have more than one tab, create a tab wrapper and mark as processed
         if (tabGroup.length > 1) {
           const tabsWrapper = createTabsWrapper(tabGroup, tabLabels);
-          
+
           // Replace all the individual code blocks with the tabs wrapper
           parent.children.splice(index, tabGroup.length, tabsWrapper);
           processed.add(tabsWrapper);
-          
+
           // Since we modified the tree, the visit will continue with the new structure
           return;
         }
@@ -557,13 +561,7 @@ function createTabsWrapper(codeBlocks: any[], tabLabels: string[]): any {
         type: 'element',
         tagName: 'div',
         properties: {
-          class: [
-            'flex',
-            'border',
-            'border-b-0',
-            'bg-muted/50',
-            'rounded-t-lg',
-          ],
+          class: ['flex', 'border', 'border-b-0', 'bg-muted/50', 'rounded-t-lg'],
         },
         children: tabButtons,
       },
