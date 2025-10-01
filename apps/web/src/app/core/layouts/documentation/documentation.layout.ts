@@ -2,12 +2,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, computed, effect, inject, PLATFORM_ID, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { ZardToastComponent } from '@zard/components/toast/toast.component';
-import { BannerComponent } from '../../../domain/components/banner/banner.component';
-import { FooterComponent } from '../../../domain/components/footer/footer.component';
-import { HeaderComponent } from '../../../domain/components/header/header.component';
-import { SidebarComponent } from '../../../domain/components/sidebar/sidebar.component';
-import { DarkModeService } from '../../../shared/services/darkmode.service';
-import { environment } from '../../../environments/environment';
+import { BannerComponent } from '@zard/domain/components/banner/banner.component';
+import { FooterComponent } from '@zard/domain/components/footer/footer.component';
+import { HeaderComponent } from '@zard/domain/components/header/header.component';
+import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
+import { DarkModeService } from '@zard/shared/services/darkmode.service';
+import { environment } from '@zard/env/environment';
 
 @Component({
   selector: 'z-documentation',
