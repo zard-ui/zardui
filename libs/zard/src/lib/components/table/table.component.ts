@@ -126,19 +126,20 @@ import { ZardTableService } from './table.service';
               @for (column of columns(); track column.accessor) {
                 @if (visibleColumns()[column.accessor]) {
                   @if (column.sortable) {
-                    <th
-                      scope="col"
-                      sortable
-                      (click)="toggleSort(column.accessor)"
-                      (keydown.enter)="toggleSort(column.accessor)"
-                      (keydown.space)="toggleSort(column.accessor); $event.preventDefault()"
-                      tabindex="0"
-                      role="button"
-                      [attr.aria-label]="'Sort by ' + column.header + (sortDirectionMap()[column.accessor] ? ', ' + sortDirectionMap()[column.accessor] + ' order' : '')"
-                      [attr.aria-sort]="sortDirectionMap()[column.accessor] ? sortDirectionMap()[column.accessor] : 'none'"
-                    >
-                      {{ column.header }}
-                      <z-table-sort-icon [direction]="sortDirectionMap()[column.accessor]"></z-table-sort-icon>
+                    <th scope="col" sortable>
+                      <span
+                        z-th-sortable
+                        (click)="toggleSort(column.accessor)"
+                        (keydown.enter)="toggleSort(column.accessor)"
+                        (keydown.space)="toggleSort(column.accessor); $event.preventDefault()"
+                        tabindex="0"
+                        role="button"
+                        [attr.aria-label]="'Sort by ' + column.header + (sortDirectionMap()[column.accessor] ? ', ' + sortDirectionMap()[column.accessor] + ' order' : '')"
+                        [attr.aria-sort]="sortDirectionMap()[column.accessor] ? sortDirectionMap()[column.accessor] : 'none'"
+                      >
+                        {{ column.header }}
+                        <z-table-sort-icon [direction]="sortDirectionMap()[column.accessor]"></z-table-sort-icon>
+                      </span>
                     </th>
                   } @else {
                     <th scope="col">
@@ -178,13 +179,6 @@ import { ZardTableService } from './table.service';
       </nav>
     }
   `,
-  styles: [
-    `
-      th[sortable]:hover {
-        cursor: pointer;
-      }
-    `,
-  ],
 })
 export class ZardTableComponent implements OnInit {
   readonly columns = input<{ header: string; accessor: string; sortable?: boolean; filterable?: boolean }[]>([]);

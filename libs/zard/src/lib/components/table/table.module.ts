@@ -12,6 +12,7 @@ import {
   ZardTableFilteringDirective,
   ZardTablePaginationDirective,
   ZardTableWrapperDirective,
+  ZardThSortableDirective,
   ZardToolbarDirective,
 } from './table.directive';
 
@@ -28,6 +29,7 @@ const directives = [
   ZardDropdownCheckboxDirective,
   ZardToolbarDirective,
   ZardDropdownLiLabelDirective,
+  ZardThSortableDirective,
 ];
 
 @NgModule({

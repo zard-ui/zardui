@@ -60,6 +60,20 @@ export class ZardTableDirective implements OnDestroy {
 }
 
 @Directive({
+  selector: 'span[z-th-sortable]',
+  standalone: true,
+  exportAs: 'zThSortable',
+  host: {
+    '[class]': 'classes()',
+  },
+})
+export class ZardThSortableDirective {
+  readonly class = input<ClassValue>('');
+  readonly zSize = input<'default' | 'compact' | 'comfortable'>('default');
+
+  protected readonly classes = computed(() => mergeClasses(tableVariants.thSortable({ zSize: this.zSize() }), this.class()));
+}
+@Directive({
   selector: 'div[z-table-wrapper]',
   standalone: true,
   exportAs: 'zTableWrapper',

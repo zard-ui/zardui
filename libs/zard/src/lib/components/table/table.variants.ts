@@ -55,7 +55,20 @@ export const tableVariants = {
       zSize: {
         default: 'p-4',
         compact: 'p-3',
-        comfortable: 'p-6',
+        comfortable: 'p-5',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
+    },
+  }),
+
+  thSortable: cva('hover:cursor-pointer', {
+    variants: {
+      zSize: {
+        default: '',
+        compact: '',
+        comfortable: '',
       },
     },
     defaultVariants: {
@@ -68,7 +81,7 @@ export const tableVariants = {
       zSize: {
         default: 'p-4',
         compact: 'p-3',
-        comfortable: 'p-6',
+        comfortable: 'p-5',
       },
     },
     defaultVariants: {
@@ -80,11 +93,11 @@ export const tableVariants = {
 
   toolbarItem: cva('min-w-[1px]'),
 
-  filtering: cva('mb-4'),
+  filtering: cva('mb-4 dark:bg-neutral-900 rounded-md'),
 
   details: cva('relative inline-block text-sm font-medium'),
 
-  summary: cva('h-10 flex items-center border gap-2 px-4 py-2 mb-4 rounded-md cursor-pointer'),
+  summary: cva('h-10 flex items-center border gap-2 px-4 py-2 mb-4 rounded-md cursor-pointer dark:bg-neutral-900'),
 
   dropdownUl: cva('border absolute z-10 right-0 w-max rounded-md p-1 flex flex-col gap-2 bg-white dark:bg-neutral-800'),
 
