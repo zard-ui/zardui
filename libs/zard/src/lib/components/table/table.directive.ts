@@ -49,7 +49,7 @@ export class ZardTableDirective implements OnDestroy {
         .forEach(c => this.renderer.addClass(el, c));
     };
 
-    host.querySelectorAll('thead').forEach(el => addClasses(el as HTMLElement, tableVariants.thead()));
+    host.querySelectorAll('thead').forEach(el => addClasses(el as HTMLElement, tableVariants.thead({ zType: this.zType() })));
 
     host.querySelectorAll('tr').forEach(el => addClasses(el as HTMLElement, tableVariants.tr({ zType: this.zType() })));
 

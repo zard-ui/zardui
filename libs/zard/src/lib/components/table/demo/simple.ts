@@ -14,8 +14,8 @@ interface Person {
   standalone: true,
   imports: [ZardTableComponent, ZardTableModule],
   template: `
-    <z-table zSize="comfortable">
-      <caption>
+    <z-table zType="bordered">
+      <caption class="border-b p-4">
         A list of your recent invoices.
       </caption>
       <thead>
@@ -28,7 +28,7 @@ interface Person {
       <tbody>
         @for (data of listOfData; track data.key) {
           <tr>
-            <td class="font-medium">{{ data.name }}</td>
+            <td>{{ data.name }}</td>
             <td>{{ data.age }}</td>
             <td>{{ data.address }}</td>
           </tr>

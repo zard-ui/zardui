@@ -27,14 +27,22 @@ export const tableVariants = {
     },
   }),
 
-  thead: cva('bg-neutral-200 dark:bg-neutral-900'),
-
-  tr: cva('transition-colors hover:bg-neutral-200 dark:hover:bg-neutral-700', {
+  thead: cva('border-b', {
     variants: {
       zType: {
-        default: 'border-b',
-        striped: 'odd:bg-neutral-100 dark:odd:bg-neutral-800',
-        bordered: 'border-b last:border-0',
+        default: 'border-t',
+        striped: 'border-t',
+        bordered: '',
+      },
+    },
+  }),
+
+  tr: cva('border-b transition-colors hover:bg-neutral-100 dark:hover:bg-neutral-900', {
+    variants: {
+      zType: {
+        default: '',
+        striped: '[tbody>&]:odd:bg-neutral-100 dark:[tbody>&]:odd:bg-neutral-900',
+        bordered: 'last:border-0',
       },
     },
     defaultVariants: {
@@ -42,7 +50,7 @@ export const tableVariants = {
     },
   }),
 
-  th: cva('text-left', {
+  th: cva('text-left text-neutral-950 dark:text-neutral-50', {
     variants: {
       zSize: {
         default: 'p-4',
@@ -55,7 +63,7 @@ export const tableVariants = {
     },
   }),
 
-  td: cva('', {
+  td: cva('text-neutral-800 dark:text-neutral-300', {
     variants: {
       zSize: {
         default: 'p-4',
@@ -67,6 +75,7 @@ export const tableVariants = {
       zSize: 'default',
     },
   }),
+
   toolbar: cva('flex justify-between items-center w-full'),
 
   toolbarItem: cva('min-w-[1px]'),

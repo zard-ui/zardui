@@ -17,7 +17,7 @@ import { ZardTableModule } from '../table.module';
       [enableOrdering]="true"
       (stateChange)="onStateChange($event)"
       zSize="default"
-      zType="default"
+      zType="bordered"
     ></z-table>
   `,
 })
