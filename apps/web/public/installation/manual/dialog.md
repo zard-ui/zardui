@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="dialog.component.ts" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -179,6 +181,8 @@ export class ZardDialogModule {}
 
 ```
 
+
+
 ```angular-ts title="dialog.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -188,6 +192,8 @@ export const dialogVariants = cva(
 export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
 ```
+
+
 
 ```angular-ts title="dialog-ref.ts" copyButton showLineNumbers
 import { EventEmitter, Inject, inject, PLATFORM_ID } from '@angular/core';
@@ -211,7 +217,7 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     private overlayRef: OverlayRef,
     private config: ZardDialogOptions<T, U>,
     private containerInstance: ZardDialogComponent<T, U>,
-    @Inject(PLATFORM_ID) private platformId: Object,
+    @Inject(PLATFORM_ID) private platformId: object,
   ) {
     this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
@@ -267,6 +273,8 @@ export class ZardDialogRef<T = any, R = any, U = any> {
 }
 
 ```
+
+
 
 ```angular-ts title="dialog.service.ts" copyButton showLineNumbers
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
@@ -367,3 +375,4 @@ export class ZardDialogService {
 }
 
 ```
+

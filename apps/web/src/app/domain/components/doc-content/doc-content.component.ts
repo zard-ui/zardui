@@ -15,6 +15,7 @@ export class DocContentComponent implements OnInit {
   readonly title = input<string>();
   readonly navigationConfig = input<NavigationConfig>();
   activeAnchor = input<string>();
+  onAnchorClick = input<((anchorId: string) => void | Promise<void>) | null>(null);
 
   ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);

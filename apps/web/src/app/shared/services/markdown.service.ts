@@ -43,6 +43,14 @@ export class MarkdownService {
             };
           }
 
+          if (node.tagName === 'h2') {
+            node.properties = {
+              ...node.properties,
+              style: [],
+              class: ['scroll-m-28', 'font-heading', 'text-xl', 'font-medium', 'tracking-tight', '[&:not(:first-child)]:mt-6'],
+            };
+          }
+
           if (node.tagName === 'h3') {
             node.properties = {
               ...node.properties,
@@ -59,13 +67,17 @@ export class MarkdownService {
             };
           }
 
-          // Inline code styling (pre/code blocks are handled by our custom plugin)
+          if (node.tagName === 'ul') {
+            node.properties = {
+              ...node.properties,
+              class: ['list-disc'],
+            };
+          }
+
           if (node.tagName === 'code') {
-            // Check if this code is inside a pre (code block) or standalone (inline code)
             const isInPre = parent && parent.tagName === 'pre';
 
             if (!isInPre) {
-              // Only style inline code - block code is handled by rehypeEnhancedCode
               node.properties = {
                 ...node.properties,
                 class: ['relative', 'rounded', 'bg-muted', 'px-[0.3rem]', 'py-[0.2rem]', 'font-mono', 'text-sm', 'font-semibold'],
@@ -194,10 +206,9 @@ export class MarkdownService {
           light: 'github-light',
         },
         keepBackground: false,
-        // Remove the default copy button transformer since we'll handle it in our custom plugin
       })
-      .use(rehypeEnhancedCode) // Our custom plugin for enhanced code blocks
-      .use(rehypeCodeTabs) // Our custom plugin for code tabs
+      .use(rehypeEnhancedCode)
+      .use(rehypeCodeTabs)
       .use(this.rehypeTailwindClasses())
       .use(rehypeStringify);
 
