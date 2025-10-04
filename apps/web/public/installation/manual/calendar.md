@@ -9,7 +9,7 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarNavVariants, ca
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
 import { ZardButtonComponent } from '../button/button.component';
-import type { ClassValue } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
 import { mergeClasses } from '../../shared/utils/utils';
 
 export interface CalendarDay {

@@ -6,6 +6,6 @@
   </section>
 
   @if (navigationConfig()) {
-    <z-dynamic-anchor [navigation]="navigationConfig()!" [activeAnchor]="activeAnchor() || ''"></z-dynamic-anchor>
+    <z-dynamic-anchor [navigation]="navigationConfig()!" [activeAnchor]="activeAnchor() || ''" [onAnchorClick]="onAnchorClick()"></z-dynamic-anchor>
   }
 </main>
