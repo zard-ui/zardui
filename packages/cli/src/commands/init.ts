@@ -1,19 +1,19 @@
 import * as commentJson from 'comment-json';
 import { Command } from 'commander';
 import { existsSync } from 'fs';
-import prompts from 'prompts';
-import fs from 'fs-extra';
+import * as prompts from 'prompts';
+import * as fs from 'fs-extra';
 import chalk from 'chalk';
-import path from 'path';
+import * as path from 'path';
 import { z } from 'zod';
 import ora from 'ora';
 
-import { getAvailableThemes, getThemeContent, getThemeDisplayName } from '../utils/theme-selector.ts';
-import { installPackages, detectPackageManager } from '../utils/package-manager.ts';
-import { DEFAULT_CONFIG, type Config } from '../utils/config.ts';
-import { UTILS, POSTCSS_CONFIG } from '../utils/templates.ts';
-import { getProjectInfo } from '../utils/get-project-info.ts';
-import { logger, spinner } from '../utils/logger.ts';
+import { getAvailableThemes, getThemeContent, getThemeDisplayName } from '../utils/theme-selector.js';
+import { installPackages, detectPackageManager } from '../utils/package-manager.js';
+import { DEFAULT_CONFIG, type Config } from '../utils/config.js';
+import { UTILS, POSTCSS_CONFIG } from '../utils/templates.js';
+import { getProjectInfo } from '../utils/get-project-info.js';
+import { logger, spinner } from '../utils/logger.js';
 
 export const init = new Command()
   .name('init')

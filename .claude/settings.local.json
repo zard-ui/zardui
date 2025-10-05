@@ -59,7 +59,15 @@
       "Bash(git rm:*)",
       "Bash(npx nx run:*)",
       "Bash(sed:*)",
-      "mcp__ide__getDiagnostics"
+      "mcp__ide__getDiagnostics",
+      "Read(//home/maverick/**)",
+      "Bash(for:*)",
+      "Bash(do echo \"=== $file ===\")",
+      "Bash(head:*)",
+      "Bash(done)",
+      "Bash(node:*)",
+      "Bash(dist/packages/cli/src/index.js --help)",
+      "Bash(npx nx release:*)"
     ],
     "defaultMode": "acceptEdits"
   },

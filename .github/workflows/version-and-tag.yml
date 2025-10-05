@@ -1,0 +1,91 @@
+name: Version and Tag
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        options:
+          - patch
+          - minor
+          - major
+          - prerelease
+      preid:
+        description: 'Pre-release identifier (only for prerelease)'
+        required: false
+        type: string
+        default: 'beta'
+      specifier:
+        description: 'Version specifier (optional - e.g., 1.2.3)'
+        required: false
+        type: string
+
+jobs:
+  version:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "zardui.adm@gmail.com"
+          git config --global user.name "ZardUI Bot"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run tests
+        run: npm test
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ -n "${{ github.event.inputs.specifier }}" ]; then
+            VERSION="${{ github.event.inputs.specifier }}"
+          elif [ "${{ github.event.inputs.version }}" == "prerelease" ]; then
+            CURRENT=$(node -p "require('./packages/cli/package.json').version")
+            VERSION=$(npx semver -i prerelease --preid ${{ github.event.inputs.preid }} $CURRENT)
+          else
+            CURRENT=$(node -p "require('./packages/cli/package.json').version")
+            VERSION=$(npx semver -i ${{ github.event.inputs.version }} $CURRENT)
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Version CLI
+        run: npx nx release version ${{ steps.version.outputs.version }} --verbose
+
+      - name: Generate changelogs
+        run: npx nx release changelog --verbose
+
+      - name: Push changes and tags
+        run: |
+          # Nx já criou os commits e tags, só precisamos fazer push
+          git push origin master --follow-tags
+
+      - name: Summary
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+
+          echo "## 🎉 Release criado com sucesso!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Tag criada:" >> $GITHUB_STEP_SUMMARY
+          echo "- \`zard@$VERSION\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Pacote publicado:" >> $GITHUB_STEP_SUMMARY
+          echo "- 📦 **@ngzard/ui@$VERSION**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "O workflow de publicação será disparado automaticamente." >> $GITHUB_STEP_SUMMARY
