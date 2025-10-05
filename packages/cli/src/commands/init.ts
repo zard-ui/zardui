@@ -8,9 +8,10 @@ import path from 'path';
 import { z } from 'zod';
 import ora from 'ora';
 
-import { UTILS, POSTCSS_CONFIG, STYLES_WITH_VARIABLES } from '../utils/templates.ts';
+import { getAvailableThemes, getThemeContent, getThemeDisplayName } from '../utils/theme-selector.ts';
 import { installPackages, detectPackageManager } from '../utils/package-manager.ts';
 import { DEFAULT_CONFIG, type Config } from '../utils/config.ts';
+import { UTILS, POSTCSS_CONFIG } from '../utils/templates.ts';
 import { getProjectInfo } from '../utils/get-project-info.ts';
 import { logger, spinner } from '../utils/logger.ts';
 
@@ -94,6 +95,16 @@ async function promptForConfig(cwd: string, projectInfo: any, packageManager: 'n
 
   const options = await prompts([
     {
+      type: 'select',
+      name: 'theme',
+      message: `Choose a ${highlight('theme')} for your components:`,
+      choices: getAvailableThemes().map(theme => ({
+        title: getThemeDisplayName(theme),
+        value: theme,
+      })),
+      initial: 0,
+    },
+    {
       type: 'text',
       name: 'tailwindCss',
       message: `Where is your ${highlight('global CSS')} file?`,
@@ -143,13 +154,14 @@ async function promptForConfig(cwd: string, projectInfo: any, packageManager: 'n
     packageManager,
     tailwind: {
       css: options.tailwindCss,
-      baseColor: 'slate',
+      baseColor: options.theme,
       cssVariables: true,
     },
     aliases: {
       components: options.components,
       utils: options.utils,
     },
+    theme: options.theme,
   });
 
   return config;
@@ -167,6 +179,7 @@ const configSchema = z.object({
     components: z.string(),
     utils: z.string(),
   }),
+  theme: z.string().optional(),
 });
 
 async function installDependencies(cwd: string, config: Config) {
@@ -215,8 +228,10 @@ async function setupTailwind(cwd: string, config: Config) {
   }
 
   const stylesPath = path.join(cwd, config.tailwind.css);
-  await fs.writeFile(stylesPath, STYLES_WITH_VARIABLES, 'utf8');
-  logger.info('Applied ZardUI theme configuration to your CSS file');
+  const selectedTheme = config.theme || 'neutral';
+  const themeContent = getThemeContent(selectedTheme);
+  await fs.writeFile(stylesPath, themeContent, 'utf8');
+  logger.info(`Applied ${getThemeDisplayName(selectedTheme)} theme configuration to your CSS file`);
 }
 
 export async function createUtils(cwd: string, config: Config) {
