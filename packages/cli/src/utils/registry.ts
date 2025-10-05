@@ -34,6 +34,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'sheet',
+    registryDependencies: ['button'],
     files: [
       {
         name: 'sheet.component.ts',
