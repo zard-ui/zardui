@@ -512,7 +512,7 @@ import { ZardDropdownService } from './dropdown.service';
 export class ZardDropdownDirective implements OnInit {
   private elementRef = inject(ElementRef);
   private viewContainerRef = inject(ViewContainerRef);
-  private dropdownService = inject(ZardDropdownService);
+  protected dropdownService = inject(ZardDropdownService);
 
   readonly zDropdownMenu = input<ZardDropdownMenuContentComponent>();
   readonly zTrigger = input<'click' | 'hover'>('click');

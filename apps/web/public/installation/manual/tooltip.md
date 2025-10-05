@@ -18,10 +18,10 @@ import {
   Renderer2,
   signal,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { filter, fromEvent, Subject, take, takeUntil } from 'rxjs';
 import { ComponentPortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 
 import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
 import { mergeClasses } from '../../shared/utils/utils';
@@ -156,7 +156,7 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   readonly elementRef = inject(ElementRef);
 
-  private position = signal<ZardTooltipPositions>('top');
+  protected position = signal<ZardTooltipPositions>('top');
   private trigger = signal<ZardTooltipTriggers>('hover');
   protected text = signal<string>('');
 

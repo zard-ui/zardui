@@ -134,9 +134,9 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
     return mergeClasses(
       sheetVariants({
         zSide: this.config.zSide,
-        zSize
+        zSize,
       }),
-      this.config.zCustomClasses
+      this.config.zCustomClasses,
     );
   });
   public sheetRef?: ZardSheetRef<T>;
@@ -179,8 +179,6 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
   onCloseClick() {
     this.cancelTriggered.emit();
   }
-
-
 
   overlayClickOutside() {
     return fromEvent<MouseEvent>(document, 'click').pipe(
