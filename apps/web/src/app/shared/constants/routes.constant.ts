@@ -17,8 +17,9 @@ const DOCS_PATH = {
     { name: 'Theming', path: '/docs/theming', available: true },
     { name: 'Dark Mode', path: '/docs/dark-mode', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
+    { name: 'Blocks', path: '/docs', available: false },
     { name: 'Figma', path: '/docs/figma', available: true },
-    { name: 'Changelog', path: '/docs', available: false },
+    { name: 'Changelog', path: '/docs/changelog', available: true },
     { name: 'About & Credits', path: '/docs/about', available: true },
   ],
 };
@@ -42,6 +43,7 @@ const COMPONENTS_PATH = {
     { name: 'Command', path: '/docs/components/command', available: true },
     { name: 'Date Picker', path: '/docs/components/date-picker', available: true },
     { name: 'Divider', path: '/docs/components/divider', available: true },
+    { name: 'Empty', path: '/docs/components/empty', available: true },
     { name: 'Form', path: '/docs/components/form', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Input Group', path: '/docs/components/input-group', available: true },

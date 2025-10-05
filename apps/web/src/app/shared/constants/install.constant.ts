@@ -1,6 +1,6 @@
 export interface Step {
   title: string;
-  subtitle: string;
+  subtitle?: string;
   url?: {
     text: string;
     href: string;

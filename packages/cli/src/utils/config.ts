@@ -6,7 +6,8 @@ import { logger } from './logger.js';
 
 const configSchema = z.object({
   $schema: z.string().optional(),
-  style: z.enum(['css']).default('css'), // Only CSS for TailwindV4
+  style: z.enum(['css']).default('css'),
+  packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']).default('npm'),
   tailwind: z
     .object({
       css: z.string().default('src/styles.css'),
@@ -20,12 +21,14 @@ const configSchema = z.object({
       utils: z.string().default('src/app/shared/utils'),
     })
     .default({}),
+  theme: z.string().optional(),
 });
 
 export type Config = z.infer<typeof configSchema>;
 
 export const DEFAULT_CONFIG: Config = {
   style: 'css',
+  packageManager: 'npm',
   tailwind: {
     css: 'src/styles.css',
     baseColor: 'slate',

@@ -26,6 +26,7 @@ import { ZardCommandOptionComponent } from '../command/command-option.component'
 import { ZardCommandComponent, ZardCommandOption } from '../command/command.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 import { comboboxVariants, ZardComboboxVariants } from './combobox.variants';
+import { ZardEmptyComponent } from '../empty/empty.component';
 
 export interface ZardComboboxOption {
   value: string;
@@ -54,6 +55,7 @@ export interface ZardComboboxGroup {
     ZardCommandOptionGroupComponent,
     ZardPopoverDirective,
     ZardPopoverComponent,
+    ZardEmptyComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -92,7 +94,9 @@ export interface ZardComboboxGroup {
 
           <z-command-list id="combobox-listbox" role="listbox">
             @if (emptyText()) {
-              <z-command-empty>{{ emptyText() }}</z-command-empty>
+              <z-command-empty>
+                <z-empty [zDescription]="emptyText()" />
+              </z-command-empty>
             }
 
             @if (groups().length > 0) {

@@ -25,6 +25,17 @@ export class DynamicInstallationService {
       },
     });
 
+    const hasExtraSteps = this.checkIfComponentHasRegisterStep(componentName);
+    if (hasExtraSteps) {
+      steps.push({
+        title: `Register ${componentName} to your project`,
+        file: {
+          path: `/installation/cli/register-${componentName}.md`,
+          lineNumber: true,
+        },
+      });
+    }
+
     return steps;
   }
 
@@ -54,10 +65,26 @@ export class DynamicInstallationService {
       expandable: true,
     });
 
+    const hasExtraSteps = this.checkIfComponentHasRegisterStep(componentName);
+    if (hasExtraSteps) {
+      steps.push({
+        title: `Register ${componentName}  to your project`,
+        file: {
+          path: `/installation/cli/register-${componentName}.md`,
+          lineNumber: true,
+        },
+      });
+    }
+
     return steps;
   }
 
   private checkIfComponentHasDependencies(componentName: string): boolean {
+    const componentsWithDeps = ['toast'];
+    return componentsWithDeps.includes(componentName);
+  }
+
+  private checkIfComponentHasRegisterStep(componentName: string): boolean {
     const componentsWithDeps = ['toast'];
     return componentsWithDeps.includes(componentName);
   }

@@ -34,6 +34,7 @@ import { BADGE } from '@zard/components/badge/demo/badge';
 import { ALERT } from '@zard/components/alert/demo/alert';
 import { TABS } from '@zard/components/tabs/demo/tabs';
 import { MENU } from '@zard/components/menu/demo/menu';
+import { EMPTY } from '@zard/components/empty/demo/empty';
 import { FORM } from '@zard/components/form/demo/form';
 import { CARD } from '@zard/components/card/demo/card';
 import { ComponentType } from '@angular/cdk/overlay';
@@ -69,6 +70,7 @@ export const COMPONENTS: ComponentData[] = [
   DIALOG,
   DIVIDER,
   DROPDOWN,
+  EMPTY,
   FORM,
   INPUT,
   INPUT_GROUP,

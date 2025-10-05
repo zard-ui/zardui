@@ -47,6 +47,19 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'empty',
+    files: [
+      {
+        name: 'empty.component.ts',
+        content: '',
+      },
+      {
+        name: 'empty.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'badge',
     files: [
       {
@@ -60,6 +73,19 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'accordion',
+    files: [
+      {
+        name: 'accordion.component.ts',
+        content: '',
+      },
+      {
+        name: 'accordion-item.component.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'alert',
     files: [
       {
@@ -68,6 +94,32 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'alert.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'alert-dialog',
+    registryDependencies: ['button'],
+    files: [
+      {
+        name: 'alert-dialog.component.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog.component.html',
+        content: '',
+      },
+      {
+        name: 'alert-dialog.service.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog-ref.ts',
+        content: '',
+      },
+      {
+        name: 'alert-dialog.variants.ts',
         content: '',
       },
     ],
@@ -104,10 +156,6 @@ export const registry: ComponentRegistry[] = [
     files: [
       {
         name: 'dialog.component.ts',
-        content: '',
-      },
-      {
-        name: 'dialog.component.html',
         content: '',
       },
       {
@@ -174,6 +222,19 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'input.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'input-group',
+    files: [
+      {
+        name: 'input-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-group.variants.ts',
         content: '',
       },
     ],
@@ -247,19 +308,6 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'tooltip.variants.ts',
-        content: '',
-      },
-    ],
-  },
-  {
-    name: 'accordion',
-    files: [
-      {
-        name: 'accordion.component.ts',
-        content: '',
-      },
-      {
-        name: 'accordion-item.component.ts',
         content: '',
       },
     ],
@@ -342,32 +390,6 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'slider.variants.ts',
-        content: '',
-      },
-    ],
-  },
-  {
-    name: 'alert-dialog',
-    registryDependencies: ['button'],
-    files: [
-      {
-        name: 'alert-dialog.component.ts',
-        content: '',
-      },
-      {
-        name: 'alert-dialog.component.html',
-        content: '',
-      },
-      {
-        name: 'alert-dialog.service.ts',
-        content: '',
-      },
-      {
-        name: 'alert-dialog-ref.ts',
-        content: '',
-      },
-      {
-        name: 'alert-dialog.variants.ts',
         content: '',
       },
     ],
@@ -594,6 +616,35 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'toggle-group.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'menu',
+    files: [
+      {
+        name: 'menu.directive.ts',
+        content: '',
+      },
+      {
+        name: 'menu.variants.ts',
+        content: '',
+      },
+      {
+        name: 'menu-content.directive.ts',
+        content: '',
+      },
+      {
+        name: 'menu-item.directive.ts',
+        content: '',
+      },
+      {
+        name: 'menu-manager.service.ts',
+        content: '',
+      },
+      {
+        name: 'menu.module.ts',
         content: '',
       },
     ],

@@ -3,14 +3,14 @@
 ```angular-ts title="calendar.component.ts" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, input, linkedSignal, model, signal, viewChild, ViewEncapsulation } from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
+import { filter } from 'rxjs';
 
 import { calendarDayButtonVariants, calendarDayVariants, calendarNavVariants, calendarVariants, calendarWeekdayVariants, ZardCalendarVariants } from './calendar.variants';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
 import { ZardButtonComponent } from '../button/button.component';
-import type { ClassValue } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
 import { mergeClasses } from '../../shared/utils/utils';
-import { filter } from 'rxjs';
 
 export interface CalendarDay {
   date: Date;
@@ -55,16 +55,16 @@ export type { ZardCalendarVariants };
         <!-- Month and Year Selectors -->
         <div class="flex items-center space-x-2">
           <!-- Month Select -->
-          <z-select [size]="selectSize()" class="min-w-[120px]" [value]="currentMonthValue()" [label]="currentMonthName()" (selectionChange)="onMonthChange($event)">
+          <z-select [zSize]="selectSize()" class="min-w-[120px]" [zValue]="currentMonthValue()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
             @for (month of months; track $index) {
-              <z-select-item [value]="$index.toString()">{{ month }}</z-select-item>
+              <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
             }
           </z-select>
 
           <!-- Year Select -->
-          <z-select [size]="selectSize()" class="min-w-[80px]" [value]="currentYearValue()" [label]="currentYearValue()" (selectionChange)="onYearChange($event)">
+          <z-select [zSize]="selectSize()" class="min-w-[80px]" [zValue]="currentYearValue()" [zLabel]="currentYearValue()" (zSelectionChange)="onYearChange($event)">
             @for (year of availableYears(); track year) {
-              <z-select-item [value]="year.toString()">{{ year }}</z-select-item>
+              <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
             }
           </z-select>
         </div>

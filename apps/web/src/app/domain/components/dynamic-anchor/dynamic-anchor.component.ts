@@ -1,6 +1,6 @@
+import { HyphenToSpacePipe } from '@zard/shared/pipes/hyphen-to-space.pipe';
 import { TitleCasePipe, ViewportScroller } from '@angular/common';
 import { Component, inject, input, model } from '@angular/core';
-import { HyphenToSpacePipe } from '@zard/shared/pipes/hyphen-to-space.pipe';
 
 export interface NavigationItem {
   id: string;
@@ -23,8 +23,15 @@ export class DynamicAnchorComponent {
 
   activeAnchor = model<string | undefined>();
   navigation = input<NavigationConfig>({ items: [] });
+  onAnchorClick = input<((anchorId: string) => void | Promise<void>) | null>(null);
 
-  scrollToAnchor(anchor: string) {
+  async scrollToAnchor(anchor: string) {
+    const customCallback = this.onAnchorClick();
+    if (customCallback) {
+      await customCallback(anchor);
+      return;
+    }
+
     const anchorElement = document.getElementById(anchor);
 
     if (anchorElement) {
