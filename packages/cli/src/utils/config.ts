@@ -7,6 +7,7 @@ import { logger } from './logger.js';
 const configSchema = z.object({
   $schema: z.string().optional(),
   style: z.enum(['css']).default('css'), // Only CSS for TailwindV4
+  packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']).default('npm'),
   tailwind: z
     .object({
       css: z.string().default('src/styles.css'),
@@ -26,6 +27,7 @@ export type Config = z.infer<typeof configSchema>;
 
 export const DEFAULT_CONFIG: Config = {
   style: 'css',
+  packageManager: 'npm',
   tailwind: {
     css: 'src/styles.css',
     baseColor: 'slate',
