@@ -27,6 +27,7 @@ import { BUTTON } from '@zard/components/button/demo/button';
 import { AVATAR } from '@zard/components/avatar/demo/avatar';
 import { TOAST } from '@zard/components/toast/demo/toast';
 import { TABLE } from '@zard/components/table/demo/table';
+import { SHEET } from '@zard/components/sheet/demo/sheet';
 import { RADIO } from '@zard/components/radio/demo/radio';
 import { INPUT } from '@zard/components/input/demo/input';
 import { BADGE } from '@zard/components/badge/demo/badge';
@@ -82,6 +83,7 @@ export const COMPONENTS: ComponentData[] = [
   RESIZABLE,
   SEGMENTED,
   SELECT,
+  SHEET,
   SLIDER,
   SKELETON,
   SWITCH,

@@ -33,6 +33,32 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'sheet',
+    registryDependencies: ['button'],
+    files: [
+      {
+        name: 'sheet.component.ts',
+        content: '',
+      },
+      {
+        name: 'sheet.variants.ts',
+        content: '',
+      },
+      {
+        name: 'sheet-ref.ts',
+        content: '',
+      },
+      {
+        name: 'sheet.module.ts',
+        content: '',
+      },
+      {
+        name: 'sheet.service.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'card',
     registryDependencies: ['core'],
     files: [

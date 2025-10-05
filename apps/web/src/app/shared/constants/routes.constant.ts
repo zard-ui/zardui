@@ -62,7 +62,7 @@ const COMPONENTS_PATH = {
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
     { name: 'Menu', path: '/docs/components/menu', available: true },
     { name: 'Resizable', path: '/docs/components/resizable', available: true },
-    { name: 'Sheet', path: '/docs/components', available: false },
+    { name: 'Sheet', path: '/docs/components/sheet', available: true },
     { name: 'Sidebar', path: '/docs/components', available: false },
     { name: 'Radio', path: '/docs/components/radio', available: true },
     { name: 'Segmented', path: '/docs/components/segmented', available: true },
