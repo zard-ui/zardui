@@ -1,6 +1,6 @@
 import { detect } from '@antfu/ni';
 
-import { getConfig } from './config.ts';
+import { getConfig } from './config.js';
 
 export async function detectPackageManager(): Promise<'npm' | 'yarn' | 'pnpm' | 'bun'> {
   const userAgent = process.env.npm_config_user_agent || '';

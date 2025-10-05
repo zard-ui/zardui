@@ -1,0 +1,92 @@
+name: Release and Publish
+
+on:
+  push:
+    tags:
+      - 'zard@*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          registry-url: 'https://registry.npmjs.org'
+          cache: 'npm'
+
+      - name: Configure Git
+        run: |
+          git config --global user.email "zardui.adm@gmail.com"
+          git config --global user.name "ZardUI Bot"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build CLI
+        run: npx nx run cli:postbuild
+
+      - name: Extract version from tag
+        id: version_info
+        run: |
+          TAG_NAME="${GITHUB_REF#refs/tags/}"
+          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+
+          # Extract version from tag zard@X.X.X
+          if [[ "$TAG_NAME" == zard@* ]]; then
+            VERSION="${TAG_NAME#zard@}"
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "Invalid tag format. Expected zard@X.X.X" >&2
+            exit 1
+          fi
+
+      - name: Verify package version
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./dist/packages/cli/package.json').version")
+          if [ "$PACKAGE_VERSION" != "${{ steps.version_info.outputs.version }}" ]; then
+            echo "Error: Tag version (${{ steps.version_info.outputs.version }}) does not match package.json version ($PACKAGE_VERSION)"
+            exit 1
+          fi
+
+      - name: Publish CLI to npm
+        run: |
+          cd dist/packages/cli
+          npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_SECRET }}
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version_info.outputs.tag_name }}
+          release_name: ZardUI CLI v${{ steps.version_info.outputs.version }}
+          body: |
+            ## ZardUI CLI v${{ steps.version_info.outputs.version }}
+
+            ### 📦 Published to npm
+
+            **[@ngzard/ui@${{ steps.version_info.outputs.version }}](https://www.npmjs.com/package/@ngzard/ui/v/${{ steps.version_info.outputs.version }})**
+
+            ### 📝 Changelog
+
+            See CHANGELOG.md for more details.
+
+            ### 🚀 Installation
+
+            ```bash
+            npx @ngzard/ui@${{ steps.version_info.outputs.version }} init
+            ```
+          draft: false
+          prerelease: ${{ contains(steps.version_info.outputs.version, 'beta') || contains(steps.version_info.outputs.version, 'alpha') || contains(steps.version_info.outputs.version, 'rc') }}

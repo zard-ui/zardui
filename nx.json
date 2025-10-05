@@ -2,14 +2,29 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "defaultBase": "master",
   "release": {
-    "projects": ["libs/*"],
+    "projects": ["packages/cli"],
+    "releaseTagPattern": "zard@{version}",
     "changelog": {
-      "automaticFromRef": true
+      "automaticFromRef": true,
+      "workspaceChangelog": {
+        "createRelease": "github",
+        "renderOptions": {
+          "authors": true
+        }
+      }
     },
     "version": {
-      "conventionalCommits": true,
-      "fallbackCurrentVersionResolver": "disk",
-      "preserveLocalDependencyProtocols": false
+      "generatorOptions": {
+        "fallbackCurrentVersionResolver": "disk",
+        "currentVersionResolver": "git-tag",
+        "specifierSource": "conventional-commits"
+      },
+      "git": {
+        "commit": true,
+        "commitMessage": "chore(release): zard@{version}",
+        "tag": true,
+        "tagMessage": "zard@{version}"
+      }
     }
   },
   "namedInputs": {

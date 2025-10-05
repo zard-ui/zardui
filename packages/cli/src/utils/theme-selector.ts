@@ -1,4 +1,4 @@
-import * as themes from '../themes/themes';
+import * as themes from '../themes/themes.js';
 
 export function getAvailableThemes(): string[] {
   return themes.availableThemes;
