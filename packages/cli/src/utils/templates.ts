@@ -9,12 +9,19 @@ export function cn(...inputs: ClassValue[]) {
   'merge-classes': `import { twMerge } from 'tailwind-merge';
 import { ClassValue, clsx } from 'clsx';
 
+export type { ClassValue };
+
 export function mergeClasses(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export function transform(value: boolean | string): boolean {
   return typeof value === 'string' ? value === '' : value;
+}
+
+export function generateId(prefix = ''): string {
+  const id = crypto.randomUUID();
+  return prefix ? \`\${prefix}-\${id}\` : id;
 }
 `,
   number: `function clamp(value: number, [min, max]: [number, number]): number {
@@ -33,8 +40,6 @@ export { clamp, roundToStep, convertValueToPercentage };
 `,
 };
 
-// Tailwind v4 doesn't need a config file - everything is configured in CSS
-
 export const POSTCSS_CONFIG = `{
   "plugins": {
     "@tailwindcss/postcss": {}
@@ -43,6 +48,7 @@ export const POSTCSS_CONFIG = `{
 `;
 
 export const STYLES_WITH_VARIABLES = `@import 'tailwindcss';
+@import 'lucide-static/font/lucide.css';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));

@@ -1,14 +1,14 @@
 import { existsSync, promises as fs } from 'fs';
 import { Command } from 'commander';
 import prompts from 'prompts';
-import { execa } from 'execa';
 import path from 'path';
 
-import { ComponentRegistry, getAllComponentNames, getRegistryComponent } from '../utils/registry.js';
-import { Config, getConfig, resolveConfigPaths } from '../utils/config.js';
-import { fetchComponentFromGithub } from '../utils/fetch-component.js';
-import { getProjectInfo } from '../utils/get-project-info.js';
-import { logger, spinner } from '../utils/logger.js';
+import { ComponentRegistry, getAllComponentNames, getRegistryComponent } from '../utils/registry.ts';
+import { Config, getConfig, resolveConfigPaths } from '../utils/config.ts';
+import { fetchComponentFromGithub } from '../utils/fetch-component.ts';
+import { installPackages } from '../utils/package-manager.ts';
+import { getProjectInfo } from '../utils/get-project-info.ts';
+import { logger, spinner } from '../utils/logger.ts';
 
 export const add = new Command()
   .name('add')
@@ -111,7 +111,7 @@ export const add = new Command()
 
     if (dependenciesToInstall.size > 0) {
       const depsSpinner = spinner('Installing dependencies...').start();
-      await execa('npm', ['install', ...Array.from(dependenciesToInstall)], { cwd });
+      await installPackages(Array.from(dependenciesToInstall), cwd, config.packageManager, false);
       depsSpinner.succeed();
     }
 

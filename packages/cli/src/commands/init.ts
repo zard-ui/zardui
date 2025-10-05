@@ -2,17 +2,17 @@ import * as commentJson from 'comment-json';
 import { Command } from 'commander';
 import { existsSync } from 'fs';
 import prompts from 'prompts';
-import { execa } from 'execa';
 import fs from 'fs-extra';
 import chalk from 'chalk';
 import path from 'path';
 import { z } from 'zod';
 import ora from 'ora';
 
-import { UTILS, POSTCSS_CONFIG, STYLES_WITH_VARIABLES } from '../utils/templates.js';
-import { DEFAULT_CONFIG, type Config } from '../utils/config.js';
-import { getProjectInfo } from '../utils/get-project-info.js';
-import { logger, spinner } from '../utils/logger.js';
+import { UTILS, POSTCSS_CONFIG, STYLES_WITH_VARIABLES } from '../utils/templates.ts';
+import { installPackages, detectPackageManager } from '../utils/package-manager.ts';
+import { DEFAULT_CONFIG, type Config } from '../utils/config.ts';
+import { getProjectInfo } from '../utils/get-project-info.ts';
+import { logger, spinner } from '../utils/logger.ts';
 
 export const init = new Command()
   .name('init')
@@ -38,7 +38,11 @@ export const init = new Command()
     logger.info('Initializing ZardUI...');
     logger.break();
 
-    const config = await promptForConfig(cwd, projectInfo);
+    const detectedPm = await detectPackageManager();
+    logger.info(`Detected package manager: ${chalk.cyan(detectedPm)}`);
+    logger.break();
+
+    const config = await promptForConfig(cwd, projectInfo, detectedPm);
 
     if (!options.yes) {
       const { proceed } = await prompts({
@@ -78,12 +82,14 @@ export const init = new Command()
     logger.break();
     logger.success('ZardUI has been initialized successfully!');
     logger.break();
+    const runCommand = config.packageManager === 'npm' ? 'npx' : config.packageManager === 'yarn' ? 'yarn dlx' : `${config.packageManager}x`;
+
     logger.info('You can now add components using:');
-    logger.info(chalk.bold('  npx @ngzard/ui add [component]'));
+    logger.info(chalk.bold(`  ${runCommand} @ngzard/ui add [component]`));
     logger.break();
   });
 
-async function promptForConfig(cwd: string, projectInfo: any): Promise<Config> {
+async function promptForConfig(cwd: string, projectInfo: any, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun'): Promise<Config> {
   const highlight = (text: string) => chalk.cyan(text);
 
   const options = await prompts([
@@ -107,7 +113,6 @@ async function promptForConfig(cwd: string, projectInfo: any): Promise<Config> {
     },
   ]);
 
-  // Verify CSS file exists
   const cssPath = path.join(cwd, options.tailwindCss);
   if (!existsSync(cssPath)) {
     logger.error(`CSS file not found at: ${options.tailwindCss}`);
@@ -115,7 +120,6 @@ async function promptForConfig(cwd: string, projectInfo: any): Promise<Config> {
     process.exit(1);
   }
 
-  // Check if CSS file has existing content
   const existingContent = await fs.readFile(cssPath, 'utf8');
   let shouldOverwrite = false;
 
@@ -135,11 +139,12 @@ async function promptForConfig(cwd: string, projectInfo: any): Promise<Config> {
   }
 
   const config = configSchema.parse({
-    style: 'css', // Fixed to CSS for TailwindV4
+    style: 'css',
+    packageManager,
     tailwind: {
       css: options.tailwindCss,
       baseColor: 'slate',
-      cssVariables: true, // Always true for ZardUI theme
+      cssVariables: true,
     },
     aliases: {
       components: options.components,
@@ -151,7 +156,8 @@ async function promptForConfig(cwd: string, projectInfo: any): Promise<Config> {
 }
 
 const configSchema = z.object({
-  style: z.enum(['css']), // Only CSS for TailwindV4
+  style: z.enum(['css']),
+  packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']),
   tailwind: z.object({
     css: z.string(),
     baseColor: z.string(),
@@ -166,7 +172,6 @@ const configSchema = z.object({
 async function installDependencies(cwd: string, config: Config) {
   const projectInfo = await getProjectInfo(cwd);
 
-  // Determine CDK version based on Angular version
   let cdkVersion = '@angular/cdk';
   if (projectInfo.angularVersion) {
     const majorVersion = parseInt(projectInfo.angularVersion.split('.')[0]);
@@ -179,33 +184,29 @@ async function installDependencies(cwd: string, config: Config) {
     }
   }
 
-  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-angular'];
-
+  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-static'];
   const devDeps = ['tailwindcss', '@tailwindcss/postcss', 'postcss', 'tailwindcss-animate'];
 
   try {
-    await execa('npm', ['install', ...deps], { cwd });
+    await installPackages(deps, cwd, config.packageManager, false);
   } catch (error) {
-    // If installation fails due to peer deps, retry with --legacy-peer-deps
     logger.warn('Installation failed, retrying with --legacy-peer-deps...');
-    await execa('npm', ['install', '--legacy-peer-deps', ...deps], { cwd });
+    await installPackages(deps, cwd, config.packageManager, false, true);
   }
 
   try {
-    await execa('npm', ['install', '-D', ...devDeps], { cwd });
+    await installPackages(devDeps, cwd, config.packageManager, true);
   } catch (error) {
-    await execa('npm', ['install', '-D', '--legacy-peer-deps', ...devDeps], { cwd });
+    await installPackages(devDeps, cwd, config.packageManager, true, true);
   }
 }
 
 async function setupTailwind(cwd: string, config: Config) {
-  // Create .postcssrc.json for Tailwind v4
   const postcssConfigPath = path.join(cwd, '.postcssrc.json');
 
   if (!existsSync(postcssConfigPath)) {
     await fs.writeFile(postcssConfigPath, POSTCSS_CONFIG, 'utf8');
   } else {
-    // Check if existing config needs updating for Tailwind v4
     const existingConfig = await fs.readFile(postcssConfigPath, 'utf8');
     if (!existingConfig.includes('@tailwindcss/postcss')) {
       logger.info('Updating existing .postcssrc.json for Tailwind CSS v4');
@@ -213,7 +214,6 @@ async function setupTailwind(cwd: string, config: Config) {
     }
   }
 
-  // Always apply ZardUI theme configuration to styles.css
   const stylesPath = path.join(cwd, config.tailwind.css);
   await fs.writeFile(stylesPath, STYLES_WITH_VARIABLES, 'utf8');
   logger.info('Applied ZardUI theme configuration to your CSS file');
@@ -244,39 +244,31 @@ async function updateTsConfig(cwd: string, config: Config) {
   }
 
   try {
-    // Read the file as text to preserve comments
     const tsconfigContent = await fs.readFile(tsconfigPath, 'utf8');
 
-    // Parse JSON with comments
     const tsconfig = commentJson.parse(tsconfigContent) as any;
 
-    // Ensure compilerOptions exists
     if (!tsconfig.compilerOptions) {
       tsconfig.compilerOptions = {};
     }
 
-    // Add baseUrl if not present
     if (!tsconfig.compilerOptions.baseUrl) {
       tsconfig.compilerOptions.baseUrl = './';
     }
 
-    // Ensure paths exists
     if (!tsconfig.compilerOptions.paths) {
       tsconfig.compilerOptions.paths = {};
     }
 
-    // Add or update path mappings - simplified to use @shared/*
     const pathMappings = {
       '@shared/*': ['src/app/shared/*'],
     };
 
-    // Merge with existing paths
     tsconfig.compilerOptions.paths = {
       ...tsconfig.compilerOptions.paths,
       ...pathMappings,
     };
 
-    // Write back the updated tsconfig preserving comments
     const updatedContent = commentJson.stringify(tsconfig, null, 2);
     await fs.writeFile(tsconfigPath, updatedContent, 'utf8');
   } catch (error) {
