@@ -1,14 +1,14 @@
 import { existsSync, promises as fs } from 'fs';
 import { Command } from 'commander';
-import prompts from 'prompts';
-import path from 'path';
+import * as prompts from 'prompts';
+import * as path from 'path';
 
-import { ComponentRegistry, getAllComponentNames, getRegistryComponent } from '../utils/registry.ts';
-import { Config, getConfig, resolveConfigPaths } from '../utils/config.ts';
-import { fetchComponentFromGithub } from '../utils/fetch-component.ts';
-import { installPackages } from '../utils/package-manager.ts';
-import { getProjectInfo } from '../utils/get-project-info.ts';
-import { logger, spinner } from '../utils/logger.ts';
+import { ComponentRegistry, getAllComponentNames, getRegistryComponent } from '../utils/registry.js';
+import { Config, getConfig, resolveConfigPaths } from '../utils/config.js';
+import { fetchComponentFromGithub } from '../utils/fetch-component.js';
+import { installPackages } from '../utils/package-manager.js';
+import { getProjectInfo } from '../utils/get-project-info.js';
+import { logger, spinner } from '../utils/logger.js';
 
 export const add = new Command()
   .name('add')

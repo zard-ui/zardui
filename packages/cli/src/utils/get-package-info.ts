@@ -1,7 +1,7 @@
-import { APP_VERSION } from '@/constants/app.constants';
+import { APP_VERSION } from '../constants/app.constants.js';
 import { fileURLToPath } from 'url';
-import fs from 'fs-extra';
-import path from 'path';
+import * as fs from 'fs-extra';
+import * as path from 'path';
 
 type PackageJson = {
   name: string;
