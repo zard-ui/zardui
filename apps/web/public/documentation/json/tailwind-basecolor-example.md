@@ -1,7 +1,7 @@
 ```json
 {
   "tailwind": {
-    "baseColor": "slate"
+    "baseColor": "gray" | "neutral" | "slate" | "stone" | "zinc"
   }
 }
 ```

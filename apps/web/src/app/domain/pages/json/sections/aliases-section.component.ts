@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { CalloutComponent } from '@zard/domain/components/callout/callout.component';
+
+import { MarkdownRendererComponent } from '../../../components/render/markdown-renderer.component';
 
 @Component({
   selector: 'z-json-aliases-section',
   standalone: true,
-  imports: [MarkdownRendererComponent, CalloutComponent],
+  imports: [MarkdownRendererComponent],
   template: `
     <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="aliases" id="aliases">
       <div class="flex flex-col gap-4 sm:gap-6">
@@ -19,11 +19,6 @@ import { CalloutComponent } from '@zard/domain/components/callout/callout.compon
             Path aliases have to be set up in your <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">tsconfig.json</code> file.
           </p>
         </div>
-
-        <z-callout title="Important" icon="!" variant="warning">
-          If you're using the <code class="bg-muted px-1.5 py-0.5 rounded text-xs">src</code> directory, make sure it is included under
-          <code class="bg-muted px-1.5 py-0.5 rounded text-xs">paths</code> in your <code class="bg-muted px-1.5 py-0.5 rounded text-xs">tsconfig.json</code> file.
-        </z-callout>
       </div>
 
       <div class="flex flex-col gap-8 sm:gap-10">

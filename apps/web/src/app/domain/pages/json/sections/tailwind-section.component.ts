@@ -1,10 +1,12 @@
 import { Component } from '@angular/core';
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
+import { RouterLink } from '@angular/router';
+
+import { MarkdownRendererComponent } from '../../../components/render/markdown-renderer.component';
 
 @Component({
   selector: 'z-json-tailwind-section',
   standalone: true,
-  imports: [MarkdownRendererComponent],
+  imports: [MarkdownRendererComponent, RouterLink],
   template: `
     <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="tailwind" id="tailwind">
       <div class="flex flex-col gap-4 sm:gap-6">
@@ -28,17 +30,12 @@ import { MarkdownRendererComponent } from '@zard/domain/components/render/markdo
           <h3 class="text-lg sm:text-xl lg:text-2xl font-medium">tailwind.baseColor</h3>
           <div class="flex flex-col gap-3">
             <p class="text-sm sm:text-base text-muted-foreground leading-relaxed">
-              This is used to generate the default color palette for your components. <strong>This cannot be changed after initialization.</strong>
+              This is used to generate the default color palette for your components. <strong>This cannot be changed after initialization.</strong> (but if u want u can change
+              manually, all the themes exist into the <a class="text-blue-500" routerLink="/docs/theming">theming page</a>)
             </p>
             <p class="text-sm sm:text-base text-muted-foreground leading-relaxed">Currently supported base colors:</p>
           </div>
           <z-markdown-renderer markdownUrl="documentation/json/tailwind-basecolor-example.md"></z-markdown-renderer>
-          <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
-            <p class="text-xs sm:text-sm text-muted-foreground">
-              <strong>Note</strong>: Zard/ui currently only supports <code class="bg-muted px-1.5 py-0.5 rounded text-xs">slate</code> as the base color. More colors will be added
-              in future releases.
-            </p>
-          </div>
         </div>
 
         <div id="tailwind-cssvariables" class="scroll-mt-20 flex flex-col gap-4">

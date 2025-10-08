@@ -1,9 +1,10 @@
 ```json title="components.json"
 {
   "style": "css",
+  "packageManager": "npm",
   "tailwind": {
     "css": "src/styles.css",
-    "baseColor": "slate",
+    "baseColor": "neutral",
     "cssVariables": true
   },
   "aliases": {
