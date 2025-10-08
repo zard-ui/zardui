@@ -10,7 +10,6 @@
   "aliases": {
     "components": "src/app/shared/components",
     "utils": "src/app/shared/utils"
-  },
-  "theme": "neutral"
+  }
 }
 ```

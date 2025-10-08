@@ -161,7 +161,6 @@ async function promptForConfig(cwd: string, projectInfo: any, packageManager: 'n
       components: options.components,
       utils: options.utils,
     },
-    theme: options.theme,
   });
 
   return config;
@@ -179,7 +178,6 @@ const configSchema = z.object({
     components: z.string(),
     utils: z.string(),
   }),
-  theme: z.string().optional(),
 });
 
 async function installDependencies(cwd: string, config: Config) {
@@ -228,7 +226,7 @@ async function setupTailwind(cwd: string, config: Config) {
   }
 
   const stylesPath = path.join(cwd, config.tailwind.css);
-  const selectedTheme = config.theme || 'neutral';
+  const selectedTheme = config.tailwind.baseColor;
   const themeContent = getThemeContent(selectedTheme);
   await fs.writeFile(stylesPath, themeContent, 'utf8');
   logger.info(`Applied ${getThemeDisplayName(selectedTheme)} theme configuration to your CSS file`);
