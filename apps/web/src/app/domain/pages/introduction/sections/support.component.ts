@@ -23,7 +23,7 @@ import { Component } from '@angular/core';
                 <img src="/icons/github.svg" alt="github icon" class="invert dark:invert-0 hidden md:block h-4 w-4" />
                 Star on GitHub
               </a>
-              <a routerLink="/sponsors" z-button zType="outline">Be a Sponsor </a>
+              <a z-button zType="outline" target="_blank" href="https://github.com/sponsors/zard-ui">Be a Sponsor </a>
             </div>
           </div>
         </div>
