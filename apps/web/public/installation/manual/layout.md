@@ -1,6 +1,6 @@
 
 
-```angular-ts title="layout.component.ts" copyButton showLineNumbers
+```angular-ts title="layout.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, contentChildren, input, ViewEncapsulation } from '@angular/core';
@@ -51,7 +51,7 @@ export class LayoutComponent {
 
 
 
-```angular-ts title="layout.variants.ts" copyButton showLineNumbers
+```angular-ts title="layout.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 // Layout Variants
@@ -105,7 +105,7 @@ export const sidebarGroupLabelVariants = cva(
 
 
 
-```angular-ts title="content.component.ts" copyButton showLineNumbers
+```angular-ts title="content.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -138,7 +138,7 @@ export class ContentComponent {
 
 
 
-```angular-ts title="footer.component.ts" copyButton showLineNumbers
+```angular-ts title="footer.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -169,7 +169,7 @@ export class FooterComponent {
 
 
 
-```angular-ts title="header.component.ts" copyButton showLineNumbers
+```angular-ts title="header.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -200,7 +200,7 @@ export class HeaderComponent {
 
 
 
-```angular-ts title="layout.module.ts" copyButton showLineNumbers
+```angular-ts title="layout.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
 import { ContentComponent } from './content.component';
@@ -221,7 +221,7 @@ export class LayoutModule {}
 
 
 
-```angular-ts title="sidebar.component.ts" copyButton showLineNumbers
+```angular-ts title="sidebar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, TemplateRef, ViewEncapsulation } from '@angular/core';

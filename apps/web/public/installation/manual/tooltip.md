@@ -1,4 +1,6 @@
-```angular-ts title="tooltip.ts" copyButton showLineNumbers
+
+
+```angular-ts title="tooltip.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { filter, fromEvent, Subject, take, takeUntil } from 'rxjs';
 
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
@@ -204,6 +206,8 @@ export class ZardTooltipModule {}
 
 ```
 
+
+
 ```angular-ts title="tooltip.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -213,6 +217,8 @@ export const tooltipVariants = cva(
 export type ZardTooltipVariants = VariantProps<typeof tooltipVariants>;
 
 ```
+
+
 
 ```angular-ts title="tooltip-positions.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ConnectedPosition } from '@angular/cdk/overlay';
@@ -251,3 +257,4 @@ export const TOOLTIP_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
 export type ZardTooltipPositions = 'top' | 'bottom' | 'left' | 'right';
 
 ```
+
