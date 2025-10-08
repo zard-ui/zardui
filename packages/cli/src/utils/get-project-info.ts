@@ -1,6 +1,20 @@
+import { access, readFile } from 'node:fs/promises';
 import * as path from 'path';
-import * as fs from 'fs-extra';
 import { z } from 'zod';
+
+async function pathExists(filePath: string): Promise<boolean> {
+  try {
+    await access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function readJson(filePath: string): Promise<any> {
+  const content = await readFile(filePath, 'utf-8');
+  return JSON.parse(content);
+}
 
 const packageJsonSchema = z.object({
   name: z.string(),
@@ -20,11 +34,11 @@ type ProjectInfo = {
 export async function getProjectInfo(cwd: string): Promise<ProjectInfo> {
   const packageJsonPath = path.join(cwd, 'package.json');
 
-  if (!(await fs.pathExists(packageJsonPath))) {
+  if (!(await pathExists(packageJsonPath))) {
     throw new Error('No package.json found. Please run this command in your project root.');
   }
 
-  const packageJson = packageJsonSchema.parse(await fs.readJson(packageJsonPath));
+  const packageJson = packageJsonSchema.parse(await readJson(packageJsonPath));
   const deps = { ...packageJson.dependencies, ...packageJson.devDependencies };
 
   const hasAngular = !!deps['@angular/core'];

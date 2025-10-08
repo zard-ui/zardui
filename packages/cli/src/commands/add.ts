@@ -1,6 +1,6 @@
 import { existsSync, promises as fs } from 'fs';
 import { Command } from 'commander';
-import * as prompts from 'prompts';
+import prompts from 'prompts';
 import * as path from 'path';
 
 import { ComponentRegistry, getAllComponentNames, getRegistryComponent } from '../utils/registry.js';

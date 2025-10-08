@@ -7,12 +7,16 @@
     "start": "concurrently \"npm run watch:files\" \"npm run generate:installation\" \"npx nx run web:serve --configuration=local --port=4222  \"",
     "prepare": "husky",
     "build": "npx nx run web:build --configuration=production",
-    "build:cli": "npx nx run cli:build --configuration=production",
+    "build:cli": "npx nx run cli:build",
+    "build:cli:dev": "npx nx run cli:build:dev",
+    "dev:cli": "npx nx run cli:build:dev",
     "test": "nx run-many --target=test --p=libs/*",
     "test:watch": "nx run-many --target=test --p=libs/* --watch",
     "watch:files": "npx tsx scripts/generate-files.cts",
     "convert:demos": "npx tsx scripts/convert-demos-to-md.cts",
-    "generate:installation": "npx tsx scripts/generate-installation-guides.cts"
+    "generate:installation": "npx tsx scripts/generate-installation-guides.cts",
+    "release:cli": "npx nx release --projects=packages/cli",
+    "publish:cli": "npx nx run cli:publish"
   },
   "engines": {
     "node": "22 || 20"
