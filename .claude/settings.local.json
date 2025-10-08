@@ -75,7 +75,8 @@
       "Bash(ngzard:*)",
       "Bash(zardev:*)",
       "Bash(npm unlink:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "WebSearch"
     ],
     "defaultMode": "acceptEdits"
   },

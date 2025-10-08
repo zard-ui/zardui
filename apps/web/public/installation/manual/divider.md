@@ -64,7 +64,7 @@ export const dividerVariants = cva('bg-border block', {
     {
       zOrientation: 'horizontal',
       zSpacing: 'sm',
-      class: 'my-1',
+      class: 'my-2',
     },
     {
       zOrientation: 'horizontal',
@@ -79,7 +79,7 @@ export const dividerVariants = cva('bg-border block', {
     {
       zOrientation: 'vertical',
       zSpacing: 'sm',
-      class: 'mx-1',
+      class: 'mx-2',
     },
     {
       zOrientation: 'vertical',
