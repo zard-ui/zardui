@@ -1,7 +1,7 @@
-import { Component, input, signal } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { Step } from '@zard/shared/constants/install.constant';
 
+import { Step } from '../../../shared/constants/install.constant';
 import { MarkdownRendererComponent } from '../render/markdown-renderer.component';
 
 @Component({
@@ -23,28 +23,7 @@ import { MarkdownRendererComponent } from '../render/markdown-renderer.component
               }
             </p>
             @if (stepProps()?.file?.path) {
-              @if (stepProps()?.expandable) {
-                <div class="space-y-3">
-                  <div class="flex items-center justify-between py-2">
-                    <button
-                      z-button
-                      zType="outline"
-                      class="flex items-center text-sm font-medium transition-colors hover:text-primary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                      (click)="toggleExpanded()"
-                    >
-                      <i [class]="'icon-' + (isExpanded() ? 'chevron-down' : 'chevron-right') + ' w-4 h-4 mr-1 transition-transform'"></i>
-                      {{ isExpanded() ? 'Hide' : 'Show' }} {{ getExpandButtonText() }}
-                    </button>
-                  </div>
-                  @if (isExpanded()) {
-                    <div class="overflow-hidden transition-all duration-200 ease-in-out animate-in slide-in-from-top-1">
-                      <z-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></z-markdown-renderer>
-                    </div>
-                  }
-                </div>
-              } @else {
-                <z-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></z-markdown-renderer>
-              }
+              <z-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></z-markdown-renderer>
             }
           </section>
         </main>
@@ -57,23 +36,4 @@ import { MarkdownRendererComponent } from '../render/markdown-renderer.component
 export class StepComponent {
   readonly stepProps = input<Step>();
   readonly position = input<number>();
-  readonly isExpanded = signal(false);
-
-  toggleExpanded() {
-    this.isExpanded.update(value => !value);
-  }
-
-  getExpandButtonText(): string {
-    const title = this.stepProps()?.title?.toLowerCase() || '';
-
-    if (title.includes('component') || title.includes('files')) {
-      return 'component files';
-    } else if (title.includes('code')) {
-      return 'code';
-    } else if (title.includes('util')) {
-      return 'utility code';
-    }
-
-    return 'code';
-  }
 }

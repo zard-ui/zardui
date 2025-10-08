@@ -1,6 +1,6 @@
 
 
-```angular-ts title="badge.component.ts" copyButton showLineNumbers
+```angular-ts title="badge.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -32,7 +32,7 @@ export class ZardBadgeComponent {
 
 
 
-```angular-ts title="badge.variants.ts" copyButton showLineNumbers
+```angular-ts title="badge.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const badgeVariants = cva(

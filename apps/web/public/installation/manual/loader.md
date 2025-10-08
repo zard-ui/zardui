@@ -1,6 +1,6 @@
 
 
-```angular-ts title="loader.component.ts" copyButton showLineNumbers
+```angular-ts title="loader.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
@@ -61,7 +61,7 @@ export class ZardLoaderComponent {
 
 
 
-```angular-ts title="loader.variants.ts" copyButton showLineNumbers
+```angular-ts title="loader.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const loaderVariants = cva('', {

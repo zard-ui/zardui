@@ -1,6 +1,6 @@
 
 
-```angular-ts title="select.component.ts" copyButton showLineNumbers
+```angular-ts title="select.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   AfterContentInit,
   ChangeDetectionStrategy,
@@ -457,7 +457,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
 
 
-```angular-ts title="select.variants.ts" copyButton showLineNumbers
+```angular-ts title="select.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const selectTriggerVariants = cva(
@@ -492,7 +492,7 @@ export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 
 
-```angular-ts title="select-item.component.ts" copyButton showLineNumbers
+```angular-ts title="select-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input, linkedSignal } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';

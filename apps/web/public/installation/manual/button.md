@@ -1,6 +1,6 @@
 
 
-```angular-ts title="button.component.ts" copyButton showLineNumbers
+```angular-ts title="button.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
@@ -55,7 +55,7 @@ export class ZardButtonComponent {
 
 
 
-```angular-ts title="button.variants.ts" copyButton showLineNumbers
+```angular-ts title="button.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const buttonVariants = cva(

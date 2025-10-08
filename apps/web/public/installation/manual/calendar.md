@@ -1,6 +1,6 @@
 
 
-```angular-ts title="calendar.component.ts" copyButton showLineNumbers
+```angular-ts title="calendar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, input, linkedSignal, model, signal, viewChild, ViewEncapsulation } from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
@@ -597,7 +597,7 @@ export class ZardCalendarComponent {
 
 
 
-```angular-ts title="calendar.variants.ts" copyButton showLineNumbers
+```angular-ts title="calendar.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const calendarVariants = cva('bg-background p-3 w-fit rounded-lg border', {

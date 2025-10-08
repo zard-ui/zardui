@@ -1,6 +1,6 @@
 
 
-```angular-ts title="dropdown.component.ts" copyButton showLineNumbers
+```angular-ts title="dropdown.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import {
@@ -285,7 +285,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 
 
 
-```angular-ts title="dropdown.variants.ts" copyButton showLineNumbers
+```angular-ts title="dropdown.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const dropdownContentVariants = cva('bg-popover text-popover-foreground z-50 min-w-[200px] overflow-y-auto rounded-md border py-1 px-1 shadow-md');
@@ -331,7 +331,7 @@ export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariant
 
 
 
-```angular-ts title="dropdown-item.component.ts" copyButton showLineNumbers
+```angular-ts title="dropdown-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
@@ -393,7 +393,7 @@ export class ZardDropdownMenuItemComponent {
 
 
 
-```angular-ts title="dropdown-label.component.ts" copyButton showLineNumbers
+```angular-ts title="dropdown-label.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -430,7 +430,7 @@ export class ZardDropdownMenuLabelComponent {
 
 
 
-```angular-ts title="dropdown-menu-content.component.ts" copyButton showLineNumbers
+```angular-ts title="dropdown-menu-content.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { Component, computed, input, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
@@ -463,7 +463,7 @@ export class ZardDropdownMenuContentComponent {
 
 
 
-```angular-ts title="dropdown-shortcut.component.ts" copyButton showLineNumbers
+```angular-ts title="dropdown-shortcut.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -491,7 +491,7 @@ export class ZardDropdownMenuShortcutComponent {
 
 
 
-```angular-ts title="dropdown-trigger.directive.ts" copyButton showLineNumbers
+```angular-ts title="dropdown-trigger.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Directive, ElementRef, HostListener, inject, input, OnInit, ViewContainerRef } from '@angular/core';
 
 import { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
@@ -598,7 +598,7 @@ export class ZardDropdownDirective implements OnInit {
 
 
 
-```angular-ts title="dropdown.module.ts" copyButton showLineNumbers
+```angular-ts title="dropdown.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
 
@@ -628,7 +628,7 @@ export class ZardDropdownModule {}
 
 
 
-```angular-ts title="dropdown.service.ts" copyButton showLineNumbers
+```angular-ts title="dropdown.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { ElementRef, inject, Injectable, PLATFORM_ID, signal, TemplateRef, ViewContainerRef } from '@angular/core';

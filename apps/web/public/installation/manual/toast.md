@@ -1,6 +1,6 @@
 
 
-```angular-ts title="toast.component.ts" copyButton showLineNumbers
+```angular-ts title="toast.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { NgxSonnerToaster } from 'ngx-sonner';
 import type { ClassValue } from 'clsx';
@@ -50,7 +50,7 @@ export class ZardToastComponent {
 
 
 
-```angular-ts title="toast.variants.ts" copyButton showLineNumbers
+```angular-ts title="toast.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const toastVariants = cva('group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg', {

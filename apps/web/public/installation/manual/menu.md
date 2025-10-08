@@ -1,6 +1,6 @@
 
 
-```angular-ts title="menu.directive.ts" copyButton showLineNumbers
+```angular-ts title="menu.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
 import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
@@ -175,7 +175,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
 
 
-```angular-ts title="menu.variants.ts" copyButton showLineNumbers
+```angular-ts title="menu.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const menuContentVariants = cva(
@@ -204,7 +204,7 @@ export type ZardMenuItemVariants = VariantProps<typeof menuItemVariants>;
 
 
 
-```angular-ts title="menu-content.directive.ts" copyButton showLineNumbers
+```angular-ts title="menu-content.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { CdkMenu } from '@angular/cdk/menu';
@@ -231,7 +231,7 @@ export class ZardMenuContentDirective {
 
 
 
-```angular-ts title="menu-item.directive.ts" copyButton showLineNumbers
+```angular-ts title="menu-item.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { BooleanInput } from '@angular/cdk/coercion';
@@ -322,7 +322,7 @@ export class ZardMenuItemDirective {
 
 
 
-```angular-ts title="menu-manager.service.ts" copyButton showLineNumbers
+```angular-ts title="menu-manager.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Injectable } from '@angular/core';
 
 import { ZardMenuDirective } from './menu.directive';
@@ -358,7 +358,7 @@ export class ZardMenuManagerService {
 
 
 
-```angular-ts title="menu.module.ts" copyButton showLineNumbers
+```angular-ts title="menu.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
 import { ZardMenuContentDirective } from './menu-content.directive';

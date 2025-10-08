@@ -1,6 +1,6 @@
 
 
-```angular-ts title="input.directive.ts" copyButton showLineNumbers
+```angular-ts title="input.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { computed, Directive, ElementRef, inject, input } from '@angular/core';
@@ -35,7 +35,7 @@ export class ZardInputDirective {
 
 
 
-```angular-ts title="input.variants.ts" copyButton showLineNumbers
+```angular-ts title="input.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export type zInputIcon = 'email' | 'password' | 'text';

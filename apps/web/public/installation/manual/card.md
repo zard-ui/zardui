@@ -1,6 +1,6 @@
 
 
-```angular-ts title="card.component.ts" copyButton showLineNumbers
+```angular-ts title="card.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
@@ -54,7 +54,7 @@ export class ZardCardComponent {
 
 
 
-```angular-ts title="card.variants.ts" copyButton showLineNumbers
+```angular-ts title="card.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const cardVariants = cva('block rounded-lg border bg-card text-card-foreground shadow-sm w-full p-6', {
@@ -76,7 +76,7 @@ export type ZardCardBodyVariants = VariantProps<typeof cardBodyVariants>;
 
 
 
-```angular-ts title="index.ts" copyButton showLineNumbers
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export * from './card.component';
 
 ```

@@ -1,6 +1,6 @@
 
 
-```angular-ts title="alert.component.ts" copyButton showLineNumbers
+```angular-ts title="alert.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
@@ -56,7 +56,7 @@ export class ZardAlertComponent {
 
 
 
-```angular-ts title="alert.variants.ts" copyButton showLineNumbers
+```angular-ts title="alert.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const alertVariants = cva('relative flex gap-2 w-full rounded-lg p-4', {

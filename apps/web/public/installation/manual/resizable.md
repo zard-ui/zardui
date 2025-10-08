@@ -1,6 +1,6 @@
 
 
-```angular-ts title="resizable.component.ts" copyButton showLineNumbers
+```angular-ts title="resizable.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import {
@@ -283,7 +283,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 
 
 
-```angular-ts title="resizable.variants.ts" copyButton showLineNumbers
+```angular-ts title="resizable.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const resizableVariants = cva('flex h-full w-full data-[layout=vertical]:flex-col overflow-hidden', {
@@ -350,7 +350,7 @@ export type ZardResizableHandleVariants = VariantProps<typeof resizableHandleVar
 
 
 
-```angular-ts title="index.ts" copyButton showLineNumbers
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export * from './resizable.component';
 export * from './resizable-panel.component';
 export * from './resizable-handle.component';
@@ -360,7 +360,7 @@ export * from './resizable.variants';
 
 
 
-```angular-ts title="resizable-handle.component.ts" copyButton showLineNumbers
+```angular-ts title="resizable-handle.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
@@ -554,7 +554,7 @@ export class ZardResizableHandleComponent {
 
 
 
-```angular-ts title="resizable-panel.component.ts" copyButton showLineNumbers
+```angular-ts title="resizable-panel.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
