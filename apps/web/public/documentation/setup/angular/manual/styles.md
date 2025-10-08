@@ -1,4 +1,4 @@
-```css title="src/styles.css" showLineNumbers copyButton
+```css title="src/styles.css"  expandable="true" showLineNumbers copyButton
 @import 'tailwindcss';
 @import 'lucide-static/font/lucide.css';
 @plugin "tailwindcss-animate";
