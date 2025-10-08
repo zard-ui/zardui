@@ -3,19 +3,11 @@
 ```angular-ts title="layout.component.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
-import {
-  AfterContentInit,
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  contentChildren,
-  ElementRef,
-  input,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, contentChildren, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { layoutVariants, LayoutVariants } from './layout.variants';
+import { SidebarComponent } from './sidebar.component';
 
 @Component({
   selector: 'z-layout',
@@ -23,39 +15,26 @@ import { layoutVariants, LayoutVariants } from './layout.variants';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `
-    <div [class]="classes()">
-      <ng-content></ng-content>
-    </div>
-  `,
+  host: {
+    '[class]': 'classes()',
+  },
+  template: `<ng-content></ng-content>`,
 })
-export class LayoutComponent implements AfterContentInit {
+export class LayoutComponent {
   readonly class = input<ClassValue>('');
   readonly zDirection = input<LayoutVariants['zDirection']>('auto');
 
-  // Query all child elements to detect sider position
-  private readonly childElements = contentChildren<ElementRef>(ElementRef, { descendants: false });
+  // Query for direct sidebar children to auto-detect layout direction
+  private readonly sidebars = contentChildren(SidebarComponent, { descendants: false });
 
   private readonly detectedDirection = computed(() => {
     if (this.zDirection() !== 'auto') {
       return this.zDirection();
     }
 
-    // Auto-detection: Check if first child is a sider
-    const children = this.childElements();
-    if (children.length === 0) {
-      return 'vertical';
-    }
-
-    const firstChild = children[0]?.nativeElement;
-    if (firstChild?.tagName?.toLowerCase() === 'z-sider') {
-      return 'horizontal';
-    }
-
-    // Check if any child has z-sider
-    const hasSider = children.some(child => child.nativeElement?.tagName?.toLowerCase() === 'z-sider');
-
-    return hasSider ? 'horizontal' : 'vertical';
+    // Auto-detection: Check if there are any sidebar children
+    const hasSidebar = this.sidebars().length > 0;
+    return hasSidebar ? 'horizontal' : 'vertical';
   });
 
   protected readonly classes = computed(() =>
@@ -63,13 +42,9 @@ export class LayoutComponent implements AfterContentInit {
       layoutVariants({
         zDirection: this.detectedDirection() as LayoutVariants['zDirection'],
       }),
-      this.class()
-    )
+      this.class(),
+    ),
   );
-
-  ngAfterContentInit(): void {
-    // Additional setup if needed
-  }
 }
 
 ```
@@ -79,7 +54,8 @@ export class LayoutComponent implements AfterContentInit {
 ```angular-ts title="layout.variants.ts" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const layoutVariants = cva('flex w-full min-h-screen', {
+// Layout Variants
+export const layoutVariants = cva('flex w-full min-h-0', {
   variants: {
     zDirection: {
       horizontal: 'flex-row',
@@ -93,6 +69,38 @@ export const layoutVariants = cva('flex w-full min-h-screen', {
 });
 export type LayoutVariants = VariantProps<typeof layoutVariants>;
 
+// Header Variants
+export const headerVariants = cva('flex items-center px-4 bg-background border-b border-border shrink-0', {
+  variants: {},
+});
+export type HeaderVariants = VariantProps<typeof headerVariants>;
+
+// Footer Variants
+export const footerVariants = cva('flex items-center px-6 bg-background border-t border-border shrink-0', {
+  variants: {},
+});
+export type FooterVariants = VariantProps<typeof footerVariants>;
+
+// Content Variants
+export const contentVariants = cva('flex-1 flex flex-col overflow-auto bg-background p-6');
+export type ContentVariants = VariantProps<typeof contentVariants>;
+
+// Sidebar Variants
+export const sidebarVariants = cva(
+  'relative flex flex-col h-full transition-all duration-300 ease-in-out border-r shrink-0 p-6 bg-sidebar text-sidebar-foreground border-sidebar-border',
+);
+
+export const sidebarTriggerVariants = cva(
+  'absolute bottom-4 z-10 flex items-center justify-center cursor-pointer rounded-sm border border-sidebar-border bg-sidebar hover:bg-sidebar-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-sidebar-ring focus-visible:ring-offset-2 w-6 h-6 -right-3',
+);
+
+// Sidebar Group Variants
+export const sidebarGroupVariants = cva('flex flex-col gap-1');
+
+export const sidebarGroupLabelVariants = cva(
+  'flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium text-sidebar-foreground/70 outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 focus-visible:ring-sidebar-ring [&>svg]:size-4 [&>svg]:shrink-0',
+);
+
 ```
 
 
@@ -103,7 +111,7 @@ import type { ClassValue } from 'clsx';
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { contentVariants } from './content.variants';
+import { contentVariants } from './layout.variants';
 
 @Component({
   selector: 'z-content',
@@ -112,10 +120,13 @@ import { contentVariants } from './content.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <main [class]="classes()">
+    <main>
       <ng-content></ng-content>
     </main>
   `,
+  host: {
+    '[class]': 'classes()',
+  },
 })
 export class ContentComponent {
   readonly class = input<ClassValue>('');
@@ -127,23 +138,13 @@ export class ContentComponent {
 
 
 
-```angular-ts title="content.variants.ts" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
-
-export const contentVariants = cva('flex-1 flex flex-col overflow-auto bg-background p-6');
-export type ContentVariants = VariantProps<typeof contentVariants>;
-
-```
-
-
-
 ```angular-ts title="footer.component.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { footerVariants } from './footer.variants';
+import { footerVariants } from './layout.variants';
 
 @Component({
   selector: 'z-footer',
@@ -168,25 +169,13 @@ export class FooterComponent {
 
 
 
-```angular-ts title="footer.variants.ts" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
-
-export const footerVariants = cva('flex items-center px-6 bg-background border-t border-border shrink-0', {
-  variants: {},
-});
-export type FooterVariants = VariantProps<typeof footerVariants>;
-
-```
-
-
-
 ```angular-ts title="header.component.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { headerVariants } from './header.variants';
+import { headerVariants } from './layout.variants';
 
 @Component({
   selector: 'z-header',
@@ -211,43 +200,49 @@ export class HeaderComponent {
 
 
 
-```angular-ts title="header.variants.ts" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+```angular-ts title="layout.module.ts" copyButton showLineNumbers
+import { NgModule } from '@angular/core';
 
-export const headerVariants = cva('flex items-center px-6 bg-background border-b border-border shrink-0', {
-  variants: {},
-});
-export type HeaderVariants = VariantProps<typeof headerVariants>;
+import { ContentComponent } from './content.component';
+import { FooterComponent } from './footer.component';
+import { HeaderComponent } from './header.component';
+import { LayoutComponent } from './layout.component';
+import { SidebarGroupLabelComponent, SidebarGroupComponent, SidebarComponent } from './sidebar.component';
+
+const LAYOUT_COMPONENTS = [LayoutComponent, HeaderComponent, FooterComponent, ContentComponent, SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent];
+
+@NgModule({
+  imports: [LAYOUT_COMPONENTS],
+  exports: [LAYOUT_COMPONENTS],
+})
+export class LayoutModule {}
 
 ```
 
 
 
-```angular-ts title="sider.component.ts" copyButton showLineNumbers
+```angular-ts title="sidebar.component.ts" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
-import { ChangeDetectionStrategy, Component, computed, effect, inject, input, output, PLATFORM_ID, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { siderTriggerVariants, siderVariants, SiderVariants } from './sider.variants';
+import { sidebarGroupLabelVariants, sidebarGroupVariants, sidebarTriggerVariants, sidebarVariants } from './layout.variants';
 
 @Component({
-  selector: 'z-sider',
-  exportAs: 'zSider',
+  selector: 'z-sidebar',
+  exportAs: 'zSidebar',
   standalone: true,
   imports: [ZardStringTemplateOutletDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     <aside [class]="classes()" [style.width.px]="currentWidth()" [attr.data-collapsed]="zCollapsed()">
-      <!-- Sider Content -->
       <div class="flex-1 overflow-auto">
         <ng-content></ng-content>
       </div>
 
-      <!-- Default Trigger -->
       @if (zCollapsible() && !zTrigger()) {
         <div
           [class]="triggerClasses()"
@@ -257,75 +252,35 @@ import { siderTriggerVariants, siderVariants, SiderVariants } from './sider.vari
           tabindex="0"
           role="button"
           [attr.aria-label]="zCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
-          [attr.aria-expanded]="!zCollapsed()">
-          @if (shouldShowZeroTrigger()) {
-            <!-- Zero Width Trigger -->
-            @if (zZeroTrigger()) {
-              <ng-container *zStringTemplateOutlet="zZeroTrigger()"></ng-container>
-            } @else {
-              <i class="icon-menu text-base"></i>
-            }
-          } @else {
-            <!-- Normal Trigger -->
-            <i [class]="chevronIcon()"></i>
-          }
+          [attr.aria-expanded]="!zCollapsed()"
+        >
+          <i [class]="chevronIcon()"></i>
         </div>
       }
 
-      <!-- Custom Trigger -->
       @if (zCollapsible() && zTrigger()) {
         <ng-container *zStringTemplateOutlet="zTrigger()"></ng-container>
       }
     </aside>
   `,
 })
-export class SiderComponent {
-  private platformId = inject(PLATFORM_ID);
-
-  // Dimensions
+export class SidebarComponent {
   readonly zWidth = input<string | number>(200);
   readonly zCollapsedWidth = input<number>(64);
-
-  // Behavior
   readonly zCollapsible = input(false, { transform });
   readonly zCollapsed = input(false, { transform });
   readonly zReverseArrow = input(false, { transform });
-
-  // Appearance
-  readonly zTheme = input<SiderVariants['zTheme']>('light');
-
-  // Custom Templates
   readonly zTrigger = input<TemplateRef<void> | null>(null);
-  readonly zZeroTrigger = input<TemplateRef<void> | null>(null);
-
-  // Responsive
-  readonly zBreakpoint = input<'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'>();
-
-  // Styling
   readonly class = input<ClassValue>('');
 
-  // Output
   readonly zCollapsedChange = output<boolean>();
 
-  // Internal state
   private readonly internalCollapsed = signal(false);
-  private resizeListener?: () => void;
 
   constructor() {
-    // Sync input with internal state
     effect(() => {
       this.internalCollapsed.set(this.zCollapsed());
     });
-
-    // Setup responsive behavior
-    if (isPlatformBrowser(this.platformId)) {
-      effect(() => {
-        const breakpoint = this.zBreakpoint();
-        if (breakpoint) {
-          this.setupResponsive(breakpoint);
-        }
-      });
-    }
   }
 
   protected readonly currentWidth = computed(() => {
@@ -338,10 +293,6 @@ export class SiderComponent {
     return typeof width === 'number' ? width : parseInt(width, 10);
   });
 
-  protected readonly shouldShowZeroTrigger = computed(() => {
-    return this.zCollapsedWidth() === 0 && this.zCollapsed();
-  });
-
   protected readonly chevronIcon = computed(() => {
     const collapsed = this.zCollapsed();
     const reverse = this.zReverseArrow();
@@ -352,95 +303,52 @@ export class SiderComponent {
     return collapsed ? 'icon-chevron-right text-base' : 'icon-chevron-left text-base';
   });
 
-  protected readonly classes = computed(() =>
-    mergeClasses(
-      siderVariants({
-        zTheme: this.zTheme(),
-      }),
-      this.class(),
-    ),
-  );
+  protected readonly classes = computed(() => mergeClasses(sidebarVariants(), this.class()));
 
-  protected readonly triggerClasses = computed(() => {
-    return mergeClasses(siderTriggerVariants({ zSize: this.shouldShowZeroTrigger() ? 'zero' : 'default' }));
-  });
+  protected readonly triggerClasses = computed(() => mergeClasses(sidebarTriggerVariants()));
 
   toggleCollapsed(): void {
     const newState = !this.zCollapsed();
     this.internalCollapsed.set(newState);
     this.zCollapsedChange.emit(newState);
   }
-
-  private setupResponsive(breakpoint: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | 'xxl'): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    const breakpoints: Record<string, number> = {
-      xs: 480,
-      sm: 576,
-      md: 768,
-      lg: 992,
-      xl: 1200,
-      xxl: 1600,
-    };
-
-    const breakpointWidth = breakpoints[breakpoint];
-
-    // Remove previous listener if exists
-    if (this.resizeListener) {
-      window.removeEventListener('resize', this.resizeListener);
-    }
-
-    // Create new listener
-    this.resizeListener = () => {
-      const shouldCollapse = window.innerWidth < breakpointWidth;
-      if (shouldCollapse !== this.internalCollapsed()) {
-        this.internalCollapsed.set(shouldCollapse);
-        this.zCollapsedChange.emit(shouldCollapse);
-      }
-    };
-
-    window.addEventListener('resize', this.resizeListener);
-
-    // Initial check
-    this.resizeListener();
-  }
 }
 
-```
+@Component({
+  selector: 'z-sidebar-group',
+  exportAs: 'zSidebarGroup',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  template: `
+    <div [class]="classes()">
+      <ng-content></ng-content>
+    </div>
+  `,
+})
+export class SidebarGroupComponent {
+  readonly class = input<ClassValue>('');
 
+  protected readonly classes = computed(() => mergeClasses(sidebarGroupVariants(), this.class()));
+}
 
+@Component({
+  selector: 'z-sidebar-group-label',
+  exportAs: 'zSidebarGroupLabel',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  template: `
+    <div [class]="classes()">
+      <ng-content></ng-content>
+    </div>
+  `,
+})
+export class SidebarGroupLabelComponent {
+  readonly class = input<ClassValue>('');
 
-```angular-ts title="sider.variants.ts" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
-
-export const siderVariants = cva('relative flex flex-col h-full transition-all duration-300 ease-in-out border-r shrink-0', {
-  variants: {
-    zTheme: {
-      light: 'bg-background border-border',
-      dark: 'bg-zinc-900 dark:bg-zinc-950 border-zinc-800 text-white',
-    },
-  },
-  defaultVariants: {
-    zTheme: 'light',
-  },
-});
-export type SiderVariants = VariantProps<typeof siderVariants>;
-
-export const siderTriggerVariants = cva(
-  'absolute bottom-4 z-10 flex items-center justify-center cursor-pointer rounded-sm border bg-background hover:bg-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2',
-  {
-    variants: {
-      zSize: {
-        default: 'w-6 h-6 -right-3',
-        zero: 'w-8 h-8 right-4',
-      },
-    },
-    defaultVariants: {
-      zSize: 'default',
-    },
-  }
-);
-export type SiderTriggerVariants = VariantProps<typeof siderTriggerVariants>;
+  protected readonly classes = computed(() => mergeClasses(sidebarGroupLabelVariants(), this.class()));
+}
 
 ```
 
