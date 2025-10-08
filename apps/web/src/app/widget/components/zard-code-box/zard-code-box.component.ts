@@ -14,6 +14,7 @@ export class ZardCodeBoxComponent {
   readonly componentType = input<string>();
   readonly onlyDemo = input<boolean | undefined>(false);
   readonly fullWidth = input<boolean | undefined>(false);
+  readonly fullScreen = input<boolean | undefined>(false);
   readonly column = input<boolean | undefined>(false);
   readonly path = input<string>();
   readonly dynamicComponent = input<ComponentType<unknown>>();

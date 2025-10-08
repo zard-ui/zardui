@@ -3,6 +3,7 @@ import { PROGRESS_BAR } from '@zard/components/progress-bar/demo/progress-bar';
 import { ALERT_DIALOG } from '@zard/components/alert-dialog/demo/alert-dialog';
 import { INPUT_GROUP } from '@zard/components/input-group/demo/input-group';
 import { DATE_PICKER } from '@zard/components/date-picker/demo/date-picker';
+import { LAYOUT } from '@zard/components/layout/demo/layout';
 import { PAGINATION } from '@zard/components/pagination/demo/pagination';
 import { BREADCRUMB } from '@zard/components/breadcrumb/demo/breadcrumb';
 import { SEGMENTED } from '@zard/components/segmented/demo/segmented';
@@ -51,6 +52,7 @@ export interface ExampleData {
   column?: boolean;
   component: ComponentType<unknown>;
   onlyDemo?: boolean;
+  fullScreen?: boolean;
 }
 
 export const COMPONENTS: ComponentData[] = [
@@ -74,6 +76,7 @@ export const COMPONENTS: ComponentData[] = [
   FORM,
   INPUT,
   INPUT_GROUP,
+  LAYOUT,
   LOADER,
   MENU,
   PAGINATION,

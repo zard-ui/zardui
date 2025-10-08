@@ -3,12 +3,13 @@
 ```angular-ts title="menu.directive.ts" copyButton showLineNumbers
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ConnectedPosition } from '@angular/cdk/overlay';
+import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID, untracked } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 import { ZardMenuManagerService } from './menu-manager.service';
+import { MENU_POSITIONS_MAP, ZardMenuPlacement } from './menu-positions';
 
-export type ZardMenuPlacement = 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft' | 'topCenter' | 'topRight';
 export type ZardMenuTrigger = 'click' | 'hover';
 
 @Directive({
@@ -45,6 +46,22 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   readonly zDisabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
   readonly zTrigger = input<ZardMenuTrigger>('click');
   readonly zHoverDelay = input<number>(100);
+  readonly zPlacement = input<ZardMenuPlacement>('bottomLeft');
+
+  private readonly menuPositions = computed(() => this.getPositionsByPlacement(this.zPlacement()));
+
+  constructor() {
+    effect(() => {
+      const positions = this.menuPositions();
+      untracked(() => {
+        this.cdkTrigger.menuPosition = positions;
+      });
+    });
+  }
+
+  private getPositionsByPlacement(placement: ZardMenuPlacement): ConnectedPosition[] {
+    return MENU_POSITIONS_MAP[placement] || MENU_POSITIONS_MAP['bottomLeft'];
+  }
 
   ngOnInit(): void {
     const isMobile = this.isMobileDevice();
@@ -353,6 +370,222 @@ export class ZardMenuManagerService {
     }
   }
 }
+
+```
+
+
+
+```angular-ts title="menu-positions.ts" copyButton showLineNumbers
+import { ConnectedPosition } from '@angular/cdk/overlay';
+
+export const MENU_POSITIONS_MAP: { [key: string]: ConnectedPosition[] } = {
+  bottomLeft: [
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+  ],
+  bottomCenter: [
+    {
+      originX: 'center',
+      originY: 'bottom',
+      overlayX: 'center',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+    {
+      originX: 'center',
+      originY: 'top',
+      overlayX: 'center',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+  ],
+  bottomRight: [
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+  ],
+  topLeft: [
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+  ],
+  topCenter: [
+    {
+      originX: 'center',
+      originY: 'top',
+      overlayX: 'center',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+    {
+      originX: 'center',
+      originY: 'bottom',
+      overlayX: 'center',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+  ],
+  topRight: [
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+  ],
+  leftTop: [
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetX: -8,
+    },
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'top',
+      offsetX: 8,
+    },
+  ],
+  leftCenter: [
+    {
+      originX: 'start',
+      originY: 'center',
+      overlayX: 'end',
+      overlayY: 'center',
+      offsetX: -8,
+    },
+    {
+      originX: 'end',
+      originY: 'center',
+      overlayX: 'start',
+      overlayY: 'center',
+      offsetX: 8,
+    },
+  ],
+  leftBottom: [
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'bottom',
+      offsetX: -8,
+    },
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'bottom',
+      offsetX: 8,
+    },
+  ],
+  rightTop: [
+    {
+      originX: 'end',
+      originY: 'top',
+      overlayX: 'start',
+      overlayY: 'top',
+      offsetX: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'top',
+      overlayX: 'end',
+      overlayY: 'top',
+      offsetX: -8,
+    },
+  ],
+  rightCenter: [
+    {
+      originX: 'end',
+      originY: 'center',
+      overlayX: 'start',
+      overlayY: 'center',
+      offsetX: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'center',
+      overlayX: 'end',
+      overlayY: 'center',
+      offsetX: -8,
+    },
+  ],
+  rightBottom: [
+    {
+      originX: 'end',
+      originY: 'bottom',
+      overlayX: 'start',
+      overlayY: 'bottom',
+      offsetX: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'bottom',
+      overlayX: 'end',
+      overlayY: 'bottom',
+      offsetX: -8,
+    },
+  ],
+};
+
+export type ZardMenuPlacement =
+  | 'bottomLeft'
+  | 'bottomCenter'
+  | 'bottomRight'
+  | 'topLeft'
+  | 'topCenter'
+  | 'topRight'
+  | 'leftTop'
+  | 'leftCenter'
+  | 'leftBottom'
+  | 'rightTop'
+  | 'rightCenter'
+  | 'rightBottom';
 
 ```
 
