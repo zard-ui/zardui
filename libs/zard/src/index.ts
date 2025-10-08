@@ -14,6 +14,13 @@ export * from './lib/components/input/input.directive';
 export * from './lib/components/input-group/input-group.component';
 export * from './lib/components/input-group/input-group.variants';
 export * from './lib/components/loader/loader.component';
+
+// Layout
+export * from './lib/components/layout/layout.component';
+export * from './lib/components/layout/header.component';
+export * from './lib/components/layout/footer.component';
+export * from './lib/components/layout/content.component';
+export * from './lib/components/layout/sidebar.component';
 export * from './lib/components/radio/radio.component';
 export * from './lib/components/segmented/segmented.component';
 export * from './lib/components/switch/switch.component';

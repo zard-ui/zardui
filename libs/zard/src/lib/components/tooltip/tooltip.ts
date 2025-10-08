@@ -1,3 +1,8 @@
+import { filter, fromEvent, Subject, take, takeUntil } from 'rxjs';
+
+import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,13 +20,9 @@ import {
   Renderer2,
   signal,
 } from '@angular/core';
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { filter, fromEvent, Subject, take, takeUntil } from 'rxjs';
-import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
 
-import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
 import { mergeClasses } from '../../shared/utils/utils';
+import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
 import { tooltipVariants } from './tooltip.variants';
 
 export type ZardTooltipTriggers = 'click' | 'hover';
@@ -45,7 +46,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private componentRef?: ComponentRef<ZardTooltipComponent>;
   private scrollListenerRef?: () => void;
 
-  readonly zTooltip = input<string>('');
+  readonly zTooltip = input<string | null>(null);
   readonly zPosition = input<ZardTooltipPositions>('top');
   readonly zTrigger = input<ZardTooltipTriggers>('hover');
 
@@ -77,11 +78,14 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   show() {
     if (this.componentRef) return;
 
+    const tooltipText = this.zTooltip();
+    if (!tooltipText || tooltipText.trim() === '') return;
+
     const tooltipPortal = new ComponentPortal(ZardTooltipComponent);
     this.componentRef = this.overlayRef?.attach(tooltipPortal);
     if (!this.componentRef) return;
 
-    this.componentRef.instance.setProps(this.zTooltip(), this.zPosition(), this.zTrigger());
+    this.componentRef.instance.setProps(tooltipText, this.zPosition(), this.zTrigger());
     this.componentRef.instance.state.set('opened');
 
     this.componentRef.instance.onLoad$.pipe(take(1)).subscribe(() => {
@@ -184,8 +188,8 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
     );
   }
 
-  setProps(text: string, position: ZardTooltipPositions, trigger: ZardTooltipTriggers) {
-    this.text.set(text);
+  setProps(text: string | null, position: ZardTooltipPositions, trigger: ZardTooltipTriggers) {
+    if (text) this.text.set(text);
     this.position.set(position);
     this.trigger.set(trigger);
   }

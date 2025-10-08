@@ -1,11 +1,12 @@
 import { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { booleanAttribute, Directive, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID } from '@angular/core';
+import { ConnectedPosition } from '@angular/cdk/overlay';
+import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID, untracked } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 import { ZardMenuManagerService } from './menu-manager.service';
+import { MENU_POSITIONS_MAP, ZardMenuPlacement } from './menu-positions';
 
-export type ZardMenuPlacement = 'bottomLeft' | 'bottomCenter' | 'bottomRight' | 'topLeft' | 'topCenter' | 'topRight';
 export type ZardMenuTrigger = 'click' | 'hover';
 
 @Directive({
@@ -42,6 +43,22 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   readonly zDisabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
   readonly zTrigger = input<ZardMenuTrigger>('click');
   readonly zHoverDelay = input<number>(100);
+  readonly zPlacement = input<ZardMenuPlacement>('bottomLeft');
+
+  private readonly menuPositions = computed(() => this.getPositionsByPlacement(this.zPlacement()));
+
+  constructor() {
+    effect(() => {
+      const positions = this.menuPositions();
+      untracked(() => {
+        this.cdkTrigger.menuPosition = positions;
+      });
+    });
+  }
+
+  private getPositionsByPlacement(placement: ZardMenuPlacement): ConnectedPosition[] {
+    return MENU_POSITIONS_MAP[placement] || MENU_POSITIONS_MAP['bottomLeft'];
+  }
 
   ngOnInit(): void {
     const isMobile = this.isMobileDevice();

@@ -67,7 +67,8 @@
       "Bash(done)",
       "Bash(node:*)",
       "Bash(dist/packages/cli/src/index.js --help)",
-      "Bash(npx nx release:*)"
+      "Bash(npx nx release:*)",
+      "WebSearch"
     ],
     "defaultMode": "acceptEdits"
   },
