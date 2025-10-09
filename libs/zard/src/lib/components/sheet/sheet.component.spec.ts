@@ -1,6 +1,6 @@
+import { Component, inject, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, inject, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 import { ZardButtonComponent } from '../button/button.component';
@@ -283,10 +283,8 @@ describe('ZardSheetComponent', () => {
         await fixture.whenStable();
 
         // Check that custom dimensions are applied via CSS variables
-        expect(sheetElement.style.width).toBe('var(--sheet-width)');
-        expect(sheetElement.style.height).toBe('var(--sheet-height)');
-        expect(sheetElement.style.getPropertyValue('--sheet-width')).toBe('500px');
-        expect(sheetElement.style.getPropertyValue('--sheet-height')).toBe('80vh');
+        expect(sheetElement.style.width).toBe('500px');
+        expect(sheetElement.style.height).toBe('80vh');
       }
     });
 
