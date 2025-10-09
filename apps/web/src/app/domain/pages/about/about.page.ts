@@ -1,13 +1,13 @@
-import { ContributorsLoadingComponent } from '@zard/domain/components/contributors/contributors-loading.component';
-import { FoundersLoadingComponent } from '@zard/domain/components/founders/founders-loading.component';
-import { FoundersComponent, FounderData } from '@zard/domain/components/founders/founders.component';
-import { ContributorsComponent } from '@zard/domain/components/contributors/contributors.component';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { CreditCardComponent } from '@zard/domain/components/credit-card/credit-card.component';
-import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
+import { ContributorsLoadingComponent } from '../../components/contributors/contributors-loading.component';
+import { FoundersLoadingComponent } from '../../components/founders/founders-loading.component';
+import { FoundersComponent, FounderData } from '../../components/founders/founders.component';
+import { ContributorsComponent } from '../../components/contributors/contributors.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { CreditCardComponent } from '../../components/credit-card/credit-card.component';
+import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { map } from 'rxjs/operators';
@@ -68,6 +68,10 @@ export class AboutPage {
     {
       title: 'TailwindCSS',
       description: "The utility-first CSS framework that powers ZardUI's styling system and enables rapid customization.",
+    },
+    {
+      title: 'NG-ZORRO',
+      description: 'An enterprise-class Angular UI library that inspired ZardUI with its exceptional developer experience and comprehensive component patterns.',
     },
     {
       title: 'Angular',
