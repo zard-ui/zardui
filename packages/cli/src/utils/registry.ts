@@ -20,6 +20,39 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'layout',
+    files: [
+      {
+        name: 'layout.component.ts',
+        content: '',
+      },
+      {
+        name: 'layout.variants.ts',
+        content: '',
+      },
+      {
+        name: 'content.component.ts',
+        content: '',
+      },
+      {
+        name: 'footer.component.ts',
+        content: '',
+      },
+      {
+        name: 'header.component.ts',
+        content: '',
+      },
+      {
+        name: 'layout.module.ts',
+        content: '',
+      },
+      {
+        name: 'sidebar.component.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'button',
     files: [
       {
@@ -671,6 +704,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'menu.module.ts',
+        content: '',
+      },
+      {
+        name: 'menu-positions.ts',
         content: '',
       },
     ],
