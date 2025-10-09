@@ -1,14 +1,13 @@
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardAlertComponent } from '@zard/components/alert/alert.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { DarkModeService } from '@zard/shared/services/darkmode.service';
 import { Component, inject } from '@angular/core';
 
+import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { ZardButtonComponent } from '../../../../../libs/zard/src/lib/components/button/button.component';
+import { ZardAlertComponent } from '../../../../../libs/zard/src/lib/components/alert/alert.component';
+import { ZardCardComponent } from '../../../../../libs/zard/src/lib/components/card/card.component';
+import { DarkModeService } from '../../shared/services/darkmode.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
@@ -22,7 +21,6 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     ScrollSpyItemDirective,
     MarkdownRendererComponent,
     ZardButtonComponent,
-    ZardBadgeComponent,
     ZardCardComponent,
     ZardAlertComponent,
   ],

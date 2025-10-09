@@ -1,8 +1,4 @@
-# DarkModeService - Complete Implementation
-
-This is the complete implementation of the dark mode service used in ZardUI:
-
-```typescript title="darkmode.service.ts" copyButton
+```typescript title="darkmode.service.ts" expandable="true" copyButton
 import { Injectable } from '@angular/core';
 
 @Injectable({

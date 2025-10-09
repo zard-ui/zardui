@@ -18,7 +18,7 @@
 
     <z-alert
       zTitle="Current Implementation Status"
-      zDescription="Currently, dark mode works via CSS class variations. In the future, we plan to add a CLI option for automatic configuration."
+      zDescription="Currently, dark mode works via CSS class variations. In the future, we plan to add a CLI option for automatic service installation."
       zType="info"
     >
     </z-alert>
@@ -38,7 +38,7 @@
   <!-- Service Details Section -->
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="service-details" id="service-details">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">DarkModeService</h2>
+      <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">DarkMode Service</h2>
       <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">
         The core of the system is an Angular service that manages theme state, persistence, and CSS class application.
       </p>
@@ -57,12 +57,12 @@
     </div>
 
     <div class="flex flex-col gap-6">
-      <div class="rounded-lg border bg-muted/30 p-6">
+      <div>
         <h3 class="text-base sm:text-lg font-semibold mb-6">App Component</h3>
         <z-markdown-renderer markdownUrl="/documentation/dark-mode/app-usage.md"></z-markdown-renderer>
       </div>
 
-      <div class="rounded-lg border bg-muted/30 p-6">
+      <div>
         <h3 class="text-base sm:text-lg font-semibold mb-6">Header Component</h3>
         <z-markdown-renderer markdownUrl="/documentation/dark-mode/header-usage.md"></z-markdown-renderer>
       </div>
@@ -99,16 +99,6 @@
         <div class="p-4 border rounded-lg bg-primary text-primary-foreground">
           <h4 class="font-medium mb-2">Primary Colors</h4>
           <p class="text-sm opacity-90">Primary colors adapted to theme.</p>
-        </div>
-      </div>
-
-      <div class="mt-6 p-4 bg-muted/30 rounded-lg">
-        <h4 class="font-medium mb-2">Badges & Components</h4>
-        <div class="flex flex-wrap gap-2">
-          <z-badge variant="default">Default</z-badge>
-          <z-badge variant="secondary">Secondary</z-badge>
-          <z-badge variant="outline">Outline</z-badge>
-          <z-badge variant="destructive">Destructive</z-badge>
         </div>
       </div>
     </z-card>
