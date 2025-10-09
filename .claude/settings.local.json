@@ -68,6 +68,14 @@
       "Bash(node:*)",
       "Bash(dist/packages/cli/src/index.js --help)",
       "Bash(npx nx release:*)",
+      "Bash(git log:*)",
+      "Bash(npm view:*)",
+      "Bash(./build.sh)",
+      "Bash(npm link:*)",
+      "Bash(ngzard:*)",
+      "Bash(zardev:*)",
+      "Bash(npm unlink:*)",
+      "Bash(git restore:*)",
       "WebSearch"
     ],
     "defaultMode": "acceptEdits"

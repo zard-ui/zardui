@@ -4,6 +4,8 @@ declare global {
   interface Window {
     switchCodeTab: (event: Event, tabIndex: number) => void;
     copyCodeToClipboard: (button: HTMLButtonElement, code: string) => void;
+    toggleExpandableCode: (button: HTMLButtonElement) => void;
+    copyTabCode: (button: HTMLButtonElement) => void;
   }
 }
 
@@ -22,10 +24,10 @@ window.switchCodeTab = function (event: Event, tabIndex: number) {
 
   allButtons.forEach((btn, index) => {
     if (index === tabIndex) {
-      btn.classList.add('bg-background', 'text-foreground');
+      btn.classList.add('bg-code-tab', 'text-foreground', 'border');
       btn.classList.remove('text-muted-foreground');
     } else {
-      btn.classList.remove('bg-background', 'text-foreground');
+      btn.classList.remove('bg-code-tab', 'text-foreground', 'border');
       btn.classList.add('text-muted-foreground');
     }
   });
@@ -40,6 +42,23 @@ window.switchCodeTab = function (event: Event, tabIndex: number) {
       content.classList.remove('block');
     }
   });
+};
+
+// Function to toggle expandable code visibility
+window.toggleExpandableCode = function (button: HTMLButtonElement) {
+  const overlay = button.closest('.expandable-overlay') as HTMLElement;
+  const wrapper = overlay?.closest('.group') as HTMLElement;
+
+  if (!overlay) return;
+
+  // Remove height constraint to allow full expansion
+  if (wrapper) {
+    wrapper.classList.remove('h-[250px]');
+    wrapper.classList.add('h-auto');
+  }
+
+  // Simply remove the overlay - no animations
+  overlay.remove();
 };
 
 // Copy code function with visual feedback
@@ -76,6 +95,25 @@ function copyCodeToClipboard(button: HTMLButtonElement, code: string): void {
       }, 2000);
     });
 }
+
+// Function to copy code from active tab
+window.copyTabCode = function (button: HTMLButtonElement) {
+  const tabsWrapper = button.closest('.code-tabs-wrapper');
+  if (!tabsWrapper) return;
+
+  // Find the active tab button (the one that's currently selected)
+  const activeTabButton = tabsWrapper.querySelector('button[data-tab].bg-background') || tabsWrapper.querySelector('button[data-tab].text-foreground');
+
+  if (!activeTabButton) return;
+
+  // Get the code from the active tab's data-code attribute
+  const code = activeTabButton.getAttribute('data-code') || '';
+
+  if (!code) return;
+
+  // Use the same copy logic with visual feedback
+  copyCodeToClipboard(button, code);
+};
 
 // Make functions globally available
 window.copyCodeToClipboard = copyCodeToClipboard;

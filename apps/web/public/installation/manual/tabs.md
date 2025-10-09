@@ -1,6 +1,6 @@
 
 
-```angular-ts title="tabs.component.ts" copyButton showLineNumbers
+```angular-ts title="tabs.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   afterNextRender,
   ChangeDetectionStrategy,
@@ -278,7 +278,7 @@ export class ZardTabGroupComponent {
 
 
 
-```angular-ts title="tabs.variants.ts" copyButton showLineNumbers
+```angular-ts title="tabs.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 import { zAlign } from './tabs.component';

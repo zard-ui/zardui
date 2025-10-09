@@ -8,24 +8,17 @@
 >
   <z-doc-heading title="Changelog" description="Latest updates and announcements." scrollSpyItem="overview" id="overview" />
 
-  <!-- Entradas do changelog -->
   <div class="space-y-8">
     @for (entry of entries(); track trackByEntry($index, entry)) {
     <div [id]="entry.id" scrollSpyItem [scrollSpyItem]="entry.id">
       <z-markdown-renderer [markdownUrl]="'/documentation/change-log/' + entry.filename"></z-markdown-renderer>
     </div>
-    }
-
-    <!-- Loading indicator -->
-    @if (isLoading() && entries().length === 0) {
+    } @if (isLoading() && entries().length === 0) {
     <div class="flex justify-center items-center py-8">
       <z-loader />
       <span class="ml-3 text-muted-foreground">Loading changelog entries...</span>
     </div>
-    }
-
-    <!-- Empty state -->
-    @if (!isLoading() && entries().length === 0) {
+    } @if (!isLoading() && entries().length === 0) {
     <z-alert variant="outline" class="mt-8" zTitle="No entries found" zDescription="No changelog entries were found at this time."> </z-alert>
     }
   </div>

@@ -1,12 +1,11 @@
 import * as commentJson from 'comment-json';
 import { Command } from 'commander';
 import { existsSync } from 'fs';
-import * as prompts from 'prompts';
-import * as fs from 'fs-extra';
+import { writeFile, readFile, mkdir } from 'node:fs/promises';
+import prompts from 'prompts';
 import chalk from 'chalk';
 import * as path from 'path';
 import { z } from 'zod';
-import ora from 'ora';
 
 import { getAvailableThemes, getThemeContent, getThemeDisplayName } from '../utils/theme-selector.js';
 import { installPackages, detectPackageManager } from '../utils/package-manager.js';
@@ -59,7 +58,7 @@ export const init = new Command()
     }
 
     const configSpinner = spinner('Writing configuration...').start();
-    await fs.writeFile(path.resolve(cwd, 'components.json'), JSON.stringify(config, null, 2), 'utf8');
+    await writeFile(path.resolve(cwd, 'components.json'), JSON.stringify(config, null, 2), 'utf8');
     configSpinner.succeed();
 
     const dependenciesSpinner = spinner('Installing dependencies...').start();
@@ -131,7 +130,7 @@ async function promptForConfig(cwd: string, projectInfo: any, packageManager: 'n
     process.exit(1);
   }
 
-  const existingContent = await fs.readFile(cssPath, 'utf8');
+  const existingContent = await readFile(cssPath, 'utf8');
   let shouldOverwrite = false;
 
   if (existingContent.trim().length > 0) {
@@ -161,7 +160,6 @@ async function promptForConfig(cwd: string, projectInfo: any, packageManager: 'n
       components: options.components,
       utils: options.utils,
     },
-    theme: options.theme,
   });
 
   return config;
@@ -179,7 +177,6 @@ const configSchema = z.object({
     components: z.string(),
     utils: z.string(),
   }),
-  theme: z.string().optional(),
 });
 
 async function installDependencies(cwd: string, config: Config) {
@@ -218,19 +215,19 @@ async function setupTailwind(cwd: string, config: Config) {
   const postcssConfigPath = path.join(cwd, '.postcssrc.json');
 
   if (!existsSync(postcssConfigPath)) {
-    await fs.writeFile(postcssConfigPath, POSTCSS_CONFIG, 'utf8');
+    await writeFile(postcssConfigPath, POSTCSS_CONFIG, 'utf8');
   } else {
-    const existingConfig = await fs.readFile(postcssConfigPath, 'utf8');
+    const existingConfig = await readFile(postcssConfigPath, 'utf8');
     if (!existingConfig.includes('@tailwindcss/postcss')) {
       logger.info('Updating existing .postcssrc.json for Tailwind CSS v4');
-      await fs.writeFile(postcssConfigPath, POSTCSS_CONFIG, 'utf8');
+      await writeFile(postcssConfigPath, POSTCSS_CONFIG, 'utf8');
     }
   }
 
   const stylesPath = path.join(cwd, config.tailwind.css);
-  const selectedTheme = config.theme || 'neutral';
+  const selectedTheme = config.tailwind.baseColor;
   const themeContent = getThemeContent(selectedTheme);
-  await fs.writeFile(stylesPath, themeContent, 'utf8');
+  await writeFile(stylesPath, themeContent, 'utf8');
   logger.info(`Applied ${getThemeDisplayName(selectedTheme)} theme configuration to your CSS file`);
 }
 
@@ -238,14 +235,14 @@ export async function createUtils(cwd: string, config: Config) {
   const utilsPath = path.join(cwd, config.aliases.utils);
 
   if (!existsSync(utilsPath)) {
-    await fs.mkdir(utilsPath, { recursive: true });
+    await mkdir(utilsPath, { recursive: true });
   }
 
   for (const [fileName, content] of Object.entries(UTILS)) {
     const filePath = path.join(utilsPath, `${fileName}.ts`);
 
     if (!existsSync(filePath)) {
-      await fs.writeFile(filePath, content.trim(), 'utf8');
+      await writeFile(filePath, content.trim(), 'utf8');
     }
   }
 }
@@ -259,7 +256,7 @@ async function updateTsConfig(cwd: string, config: Config) {
   }
 
   try {
-    const tsconfigContent = await fs.readFile(tsconfigPath, 'utf8');
+    const tsconfigContent = await readFile(tsconfigPath, 'utf8');
 
     const tsconfig = commentJson.parse(tsconfigContent) as any;
 
@@ -285,7 +282,7 @@ async function updateTsConfig(cwd: string, config: Config) {
     };
 
     const updatedContent = commentJson.stringify(tsconfig, null, 2);
-    await fs.writeFile(tsconfigPath, updatedContent, 'utf8');
+    await writeFile(tsconfigPath, updatedContent, 'utf8');
   } catch (error) {
     logger.warn('Failed to update tsconfig.json paths');
     logger.error(error);

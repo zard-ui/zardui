@@ -52,6 +52,7 @@
   --shiki--dark: var(--shiki-theme,);
   --surface: oklch(0.97 0 0);
   --code: var(--surface);
+  --code-tab-button: oklch(0.925 0 0);
 }
 
 .dark {
@@ -91,6 +92,7 @@
   --sidebar-ring: oklch(0.439 0 0);
   --surface: oklch(0.2 0 0);
   --code: var(--surface);
+  --code-tab-button: oklch(0.178 0 0);
 }
 
 @theme inline {
@@ -136,6 +138,7 @@
   --color-sidebar-ring: var(--sidebar-ring);
   --color-surface: var(--surface);
   --color-code: var(--code);
+  --color-code-tab: var(--code-tab-button);
 }
 
 @layer base {
@@ -235,6 +238,12 @@ code[data-theme*=' '] span {
 [data-theme='dark'] code[data-theme*=' '],
 [data-theme='dark'] code[data-theme*=' '] span {
   color: var(--shiki-dark);
+}
+
+/* Remove background from highlighted chars in code blocks */
+code [data-highlighted-chars] {
+  background-color: transparent !important;
+  box-shadow: none !important;
 }
 .embla {
   overflow: hidden;

@@ -1,6 +1,6 @@
 
 
-```angular-ts title="form.component.ts" copyButton showLineNumbers
+```angular-ts title="form.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -98,7 +98,7 @@ export class ZardFormMessageComponent {
 
 
 
-```angular-ts title="form.variants.ts" copyButton showLineNumbers
+```angular-ts title="form.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const formFieldVariants = cva('grid gap-2');
@@ -136,7 +136,7 @@ export type ZardFormMessageVariants = VariantProps<typeof formMessageVariants>;
 
 
 
-```angular-ts title="form.module.ts" copyButton showLineNumbers
+```angular-ts title="form.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
 import { ZardFormControlComponent, ZardFormFieldComponent, ZardFormLabelComponent, ZardFormMessageComponent } from './form.component';

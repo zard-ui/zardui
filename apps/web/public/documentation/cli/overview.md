@@ -2,20 +2,42 @@
 
 The ZardUI CLI is your gateway to beautiful Angular components. With just one command, you can add professionally designed, fully accessible components to your project.
 
-### Quick Start
-
-```bash title="Terminal" copyButton
+```bash tab="npm" copyButton
 npx @ngzard/ui init
 ```
 
-This command will:
-- ✓ Initialize ZardUI configuration
-- ✓ Install required dependencies  
-- ✓ Set up Tailwind CSS v4
-- ✓ Create utility functions
-- ✓ Configure TypeScript paths
+```bash tab="pnpm" copyButton
+pnpm dlx @ngzard/ui init
+```
 
-### Key Features
+```bash tab="yarn" copyButton
+yarn @ngzard/ui init
+```
+
+```bash tab="bun" copyButton
+bunx @ngzard/ui init
+```
+
+This command will guide you through an interactive setup:
+
+```bash title="terminal"
+✔ Choose a theme for your components: › Neutral (Default)
+✔ Where is your global CSS file? … src/styles.css
+✔ Configure the import alias for components: … src/app/shared/components
+✔ Configure the import alias for utils: … src/app/shared/utils
+✔ Your CSS file already has content. This will overwrite everything with ZardUI theme configuration. Continue? … yes
+✔ Write configuration to components.json? … yes
+✔ Writing configuration...
+✔ Installing dependencies...
+✔ Setting up Tailwind CSS...
+✔ Creating utils...
+✔ Updating tsconfig.json...
+
+ZardUI has been initialized successfully!
+
+You can now add components using:
+  npx @ngzard/ui add [component]
+```
 
 **One-Command Setup**
 Get started instantly with automated project configuration, dependency installation, and Tailwind CSS setup.

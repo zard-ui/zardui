@@ -1,6 +1,6 @@
 
 
-```angular-ts title="alert-dialog.component.ts" copyButton showLineNumbers
+```angular-ts title="alert-dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
   Component,
@@ -175,7 +175,7 @@ export class ZardAlertDialogModule {}
 
 
 
-```angular-ts title="alert-dialog.variants.ts" copyButton showLineNumbers
+```angular-ts title="alert-dialog.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg transition-all duration-200 ease-out rounded-lg sm:max-w-lg', {
@@ -197,7 +197,7 @@ export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
 
 
-```angular-ts title="alert-dialog-ref.ts" copyButton showLineNumbers
+```angular-ts title="alert-dialog-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
 
 import { OverlayRef } from '@angular/cdk/overlay';
@@ -290,7 +290,7 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 
 
-```angular-html title="alert-dialog.component.html" copyButton showLineNumbers
+```angular-html title="alert-dialog.component.html" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 <div class="flex flex-col gap-4 p-6" cdkTrapFocus [cdkTrapFocusAutoCapture]="true">
   @if (config.zTitle || config.zDescription) {
     <header class="flex flex-col gap-2 text-center sm:text-left">
@@ -331,7 +331,7 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 
 
-```angular-ts title="alert-dialog.service.ts" copyButton showLineNumbers
+```angular-ts title="alert-dialog.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';

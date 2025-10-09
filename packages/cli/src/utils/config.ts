@@ -1,8 +1,22 @@
-import * as fs from 'fs-extra';
+import { access, readFile } from 'node:fs/promises';
 import * as path from 'path';
 import { z } from 'zod';
 
 import { logger } from './logger.js';
+
+async function pathExists(filePath: string): Promise<boolean> {
+  try {
+    await access(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function readJson(filePath: string): Promise<any> {
+  const content = await readFile(filePath, 'utf-8');
+  return JSON.parse(content);
+}
 
 const configSchema = z.object({
   $schema: z.string().optional(),
@@ -21,7 +35,6 @@ const configSchema = z.object({
       utils: z.string().default('src/app/shared/utils'),
     })
     .default({}),
-  theme: z.string().optional(),
 });
 
 export type Config = z.infer<typeof configSchema>;
@@ -43,12 +56,12 @@ export const DEFAULT_CONFIG: Config = {
 export async function getConfig(cwd: string): Promise<Config | null> {
   const configPath = path.resolve(cwd, 'components.json');
 
-  if (!(await fs.pathExists(configPath))) {
+  if (!(await pathExists(configPath))) {
     return null;
   }
 
   try {
-    const configJson = await fs.readJson(configPath);
+    const configJson = await readJson(configPath);
     return configSchema.parse(configJson);
   } catch (error) {
     logger.error('Invalid configuration file');

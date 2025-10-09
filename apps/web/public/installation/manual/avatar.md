@@ -1,6 +1,6 @@
 
 
-```angular-ts title="avatar.component.ts" copyButton showLineNumbers
+```angular-ts title="avatar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } from './avatar.variants';
@@ -133,7 +133,7 @@ export class ZardAvatarComponent {
 
 
 
-```angular-ts title="avatar.variants.ts" copyButton showLineNumbers
+```angular-ts title="avatar.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content hover:bg-primary/90 cursor-default', {

@@ -7,9 +7,10 @@ The CLI stores configuration in `components.json` in your project root. This fil
 ```json title="components.json" copyButton
 {
   "style": "css",
+  "packageManager": "npm",
   "tailwind": {
     "css": "src/styles.css",
-    "baseColor": "slate",
+    "baseColor": "neutral",
     "cssVariables": true
   },
   "aliases": {
@@ -37,6 +38,6 @@ The CLI automatically configures TypeScript path mappings in your `tsconfig.json
 This allows you to import components and utilities using clean paths:
 
 ```typescript title="example.component.ts" copyButton
-import { ZardButtonComponent } from '@shared/components/button';
+import { ButtonComponent } from '@shared/components/button';
 import { mergeClasses } from '@shared/utils/merge-classes';
 ```

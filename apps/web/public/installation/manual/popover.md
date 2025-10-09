@@ -1,6 +1,6 @@
 
 
-```angular-ts title="popover.component.ts" copyButton showLineNumbers
+```angular-ts title="popover.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Subject } from 'rxjs';
 
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
@@ -389,7 +389,7 @@ export class ZardPopoverComponent {
 
 
 
-```angular-ts title="popover.variants.ts" copyButton showLineNumbers
+```angular-ts title="popover.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const popoverVariants = cva(

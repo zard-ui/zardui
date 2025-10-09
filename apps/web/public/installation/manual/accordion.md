@@ -1,6 +1,6 @@
 
 
-```angular-ts title="accordion.component.ts" copyButton showLineNumbers
+```angular-ts title="accordion.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { AfterContentInit, ChangeDetectionStrategy, Component, contentChildren, input, ViewEncapsulation } from '@angular/core';
 
 import { ZardAccordionItemComponent } from './accordion-item.component';
@@ -91,7 +91,7 @@ export class ZardAccordionComponent implements AfterContentInit {
 
 
 
-```angular-ts title="accordion-item.component.ts" copyButton showLineNumbers
+```angular-ts title="accordion-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
 
 import { ZardAccordionComponent } from './accordion.component';

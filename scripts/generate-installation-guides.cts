@@ -70,22 +70,6 @@ function analyzeComponentDependencies(componentPath: string, componentName: stri
       });
     }
 
-    if (content.includes('@angular/animations')) {
-      dependencies.push({
-        name: '@angular/animations',
-        type: 'angular',
-        npmPackage: '@angular/animations',
-      });
-    }
-
-    if (content.includes('rxjs')) {
-      dependencies.push({
-        name: 'rxjs',
-        type: 'external',
-        npmPackage: 'rxjs',
-      });
-    }
-
     if (content.includes('ngx-sonner')) {
       dependencies.push({
         name: 'ngx-sonner',
@@ -139,14 +123,38 @@ function generateCliInstallDepsMarkdown(dependencies: ComponentDependency[]): st
 
   const packages = [...new Set(additionalDeps.map(dep => dep.npmPackage).filter(Boolean))].join(' ');
 
-  return `\`\`\`bash title="Terminal" copyButton
+  return `\`\`\`bash tab="npm" copyButton
 npm install ${packages}
+\`\`\`
+
+\`\`\`bash tab="pnpm"
+pnpm add ${packages}
+\`\`\`
+
+\`\`\`bash tab="yarn"
+yarn add ${packages}
+\`\`\`
+
+\`\`\`bash tab="bun"
+bun add ${packages}
 \`\`\``;
 }
 
 function generateCliAddComponentMarkdown(componentName: string): string {
-  return `\`\`\`bash title="Terminal" copyButton
+  return `\`\`\`bash tab="npm" copyButton
 npx @ngzard/ui add ${componentName}
+\`\`\`
+
+\`\`\`bash tab="pnpm"
+pnpm dlx @ngzard/ui add ${componentName}
+\`\`\`
+
+\`\`\`bash tab="yarn"
+yarn dlx @ngzard/ui add ${componentName}
+\`\`\`
+
+\`\`\`bash tab="bun"
+bunx @ngzard/ui add ${componentName}
 \`\`\``;
 }
 
@@ -164,8 +172,20 @@ function generateManualInstallDepsMarkdown(dependencies: ComponentDependency[]):
 
   const packages = [...new Set(additionalDeps.map(dep => dep.npmPackage).filter(Boolean))].join(' ');
 
-  return `\`\`\`bash title="Terminal" copyButton
+  return `\`\`\`bash tab="npm" copyButton
 npm install ${packages}
+\`\`\`
+
+\`\`\`bash tab="pnpm"
+pnpm add ${packages}
+\`\`\`
+
+\`\`\`bash tab="yarn"
+yarn add ${packages}
+\`\`\`
+
+\`\`\`bash tab="bun"
+bun add ${packages}
 \`\`\``;
 }
 
@@ -181,7 +201,7 @@ function generateComponentMarkdown(componentPath: string, componentName: string)
       if (fs.existsSync(filePath)) {
         const content = fs.readFileSync(filePath, 'utf-8');
         const language = fileName.endsWith('.ts') ? 'angular-ts' : 'typescript';
-        markdown += `\n\n\`\`\`${language} title="${fileName}" copyButton showLineNumbers\n${content}\n\`\`\`\n\n`;
+        markdown += `\n\n\`\`\`${language} title="${fileName}" expandable="true" expandableTitle="Expand" copyButton showLineNumbers\n${content}\n\`\`\`\n\n`;
       }
     });
 
@@ -195,7 +215,7 @@ function generateComponentMarkdown(componentPath: string, componentName: string)
       const filePath = path.join(componentPath, fileName);
       const content = fs.readFileSync(filePath, 'utf-8');
       const language = fileName.endsWith('.html') ? 'angular-html' : 'angular-ts';
-      markdown += `\n\n\`\`\`${language} title="${fileName}" copyButton showLineNumbers\n${content}\n\`\`\`\n\n`;
+      markdown += `\n\n\`\`\`${language} title="${fileName}" expandable="true" expandableTitle="Expand" copyButton showLineNumbers\n${content}\n\`\`\`\n\n`;
     });
 
     return markdown || `// No TypeScript files found for ${componentName}`;

@@ -1,6 +1,6 @@
 
 
-```angular-ts title="slider.component.ts" copyButton showLineNumbers
+```angular-ts title="slider.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 import { DOCUMENT } from '@angular/common';
@@ -395,7 +395,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
 
 
-```angular-ts title="slider.variants.ts" copyButton showLineNumbers
+```angular-ts title="slider.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const sliderVariants = cva(

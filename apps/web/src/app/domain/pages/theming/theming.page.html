@@ -5,14 +5,13 @@
     <p class="text-sm sm:text-base text-muted-foreground">You can choose between using CSS variables (recommended) or utility classes for theming.</p>
   </div>
 
-  <!-- CSS Variables Section -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="css-variables" id="css-variables">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">CSS Variables</h2>
       <z-markdown-renderer markdownUrl="/documentation/theming/css-variables-intro.md"></z-markdown-renderer>
     </div>
 
-    <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
+    <div class="">
       <h3 class="text-base sm:text-lg font-semibold mb-4">TailwindCSS v4 Configuration</h3>
       <p class="text-xs sm:text-sm text-muted-foreground mb-4">
         Copy and paste the following into your
@@ -22,7 +21,6 @@
     </div>
   </section>
 
-  <!-- Utility Classes Section -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="utility-classes" id="utility-classes">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Utility classes</h2>
@@ -30,7 +28,6 @@
     </div>
   </section>
 
-  <!-- Convention Section -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="convention" id="convention">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Convention</h2>
@@ -91,15 +88,9 @@
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">List of variables</h2>
       <p class="text-base sm:text-lg text-muted-foreground">Here's the list of variables available for customization:</p>
     </div>
-
-    <z-accordion zType="single" [zCollapsible]="true" class="w-full">
-      <z-accordion-item zValue="variables" zTitle="Show all variables">
-        <z-markdown-renderer markdownUrl="/documentation/theming/variables-list.md"></z-markdown-renderer>
-      </z-accordion-item>
-    </z-accordion>
+    <z-markdown-renderer markdownUrl="/documentation/theming/variables-list.md"></z-markdown-renderer>
   </section>
 
-  <!-- Adding New Colors Section -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="adding-new-colors" id="adding-new-colors">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Adding new colors</h2>
@@ -108,48 +99,41 @@
         <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">&#64;theme</code> directive.
       </p>
     </div>
-
-    <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
-      <z-markdown-renderer markdownUrl="/documentation/theming/adding-colors-example.md"></z-markdown-renderer>
-    </div>
+    <z-markdown-renderer markdownUrl="/documentation/theming/adding-colors-example.md"></z-markdown-renderer>
   </section>
 
-  <!-- Base Colors Section -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="base-colors" id="base-colors">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Base Colors</h2>
       <p class="text-base sm:text-lg text-muted-foreground">For reference, here's a list of the base colors that are available.</p>
     </div>
 
-    <z-accordion zType="multiple" [zCollapsible]="true" class="w-full">
-      <z-accordion-item zValue="neutral" zTitle="Neutral">
-        <p class="text-xs sm:text-sm text-muted-foreground mb-4">A modern, neutral color palette with subtle blue undertones using OKLCH color space.</p>
-        <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-neutral.md"></z-markdown-renderer>
-      </z-accordion-item>
+    <div>
+      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Neutral</h1>
+      <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-neutral.md"></z-markdown-renderer>
+    </div>
 
-      <z-accordion-item zValue="stone" zTitle="Stone">
-        <p class="text-xs sm:text-sm text-muted-foreground mb-4">A warm, earthy color palette with brown undertones optimized in OKLCH.</p>
-        <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-stone.md"></z-markdown-renderer>
-      </z-accordion-item>
+    <div>
+      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">stone</h1>
+      <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-stone.md"></z-markdown-renderer>
+    </div>
 
-      <z-accordion-item zValue="zinc" zTitle="Zinc">
-        <p class="text-xs sm:text-sm text-muted-foreground mb-4">A modern, neutral color palette with subtle blue undertones using OKLCH color space.</p>
-        <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-zinc.md"></z-markdown-renderer>
-      </z-accordion-item>
+    <div>
+      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Zinc</h1>
+      <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-zinc.md"></z-markdown-renderer>
+    </div>
 
-      <z-accordion-item zValue="gray" zTitle="Gray">
-        <p class="text-xs sm:text-sm text-muted-foreground mb-4">A pure, neutral color palette without any color undertones in OKLCH format.</p>
-        <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-gray.md"></z-markdown-renderer>
-      </z-accordion-item>
+    <div>
+      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Gray</h1>
+      <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-gray.md"></z-markdown-renderer>
+    </div>
 
-      <z-accordion-item zValue="slate" zTitle="Slate">
-        <p class="text-xs sm:text-sm text-muted-foreground mb-4">A cool, professional color palette with blue-gray undertones in OKLCH format.</p>
-        <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-slate.md"></z-markdown-renderer>
-      </z-accordion-item>
-    </z-accordion>
+    <div>
+      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Slate</h1>
+      <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-slate.md"></z-markdown-renderer>
+    </div>
   </section>
 
-  <!-- Other Color Formats Section -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="other-formats" id="other-formats">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Other color formats</h2>

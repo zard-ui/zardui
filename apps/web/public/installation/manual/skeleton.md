@@ -1,6 +1,6 @@
 
 
-```angular-ts title="skeleton.component.ts" copyButton showLineNumbers
+```angular-ts title="skeleton.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
@@ -27,7 +27,7 @@ export class ZardSkeletonComponent {
 
 
 
-```angular-ts title="skeleton.variants.ts" copyButton showLineNumbers
+```angular-ts title="skeleton.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const skeletonVariants = cva('bg-accent animate-pulse rounded-md');

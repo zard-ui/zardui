@@ -1,28 +1,17 @@
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { ZardAccordionItemComponent } from '@zard/components/accordion/accordion-item.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { ZardAccordionComponent } from '@zard/components/accordion/accordion.component';
-import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
+import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-theming',
   standalone: true,
-  imports: [
-    RouterModule,
-    DocContentComponent,
-    DocHeadingComponent,
-    ScrollSpyDirective,
-    ScrollSpyItemDirective,
-    MarkdownRendererComponent,
-    ZardAccordionComponent,
-    ZardAccordionItemComponent,
-  ],
+  imports: [RouterModule, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
   templateUrl: './theming.page.html',
 })
 export class ThemingPage {

@@ -1,0 +1,11 @@
+{
+  "name": "@ngzard/ui-dev",
+  "version": "0.0.0-dev",
+  "description": "Development version of @ngzard/ui CLI",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "zardev": "./index.js"
+  },
+  "private": true
+}

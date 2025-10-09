@@ -1,6 +1,6 @@
 
 
-```angular-ts title="table.component.ts" copyButton showLineNumbers
+```angular-ts title="table.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -150,7 +150,7 @@ export class ZardTableCaptionComponent {
 
 
 
-```angular-ts title="table.variants.ts" copyButton showLineNumbers
+```angular-ts title="table.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const tableVariants = cva(
@@ -217,7 +217,7 @@ export type ZardTableCaptionVariants = VariantProps<typeof tableCaptionVariants>
 
 
 
-```angular-ts title="table.module.ts" copyButton showLineNumbers
+```angular-ts title="table.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
 import {

@@ -1,5 +1,5 @@
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
-import { SOCIAL_MEDIAS } from '@zard/shared/constants/medias.constant';
+import { SOCIAL_MEDIAS } from '../../../shared/constants/medias.constant';
 import { Component, input } from '@angular/core';
 
 export interface FounderData {
@@ -23,7 +23,8 @@ export interface FounderData {
             <z-avatar
               [zImage]="{ url: founder.avatar_url, alt: founder.name + ' avatar', fallback: founder.name.substring(0, 2).toUpperCase() }"
               zSize="lg"
-              class="shrink-0"
+              zShape="circle"
+              class="shrink-0 rounded-full"
             ></z-avatar>
             <div class="flex flex-col gap-3">
               <div>
@@ -35,7 +36,6 @@ export interface FounderData {
                   <img [src]="githubData?.icon" [alt]="githubData?.iconAlt" class="h-4 dark:invert" />
                   GitHub
                 </a>
-                <span class="text-xs text-muted-foreground">{{ founder.contributions }} contributions</span>
               </div>
             </div>
           </div>

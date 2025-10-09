@@ -1,6 +1,6 @@
 
 
-```angular-ts title="dialog.component.ts" copyButton showLineNumbers
+```angular-ts title="dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
   Component,
@@ -183,7 +183,7 @@ export class ZardDialogModule {}
 
 
 
-```angular-ts title="dialog.variants.ts" copyButton showLineNumbers
+```angular-ts title="dialog.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const dialogVariants = cva(
@@ -195,7 +195,7 @@ export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
 
 
-```angular-ts title="dialog-ref.ts" copyButton showLineNumbers
+```angular-ts title="dialog-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { EventEmitter, Inject, inject, PLATFORM_ID } from '@angular/core';
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
@@ -276,7 +276,7 @@ export class ZardDialogRef<T = any, R = any, U = any> {
 
 
 
-```angular-ts title="dialog.service.ts" copyButton showLineNumbers
+```angular-ts title="dialog.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';

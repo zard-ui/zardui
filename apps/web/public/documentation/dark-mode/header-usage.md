@@ -1,5 +1,7 @@
 # Usage in Header Component
 
+## (or any component you want to use to trigger the theme)
+
 The header uses the service to implement the theme toggle button, allowing users to switch between light and dark mode.
 
 ```typescript

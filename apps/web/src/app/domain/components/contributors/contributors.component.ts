@@ -16,7 +16,7 @@ export interface Contributor {
   template: `
     <div class="flex flex-wrap gap-4">
       @for (contributor of contributors(); track contributor.login) {
-        <div class="relative" [zTooltip]="contributor.login + ' (' + contributor.contributions + ' contributions)'" zPosition="top" zTrigger="hover">
+        <div class="relative" [zTooltip]="contributor.login" zPosition="top" zTrigger="hover">
           <a [href]="contributor.html_url" target="_blank" rel="noopener noreferrer" class="block transition-transform hover:scale-110">
             <z-avatar
               [zImage]="{ url: contributor.avatar_url, alt: contributor.login + ' avatar', fallback: contributor.login.substring(0, 2).toUpperCase() }"

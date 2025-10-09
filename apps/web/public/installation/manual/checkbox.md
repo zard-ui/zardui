@@ -1,6 +1,6 @@
 
 
-```angular-ts title="checkbox.component.ts" copyButton showLineNumbers
+```angular-ts title="checkbox.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
@@ -89,7 +89,7 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
 
 
 
-```angular-ts title="checkbox.variants.ts" copyButton showLineNumbers
+```angular-ts title="checkbox.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const checkboxVariants = cva(

@@ -1,6 +1,6 @@
 
 
-```angular-ts title="combobox.component.ts" copyButton showLineNumbers
+```angular-ts title="combobox.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
 import {
@@ -413,7 +413,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
 
 
 
-```angular-ts title="combobox.variants.ts" copyButton showLineNumbers
+```angular-ts title="combobox.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const comboboxVariants = cva('', {
