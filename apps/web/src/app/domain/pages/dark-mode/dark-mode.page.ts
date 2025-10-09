@@ -4,10 +4,10 @@ import { MarkdownRendererComponent } from '../../components/render/markdown-rend
 import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { ZardButtonComponent } from '../../../../../libs/zard/src/lib/components/button/button.component';
-import { ZardAlertComponent } from '../../../../../libs/zard/src/lib/components/alert/alert.component';
-import { ZardCardComponent } from '../../../../../libs/zard/src/lib/components/card/card.component';
-import { DarkModeService } from '../../shared/services/darkmode.service';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
+import { ZardCardComponent } from '@zard/components/card/card.component';
+import { DarkModeService } from '../../../shared/services/darkmode.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
