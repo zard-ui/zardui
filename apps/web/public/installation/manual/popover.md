@@ -1,11 +1,6 @@
 
 
 ```angular-ts title="popover.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Subject } from 'rxjs';
-
-import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,7 +19,10 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
+import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
+import { Subject } from 'rxjs';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { popoverVariants } from './popover.variants';
@@ -190,14 +188,14 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
       const positionStrategy = this.overlayPositionBuilder
         .flexibleConnectedTo(this.nativeElement)
         .withPositions(this.getPositions())
-        .withPush(true)
-        .withFlexibleDimensions(true)
+        .withPush(false)
+        .withFlexibleDimensions(false)
         .withViewportMargin(8);
 
       this.overlayRef = this.overlay.create({
         positionStrategy,
         hasBackdrop: false,
-        scrollStrategy: this.overlay.scrollStrategies.close(),
+        scrollStrategy: this.overlay.scrollStrategies.reposition(),
       });
     }
   }

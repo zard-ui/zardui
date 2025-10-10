@@ -1,59 +1,90 @@
-<button (click)="sidebarState.set(true)" aria-label="Toggle Menu">
-  <a class="flex xl:hidden justify-centertems-center">
-    <i class="icon-align-justify !text-2xl"></i>
+<button z-button zType="ghost" (click)="toggleMenu()" aria-label="Toggle Menu" class="!p-0 !h-auto">
+  <a class="flex xl:hidden justify-center items-center gap-2.5">
+    <div class="relative flex h-8 w-4 items-center justify-center">
+      <div class="relative size-4">
+        <span
+          [class]="
+            sidebarState()
+              ? 'bg-foreground absolute left-0 block h-0.5 w-4 transition-all duration-100 top-[0.4rem] rotate-45'
+              : 'bg-foreground absolute left-0 block h-0.5 w-4 transition-all duration-100 top-1'
+          "
+        ></span>
+        <span
+          [class]="
+            sidebarState()
+              ? 'bg-foreground absolute left-0 block h-0.5 w-4 transition-all duration-100 top-[0.4rem] -rotate-45'
+              : 'bg-foreground absolute left-0 block h-0.5 w-4 transition-all duration-100 top-2.5'
+          "
+        ></span>
+      </div>
+      <span class="sr-only">Toggle Menu</span>
+    </div>
+    <span class="flex h-8 items-center text-lg leading-none font-medium">Menu</span>
   </a>
-  <span class="sr-only">Toggle Menu</span>
 </button>
 
 @if (sidebarState()) {
-  <main class="relative z-[99]">
-    <aside role="backdrop" class="fixed inset-0 z-50 bg-black/80 animate-in fade-in w-full h-screen" (click)="sidebarState.set(false)"></aside>
+  <div
+    [attr.data-state]="sidebarState() ? 'open' : 'closed'"
+    (click)="closeMenu()"
+    class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 duration-200"
+    style="top: var(--header-height)"
+  ></div>
 
-    <nav
-      class="fixed z-50 p-5 shadow-lg transition ease-in-out inset-y-0 left-0 h-screen w-3/4 sm:max-w-sm pr-0 border-l bg-background dark:bg-background/95 backdrop-blur"
-      [class]="sidebarState() ? 'animate-in slide-in-from-left ' : 'animate-out slide-out-to-left'"
+  <div class="fixed left-0 z-50" style="top: var(--header-height); min-width: max-content; will-change: transform">
+    <div
+      [attr.data-side]="'bottom'"
+      [attr.data-align]="'start'"
+      [attr.data-state]="sidebarState() ? 'open' : 'closed'"
+      (click)="$event.stopPropagation()"
+      role="dialog"
+      class="text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 z-50 border outline-hidden bg-background/90 no-scrollbar overflow-y-auto rounded-none border-none p-0 shadow-none backdrop-blur duration-100"
+      style="width: 100vw; height: calc(100vh - var(--header-height))"
+      tabindex="-1"
     >
-      <header class="flex items-center justify-between">
-        <a class="flex items-center gap-1" routerLink="/" (click)="sidebarState.set(false)">
-          <img src="images/zard.svg" alt="Logo" class="mr-2 h-8 dark:invert" />
-          <z-badge zType="secondary">{{ appVersion }}</z-badge>
-        </a>
-        <button (click)="sidebarState.set(false)" z-button zType="ghost" aria-label="Close">
-          <i class="icon-x !text-lg"></i>
-          <span class="sr-only">Close</span>
-        </button>
-      </header>
-
-      <main class="relative overflow-hidden h-[calc(100vh-8rem)] py-2">
-        <menu class="h-full overflow-auto">
-          <nav class="grid gap-8 pt-4">
-            @for (doc of sidebarPaths; track $index) {
-              <ul class="grid gap-2 pr-5">
-                <h1 class="px-2 font-semibold">{{ doc.title }}</h1>
-                @for (path of doc.data; track $index) {
-                  <li class="text-sm">
-                    <a
-                      z-button
-                      zType="ghost"
-                      zFull
-                      [routerLink]="path.path"
-                      class="justify-between px-2 py-1 font-normal capitalize"
-                      routerLinkActive="bg-accent font-semibold"
-                      [routerLinkActiveOptions]="{ exact: true }"
-                      (click)="isAvailable(path.available)"
-                    >
-                      {{ path.name }}
-                      @if (!path.available) {
-                        <z-badge zType="secondary" class="px-1 py-0">soon</z-badge>
-                      }
-                    </a>
-                  </li>
+      <nav class="flex flex-col gap-12 overflow-auto px-6 py-6">
+        <div class="flex flex-col gap-4">
+          <div class="text-muted-foreground text-sm font-medium">Menu</div>
+          <div class="flex flex-col gap-3">
+            @for (item of mainMenu; track $index) {
+              <a
+                [routerLink]="item.path"
+                routerLinkActive="font-semibold"
+                [routerLinkActiveOptions]="{ exact: true }"
+                (click)="isAvailable(item.available)"
+                class="text-2xl font-medium flex items-center gap-2 capitalize hover:text-foreground transition-colors"
+              >
+                {{ item.name }}
+                @if (!item.available) {
+                  <z-badge zType="secondary" class="px-1.5 py-0.5 text-xs">soon</z-badge>
                 }
-              </ul>
+              </a>
             }
-          </nav>
-        </menu>
-      </main>
-    </nav>
-  </main>
+          </div>
+        </div>
+
+        @for (doc of sidebarPaths; track $index) {
+          <div class="flex flex-col gap-4">
+            <div class="text-muted-foreground text-sm font-medium">{{ doc.title }}</div>
+            <div class="flex flex-col gap-3">
+              @for (path of doc.data; track $index) {
+                <a
+                  [routerLink]="path.path"
+                  routerLinkActive="font-semibold"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="isAvailable(path.available)"
+                  class="text-2xl font-medium flex items-center gap-2 capitalize hover:text-foreground transition-colors"
+                >
+                  {{ path.name }}
+                  @if (!path.available) {
+                    <z-badge zType="secondary" class="px-1.5 py-0.5 text-xs">soon</z-badge>
+                  }
+                </a>
+              }
+            </div>
+          </div>
+        }
+      </nav>
+    </div>
+  </div>
 }
