@@ -1,8 +1,8 @@
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { RouterModule } from '@angular/router';
-import { Component, effect, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
+import { SIDEBAR_PATHS, HEADER_PATHS } from '@zard/shared/constants/routes.constant';
 import { environment } from '@zard/env/environment';
 
 @Component({
@@ -12,28 +12,25 @@ import { environment } from '@zard/env/environment';
   imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent],
 })
 export class MobileMenuComponent {
+  readonly mainMenu = [
+    { name: 'Home', path: '/', available: true },
+    ...HEADER_PATHS,
+  ];
   readonly sidebarPaths = SIDEBAR_PATHS;
   readonly appVersion = environment.appVersion;
   sidebarState = signal<boolean>(false);
 
-  constructor() {
-    effect(() => {
-      this.toggleOverflow();
-    });
+  toggleMenu(): void {
+    this.sidebarState.set(!this.sidebarState());
   }
 
-  toggleOverflow(): void {
-    const html = document.documentElement;
-    if (this.sidebarState()) {
-      html.classList.add('overflow-hidden');
-    } else {
-      html.classList.remove('overflow-hidden');
-    }
+  closeMenu(): void {
+    this.sidebarState.set(false);
   }
 
   isAvailable(available: boolean): void {
     if (available) {
-      this.sidebarState.set(false);
+      this.closeMenu();
     }
   }
 }
