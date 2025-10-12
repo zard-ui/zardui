@@ -83,3 +83,7 @@ export * from './lib/components/menu/menu-item.directive';
 export * from './lib/components/menu/menu.directive';
 export * from './lib/components/menu/menu.variants';
 export * from './lib/components/menu/menu.module';
+
+// Context Menu
+export * from './lib/components/menu/context-menu/context-menu.directive';
+

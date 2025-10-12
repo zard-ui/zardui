@@ -45,7 +45,6 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   readonly zHoverDelay = input<number>(100);
 
   ngOnInit(): void {
-    // Check if device is mobile/touch device
     const isMobile = this.isMobileDevice();
 
     // If trigger is hover but device is mobile, skip hover behavior
@@ -319,13 +318,11 @@ export class ZardMenuItemDirective {
 import { Injectable } from '@angular/core';
 
 import { ZardMenuDirective } from './menu.directive';
-
 @Injectable({
   providedIn: 'root',
 })
 export class ZardMenuManagerService {
   private activeHoverMenu: ZardMenuDirective | null = null;
-
   registerHoverMenu(menu: ZardMenuDirective): void {
     if (this.activeHoverMenu && this.activeHoverMenu !== menu) {
       this.activeHoverMenu.close();
@@ -335,13 +332,6 @@ export class ZardMenuManagerService {
 
   unregisterHoverMenu(menu: ZardMenuDirective): void {
     if (this.activeHoverMenu === menu) {
-      this.activeHoverMenu = null;
-    }
-  }
-
-  closeActiveMenu(): void {
-    if (this.activeHoverMenu) {
-      this.activeHoverMenu.close();
       this.activeHoverMenu = null;
     }
   }
@@ -357,8 +347,9 @@ import { NgModule } from '@angular/core';
 import { ZardMenuContentDirective } from './menu-content.directive';
 import { ZardMenuItemDirective } from './menu-item.directive';
 import { ZardMenuDirective } from './menu.directive';
+import { ZardContextMenuDirective } from '@zard/components/menu/context-menu/context-menu.directive';
 
-const MENU_COMPONENTS = [ZardMenuContentDirective, ZardMenuItemDirective, ZardMenuDirective];
+const MENU_COMPONENTS = [ZardMenuContentDirective, ZardMenuItemDirective, ZardMenuDirective,ZardContextMenuDirective];
 
 @NgModule({
   imports: [MENU_COMPONENTS],
