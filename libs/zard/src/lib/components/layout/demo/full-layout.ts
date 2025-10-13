@@ -63,7 +63,7 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
         </z-sidebar>
 
         <z-layout>
-          <z-content>
+          <z-content class="min-h-[200px]">
             <div class="space-y-4">
               <z-skeleton class="h-32 w-full"></z-skeleton>
               <z-skeleton class="h-48 w-full"></z-skeleton>

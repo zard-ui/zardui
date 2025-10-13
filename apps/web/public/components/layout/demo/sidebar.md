@@ -21,7 +21,8 @@ interface MenuItem {
   standalone: true,
   imports: [LayoutModule, ZardButtonComponent, ZardBreadcrumbModule, ZardMenuModule, ZardSkeletonComponent, ZardTooltipModule, ZardDividerComponent, ZardAvatarComponent],
   template: `
-    <z-layout class="min-h-[500px] border rounded-md overflow-hidden">
+    <!-- border and rounded-md are just for the demo purpose -->
+    <z-layout class="border rounded-md overflow-hidden">
       <z-sidebar [zWidth]="250" [zCollapsible]="true" [zCollapsed]="sidebarCollapsed()" [zCollapsedWidth]="70" (zCollapsedChange)="onCollapsedChange($event)" class="!p-0">
         <nav [class]="'flex flex-col h-full overflow-hidden ' + (sidebarCollapsed() ? 'gap-1 p-1 pt-4' : 'gap-4 p-4')">
           <z-sidebar-group>
@@ -90,7 +91,7 @@ interface MenuItem {
               z-menu
               [zMenuTriggerFor]="userMenu"
               zPlacement="rightBottom"
-              [class]="'flex items-center justify-center gap-2 cursor-pointer rounded-md hover:bg-zinc-100 ' + (sidebarCollapsed() ? 'p-0 m-2' : 'p-2')"
+              [class]="'flex items-center justify-center gap-2 cursor-pointer rounded-md hover:bg-accent ' + (sidebarCollapsed() ? 'p-0 m-2' : 'p-2')"
             >
               <z-avatar zSize="sm" [zImage]="avatar" />
 
@@ -125,7 +126,8 @@ interface MenuItem {
         </nav>
       </z-sidebar>
 
-      <z-content>
+      <!-- min-h-[200px] is just for the demo purpose to have a minimum height -->
+      <z-content class="min-h-[200px]">
         <div class="flex items-center">
           <button z-button zType="ghost" zSize="sm" class="-ml-2" (click)="toggleSidebar()">
             <i class="icon-panel-left"></i>
