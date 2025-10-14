@@ -1,0 +1,93 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: 'en-US'
+tone_instructions: 'Enforce Angular best practices: signals (input/output/computed), OnPush, inject(), native control flow, class/style bindings, strict TypeScript, CVA patterns, TailwindCSS v4. Flag @HostBinding/@HostListener.'
+
+reviews:
+  profile: 'assertive'
+  high_level_summary: true
+  auto_review:
+    enabled: true
+    drafts: false
+    ignore_title_keywords:
+      - 'wip'
+      - 'draft'
+  path_filters:
+    - '!node_modules/**'
+    - '!dist/**'
+    - '!.angular/**'
+    - '!packages/**'
+    - 'apps/**'
+    - 'libs/**'
+    - 'scripts/**'
+
+tools:
+  eslint:
+    enabled: true
+  gitleaks:
+    enabled: true
+  actionlint:
+    enabled: true
+
+chat:
+  auto_reply: true
+
+knowledge_base:
+  code_guidelines:
+    enabled: true
+    filePatterns:
+      - '**/.cursorrules'
+      - '**/CLAUDE.md'
+      - '**/CONTRIBUTING.md'
+      - '**/README.md'
+
+path_instructions:
+  - path: 'libs/zard/src/lib/components/**/*.component.ts'
+    instructions: |
+      - NO standalone: true (it's default, must be omitted)
+      - MUST use ChangeDetectionStrategy.OnPush
+      - Use input() and output() functions, NOT @Input/@Output decorators
+      - Use computed() for derived state
+      - Host bindings in host object, NOT @HostBinding/@HostListener
+      - Use inject() function, NOT constructor injection
+      - Verify mergeClasses() for CVA variant integration
+      - Avoid 'any' type, use strict typing
+
+  - path: 'libs/zard/src/lib/components/**/*.html'
+    instructions: |
+      - Use native control flow: @if, @for, @switch (NOT *ngIf/*ngFor/*ngSwitch)
+      - Use [class] bindings, NOT ngClass
+      - Use [style] bindings, NOT ngStyle
+      - Keep templates simple, avoid complex logic
+      - Use async pipe for observables
+      - Use NgOptimizedImage for static images
+
+  - path: 'libs/zard/src/lib/components/**/*.variants.ts'
+    instructions: |
+      - Verify CVA patterns with strict TypeScript types
+      - Ensure TailwindCSS v4 utility classes
+      - Use type inference when obvious
+
+  - path: 'libs/zard/src/lib/components/**/*.spec.ts'
+    instructions: |
+      - Jest + @happy-dom setup
+      - Test standalone components properly
+      - Comprehensive coverage for signals and computed values
+
+  - path: 'libs/zard/src/lib/shared/**/*.service.ts'
+    instructions: |
+      - Use providedIn: 'root' for singletons
+      - Single responsibility principle
+      - Use inject() function, NOT constructor injection
+      - Keep state transformations pure
+
+  - path: 'libs/zard/src/lib/components/**/demo/**'
+    instructions: 'Validate demo structure follows patterns with clear examples'
+
+  - path: 'libs/zard/src/lib/components/**/doc/**'
+    instructions: 'Ensure complete API documentation in overview.md and api.md'
+
+  - path: 'apps/web/**'
+    instructions: |
+      - Lazy loading for feature routes
+      - Proper @zard/* library consumption
+      - Follow same Angular best practices
