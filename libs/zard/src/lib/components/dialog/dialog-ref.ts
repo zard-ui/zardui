@@ -13,6 +13,7 @@ const enum eTriggerAction {
 
 export class ZardDialogRef<T = any, R = any, U = any> {
   private destroy$ = new Subject<void>();
+  private isClosing = false;
   protected result?: R;
   componentInstance: T | null = null;
 
@@ -49,14 +50,29 @@ export class ZardDialogRef<T = any, R = any, U = any> {
   }
 
   close(result?: R) {
+    if (this.isClosing) {
+      return;
+    }
+
+    this.isClosing = true;
     this.result = result;
 
     this.containerInstance.state.set('close');
 
     setTimeout(() => {
-      this.overlayRef.detachBackdrop();
-      this.overlayRef.dispose();
-      this.destroy$.next();
+      if (this.overlayRef && !this.overlayRef.hasAttached()) {
+        return;
+      }
+
+      if (this.overlayRef) {
+        this.overlayRef.detachBackdrop();
+        this.overlayRef.dispose();
+      }
+
+      if (!this.destroy$.closed) {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
     }, 150);
   }
 
