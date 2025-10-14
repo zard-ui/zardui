@@ -1,7 +1,8 @@
-import { EventEmitter, Inject, inject, PLATFORM_ID } from '@angular/core';
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+
 import { OverlayRef } from '@angular/cdk/overlay';
+import { isPlatformBrowser } from '@angular/common';
+import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
 
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
@@ -49,9 +50,14 @@ export class ZardDialogRef<T = any, R = any, U = any> {
 
   close(result?: R) {
     this.result = result;
-    this.overlayRef.detachBackdrop();
-    this.overlayRef.dispose();
-    this.destroy$.next();
+
+    this.containerInstance.state.set('close');
+
+    setTimeout(() => {
+      this.overlayRef.detachBackdrop();
+      this.overlayRef.dispose();
+      this.destroy$.next();
+    }, 150);
   }
 
   private trigger(action: eTriggerAction) {
