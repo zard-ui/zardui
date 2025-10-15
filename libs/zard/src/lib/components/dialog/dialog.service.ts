@@ -1,10 +1,10 @@
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 
-import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 import { ZardDialogRef } from './dialog-ref';
+import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
@@ -60,7 +60,10 @@ export class ZardDialogService {
 
     const containerPortal = new ComponentPortal<ZardDialogComponent<T, U>>(ZardDialogComponent, config.zViewContainerRef, injector);
     const containerRef = overlayRef.attach<ZardDialogComponent<T, U>>(containerPortal);
-    containerRef.instance.state.set('open');
+
+    setTimeout(() => {
+      containerRef.instance.state.set('open');
+    }, 0);
 
     return containerRef.instance;
   }

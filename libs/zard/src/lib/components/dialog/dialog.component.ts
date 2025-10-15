@@ -1,3 +1,8 @@
+import { filter, fromEvent, takeUntil } from 'rxjs';
+
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,15 +20,12 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
-import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
-import { filter, fromEvent, takeUntil } from 'rxjs';
 
-import { ZardButtonComponent } from '../button/button.component';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
-import { ZardDialogRef } from './dialog-ref';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -106,9 +108,17 @@ export class ZardDialogOptions<T, U> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
-    '[attr.data-state]': 'state()',
+    '[@dialogAnimation]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
   },
+  animations: [
+    trigger('dialogAnimation', [
+      state('close', style({ opacity: 0, transform: 'scale(0.9)' })),
+      state('open', style({ opacity: 1, transform: 'scale(1)' })),
+      transition('close => open', animate('150ms ease-out')),
+      transition('open => close', animate('150ms ease-in')),
+    ]),
+  ],
 })
 export class ZardDialogComponent<T, U> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
