@@ -276,12 +276,10 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
 
     if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
-      setTimeout(() => {
-        this.overlayRef
-          .outsidePointerEvents()
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(() => this.close());
-      }, 0);
+      this.overlayRef
+        .outsidePointerEvents()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.close());
     }
 
     if (isPlatformBrowser(this.platformId)) {
