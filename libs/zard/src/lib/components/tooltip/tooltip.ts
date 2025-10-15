@@ -93,8 +93,10 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
 
       switch (this.zTrigger()) {
         case 'click':
+          if (!this.overlayRef) return;
+
           this.overlayRef
-            ?.outsidePointerEvents()
+            .outsidePointerEvents()
             .pipe(takeUntil(merge(this.destroy$, this.overlayRef.detachments())))
             .subscribe(() => this.hide());
           break;

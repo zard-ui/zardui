@@ -119,6 +119,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.hide();
+    this.hidePopover$.complete();
     this.destroy$.next();
     this.destroy$.complete();
   }

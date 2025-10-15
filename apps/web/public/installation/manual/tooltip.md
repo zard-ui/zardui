@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="tooltip.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Subject, take, takeUntil } from 'rxjs';
+import { merge, Subject, take, takeUntil } from 'rxjs';
 
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -96,9 +96,11 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
 
       switch (this.zTrigger()) {
         case 'click':
+          if (!this.overlayRef) return;
+
           this.overlayRef
-            ?.outsidePointerEvents()
-            .pipe(takeUntil(this.destroy$))
+            .outsidePointerEvents()
+            .pipe(takeUntil(merge(this.destroy$, this.overlayRef.detachments())))
             .subscribe(() => this.hide());
           break;
         case 'hover':

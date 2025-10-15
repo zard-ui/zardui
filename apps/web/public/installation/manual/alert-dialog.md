@@ -221,10 +221,6 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     this.containerInstance.state.set('close');
 
     setTimeout(() => {
-      if (this.overlayRef && !this.overlayRef.hasAttached()) {
-        return;
-      }
-
       if (this.overlayRef) {
         this.overlayRef.dispose();
       }
@@ -270,14 +266,11 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
   }
 
   private handleMaskClick() {
-    const hasMaskClosable = this.config.zMaskClosable || this.config.zMaskClosable === undefined;
+    const hasMaskClosable = this.config.zMaskClosable ?? true;
     if (hasMaskClosable) {
       this.overlayRef
         .outsidePointerEvents()
-        .pipe(
-          filter(() => hasMaskClosable),
-          takeUntil(this.destroy$),
-        )
+        .pipe(takeUntil(this.destroy$))
         .subscribe(() => {
           this.close();
         });
