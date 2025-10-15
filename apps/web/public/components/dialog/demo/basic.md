@@ -1,9 +1,10 @@
 ```angular-ts showLineNumbers copyButton
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.directive';
+import { ZardDatePickerComponent } from '../../date-picker/date-picker.component';
+import { ZardPopoverComponent, ZardPopoverDirective } from '../../popover/popover.component';
 import { ZardDialogModule } from '../dialog.component';
 import { Z_MODAL_DATA, ZardDialogService } from '../dialog.service';
 
@@ -16,31 +17,27 @@ interface iDialogData {
   selector: 'zard-demo-dialog-basic',
   exportAs: 'zardDemoDialogBasic',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, ZardInputDirective],
+  imports: [FormsModule, ReactiveFormsModule, ZardDatePickerComponent, ZardPopoverComponent, ZardPopoverDirective],
   template: `
-    <form [formGroup]="form" class="grid gap-4">
-      <div class="grid gap-3">
-        <label
-          for="name"
-          class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-          >Name</label
-        >
-        <input z-input formControlName="name" />
-      </div>
+    <button z-button zPopover [zContent]="popoverContent" zType="outline">Open popover</button>
 
-      <div class="grid gap-3">
-        <label
-          for="username"
-          class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-          >Username</label
-        >
-        <input z-input formControlName="username" />
-      </div>
-    </form>
+    <ng-template #popoverContent>
+      <z-popover>
+        <div class="space-y-2">
+          <h4 class="font-medium leading-none">Dimensions</h4>
+          <p class="text-sm text-muted-foreground">Set the dimensions for the layer.</p>
+        </div>
+      </z-popover>
+    </ng-template>
+
+    ---
+
+    <z-date-picker placeholder="Pick a date" [value]="selectedDate()" (dateChange)="onDateChange($event)" />
   `,
 })
 export class ZardDemoDialogBasicInputComponent {
   private zData: iDialogData = inject(Z_MODAL_DATA);
+  selectedDate = signal<Date | null>(null);
 
   form = new FormGroup({
     name: new FormControl('Pedro Duarte'),
@@ -49,6 +46,11 @@ export class ZardDemoDialogBasicInputComponent {
 
   constructor() {
     if (this.zData) this.form.patchValue(this.zData);
+  }
+
+  onDateChange(date: Date | null) {
+    this.selectedDate.set(date);
+    console.log('Selected date:', date);
   }
 }
 

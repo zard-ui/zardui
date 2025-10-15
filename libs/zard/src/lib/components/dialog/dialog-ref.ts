@@ -27,16 +27,10 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
 
     if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
-      this.containerInstance.getNativeElement().addEventListener(
-        'animationend',
-        () => {
-          this.containerInstance
-            .overlayClickOutside()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(() => this.close());
-        },
-        { once: true },
-      );
+      this.overlayRef
+        .outsidePointerEvents()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.close());
     }
 
     if (isPlatformBrowser(this.platformId)) {

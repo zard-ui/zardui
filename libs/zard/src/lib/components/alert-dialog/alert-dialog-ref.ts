@@ -1,4 +1,4 @@
-import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
+import { filter, Observable, Subject, takeUntil } from 'rxjs';
 
 import { OverlayRef } from '@angular/cdk/overlay';
 
@@ -7,6 +7,7 @@ import { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } fro
 export class ZardAlertDialogRef<T = unknown, R = unknown> {
   componentInstance?: T;
   private destroy$ = new Subject<void>();
+  private isClosing = false;
   private readonly afterClosedSubject: Subject<R | undefined> = new Subject();
 
   constructor(
@@ -23,25 +24,34 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     });
 
     this.handleMaskClick();
-
-    fromEvent<KeyboardEvent>(document, 'keydown')
-      .pipe(
-        filter(event => event.key === 'Escape'),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(() => this.close());
+    this.handleEscapeKey();
   }
 
   close(dialogResult?: R): void {
+    if (this.isClosing) {
+      return;
+    }
+
+    this.isClosing = true;
     this.containerInstance.state.set('close');
 
     setTimeout(() => {
-      this.overlayRef.dispose();
+      if (this.overlayRef && !this.overlayRef.hasAttached()) {
+        return;
+      }
+
+      if (this.overlayRef) {
+        this.overlayRef.dispose();
+      }
+
       this.afterClosedSubject.next(dialogResult);
       this.afterClosedSubject.complete();
-      this.destroy$.next();
-      this.destroy$.complete();
-    }, 200);
+
+      if (!this.destroy$.closed) {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
+    }, 150);
   }
 
   afterClosed(): Observable<R | undefined> {
@@ -75,13 +85,27 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
   }
 
   private handleMaskClick() {
-    if (this.config.zMaskClosable) {
-      this.containerInstance
-        .overlayClickOutside()
-        .pipe(filter(() => this.config.zMaskClosable === true))
+    const hasMaskClosable = this.config.zMaskClosable || this.config.zMaskClosable === undefined;
+    if (hasMaskClosable) {
+      this.overlayRef
+        .outsidePointerEvents()
+        .pipe(
+          filter(() => hasMaskClosable),
+          takeUntil(this.destroy$),
+        )
         .subscribe(() => {
           this.close();
         });
     }
+  }
+
+  private handleEscapeKey() {
+    this.overlayRef
+      .keydownEvents()
+      .pipe(
+        filter(event => event.key === 'Escape'),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => this.close());
   }
 }

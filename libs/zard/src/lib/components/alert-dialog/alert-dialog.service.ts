@@ -101,10 +101,9 @@ export class ZardAlertDialogService {
     const containerPortal = new ComponentPortal<ZardAlertDialogComponent<T>>(ZardAlertDialogComponent, config.zViewContainerRef, injector);
     const containerRef = overlayRef.attach<ZardAlertDialogComponent<T>>(containerPortal);
 
-    // Pequeno delay para evitar reflow durante a renderização inicial
     setTimeout(() => {
       containerRef.instance.state.set('open');
-    }, 10);
+    }, 0);
 
     return containerRef.instance;
   }

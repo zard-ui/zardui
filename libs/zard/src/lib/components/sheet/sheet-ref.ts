@@ -1,7 +1,8 @@
-import { EventEmitter, Inject, inject, PLATFORM_ID } from '@angular/core';
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+
 import { OverlayRef } from '@angular/cdk/overlay';
+import { isPlatformBrowser } from '@angular/common';
+import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
 
 import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
@@ -25,16 +26,10 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
 
     if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
-      this.containerInstance.getNativeElement().addEventListener(
-        'animationend',
-        () => {
-          this.containerInstance
-            .overlayClickOutside()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(() => this.close());
-        },
-        { once: true },
-      );
+      this.overlayRef
+        .outsidePointerEvents()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.close());
     }
 
     if (isPlatformBrowser(this.platformId)) {
