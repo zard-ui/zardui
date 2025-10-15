@@ -35,7 +35,7 @@ import { CARD } from '@zard/components/card/demo/card';
 import { FORM } from '@zard/components/form/demo/form';
 import { MENU } from '@zard/components/menu/demo/menu';
 import { ComponentType } from '@angular/cdk/overlay';
-import { CONTEXTMENU } from '@zard/components/menu/context-menu/demo/context-menu';
+import { CONTEXT_MENU } from '@zard/components/menu/demo/context-menu';
 
 export interface ComponentData {
   componentName: string;
@@ -72,7 +72,7 @@ export const COMPONENTS: ComponentData[] = [
   INPUT,
   LOADER,
   MENU,
-  CONTEXTMENU,
+  CONTEXT_MENU,
   PAGINATION,
   POPOVER,
   PROGRESS_BAR,

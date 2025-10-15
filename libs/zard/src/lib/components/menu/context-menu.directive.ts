@@ -10,8 +10,8 @@ import {
   OnInit,
   TemplateRef,
 } from '@angular/core';
-import { ZardMenuManagerService } from '@zard/components/menu/menu-manager.service';
 
+import { ZardMenuDirective } from './menu.directive';
 
 export interface ContextMenuPosition {
   x: number;
@@ -19,7 +19,7 @@ export interface ContextMenuPosition {
 }
 
 /**
- * Directive that enables context menu (right-click menu) functionality.
+ * Extends the base ZardMenuDirective to add right-click behavior and positioning.
  *
  * @example
  * ```html
@@ -38,14 +38,14 @@ export interface ContextMenuPosition {
   standalone: true,
   hostDirectives: [
     {
-      directive: CdkMenuTrigger,
-      inputs: ['cdkMenuTriggerFor: zContextMenuTriggerFor'],
+      directive: ZardMenuDirective,
+      inputs: ['zMenuTriggerFor: zContextMenuTriggerFor', 'zDisabled', 'zPlacement'],
     },
   ],
   host: {
     '[attr.aria-haspopup]': "'menu'",
     '[attr.aria-expanded]': 'cdkTrigger.isOpen()',
-    '[attr.data-state]': "cdkTrigger.isOpen() ? 'open' : 'closed'",
+    '[attr.data-state]': "cdkTrigger.isOpen() ? 'open': 'closed'",
     '[attr.data-disabled]': "zDisabled() ? '' : undefined",
     '[attr.tabindex]': "zDisabled() ? '-1' : '0'",
     '(contextmenu)': 'onContextMenu($event)',
@@ -53,13 +53,12 @@ export interface ContextMenuPosition {
   },
 })
 export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
-  private static readonly MENU_OVERLAY_SELECTOR =
-    '.cdk-overlay-container .cdk-overlay-pane:last-child';
-  private static readonly PADDING = 8; // Padding from viewport edges
+  private static readonly MENU_OVERLAY_SELECTOR = '.cdk-overlay-container .cdk-overlay-pane:last-child';
+  private static readonly PADDING = 8;
 
+  protected readonly menuDirective = inject(ZardMenuDirective, { host: true });
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
   private readonly elementRef = inject(ElementRef<HTMLElement>);
-  private readonly menuManager = inject(ZardMenuManagerService);
 
   private readonly cleanupFunctions: Array<() => void> = [];
   private currentPosition: ContextMenuPosition | null = null;
@@ -74,15 +73,24 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
   });
 
   ngOnInit(): void {
+    // Override to use fixed positioning for context menus
+    this.cdkTrigger.menuPosition = [
+      {
+        originX: 'start',
+        originY: 'top',
+        overlayX: 'start',
+        overlayY: 'top',
+      },
+    ];
+
     this.setupGlobalListeners();
     this.setupMenuOpenListener();
     this.setupResizeObserver();
   }
 
   ngOnDestroy(): void {
-    this.menuManager.unregisterHoverMenu(this as any);
     this.resizeObserver?.disconnect();
-    this.cleanupFunctions.forEach((cleanup) => cleanup());
+    this.cleanupFunctions.forEach(cleanup => cleanup());
     this.cleanupFunctions.length = 0;
   }
 
@@ -113,19 +121,11 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
   }
 
   /**
-   * Closes the context menu
-   */
-  close(): void {
-    this.cdkTrigger.close();
-    this.currentPosition = null;
-  }
-
-  /**
    * Opens the context menu at the current stored position
    */
   private openContextMenu(): void {
     if (this.cdkTrigger.isOpen()) {
-      this.cdkTrigger.close();
+      this.menuDirective.close();
     }
 
     // Small delay to ensure clean state transition
@@ -150,49 +150,31 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
    * Sets up global event listeners for menu interactions
    */
   private setupGlobalListeners(): void {
-    // Close context menu on outside click
-    this.addEventListenerWithCleanup(document, 'click', (event: Event) => {
-      if (this.cdkTrigger.isOpen() && !this.isEventInsideMenu(event)) {
-        this.close();
-      }
-    });
-
-    // Close context menu on outside right-click
-    this.addEventListenerWithCleanup(
-      document,
-      'contextmenu',
-      (event: MouseEvent) => {
-        if (this.cdkTrigger.isOpen() && !this.isEventInsideMenu(event)) {
-          this.close();
-        }
-      }
-    );
-
-    // Close context menu on scroll
+    // Close on scroll
     this.addEventListenerWithCleanup(
       document,
       'scroll',
       () => {
         if (this.cdkTrigger.isOpen()) {
-          this.close();
+          this.menuDirective.close();
         }
       },
-      { passive: true, capture: true }
+      { passive: true, capture: true },
     );
 
-    // Close context menu on window resize
+    // Close on window resize
     this.addEventListenerWithCleanup(window, 'resize', () => {
       if (this.cdkTrigger.isOpen()) {
-        this.close();
+        this.menuDirective.close();
       }
     });
 
-    // Close context menu on escape key
+    // Close on escape key and restore focus
     this.addEventListenerWithCleanup(document, 'keydown', (event: KeyboardEvent) => {
       if (event.key === 'Escape' && this.cdkTrigger.isOpen()) {
         event.preventDefault();
         event.stopPropagation();
-        this.close();
+        this.menuDirective.close();
         this.elementRef.nativeElement.focus();
       }
     });
@@ -205,19 +187,18 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
     const openSubscription = this.cdkTrigger.opened.subscribe(() => {
       requestAnimationFrame(() => {
         this.positionMenu();
-        this.setupMenuKeyboardNavigation();
+        this.setupKeyboardNavigation();
         this.focusFirstMenuItem();
       });
     });
 
     const closeSubscription = this.cdkTrigger.closed.subscribe(() => {
-      this.menuManager.unregisterHoverMenu(this as any);
       this.currentPosition = null;
     });
 
     this.cleanupFunctions.push(
       () => openSubscription.unsubscribe(),
-      () => closeSubscription.unsubscribe()
+      () => closeSubscription.unsubscribe(),
     );
   }
 
@@ -239,9 +220,7 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
   private positionMenu(): void {
     if (!this.currentPosition) return;
 
-    const overlay = document.querySelector(
-      ZardContextMenuTriggerDirective.MENU_OVERLAY_SELECTOR
-    ) as HTMLElement;
+    const overlay = document.querySelector(ZardContextMenuTriggerDirective.MENU_OVERLAY_SELECTOR) as HTMLElement;
     if (!overlay) return;
 
     const menu = overlay.querySelector('[z-menu-content]') as HTMLElement;
@@ -293,60 +272,54 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
   /**
    * Sets up keyboard navigation for the menu
    */
-  private setupMenuKeyboardNavigation(): void {
-    const overlay = document.querySelector(
-      ZardContextMenuTriggerDirective.MENU_OVERLAY_SELECTOR
-    );
+  private setupKeyboardNavigation(): void {
+    const overlay = document.querySelector(ZardContextMenuTriggerDirective.MENU_OVERLAY_SELECTOR);
     if (!overlay) return;
 
-    this.addEventListenerWithCleanup(
-      overlay,
-      'keydown',
-      (event: KeyboardEvent) => {
-        if (!this.cdkTrigger.isOpen()) return;
+    this.addEventListenerWithCleanup(overlay, 'keydown', (event: KeyboardEvent) => {
+      if (!this.cdkTrigger.isOpen()) return;
 
-        switch (event.key) {
-          case 'ArrowDown':
-            event.preventDefault();
-            this.focusNextMenuItem();
-            break;
-          case 'ArrowUp':
-            event.preventDefault();
+      switch (event.key) {
+        case 'ArrowDown':
+          event.preventDefault();
+          this.focusNextMenuItem();
+          break;
+        case 'ArrowUp':
+          event.preventDefault();
+          this.focusPreviousMenuItem();
+          break;
+        case 'Home':
+          event.preventDefault();
+          this.focusFirstMenuItem();
+          break;
+        case 'End':
+          event.preventDefault();
+          this.focusLastMenuItem();
+          break;
+        case 'Enter':
+        case ' ':
+          event.preventDefault();
+          this.activateCurrentMenuItem();
+          break;
+        case 'ArrowRight':
+          event.preventDefault();
+          this.expandSubmenuIfAvailable();
+          break;
+        case 'ArrowLeft':
+          event.preventDefault();
+          this.collapseSubmenuOrClose();
+          break;
+        case 'Tab':
+          // Trap focus within menu
+          event.preventDefault();
+          if (event.shiftKey) {
             this.focusPreviousMenuItem();
-            break;
-          case 'Home':
-            event.preventDefault();
-            this.focusFirstMenuItem();
-            break;
-          case 'End':
-            event.preventDefault();
-            this.focusLastMenuItem();
-            break;
-          case 'Enter':
-          case ' ':
-            event.preventDefault();
-            this.activateCurrentMenuItem();
-            break;
-          case 'ArrowRight':
-            event.preventDefault();
-            this.expandSubmenuIfAvailable();
-            break;
-          case 'ArrowLeft':
-            event.preventDefault();
-            this.collapseSubmenuOrClose();
-            break;
-          case 'Tab':
-            // Trap focus within menu
-            event.preventDefault();
-            if (event.shiftKey) {
-              this.focusPreviousMenuItem();
-            } else {
-              this.focusNextMenuItem();
-            }
-            break;
-        }
+          } else {
+            this.focusNextMenuItem();
+          }
+          break;
       }
-    );
+    });
   }
 
   /**
@@ -354,9 +327,7 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
    */
   private focusFirstMenuItem(): void {
     const menuItems = this.getMenuItems();
-    const firstFocusable = menuItems.find(
-      (item) => !this.isMenuItemDisabled(item)
-    );
+    const firstFocusable = menuItems.find(item => !this.isMenuItemDisabled(item));
     if (firstFocusable) {
       firstFocusable.focus();
     }
@@ -367,9 +338,7 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
    */
   private focusLastMenuItem(): void {
     const menuItems = this.getMenuItems();
-    const lastFocusable = [...menuItems]
-      .reverse()
-      .find((item) => !this.isMenuItemDisabled(item));
+    const lastFocusable = [...menuItems].reverse().find(item => !this.isMenuItemDisabled(item));
     if (lastFocusable) {
       lastFocusable.focus();
     }
@@ -380,9 +349,7 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
    */
   private focusNextMenuItem(): void {
     const menuItems = this.getMenuItems();
-    const currentIndex = menuItems.findIndex(
-      (item) => item === document.activeElement
-    );
+    const currentIndex = menuItems.findIndex(item => item === document.activeElement);
 
     if (currentIndex === -1) {
       this.focusFirstMenuItem();
@@ -406,9 +373,7 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
    */
   private focusPreviousMenuItem(): void {
     const menuItems = this.getMenuItems();
-    const currentIndex = menuItems.findIndex(
-      (item) => item === document.activeElement
-    );
+    const currentIndex = menuItems.findIndex(item => item === document.activeElement);
 
     if (currentIndex === -1) {
       this.focusLastMenuItem();
@@ -459,35 +424,26 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
   private collapseSubmenuOrClose(): void {
     const activeMenu = document.activeElement?.closest('[z-menu-content]');
     if (!activeMenu) {
-      this.close();
+      this.menuDirective.close();
       this.elementRef.nativeElement.focus();
       return;
     }
 
     // Check if we're in a submenu
     const parentOverlay = activeMenu.parentElement?.closest('.cdk-overlay-pane');
-    const rootOverlay = document.querySelector(
-      ZardContextMenuTriggerDirective.MENU_OVERLAY_SELECTOR
-    );
+    const rootOverlay = document.querySelector(ZardContextMenuTriggerDirective.MENU_OVERLAY_SELECTOR);
 
     if (parentOverlay && parentOverlay !== rootOverlay) {
       // We're in a submenu, find and focus the parent trigger
-      const parentTrigger = parentOverlay.querySelector(
-        '[aria-expanded="true"]'
-      ) as HTMLElement;
+      const parentTrigger = parentOverlay.querySelector('[aria-expanded="true"]') as HTMLElement;
       if (parentTrigger) {
         parentTrigger.focus();
-        // Close the submenu
-        const closeButton = activeMenu.querySelector('[aria-label="Close"]') as HTMLElement;
-        if (closeButton) {
-          closeButton.click();
-        }
         return;
       }
     }
 
     // Otherwise close the context menu
-    this.close();
+    this.menuDirective.close();
     this.elementRef.nativeElement.focus();
   }
 
@@ -495,85 +451,46 @@ export class ZardContextMenuTriggerDirective implements OnInit, OnDestroy {
    * Gets all menu items in the current menu overlay
    */
   private getMenuItems(): HTMLElement[] {
-    const overlay = document.querySelector(
-      ZardContextMenuTriggerDirective.MENU_OVERLAY_SELECTOR
-    );
+    const overlay = document.querySelector(ZardContextMenuTriggerDirective.MENU_OVERLAY_SELECTOR);
     if (!overlay) return [];
 
     // Get the currently visible menu content
-    const visibleMenu = Array.from(
-      overlay.querySelectorAll('[z-menu-content]')
-    ).find((menu) => {
+    const visibleMenu = Array.from(overlay.querySelectorAll('[z-menu-content]')).find(menu => {
       const style = window.getComputedStyle(menu as HTMLElement);
       return style.display !== 'none' && style.visibility !== 'hidden';
     });
 
     if (!visibleMenu) return [];
 
-    return Array.from(
-      visibleMenu.querySelectorAll(
-        '[z-menu-item]:not([role="separator"]), [role="menuitem"]:not([role="separator"])'
-      )
-    ) as HTMLElement[];
+    return Array.from(visibleMenu.querySelectorAll('[z-menu-item]:not([role="separator"]), [role="menuitem"]:not([role="separator"])')) as HTMLElement[];
   }
 
   /**
    * Checks if an element is a menu item
    */
   private isMenuItem(element: HTMLElement): boolean {
-    return (
-      element.hasAttribute('z-menu-item') ||
-      element.getAttribute('role') === 'menuitem'
-    );
+    return element.hasAttribute('z-menu-item') || element.getAttribute('role') === 'menuitem';
   }
 
   /**
    * Checks if a menu item is disabled
    */
   private isMenuItemDisabled(element: HTMLElement): boolean {
-    return (
-      element.hasAttribute('disabled') ||
-      element.getAttribute('aria-disabled') === 'true' ||
-      element.hasAttribute('data-disabled') ||
-      element.hasAttribute('zDisabled')
-    );
+    return element.hasAttribute('disabled') || element.getAttribute('aria-disabled') === 'true' || element.hasAttribute('data-disabled') || element.hasAttribute('zDisabled');
   }
 
   /**
    * Checks if a menu item has a submenu
    */
   private hasSubmenu(element: HTMLElement): boolean {
-    return (
-      element.getAttribute('aria-haspopup') === 'menu' ||
-      element.hasAttribute('z-submenu-trigger')
-    );
-  }
-
-  /**
-   * Checks if an event occurred inside the menu overlay
-   */
-  private isEventInsideMenu(event: Event): boolean {
-    const target = event.target as Element;
-    if (!target) return false;
-
-    const overlay = document.querySelector(
-      ZardContextMenuTriggerDirective.MENU_OVERLAY_SELECTOR
-    );
-    return overlay ? overlay.contains(target) : false;
+    return element.getAttribute('aria-haspopup') === 'menu' || element.hasAttribute('z-submenu-trigger');
   }
 
   /**
    * Adds an event listener and registers cleanup function
    */
-  private addEventListenerWithCleanup(
-    element: Element | Document | Window,
-    eventType: string,
-    handler: (event: any) => void,
-    options?: AddEventListenerOptions
-  ): void {
+  private addEventListenerWithCleanup(element: Element | Document | Window, eventType: string, handler: (event: any) => void, options?: AddEventListenerOptions): void {
     element.addEventListener(eventType, handler, options);
-    this.cleanupFunctions.push(() =>
-      element.removeEventListener(eventType, handler, options)
-    );
+    this.cleanupFunctions.push(() => element.removeEventListener(eventType, handler, options));
   }
 }

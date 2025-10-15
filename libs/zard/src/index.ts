@@ -85,5 +85,5 @@ export * from './lib/components/menu/menu.variants';
 export * from './lib/components/menu/menu.module';
 
 // Context Menu
-export * from './lib/components/menu/context-menu/context-menu.directive';
+export * from '@zard/components/menu/context-menu.directive';
 
