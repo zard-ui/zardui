@@ -1,4 +1,4 @@
-import { Subject, takeUntil } from 'rxjs';
+import { merge, Subject, takeUntil } from 'rxjs';
 
 import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -70,6 +70,7 @@ const POPOVER_POSITIONS_MAP = {
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
+  private readonly hidePopover$ = new Subject<void>();
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly elementRef = inject(ElementRef);
@@ -142,6 +143,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   hide() {
     if (!this.isVisible()) return;
 
+    this.hidePopover$.next();
     this.overlayRef?.detach();
     this.isVisible.set(false);
     this.zVisibleChange.emit(false);
@@ -335,7 +337,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 
     this.overlayRef
       .outsidePointerEvents()
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntil(merge(this.hidePopover$, this.destroy$)))
       .subscribe(event => {
         const clickTarget = event.target as HTMLElement;
 

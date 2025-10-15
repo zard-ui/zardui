@@ -1,4 +1,4 @@
-import { Subject, take, takeUntil } from 'rxjs';
+import { merge, Subject, take, takeUntil } from 'rxjs';
 
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
@@ -95,7 +95,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
         case 'click':
           this.overlayRef
             ?.outsidePointerEvents()
-            .pipe(takeUntil(this.destroy$))
+            .pipe(takeUntil(merge(this.destroy$, this.overlayRef.detachments())))
             .subscribe(() => this.hide());
           break;
         case 'hover':

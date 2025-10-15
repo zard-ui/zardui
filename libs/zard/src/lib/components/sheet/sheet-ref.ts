@@ -13,6 +13,7 @@ const enum eTriggerAction {
 
 export class ZardSheetRef<T = any, R = any, U = any> {
   private destroy$ = new Subject<void>();
+  private isClosing = false;
   protected result?: R;
   componentInstance: T | null = null;
 
@@ -43,15 +44,29 @@ export class ZardSheetRef<T = any, R = any, U = any> {
   }
 
   close(result?: R) {
+    if (this.isClosing) {
+      return;
+    }
+
+    this.isClosing = true;
     this.result = result;
     this.containerInstance.state.set('closed');
 
     const element = this.containerInstance.getNativeElement();
     const onAnimationEnd = () => {
       element.removeEventListener('animationend', onAnimationEnd);
-      this.overlayRef.detachBackdrop();
-      this.overlayRef.dispose();
-      this.destroy$.next();
+
+      if (this.overlayRef) {
+        if (this.overlayRef.hasAttached()) {
+          this.overlayRef.detachBackdrop();
+        }
+        this.overlayRef.dispose();
+      }
+
+      if (!this.destroy$.closed) {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
     };
 
     element.addEventListener('animationend', onAnimationEnd);

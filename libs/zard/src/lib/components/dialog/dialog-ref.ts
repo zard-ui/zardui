@@ -54,12 +54,10 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.containerInstance.state.set('close');
 
     setTimeout(() => {
-      if (this.overlayRef && !this.overlayRef.hasAttached()) {
-        return;
-      }
-
       if (this.overlayRef) {
-        this.overlayRef.detachBackdrop();
+        if (this.overlayRef.hasAttached()) {
+          this.overlayRef.detachBackdrop();
+        }
         this.overlayRef.dispose();
       }
 
