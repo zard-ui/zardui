@@ -18,9 +18,6 @@ export interface ContextMenuPosition {
   y: number;
 }
 
-/**
- * Extends the base ZardMenuDirective to add right-click behavior and positioning.
- *
  * @example
  * ```html
  * <div [zContextMenuTriggerFor]="menu">Right click here</div>
