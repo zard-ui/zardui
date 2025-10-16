@@ -1,8 +1,9 @@
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { COMPONENTS_PATH } from '@zard/shared/constants/routes.constant';
-import { SeoService } from '@zard/shared/services/seo.service';
 import { Component, inject, type OnInit } from '@angular/core';
+
+import { COMPONENTS_PATH } from '../../../../shared/constants/routes.constant';
+import { SeoService } from '../../../../shared/services/seo.service';
+import { DocContentComponent } from '../../../components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '../../../components/doc-heading/doc-heading.component';
 
 @Component({
   selector: 'z-components-list',

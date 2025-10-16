@@ -1,13 +1,13 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AiAssistComponent } from '@zard/domain/components/ai-assist/ai-assist.component';
 
 import { ComponentData, COMPONENTS } from '../../../shared/constants/components.constant';
 import { Step } from '../../../shared/constants/install.constant';
 import { DynamicInstallationService } from '../../../shared/services/dynamic-installation.service';
 import { SeoService } from '../../../shared/services/seo.service';
 import { ZardCodeBoxComponent } from '../../../widget/components/zard-code-box/zard-code-box.component';
+import { AiAssistComponent } from '../../components/ai-assist/ai-assist.component';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';

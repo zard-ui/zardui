@@ -3,11 +3,9 @@
 ```angular-ts title="breadcrumb.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, input, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { ZardIconComponent } from '../icon/icon.component';
 import {
   breadcrumbEllipsisVariants,
   breadcrumbItemVariants,
@@ -16,6 +14,9 @@ import {
   type ZardBreadcrumbEllipsisVariants,
   type ZardBreadcrumbVariants,
 } from './breadcrumb.variants';
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-breadcrumb-item, [z-breadcrumb-item]',

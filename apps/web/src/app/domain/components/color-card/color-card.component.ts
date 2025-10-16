@@ -4,8 +4,8 @@ import { Component, input, inject, computed, ChangeDetectionStrategy, HostListen
 import { LucideAngularModule, Check, Clipboard as ClipboardIcon } from 'lucide-angular';
 import { toast } from 'ngx-sonner';
 
-import { Color } from '@zard/shared/constants/colors.constant';
-import { ColorsService, ColorFormat } from '@zard/shared/services/colors.service';
+import { Color } from '../../../shared/constants/colors.constant';
+import { ColorsService, ColorFormat } from '../../../shared/services/colors.service';
 
 @Component({
   selector: 'button[z-color-card]',

@@ -1,11 +1,13 @@
 import { Component, computed, inject, signal, afterNextRender, DestroyRef } from '@angular/core';
-import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
-import { HeaderComponent } from '@zard/domain/components/header/header.component';
-import { FooterComponent } from '@zard/domain/components/footer/footer.component';
-import { ZardToastComponent } from '@zard/components/toast/toast.component';
-import { DarkModeService } from '@zard/shared/services/darkmode.service';
-import { environment } from '@zard/env/environment';
 import { RouterModule } from '@angular/router';
+
+import { ZardToastComponent } from '@zard/components/toast/toast.component';
+
+import { environment } from '../../../../environments/environment';
+import { FooterComponent } from '../../../domain/components/footer/footer.component';
+import { HeaderComponent } from '../../../domain/components/header/header.component';
+import { SidebarComponent } from '../../../domain/components/sidebar/sidebar.component';
+import { DarkModeService } from '../../../shared/services/darkmode.service';
 
 @Component({
   selector: 'z-documentation',

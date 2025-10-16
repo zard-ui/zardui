@@ -1,21 +1,22 @@
-import { LucideAngularModule, GalleryHorizontal } from 'lucide-angular';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { Component, inject, HostListener, viewChild } from '@angular/core';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { environment } from '@zard/env/environment';
-import { RouterModule } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
+import { Component, inject, HostListener, viewChild } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { LucideAngularModule, GalleryHorizontal } from 'lucide-angular';
 import type { Observable } from 'rxjs';
 
-import { DocResearcherComponent } from '../doc-researcher/doc-researcher.component';
-import { DarkModeService } from '../../../shared/services/darkmode.service';
-import { LayoutService } from '../../../shared/services/layout.service';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardDividerComponent } from '@zard/components/divider/divider.component';
+
+import { environment } from '../../../../environments/environment';
 import { SOCIAL_MEDIAS } from '../../../shared/constants/medias.constant';
-import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
 import { HEADER_PATHS } from '../../../shared/constants/routes.constant';
+import { DarkModeService } from '../../../shared/services/darkmode.service';
 import { GithubService } from '../../../shared/services/github.service';
+import { LayoutService } from '../../../shared/services/layout.service';
+import { DocResearcherComponent } from '../doc-researcher/doc-researcher.component';
+import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
 
 @Component({
   selector: 'z-header',

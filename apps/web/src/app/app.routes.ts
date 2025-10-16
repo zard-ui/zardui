@@ -1,8 +1,8 @@
 import { Route } from '@angular/router';
 
 import { DocumentationLayout } from './core/layouts/documentation/documentation.layout';
-import { DEFAULT_DOC } from './shared/constants/routes.constant';
 import { ShellLayout } from './core/layouts/shell/shell.layout';
+import { DEFAULT_DOC } from './shared/constants/routes.constant';
 
 export const appRoutes: Route[] = [
   {
@@ -78,6 +78,10 @@ export const appRoutes: Route[] = [
       {
         path: 'roadmap',
         loadComponent: async () => import('./domain/pages/roadmap/roadmap.page').then(m => m.RoadmapPage),
+      },
+      {
+        path: 'scss',
+        loadComponent: async () => import('./domain/pages/scss/scss.page').then(m => m.ScssPage),
       },
       {
         path: 'changelog',

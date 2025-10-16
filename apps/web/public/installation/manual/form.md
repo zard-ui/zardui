@@ -1,12 +1,12 @@
 
 
 ```angular-ts title="form.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { formFieldVariants, formControlVariants, formLabelVariants, formMessageVariants, type ZardFormMessageVariants } from './form.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-form-field, [z-form-field]',

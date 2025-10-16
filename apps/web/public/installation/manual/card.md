@@ -1,13 +1,13 @@
 
 
 ```angular-ts title="card.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, input, type TemplateRef, ViewEncapsulation } from '@angular/core';
 
+import type { ClassValue } from 'clsx';
+
+import { cardBodyVariants, cardHeaderVariants, cardVariants } from './card.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { cardBodyVariants, cardHeaderVariants, cardVariants } from './card.variants';
 
 @Component({
   selector: 'z-card',

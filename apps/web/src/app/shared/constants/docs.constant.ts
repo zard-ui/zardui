@@ -1,4 +1,4 @@
-import { Topic } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { Topic } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
 
 export interface DocData {
   docName: string;

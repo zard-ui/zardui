@@ -202,10 +202,11 @@ export type ZardAvatarGroupVariants = VariantProps<typeof avatarGroupVariants>;
 
 ```angular-ts title="avatar-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { avatarGroupVariants, ZardAvatarGroupVariants } from './avatar.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-avatar-group',

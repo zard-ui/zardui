@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, of, firstValueFrom } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
 
-import { MarkdownCacheService } from '@zard/shared/services/markdown-cache.service';
+import { MarkdownCacheService } from '../../../../shared/services/markdown-cache.service';
 
 export interface ChangelogEntry {
   date: string;

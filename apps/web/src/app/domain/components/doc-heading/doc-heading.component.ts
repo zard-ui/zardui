@@ -1,6 +1,6 @@
-import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
 import { Component, input } from '@angular/core';
 
+import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { AiAssistComponent } from '../ai-assist/ai-assist.component';
 
 @Component({

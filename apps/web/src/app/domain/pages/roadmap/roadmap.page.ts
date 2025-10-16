@@ -1,11 +1,13 @@
-import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
+
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { SeoService } from '@zard/shared/services/seo.service';
-import { Component, inject, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
+
+import { SeoService } from '../../../shared/services/seo.service';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
 
 interface RoadmapPhase {
   id: string;

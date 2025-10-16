@@ -3,6 +3,7 @@
 ```angular-ts title="toggle.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, forwardRef, HostListener, ViewEncapsulation, signal, computed, input, output, linkedSignal } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
 import { toggleVariants, type ZardToggleVariants } from './toggle.variants';

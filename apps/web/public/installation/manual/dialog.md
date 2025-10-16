@@ -209,11 +209,11 @@ export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
 
 ```angular-ts title="dialog-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-
 import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
+
+import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
 
 import type { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
@@ -313,6 +313,7 @@ import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
+
 import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 

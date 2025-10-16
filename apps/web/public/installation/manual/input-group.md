@@ -2,11 +2,12 @@
 
 ```angular-ts title="input-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input, type TemplateRef, ViewEncapsulation } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
+import { inputGroupAddonVariants, inputGroupAffixVariants, inputGroupInputVariants, inputGroupVariants, type ZardInputGroupVariants } from './input-group.variants';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { inputGroupAddonVariants, inputGroupAffixVariants, inputGroupInputVariants, inputGroupVariants, type ZardInputGroupVariants } from './input-group.variants';
 
 @Component({
   selector: 'z-input-group',

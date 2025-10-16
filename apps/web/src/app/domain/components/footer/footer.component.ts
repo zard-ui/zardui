@@ -1,9 +1,11 @@
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { SOCIAL_MEDIAS } from '@zard/shared/constants/medias.constant';
-import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
 import { RouterModule } from '@angular/router';
+
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardDividerComponent } from '@zard/components/divider/divider.component';
+
+import { SOCIAL_MEDIAS } from '../../../shared/constants/medias.constant';
+import { SIDEBAR_PATHS } from '../../../shared/constants/routes.constant';
 
 @Component({
   selector: 'z-footer',

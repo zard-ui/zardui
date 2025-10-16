@@ -1,7 +1,9 @@
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
-import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+
+import { SIDEBAR_PATHS } from '../../../shared/constants/routes.constant';
 
 @Component({
   selector: 'z-sidebar',

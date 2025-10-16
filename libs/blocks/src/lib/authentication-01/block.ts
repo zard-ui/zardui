@@ -1,4 +1,4 @@
-import type { Block } from '@zard/domain/components/block-container/block-container.component';
+import type { Block } from '@docs/domain/components/block-container/block-container.component';
 
 import { Authentication01Component } from './authentication-01.component';
 
@@ -16,12 +16,12 @@ export const authentication01Block: Block = {
     {
       name: 'authentication-01.component.ts',
       path: 'src/components/authentication-01/authentication-01.component.ts',
-      content: `import { ZardFormFieldComponent, ZardFormLabelComponent, ZardFormControlComponent } from '@zard/components/form/form.component';
+      content: `import { ZardFormFieldComponent, ZardFormLabelComponent, ZardFormControlComponent } from '@docs/components/form/form.component';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
-import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardCheckboxComponent } from '@docs/components/checkbox/checkbox.component';
+import { ZardButtonComponent } from '@docs/components/button/button.component';
+import { ZardInputDirective } from '@docs/components/input/input.directive';
+import { ZardCardComponent } from '@docs/components/card/card.component';
 import { Component, signal } from '@angular/core';
 
 @Component({
@@ -67,7 +67,7 @@ export class Authentication01Component {
           <z-form-field>
             <z-form-label [zRequired]="true">Email</z-form-label>
             <z-form-control>
-              <input z-input type="email" formControlName="email" placeholder="name@zard.com" class="w-full" />
+              <input z-input type="email" formControlName="email" placeholder="name@docs.com" class="w-full" />
             </z-form-control>
           </z-form-field>
 

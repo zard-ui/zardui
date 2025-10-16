@@ -1,10 +1,11 @@
 import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
-import { ZardSelectComponent } from '@zard/components/select/select.component';
+
 import { ZardSelectItemComponent } from '@zard/components/select/select-item.component';
+import { ZardSelectComponent } from '@zard/components/select/select.component';
 import { ZardSkeletonComponent } from '@zard/components/skeleton/skeleton.component';
 
-import { ColorsService, ColorFormat } from '@zard/shared/services/colors.service';
-import { COLOR_FORMATS } from '@zard/shared/constants/colors.constant';
+import { COLOR_FORMATS } from '../../../shared/constants/colors.constant';
+import { ColorsService, ColorFormat } from '../../../shared/services/colors.service';
 
 @Component({
   selector: 'z-color-format-selector',

@@ -3,11 +3,12 @@
 ```angular-ts title="toggle-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
-import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
 
 export interface ZardToggleGroupItem {

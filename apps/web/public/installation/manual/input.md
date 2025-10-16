@@ -1,12 +1,12 @@
 
 
 ```angular-ts title="input.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { computed, Directive, ElementRef, inject, input } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { inputVariants, type ZardInputVariants } from './input.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',

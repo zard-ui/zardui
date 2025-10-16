@@ -3,6 +3,7 @@
 ```angular-ts title="switch.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
 import { switchVariants, type ZardSwitchVariants } from './switch.variants';

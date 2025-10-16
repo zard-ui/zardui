@@ -4,14 +4,14 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 
+import type { ClassValue } from 'clsx';
+
+import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardCalendarComponent } from '../calendar/calendar.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
-import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
-
-import type { ClassValue } from 'clsx';
 
 const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, string> = {
   sm: 'h-8',

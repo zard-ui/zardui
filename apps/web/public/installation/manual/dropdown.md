@@ -3,6 +3,7 @@
 ```angular-ts title="dropdown.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -21,11 +22,12 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { dropdownContentVariants } from './dropdown.variants';
 
 import type { ClassValue } from 'clsx';
-import { isPlatformBrowser } from '@angular/common';
+
+import { dropdownContentVariants } from './dropdown.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
+
 @Component({
   selector: 'z-dropdown-menu',
   exportAs: 'zDropdownMenu',
@@ -330,13 +332,13 @@ export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariant
 
 
 ```angular-ts title="dropdown-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardDropdownService } from './dropdown.service';
 import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
@@ -633,8 +635,9 @@ export class ZardDropdownModule {}
 ```angular-ts title="dropdown.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { type ElementRef, inject, Injectable, PLATFORM_ID, signal, type TemplateRef, type ViewContainerRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { type ElementRef, inject, Injectable, PLATFORM_ID, signal, type TemplateRef, type ViewContainerRef } from '@angular/core';
+
 import type { Subscription } from 'rxjs';
 
 @Injectable({

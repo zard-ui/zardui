@@ -1,9 +1,9 @@
 import { Component, input, inject, ChangeDetectionStrategy } from '@angular/core';
+
+import { ColorPalette } from '../../../shared/constants/colors.constant';
+import { ColorsService } from '../../../shared/services/colors.service';
 import { ColorCardComponent } from '../color-card/color-card.component';
 import { ColorFormatSelectorComponent } from '../color-format-selector/color-format-selector.component';
-
-import { ColorPalette } from '@zard/shared/constants/colors.constant';
-import { ColorsService } from '@zard/shared/services/colors.service';
 
 @Component({
   selector: 'z-color-palette',

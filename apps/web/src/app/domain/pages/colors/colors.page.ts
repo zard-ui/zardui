@@ -1,10 +1,12 @@
-import { ColorPaletteComponent } from '@zard/domain/components/color-palette/color-palette.component';
-import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { COLOR_PALETTES } from '@zard/shared/constants/colors.constant';
-import { SeoService } from '@zard/shared/services/seo.service';
 import { ViewportScroller } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+
+import { COLOR_PALETTES } from '../../../shared/constants/colors.constant';
+import { SeoService } from '../../../shared/services/seo.service';
+import { ColorPaletteComponent } from '../../components/color-palette/color-palette.component';
 
 @Component({
   selector: 'z-colors',

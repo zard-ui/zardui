@@ -5,8 +5,9 @@ import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { firstValueFrom } from 'rxjs';
 
 import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
-import { MarkdownCacheService } from '@zard/shared/services/markdown-cache.service';
-import { MarkdownService } from '@zard/shared/services/markdown.service';
+
+import { MarkdownCacheService } from '../../../shared/services/markdown-cache.service';
+import { MarkdownService } from '../../../shared/services/markdown.service';
 
 @Component({
   selector: 'z-markdown-renderer',

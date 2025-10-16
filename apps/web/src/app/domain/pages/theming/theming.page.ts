@@ -1,11 +1,11 @@
-import { SeoService } from '@zard/shared/services/seo.service';
 import { Component, inject, type OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { SeoService } from '../../../shared/services/seo.service';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 

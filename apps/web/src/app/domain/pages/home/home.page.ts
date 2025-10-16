@@ -1,11 +1,12 @@
-import { ShowcaseComponent } from '@zard/domain/components/showcase/showcase.component';
-import { BenefitsComponent } from '@zard/domain/components/benefits/benefits.component';
-import { YoutubeComponent } from '@zard/domain/components/youtube/youtube.component';
-import { HeroComponent } from '@zard/domain/components/hero/hero.component';
-import { SeoService } from '@zard/shared/services/seo.service';
-import { Component, inject, type OnInit } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
+import { Component, inject, type OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
+
+import { SeoService } from '../../../shared/services/seo.service';
+import { BenefitsComponent } from '../../components/benefits/benefits.component';
+import { HeroComponent } from '../../components/hero/hero.component';
+import { ShowcaseComponent } from '../../components/showcase/showcase.component';
+import { YoutubeComponent } from '../../components/youtube/youtube.component';
 
 @Component({
   selector: 'z-home',

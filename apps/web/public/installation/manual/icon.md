@@ -2,12 +2,13 @@
 
 ```angular-ts title="icon.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { LucideAngularModule } from 'lucide-angular';
+
 import type { ClassValue } from 'clsx';
+import { LucideAngularModule } from 'lucide-angular';
 
 import { iconVariants, type ZardIconVariants } from './icon.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZARD_ICONS, type ZardIcon } from './icons';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-icon, [z-icon]',

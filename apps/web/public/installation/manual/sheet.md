@@ -249,11 +249,11 @@ export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 
 
 ```angular-ts title="sheet-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-
 import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
+
+import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
 
 import type { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
@@ -380,13 +380,13 @@ export class ZardSheetModule {}
 
 
 ```angular-ts title="sheet.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 
-import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 import { ZardSheetRef } from './sheet-ref';
+import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');

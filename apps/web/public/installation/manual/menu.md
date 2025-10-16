@@ -248,14 +248,14 @@ export class ZardMenuContentDirective {
 
 
 ```angular-ts title="menu-item.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuItem } from '@angular/cdk/menu';
 import { booleanAttribute, computed, Directive, effect, inject, input, signal, untracked } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { menuItemVariants, type ZardMenuItemVariants } from './menu.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Directive({
   selector: 'button[z-menu-item], [z-menu-item]',

@@ -1,8 +1,6 @@
 
 
 ```angular-ts title="slider.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
-
 import { DOCUMENT } from '@angular/common';
 import {
   type AfterViewInit,
@@ -27,11 +25,12 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import type { ClassValue } from 'clsx';
+import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+
+import { sliderOrientationVariants, sliderRangeVariants, sliderThumbVariants, sliderTrackVariants, sliderVariants } from './slider.variants';
 import { clamp, convertValueToPercentage, roundToStep } from '../../shared/utils/number';
 import { mergeClasses } from '../../shared/utils/utils';
-import { sliderOrientationVariants, sliderRangeVariants, sliderThumbVariants, sliderTrackVariants, sliderVariants } from './slider.variants';
-
-import type { ClassValue } from 'clsx';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: number) => void;

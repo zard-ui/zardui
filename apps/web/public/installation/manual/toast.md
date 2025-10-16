@@ -2,11 +2,12 @@
 
 ```angular-ts title="toast.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { NgxSonnerToaster } from 'ngx-sonner';
-import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+import { NgxSonnerToaster } from 'ngx-sonner';
+
 import { toastVariants, type ZardToastVariants } from './toast.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-toast, z-toaster',

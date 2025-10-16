@@ -1,8 +1,9 @@
-import { HeaderComponent } from '@zard/domain/components/header/header.component';
-import { FooterComponent } from '@zard/domain/components/footer/footer.component';
-import { environment } from '@zard/env/environment';
-import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { environment } from '../../../../environments/environment';
+import { FooterComponent } from '../../../domain/components/footer/footer.component';
+import { HeaderComponent } from '../../../domain/components/header/header.component';
 
 @Component({
   selector: 'z-shell',

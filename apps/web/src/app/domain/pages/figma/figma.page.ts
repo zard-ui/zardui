@@ -1,12 +1,13 @@
-import { ResourceCardComponent } from '@zard/domain/components/resource-card/resource-card.component';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
-import { CalloutComponent } from '@zard/domain/components/callout/callout.component';
-import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
-import { SeoService } from '@zard/shared/services/seo.service';
 import { Component, inject, type OnInit } from '@angular/core';
+
+import { SeoService } from '../../../shared/services/seo.service';
+import { CalloutComponent } from '../../components/callout/callout.component';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import { ResourceCardComponent } from '../../components/resource-card/resource-card.component';
+import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-figma',
