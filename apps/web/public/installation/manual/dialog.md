@@ -1,6 +1,9 @@
 
 
 ```angular-ts title="dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,15 +21,12 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
-import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
-import { filter, fromEvent, takeUntil } from 'rxjs';
 
-import { ZardButtonComponent } from '../button/button.component';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
-import { ZardDialogRef } from './dialog-ref';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -109,13 +109,20 @@ export class ZardDialogOptions<T, U> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
-    '[attr.data-state]': 'state()',
+    '[@dialogAnimation]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
   },
+  animations: [
+    trigger('dialogAnimation', [
+      state('close', style({ opacity: 0, transform: 'scale(0.9)' })),
+      state('open', style({ opacity: 1, transform: 'scale(1)' })),
+      transition('close => open', animate('150ms ease-out')),
+      transition('open => close', animate('150ms ease-in')),
+    ]),
+  ],
 })
 export class ZardDialogComponent<T, U> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
-  private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardDialogOptions<T, U>);
 
   protected readonly classes = computed(() => mergeClasses(dialogVariants(), this.config.zCustomClasses));
@@ -159,18 +166,6 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
   onCloseClick() {
     this.cancelTriggered.emit();
   }
-
-  overlayClickOutside() {
-    return fromEvent<MouseEvent>(document, 'click').pipe(
-      filter(event => {
-        const clickTarget = event.target as HTMLElement;
-        const hasNotOrigin = clickTarget !== this.host.nativeElement;
-        const hasNotOverlay = !!this.overlayRef && this.overlayRef.overlayElement.contains(clickTarget) === false;
-        return hasNotOrigin && hasNotOverlay;
-      }),
-      takeUntil(this.overlayRef.detachments()),
-    );
-  }
 }
 
 @NgModule({
@@ -187,7 +182,7 @@ export class ZardDialogModule {}
 import { cva, VariantProps } from 'class-variance-authority';
 
 export const dialogVariants = cva(
-  'fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg rounded-lg max-w-[calc(100%-2rem)] sm:max-w-[425px] duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out',
+  'fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg rounded-lg max-w-[calc(100%-2rem)] sm:max-w-[425px]',
 );
 export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
@@ -196,10 +191,11 @@ export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
 
 ```angular-ts title="dialog-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { EventEmitter, Inject, inject, PLATFORM_ID } from '@angular/core';
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+
 import { OverlayRef } from '@angular/cdk/overlay';
+import { isPlatformBrowser } from '@angular/common';
+import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
 
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
@@ -210,6 +206,7 @@ const enum eTriggerAction {
 
 export class ZardDialogRef<T = any, R = any, U = any> {
   private destroy$ = new Subject<void>();
+  private isClosing = false;
   protected result?: R;
   componentInstance: T | null = null;
 
@@ -222,17 +219,11 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
 
-    if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
-      this.containerInstance.getNativeElement().addEventListener(
-        'animationend',
-        () => {
-          this.containerInstance
-            .overlayClickOutside()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(() => this.close());
-        },
-        { once: true },
-      );
+    if ((this.config.zMaskClosable ?? true) && isPlatformBrowser(this.platformId)) {
+      this.overlayRef
+        .outsidePointerEvents()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.close());
     }
 
     if (isPlatformBrowser(this.platformId)) {
@@ -246,10 +237,28 @@ export class ZardDialogRef<T = any, R = any, U = any> {
   }
 
   close(result?: R) {
+    if (this.isClosing) {
+      return;
+    }
+
+    this.isClosing = true;
     this.result = result;
-    this.overlayRef.detachBackdrop();
-    this.overlayRef.dispose();
-    this.destroy$.next();
+
+    this.containerInstance.state.set('close');
+
+    setTimeout(() => {
+      if (this.overlayRef) {
+        if (this.overlayRef.hasAttached()) {
+          this.overlayRef.detachBackdrop();
+        }
+        this.overlayRef.dispose();
+      }
+
+      if (!this.destroy$.closed) {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
+    }, 150);
   }
 
   private trigger(action: eTriggerAction) {
@@ -277,13 +286,13 @@ export class ZardDialogRef<T = any, R = any, U = any> {
 
 
 ```angular-ts title="dialog.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 
-import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 import { ZardDialogRef } from './dialog-ref';
+import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
@@ -339,7 +348,10 @@ export class ZardDialogService {
 
     const containerPortal = new ComponentPortal<ZardDialogComponent<T, U>>(ZardDialogComponent, config.zViewContainerRef, injector);
     const containerRef = overlayRef.attach<ZardDialogComponent<T, U>>(containerPortal);
-    containerRef.instance.state.set('open');
+
+    setTimeout(() => {
+      containerRef.instance.state.set('open');
+    }, 0);
 
     return containerRef.instance;
   }

@@ -1,6 +1,8 @@
 
 
 ```angular-ts title="sheet.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { OverlayModule } from '@angular/cdk/overlay';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,14 +19,11 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
-import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
-import { filter, fromEvent, takeUntil } from 'rxjs';
 
-import { sheetVariants, ZardSheetVariants } from './sheet.variants';
-import { ZardButtonComponent } from '../button/button.component';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
 import { ZardSheetRef } from './sheet-ref';
+import { sheetVariants, ZardSheetVariants } from './sheet.variants';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -125,7 +124,6 @@ export class ZardSheetOptions<T, U> {
 })
 export class ZardSheetComponent<T, U> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
-  private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardSheetOptions<T, U>);
 
   protected readonly classes = computed(() => {
@@ -178,18 +176,6 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
 
   onCloseClick() {
     this.cancelTriggered.emit();
-  }
-
-  overlayClickOutside() {
-    return fromEvent<MouseEvent>(document, 'click').pipe(
-      filter(event => {
-        const clickTarget = event.target as HTMLElement;
-        const hasNotOrigin = clickTarget !== this.host.nativeElement;
-        const hasNotOverlay = !!this.overlayRef && this.overlayRef.overlayElement.contains(clickTarget) === false;
-        return hasNotOrigin && hasNotOverlay;
-      }),
-      takeUntil(this.overlayRef.detachments()),
-    );
   }
 }
 
@@ -262,10 +248,11 @@ export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 
 
 ```angular-ts title="sheet-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { EventEmitter, Inject, inject, PLATFORM_ID } from '@angular/core';
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+
 import { OverlayRef } from '@angular/cdk/overlay';
+import { isPlatformBrowser } from '@angular/common';
+import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
 
 import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
@@ -276,6 +263,7 @@ const enum eTriggerAction {
 
 export class ZardSheetRef<T = any, R = any, U = any> {
   private destroy$ = new Subject<void>();
+  private isClosing = false;
   protected result?: R;
   componentInstance: T | null = null;
 
@@ -288,17 +276,11 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
 
-    if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
-      this.containerInstance.getNativeElement().addEventListener(
-        'animationend',
-        () => {
-          this.containerInstance
-            .overlayClickOutside()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(() => this.close());
-        },
-        { once: true },
-      );
+    if ((this.config.zMaskClosable ?? true) && isPlatformBrowser(this.platformId)) {
+      this.overlayRef
+        .outsidePointerEvents()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.close());
     }
 
     if (isPlatformBrowser(this.platformId)) {
@@ -312,15 +294,29 @@ export class ZardSheetRef<T = any, R = any, U = any> {
   }
 
   close(result?: R) {
+    if (this.isClosing) {
+      return;
+    }
+
+    this.isClosing = true;
     this.result = result;
     this.containerInstance.state.set('closed');
 
     const element = this.containerInstance.getNativeElement();
     const onAnimationEnd = () => {
       element.removeEventListener('animationend', onAnimationEnd);
-      this.overlayRef.detachBackdrop();
-      this.overlayRef.dispose();
-      this.destroy$.next();
+
+      if (this.overlayRef) {
+        if (this.overlayRef.hasAttached()) {
+          this.overlayRef.detachBackdrop();
+        }
+        this.overlayRef.dispose();
+      }
+
+      if (!this.destroy$.closed) {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
     };
 
     element.addEventListener('animationend', onAnimationEnd);

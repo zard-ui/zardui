@@ -26,17 +26,11 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
 
-    if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
-      this.containerInstance.getNativeElement().addEventListener(
-        'animationend',
-        () => {
-          this.containerInstance
-            .overlayClickOutside()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(() => this.close());
-        },
-        { once: true },
-      );
+    if ((this.config.zMaskClosable ?? true) && isPlatformBrowser(this.platformId)) {
+      this.overlayRef
+        .outsidePointerEvents()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.close());
     }
 
     if (isPlatformBrowser(this.platformId)) {
@@ -60,12 +54,10 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.containerInstance.state.set('close');
 
     setTimeout(() => {
-      if (this.overlayRef && !this.overlayRef.hasAttached()) {
-        return;
-      }
-
       if (this.overlayRef) {
-        this.overlayRef.detachBackdrop();
+        if (this.overlayRef.hasAttached()) {
+          this.overlayRef.detachBackdrop();
+        }
         this.overlayRef.dispose();
       }
 

@@ -1,3 +1,7 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { A11yModule } from '@angular/cdk/a11y';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,10 +20,6 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
-import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
-import { filter, fromEvent, takeUntil } from 'rxjs';
-import { A11yModule } from '@angular/cdk/a11y';
 import { ClassValue } from 'clsx';
 
 import { alertDialogVariants, ZardAlertDialogVariants } from './alert-dialog.variants';
@@ -61,7 +61,7 @@ export class ZardAlertDialogOptions<T> {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
-    '[attr.data-state]': 'state()',
+    '[@alertDialogAnimation]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
     role: 'alertdialog',
     '[attr.aria-modal]': 'true',
@@ -77,22 +77,19 @@ export class ZardAlertDialogOptions<T> {
         height: fit-content;
         transform-origin: center center;
       }
-
-      z-alert-dialog[data-state='close'] {
-        transform: scale(0.95);
-        opacity: 0;
-      }
-
-      z-alert-dialog[data-state='open'] {
-        transform: scale(1);
-        opacity: 1;
-      }
     `,
+  ],
+  animations: [
+    trigger('alertDialogAnimation', [
+      state('close', style({ opacity: 0, transform: 'scale(0.9)' })),
+      state('open', style({ opacity: 1, transform: 'scale(1)' })),
+      transition('close => open', animate('150ms ease-out')),
+      transition('open => close', animate('150ms ease-in')),
+    ]),
   ],
 })
 export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
-  private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardAlertDialogOptions<T>);
 
   protected readonly classes = computed(() =>
@@ -147,18 +144,6 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   onCancelClick() {
     this.cancelTriggered.emit();
-  }
-
-  overlayClickOutside() {
-    return fromEvent<MouseEvent>(document, 'click').pipe(
-      filter(event => {
-        const clickTarget = event.target as HTMLElement;
-        const hasNotOrigin = clickTarget !== this.host.nativeElement;
-        const hasNotOverlay = !!this.overlayRef && this.overlayRef.overlayElement.contains(clickTarget) === false;
-        return hasNotOrigin && hasNotOverlay;
-      }),
-      takeUntil(this.overlayRef.detachments()),
-    );
   }
 }
 

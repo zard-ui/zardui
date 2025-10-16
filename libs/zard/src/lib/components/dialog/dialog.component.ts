@@ -1,7 +1,5 @@
-import { filter, fromEvent, takeUntil } from 'rxjs';
-
 import { animate, state, style, transition, trigger } from '@angular/animations';
-import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
+import { OverlayModule } from '@angular/cdk/overlay';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
@@ -122,7 +120,6 @@ export class ZardDialogOptions<T, U> {
 })
 export class ZardDialogComponent<T, U> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
-  private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardDialogOptions<T, U>);
 
   protected readonly classes = computed(() => mergeClasses(dialogVariants(), this.config.zCustomClasses));
@@ -165,18 +162,6 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
 
   onCloseClick() {
     this.cancelTriggered.emit();
-  }
-
-  overlayClickOutside() {
-    return fromEvent<MouseEvent>(document, 'click').pipe(
-      filter(event => {
-        const clickTarget = event.target as HTMLElement;
-        const hasNotOrigin = clickTarget !== this.host.nativeElement;
-        const hasNotOverlay = !!this.overlayRef && this.overlayRef.overlayElement.contains(clickTarget) === false;
-        return hasNotOrigin && hasNotOverlay;
-      }),
-      takeUntil(this.overlayRef.detachments()),
-    );
   }
 }
 

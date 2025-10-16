@@ -1,3 +1,8 @@
+import { merge, Subject, takeUntil } from 'rxjs';
+
+import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,10 +21,6 @@ import {
   TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
-import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
-import { Subject } from 'rxjs';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { popoverVariants } from './popover.variants';
@@ -69,6 +70,7 @@ const POPOVER_POSITIONS_MAP = {
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
+  private readonly hidePopover$ = new Subject<void>();
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly elementRef = inject(ElementRef);
@@ -77,7 +79,6 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
 
   private overlayRef?: OverlayRef;
-  private documentClickListenerRef?: () => void;
 
   readonly zTrigger = input<ZardPopoverTrigger>('click');
   readonly zContent = input.required<TemplateRef<unknown>>();
@@ -118,6 +119,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.hide();
+    this.hidePopover$.complete();
     this.destroy$.next();
     this.destroy$.complete();
   }
@@ -134,7 +136,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.isVisible.set(true);
     this.zVisibleChange.emit(true);
 
-    if (this.zOverlayClickable() && this.zTrigger() === 'click') {
+    if (this.zOverlayClickable() && this.zTrigger() === 'click' && isPlatformBrowser(this.platformId)) {
       this.setupOutsideClickListener();
     }
   }
@@ -142,14 +144,10 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   hide() {
     if (!this.isVisible()) return;
 
+    this.hidePopover$.next();
     this.overlayRef?.detach();
     this.isVisible.set(false);
     this.zVisibleChange.emit(false);
-
-    if (this.documentClickListenerRef) {
-      this.documentClickListenerRef();
-      this.documentClickListenerRef = undefined;
-    }
   }
 
   toggle() {
@@ -336,31 +334,20 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   private setupOutsideClickListener() {
-    setTimeout(() => {
-      this.documentClickListenerRef = this.renderer.listen(document, 'click', (event: MouseEvent) => {
-        const clickTarget = event.target as HTMLElement;
-        const overlayElement = this.overlayRef?.overlayElement;
+    if (!this.overlayRef) return;
 
-        // Check if click is on the trigger element
+    this.overlayRef
+      .outsidePointerEvents()
+      .pipe(takeUntil(merge(this.hidePopover$, this.destroy$)))
+      .subscribe(event => {
+        const clickTarget = event.target as HTMLElement;
+
         if (this.nativeElement.contains(clickTarget)) {
           return;
         }
 
-        // Check if click is within the popover overlay
-        if (overlayElement && overlayElement.contains(clickTarget)) {
-          return;
-        }
-
-        // Check if click is within any CDK overlay (for select dropdowns, etc.)
-        const isInCdkOverlay = clickTarget.closest('.cdk-overlay-container') !== null;
-        if (isInCdkOverlay) {
-          return;
-        }
-
-        // If none of the above, it's truly an outside click - hide the popover
         this.hide();
       });
-    });
   }
 }
 
