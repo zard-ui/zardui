@@ -1,4 +1,6 @@
 import { Component, input } from '@angular/core';
+import { RouterLink } from '@angular/router';
+
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 
 import { Step } from '../../../shared/constants/install.constant';
@@ -18,8 +20,12 @@ import { MarkdownRendererComponent } from '../render/markdown-renderer.component
             <p>
               {{ stepProps()?.subtitle }}
 
-              @if (stepProps()?.url) {
-                <a z-button zType="link" class="p-0" [href]="stepProps()?.url?.href" [target]="stepProps()?.url?.external ? '_blank' : '_self'">{{ stepProps()?.url?.text }}</a>
+              @if (stepProps()?.url && stepProps()?.url?.external) {
+                <a z-button zType="link" class="p-0" [href]="stepProps()?.url?.href" target="_blank">{{ stepProps()?.url?.text }}</a>
+              }
+
+              @if (stepProps()?.url && !stepProps()?.url?.external) {
+                <a z-button zType="link" class="p-0" [routerLink]="stepProps()?.url?.href">{{ stepProps()?.url?.text }}</a>
               }
             </p>
             @if (stepProps()?.file?.path) {
@@ -31,7 +37,7 @@ import { MarkdownRendererComponent } from '../render/markdown-renderer.component
     }
   `,
   standalone: true,
-  imports: [ZardButtonComponent, MarkdownRendererComponent],
+  imports: [ZardButtonComponent, MarkdownRendererComponent, RouterLink],
 })
 export class StepComponent {
   readonly stepProps = input<Step>();

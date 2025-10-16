@@ -1,6 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
 
-import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 
 import { SeoService } from '../../../shared/services/seo.service';
@@ -44,17 +43,11 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
             </div>
           }
         </div>
-        <z-alert
-          zTitle="Framework Support"
-          class="bg-blue-500 dark:text-blue-100 dark:bg-blue-950 border dark:border-blue-800"
-          zDescription="Angular is available now with full documentation and examples. Analog and Nx support are coming soon with dedicated guides and configurations."
-          zAppearance="fill"
-        />
       </section>
     </z-content>
   `,
   standalone: true,
-  imports: [EnvCardComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardBadgeComponent, ZardAlertComponent],
+  imports: [EnvCardComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardBadgeComponent],
 })
 export class EnviromentsPage implements OnInit {
   protected readonly environments = [
