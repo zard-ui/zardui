@@ -1,0 +1,130 @@
+name: 🚀 Auto Release on Merge
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '**/CHANGELOG.md'
+      - '.github/workflows/production-deploy.yml'
+
+permissions:
+  contents: write
+  issues: write
+  pull-requests: write
+
+jobs:
+  detect-release:
+    name: 🔍 Detect if Release Needed
+    runs-on: ubuntu-latest
+    outputs:
+      should_release: ${{ steps.check.outputs.should_release }}
+      bump_type: ${{ steps.check.outputs.bump_type }}
+      feature_count: ${{ steps.check.outputs.feature_count }}
+      fix_count: ${{ steps.check.outputs.fix_count }}
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 📦 Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      - name: 🔍 Analyze commits for release
+        id: check
+        run: npx tsx scripts/should-release.cts
+
+  release:
+    name: 🚀 Create Release
+    runs-on: ubuntu-latest
+    needs: detect-release
+    if: needs.detect-release.outputs.should_release == 'true'
+    steps:
+      - name: 📥 Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 📦 Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: 🤖 Configure Git
+        run: |
+          git config --global user.email "zardui.adm@gmail.com"
+          git config --global user.name "ZardUI Bot"
+
+      - name: 📥 Install dependencies
+        run: npm ci
+
+      - name: 📊 Release Summary (Pre)
+        run: |
+          echo "## 🎯 Release Analysis" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Bump Type**: ${{ needs.detect-release.outputs.bump_type }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Features**: ${{ needs.detect-release.outputs.feature_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Fixes**: ${{ needs.detect-release.outputs.fix_count }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+
+      - name: 🎯 Run Nx Release
+        id: nx_release
+        run: |
+          npx nx release --skip-publish --yes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🏷️ Push Changes and Tags
+        run: |
+          git push origin master --follow-tags
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: 🎉 Success Summary
+        run: |
+          # Extract the new version from the last tag
+          NEW_VERSION=$(git describe --tags --abbrev=0)
+
+          echo "## ✅ Release Created Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🏷️ Version" >> $GITHUB_STEP_SUMMARY
+          echo "\`$NEW_VERSION\`" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Next Steps" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ CHANGELOG.md updated" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Version bumped in package.json" >> $GITHUB_STEP_SUMMARY
+          echo "- ✅ Git tag created" >> $GITHUB_STEP_SUMMARY
+          echo "- 🚀 NPM publish workflow will be triggered automatically" >> $GITHUB_STEP_SUMMARY
+          echo "- 📝 GitHub Release will be created" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
+          echo "- [View on GitHub](https://github.com/${{ github.repository }}/releases/tag/$NEW_VERSION)" >> $GITHUB_STEP_SUMMARY
+          echo "- [View Changelog](https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md)" >> $GITHUB_STEP_SUMMARY
+
+  skip-release:
+    name: ⏭️ Skip Release
+    runs-on: ubuntu-latest
+    needs: detect-release
+    if: needs.detect-release.outputs.should_release == 'false'
+    steps:
+      - name: 📊 Skip Summary
+        run: |
+          echo "## ⏭️ Release Skipped" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "No changes that require a release were detected." >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📋 Commit Types that Trigger Releases:" >> $GITHUB_STEP_SUMMARY
+          echo "- ✨ **feat** → Minor version bump" >> $GITHUB_STEP_SUMMARY
+          echo "- 🐛 **fix** → Patch version bump" >> $GITHUB_STEP_SUMMARY
+          echo "- 🚀 **perf** → Patch version bump" >> $GITHUB_STEP_SUMMARY
+          echo "- ⏪️ **revert** → Patch version bump" >> $GITHUB_STEP_SUMMARY
+          echo "- **Breaking changes** (!) → Major version bump" >> $GITHUB_STEP_SUMMARY
