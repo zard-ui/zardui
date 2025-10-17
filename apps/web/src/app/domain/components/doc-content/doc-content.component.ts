@@ -1,10 +1,11 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, inject, OnInit, input, computed } from '@angular/core';
+import { Component, inject, OnInit, input, computed, ChangeDetectionStrategy } from '@angular/core';
 
 import { DynamicAnchorComponent, NavigationConfig } from '../dynamic-anchor/dynamic-anchor.component';
 
 @Component({
   selector: 'z-content',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DynamicAnchorComponent],
   templateUrl: './doc-content.component.html',
 })

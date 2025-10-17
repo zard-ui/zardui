@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { AiAssistComponent } from '../ai-assist/ai-assist.component';
@@ -6,6 +6,7 @@ import { AiAssistComponent } from '../ai-assist/ai-assist.component';
 @Component({
   selector: 'z-doc-heading',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ScrollSpyItemDirective, AiAssistComponent],
   template: `
     <header class="flex flex-col gap-2" [scrollSpyItem]="id() || 'overview'" [id]="id() || 'overview'">

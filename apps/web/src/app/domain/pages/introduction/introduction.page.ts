@@ -16,7 +16,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   standalone: true,
   imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, WhyZardUISection, CLISection, AIReadySection, OpenSourceSection, SupportSection],
   template: `
-    <z-content [title]="title" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+    <z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
       <z-doc-heading
         title="Introduction"
         description="Built for Angular developers who value both aesthetics and functionality. ZardUI bridges the gap between beautiful design and practical implementation."
@@ -35,7 +35,6 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 })
 export class IntroductionPage implements OnInit {
   private readonly seoService = inject(SeoService);
-  readonly title = 'Introduction - zard/ui';
   activeAnchor?: string;
 
   readonly navigationConfig: NavigationConfig = {

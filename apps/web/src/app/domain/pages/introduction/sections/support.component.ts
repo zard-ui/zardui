@@ -1,9 +1,11 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { Component } from '@angular/core';
 
 @Component({
   selector: 'support-section',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardButtonComponent],
   template: `
     <section class="flex flex-col gap-8">

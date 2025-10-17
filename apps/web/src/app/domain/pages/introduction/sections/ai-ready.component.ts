@@ -1,19 +1,21 @@
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { BookOpenText, Sun, type LucideIconData, LucideAngularModule } from 'lucide-angular';
+
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIcon } from '@zard/components/icon/icons';
-import { Component } from '@angular/core';
 
 interface AIFeatureCard {
   title: string;
   description: string;
-  icon: ZardIcon;
+  icon: LucideIconData;
 }
 
 @Component({
   selector: 'ai-ready-section',
   standalone: true,
-  imports: [ZardBadgeComponent, ZardCardComponent, ZardIconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ZardBadgeComponent, ZardCardComponent, LucideAngularModule],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -32,7 +34,7 @@ interface AIFeatureCard {
           <z-card [zTitle]="title">
             <ng-template #title>
               <div class="flex items-center gap-2">
-                <z-icon [zType]="card.icon" class="text-lg font-normal" />
+                <lucide-angular [img]="card.icon" class="text-lg font-normal" />
                 <h3 class="text-base">{{ card.title }}</h3>
               </div>
             </ng-template>
@@ -48,12 +50,12 @@ export class AIReadySection {
     {
       title: 'Predictable Patterns',
       description: 'Consistent naming conventions, standardized props, and logical component hierarchies that AI can easily understand and generate code for.',
-      icon: 'sun',
+      icon: Sun,
     },
     {
       title: 'Rich Documentation',
       description: 'Comprehensive examples, clear API references, and usage patterns that provide AI tools with the context they need to generate accurate code.',
-      icon: 'book-open-text',
+      icon: BookOpenText,
     },
   ];
 }
