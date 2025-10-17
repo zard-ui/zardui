@@ -51,7 +51,17 @@ function getCommitsSinceLastTag(): CommitInfo[] {
       .split('\n')
       .filter(line => line.trim())
       .map(line => {
-        const [hash, message] = line.split('\x00');
+        // Defensively handle missing separator or unexpected format
+        const parts = line.split('\x00');
+        const hash = parts[0] || '';
+        const message = parts[1] || '';
+
+        // Skip if we don't have both hash and message
+        if (!hash || !message) {
+          console.warn(`Skipping malformed commit line: ${line.substring(0, 50)}...`);
+          return null;
+        }
+
         const normalized = normalizeToConventional(message);
         const valid = parseCommit(message) !== null;
 
@@ -61,7 +71,8 @@ function getCommitsSinceLastTag(): CommitInfo[] {
           normalized,
           valid,
         };
-      });
+      })
+      .filter((commit): commit is CommitInfo => commit !== null);
   } catch (error) {
     console.error('Error fetching commits:', error);
     return [];

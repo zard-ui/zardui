@@ -64,12 +64,15 @@ function analyzeCommits(commits: string[]): ReleaseAnalysis {
   let fixCount = 0;
 
   for (const commit of commits) {
-    const bump = getSemverBump(commit);
+    // Parse commit once and reuse the result
     const parsed = parseCommit(commit);
+    if (!parsed) continue;
+
+    const bump = parsed.semverBump;
 
     // Track feature and fix counts
-    if (parsed?.type === 'feat') featureCount++;
-    if (parsed?.type === 'fix') fixCount++;
+    if (parsed.type === 'feat') featureCount++;
+    if (parsed.type === 'fix') fixCount++;
 
     // Determine highest bump
     if (bump === 'major') {
