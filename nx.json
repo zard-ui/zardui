@@ -2,7 +2,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "defaultBase": "master",
   "release": {
-    "projects": ["packages/cli"],
+    "projects": ["packages/cli", "blocks"],
     "releaseTagPattern": "zard@{version}",
     "changelog": {
       "automaticFromRef": true,
@@ -14,6 +14,7 @@
       }
     },
     "version": {
+      "preVersionCommand": "npx nx run-many -t build",
       "generatorOptions": {
         "fallbackCurrentVersionResolver": "disk",
         "currentVersionResolver": "git-tag",

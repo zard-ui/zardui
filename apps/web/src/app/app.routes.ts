@@ -11,6 +11,16 @@ export const appRoutes: Route[] = [
     children: [{ path: '', loadComponent: () => import('./domain/pages/home/home.page').then(m => m.HomePage) }],
   },
   {
+    path: 'blocks',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadChildren: async () => (await import('./domain/pages/blocks/blocks.routes')).BLOCKS_ROUTES,
+      },
+    ],
+  },
+  {
     path: 'docs',
     component: DocumentationLayout,
     children: [

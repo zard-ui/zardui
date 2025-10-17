@@ -1,0 +1,22 @@
+<div class="overflow-hidden">
+  <div class="flex items-center justify-between px-6 py-4">
+    <section class="flex items-center gap-2">
+      <z-segmented class="&>div>button:px-2" [zOptions]="tabOptions" [zDefaultValue]="activeTab()" (zChange)="onTabChange($event)" zSize="sm" />
+
+      <z-divider zOrientation="vertical" class="h-4"></z-divider>
+      <h3 class="flex-1 text-center text-sm font-medium underline-offset-2 hover:underline md:flex-auto md:text-left">
+        {{ block().title }}
+      </h3>
+    </section>
+
+    @if (activeTab() === 'preview') {
+      <z-toggle-group zMode="single" zType="outline" zSize="md" [items]="viewportOptions" [value]="viewportSize()" (valueChange)="onViewportChange($event)" />
+    }
+  </div>
+
+  @if (activeTab() === 'preview') {
+    <z-block-preview [component]="block().component" [viewportSize]="viewportSize()" [block]="block()" />
+  } @else {
+    <z-block-code-viewer [files]="block().files" />
+  }
+</div>

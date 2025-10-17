@@ -1,0 +1,25 @@
+<div class="container mx-auto px-6 flex items-center justify-between gap-4">
+  <div class="relative overflow-hidden">
+    <div class="flex items-center overflow-x-scroll lg:overflow-hidden no-scrollbar">
+      @for (tab of tabs(); track tab.route) {
+        <a
+          class="hover:text-primary flex h-7 items-center justify-center px-4 text-center text-base font-medium transition-colors"
+          [class.text-muted-foreground]="!rla.isActive"
+          [class.text-primary]="rla.isActive"
+          [routerLink]="tab.route"
+          routerLinkActive
+          #rla="routerLinkActive"
+          [routerLinkActiveOptions]="{ exact: true }"
+          [attr.data-active]="rla.isActive"
+        >
+          {{ tab.label }}
+        </a>
+      }
+    </div>
+  </div>
+  @if (browseAllRoute()) {
+    <a [routerLink]="browseAllRoute()" z-button zType="secondary" class="hidden lg:flex">
+      {{ browseAllLabel() }}
+    </a>
+  }
+</div>
