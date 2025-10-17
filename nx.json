@@ -7,7 +7,7 @@
     "releaseTagPattern": "v{version}",
     "git": {
       "commit": true,
-      "commitMessage": "🔖 chore(release): publish v{version} [skip ci]",
+      "commitMessage": "🔖 chore(release): publish v{version}",
       "tag": true,
       "tagMessage": "v{version}"
     },

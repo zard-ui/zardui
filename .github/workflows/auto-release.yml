@@ -7,6 +7,9 @@ on:
     paths-ignore:
       - '**/CHANGELOG.md'
       - '.github/workflows/production-deploy.yml'
+      - '.github/workflows/release.yml'
+      - '**/package.json'
+      - '**/package-lock.json'
 
 permissions:
   contents: write
