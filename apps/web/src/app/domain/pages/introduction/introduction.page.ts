@@ -1,15 +1,16 @@
 import { Component, inject, type OnInit } from '@angular/core';
 
+import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
+import { SeoService } from '@docs/shared/services/seo.service';
+
 import { AIReadySection } from './sections/ai-ready.component';
 import { CLISection } from './sections/cli.component';
 import { OpenSourceSection } from './sections/open-source.component';
 import { SupportSection } from './sections/support.component';
 import { WhyZardUISection } from './sections/why-zardui.component';
-import { SeoService } from '../../../shared/services/seo.service';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-introduction',
