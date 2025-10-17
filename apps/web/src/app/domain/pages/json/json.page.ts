@@ -1,17 +1,18 @@
 import { Component, inject, type OnInit } from '@angular/core';
 
+import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { ScrollSpyItemDirective } from '@docs/domain/directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
+import { SeoService } from '@docs/shared/services/seo.service';
+
 import { JsonAliasesSectionComponent } from './sections/aliases-section.component';
 import { JsonCurrentStructureSectionComponent } from './sections/current-structure-section.component';
 import { JsonIntroductionSectionComponent } from './sections/introduction-section.component';
 import { JsonPackageManagerSectionComponent } from './sections/package-manager-section.component';
 import { JsonStyleSectionComponent } from './sections/style-section.component';
 import { JsonTailwindSectionComponent } from './sections/tailwind-section.component';
-import { SeoService } from '../../../shared/services/seo.service';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-json',

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { CalloutComponent } from '../../../components/callout/callout.component';
-import { MarkdownRendererComponent } from '../../../components/render/markdown-renderer.component';
+import { CalloutComponent } from '@docs/domain/components/callout/callout.component';
+import { MarkdownRendererComponent } from '@docs/domain/components/render/markdown-renderer.component';
 
 @Component({
   selector: 'z-json-introduction-section',

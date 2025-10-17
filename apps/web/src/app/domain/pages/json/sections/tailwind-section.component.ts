@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { MarkdownRendererComponent } from '../../../components/render/markdown-renderer.component';
+import { MarkdownRendererComponent } from '@docs/domain/components/render/markdown-renderer.component';
 
 @Component({
   selector: 'z-json-tailwind-section',
