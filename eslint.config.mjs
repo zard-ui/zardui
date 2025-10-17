@@ -30,7 +30,7 @@ export default [
         'warn',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$', '^@zard/domain/.*$', '^@zard/env/.*$', '^@zard/shared/.*$', '^@zard/widget/.*$', '^@cli/.*$'],
+          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$', '^@zard/domain/.*$', '^@zard/env/.*$', '^@zard/shared/.*$', '^@zard/widget/.*$', '^@cli/.*$', '^@docs/.*$'],
           depConstraints: [
             {
               sourceTag: '*',
@@ -64,6 +64,11 @@ export default [
             },
             {
               pattern: '@zard/**',
+              group: 'internal',
+              position: 'before',
+            },
+            {
+              pattern: '@docs/**',
               group: 'internal',
               position: 'before',
             },
