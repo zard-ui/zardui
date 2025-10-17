@@ -1,11 +1,4 @@
-<z-content
-  [title]="title"
-  [navigationConfig]="navigationConfig()"
-  [activeAnchor]="activeAnchor"
-  [onAnchorClick]="onAnchorClick.bind(this)"
-  scrollSpy
-  (scrollSpyChange)="activeAnchor = $event"
->
+<z-content [navigationConfig]="navigationConfig()" [activeAnchor]="activeAnchor" [onAnchorClick]="onAnchorClick.bind(this)" scrollSpy (scrollSpyChange)="activeAnchor = $event">
   <z-doc-heading title="Changelog" description="Latest updates and announcements." scrollSpyItem="overview" id="overview" />
 
   <div class="space-y-8">

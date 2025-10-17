@@ -4,14 +4,15 @@ import { Component, inject, OnInit, signal, computed } from '@angular/core';
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
 
+import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { MarkdownRendererComponent } from '@docs/domain/components/render/markdown-renderer.component';
+import { ScrollSpyItemDirective } from '@docs/domain/directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
+import { SeoService } from '@docs/shared/services/seo.service';
+
 import { ChangelogService, type ChangelogEntry } from './services/changelog.service';
-import { SeoService } from '../../../shared/services/seo.service';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
-import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-changelog',
@@ -22,8 +23,6 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 export class ChangeLogPage implements OnInit {
   private readonly changelogService = inject(ChangelogService);
   private readonly seoService = inject(SeoService);
-
-  readonly title = 'Changelog - zard/ui';
   activeAnchor?: string;
 
   readonly entries = signal<ChangelogEntry[]>([]);
@@ -65,7 +64,7 @@ export class ChangeLogPage implements OnInit {
     return entry.id;
   }
 
-  async onAnchorClick(anchorId: string) {
+  async onAnchorClick(_: string) {
     return;
   }
 }

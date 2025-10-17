@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
 
-import { SeoService } from '../../../shared/services/seo.service';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
+import { SeoService } from '@docs/shared/services/seo.service';
 
 interface RoadmapPhase {
   id: string;
@@ -23,6 +23,7 @@ interface RoadmapPhase {
 @Component({
   selector: 'z-roadmap',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, DocContentComponent, DocHeadingComponent, ZardCardComponent, ZardBadgeComponent, ZardProgressBarComponent],
   templateUrl: './roadmap.page.html',
 })
