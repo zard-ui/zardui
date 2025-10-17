@@ -79,7 +79,7 @@ jobs:
       - name: 🎯 Run Nx Release
         id: nx_release
         run: |
-          npx nx release --skip-publish --yes
+          npx nx release --skip-publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
