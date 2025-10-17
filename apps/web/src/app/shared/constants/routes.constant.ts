@@ -4,7 +4,8 @@ export const DEFAULT_DOC = 'installation';
 export const HEADER_PATHS = [
   { name: 'Docs', path: '/docs', available: true },
   { name: 'Components', path: '/docs/components', available: true },
-  { name: 'Blocks', path: '/blocks', available: false },
+  { name: 'Blocks', path: '/blocks', available: true },
+  { name: 'Charts', path: '/charts', available: false },
   { name: 'Themes', path: '/themes', available: false },
 ];
 

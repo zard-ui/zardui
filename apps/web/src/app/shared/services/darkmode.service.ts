@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DarkModeService {
   private readonly storageKey = 'theme';
+  private readonly themeSignal = signal<'light' | 'dark'>('light');
 
   initTheme(): void {
     const savedTheme = localStorage.getItem(this.storageKey);
@@ -19,7 +20,11 @@ export class DarkModeService {
   }
 
   getCurrentTheme(): 'light' | 'dark' {
-    return (localStorage.getItem(this.storageKey) as 'light' | 'dark') || 'light';
+    return this.themeSignal();
+  }
+
+  get theme() {
+    return this.themeSignal.asReadonly();
   }
 
   private applyTheme(theme: 'light' | 'dark'): void {
@@ -30,5 +35,7 @@ export class DarkModeService {
     html.setAttribute('data-theme', theme);
     html.style.colorScheme = theme;
     localStorage.setItem(this.storageKey, theme);
+
+    this.themeSignal.set(theme);
   }
 }

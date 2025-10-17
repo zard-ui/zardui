@@ -1,0 +1,50 @@
+<div class="flex min-h-svh bg-code rounded-lg">
+  <div class="w-64 border-r overflow-auto flex flex-col">
+    <div class="px-4 py-3 border-b border-border">
+      <h4 class="text-sm font-semibold text-code-foreground">Files</h4>
+    </div>
+
+    <div class="flex-1 p-3 space-y-0.5 overflow-auto">
+      <z-file-tree
+        [nodes]="fileTree()"
+        [openFolders]="openFolders()"
+        [selectedFilePath]="selectedFile()?.path ?? null"
+        (folderToggled)="toggleFolder($event)"
+        (fileSelected)="handleFileSelected($event)"
+      />
+    </div>
+  </div>
+
+  <div class="flex-1 flex flex-col overflow-hidden rounded-tr-lg rounded-br-lg bg-code">
+    @if (selectedFile()) {
+      <div class="flex items-center justify-between gap-3 px-4 py-1 border-b border-border">
+        <div class="flex items-center gap-3">
+          <img [src]="getFileIcon(selectedFile()!.name)" alt="file icon" class="w-4 h-4 dark:invert" />
+          <span class="text-sm text-code-foreground">{{ selectedFile()!.path }}</span>
+        </div>
+        <button (click)="copyToClipboard()" z-button zType="ghost" title="Copy code">
+          <i class="icon-clipboard text-sm"></i>
+          <span class="sr-only">Copy to clipboard</span>
+        </button>
+      </div>
+
+      <div class="flex-1 overflow-auto p-2.5 text-sm">
+        <z-simple-code-highlight [code]="selectedFile()!.content" [language]="selectedFile()!.language" [showCopyButton]="false" [showLineNumbers]="true" />
+      </div>
+    } @else {
+      <div class="flex items-center justify-center h-full">
+        <div class="text-center space-y-3">
+          <svg class="h-12 w-12 mx-auto text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          <p class="text-sm text-zinc-500">Select a file to view its contents</p>
+        </div>
+      </div>
+    }
+  </div>
+</div>

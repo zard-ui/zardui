@@ -1,0 +1,30 @@
+<div class="relative bg-background">
+  <div class="w-full min-h-svh border border-border rounded-lg relative">
+    @if (shouldShowImage()) {
+      @if (currentImage()) {
+        <div class="flex flex-col h-full min-h-svh items-center justify-center p-4 rounded-lg gap-4">
+          <img
+            [src]="currentImage()"
+            [alt]="block()?.title || 'Block preview'"
+            class="max-w-full h-auto rounded-lg shadow-lg"
+            (error)="onImageError($event)"
+          />
+          <p class="text-sm text-muted-foreground">{{ block()?.title }}</p>
+        </div>
+      }
+    } @else {
+      <div class="absolute inset-0 h-full min-h-svh bg-surface bg-[radial-gradient(#333437_1px,transparent_1px)] [background-size:16px_16px] rounded-lg"></div>
+      <z-resizable class="w-full min-h-svh rounded-lg">
+        <z-resizable-panel [zDefaultSize]="100" class="overflow-y-auto">
+          <section class="flex h-full w-full items-center justify-center rounded-lg">
+            <div class="w-full transition-all duration-300 ease-in-out" [style.max-width]="getViewportWidth()">
+              <div class="h-full w-full overflow-auto rounded-lg">
+                <ng-container *ngComponentOutlet="component()"></ng-container>
+              </div>
+            </div>
+          </section>
+        </z-resizable-panel>
+      </z-resizable>
+    }
+  </div>
+</div>

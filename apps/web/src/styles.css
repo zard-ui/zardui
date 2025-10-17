@@ -9,8 +9,7 @@
   --header-height: calc(var(--spacing) * 14);
   --footer-height: calc(var(--spacing) * 14);
   --sidebar-width: 16rem;
-  --font-geist-sans: 'Geist Sans', sans-serif;
-  --font-geist-mono: 'Geist Mono', monospace;
+  --font-geist-sans: 'Geist', sans-serif;
   --background: oklch(1 0 0);
   --foreground: oklch(0.225 0 0);
   --card: oklch(1 0 0);
@@ -52,6 +51,9 @@
   --shiki--dark: var(--shiki-theme,);
   --surface: oklch(0.97 0 0);
   --code: var(--surface);
+  --surface: oklch(98% 0 0);
+  --surface-foreground: var(--foreground);
+  --code-foreground: var(--surface-foreground);
   --code-tab-button: oklch(0.925 0 0);
 }
 
@@ -91,8 +93,10 @@
   --sidebar-border: oklch(0.269 0 0);
   --sidebar-ring: oklch(0.439 0 0);
   --surface: oklch(0.2 0 0);
+  --surface-foreground: oklch(70.8% 0 0);
   --code: var(--surface);
   --code-tab-button: oklch(0.178 0 0);
+  --code-foreground: var(--surface-foreground);
 }
 
 @theme inline {
