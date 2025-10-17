@@ -101,8 +101,8 @@ function transformContent(content: string, config: Config): string {
   // Transform the shared utils import (number)
   transformed = transformed.replace(/from ['"]\.\.\/\.\.\/shared\/utils\/number['"]/g, `from '@shared/utils/number'`);
 
-  // Transform relative component imports
-  const componentImportRegex = /from ['"]\.\.\/([\w-]+)['"]/g;
+  // Transform relative component imports (handles nested paths like ../core/directives/...)
+  const componentImportRegex = /from ['"]\.\.\/([\w-/]+)['"]/g;
   transformed = transformed.replace(componentImportRegex, `from '@shared/components/$1'`);
 
   // Fix ClassValue import - it should come from clsx, not class-variance-authority

@@ -21,6 +21,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'layout',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'layout.component.ts',
@@ -107,6 +108,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'empty',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'empty.component.ts',
@@ -287,6 +289,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'input-group',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'input-group.component.ts',
@@ -330,6 +333,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tabs',
+    registryDependencies: ['button'],
     files: [
       {
         name: 'tabs.component.ts',
@@ -468,7 +472,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'combobox',
-    registryDependencies: ['input', 'popover'],
+    registryDependencies: ['button', 'command', 'popover', 'empty', 'input'],
     files: [
       {
         name: 'combobox.component.ts',
@@ -527,7 +531,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'date-picker',
-    registryDependencies: ['calendar', 'input'],
+    registryDependencies: ['button', 'calendar', 'popover', 'input'],
     files: [
       {
         name: 'date-picker.component.ts',
