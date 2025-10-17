@@ -49,6 +49,14 @@ const inlineTheme = `
 }
 `;
 
+const layerBase = `
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+}
+`;
+
 export const neutral = `
 ${tailwindConfiguration}
 
@@ -122,6 +130,8 @@ ${tailwindConfiguration}
 }
 
 ${inlineTheme}
+
+${layerBase}
 `;
 
 export const stone = `
@@ -197,6 +207,8 @@ ${tailwindConfiguration}
 }
 
 ${inlineTheme}
+
+${layerBase}
 `;
 
 export const zinc = `
@@ -272,6 +284,8 @@ ${tailwindConfiguration}
 }
 
 ${inlineTheme}
+
+${layerBase}
 `;
 
 export const gray = `
@@ -347,6 +361,8 @@ ${tailwindConfiguration}
 }
 
 ${inlineTheme}
+
+${layerBase}
 `;
 
 export const slate = `
@@ -422,4 +438,6 @@ ${tailwindConfiguration}
 }
 
 ${inlineTheme}
+
+${layerBase}
 `;

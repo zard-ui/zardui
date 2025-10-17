@@ -7,6 +7,7 @@ import { ZardDemoButtonShapeComponent } from './shape';
 import { ZardDemoButtonGhostComponent } from './ghost';
 import { ZardDemoButtonSizeComponent } from './size';
 import { ZardDemoButtonFullComponent } from './full';
+import { ZardDemoButtonLinkComponent } from './link';
 
 export const BUTTON = {
   componentName: 'button',
@@ -31,6 +32,10 @@ export const BUTTON = {
     {
       name: 'ghost',
       component: ZardDemoButtonGhostComponent,
+    },
+    {
+      name: 'link',
+      component: ZardDemoButtonLinkComponent,
     },
     {
       name: 'size',

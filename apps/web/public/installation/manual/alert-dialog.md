@@ -1,6 +1,10 @@
 
 
 ```angular-ts title="alert-dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { A11yModule } from '@angular/cdk/a11y';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,10 +23,6 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
-import { OverlayModule, OverlayRef } from '@angular/cdk/overlay';
-import { filter, fromEvent, takeUntil } from 'rxjs';
-import { A11yModule } from '@angular/cdk/a11y';
 import { ClassValue } from 'clsx';
 
 import { alertDialogVariants, ZardAlertDialogVariants } from './alert-dialog.variants';
@@ -64,7 +64,7 @@ export class ZardAlertDialogOptions<T> {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
-    '[attr.data-state]': 'state()',
+    '[@alertDialogAnimation]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
     role: 'alertdialog',
     '[attr.aria-modal]': 'true',
@@ -80,22 +80,19 @@ export class ZardAlertDialogOptions<T> {
         height: fit-content;
         transform-origin: center center;
       }
-
-      z-alert-dialog[data-state='close'] {
-        transform: scale(0.95);
-        opacity: 0;
-      }
-
-      z-alert-dialog[data-state='open'] {
-        transform: scale(1);
-        opacity: 1;
-      }
     `,
+  ],
+  animations: [
+    trigger('alertDialogAnimation', [
+      state('close', style({ opacity: 0, transform: 'scale(0.9)' })),
+      state('open', style({ opacity: 1, transform: 'scale(1)' })),
+      transition('close => open', animate('150ms ease-out')),
+      transition('open => close', animate('150ms ease-in')),
+    ]),
   ],
 })
 export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
-  private readonly overlayRef = inject(OverlayRef);
   protected readonly config = inject(ZardAlertDialogOptions<T>);
 
   protected readonly classes = computed(() =>
@@ -151,18 +148,6 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   onCancelClick() {
     this.cancelTriggered.emit();
   }
-
-  overlayClickOutside() {
-    return fromEvent<MouseEvent>(document, 'click').pipe(
-      filter(event => {
-        const clickTarget = event.target as HTMLElement;
-        const hasNotOrigin = clickTarget !== this.host.nativeElement;
-        const hasNotOverlay = !!this.overlayRef && this.overlayRef.overlayElement.contains(clickTarget) === false;
-        return hasNotOrigin && hasNotOverlay;
-      }),
-      takeUntil(this.overlayRef.detachments()),
-    );
-  }
 }
 
 @NgModule({
@@ -178,7 +163,7 @@ export class ZardAlertDialogModule {}
 ```angular-ts title="alert-dialog.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg transition-all duration-200 ease-out rounded-lg sm:max-w-lg', {
+export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg rounded-lg sm:max-w-lg', {
   variants: {
     zType: {
       default: '',
@@ -198,7 +183,7 @@ export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
 
 ```angular-ts title="alert-dialog-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { filter, fromEvent, Observable, Subject, takeUntil } from 'rxjs';
+import { filter, Observable, Subject, takeUntil } from 'rxjs';
 
 import { OverlayRef } from '@angular/cdk/overlay';
 
@@ -207,6 +192,7 @@ import { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } fro
 export class ZardAlertDialogRef<T = unknown, R = unknown> {
   componentInstance?: T;
   private destroy$ = new Subject<void>();
+  private isClosing = false;
   private readonly afterClosedSubject: Subject<R | undefined> = new Subject();
 
   constructor(
@@ -223,25 +209,30 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     });
 
     this.handleMaskClick();
-
-    fromEvent<KeyboardEvent>(document, 'keydown')
-      .pipe(
-        filter(event => event.key === 'Escape'),
-        takeUntil(this.destroy$),
-      )
-      .subscribe(() => this.close());
+    this.handleEscapeKey();
   }
 
   close(dialogResult?: R): void {
+    if (this.isClosing) {
+      return;
+    }
+
+    this.isClosing = true;
     this.containerInstance.state.set('close');
 
     setTimeout(() => {
-      this.overlayRef.dispose();
+      if (this.overlayRef) {
+        this.overlayRef.dispose();
+      }
+
       this.afterClosedSubject.next(dialogResult);
       this.afterClosedSubject.complete();
-      this.destroy$.next();
-      this.destroy$.complete();
-    }, 200);
+
+      if (!this.destroy$.closed) {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
+    }, 150);
   }
 
   afterClosed(): Observable<R | undefined> {
@@ -275,14 +266,25 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
   }
 
   private handleMaskClick() {
-    if (this.config.zMaskClosable) {
-      this.containerInstance
-        .overlayClickOutside()
-        .pipe(filter(() => this.config.zMaskClosable === true))
+    const hasMaskClosable = this.config.zMaskClosable ?? true;
+    if (hasMaskClosable) {
+      this.overlayRef
+        .outsidePointerEvents()
+        .pipe(takeUntil(this.destroy$))
         .subscribe(() => {
           this.close();
         });
     }
+  }
+
+  private handleEscapeKey() {
+    this.overlayRef
+      .keydownEvents()
+      .pipe(
+        filter(event => event.key === 'Escape'),
+        takeUntil(this.destroy$),
+      )
+      .subscribe(() => this.close());
   }
 }
 
@@ -435,10 +437,9 @@ export class ZardAlertDialogService {
     const containerPortal = new ComponentPortal<ZardAlertDialogComponent<T>>(ZardAlertDialogComponent, config.zViewContainerRef, injector);
     const containerRef = overlayRef.attach<ZardAlertDialogComponent<T>>(containerPortal);
 
-    // Pequeno delay para evitar reflow durante a renderização inicial
     setTimeout(() => {
       containerRef.instance.state.set('open');
-    }, 10);
+    }, 0);
 
     return containerRef.instance;
   }

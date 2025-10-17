@@ -1,7 +1,8 @@
-import { EventEmitter, Inject, inject, PLATFORM_ID } from '@angular/core';
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-import { isPlatformBrowser } from '@angular/common';
+
 import { OverlayRef } from '@angular/cdk/overlay';
+import { isPlatformBrowser } from '@angular/common';
+import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
 
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
@@ -12,6 +13,7 @@ const enum eTriggerAction {
 
 export class ZardDialogRef<T = any, R = any, U = any> {
   private destroy$ = new Subject<void>();
+  private isClosing = false;
   protected result?: R;
   componentInstance: T | null = null;
 
@@ -24,17 +26,11 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
     this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
 
-    if ((this.config.zMaskClosable || this.config.zMaskClosable === undefined) && isPlatformBrowser(this.platformId)) {
-      this.containerInstance.getNativeElement().addEventListener(
-        'animationend',
-        () => {
-          this.containerInstance
-            .overlayClickOutside()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(() => this.close());
-        },
-        { once: true },
-      );
+    if ((this.config.zMaskClosable ?? true) && isPlatformBrowser(this.platformId)) {
+      this.overlayRef
+        .outsidePointerEvents()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(() => this.close());
     }
 
     if (isPlatformBrowser(this.platformId)) {
@@ -48,10 +44,28 @@ export class ZardDialogRef<T = any, R = any, U = any> {
   }
 
   close(result?: R) {
+    if (this.isClosing) {
+      return;
+    }
+
+    this.isClosing = true;
     this.result = result;
-    this.overlayRef.detachBackdrop();
-    this.overlayRef.dispose();
-    this.destroy$.next();
+
+    this.containerInstance.state.set('close');
+
+    setTimeout(() => {
+      if (this.overlayRef) {
+        if (this.overlayRef.hasAttached()) {
+          this.overlayRef.detachBackdrop();
+        }
+        this.overlayRef.dispose();
+      }
+
+      if (!this.destroy$.closed) {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
+    }, 150);
   }
 
   private trigger(action: eTriggerAction) {
