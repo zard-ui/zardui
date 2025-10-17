@@ -1,8 +1,9 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'z-env-card',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <a [routerLink]="disabled() ? null : path()" [class]="cardClasses()">
       <img [src]="'images/envs/' + icon()" class="h-14 w-14 dark:invert invert-0" [alt]="name() + 'logo'" />

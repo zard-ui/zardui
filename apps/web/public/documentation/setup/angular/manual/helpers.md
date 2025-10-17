@@ -12,10 +12,8 @@ export function transform(value: boolean | string): boolean {
 ```
 
 ```typescript title="utils/cn.ts" expandable="true" copyButton showLineNumbers
+import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
-import { ClassValue, clsx } from 'clsx';
-
-export type { ClassValue };
 
 export function mergeClasses(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -29,6 +27,8 @@ export function generateId(prefix = ''): string {
   const id = crypto.randomUUID();
   return prefix ? `${prefix}-${id}` : id;
 }
+
+export const noopFun = () => void 0;
 ```
 
 ```typescript title="utils/numbers.ts" expandable="true" copyButton showLineNumbers
