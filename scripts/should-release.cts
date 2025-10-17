@@ -8,6 +8,7 @@
  */
 
 import { execSync } from 'child_process';
+import { appendFileSync } from 'fs';
 
 import { getSemverBump, parseCommit } from './emoji-commit-mapper.cts';
 
@@ -98,10 +99,8 @@ function analyzeCommits(commits: string[]): ReleaseAnalysis {
 function setGitHubOutput(key: string, value: string) {
   const output = process.env.GITHUB_OUTPUT;
   if (output) {
-    const fs = require('fs');
-    fs.appendFileSync(output, `${key}=${value}\n`);
+    appendFileSync(output, `${key}=${value}\n`);
   }
-  console.log(`::set-output name=${key}::${value}`);
 }
 
 /**

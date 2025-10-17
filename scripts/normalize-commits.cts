@@ -39,7 +39,7 @@ function getCommitsSinceLastTag(): CommitInfo[] {
     const range = latestTag ? `${latestTag}..HEAD` : 'HEAD';
 
     // Get commits with hash and message
-    const output = execSync(`git log ${range} --pretty=format:"%H|%s" --no-merges`, {
+    const output = execSync(`git log ${range} --pretty=format:"%H%x00%s" --no-merges`, {
       encoding: 'utf-8',
     });
 
@@ -51,7 +51,7 @@ function getCommitsSinceLastTag(): CommitInfo[] {
       .split('\n')
       .filter(line => line.trim())
       .map(line => {
-        const [hash, message] = line.split('|');
+        const [hash, message] = line.split('\x00');
         const normalized = normalizeToConventional(message);
         const valid = parseCommit(message) !== null;
 
