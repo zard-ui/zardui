@@ -1,18 +1,20 @@
-import { Component, inject, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
+
+import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
+import { SeoService } from '@docs/shared/services/seo.service';
 
 import { CliCommandsSection } from './sections/commands.component';
 import { CliConfigurationSection } from './sections/configuration.component';
 import { CliInstallationSection } from './sections/installation.component';
 import { CliOverviewSection } from './sections/overview.component';
-import { SeoService } from '../../../shared/services/seo.service';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-cli',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, CliOverviewSection, CliInstallationSection, CliCommandsSection, CliConfigurationSection],
   template: `
     <z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">

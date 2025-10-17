@@ -1,17 +1,18 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 
-import { SeoService } from '../../../shared/services/seo.service';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
+import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { ScrollSpyItemDirective } from '@docs/domain/directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
+import { SeoService } from '@docs/shared/services/seo.service';
 
 @Component({
   selector: 'z-scss',
   templateUrl: './scss.page.html',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective],
 })
 export class ScssPage implements OnInit {

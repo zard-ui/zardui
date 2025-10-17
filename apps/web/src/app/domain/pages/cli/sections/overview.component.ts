@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { MarkdownRendererComponent } from '../../../components/render/markdown-renderer.component';
+import { MarkdownRendererComponent } from '@docs/domain/components/render/markdown-renderer.component';
 
 @Component({
   selector: 'cli-overview-section',

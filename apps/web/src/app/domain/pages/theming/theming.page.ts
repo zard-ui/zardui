@@ -1,13 +1,13 @@
 import { Component, inject, type OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { SeoService } from '../../../shared/services/seo.service';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
-import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
+import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { MarkdownRendererComponent } from '@docs/domain/components/render/markdown-renderer.component';
+import { ScrollSpyItemDirective } from '@docs/domain/directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
+import { SeoService } from '@docs/shared/services/seo.service';
 
 @Component({
   selector: 'z-theming',

@@ -1,18 +1,19 @@
-import { Component, inject, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 
-import { SeoService } from '../../../shared/services/seo.service';
-import { CalloutComponent } from '../../components/callout/callout.component';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { ResourceCardComponent } from '../../components/resource-card/resource-card.component';
-import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
+import { CalloutComponent } from '@docs/domain/components/callout/callout.component';
+import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { ResourceCardComponent } from '@docs/domain/components/resource-card/resource-card.component';
+import { ScrollSpyItemDirective } from '@docs/domain/directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
+import { SeoService } from '@docs/shared/services/seo.service';
 
 @Component({
   selector: 'z-figma',
   templateUrl: './figma.page.html',
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DocContentComponent, DocHeadingComponent, CalloutComponent, ResourceCardComponent, ScrollSpyDirective, ScrollSpyItemDirective],
 })
 export class FigmaPage implements OnInit {

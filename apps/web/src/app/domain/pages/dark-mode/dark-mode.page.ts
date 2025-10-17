@@ -4,14 +4,14 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 
-import { DarkModeService } from '../../../shared/services/darkmode.service';
-import { SeoService } from '../../../shared/services/seo.service';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
-import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
+import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { MarkdownRendererComponent } from '@docs/domain/components/render/markdown-renderer.component';
+import { ScrollSpyItemDirective } from '@docs/domain/directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
+import { DarkModeService } from '@docs/shared/services/darkmode.service';
+import { SeoService } from '@docs/shared/services/seo.service';
 
 @Component({
   selector: 'z-darkmode',
