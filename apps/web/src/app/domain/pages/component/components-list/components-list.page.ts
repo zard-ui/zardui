@@ -1,9 +1,9 @@
-import { Component, inject, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 
-import { COMPONENTS_PATH } from '../../../../shared/constants/routes.constant';
-import { SeoService } from '../../../../shared/services/seo.service';
-import { DocContentComponent } from '../../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../../components/doc-heading/doc-heading.component';
+import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
+import { COMPONENTS_PATH } from '@docs/shared/constants/routes.constant';
+import { SeoService } from '@docs/shared/services/seo.service';
 
 @Component({
   selector: 'z-components-list',
@@ -20,6 +20,7 @@ import { DocHeadingComponent } from '../../../components/doc-heading/doc-heading
     </z-content>
   `,
   standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DocContentComponent, DocHeadingComponent],
 })
 export class ComponentsListPage implements OnInit {

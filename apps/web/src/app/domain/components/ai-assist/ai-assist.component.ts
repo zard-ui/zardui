@@ -11,9 +11,10 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
 
+import { environment } from '@docs/env/environment';
+import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '@docs/shared/constants/routes.constant';
+
 import type { AiAssistOption } from './ai-assist.types';
-import { environment } from '../../../../environments/environment';
-import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '../../../shared/constants/routes.constant';
 
 @Component({
   selector: 'z-assist',
