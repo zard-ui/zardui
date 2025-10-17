@@ -1,3 +1,13 @@
+## 1.0.0-beta.22 (2025-10-17)
+
+### 🐛 Bug Fixes
+
+- **cli:** add missing component dependencies in registry ([#264](https://github.com/zard-ui/zardui/pull/264))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
 ## 1.0.0-beta.21 (2025-10-17)
 
 ### ✨ Features
