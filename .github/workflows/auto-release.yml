@@ -79,19 +79,39 @@ jobs:
       - name: 🎯 Run Nx Release
         id: nx_release
         run: |
+          echo "Git status before release:"
+          git status
+          echo ""
+          echo "Bump type detected: ${{ needs.detect-release.outputs.bump_type }}"
+          echo ""
+
           # Check if there are any existing release tags
           if git describe --tags --abbrev=0 2>/dev/null; then
             echo "Found existing tags, running normal release"
-            npx nx release --skip-publish --verbose
+            npx nx release --skip-publish --verbose ${{ needs.detect-release.outputs.bump_type }}
           else
             echo "No existing tags found, running first release"
-            npx nx release --skip-publish --first-release --verbose
+            npx nx release --skip-publish --first-release --verbose ${{ needs.detect-release.outputs.bump_type }}
           fi
+
+          echo ""
+          echo "Git status after release:"
+          git status
+          echo ""
+          echo "Recent commits:"
+          git log --oneline -3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: 🏷️ Push Changes and Tags
         run: |
+          echo "Checking git status before push..."
+          git status
+          echo ""
+          echo "Checking for new tags..."
+          git tag -l --sort=-version:refname | head -5
+          echo ""
+          echo "Pushing changes and tags..."
           git push origin master --follow-tags
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
