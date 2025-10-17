@@ -79,7 +79,14 @@ jobs:
       - name: 🎯 Run Nx Release
         id: nx_release
         run: |
-          npx nx release --skip-publish
+          # Check if there are any existing release tags
+          if git describe --tags --abbrev=0 2>/dev/null; then
+            echo "Found existing tags, running normal release"
+            npx nx release --skip-publish --verbose
+          else
+            echo "No existing tags found, running first release"
+            npx nx release --skip-publish --first-release --verbose
+          fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -92,13 +99,17 @@ jobs:
       - name: 🎉 Success Summary
         run: |
           # Extract the new version from the last tag
-          NEW_VERSION=$(git describe --tags --abbrev=0)
+          NEW_VERSION=$(git describe --tags --abbrev=0 2>/dev/null || echo "unknown")
 
           echo "## ✅ Release Created Successfully!" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🏷️ Version" >> $GITHUB_STEP_SUMMARY
-          echo "\`$NEW_VERSION\`" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$NEW_VERSION" != "unknown" ]; then
+            echo "### 🏷️ Version" >> $GITHUB_STEP_SUMMARY
+            echo "\`$NEW_VERSION\`" >> $GITHUB_STEP_SUMMARY
+            echo "" >> $GITHUB_STEP_SUMMARY
+          fi
+
           echo "### 📦 Next Steps" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ CHANGELOG.md updated" >> $GITHUB_STEP_SUMMARY
           echo "- ✅ Version bumped in package.json" >> $GITHUB_STEP_SUMMARY
@@ -106,9 +117,12 @@ jobs:
           echo "- 🚀 NPM publish workflow will be triggered automatically" >> $GITHUB_STEP_SUMMARY
           echo "- 📝 GitHub Release will be created" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
-          echo "- [View on GitHub](https://github.com/${{ github.repository }}/releases/tag/$NEW_VERSION)" >> $GITHUB_STEP_SUMMARY
-          echo "- [View Changelog](https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md)" >> $GITHUB_STEP_SUMMARY
+
+          if [ "$NEW_VERSION" != "unknown" ]; then
+            echo "### 🔗 Links" >> $GITHUB_STEP_SUMMARY
+            echo "- [View on GitHub](https://github.com/${{ github.repository }}/releases/tag/$NEW_VERSION)" >> $GITHUB_STEP_SUMMARY
+            echo "- [View Changelog](https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md)" >> $GITHUB_STEP_SUMMARY
+          fi
 
   skip-release:
     name: ⏭️ Skip Release
