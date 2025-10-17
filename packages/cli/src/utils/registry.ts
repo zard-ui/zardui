@@ -21,6 +21,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'layout',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'layout.component.ts',
