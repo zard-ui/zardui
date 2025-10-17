@@ -1,15 +1,7 @@
-name: 🚀 Auto Release on Merge
+name: 🚀 Manual Release
 
 on:
-  push:
-    branches:
-      - master
-    paths-ignore:
-      - '**/CHANGELOG.md'
-      - '.github/workflows/production-deploy.yml'
-      - '.github/workflows/release.yml'
-      - '**/package.json'
-      - '**/package-lock.json'
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -48,7 +40,6 @@ jobs:
     name: 🚀 Create Release
     runs-on: ubuntu-latest
     needs: detect-release
-    if: needs.detect-release.outputs.should_release == 'true'
     steps:
       - name: 📥 Checkout
         uses: actions/checkout@v4
@@ -146,22 +137,3 @@ jobs:
             echo "- [View on GitHub](https://github.com/${{ github.repository }}/releases/tag/$NEW_VERSION)" >> $GITHUB_STEP_SUMMARY
             echo "- [View Changelog](https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md)" >> $GITHUB_STEP_SUMMARY
           fi
-
-  skip-release:
-    name: ⏭️ Skip Release
-    runs-on: ubuntu-latest
-    needs: detect-release
-    if: needs.detect-release.outputs.should_release == 'false'
-    steps:
-      - name: 📊 Skip Summary
-        run: |
-          echo "## ⏭️ Release Skipped" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "No changes that require a release were detected." >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📋 Commit Types that Trigger Releases:" >> $GITHUB_STEP_SUMMARY
-          echo "- ✨ **feat** → Minor version bump" >> $GITHUB_STEP_SUMMARY
-          echo "- 🐛 **fix** → Patch version bump" >> $GITHUB_STEP_SUMMARY
-          echo "- 🚀 **perf** → Patch version bump" >> $GITHUB_STEP_SUMMARY
-          echo "- ⏪️ **revert** → Patch version bump" >> $GITHUB_STEP_SUMMARY
-          echo "- **Breaking changes** (!) → Major version bump" >> $GITHUB_STEP_SUMMARY
