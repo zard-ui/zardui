@@ -43,13 +43,19 @@ export default {
     // Subject should not be empty (description is required)
     'subject-empty': [2, 'never'],
 
+    // Subject minimum length (at least 10 characters for meaningful description)
+    'subject-min-length': [2, 'always', 10],
+
+    // Subject maximum length (keep it concise, max 72 characters)
+    'subject-max-length': [2, 'always', 72],
+
     // Subject should not end with period
     'subject-full-stop': [2, 'never', '.'],
 
     // Subject should be lowercase (disabled because of proper nouns)
     'subject-case': [0],
 
-    // Header max length
+    // Header max length (including emoji, type, scope)
     'header-max-length': [2, 'always', 100],
 
     // Body max line length
