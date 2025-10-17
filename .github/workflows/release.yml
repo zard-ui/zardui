@@ -33,7 +33,7 @@ jobs:
         run: npm ci
 
       - name: Build CLI
-        run: npx nx run cli:postbuild
+        run: npx nx build cli
 
       - name: Extract version from tag
         id: version_info
@@ -52,7 +52,7 @@ jobs:
 
       - name: Verify package version
         run: |
-          PACKAGE_VERSION=$(node -p "require('./dist/packages/cli/package.json').version")
+          PACKAGE_VERSION=$(node -p "require('./packages/cli/dist/package.json').version")
           if [ "$PACKAGE_VERSION" != "${{ steps.version_info.outputs.version }}" ]; then
             echo "Error: Tag version (${{ steps.version_info.outputs.version }}) does not match package.json version ($PACKAGE_VERSION)"
             exit 1
@@ -60,33 +60,19 @@ jobs:
 
       - name: Publish CLI to npm
         run: |
-          cd dist/packages/cli
+          cd packages/cli/dist
           npm publish --provenance --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_SECRET }}
 
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.version_info.outputs.tag_name }}
-          release_name: ZardUI CLI v${{ steps.version_info.outputs.version }}
-          body: |
-            ## ZardUI CLI v${{ steps.version_info.outputs.version }}
-
-            ### 📦 Published to npm
-
-            **[@ngzard/ui@${{ steps.version_info.outputs.version }}](https://www.npmjs.com/package/@ngzard/ui/v/${{ steps.version_info.outputs.version }})**
-
-            ### 📝 Changelog
-
-            See CHANGELOG.md for details.
-
-            ### 🚀 Installation
-
-            ```bash
-            npx @ngzard/ui@${{ steps.version_info.outputs.version }} init
-            ```
-          draft: false
-          prerelease: ${{ contains(steps.version_info.outputs.version, 'beta') || contains(steps.version_info.outputs.version, 'alpha') || contains(steps.version_info.outputs.version, 'rc') }}
+      - name: 🎉 Publish Summary
+        run: |
+          echo "## ✅ Package Published Successfully!" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 📦 Published to npm" >> $GITHUB_STEP_SUMMARY
+          echo "**[@ngzard/ui@${{ steps.version_info.outputs.version }}](https://www.npmjs.com/package/@ngzard/ui/v/${{ steps.version_info.outputs.version }})**" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### 🚀 Installation" >> $GITHUB_STEP_SUMMARY
+          echo '```bash' >> $GITHUB_STEP_SUMMARY
+          echo "npx @ngzard/ui@${{ steps.version_info.outputs.version }} init" >> $GITHUB_STEP_SUMMARY
+          echo '```' >> $GITHUB_STEP_SUMMARY
