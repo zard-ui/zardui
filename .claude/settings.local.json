@@ -76,7 +76,8 @@
       "Bash(zardev:*)",
       "Bash(npm unlink:*)",
       "Bash(git restore:*)",
-      "WebSearch"
+      "WebSearch",
+      "Bash(npx commitlint)"
     ],
     "defaultMode": "acceptEdits"
   },

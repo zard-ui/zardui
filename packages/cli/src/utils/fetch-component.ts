@@ -1,13 +1,53 @@
 import { execa } from 'execa';
+import { readFileSync } from 'fs';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 
 import type { Config } from './config.js';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const GITHUB_API = 'https://api.github.com/repos/zard-ui/zardui/contents';
-const GITHUB_RAW = 'https://raw.githubusercontent.com/zard-ui/zardui/master';
+
+/**
+ * Get the CLI version from package.json
+ * This determines which git tag to fetch components from
+ */
+function getCliVersion(): string {
+  try {
+    // In production, package.json is at the root of the published package
+    const packageJsonPath = join(__dirname, '../../package.json');
+    const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
+    return packageJson.version;
+  } catch (error) {
+    console.warn('Failed to read CLI version from package.json, falling back to master branch');
+    return 'master';
+  }
+}
+
+/**
+ * Get the GitHub ref (tag or branch) to fetch components from
+ * Uses the CLI version tag (e.g., v1.2.3) to ensure component compatibility
+ */
+function getGithubRef(): string {
+  const version = getCliVersion();
+
+  // If version is 'master' (fallback), use master branch
+  if (version === 'master') {
+    return 'master';
+  }
+
+  // Use the version tag (e.g., v1.2.3)
+  return `v${version}`;
+}
+
+const GITHUB_REF = getGithubRef();
+const GITHUB_RAW = `https://raw.githubusercontent.com/zard-ui/zardui/${GITHUB_REF}`;
 
 async function fetchFromGitHubAPI(filePath: string): Promise<string> {
   try {
-    const apiUrl = `${GITHUB_API}/${filePath}`;
+    const apiUrl = `${GITHUB_API}/${filePath}?ref=${GITHUB_REF}`;
     const { stdout } = await execa('curl', ['-s', '-H', 'Accept: application/vnd.github.v3+json', '-H', 'User-Agent: zard-cli', apiUrl]);
 
     const response = JSON.parse(stdout);

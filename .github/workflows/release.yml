@@ -3,7 +3,7 @@ name: Release and Publish
 on:
   push:
     tags:
-      - 'zard@*'
+      - 'v*'
 
 jobs:
   release:
@@ -41,12 +41,12 @@ jobs:
           TAG_NAME="${GITHUB_REF#refs/tags/}"
           echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
 
-          # Extrai versão da tag zard@X.X.X
-          if [[ "$TAG_NAME" == zard@* ]]; then
-            VERSION="${TAG_NAME#zard@}"
+          # Extract version from tag vX.X.X
+          if [[ "$TAG_NAME" == v* ]]; then
+            VERSION="${TAG_NAME#v}"
             echo "version=$VERSION" >> $GITHUB_OUTPUT
           else
-            echo "Invalid tag format. Expected zard@X.X.X" >&2
+            echo "Invalid tag format. Expected vX.X.X" >&2
             exit 1
           fi
 
@@ -75,15 +75,15 @@ jobs:
           body: |
             ## ZardUI CLI v${{ steps.version_info.outputs.version }}
 
-            ### 📦 Publicado no npm
+            ### 📦 Published to npm
 
             **[@ngzard/ui@${{ steps.version_info.outputs.version }}](https://www.npmjs.com/package/@ngzard/ui/v/${{ steps.version_info.outputs.version }})**
 
             ### 📝 Changelog
 
-            Veja o CHANGELOG.md para mais detalhes.
+            See CHANGELOG.md for details.
 
-            ### 🚀 Instalação
+            ### 🚀 Installation
 
             ```bash
             npx @ngzard/ui@${{ steps.version_info.outputs.version }} init

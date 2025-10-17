@@ -283,40 +283,83 @@ bugfix/#<issue-number>-<descriptive-name>
 
 ### Conventional Commits for Automated Releases
 
-We use **Conventional Commits** as specified in CLAUDE.md:
+We use **Conventional Commits with Emojis** for better visual feedback and automated releases.
+
+#### 🎯 Making Commits
+
+Make commits using the standard git command with the emoji + type format:
 
 ```bash
-📦 refactor: code changes that don't fix bugs or add features
-✨ feat: new functionality
-🐛 fix: bug correction
-💄 style: changes that don't affect code meaning (formatting, etc)
-🏗️ build: build system or dependencies changes
-🔧 ci: CI configuration changes
-✏️ docs: documentation only changes
-🚀 perf: performance improvements
-🧪 test: adding or correcting tests
-🌐 i18n: internationalization and localization
-📈 analytics: analytics
-🗃️ database: database-related changes
+git add .
+git commit -m "✨ feat(button): add new variant"
 ```
 
-### Automatic Versioning
+#### 📝 Commit Types and Versioning
+
+| Emoji | Type       | Description              | Version Bump      |
+| ----- | ---------- | ------------------------ | ----------------- |
+| ✨    | `feat`     | New functionality        | **Minor** (0.x.0) |
+| 🐛    | `fix`      | Bug correction           | **Patch** (0.0.x) |
+| 🚀    | `perf`     | Performance improvements | **Patch** (0.0.x) |
+| ⏪️   | `revert`   | Revert previous commit   | **Patch** (0.0.x) |
+| 📦    | `refactor` | Code refactoring         | No release        |
+| 🧪    | `test`     | Tests                    | No release        |
+| 📝    | `docs`     | Documentation            | No release        |
+| 💄    | `style`    | Code style               | No release        |
+| 🏗️    | `build`    | Build system             | No release        |
+| 🔧    | `chore`    | Maintenance              | No release        |
+
+**Breaking Changes**: Add `!` after the type for a **Major** version bump:
 
 ```bash
-# Examples of how commits affect versioning:
-feat(button): add loading state    # Minor: v19.3.4 → v19.4.0
-fix(input): resolve focus bug      # Patch: v19.1.0 → v19.1.1
-feat!(card): support to angular 20 # Major: v19.1.0 → v20.0.0
-docs: update examples              # No release
+✨ feat(button)!: redesign button API  # Major: 1.0.0 → 2.0.0
 ```
 
-### Practical Examples
+#### ✅ Commit Validation
+
+We use Husky + commitlint to validate commits automatically:
+
+- ✅ **Before commit**: lint-staged runs ESLint and Prettier
+- ✅ **On commit message**: commitlint validates format
+- ❌ Invalid format → commit rejected with helpful error
+
+#### 🎨 Commit Format
+
+```
+emoji type(scope): description
+
+[optional body]
+
+[optional footer]
+```
+
+**Examples:**
 
 ```bash
-✨ feat: add button component with variants
-🐛 fix: resolve keyboard navigation in dropdown
-📦 refactor: improve component performance with OnPush
-🧪 test: add comprehensive tests for form validation
+✨ feat(button): add loading state
+🐛 fix(input): resolve focus bug
+📦 refactor(dialog): improve animation performance
+🧪 test(form): add validation tests
+📝 docs(readme): update installation guide
+```
+
+**Important - Emoji is REQUIRED**:
+
+1. ✅ **Emoji at the start** (MANDATORY - commit will be rejected without it)
+2. ✅ **Type** (feat, fix, etc)
+3. ⚪ **Scope** in parentheses (optional)
+4. ✅ **Colon and space**
+5. ✅ **Clear, imperative description**
+
+**Examples of valid commits:**
+
+```bash
+✅ ✨ feat(button): add variant
+✅ 🐛 fix: resolve bug
+✅ 📦 refactor(core): improve performance
+
+❌ feat(button): missing emoji - WILL BE REJECTED
+❌ feat: missing emoji - WILL BE REJECTED
 ```
 
 ## 🔧 Essential Commands
@@ -353,28 +396,98 @@ npm run test:watch        # 👁️ Tests in watch mode
 
 ## 🚀 Automatic Release System
 
-### Release Cycle
+### ✨ How It Works (100% Automated)
 
-- **Monday-Thursday**: Development and PRs
-- **Friday**: Code freeze + automatic release
-- **Versioning**: Based on conventional commits
+Our release system is **fully automated** - you don't need to do anything special! Here's what happens:
 
-### How It Works
+#### 1. 🔀 You Merge a PR to `master`
 
 ```bash
-1. PR with "feat(button): add loading state" is merged
-2. Semantic Release detects conventional commit
-3. Auto bump: v19.3.4 → v19.4.0
-4. Creates tag v19.4.0
-5. Publishes @zard/ui@19.4.0 to npm
-6. Automatic release notes
+# Example PR with commits:
+✨ feat(button): add loading variant
+🐛 fix(input): resolve focus issue
+📦 refactor(dialog): improve performance
 ```
 
-### Version Support
+#### 2. 🤖 GitHub Actions Detects Changes
 
-- **Current + Previous**: Angular 20 + 19 actively supported
-- **LTS**: Angular 18 with extended support (bug fixes only)
-- **Migration**: When Angular 21 is released, create migration branch
+The [auto-release workflow](.github/workflows/auto-release.yml) automatically:
+
+- ✅ Analyzes commits since last release
+- ✅ Determines version bump (major/minor/patch)
+- ✅ Skips if only docs/chore commits
+
+#### 3. 📝 Nx Release Creates the Release
+
+If release is needed, it automatically:
+
+- ✅ Bumps version in `package.json`
+- ✅ Generates/updates `CHANGELOG.md`
+- ✅ Creates git commit: `🔖 chore(release): publish X.Y.Z`
+- ✅ Creates git tag: `zard@X.Y.Z`
+- ✅ Pushes to GitHub
+
+#### 4. 📦 NPM Publishing (Triggered by Tag)
+
+The tag push triggers [release.yml](.github/workflows/release.yml):
+
+- ✅ Builds packages
+- ✅ Publishes to npm
+- ✅ Creates GitHub Release with notes
+
+### 📊 Version Bump Logic
+
+| Commits in PR             | Version Bump | Example           |
+| ------------------------- | ------------ | ----------------- |
+| Only `feat`               | **Minor**    | `1.2.3` → `1.3.0` |
+| Only `fix`                | **Patch**    | `1.2.3` → `1.2.4` |
+| `feat` + `fix`            | **Minor**    | `1.2.3` → `1.3.0` |
+| Any with `!`              | **Major**    | `1.2.3` → `2.0.0` |
+| Only `docs`, `chore`, etc | **None**     | No release        |
+
+### 🎯 What You Need to Do
+
+**Nothing!** Just:
+
+1. ✅ Use proper commit format (emoji + type)
+2. ✅ Get your PR reviewed and approved
+3. ✅ Squash & merge to master
+4. ✅ Automation handles the rest!
+
+### 🔍 Monitoring Releases
+
+- 📊 **GitHub Actions**: Check the "Actions" tab for release status
+- 📝 **CHANGELOG.md**: Auto-updated with each release
+- 🏷️ **GitHub Releases**: Created automatically with notes
+- 📦 **npm**: Published automatically
+
+### 🛠️ Manual Release (Emergency)
+
+If you need to create a release manually:
+
+```bash
+# Dry run (preview)
+npm run release:dry-run
+
+# Create release
+npm run release
+
+# Create specific version
+npx nx release version 1.2.3
+```
+
+### 📅 Release Frequency
+
+- **Automatic**: Every merge to master (if needed)
+- **No schedule**: Releases happen when features/fixes are ready
+- **Fast**: Release created within ~2 minutes of merge
+
+### 🔖 Version Support
+
+- **Current**: Angular 20 actively supported
+- **Previous**: Angular 19 actively supported
+- **LTS**: Angular 18 with bug fixes only
+- **Migration**: Documented in CHANGELOG when dropping support
 
 ---
 
