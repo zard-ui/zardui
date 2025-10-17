@@ -107,6 +107,22 @@ function setGitHubOutput(key: string, value: string) {
 }
 
 /**
+ * Checks if current version is a prerelease (beta, alpha, etc.)
+ */
+function isPrerelease(): boolean {
+  try {
+    const packageJson = JSON.parse(
+      execSync('cat libs/zard/package.json', { encoding: 'utf-8' })
+    );
+    const version = packageJson.version || '';
+    // Check if version contains beta, alpha, rc, etc.
+    return /-(beta|alpha|rc|pre|dev)/.test(version);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Main execution
  */
 function main() {
@@ -126,11 +142,13 @@ function main() {
   }
 
   const analysis = analyzeCommits(commits);
+  const inPrerelease = isPrerelease();
 
   console.log('📈 Analysis Results:');
   console.log(`   • Features: ${analysis.featureCount}`);
   console.log(`   • Fixes: ${analysis.fixCount}`);
   console.log(`   • Highest bump: ${analysis.highestBump}`);
+  console.log(`   • Current version is prerelease: ${inPrerelease ? 'YES (will use prerelease bump)' : 'NO'}`);
   console.log(`   • Should release: ${analysis.shouldRelease ? 'YES ✅' : 'NO ❌'}\n`);
 
   if (analysis.shouldRelease) {
@@ -144,9 +162,13 @@ function main() {
     console.log('');
   }
 
+  // If we're in a prerelease version (beta, alpha, etc.), use 'prerelease' bump
+  // This will increment the prerelease version (e.g., 1.0.0-beta.20 -> 1.0.0-beta.21)
+  const bumpType = inPrerelease && analysis.highestBump !== 'none' ? 'prerelease' : analysis.highestBump;
+
   // Set GitHub Actions outputs
   setGitHubOutput('should_release', analysis.shouldRelease ? 'true' : 'false');
-  setGitHubOutput('bump_type', analysis.highestBump);
+  setGitHubOutput('bump_type', bumpType);
   setGitHubOutput('feature_count', analysis.featureCount.toString());
   setGitHubOutput('fix_count', analysis.fixCount.toString());
 

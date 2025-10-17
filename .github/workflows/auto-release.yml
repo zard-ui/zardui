@@ -88,10 +88,10 @@ jobs:
           # Check if there are any existing release tags
           if git describe --tags --abbrev=0 2>/dev/null; then
             echo "Found existing tags, running normal release"
-            npx nx release --skip-publish --verbose ${{ needs.detect-release.outputs.bump_type }}
+            npx nx release --skip-publish --preid=beta --verbose ${{ needs.detect-release.outputs.bump_type }}
           else
             echo "No existing tags found, running first release"
-            npx nx release --skip-publish --first-release --verbose ${{ needs.detect-release.outputs.bump_type }}
+            npx nx release --skip-publish --first-release --preid=beta --verbose ${{ needs.detect-release.outputs.bump_type }}
           fi
 
           echo ""
