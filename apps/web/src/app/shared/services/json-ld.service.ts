@@ -74,7 +74,7 @@ export class JsonLdService {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly renderer: Renderer2;
-  private currentScript?: HTMLScriptElement;
+  private currentScripts: HTMLScriptElement[] = [];
   private readonly baseUrl = 'https://zardui.com';
   private readonly authorName = 'Luiz Gomes';
 
@@ -95,7 +95,7 @@ export class JsonLdService {
     this.renderer.appendChild(script, this.renderer.createText(jsonContent));
     this.renderer.appendChild(document.head, script);
 
-    this.currentScript = script;
+    this.currentScripts = [script];
   }
 
   removeJsonLd(): void {
@@ -103,10 +103,12 @@ export class JsonLdService {
       return;
     }
 
-    if (this.currentScript) {
-      this.renderer.removeChild(document.head, this.currentScript);
-      this.currentScript = undefined;
-    }
+    this.currentScripts.forEach(script => {
+      if (script && script.parentNode) {
+        this.renderer.removeChild(document.head, script);
+      }
+    });
+    this.currentScripts = [];
   }
 
   setHomeJsonLd(): void {
@@ -132,7 +134,7 @@ export class JsonLdService {
     const article: JsonLdArticle = {
       '@context': 'https://schema.org',
       '@type': 'Article',
-      headline: `${displayName} - Angular Component`,
+      headline: `${displayName} - zard/ui`,
       description: description,
       image: `${this.baseUrl}/og/og-${componentName}.jpg`,
       author: {
@@ -144,7 +146,7 @@ export class JsonLdService {
         name: 'Zard UI',
         logo: {
           '@type': 'ImageObject',
-          url: `${this.baseUrl}/site/og-image.png`,
+          url: `${this.baseUrl}/images/zard-og-image.png`,
         },
       },
       dateModified: new Date().toISOString(),
@@ -196,7 +198,7 @@ export class JsonLdService {
         name: 'Zard UI',
         logo: {
           '@type': 'ImageObject',
-          url: `${this.baseUrl}/site/og-image.png`,
+          url: `${this.baseUrl}/images/zard-og-image.png`,
         },
       },
       dateModified: new Date().toISOString(),
@@ -235,12 +237,13 @@ export class JsonLdService {
 
     this.removeJsonLd();
 
-    schemas.forEach(schema => {
+    this.currentScripts = schemas.map(schema => {
       const script = this.renderer.createElement('script');
       this.renderer.setAttribute(script, 'type', 'application/ld+json');
       const jsonContent = JSON.stringify(schema, null, 2);
       this.renderer.appendChild(script, this.renderer.createText(jsonContent));
       this.renderer.appendChild(document.head, script);
+      return script;
     });
   }
 
