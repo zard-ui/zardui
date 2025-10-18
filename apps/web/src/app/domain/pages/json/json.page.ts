@@ -1,16 +1,17 @@
-import { Component } from '@angular/core';
+import { SeoService } from '@zard/shared/services/seo.service';
+import { Component, inject, type OnInit } from '@angular/core';
 
+import { JsonCurrentStructureSectionComponent } from './sections/current-structure-section.component';
+import { JsonPackageManagerSectionComponent } from './sections/package-manager-section.component';
+import { JsonIntroductionSectionComponent } from './sections/introduction-section.component';
 import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { JsonTailwindSectionComponent } from './sections/tailwind-section.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { JsonAliasesSectionComponent } from './sections/aliases-section.component';
-import { JsonCurrentStructureSectionComponent } from './sections/current-structure-section.component';
-import { JsonIntroductionSectionComponent } from './sections/introduction-section.component';
-import { JsonPackageManagerSectionComponent } from './sections/package-manager-section.component';
 import { JsonStyleSectionComponent } from './sections/style-section.component';
-import { JsonTailwindSectionComponent } from './sections/tailwind-section.component';
+import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-json',
@@ -40,7 +41,8 @@ import { JsonTailwindSectionComponent } from './sections/tailwind-section.compon
     </z-content>
   `,
 })
-export class JsonPage {
+export class JsonPage implements OnInit {
+  private readonly seoService = inject(SeoService);
   readonly title = 'components.json - zard/ui';
   activeAnchor?: string;
 
@@ -54,4 +56,13 @@ export class JsonPage {
       { id: 'current-structure', label: 'Current Structure', type: 'custom' },
     ],
   };
+
+  ngOnInit(): void {
+    this.seoService.setDocsSeo(
+      'components.json',
+      'Configuration file for your Zard UI project. Customize styles, paths, package manager, Tailwind config, and component aliases.',
+      '/docs/components-json',
+      'og-componentsjson.jpg',
+    );
+  }
 }

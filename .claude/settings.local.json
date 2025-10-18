@@ -77,7 +77,8 @@
       "Bash(npm unlink:*)",
       "Bash(git restore:*)",
       "WebSearch",
-      "Bash(npx commitlint)"
+      "Bash(npx commitlint)",
+      "Bash(npx nx reset)"
     ],
     "defaultMode": "acceptEdits"
   },

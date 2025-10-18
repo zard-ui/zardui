@@ -5,6 +5,7 @@ import { DocContentComponent } from '@zard/domain/components/doc-content/doc-con
 import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { SeoService } from '@zard/shared/services/seo.service';
 import { CommonModule } from '@angular/common';
 
 import { ChangelogService, type ChangelogEntry } from './services/changelog.service';
@@ -19,6 +20,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 })
 export class ChangeLogPage implements OnInit {
   private readonly changelogService = inject(ChangelogService);
+  private readonly seoService = inject(SeoService);
 
   readonly title = 'Changelog - zard/ui';
   activeAnchor?: string;
@@ -39,6 +41,7 @@ export class ChangeLogPage implements OnInit {
   });
 
   async ngOnInit() {
+    this.seoService.setDocsSeo('Changelog', 'Latest updates and announcements.', '/docs/changelog', 'og-changelog.jpg');
     await this.loadAllEntries();
   }
 

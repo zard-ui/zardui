@@ -6,7 +6,7 @@
   "scripts": {
     "start": "concurrently \"npm run watch:files\" \"npm run generate:installation\" \"npx nx run web:serve --configuration=local --port=4222  \"",
     "prepare": "husky",
-    "build": "npx nx run web:build --configuration=production",
+    "build": "node apps/web/update-routes.mjs && npx nx run web:build --configuration=production",
     "build:cli": "npx nx run cli:build",
     "dev:cli": "npx nx run cli:build:dev",
     "test": "nx run-many --target=test --p=libs/*",

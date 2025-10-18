@@ -47,8 +47,7 @@ function getAvailableRoutes(): Array<{ path: string; priority: number; changefre
 }
 
 app.get('/sitemap.xml', (req, res) => {
-  const { protocol, headers } = req;
-  const baseUrl = `${protocol}://${headers.host}`;
+  const urlWebsite = `https://zardui.com`;
 
   const root = xmlbuilder.create('urlset', { version: '1.0', encoding: 'UTF-8' });
   root.att('xmlns', 'http://www.sitemaps.org/schemas/sitemap/0.9');
@@ -58,7 +57,7 @@ app.get('/sitemap.xml', (req, res) => {
 
   routes.forEach(route => {
     const url = root.ele('url');
-    url.ele('loc', `${baseUrl}${route.path}`);
+    url.ele('loc', `${urlWebsite}${route.path}`);
     url.ele('lastmod', today);
     url.ele('changefreq', route.changefreq);
     url.ele('priority', route.priority);

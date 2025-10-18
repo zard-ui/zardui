@@ -1,7 +1,8 @@
 import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { Component } from '@angular/core';
+import { SeoService } from '@zard/shared/services/seo.service';
+import { Component, inject, type OnInit } from '@angular/core';
 
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 import { OpenSourceSection } from './sections/open-source.component';
@@ -32,7 +33,8 @@ import { CLISection } from './sections/cli.component';
     </z-content>
   `,
 })
-export class IntroductionPage {
+export class IntroductionPage implements OnInit {
+  private readonly seoService = inject(SeoService);
   readonly title = 'Introduction - zard/ui';
   activeAnchor?: string;
 
@@ -46,4 +48,13 @@ export class IntroductionPage {
       { id: 'support', label: 'Support', type: 'custom' },
     ],
   };
+
+  ngOnInit(): void {
+    this.seoService.setDocsSeo(
+      'Introduction',
+      'Built for Angular developers who value both aesthetics and functionality. ZardUI bridges the gap between beautiful design and practical implementation.',
+      '/docs/introduction',
+      'og-introduction.jpg',
+    );
+  }
 }

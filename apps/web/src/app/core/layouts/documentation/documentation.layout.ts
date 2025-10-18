@@ -1,9 +1,9 @@
+import { Component, computed, inject, signal, afterNextRender, DestroyRef } from '@angular/core';
 import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
 import { HeaderComponent } from '@zard/domain/components/header/header.component';
 import { FooterComponent } from '@zard/domain/components/footer/footer.component';
 import { BannerComponent } from '@zard/domain/components/banner/banner.component';
 import { ZardToastComponent } from '@zard/components/toast/toast.component';
-import { Component, computed, effect, inject, signal } from '@angular/core';
 import { DarkModeService } from '@zard/shared/services/darkmode.service';
 import { environment } from '@zard/env/environment';
 import { RouterModule } from '@angular/router';
@@ -36,6 +36,7 @@ import { RouterModule } from '@angular/router';
 })
 export class DocumentationLayout {
   private readonly darkModeService = inject(DarkModeService);
+  private readonly destroyRef = inject(DestroyRef);
   readonly isDevEnv = !environment.production;
   readonly isDevMode = environment.devMode;
 
@@ -43,11 +44,9 @@ export class DocumentationLayout {
   readonly currentTheme = computed(() => this.themeSignal());
 
   constructor() {
-    // Initialize theme signal with current theme
     this.themeSignal.set(this.darkModeService.getCurrentTheme());
 
-    // Watch for theme changes by observing the document's class changes
-    effect(() => {
+    afterNextRender(() => {
       const observer = new MutationObserver(() => {
         const newTheme = this.darkModeService.getCurrentTheme();
         if (newTheme !== this.themeSignal()) {
@@ -60,7 +59,7 @@ export class DocumentationLayout {
         attributeFilter: ['class', 'data-theme'],
       });
 
-      return () => observer.disconnect();
+      this.destroyRef.onDestroy(() => observer.disconnect());
     });
   }
 }

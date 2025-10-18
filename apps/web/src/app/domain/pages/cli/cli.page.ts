@@ -1,7 +1,8 @@
 import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
 import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { Component } from '@angular/core';
+import { SeoService } from '@zard/shared/services/seo.service';
+import { Component, inject, type OnInit } from '@angular/core';
 
 import { CliConfigurationSection } from './sections/configuration.component';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
@@ -14,7 +15,7 @@ import { CliCommandsSection } from './sections/commands.component';
   standalone: true,
   imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, CliOverviewSection, CliInstallationSection, CliCommandsSection, CliConfigurationSection],
   template: `
-    <z-content [title]="title" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+    <z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
       <z-doc-heading
         title="CLI"
         description="Use the ZardUI CLI to add beautiful, accessible components to your Angular project with a single command."
@@ -30,8 +31,8 @@ import { CliCommandsSection } from './sections/commands.component';
     </z-content>
   `,
 })
-export class CliPage {
-  readonly title = 'CLI - zard/ui';
+export class CliPage implements OnInit {
+  private readonly seoService = inject(SeoService);
   activeAnchor?: string;
 
   readonly navigationConfig: NavigationConfig = {
@@ -45,4 +46,8 @@ export class CliPage {
       { id: 'requirements', label: 'Requirements & Troubleshooting', type: 'custom' },
     ],
   };
+
+  ngOnInit(): void {
+    this.seoService.setDocsSeo('CLI', 'Use the Zard CLI to add components to your project.', '/docs/cli', 'og-cli.jpg');
+  }
 }

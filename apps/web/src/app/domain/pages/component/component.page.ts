@@ -7,9 +7,9 @@ import { DocContentComponent } from '@zard/domain/components/doc-content/doc-con
 import { ComponentData, COMPONENTS } from '@zard/shared/constants/components.constant';
 import { StepsComponent } from '@zard/domain/components/steps/steps.component';
 import { Step } from '@zard/shared/constants/install.constant';
+import { SeoService } from '@zard/shared/services/seo.service';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Title } from '@angular/platform-browser';
 
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
@@ -21,7 +21,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
 })
 export class ComponentPage {
-  private readonly titleService = inject(Title);
+  private readonly seoService = inject(SeoService);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
   private readonly dynamicInstallationService = inject(DynamicInstallationService);
@@ -76,9 +76,9 @@ export class ComponentPage {
   setPageTitle() {
     const componentName = this.componentData?.componentName;
     if (componentName) {
-      const capitalizedText = componentName[0].toUpperCase() + componentName.slice(1);
-      const pageTitle = `${capitalizedText} - zard/ui`;
-      this.titleService.setTitle(pageTitle);
+      // Você pode adicionar descriptions customizadas aqui se quiser
+      // const customDescription = 'Descrição específica para este componente';
+      this.seoService.setComponentSeo(componentName);
     }
   }
 }

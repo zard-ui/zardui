@@ -1,3 +1,9 @@
+import { SeoService } from '@zard/shared/services/seo.service';
+import { Component, inject, type OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+
 import { ContributorsLoadingComponent } from '../../components/contributors/contributors-loading.component';
 import { FoundersLoadingComponent } from '../../components/founders/founders-loading.component';
 import { FoundersComponent, FounderData } from '../../components/founders/founders.component';
@@ -6,14 +12,9 @@ import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { CreditCardComponent } from '../../components/credit-card/credit-card.component';
+import { Contributor, GithubService } from '../../../shared/services/github.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
-import { Component, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-
-import { Contributor, GithubService } from '../../../shared/services/github.service';
 
 @Component({
   selector: 'z-about',
@@ -32,11 +33,14 @@ import { Contributor, GithubService } from '../../../shared/services/github.serv
     CreditCardComponent,
   ],
 })
-export class AboutPage {
+export class AboutPage implements OnInit {
   private readonly githubService = inject(GithubService);
-  readonly title = 'About - zard/ui';
-
+  private readonly seoService = inject(SeoService);
   activeAnchor?: string;
+
+  ngOnInit(): void {
+    this.seoService.setDocsSeo('About', 'Learn more about ZardUI, our team, and the amazing contributors who make this project possible.', '/docs/about', 'og-credits.jpg');
+  }
   contributors$: Observable<Contributor[]> = this.githubService.getContributors();
   founders$: Observable<FounderData[]>;
 
