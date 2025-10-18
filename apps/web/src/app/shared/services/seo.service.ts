@@ -1,6 +1,7 @@
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 import { isPlatformBrowser } from '@angular/common';
+import { JsonLdService } from './json-ld.service';
 
 export interface SeoConfig {
   title: string;
@@ -19,6 +20,7 @@ export class SeoService {
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly meta = inject(Meta);
   private readonly titleService = inject(Title);
+  private readonly jsonLdService = inject(JsonLdService);
   private readonly baseUrl = 'https://zardui.com';
   private readonly defaultImage = 'https://zardui.com/site/og-image.png';
 
@@ -61,6 +63,7 @@ export class SeoService {
       image: image,
       type: 'website',
     });
+    this.jsonLdService.setComponentJsonLd(componentName, description);
   }
 
   setDocsSeo(title: string, description: string, path: string, image: string): void {
@@ -72,6 +75,7 @@ export class SeoService {
       type: 'website',
       image: image,
     });
+    this.jsonLdService.setDocsJsonLd(title, description, path);
   }
 
   setHomeSeo(): void {
@@ -102,6 +106,7 @@ export class SeoService {
       url: '/',
       image: 'https://zardui.com/images/zard-og-image.png',
     });
+    this.jsonLdService.setHomeJsonLd();
   }
 
   private generateDefaultKeywords(title: string): string[] {
