@@ -17,7 +17,8 @@
     "release:cli": "npx nx release --projects=packages/cli",
     "publish:cli": "npx nx run cli:publish",
     "release": "npx nx release",
-    "release:dry-run": "npx nx release --dry-run"
+    "release:dry-run": "npx nx release --dry-run",
+    "serve:ssr": "node dist/apps/web/server/server.mjs"
   },
   "engines": {
     "node": "22 || 20"
@@ -31,7 +32,9 @@
     "@angular/forms": "20.1.8",
     "@angular/platform-browser": "20.1.8",
     "@angular/platform-browser-dynamic": "20.1.8",
+    "@angular/platform-server": "~20.1.8",
     "@angular/router": "20.1.8",
+    "@angular/ssr": "20.1.6",
     "@antfu/ni": "^26.1.0",
     "@shikijs/rehype": "^3.12.0",
     "@tailwindcss/postcss": "^4.1.12",
@@ -44,6 +47,7 @@
     "embla-carousel-angular": "^20.0.0",
     "embla-carousel-autoplay": "^8.6.0",
     "execa": "^8.0.1",
+    "express": "^4.21.2",
     "fast-glob": "^3.3.2",
     "fs-extra": "^11.2.0",
     "lucide-static": "^0.542.0",
@@ -64,6 +68,7 @@
     "tailwindcss": "^4.1.12",
     "ts-morph": "^25.0.0",
     "unified": "^11.0.5",
+    "xmlbuilder": "^15.1.1",
     "zod": "^3.24.1",
     "zone.js": "^0.15.1"
   },
@@ -90,6 +95,7 @@
     "@swc/core": "^1.13.5",
     "@swc/helpers": "^0.5.17",
     "@swc/jest": "^0.2.37",
+    "@types/express": "^4.17.21",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "^29.5.14",
     "@types/node": "^24.3.0",

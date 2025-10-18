@@ -1,0 +1,26 @@
+# Firebase App Hosting configuration for ZardUI
+# See https://firebase.google.com/docs/app-hosting
+
+# Cloud Run settings for the SSR backend
+runConfig:
+  # Minimum number of instances to keep warm (0 = scale to zero when idle)
+  minInstances: 0
+
+  # Maximum number of instances (auto-scaling limit)
+  maxInstances: 10
+
+  # Number of concurrent requests per instance
+  concurrency: 80
+
+  # CPU allocation (1 = 1 vCPU)
+  cpu: 1
+
+  # Memory allocation in MiB
+  memoryMiB: 512
+
+# Environment variables (optional)
+# env:
+#   - variable: NODE_ENV
+#     value: production
+#     availability:
+#       - RUNTIME
