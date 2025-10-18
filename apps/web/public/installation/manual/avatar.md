@@ -1,9 +1,10 @@
 
 
 ```angular-ts title="avatar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } from './avatar.variants';
+import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
+
+import { mergeClasses } from '../../shared/utils/utils';
+import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } from './avatar.variants';
 
 @Component({
   selector: 'z-avatar',
@@ -12,16 +13,14 @@ import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } fr
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    @if (zLoading()) {
-      <span class="icon-loader-circle animate-spin {{ zLoading() }}"></span>
-    } @else {
-      @if (zImage()?.fallback) {
-        <span class="text-base absolute m-auto z-0">{{ zImage()?.fallback }}</span>
-      }
-      @if (zImage()?.url) {
-        <img [src]="zImage()?.url" [alt]="zImage()?.alt || 'Avatar'" [class]="imgClasses()" />
-      }
+    @if (zFallback() && (!zSrc() || !imageLoaded())) {
+      <span class="text-base absolute m-auto z-0">{{ zFallback() }}</span>
     }
+
+    @if (zSrc() && !imageError()) {
+      <img [src]="zSrc()" [alt]="zAlt()" [class]="imgClasses()" [hidden]="!imageLoaded()" (load)="onImageLoad()" (error)="onImageError()" />
+    }
+
     @if (zStatus()) {
       @switch (zStatus()) {
         @case ('online') {
@@ -110,23 +109,34 @@ import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } fr
   `,
   host: {
     '[class]': 'containerClasses()',
+    '[attr.data-slot]': '"avatar"',
   },
 })
 export class ZardAvatarComponent {
-  readonly zType = input<ZardAvatarVariants['zType']>('default');
-  readonly zSize = input<ZardAvatarVariants['zSize'] | null>('default');
-  readonly zShape = input<ZardAvatarVariants['zShape'] | null>('default');
-  readonly zStatus = input<ZardAvatarVariants['zStatus'] | null>(null);
-  readonly zBorder = input(false, { transform });
-  readonly zLoading = input(false, { transform });
-  readonly zImage = input<ZardAvatarImage['zImage'] | null>({ fallback: 'ZA' });
+  readonly zStatus = input<ZardAvatarVariants['zStatus']>();
+  readonly zShape = input<ZardImageVariants['zShape']>('circle');
+  readonly zSize = input<ZardAvatarVariants['zSize']>('default');
+  readonly zSrc = input<string>();
+  readonly zAlt = input<string>('');
+  readonly zFallback = input<string>('');
 
   readonly class = input<string>('');
 
-  protected readonly containerClasses = computed(() =>
-    mergeClasses(avatarVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape(), zBorder: this.zBorder() }), this.class()),
-  );
+  protected readonly imageError = signal(false);
+  protected readonly imageLoaded = signal(false);
+
+  protected readonly containerClasses = computed(() => mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize(), zStatus: this.zStatus() }), this.class()));
   protected readonly imgClasses = computed(() => mergeClasses(imageVariants({ zShape: this.zShape() })));
+
+  protected onImageLoad(): void {
+    this.imageLoaded.set(true);
+    this.imageError.set(false);
+  }
+
+  protected onImageError(): void {
+    this.imageError.set(true);
+    this.imageLoaded.set(false);
+  }
 }
 
 ```
@@ -136,25 +146,18 @@ export class ZardAvatarComponent {
 ```angular-ts title="avatar.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content hover:bg-primary/90 cursor-default', {
+export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content cursor-default w-12 h-12 bg-muted', {
   variants: {
-    zType: {
-      default: 'bg-primary text-primary-foreground hover:bg-primary/90',
-      destructive: 'bg-destructive text-destructive-foreground hover:bg-destructive/90',
-      outline: 'border border-input hover:bg-accent hover:text-accent-foreground',
-      secondary: 'bg-secondary text-secondary-foreground hover:bg-secondary/80',
-      ghost: 'hover:bg-accent hover:text-accent-foreground shadow-sm shadow-black',
-    },
     zSize: {
-      default: 'w-12 h-12',
-      sm: 'w-10 h-10',
-      md: 'w-18 h-18',
-      lg: 'w-37 h-37',
-      full: 'w-full h-full',
+      sm: 'w-8 h-8',
+      default: 'w-10 h-10',
+      md: 'w-12 h-12',
+      lg: 'w-14 h-14',
+      xl: 'w-16 h-16',
     },
     zShape: {
-      default: 'rounded-md',
       circle: 'rounded-full',
+      rounded: 'rounded-md',
       square: 'rounded-none',
     },
     zStatus: {
@@ -164,41 +167,70 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
       away: 'away',
       invisible: 'invisible',
     },
-    zBorder: {
-      true: 'border border-3 border-white',
-    },
-    zLoading: {
-      true: 'opacity-100',
-    },
   },
   defaultVariants: {
-    zType: 'default',
     zSize: 'default',
-    zShape: 'default',
+    zShape: 'circle',
   },
 });
 
-export const imageVariants = cva('relative object-cover object-center w-full h-full z-10', {
+export const imageVariants = cva('relative object-cover object-center w-full h-full z-10 ring-1 ring-border', {
   variants: {
     zShape: {
-      default: 'rounded-md',
       circle: 'rounded-full',
+      rounded: 'rounded-md',
       square: 'rounded-none',
     },
   },
   defaultVariants: {
-    zShape: 'default',
+    zShape: 'circle',
   },
 });
 
-export type ZardAvatarImage = {
-  zImage: {
-    fallback: string;
-    url?: string;
-    alt?: string;
-  };
-};
-export type ZardAvatarVariants = VariantProps<typeof avatarVariants> & ZardAvatarImage;
+export const avatarGroupVariants = cva('flex items-center [&_img]:ring-2 [&_img]:ring-background', {
+  variants: {
+    zOrientation: {
+      horizontal: 'flex-row -space-x-3',
+      vertical: 'flex-col -space-y-3',
+    },
+  },
+  defaultVariants: {
+    zOrientation: 'horizontal',
+  },
+});
+
+export type ZardAvatarVariants = VariantProps<typeof avatarVariants>;
+export type ZardImageVariants = VariantProps<typeof imageVariants>;
+export type ZardAvatarGroupVariants = VariantProps<typeof avatarGroupVariants>;
+
+```
+
+
+
+```angular-ts title="avatar-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import type { ClassValue } from 'clsx';
+
+import { mergeClasses } from '../../shared/utils/utils';
+import { avatarGroupVariants, ZardAvatarGroupVariants } from './avatar.variants';
+
+@Component({
+  selector: 'z-avatar-group',
+  exportAs: 'zAvatarGroup',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  template: `<ng-content />`,
+  host: {
+    '[class]': 'classes()',
+  },
+})
+export class ZardAvatarGroupComponent {
+  readonly zOrientation = input<ZardAvatarGroupVariants['zOrientation']>('horizontal');
+  readonly class = input<ClassValue>('');
+
+  protected readonly classes = computed(() => mergeClasses(avatarGroupVariants({ zOrientation: this.zOrientation() }), this.class()));
+}
 
 ```
 

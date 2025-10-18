@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } from './avatar.variants';
+import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
+
+import { mergeClasses } from '../../shared/utils/utils';
+import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } from './avatar.variants';
 
 @Component({
   selector: 'z-avatar',
@@ -9,16 +10,14 @@ import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } fr
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    @if (zLoading()) {
-      <span class="icon-loader-circle animate-spin {{ zLoading() }}"></span>
-    } @else {
-      @if (zImage()?.fallback) {
-        <span class="text-base absolute m-auto z-0">{{ zImage()?.fallback }}</span>
-      }
-      @if (zImage()?.url) {
-        <img [src]="zImage()?.url" [alt]="zImage()?.alt || 'Avatar'" [class]="imgClasses()" />
-      }
+    @if (zFallback() && (!zSrc() || !imageLoaded())) {
+      <span class="text-base absolute m-auto z-0">{{ zFallback() }}</span>
     }
+
+    @if (zSrc() && !imageError()) {
+      <img [src]="zSrc()" [alt]="zAlt()" [class]="imgClasses()" [hidden]="!imageLoaded()" (load)="onImageLoad()" (error)="onImageError()" />
+    }
+
     @if (zStatus()) {
       @switch (zStatus()) {
         @case ('online') {
@@ -107,21 +106,32 @@ import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } fr
   `,
   host: {
     '[class]': 'containerClasses()',
+    '[attr.data-slot]': '"avatar"',
   },
 })
 export class ZardAvatarComponent {
-  readonly zType = input<ZardAvatarVariants['zType']>('default');
-  readonly zSize = input<ZardAvatarVariants['zSize'] | null>('default');
-  readonly zShape = input<ZardAvatarVariants['zShape'] | null>('default');
-  readonly zStatus = input<ZardAvatarVariants['zStatus'] | null>(null);
-  readonly zBorder = input(false, { transform });
-  readonly zLoading = input(false, { transform });
-  readonly zImage = input<ZardAvatarImage['zImage'] | null>({ fallback: 'ZA' });
+  readonly zStatus = input<ZardAvatarVariants['zStatus']>();
+  readonly zShape = input<ZardImageVariants['zShape']>('circle');
+  readonly zSize = input<ZardAvatarVariants['zSize']>('default');
+  readonly zSrc = input<string>();
+  readonly zAlt = input<string>('');
+  readonly zFallback = input<string>('');
 
   readonly class = input<string>('');
 
-  protected readonly containerClasses = computed(() =>
-    mergeClasses(avatarVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape(), zBorder: this.zBorder() }), this.class()),
-  );
+  protected readonly imageError = signal(false);
+  protected readonly imageLoaded = signal(false);
+
+  protected readonly containerClasses = computed(() => mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize(), zStatus: this.zStatus() }), this.class()));
   protected readonly imgClasses = computed(() => mergeClasses(imageVariants({ zShape: this.zShape() })));
+
+  protected onImageLoad(): void {
+    this.imageLoaded.set(true);
+    this.imageError.set(false);
+  }
+
+  protected onImageError(): void {
+    this.imageError.set(true);
+    this.imageLoaded.set(false);
+  }
 }

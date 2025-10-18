@@ -1,6 +1,7 @@
 export * from './lib/components/core/directives/string-template-outlet/string-template-outlet.directive';
 export * from './lib/components/alert/alert.component';
 export * from './lib/components/avatar/avatar.component';
+export * from './lib/components/avatar/avatar-group.component';
 export * from './lib/components/badge/badge.component';
 export * from './lib/components/breadcrumb/breadcrumb.component';
 export * from './lib/components/button/button.component';

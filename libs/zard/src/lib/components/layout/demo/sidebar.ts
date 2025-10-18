@@ -92,7 +92,7 @@ interface MenuItem {
               zPlacement="rightBottom"
               [class]="'flex items-center justify-center gap-2 cursor-pointer rounded-md hover:bg-accent ' + (sidebarCollapsed() ? 'p-0 m-2' : 'p-2')"
             >
-              <z-avatar zSize="sm" [zImage]="avatar" />
+              <z-avatar zSrc="https://zardui.com/images/avatar/imgs/avatar_image.jpg" zAlt="Zard UI" />
 
               @if (!sidebarCollapsed()) {
                 <div>
@@ -172,12 +172,6 @@ export class LayoutDemoSidebarComponent {
     { icon: 'icon-calendar', label: 'Calendar' },
     { icon: 'icon-search', label: 'Search' },
   ];
-
-  avatar = {
-    fallback: 'ZA',
-    url: 'https://zardui.com/images/avatar/imgs/avatar_image.jpg',
-    alt: 'ZadUI',
-  };
 
   toggleSidebar() {
     this.sidebarCollapsed.update(collapsed => !collapsed);

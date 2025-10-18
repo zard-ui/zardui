@@ -7,17 +7,11 @@ import { ZardAvatarComponent } from '../avatar.component';
   standalone: true,
   imports: [ZardAvatarComponent],
   template: `
-    <z-avatar zSize="sm" [zImage]="zImageDefault" />
-    <z-avatar zSize="md" [zImage]="zImageDefault" />
-    <z-avatar zSize="lg" [zImage]="zImageDefault" />
+    <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" zSize="sm" />
+    <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" zSize="md" />
+    <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" zSize="lg" />
   `,
 })
-export class ZardDemoAvatarSizeComponent {
-  readonly zImageDefault = {
-    fallback: 'ZA',
-    url: '/images/avatar/imgs/avatar_image.jpg',
-    alt: 'ZadUI',
-  };
-}
+export class ZardDemoAvatarSizeComponent {}
 
 ```
