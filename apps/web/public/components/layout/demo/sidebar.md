@@ -176,7 +176,7 @@ export class LayoutDemoSidebarComponent {
 
   avatar = {
     fallback: 'ZA',
-    url: '/images/avatar/imgs/avatar_image.jpg',
+    url: 'https://zardui.com/images/avatar/imgs/avatar_image.jpg',
     alt: 'ZadUI',
   };
 

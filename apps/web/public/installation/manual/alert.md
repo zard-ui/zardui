@@ -17,7 +17,9 @@ import type { ClassValue } from 'clsx';
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (zIcon()) {
-      <i [class]="iconClasses()"></i>
+      <ng-container *zStringTemplateOutlet="zIcon()">
+        <i [class]="iconClasses()"></i>
+      </ng-container>
     }
 
     <div class="flex-1">
@@ -44,7 +46,7 @@ export class ZardAlertComponent {
   readonly class = input<ClassValue>('');
   readonly zTitle = input<string | TemplateRef<void>>('');
   readonly zDescription = input<string | TemplateRef<void>>('');
-  readonly zIcon = input<string>('');
+  readonly zIcon = input<string | TemplateRef<void>>('');
   readonly zType = input<ZardAlertVariants['zType']>('default');
 
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));

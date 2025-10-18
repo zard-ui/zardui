@@ -1,42 +1,42 @@
 # Review
 
-[x] Accordion ✅
-[x] Alert ✅
-[ ] Alert Dialog
-[ ] Avatar
-[ ] Badge
-[ ] Breadcrumb
-[ ] Button
-[ ] Calendar
-[ ] Card
-[ ] Checkbox
-[ ] Combobox
-[ ] Command
-[ ] Date Picker
-[ ] Dialog
-[ ] Divider
-[ ] Dropdown
-[ ] Empty
-[ ] Form
-[ ] Input
-[ ] Input Group
-[ ] Layout
-[ ] Loader
-[ ] Menu
-[ ] Pagination
-[ ] Popover
-[ ] Progress Bar
-[ ] Radio
-[ ] Resizable
-[ ] Segmented
-[ ] Select
-[ ] Sheet
-[ ] Sidebar
-[ ] Skeleton
-[ ] Slider
-[ ] Switch
-[ ] Table
-[ ] Tabs
-[ ] Toggle
-[ ] Toggle Group
-[ ] Tooltip
+- [x] Accordion ✅
+- [x] Alert ✅
+- [ ] Alert Dialog
+- [ ] Avatar
+- [ ] Badge
+- [ ] Breadcrumb
+- [ ] Button
+- [ ] Calendar
+- [ ] Card
+- [ ] Checkbox
+- [ ] Combobox
+- [ ] Command
+- [ ] Date Picker
+- [ ] Dialog
+- [ ] Divider
+- [ ] Dropdown
+- [ ] Empty
+- [ ] Form
+- [ ] Input
+- [ ] Input Group
+- [ ] Layout
+- [ ] Loader
+- [ ] Menu
+- [ ] Pagination
+- [ ] Popover
+- [ ] Progress Bar
+- [ ] Radio
+- [ ] Resizable
+- [ ] Segmented
+- [ ] Select
+- [ ] Sheet
+- [ ] Sidebar
+- [ ] Skeleton
+- [ ] Slider
+- [ ] Switch
+- [ ] Table
+- [ ] Tabs
+- [ ] Toggle
+- [ ] Toggle Group
+- [ ] Tooltip

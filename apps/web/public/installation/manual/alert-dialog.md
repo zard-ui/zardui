@@ -1,6 +1,8 @@
 
 
 ```angular-ts title="alert-dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ClassValue } from 'clsx';
+
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
@@ -23,13 +25,12 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { ClassValue } from 'clsx';
 
-import { alertDialogVariants, ZardAlertDialogVariants } from './alert-dialog.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardAlertDialogService } from './alert-dialog.service';
-import { ZardAlertDialogRef } from './alert-dialog-ref';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardAlertDialogRef } from './alert-dialog-ref';
+import { ZardAlertDialogService } from './alert-dialog.service';
+import { alertDialogVariants } from './alert-dialog.variants';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -41,7 +42,6 @@ export class ZardAlertDialogOptions<T> {
   zCustomClasses?: ClassValue;
   zData?: object;
   zDescription?: string;
-  zIcon?: string;
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
@@ -49,7 +49,6 @@ export class ZardAlertDialogOptions<T> {
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zTitle?: string | TemplateRef<T>;
-  zType?: ZardAlertDialogVariants['zType'];
   zViewContainerRef?: ViewContainerRef;
   zWidth?: string;
 }
@@ -95,14 +94,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
   protected readonly config = inject(ZardAlertDialogOptions<T>);
 
-  protected readonly classes = computed(() =>
-    mergeClasses(
-      alertDialogVariants({
-        zType: this.config.zType,
-      }),
-      this.config.zCustomClasses,
-    ),
-  );
+  protected readonly classes = computed(() => mergeClasses(alertDialogVariants(), this.config.zCustomClasses));
 
   private alertDialogId = generateId('alert-dialog');
   protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
@@ -163,18 +155,7 @@ export class ZardAlertDialogModule {}
 ```angular-ts title="alert-dialog.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg rounded-lg sm:max-w-lg', {
-  variants: {
-    zType: {
-      default: '',
-      destructive: 'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
-      warning: 'border-warning/50 text-warning dark:border-warning [&>svg]:text-warning',
-    },
-  },
-  defaultVariants: {
-    zType: 'default',
-  },
-});
+export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg rounded-lg');
 
 export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
@@ -336,8 +317,8 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 ```angular-ts title="alert-dialog.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 
 import { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
@@ -368,8 +349,6 @@ export class ZardAlertDialogService {
       zOkText: config.zOkText || 'Confirm',
       zCancelText: config.zCancelText || 'Cancel',
       zOkDestructive: config.zOkDestructive ?? false,
-      zIcon: config.zIcon,
-      zType: config.zType || 'default',
     };
     return this.create(confirmConfig);
   }
@@ -379,8 +358,6 @@ export class ZardAlertDialogService {
       ...config,
       zOkText: config.zOkText || 'OK',
       zCancelText: null,
-      zIcon: config.zIcon || 'alert-triangle',
-      zType: config.zType || 'warning',
     };
     return this.create(warningConfig);
   }
@@ -390,8 +367,6 @@ export class ZardAlertDialogService {
       ...config,
       zOkText: config.zOkText || 'OK',
       zCancelText: null,
-      zIcon: config.zIcon || 'info',
-      zType: config.zType || 'default',
     };
     return this.create(infoConfig);
   }
