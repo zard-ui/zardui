@@ -93,6 +93,10 @@ app.get('**', (req, res, next) => {
     .catch(err => next(err));
 });
 
+// Export the Express app for Firebase App Hosting / Cloud Run
+export default app;
+
+// Start server when running locally
 if (isMainModule(import.meta.url)) {
   const port = process.env['PORT'] || 4000;
   app.listen(port, () => {
