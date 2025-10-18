@@ -20,8 +20,10 @@ import { RouterModule } from '@angular/router';
 })
 export class HomePage implements OnInit {
   private readonly viewportScroller = inject(ViewportScroller);
+  private readonly seoService = inject(SeoService);
 
   ngOnInit(): void {
     this.viewportScroller.scrollToPosition([0, 0]);
+    this.seoService.setHomeSeo();
   }
 }

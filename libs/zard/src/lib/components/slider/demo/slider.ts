@@ -6,6 +6,7 @@ import { ZardDemoSliderComponent } from './default';
 export const SLIDER = {
   componentName: 'slider',
   componentType: 'slider',
+  description: 'An input where the user selects a value from within a given range.',
   fullWidth: true,
   examples: [
     {

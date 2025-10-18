@@ -1,10 +1,11 @@
+import { ZardDemoSheetDimensionsComponent } from './dimensions';
 import { ZardDemoSheetBasicComponent } from './basic';
 import { ZardDemoSheetSideComponent } from './side';
-import { ZardDemoSheetDimensionsComponent } from './dimensions';
 
 export const SHEET = {
   componentName: 'sheet',
   componentType: 'sheet',
+  description: 'Extends the Dialog component to display content that complements the main content of the screen.',
   examples: [
     {
       name: 'basic',

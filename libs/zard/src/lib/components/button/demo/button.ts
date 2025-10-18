@@ -6,12 +6,13 @@ import { ZardDemoButtonDefaultComponent } from './default';
 import { ZardDemoButtonShapeComponent } from './shape';
 import { ZardDemoButtonGhostComponent } from './ghost';
 import { ZardDemoButtonSizeComponent } from './size';
-import { ZardDemoButtonFullComponent } from './full';
 import { ZardDemoButtonLinkComponent } from './link';
+import { ZardDemoButtonFullComponent } from './full';
 
 export const BUTTON = {
   componentName: 'button',
   componentType: 'button',
+  description: 'Displays a button or a component that looks like a button.',
   examples: [
     {
       name: 'default',

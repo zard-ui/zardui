@@ -3,7 +3,6 @@ import { PROGRESS_BAR } from '@zard/components/progress-bar/demo/progress-bar';
 import { ALERT_DIALOG } from '@zard/components/alert-dialog/demo/alert-dialog';
 import { INPUT_GROUP } from '@zard/components/input-group/demo/input-group';
 import { DATE_PICKER } from '@zard/components/date-picker/demo/date-picker';
-import { LAYOUT } from '@zard/components/layout/demo/layout';
 import { PAGINATION } from '@zard/components/pagination/demo/pagination';
 import { BREADCRUMB } from '@zard/components/breadcrumb/demo/breadcrumb';
 import { SEGMENTED } from '@zard/components/segmented/demo/segmented';
@@ -23,6 +22,7 @@ import { SWITCH } from '@zard/components/switch/demo/switch';
 import { SLIDER } from '@zard/components/slider/demo/slider';
 import { SELECT } from '@zard/components/select/demo/select';
 import { LOADER } from '@zard/components/loader/demo/loader';
+import { LAYOUT } from '@zard/components/layout/demo/layout';
 import { DIALOG } from '@zard/components/dialog/demo/dialog';
 import { BUTTON } from '@zard/components/button/demo/button';
 import { AVATAR } from '@zard/components/avatar/demo/avatar';
@@ -31,17 +31,18 @@ import { TABLE } from '@zard/components/table/demo/table';
 import { SHEET } from '@zard/components/sheet/demo/sheet';
 import { RADIO } from '@zard/components/radio/demo/radio';
 import { INPUT } from '@zard/components/input/demo/input';
+import { EMPTY } from '@zard/components/empty/demo/empty';
 import { BADGE } from '@zard/components/badge/demo/badge';
 import { ALERT } from '@zard/components/alert/demo/alert';
 import { TABS } from '@zard/components/tabs/demo/tabs';
 import { MENU } from '@zard/components/menu/demo/menu';
-import { EMPTY } from '@zard/components/empty/demo/empty';
 import { FORM } from '@zard/components/form/demo/form';
 import { CARD } from '@zard/components/card/demo/card';
 import { ComponentType } from '@angular/cdk/overlay';
 
 export interface ComponentData {
   componentName: string;
+  description: string;
   examples: ExampleData[];
   fullWidth?: boolean;
 }

@@ -1,13 +1,14 @@
-import { ZardDemoToastDefaultComponent } from './default';
 import { ZardDemoToastDestructiveComponent } from './destructive';
+import { ZardDemoToastPositionComponent } from './position';
+import { ZardDemoToastAdvancedComponent } from './advanced';
 import { ZardDemoToastSuccessComponent } from './success';
 import { ZardDemoToastLoadingComponent } from './loading';
-import { ZardDemoToastAdvancedComponent } from './advanced';
-import { ZardDemoToastPositionComponent } from './position';
+import { ZardDemoToastDefaultComponent } from './default';
 
 export const TOAST = {
   componentName: 'toast',
   componentType: 'toast',
+  description: 'A succinct message that is displayed temporarily.',
   examples: [
     {
       name: 'default',

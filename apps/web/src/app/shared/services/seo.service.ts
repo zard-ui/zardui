@@ -25,7 +25,9 @@ export class SeoService {
   setMetaTags(config: SeoConfig): void {
     const fullTitle = `${config.title} - zard/ui`;
     const url = config.url ? `${this.baseUrl}${config.url}` : this.baseUrl;
-    const image = `${this.baseUrl}/og/${config.image}` || this.defaultImage;
+    const image = config.image
+      ? (config.image.startsWith('http') ? config.image : `${this.baseUrl}/og/${config.image}`)
+      : this.defaultImage;
     const keywords = config.keywords || this.generateDefaultKeywords(config.title);
     const type = config.type || 'website';
 
@@ -49,17 +51,15 @@ export class SeoService {
     this.updateCanonicalUrl(url);
   }
 
-  setComponentSeo(componentName: string, description?: string): void {
+  setComponentSeo(componentName: string, description: string, image: string): void {
     const displayName = this.formatComponentName(componentName);
-    const defaultDescription =
-      description || `${displayName} component for Angular. Free, open-source, and fully customizable with TailwindCSS. Part of Zard UI component library.`;
-
     this.setMetaTags({
       title: displayName,
-      description: defaultDescription,
+      description: description,
       keywords: this.generateComponentKeywords(componentName),
       url: `/docs/components/${componentName}`,
-      type: 'article',
+      image: image,
+      type: 'website',
     });
   }
 
@@ -76,7 +76,7 @@ export class SeoService {
 
   setHomeSeo(): void {
     this.setMetaTags({
-      title: 'Home',
+      title: 'Zard UI - The @shadcn/ui Alternative for Angular',
       description: 'Finally, a real @shadcn/ui alternative for Angular. Free and open-source UI components built with Angular, TypeScript, and Tailwind CSS.',
       keywords: [
         'Angular UI',
@@ -84,15 +84,23 @@ export class SeoService {
         'Angular library',
         'Zard UI',
         'ZardUI',
-        'ng-zorro tailwind',
-        'Tailwind Angular',
+        'Zard',
+        'Zard-ui',
+        'Zard/ui',
+        'Zard/ui shadcn',
+        'Zard/ui shadcn/ui',
+        'Angular shadcn/ui',
+        'ng-zorro shandcn/ui',
+        'Tailwind Angular shadcn/ui',
+        'Shadcn UI alternative for angular',
         'Shadcn UI alternative',
         'shadcn/ui angular',
         'Open Source UI',
-        'Angular components',
+        'Angular tailwind components',
         'TypeScript components',
       ],
       url: '/',
+      image: 'https://zardui.com/images/zard-og-image.png',
     });
   }
 
@@ -117,18 +125,19 @@ export class SeoService {
       `zard-ui ${componentName}`,
       `zard ${componentName}`,
       `zardui ${componentName}`,
+      `zard/ui ${componentName}`,
       `shadcn/ui angular ${componentName}`,
       `Angular ${displayName} component`,
       `${displayName} component`,
       `Tailwind ${displayName}`,
       `Angular ${componentName}`,
-      'Angular UI components',
-      'Zard UI',
+      `Angular UI component ${componentName}`,
+      `Zard UI ${componentName}`,
     ];
   }
 
   private generateDocsKeywords(title: string): string[] {
-    return [`Zard UI ${title}`, `zard-ui ${title.toLowerCase()}`, `Angular Zard/ui ${title}`, 'Zard UI docs', `shadcn/ui angular ${title}`, `zard ${title}`];
+    return [`Zard UI ${title}`, `zard-ui ${title.toLowerCase()}`, `Angular Zard/ui ${title}`, `Zard UI docs ${title}`, `shadcn/ui angular ${title}`, `zard ${title}`];
   }
 
   private formatComponentName(componentName: string): string {

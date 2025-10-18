@@ -6,6 +6,7 @@ import { ZardDemoTabsAlignComponent } from './align';
 export const TABS = {
   componentName: 'tabs',
   componentType: 'tabs',
+  description: 'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
   examples: [
     {
       name: 'default',
