@@ -106,13 +106,15 @@ import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } 
   `,
   host: {
     '[class]': 'containerClasses()',
+    '[style.width]': 'customSize()',
+    '[style.height]': 'customSize()',
     '[attr.data-slot]': '"avatar"',
   },
 })
 export class ZardAvatarComponent {
   readonly zStatus = input<ZardAvatarVariants['zStatus']>();
   readonly zShape = input<ZardImageVariants['zShape']>('circle');
-  readonly zSize = input<ZardAvatarVariants['zSize']>('default');
+  readonly zSize = input<ZardAvatarVariants['zSize'] | number>('default');
   readonly zSrc = input<string>();
   readonly zAlt = input<string>('');
   readonly zFallback = input<string>('');
@@ -122,7 +124,15 @@ export class ZardAvatarComponent {
   protected readonly imageError = signal(false);
   protected readonly imageLoaded = signal(false);
 
-  protected readonly containerClasses = computed(() => mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize(), zStatus: this.zStatus() }), this.class()));
+  protected readonly containerClasses = computed(() => {
+    return mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize() as ZardAvatarVariants['zSize'], zStatus: this.zStatus() }), this.class());
+  });
+
+  protected readonly customSize = computed(() => {
+    const size = this.zSize();
+    return typeof size === 'number' ? `${size}px` : null;
+  });
+
   protected readonly imgClasses = computed(() => mergeClasses(imageVariants({ zShape: this.zShape() })));
 
   protected onImageLoad(): void {

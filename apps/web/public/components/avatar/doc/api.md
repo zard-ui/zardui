@@ -6,7 +6,7 @@
 
 | Property      | Description                                       | Type                                                     | Default   |
 | ------------- | ------------------------------------------------- | -------------------------------------------------------- | --------- |
-| `[zSize]`     | Avatar size variant                               | `sm \| default \| md \| lg \| xl`                        | `default` |
+| `[zSize]`     | Avatar size variant                               | `sm \| default \| md \| lg \| xl \| number`              | `default` |
 | `[zShape]`    | Avatar shape                                      | `circle \| rounded \| square`                            | `circle`  |
 | `[zStatus]`   | Status indicator badge                            | `online \| offline \| doNotDisturb \| away \| invisible` |           |
 | `[zSrc]`      | Image source URL                                  | `string`                                                 |           |

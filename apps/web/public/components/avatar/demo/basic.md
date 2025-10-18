@@ -8,8 +8,8 @@ import { ZardAvatarComponent } from '../avatar.component';
   standalone: true,
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent],
   template: `
-    <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zFallback="ZA" zSize="sm" />
-    <z-avatar zSrc="error-image.png" zFallback="ZA" class="w-[32px] h-[32px]" />
+    <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zFallback="ZA" [zSize]="32" />
+    <z-avatar zSrc="error-image.png" zFallback="ZA" zSize="sm" />
 
     <z-avatar-group>
       <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zFallback="JD" zSize="sm" />
