@@ -1,11 +1,11 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { StepsComponent } from '@zard/domain/components/steps/steps.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
 import { Installation, installations } from '@zard/shared/constants/install.constant';
+import { StepsComponent } from '@zard/domain/components/steps/steps.component';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { SeoService } from '@zard/shared/services/seo.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'z-install',
@@ -14,7 +14,7 @@ import { Installation, installations } from '@zard/shared/constants/install.cons
   imports: [StepsComponent, DocContentComponent, DocHeadingComponent],
 })
 export class InstallPage implements OnInit {
-  private readonly titleService = inject(Title);
+  private readonly seoService = inject(SeoService);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
   readonly navigationConfig: NavigationConfig = {
@@ -45,9 +45,12 @@ export class InstallPage implements OnInit {
   setPageTitle() {
     const environmentName = this.installGuide?.title;
     if (environmentName) {
-      const capitalizedText = environmentName[0].toUpperCase() + environmentName.slice(1);
-      const pageTitle = `${capitalizedText} - zard/ui`;
-      this.titleService.setTitle(pageTitle);
+      this.seoService.setDocsSeo(
+        `Installation - ${environmentName}`,
+        `Learn how to install and set up Zard UI in your ${environmentName} project. Step-by-step guide with CLI and manual installation options.`,
+        `/docs/installation/${this.installGuide.environment}`,
+        '',
+      );
     }
   }
 }

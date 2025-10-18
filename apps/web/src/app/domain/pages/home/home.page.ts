@@ -2,10 +2,10 @@ import { ShowcaseComponent } from '@zard/domain/components/showcase/showcase.com
 import { BenefitsComponent } from '@zard/domain/components/benefits/benefits.component';
 import { YoutubeComponent } from '@zard/domain/components/youtube/youtube.component';
 import { HeroComponent } from '@zard/domain/components/hero/hero.component';
-import { RouterModule } from '@angular/router';
+import { SeoService } from '@zard/shared/services/seo.service';
 import { Component, inject, type OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
 import { ViewportScroller } from '@angular/common';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'z-home',
@@ -19,12 +19,9 @@ import { ViewportScroller } from '@angular/common';
   `,
 })
 export class HomePage implements OnInit {
-  private readonly titleService = inject(Title);
   private readonly viewportScroller = inject(ViewportScroller);
-  private readonly title = 'Zard UI - The @shadcn/ui Alternative for Angular';
 
   ngOnInit(): void {
     this.viewportScroller.scrollToPosition([0, 0]);
-    this.titleService.setTitle(this.title);
   }
 }

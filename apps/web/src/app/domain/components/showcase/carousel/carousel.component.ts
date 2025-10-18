@@ -1,7 +1,21 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, DestroyRef, ElementRef, OnInit, computed, contentChildren, inject, input, signal, viewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  ElementRef,
+  OnInit,
+  PLATFORM_ID,
+  computed,
+  contentChildren,
+  inject,
+  input,
+  signal,
+  viewChild,
+} from '@angular/core';
 import EmblaCarousel, { type EmblaCarouselType, type EmblaOptionsType } from 'embla-carousel';
+import { isPlatformBrowser } from '@angular/common';
 import Autoplay from 'embla-carousel-autoplay';
-
 import { twMerge } from 'tailwind-merge';
 import { clsx } from 'clsx';
 
@@ -62,12 +76,14 @@ import { carouselVariants, carouselContentVariants, carouselViewportVariants, ty
   `,
 })
 export class ZardCarouselComponent implements OnInit, AfterViewInit {
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly destroyRef = inject(DestroyRef);
   private emblaApi: EmblaCarouselType | undefined;
 
   // Inputs
   readonly orientation = input<CarouselVariants['orientation']>('horizontal');
-  readonly itemsPerView = input<number>(3.2); // 3.2 items per view for infinite feel
+  readonly itemsPerView = input<number>(3.2);
   readonly showNavigation = input<boolean>(true);
   readonly showDots = input<boolean>(true);
   readonly autoplay = input<boolean>(false);
@@ -143,6 +159,10 @@ export class ZardCarouselComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
+    if (!this.isBrowser) {
+      return;
+    }
+
     const emblaNode = this.emblaNode()?.nativeElement;
     if (!emblaNode) return;
 

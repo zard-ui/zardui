@@ -31,7 +31,10 @@
         "ssr": {
           "entry": "apps/web/src/server.ts"
         },
-        "prerender": true
+        "prerender": {
+          "discoverRoutes": false,
+          "routesFile": "apps/web/prerender-routes.txt"
+        }
       },
       "configurations": {
         "production": {

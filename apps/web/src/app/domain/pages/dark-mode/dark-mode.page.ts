@@ -1,14 +1,15 @@
-import { Component, inject } from '@angular/core';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
+import { ZardCardComponent } from '@zard/components/card/card.component';
+import { SeoService } from '@zard/shared/services/seo.service';
+import { Component, inject, type OnInit } from '@angular/core';
 
 import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
 import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardAlertComponent } from '@zard/components/alert/alert.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { DarkModeService } from '../../../shared/services/darkmode.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
+import { DarkModeService } from '../../../shared/services/darkmode.service';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
@@ -26,11 +27,11 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   ],
   templateUrl: './dark-mode.page.html',
 })
-export class DarkmodePage {
-  readonly title = 'Dark Mode - zard/ui';
+export class DarkmodePage implements OnInit {
   activeAnchor?: string;
 
   private readonly darkModeService = inject(DarkModeService);
+  private readonly seoService = inject(SeoService);
 
   readonly navigationConfig: NavigationConfig = {
     items: [
@@ -48,5 +49,9 @@ export class DarkmodePage {
 
   toggleTheme(): void {
     this.darkModeService.toggleTheme();
+  }
+
+  ngOnInit(): void {
+    this.seoService.setDocsSeo('Dark Mode', 'Adding dark mode to your site.', '/docs/dark-mode', 'og-darkmode.jpg');
   }
 }

@@ -5,7 +5,8 @@ import { DocContentComponent } from '@zard/domain/components/doc-content/doc-con
 import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
 import { CalloutComponent } from '@zard/domain/components/callout/callout.component';
 import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
-import { Component } from '@angular/core';
+import { SeoService } from '@zard/shared/services/seo.service';
+import { Component, inject, type OnInit } from '@angular/core';
 
 @Component({
   selector: 'z-figma',
@@ -13,9 +14,18 @@ import { Component } from '@angular/core';
   standalone: true,
   imports: [DocContentComponent, DocHeadingComponent, CalloutComponent, ResourceCardComponent, ScrollSpyDirective, ScrollSpyItemDirective],
 })
-export class FigmaPage {
-  readonly title = 'Figma - zard/ui';
+export class FigmaPage implements OnInit {
+  private readonly seoService = inject(SeoService);
   activeAnchor?: string;
+
+  ngOnInit(): void {
+    this.seoService.setDocsSeo(
+      'Figma',
+      'Explore Figma design kits and resources for Zard UI. Free and premium options available to streamline your design-to-development workflow.',
+      '/docs/figma',
+      'og-figma.jpg',
+    );
+  }
 
   readonly navigationConfig: NavigationConfig = {
     items: [
