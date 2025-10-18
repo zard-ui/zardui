@@ -148,6 +148,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'alert',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'alert.component.ts',

@@ -1,50 +1,56 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import type { ClassValue } from 'clsx';
+import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { alertVariants, ZardAlertVariants } from './alert.variants';
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, ZardAlertVariants } from './alert.variants';
 
+import type { ClassValue } from 'clsx';
 @Component({
   selector: 'z-alert',
   standalone: true,
   exportAs: 'zAlert',
+  imports: [ZardStringTemplateOutletDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    @if (iconName()) {
-      <i [class]="iconName()"></i>
+    @if (zIcon()) {
+      <ng-container *zStringTemplateOutlet="zIcon()">
+        <i [class]="iconClasses()"></i>
+      </ng-container>
     }
 
-    <div class="flex flex-col gap-1 w-full">
-      <h5 class="font-medium leading-none tracking-tight mt-1">{{ zTitle() }}</h5>
-      <span class="text-sm leading-[1.625]">{{ zDescription() }}</span>
+    <div class="flex-1">
+      @if (zTitle()) {
+        <div [class]="titleClasses()" data-slot="alert-title">
+          <ng-container *zStringTemplateOutlet="zTitle()">{{ zTitle() }}</ng-container>
+        </div>
+      }
+
+      @if (zDescription()) {
+        <div [class]="descriptionClasses()" data-slot="alert-description">
+          <ng-container *zStringTemplateOutlet="zDescription()">{{ zDescription() }}</ng-container>
+        </div>
+      }
     </div>
   `,
   host: {
+    role: 'alert',
     '[class]': 'classes()',
-    '[attr.data-type]': 'zType()',
-    '[attr.data-appearance]': 'zAppearance()',
+    '[attr.data-slot]': '"alert"',
   },
 })
 export class ZardAlertComponent {
   readonly class = input<ClassValue>('');
-  readonly zTitle = input.required<string>();
-  readonly zDescription = input.required<string>();
-  readonly zIcon = input<string>();
+  readonly zTitle = input<string | TemplateRef<void>>('');
+  readonly zDescription = input<string | TemplateRef<void>>('');
+  readonly zIcon = input<string | TemplateRef<void>>('');
   readonly zType = input<ZardAlertVariants['zType']>('default');
-  readonly zAppearance = input<ZardAlertVariants['zAppearance']>('outline');
 
-  protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType(), zAppearance: this.zAppearance() }), this.class()));
+  protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
 
-  protected readonly iconsType: Record<NonNullable<ZardAlertVariants['zType']>, string> = {
-    default: '',
-    info: 'icon-info',
-    success: 'icon-circle-check',
-    warning: 'icon-triangle-alert',
-    error: 'icon-circle-x',
-  };
+  protected readonly iconClasses = computed(() => mergeClasses(alertIconVariants(), this.zIcon()));
 
-  protected readonly iconName = computed(() => {
-    return this.zIcon() ?? this.iconsType[this.zType() ?? 'default'];
-  });
+  protected readonly titleClasses = computed(() => alertTitleVariants());
+
+  protected readonly descriptionClasses = computed(() => alertDescriptionVariants({ zType: this.zType() }));
 }

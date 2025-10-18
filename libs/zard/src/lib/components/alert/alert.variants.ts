@@ -1,23 +1,34 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const alertVariants = cva('relative flex gap-2 w-full rounded-lg p-4', {
+export const alertVariants = cva('relative w-full rounded-lg border px-4 py-3 text-sm flex items-center gap-3', {
   variants: {
     zType: {
-      default: 'dark:data-[appearance="soft"]:text-zinc-800 data-[appearance="fill"]:text-white',
-      info: 'text-blue-500 data-[appearance="fill"]:text-white',
-      success: 'text-green-600 data-[appearance="fill"]:text-white',
-      warning: 'text-yellow-600 data-[appearance="fill"]:text-white',
-      error: 'text-red-500 data-[appearance="fill"]:text-white',
-    },
-    zAppearance: {
-      outline: 'border data-[type="info"]:border-blue-500 data-[type="success"]:border-green-600 data-[type="warning"]:border-yellow-600 data-[type="error"]:border-red-500',
-      soft: 'bg-zinc-100 data-[type="info"]:bg-blue-50 data-[type="success"]:bg-green-50 data-[type="warning"]:bg-yellow-50 data-[type="error"]:bg-red-50',
-      fill: 'bg-zinc-500 data-[type="info"]:bg-blue-500 data-[type="success"]:bg-green-600 data-[type="warning"]:bg-yellow-600 data-[type="error"]:bg-red-500',
+      default: 'bg-card text-card-foreground',
+      destructive: 'text-destructive bg-card',
     },
   },
   defaultVariants: {
     zType: 'default',
-    zAppearance: 'outline',
   },
 });
+
+export const alertIconVariants = cva('shrink-0 self-start !text-base');
+
+export const alertTitleVariants = cva('font-medium tracking-tight leading-none');
+
+export const alertDescriptionVariants = cva('text-sm leading-relaxed mt-1', {
+  variants: {
+    zType: {
+      default: 'text-muted-foreground',
+      destructive: 'text-destructive/90',
+    },
+  },
+  defaultVariants: {
+    zType: 'default',
+  },
+});
+
 export type ZardAlertVariants = VariantProps<typeof alertVariants>;
+export type ZardAlertIconVariants = VariantProps<typeof alertIconVariants>;
+export type ZardAlertTitleVariants = VariantProps<typeof alertTitleVariants>;
+export type ZardAlertDescriptionVariants = VariantProps<typeof alertDescriptionVariants>;

@@ -1,14 +1,13 @@
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { ScrollSpyItemDirective } from '@zard/domain/directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '@zard/domain/directives/scroll-spy.directive';
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardAlertComponent } from '@zard/components/alert/alert.component';
-
 import { Component } from '@angular/core';
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { EnvCardComponent } from '../../components/env-card/env-card.component';
+import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-enviroments',
@@ -47,7 +46,6 @@ import { EnvCardComponent } from '../../components/env-card/env-card.component';
           zTitle="Framework Support"
           class="bg-blue-500 dark:text-blue-100 dark:bg-blue-950 border dark:border-blue-800"
           zDescription="Angular is available now with full documentation and examples. Analog and Nx support are coming soon with dedicated guides and configurations."
-          zType="info"
           zAppearance="fill"
         />
       </section>
