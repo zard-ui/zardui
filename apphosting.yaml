@@ -1,4 +1,4 @@
-# Firebase App Hosting configuration for ZardUI
+# Firebase App Hosting configuration for ZardUI (Nx monorepo)
 # See https://firebase.google.com/docs/app-hosting
 
 # Cloud Run settings for the SSR backend
@@ -18,9 +18,20 @@ runConfig:
   # Memory allocation in MiB
   memoryMiB: 512
 
-# Environment variables (optional)
-# env:
-#   - variable: NODE_ENV
-#     value: production
-#     availability:
-#       - RUNTIME
+# Custom build configuration for Nx monorepo
+buildConfig:
+  # Build command - use Nx to build the web app
+  buildCommand: "npm run build"
+
+  # Output directory containing the built SSR application
+  outputDirectory: "dist/apps/web"
+
+  # Server entry point
+  serverEntryPoint: "server/server.mjs"
+
+# Environment variables
+env:
+  - variable: NODE_ENV
+    value: production
+    availability:
+      - RUNTIME
