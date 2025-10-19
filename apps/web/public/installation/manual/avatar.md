@@ -109,6 +109,8 @@ import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } 
   `,
   host: {
     '[class]': 'containerClasses()',
+    '[style.width]': 'customSize()',
+    '[style.height]': 'customSize()',
     '[attr.data-slot]': '"avatar"',
   },
 })
@@ -126,14 +128,14 @@ export class ZardAvatarComponent {
   protected readonly imageLoaded = signal(false);
 
   protected readonly containerClasses = computed(() => {
-    const isCustomSize = typeof this.zSize() === 'number';
-    if (isCustomSize) {
-      const customSizeClass = `w-[${this.zSize()}px] h-[${this.zSize()}px]`;
-      return mergeClasses(avatarVariants({ zShape: this.zShape(), zStatus: this.zStatus() }), customSizeClass, this.class());
-    }
-
     return mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize() as ZardAvatarVariants['zSize'], zStatus: this.zStatus() }), this.class());
   });
+
+  protected readonly customSize = computed(() => {
+    const size = this.zSize();
+    return typeof size === 'number' ? `${size}px` : null;
+  });
+
   protected readonly imgClasses = computed(() => mergeClasses(imageVariants({ zShape: this.zShape() })));
 
   protected onImageLoad(): void {
@@ -162,7 +164,6 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
       md: 'w-12 h-12',
       lg: 'w-14 h-14',
       xl: 'w-16 h-16',
-      custom: 0,
     },
     zShape: {
       circle: 'rounded-full',

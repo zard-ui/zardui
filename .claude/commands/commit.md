@@ -1,4 +1,8 @@
-Add a commit message that describes the changes made in the code.
+Generate a commit message based on the recent edits made to the files.
+
+- DO NOT COMMIT THE CHANGES YOURSELF.
+- GENERATE ONLY THE COMMIT MESSAGE.
+- The commit message should be concise and descriptive of the changes made.
 
 Use the following format:
 
