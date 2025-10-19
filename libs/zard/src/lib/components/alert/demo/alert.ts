@@ -1,13 +1,14 @@
-import { ZardDemoAlertBasicComponent } from './basic';
+import { ZardDemoAlertWarningComponent } from './warning';
+import { ZardDemoAlertSuccessComponent } from './success';
 import { ZardDemoAlertDefaultComponent } from './default';
 import { ZardDemoAlertErrorComponent } from './error';
+import { ZardDemoAlertBasicComponent } from './basic';
 import { ZardDemoAlertInfoComponent } from './info';
-import { ZardDemoAlertSuccessComponent } from './success';
-import { ZardDemoAlertWarningComponent } from './warning';
 
 export const ALERT = {
   componentName: 'alert',
   componentType: 'alert',
+  description: 'Displays a callout for user attention.',
   examples: [
     {
       name: 'basic',

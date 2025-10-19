@@ -6,6 +6,7 @@ import { ZardDemoSwitchSizeComponent } from './size';
 export const SWITCH = {
   componentName: 'switch',
   componentType: 'switch',
+  description: 'A control that allows the user to toggle between checked and unchecked.',
   examples: [
     {
       name: 'default',

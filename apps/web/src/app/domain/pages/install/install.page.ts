@@ -46,10 +46,10 @@ export class InstallPage implements OnInit {
     const environmentName = this.installGuide?.title;
     if (environmentName) {
       this.seoService.setDocsSeo(
-        `Installation - ${environmentName}`,
+        `${environmentName}`,
         `Learn how to install and set up Zard UI in your ${environmentName} project. Step-by-step guide with CLI and manual installation options.`,
         `/docs/installation/${this.installGuide.environment}`,
-        '',
+        `og-${environmentName.toLocaleLowerCase()}.jpg`,
       );
     }
   }

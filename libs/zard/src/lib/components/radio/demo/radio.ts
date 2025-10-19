@@ -7,6 +7,7 @@ import { ZardDemoRadioSizeComponent } from './size';
 export const RADIO = {
   componentName: 'radio',
   componentType: 'radio',
+  description: 'A control that allows the user to select one option from a set of options.',
   examples: [
     {
       name: 'default',

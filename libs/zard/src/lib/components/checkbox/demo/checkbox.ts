@@ -7,6 +7,7 @@ import { ZardDemoCheckboxSizeComponent } from './size';
 export const CHECKBOX = {
   componentName: 'checkbox',
   componentType: 'checkbox',
+  description: 'A control that allows the user to toggle between checked and not checked.',
   examples: [
     {
       name: 'default',
