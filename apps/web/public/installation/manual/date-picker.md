@@ -46,7 +46,16 @@ export type { ZardDatePickerVariants };
 
     <ng-template #calendarTemplate>
       <z-popover [class]="popoverClasses()">
-        <z-calendar #calendar [zSize]="calendarSize()" [value]="value()" [minDate]="minDate()" [maxDate]="maxDate()" [disabled]="disabled()" (dateChange)="onDateChange($event)" />
+        <z-calendar
+          #calendar
+          zMode="single"
+          [zSize]="calendarSize()"
+          [value]="value()"
+          [minDate]="minDate()"
+          [maxDate]="maxDate()"
+          [disabled]="disabled()"
+          (dateChange)="onDateChange($event)"
+        />
       </z-popover>
     </ng-template>
   `,
@@ -112,8 +121,10 @@ export class ZardDatePickerComponent {
     return this.formatDate(date, this.zFormat());
   });
 
-  protected onDateChange(date: Date): void {
-    this.dateChange.emit(date);
+  protected onDateChange(date: Date | Date[]): void {
+    // Date picker always uses single mode, so we can safely cast
+    const singleDate = Array.isArray(date) ? date[0] : date;
+    this.dateChange.emit(singleDate);
     // Close popover after selection using direct method call
     this.popoverDirective().hide();
   }

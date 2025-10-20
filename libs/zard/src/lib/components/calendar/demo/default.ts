@@ -8,7 +8,7 @@ import { ZardCalendarComponent } from '../calendar.component';
   template: ` <z-calendar (dateChange)="onDateChange($event)" /> `,
 })
 export class ZardDemoCalendarDefaultComponent {
-  onDateChange(date: Date) {
+  onDateChange(date: Date | Date[]) {
     console.log('Selected date:', date);
   }
 }

@@ -36,7 +36,7 @@ export class ZardDemoCalendarWithConstraintsComponent {
     this.maxDate.setHours(23, 59, 59, 999);
   }
 
-  onDateChange(date: Date) {
+  onDateChange(date: Date | Date[]) {
     console.log('Selected date:', date);
   }
 }

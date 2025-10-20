@@ -109,15 +109,16 @@ export class ZardDatePickerComponent {
     return this.formatDate(date, this.zFormat());
   });
 
-  protected onDateChange(date: Date): void {
-    this.dateChange.emit(date);
-    // Close popover after selection using direct method call
+  protected onDateChange(date: Date | Date[]): void {
+    // Date picker always uses single mode, so we can safely cast
+    const singleDate = Array.isArray(date) ? date[0] : date;
+    this.dateChange.emit(singleDate);
+
     this.popoverDirective().hide();
   }
 
   protected onPopoverVisibilityChange(visible: boolean): void {
     if (visible) {
-      // Reset calendar navigation when opening to show correct month/year
       setTimeout(() => {
         if (this.calendar()) {
           this.calendar().resetNavigation();

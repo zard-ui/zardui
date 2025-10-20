@@ -41,9 +41,9 @@ describe('ZardCalendarComponent', () => {
   describe('Date Selection', () => {
     it('should emit dateChange when a date is selected', () => {
       const testDate = new Date(2024, 0, 15);
-      let emittedDate: Date | undefined;
+      let emittedDate: Date | Date[] | undefined;
 
-      component.dateChange.subscribe((date: Date) => {
+      component.dateChange.subscribe((date: Date | Date[]) => {
         emittedDate = date;
       });
 
@@ -60,9 +60,9 @@ describe('ZardCalendarComponent', () => {
       });
 
       const testDate = new Date(2024, 0, 15);
-      let emittedDate: Date | undefined;
+      let emittedDate: Date | Date[] | undefined;
 
-      component.dateChange.subscribe((date: Date) => {
+      component.dateChange.subscribe((date: Date | Date[]) => {
         emittedDate = date;
       });
 
@@ -81,8 +81,8 @@ describe('ZardCalendarComponent', () => {
         writable: true,
       });
 
-      let emittedDate: Date | undefined;
-      component.dateChange.subscribe((date: Date) => {
+      let emittedDate: Date | Date[] | undefined;
+      component.dateChange.subscribe((date: Date | Date[]) => {
         emittedDate = date;
       });
 
@@ -101,8 +101,8 @@ describe('ZardCalendarComponent', () => {
         writable: true,
       });
 
-      let emittedDate: Date | undefined;
-      component.dateChange.subscribe((date: Date) => {
+      let emittedDate: Date | Date[] | undefined;
+      component.dateChange.subscribe((date: Date | Date[]) => {
         emittedDate = date;
       });
 

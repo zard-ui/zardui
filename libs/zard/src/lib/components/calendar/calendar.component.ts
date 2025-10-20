@@ -1,13 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, input, linkedSignal, model, signal, viewChild, ViewEncapsulation } from '@angular/core';
-import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
 import { filter } from 'rxjs';
 
-import { calendarDayButtonVariants, calendarDayVariants, calendarNavVariants, calendarVariants, calendarWeekdayVariants, ZardCalendarVariants } from './calendar.variants';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, input, linkedSignal, model, signal, viewChild, ViewEncapsulation } from '@angular/core';
+import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
+
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
-import { ZardButtonComponent } from '../button/button.component';
+import { calendarDayButtonVariants, calendarDayVariants, calendarNavVariants, calendarVariants, calendarWeekdayVariants, ZardCalendarVariants } from './calendar.variants';
+
 import type { ClassValue } from 'clsx';
-import { mergeClasses } from '../../shared/utils/utils';
+
+export type CalendarMode = 'single' | 'multiple' | 'range';
+export type CalendarValue = Date | Date[] | null;
 
 export interface CalendarDay {
   date: Date;
@@ -15,6 +20,9 @@ export interface CalendarDay {
   isToday: boolean;
   isSelected: boolean;
   isDisabled: boolean;
+  isRangeStart?: boolean;
+  isRangeEnd?: boolean;
+  isInRange?: boolean;
   id?: string;
 }
 
@@ -52,14 +60,14 @@ export type { ZardCalendarVariants };
         <!-- Month and Year Selectors -->
         <div class="flex items-center space-x-2">
           <!-- Month Select -->
-          <z-select [zSize]="selectSize()" class="min-w-[120px]" [zValue]="currentMonthValue()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
+          <z-select [zSize]="selectSize()" [zValue]="currentMonthValue()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
             @for (month of months; track $index) {
               <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
             }
           </z-select>
 
           <!-- Year Select -->
-          <z-select [zSize]="selectSize()" class="min-w-[80px]" [zValue]="currentYearValue()" [zLabel]="currentYearValue()" (zSelectionChange)="onYearChange($event)">
+          <z-select [zSize]="selectSize()" [zValue]="currentYearValue()" [zLabel]="currentYearValue()" (zSelectionChange)="onYearChange($event)">
             @for (year of availableYears(); track year) {
               <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
             }
@@ -72,7 +80,7 @@ export type { ZardCalendarVariants };
       </div>
 
       <!-- Weekdays Header -->
-      <div class="grid grid-cols-7 text-center" role="row">
+      <div class="grid grid-cols-7 text-center w-fit" role="row">
         @for (weekday of weekdays; track $index) {
           <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
@@ -81,7 +89,7 @@ export type { ZardCalendarVariants };
       </div>
 
       <!-- Calendar Days Grid -->
-      <div class="grid grid-cols-7 gap-0 mt-2" role="rowgroup">
+      <div class="grid grid-cols-7 gap-0 mt-2 auto-rows-min w-fit" role="rowgroup">
         @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
           <div [class]="dayContainerClasses()" role="gridcell">
             <button
@@ -114,7 +122,8 @@ export class ZardCalendarComponent {
   }
   readonly class = input<ClassValue>('');
   readonly zSize = input<ZardCalendarVariants['zSize']>('default');
-  readonly value = model<Date | null>(null);
+  readonly zMode = input<CalendarMode>('single');
+  readonly value = model<CalendarValue>(null);
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = input<boolean>(false);
@@ -123,8 +132,19 @@ export class ZardCalendarComponent {
 
   private readonly focusedDayIndex = signal<number>(-1);
 
-  private readonly currentDate = computed(() => this.value() ?? new Date(), {
-    equal: (a, b) => a.getTime() === b.getTime(),
+  private readonly currentDate = computed(() => {
+    const val = this.value();
+    const mode = this.zMode();
+
+    if (!val) return new Date();
+
+    // For single mode, val is Date | null
+    if (mode === 'single') return val as Date;
+
+    // For multiple/range mode, val is Date[]
+    if (Array.isArray(val) && val.length > 0) return val[0];
+
+    return new Date();
   });
 
   readonly weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
@@ -160,7 +180,7 @@ export class ZardCalendarComponent {
 
   protected readonly navButtonClasses = computed(() => {
     const size = this.zSize();
-    const baseClasses = 'p-0 opacity-50 hover:opacity-100';
+    const baseClasses = 'p-0';
 
     switch (size) {
       case 'sm':
@@ -240,6 +260,8 @@ export class ZardCalendarComponent {
     const today = new Date();
     const minDate = this.minDate();
     const maxDate = this.maxDate();
+    const mode = this.zMode();
+    const value = this.value();
 
     const year = selectedDate.getFullYear();
     const month = selectedDate.getMonth();
@@ -260,12 +282,55 @@ export class ZardCalendarComponent {
     const days: CalendarDay[] = [];
     const currentWeekDate = new Date(startDate);
 
+    // Prepare selected dates for comparison
+    let selectedDates: Date[] = [];
+    if (mode === 'single' && value) {
+      selectedDates = [value as Date];
+    } else if ((mode === 'multiple' || mode === 'range') && Array.isArray(value)) {
+      selectedDates = value;
+    }
+
+    // For range mode, determine range start and end
+    let rangeStart: Date | null = null;
+    let rangeEnd: Date | null = null;
+    if (mode === 'range' && selectedDates.length > 0) {
+      rangeStart = selectedDates[0];
+      rangeEnd = selectedDates.length > 1 ? selectedDates[1] : null;
+    }
+
     while (currentWeekDate <= endDate) {
       const date = new Date(currentWeekDate);
       const isCurrentMonth = date.getMonth() === month;
       const isToday = this.isSameDay(date, today);
-      const isSelected = currentDate ? this.isSameDay(date, currentDate) : false;
       const isDisabled = this.disabled() || this.isDateDisabled(date, minDate, maxDate);
+
+      // Determine if date is selected
+      let isSelected = false;
+      let isRangeStart = false;
+      let isRangeEnd = false;
+      let isInRange = false;
+
+      if (mode === 'single') {
+        isSelected = selectedDates.length > 0 && this.isSameDay(date, selectedDates[0]);
+      } else if (mode === 'multiple') {
+        isSelected = selectedDates.some(d => this.isSameDay(date, d));
+      } else if (mode === 'range') {
+        if (rangeStart && this.isSameDay(date, rangeStart)) {
+          isRangeStart = true;
+          isSelected = true;
+        }
+        if (rangeEnd && this.isSameDay(date, rangeEnd)) {
+          isRangeEnd = true;
+          isSelected = true;
+        }
+        if (rangeStart && rangeEnd && !isRangeStart && !isRangeEnd) {
+          // Check if date is between start and end
+          const dateTime = date.getTime();
+          const startTime = rangeStart.getTime();
+          const endTime = rangeEnd.getTime();
+          isInRange = dateTime > startTime && dateTime < endTime;
+        }
+      }
 
       days.push({
         date,
@@ -273,6 +338,9 @@ export class ZardCalendarComponent {
         isToday,
         isSelected,
         isDisabled,
+        isRangeStart,
+        isRangeEnd,
+        isInRange,
       });
 
       currentWeekDate.setDate(currentWeekDate.getDate() + 1);
@@ -289,6 +357,9 @@ export class ZardCalendarComponent {
         today: day.isToday,
         outside: !day.isCurrentMonth,
         disabled: day.isDisabled,
+        rangeStart: day.isRangeStart ?? false,
+        rangeEnd: day.isRangeEnd ?? false,
+        inRange: day.isInRange ?? false,
       }),
     );
   }
@@ -343,7 +414,49 @@ export class ZardCalendarComponent {
 
     if (this.isDateDisabled(date, minDate, maxDate)) return;
 
-    this.value.set(date);
+    const mode = this.zMode();
+    const currentValue = this.value();
+
+    if (mode === 'single') {
+      this.value.set(date);
+    } else if (mode === 'multiple') {
+      const selectedDates = Array.isArray(currentValue) ? [...currentValue] : [];
+      const existingIndex = selectedDates.findIndex(d => this.isSameDay(d, date));
+
+      if (existingIndex >= 0) {
+        // Remove date if already selected
+        selectedDates.splice(existingIndex, 1);
+      } else {
+        // Add date
+        selectedDates.push(date);
+      }
+
+      this.value.set(selectedDates.length > 0 ? selectedDates : null);
+    } else if (mode === 'range') {
+      const selectedDates = Array.isArray(currentValue) ? [...currentValue] : [];
+
+      if (selectedDates.length === 0) {
+        // First date selected - set as range start
+        this.value.set([date]);
+      } else if (selectedDates.length === 1) {
+        // Second date selected - complete the range
+        const start = selectedDates[0];
+        if (date.getTime() < start.getTime()) {
+          // New date is before start, swap them
+          this.value.set([date, start]);
+        } else if (this.isSameDay(date, start)) {
+          // Same date clicked, reset
+          this.value.set(null);
+        } else {
+          // New date is after start
+          this.value.set([start, date]);
+        }
+      } else {
+        // Range already complete, start new range
+        this.value.set([date]);
+      }
+    }
+
     this.focusedDayIndex.set(i ?? this.calendarDays().findIndex(day => this.isSameDay(day.date, date)));
   }
 
@@ -359,6 +472,9 @@ export class ZardCalendarComponent {
 
     if (day.isToday) labels.push('Today');
     if (day.isSelected) labels.push('Selected');
+    if (day.isRangeStart) labels.push('Range start');
+    if (day.isRangeEnd) labels.push('Range end');
+    if (day.isInRange) labels.push('In range');
     if (!day.isCurrentMonth) labels.push('Outside month');
     if (day.isDisabled) labels.push('Disabled');
 

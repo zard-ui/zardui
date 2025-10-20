@@ -46,7 +46,7 @@ export class ZardDemoCalendarSizesComponent {
     }
   }
 
-  onDateChange(date: Date) {
+  onDateChange(date: Date | Date[]) {
     console.log('Selected date:', date);
   }
 }
