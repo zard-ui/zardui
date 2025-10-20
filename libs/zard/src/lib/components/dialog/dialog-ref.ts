@@ -1,9 +1,7 @@
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-
 import { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
-
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
 const enum eTriggerAction {
@@ -51,8 +49,11 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.isClosing = true;
     this.result = result;
 
-    this.containerInstance.state.set('close');
+    // Add the leave animation class to trigger CSS transition
+    const hostElement = this.containerInstance.getNativeElement();
+    hostElement.classList.add('dialog-leave');
 
+    // Wait for animation to complete before disposing
     setTimeout(() => {
       if (this.overlayRef) {
         if (this.overlayRef.hasAttached()) {
@@ -65,7 +66,7 @@ export class ZardDialogRef<T = any, R = any, U = any> {
         this.destroy$.next();
         this.destroy$.complete();
       }
-    }, 150);
+    }, 150); // Match the animation duration
   }
 
   private trigger(action: eTriggerAction) {
@@ -76,7 +77,9 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     } else if (typeof trigger === 'function') {
       const result = trigger(this.getContentComponent()) as R;
       this.closeWithResult(result);
-    } else this.close();
+    } else {
+      this.close();
+    }
   }
 
   private getContentComponent(): T {
@@ -84,6 +87,8 @@ export class ZardDialogRef<T = any, R = any, U = any> {
   }
 
   private closeWithResult(result: R): void {
-    if (result !== false) this.close(result);
+    if (result !== false) {
+      this.close(result);
+    }
   }
 }

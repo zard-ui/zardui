@@ -2,11 +2,11 @@ import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
-
 import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
+
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
 
 @Injectable({
@@ -30,8 +30,8 @@ export class ZardDialogService {
     }
 
     const dialogContainer = this.attachDialogContainer<T, U>(overlayRef, config);
-
     const dialogRef = this.attachDialogContent<T, U>(componentOrTemplateRef, dialogContainer, overlayRef, config);
+
     dialogContainer.dialogRef = dialogRef;
 
     return dialogRef;
@@ -46,6 +46,7 @@ export class ZardDialogService {
 
       return this.overlay.create(overlayConfig);
     }
+
     return undefined;
   }
 
@@ -59,11 +60,11 @@ export class ZardDialogService {
     });
 
     const containerPortal = new ComponentPortal<ZardDialogComponent<T, U>>(ZardDialogComponent, config.zViewContainerRef, injector);
+
     const containerRef = overlayRef.attach<ZardDialogComponent<T, U>>(containerPortal);
 
-    setTimeout(() => {
-      containerRef.instance.state.set('open');
-    }, 0);
+    // No need for setTimeout or state.set() anymore!
+    // The animate.enter directive handles the entry animation automatically
 
     return containerRef.instance;
   }
