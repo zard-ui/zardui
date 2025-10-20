@@ -136,7 +136,6 @@ interface MenuItem {
 
           <z-breadcrumb zWrap="wrap" zAlign="start">
             <z-breadcrumb-item [routerLink]="['/docs/components/layout']">Home</z-breadcrumb-item>
-            <z-breadcrumb-separator />
             <z-breadcrumb-item>
               <span aria-current="page">Components</span>
             </z-breadcrumb-item>

@@ -1,19 +1,72 @@
 import { ClassValue } from 'clsx';
 
-import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, input, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import {
   breadcrumbEllipsisVariants,
   breadcrumbItemVariants,
   breadcrumbListVariants,
-  breadcrumbSeparatorVariants,
   breadcrumbVariants,
   ZardBreadcrumbEllipsisVariants,
-  ZardBreadcrumbSeparatorVariants,
   ZardBreadcrumbVariants,
 } from './breadcrumb.variants';
+
+@Component({
+  selector: 'z-breadcrumb-item',
+  exportAs: 'zBreadcrumbItem',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  imports: [ZardStringTemplateOutletDirective],
+  hostDirectives: [
+    {
+      directive: RouterLink,
+      inputs: ['routerLink', 'queryParams', 'fragment', 'queryParamsHandling', 'state', 'relativeTo', 'preserveFragment', 'skipLocationChange', 'replaceUrl'],
+    },
+  ],
+  template: `
+    <li [class]="classes()">
+      <ng-content></ng-content>
+    </li>
+    @if (!isLast()) {
+      <li aria-hidden="true" role="presentation" [class]="separatorClasses()">
+        @if (isTemplate(separator())) {
+          <ng-container *zStringTemplateOutlet="separator()"></ng-container>
+        } @else if (separator()) {
+          {{ separator() }}
+        } @else {
+          <div class="icon-chevron-right"></div>
+        }
+      </li>
+    }
+  `,
+  host: {
+    class: 'inline-flex items-center gap-1.5',
+  },
+})
+export class ZardBreadcrumbItemComponent {
+  readonly class = input<ClassValue>('');
+
+  protected separator = signal<string | TemplateRef<void> | null>(null);
+  protected isLast = signal<boolean>(false);
+
+  protected readonly classes = computed(() => mergeClasses(breadcrumbItemVariants(), this.class()));
+  protected readonly separatorClasses = computed(() => 'text-muted-foreground [&_svg]:size-3.5');
+
+  setSeparator(separator: string | TemplateRef<void> | null): void {
+    this.separator.set(separator);
+  }
+
+  setIsLast(isLast: boolean): void {
+    this.isLast.set(isLast);
+  }
+
+  protected isTemplate(value: string | TemplateRef<void> | null | undefined): value is TemplateRef<void> {
+    return value instanceof TemplateRef;
+  }
+}
 
 @Component({
   selector: 'z-breadcrumb',
@@ -32,55 +85,26 @@ export class ZardBreadcrumbComponent {
   readonly zSize = input<ZardBreadcrumbVariants['zSize']>('md');
   readonly zAlign = input<ZardBreadcrumbVariants['zAlign']>('start');
   readonly zWrap = input<ZardBreadcrumbVariants['zWrap']>('wrap');
+  readonly zSeparator = input<string | TemplateRef<void> | null>(null);
 
   readonly class = input<ClassValue>('');
+
+  protected readonly items = contentChildren(ZardBreadcrumbItemComponent);
 
   protected readonly navClasses = computed(() => mergeClasses(breadcrumbVariants({ zSize: this.zSize() }), this.class()));
   protected readonly listClasses = computed(() => breadcrumbListVariants({ zAlign: this.zAlign(), zWrap: this.zWrap() }));
-}
 
-@Component({
-  selector: 'z-breadcrumb-item',
-  exportAs: 'zBreadcrumbItem',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  hostDirectives: [
-    {
-      directive: RouterLink,
-      inputs: ['routerLink', 'queryParams', 'fragment', 'queryParamsHandling', 'state', 'relativeTo', 'preserveFragment', 'skipLocationChange', 'replaceUrl'],
-    },
-  ],
-  host: {
-    '[class]': 'classes()',
-  },
-  template: `<ng-content></ng-content>`,
-})
-export class ZardBreadcrumbItemComponent {
-  readonly class = input<ClassValue>('');
+  constructor() {
+    effect(() => {
+      const itemsList = this.items();
+      const separator = this.zSeparator();
 
-  protected readonly classes = computed(() => mergeClasses(breadcrumbItemVariants(), this.class()));
-}
-
-@Component({
-  selector: 'z-breadcrumb-separator',
-  exportAs: 'zBreadcrumbSeparator',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: `
-    <li aria-hidden="true" role="presentation" [class]="classes()">
-      <ng-content>
-        <div class="icon-chevron-right"></div>
-      </ng-content>
-    </li>
-  `,
-})
-export class ZardBreadcrumbSeparatorComponent {
-  readonly zSeparator = input<string | TemplateRef<void> | null>('/');
-  readonly zType = input<ZardBreadcrumbSeparatorVariants['zType']>('default');
-
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(breadcrumbSeparatorVariants({ zType: this.zType() }), this.class()));
+      itemsList.forEach((item, index) => {
+        item.setSeparator(separator);
+        item.setIsLast(index === itemsList.length - 1);
+      });
+    });
+  }
 }
 
 @Component({
