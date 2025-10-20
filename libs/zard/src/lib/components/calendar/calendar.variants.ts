@@ -1,17 +1,6 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const calendarVariants = cva('bg-background p-3 w-fit rounded-lg border', {
-  variants: {
-    zSize: {
-      sm: 'text-sm',
-      default: '',
-      lg: 'text-lg',
-    },
-  },
-  defaultVariants: {
-    zSize: 'default',
-  },
-});
+export const calendarVariants = cva('bg-background p-3 w-fit rounded-lg border');
 
 export const calendarMonthVariants = cva('flex flex-col w-fit gap-4');
 
@@ -23,43 +12,16 @@ export const calendarNavButtonVariants = cva(
 
 export const calendarWeekdaysVariants = cva('flex');
 
-export const calendarWeekdayVariants = cva('text-muted-foreground font-normal text-center', {
-  variants: {
-    zSize: {
-      sm: 'text-xs w-7',
-      default: 'text-[0.8rem] w-8',
-      lg: 'text-sm w-11',
-    },
-  },
-  defaultVariants: {
-    zSize: 'default',
-  },
-});
+export const calendarWeekdayVariants = cva('text-muted-foreground font-normal text-center text-[0.8rem] w-8');
 
 export const calendarWeekVariants = cva('flex w-full mt-2');
 
-export const calendarDayVariants = cva('p-0 relative focus-within:relative focus-within:z-20 flex mt-1', {
-  variants: {
-    zSize: {
-      sm: 'h-7 w-7 text-xs',
-      default: 'h-8 w-8 text-sm',
-      lg: 'h-11 w-11 text-base',
-    },
-  },
-  defaultVariants: {
-    zSize: 'default',
-  },
-});
+export const calendarDayVariants = cva('p-0 relative focus-within:relative focus-within:z-20 flex mt-1 h-8 w-8 text-sm');
 
 export const calendarDayButtonVariants = cva(
-  'p-0 font-normal flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground w-full h-full',
+  'p-0 font-normal flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground w-full h-full text-sm',
   {
     variants: {
-      zSize: {
-        sm: 'text-xs',
-        default: 'text-sm',
-        lg: 'text-base',
-      },
       selected: {
         true: 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
         false: '',
@@ -110,7 +72,6 @@ export const calendarDayButtonVariants = cva(
       },
     ],
     defaultVariants: {
-      zSize: 'default',
       selected: false,
       today: false,
       outside: false,

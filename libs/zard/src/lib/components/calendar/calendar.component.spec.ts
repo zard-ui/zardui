@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ZardCalendarComponent, CalendarDay } from './calendar.component';
+import { isSameDay, isDateDisabled, getDayAriaLabel, generateCalendarDays } from './calendar.utils';
 
 describe('ZardCalendarComponent', () => {
   let component: ZardCalendarComponent;
@@ -22,19 +23,10 @@ describe('ZardCalendarComponent', () => {
 
     it('should initialize with default values', () => {
       expect(component.class()).toBe('');
-      expect(component.zSize()).toBe('default');
       expect(component.value()).toBeNull();
       expect(component.minDate()).toBeNull();
       expect(component.maxDate()).toBeNull();
       expect(component.disabled()).toBe(false);
-    });
-
-    it('should have correct weekdays', () => {
-      expect(component.weekdays).toEqual(['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']);
-    });
-
-    it('should have correct months', () => {
-      expect(component.months).toEqual(['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']);
     });
   });
 
@@ -47,13 +39,13 @@ describe('ZardCalendarComponent', () => {
         emittedDate = date;
       });
 
-      component.selectDate(testDate);
+      // Simulate clicking on a date through the grid component
+      component['onDateSelect']({ date: testDate, index: 0 });
 
       expect(emittedDate).toEqual(testDate);
     });
 
-    it('should not emit dateChange when component is disabled', () => {
-      // Mock disabled signal by overriding the input function
+    it('should not select date when component is disabled', () => {
       Object.defineProperty(component, 'disabled', {
         value: () => true,
         writable: true,
@@ -66,47 +58,7 @@ describe('ZardCalendarComponent', () => {
         emittedDate = date;
       });
 
-      component.selectDate(testDate);
-
-      expect(emittedDate).toBeUndefined();
-    });
-
-    it('should not select date if it is before minDate', () => {
-      const minDate = new Date(2024, 0, 10);
-      const testDate = new Date(2024, 0, 5);
-
-      // Mock minDate signal
-      Object.defineProperty(component, 'minDate', {
-        value: () => minDate,
-        writable: true,
-      });
-
-      let emittedDate: Date | Date[] | undefined;
-      component.dateChange.subscribe((date: Date | Date[]) => {
-        emittedDate = date;
-      });
-
-      component.selectDate(testDate);
-
-      expect(emittedDate).toBeUndefined();
-    });
-
-    it('should not select date if it is after maxDate', () => {
-      const maxDate = new Date(2024, 0, 10);
-      const testDate = new Date(2024, 0, 15);
-
-      // Mock maxDate signal
-      Object.defineProperty(component, 'maxDate', {
-        value: () => maxDate,
-        writable: true,
-      });
-
-      let emittedDate: Date | Date[] | undefined;
-      component.dateChange.subscribe((date: Date | Date[]) => {
-        emittedDate = date;
-      });
-
-      component.selectDate(testDate);
+      component['onDateSelect']({ date: testDate, index: 0 });
 
       expect(emittedDate).toBeUndefined();
     });
@@ -132,34 +84,6 @@ describe('ZardCalendarComponent', () => {
       expect(component['currentMonthValue']()).toBe('6'); // July
       expect(component['currentYearValue']()).toBe('2024');
     });
-
-    it('should disable previous button when minDate prevents navigation', () => {
-      const minDate = new Date(2024, 5, 1); // June 1, 2024
-      const currentDate = new Date(2024, 5, 15); // June 15, 2024
-
-      // Mock minDate signal
-      Object.defineProperty(component, 'minDate', {
-        value: () => minDate,
-        writable: true,
-      });
-      component['value'].set(currentDate);
-
-      expect(component['isPreviousDisabled']()).toBe(true);
-    });
-
-    it('should disable next button when maxDate prevents navigation', () => {
-      const maxDate = new Date(2024, 5, 30); // June 30, 2024
-      const currentDate = new Date(2024, 5, 15); // June 15, 2024
-
-      // Mock maxDate signal
-      Object.defineProperty(component, 'maxDate', {
-        value: () => maxDate,
-        writable: true,
-      });
-      component['value'].set(currentDate);
-
-      expect(component['isNextDisabled']()).toBe(true);
-    });
   });
 
   describe('Month and Year Selection', () => {
@@ -177,12 +101,13 @@ describe('ZardCalendarComponent', () => {
       const initialDate = new Date(2024, 5, 1); // June 2024
       component['value'].set(initialDate);
 
+      const beforeMonth = component['currentMonthValue']();
+
       component['onMonthChange']('invalid');
       component['onMonthChange']('12'); // Invalid month
       component['onMonthChange'](''); // Empty string
 
-      const currentDate = component['currentDate']();
-      expect(currentDate.getMonth()).toBe(5); // Should remain June
+      expect(component['currentMonthValue']()).toBe(beforeMonth);
     });
 
     it('should change year when valid year is provided', () => {
@@ -205,20 +130,6 @@ describe('ZardCalendarComponent', () => {
       component['onYearChange'](''); // Empty string
 
       expect(component['currentYearValue']()).toBe('2024'); // Should remain 2024
-    });
-
-    it('should return correct current month name', () => {
-      const date = new Date(2024, 5, 1); // June 2024
-      component['value'].set(date);
-
-      expect(component['currentMonthName']()).toBe('Jun');
-    });
-
-    it('should return correct current year', () => {
-      const date = new Date(2024, 5, 1); // June 2024
-      component['value'].set(date);
-
-      expect(component['currentYearValue']()).toBe('2024');
     });
   });
 
@@ -262,65 +173,52 @@ describe('ZardCalendarComponent', () => {
     });
   });
 
-  describe('CSS Classes and Styling', () => {
-    it('should generate correct day button classes for selected day', () => {
-      const day: CalendarDay = {
-        date: new Date(2024, 0, 15),
-        isCurrentMonth: true,
-        isToday: false,
-        isSelected: true,
-        isDisabled: false,
-      };
+  describe('Focus Management', () => {
+    it('should reset navigation to current value on reset', () => {
+      const testDate = new Date(2024, 5, 15);
+      component['value'].set(testDate);
 
-      const classes = component['dayButtonClasses'](day);
-      expect(classes).toContain('bg-primary');
-      expect(classes).toContain('text-primary-foreground');
+      component['previousMonth']();
+      component.resetNavigation();
+
+      expect(component['currentDate']().getTime()).toEqual(testDate.getTime());
     });
+  });
+});
 
-    it('should generate correct day button classes for today', () => {
-      const day: CalendarDay = {
-        date: new Date(),
-        isCurrentMonth: true,
-        isToday: true,
-        isSelected: false,
-        isDisabled: false,
-      };
+describe('Calendar Utility Functions', () => {
+  describe('isSameDay', () => {
+    it('should correctly identify same day', () => {
+      const date1 = new Date(2024, 5, 15, 10, 30);
+      const date2 = new Date(2024, 5, 15, 14, 45);
+      const date3 = new Date(2024, 5, 16, 10, 30);
 
-      const classes = component['dayButtonClasses'](day);
-      expect(classes).toContain('bg-accent');
-      expect(classes).toContain('text-accent-foreground');
-    });
-
-    it('should generate correct day button classes for outside month', () => {
-      const day: CalendarDay = {
-        date: new Date(2024, 0, 31),
-        isCurrentMonth: false,
-        isToday: false,
-        isSelected: false,
-        isDisabled: false,
-      };
-
-      const classes = component['dayButtonClasses'](day);
-      expect(classes).toContain('text-muted-foreground');
-      expect(classes).toContain('opacity-50');
-    });
-
-    it('should generate correct day button classes for disabled day', () => {
-      const day: CalendarDay = {
-        date: new Date(2024, 0, 15),
-        isCurrentMonth: true,
-        isToday: false,
-        isSelected: false,
-        isDisabled: true,
-      };
-
-      const classes = component['dayButtonClasses'](day);
-      expect(classes).toContain('opacity-50');
-      expect(classes).toContain('cursor-not-allowed');
+      expect(isSameDay(date1, date2)).toBe(true);
+      expect(isSameDay(date1, date3)).toBe(false);
     });
   });
 
-  describe('Accessibility', () => {
+  describe('isDateDisabled', () => {
+    it('should correctly identify disabled dates', () => {
+      const minDate = new Date(2024, 0, 10);
+      const maxDate = new Date(2024, 0, 20);
+      const testDate1 = new Date(2024, 0, 5); // Before min
+      const testDate2 = new Date(2024, 0, 15); // Within range
+      const testDate3 = new Date(2024, 0, 25); // After max
+
+      expect(isDateDisabled(testDate1, minDate, maxDate)).toBe(true);
+      expect(isDateDisabled(testDate2, minDate, maxDate)).toBe(false);
+      expect(isDateDisabled(testDate3, minDate, maxDate)).toBe(true);
+    });
+
+    it('should handle null min/max dates', () => {
+      const testDate = new Date(2024, 0, 15);
+
+      expect(isDateDisabled(testDate, null, null)).toBe(false);
+    });
+  });
+
+  describe('getDayAriaLabel', () => {
     it('should generate correct aria label for regular day', () => {
       const day: CalendarDay = {
         date: new Date(2024, 0, 15),
@@ -330,7 +228,7 @@ describe('ZardCalendarComponent', () => {
         isDisabled: false,
       };
 
-      const ariaLabel = component['getDayAriaLabel'](day);
+      const ariaLabel = getDayAriaLabel(day);
       expect(ariaLabel).toContain('Monday, January 15, 2024');
     });
 
@@ -344,7 +242,7 @@ describe('ZardCalendarComponent', () => {
         isDisabled: false,
       };
 
-      const ariaLabel = component['getDayAriaLabel'](day);
+      const ariaLabel = getDayAriaLabel(day);
       expect(ariaLabel).toContain('Today');
     });
 
@@ -357,7 +255,7 @@ describe('ZardCalendarComponent', () => {
         isDisabled: false,
       };
 
-      const ariaLabel = component['getDayAriaLabel'](day);
+      const ariaLabel = getDayAriaLabel(day);
       expect(ariaLabel).toContain('Selected');
     });
 
@@ -370,7 +268,7 @@ describe('ZardCalendarComponent', () => {
         isDisabled: false,
       };
 
-      const ariaLabel = component['getDayAriaLabel'](day);
+      const ariaLabel = getDayAriaLabel(day);
       expect(ariaLabel).toContain('Outside month');
     });
 
@@ -383,174 +281,82 @@ describe('ZardCalendarComponent', () => {
         isDisabled: true,
       };
 
-      const ariaLabel = component['getDayAriaLabel'](day);
+      const ariaLabel = getDayAriaLabel(day);
       expect(ariaLabel).toContain('Disabled');
     });
   });
 
-  describe('Focus Management', () => {
-    it('should reset navigation to current value on reset', () => {
-      const testDate = new Date(2024, 5, 15);
-      component['value'].set(testDate);
-
-      component['previousMonth']();
-      component.resetNavigation();
-
-      expect(component['currentDate']().getTime()).toEqual(testDate.getTime());
-    });
-  });
-
-  describe('Computed Properties', () => {
-    it('should compute available years correctly', () => {
-      const currentYear = new Date().getFullYear();
-      const availableYears = component['availableYears']();
-
-      expect(availableYears).toContain(currentYear);
-      expect(availableYears).toContain(currentYear - 10);
-      expect(availableYears).toContain(currentYear + 10);
-      expect(availableYears.length).toBe(21);
-    });
-
-    it('should compute current month value correctly', () => {
-      const date = new Date(2024, 5, 1); // June 2024
-      component['value'].set(date);
-
-      expect(component['currentMonthValue']()).toBe('5');
-    });
-
-    it('should compute current year value correctly', () => {
-      const date = new Date(2024, 5, 1); // June 2024
-      component['value'].set(date);
-
-      expect(component['currentYearValue']()).toBe('2024');
-    });
-
-    it('should compute current month year correctly', () => {
-      const date = new Date(2024, 5, 1); // June 2024
-      component['value'].set(date);
-
-      expect(component['currentMonthYear']()).toBe('June 2024');
-    });
-  });
-
-  describe('Keyboard Navigation', () => {
-    it('should handle arrow key navigation', () => {
-      const initialDate = new Date(2024, 0, 15); // January 15, 2024
-      component['value'].set(initialDate);
-
-      const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-      jest.spyOn(event, 'preventDefault');
-
-      component.onKeyDown(event);
-
-      expect(event.preventDefault).toHaveBeenCalled();
-    });
-
-    it('should handle Home and End keys', () => {
-      const initialDate = new Date(2024, 0, 15); // January 15, 2024
-      component['value'].set(initialDate);
-
-      const homeEvent = new KeyboardEvent('keydown', { key: 'Home' });
-      const endEvent = new KeyboardEvent('keydown', { key: 'End' });
-
-      jest.spyOn(homeEvent, 'preventDefault');
-      jest.spyOn(endEvent, 'preventDefault');
-
-      component.onKeyDown(homeEvent);
-      component.onKeyDown(endEvent);
-
-      expect(homeEvent.preventDefault).toHaveBeenCalled();
-      expect(endEvent.preventDefault).toHaveBeenCalled();
-    });
-
-    it('should handle PageUp and PageDown for month navigation', () => {
-      const initialDate = new Date(2024, 5, 1); // June 2024
-      component['value'].set(initialDate);
-
-      const pageUpEvent = new KeyboardEvent('keydown', { key: 'PageUp' });
-      jest.spyOn(pageUpEvent, 'preventDefault');
-
-      component.onKeyDown(pageUpEvent);
-
-      expect(pageUpEvent.preventDefault).toHaveBeenCalled();
-      // Should navigate to previous month (May)
-      expect(component['currentMonthValue']()).toBe('4');
-    });
-
-    it('should handle Ctrl+PageUp and Ctrl+PageDown for year navigation', () => {
-      const initialDate = new Date(2024, 5, 1); // June 2024
-      component['value'].set(initialDate);
-
-      const ctrlPageUpEvent = new KeyboardEvent('keydown', {
-        key: 'PageUp',
-        ctrlKey: true,
-      });
-      jest.spyOn(ctrlPageUpEvent, 'preventDefault');
-
-      component.onKeyDown(ctrlPageUpEvent);
-
-      expect(ctrlPageUpEvent.preventDefault).toHaveBeenCalled();
-      // Should navigate to previous year (2023)
-      expect(component['currentYearValue']()).toBe('2023');
-    });
-
-    it('should handle Enter and Space for date selection', () => {
-      const initialDate = new Date(2024, 0, 15);
-      component['value'].set(initialDate);
-      component['value'].set(new Date(2024, 0, 1));
-
-      const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
-
-      jest.spyOn(enterEvent, 'preventDefault');
-
-      component.onKeyDown(enterEvent);
-
-      expect(enterEvent.preventDefault).toHaveBeenCalled();
-    });
-
-    it('should not handle keyboard events when disabled', () => {
-      // Mock disabled signal
-      Object.defineProperty(component, 'disabled', {
-        value: () => true,
-        writable: true,
+  describe('generateCalendarDays', () => {
+    it('should generate calendar days with correct structure', () => {
+      const days = generateCalendarDays({
+        year: 2024,
+        month: 0, // January
+        mode: 'single',
+        selectedDates: [],
+        minDate: null,
+        maxDate: null,
+        disabled: false,
       });
 
-      const event = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-      jest.spyOn(event, 'preventDefault');
-
-      component.onKeyDown(event);
-
-      // Should not prevent default when disabled
-      expect(event.preventDefault).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Private Helper Methods', () => {
-    it('should correctly identify same day', () => {
-      const date1 = new Date(2024, 5, 15, 10, 30);
-      const date2 = new Date(2024, 5, 15, 14, 45);
-      const date3 = new Date(2024, 5, 16, 10, 30);
-
-      expect(component['isSameDay'](date1, date2)).toBe(true);
-      expect(component['isSameDay'](date1, date3)).toBe(false);
+      expect(days.length).toBeGreaterThan(0);
+      expect(days[0]).toHaveProperty('date');
+      expect(days[0]).toHaveProperty('isCurrentMonth');
+      expect(days[0]).toHaveProperty('isToday');
+      expect(days[0]).toHaveProperty('isSelected');
+      expect(days[0]).toHaveProperty('isDisabled');
     });
 
-    it('should correctly identify disabled dates', () => {
-      const minDate = new Date(2024, 0, 10);
-      const maxDate = new Date(2024, 0, 20);
-      const testDate1 = new Date(2024, 0, 5); // Before min
-      const testDate2 = new Date(2024, 0, 15); // Within range
-      const testDate3 = new Date(2024, 0, 25); // After max
+    it('should mark selected dates in single mode', () => {
+      const selectedDate = new Date(2024, 0, 15);
+      const days = generateCalendarDays({
+        year: 2024,
+        month: 0,
+        mode: 'single',
+        selectedDates: [selectedDate],
+        minDate: null,
+        maxDate: null,
+        disabled: false,
+      });
 
-      expect(component['isDateDisabled'](testDate1, minDate, maxDate)).toBe(true);
-      expect(component['isDateDisabled'](testDate2, minDate, maxDate)).toBe(false);
-      expect(component['isDateDisabled'](testDate3, minDate, maxDate)).toBe(true);
+      const selectedDay = days.find(day => isSameDay(day.date, selectedDate));
+      expect(selectedDay?.isSelected).toBe(true);
     });
 
-    it('should handle null min/max dates', () => {
-      const testDate = new Date(2024, 0, 15);
+    it('should mark multiple selected dates in multiple mode', () => {
+      const selectedDates = [new Date(2024, 0, 15), new Date(2024, 0, 20)];
+      const days = generateCalendarDays({
+        year: 2024,
+        month: 0,
+        mode: 'multiple',
+        selectedDates,
+        minDate: null,
+        maxDate: null,
+        disabled: false,
+      });
 
-      expect(component['isDateDisabled'](testDate, null, null)).toBe(false);
+      const selectedDays = days.filter(day => day.isSelected);
+      expect(selectedDays.length).toBe(2);
+    });
+
+    it('should mark range correctly in range mode', () => {
+      const selectedDates = [new Date(2024, 0, 10), new Date(2024, 0, 20)];
+      const days = generateCalendarDays({
+        year: 2024,
+        month: 0,
+        mode: 'range',
+        selectedDates,
+        minDate: null,
+        maxDate: null,
+        disabled: false,
+      });
+
+      const rangeStart = days.find(day => isSameDay(day.date, selectedDates[0]));
+      const rangeEnd = days.find(day => isSameDay(day.date, selectedDates[1]));
+      const inRange = days.filter(day => day.isInRange);
+
+      expect(rangeStart?.isRangeStart).toBe(true);
+      expect(rangeEnd?.isRangeEnd).toBe(true);
+      expect(inRange.length).toBeGreaterThan(0);
     });
   });
 });

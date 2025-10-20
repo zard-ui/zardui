@@ -1,7 +1,6 @@
 import { ZardDemoCalendarDefaultComponent } from './default';
 import { ZardDemoCalendarMultipleComponent } from './multiple';
 import { ZardDemoCalendarRangeComponent } from './range';
-import { ZardDemoCalendarSizesComponent } from './sizes';
 import { ZardDemoCalendarWithConstraintsComponent } from './with-constraints';
 
 export const CALENDAR = {
@@ -20,10 +19,6 @@ export const CALENDAR = {
     {
       name: 'range',
       component: ZardDemoCalendarRangeComponent,
-    },
-    {
-      name: 'sizes',
-      component: ZardDemoCalendarSizesComponent,
     },
     {
       name: 'with-constraints',

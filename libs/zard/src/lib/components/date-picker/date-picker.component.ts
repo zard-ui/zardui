@@ -43,7 +43,7 @@ export type { ZardDatePickerVariants };
 
     <ng-template #calendarTemplate>
       <z-popover [class]="popoverClasses()">
-        <z-calendar #calendar [zSize]="calendarSize()" [value]="value()" [minDate]="minDate()" [maxDate]="maxDate()" [disabled]="disabled()" (dateChange)="onDateChange($event)" />
+        <z-calendar #calendar [value]="value()" [minDate]="minDate()" [maxDate]="maxDate()" [disabled]="disabled()" (dateChange)="onDateChange($event)" />
       </z-popover>
     </ng-template>
   `,
@@ -93,13 +93,6 @@ export class ZardDatePickerComponent {
   });
 
   protected readonly popoverClasses = computed(() => mergeClasses('w-auto p-0'));
-
-  protected readonly calendarSize = computed(() => {
-    const size = this.zSize();
-    if (size === 'sm') return 'sm';
-    if (size === 'lg') return 'lg';
-    return 'default';
-  });
 
   protected readonly displayText = computed(() => {
     const date = this.value();
