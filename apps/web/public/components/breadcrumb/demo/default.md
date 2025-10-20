@@ -12,7 +12,7 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
         <i class="icon-house"></i>
         Home
       </z-breadcrumb-item>
-      <z-breadcrumb-item [routerLink]="['/components']">Components</z-breadcrumb-item>
+      <z-breadcrumb-item [routerLink]="['/docs/components']">Components</z-breadcrumb-item>
       <z-breadcrumb-item>Breadcrumb</z-breadcrumb-item>
     </z-breadcrumb>
   `,

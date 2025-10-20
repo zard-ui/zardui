@@ -378,6 +378,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'breadcrumb',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'breadcrumb.component.ts',

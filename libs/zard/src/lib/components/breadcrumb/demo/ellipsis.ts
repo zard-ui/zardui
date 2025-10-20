@@ -1,17 +1,25 @@
 import { Component } from '@angular/core';
 
+import { ZardMenuModule } from '../../menu/menu.module';
 import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
   standalone: true,
-  imports: [ZardBreadcrumbModule],
+  imports: [ZardBreadcrumbModule, ZardMenuModule],
   template: `
     <z-breadcrumb>
       <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
       <z-breadcrumb-item>
-        <z-breadcrumb-ellipsis />
+        <z-breadcrumb-ellipsis z-menu [zMenuTriggerFor]="ellipsisMenu" />
+
+        <ng-template #ellipsisMenu>
+          <div z-menu-content class="w-48">
+            <button z-menu-item>Getting Started</button>
+            <button z-menu-item>Installation</button>
+          </div>
+        </ng-template>
       </z-breadcrumb-item>
-      <z-breadcrumb-item [routerLink]="['/components']">Components</z-breadcrumb-item>
+      <z-breadcrumb-item>Components</z-breadcrumb-item>
       <z-breadcrumb-item>Breadcrumb</z-breadcrumb-item>
     </z-breadcrumb>
   `,
