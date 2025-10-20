@@ -4,48 +4,24 @@
 
 > z-breadcrumb is a flexible and accessible component that renders a navigation trail and wraps its list of items.
 
-| Property  | Description        | Type              | Default |
-| --------- | ------------------ | ----------------- | ------- |
-| `[class]` | Custom css classes | `string`          | `''`    |
-| `[zSize]` | Breadcrumb size    | `sm \| md \| lg ` | `'md'`  |
-
-## [z-breadcrumb-list] <span class="api-type-label component">Component</span>
-
-> z-breadcrumb-list renders the container for breadcrumb items. Typically used inside z-breadcrumb to control layout and spacing.
-
 | Property   | Description          | Type                     | Default   |
 | ---------- | -------------------- | ------------------------ | --------- |
 | `[class]`  | Custom css classes   | `string`                 | `''`      |
+| `[zSize]`  | Breadcrumb size      | `sm \| md \| lg`         | `'md'`    |
 | `[zAlign]` | Horizontal alignment | `start \| center \| end` | `'start'` |
 | `[zWrap]`  | Wrapping behavior    | `wrap \| nowrap`         | `'wrap'`  |
 
 ## [z-breadcrumb-item] <span class="api-type-label component">Component</span>
 
-> z-breadcrumb-item represents a single item in the breadcrumb trail and optionally includes a separator.
+> z-breadcrumb-item represents a single item in the breadcrumb trail. Supports all RouterLink inputs for navigation. For the current page, wrap content with `<span aria-current="page">`.
 
-| Property   | Description        | Type                                 | Default     |
-| ---------- | ------------------ | ------------------------------------ | ----------- |
-| `[class]`  | Custom css classes | `string`                             | `''`        |
-| `[zType]`  | Visual style       | `default \| muted \| bold \| subtle` | `'default'` |
-| `[zShape]` | Shape and spacing  | `default \| square \| rounded`       | `'default'` |
+| Property        | Description                    | Type     | Default |
+| --------------- | ------------------------------ | -------- | ------- |
+| `[class]`       | Custom css classes             | `string` | `''`    |
+| `[routerLink]`  | Angular router link (optional) | `any`    | -       |
+| `[queryParams]` | Query parameters               | `any`    | -       |
 
-## [z-breadcrumb-link] <span class="api-type-label component">Component</span>
-
-> z-breadcrumb-link is a styled anchor used inside z-breadcrumb-item to navigate between levels.
-
-| Property  | Description        | Type                             | Default     |
-| --------- | ------------------ | -------------------------------- | ----------- |
-| `[class]` | Custom css classes | `string`                         | `''`        |
-| `[zType]` | Link style         | `default \| underline \| subtle` | `'default'` |
-
-## [z-breadcrumb-page] <span class="api-type-label component">Component</span>
-
-> z-breadcrumb-page indicates the current page in the breadcrumb trail and renders with aria-current="page" for accessibility.
-
-| Property  | Description        | Type                           | Default     |
-| --------- | ------------------ | ------------------------------ | ----------- |
-| `[class]` | Custom css classes | `string`                       | `''`        |
-| `[zType]` | Link style         | `default \| strong \| primary` | `'default'` |
+**Note:** All RouterLink inputs are supported through host directives.
 
 ## [z-breadcrumb-separator] <span class="api-type-label component">Component</span>
 

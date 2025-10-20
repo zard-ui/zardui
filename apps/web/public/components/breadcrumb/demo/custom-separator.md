@@ -8,23 +8,17 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
   imports: [ZardBreadcrumbModule],
   template: `
     <z-breadcrumb>
-      <z-breadcrumb-list>
-        <z-breadcrumb-item>
-          <z-breadcrumb-link zLink="/">Home</z-breadcrumb-link>
-        </z-breadcrumb-item>
-        <z-breadcrumb-separator>
-          <div class="icon-move-right"></div>
-        </z-breadcrumb-separator>
-        <z-breadcrumb-item>
-          <z-breadcrumb-link zLink="/components">Components</z-breadcrumb-link>
-        </z-breadcrumb-item>
-        <z-breadcrumb-separator>
-          <div class="icon-move-right"></div>
-        </z-breadcrumb-separator>
-        <z-breadcrumb-item>
-          <z-breadcrumb-page>Breadcrumb</z-breadcrumb-page>
-        </z-breadcrumb-item>
-      </z-breadcrumb-list>
+      <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
+      <z-breadcrumb-separator>
+        <div class="icon-move-right"></div>
+      </z-breadcrumb-separator>
+      <z-breadcrumb-item [routerLink]="['/components']">Components</z-breadcrumb-item>
+      <z-breadcrumb-separator>
+        <div class="icon-move-right"></div>
+      </z-breadcrumb-separator>
+      <z-breadcrumb-item>
+        <span aria-current="page">Breadcrumb</span>
+      </z-breadcrumb-item>
     </z-breadcrumb>
   `,
 })

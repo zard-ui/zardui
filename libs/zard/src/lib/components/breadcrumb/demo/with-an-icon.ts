@@ -6,29 +6,21 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
   standalone: true,
   imports: [ZardBreadcrumbModule],
   template: `
-    <z-breadcrumb>
-      <z-breadcrumb-list zWrap="wrap" zAlign="start">
-        <z-breadcrumb-item>
-          <z-breadcrumb-link zLink="/">
-            <div class="icon-house"></div>
-            Home
-          </z-breadcrumb-link>
-        </z-breadcrumb-item>
-        <z-breadcrumb-separator />
-        <z-breadcrumb-item>
-          <z-breadcrumb-link zLink="/components">
-            <div class="icon-puzzle"></div>
-            Components
-          </z-breadcrumb-link>
-        </z-breadcrumb-item>
-        <z-breadcrumb-separator />
-        <z-breadcrumb-item>
-          <z-breadcrumb-page>
-            <div class="icon-square-library"></div>
-            Breadcrumb
-          </z-breadcrumb-page>
-        </z-breadcrumb-item>
-      </z-breadcrumb-list>
+    <z-breadcrumb zWrap="wrap" zAlign="start">
+      <z-breadcrumb-item [routerLink]="['/']">
+        <i class="icon-house"></i>
+        Home
+      </z-breadcrumb-item>
+      <z-breadcrumb-separator />
+      <z-breadcrumb-item [routerLink]="['/components']">
+        <i class="icon-puzzle"></i>
+        Components
+      </z-breadcrumb-item>
+      <z-breadcrumb-separator />
+      <z-breadcrumb-item>
+        <i class="icon-square-library"></i>
+        Breadcrumb
+      </z-breadcrumb-item>
     </z-breadcrumb>
   `,
 })

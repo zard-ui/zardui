@@ -134,16 +134,12 @@ interface MenuItem {
 
           <z-divider zOrientation="vertical" class="h-4 ml-2" />
 
-          <z-breadcrumb>
-            <z-breadcrumb-list zWrap="wrap" zAlign="start">
-              <z-breadcrumb-item>
-                <z-breadcrumb-link zLink="/docs/components/layout">Home</z-breadcrumb-link>
-              </z-breadcrumb-item>
-              <z-breadcrumb-separator />
-              <z-breadcrumb-item>
-                <z-breadcrumb-link zLink="/docs/components/layout">Components</z-breadcrumb-link>
-              </z-breadcrumb-item>
-            </z-breadcrumb-list>
+          <z-breadcrumb zWrap="wrap" zAlign="start">
+            <z-breadcrumb-item [routerLink]="['/docs/components/layout']">Home</z-breadcrumb-item>
+            <z-breadcrumb-separator />
+            <z-breadcrumb-item>
+              <span aria-current="page">Components</span>
+            </z-breadcrumb-item>
           </z-breadcrumb>
         </div>
 
