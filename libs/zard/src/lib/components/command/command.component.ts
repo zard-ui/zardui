@@ -21,6 +21,7 @@ import { ZardCommandOptionComponent } from './command-option.component';
 import { commandVariants, ZardCommandVariants } from './command.variants';
 
 import type { ClassValue } from 'clsx';
+import { LucideIconData } from 'lucide-angular';
 
 export interface ZardCommandOption {
   value: unknown;
@@ -28,7 +29,7 @@ export interface ZardCommandOption {
   disabled?: boolean;
   command?: string;
   shortcut?: string;
-  icon?: string;
+  icon?: LucideIconData;
   action?: () => void;
   key?: string; // Keyboard shortcut key (e.g., 'n' for Ctrl+N)
 }

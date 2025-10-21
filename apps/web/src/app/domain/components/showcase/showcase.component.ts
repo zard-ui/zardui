@@ -11,6 +11,8 @@ import { ZardTooltipModule } from '@zard/components/tooltip/tooltip';
 import { RouterModule, Router } from '@angular/router';
 
 import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/carousel.component';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { ArrowRight } from 'lucide-angular';
 
 @Component({
   selector: 'z-showcase',
@@ -67,7 +69,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
                         @case ('cta') {
                           <div class="text-center">
                             <div class="flex items-center justify-center p-2 rounded-2xl bg-white/10 backdrop-blur-sm">
-                              <i class="icon-arrow-right text-xl"></i>
+                              <z-icon [zType]="ArrowRightIcon" class="text-xl" />
                             </div>
 
                             <div>
@@ -101,11 +103,13 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
     ZardProgressBarComponent,
     ZardAvatarComponent,
     ZardTooltipModule,
+    ZardIconComponent,
   ],
 })
 export class ShowcaseComponent {
   private readonly router = inject(Router);
   readonly itemWidth = 100 / 3.2;
+  readonly ArrowRightIcon = ArrowRight;
 
   readonly showcaseComponents = signal([
     {

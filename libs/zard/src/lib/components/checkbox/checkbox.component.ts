@@ -3,8 +3,10 @@ import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { checkboxLabelVariants, checkboxVariants, ZardCheckboxVariants } from './checkbox.variants';
+import { ZardIconComponent } from '../icon/icon.component';
 
 import type { ClassValue } from 'clsx';
+import { Check } from 'lucide-angular';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
@@ -12,14 +14,19 @@ type OnChangeType = (value: any) => void;
 @Component({
   selector: 'z-checkbox, [z-checkbox]',
   standalone: true,
+  imports: [ZardIconComponent],
   exportAs: 'zCheckbox',
   template: `
     <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (click)="onCheckboxChange()">
       <main class="flex relative">
         <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onCheckboxBlur()" name="checkbox" />
-        <i
-          class="icon-check absolute flex items-center justify-center text-primary-foreground opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        ></i>
+        <z-icon
+          [zType]="CheckIcon"
+          [class]="
+            'absolute flex items-center justify-center text-primary-foreground top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity ' +
+            (checked ? 'opacity-100' : 'opacity-0')
+          "
+        />
       </main>
       <label [class]="labelClasses()" for="checkbox">
         <ng-content></ng-content>
@@ -38,6 +45,8 @@ type OnChangeType = (value: any) => void;
 })
 export class ZardCheckboxComponent implements ControlValueAccessor {
   private cdr = inject(ChangeDetectorRef);
+
+  readonly CheckIcon = Check;
 
   readonly checkChange = output<boolean>();
   readonly class = input<ClassValue>('');

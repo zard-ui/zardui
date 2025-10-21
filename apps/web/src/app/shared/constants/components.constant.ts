@@ -1,3 +1,4 @@
+import { ICON } from '@zard/components/icon/demo/icon';
 import { TOGGLE_GROUP } from '@zard/components/toggle-group/demo/toggle-group';
 import { PROGRESS_BAR } from '@zard/components/progress-bar/demo/progress-bar';
 import { ALERT_DIALOG } from '@zard/components/alert-dialog/demo/alert-dialog';
@@ -75,6 +76,7 @@ export const COMPONENTS: ComponentData[] = [
   DROPDOWN,
   EMPTY,
   FORM,
+  ICON,
   INPUT,
   INPUT_GROUP,
   LAYOUT,

@@ -275,6 +275,19 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'icon',
+    files: [
+      {
+        name: 'icon.component.ts',
+        content: '',
+      },
+      {
+        name: 'icon.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'input',
     files: [
       {
@@ -513,10 +526,6 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'command-divider.component.ts',
-        content: '',
-      },
-      {
-        name: 'command-json.component.ts',
         content: '',
       },
       {

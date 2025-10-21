@@ -181,21 +181,23 @@ describe('ZardAvatarComponent', () => {
       hostComponent.zLoading = true;
       fixture.detectChanges();
 
-      const loaderElement = fixture.debugElement.query(By.css('.icon-loader-circle'));
+      const loaderElement = fixture.debugElement.query(By.css('z-icon'));
       expect(loaderElement).toBeTruthy();
+      expect(loaderElement.componentInstance.zType()).toBe('LoaderCircle');
     });
 
     it('should hide loading spinner when loading is false', () => {
       hostComponent.zLoading = true;
       fixture.detectChanges();
 
-      let loaderElement = fixture.debugElement.query(By.css('.icon-loader-circle'));
+      let loaderElement = fixture.debugElement.query(By.css('z-icon'));
       expect(loaderElement).toBeTruthy();
+      expect(loaderElement.componentInstance.zType()).toBe('LoaderCircle');
 
       hostComponent.zLoading = false;
       fixture.detectChanges();
 
-      loaderElement = fixture.debugElement.query(By.css('.icon-loader-circle'));
+      loaderElement = fixture.debugElement.query(By.css('z-icon'));
       expect(loaderElement).toBeNull();
     });
   });

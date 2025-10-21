@@ -2,6 +2,7 @@
 import { Component } from '@angular/core';
 
 import { ZardToggleGroupComponent, ZardToggleGroupItem } from '../toggle-group.component';
+import { Bold, Italic, Underline } from 'lucide-angular';
 
 @Component({
   selector: 'demo-toggle-group-sizes',
@@ -30,17 +31,17 @@ export default class ToggleGroupSizesComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'bold',
-      icon: 'icon-bold',
+      icon: Bold,
       ariaLabel: 'Toggle bold',
     },
     {
       value: 'italic',
-      icon: 'icon-italic',
+      icon: Italic,
       ariaLabel: 'Toggle italic',
     },
     {
       value: 'underline',
-      icon: 'icon-underline',
+      icon: Underline,
       ariaLabel: 'Toggle underline',
     },
   ];

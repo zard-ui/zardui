@@ -1,11 +1,13 @@
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { Component } from '@angular/core';
+import { Ban, X, CircleCheck, CircleDollarSign, Zap, LucideIconData } from 'lucide-angular';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 interface OpenSourceFeature {
   title: string;
   description: string;
-  icon: string;
+  icon: LucideIconData;
 }
 
 interface StandAgainstItem {
@@ -16,7 +18,7 @@ interface StandAgainstItem {
 @Component({
   selector: 'open-source-section',
   standalone: true,
-  imports: [ZardBadgeComponent, ZardCardComponent],
+  imports: [ZardBadgeComponent, ZardCardComponent, ZardIconComponent],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -32,7 +34,7 @@ interface StandAgainstItem {
           <z-card [zTitle]="title">
             <ng-template #title>
               <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
-                <i class="text-lg font-normal" [class]="feature.icon"></i>
+                <z-icon [zType]="feature.icon" class="text-lg font-normal" />
               </div>
               <h3 class="mt-4 text-base font-semibold">{{ feature.title }}</h3>
             </ng-template>
@@ -44,13 +46,13 @@ interface StandAgainstItem {
       <!-- What We Stand Against -->
       <div class="rounded-lg bg-destructive/5 p-6">
         <h3 class="mb-4 text-lg font-semibold flex items-center gap-2">
-          <i class="icon-ban text-destructive"></i>
+          <z-icon [zType]="BanIcon" class="text-destructive" />
           What We Stand Against
         </h3>
         <div class="grid gap-3 md:grid-cols-3">
           @for (item of standAgainstItems; track $index) {
             <div class="flex items-start gap-3">
-              <div class="icon-x text-destructive"></div>
+              <z-icon [zType]="XIcon" class="text-destructive" />
               <div>
                 <p class="font-medium text-sm">{{ item.title }}</p>
                 <p class="text-xs text-muted-foreground">{{ item.description }}</p>
@@ -63,21 +65,24 @@ interface StandAgainstItem {
   `,
 })
 export class OpenSourceSection {
+  readonly BanIcon = Ban;
+  readonly XIcon = X;
+
   readonly features: OpenSourceFeature[] = [
     {
       title: 'Community Owned',
       description: "Governed by developers, not corporations. Every decision is made transparently with the community's best interests at heart.",
-      icon: 'icon-circle-check',
+      icon: CircleCheck,
     },
     {
       title: 'Forever Free',
       description: 'Every component, every feature, always free. No premium tiers, no hidden costs, no "pro" versions.',
-      icon: 'icon-circle-dollar-sign',
+      icon: CircleDollarSign,
     },
     {
       title: 'Built in Public',
       description: 'All development happens in the open. Watch us build, contribute your ideas, and shape the future together.',
-      icon: 'icon-zap',
+      icon: Zap,
     },
   ];
 

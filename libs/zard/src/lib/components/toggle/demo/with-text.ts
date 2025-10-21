@@ -1,15 +1,19 @@
 import { Component } from '@angular/core';
+import { Italic } from 'lucide-angular';
 
 import { ZardToggleComponent } from '../toggle.component';
+import { ZardIconComponent } from '../../icon/icon.component';
 
 @Component({
   standalone: true,
-  imports: [ZardToggleComponent],
+  imports: [ZardToggleComponent, ZardIconComponent],
   template: `
     <z-toggle>
-      <div class="icon-italic"></div>
+      <z-icon [zType]="ItalicIcon" />
       Italic
     </z-toggle>
   `,
 })
-export class ZardDemoToggleWithTextComponent {}
+export class ZardDemoToggleWithTextComponent {
+  readonly ItalicIcon = Italic;
+}

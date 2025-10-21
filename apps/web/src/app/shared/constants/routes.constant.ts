@@ -46,6 +46,7 @@ const COMPONENTS_PATH = {
     { name: 'Divider', path: '/docs/components/divider', available: true },
     { name: 'Empty', path: '/docs/components/empty', available: true },
     { name: 'Form', path: '/docs/components/form', available: true },
+    { name: 'Icon', path: '/docs/components/icon', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Input Group', path: '/docs/components/input-group', available: true },
     { name: 'Layout', path: '/docs/components/layout', available: true },

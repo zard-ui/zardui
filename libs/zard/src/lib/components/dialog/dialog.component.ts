@@ -1,6 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,17 +15,22 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { LucideIconData, X } from 'lucide-angular';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 import { ZardButtonComponent } from '../button/button.component';
-import { ZardDialogRef } from './dialog-ref';
+import { mergeClasses } from '../../shared/utils/utils';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
+import { ZardDialogRef } from './dialog-ref';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardDialogOptions<T, U> {
-  zCancelIcon?: string;
+  zCancelIcon?: LucideIconData;
   zCancelText?: string | null;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
@@ -39,7 +41,7 @@ export class ZardDialogOptions<T, U> {
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
-  zOkIcon?: string;
+  zOkIcon?: LucideIconData;
   zOkText?: string | null;
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
@@ -51,11 +53,11 @@ export class ZardDialogOptions<T, U> {
 @Component({
   selector: 'z-dialog',
   exportAs: 'zDialog',
-  imports: [OverlayModule, PortalModule, ZardButtonComponent],
+  imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
       <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1" (click)="onCloseClick()">
-        <i class="icon-x text-sm"></i>
+        <z-icon [zType]="XIcon" />
       </button>
     }
 
@@ -84,7 +86,7 @@ export class ZardDialogOptions<T, U> {
         @if (config.zCancelText !== null) {
           <button data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
             @if (config.zCancelIcon) {
-              <i class="icon-{{ config.zCancelIcon }}"></i>
+              <z-icon [zType]="config.zCancelIcon" />
             }
 
             {{ config.zCancelText || 'Cancel' }}
@@ -94,7 +96,7 @@ export class ZardDialogOptions<T, U> {
         @if (config.zOkText !== null) {
           <button data-testid="z-ok-button" z-button [zType]="config.zOkDestructive ? 'destructive' : 'default'" [disabled]="config.zOkDisabled" (click)="onOkClick()">
             @if (config.zOkIcon) {
-              <i class="icon-{{ config.zOkIcon }}"></i>
+              <z-icon [zType]="config.zOkIcon" />
             }
 
             {{ config.zOkText || 'OK' }}
@@ -119,6 +121,8 @@ export class ZardDialogOptions<T, U> {
   ],
 })
 export class ZardDialogComponent<T, U> extends BasePortalOutlet {
+  readonly XIcon = X;
+
   private readonly host = inject(ElementRef<HTMLElement>);
   protected readonly config = inject(ZardDialogOptions<T, U>);
 

@@ -3,16 +3,19 @@ import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { alertVariants, ZardAlertVariants } from './alert.variants';
+import { ZardIconComponent } from '../icon/icon.component';
+import { CircleCheck, CircleX, Info, LucideIconData, TriangleAlert } from 'lucide-angular';
 
 @Component({
   selector: 'z-alert',
   standalone: true,
+  imports: [ZardIconComponent],
   exportAs: 'zAlert',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (iconName()) {
-      <i [class]="iconName()"></i>
+      <z-icon [zType]="iconName()!" />
     }
 
     <div class="flex flex-col gap-1 w-full">
@@ -30,21 +33,25 @@ export class ZardAlertComponent {
   readonly class = input<ClassValue>('');
   readonly zTitle = input.required<string>();
   readonly zDescription = input.required<string>();
-  readonly zIcon = input<string>();
+  readonly zIcon = input<LucideIconData>();
   readonly zType = input<ZardAlertVariants['zType']>('default');
   readonly zAppearance = input<ZardAlertVariants['zAppearance']>('outline');
 
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType(), zAppearance: this.zAppearance() }), this.class()));
 
-  protected readonly iconsType: Record<NonNullable<ZardAlertVariants['zType']>, string> = {
+  protected readonly iconsType: Record<NonNullable<ZardAlertVariants['zType']>, LucideIconData | ''> = {
     default: '',
-    info: 'icon-info',
-    success: 'icon-circle-check',
-    warning: 'icon-triangle-alert',
-    error: 'icon-circle-x',
+    info: Info,
+    success: CircleCheck,
+    warning: TriangleAlert,
+    error: CircleX,
   };
 
-  protected readonly iconName = computed(() => {
-    return this.zIcon() ?? this.iconsType[this.zType() ?? 'default'];
+  protected readonly iconName = computed((): LucideIconData | null => {
+    const customIcon = this.zIcon();
+    if (customIcon) return customIcon;
+
+    const typeIcon = this.iconsType[this.zType() ?? 'default'];
+    return typeIcon || null;
   });
 }

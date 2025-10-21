@@ -5,6 +5,7 @@ import { Component, input, signal } from '@angular/core';
 
 import { BlockCodeViewerComponent } from '../block-code-viewer/block-code-viewer.component';
 import { BlockPreviewComponent } from '../block-preview/block-preview.component';
+import { Monitor, Smartphone, Tablet } from 'lucide-angular';
 
 export interface BlockFile {
   name: string;
@@ -52,9 +53,9 @@ export class BlockContainerComponent {
   ];
 
   protected readonly viewportOptions = [
-    { value: 'desktop', ariaLabel: 'Desktop view', icon: 'icon-monitor' },
-    { value: 'tablet', ariaLabel: 'Tablet view', icon: 'icon-tablet' },
-    { value: 'mobile', ariaLabel: 'Mobile view', icon: 'icon-smartphone' },
+    { value: 'desktop', ariaLabel: 'Desktop view', icon: Monitor },
+    { value: 'tablet', ariaLabel: 'Tablet view', icon: Tablet },
+    { value: 'mobile', ariaLabel: 'Mobile view', icon: Smartphone },
   ];
 
   protected onTabChange(value: string): void {

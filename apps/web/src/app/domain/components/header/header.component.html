@@ -35,9 +35,9 @@
       <z-divider zOrientation="vertical"></z-divider>
       <button z-button zType="ghost" zSize="sm" (click)="toggleTheme()">
         @if (getCurrentTheme() === 'dark') {
-          <i class="icon-moon !text-lg"></i>
+          <z-icon [zType]="MoonIcon" zSize="lg" />
         } @else {
-          <i class="icon-sun !text-lg"></i>
+          <z-icon [zType]="SunIcon" zSize="lg" />
         }
       </button>
     </aside>

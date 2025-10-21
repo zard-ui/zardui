@@ -1,30 +1,32 @@
 import { Component } from '@angular/core';
 
 import { ZardBreadcrumbModule } from '../breadcrumb.module';
+import { ZardIconComponent } from '../../icon/icon.component';
+import { House, Puzzle, SquareLibrary } from 'lucide-angular';
 
 @Component({
   standalone: true,
-  imports: [ZardBreadcrumbModule],
+  imports: [ZardBreadcrumbModule, ZardIconComponent],
   template: `
     <z-breadcrumb>
       <z-breadcrumb-list zWrap="wrap" zAlign="start">
         <z-breadcrumb-item>
           <z-breadcrumb-link zLink="/">
-            <div class="icon-house"></div>
+            <div z-icon [zType]="HouseIcon"></div>
             Home
           </z-breadcrumb-link>
         </z-breadcrumb-item>
         <z-breadcrumb-separator />
         <z-breadcrumb-item>
           <z-breadcrumb-link zLink="/components">
-            <div class="icon-puzzle"></div>
+            <div z-icon [zType]="PuzzleIcon"></div>
             Components
           </z-breadcrumb-link>
         </z-breadcrumb-item>
         <z-breadcrumb-separator />
         <z-breadcrumb-item>
           <z-breadcrumb-page>
-            <div class="icon-square-library"></div>
+            <div z-icon [zType]="SquareLibraryIcon"></div>
             Breadcrumb
           </z-breadcrumb-page>
         </z-breadcrumb-item>
@@ -32,4 +34,8 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
     </z-breadcrumb>
   `,
 })
-export class ZardDemoBreadcrumbWithAnIconComponent {}
+export class ZardDemoBreadcrumbWithAnIconComponent {
+  readonly HouseIcon = House;
+  readonly PuzzleIcon = Puzzle;
+  readonly SquareLibraryIcon = SquareLibrary;
+}

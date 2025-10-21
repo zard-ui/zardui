@@ -1,13 +1,14 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardCalendarComponent } from '../calendar/calendar.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 import { datePickerVariants, ZardDatePickerVariants } from './date-picker.variants';
-
+import { ZardCalendarComponent } from '../calendar/calendar.component';
+import { ZardButtonComponent } from '../button/button.component';
 import type { ClassValue } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
+import { mergeClasses } from '../../shared/utils/utils';
+import { Calendar } from 'lucide-angular';
 
 export type { ZardDatePickerVariants };
 
@@ -17,7 +18,7 @@ export type { ZardDatePickerVariants };
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardButtonComponent, ZardCalendarComponent, ZardPopoverComponent, ZardPopoverDirective],
+  imports: [ZardButtonComponent, ZardCalendarComponent, ZardPopoverComponent, ZardPopoverDirective, ZardIconComponent],
   host: {},
   template: `
     <button
@@ -35,7 +36,7 @@ export type { ZardDatePickerVariants };
       [attr.aria-haspopup]="true"
       aria-label="Choose date"
     >
-      <i class="icon-calendar"></i>
+      <z-icon [zType]="CalendarIcon" />
       <span [class]="textClasses()">
         {{ displayText() }}
       </span>
@@ -50,6 +51,7 @@ export type { ZardDatePickerVariants };
   providers: [DatePipe],
 })
 export class ZardDatePickerComponent {
+  readonly CalendarIcon = Calendar;
   private readonly datePipe = inject(DatePipe);
 
   readonly calendarTemplate = viewChild.required<TemplateRef<unknown>>('calendarTemplate');

@@ -1,5 +1,3 @@
-import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -16,16 +14,20 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { OverlayModule } from '@angular/cdk/overlay';
+import { LucideIconData, X } from 'lucide-angular';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardSheetRef } from './sheet-ref';
+import { ZardIconComponent } from '../icon/icon.component';
 import { sheetVariants, ZardSheetVariants } from './sheet.variants';
+import { ZardButtonComponent } from '../button/button.component';
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardSheetRef } from './sheet-ref';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardSheetOptions<T, U> {
-  zCancelIcon?: string;
+  zCancelIcon?: LucideIconData;
   zCancelText?: string | null;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
@@ -37,7 +39,7 @@ export class ZardSheetOptions<T, U> {
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
-  zOkIcon?: string;
+  zOkIcon?: LucideIconData;
   zOkText?: string | null;
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
@@ -51,11 +53,11 @@ export class ZardSheetOptions<T, U> {
 @Component({
   selector: 'z-sheet',
   exportAs: 'zSheet',
-  imports: [OverlayModule, PortalModule, ZardButtonComponent],
+  imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
       <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1 cursor-pointer " (click)="onCloseClick()">
-        <i class="icon-x text-sm"></i>
+        <z-icon [zType]="XIcon" />
       </button>
     }
 
@@ -91,7 +93,7 @@ export class ZardSheetOptions<T, U> {
             (click)="onOkClick()"
           >
             @if (config.zOkIcon) {
-              <i class="icon-{{ config.zOkIcon }}"></i>
+              <z-icon [zType]="config.zOkIcon" />
             }
 
             {{ config.zOkText || 'OK' }}
@@ -101,7 +103,7 @@ export class ZardSheetOptions<T, U> {
         @if (config.zCancelText !== null) {
           <button data-testid="z-cancel-button" class="cursor-pointer" z-button zType="outline" (click)="onCloseClick()">
             @if (config.zCancelIcon) {
-              <i class="icon-{{ config.zCancelIcon }}"></i>
+              <z-icon [zType]="config.zCancelIcon" />
             }
 
             {{ config.zCancelText || 'Cancel' }}
@@ -120,6 +122,8 @@ export class ZardSheetOptions<T, U> {
   },
 })
 export class ZardSheetComponent<T, U> extends BasePortalOutlet {
+  readonly XIcon = X;
+
   private readonly host = inject(ElementRef<HTMLElement>);
   protected readonly config = inject(ZardSheetOptions<T, U>);
 

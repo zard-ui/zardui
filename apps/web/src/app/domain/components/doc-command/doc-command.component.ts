@@ -1,9 +1,10 @@
 import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/command/command.component';
 import { AfterViewInit, Component, inject, viewChild, OnDestroy } from '@angular/core';
 import { ZardCommandModule } from '@zard/components/command/command.module';
-import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
+import { SIDEBAR_PATHS } from '../../../shared/constants/routes.constant';
 import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
 import { Router } from '@angular/router';
+import { FileText, Layers } from 'lucide-angular';
 
 @Component({
   standalone: true,
@@ -16,7 +17,7 @@ import { Router } from '@angular/router';
 
         <z-command-option-group zLabel="Getting Started">
           @for (item of gettingStartedItems; track item.path) {
-            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon='<div class="icon-file-text"></div>'> </z-command-option>
+            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" [zIcon]="FileTextIcon"> </z-command-option>
           }
         </z-command-option-group>
 
@@ -24,7 +25,7 @@ import { Router } from '@angular/router';
 
         <z-command-option-group zLabel="Components">
           @for (item of componentItems; track item.path) {
-            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon='<div class="icon-layers"></div>'> </z-command-option>
+            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" [zIcon]="LayersIcon"> </z-command-option>
           }
         </z-command-option-group>
       </z-command-list>
@@ -33,6 +34,8 @@ import { Router } from '@angular/router';
 })
 export class CommandDocComponent implements AfterViewInit, OnDestroy {
   readonly commandComponent = viewChild.required<ZardCommandComponent>('commandRef');
+  readonly FileTextIcon = FileText;
+  readonly LayersIcon = Layers;
   private router = inject(Router);
   private dialogRef = inject(ZardDialogRef);
   private escapeListener?: (event: KeyboardEvent) => void;
