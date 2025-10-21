@@ -13,19 +13,19 @@ export default class ToggleGroupWithTextComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'bold',
-      icon: 'icon-bold',
+      icon: 'Bold',
       label: 'Bold',
       ariaLabel: 'Toggle bold',
     },
     {
       value: 'italic',
-      icon: 'icon-italic',
+      icon: 'Italic',
       label: 'Italic',
       ariaLabel: 'Toggle italic',
     },
     {
       value: 'underline',
-      icon: 'icon-underline',
+      icon: 'Underline',
       label: 'Underline',
       ariaLabel: 'Toggle underline',
     },

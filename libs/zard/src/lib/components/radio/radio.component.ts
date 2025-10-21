@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
-import { NgClass } from '@angular/common';
 
 import { radioLabelVariants, radioVariants, ZardRadioVariants } from './radio.variants';
 import { generateId, mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => unknown;
 type OnChangeType = (value: unknown) => void;
@@ -12,25 +12,17 @@ type OnChangeType = (value: unknown) => void;
 @Component({
   selector: 'z-radio, [z-radio]',
   standalone: true,
-  imports: [NgClass],
+  imports: [ZardIconComponent],
   exportAs: 'zRadio',
   template: `
     <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onRadioChange()">
       <main class="flex relative">
         <input #input type="radio" [value]="value()" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onRadioBlur()" [name]="name()" [id]="zId()" />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          [ngClass]="svgSizeClass()"
-          class="absolute flex items-center justify-center text-primary-foreground lucide lucide-circle opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        >
-          <circle cx="12" cy="12" r="10"></circle>
-        </svg>
+        <z-icon
+          zType="Circle"
+          [zSize]="iconSize()"
+          class="absolute flex items-center justify-center text-primary-foreground opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+        />
       </main>
       <label [class]="labelClasses()" [for]="zId()">
         <ng-content></ng-content>
@@ -66,15 +58,15 @@ export class ZardRadioComponent implements ControlValueAccessor {
   protected readonly classes = computed(() => mergeClasses(radioVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()));
   protected readonly labelClasses = computed(() => mergeClasses(radioLabelVariants({ zSize: this.zSize() })));
 
-  protected readonly svgSizeClass = computed(() => {
+  protected readonly iconSize = computed((): 'sm' | 'default' | 'lg' => {
     const size = this.zSize();
     if (size === 'lg') {
-      return 'h-5 w-5';
+      return 'lg';
     }
     if (size === 'sm') {
-      return 'h-2.5 w-2.5';
+      return 'sm';
     }
-    return 'h-3.5 w-3.5'; // default size
+    return 'default';
   });
 
   checked = false;

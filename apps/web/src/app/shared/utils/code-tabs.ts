@@ -70,8 +70,8 @@ function copyCodeToClipboard(button: HTMLButtonElement, code: string): void {
       // Save original content
       const originalHTML = button.innerHTML;
 
-      // Show success feedback with Lucide check icon
-      button.innerHTML = `<i class="icon-check text-green-500"></i>`;
+      // Show success feedback with check icon
+      button.innerHTML = `<img src="/icons/check.svg" alt="Copied" class="h-4 w-4 text-green-500" />`;
 
       // Add success animation
       button.classList.add('bg-green-50', 'border-green-200', 'text-green-600');

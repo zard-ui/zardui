@@ -516,10 +516,6 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'command-json.component.ts',
-        content: '',
-      },
-      {
         name: 'command.module.ts',
         content: '',
       },

@@ -15,6 +15,7 @@ import {
 } from './pagination.variants';
 import { buttonVariants, ZardButtonVariants } from '../button/button.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-pagination-content',
@@ -95,10 +96,10 @@ export class ZardPaginationButtonComponent {
   exportAs: 'zPaginationPrevious',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardPaginationButtonComponent],
+  imports: [ZardPaginationButtonComponent, ZardIconComponent],
   template: `
     <z-pagination-button aria-label="Go to previous page" [class]="classes()" [zSize]="'default'">
-      <div class="icon-chevron-left"></div>
+      <z-icon zType="ChevronLeft" />
       <span class="hidden sm:block">Previous</span>
     </z-pagination-button>
   `,
@@ -114,11 +115,11 @@ export class ZardPaginationPreviousComponent {
   exportAs: 'zPaginationNext',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardPaginationButtonComponent],
+  imports: [ZardPaginationButtonComponent, ZardIconComponent],
   template: `
     <z-pagination-button aria-label="Go to next page" [class]="classes()" [zSize]="'default'">
       <span class="hidden sm:block">Next</span>
-      <div class="icon-chevron-right"></div>
+      <z-icon zType="ChevronRight" />
     </z-pagination-button>
   `,
 })
@@ -133,8 +134,9 @@ export class ZardPaginationNextComponent {
   exportAs: 'zPaginationEllipsis',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  imports: [ZardIconComponent],
   template: `
-    <span aria-hidden="true" role="presentation" data-slot="pagination-ellipsis" class="icon-ellipsis"></span>
+    <z-icon zType="Ellipsis" aria-hidden="true" role="presentation" />
     <span class="sr-only">More pages</span>
   `,
   host: {
@@ -152,12 +154,12 @@ export class ZardPaginationEllipsisComponent {
   exportAs: 'zPagination',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardPaginationContentComponent, ZardPaginationItemComponent, ZardPaginationButtonComponent],
+  imports: [ZardPaginationContentComponent, ZardPaginationItemComponent, ZardPaginationButtonComponent, ZardIconComponent],
   template: `
     <z-pagination-content>
       <z-pagination-item>
         <z-pagination-button aria-label="Go to previous page" [zSize]="zSize()" [zDisabled]="disabled() || currentPage() === 1" (zClick)="goToPrevious()">
-          <div class="icon-chevron-left"></div>
+          <z-icon zType="ChevronLeft" />
         </z-pagination-button>
       </z-pagination-item>
 
@@ -171,7 +173,7 @@ export class ZardPaginationEllipsisComponent {
 
       <z-pagination-item>
         <z-pagination-button aria-label="Go to next page" [zSize]="zSize()" [zDisabled]="disabled() || currentPage() === zTotal()" (zClick)="goToNext()">
-          <div class="icon-chevron-right"></div>
+          <z-icon zType="ChevronRight" />
         </z-pagination-button>
       </z-pagination-item>
     </z-pagination-content>

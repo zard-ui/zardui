@@ -7,7 +7,6 @@ import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandEmptyComponent } from './command-empty.component';
 import { ZardCommandListComponent } from './command-list.component';
-import { ZardCommandJsonComponent } from './command-json.component';
 import { ZardCommandComponent } from './command.component';
 
 const COMMAND_COMPONENTS = [
@@ -18,7 +17,6 @@ const COMMAND_COMPONENTS = [
   ZardCommandOptionComponent,
   ZardCommandOptionGroupComponent,
   ZardCommandDividerComponent,
-  ZardCommandJsonComponent,
 ];
 
 @NgModule({

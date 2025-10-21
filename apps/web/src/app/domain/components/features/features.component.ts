@@ -5,6 +5,7 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 @Component({
   selector: 'z-features',
@@ -32,11 +33,11 @@ import { ZardInputDirective } from '@zard/components/input/input.directive';
       <footer class="flex justify-center mt-8">
         <a z-button zType="ghost" routerLink="/components/button" class="group"
           >View all
-          <i class="icon-chevron-right shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1"></i>
+          <z-icon zType="ChevronRight" class="shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1" />
         </a>
       </footer>
     </section>
   `,
-  imports: [RouterModule, ZardCardComponent, ZardButtonComponent, ZardCardComponent, ZardBadgeComponent, ZardCheckboxComponent, ZardInputDirective],
+  imports: [RouterModule, ZardCardComponent, ZardButtonComponent, ZardCardComponent, ZardBadgeComponent, ZardCheckboxComponent, ZardInputDirective, ZardIconComponent],
 })
 export class FeaturesComponent {}

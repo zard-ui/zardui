@@ -50,7 +50,7 @@
     "express": "^4.21.2",
     "fast-glob": "^3.3.2",
     "fs-extra": "^11.2.0",
-    "lucide-static": "^0.542.0",
+    "lucide-angular": "^0.546.0",
     "ngx-sonner": "^3.1.0",
     "ora": "^8.1.1",
     "postcss": "^8.5.6",

@@ -1,5 +1,4 @@
 import { ZardDemoCommandDefaultComponent } from './default';
-import { ZardDemoCommandJsonComponent } from './json';
 
 export const COMMAND = {
   componentName: 'command',
@@ -9,10 +8,6 @@ export const COMMAND = {
     {
       name: 'default',
       component: ZardDemoCommandDefaultComponent,
-    },
-    {
-      name: 'json',
-      component: ZardDemoCommandJsonComponent,
     },
   ],
 };

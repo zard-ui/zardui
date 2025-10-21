@@ -152,31 +152,34 @@ describe('ZardToggleGroupComponent', () => {
 
   it('should render icons when provided', () => {
     const itemsWithIcons: ZardToggleGroupItem[] = [
-      { value: 'bold', icon: 'icon-bold', ariaLabel: 'Toggle bold' },
-      { value: 'italic', icon: 'icon-italic', ariaLabel: 'Toggle italic' },
+      { value: 'bold', icon: 'Bold', ariaLabel: 'Toggle bold' },
+      { value: 'italic', icon: 'Italic', ariaLabel: 'Toggle italic' },
     ];
 
     fixture.componentRef.setInput('items', itemsWithIcons);
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
-    expect(buttons[0].querySelector('.icon-bold')).toBeTruthy();
-    expect(buttons[1].querySelector('.icon-italic')).toBeTruthy();
+    const icon1 = buttons[0].querySelector('z-icon');
+    const icon2 = buttons[1].querySelector('z-icon');
+
+    expect(icon1).toBeTruthy();
+    expect(icon2).toBeTruthy();
   });
 
   it('should render both icon and label when provided', () => {
-    const itemsWithIconsAndLabels: ZardToggleGroupItem[] = [{ value: 'bold', icon: 'icon-bold', label: 'Bold', ariaLabel: 'Toggle bold' }];
+    const itemsWithIconsAndLabels: ZardToggleGroupItem[] = [{ value: 'bold', icon: 'Bold', label: 'Bold', ariaLabel: 'Toggle bold' }];
 
     fixture.componentRef.setInput('items', itemsWithIconsAndLabels);
     fixture.detectChanges();
 
     const button = fixture.nativeElement.querySelector('button');
-    const icon = button.querySelector('.icon-bold');
-    const textSpan = button.querySelector('span:not([class*="icon"])');
+    const icon = button.querySelector('z-icon');
+    const textSpan = button.querySelector('span:last-child');
 
     expect(icon).toBeTruthy();
-    expect(icon.classList.contains('shrink-0')).toBeTruthy();
     expect(textSpan).toBeTruthy();
+    expect(textSpan.textContent).toBe('Bold');
     expect(textSpan.textContent.trim()).toBe('Bold');
   });
 });

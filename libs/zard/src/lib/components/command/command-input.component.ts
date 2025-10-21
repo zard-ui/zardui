@@ -19,21 +19,21 @@ import {
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardCommandJsonComponent } from './command-json.component';
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
+import { ZardIconComponent } from '../icon/icon.component';
 
 import type { ClassValue } from 'clsx';
 @Component({
   selector: 'z-command-input',
   exportAs: 'zCommandInput',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
-      <div class="icon-search mr-2 h-4 w-4 shrink-0 opacity-50 flex items-center justify-center"></div>
+      <z-icon zType="Search" class="mr-2 shrink-0 opacity-50" />
       <input
         #searchInput
         [class]="classes()"
@@ -63,7 +63,6 @@ import type { ClassValue } from 'clsx';
 })
 export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
-  private readonly jsonCommandComponent = inject(ZardCommandJsonComponent, { optional: true });
   readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
   readonly placeholder = input<string>('Type a command or search...');
@@ -77,7 +76,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
   protected readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
 
-  private onChange = (_value: string) => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  private onChange = (_: string) => {
     // ControlValueAccessor implementation - intentionally empty
   };
   private onTouched = () => {
@@ -114,8 +114,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
     // Send search to appropriate parent component
     if (this.commandComponent) {
       this.commandComponent.onSearch(value);
-    } else if (this.jsonCommandComponent) {
-      this.jsonCommandComponent.onSearch(value);
     }
     this.onChange(value);
     this.valueChange.emit(value);
@@ -130,11 +128,9 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
         event.stopPropagation(); // Stop the event from bubbling up
       }
 
-      // Try both types of parent components
+      // Send to parent command component
       if (this.commandComponent) {
         this.commandComponent.onKeyDown(event);
-      } else if (this.jsonCommandComponent) {
-        this.jsonCommandComponent.handleKeydown(event);
       }
       return;
     }
@@ -153,7 +149,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
     this.onTouched = fn;
   }
 
-  setDisabledState(_isDisabled: boolean): void {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  setDisabledState(_: boolean): void {
     // Implementation if needed for form control disabled state
   }
 

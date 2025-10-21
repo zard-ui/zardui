@@ -14,22 +14,22 @@ const FILE_ICONS: FileIconMapping = {
 
   ts: '/icons/typescript.svg',
   html: '/icons/html.svg',
-  css: 'icon-code',
-  json: 'icon-braces',
+  css: '/icons/code.svg',
+  json: '/icons/braces.svg',
   md: '/icons/html.svg',
-  bash: 'icon-terminal',
-  terminal: 'icon-terminal',
+  bash: '/icons/terminal.svg',
+  terminal: '/icons/terminal.svg',
 };
 
 const LANGUAGE_ICONS: FileIconMapping = {
   typescript: '/icons/typescript.svg',
   javascript: '/icons/typescript.svg',
   html: '/icons/html.svg',
-  css: 'icon-code',
-  json: 'icon-braces',
-  bash: 'icon-terminal',
-  shell: 'icon-terminal',
-  sh: 'icon-terminal',
+  css: '/icons/code.svg',
+  json: '/icons/braces.svg',
+  bash: '/icons/terminal.svg',
+  shell: '/icons/terminal.svg',
+  sh: '/icons/terminal.svg',
   angular: '/icons/angular-file.svg',
   ts: '/icons/typescript.svg',
   js: '/icons/typescript.svg',
@@ -93,9 +93,11 @@ function createCopyButton(codeContent: string, hasTitle = false): any {
     children: [
       {
         type: 'element',
-        tagName: 'i',
+        tagName: 'img',
         properties: {
-          class: ['icon-clipboard'],
+          src: '/icons/clipboard.svg',
+          alt: 'Copy',
+          class: ['size-4 invert-0 dark:invert group-hover:scale-110 transition-transform duration-200'],
         },
         children: [],
       },
@@ -628,9 +630,11 @@ function createTabsWrapper(codeBlocks: any[], tabLabels: string[], hasCopyButton
       children: [
         {
           type: 'element',
-          tagName: 'i',
+          tagName: 'img',
           properties: {
-            class: ['icon-clipboard'],
+            src: '/icons/clipboard.svg',
+            alt: 'Copy',
+            class: ['size-4 invert-0 dark:invert group-hover:scale-110 transition-transform duration-200'],
           },
           children: [],
         },

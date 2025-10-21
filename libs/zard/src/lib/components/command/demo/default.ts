@@ -13,23 +13,23 @@ import { ZardCommandOption } from '../command.component';
         <z-command-empty>No commands found.</z-command-empty>
 
         <z-command-option-group zLabel="Quick Actions">
-          <z-command-option zLabel="Create new project" zValue="new-project" zIcon='<div class="icon-folder-plus"></div>' zShortcut="⌘N"> </z-command-option>
-          <z-command-option zLabel="Open file" zValue="open-file" zIcon='<div class="icon-folder-open"></div>' zShortcut="⌘O"> </z-command-option>
-          <z-command-option zLabel="Save all" zValue="save-all" zIcon='<div class="icon-save"></div>' zShortcut="⌘S"> </z-command-option>
+          <z-command-option zLabel="Create new project" zValue="new-project" zIcon="FolderPlus" zShortcut="⌘N"> </z-command-option>
+          <z-command-option zLabel="Open file" zValue="open-file" zIcon="FolderOpen" zShortcut="⌘O"> </z-command-option>
+          <z-command-option zLabel="Save all" zValue="save-all" zIcon="Save" zShortcut="⌘S"> </z-command-option>
         </z-command-option-group>
 
         <z-command-divider></z-command-divider>
 
         <z-command-option-group zLabel="Navigation">
-          <z-command-option zLabel="Go to Dashboard" zValue="dashboard" zIcon='<div class="icon-layout-dashboard"></div>' zShortcut="⌘1"> </z-command-option>
-          <z-command-option zLabel="Go to Projects" zValue="projects" zIcon='<div class="icon-folder"></div>' zShortcut="⌘2"> </z-command-option>
+          <z-command-option zLabel="Go to Dashboard" zValue="dashboard" zIcon="LayoutDashboard" zShortcut="⌘1"> </z-command-option>
+          <z-command-option zLabel="Go to Projects" zValue="projects" zIcon="Folder" zShortcut="⌘2"> </z-command-option>
         </z-command-option-group>
 
         <z-command-divider></z-command-divider>
 
         <z-command-option-group zLabel="Tools">
-          <z-command-option zLabel="Open terminal" zValue="terminal" zIcon='<div class="icon-terminal"></div>' zShortcut="⌘T"> </z-command-option>
-          <z-command-option zLabel="Toggle theme" zValue="theme" zIcon='<div class="icon-moon"></div>' zShortcut="⌘D"> </z-command-option>
+          <z-command-option zLabel="Open terminal" zValue="terminal" zIcon="Terminal" zShortcut="⌘T"> </z-command-option>
+          <z-command-option zLabel="Toggle theme" zValue="theme" zIcon="Moon" zShortcut="⌘D"> </z-command-option>
         </z-command-option-group>
       </z-command-list>
     </z-command>

@@ -7,6 +7,7 @@ import { FooterComponent } from '../footer.component';
 import { HeaderComponent } from '../header.component';
 import { LayoutComponent } from '../layout.component';
 import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from '../sidebar.component';
+import { ZardIconComponent } from '../../icon/icon.component';
 
 @Component({
   selector: 'z-demo-layout-full',
@@ -21,6 +22,7 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
     SidebarGroupLabelComponent,
     ZardButtonComponent,
     ZardSkeletonComponent,
+    ZardIconComponent,
   ],
   template: `
     <z-layout class="min-h-[600px] border rounded-md overflow-hidden">
@@ -32,10 +34,10 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
           </div>
           <div class="flex items-center gap-2">
             <button z-button zType="ghost" zSize="sm">
-              <i class="icon-search"></i>
+              <z-icon zType="Search" />
             </button>
             <button z-button zType="ghost" zSize="sm">
-              <i class="icon-bell"></i>
+              <z-icon zType="Bell" />
             </button>
           </div>
         </div>
@@ -47,15 +49,15 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
             <z-sidebar-group>
               <z-sidebar-group-label>Menu</z-sidebar-group-label>
               <button z-button zType="secondary" class="justify-start">
-                <i class="icon-house mr-2"></i>
+                <z-icon zType="House" class="mr-2" />
                 Dashboard
               </button>
               <button z-button zType="ghost" class="justify-start">
-                <i class="icon-layers mr-2"></i>
+                <z-icon zType="Layers" class="mr-2" />
                 Projects
               </button>
               <button z-button zType="ghost" class="justify-start">
-                <i class="icon-users mr-2"></i>
+                <z-icon zType="Users" class="mr-2" />
                 Team
               </button>
             </z-sidebar-group>

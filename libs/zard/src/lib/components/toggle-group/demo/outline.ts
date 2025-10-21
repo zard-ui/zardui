@@ -12,17 +12,17 @@ export default class ToggleGroupOutlineComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'bold',
-      icon: 'icon-bold',
+      icon: 'Bold',
       ariaLabel: 'Toggle bold',
     },
     {
       value: 'italic',
-      icon: 'icon-italic',
+      icon: 'Italic',
       ariaLabel: 'Toggle italic',
     },
     {
       value: 'underline',
-      icon: 'icon-underline',
+      icon: 'Underline',
       ariaLabel: 'Toggle underline',
     },
   ];

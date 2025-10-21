@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterTestingModule } from '@angular/router/testing';
 
 import { By } from '@angular/platform-browser';
@@ -162,10 +162,11 @@ describe('BreadcrumbComponents Integration', () => {
     expect(span.getAttribute('aria-current')).toBe('page');
   });
 
-  it('breadcrumb-ellipsis should contain the icon class', () => {
+  it('breadcrumb-ellipsis should contain z-icon component', () => {
     const breadcrumbPageDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent));
-    const span = breadcrumbPageDebug.nativeElement.querySelector('span');
-    expect(span.classList).toContain('icon-ellipsis');
+    const iconElement = breadcrumbPageDebug.query(By.css('z-icon'));
+    expect(iconElement).toBeTruthy();
+    expect(iconElement.componentInstance.zType()).toBe('Ellipsis');
   });
 
   it('should render the correct routerLink and projected content', () => {

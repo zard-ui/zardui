@@ -1,16 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } from './avatar.variants';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-avatar',
   exportAs: 'zAvatar',
   standalone: true,
+  imports: [ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (zLoading()) {
-      <span class="icon-loader-circle animate-spin {{ zLoading() }}"></span>
+      <z-icon zType="LoaderCircle" class="animate-spin" />
     } @else {
       @if (zImage()?.fallback) {
         <span class="text-base absolute m-auto z-0">{{ zImage()?.fallback }}</span>

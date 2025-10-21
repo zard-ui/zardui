@@ -9,6 +9,7 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarNavVariants, ca
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
 import { ZardButtonComponent } from '../button/button.component';
+import { ZardIconComponent } from '../icon/icon.component';
 import type { ClassValue } from 'clsx';
 import { mergeClasses } from '../../shared/utils/utils';
 
@@ -29,7 +30,7 @@ export type { ZardCalendarVariants };
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardButtonComponent, ZardSelectComponent, ZardSelectItemComponent],
+  imports: [ZardButtonComponent, ZardSelectComponent, ZardSelectItemComponent, ZardIconComponent],
   host: {
     '(keydown)': 'onKeyDown($event)',
     '[attr.tabindex]': '0',
@@ -49,7 +50,7 @@ export type { ZardCalendarVariants };
           aria-label="Previous month"
           [class]="navButtonClasses()"
         >
-          <i class="icon-chevron-left"></i>
+          <z-icon zType="ChevronLeft" />
         </button>
 
         <!-- Month and Year Selectors -->
@@ -70,7 +71,7 @@ export type { ZardCalendarVariants };
         </div>
 
         <button z-button zType="ghost" [zSize]="navButtonSize()" (click)="nextMonth()" [disabled]="isNextDisabled()" aria-label="Next month" [class]="navButtonClasses()">
-          <i class="icon-chevron-right"></i>
+          <z-icon zType="ChevronRight" />
         </button>
       </div>
 

@@ -27,12 +27,13 @@ import { ZardCommandComponent, ZardCommandOption } from '../command/command.comp
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 import { comboboxVariants, ZardComboboxVariants } from './combobox.variants';
 import { ZardEmptyComponent } from '../empty/empty.component';
+import { IconName, ZardIconComponent } from '../icon/icon.component';
 
 export interface ZardComboboxOption {
   value: string;
   label: string;
   disabled?: boolean;
-  icon?: string;
+  icon?: IconName;
 }
 
 export interface ZardComboboxGroup {
@@ -56,6 +57,7 @@ export interface ZardComboboxGroup {
     ZardPopoverDirective,
     ZardPopoverComponent,
     ZardEmptyComponent,
+    ZardIconComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -82,7 +84,7 @@ export interface ZardComboboxGroup {
       <span class="flex-1 text-left truncate">
         {{ displayValue() || placeholder() }}
       </span>
-      <i [class]="iconClasses()"></i>
+      <z-icon zType="ChevronsUpDown" class="ml-2 shrink-0 opacity-50" />
     </button>
 
     <ng-template #popoverContent>
@@ -108,12 +110,12 @@ export interface ZardComboboxGroup {
                         [zValue]="option.value"
                         [zLabel]="option.label"
                         [zDisabled]="option.disabled || false"
-                        [zIcon]="option.icon || ''"
+                        [zIcon]="option.icon"
                         [attr.aria-selected]="option.value === getCurrentValue()"
                       >
                         {{ option.label }}
                         @if (option.value === getCurrentValue()) {
-                          <i class="icon-check ml-auto h-4 w-4"></i>
+                          <z-icon zType="Check" class="ml-auto" />
                         }
                       </z-command-option>
                     }
@@ -124,12 +126,12 @@ export interface ZardComboboxGroup {
                       [zValue]="option.value"
                       [zLabel]="option.label"
                       [zDisabled]="option.disabled || false"
-                      [zIcon]="option.icon || ''"
+                      [zIcon]="option.icon"
                       [attr.aria-selected]="option.value === getCurrentValue()"
                     >
                       {{ option.label }}
                       @if (option.value === getCurrentValue()) {
-                        <i class="icon-check ml-auto h-4 w-4"></i>
+                        <z-icon zType="Check" class="ml-auto" />
                       }
                     </z-command-option>
                   }
@@ -141,12 +143,12 @@ export interface ZardComboboxGroup {
                   [zValue]="option.value"
                   [zLabel]="option.label"
                   [zDisabled]="option.disabled || false"
-                  [zIcon]="option.icon || ''"
+                  [zIcon]="option.icon"
                   [attr.aria-selected]="option.value === getCurrentValue()"
                 >
                   {{ option.label }}
                   @if (option.value === getCurrentValue()) {
-                    <i class="icon-check ml-auto h-4 w-4"></i>
+                    <z-icon zType="Check" class="ml-auto" />
                   }
                 </z-command-option>
               }
@@ -203,8 +205,6 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   );
 
   protected readonly buttonClasses = computed(() => 'w-full justify-between');
-
-  protected readonly iconClasses = computed(() => 'icon-chevrons-up-down ml-2 h-4 w-4 shrink-0 opacity-50');
 
   protected readonly popoverClasses = computed(() => {
     const widthClass = this.zWidth() === 'full' ? 'w-full' : 'w-[200px]';
