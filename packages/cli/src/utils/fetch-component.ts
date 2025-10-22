@@ -1,7 +1,7 @@
-import { execa } from 'execa';
-import { readFileSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
+import { readFileSync } from 'fs';
+import { execa } from 'execa';
 
 import type { Config } from './config.js';
 
@@ -17,7 +17,7 @@ const GITHUB_API = 'https://api.github.com/repos/zard-ui/zardui/contents';
 function getCliVersion(): string {
   try {
     // In production, package.json is at the root of the published package
-    const packageJsonPath = join(__dirname, '../../package.json');
+    const packageJsonPath = join(__dirname, '../package.json');
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
     return packageJson.version;
   } catch (error) {
