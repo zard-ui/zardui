@@ -22,7 +22,7 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
-import { debounceTime, from, fromEvent, merge, tap } from 'rxjs';
+import { debounceTime, fromEvent, merge } from 'rxjs';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
