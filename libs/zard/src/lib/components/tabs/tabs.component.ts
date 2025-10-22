@@ -270,9 +270,13 @@ export class ZardTabGroupComponent implements AfterViewInit {
     return position === 'top' || position === 'bottom';
   });
 
-  protected readonly navGridClasses = computed(() =>
-    this.isHorizontal() ? `grid${this.showArrow() ? ' grid-cols-[25px_1fr_25px]' : ''}` : `grid${this.showArrow() ? ' grid-rows-[25px_1fr_25px]' : ''}`,
-  );
+  protected readonly navGridClasses = computed(() => {
+    if (this.isHorizontal()) {
+      return `grid${this.showArrow() ? ' grid-cols-[25px_1fr_25px]' : ''}`;
+    }
+
+    return `grid${this.showArrow() ? ' grid-rows-[25px_1fr_25px]' : ''}`;
+  });
 
   protected readonly containerClasses = computed(() => tabContainerVariants({ zPosition: this.zTabsPosition() }));
 
