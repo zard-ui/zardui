@@ -35,7 +35,25 @@ export const init = new Command()
       process.exit(1);
     }
 
-    logger.info('Initializing ZardUI...');
+    const componentsJsonPath = path.resolve(cwd, 'components.json');
+    const isReInitializing = existsSync(componentsJsonPath);
+
+    if (isReInitializing) {
+      logger.warn('ZardUI is already initialized in this project.');
+      const { reinitialize } = await prompts({
+        type: 'confirm',
+        name: 'reinitialize',
+        message: 'Do you want to re-initialize? This will overwrite your existing configuration and utils.',
+        initial: true,
+      });
+
+      if (!reinitialize) {
+        logger.info('Re-initialization cancelled.');
+        process.exit(0);
+      }
+    }
+
+    logger.info(isReInitializing ? 'Re-initializing ZardUI...' : 'Initializing ZardUI...');
     logger.break();
 
     const detectedPm = await detectPackageManager();
@@ -65,7 +83,7 @@ export const init = new Command()
     await installDependencies(cwd, config);
     dependenciesSpinner.succeed();
 
-    if (!projectInfo.hasTailwind) {
+    if (!projectInfo.hasTailwind || isReInitializing) {
       const tailwindSpinner = spinner('Setting up Tailwind CSS...').start();
       await setupTailwind(cwd, config);
       tailwindSpinner.succeed();
@@ -131,7 +149,6 @@ async function promptForConfig(cwd: string, projectInfo: any, packageManager: 'n
   }
 
   const existingContent = await readFile(cssPath, 'utf8');
-  let shouldOverwrite = false;
 
   if (existingContent.trim().length > 0) {
     const { overwrite } = await prompts({
@@ -145,7 +162,6 @@ async function promptForConfig(cwd: string, projectInfo: any, packageManager: 'n
       logger.info('Installation cancelled.');
       process.exit(0);
     }
-    shouldOverwrite = true;
   }
 
   const config = configSchema.parse({
@@ -214,15 +230,7 @@ async function installDependencies(cwd: string, config: Config) {
 async function setupTailwind(cwd: string, config: Config) {
   const postcssConfigPath = path.join(cwd, '.postcssrc.json');
 
-  if (!existsSync(postcssConfigPath)) {
-    await writeFile(postcssConfigPath, POSTCSS_CONFIG, 'utf8');
-  } else {
-    const existingConfig = await readFile(postcssConfigPath, 'utf8');
-    if (!existingConfig.includes('@tailwindcss/postcss')) {
-      logger.info('Updating existing .postcssrc.json for Tailwind CSS v4');
-      await writeFile(postcssConfigPath, POSTCSS_CONFIG, 'utf8');
-    }
-  }
+  await writeFile(postcssConfigPath, POSTCSS_CONFIG, 'utf8');
 
   const stylesPath = path.join(cwd, config.tailwind.css);
   const selectedTheme = config.tailwind.baseColor;
@@ -240,10 +248,7 @@ export async function createUtils(cwd: string, config: Config) {
 
   for (const [fileName, content] of Object.entries(UTILS)) {
     const filePath = path.join(utilsPath, `${fileName}.ts`);
-
-    if (!existsSync(filePath)) {
-      await writeFile(filePath, content.trim(), 'utf8');
-    }
+    await writeFile(filePath, content.trim(), 'utf8');
   }
 }
 
