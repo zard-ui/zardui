@@ -26,6 +26,8 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { debounceTime, fromEvent, merge } from 'rxjs';
+import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
@@ -274,11 +276,11 @@ export class ZardTabGroupComponent implements AfterViewInit {
   });
 
   protected readonly navGridClasses = computed(() => {
-    if (this.isHorizontal()) {
-      return `grid${this.showArrow() ? ' grid-cols-[25px_1fr_25px]' : ''}`;
+    const gridLayout = this.isHorizontal() ? 'grid-cols-[25px_1fr_25px]' : 'grid-rows-[25px_1fr_25px]';
+    if (this.showArrow()) {
+      return twMerge(clsx('grid', gridLayout));
     }
-
-    return `grid${this.showArrow() ? ' grid-rows-[25px_1fr_25px]' : ''}`;
+    return 'grid';
   });
 
   protected readonly containerClasses = computed(() => tabContainerVariants({ zPosition: this.zTabsPosition() }));
