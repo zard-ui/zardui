@@ -17,10 +17,10 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
@@ -45,14 +45,15 @@ export class ZardTabComponent {
   selector: 'z-tab-group',
   standalone: true,
   imports: [CommonModule, ZardButtonComponent],
+  host: { '[class]': 'containerClasses()' },
   template: `
-    <div class="tab-group" [ngClass]="containerClasses()">
-      @let showArrow = zShowArrow() && scrollPresent();
+    <div class="tab-group">
+      @let horizontal = isHorizontal();
 
       @if (navBeforeContent()) {
         <div [class]="navGridClasses()">
-          @if (showArrow) {
-            @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
+          @if (showArrow()) {
+            @if (horizontal) {
               <button class="scroll-btn scroll-left pr-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('left')">
                 <i class="icon-chevron-left"></i>
               </button>
@@ -63,16 +64,24 @@ export class ZardTabComponent {
             }
           }
 
-          <nav [ngClass]="navClasses()" #tabNav>
+          <nav [ngClass]="navClasses()" #tabNav role="tablist">
             @for (tab of tabs(); track $index; let index = $index) {
-              <button z-button zType="ghost" (click)="setActiveTab(index)" [ngClass]="buttonClassesSignal()[index]">
+              <button
+                z-button
+                zType="ghost"
+                role="tab"
+                [attr.aria-selected]="activeTabIndex() === index"
+                [attr.tabindex]="activeTabIndex() === index ? 0 : -1"
+                (click)="setActiveTab(index)"
+                [ngClass]="buttonClassesSignal()[index]"
+              >
                 {{ tab.label() }}
               </button>
             }
           </nav>
 
-          @if (showArrow) {
-            @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
+          @if (showArrow()) {
+            @if (horizontal) {
               <button class="scroll-btn scroll-right pl-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('right')">
                 <i class="icon-chevron-right"></i>
               </button>
@@ -95,8 +104,8 @@ export class ZardTabComponent {
 
       @if (!navBeforeContent()) {
         <div [class]="navGridClasses()">
-          @if (showArrow) {
-            @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
+          @if (showArrow()) {
+            @if (horizontal) {
               <button class="scroll-btn scroll-left pr-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('left')">
                 <i class="icon-chevron-left"></i>
               </button>
@@ -107,16 +116,24 @@ export class ZardTabComponent {
             }
           }
 
-          <nav [ngClass]="navClasses()" #tabNav>
+          <nav [ngClass]="navClasses()" #tabNav role="tablist">
             @for (tab of tabs(); track $index; let index = $index) {
-              <button z-button zType="ghost" (click)="setActiveTab(index)" [ngClass]="buttonClassesSignal()[index]">
+              <button
+                z-button
+                zType="ghost"
+                role="tab"
+                [attr.aria-selected]="activeTabIndex() === index"
+                [attr.tabindex]="activeTabIndex() === index ? 0 : -1"
+                (click)="setActiveTab(index)"
+                [ngClass]="buttonClassesSignal()[index]"
+              >
                 {{ tab.label() }}
               </button>
             }
           </nav>
 
-          @if (showArrow) {
-            @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
+          @if (showArrow()) {
+            @if (horizontal) {
               <button class="scroll-btn scroll-right pl-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('right')">
                 <i class="icon-chevron-right"></i>
               </button>
@@ -178,6 +195,8 @@ export class ZardTabGroupComponent implements AfterViewInit {
   public readonly zScrollAmount = input(100);
   public readonly zAlignTabs = input<zAlign>('start');
 
+  protected readonly showArrow = computed(() => this.zShowArrow() && this.scrollPresent());
+
   ngAfterViewInit(): void {
     // default tab selection
     if (this.tabs().length) {
@@ -236,18 +255,13 @@ export class ZardTabGroupComponent implements AfterViewInit {
     return position === 'top' || position === 'bottom';
   });
 
-  protected readonly navGridClasses = computed(() => {
-    const position = this.zTabsPosition();
-    const hasArrows = this.zShowArrow() && this.scrollPresent();
-    return position === 'left' || position === 'right' ? `grid${hasArrows ? ' grid-rows-[25px_1fr_25px]' : ''}` : `grid${hasArrows ? ' grid-cols-[25px_1fr_25px]' : ''}`;
-  });
+  protected readonly navGridClasses = computed(() =>
+    this.isHorizontal() ? `grid${this.showArrow() ? ' grid-cols-[25px_1fr_25px]' : ''}` : `grid${this.showArrow() ? ' grid-rows-[25px_1fr_25px]' : ''}`,
+  );
 
   protected readonly containerClasses = computed(() => tabContainerVariants({ zPosition: this.zTabsPosition() }));
 
-  protected readonly navClasses = computed(() => {
-    const showArrow = this.zShowArrow() && this.scrollPresent();
-    return tabNavVariants({ zPosition: this.zTabsPosition(), zAlignTabs: showArrow ? 'start' : this.zAlignTabs() });
-  });
+  protected readonly navClasses = computed(() => tabNavVariants({ zPosition: this.zTabsPosition(), zAlignTabs: this.showArrow() ? 'start' : this.zAlignTabs() }));
 
   protected readonly buttonClassesSignal = computed(() => {
     const activeIndex = this.activeTabIndex();
