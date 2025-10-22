@@ -2,7 +2,6 @@ export const availableThemes: string[] = ['neutral', 'stone', 'zinc', 'gray', 's
 
 const tailwindConfiguration = `
 @import 'tailwindcss';
-@import 'lucide-static/font/lucide.css';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
@@ -53,6 +52,9 @@ const layerBase = `
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
   }
 }
 `;

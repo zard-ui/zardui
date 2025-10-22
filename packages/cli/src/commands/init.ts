@@ -1,10 +1,10 @@
+import { writeFile, readFile, mkdir } from 'node:fs/promises';
 import * as commentJson from 'comment-json';
 import { Command } from 'commander';
 import { existsSync } from 'fs';
-import { writeFile, readFile, mkdir } from 'node:fs/promises';
 import prompts from 'prompts';
-import chalk from 'chalk';
 import * as path from 'path';
+import chalk from 'chalk';
 import { z } from 'zod';
 
 import { getAvailableThemes, getThemeContent, getThemeDisplayName } from '../utils/theme-selector.js';
@@ -138,7 +138,7 @@ async function promptForConfig(cwd: string, projectInfo: any, packageManager: 'n
       type: 'confirm',
       name: 'overwrite',
       message: `Your CSS file already has content. This will overwrite everything with ZardUI theme configuration. Continue?`,
-      initial: false,
+      initial: true,
     });
 
     if (!overwrite) {
@@ -194,7 +194,7 @@ async function installDependencies(cwd: string, config: Config) {
     }
   }
 
-  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-static'];
+  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-angular'];
   const devDeps = ['tailwindcss', '@tailwindcss/postcss', 'postcss', 'tailwindcss-animate'];
 
   try {
