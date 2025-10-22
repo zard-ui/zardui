@@ -1,4 +1,5 @@
 import {
+  afterNextRender,
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
@@ -21,6 +22,7 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
+import { debounceTime, from, fromEvent, merge, tap } from 'rxjs';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
@@ -172,6 +174,7 @@ export class ZardTabComponent {
 export class ZardTabGroupComponent implements AfterViewInit {
   private readonly tabComponents = contentChildren(ZardTabComponent, { descendants: true });
   private readonly tabsContainer = viewChild.required<ElementRef>('tabNav');
+  private readonly destroyRef = inject(DestroyRef);
   private readonly injector = inject(Injector);
 
   protected readonly tabs = computed(() => this.tabComponents());
@@ -204,16 +207,28 @@ export class ZardTabGroupComponent implements AfterViewInit {
     }
 
     runInInjectionContext(this.injector, () => {
-      // Can't use effect over signal as it runs before child query result has value
-      toObservable(this.zShowArrow)
-        .pipe(takeUntilDestroyed(inject(DestroyRef)))
-        .subscribe(() => {
-          // small optimization, don't set signal if value hasn't changed
-          if (this.hasScroll() !== this.scrollPresent()) {
-            this.scrollPresent.set(this.hasScroll());
-          }
+      const observeInputs$ = merge(toObservable(this.zShowArrow), toObservable(this.tabs));
+      afterNextRender(() => {
+        const resizeObserver = new ResizeObserver(() => {
+          this.setScrollState();
         });
+        resizeObserver.observe(this.tabsContainer().nativeElement);
+
+        merge(observeInputs$, fromEvent(window, 'resize'))
+          .pipe(debounceTime(10), takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => this.setScrollState());
+
+        this.destroyRef.onDestroy(() => {
+          resizeObserver.disconnect();
+        });
+      });
     });
+  }
+
+  private setScrollState(): void {
+    if (this.hasScroll() !== this.scrollPresent()) {
+      this.scrollPresent.set(this.hasScroll());
+    }
   }
 
   private hasScroll(): boolean {
