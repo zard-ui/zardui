@@ -8,13 +8,14 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardButtonComponent],
   template: `
     <div class="w-full h-[300px]">
-      <z-tab-group [zShowArrow]="zShowArrow">
+      <div class="text-sm mb-4">
+        <div class="flex justify-center items-center gap-2 mt-4">
+          <button z-button zType="ghost" (click)="showArrow = !showArrow">{{ showArrow ? 'Hide' : 'Show' }} Arrows</button>
+        </div>
+      </div>
+      <z-tab-group [zShowArrow]="showArrow">
         <z-tab label="First">
-          <p class="text-center w-full">zShowArrow: {{ zShowArrow }}</p>
-          <div class="flex justify-center items-center gap-2 mt-4">
-            <button z-button zType="ghost" (click)="zShowArrow = true">Show Arrow</button>
-            <button z-button zType="ghost" (click)="zShowArrow = false">Hide Arrow</button>
-          </div>
+          <p>Is the default tab component</p>
         </z-tab>
         <z-tab label="Second">
           <p>Content of the second tab</p>
@@ -48,5 +49,5 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
   `,
 })
 export class ZardDemoTabsArrowComponent {
-  zShowArrow = true;
+  showArrow = true;
 }
