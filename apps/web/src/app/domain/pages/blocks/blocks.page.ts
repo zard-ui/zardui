@@ -1,13 +1,14 @@
 import { CategoryTabsComponent, type CategoryTab } from '@zard/shared/components/category-tabs/category-tabs.component';
 import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
 import { DarkModeService } from '@zard/shared/services/darkmode.service';
-import { Component, inject, signal, type OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, signal, type OnInit } from '@angular/core';
 import { SeoService } from '@zard/shared/services/seo.service';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
 
 import { BlockContainerComponent, type Block } from '../../components/block-container/block-container.component';
 import { BlocksService, type BlockCategory } from '../../services/blocks.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'z-blocks',
@@ -21,6 +22,7 @@ export class BlocksPage implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly blocksService = inject(BlocksService);
   private readonly darkModeService = inject(DarkModeService);
+  private readonly destroyRef = inject(DestroyRef);
 
   protected readonly blocks = signal<Block[]>([]);
   protected readonly currentCategory = signal<BlockCategory>('featured');
@@ -38,7 +40,7 @@ export class BlocksPage implements OnInit {
     this.viewportScroller.scrollToPosition([0, 0]);
     this.loadBlocks();
 
-    this.route.params.subscribe(params => {
+    this.route.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(params => {
       const category = (params['category'] || 'featured') as BlockCategory;
       this.currentCategory.set(category);
       this.loadBlocks();

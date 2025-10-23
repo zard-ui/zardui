@@ -7,11 +7,12 @@ import { ComponentData, COMPONENTS } from '../../../shared/constants/components.
 import { StepsComponent } from '../../components/steps/steps.component';
 import { Step } from '../../../shared/constants/install.constant';
 import { SeoService } from '../../../shared/services/seo.service';
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'z-component',
@@ -20,12 +21,13 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
 })
 export class ComponentPage {
-  private readonly seoService = inject(SeoService);
   private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly dynamicInstallationService = inject(DynamicInstallationService);
-  activeAnchor?: string;
-  componentData?: ComponentData;
+  private readonly router = inject(Router);
+  private readonly seoService = inject(SeoService);
+  activeAnchor!: string;
+  componentData!: ComponentData;
   navigationConfig: NavigationConfig = {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
@@ -38,7 +40,7 @@ export class ComponentPage {
   installGuide!: { manual: Step[]; cli: Step[] } | undefined;
 
   constructor() {
-    this.activatedRoute.params.subscribe(() => {
+    this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.loadData();
     });
     this.loadData();
@@ -73,7 +75,7 @@ export class ComponentPage {
   }
 
   setPageTitle() {
-    const { componentName, description } = this.componentData!;
+    const { componentName, description } = this.componentData;
     const ogImage = `og-${componentName}.jpg`;
 
     if (componentName) {
