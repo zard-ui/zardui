@@ -166,7 +166,7 @@ describe('BreadcrumbComponents Integration', () => {
     const breadcrumbPageDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent));
     const iconElement = breadcrumbPageDebug.query(By.css('z-icon'));
     expect(iconElement).toBeTruthy();
-    expect(iconElement.componentInstance.zType()).toBe('Ellipsis');
+    expect(iconElement.componentInstance.zType()).toBe('ellipsis');
   });
 
   it('should render the correct routerLink and projected content', () => {

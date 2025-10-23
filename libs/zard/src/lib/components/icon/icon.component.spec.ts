@@ -8,7 +8,7 @@ import { ZardIconComponent } from './icon.component';
   template: `<z-icon [zType]="iconType" [zSize]="size" />`,
 })
 class TestHostComponent {
-  iconType: 'House' | 'ChevronDown' = 'House';
+  iconType: 'house' | 'chevron-down' = 'house';
   size: 'sm' | 'default' | 'lg' | 'xl' = 'default';
 }
 
@@ -31,19 +31,17 @@ describe('ZardIconComponent', () => {
   });
 
   it('should render icon with default size', () => {
-    const iconElement = fixture.nativeElement.querySelector('z-icon');
+    const iconElement = fixture.nativeElement.querySelector('z-icon lucide-angular svg');
     expect(iconElement).toBeTruthy();
-    expect(iconElement.classList.contains('h-4')).toBe(true);
-    expect(iconElement.classList.contains('w-4')).toBe(true);
+    expect(iconElement.classList.contains('size-3.5')).toBe(true);
   });
 
   it('should apply custom size classes', () => {
     component.size = 'lg';
     fixture.detectChanges();
 
-    const iconElement = fixture.nativeElement.querySelector('z-icon');
-    expect(iconElement.classList.contains('h-5')).toBe(true);
-    expect(iconElement.classList.contains('w-5')).toBe(true);
+    const iconElement = fixture.nativeElement.querySelector('z-icon lucide-angular svg');
+    expect(iconElement.classList.contains('size-4')).toBe(true);
   });
 
   it('should render lucide-angular component', () => {
@@ -52,8 +50,8 @@ describe('ZardIconComponent', () => {
   });
 
   it('should change icon type', () => {
-    component.iconType = 'ChevronDown';
+    component.iconType = 'chevron-down';
     fixture.detectChanges();
-    expect(component.iconType).toBe('ChevronDown');
+    expect(component.iconType).toBe('chevron-down');
   });
 });

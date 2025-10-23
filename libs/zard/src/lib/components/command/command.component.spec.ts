@@ -28,7 +28,7 @@ import { ZardCommandComponent } from './command.component';
       <z-command-list>
         <z-command-empty>No results found.</z-command-empty>
         <z-command-option-group zLabel="Test Group">
-          <z-command-option zLabel="Test Option" zValue="test" zShortcut="⌘T" zIcon="Search"></z-command-option>
+          <z-command-option zLabel="Test Option" zValue="test" zShortcut="⌘T" zIcon="search"></z-command-option>
           <z-command-option zLabel="Disabled Option" zValue="disabled" [zDisabled]="true"></z-command-option>
           <z-command-option zLabel="Search Option" zValue="search" zCommand="search test"></z-command-option>
         </z-command-option-group>
@@ -39,14 +39,14 @@ import { ZardCommandComponent } from './command.component';
   `,
 })
 class TestHostComponent {
-  selectedOption: unknown = null;
-  changedOption: unknown = null;
+  selectedOption: any = null;
+  changedOption: any = null;
 
-  onSelect(option: unknown) {
+  onSelect(option: any) {
     this.selectedOption = option;
   }
 
-  onChange(option: unknown) {
+  onChange(option: any) {
     this.changedOption = option;
   }
 }
@@ -193,7 +193,7 @@ describe('ZardCommandComponent', () => {
 
   it('should render option with icon and shortcut', () => {
     const optionElement = fixture.nativeElement.querySelector('z-command-option');
-    const iconElement = optionElement.querySelector('z-icon');
+    const iconElement = optionElement.querySelector('div[z-icon]');
     expect(iconElement).toBeTruthy();
     expect(optionElement.textContent).toContain('⌘T');
   });

@@ -183,7 +183,7 @@ describe('ZardAvatarComponent', () => {
 
       const loaderElement = fixture.debugElement.query(By.css('z-icon'));
       expect(loaderElement).toBeTruthy();
-      expect(loaderElement.componentInstance.zType()).toBe('LoaderCircle');
+      expect(loaderElement.componentInstance.zType()).toBe('loader-circle');
     });
 
     it('should hide loading spinner when loading is false', () => {
@@ -192,7 +192,7 @@ describe('ZardAvatarComponent', () => {
 
       let loaderElement = fixture.debugElement.query(By.css('z-icon'));
       expect(loaderElement).toBeTruthy();
-      expect(loaderElement.componentInstance.zType()).toBe('LoaderCircle');
+      expect(loaderElement.componentInstance.zType()).toBe('loader-circle');
 
       hostComponent.zLoading = false;
       fixture.detectChanges();

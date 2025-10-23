@@ -32,9 +32,9 @@ describe('ZardToggleGroupComponent', () => {
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
     expect(buttons.length).toBe(3);
-    expect(buttons[0].textContent.trim()).toBe('bold');
-    expect(buttons[1].textContent.trim()).toBe('italic');
-    expect(buttons[2].textContent.trim()).toBe('underline');
+    expect(buttons[0].textContent.trim()).toBe('Bold');
+    expect(buttons[1].textContent.trim()).toBe('Italic');
+    expect(buttons[2].textContent.trim()).toBe('Underline');
   });
 
   it('should set aria-pressed attribute correctly for multiple type', () => {
@@ -160,8 +160,8 @@ describe('ZardToggleGroupComponent', () => {
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
-    const icon1 = buttons[0].querySelector('z-icon');
-    const icon2 = buttons[1].querySelector('z-icon');
+    const icon1 = buttons[0].querySelector('span[z-icon]');
+    const icon2 = buttons[1].querySelector('span[z-icon]');
 
     expect(icon1).toBeTruthy();
     expect(icon2).toBeTruthy();
@@ -174,12 +174,12 @@ describe('ZardToggleGroupComponent', () => {
     fixture.detectChanges();
 
     const button = fixture.nativeElement.querySelector('button');
-    const icon = button.querySelector('z-icon');
+    const icon = button.querySelector('span[z-icon]');
     const textSpan = button.querySelector('span:last-child');
 
     expect(icon).toBeTruthy();
     expect(textSpan).toBeTruthy();
-    expect(textSpan.textContent).toBe('bold');
-    expect(textSpan.textContent.trim()).toBe('bold');
+    expect(textSpan.textContent).toBe('Bold');
+    expect(textSpan.textContent.trim()).toBe('Bold');
   });
 });
