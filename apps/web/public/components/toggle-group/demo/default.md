@@ -2,7 +2,6 @@
 import { Component } from '@angular/core';
 
 import { ZardToggleGroupComponent, ZardToggleGroupItem } from '../toggle-group.component';
-import { Bold, Italic, Underline } from 'lucide-angular';
 
 @Component({
   selector: 'demo-toggle-group-default',
@@ -14,17 +13,17 @@ export default class ToggleGroupDefaultComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'bold',
-      icon: Bold,
+      icon: 'bold',
       ariaLabel: 'Toggle bold',
     },
     {
       value: 'italic',
-      icon: Italic,
+      icon: 'italic',
       ariaLabel: 'Toggle italic',
     },
     {
       value: 'underline',
-      icon: Underline,
+      icon: 'underline',
       ariaLabel: 'Toggle underline',
     },
   ];

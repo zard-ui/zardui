@@ -1,10 +1,9 @@
 ```angular-ts showLineNumbers copyButton
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
-import { Lightbulb, LightbulbOff } from 'lucide-angular';
 
-import { ZardToggleComponent } from '../toggle.component';
 import { ZardIconComponent } from '../../icon/icon.component';
+import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
   standalone: true,
@@ -12,17 +11,15 @@ import { ZardIconComponent } from '../../icon/icon.component';
   template: `
     <z-toggle aria-label="Turn on the light" [(ngModel)]="lightOn">
       @if (lightOn) {
-        <z-icon [zType]="LightbulbIcon" />
+        <z-icon zType="lightbulb" />
       } @else {
-        <z-icon [zType]="LightbulbOffIcon" />
+        <z-icon zType="lightbulb-off" />
       }
     </z-toggle>
   `,
 })
 export class ZardDemoToggleWithFormComponent {
-  readonly LightbulbIcon = Lightbulb;
-  readonly LightbulbOffIcon = LightbulbOff;
-  lightOn = false;
+  protected lightOn = false;
 }
 
 ```

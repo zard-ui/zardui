@@ -1,7 +1,14 @@
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { Code, Heart, Layers, Palette, Shield, Zap } from 'lucide-angular';
+import { ZardIcon } from '@zard/components/icon/icons';
+
+export interface BenefitFeature {
+  icon: ZardIcon;
+  title: string;
+  description: string;
+  highlight?: string;
+}
 
 @Component({
   selector: 'z-benefits',
@@ -100,36 +107,36 @@ import { Code, Heart, Layers, Palette, Shield, Zap } from 'lucide-angular';
   `,
 })
 export class BenefitsComponent {
-  readonly features = signal([
+  readonly features = signal<BenefitFeature[]>([
     {
-      icon: Zap,
+      icon: 'zap',
       title: 'Lightning Fast',
       description: 'Built with performance in mind. Optimized bundle size and runtime performance for production apps.',
       highlight: 'Fast',
     },
     {
-      icon: Palette,
+      icon: 'palette',
       title: 'Beautiful Design',
       description: 'Carefully crafted components that follow modern design principles and accessibility standards.',
     },
     {
-      icon: Code,
+      icon: 'code',
       title: 'Developer Experience',
       description: 'TypeScript-first, excellent IDE support, and comprehensive documentation for smooth development.',
       highlight: 'DX',
     },
     {
-      icon: Layers,
+      icon: 'layers',
       title: 'Modular Architecture',
       description: 'Import only what you need. Tree-shakable components that keep your bundle size minimal.',
     },
     {
-      icon: Shield,
+      icon: 'shield',
       title: 'Type Safe',
       description: 'Full TypeScript support with strict typing, ensuring reliability and better code completion.',
     },
     {
-      icon: Heart,
+      icon: 'heart',
       title: 'Community Driven',
       description: 'Open source with active community contributions, regular updates and responsive support.',
     },

@@ -1,11 +1,10 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
 import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardMenuModule } from '../menu.module';
+import { ZardButtonComponent } from '../../button/button.component';
 import { ZardIconComponent } from '../../icon/icon.component';
-import { BookOpen, ChevronDown, ChevronRight, FileText, Info, Users } from 'lucide-angular';
+import { ZardMenuModule } from '../menu.module';
 
 @Component({
   selector: 'zard-demo-menu-default',
@@ -18,7 +17,7 @@ import { BookOpen, ChevronDown, ChevronRight, FileText, Info, Users } from 'luci
           <div class="relative">
             <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="productsMenu">
               Products
-              <z-icon [zType]="ChevronDownIcon" class="ml-1" />
+              <z-icon zType="chevron-down" class="ml-1" />
             </button>
 
             <ng-template #productsMenu>
@@ -34,7 +33,7 @@ import { BookOpen, ChevronDown, ChevronRight, FileText, Info, Users } from 'luci
           <div class="relative">
             <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="solutionsMenu">
               Solutions
-              <z-icon [zType]="ChevronDownIcon" class="ml-1" />
+              <z-icon zType="chevron-down" class="ml-1" />
             </button>
 
             <ng-template #solutionsMenu>
@@ -62,33 +61,30 @@ import { BookOpen, ChevronDown, ChevronRight, FileText, Info, Users } from 'luci
           <div class="relative">
             <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="resourcesMenu">
               Resources
-              <z-icon [zType]="ChevronDownIcon" />
+              <z-icon zType="chevron-down" />
             </button>
 
             <ng-template #resourcesMenu>
               <div z-menu-content class="w-56">
                 <button z-menu-item (click)="log('Blog')">
-                  <z-icon [zType]="BookOpenIcon" class="mr-2" />
+                  <z-icon zType="book-open" class="mr-2" />
                   Blog
                 </button>
 
                 <button z-menu-item (click)="log('Documentation')">
-                  <z-icon [zType]="FileTextIcon" class="mr-2" />
+                  <z-icon zType="file-text" class="mr-2" />
                   Documentation
                 </button>
 
                 <button z-menu-item z-menu [zMenuTriggerFor]="helpSubmenu" class="justify-between">
-                  <div class="flex items-center">
-                    <z-icon [zType]="InfoIcon" class="mr-2" />
-                    Help & Support
-                  </div>
-                  <z-icon [zType]="ChevronRightIcon" />
+                  <div class="flex items-center">zType="info" class="mr-2" /> Help & Support</div>
+                  <z-icon zType="chevron-right" />
                 </button>
 
                 <z-divider zSpacing="sm"></z-divider>
 
                 <button z-menu-item (click)="log('Community')">
-                  <z-icon [zType]="UsersIcon" class="mr-2" />
+                  <z-icon zType="users" class="mr-2" />
                   Community
                 </button>
               </div>
@@ -113,13 +109,6 @@ import { BookOpen, ChevronDown, ChevronRight, FileText, Info, Users } from 'luci
   `,
 })
 export class ZardDemoMenuDefaultComponent {
-  readonly ChevronDownIcon = ChevronDown;
-  readonly BookOpenIcon = BookOpen;
-  readonly FileTextIcon = FileText;
-  readonly InfoIcon = Info;
-  readonly ChevronRightIcon = ChevronRight;
-  readonly UsersIcon = Users;
-
   log(item: string) {
     console.log('Navigate to:', item);
   }

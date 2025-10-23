@@ -1,12 +1,12 @@
-import { Layers2, LucideIconData, Sparkles, Users, Zap } from 'lucide-angular';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { Component } from '@angular/core';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardIcon } from '@zard/components/icon/icons';
+import { Component } from '@angular/core';
 
 interface FeatureCard {
   title: string;
   description: string;
-  icon: LucideIconData;
+  icon: ZardIcon;
 }
 
 @Component({
@@ -41,22 +41,22 @@ export class WhyZardUISection {
     {
       title: 'Beautiful & Practical',
       description: 'Meticulously crafted components that look stunning out of the box while remaining highly functional and accessible.',
-      icon: Sparkles,
+      icon: 'sparkles',
     },
     {
       title: 'Community First',
       description: 'Built by Angular developers who understand your needs. Real-world solutions to real problems.',
-      icon: Users,
+      icon: 'users',
     },
     {
       title: 'Modern Angular',
       description: 'Leveraging the latest Angular features including standalone components, signals, and best practices.',
-      icon: Zap,
+      icon: 'zap',
     },
     {
       title: 'Infinitely Customizable',
       description: 'Built with TailwindCSS for seamless customization. Make every component truly yours.',
-      icon: Layers2,
+      icon: 'layers-2',
     },
   ];
 }

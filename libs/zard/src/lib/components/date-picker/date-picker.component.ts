@@ -8,7 +8,6 @@ import { ZardButtonComponent } from '../button/button.component';
 import type { ClassValue } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
-import { Calendar } from 'lucide-angular';
 
 export type { ZardDatePickerVariants };
 
@@ -36,7 +35,7 @@ export type { ZardDatePickerVariants };
       [attr.aria-haspopup]="true"
       aria-label="Choose date"
     >
-      <z-icon [zType]="CalendarIcon" />
+      <z-icon zType="calendar" />
       <span [class]="textClasses()">
         {{ displayText() }}
       </span>
@@ -51,7 +50,6 @@ export type { ZardDatePickerVariants };
   providers: [DatePipe],
 })
 export class ZardDatePickerComponent {
-  readonly CalendarIcon = Calendar;
   private readonly datePipe = inject(DatePipe);
 
   readonly calendarTemplate = viewChild.required<TemplateRef<unknown>>('calendarTemplate');

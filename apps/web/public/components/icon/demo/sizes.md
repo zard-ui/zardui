@@ -1,6 +1,5 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
-import { House } from 'lucide-angular';
 
 import { ZardIconComponent } from '../icon.component';
 
@@ -10,28 +9,27 @@ import { ZardIconComponent } from '../icon.component';
   template: `
     <div class="flex items-center gap-6">
       <div class="flex flex-col items-center gap-2">
-        <z-icon [zType]="HouseIcon" zSize="sm" />
+        <z-icon zType="house" zSize="sm" />
         <span class="text-xs text-muted-foreground">Small</span>
       </div>
 
       <div class="flex flex-col items-center gap-2">
-        <z-icon [zType]="HouseIcon" zSize="default" />
+        <z-icon zType="house" zSize="default" />
         <span class="text-xs text-muted-foreground">Default</span>
       </div>
 
       <div class="flex flex-col items-center gap-2">
-        <z-icon [zType]="HouseIcon" zSize="lg" />
+        <z-icon zType="house" zSize="lg" />
         <span class="text-xs text-muted-foreground">Large</span>
       </div>
 
       <div class="flex flex-col items-center gap-2">
-        <z-icon [zType]="HouseIcon" zSize="xl" />
+        <z-icon zType="house" zSize="xl" />
         <span class="text-xs text-muted-foreground">Extra Large</span>
       </div>
     </div>
   `,
 })
-export class ZardDemoIconSizesComponent {
-  readonly HouseIcon = House;}
+export class ZardDemoIconSizesComponent {}
 
 ```

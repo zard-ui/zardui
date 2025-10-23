@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
 import { ZardToggleGroupComponent, ZardToggleGroupItem } from '../toggle-group.component';
-import { TextAlignCenter, TextAlignEnd, TextAlignStart } from 'lucide-angular';
 
 @Component({
   selector: 'demo-toggle-group-single',
@@ -13,17 +12,17 @@ export default class ToggleGroupSingleComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'left',
-      icon: TextAlignStart,
+      icon: 'text-align-start',
       ariaLabel: 'Text align start',
     },
     {
       value: 'center',
-      icon: TextAlignCenter,
+      icon: 'text-align-center',
       ariaLabel: 'Text align center',
     },
     {
       value: 'right',
-      icon: TextAlignEnd,
+      icon: 'text-align-end',
       ariaLabel: 'Text align end',
     },
   ];

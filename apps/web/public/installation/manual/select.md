@@ -26,7 +26,6 @@ import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@ang
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import { ChevronDown } from 'lucide-angular';
 
 import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -72,7 +71,7 @@ type OnChangeType = (value: string) => void;
           <span class="text-muted-foreground">{{ zPlaceholder() }}</span>
         }
       </span>
-      <z-icon [zType]="ChevronDownIcon" zSize="lg" class="opacity-50" />
+      <z-icon zType="chevron-down" zSize="lg" class="opacity-50" />
     </button>
 
     <ng-template #dropdownTemplate>
@@ -85,8 +84,6 @@ type OnChangeType = (value: string) => void;
   `,
 })
 export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit, OnDestroy {
-  readonly ChevronDownIcon = ChevronDown;
-
   private elementRef = inject(ElementRef);
   private overlay = inject(Overlay);
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
@@ -498,7 +495,6 @@ export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 ```angular-ts title="select-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input, linkedSignal } from '@angular/core';
-import { Check } from 'lucide-angular';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -528,15 +524,13 @@ interface SelectHost {
   template: `
     <span class="absolute right-2 flex size-3.5 items-center justify-center">
       @if (isSelected()) {
-        <z-icon [zType]="CheckIcon" />
+        <z-icon zType="check" />
       }
     </span>
     <ng-content></ng-content>
   `,
 })
 export class ZardSelectItemComponent {
-  readonly CheckIcon = Check;
-
   readonly zValue = input.required<string>();
   readonly zDisabled = input(false, { transform });
   readonly class = input<string>('');

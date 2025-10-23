@@ -222,15 +222,14 @@ export class LayoutModule {}
 
 
 ```angular-ts title="sidebar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
-import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
-
-import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { sidebarGroupLabelVariants, sidebarGroupVariants, sidebarTriggerVariants, sidebarVariants } from './layout.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
-import { ChevronLeft, ChevronRight, LucideIconData } from 'lucide-angular';
+import { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-sidebar',
@@ -295,14 +294,14 @@ export class SidebarComponent {
     return typeof width === 'number' ? width : parseInt(width, 10);
   });
 
-  protected readonly chevronIcon = computed((): LucideIconData => {
+  protected readonly chevronIcon = computed((): ZardIcon => {
     const collapsed = this.zCollapsed();
     const reverse = this.zReverseArrow();
 
     if (reverse) {
-      return collapsed ? ChevronLeft : ChevronRight;
+      return collapsed ? 'chevron-left' : 'chevron-right';
     }
-    return collapsed ? ChevronRight : ChevronLeft;
+    return collapsed ? 'chevron-right' : 'chevron-left';
   });
 
   protected readonly classes = computed(() => mergeClasses(sidebarVariants(), this.class()));

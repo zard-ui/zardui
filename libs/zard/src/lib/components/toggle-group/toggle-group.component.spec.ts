@@ -1,8 +1,7 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardToggleGroupComponent, ZardToggleGroupItem } from './toggle-group.component';
-import { Bold, Italic, Underline } from 'lucide-angular';
 
 describe('ZardToggleGroupComponent', () => {
   let component: ZardToggleGroupComponent;
@@ -33,9 +32,9 @@ describe('ZardToggleGroupComponent', () => {
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
     expect(buttons.length).toBe(3);
-    expect(buttons[0].textContent.trim()).toBe(Bold);
-    expect(buttons[1].textContent.trim()).toBe(Italic);
-    expect(buttons[2].textContent.trim()).toBe(Underline);
+    expect(buttons[0].textContent.trim()).toBe('bold');
+    expect(buttons[1].textContent.trim()).toBe('italic');
+    expect(buttons[2].textContent.trim()).toBe('underline');
   });
 
   it('should set aria-pressed attribute correctly for multiple type', () => {
@@ -153,8 +152,8 @@ describe('ZardToggleGroupComponent', () => {
 
   it('should render icons when provided', () => {
     const itemsWithIcons: ZardToggleGroupItem[] = [
-      { value: 'bold', icon: Bold, ariaLabel: 'Toggle bold' },
-      { value: 'italic', icon: Italic, ariaLabel: 'Toggle italic' },
+      { value: 'bold', icon: 'bold', ariaLabel: 'Toggle bold' },
+      { value: 'italic', icon: 'italic', ariaLabel: 'Toggle italic' },
     ];
 
     fixture.componentRef.setInput('items', itemsWithIcons);
@@ -169,7 +168,7 @@ describe('ZardToggleGroupComponent', () => {
   });
 
   it('should render both icon and label when provided', () => {
-    const itemsWithIconsAndLabels: ZardToggleGroupItem[] = [{ value: 'bold', icon: Bold, label: 'Bold', ariaLabel: 'Toggle bold' }];
+    const itemsWithIconsAndLabels: ZardToggleGroupItem[] = [{ value: 'bold', icon: 'bold', label: 'Bold', ariaLabel: 'Toggle bold' }];
 
     fixture.componentRef.setInput('items', itemsWithIconsAndLabels);
     fixture.detectChanges();
@@ -180,7 +179,7 @@ describe('ZardToggleGroupComponent', () => {
 
     expect(icon).toBeTruthy();
     expect(textSpan).toBeTruthy();
-    expect(textSpan.textContent).toBe(Bold);
-    expect(textSpan.textContent.trim()).toBe(Bold);
+    expect(textSpan.textContent).toBe('bold');
+    expect(textSpan.textContent.trim()).toBe('bold');
   });
 });

@@ -1,9 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component, HostListener } from '@angular/core';
 
-import { ZardCommandModule } from '../command.module';
 import { ZardCommandOption } from '../command.component';
-import { Folder, FolderOpen, FolderPlus, LayoutDashboard, Moon, Save, Terminal } from 'lucide-angular';
+import { ZardCommandModule } from '../command.module';
 
 @Component({
   standalone: true,
@@ -15,37 +14,29 @@ import { Folder, FolderOpen, FolderPlus, LayoutDashboard, Moon, Save, Terminal }
         <z-command-empty>No commands found.</z-command-empty>
 
         <z-command-option-group zLabel="Quick Actions">
-          <z-command-option zLabel="Create new project" zValue="new-project" [zIcon]="FolderPlusIcon" zShortcut="⌘N"> </z-command-option>
-          <z-command-option zLabel="Open file" zValue="open-file" [zIcon]="FolderOpenIcon" zShortcut="⌘O"> </z-command-option>
-          <z-command-option zLabel="Save all" zValue="save-all" [zIcon]="SaveIcon" zShortcut="⌘S"> </z-command-option>
+          <z-command-option zLabel="Create new project" zValue="new-project" zIcon="folder" zShortcut="⌘N"> </z-command-option>
+          <z-command-option zLabel="Open file" zValue="open-file" zIcon="folder-open" zShortcut="⌘O"> </z-command-option>
+          <z-command-option zLabel="Save all" zValue="save-all" zIcon="save" zShortcut="⌘S"> </z-command-option>
         </z-command-option-group>
 
         <z-command-divider></z-command-divider>
 
         <z-command-option-group zLabel="Navigation">
-          <z-command-option zLabel="Go to Dashboard" zValue="dashboard" [zIcon]="LayoutDashboardIcon" zShortcut="⌘1"> </z-command-option>
-          <z-command-option zLabel="Go to Projects" zValue="projects" [zIcon]="FolderIcon" zShortcut="⌘2"> </z-command-option>
+          <z-command-option zLabel="Go to Dashboard" zValue="dashboard" zIcon="layout-dashboard" zShortcut="⌘1"> </z-command-option>
+          <z-command-option zLabel="Go to Projects" zValue="projects" zIcon="folder" zShortcut="⌘2"> </z-command-option>
         </z-command-option-group>
 
         <z-command-divider></z-command-divider>
 
         <z-command-option-group zLabel="Tools">
-          <z-command-option zLabel="Open terminal" zValue="terminal" [zIcon]="TerminalIcon" zShortcut="⌘T"> </z-command-option>
-          <z-command-option zLabel="Toggle theme" zValue="theme" [zIcon]="MoonIcon" zShortcut="⌘D"> </z-command-option>
+          <z-command-option zLabel="Open terminal" zValue="terminal" zIcon="terminal" zShortcut="⌘T"> </z-command-option>
+          <z-command-option zLabel="Toggle theme" zValue="theme" zIcon="moon" zShortcut="⌘D"> </z-command-option>
         </z-command-option-group>
       </z-command-list>
     </z-command>
   `,
 })
 export class ZardDemoCommandDefaultComponent {
-  readonly FolderPlusIcon = FolderPlus;
-  readonly FolderOpenIcon = FolderOpen;
-  readonly SaveIcon = Save;
-  readonly LayoutDashboardIcon = LayoutDashboard;
-  readonly FolderIcon = Folder;
-  readonly TerminalIcon = Terminal;
-  readonly MoonIcon = Moon;
-  
   // Handle command selection
   handleCommand(option: ZardCommandOption) {
     const action = `Executed "${option.label}" (value: ${option.value})`;

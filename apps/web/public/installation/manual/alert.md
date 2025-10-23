@@ -4,10 +4,10 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { alertVariants, ZardAlertVariants } from './alert.variants';
 import { ZardIconComponent } from '../icon/icon.component';
-import { CircleCheck, CircleX, Info, LucideIconData, TriangleAlert } from 'lucide-angular';
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-alert',
@@ -36,21 +36,21 @@ export class ZardAlertComponent {
   readonly class = input<ClassValue>('');
   readonly zTitle = input.required<string>();
   readonly zDescription = input.required<string>();
-  readonly zIcon = input<LucideIconData>();
+  readonly zIcon = input<ZardIcon>();
   readonly zType = input<ZardAlertVariants['zType']>('default');
   readonly zAppearance = input<ZardAlertVariants['zAppearance']>('outline');
 
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType(), zAppearance: this.zAppearance() }), this.class()));
 
-  protected readonly iconsType: Record<NonNullable<ZardAlertVariants['zType']>, LucideIconData | ''> = {
+  protected readonly iconsType: Record<NonNullable<ZardAlertVariants['zType']>, ZardIcon | ''> = {
     default: '',
-    info: Info,
-    success: CircleCheck,
-    warning: TriangleAlert,
-    error: CircleX,
+    info: 'info',
+    success: 'circle-check',
+    warning: 'triangle-alert',
+    error: 'circle-x',
   };
 
-  protected readonly iconName = computed((): LucideIconData | null => {
+  protected readonly iconName = computed((): ZardIcon | null => {
     const customIcon = this.zIcon();
     if (customIcon) return customIcon;
 

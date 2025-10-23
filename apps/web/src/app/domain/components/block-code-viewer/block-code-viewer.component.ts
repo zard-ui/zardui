@@ -1,11 +1,10 @@
 import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { Component, input, signal, computed } from '@angular/core';
-import { Clipboard } from 'lucide-angular';
 
 import { SimpleCodeHighlightComponent } from '../../../shared/components/simple-code-highlight/simple-code-highlight.component';
 import type { BlockFile, FileTreeNode } from '../block-container/block-container.component';
 import { FileTreeComponent } from '../file-tree/file-tree.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 @Component({
   selector: 'z-block-code-viewer',

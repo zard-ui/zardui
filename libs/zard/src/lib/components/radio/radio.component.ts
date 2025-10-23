@@ -5,7 +5,6 @@ import type { ClassValue } from 'clsx';
 import { radioLabelVariants, radioVariants, ZardRadioVariants } from './radio.variants';
 import { generateId, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
-import { Circle } from 'lucide-angular';
 
 type OnTouchedType = () => unknown;
 type OnChangeType = (value: unknown) => void;
@@ -20,7 +19,7 @@ type OnChangeType = (value: unknown) => void;
       <main class="flex relative">
         <input #input type="radio" [value]="value()" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onRadioBlur()" [name]="name()" [id]="zId()" />
         <z-icon
-          [zType]="CircleIcon"
+          zType="circle"
           [zSize]="iconSize()"
           class="absolute flex items-center justify-center text-primary-foreground opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
         />
@@ -41,7 +40,6 @@ type OnChangeType = (value: unknown) => void;
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardRadioComponent implements ControlValueAccessor {
-  readonly CircleIcon = Circle;
   private cdr = inject(ChangeDetectorRef);
 
   readonly radioChange = output<boolean>();

@@ -93,12 +93,10 @@ export class ZardAccordionComponent implements AfterContentInit {
 
 ```angular-ts title="accordion-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
-import { ChevronDown } from 'lucide-angular';
+import type { ClassValue } from 'clsx';
 
 import { ZardAccordionComponent } from './accordion.component';
 import { ZardIconComponent } from '../icon/icon.component';
-
-import type { ClassValue } from 'clsx';
 
 @Component({
   selector: 'z-accordion-item',
@@ -125,7 +123,7 @@ import type { ClassValue } from 'clsx';
         <span class="group-hover:underline">
           {{ zTitle() }}
         </span>
-        <z-icon [zType]="ChevronDownIcon" class="transition-transform duration-200" [class]="isOpen() ? 'rotate-180' : ''" />
+        <z-icon zType="chevron-down" class="transition-transform duration-200" [class]="isOpen() ? 'rotate-180' : ''" />
       </button>
 
       <div
@@ -146,8 +144,6 @@ import type { ClassValue } from 'clsx';
   `,
 })
 export class ZardAccordionItemComponent {
-  readonly ChevronDownIcon = ChevronDown;
-
   private cdr = inject(ChangeDetectorRef);
 
   readonly zTitle = input<string>('');

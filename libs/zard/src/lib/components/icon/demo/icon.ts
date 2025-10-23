@@ -1,7 +1,7 @@
-import { ZardDemoIconColorsComponent } from './colors';
-import { ZardDemoIconDefaultComponent } from './default';
-import { ZardDemoIconSizesComponent } from './sizes';
 import { ZardDemoIconStrokeWidthComponent } from './stroke-width';
+import { ZardDemoIconDefaultComponent } from './default';
+import { ZardDemoIconColorsComponent } from './colors';
+import { ZardDemoIconSizesComponent } from './sizes';
 
 export const ICON = {
   componentName: 'icon',
@@ -22,7 +22,7 @@ export const ICON = {
       component: ZardDemoIconColorsComponent,
     },
     {
-      name: 'strokeWidth',
+      name: 'stroke-width',
       component: ZardDemoIconStrokeWidthComponent,
     },
   ],

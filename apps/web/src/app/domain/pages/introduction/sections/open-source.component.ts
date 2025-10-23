@@ -1,13 +1,13 @@
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { Component } from '@angular/core';
-import { Ban, X, CircleCheck, CircleDollarSign, Zap, LucideIconData } from 'lucide-angular';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardIcon } from '@zard/components/icon/icons';
+import { Component } from '@angular/core';
 
 interface OpenSourceFeature {
   title: string;
   description: string;
-  icon: LucideIconData;
+  icon: ZardIcon;
 }
 
 interface StandAgainstItem {
@@ -46,13 +46,13 @@ interface StandAgainstItem {
       <!-- What We Stand Against -->
       <div class="rounded-lg bg-destructive/5 p-6">
         <h3 class="mb-4 text-lg font-semibold flex items-center gap-2">
-          <z-icon [zType]="BanIcon" class="text-destructive" />
+          <z-icon zType="ban" class="text-destructive" />
           What We Stand Against
         </h3>
         <div class="grid gap-3 md:grid-cols-3">
           @for (item of standAgainstItems; track $index) {
             <div class="flex items-start gap-3">
-              <z-icon [zType]="XIcon" class="text-destructive" />
+              <z-icon zType="x" class="text-destructive" />
               <div>
                 <p class="font-medium text-sm">{{ item.title }}</p>
                 <p class="text-xs text-muted-foreground">{{ item.description }}</p>
@@ -65,24 +65,21 @@ interface StandAgainstItem {
   `,
 })
 export class OpenSourceSection {
-  readonly BanIcon = Ban;
-  readonly XIcon = X;
-
   readonly features: OpenSourceFeature[] = [
     {
       title: 'Community Owned',
       description: "Governed by developers, not corporations. Every decision is made transparently with the community's best interests at heart.",
-      icon: CircleCheck,
+      icon: 'circle-check',
     },
     {
       title: 'Forever Free',
       description: 'Every component, every feature, always free. No premium tiers, no hidden costs, no "pro" versions.',
-      icon: CircleDollarSign,
+      icon: 'circle-dollar-sign',
     },
     {
       title: 'Built in Public',
       description: 'All development happens in the open. Watch us build, contribute your ideas, and shape the future together.',
-      icon: Zap,
+      icon: 'zap',
     },
   ];
 

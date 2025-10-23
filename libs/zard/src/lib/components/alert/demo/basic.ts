@@ -1,7 +1,7 @@
+import { ZardIcon } from '../../icon/icons';
 import { Component } from '@angular/core';
 
 import { ZardAlertComponent } from '../alert.component';
-import { CodeXml } from 'lucide-angular';
 
 @Component({
   standalone: true,
@@ -9,7 +9,7 @@ import { CodeXml } from 'lucide-angular';
   template: ` <z-alert [zIcon]="icon" [zTitle]="title" [zDescription]="description" /> `,
 })
 export class ZardDemoAlertBasicComponent {
-  icon = CodeXml;
+  icon = 'code-xml' as ZardIcon;
   title = 'Hello World!';
   description = 'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Assumenda, sint.';
 }

@@ -3,13 +3,11 @@
 ```angular-ts title="checkbox.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { checkboxLabelVariants, checkboxVariants, ZardCheckboxVariants } from './checkbox.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-
 import type { ClassValue } from 'clsx';
-import { Check } from 'lucide-angular';
+
+import { checkboxLabelVariants, checkboxVariants, ZardCheckboxVariants } from './checkbox.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
@@ -24,8 +22,11 @@ type OnChangeType = (value: any) => void;
       <main class="flex relative">
         <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onCheckboxBlur()" name="checkbox" />
         <z-icon
-          [zType]="CheckIcon"
-          [class]="'absolute flex items-center justify-center text-primary-foreground top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity ' + (checked ? 'opacity-100' : 'opacity-0')"
+          zType="check"
+          [class]="
+            'absolute flex items-center justify-center text-primary-foreground top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity ' +
+            (checked ? 'opacity-100' : 'opacity-0')
+          "
         />
       </main>
       <label [class]="labelClasses()" for="checkbox">
@@ -45,8 +46,6 @@ type OnChangeType = (value: any) => void;
 })
 export class ZardCheckboxComponent implements ControlValueAccessor {
   private cdr = inject(ChangeDetectorRef);
-
-  readonly CheckIcon = Check;
 
   readonly checkChange = output<boolean>();
   readonly class = input<ClassValue>('');

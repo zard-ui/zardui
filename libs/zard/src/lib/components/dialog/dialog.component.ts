@@ -18,19 +18,19 @@ import {
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { LucideIconData, X } from 'lucide-angular';
 
-import { ZardIconComponent } from '../icon/icon.component';
 import { ZardButtonComponent } from '../button/button.component';
+import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
 import { ZardDialogRef } from './dialog-ref';
+import { ZardIcon } from '../icon/icons';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardDialogOptions<T, U> {
-  zCancelIcon?: LucideIconData;
+  zCancelIcon?: ZardIcon;
   zCancelText?: string | null;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
@@ -41,7 +41,7 @@ export class ZardDialogOptions<T, U> {
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
-  zOkIcon?: LucideIconData;
+  zOkIcon?: ZardIcon;
   zOkText?: string | null;
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
@@ -57,7 +57,7 @@ export class ZardDialogOptions<T, U> {
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
       <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1" (click)="onCloseClick()">
-        <z-icon [zType]="XIcon" />
+        <z-icon zType="x" />
       </button>
     }
 
@@ -121,8 +121,6 @@ export class ZardDialogOptions<T, U> {
   ],
 })
 export class ZardDialogComponent<T, U> extends BasePortalOutlet {
-  readonly XIcon = X;
-
   private readonly host = inject(ElementRef<HTMLElement>);
   protected readonly config = inject(ZardDialogOptions<T, U>);
 

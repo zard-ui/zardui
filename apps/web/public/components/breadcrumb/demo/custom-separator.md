@@ -1,9 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardBreadcrumbModule } from '../breadcrumb.module';
 import { ZardIconComponent } from '../../icon/icon.component';
-import { MoveRight } from 'lucide-angular';
+import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
   standalone: true,
@@ -15,13 +14,13 @@ import { MoveRight } from 'lucide-angular';
           <z-breadcrumb-link zLink="/">Home</z-breadcrumb-link>
         </z-breadcrumb-item>
         <z-breadcrumb-separator>
-          <div z-icon [zType]="MoveRightIcon"></div>
+          <div z-icon zType="move-right"></div>
         </z-breadcrumb-separator>
         <z-breadcrumb-item>
           <z-breadcrumb-link zLink="/components">Components</z-breadcrumb-link>
         </z-breadcrumb-item>
         <z-breadcrumb-separator>
-          <div z-icon [zType]="MoveRightIcon"></div>
+          <div z-icon zType="move-right"></div>
         </z-breadcrumb-separator>
         <z-breadcrumb-item>
           <z-breadcrumb-page>Breadcrumb</z-breadcrumb-page>
@@ -30,8 +29,6 @@ import { MoveRight } from 'lucide-angular';
     </z-breadcrumb>
   `,
 })
-export class ZardDemoBreadcrumbCustomSeparatorComponent {
-  readonly MoveRightIcon = MoveRight;
-}
+export class ZardDemoBreadcrumbCustomSeparatorComponent {}
 
 ```

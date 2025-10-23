@@ -17,14 +17,13 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardCommandInputComponent } from './command-input.component';
-import { ZardCommandOptionComponent } from './command-option.component';
-import { commandVariants, ZardCommandVariants } from './command.variants';
-
 import type { ClassValue } from 'clsx';
-import { LucideIconData } from 'lucide-angular';
+
+import { commandVariants, ZardCommandVariants } from './command.variants';
+import { ZardCommandOptionComponent } from './command-option.component';
+import { ZardCommandInputComponent } from './command-input.component';
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIcon } from '../icon/icons';
 
 export interface ZardCommandOption {
   value: unknown;
@@ -32,7 +31,7 @@ export interface ZardCommandOption {
   disabled?: boolean;
   command?: string;
   shortcut?: string;
-  icon?: LucideIconData;
+  icon?: ZardIcon;
   action?: () => void;
   key?: string; // Keyboard shortcut key (e.g., 'n' for Ctrl+N)
 }
@@ -432,8 +431,6 @@ export class ZardCommandEmptyComponent {
 
 
 ```angular-ts title="command-input.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Subject, switchMap, takeUntil, timer } from 'rxjs';
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -451,14 +448,14 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Subject, switchMap, takeUntil, timer } from 'rxjs';
+import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
-import { ZardIconComponent } from '../icon/icon.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
-import type { ClassValue } from 'clsx';
-import { Search } from 'lucide-angular';
 @Component({
   selector: 'z-command-input',
   exportAs: 'zCommandInput',
@@ -468,7 +465,7 @@ import { Search } from 'lucide-angular';
   encapsulation: ViewEncapsulation.None,
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
-      <z-icon [zType]="SearchIcon" class="mr-2 shrink-0 opacity-50" />
+      <z-icon zType="search" class="mr-2 shrink-0 opacity-50" />
       <input
         #searchInput
         [class]="classes()"
@@ -497,7 +494,6 @@ import { Search } from 'lucide-angular';
   ],
 })
 export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
-  readonly SearchIcon = Search;
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
   readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
@@ -709,10 +705,10 @@ import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input
 import type { ClassValue } from 'clsx';
 
 import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
-import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 import { ZardCommandComponent } from './command.component';
-import { LucideIconData } from 'lucide-angular';
+import { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-command-option',
@@ -752,7 +748,7 @@ export class ZardCommandOptionComponent {
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
   readonly zCommand = input<string>('');
-  readonly zIcon = input<LucideIconData>();
+  readonly zIcon = input<ZardIcon>();
   readonly zShortcut = input<string>('');
   readonly zDisabled = input(false, { transform });
   readonly variant = input<ZardCommandItemVariants['variant']>('default');

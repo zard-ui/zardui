@@ -1,21 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
 
-import { ZardToggleComponent } from './toggle.component';
 import { ZardIconComponent } from '../icon/icon.component';
-import { Bold } from 'lucide-angular';
+import { ZardToggleComponent } from './toggle.component';
 
 @Component({
   standalone: true,
   imports: [ZardToggleComponent, ZardIconComponent],
   template: `
     <z-toggle aria-label="Test component" [zValue]="zValue" [zDefault]="zDefault" [disabled]="disabled">
-      <div z-icon [zType]="BoldIcon"></div>
+      <div z-icon zType="bold"></div>
     </z-toggle>
   `,
 })
 class TestZardToggleComponent {
-  BoldIcon = Bold;
   zDefault = false;
   disabled = false;
 }

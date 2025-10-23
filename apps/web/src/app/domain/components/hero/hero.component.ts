@@ -1,9 +1,8 @@
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { RouterModule } from '@angular/router';
-import { ChevronRight } from 'lucide-angular';
 
 @Component({
   selector: 'z-hero',
@@ -37,7 +36,7 @@ import { ChevronRight } from 'lucide-angular';
           <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
             <a z-button routerLink="/docs/components" class="group bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-3">
               Browse Components
-              <z-icon [zType]="ChevronRightIcon" class="shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1 ml-2" />
+              <z-icon zType="chevron-right" class="shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1 ml-2" />
             </a>
             <a z-button zType="outline" routerLink="/docs/installation" class="px-8 py-3"> Get Started </a>
           </div>
@@ -58,8 +57,6 @@ import { ChevronRight } from 'lucide-angular';
   `,
 })
 export class HeroComponent {
-  readonly ChevronRightIcon = ChevronRight;
-
   readonly stackImages = signal([
     { src: 'icons/angular.svg', class: 'size-8 invert dark:invert-0', alt: 'Angular logo' },
     { src: 'icons/typescript.svg', class: 'size-8 invert-0 dark:invert', alt: 'TypeScript logo' },

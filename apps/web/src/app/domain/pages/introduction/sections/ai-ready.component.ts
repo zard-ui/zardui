@@ -1,13 +1,13 @@
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { Component } from '@angular/core';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { BookOpenText, LucideIconData, Sun } from 'lucide-angular';
+import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardIcon } from '@zard/components/icon/icons';
+import { Component } from '@angular/core';
 
 interface AIFeatureCard {
   title: string;
   description: string;
-  icon: LucideIconData;
+  icon: ZardIcon;
 }
 
 @Component({
@@ -48,12 +48,12 @@ export class AIReadySection {
     {
       title: 'Predictable Patterns',
       description: 'Consistent naming conventions, standardized props, and logical component hierarchies that AI can easily understand and generate code for.',
-      icon: Sun,
+      icon: 'sun',
     },
     {
       title: 'Rich Documentation',
       description: 'Comprehensive examples, clear API references, and usage patterns that provide AI tools with the context they need to generate accurate code.',
-      icon: BookOpenText,
+      icon: 'book-open-text',
     },
   ];
 }

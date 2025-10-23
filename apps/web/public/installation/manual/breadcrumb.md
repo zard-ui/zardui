@@ -21,9 +21,8 @@ import {
   ZardBreadcrumbSeparatorVariants,
   ZardBreadcrumbEllipsisVariants,
 } from './breadcrumb.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
-import { ChevronRight, Ellipsis } from 'lucide-angular';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-breadcrumb',
@@ -134,13 +133,12 @@ export class ZardBreadcrumbPageComponent {
   template: `
     <li aria-hidden="true" role="presentation" [class]="classes()">
       <ng-content>
-        <z-icon [zType]="ChevronRightIcon" />
+        <z-icon zType="chevron-right" />
       </ng-content>
     </li>
   `,
 })
 export class ZardBreadcrumbSeparatorComponent {
-  readonly ChevronRightIcon = ChevronRight;
   readonly zSeparator = input<string | TemplateRef<void> | null>('/');
   readonly zType = input<ZardBreadcrumbSeparatorVariants['zType']>('default');
 
@@ -156,7 +154,7 @@ export class ZardBreadcrumbSeparatorComponent {
   imports: [ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <z-icon [zType]="EllipsisIcon" /> `,
+  template: ` <z-icon zType="ellipsis" /> `,
   host: {
     '[class]': 'classes()',
     'aria-hidden': 'true',
@@ -164,7 +162,6 @@ export class ZardBreadcrumbSeparatorComponent {
   },
 })
 export class ZardBreadcrumbEllipsisComponent {
-  readonly EllipsisIcon = Ellipsis;
   readonly zColor = input<ZardBreadcrumbEllipsisVariants['zColor']>('muted');
 
   readonly class = input<ClassValue>('');

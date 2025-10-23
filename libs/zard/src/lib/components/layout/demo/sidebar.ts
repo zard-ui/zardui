@@ -1,18 +1,18 @@
+import { ZardIcon } from '../../icon/icons';
 import { Component, signal } from '@angular/core';
 
-import { ZardAvatarComponent } from '../../avatar/avatar.component';
-import { ZardBreadcrumbModule } from '../../breadcrumb/breadcrumb.module';
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardMenuModule } from '../../menu/menu.module';
 import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
-import { ZardTooltipModule } from '../../tooltip/tooltip';
-import { LayoutModule } from '../layout.module';
+import { ZardBreadcrumbModule } from '../../breadcrumb/breadcrumb.module';
+import { ZardDividerComponent } from '../../divider/divider.component';
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardAvatarComponent } from '../../avatar/avatar.component';
 import { ZardIconComponent } from '../../icon/icon.component';
-import { Calendar, ChevronRight, ChevronsUpDown, Folder, House, Inbox, LogOut, LucideIconData, PanelLeft, Search, Settings, User } from 'lucide-angular';
+import { ZardTooltipModule } from '../../tooltip/tooltip';
+import { ZardMenuModule } from '../../menu/menu.module';
+import { LayoutModule } from '../layout.module';
 
 interface MenuItem {
-  icon: LucideIconData;
+  icon: ZardIcon;
   label: string;
   submenu?: { label: string }[];
 }
@@ -69,7 +69,7 @@ interface MenuItem {
                   <z-icon [zType]="item.icon" [class]="sidebarCollapsed() ? '' : ' mr-2'"></z-icon>
                   @if (!sidebarCollapsed()) {
                     <span class="flex-1 text-left">{{ item.label }}</span>
-                    <z-icon [zType]="ChevronRightIcon" />
+                    <z-icon zType="chevron-right" />
                   }
                 </button>
 
@@ -112,23 +112,23 @@ interface MenuItem {
                   <div class="text-xs">test&#64;zardui.com</div>
                 </div>
 
-                <z-icon [zType]="ChevronsUpDownIcon" class="ml-auto" />
+                <z-icon zType="chevrons-up-down" class="ml-auto" />
               }
             </div>
 
             <ng-template #userMenu>
               <div z-menu-content class="w-48">
                 <button z-menu-item>
-                  <z-icon [zType]="UserIcon" class="mr-2" />
+                  <z-icon zType="user" class="mr-2" />
                   Profile
                 </button>
                 <button z-menu-item>
-                  <z-icon [zType]="SettingsIcon" class="mr-2" />
+                  <z-icon zType="settings" class="mr-2" />
                   Settings
                 </button>
                 <z-divider zSpacing="sm" />
                 <button z-menu-item>
-                  <z-icon [zType]="LogOutIcon" class="mr-2" />
+                  <z-icon zType="log-out" class="mr-2" />
                   Logout
                 </button>
               </div>
@@ -141,7 +141,7 @@ interface MenuItem {
       <z-content class="min-h-[200px]">
         <div class="flex items-center">
           <button z-button zType="ghost" zSize="sm" class="-ml-2" (click)="toggleSidebar()">
-            <z-icon [zType]="PanelLeftIcon" />
+            <z-icon zType="panel-left" />
           </button>
 
           <z-divider zOrientation="vertical" class="h-4 ml-2" />
@@ -168,28 +168,21 @@ interface MenuItem {
   `,
 })
 export class LayoutDemoSidebarComponent {
-  readonly ChevronRightIcon = ChevronRight;
-  readonly ChevronsUpDownIcon = ChevronsUpDown;
-  readonly UserIcon = User;
-  readonly SettingsIcon = Settings;
-  readonly LogOutIcon = LogOut;
-  readonly PanelLeftIcon = PanelLeft;
-
   sidebarCollapsed = signal(false);
 
   mainMenuItems: MenuItem[] = [
-    { icon: House, label: 'Home' },
-    { icon: Inbox, label: 'Inbox' },
+    { icon: 'house', label: 'Home' },
+    { icon: 'inbox', label: 'Inbox' },
   ];
 
   workspaceMenuItems: MenuItem[] = [
     {
-      icon: Folder,
+      icon: 'folder',
       label: 'Projects',
       submenu: [{ label: 'Design System' }, { label: 'Mobile App' }, { label: 'Website' }],
     },
-    { icon: Calendar, label: 'Calendar' },
-    { icon: Search, label: 'Search' },
+    { icon: 'calendar', label: 'Calendar' },
+    { icon: 'search', label: 'Search' },
   ];
 
   avatar = {

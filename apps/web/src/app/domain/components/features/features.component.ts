@@ -1,12 +1,11 @@
-import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
-import { ChevronRight } from 'lucide-angular';
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { ZardCardComponent } from '@zard/components/card/card.component';
+import { RouterModule } from '@angular/router';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'z-features',
@@ -34,13 +33,11 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
       <footer class="flex justify-center mt-8">
         <a z-button zType="ghost" routerLink="/components/button" class="group"
           >View all
-          <z-icon [zType]="ChevronRightIcon" class="shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1" />
+          <z-icon zType="chevron-right" class="shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1" />
         </a>
       </footer>
     </section>
   `,
   imports: [RouterModule, ZardCardComponent, ZardButtonComponent, ZardCardComponent, ZardBadgeComponent, ZardCheckboxComponent, ZardInputDirective, ZardIconComponent],
 })
-export class FeaturesComponent {
-  readonly ChevronRightIcon = ChevronRight;
-}
+export class FeaturesComponent {}

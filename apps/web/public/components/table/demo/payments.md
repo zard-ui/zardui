@@ -1,11 +1,10 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardBadgeComponent } from '../../badge/badge.component';
-import { ZardButtonComponent } from '../../button/button.component';
 import { ZardTableBodyComponent, ZardTableCellComponent, ZardTableComponent, ZardTableHeadComponent, ZardTableHeaderComponent, ZardTableRowComponent } from '../table.component';
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardBadgeComponent } from '../../badge/badge.component';
 import { ZardIconComponent } from '../../icon/icon.component';
-import { Copy, Eye } from 'lucide-angular';
 
 export interface Payment {
   id: string;
@@ -56,10 +55,10 @@ export interface Payment {
                 <td z-table-cell>
                   <div class="flex items-center gap-2">
                     <z-button zType="ghost" zSize="icon" (click)="copyPaymentId(payment.id)" title="Copy payment ID">
-                      <div z-icon [zType]="CopyIcon"></div>
+                      <div z-icon zType="copy"></div>
                     </z-button>
                     <z-button zType="ghost" zSize="icon" (click)="viewDetails(payment)" title="View details">
-                      <div z-icon [zType]="EyeIcon"></div>
+                      <div z-icon zType="eye"></div>
                     </z-button>
                   </div>
                 </td>
@@ -76,9 +75,6 @@ export interface Payment {
   `,
 })
 export class ZardDemoTablePaymentsComponent {
-  readonly CopyIcon = Copy;
-  readonly EyeIcon = Eye;
-  
   payments: Payment[] = [
     {
       id: 'm5gr84i9',

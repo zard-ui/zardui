@@ -1,10 +1,10 @@
 import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/command/command.component';
 import { AfterViewInit, Component, inject, viewChild, OnDestroy } from '@angular/core';
 import { ZardCommandModule } from '@zard/components/command/command.module';
-import { SIDEBAR_PATHS } from '../../../shared/constants/routes.constant';
 import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
 import { Router } from '@angular/router';
-import { FileText, Layers } from 'lucide-angular';
+
+import { SIDEBAR_PATHS } from '../../../shared/constants/routes.constant';
 
 @Component({
   standalone: true,
@@ -17,7 +17,7 @@ import { FileText, Layers } from 'lucide-angular';
 
         <z-command-option-group zLabel="Getting Started">
           @for (item of gettingStartedItems; track item.path) {
-            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" [zIcon]="FileTextIcon"> </z-command-option>
+            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon="file-text"> </z-command-option>
           }
         </z-command-option-group>
 
@@ -25,7 +25,7 @@ import { FileText, Layers } from 'lucide-angular';
 
         <z-command-option-group zLabel="Components">
           @for (item of componentItems; track item.path) {
-            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" [zIcon]="LayersIcon"> </z-command-option>
+            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon="layers"> </z-command-option>
           }
         </z-command-option-group>
       </z-command-list>
@@ -34,8 +34,6 @@ import { FileText, Layers } from 'lucide-angular';
 })
 export class CommandDocComponent implements AfterViewInit, OnDestroy {
   readonly commandComponent = viewChild.required<ZardCommandComponent>('commandRef');
-  readonly FileTextIcon = FileText;
-  readonly LayersIcon = Layers;
   private router = inject(Router);
   private dialogRef = inject(ZardDialogRef);
   private escapeListener?: (event: KeyboardEvent) => void;

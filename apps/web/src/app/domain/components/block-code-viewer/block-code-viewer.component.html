@@ -23,7 +23,7 @@
           <span class="text-sm text-code-foreground">{{ selectedFile()!.path }}</span>
         </div>
         <button (click)="copyToClipboard()" z-button zType="ghost" title="Copy code">
-          <z-icon [zType]="ClipboardIcon" class="text-sm" />
+          <z-icon zType="clipboard" class="text-sm" />
           <span class="sr-only">Copy to clipboard</span>
         </button>
       </div>

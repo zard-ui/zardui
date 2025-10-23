@@ -1,20 +1,19 @@
 
 
 ```angular-ts title="toggle-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
 import { ZardIconComponent } from '../icon/icon.component';
-import { LucideIconData } from 'lucide-angular';
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIcon } from '../icon/icons';
 
 export interface ZardToggleGroupItem {
   value: string;
   label?: string;
-  icon?: LucideIconData;
+  icon?: ZardIcon;
   disabled?: boolean;
   ariaLabel?: string;
 }

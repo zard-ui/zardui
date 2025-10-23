@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+
 import { avatarVariants, imageVariants, ZardAvatarImage, ZardAvatarVariants } from './avatar.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
-import { LoaderCircle } from 'lucide-angular';
 
 @Component({
   selector: 'z-avatar',
@@ -13,7 +13,7 @@ import { LoaderCircle } from 'lucide-angular';
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (zLoading()) {
-      <z-icon [zType]="LoaderCircleIcon" class="animate-spin" />
+      <z-icon zType="loader-circle" class="animate-spin" />
     } @else {
       @if (zImage()?.fallback) {
         <span class="text-base absolute m-auto z-0">{{ zImage()?.fallback }}</span>
@@ -113,7 +113,6 @@ import { LoaderCircle } from 'lucide-angular';
   },
 })
 export class ZardAvatarComponent {
-  readonly LoaderCircleIcon = LoaderCircle;
   readonly zType = input<ZardAvatarVariants['zType']>('default');
   readonly zSize = input<ZardAvatarVariants['zSize'] | null>('default');
   readonly zShape = input<ZardAvatarVariants['zShape'] | null>('default');

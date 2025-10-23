@@ -18,7 +18,6 @@ import { CommonModule } from '@angular/common';
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronUp } from 'lucide-angular';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
@@ -50,11 +49,11 @@ export class ZardTabComponent {
           @if (showArrow()) {
             @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
               <button class="scroll-btn scroll-left pr-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('left')">
-                <z-icon [zType]="ChevronLeftIcon" />
+                <z-icon zType="chevron-left" />
               </button>
             } @else {
               <button class="scroll-btn scroll-up pb-4 cursor-pointer" [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'" (click)="scrollNav('up')">
-                <z-icon [zType]="ChevronUpIcon" />
+                <z-icon zType="chevron-up" />
               </button>
             }
           }
@@ -70,11 +69,11 @@ export class ZardTabComponent {
           @if (showArrow()) {
             @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
               <button class="scroll-btn scroll-right pl-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('right')">
-                <z-icon [zType]="ChevronRightIcon" />
+                <z-icon zType="chevron-right" />
               </button>
             } @else {
               <button class="scroll-btn scroll-down pt-4 cursor-pointer" [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'" (click)="scrollNav('down')">
-                <z-icon [zType]="ChevronDownIcon" />
+                <z-icon zType="chevron-down" />
               </button>
             }
           }
@@ -94,11 +93,11 @@ export class ZardTabComponent {
           @if (showArrow()) {
             @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
               <button class="scroll-btn scroll-left pr-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('left')">
-                <z-icon [zType]="ChevronLeftIcon" />
+                <z-icon zType="chevron-left" />
               </button>
             } @else {
               <button class="scroll-btn scroll-up pb-4 cursor-pointer" [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'" (click)="scrollNav('up')">
-                <z-icon [zType]="ChevronUpIcon" />
+                <z-icon zType="chevron-up" />
               </button>
             }
           }
@@ -114,11 +113,11 @@ export class ZardTabComponent {
           @if (showArrow()) {
             @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
               <button class="scroll-btn scroll-right pl-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('right')">
-                <z-icon [zType]="ChevronRightIcon" />
+                <z-icon zType="chevron-right" />
               </button>
             } @else {
               <button class="scroll-btn scroll-down pt-4 cursor-pointer" [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'" (click)="scrollNav('down')">
-                <z-icon [zType]="ChevronDownIcon" />
+                <z-icon zType="chevron-down" />
               </button>
             }
           }
@@ -155,11 +154,6 @@ export class ZardTabGroupComponent {
   protected readonly tabs = computed(() => this.tabComponents());
   protected readonly activeTabIndex = signal<number>(0);
   protected readonly hasScrollSignal = signal<boolean>(false);
-
-  readonly ChevronLeftIcon = ChevronLeft;
-  readonly ChevronUpIcon = ChevronUp;
-  readonly ChevronRightIcon = ChevronRight;
-  readonly ChevronDownIcon = ChevronDown;
 
   protected readonly showArrow = computed(() => {
     const _tabs = this.tabs();

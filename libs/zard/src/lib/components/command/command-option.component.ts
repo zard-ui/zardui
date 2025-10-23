@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input
 import type { ClassValue } from 'clsx';
 
 import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
-import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 import { ZardCommandComponent } from './command.component';
-import { LucideIconData } from 'lucide-angular';
+import { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-command-option',
@@ -45,7 +45,7 @@ export class ZardCommandOptionComponent {
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
   readonly zCommand = input<string>('');
-  readonly zIcon = input<LucideIconData>();
+  readonly zIcon = input<ZardIcon>();
   readonly zShortcut = input<string>('');
   readonly zDisabled = input(false, { transform });
   readonly variant = input<ZardCommandItemVariants['variant']>('default');

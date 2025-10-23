@@ -1,5 +1,3 @@
-import { Subject, switchMap, takeUntil, timer } from 'rxjs';
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,14 +15,14 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Subject, switchMap, takeUntil, timer } from 'rxjs';
+import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
-import { ZardIconComponent } from '../icon/icon.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
-import type { ClassValue } from 'clsx';
-import { Search } from 'lucide-angular';
 @Component({
   selector: 'z-command-input',
   exportAs: 'zCommandInput',
@@ -34,7 +32,7 @@ import { Search } from 'lucide-angular';
   encapsulation: ViewEncapsulation.None,
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
-      <z-icon [zType]="SearchIcon" class="mr-2 shrink-0 opacity-50" />
+      <z-icon zType="search" class="mr-2 shrink-0 opacity-50" />
       <input
         #searchInput
         [class]="classes()"
@@ -63,7 +61,6 @@ import { Search } from 'lucide-angular';
   ],
 })
 export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
-  readonly SearchIcon = Search;
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
   readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 

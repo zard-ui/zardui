@@ -1,8 +1,6 @@
 
 
 ```angular-ts title="combobox.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,26 +16,27 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardCommandEmptyComponent } from '../command/command-empty.component';
-import { ZardCommandInputComponent } from '../command/command-input.component';
-import { ZardCommandListComponent } from '../command/command-list.component';
 import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
-import { ZardCommandOptionComponent } from '../command/command-option.component';
-import { ZardCommandComponent, ZardCommandOption } from '../command/command.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
+import { ZardCommandComponent, ZardCommandOption } from '../command/command.component';
+import { ZardCommandOptionComponent } from '../command/command-option.component';
+import { ZardCommandInputComponent } from '../command/command-input.component';
+import { ZardCommandEmptyComponent } from '../command/command-empty.component';
+import { ZardCommandListComponent } from '../command/command-list.component';
 import { comboboxVariants, ZardComboboxVariants } from './combobox.variants';
+import { ZardButtonComponent } from '../button/button.component';
 import { ZardEmptyComponent } from '../empty/empty.component';
 import { ZardIconComponent } from '../icon/icon.component';
-import { Check, ChevronsUpDown, LucideIconData } from 'lucide-angular';
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIcon } from '../icon/icons';
 
 export interface ZardComboboxOption {
   value: string;
   label: string;
   disabled?: boolean;
-  icon?: LucideIconData;
+  icon?: ZardIcon;
 }
 
 export interface ZardComboboxGroup {
@@ -88,7 +87,7 @@ export interface ZardComboboxGroup {
       <span class="flex-1 text-left truncate">
         {{ displayValue() || placeholder() }}
       </span>
-      <z-icon [zType]="ChevronsUpDownIcon" class="ml-2 shrink-0 opacity-50" />
+      <z-icon zType="chevrons-up-down" class="ml-2 shrink-0 opacity-50" />
     </button>
 
     <ng-template #popoverContent>
@@ -119,7 +118,7 @@ export interface ZardComboboxGroup {
                       >
                         {{ option.label }}
                         @if (option.value === getCurrentValue()) {
-                          <z-icon [zType]="CheckIcon" class="ml-auto" />
+                          <z-icon zType="check" class="ml-auto" />
                         }
                       </z-command-option>
                     }
@@ -135,7 +134,7 @@ export interface ZardComboboxGroup {
                     >
                       {{ option.label }}
                       @if (option.value === getCurrentValue()) {
-                        <z-icon [zType]="CheckIcon" class="ml-auto" />
+                        <z-icon zType="check" class="ml-auto" />
                       }
                     </z-command-option>
                   }
@@ -152,7 +151,7 @@ export interface ZardComboboxGroup {
                 >
                   {{ option.label }}
                   @if (option.value === getCurrentValue()) {
-                    <z-icon [zType]="CheckIcon" class="ml-auto" />
+                    <z-icon zType="check" class="ml-auto" />
                   }
                 </z-command-option>
               }
@@ -174,8 +173,6 @@ export interface ZardComboboxGroup {
   ],
 })
 export class ZardComboboxComponent implements ControlValueAccessor {
-  readonly ChevronsUpDownIcon = ChevronsUpDown;
-  readonly CheckIcon = Check;
   readonly class = input<ClassValue>('');
   readonly buttonVariant = input<'default' | 'outline' | 'secondary' | 'ghost'>('outline');
   readonly zWidth = input<ZardComboboxVariants['zWidth']>('default');

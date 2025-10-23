@@ -14,14 +14,13 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardCommandInputComponent } from './command-input.component';
-import { ZardCommandOptionComponent } from './command-option.component';
-import { commandVariants, ZardCommandVariants } from './command.variants';
-
 import type { ClassValue } from 'clsx';
-import { LucideIconData } from 'lucide-angular';
+
+import { commandVariants, ZardCommandVariants } from './command.variants';
+import { ZardCommandOptionComponent } from './command-option.component';
+import { ZardCommandInputComponent } from './command-input.component';
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIcon } from '../icon/icons';
 
 export interface ZardCommandOption {
   value: unknown;
@@ -29,7 +28,7 @@ export interface ZardCommandOption {
   disabled?: boolean;
   command?: string;
   shortcut?: string;
-  icon?: LucideIconData;
+  icon?: ZardIcon;
   action?: () => void;
   key?: string; // Keyboard shortcut key (e.g., 'n' for Ctrl+N)
 }

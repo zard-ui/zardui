@@ -3,6 +3,7 @@
 ```angular-ts title="calendar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, input, linkedSignal, model, signal, viewChild, ViewEncapsulation } from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
+import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
 import { calendarDayButtonVariants, calendarDayVariants, calendarNavVariants, calendarVariants, calendarWeekdayVariants, ZardCalendarVariants } from './calendar.variants';
@@ -10,9 +11,7 @@ import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
-import type { ClassValue } from 'clsx';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ChevronLeft, ChevronRight } from 'lucide-angular';
 
 export interface CalendarDay {
   date: Date;
@@ -51,7 +50,7 @@ export type { ZardCalendarVariants };
           aria-label="Previous month"
           [class]="navButtonClasses()"
         >
-          <z-icon [zType]="ChevronLeftIcon" />
+          <z-icon zType="chevron-left" />
         </button>
 
         <!-- Month and Year Selectors -->
@@ -72,7 +71,7 @@ export type { ZardCalendarVariants };
         </div>
 
         <button z-button zType="ghost" [zSize]="navButtonSize()" (click)="nextMonth()" [disabled]="isNextDisabled()" aria-label="Next month" [class]="navButtonClasses()">
-          <z-icon [zType]="ChevronRightIcon" />
+          <z-icon zType="chevron-right" />
         </button>
       </div>
 
@@ -108,9 +107,6 @@ export type { ZardCalendarVariants };
   `,
 })
 export class ZardCalendarComponent {
-  readonly ChevronLeftIcon = ChevronLeft;
-  readonly ChevronRightIcon = ChevronRight;
-
   private readonly calendarContainer = viewChild.required<ElementRef<HTMLElement>>('calendarContainer');
 
   // Public method to reset navigation (useful for date-picker)
