@@ -18,7 +18,13 @@ type OnChangeType = (value: any) => void;
   imports: [ZardIconComponent],
   exportAs: 'zCheckbox',
   template: `
-    <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (click)="onCheckboxChange()">
+    <span
+      tabindex="0"
+      class="flex items-center gap-2"
+      [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'"
+      (click)="onCheckboxChange()"
+      (keyup)="onKeyboardEvent($event)"
+    >
       <main class="flex relative">
         <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onCheckboxBlur()" name="checkbox" />
         <z-icon
@@ -87,6 +93,13 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
     this.onChange(this.checked);
     this.checkChange.emit(this.checked);
     this.cdr.markForCheck();
+  }
+
+  onKeyboardEvent(event: KeyboardEvent): void {
+    if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      this.onCheckboxChange();
+    }
   }
 }
 

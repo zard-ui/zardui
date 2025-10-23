@@ -1,7 +1,8 @@
-import { ZardDemoIconStrokeWidthComponent } from './stroke-width';
-import { ZardDemoIconDefaultComponent } from './default';
 import { ZardDemoIconColorsComponent } from './colors';
+import { ZardDemoIconDefaultComponent } from './default';
+import { ZardDemoIconSearchableComponent } from './searchable';
 import { ZardDemoIconSizesComponent } from './sizes';
+import { ZardDemoIconStrokeWidthComponent } from './stroke-width';
 
 export const ICON = {
   componentName: 'icon',
@@ -24,6 +25,12 @@ export const ICON = {
     {
       name: 'stroke-width',
       component: ZardDemoIconStrokeWidthComponent,
+    },
+    {
+      name: 'searchable',
+      component: ZardDemoIconSearchableComponent,
+      fullWidth: true,
+      flexAlign: 'start',
     },
   ],
 };

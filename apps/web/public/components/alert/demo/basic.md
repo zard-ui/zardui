@@ -1,5 +1,5 @@
 ```angular-ts showLineNumbers copyButton
-import { ZardIcon } from '@zard/components/icon/icons';
+import { ZardIcon } from '../../icon/icons';
 import { Component } from '@angular/core';
 
 import { ZardAlertComponent } from '../alert.component';

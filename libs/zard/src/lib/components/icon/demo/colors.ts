@@ -10,7 +10,7 @@ import { ZardIconComponent } from '../icon.component';
       <z-icon zType="heart" class="text-destructive" />
       <z-icon zType="circle-check" class="text-green-500" />
       <z-icon zType="triangle-alert" class="text-warning" />
-      zType="info" class="text-blue-500" />
+      <z-icon zType="info" class="text-blue-500" />
       <z-icon zType="star" class="text-yellow-500" />
       <z-icon zType="zap" class="text-purple-500" />
     </div>
