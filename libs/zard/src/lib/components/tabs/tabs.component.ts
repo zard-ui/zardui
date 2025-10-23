@@ -1,22 +1,30 @@
 import {
   afterNextRender,
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
+  DestroyRef,
   ElementRef,
+  inject,
+  Injector,
   input,
   output,
+  runInInjectionContext,
   signal,
   TemplateRef,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { combineLatest, interval, startWith } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
+import { debounceTime, fromEvent, merge } from 'rxjs';
+import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
@@ -41,12 +49,15 @@ export class ZardTabComponent {
   selector: 'z-tab-group',
   standalone: true,
   imports: [CommonModule, ZardButtonComponent],
+  host: { '[class]': 'containerClasses()' },
   template: `
-    <div class="tab-group" [ngClass]="containerClasses()">
+    <div class="tab-group">
+      @let horizontal = isHorizontal();
+
       @if (navBeforeContent()) {
         <div [class]="navGridClasses()">
           @if (showArrow()) {
-            @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
+            @if (horizontal) {
               <button class="scroll-btn scroll-left pr-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('left')">
                 <i class="icon-chevron-left"></i>
               </button>
@@ -57,16 +68,24 @@ export class ZardTabComponent {
             }
           }
 
-          <nav [ngClass]="navClasses()" #tabNav>
+          <nav [ngClass]="navClasses()" #tabNav role="tablist">
             @for (tab of tabs(); track $index; let index = $index) {
-              <button z-button zType="ghost" (click)="setActiveTab(index)" [ngClass]="buttonClassesSignal()[index]">
+              <button
+                z-button
+                zType="ghost"
+                role="tab"
+                [attr.aria-selected]="activeTabIndex() === index"
+                [attr.tabindex]="activeTabIndex() === index ? 0 : -1"
+                (click)="setActiveTab(index)"
+                [ngClass]="buttonClassesSignal()[index]"
+              >
                 {{ tab.label() }}
               </button>
             }
           </nav>
 
           @if (showArrow()) {
-            @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
+            @if (horizontal) {
               <button class="scroll-btn scroll-right pl-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('right')">
                 <i class="icon-chevron-right"></i>
               </button>
@@ -90,7 +109,7 @@ export class ZardTabComponent {
       @if (!navBeforeContent()) {
         <div [class]="navGridClasses()">
           @if (showArrow()) {
-            @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
+            @if (horizontal) {
               <button class="scroll-btn scroll-left pr-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('left')">
                 <i class="icon-chevron-left"></i>
               </button>
@@ -101,16 +120,24 @@ export class ZardTabComponent {
             }
           }
 
-          <nav [ngClass]="navClasses()" #tabNav>
+          <nav [ngClass]="navClasses()" #tabNav role="tablist">
             @for (tab of tabs(); track $index; let index = $index) {
-              <button z-button zType="ghost" (click)="setActiveTab(index)" [ngClass]="buttonClassesSignal()[index]">
+              <button
+                z-button
+                zType="ghost"
+                role="tab"
+                [attr.aria-selected]="activeTabIndex() === index"
+                [attr.tabindex]="activeTabIndex() === index ? 0 : -1"
+                (click)="setActiveTab(index)"
+                [ngClass]="buttonClassesSignal()[index]"
+              >
                 {{ tab.label() }}
               </button>
             }
           </nav>
 
           @if (showArrow()) {
-            @if (zTabsPosition() === 'top' || zTabsPosition() === 'bottom') {
+            @if (horizontal) {
               <button class="scroll-btn scroll-right pl-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('right')">
                 <i class="icon-chevron-right"></i>
               </button>
@@ -146,20 +173,15 @@ export class ZardTabComponent {
     `,
   ],
 })
-export class ZardTabGroupComponent {
+export class ZardTabGroupComponent implements AfterViewInit {
   private readonly tabComponents = contentChildren(ZardTabComponent, { descendants: true });
   private readonly tabsContainer = viewChild.required<ElementRef>('tabNav');
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly injector = inject(Injector);
 
   protected readonly tabs = computed(() => this.tabComponents());
   protected readonly activeTabIndex = signal<number>(0);
-  protected readonly hasScrollSignal = signal<boolean>(false);
-
-  protected readonly showArrow = computed(() => {
-    const _tabs = this.tabs();
-    const _position = this.zTabsPosition();
-    const scrollStatus = this.hasScrollSignal();
-    return scrollStatus;
-  });
+  protected readonly scrollPresent = signal<boolean>(false);
 
   protected readonly zOnTabChange = output<{
     index: number;
@@ -178,21 +200,42 @@ export class ZardTabGroupComponent {
   public readonly zScrollAmount = input(100);
   public readonly zAlignTabs = input<zAlign>('start');
 
-  constructor() {
-    afterNextRender(() => {
-      if (this.tabs().length > 0) {
-        this.setActiveTab(0);
-      }
+  protected readonly showArrow = computed(() => this.zShowArrow() && this.scrollPresent());
 
-      combineLatest([interval(100).pipe(startWith(0))]).subscribe(() => {
-        this.hasScrollSignal.set(this.hasScroll());
+  ngAfterViewInit(): void {
+    // default tab selection
+    if (this.tabs().length) {
+      this.setActiveTab(0);
+    }
+
+    runInInjectionContext(this.injector, () => {
+      const observeInputs$ = merge(toObservable(this.zShowArrow), toObservable(this.tabs));
+      afterNextRender(() => {
+        const resizeObserver = new ResizeObserver(() => {
+          this.setScrollState();
+        });
+        resizeObserver.observe(this.tabsContainer().nativeElement);
+
+        merge(observeInputs$, fromEvent(window, 'resize'))
+          .pipe(debounceTime(10), takeUntilDestroyed(this.destroyRef))
+          .subscribe(() => this.setScrollState());
+
+        this.destroyRef.onDestroy(() => {
+          resizeObserver.disconnect();
+        });
       });
     });
   }
 
+  private setScrollState(): void {
+    if (this.hasScroll() !== this.scrollPresent()) {
+      this.scrollPresent.set(this.hasScroll());
+    }
+  }
+
   private hasScroll(): boolean {
-    if (this.tabsContainer && this.tabsContainer().nativeElement && this.zShowArrow()) {
-      const navElement: HTMLElement = this.tabsContainer().nativeElement;
+    const navElement: HTMLElement = this.tabsContainer().nativeElement;
+    if (this.zShowArrow()) {
       return navElement.scrollWidth > navElement.clientWidth || navElement.scrollHeight > navElement.clientHeight;
     }
     return false;
@@ -230,9 +273,11 @@ export class ZardTabGroupComponent {
   });
 
   protected readonly navGridClasses = computed(() => {
-    const position = this.zTabsPosition();
-    const hasArrows = this.showArrow();
-    return position === 'left' || position === 'right' ? `grid${hasArrows ? ' grid-rows-[25px_1fr_25px]' : ''}` : `grid${hasArrows ? ' grid-cols-[25px_1fr_25px]' : ''}`;
+    const gridLayout = this.isHorizontal() ? 'grid-cols-[25px_1fr_25px]' : 'grid-rows-[25px_1fr_25px]';
+    if (this.showArrow()) {
+      return twMerge(clsx('grid', gridLayout));
+    }
+    return 'grid';
   });
 
   protected readonly containerClasses = computed(() => tabContainerVariants({ zPosition: this.zTabsPosition() }));
