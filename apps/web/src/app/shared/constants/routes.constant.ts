@@ -9,7 +9,7 @@ export const HEADER_PATHS = [
   { name: 'Themes', path: '/themes', available: false },
 ];
 
-const DOCS_PATH = {
+export const DOCS_PATH = {
   title: 'Getting Started',
   data: [
     { name: 'Introduction', path: '/docs/introduction', available: true },
@@ -25,7 +25,7 @@ const DOCS_PATH = {
   ],
 };
 
-const COMPONENTS_PATH = {
+export const COMPONENTS_PATH = {
   title: 'Components',
   data: [
     { name: 'Accordion', path: '/docs/components/accordion', available: true },

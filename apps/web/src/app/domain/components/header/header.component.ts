@@ -19,7 +19,7 @@ import { GithubService } from '../../../shared/services/github.service';
   selector: 'z-header',
   templateUrl: './header.component.html',
   standalone: true,
-  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, ZardIconComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe, DocResearcherComponent],
+  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe, DocResearcherComponent],
 })
 export class HeaderComponent {
   readonly docResearcher = viewChild.required(DocResearcherComponent);

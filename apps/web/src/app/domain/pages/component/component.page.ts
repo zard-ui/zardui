@@ -1,23 +1,24 @@
-import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
-import { ZardCodeBoxComponent } from '../../../widget/components/zard-code-box/zard-code-box.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { DynamicInstallationService } from '../../../shared/services/dynamic-installation.service';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { ComponentData, COMPONENTS } from '../../../shared/constants/components.constant';
-import { StepsComponent } from '../../components/steps/steps.component';
-import { Step } from '../../../shared/constants/install.constant';
-import { SeoService } from '../../../shared/services/seo.service';
+import { AiAssistComponent } from '@zard/domain/components/ai-assist/ai-assist.component';
 import { Component, inject, signal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { ZardCodeBoxComponent } from '../../../widget/components/zard-code-box/zard-code-box.component';
+import { DynamicInstallationService } from '../../../shared/services/dynamic-installation.service';
+import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import { ComponentData, COMPONENTS } from '../../../shared/constants/components.constant';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
+import { StepsComponent } from '../../components/steps/steps.component';
+import { Step } from '../../../shared/constants/install.constant';
+import { SeoService } from '../../../shared/services/seo.service';
 
 @Component({
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
+  imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent, AiAssistComponent],
 })
 export class ComponentPage {
   private readonly seoService = inject(SeoService);

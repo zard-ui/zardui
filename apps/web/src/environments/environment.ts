@@ -3,4 +3,8 @@ export const environment = {
   appVersion: 'beta',
   devMode: false,
   package: '@ngzard/ui',
+  features: {
+    copyPage: false,
+    copyMD: false,
+  },
 };

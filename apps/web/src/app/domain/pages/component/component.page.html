@@ -1,7 +1,8 @@
 @if (componentData) {
 <z-content [title]="componentData.componentName" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
-  <div class="flex flex-col gap-5" scrollSpyItem="overview" id="overview">
+  <div class="flex flex-col gap-5 relative" scrollSpyItem="overview" id="overview">
     <z-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/overview.md"></z-markdown-renderer>
+    <z-assist></z-assist>
     <z-code-box
       [scrollSpyItem]="componentData.examples[0].name"
       [attr.id]="componentData.examples[0].name"
@@ -9,8 +10,6 @@
       [dynamicComponent]="componentData.examples[0].component"
       [onlyDemo]="componentData.examples[0].onlyDemo"
       [column]="componentData.examples[0].column || false"
-      [fullWidth]="componentData.examples[0].fullWidth || false"
-      [flexAlign]="componentData.examples[0].flexAlign || 'center'"
     ></z-code-box>
   </div>
 
@@ -57,8 +56,6 @@
         [fullScreen]="item.fullScreen"
         [onlyDemo]="item.onlyDemo"
         [column]="item.column"
-        [fullWidth]="item.fullWidth"
-        [flexAlign]="item.flexAlign || 'center'"
       ></z-code-box>
       }
     </section>
