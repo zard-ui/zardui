@@ -5,13 +5,14 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
+import { ZardEmptyComponent } from '../../empty/empty.component';
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardIconComponent } from '../icon.component';
 import { ZARD_ICONS } from '../icons';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, ZardIconComponent, ZardInputDirective, ZardButtonComponent],
+  imports: [CommonModule, ZardIconComponent, ZardInputDirective, ZardButtonComponent, ZardEmptyComponent],
   template: `
     <div class="flex flex-col gap-4 w-full">
       <div class="flex flex-col gap-2">
@@ -47,7 +48,7 @@ import { ZARD_ICONS } from '../icons';
       </div>
 
       @if (filteredIcons().length === 0) {
-        <div class="text-center py-8 text-muted-foreground">No icons found matching "{{ searchQuery() }}"</div>
+        <z-empty zDescription="No icons found for the given search." />
       }
     </div>
   `,
