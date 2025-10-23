@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ZardSelectItemComponent } from '../../select/select-item.component';
@@ -7,6 +7,7 @@ import { ZardSelectComponent } from '../../select/select.component';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardFormModule } from '../form.module';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface FormData {
   firstName: string;
@@ -131,6 +132,7 @@ interface FormData {
 })
 export class ZardDemoFormComplexComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly showSuccess = signal(false);
   readonly isSubmitting = signal(false);
@@ -162,8 +164,8 @@ export class ZardDemoFormComplexComponent {
 
   constructor() {
     // Track message length
-    this.form.controls.message.valueChanges.subscribe(value => {
-      this.messageLength.set(value?.length || 0);
+    this.form.controls.message.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(value => {
+      this.messageLength.set(value?.length ?? 0);
     });
   }
 

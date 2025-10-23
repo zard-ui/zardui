@@ -633,6 +633,7 @@ import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overla
 import { TemplatePortal } from '@angular/cdk/portal';
 import { ElementRef, inject, Injectable, PLATFORM_ID, signal, TemplateRef, ViewContainerRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -646,6 +647,7 @@ export class ZardDropdownService {
   private portal?: TemplatePortal;
   private triggerElement?: ElementRef;
   private focusedIndex = signal<number>(-1);
+  private outsideClickSubscription!: Subscription;
 
   readonly isOpen = signal(false);
 
@@ -678,7 +680,7 @@ export class ZardDropdownService {
     }, 0);
 
     // Close on outside click
-    this.overlayRef.outsidePointerEvents().subscribe(() => {
+    this.outsideClickSubscription = this.overlayRef.outsidePointerEvents().subscribe(() => {
       this.close();
     });
   }
@@ -730,6 +732,9 @@ export class ZardDropdownService {
     if (this.overlayRef) {
       this.overlayRef.dispose();
       this.overlayRef = undefined;
+      if (this.outsideClickSubscription) {
+        this.outsideClickSubscription.unsubscribe();
+      }
     }
   }
 
