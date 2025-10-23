@@ -57,7 +57,6 @@ export const init = new Command()
     logger.break();
 
     const detectedPm = await detectPackageManager();
-    logger.info(`Detected package manager: ${chalk.cyan(detectedPm)}`);
     logger.break();
 
     const config = await promptForConfig(cwd, projectInfo, detectedPm);

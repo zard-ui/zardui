@@ -10,13 +10,8 @@ const __dirname = dirname(__filename);
 
 const GITHUB_API = 'https://api.github.com/repos/zard-ui/zardui/contents';
 
-/**
- * Get the CLI version from package.json
- * This determines which git tag to fetch components from
- */
 function getCliVersion(): string {
   try {
-    // In production, package.json is at the root of the published package
     const packageJsonPath = join(__dirname, '../package.json');
     const packageJson = JSON.parse(readFileSync(packageJsonPath, 'utf8'));
     return packageJson.version;
@@ -33,12 +28,10 @@ function getCliVersion(): string {
 function getGithubRef(): string {
   const version = getCliVersion();
 
-  // If version is 'master' (fallback), use master branch
-  if (version === 'master') {
+  if (version === 'master' || version.includes('dev') || version === '0.0.0') {
     return 'master';
   }
 
-  // Use the version tag (e.g., v1.2.3)
   return `v${version}`;
 }
 
@@ -62,7 +55,6 @@ async function fetchFromGitHubAPI(filePath: string): Promise<string> {
 
     throw new Error('Invalid response from GitHub API');
   } catch (error) {
-    // Fallback to raw URL with longer delay
     await new Promise(resolve => setTimeout(resolve, 3000));
 
     const rawUrl = `${GITHUB_RAW}/${filePath}`;
@@ -80,7 +72,6 @@ export async function fetchComponentFromGithub(componentName: string, fileName: 
   try {
     const filePath = `libs/zard/src/lib/components/${componentName}/${fileName}`;
 
-    // Add staggered delay based on component order to avoid hitting rate limits
     const randomDelay = Math.random() * 2000 + 1000; // 1-3 seconds
     await new Promise(resolve => setTimeout(resolve, randomDelay));
 
@@ -92,22 +83,26 @@ export async function fetchComponentFromGithub(componentName: string, fileName: 
 }
 
 function transformContent(content: string, config: Config): string {
-  // Minimal transformations - just fix the essential imports
   let transformed = content;
 
-  // Transform the shared utils import
-  transformed = transformed.replace(/from ['"]\.\.\/\.\.\/shared\/utils\/utils['"]/g, `from '@shared/utils/merge-classes'`);
+  const utilsImportPath = convertPhysicalPathToImportAlias(config.aliases.utils);
+  const componentsImportPath = convertPhysicalPathToImportAlias(config.aliases.components);
 
-  // Transform the shared utils import (number)
-  transformed = transformed.replace(/from ['"]\.\.\/\.\.\/shared\/utils\/number['"]/g, `from '@shared/utils/number'`);
+  transformed = transformed.replace(/from ['"]\.\.\/\.\.\/shared\/utils\/utils['"]/g, `from '${utilsImportPath}/merge-classes'`);
 
-  // Transform relative component imports (handles nested paths like ../core/directives/...)
+  transformed = transformed.replace(/from ['"]\.\.\/\.\.\/shared\/utils\/number['"]/g, `from '${utilsImportPath}/number'`);
+
   const componentImportRegex = /from ['"]\.\.\/([\w-/]+)['"]/g;
-  transformed = transformed.replace(componentImportRegex, `from '@shared/components/$1'`);
+  transformed = transformed.replace(componentImportRegex, `from '${componentsImportPath}/$1'`);
 
-  // Fix ClassValue import - it should come from clsx, not class-variance-authority
   transformed = transformed.replace(/import \{ ClassValue \} from ['"]class-variance-authority\/dist\/types['"]/g, `import { ClassValue } from 'clsx'`);
   transformed = transformed.replace(/import \{ ClassValue \} from ['"]class-variance-authority['"]/g, `import { ClassValue } from 'clsx'`);
 
   return transformed;
+}
+
+function convertPhysicalPathToImportAlias(physicalPath: string): string {
+  const withoutSrc = physicalPath.replace(/^src\/app\//, '@').replace(/^libs\/[^/]+\/src\/lib\//, '@');
+
+  return withoutSrc;
 }
