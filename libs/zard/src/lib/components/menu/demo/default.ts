@@ -76,7 +76,7 @@ import { ZardMenuModule } from '../menu.module';
                 </button>
 
                 <button z-menu-item z-menu [zMenuTriggerFor]="helpSubmenu" class="justify-between">
-                  <div class="flex items-center">zType="info" class="mr-2" /> Help & Support</div>
+                  <div class="flex items-center"><z-icon zType="info" class="mr-2" /> Help & Support</div>
                   <z-icon zType="chevron-right" />
                 </button>
 
