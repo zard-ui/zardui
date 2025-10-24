@@ -159,6 +159,13 @@
   .container {
     @apply mx-auto w-full max-w-screen-2xl px-2 md:px-6 lg:px-8;
   }
+
+  .no-bullets :where(ul, li) {
+    @apply list-none;
+  }
+  .no-bullets li::marker {
+    content: '';
+  }
 }
 
 @utility scrollbar-custom {
