@@ -34,7 +34,7 @@ export interface ZardResizeEvent {
 type CleanupFunction = () => void;
 
 @Component({
-  selector: 'z-resizable',
+  selector: 'z-resizable, [z-resizable]',
   exportAs: 'zResizable',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -80,6 +80,10 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
       }
       if (value.endsWith('px')) {
         const pixels = Number.parseFloat(value);
+
+        if (containerSize <= 0) {
+          return 0;
+        }
         return (pixels / containerSize) * 100;
       }
     }
@@ -129,6 +133,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
         this.document.removeEventListener('mouseup', handleEnd);
         this.document.removeEventListener('touchend', handleEnd);
       }
+      this.listenersCleanup.pop();
     };
 
     if (isPlatformBrowser(this.platformId)) {
@@ -207,7 +212,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 
     for (let index = 0; index < panels.length; index++) {
       const size = sizes[index];
-      if (size) {
+      if (size !== undefined && size !== null) {
         const element = panels[index].elementRef.nativeElement as HTMLElement;
         if (layout === 'vertical') {
           element.style.height = `${size}%`;
@@ -261,7 +266,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
       sizes[index] = 0;
 
       const totalOthers = this.othersTotal(sizes, index);
-      const scale = (totalOthers + collapsedSize) / totalOthers;
+      const scale = (totalOthers + collapsedSize) / (totalOthers > 0 ? totalOthers : 1);
 
       sizes = this.scaleSizes(sizes, index, scale);
     }
@@ -377,7 +382,7 @@ import { ZardResizableComponent } from './resizable.component';
 import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
 
 @Component({
-  selector: 'z-resizable-handle',
+  selector: 'z-resizable-handle, [z-resizable-handle]',
   exportAs: 'zResizableHandle',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -548,8 +553,8 @@ export class ZardResizableHandleComponent {
       sizes[handleIndex + 1] = rightMin;
     }
 
-    this.resizable['panelSizes'].set(sizes);
-    this.resizable['updatePanelStyles']();
+    this.resizable.panelSizes.set(sizes);
+    this.resizable.updatePanelStyles();
     this.resizable.zResize.emit({
       sizes,
       layout: this.resizable.zLayout() ?? 'horizontal',

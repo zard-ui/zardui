@@ -135,8 +135,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
     // Handle other keys as needed
   }
 
-  writeValue(value = ''): void {
-    this.searchTerm.set(value);
+  writeValue(value: string | null): void {
+    this.searchTerm.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {

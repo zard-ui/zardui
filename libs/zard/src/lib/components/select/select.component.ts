@@ -257,7 +257,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     setTimeout(() => {
       this.focusDropdown();
       this.focusSelectedItem();
-    });
+    }, 0);
   }
 
   close() {
@@ -438,8 +438,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   }
 
   // ControlValueAccessor implementation
-  writeValue(value = ''): void {
-    this._selectedValue.set(value);
+  writeValue(value: string | null): void {
+    this._selectedValue.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {

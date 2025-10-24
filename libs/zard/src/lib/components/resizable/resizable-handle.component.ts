@@ -7,7 +7,7 @@ import { ZardResizableComponent } from './resizable.component';
 import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
 
 @Component({
-  selector: 'z-resizable-handle',
+  selector: 'z-resizable-handle, [z-resizable-handle]',
   exportAs: 'zResizableHandle',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -178,8 +178,8 @@ export class ZardResizableHandleComponent {
       sizes[handleIndex + 1] = rightMin;
     }
 
-    this.resizable['panelSizes'].set(sizes);
-    this.resizable['updatePanelStyles']();
+    this.resizable.panelSizes.set(sizes);
+    this.resizable.updatePanelStyles();
     this.resizable.zResize.emit({
       sizes,
       layout: this.resizable.zLayout() ?? 'horizontal',

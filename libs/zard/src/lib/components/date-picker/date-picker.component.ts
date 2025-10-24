@@ -10,6 +10,12 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 import type { ClassValue } from 'clsx';
 
+const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, string> = {
+  sm: 'h-8',
+  default: 'h-10',
+  lg: 'h-12',
+};
+
 @Component({
   selector: 'z-date-picker, [z-date-picker]',
   exportAs: 'zDatePicker',
@@ -78,15 +84,8 @@ export class ZardDatePickerComponent {
 
   protected readonly buttonClasses = computed(() => {
     const hasValue = !!this.value();
-    let height = '';
-    const heightsForSizes = {
-      sm: 'h-8',
-      default: 'h-10',
-      lg: 'h-12',
-    };
-    const size = this.zSize() ?? 'default';
-    height = heightsForSizes[size] ?? 'h-10';
-
+    const size: NonNullable<ZardDatePickerVariants['zSize']> = this.zSize() ?? 'default';
+    const height = HEIGHT_BY_SIZE[size];
     return mergeClasses('justify-start text-left font-normal', !hasValue && 'text-muted-foreground', height, 'min-w-[240px]');
   });
 

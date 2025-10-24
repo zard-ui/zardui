@@ -209,9 +209,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private getDropdownItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(
-      (item: Element) => !item.hasAttribute('data-disabled'),
-    ) as HTMLElement[];
+    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
@@ -357,7 +355,7 @@ import { dropdownItemVariants, ZardDropdownItemVariants } from './dropdown.varia
   },
 })
 export class ZardDropdownMenuItemComponent {
-  private dropdownService = inject(ZardDropdownService);
+  private readonly dropdownService = inject(ZardDropdownService);
 
   readonly variant = input<ZardDropdownItemVariants['variant']>('default');
   readonly inset = input(false, { transform });
@@ -512,7 +510,7 @@ import { ZardDropdownService } from './dropdown.service';
 export class ZardDropdownDirective implements OnInit {
   private readonly elementRef = inject(ElementRef);
   private readonly viewContainerRef = inject(ViewContainerRef);
-  protected dropdownService = inject(ZardDropdownService);
+  protected readonly dropdownService = inject(ZardDropdownService);
 
   readonly zDropdownMenu = input<ZardDropdownMenuContentComponent>();
   readonly zTrigger = input<'click' | 'hover'>('click');
@@ -522,7 +520,8 @@ export class ZardDropdownDirective implements OnInit {
     // Ensure button has proper accessibility attributes
     const element = this.elementRef.nativeElement;
     if (!element.hasAttribute('aria-label') && !element.hasAttribute('aria-labelledby')) {
-      element.setAttribute('aria-label', element.textContent?.trim() ?? 'Open menu');
+      const label = element.textContent?.trim();
+      element.setAttribute('aria-label', label?.length ? label : 'Open menu');
     }
   }
 
@@ -639,14 +638,14 @@ import { Subscription } from 'rxjs';
   providedIn: 'root',
 })
 export class ZardDropdownService {
-  private overlay = inject(Overlay);
-  private overlayPositionBuilder = inject(OverlayPositionBuilder);
-  private platformId = inject(PLATFORM_ID);
+  private readonly overlay = inject(Overlay);
+  private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
+  private readonly platformId = inject(PLATFORM_ID);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
   private triggerElement?: ElementRef;
-  private focusedIndex = signal<number>(-1);
+  private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
 
   readonly isOpen = signal(false);
@@ -784,9 +783,7 @@ export class ZardDropdownService {
   private getDropdownItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(
-      (item: Element) => !item.hasAttribute('data-disabled'),
-    ) as HTMLElement[];
+    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
@@ -827,14 +824,15 @@ export class ZardDropdownService {
   }
 
   private updateItemFocus(items: HTMLElement[], focusedIndex: number) {
-    items.forEach((item, index) => {
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
       if (index === focusedIndex) {
         item.focus();
-        item.setAttribute('data-highlighted', '');
+        item.dataset['highlighted'] = '';
       } else {
-        item.removeAttribute('data-highlighted');
+        delete item.dataset['highlighted'];
       }
-    });
+    }
   }
 }
 

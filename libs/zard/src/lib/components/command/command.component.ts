@@ -7,7 +7,6 @@ import {
   effect,
   EventEmitter,
   forwardRef,
-  HostListener,
   input,
   Output,
   signal,
@@ -66,6 +65,7 @@ export interface ZardCommandConfig {
     '[attr.role]': '"combobox"',
     '[attr.aria-expanded]': 'true',
     '[attr.aria-haspopup]': '"listbox"',
+    '(keydown)': 'onKeyDown($event)',
   },
   providers: [
     {
@@ -114,7 +114,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
   // Status message for screen readers
   protected readonly statusMessage = computed(() => {
-    const searchTerm = this.searchTerm();
+    const searchTerm = this.searchTerm().trim();
     const filteredCount = this.filteredOptions().length;
 
     if (!searchTerm) return '';
@@ -167,7 +167,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
     this.zOnSelect.emit(commandOption);
   }
 
-  @HostListener('keydown', ['$event'])
+  // in @Component host: '(keydown)': 'onKeyDown($event)'
   onKeyDown(event: KeyboardEvent) {
     const filteredOptions = this.filteredOptions();
     if (filteredOptions.length === 0) return;

@@ -104,7 +104,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
     ),
   );
 
-  private alertDialogId = generateId('alert-dialog');
+  private readonly alertDialogId = generateId('alert-dialog');
   protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
   protected readonly descriptionId = computed(() => (this.config.zDescription ? `${this.alertDialogId}-description` : null));
 
@@ -128,14 +128,14 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
     if (this.portalOutlet()?.hasAttached()) {
-      throw Error('Attempting to attach alert dialog content after content is already attached');
+      throw new Error('Attempting to attach alert dialog content after content is already attached');
     }
     return this.portalOutlet()?.attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     if (this.portalOutlet()?.hasAttached()) {
-      throw Error('Attempting to attach alert dialog content after content is already attached');
+      throw new Error('Attempting to attach alert dialog content after content is already attached');
     }
 
     return this.portalOutlet()?.attachTemplatePortal(portal);
@@ -316,13 +316,13 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
   <footer class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
     @if (config.zCancelText !== null) {
       <button data-testid="z-alert-cancel-button" z-button zType="outline" (click)="onCancelClick()">
-        {{ config.zCancelText ?? 'Cancel' }}
+        {{ config.zCancelText || 'Cancel' }}
       </button>
     }
 
     @if (config.zOkText !== null) {
       <button data-testid="z-alert-ok-button" z-button [zType]="config.zOkDestructive ? 'destructive' : 'default'" [disabled]="config.zOkDisabled" (click)="onOkClick()">
-        {{ config.zOkText ?? 'Continue' }}
+        {{ config.zOkText || 'Continue' }}
       </button>
     }
   </footer>

@@ -9,11 +9,11 @@ export function isTemplateRef<T>(value: TemplateRef<T> | unknown): value is Temp
   exportAs: 'zStringTemplateOutlet',
 })
 export class ZardStringTemplateOutletDirective<_T = unknown> implements OnChanges {
-  private viewContainer = inject(ViewContainerRef);
-  private templateRef = inject(TemplateRef<unknown>);
+  private readonly viewContainer = inject(ViewContainerRef);
+  private readonly templateRef = inject(TemplateRef<unknown>);
 
   private embeddedViewRef: EmbeddedViewRef<unknown> | null = null;
-  private context = new ZardStringTemplateOutletContext();
+  private readonly context = new ZardStringTemplateOutletContext();
   @Input() zStringTemplateOutletContext: any | null = null;
   @Input() zStringTemplateOutlet: unknown | TemplateRef<unknown> = null;
 
@@ -52,7 +52,7 @@ export class ZardStringTemplateOutletDirective<_T = unknown> implements OnChange
         const currCtxKeys = Object.keys(ctxChange.currentValue ?? {});
         if (prevCtxKeys.length === currCtxKeys.length) {
           for (const propName of currCtxKeys) {
-            if (prevCtxKeys.includes(propName)) {
+            if (!prevCtxKeys.includes(propName)) {
               return true;
             }
           }
