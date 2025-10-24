@@ -192,8 +192,10 @@ export class ZardTabGroupComponent implements AfterViewInit {
       );
 
       afterNextRender(() => {
+        // SSR/browser guard
+        if (typeof window === 'undefined' || typeof ResizeObserver === 'undefined') return;
+
         const resizeObserver = new ResizeObserver(() => this.setScrollState());
-        resizeObserver.observe(this.tabsContainer().nativeElement);
 
         tabNavEl$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(el => {
           if (observedEl) resizeObserver.unobserve(observedEl);
