@@ -1,3 +1,9 @@
+## 1.0.0-beta.24 (2025-10-24)
+
+### 🐛 Bug Fixes
+
+- **release:** fix version mismatch in beta.23 npm publish
+
 ## 1.0.0-beta.23 (2025-10-24)
 
 ### 📦 Code Refactoring
