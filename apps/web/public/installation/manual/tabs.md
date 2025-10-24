@@ -173,6 +173,8 @@ export class ZardTabGroupComponent implements AfterViewInit {
   public readonly zShowArrow = input(true);
   public readonly zScrollAmount = input(100);
   public readonly zAlignTabs = input<zAlign>('start');
+  // Preserve consumer classes on host
+  public readonly class = input<string>('');
 
   protected readonly showArrow = computed(() => this.zShowArrow() && this.scrollPresent());
 
@@ -265,7 +267,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
     return 'grid';
   });
 
-  protected readonly containerClasses = computed(() => tabContainerVariants({ zPosition: this.zTabsPosition() }));
+  protected readonly containerClasses = computed(() => twMerge(tabContainerVariants({ zPosition: this.zTabsPosition() }), this.class()));
 
   protected readonly navClasses = computed(() => tabNavVariants({ zPosition: this.zTabsPosition(), zAlignTabs: this.showArrow() ? 'start' : this.zAlignTabs() }));
 
