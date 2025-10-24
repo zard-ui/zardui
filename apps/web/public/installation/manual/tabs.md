@@ -25,7 +25,7 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
-import { debounceTime, fromEvent, merge } from 'rxjs';
+import { debounceTime, distinctUntilChanged, fromEvent, map, merge } from 'rxjs';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 
@@ -173,6 +173,8 @@ export class ZardTabGroupComponent implements AfterViewInit {
   public readonly zShowArrow = input(true);
   public readonly zScrollAmount = input(100);
   public readonly zAlignTabs = input<zAlign>('start');
+  // Preserve consumer classes on host
+  public readonly class = input<string>('');
 
   protected readonly showArrow = computed(() => this.zShowArrow() && this.scrollPresent());
 
@@ -183,20 +185,33 @@ export class ZardTabGroupComponent implements AfterViewInit {
     }
 
     runInInjectionContext(this.injector, () => {
-      const observeInputs$ = merge(toObservable(this.zShowArrow), toObservable(this.tabs));
+      const observeInputs$ = merge(toObservable(this.zShowArrow), toObservable(this.tabs), toObservable(this.zTabsPosition));
+
+      // Re-observe whenever #tabNav reference changes (e.g., when placement toggles)
+      let observedEl: HTMLElement | null = null;
+      const tabNavEl$ = toObservable(this.tabsContainer).pipe(
+        map(ref => ref.nativeElement as HTMLElement),
+        distinctUntilChanged(),
+      );
+
       afterNextRender(() => {
-        const resizeObserver = new ResizeObserver(() => {
+        // SSR/browser guard
+        if (typeof window === 'undefined' || typeof ResizeObserver === 'undefined') return;
+
+        const resizeObserver = new ResizeObserver(() => this.setScrollState());
+
+        tabNavEl$.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(el => {
+          if (observedEl) resizeObserver.unobserve(observedEl);
+          observedEl = el;
+          resizeObserver.observe(el);
           this.setScrollState();
         });
-        resizeObserver.observe(this.tabsContainer().nativeElement);
 
         merge(observeInputs$, fromEvent(window, 'resize'))
           .pipe(debounceTime(10), takeUntilDestroyed(this.destroyRef))
           .subscribe(() => this.setScrollState());
 
-        this.destroyRef.onDestroy(() => {
-          resizeObserver.disconnect();
-        });
+        this.destroyRef.onDestroy(() => resizeObserver.disconnect());
       });
     });
   }
@@ -254,7 +269,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
     return 'grid';
   });
 
-  protected readonly containerClasses = computed(() => tabContainerVariants({ zPosition: this.zTabsPosition() }));
+  protected readonly containerClasses = computed(() => twMerge(tabContainerVariants({ zPosition: this.zTabsPosition() }), this.class()));
 
   protected readonly navClasses = computed(() => tabNavVariants({ zPosition: this.zTabsPosition(), zAlignTabs: this.showArrow() ? 'start' : this.zAlignTabs() }));
 
