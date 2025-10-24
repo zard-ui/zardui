@@ -107,7 +107,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
     return this.optionComponents().filter(option => {
       const label = option.zLabel().toLowerCase();
-      const command = option.zCommand()?.toLowerCase() || '';
+      const command = option.zCommand()?.toLowerCase() ?? '';
       return label.includes(lowerSearchTerm) || command.includes(lowerSearchTerm);
     });
   });
@@ -117,9 +117,9 @@ export class ZardCommandComponent implements ControlValueAccessor {
     const searchTerm = this.searchTerm();
     const filteredCount = this.filteredOptions().length;
 
-    if (searchTerm === '') return '';
+    if (!searchTerm) return '';
 
-    if (filteredCount === 0) {
+    if (!filteredCount) {
       return `No results found for "${searchTerm}"`;
     }
 
@@ -214,7 +214,9 @@ export class ZardCommandComponent implements ControlValueAccessor {
     const selectedIndex = this.selectedIndex();
 
     // Clear previous selection
-    filteredOptions.forEach(option => option.setSelected(false));
+    for (const option of filteredOptions) {
+      option.setSelected(false);
+    }
 
     // Set new selection
     if (selectedIndex >= 0 && selectedIndex < filteredOptions.length) {

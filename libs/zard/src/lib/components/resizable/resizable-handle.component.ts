@@ -37,7 +37,7 @@ export class ZardResizableHandleComponent {
   readonly zHandleIndex = input<number>(0);
   readonly class = input<ClassValue>('');
 
-  protected readonly layout = computed(() => this.resizable?.zLayout() || 'horizontal');
+  protected readonly layout = computed(() => this.resizable?.zLayout() ?? 'horizontal');
 
   protected readonly classes = computed(() =>
     mergeClasses(
@@ -123,10 +123,10 @@ export class ZardResizableHandleComponent {
     if (!leftPanel || !rightPanel) return;
 
     const containerSize = this.resizable.getContainerSize();
-    const leftMin = this.resizable.convertToPercentage(leftPanel.zMin() || 0, containerSize);
-    const leftMax = this.resizable.convertToPercentage(leftPanel.zMax() || 100, containerSize);
-    const rightMin = this.resizable.convertToPercentage(rightPanel.zMin() || 0, containerSize);
-    const rightMax = this.resizable.convertToPercentage(rightPanel.zMax() || 100, containerSize);
+    const leftMin = this.resizable.convertToPercentage(leftPanel.zMin(), containerSize);
+    const leftMax = this.resizable.convertToPercentage(leftPanel.zMax(), containerSize);
+    const rightMin = this.resizable.convertToPercentage(rightPanel.zMin(), containerSize);
+    const rightMax = this.resizable.convertToPercentage(rightPanel.zMax(), containerSize);
 
     let newLeftSize = sizes[handleIndex] + delta;
     let newRightSize = sizes[handleIndex + 1] - delta;
@@ -145,7 +145,7 @@ export class ZardResizableHandleComponent {
       this.resizable.updatePanelStyles();
       this.resizable.zResize.emit({
         sizes,
-        layout: this.resizable.zLayout() || 'horizontal',
+        layout: this.resizable.zLayout() ?? 'horizontal',
       });
     }
   }
@@ -163,10 +163,10 @@ export class ZardResizableHandleComponent {
     if (!leftPanel || !rightPanel) return;
 
     const containerSize = this.resizable.getContainerSize();
-    const leftMin = this.resizable.convertToPercentage(leftPanel.zMin() || 0, containerSize);
-    const leftMax = this.resizable.convertToPercentage(leftPanel.zMax() || 100, containerSize);
-    const rightMin = this.resizable.convertToPercentage(rightPanel.zMin() || 0, containerSize);
-    const rightMax = this.resizable.convertToPercentage(rightPanel.zMax() || 100, containerSize);
+    const leftMin = this.resizable.convertToPercentage(leftPanel.zMin(), containerSize);
+    const leftMax = this.resizable.convertToPercentage(leftPanel.zMax(), containerSize);
+    const rightMin = this.resizable.convertToPercentage(rightPanel.zMin(), containerSize);
+    const rightMax = this.resizable.convertToPercentage(rightPanel.zMax(), containerSize);
 
     const totalSize = sizes[handleIndex] + sizes[handleIndex + 1];
 
@@ -182,7 +182,7 @@ export class ZardResizableHandleComponent {
     this.resizable['updatePanelStyles']();
     this.resizable.zResize.emit({
       sizes,
-      layout: this.resizable.zLayout() || 'horizontal',
+      layout: this.resizable.zLayout() ?? 'horizontal',
     });
   }
 }

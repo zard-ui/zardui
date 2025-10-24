@@ -11,7 +11,7 @@ import { ZardSelectComponent } from '../../select/select.component';
     <div class="space-y-6">
       <div class="flex items-center gap-4">
         <label class="text-sm font-medium">Size:</label>
-        <z-select [zValue]="selectedSize() || 'default'" [zLabel]="sizeLabel()" (zSelectionChange)="onSizeChange($event)" class="min-w-[120px]">
+        <z-select [zValue]="selectedSize() ?? 'default'" [zLabel]="sizeLabel()" (zSelectionChange)="onSizeChange($event)" class="min-w-[120px]">
           <z-select-item zValue="sm">Small</z-select-item>
           <z-select-item zValue="default">Default</z-select-item>
           <z-select-item zValue="lg">Large</z-select-item>

@@ -22,7 +22,7 @@ import { ZardIconComponent } from '../icon/icon.component';
         <span class="text-base absolute m-auto z-0">{{ zImage()?.fallback }}</span>
       }
       @if (zImage()?.url) {
-        <img [src]="zImage()?.url" [alt]="zImage()?.alt || 'Avatar'" [class]="imgClasses()" />
+        <img [src]="zImage()?.url" [alt]="zImage()?.alt ?? 'Avatar'" [class]="imgClasses()" />
       }
     }
     @if (zStatus()) {

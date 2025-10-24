@@ -510,8 +510,8 @@ import { ZardDropdownService } from './dropdown.service';
   },
 })
 export class ZardDropdownDirective implements OnInit {
-  private elementRef = inject(ElementRef);
-  private viewContainerRef = inject(ViewContainerRef);
+  private readonly elementRef = inject(ElementRef);
+  private readonly viewContainerRef = inject(ViewContainerRef);
   protected dropdownService = inject(ZardDropdownService);
 
   readonly zDropdownMenu = input<ZardDropdownMenuContentComponent>();
@@ -522,7 +522,7 @@ export class ZardDropdownDirective implements OnInit {
     // Ensure button has proper accessibility attributes
     const element = this.elementRef.nativeElement;
     if (!element.hasAttribute('aria-label') && !element.hasAttribute('aria-labelledby')) {
-      element.setAttribute('aria-label', element.textContent?.trim() || 'Open menu');
+      element.setAttribute('aria-label', element.textContent?.trim() ?? 'Open menu');
     }
   }
 

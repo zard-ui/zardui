@@ -48,11 +48,11 @@ export class ZardStringTemplateOutletDirective<_T = unknown> implements OnChange
         shouldOutletRecreate = zStringTemplateOutlet.firstChange || isTemplateRef(zStringTemplateOutlet.previousValue) || isTemplateRef(zStringTemplateOutlet.currentValue);
       }
       const hasContextShapeChanged = (ctxChange: SimpleChange): boolean => {
-        const prevCtxKeys = Object.keys(ctxChange.previousValue || {});
-        const currCtxKeys = Object.keys(ctxChange.currentValue || {});
+        const prevCtxKeys = Object.keys(ctxChange.previousValue ?? {});
+        const currCtxKeys = Object.keys(ctxChange.currentValue ?? {});
         if (prevCtxKeys.length === currCtxKeys.length) {
           for (const propName of currCtxKeys) {
-            if (prevCtxKeys.indexOf(propName) === -1) {
+            if (prevCtxKeys.includes(propName)) {
               return true;
             }
           }

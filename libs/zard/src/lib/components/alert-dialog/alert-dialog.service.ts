@@ -13,9 +13,9 @@ export const Z_ALERT_MODAL_DATA = new InjectionToken<unknown>('Z_ALERT_MODAL_DAT
   providedIn: 'root',
 })
 export class ZardAlertDialogService {
-  private overlay = inject(Overlay);
-  private injector = inject(Injector);
-  private platformId = inject(PLATFORM_ID);
+  private readonly overlay = inject(Overlay);
+  private readonly injector = inject(Injector);
+  private readonly platformId = inject(PLATFORM_ID);
 
   create<T>(config: ZardAlertDialogOptions<T>): ZardAlertDialogRef<T> {
     return this.open<T>(config.zContent, config);
@@ -29,11 +29,11 @@ export class ZardAlertDialogService {
   ): ZardAlertDialogRef<T> {
     const confirmConfig: ZardAlertDialogOptions<T> = {
       ...config,
-      zOkText: config.zOkText || 'Confirm',
-      zCancelText: config.zCancelText || 'Cancel',
+      zOkText: config.zOkText ?? 'Confirm',
+      zCancelText: config.zCancelText ?? 'Cancel',
       zOkDestructive: config.zOkDestructive ?? false,
       zIcon: config.zIcon,
-      zType: config.zType || 'default',
+      zType: config.zType ?? 'default',
     };
     return this.create(confirmConfig);
   }
@@ -41,10 +41,10 @@ export class ZardAlertDialogService {
   warning<T>(config: Omit<ZardAlertDialogOptions<T>, 'zOkText'> & { zOkText?: string }): ZardAlertDialogRef<T> {
     const warningConfig: ZardAlertDialogOptions<T> = {
       ...config,
-      zOkText: config.zOkText || 'OK',
+      zOkText: config.zOkText ?? 'OK',
       zCancelText: null,
-      zIcon: config.zIcon || 'alert-triangle',
-      zType: config.zType || 'warning',
+      zIcon: config.zIcon ?? 'alert-triangle',
+      zType: config.zType ?? 'warning',
     };
     return this.create(warningConfig);
   }
@@ -52,10 +52,10 @@ export class ZardAlertDialogService {
   info<T>(config: Omit<ZardAlertDialogOptions<T>, 'zOkText'> & { zOkText?: string }): ZardAlertDialogRef<T> {
     const infoConfig: ZardAlertDialogOptions<T> = {
       ...config,
-      zOkText: config.zOkText || 'OK',
+      zOkText: config.zOkText ?? 'OK',
       zCancelText: null,
-      zIcon: config.zIcon || 'info',
-      zType: config.zType || 'default',
+      zIcon: config.zIcon ?? 'info',
+      zType: config.zType ?? 'default',
     };
     return this.create(infoConfig);
   }
