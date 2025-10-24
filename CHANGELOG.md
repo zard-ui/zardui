@@ -1,3 +1,36 @@
+## 1.0.0-beta.23 (2025-10-24)
+
+### 📦 Code Refactoring
+
+- **core:** changed icon packs to lucide-angular ([#274](https://github.com/zard-ui/zardui/pull/274))
+- **tabs:** improvements pr 278 ([#280](https://github.com/zard-ui/zardui/pull/280))
+
+### 🐛 Bug Fixes
+
+- **ci:** update package.json version from tag before build in release workflow
+- **radio:** improve label positioning and accessibility with setDisabledState
+- **tabs:** vertical tabs placement ([#278](https://github.com/zard-ui/zardui/pull/278))
+- **memory:** removing memory leaks ([#277](https://github.com/zard-ui/zardui/pull/277))
+- **tabs:** tabgroup memory leak fix and performance optimization ([#273](https://github.com/zard-ui/zardui/pull/273))
+
+### ✨ Features
+
+- **ssr:** adding ssr support to the documentation ([#269](https://github.com/zard-ui/zardui/pull/269))
+- **seo:** adding dynamic meta tags for doc pages ([#266](https://github.com/zard-ui/zardui/pull/266))
+- **firebase:** adding apphosting.yaml configuration to firebase app hosting
+
+### 🔧 Chores
+
+- **release:** convert auto-release to manual trigger
+- **firebase:** export Express app for Firebase App Hosting
+
+### ❤️ Thank You
+
+- Matheus Ribeiro
+- Luiz Gomes
+- mikij
+- ZardUI Team
+
 ## 1.0.0-beta.22 (2025-10-17)
 
 ### 🐛 Bug Fixes
