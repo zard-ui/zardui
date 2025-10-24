@@ -47,7 +47,7 @@ import { ZardDividerComponent } from '../../divider/divider.component';
     </div>
   `,
 })
-export class ZardDemoTabsPositiontComponent {
+export class ZardDemoTabsPositionComponent {
   protected zTabsPosition: zPosition = 'top';
   protected zActivePosition: zPosition = 'bottom';
 }
