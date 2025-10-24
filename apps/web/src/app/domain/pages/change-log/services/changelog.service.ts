@@ -20,8 +20,6 @@ export class ChangelogService {
   async loadAllEntries(): Promise<ChangelogEntry[]> {
     try {
       const filenames = await this.getAvailableFiles();
-      console.log('Loading all changelog files:', filenames);
-
       const loadPromises = filenames.map(filename => this.loadSingleEntry(filename).toPromise());
       const entries = await Promise.all(loadPromises);
 

@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
 import { ZardDividerComponent } from '../../divider/divider.component';
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardMenuModule } from '../menu.module';
 
 @Component({
   selector: 'zard-demo-menu-default',
   standalone: true,
-  imports: [ZardMenuModule, ZardButtonComponent, ZardDividerComponent],
+  imports: [ZardMenuModule, ZardButtonComponent, ZardDividerComponent, ZardIconComponent],
   template: `
     <nav class="flex items-center justify-between p-4">
       <div class="flex items-center space-x-6">
@@ -15,7 +16,7 @@ import { ZardMenuModule } from '../menu.module';
           <div class="relative">
             <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="productsMenu">
               Products
-              <i class="icon-chevron-down ml-1"></i>
+              <z-icon zType="chevron-down" class="ml-1" />
             </button>
 
             <ng-template #productsMenu>
@@ -31,7 +32,7 @@ import { ZardMenuModule } from '../menu.module';
           <div class="relative">
             <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="solutionsMenu">
               Solutions
-              <i class="icon-chevron-down ml-1"></i>
+              <z-icon zType="chevron-down" class="ml-1" />
             </button>
 
             <ng-template #solutionsMenu>
@@ -59,33 +60,30 @@ import { ZardMenuModule } from '../menu.module';
           <div class="relative">
             <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="resourcesMenu">
               Resources
-              <i class="icon-chevron-down ml-1"></i>
+              <z-icon zType="chevron-down" />
             </button>
 
             <ng-template #resourcesMenu>
               <div z-menu-content class="w-56">
                 <button z-menu-item (click)="log('Blog')">
-                  <i class="icon-book-open mr-2"></i>
+                  <z-icon zType="book-open" class="mr-2" />
                   Blog
                 </button>
 
                 <button z-menu-item (click)="log('Documentation')">
-                  <i class="icon-file-text mr-2"></i>
+                  <z-icon zType="file-text" class="mr-2" />
                   Documentation
                 </button>
 
                 <button z-menu-item z-menu [zMenuTriggerFor]="helpSubmenu" class="justify-between">
-                  <div class="flex items-center">
-                    <i class="icon-info mr-2"></i>
-                    Help & Support
-                  </div>
-                  <i class="icon-chevron-right"></i>
+                  <div class="flex items-center"><z-icon zType="info" class="mr-2" /> Help & Support</div>
+                  <z-icon zType="chevron-right" />
                 </button>
 
                 <z-divider zSpacing="sm"></z-divider>
 
                 <button z-menu-item (click)="log('Community')">
-                  <i class="icon-users mr-2"></i>
+                  <z-icon zType="users" class="mr-2" />
                   Community
                 </button>
               </div>

@@ -8,24 +8,15 @@ import { ZardRadioComponent } from '../radio.component';
   standalone: true,
   imports: [ZardRadioComponent, FormsModule],
   template: `
-    <span z-radio name="radio" [(ngModel)]="val" value="a">Default</span>
-    <span z-radio name="radio" zType="destructive" [(ngModel)]="val" value="b">Destructive</span>
-    <span z-radio name="radio" zType="secondary" [(ngModel)]="val" value="c">Secondary</span>
-    <span z-radio name="radio" [(ngModel)]="val" value="d">Directive usage</span>
+    <div class="flex flex-col gap-3">
+      <span z-radio name="option" [(ngModel)]="selected" value="default">Default</span>
+      <span z-radio name="option" [(ngModel)]="selected" value="comfortable">Comfortable</span>
+      <span z-radio name="option" [(ngModel)]="selected" value="compact">Compact</span>
+    </div>
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 24px;
-      }
-    `,
-  ],
 })
 export class ZardDemoRadioBasicComponent {
-  val = 'a';
+  selected = 'default';
 }
 
 ```

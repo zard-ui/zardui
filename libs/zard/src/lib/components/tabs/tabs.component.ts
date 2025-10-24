@@ -1,3 +1,8 @@
+import clsx from 'clsx';
+import { debounceTime, fromEvent, merge } from 'rxjs';
+import { twMerge } from 'tailwind-merge';
+
+import { CommonModule } from '@angular/common';
 import {
   afterNextRender,
   AfterViewInit,
@@ -17,14 +22,11 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
-import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
-import { debounceTime, distinctUntilChanged, fromEvent, map, merge } from 'rxjs';
-import { twMerge } from 'tailwind-merge';
-import clsx from 'clsx';
+import { ZardIconComponent } from '../icon/icon.component';
+import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
@@ -48,7 +50,7 @@ export class ZardTabComponent {
 @Component({
   selector: 'z-tab-group',
   standalone: true,
-  imports: [CommonModule, ZardButtonComponent],
+  imports: [CommonModule, ZardButtonComponent, ZardIconComponent],
   host: { '[class]': 'containerClasses()' },
   template: `
     @if (navBeforeContent()) {
@@ -81,11 +83,11 @@ export class ZardTabComponent {
         @if (showArrow()) {
           @if (horizontal) {
             <button class="scroll-btn scroll-left pr-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('left')">
-              <i class="icon-chevron-left"></i>
+              <z-icon zType="chevron-left" />
             </button>
           } @else {
             <button class="scroll-btn scroll-up pb-4 cursor-pointer" [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'" (click)="scrollNav('up')">
-              <i class="icon-chevron-up"></i>
+              <z-icon zType="chevron-up" />
             </button>
           }
         }
@@ -111,11 +113,11 @@ export class ZardTabComponent {
         @if (showArrow()) {
           @if (horizontal) {
             <button class="scroll-btn scroll-right pl-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('right')">
-              <i class="icon-chevron-right"></i>
+              <z-icon zType="chevron-right" />
             </button>
           } @else {
             <button class="scroll-btn scroll-down pt-4 cursor-pointer" [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'" (click)="scrollNav('down')">
-              <i class="icon-chevron-down"></i>
+              <z-icon zType="chevron-down" />
             </button>
           }
         }

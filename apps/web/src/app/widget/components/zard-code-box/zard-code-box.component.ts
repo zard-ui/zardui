@@ -1,8 +1,9 @@
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { NgComponentOutlet } from '@angular/common';
-import { Component, input, signal, computed } from '@angular/core';
 import { ComponentType } from '@angular/cdk/overlay';
+import { NgComponentOutlet } from '@angular/common';
+import { Component, computed, input, signal } from '@angular/core';
+import { ZardCardComponent } from '@zard/components/card/card.component';
 import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
+
 import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
 
 @Component({
@@ -15,6 +16,7 @@ export class ZardCodeBoxComponent {
   readonly onlyDemo = input<boolean | undefined>(false);
   readonly fullWidth = input<boolean | undefined>(false);
   readonly fullScreen = input<boolean | undefined>(false);
+  readonly flexAlign = input<'start' | 'center' | 'end' | undefined>('center');
   readonly column = input<boolean | undefined>(false);
   readonly path = input<string>();
   readonly dynamicComponent = input<ComponentType<unknown>>();
@@ -37,6 +39,10 @@ export class ZardCodeBoxComponent {
 
     if (this.fullWidth()) {
       classes.push('[&_ng-component]:w-full', '[&_div:first-child]:w-full');
+    }
+
+    if (this.flexAlign()) {
+      classes.push(`items-${this.flexAlign()}`);
     }
 
     return classes.join(' ');

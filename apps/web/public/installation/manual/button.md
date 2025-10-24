@@ -1,24 +1,24 @@
 
 
 ```angular-ts title="button.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
-
-import { mergeClasses, transform } from '../../shared/utils/utils';
 import { buttonVariants, ZardButtonVariants } from './button.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',
   exportAs: 'zButton',
   standalone: true,
+  imports: [ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (zLoading()) {
-      <span zType="cached" class="icon-loader-circle animate-spin"></span>
+      <z-icon zType="loader-circle" class="animate-spin" />
     }
-
     <ng-content></ng-content>
   `,
   host: {
@@ -26,8 +26,6 @@ import { buttonVariants, ZardButtonVariants } from './button.variants';
   },
 })
 export class ZardButtonComponent {
-  private readonly elementRef = inject(ElementRef);
-
   readonly zType = input<ZardButtonVariants['zType']>('default');
   readonly zSize = input<ZardButtonVariants['zSize']>('default');
   readonly zShape = input<ZardButtonVariants['zShape']>('default');

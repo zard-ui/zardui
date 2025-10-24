@@ -18,6 +18,7 @@ import {
   ZardBreadcrumbSeparatorVariants,
   ZardBreadcrumbEllipsisVariants,
 } from './breadcrumb.variants';
+import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
@@ -122,12 +123,14 @@ export class ZardBreadcrumbPageComponent {
 @Component({
   selector: 'z-breadcrumb-separator',
   exportAs: 'zBreadcrumbSeparator',
+  standalone: true,
+  imports: [ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     <li aria-hidden="true" role="presentation" [class]="classes()">
       <ng-content>
-        <div class="icon-chevron-right"></div>
+        <z-icon zType="chevron-right" />
       </ng-content>
     </li>
   `,
@@ -144,11 +147,15 @@ export class ZardBreadcrumbSeparatorComponent {
 @Component({
   selector: 'z-breadcrumb-ellipsis',
   exportAs: 'zBreadcrumbEllipsis',
+  standalone: true,
+  imports: [ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <span aria-hidden="true" role="presentation" class="icon-ellipsis"></span> `,
+  template: ` <z-icon zType="ellipsis" /> `,
   host: {
     '[class]': 'classes()',
+    'aria-hidden': 'true',
+    role: 'presentation',
   },
 })
 export class ZardBreadcrumbEllipsisComponent {

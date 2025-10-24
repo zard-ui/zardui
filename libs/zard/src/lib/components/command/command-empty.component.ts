@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardCommandJsonComponent } from './command-json.component';
 import { ZardCommandComponent } from './command.component';
 import { commandEmptyVariants } from './command.variants';
 
@@ -23,7 +22,6 @@ import type { ClassValue } from 'clsx';
 })
 export class ZardCommandEmptyComponent {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
-  private readonly jsonCommandComponent = inject(ZardCommandJsonComponent, { optional: true });
 
   readonly class = input<ClassValue>('');
 
@@ -34,12 +32,6 @@ export class ZardCommandEmptyComponent {
     if (this.commandComponent) {
       const filteredOptions = this.commandComponent.filteredOptions();
       return filteredOptions.length === 0;
-    }
-
-    // Check JSON command component
-    if (this.jsonCommandComponent) {
-      const filteredGroups = this.jsonCommandComponent.filteredGroups();
-      return filteredGroups.length === 0;
     }
 
     return false;

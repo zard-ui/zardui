@@ -222,19 +222,20 @@ export class LayoutModule {}
 
 
 ```angular-ts title="sidebar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
-import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
-
-import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { sidebarGroupLabelVariants, sidebarGroupVariants, sidebarTriggerVariants, sidebarVariants } from './layout.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
+import { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-sidebar',
   exportAs: 'zSidebar',
   standalone: true,
-  imports: [ZardStringTemplateOutletDirective],
+  imports: [ZardStringTemplateOutletDirective, ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -254,7 +255,7 @@ import { sidebarGroupLabelVariants, sidebarGroupVariants, sidebarTriggerVariants
           [attr.aria-label]="zCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
           [attr.aria-expanded]="!zCollapsed()"
         >
-          <i [class]="chevronIcon()"></i>
+          <z-icon [zType]="chevronIcon()" />
         </div>
       }
 
@@ -293,14 +294,14 @@ export class SidebarComponent {
     return typeof width === 'number' ? width : parseInt(width, 10);
   });
 
-  protected readonly chevronIcon = computed(() => {
+  protected readonly chevronIcon = computed((): ZardIcon => {
     const collapsed = this.zCollapsed();
     const reverse = this.zReverseArrow();
 
     if (reverse) {
-      return collapsed ? 'icon-chevron-left text-base' : 'icon-chevron-right text-base';
+      return collapsed ? 'chevron-left' : 'chevron-right';
     }
-    return collapsed ? 'icon-chevron-right text-base' : 'icon-chevron-left text-base';
+    return collapsed ? 'chevron-right' : 'chevron-left';
   });
 
   protected readonly classes = computed(() => mergeClasses(sidebarVariants(), this.class()));

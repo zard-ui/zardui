@@ -1,17 +1,19 @@
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardIcon } from '@zard/components/icon/icons';
 import { Component } from '@angular/core';
 
 interface AIFeatureCard {
   title: string;
   description: string;
-  icon: string;
+  icon: ZardIcon;
 }
 
 @Component({
   selector: 'ai-ready-section',
   standalone: true,
-  imports: [ZardBadgeComponent, ZardCardComponent],
+  imports: [ZardBadgeComponent, ZardCardComponent, ZardIconComponent],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -30,7 +32,7 @@ interface AIFeatureCard {
           <z-card [zTitle]="title">
             <ng-template #title>
               <div class="flex items-center gap-2">
-                <i class="text-lg font-normal" [class]="card.icon"></i>
+                <z-icon [zType]="card.icon" class="text-lg font-normal" />
                 <h3 class="text-base">{{ card.title }}</h3>
               </div>
             </ng-template>
@@ -46,12 +48,12 @@ export class AIReadySection {
     {
       title: 'Predictable Patterns',
       description: 'Consistent naming conventions, standardized props, and logical component hierarchies that AI can easily understand and generate code for.',
-      icon: 'icon-sun',
+      icon: 'sun',
     },
     {
       title: 'Rich Documentation',
       description: 'Comprehensive examples, clear API references, and usage patterns that provide AI tools with the context they need to generate accurate code.',
-      icon: 'icon-book-open-text',
+      icon: 'book-open-text',
     },
   ];
 }

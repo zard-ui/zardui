@@ -1,12 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, input, linkedSignal, model, signal, viewChild, ViewEncapsulation } from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
+import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
 import { calendarDayButtonVariants, calendarDayVariants, calendarNavVariants, calendarVariants, calendarWeekdayVariants, ZardCalendarVariants } from './calendar.variants';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
 import { ZardButtonComponent } from '../button/button.component';
-import type { ClassValue } from 'clsx';
+import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
 
 export interface CalendarDay {
@@ -26,7 +27,7 @@ export type { ZardCalendarVariants };
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardButtonComponent, ZardSelectComponent, ZardSelectItemComponent],
+  imports: [ZardButtonComponent, ZardSelectComponent, ZardSelectItemComponent, ZardIconComponent],
   host: {
     '(keydown)': 'onKeyDown($event)',
     '[attr.tabindex]': '0',
@@ -46,7 +47,7 @@ export type { ZardCalendarVariants };
           aria-label="Previous month"
           [class]="navButtonClasses()"
         >
-          <i class="icon-chevron-left"></i>
+          <z-icon zType="chevron-left" />
         </button>
 
         <!-- Month and Year Selectors -->
@@ -67,7 +68,7 @@ export type { ZardCalendarVariants };
         </div>
 
         <button z-button zType="ghost" [zSize]="navButtonSize()" (click)="nextMonth()" [disabled]="isNextDisabled()" aria-label="Next month" [class]="navButtonClasses()">
-          <i class="icon-chevron-right"></i>
+          <z-icon zType="chevron-right" />
         </button>
       </div>
 

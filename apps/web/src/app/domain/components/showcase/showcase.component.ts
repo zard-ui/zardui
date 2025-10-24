@@ -6,6 +6,7 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardTooltipModule } from '@zard/components/tooltip/tooltip';
 import { RouterModule, Router } from '@angular/router';
@@ -67,7 +68,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
                         @case ('cta') {
                           <div class="text-center">
                             <div class="flex items-center justify-center p-2 rounded-2xl bg-white/10 backdrop-blur-sm">
-                              <i class="icon-arrow-right text-xl"></i>
+                              <z-icon zType="arrow-right" class="text-xl" />
                             </div>
 
                             <div>
@@ -101,6 +102,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
     ZardProgressBarComponent,
     ZardAvatarComponent,
     ZardTooltipModule,
+    ZardIconComponent,
   ],
 })
 export class ShowcaseComponent {

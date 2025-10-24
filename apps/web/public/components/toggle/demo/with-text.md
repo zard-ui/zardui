@@ -1,14 +1,15 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
+import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
   standalone: true,
-  imports: [ZardToggleComponent],
+  imports: [ZardToggleComponent, ZardIconComponent],
   template: `
     <z-toggle>
-      <div class="icon-italic"></div>
+      <z-icon zType="italic" />
       Italic
     </z-toggle>
   `,

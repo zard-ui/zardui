@@ -39,7 +39,8 @@ describe('ZardAlertComponent', () => {
   });
 
   it('should render correct icon based on zType', () => {
-    const icon = fixture.debugElement.query(By.css('i'));
-    expect(icon.nativeElement.classList).toContain('icon-info');
+    const icon = fixture.debugElement.query(By.css('z-icon'));
+    expect(icon).toBeTruthy();
+    expect(icon.componentInstance.zType()).toBe('info');
   });
 });

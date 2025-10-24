@@ -1,7 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 
-import { ZardCommandModule } from '../command.module';
 import { ZardCommandOption } from '../command.component';
+import { ZardCommandModule } from '../command.module';
 
 @Component({
   standalone: true,
@@ -13,23 +13,23 @@ import { ZardCommandOption } from '../command.component';
         <z-command-empty>No commands found.</z-command-empty>
 
         <z-command-option-group zLabel="Quick Actions">
-          <z-command-option zLabel="Create new project" zValue="new-project" zIcon='<div class="icon-folder-plus"></div>' zShortcut="⌘N"> </z-command-option>
-          <z-command-option zLabel="Open file" zValue="open-file" zIcon='<div class="icon-folder-open"></div>' zShortcut="⌘O"> </z-command-option>
-          <z-command-option zLabel="Save all" zValue="save-all" zIcon='<div class="icon-save"></div>' zShortcut="⌘S"> </z-command-option>
+          <z-command-option zLabel="Create new project" zValue="new-project" zIcon="folder" zShortcut="⌘N"> </z-command-option>
+          <z-command-option zLabel="Open file" zValue="open-file" zIcon="folder-open" zShortcut="⌘O"> </z-command-option>
+          <z-command-option zLabel="Save all" zValue="save-all" zIcon="save" zShortcut="⌘S"> </z-command-option>
         </z-command-option-group>
 
         <z-command-divider></z-command-divider>
 
         <z-command-option-group zLabel="Navigation">
-          <z-command-option zLabel="Go to Dashboard" zValue="dashboard" zIcon='<div class="icon-layout-dashboard"></div>' zShortcut="⌘1"> </z-command-option>
-          <z-command-option zLabel="Go to Projects" zValue="projects" zIcon='<div class="icon-folder"></div>' zShortcut="⌘2"> </z-command-option>
+          <z-command-option zLabel="Go to Dashboard" zValue="dashboard" zIcon="layout-dashboard" zShortcut="⌘1"> </z-command-option>
+          <z-command-option zLabel="Go to Projects" zValue="projects" zIcon="folder" zShortcut="⌘2"> </z-command-option>
         </z-command-option-group>
 
         <z-command-divider></z-command-divider>
 
         <z-command-option-group zLabel="Tools">
-          <z-command-option zLabel="Open terminal" zValue="terminal" zIcon='<div class="icon-terminal"></div>' zShortcut="⌘T"> </z-command-option>
-          <z-command-option zLabel="Toggle theme" zValue="theme" zIcon='<div class="icon-moon"></div>' zShortcut="⌘D"> </z-command-option>
+          <z-command-option zLabel="Open terminal" zValue="terminal" zIcon="terminal" zShortcut="⌘T"> </z-command-option>
+          <z-command-option zLabel="Toggle theme" zValue="theme" zIcon="moon" zShortcut="⌘D"> </z-command-option>
         </z-command-option-group>
       </z-command-list>
     </z-command>

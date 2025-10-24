@@ -10,7 +10,7 @@
 
   <div class="space-y-8">
     @for (entry of entries(); track trackByEntry($index, entry)) {
-    <div [id]="entry.id" scrollSpyItem [scrollSpyItem]="entry.id">
+    <div [id]="entry.id" class="no-bullets" scrollSpyItem [scrollSpyItem]="entry.id">
       <z-markdown-renderer [markdownUrl]="'/documentation/change-log/' + entry.filename"></z-markdown-renderer>
     </div>
     } @if (isLoading() && entries().length === 0) {

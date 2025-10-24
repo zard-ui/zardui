@@ -1,6 +1,6 @@
 ```angular-ts showLineNumbers copyButton
-import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
 
 import { ZardRadioComponent } from '../radio.component';
 
@@ -8,12 +8,12 @@ import { ZardRadioComponent } from '../radio.component';
   standalone: true,
   imports: [ZardRadioComponent, FormsModule],
   template: `
-    <span name="radio-disabled" z-radio disabled> Disabled </span>
-    <span name="radio-disabled" z-radio disabled [(ngModel)]="selected" [value]="true"> Disabled Selected </span>
+    <span z-radio name="radio" [(ngModel)]="val" value="a" [disabled]="true">Disabled</span>
+    <span z-radio name="radio" [(ngModel)]="val" value="b" [disabled]="true">Disabled</span>
   `,
 })
 export class ZardDemoRadioDisabledComponent {
-  selected = true;
+  val = 'a';
 }
 
 ```
