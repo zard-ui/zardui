@@ -25,7 +25,6 @@ export class ZardDialogService {
     const overlayRef = this.createOverlay();
 
     if (!overlayRef) {
-      // Return a mock dialog ref for SSR environments
       return new ZardDialogRef(undefined as any, config, undefined as any, this.platformId);
     }
 
@@ -63,9 +62,6 @@ export class ZardDialogService {
 
     const containerRef = overlayRef.attach<ZardDialogComponent<T, U>>(containerPortal);
 
-    // No need for setTimeout or state.set() anymore!
-    // The animate.enter directive handles the entry animation automatically
-
     return containerRef.instance;
   }
 
@@ -74,7 +70,6 @@ export class ZardDialogService {
 
     if (componentOrTemplateRef instanceof TemplateRef) {
       dialogContainer.attachTemplatePortal(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         new TemplatePortal<T>(componentOrTemplateRef, null!, {
           dialogRef: dialogRef,
         } as any),

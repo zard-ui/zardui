@@ -49,11 +49,9 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.isClosing = true;
     this.result = result;
 
-    // Add the leave animation class to trigger CSS transition
     const hostElement = this.containerInstance.getNativeElement();
     hostElement.classList.add('dialog-leave');
 
-    // Wait for animation to complete before disposing
     setTimeout(() => {
       if (this.overlayRef) {
         if (this.overlayRef.hasAttached()) {
@@ -66,7 +64,7 @@ export class ZardDialogRef<T = any, R = any, U = any> {
         this.destroy$.next();
         this.destroy$.complete();
       }
-    }, 150); // Match the animation duration
+    }, 150);
   }
 
   private trigger(action: eTriggerAction) {

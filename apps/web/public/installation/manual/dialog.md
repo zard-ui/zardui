@@ -1,9 +1,6 @@
 
 
 ```angular-ts title="dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { animate, state, style, transition, trigger } from '@angular/animations';
-import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -15,18 +12,19 @@ import {
   inject,
   NgModule,
   output,
-  signal,
   TemplateRef,
   Type,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { OverlayModule } from '@angular/cdk/overlay';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
-import { ZardDialogRef } from './dialog-ref';
+import { mergeClasses } from '../../shared/utils/utils';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
+import { ZardDialogRef } from './dialog-ref';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -109,16 +107,38 @@ export class ZardDialogOptions<T, U> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
-    '[@dialogAnimation]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
+    'animate.enter': 'dialog-enter',
+    'animate.leave': 'dialog-leave',
   },
-  animations: [
-    trigger('dialogAnimation', [
-      state('close', style({ opacity: 0, transform: 'scale(0.9)' })),
-      state('open', style({ opacity: 1, transform: 'scale(1)' })),
-      transition('close => open', animate('150ms ease-out')),
-      transition('open => close', animate('150ms ease-in')),
-    ]),
+  styles: [
+    `
+      :host {
+        /* Default state when visible */
+        opacity: 1;
+        transform: scale(1);
+        transition:
+          opacity 150ms ease-out,
+          transform 150ms ease-out;
+      }
+
+      /* Initial state when entering */
+      @starting-style {
+        :host {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+      }
+
+      /* Leave animation styles */
+      :host.dialog-leave {
+        opacity: 0;
+        transform: scale(0.9);
+        transition:
+          opacity 150ms ease-in,
+          transform 150ms ease-in;
+      }
+    `,
   ],
 })
 export class ZardDialogComponent<T, U> extends BasePortalOutlet {
@@ -134,7 +154,6 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
-  state = signal<'close' | 'open'>('close');
 
   constructor() {
     super();
@@ -192,11 +211,9 @@ export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
 ```angular-ts title="dialog-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-
 import { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
-
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
 const enum eTriggerAction {
@@ -244,8 +261,11 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.isClosing = true;
     this.result = result;
 
-    this.containerInstance.state.set('close');
+    // Add the leave animation class to trigger CSS transition
+    const hostElement = this.containerInstance.getNativeElement();
+    hostElement.classList.add('dialog-leave');
 
+    // Wait for animation to complete before disposing
     setTimeout(() => {
       if (this.overlayRef) {
         if (this.overlayRef.hasAttached()) {
@@ -258,7 +278,7 @@ export class ZardDialogRef<T = any, R = any, U = any> {
         this.destroy$.next();
         this.destroy$.complete();
       }
-    }, 150);
+    }, 150); // Match the animation duration
   }
 
   private trigger(action: eTriggerAction) {
@@ -269,7 +289,9 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     } else if (typeof trigger === 'function') {
       const result = trigger(this.getContentComponent()) as R;
       this.closeWithResult(result);
-    } else this.close();
+    } else {
+      this.close();
+    }
   }
 
   private getContentComponent(): T {
@@ -277,7 +299,9 @@ export class ZardDialogRef<T = any, R = any, U = any> {
   }
 
   private closeWithResult(result: R): void {
-    if (result !== false) this.close(result);
+    if (result !== false) {
+      this.close(result);
+    }
   }
 }
 
@@ -290,11 +314,11 @@ import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
-
 import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
+
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
 
 @Injectable({
@@ -318,8 +342,8 @@ export class ZardDialogService {
     }
 
     const dialogContainer = this.attachDialogContainer<T, U>(overlayRef, config);
-
     const dialogRef = this.attachDialogContent<T, U>(componentOrTemplateRef, dialogContainer, overlayRef, config);
+
     dialogContainer.dialogRef = dialogRef;
 
     return dialogRef;
@@ -334,6 +358,7 @@ export class ZardDialogService {
 
       return this.overlay.create(overlayConfig);
     }
+
     return undefined;
   }
 
@@ -347,11 +372,11 @@ export class ZardDialogService {
     });
 
     const containerPortal = new ComponentPortal<ZardDialogComponent<T, U>>(ZardDialogComponent, config.zViewContainerRef, injector);
+
     const containerRef = overlayRef.attach<ZardDialogComponent<T, U>>(containerPortal);
 
-    setTimeout(() => {
-      containerRef.instance.state.set('open');
-    }, 0);
+    // No need for setTimeout or state.set() anymore!
+    // The animate.enter directive handles the entry animation automatically
 
     return containerRef.instance;
   }

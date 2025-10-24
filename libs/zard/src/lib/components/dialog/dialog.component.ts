@@ -16,12 +16,12 @@ import {
 } from '@angular/core';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
-
 import { ZardButtonComponent } from '../button/button.component';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
 import { ZardDialogRef } from './dialog-ref';
+// Used by the NgModule provider definition
+import { ZardDialogService } from './dialog.service';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -111,7 +111,6 @@ export class ZardDialogOptions<T, U> {
   styles: [
     `
       :host {
-        /* Default state when visible */
         opacity: 1;
         transform: scale(1);
         transition:
@@ -119,7 +118,6 @@ export class ZardDialogOptions<T, U> {
           transform 150ms ease-out;
       }
 
-      /* Initial state when entering */
       @starting-style {
         :host {
           opacity: 0;
@@ -127,7 +125,6 @@ export class ZardDialogOptions<T, U> {
         }
       }
 
-      /* Leave animation styles */
       :host.dialog-leave {
         opacity: 0;
         transform: scale(0.9);
