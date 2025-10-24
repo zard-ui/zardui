@@ -17,11 +17,9 @@ type OnChangeType = (value: unknown) => void;
   imports: [],
   exportAs: 'zRadio',
   template: `
-    <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onRadioChange()">
-      <main class="flex relative items-center justify-center">
-        <input #input type="radio" [value]="value()" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onRadioBlur()" [name]="name()" [id]="zId()" />
-        <span class="absolute size-2 rounded-full bg-primary opacity-0 peer-checked:opacity-100 pointer-events-none"></span>
-      </main>
+    <span class="flex items-center gap-2 relative" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onRadioChange()">
+      <input #input type="radio" [value]="value()" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onRadioBlur()" [name]="name()" [id]="zId()" />
+      <span class="absolute size-2 rounded-full bg-primary opacity-0 peer-checked:opacity-100 pointer-events-none left-[4px]"></span>
       <label [class]="labelClasses()" [for]="zId()">
         <ng-content></ng-content>
       </label>
@@ -69,6 +67,12 @@ export class ZardRadioComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
+  setDisabledState(_isDisabled: boolean): void {
+    // This is called by Angular forms when the disabled state changes
+    // The input disabled() signal handles the state
+    this.cdr.markForCheck();
+  }
+
   onRadioBlur(): void {
     this.onTouched();
     this.cdr.markForCheck();
@@ -95,7 +99,7 @@ export const radioVariants = cva(
   'cursor-[unset] peer appearance-none rounded-full border border-input bg-background shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30 aspect-square shrink-0 size-4',
 );
 
-export const radioLabelVariants = cva('cursor-[unset] text-sm empty:hidden');
+export const radioLabelVariants = cva('text-sm empty:hidden peer-disabled:opacity-50 peer-disabled:cursor-not-allowed');
 
 ```
 

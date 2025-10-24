@@ -1,11 +1,6 @@
 
 
 ```angular-ts title="tabs.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import clsx from 'clsx';
-import { debounceTime, fromEvent, merge } from 'rxjs';
-import { twMerge } from 'tailwind-merge';
-
-import { CommonModule } from '@angular/common';
 import {
   afterNextRender,
   AfterViewInit,
@@ -25,11 +20,15 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { debounceTime, fromEvent, merge, map, distinctUntilChanged } from 'rxjs';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
+import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
 
+import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
-import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
