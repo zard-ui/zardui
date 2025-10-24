@@ -16,13 +16,7 @@ export default [
         'error',
         {
           enforceBuildableLibDependency: true,
-          allow: [
-            '^.*/eslint(\\.base)?\\.config\\.[cm]?js$',
-            '^@zard/domain/.*$',
-            '^@zard/env/.*$',
-            '^@zard/shared/.*$',
-            '^@zard/widget/.*$'
-          ],
+          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$', '^@zard/domain/.*$', '^@zard/env/.*$', '^@zard/shared/.*$', '^@zard/widget/.*$'],
           depConstraints: [
             {
               sourceTag: '*',
