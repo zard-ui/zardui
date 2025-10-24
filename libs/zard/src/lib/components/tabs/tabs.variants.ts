@@ -2,7 +2,7 @@ import { cva, VariantProps } from 'class-variance-authority';
 
 import { zAlign } from './tabs.component';
 
-export const tabContainerVariants = cva('flex w-full h-full', {
+export const tabContainerVariants = cva('flex', {
   variants: {
     zPosition: {
       top: 'flex-col',
@@ -19,10 +19,10 @@ export const tabContainerVariants = cva('flex w-full h-full', {
 export const tabNavVariants = cva('flex gap-4 overflow-auto scroll nav-tab-scroll', {
   variants: {
     zPosition: {
-      top: 'flex-row border-b mb-4 w-full',
-      bottom: 'flex-row border-t mt-4 w-full',
-      left: 'flex-col border-r mr-4 h-full min-h-0',
-      right: 'flex-col border-l ml-4 h-full min-h-0',
+      top: 'flex-row border-b mb-4',
+      bottom: 'flex-row border-t mt-4',
+      left: 'flex-col border-r mr-4 min-h-0',
+      right: 'flex-col border-l ml-4 min-h-0',
     },
     zAlignTabs: {
       start: 'justify-start',
