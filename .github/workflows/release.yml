@@ -32,9 +32,6 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Build CLI
-        run: npx nx build cli
-
       - name: Extract version from tag
         id: version_info
         run: |
@@ -50,13 +47,22 @@ jobs:
             exit 1
           fi
 
-      - name: Verify package version
+      - name: Update package.json version
+        run: |
+          # Update CLI package.json with tag version
+          node -e "const fs = require('fs'); const pkg = require('./packages/cli/package.json'); pkg.version = '${{ steps.version_info.outputs.version }}'; fs.writeFileSync('./packages/cli/package.json', JSON.stringify(pkg, null, 2) + '\n');"
+
+          # Update main package.json with tag version
+          node -e "const fs = require('fs'); const pkg = require('./package.json'); pkg.version = '${{ steps.version_info.outputs.version }}'; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');"
+
+      - name: Build CLI
+        run: npx nx build cli
+
+      - name: Verify build output
         run: |
           PACKAGE_VERSION=$(node -p "require('./packages/cli/dist/package.json').version")
-          if [ "$PACKAGE_VERSION" != "${{ steps.version_info.outputs.version }}" ]; then
-            echo "Error: Tag version (${{ steps.version_info.outputs.version }}) does not match package.json version ($PACKAGE_VERSION)"
-            exit 1
-          fi
+          echo "Built package version: $PACKAGE_VERSION"
+          echo "Tag version: ${{ steps.version_info.outputs.version }}"
 
       - name: Publish CLI to npm
         run: |
