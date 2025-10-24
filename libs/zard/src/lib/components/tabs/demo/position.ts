@@ -1,37 +1,52 @@
-import { ZardButtonComponent } from '../../button/button.component';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardTabComponent, ZardTabGroupComponent, zPosition } from '../tabs.component';
+import { ZardRadioComponent } from '../../radio/radio.component';
+import { FormsModule } from '@angular/forms';
+import { ZardDividerComponent } from '../../divider/divider.component';
 
 @Component({
   standalone: true,
-  imports: [ZardTabComponent, ZardTabGroupComponent, ZardButtonComponent],
+  imports: [ZardTabComponent, ZardTabGroupComponent, ZardRadioComponent, FormsModule, ZardDividerComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="w-full h-[300px]">
-      <z-tab-group [zTabsPosition]="zTabsPosition" [zActivePosition]="zActivePosition">
-        <z-tab label="zTabsPosition">
-          <p class="text-center w-full">zTabsPosition: {{ zTabsPosition }}</p>
-          <div class="flex justify-center items-center gap-2 mt-4">
-            <button z-button zType="ghost" (click)="zTabsPosition = 'top'">Top</button>
-            <button z-button zType="ghost" (click)="zTabsPosition = 'bottom'">Bottom</button>
-            <button z-button zType="ghost" (click)="zTabsPosition = 'left'">Left</button>
-            <button z-button zType="ghost" (click)="zTabsPosition = 'right'">Right</button>
-          </div>
+    <div class="w-full h-[300px] flex flex-col justify-between">
+      <z-tab-group [zTabsPosition]="zTabsPosition" [zActivePosition]="zActivePosition" class="h-[180px]">
+        <z-tab label="First">
+          <p>Is the default tab component</p>
         </z-tab>
-        <z-tab label="zActivePosition">
-          <p class="text-center w-full">zActivePosition: {{ zActivePosition }}</p>
-          <div class="flex justify-center items-center gap-2 mt-4">
-            <button z-button zType="ghost" (click)="zActivePosition = 'top'">Top</button>
-            <button z-button zType="ghost" (click)="zActivePosition = 'bottom'">Bottom</button>
-            <button z-button zType="ghost" (click)="zActivePosition = 'left'">Left</button>
-            <button z-button zType="ghost" (click)="zActivePosition = 'right'">Right</button>
-          </div>
+        <z-tab label="Second">
+          <p>Content of the second tab</p>
+        </z-tab>
+        <z-tab label="Third">
+          <p>Content of the third tab</p>
         </z-tab>
       </z-tab-group>
+      <div>
+        <z-divider class="my-0" />
+        <div class="flex flex-col gap-3 px-4 py-2 ">
+          <div class="flex justify-between items-center">
+            <span>Tabs Position:</span>
+            <div class="flex gap-2">
+              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="top">Top</span>
+              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="bottom">Bottom</span>
+              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="left">Left</span>
+              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="right">Right</span>
+            </div>
+          </div>
+          <div class="flex justify-center items-center gap-2">
+            <span>Active Tab Indicator Position:</span>
+            <span z-radio name="active" [(ngModel)]="zActivePosition" value="top">Top</span>
+            <span z-radio name="active" [(ngModel)]="zActivePosition" value="bottom">Bottom</span>
+            <span z-radio name="active" [(ngModel)]="zActivePosition" value="left">Left</span>
+            <span z-radio name="active" [(ngModel)]="zActivePosition" value="right">Right</span>
+          </div>
+        </div>
+      </div>
     </div>
   `,
 })
 export class ZardDemoTabsPositiontComponent {
-  zTabsPosition: zPosition = 'top';
-  zActivePosition: zPosition = 'top';
+  protected zTabsPosition: zPosition = 'top';
+  protected zActivePosition: zPosition = 'bottom';
 }
