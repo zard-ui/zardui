@@ -1,8 +1,5 @@
-import { ZardDemoRadioDestructiveComponent } from './destructive';
-import { ZardDemoRadioSecondaryComponent } from './secondary';
-import { ZardDemoRadioDisabledComponent } from './disabled';
 import { ZardDemoRadioDefaultComponent } from './default';
-import { ZardDemoRadioSizeComponent } from './size';
+import { ZardDemoRadioDisabledComponent } from './disabled';
 
 export const RADIO = {
   componentName: 'radio',
@@ -12,18 +9,6 @@ export const RADIO = {
     {
       name: 'default',
       component: ZardDemoRadioDefaultComponent,
-    },
-    {
-      name: 'secondary',
-      component: ZardDemoRadioSecondaryComponent,
-    },
-    {
-      name: 'destructive',
-      component: ZardDemoRadioDestructiveComponent,
-    },
-    {
-      name: 'size',
-      component: ZardDemoRadioSizeComponent,
     },
     {
       name: 'disabled',

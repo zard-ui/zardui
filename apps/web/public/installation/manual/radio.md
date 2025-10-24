@@ -5,9 +5,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwar
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
-import { radioLabelVariants, radioVariants, ZardRadioVariants } from './radio.variants';
+import { radioLabelVariants, radioVariants } from './radio.variants';
 import { generateId, mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => unknown;
 type OnChangeType = (value: unknown) => void;
@@ -15,17 +14,13 @@ type OnChangeType = (value: unknown) => void;
 @Component({
   selector: 'z-radio, [z-radio]',
   standalone: true,
-  imports: [ZardIconComponent],
+  imports: [],
   exportAs: 'zRadio',
   template: `
     <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onRadioChange()">
-      <main class="flex relative">
+      <main class="flex relative items-center justify-center">
         <input #input type="radio" [value]="value()" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onRadioBlur()" [name]="name()" [id]="zId()" />
-        <z-icon
-          zType="circle"
-          [zSize]="iconSize()"
-          class="absolute flex items-center justify-center text-primary-foreground opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        />
+        <span class="absolute size-2 rounded-full bg-primary opacity-0 peer-checked:opacity-100 pointer-events-none"></span>
       </main>
       <label [class]="labelClasses()" [for]="zId()">
         <ng-content></ng-content>
@@ -48,8 +43,6 @@ export class ZardRadioComponent implements ControlValueAccessor {
   readonly radioChange = output<boolean>();
   readonly class = input<ClassValue>('');
   readonly disabled = input(false, { transform });
-  readonly zType = input<ZardRadioVariants['zType']>('default');
-  readonly zSize = input<ZardRadioVariants['zSize']>('default');
   readonly name = input<string>('radio');
   readonly zId = input<string>(generateId('radio'));
   readonly value = input<unknown>(null);
@@ -58,19 +51,8 @@ export class ZardRadioComponent implements ControlValueAccessor {
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onTouched: OnTouchedType = () => {};
 
-  protected readonly classes = computed(() => mergeClasses(radioVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()));
-  protected readonly labelClasses = computed(() => mergeClasses(radioLabelVariants({ zSize: this.zSize() })));
-
-  protected readonly iconSize = computed((): 'sm' | 'default' | 'lg' => {
-    const size = this.zSize();
-    if (size === 'lg') {
-      return 'lg';
-    }
-    if (size === 'sm') {
-      return 'sm';
-    }
-    return 'default';
-  });
+  protected readonly classes = computed(() => mergeClasses(radioVariants(), this.class()));
+  protected readonly labelClasses = computed(() => mergeClasses(radioLabelVariants()));
 
   checked = false;
 
@@ -107,51 +89,13 @@ export class ZardRadioComponent implements ControlValueAccessor {
 
 
 ```angular-ts title="radio.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 export const radioVariants = cva(
-  'cursor-[unset] peer appearance-none border transition shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
-  {
-    variants: {
-      zType: {
-        default: 'border-primary checked:bg-primary',
-        destructive: 'border-destructive checked:bg-destructive',
-        secondary: 'border-secondary checked:bg-secondary',
-      },
-      zSize: {
-        default: 'h-4 w-4',
-        sm: 'h-3 w-3',
-        lg: 'h-6 w-6',
-      },
-      zShape: {
-        default: 'rounded-full',
-        circle: 'rounded-full',
-        square: 'rounded-none',
-      },
-    },
-    defaultVariants: {
-      zType: 'default',
-      zSize: 'default',
-      zShape: 'default',
-    },
-  },
+  'cursor-[unset] peer appearance-none rounded-full border border-input bg-background shadow-xs transition-[color,box-shadow] outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 dark:bg-input/30 aspect-square shrink-0 size-4',
 );
 
-export const radioLabelVariants = cva('cursor-[unset] text-current empty:hidden', {
-  variants: {
-    zSize: {
-      default: 'text-base',
-      sm: 'text-sm',
-      lg: 'text-lg',
-    },
-  },
-  defaultVariants: {
-    zSize: 'default',
-  },
-});
-
-export type ZardRadioVariants = VariantProps<typeof radioVariants>;
-export type ZardRadioLabelVariants = VariantProps<typeof radioLabelVariants>;
+export const radioLabelVariants = cva('cursor-[unset] text-sm empty:hidden');
 
 ```
 

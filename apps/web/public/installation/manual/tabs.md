@@ -7,23 +7,23 @@ import { twMerge } from 'tailwind-merge';
 
 import { CommonModule } from '@angular/common';
 import {
-    afterNextRender,
-    AfterViewInit,
-    ChangeDetectionStrategy,
-    Component,
-    computed,
-    contentChildren,
-    DestroyRef,
-    ElementRef,
-    inject,
-    Injector,
-    input,
-    output,
-    runInInjectionContext,
-    signal,
-    TemplateRef,
-    viewChild,
-    ViewEncapsulation
+  afterNextRender,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  DestroyRef,
+  ElementRef,
+  inject,
+  Injector,
+  input,
+  output,
+  runInInjectionContext,
+  signal,
+  TemplateRef,
+  viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 

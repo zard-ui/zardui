@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwar
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
-import { radioLabelVariants, radioVariants, ZardRadioVariants } from './radio.variants';
+import { radioLabelVariants, radioVariants } from './radio.variants';
 import { generateId, mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => unknown;
 type OnChangeType = (value: unknown) => void;
@@ -12,18 +11,12 @@ type OnChangeType = (value: unknown) => void;
 @Component({
   selector: 'z-radio, [z-radio]',
   standalone: true,
-  imports: [ZardIconComponent],
+  imports: [],
   exportAs: 'zRadio',
   template: `
-    <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onRadioChange()">
-      <main class="flex relative">
-        <input #input type="radio" [value]="value()" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onRadioBlur()" [name]="name()" [id]="zId()" />
-        <z-icon
-          zType="circle"
-          [zSize]="iconSize()"
-          class="absolute flex items-center justify-center text-primary-foreground opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        />
-      </main>
+    <span class="flex items-center gap-2 relative" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onRadioChange()">
+      <input #input type="radio" [value]="value()" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onRadioBlur()" [name]="name()" [id]="zId()" />
+      <span class="absolute size-2 rounded-full bg-primary opacity-0 peer-checked:opacity-100 pointer-events-none left-[4px]"></span>
       <label [class]="labelClasses()" [for]="zId()">
         <ng-content></ng-content>
       </label>
@@ -45,8 +38,6 @@ export class ZardRadioComponent implements ControlValueAccessor {
   readonly radioChange = output<boolean>();
   readonly class = input<ClassValue>('');
   readonly disabled = input(false, { transform });
-  readonly zType = input<ZardRadioVariants['zType']>('default');
-  readonly zSize = input<ZardRadioVariants['zSize']>('default');
   readonly name = input<string>('radio');
   readonly zId = input<string>(generateId('radio'));
   readonly value = input<unknown>(null);
@@ -55,19 +46,8 @@ export class ZardRadioComponent implements ControlValueAccessor {
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onTouched: OnTouchedType = () => {};
 
-  protected readonly classes = computed(() => mergeClasses(radioVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()));
-  protected readonly labelClasses = computed(() => mergeClasses(radioLabelVariants({ zSize: this.zSize() })));
-
-  protected readonly iconSize = computed((): 'sm' | 'default' | 'lg' => {
-    const size = this.zSize();
-    if (size === 'lg') {
-      return 'lg';
-    }
-    if (size === 'sm') {
-      return 'sm';
-    }
-    return 'default';
-  });
+  protected readonly classes = computed(() => mergeClasses(radioVariants(), this.class()));
+  protected readonly labelClasses = computed(() => mergeClasses(radioLabelVariants()));
 
   checked = false;
 
@@ -82,6 +62,12 @@ export class ZardRadioComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: OnTouchedType): void {
     this.onTouched = fn;
+  }
+
+  setDisabledState(_isDisabled: boolean): void {
+    // This is called by Angular forms when the disabled state changes
+    // The input disabled() signal handles the state
+    this.cdr.markForCheck();
   }
 
   onRadioBlur(): void {
