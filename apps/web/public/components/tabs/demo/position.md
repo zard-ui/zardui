@@ -25,22 +25,22 @@ import { ZardDividerComponent } from '../../divider/divider.component';
       </z-tab-group>
       <div>
         <z-divider class="my-0" />
-        <div class="flex flex-col gap-3 px-4 py-2 ">
+        <div class="flex flex-col gap-3 px-4 py-2 text-sm">
           <div class="flex justify-between items-center">
             <span>Tabs Position:</span>
             <div class="flex gap-2">
-              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="top">Top</span>
-              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="bottom">Bottom</span>
-              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="left">Left</span>
-              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="right">Right</span>
+              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="top" zSize="sm">Top</span>
+              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="bottom" zSize="sm">Bottom</span>
+              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="left" zSize="sm">Left</span>
+              <span z-radio name="tab" [(ngModel)]="zTabsPosition" value="right" zSize="sm">Right</span>
             </div>
           </div>
           <div class="flex justify-center items-center gap-2">
             <span>Active Tab Indicator Position:</span>
-            <span z-radio name="active" [(ngModel)]="zActivePosition" value="top">Top</span>
-            <span z-radio name="active" [(ngModel)]="zActivePosition" value="bottom">Bottom</span>
-            <span z-radio name="active" [(ngModel)]="zActivePosition" value="left">Left</span>
-            <span z-radio name="active" [(ngModel)]="zActivePosition" value="right">Right</span>
+            <span z-radio name="active" [(ngModel)]="zActivePosition" value="top" zSize="sm">Top</span>
+            <span z-radio name="active" [(ngModel)]="zActivePosition" value="bottom" zSize="sm">Bottom</span>
+            <span z-radio name="active" [(ngModel)]="zActivePosition" value="left" zSize="sm">Left</span>
+            <span z-radio name="active" [(ngModel)]="zActivePosition" value="right" zSize="sm">Right</span>
           </div>
         </div>
       </div>

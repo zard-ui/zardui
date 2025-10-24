@@ -57,47 +57,7 @@ export class ZardTabComponent {
     @let horizontal = isHorizontal();
 
     @if (navBeforeContent()) {
-      <div [class]="navGridClasses()">
-        @if (showArrow()) {
-          @if (horizontal) {
-            <button class="scroll-btn scroll-left pr-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('left')">
-              <i class="icon-chevron-left"></i>
-            </button>
-          } @else {
-            <button class="scroll-btn scroll-up pb-4 cursor-pointer" [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'" (click)="scrollNav('up')">
-              <i class="icon-chevron-up"></i>
-            </button>
-          }
-        }
-
-        <nav [ngClass]="navClasses()" #tabNav role="tablist">
-          @for (tab of tabs(); track $index; let index = $index) {
-            <button
-              z-button
-              zType="ghost"
-              role="tab"
-              [attr.aria-selected]="activeTabIndex() === index"
-              [attr.tabindex]="activeTabIndex() === index ? 0 : -1"
-              (click)="setActiveTab(index)"
-              [ngClass]="buttonClassesSignal()[index]"
-            >
-              {{ tab.label() }}
-            </button>
-          }
-        </nav>
-
-        @if (showArrow()) {
-          @if (horizontal) {
-            <button class="scroll-btn scroll-right pl-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('right')">
-              <i class="icon-chevron-right"></i>
-            </button>
-          } @else {
-            <button class="scroll-btn scroll-down pt-4 cursor-pointer" [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'" (click)="scrollNav('down')">
-              <i class="icon-chevron-down"></i>
-            </button>
-          }
-        }
-      </div>
+      <ng-container [ngTemplateOutlet]="navigationBlock"></ng-container>
     }
 
     <div class="tab-content flex-1">
@@ -109,6 +69,10 @@ export class ZardTabComponent {
     </div>
 
     @if (!navBeforeContent()) {
+      <ng-container [ngTemplateOutlet]="navigationBlock"></ng-container>
+    }
+
+    <ng-template #navigationBlock>
       <div [class]="navGridClasses()">
         @if (showArrow()) {
           @if (horizontal) {
@@ -150,7 +114,7 @@ export class ZardTabComponent {
           }
         }
       </div>
-    }
+    </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
