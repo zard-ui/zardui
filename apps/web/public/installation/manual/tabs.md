@@ -9,6 +9,7 @@ import {
   computed,
   contentChildren,
   DestroyRef,
+  DOCUMENT,
   ElementRef,
   inject,
   Injector,
@@ -153,6 +154,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
   private readonly tabsContainer = viewChild.required<ElementRef>('tabNav');
   private readonly destroyRef = inject(DestroyRef);
   private readonly injector = inject(Injector);
+  private readonly window = inject(DOCUMENT).defaultView;
 
   protected readonly tabs = computed(() => this.tabComponents());
   protected readonly activeTabIndex = signal<number>(0);
@@ -197,7 +199,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
 
       afterNextRender(() => {
         // SSR/browser guard
-        if (typeof window === 'undefined' || typeof ResizeObserver === 'undefined') return;
+        if (!this.window || typeof ResizeObserver === 'undefined') return;
 
         const resizeObserver = new ResizeObserver(() => this.setScrollState());
 
@@ -208,7 +210,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
           this.setScrollState();
         });
 
-        merge(observeInputs$, fromEvent(window, 'resize'))
+        merge(observeInputs$, fromEvent(this.window, 'resize'))
           .pipe(debounceTime(10), takeUntilDestroyed(this.destroyRef))
           .subscribe(() => this.setScrollState());
 
