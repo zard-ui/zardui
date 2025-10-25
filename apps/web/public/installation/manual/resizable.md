@@ -257,18 +257,26 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
       sizes[index] = defaultSize;
 
       const totalOthers = this.othersTotal(sizes, index);
-      const scale = (100 - defaultSize) / totalOthers;
-
-      sizes = this.scaleSizes(sizes, index, scale);
+      if (totalOthers === 0) {
+        const share = (100 - defaultSize) / (sizes.length - 1);
+        sizes = sizes.map((s, i) => (i === index ? defaultSize : share));
+      } else {
+        const scale = (100 - defaultSize) / totalOthers;
+        sizes = this.scaleSizes(sizes, index, scale);
+      }
     } else {
       const collapsedSize = sizes[index];
 
       sizes[index] = 0;
 
       const totalOthers = this.othersTotal(sizes, index);
-      const scale = (totalOthers + collapsedSize) / (totalOthers > 0 ? totalOthers : 1);
-
-      sizes = this.scaleSizes(sizes, index, scale);
+      if (totalOthers === 0) {
+        const share = (100 - collapsedSize) / (sizes.length - 1);
+        sizes = sizes.map((s, i) => (i === index ? collapsedSize : share));
+      } else {
+        const scale = (totalOthers + collapsedSize) / totalOthers;
+        sizes = this.scaleSizes(sizes, index, scale);
+      }
     }
 
     this.panelSizes.set(sizes);

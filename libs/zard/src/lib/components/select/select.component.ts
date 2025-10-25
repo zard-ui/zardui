@@ -312,7 +312,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
           ])
           .withPush(false);
 
-        const elementWidth = this.elementRef.nativeElement.offsetWidth ?? 200;
+        const elementWidth = this.elementRef.nativeElement.offsetWidth || 200;
 
         this.overlayRef = this.overlay.create({
           positionStrategy,
