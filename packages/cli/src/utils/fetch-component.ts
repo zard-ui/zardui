@@ -3,7 +3,7 @@ import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
 import { execa } from 'execa';
 
-import type { Config } from './config.js';
+import type { Config } from '@cli/utils/config.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

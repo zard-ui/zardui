@@ -21,7 +21,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'layout',
-    registryDependencies: ['core'],
+    registryDependencies: ['core', 'icon'],
     files: [
       {
         name: 'layout.component.ts',
@@ -55,6 +55,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'button',
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'button.component.ts',
@@ -68,7 +69,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'sheet',
-    registryDependencies: ['button'],
+    registryDependencies: ['button', 'icon'],
     files: [
       {
         name: 'sheet.component.ts',
@@ -135,6 +136,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'accordion',
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'accordion.component.ts',
@@ -148,6 +150,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'alert',
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'alert.component.ts',
@@ -187,6 +190,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'avatar',
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'avatar.component.ts',
@@ -200,6 +204,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'checkbox',
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'checkbox.component.ts',
@@ -213,7 +218,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'dialog',
-    registryDependencies: ['button'],
+    registryDependencies: ['button', 'icon'],
     files: [
       {
         name: 'dialog.component.ts',
@@ -285,6 +290,10 @@ export const registry: ComponentRegistry[] = [
         name: 'icon.variants.ts',
         content: '',
       },
+      {
+        name: 'icons.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -316,6 +325,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'select',
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'select.component.ts',
@@ -346,7 +356,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tabs',
-    registryDependencies: ['button'],
+    registryDependencies: ['button', 'icon'],
     files: [
       {
         name: 'tabs.component.ts',
@@ -390,6 +400,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'breadcrumb',
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'breadcrumb.component.ts',
@@ -472,6 +483,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'calendar',
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'calendar.component.ts',
@@ -485,7 +497,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'combobox',
-    registryDependencies: ['button', 'command', 'popover', 'empty', 'input'],
+    registryDependencies: ['button', 'command', 'popover', 'empty', 'input', 'icon'],
     files: [
       {
         name: 'combobox.component.ts',
@@ -499,6 +511,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'command',
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'command.component.ts',
@@ -540,7 +553,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'date-picker',
-    registryDependencies: ['button', 'calendar', 'popover', 'input'],
+    registryDependencies: ['button', 'calendar', 'popover', 'input', 'icon'],
     files: [
       {
         name: 'date-picker.component.ts',
@@ -571,7 +584,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'pagination',
-    registryDependencies: ['button'],
+    registryDependencies: ['button', 'icon'],
     files: [
       {
         name: 'pagination.component.ts',
@@ -680,7 +693,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'toggle-group',
-    registryDependencies: ['toggle'],
+    registryDependencies: ['toggle', 'icon'],
     files: [
       {
         name: 'toggle-group.component.ts',
@@ -726,11 +739,3 @@ export const registry: ComponentRegistry[] = [
     ],
   },
 ];
-
-export function getRegistryComponent(name: string): ComponentRegistry | undefined {
-  return registry.find(component => component.name === name);
-}
-
-export function getAllComponentNames(): string[] {
-  return registry.map(component => component.name);
-}
