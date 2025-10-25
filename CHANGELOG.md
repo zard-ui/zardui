@@ -1,3 +1,26 @@
+## 1.0.0-beta.25 (2025-10-24)
+
+### 📦 Code Refactoring
+
+- **cli:** modularize commands and reorganize structure
+  - Split init command (294 lines) into 6 focused modules
+  - Split add command (151 lines) into 4 focused modules
+  - Reorganized registry and themes into core/ directory
+  - Separated logic from data for better maintainability
+
+### ✨ Features
+
+- **cli:** add @cli path alias for cleaner imports
+  - Configured TypeScript path mapping with @cli/* alias
+  - Added tsc-alias to build pipeline for alias resolution
+  - Updated all imports to use new path alias
+
+### 🐛 Bug Fixes
+
+- **cli:** add icon component dependencies to registry
+  - Fixed 17 components that were crashing due to missing icon dependency
+  - Updated registry with proper icon dependencies for: accordion, alert, avatar, breadcrumb, button, calendar, checkbox, combobox, command, date-picker, dialog, pagination, select, sheet, layout, tabs, toggle-group
+
 ## 1.0.0-beta.24 (2025-10-24)
 
 ### 🐛 Bug Fixes
