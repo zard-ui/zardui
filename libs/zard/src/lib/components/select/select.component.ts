@@ -276,7 +276,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     }
 
     this._selectedValue.set(value);
-    this._selectedLabel.set(label ?? value); // Fallback to value if label is empty
+    this._selectedLabel.set(label || value); // Fallback to value if label is empty
     this.onChange(value);
     this.zSelectionChange.emit(value);
     this.close();
