@@ -506,10 +506,12 @@ export class ZardResizableHandleComponent {
     if (!leftPanel || !rightPanel) return;
 
     const containerSize = this.resizable.getContainerSize();
-    const leftMin = this.resizable.convertToPercentage(leftPanel.zMin(), containerSize);
-    const leftMax = this.resizable.convertToPercentage(leftPanel.zMax(), containerSize);
-    const rightMin = this.resizable.convertToPercentage(rightPanel.zMin(), containerSize);
-    const rightMax = this.resizable.convertToPercentage(rightPanel.zMax(), containerSize);
+    const { leftMin, leftMax, rightMin, rightMax } = this.normalizeMinMax(
+      this.resizable.convertToPercentage(leftPanel.zMin(), containerSize),
+      this.resizable.convertToPercentage(leftPanel.zMax(), containerSize),
+      this.resizable.convertToPercentage(rightPanel.zMin(), containerSize),
+      this.resizable.convertToPercentage(rightPanel.zMax(), containerSize),
+    );
 
     let newLeftSize = sizes[handleIndex] + delta;
     let newRightSize = sizes[handleIndex + 1] - delta;
@@ -546,10 +548,12 @@ export class ZardResizableHandleComponent {
     if (!leftPanel || !rightPanel) return;
 
     const containerSize = this.resizable.getContainerSize();
-    const leftMin = this.resizable.convertToPercentage(leftPanel.zMin(), containerSize);
-    const leftMax = this.resizable.convertToPercentage(leftPanel.zMax(), containerSize);
-    const rightMin = this.resizable.convertToPercentage(rightPanel.zMin(), containerSize);
-    const rightMax = this.resizable.convertToPercentage(rightPanel.zMax(), containerSize);
+    const { leftMin, leftMax, rightMin, rightMax } = this.normalizeMinMax(
+      this.resizable.convertToPercentage(leftPanel.zMin(), containerSize),
+      this.resizable.convertToPercentage(leftPanel.zMax(), containerSize),
+      this.resizable.convertToPercentage(rightPanel.zMin(), containerSize),
+      this.resizable.convertToPercentage(rightPanel.zMax(), containerSize),
+    );
 
     const totalSize = sizes[handleIndex] + sizes[handleIndex + 1];
 
@@ -567,6 +571,22 @@ export class ZardResizableHandleComponent {
       sizes,
       layout: this.resizable.zLayout() ?? 'horizontal',
     });
+  }
+
+  private normalizeMinMax(leftMin: number, leftMax: number, rightMin: number, rightMax: number): { leftMin: number; leftMax: number; rightMin: number; rightMax: number } {
+    if (leftMax < leftMin) {
+      const temp = leftMax;
+      leftMax = leftMin;
+      leftMin = temp;
+    }
+
+    if (rightMax < rightMin) {
+      const temp = rightMax;
+      rightMax = rightMin;
+      rightMin = temp;
+    }
+
+    return { leftMin, leftMax, rightMin, rightMax };
   }
 }
 
