@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-slider] <span class="api-type-label component">Component</span>
+[z-slider] Component
 
 > `z-slider` is a flexible and accessible component that allows users to select a numeric value from within a configurable range using pointer or keyboard interaction.
 

@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-avatar] <span class="api-type-label component">Component</span>
+[z-avatar] Component
 
 > `z-avatar` is a component that accepts all properties supported by a native `<div>`.
 

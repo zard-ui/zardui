@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-### Inputs
+[z-segmented] Component
 
 | Name            | Type                        | Default               | Description                            |
 | --------------- | --------------------------- | --------------------- | -------------------------------------- |

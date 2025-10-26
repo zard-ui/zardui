@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-table] <span class="api-type-label directive">Directive</span>
+[z-table] Directive
 
 > `z-table` is a directive that accepts all properties supported by a native `<table>`. It automatically styles all nested table elements (`thead`, `tbody`, `tr`, `th`, `td`, `caption`) without requiring additional directives.
 

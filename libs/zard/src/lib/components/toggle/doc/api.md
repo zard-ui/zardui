@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-toggle] <span class="api-type-label component">Component</span>
+[z-toggle] Component
 
 > A two-state button that can be either on or off.
 

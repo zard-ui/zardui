@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-toaster] <span class="api-type-label component">Component</span>
+[z-toaster] Component
 
 > `z-toaster` is a component that displays toast notifications. It uses `ngx-sonner` under the hood.
 

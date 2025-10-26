@@ -1,4 +1,4 @@
-# Radio API
+# API Reference
 
 ## Inputs
 

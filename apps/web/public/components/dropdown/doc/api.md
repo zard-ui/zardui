@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## z-dropdown (Directive) <span class="api-type-label directive">Directive</span>
+[z-dropdown-menu] Component
 
 A dropdown trigger directive that handles dropdown interactions.
 

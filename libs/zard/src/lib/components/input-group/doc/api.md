@@ -1,8 +1,8 @@
-# Input Group API Reference
+# API Reference
 
 ## Components
 
-### z-input-group
+[z-input-group] Component
 
 | Input                   | Type                                | Default     | Description                                    |
 | ----------------------- | ----------------------------------- | ----------- | ---------------------------------------------- |

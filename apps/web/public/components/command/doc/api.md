@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-command] <span class="api-type-label component">Component</span>
+[z-command] Component
 
 The main command palette container that handles search input and keyboard navigation. Features intelligent debounced search, ARIA accessibility, and comprehensive keyboard navigation.
 

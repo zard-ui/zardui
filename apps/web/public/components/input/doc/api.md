@@ -1,6 +1,6 @@
 # API Reference
 
-<span class="api-directive">[z-input] Directive</span>
+[z-input] Directive
 
 z-input is a Directive, it accepts all props which are supported by <a href="https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input" target="_blank">native input</a>.
 

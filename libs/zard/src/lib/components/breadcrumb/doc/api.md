@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-breadcrumb] <span class="api-type-label component">Component</span>
+[z-breadcrumb] Component
 
 > z-breadcrumb is a flexible and accessible component that renders a navigation trail and wraps its list of items.
 

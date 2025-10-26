@@ -1,10 +1,10 @@
-# Zard Progress Bar API
+# API Reference
 
 ## `<z-progress-bar>` <span class="api-type-label component">Component</span>
 
 The `z-progress-bar` component is a flexible and customizable progress bar that allows full styling control using class-variance-authority (CVA). It provides several configuration options for size, shape, type, and more.
 
-### **Usage**
+[z-progress-bar] Component
 
 ### **Properties**
 

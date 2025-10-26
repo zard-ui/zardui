@@ -4,7 +4,7 @@
 
 The main container component that manages resizable panels.
 
-### Selector
+[z-resizable] Component
 
 `z-resizable`
 

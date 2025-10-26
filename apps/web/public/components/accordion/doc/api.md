@@ -1,6 +1,6 @@
 # API Reference
 
-<span class="api-component">[z-accordion] Component</span>
+[z-accordion] Component
 
 z-accordion is a component that displays a list of collapsible content sections.
 
@@ -11,7 +11,7 @@ z-accordion is a component that displays a list of collapsible content sections.
 | `[zValue]`        | The controlled value of the accordion    | `string \| string[]`     | `''`       |
 | `[zDefaultValue]` | The default value of the accordion       | `string \| string[]`     | `''`       |
 
-<span class="api-component">[z-accordion-item] Component</span>
+[z-accordion-item] Component
 
 z-accordion-item represents a single section in the accordion.
 

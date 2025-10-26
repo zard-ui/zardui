@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-badge] <span class="api-type-label component">Component</span>
+[z-badge] Component
 
 > `z-badge` is a component that accepts all properties supported by a native `<span>`.
 

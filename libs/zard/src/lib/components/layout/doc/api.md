@@ -37,7 +37,7 @@
 
 ## z-sidebar
 
-### Inputs
+[z-layout] Component
 
 | Property             | Description                                | Type                        | Default |
 | -------------------- | ------------------------------------------ | --------------------------- | ------- |

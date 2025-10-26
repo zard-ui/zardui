@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-checkbox] <span class="api-type-label directive">Directive</span>
+[z-checkbox] Directive
 
 > z-checkbox is a Directive that brings you a customizable checkbox with minimal configuration
 

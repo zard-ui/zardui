@@ -1,8 +1,8 @@
-# Calendar API
+# API Reference
 
 ## ZardCalendarComponent
 
-### Inputs
+[z-calendar] Component
 
 | Name       | Type                        | Default     | Description                                     |
 | ---------- | --------------------------- | ----------- | ----------------------------------------------- |

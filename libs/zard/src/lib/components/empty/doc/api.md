@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-empty] <span class="api-type-label component">Component</span>
+[z-empty] Component
 
 > `z-empty` component displays a placeholder when no data is available, commonly used in tables, lists, or search results.
 

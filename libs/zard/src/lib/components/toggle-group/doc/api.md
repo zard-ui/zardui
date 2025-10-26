@@ -1,8 +1,8 @@
-# Toggle Group API
+# API Reference
 
 ## Component Props
 
-### Inputs
+[z-toggle-group] Component
 
 | Name       | Type                   | Default | Description                         |
 | ---------- | ---------------------- | ------- | ----------------------------------- |

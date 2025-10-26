@@ -1,8 +1,8 @@
-# Menu API Reference
+# API Reference
 
 ## Directives
 
-### z-menu
+[z-menu] Component
 
 The trigger directive that opens the menu when interacted with.
 

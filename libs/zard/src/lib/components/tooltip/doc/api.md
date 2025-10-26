@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-tooltip] <span class="api-type-label directive">Directive</span>
+[z-tooltip] Directive
 
 | Property      | Description                        | Type                             | Default |
 | ------------- | ---------------------------------- | -------------------------------- | ------- |

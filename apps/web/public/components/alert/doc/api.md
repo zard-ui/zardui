@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-alert] <span class="api-type-label component">Component</span>
+[z-alert] Component
 
 > `z-alert` is a component that provides a structured container for displaying content.
 

@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-tab] <span class="api-type-label component">Component</span>
+[z-tab] Component
 
 > z-tab-group is a Component that allows you to create a tabbed interface with customizable navigation and active indicator positions.
 

@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [ZardDialogService] <span class="api-type-label service">Service</span>
+[ZardDialogService] Service
 
 > The `ZardDialogService` provides methods to open and close dialogs.
 

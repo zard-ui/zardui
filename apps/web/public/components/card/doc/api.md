@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-card] <span class="api-type-label component">Component</span>
+[z-card] Component
 
 > z-card is a component that provides a structured container for displaying content with optional header and body sections.
 

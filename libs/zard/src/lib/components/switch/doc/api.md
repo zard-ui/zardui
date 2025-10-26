@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-switch] <span class="api-type-label directive">Directive</span>
+[z-switch] Directive
 
 > z-switch is a Directive that brings you a customizable switch with minimal configuration
 

@@ -1,6 +1,6 @@
-# Date Picker API
+# API Reference
 
-### ZardDatePickerComponent
+[z-date-picker] Component
 
 A date picker component that provides an intuitive interface for date selection through a button trigger and calendar popup.
 

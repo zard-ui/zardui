@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-button] <span class="api-type-label directive">Directive</span>
+[z-button] Directive
 
 > z-button is a Directive, it accepts all props which are supported by [native button](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/button).
 

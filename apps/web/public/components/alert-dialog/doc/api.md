@@ -1,4 +1,4 @@
-# Alert Dialog API
+# API Reference
 
 Configuration options for creating alert dialogs.
 

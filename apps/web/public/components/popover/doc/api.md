@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [zPopover] <span class="api-type-label directive">Directive</span>
+[zPopover] Directive
 
 The directive that creates a popover when applied to a trigger element.
 

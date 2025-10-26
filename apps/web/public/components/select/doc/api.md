@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-### z-select
+[z-select] Component
 
 > A customizable select component that allows single value selection.
 

@@ -1,4 +1,4 @@
-# API
+# API Reference
 
 | Property            | Type                                               | Default               | Description                                 |
 | ------------------- | -------------------------------------------------- | --------------------- | ------------------------------------------- |
@@ -16,7 +16,7 @@
 | `ariaLabel`         | `string`                                           | `''`                  | ARIA label for accessibility                |
 | `ariaDescribedBy`   | `string`                                           | `''`                  | ARIA described-by for accessibility         |
 
-### Outputs
+[z-combobox] Component
 
 | Event          | Type                               | Description                        |
 | -------------- | ---------------------------------- | ---------------------------------- |

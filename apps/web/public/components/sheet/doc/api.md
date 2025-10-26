@@ -1,8 +1,8 @@
-# Sheet API Reference
+# API Reference
 
 ## Service
 
-### ZardSheetService
+[z-sheet] Component
 
 Service for creating and managing sheet overlays.
 

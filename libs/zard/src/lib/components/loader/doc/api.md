@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-loader] <span class="api-type-label component">Component</span>
+[z-loader] Component
 
 > `z-loader` is a component that provides a loading animation.
 

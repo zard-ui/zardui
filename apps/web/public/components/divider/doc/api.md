@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-divider] <span class="api-type-label component">Component</span>
+[z-divider] Component
 
 > `z-divider` is used to visually separate content with a horizontal or vertical line.
 

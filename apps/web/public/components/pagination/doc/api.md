@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [`z-pagination`] <span class="api-type-label component">Component</span>
+[z-pagination] Component
 
 > Pagination component with previous, next, and numbered page navigation. Supports two-way binding with `[(ngModel)]` and form integration via `ControlValueAccessor`.
 
