@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="avatar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
@@ -8,7 +10,6 @@ import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } 
   selector: 'z-avatar',
   exportAs: 'zAvatar',
   standalone: true,
-  imports: [ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
@@ -150,6 +151,8 @@ export class ZardAvatarComponent {
 
 ```
 
+
+
 ```angular-ts title="avatar.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -212,6 +215,8 @@ export type ZardAvatarGroupVariants = VariantProps<typeof avatarGroupVariants>;
 
 ```
 
+
+
 ```angular-ts title="avatar-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
@@ -238,3 +243,4 @@ export class ZardAvatarGroupComponent {
 }
 
 ```
+

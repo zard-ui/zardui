@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { ZardIconComponent } from '../../icon/icon.component';
 
 import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
   standalone: true,
-  imports: [ZardBreadcrumbModule],
+  imports: [ZardBreadcrumbModule, ZardIconComponent],
   template: `
     <z-breadcrumb [zSeparator]="customSeparator">
       <z-breadcrumb-item>Home</z-breadcrumb-item>
@@ -13,7 +14,7 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
     </z-breadcrumb>
 
     <ng-template #customSeparator>
-      <div class="icon-arrow-right"></div>
+      <z-icon zType="arrow-right"></z-icon>
     </ng-template>
   `,
 })

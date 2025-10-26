@@ -8,7 +8,7 @@ import { ZardAlertComponent } from './alert.component';
   selector: 'test-host-component',
   standalone: true,
   imports: [ZardAlertComponent],
-  template: ` <z-alert zTitle="Test Title" zDescription="Test Description" zType="info" zIcon="icon-info" class="custom-class"></z-alert> `,
+  template: ` <z-alert zTitle="Test Title" zDescription="Test Description" zType="info" zIcon="info" class="custom-class"></z-alert> `,
 })
 class TestHostComponent {}
 
@@ -43,8 +43,8 @@ describe('ZardAlertComponent', () => {
   });
 
   it('should render correct icon when zIcon is provided', () => {
-    const icon = fixture.debugElement.query(By.css('i'));
+    const icon = fixture.debugElement.query(By.css('z-icon'));
     expect(icon).toBeTruthy();
-    expect(icon.nativeElement.classList).toContain('icon-info');
+    expect(icon.componentInstance.zType()).toBe('info');
   });
 });

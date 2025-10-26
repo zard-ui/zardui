@@ -15,7 +15,7 @@ import type { ClassValue } from 'clsx';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    @if (zIcon()) {
+    @if (zIcon() || iconName()) {
       <ng-container *zStringTemplateOutlet="zIcon()">
         <z-icon [zType]="iconName()!" />
       </ng-container>
@@ -64,7 +64,7 @@ export class ZardAlertComponent {
 
     switch (this.zType()) {
       case 'destructive':
-        return 'circle-x';
+        return 'circle-alert';
       default:
         return null;
     }

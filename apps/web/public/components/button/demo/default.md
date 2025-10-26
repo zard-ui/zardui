@@ -1,14 +1,15 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
+import { ZardIconComponent } from '../../icon/icon.component';
 
 import { ZardButtonComponent } from '../button.component';
 
 @Component({
   standalone: true,
-  imports: [ZardButtonComponent],
+  imports: [ZardButtonComponent, ZardIconComponent],
   template: `
     <button z-button zType="outline">Button</button>
-    <button z-button zType="outline"><i class="icon-arrow-up"></i></button>
+    <button z-button zType="outline"><z-icon zType="arrow-up"></z-icon></button>
   `,
 })
 export class ZardDemoButtonDefaultComponent {}

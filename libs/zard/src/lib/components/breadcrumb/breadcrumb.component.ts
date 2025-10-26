@@ -20,7 +20,7 @@ import {
   exportAs: 'zBreadcrumbItem',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardStringTemplateOutletDirective],
+  imports: [ZardStringTemplateOutletDirective, ZardIconComponent],
   hostDirectives: [
     {
       directive: RouterLink,
@@ -31,14 +31,15 @@ import {
     <li [class]="classes()">
       <ng-content></ng-content>
     </li>
+
     @if (!isLast()) {
-      <li aria-hidden="true" role="presentation" [class]="separatorClasses()">
+      <li aria-hidden="true" role="presentation" [class]="separatorClasses()" (click)="$event.stopPropagation()">
         @if (isTemplate(separator())) {
           <ng-container *zStringTemplateOutlet="separator()"></ng-container>
         } @else if (separator()) {
           {{ separator() }}
         } @else {
-          <div class="icon-chevron-right"></div>
+          <z-icon zType="chevron-right"></z-icon>
         }
       </li>
     }

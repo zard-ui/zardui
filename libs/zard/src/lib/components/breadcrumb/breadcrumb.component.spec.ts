@@ -1,10 +1,9 @@
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
 
-import { By } from '@angular/platform-browser';
-
-import { ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent } from './breadcrumb.component';
+import { ZardBreadcrumbComponent, ZardBreadcrumbEllipsisComponent, ZardBreadcrumbItemComponent } from './breadcrumb.component';
 
 @Component({
   selector: 'test-host-component',
@@ -121,8 +120,9 @@ describe('BreadcrumbComponents Integration', () => {
   });
 
   it('should render default chevron separator when zSeparator is not provided', () => {
-    const separator = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"] .icon-chevron-right'));
+    const separator = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"] z-icon'));
     expect(separator).toBeTruthy();
+    expect(separator.componentInstance.zType()).toBe('chevron-right');
   });
 });
 
@@ -182,8 +182,9 @@ describe('BreadcrumbComponent - Custom Separator', () => {
     component.separator = null;
     fixture.detectChanges();
 
-    const chevrons = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] .icon-chevron-right'));
+    const chevrons = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] z-icon'));
     expect(chevrons.length).toBe(2); // 3 items = 2 separators
+    expect(chevrons[0].componentInstance.zType()).toBe('chevron-right');
   });
 
   it('should update separator dynamically when input changes', () => {

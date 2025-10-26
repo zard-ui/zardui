@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncaps
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
+import { ZardIconComponent } from '../icon/icon.component';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
 import { calendarNavVariants } from './calendar.variants';
@@ -12,11 +13,11 @@ import { calendarNavVariants } from './calendar.variants';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardButtonComponent, ZardSelectComponent, ZardSelectItemComponent],
+  imports: [ZardButtonComponent, ZardIconComponent, ZardSelectComponent, ZardSelectItemComponent],
   template: `
     <div [class]="navClasses()">
       <button z-button zType="ghost" zSize="sm" (click)="onPreviousClick()" [disabled]="isPreviousDisabled()" aria-label="Previous month" class="p-0 h-7 w-7">
-        <i class="icon-chevron-left"></i>
+        <z-icon zType="chevron-left"></z-icon>
       </button>
 
       <!-- Month and Year Selectors -->
@@ -37,7 +38,7 @@ import { calendarNavVariants } from './calendar.variants';
       </div>
 
       <button z-button zType="ghost" zSize="sm" (click)="onNextClick()" [disabled]="isNextDisabled()" aria-label="Next month" class="p-0 h-7 w-7">
-        <i class="icon-chevron-right"></i>
+        <z-icon zType="chevron-right"></z-icon>
       </button>
     </div>
   `,

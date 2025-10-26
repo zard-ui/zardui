@@ -1,11 +1,12 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
+import { ZardIconComponent } from '../../icon/icon.component';
 
 import { ZardBadgeComponent } from '../badge.component';
 
 @Component({
   standalone: true,
-  imports: [ZardBadgeComponent],
+  imports: [ZardBadgeComponent, ZardIconComponent],
   template: `
     <div class="flex flex-col items-center gap-2">
       <div class="flex w-full flex-wrap gap-2">
@@ -16,7 +17,7 @@ import { ZardBadgeComponent } from '../badge.component';
       </div>
       <div class="flex w-full flex-wrap gap-2">
         <z-badge zType="secondary" class="bg-blue-500 text-white dark:bg-blue-600">
-          <span class="icon-badge-check"></span>
+          <z-icon zType="badge-check"></z-icon>
           Verified
         </z-badge>
         <z-badge zShape="pill" class="h-5 min-w-5 px-1 font-mono tabular-nums">8</z-badge>

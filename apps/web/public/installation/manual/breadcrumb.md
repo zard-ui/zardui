@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="breadcrumb.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ClassValue } from 'clsx';
 
@@ -6,6 +8,7 @@ import { RouterLink } from '@angular/router';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardIconComponent } from '../icon/icon.component';
 import {
   breadcrumbEllipsisVariants,
   breadcrumbItemVariants,
@@ -20,7 +23,7 @@ import {
   exportAs: 'zBreadcrumbItem',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardStringTemplateOutletDirective],
+  imports: [ZardStringTemplateOutletDirective, ZardIconComponent],
   hostDirectives: [
     {
       directive: RouterLink,
@@ -31,14 +34,15 @@ import {
     <li [class]="classes()">
       <ng-content></ng-content>
     </li>
+
     @if (!isLast()) {
-      <li aria-hidden="true" role="presentation" [class]="separatorClasses()">
+      <li aria-hidden="true" role="presentation" [class]="separatorClasses()" (click)="$event.stopPropagation()">
         @if (isTemplate(separator())) {
           <ng-container *zStringTemplateOutlet="separator()"></ng-container>
         } @else if (separator()) {
           {{ separator() }}
         } @else {
-          <div class="icon-chevron-right"></div>
+          <z-icon zType="chevron-right"></z-icon>
         }
       </li>
     }
@@ -131,6 +135,8 @@ export class ZardBreadcrumbEllipsisComponent {
 
 ```
 
+
+
 ```angular-ts title="breadcrumb.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -212,6 +218,8 @@ export type ZardBreadcrumbEllipsisVariants = VariantProps<typeof breadcrumbEllip
 
 ```
 
+
+
 ```angular-ts title="breadcrumb.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
@@ -226,3 +234,4 @@ const components = [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBr
 export class ZardBreadcrumbModule {}
 
 ```
+
