@@ -6,6 +6,8 @@ describe('ZardCalendarComponent', () => {
   let fixture: ComponentFixture<ZardCalendarComponent>;
 
   beforeEach(async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
     await TestBed.configureTestingModule({
       imports: [ZardCalendarComponent],
     }).compileComponents();

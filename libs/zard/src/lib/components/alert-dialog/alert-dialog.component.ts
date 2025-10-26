@@ -116,7 +116,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
     ),
   );
 
-  private alertDialogId = generateId('alert-dialog');
+  private readonly alertDialogId = generateId('alert-dialog');
   protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
   protected readonly descriptionId = computed(() => (this.config.zDescription ? `${this.alertDialogId}-description` : null));
 
@@ -140,14 +140,14 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
     if (this.portalOutlet()?.hasAttached()) {
-      throw Error('Attempting to attach alert dialog content after content is already attached');
+      throw new Error('Attempting to attach alert dialog content after content is already attached');
     }
     return this.portalOutlet()?.attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     if (this.portalOutlet()?.hasAttached()) {
-      throw Error('Attempting to attach alert dialog content after content is already attached');
+      throw new Error('Attempting to attach alert dialog content after content is already attached');
     }
 
     return this.portalOutlet()?.attachTemplatePortal(portal);

@@ -129,7 +129,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
     const option = this.zOptions().find(opt => opt.value === value);
     const item = this.items().find(item => item.value() === value);
 
-    if ((option && option.disabled) || (item && item.disabled())) return;
+    if (option?.disabled || item?.disabled()) return;
 
     this.selectedValue.set(value);
     this.onChange(value);
@@ -139,7 +139,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
 
   // ControlValueAccessor implementation
   writeValue(value: string): void {
-    this.selectedValue.set(value || '');
+    this.selectedValue.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {

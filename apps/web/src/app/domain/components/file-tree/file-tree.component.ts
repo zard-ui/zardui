@@ -1,4 +1,5 @@
 import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
@@ -7,14 +8,14 @@ import type { FileTreeNode, BlockFile } from '../block-container/block-container
 @Component({
   selector: 'z-file-tree',
   standalone: true,
-  imports: [CommonModule, FileTreeComponent, ZardBreadcrumbModule],
+  imports: [CommonModule, FileTreeComponent, ZardBreadcrumbModule, ZardIconComponent],
   template: `
     @for (node of nodes(); track node.path) {
       @if (node.type === 'folder' && node.path) {
         <div class="folder-item">
           <button (click)="toggleFolder(node.path)" z-button zType="ghost" class="w-full justify-start ring-sidebar-ring">
-            <i class="icon-chevron-right text-sm" [class.rotate-90]="isOpen(node.path)"></i>
-            <i class="icon-folder text-sm"></i>
+            <z-icon zType="chevron-right" zSize="sm" [class.rotate-90]="isOpen(node.path)" />
+            <z-icon zType="folder" zSize="sm" />
             <span class="font-normal truncate">{{ node.name }}</span>
           </button>
           @if (isOpen(node.path) && node.children && node.children.length > 0) {
@@ -35,7 +36,7 @@ import type { FileTreeNode, BlockFile } from '../block-container/block-container
           [class]="selectedFilePath() === node.file.path ? 'bg-muted-foreground/15 text-sidebar-accent-foreground' : ''"
           class=" flex items-center gap-2 py-1 px-2 rounded transition-colors w-full text-left text-sm"
         >
-          <i class="icon-file text-sm flex-shrink-0"></i>
+          <z-icon zType="file" zSize="sm" class="flex-shrink-0" />
           <span class="truncate">{{ node.name }}</span>
         </button>
       }

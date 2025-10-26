@@ -1,15 +1,17 @@
-import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
-import { ZardCodeBoxComponent } from '../../../widget/components/zard-code-box/zard-code-box.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { DynamicInstallationService } from '../../../shared/services/dynamic-installation.service';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { ComponentData, COMPONENTS } from '../../../shared/constants/components.constant';
-import { StepsComponent } from '../../components/steps/steps.component';
-import { Step } from '../../../shared/constants/install.constant';
-import { SeoService } from '../../../shared/services/seo.service';
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AiAssistComponent } from '@zard/domain/components/ai-assist/ai-assist.component';
 
+import { ComponentData, COMPONENTS } from '../../../shared/constants/components.constant';
+import { Step } from '../../../shared/constants/install.constant';
+import { DynamicInstallationService } from '../../../shared/services/dynamic-installation.service';
+import { SeoService } from '../../../shared/services/seo.service';
+import { ZardCodeBoxComponent } from '../../../widget/components/zard-code-box/zard-code-box.component';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
+import { StepsComponent } from '../../components/steps/steps.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
@@ -17,15 +19,16 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
+  imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent, AiAssistComponent],
 })
 export class ComponentPage {
-  private readonly seoService = inject(SeoService);
   private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly router = inject(Router);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly dynamicInstallationService = inject(DynamicInstallationService);
-  activeAnchor?: string;
-  componentData?: ComponentData;
+  private readonly router = inject(Router);
+  private readonly seoService = inject(SeoService);
+  activeAnchor!: string;
+  componentData!: ComponentData;
   navigationConfig: NavigationConfig = {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
@@ -38,7 +41,7 @@ export class ComponentPage {
   installGuide!: { manual: Step[]; cli: Step[] } | undefined;
 
   constructor() {
-    this.activatedRoute.params.subscribe(() => {
+    this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
       this.loadData();
     });
     this.loadData();
@@ -73,7 +76,7 @@ export class ComponentPage {
   }
 
   setPageTitle() {
-    const { componentName, description } = this.componentData!;
+    const { componentName, description } = this.componentData;
     const ogImage = `og-${componentName}.jpg`;
 
     if (componentName) {

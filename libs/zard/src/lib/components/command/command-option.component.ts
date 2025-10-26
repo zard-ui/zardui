@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
-
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardCommandComponent } from './command.component';
-import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
-
 import type { ClassValue } from 'clsx';
+
+import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
+import { ZardCommandComponent } from './command.component';
+import { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-command-option',
@@ -12,6 +13,7 @@ import type { ClassValue } from 'clsx';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  imports: [ZardIconComponent],
   template: `
     @if (shouldShow()) {
       <div
@@ -26,7 +28,7 @@ import type { ClassValue } from 'clsx';
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
-          <div class="mr-2 shrink-0 flex items-center justify-center w-4 h-4" [innerHTML]="zIcon()"></div>
+          <div z-icon [zType]="zIcon()!" class="mr-2 shrink-0 flex items-center justify-center"></div>
         }
         <span class="flex-1">{{ zLabel() }}</span>
         @if (zShortcut()) {
@@ -42,8 +44,8 @@ export class ZardCommandOptionComponent {
 
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
-  readonly zIcon = input<string>('');
   readonly zCommand = input<string>('');
+  readonly zIcon = input<ZardIcon>();
   readonly zShortcut = input<string>('');
   readonly zDisabled = input(false, { transform });
   readonly variant = input<ZardCommandItemVariants['variant']>('default');

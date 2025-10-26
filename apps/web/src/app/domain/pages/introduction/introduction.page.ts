@@ -18,7 +18,7 @@ import { CLISection } from './sections/cli.component';
   template: `
     <z-content [title]="title" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
       <z-doc-heading
-        title="Beautifully designed components"
+        title="Introduction"
         description="Built for Angular developers who value both aesthetics and functionality. ZardUI bridges the gap between beautiful design and practical implementation."
         scrollSpyItem="overview"
         id="overview"

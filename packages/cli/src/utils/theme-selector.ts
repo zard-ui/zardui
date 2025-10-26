@@ -1,4 +1,4 @@
-import * as themes from '../themes/themes.js';
+import * as themes from '@cli/core/themes/theme-definitions.js';
 
 export function getAvailableThemes(): string[] {
   return themes.availableThemes;
@@ -33,5 +33,5 @@ export function getThemeDisplayName(themeName: string): string {
     gray: 'Gray',
     slate: 'Slate',
   };
-  return names[themeName] || themeName;
+  return names[themeName] ?? themeName;
 }

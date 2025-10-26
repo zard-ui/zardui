@@ -1,4 +1,5 @@
 import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { Component, input, signal, computed } from '@angular/core';
 
 import { SimpleCodeHighlightComponent } from '../../../shared/components/simple-code-highlight/simple-code-highlight.component';
@@ -8,12 +9,13 @@ import { FileTreeComponent } from '../file-tree/file-tree.component';
 @Component({
   selector: 'z-block-code-viewer',
   standalone: true,
-  imports: [SimpleCodeHighlightComponent, FileTreeComponent, ZardBreadcrumbModule],
+  imports: [SimpleCodeHighlightComponent, FileTreeComponent, ZardBreadcrumbModule, ZardIconComponent],
   templateUrl: './block-code-viewer.component.html',
 })
 export class BlockCodeViewerComponent {
   readonly files = input.required<BlockFile[]>();
 
+  readonly ClipboardIcon = Clipboard;
   protected readonly selectedFile = signal<BlockFile | null>(null);
   protected readonly openFolders = signal<Set<string>>(new Set());
 

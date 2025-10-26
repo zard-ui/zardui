@@ -1,4 +1,4 @@
-import { ZardDemoTabsPositiontComponent } from './position';
+import { ZardDemoTabsPositionComponent } from './position';
 import { ZardDemoTabsDefaultComponent } from './default';
 import { ZardDemoTabsArrowComponent } from './arrow';
 import { ZardDemoTabsAlignComponent } from './align';
@@ -14,7 +14,7 @@ export const TABS = {
     },
     {
       name: 'position',
-      component: ZardDemoTabsPositiontComponent,
+      component: ZardDemoTabsPositionComponent,
     },
     {
       name: 'align',

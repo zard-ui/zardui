@@ -1,15 +1,20 @@
-import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import { DatePipe } from '@angular/common';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardCalendarComponent } from '../calendar/calendar.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 import { datePickerVariants, ZardDatePickerVariants } from './date-picker.variants';
+import { ZardCalendarComponent } from '../calendar/calendar.component';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardIconComponent } from '../icon/icon.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
-import type { ClassValue } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
 
-export type { ZardDatePickerVariants };
+const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, string> = {
+  sm: 'h-8',
+  default: 'h-10',
+  lg: 'h-12',
+};
 
 @Component({
   selector: 'z-date-picker, [z-date-picker]',
@@ -17,7 +22,7 @@ export type { ZardDatePickerVariants };
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardButtonComponent, ZardCalendarComponent, ZardPopoverComponent, ZardPopoverDirective],
+  imports: [ZardButtonComponent, ZardCalendarComponent, ZardPopoverComponent, ZardPopoverDirective, ZardIconComponent],
   host: {},
   template: `
     <button
@@ -35,7 +40,7 @@ export type { ZardDatePickerVariants };
       [attr.aria-haspopup]="true"
       aria-label="Choose date"
     >
-      <i class="icon-calendar"></i>
+      <z-icon zType="calendar" />
       <span [class]="textClasses()">
         {{ displayText() }}
       </span>
@@ -79,12 +84,9 @@ export class ZardDatePickerComponent {
 
   protected readonly buttonClasses = computed(() => {
     const hasValue = !!this.value();
-    return mergeClasses(
-      'justify-start text-left font-normal',
-      !hasValue && 'text-muted-foreground',
-      this.zSize() === 'sm' ? 'h-8' : this.zSize() === 'lg' ? 'h-12' : 'h-10',
-      'min-w-[240px]',
-    );
+    const size: NonNullable<ZardDatePickerVariants['zSize']> = this.zSize() ?? 'default';
+    const height = HEIGHT_BY_SIZE[size];
+    return mergeClasses('justify-start text-left font-normal', !hasValue && 'text-muted-foreground', height, 'min-w-[240px]');
   });
 
   protected readonly textClasses = computed(() => {
@@ -94,12 +96,7 @@ export class ZardDatePickerComponent {
 
   protected readonly popoverClasses = computed(() => mergeClasses('w-auto p-0'));
 
-  protected readonly calendarSize = computed(() => {
-    const size = this.zSize();
-    if (size === 'sm') return 'sm';
-    if (size === 'lg') return 'lg';
-    return 'default';
-  });
+  protected readonly calendarSize = computed(() => this.zSize() ?? 'default');
 
   protected readonly displayText = computed(() => {
     const date = this.value();
@@ -127,6 +124,6 @@ export class ZardDatePickerComponent {
   }
 
   private formatDate(date: Date, format: string): string {
-    return this.datePipe.transform(date, format) || '';
+    return this.datePipe.transform(date, format) ?? '';
   }
 }

@@ -23,7 +23,7 @@ import { dropdownItemVariants, ZardDropdownItemVariants } from './dropdown.varia
   },
 })
 export class ZardDropdownMenuItemComponent {
-  private dropdownService = inject(ZardDropdownService);
+  private readonly dropdownService = inject(ZardDropdownService);
 
   readonly variant = input<ZardDropdownItemVariants['variant']>('default');
   readonly inset = input(false, { transform });

@@ -6,6 +6,7 @@ import {
   Component,
   computed,
   contentChildren,
+  DOCUMENT,
   ElementRef,
   EventEmitter,
   inject,
@@ -27,8 +28,10 @@ export interface ZardResizeEvent {
   layout: 'horizontal' | 'vertical';
 }
 
+type CleanupFunction = () => void;
+
 @Component({
-  selector: 'z-resizable',
+  selector: 'z-resizable, [z-resizable]',
   exportAs: 'zResizable',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,7 +45,8 @@ export interface ZardResizeEvent {
 export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
-  private listeners: (() => void)[] = [];
+  private readonly document = inject(DOCUMENT);
+  private readonly listenersCleanup: CleanupFunction[] = [];
 
   readonly zLayout = input<ZardResizableVariants['zLayout']>('horizontal');
   readonly zLazy = input(false, { transform });
@@ -56,7 +60,6 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   readonly panelSizes = signal<number[]>([]);
   protected readonly isResizing = signal(false);
   protected readonly activeHandleIndex = signal<number | null>(null);
-
   protected readonly classes = computed(() => mergeClasses(resizableVariants({ zLayout: this.zLayout() }), this.class()));
 
   ngAfterContentInit(): void {
@@ -70,15 +73,19 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 
     if (typeof value === 'string') {
       if (value.endsWith('%')) {
-        return parseFloat(value);
+        return Number.parseFloat(value);
       }
       if (value.endsWith('px')) {
-        const pixels = parseFloat(value);
+        const pixels = Number.parseFloat(value);
+
+        if (containerSize <= 0) {
+          return 0;
+        }
         return (pixels / containerSize) * 100;
       }
     }
 
-    return parseFloat(value.toString()) || 0;
+    return Number.parseFloat(value.toString()) || 0;
   }
 
   private initializePanelSizes(): void {
@@ -106,7 +113,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     this.activeHandleIndex.set(handleIndex);
 
     const sizes = [...this.panelSizes()];
-    this.zResizeStart.emit({ sizes, layout: this.zLayout() || 'horizontal' });
+    this.zResizeStart.emit({ sizes, layout: this.zLayout() ?? 'horizontal' });
 
     const startPosition = this.getEventPosition(event);
     const startSizes = [...sizes];
@@ -118,24 +125,25 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const handleEnd = () => {
       this.endResize();
       if (isPlatformBrowser(this.platformId)) {
-        document.removeEventListener('mousemove', handleMove);
-        document.removeEventListener('touchmove', handleMove);
-        document.removeEventListener('mouseup', handleEnd);
-        document.removeEventListener('touchend', handleEnd);
+        this.document.removeEventListener('mousemove', handleMove);
+        this.document.removeEventListener('touchmove', handleMove);
+        this.document.removeEventListener('mouseup', handleEnd);
+        this.document.removeEventListener('touchend', handleEnd);
       }
+      this.listenersCleanup.pop();
     };
 
     if (isPlatformBrowser(this.platformId)) {
-      document.addEventListener('mousemove', handleMove);
-      document.addEventListener('touchmove', handleMove);
-      document.addEventListener('mouseup', handleEnd);
-      document.addEventListener('touchend', handleEnd);
+      this.document.addEventListener('mousemove', handleMove);
+      this.document.addEventListener('touchmove', handleMove);
+      this.document.addEventListener('mouseup', handleEnd);
+      this.document.addEventListener('touchend', handleEnd);
 
-      this.listeners.push(() => {
-        document.removeEventListener('mousemove', handleMove);
-        document.removeEventListener('touchmove', handleMove);
-        document.removeEventListener('mouseup', handleEnd);
-        document.removeEventListener('touchend', handleEnd);
+      this.listenersCleanup.push(() => {
+        this.document.removeEventListener('mousemove', handleMove);
+        this.document.removeEventListener('touchmove', handleMove);
+        this.document.removeEventListener('mouseup', handleEnd);
+        this.document.removeEventListener('touchend', handleEnd);
       });
     }
   }
@@ -154,10 +162,10 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 
     if (!leftPanel || !rightPanel) return;
 
-    const leftMin = this.convertToPercentage(leftPanel.zMin() || 0, containerSize);
-    const leftMax = this.convertToPercentage(leftPanel.zMax() || 100, containerSize);
-    const rightMin = this.convertToPercentage(rightPanel.zMin() || 0, containerSize);
-    const rightMax = this.convertToPercentage(rightPanel.zMax() || 100, containerSize);
+    const leftMin = this.convertToPercentage(leftPanel.zMin(), containerSize);
+    const leftMax = this.convertToPercentage(leftPanel.zMax(), containerSize);
+    const rightMin = this.convertToPercentage(rightPanel.zMin(), containerSize);
+    const rightMax = this.convertToPercentage(rightPanel.zMax(), containerSize);
 
     let newLeftSize = startSizes[handleIndex] + deltaPercentage;
     let newRightSize = startSizes[handleIndex + 1] - deltaPercentage;
@@ -178,7 +186,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
         this.updatePanelStyles();
       }
 
-      this.zResize.emit({ sizes: newSizes, layout: this.zLayout() || 'horizontal' });
+      this.zResize.emit({ sizes: newSizes, layout: this.zLayout() ?? 'horizontal' });
     }
   }
 
@@ -191,7 +199,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     }
 
     const sizes = [...this.panelSizes()];
-    this.zResizeEnd.emit({ sizes, layout: this.zLayout() || 'horizontal' });
+    this.zResizeEnd.emit({ sizes, layout: this.zLayout() ?? 'horizontal' });
   }
 
   updatePanelStyles(): void {
@@ -199,10 +207,10 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const sizes = this.panelSizes();
     const layout = this.zLayout();
 
-    panels.forEach((panel, index) => {
+    for (let index = 0; index < panels.length; index++) {
       const size = sizes[index];
-      if (size !== undefined) {
-        const element = panel.elementRef.nativeElement as HTMLElement;
+      if (size !== undefined && size !== null) {
+        const element = panels[index].elementRef.nativeElement as HTMLElement;
         if (layout === 'vertical') {
           element.style.height = `${size}%`;
           element.style.width = '100%';
@@ -211,7 +219,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
           element.style.height = '100%';
         }
       }
-    });
+    }
   }
 
   private getEventPosition(event: MouseEvent | TouchEvent): number {
@@ -234,44 +242,56 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const panels = this.panels();
     const panel = panels[index];
 
-    if (!panel || !panel.zCollapsible()) return;
+    if (!panel?.zCollapsible()) return;
 
-    const sizes = [...this.panelSizes()];
+    let sizes = [...this.panelSizes()];
     const isCollapsed = sizes[index] === 0;
 
     if (isCollapsed) {
       const containerSize = this.getContainerSize();
-      const defaultSize = this.convertToPercentage(panel.zDefaultSize() || 100 / panels.length, containerSize);
+      const defaultSize = this.convertToPercentage(panel.zDefaultSize() ?? 100 / panels.length, containerSize);
+
       sizes[index] = defaultSize;
 
-      const totalOthers = sizes.reduce((sum, size, i) => (i !== index ? sum + size : sum), 0);
-      const scale = (100 - defaultSize) / totalOthers;
-
-      sizes.forEach((size, i) => {
-        if (i !== index) {
-          sizes[i] = size * scale;
-        }
-      });
+      const totalOthers = this.othersTotal(sizes, index);
+      if (totalOthers === 0) {
+        const share = (100 - defaultSize) / (sizes.length - 1);
+        sizes = sizes.map((s, i) => (i === index ? defaultSize : share));
+      } else {
+        const scale = (100 - defaultSize) / totalOthers;
+        sizes = this.scaleSizes(sizes, index, scale);
+      }
     } else {
       const collapsedSize = sizes[index];
+
       sizes[index] = 0;
 
-      const totalOthers = sizes.reduce((sum, size, i) => (i !== index ? sum + size : sum), 0);
-      const scale = (totalOthers + collapsedSize) / totalOthers;
-
-      sizes.forEach((size, i) => {
-        if (i !== index) {
-          sizes[i] = size * scale;
-        }
-      });
+      const totalOthers = this.othersTotal(sizes, index);
+      if (totalOthers === 0) {
+        const share = (100 - collapsedSize) / (sizes.length - 1);
+        sizes = sizes.map((s, i) => (i === index ? collapsedSize : share));
+      } else {
+        const scale = (totalOthers + collapsedSize) / totalOthers;
+        sizes = this.scaleSizes(sizes, index, scale);
+      }
     }
 
     this.panelSizes.set(sizes);
     this.updatePanelStyles();
-    this.zResize.emit({ sizes, layout: this.zLayout() || 'horizontal' });
+    this.zResize.emit({ sizes, layout: this.zLayout() ?? 'horizontal' });
   }
 
   ngOnDestroy(): void {
-    this.listeners.forEach(cleanup => cleanup());
+    for (const cleanup of this.listenersCleanup) {
+      cleanup();
+    }
+  }
+
+  private scaleSizes(sizes: number[], index: number, scale: number): number[] {
+    return sizes.map((size, i) => (i === index ? size : size * scale));
+  }
+
+  private othersTotal(sizes: number[], index: number): number {
+    return sizes.reduce((sum, size, i) => (i === index ? sum : sum + size), 0);
   }
 }

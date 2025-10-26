@@ -1,8 +1,6 @@
 
 
 ```angular-ts title="sheet.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,16 +17,20 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { OverlayModule } from '@angular/cdk/overlay';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardSheetRef } from './sheet-ref';
 import { sheetVariants, ZardSheetVariants } from './sheet.variants';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardIconComponent } from '../icon/icon.component';
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardSheetRef } from './sheet-ref';
+import { ZardIcon } from '../icon/icons';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardSheetOptions<T, U> {
-  zCancelIcon?: string;
+  zCancelIcon?: ZardIcon;
   zCancelText?: string | null;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
@@ -40,7 +42,7 @@ export class ZardSheetOptions<T, U> {
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
-  zOkIcon?: string;
+  zOkIcon?: ZardIcon;
   zOkText?: string | null;
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
@@ -54,11 +56,11 @@ export class ZardSheetOptions<T, U> {
 @Component({
   selector: 'z-sheet',
   exportAs: 'zSheet',
-  imports: [OverlayModule, PortalModule, ZardButtonComponent],
+  imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
       <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1 cursor-pointer " (click)="onCloseClick()">
-        <i class="icon-x text-sm"></i>
+        <z-icon zType="x" />
       </button>
     }
 
@@ -94,20 +96,20 @@ export class ZardSheetOptions<T, U> {
             (click)="onOkClick()"
           >
             @if (config.zOkIcon) {
-              <i class="icon-{{ config.zOkIcon }}"></i>
+              <z-icon [zType]="config.zOkIcon" />
             }
 
-            {{ config.zOkText || 'OK' }}
+            {{ config.zOkText ?? 'OK' }}
           </button>
         }
 
         @if (config.zCancelText !== null) {
           <button data-testid="z-cancel-button" class="cursor-pointer" z-button zType="outline" (click)="onCloseClick()">
             @if (config.zCancelIcon) {
-              <i class="icon-{{ config.zCancelIcon }}"></i>
+              <z-icon [zType]="config.zCancelIcon" />
             }
 
-            {{ config.zCancelText || 'Cancel' }}
+            {{ config.zCancelText ?? 'Cancel' }}
           </button>
         }
       </footer>
@@ -157,14 +159,14 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
 
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
     if (this.portalOutlet()?.hasAttached()) {
-      throw Error('Attempting to attach modal content after content is already attached');
+      throw new Error('Attempting to attach modal content after content is already attached');
     }
     return this.portalOutlet()?.attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     if (this.portalOutlet()?.hasAttached()) {
-      throw Error('Attempting to attach modal content after content is already attached');
+      throw new Error('Attempting to attach modal content after content is already attached');
     }
 
     return this.portalOutlet()?.attachTemplatePortal(portal);

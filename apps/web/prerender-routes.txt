@@ -27,6 +27,7 @@
 /docs/components/divider
 /docs/components/empty
 /docs/components/form
+/docs/components/icon
 /docs/components/input
 /docs/components/input-group
 /docs/components/layout

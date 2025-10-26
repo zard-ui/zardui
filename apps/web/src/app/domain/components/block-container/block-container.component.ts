@@ -2,6 +2,7 @@ import { ZardToggleGroupComponent } from '@zard/components/toggle-group/toggle-g
 import { ZardSegmentedComponent } from '@zard/components/segmented/segmented.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { Component, input, signal } from '@angular/core';
+import { ZardIcon } from '@zard/components/icon/icons';
 
 import { BlockCodeViewerComponent } from '../block-code-viewer/block-code-viewer.component';
 import { BlockPreviewComponent } from '../block-preview/block-preview.component';
@@ -34,6 +35,12 @@ export interface FileTreeNode {
   file?: BlockFile;
 }
 
+export interface ViewportOption {
+  value: string;
+  ariaLabel: string;
+  icon: ZardIcon;
+}
+
 @Component({
   selector: 'z-block-container',
   standalone: true,
@@ -51,10 +58,10 @@ export class BlockContainerComponent {
     { label: 'Code', value: 'code' },
   ];
 
-  protected readonly viewportOptions = [
-    { value: 'desktop', ariaLabel: 'Desktop view', icon: 'icon-monitor' },
-    { value: 'tablet', ariaLabel: 'Tablet view', icon: 'icon-tablet' },
-    { value: 'mobile', ariaLabel: 'Mobile view', icon: 'icon-smartphone' },
+  protected readonly viewportOptions: ViewportOption[] = [
+    { value: 'desktop', ariaLabel: 'Desktop view', icon: 'monitor' },
+    { value: 'tablet', ariaLabel: 'Tablet view', icon: 'tablet' },
+    { value: 'mobile', ariaLabel: 'Mobile view', icon: 'smartphone' },
   ];
 
   protected onTabChange(value: string): void {

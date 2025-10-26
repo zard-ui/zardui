@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
-import { NgClass } from '@angular/common';
 
-import { radioLabelVariants, radioVariants, ZardRadioVariants } from './radio.variants';
+import { radioLabelVariants, radioVariants } from './radio.variants';
 import { generateId, mergeClasses, transform } from '../../shared/utils/utils';
 
 type OnTouchedType = () => unknown;
@@ -12,26 +11,12 @@ type OnChangeType = (value: unknown) => void;
 @Component({
   selector: 'z-radio, [z-radio]',
   standalone: true,
-  imports: [NgClass],
+  imports: [],
   exportAs: 'zRadio',
   template: `
-    <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onRadioChange()">
-      <main class="flex relative">
-        <input #input type="radio" [value]="value()" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onRadioBlur()" [name]="name()" [id]="zId()" />
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          [ngClass]="svgSizeClass()"
-          class="absolute flex items-center justify-center text-primary-foreground lucide lucide-circle opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        >
-          <circle cx="12" cy="12" r="10"></circle>
-        </svg>
-      </main>
+    <span class="flex items-center gap-2 relative" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onRadioChange()">
+      <input #input type="radio" [value]="value()" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onRadioBlur()" [name]="name()" [id]="zId()" />
+      <span class="absolute size-2 rounded-full bg-primary opacity-0 peer-checked:opacity-100 pointer-events-none left-[4px]"></span>
       <label [class]="labelClasses()" [for]="zId()">
         <ng-content></ng-content>
       </label>
@@ -53,8 +38,6 @@ export class ZardRadioComponent implements ControlValueAccessor {
   readonly radioChange = output<boolean>();
   readonly class = input<ClassValue>('');
   readonly disabled = input(false, { transform });
-  readonly zType = input<ZardRadioVariants['zType']>('default');
-  readonly zSize = input<ZardRadioVariants['zSize']>('default');
   readonly name = input<string>('radio');
   readonly zId = input<string>(generateId('radio'));
   readonly value = input<unknown>(null);
@@ -63,19 +46,8 @@ export class ZardRadioComponent implements ControlValueAccessor {
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onTouched: OnTouchedType = () => {};
 
-  protected readonly classes = computed(() => mergeClasses(radioVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()));
-  protected readonly labelClasses = computed(() => mergeClasses(radioLabelVariants({ zSize: this.zSize() })));
-
-  protected readonly svgSizeClass = computed(() => {
-    const size = this.zSize();
-    if (size === 'lg') {
-      return 'h-5 w-5';
-    }
-    if (size === 'sm') {
-      return 'h-2.5 w-2.5';
-    }
-    return 'h-3.5 w-3.5'; // default size
-  });
+  protected readonly classes = computed(() => mergeClasses(radioVariants(), this.class()));
+  protected readonly labelClasses = computed(() => mergeClasses(radioLabelVariants()));
 
   checked = false;
 
@@ -90,6 +62,12 @@ export class ZardRadioComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: OnTouchedType): void {
     this.onTouched = fn;
+  }
+
+  setDisabledState(_isDisabled: boolean): void {
+    // This is called by Angular forms when the disabled state changes
+    // The input disabled() signal handles the state
+    this.cdr.markForCheck();
   }
 
   onRadioBlur(): void {

@@ -1,16 +1,18 @@
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardIcon } from '@zard/components/icon/icons';
 import { Component } from '@angular/core';
 
 interface FeatureCard {
   title: string;
   description: string;
-  icon: string;
+  icon: ZardIcon;
 }
 
 @Component({
   selector: 'why-zardui-section',
   standalone: true,
-  imports: [ZardCardComponent],
+  imports: [ZardCardComponent, ZardIconComponent],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -23,7 +25,7 @@ interface FeatureCard {
           <z-card [zTitle]="title">
             <ng-template #title>
               <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-lg">
-                <i class="text-primary font-extralight" [class]="card.icon"></i>
+                <z-icon [zType]="card.icon" class="text-primary" />
               </div>
             </ng-template>
             <h3 class="mt-4 text-lg font-semibold">{{ card.title }}</h3>
@@ -39,22 +41,22 @@ export class WhyZardUISection {
     {
       title: 'Beautiful & Practical',
       description: 'Meticulously crafted components that look stunning out of the box while remaining highly functional and accessible.',
-      icon: 'icon-sparkles',
+      icon: 'sparkles',
     },
     {
       title: 'Community First',
       description: 'Built by Angular developers who understand your needs. Real-world solutions to real problems.',
-      icon: 'icon-users',
+      icon: 'users',
     },
     {
       title: 'Modern Angular',
       description: 'Leveraging the latest Angular features including standalone components, signals, and best practices.',
-      icon: 'icon-zap',
+      icon: 'zap',
     },
     {
       title: 'Infinitely Customizable',
       description: 'Built with TailwindCSS for seamless customization. Make every component truly yours.',
-      icon: 'icon-layers-2',
+      icon: 'layers-2',
     },
   ];
 }

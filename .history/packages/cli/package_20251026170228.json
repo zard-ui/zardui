@@ -1,0 +1,65 @@
+{
+  "name": "@ngzard/ui",
+<<<<<<< HEAD
+  "version": "1.0.0",
+=======
+  "version": "1.0.0-beta.25",
+>>>>>>> 62729b1b551b5438dad453f9b95337bf39bb1866
+  "description": "An alternative to shadcn/ui for angular",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "ngzard": "./index.js"
+  },
+  "keywords": [
+    "ngzard",
+    "zard",
+    "zard-ui",
+    "shadcn/ui-angular",
+    "angular",
+    "components",
+    "ui",
+    "tailwindcss",
+    "tailwind",
+    "cli",
+    "design-system",
+    "typescript"
+  ],
+  "author": "ZardUI Team",
+  "license": "MIT",
+  "homepage": "https://zardui.com/",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zard-ui/zardui.git",
+    "directory": "packages/cli"
+  },
+  "bugs": {
+    "url": "https://github.com/zard-ui/zardui/issues"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "files": [
+    "**/*.js",
+    "**/*.d.ts",
+    "**/*.js.map",
+    "**/*.d.ts.map",
+    "!**/*.spec.js",
+    "!**/*.test.js"
+  ],
+  "dependencies": {
+    "@antfu/ni": "^0.23.2",
+    "chalk": "^5.3.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "commander": "^12.1.0",
+    "comment-json": "^4.2.5",
+    "execa": "^9.5.2",
+    "ora": "^8.1.1",
+    "prompts": "^2.4.2",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "tsc-alias": "^1.8.16"
+  }
+}

@@ -2,7 +2,7 @@ import { access, readFile } from 'node:fs/promises';
 import * as path from 'path';
 import { z } from 'zod';
 
-import { logger } from './logger.js';
+import { logger } from '@cli/utils/logger.js';
 
 async function pathExists(filePath: string): Promise<boolean> {
   try {

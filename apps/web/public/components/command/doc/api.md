@@ -18,25 +18,6 @@ The main command palette container that handles search input and keyboard naviga
 
 ---
 
-## [z-command-json] <span class="api-type-label component">Component</span>
-
-JSON-configured command palette that renders options from a configuration object. Includes advanced keyboard shortcuts and action handling.
-
-| Property | Description                      | Type                        | Default   |
-| -------- | -------------------------------- | --------------------------- | --------- |
-| `config` | Command configuration (required) | `ZardCommandConfig`         | -         |
-| `size`   | Size of the command palette      | `sm \| default \| lg \| xl` | `default` |
-| `class`  | Additional CSS classes           | `string`                    | `''`      |
-
-### Events
-
-| Event       | Description                            | Type                              |
-| ----------- | -------------------------------------- | --------------------------------- |
-| `zOnChange` | Fired when the selected option changes | `EventEmitter<ZardCommandOption>` |
-| `zOnSelect` | Fired when an option is selected       | `EventEmitter<ZardCommandOption>` |
-
----
-
 ## [z-command-input] <span class="api-type-label component">Component</span>
 
 Search input component with debounced input handling and accessibility features.

@@ -1,15 +1,16 @@
-import { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
+import { ZardIconComponent } from '../icon/icon.component';
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIcon } from '../icon/icons';
 
 export interface ZardToggleGroupItem {
   value: string;
   label?: string;
-  icon?: string;
+  icon?: ZardIcon;
   disabled?: boolean;
   ariaLabel?: string;
 }
@@ -23,6 +24,7 @@ type OnChangeType = (value: string | string[]) => void;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  imports: [ZardIconComponent],
   template: `
     <div [class]="classes()" role="group" [attr.data-orientation]="'horizontal'">
       @for (item of items(); track item.value; let i = $index) {
@@ -36,7 +38,7 @@ type OnChangeType = (value: string | string[]) => void;
           (click)="toggleItem(item)"
         >
           @if (item.icon) {
-            <span [class]="item.icon + ' w-4 h-4 shrink-0'"></span>
+            <span z-icon [zType]="item.icon" class="w-4 h-4 shrink-0"></span>
           }
           @if (item.label) {
             <span>{{ item.label }}</span>
@@ -174,7 +176,7 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  setDisabledState(_isDisabled: boolean): void {
+  setDisabledState(): void {
     // Note: disabled state is handled through the disabled input
     // This method is required by ControlValueAccessor interface
   }

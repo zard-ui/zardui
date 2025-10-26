@@ -1,12 +1,17 @@
-# API
+# Radio API
 
-## [z-radio] <span class="api-type-label directive">Directive</span>
+## Inputs
 
-> z-radio is a Directive that brings you a customizable radio button with minimal configuration
+| Name       | Type         | Default        | Description                        |
+| ---------- | ------------ | -------------- | ---------------------------------- |
+| `class`    | `ClassValue` | `''`           | Additional CSS classes             |
+| `disabled` | `boolean`    | `false`        | Whether the radio is disabled      |
+| `name`     | `string`     | `'radio'`      | Name attribute for the radio group |
+| `zId`      | `string`     | auto-generated | ID attribute for the radio         |
+| `value`    | `unknown`    | `null`         | Value of the radio button          |
 
-To get a customized radio button, just pass the following props to the directive.
+## Outputs
 
-| Property  | Description | Type                   | Default   |
-| --------- | ----------- | ---------------------- | --------- |
-| `[zType]` | radio type  | `default\|destructive` | `default` |
-| `[zSize]` | radio size  | `default\|sm\|lg`      | `default` |
+| Name          | Type                    | Description                        |
+| ------------- | ----------------------- | ---------------------------------- |
+| `radioChange` | `EventEmitter<boolean>` | Emits when radio selection changes |
