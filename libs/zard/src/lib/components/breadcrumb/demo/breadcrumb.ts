@@ -5,6 +5,7 @@ import { ZardDemoBreadcrumbSeparatorComponent } from './separator';
 export const BREADCRUMB = {
   componentName: 'breadcrumb',
   componentType: 'breadcrumb',
+  description: 'Displays the path to the current resource using a hierarchy of links.',
   examples: [
     {
       name: 'default',

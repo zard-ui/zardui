@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="alert.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
@@ -11,6 +9,7 @@ import type { ClassValue } from 'clsx';
 @Component({
   selector: 'z-alert',
   standalone: true,
+  imports: [ZardIconComponent],
   exportAs: 'zAlert',
   imports: [ZardStringTemplateOutletDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -60,8 +59,6 @@ export class ZardAlertComponent {
 
 ```
 
-
-
 ```angular-ts title="alert.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -99,4 +96,3 @@ export type ZardAlertTitleVariants = VariantProps<typeof alertTitleVariants>;
 export type ZardAlertDescriptionVariants = VariantProps<typeof alertDescriptionVariants>;
 
 ```
-

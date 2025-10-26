@@ -14,6 +14,7 @@ export * from './lib/components/empty/empty.component';
 export * from './lib/components/input/input.directive';
 export * from './lib/components/input-group/input-group.component';
 export * from './lib/components/input-group/input-group.variants';
+export * from './lib/components/icon/icon.component';
 export * from './lib/components/loader/loader.component';
 
 // Layout
@@ -54,7 +55,6 @@ export * from './lib/components/alert-dialog/alert-dialog-ref';
 
 // Command
 export * from './lib/components/command/command.component';
-export * from './lib/components/command/command-json.component';
 export * from './lib/components/command/command-input.component';
 export * from './lib/components/command/command-list.component';
 export * from './lib/components/command/command-empty.component';

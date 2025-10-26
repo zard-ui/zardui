@@ -65,6 +65,8 @@ describe('ZardCheckboxComponent', () => {
   let checkboxElements: HTMLInputElement[];
 
   beforeEach(async () => {
+    jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+
     await TestBed.configureTestingModule({
       imports: [TestHostComponent, TestHostWithNgModelComponent],
     }).compileComponents();

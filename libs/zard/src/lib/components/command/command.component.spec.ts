@@ -28,7 +28,7 @@ import { ZardCommandComponent } from './command.component';
       <z-command-list>
         <z-command-empty>No results found.</z-command-empty>
         <z-command-option-group zLabel="Test Group">
-          <z-command-option zLabel="Test Option" zValue="test" zShortcut="⌘T" zIcon='<div class="icon-test"></div>'></z-command-option>
+          <z-command-option zLabel="Test Option" zValue="test" zShortcut="⌘T" zIcon="search"></z-command-option>
           <z-command-option zLabel="Disabled Option" zValue="disabled" [zDisabled]="true"></z-command-option>
           <z-command-option zLabel="Search Option" zValue="search" zCommand="search test"></z-command-option>
         </z-command-option-group>
@@ -39,14 +39,14 @@ import { ZardCommandComponent } from './command.component';
   `,
 })
 class TestHostComponent {
-  selectedOption: unknown = null;
-  changedOption: unknown = null;
+  selectedOption: any = null;
+  changedOption: any = null;
 
-  onSelect(option: unknown) {
+  onSelect(option: any) {
     this.selectedOption = option;
   }
 
-  onChange(option: unknown) {
+  onChange(option: any) {
     this.changedOption = option;
   }
 }
@@ -148,8 +148,8 @@ describe('ZardCommandComponent', () => {
     fixture.detectChanges();
 
     expect(hostComponent.selectedOption).toBeTruthy();
-    expect((hostComponent.selectedOption as any)?.label).toBe('Test Option');
-    expect((hostComponent.selectedOption as any)?.value).toBe('test');
+    expect(hostComponent.selectedOption?.label).toBe('Test Option');
+    expect(hostComponent.selectedOption?.value).toBe('test');
   }));
 
   it('should emit zOnChange when option is clicked', fakeAsync(() => {
@@ -162,8 +162,8 @@ describe('ZardCommandComponent', () => {
     fixture.detectChanges();
 
     expect(hostComponent.changedOption).toBeTruthy();
-    expect((hostComponent.changedOption as any)?.label).toBe('Test Option');
-    expect((hostComponent.changedOption as any)?.value).toBe('test');
+    expect(hostComponent.changedOption?.label).toBe('Test Option');
+    expect(hostComponent.changedOption?.value).toBe('test');
   }));
 
   it('should not emit events for disabled options', () => {
@@ -188,12 +188,13 @@ describe('ZardCommandComponent', () => {
     fixture.detectChanges();
 
     expect(hostComponent.selectedOption).toBeTruthy();
-    expect((hostComponent.selectedOption as any)?.label).toBe('Test Option');
+    expect(hostComponent.selectedOption?.label).toBe('Test Option');
   }));
 
   it('should render option with icon and shortcut', () => {
     const optionElement = fixture.nativeElement.querySelector('z-command-option');
-    expect(optionElement.innerHTML).toContain('icon-test');
+    const iconElement = optionElement.querySelector('div[z-icon]');
+    expect(iconElement).toBeTruthy();
     expect(optionElement.textContent).toContain('⌘T');
   });
 

@@ -3,11 +3,11 @@
 ```angular-ts title="checkbox.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { checkboxLabelVariants, checkboxVariants, ZardCheckboxVariants } from './checkbox.variants';
-
 import type { ClassValue } from 'clsx';
+
+import { checkboxLabelVariants, checkboxVariants, ZardCheckboxVariants } from './checkbox.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
@@ -15,14 +15,25 @@ type OnChangeType = (value: any) => void;
 @Component({
   selector: 'z-checkbox, [z-checkbox]',
   standalone: true,
+  imports: [ZardIconComponent],
   exportAs: 'zCheckbox',
   template: `
-    <span class="flex items-center gap-2" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (click)="onCheckboxChange()">
+    <span
+      tabindex="0"
+      class="flex items-center gap-2"
+      [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'"
+      (click)="onCheckboxChange()"
+      (keyup)="onKeyboardEvent($event)"
+    >
       <main class="flex relative">
         <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onCheckboxBlur()" name="checkbox" />
-        <i
-          class="icon-check absolute flex items-center justify-center text-primary-foreground opacity-0 peer-checked:opacity-100 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
-        ></i>
+        <z-icon
+          zType="check"
+          [class]="
+            'absolute flex items-center justify-center text-primary-foreground top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity ' +
+            (checked ? 'opacity-100' : 'opacity-0')
+          "
+        />
       </main>
       <label [class]="labelClasses()" for="checkbox">
         <ng-content></ng-content>
@@ -82,6 +93,13 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
     this.onChange(this.checked);
     this.checkChange.emit(this.checked);
     this.cdr.markForCheck();
+  }
+
+  onKeyboardEvent(event: KeyboardEvent): void {
+    if (event.key === ' ' || event.key === 'Enter') {
+      event.preventDefault();
+      this.onCheckboxChange();
+    }
   }
 }
 

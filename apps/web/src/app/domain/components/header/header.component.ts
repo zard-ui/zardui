@@ -1,18 +1,19 @@
-import { Component, inject, OnInit, HostListener, viewChild } from '@angular/core';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { DarkModeService } from '@zard/shared/services/darkmode.service';
-import { SOCIAL_MEDIAS } from '@zard/shared/constants/medias.constant';
-import { HEADER_PATHS } from '@zard/shared/constants/routes.constant';
-import { GithubService } from '@zard/shared/services/github.service';
+import { Component, inject, HostListener, viewChild } from '@angular/core';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { environment } from '@zard/env/environment';
 import { RouterModule } from '@angular/router';
 import { AsyncPipe } from '@angular/common';
 import type { Observable } from 'rxjs';
 
 import { DocResearcherComponent } from '../doc-researcher/doc-researcher.component';
+import { DarkModeService } from '../../../shared/services/darkmode.service';
+import { SOCIAL_MEDIAS } from '../../../shared/constants/medias.constant';
 import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
+import { HEADER_PATHS } from '../../../shared/constants/routes.constant';
+import { GithubService } from '../../../shared/services/github.service';
 
 @Component({
   selector: 'z-header',

@@ -8,6 +8,7 @@ import { ZardDemoButtonTypeComponent } from './type';
 export const BUTTON = {
   componentName: 'button',
   componentType: 'button',
+  description: 'Displays a button or a component that looks like a button.',
   examples: [
     {
       name: 'default',

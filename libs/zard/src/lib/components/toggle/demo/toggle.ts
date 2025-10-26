@@ -10,6 +10,7 @@ import { ZardDemoToggleComponent } from './default';
 export const TOGGLE = {
   componentName: 'toggle',
   componentType: 'toggle',
+  description: 'A two-state button that can be either on or off.',
   examples: [
     {
       name: 'default',

@@ -1,4 +1,4 @@
-import { ZardDemoTabsPositiontComponent } from './position';
+import { ZardDemoTabsPositionComponent } from './position';
 import { ZardDemoTabsDefaultComponent } from './default';
 import { ZardDemoTabsArrowComponent } from './arrow';
 import { ZardDemoTabsAlignComponent } from './align';
@@ -6,6 +6,7 @@ import { ZardDemoTabsAlignComponent } from './align';
 export const TABS = {
   componentName: 'tabs',
   componentType: 'tabs',
+  description: 'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
   examples: [
     {
       name: 'default',
@@ -13,7 +14,7 @@ export const TABS = {
     },
     {
       name: 'position',
-      component: ZardDemoTabsPositiontComponent,
+      component: ZardDemoTabsPositionComponent,
     },
     {
       name: 'align',

@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewE
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardIconComponent } from '../icon/icon.component';
+import { ZardIcon } from '../icon/icons';
 import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, ZardAlertVariants } from './alert.variants';
 
 import type { ClassValue } from 'clsx';
@@ -9,13 +11,13 @@ import type { ClassValue } from 'clsx';
   selector: 'z-alert',
   standalone: true,
   exportAs: 'zAlert',
-  imports: [ZardStringTemplateOutletDirective],
+  imports: [ZardIconComponent, ZardStringTemplateOutletDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (zIcon()) {
       <ng-container *zStringTemplateOutlet="zIcon()">
-        <i [class]="iconClasses()"></i>
+        <z-icon [zType]="iconName()!" />
       </ng-container>
     }
 
@@ -43,7 +45,7 @@ export class ZardAlertComponent {
   readonly class = input<ClassValue>('');
   readonly zTitle = input<string | TemplateRef<void>>('');
   readonly zDescription = input<string | TemplateRef<void>>('');
-  readonly zIcon = input<string | TemplateRef<void>>('');
+  readonly zIcon = input<ZardIcon | TemplateRef<void>>();
   readonly zType = input<ZardAlertVariants['zType']>('default');
 
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
@@ -53,4 +55,18 @@ export class ZardAlertComponent {
   protected readonly titleClasses = computed(() => alertTitleVariants());
 
   protected readonly descriptionClasses = computed(() => alertDescriptionVariants({ zType: this.zType() }));
+
+  protected readonly iconName = computed((): ZardIcon | null => {
+    const customIcon = this.zIcon();
+    if (customIcon && !(customIcon instanceof TemplateRef)) {
+      return customIcon;
+    }
+
+    switch (this.zType()) {
+      case 'destructive':
+        return 'circle-x';
+      default:
+        return null;
+    }
+  });
 }

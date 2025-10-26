@@ -5,6 +5,7 @@ import { RouterLink } from '@angular/router';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardIconComponent } from '../icon/icon.component';
 import {
   breadcrumbEllipsisVariants,
   breadcrumbItemVariants,
@@ -110,11 +111,15 @@ export class ZardBreadcrumbComponent {
 @Component({
   selector: 'z-breadcrumb-ellipsis',
   exportAs: 'zBreadcrumbEllipsis',
+  standalone: true,
+  imports: [ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <span aria-hidden="true" role="presentation" class="icon-ellipsis"></span> `,
+  template: ` <z-icon zType="ellipsis" /> `,
   host: {
     '[class]': 'classes()',
+    'aria-hidden': 'true',
+    role: 'presentation',
   },
 })
 export class ZardBreadcrumbEllipsisComponent {

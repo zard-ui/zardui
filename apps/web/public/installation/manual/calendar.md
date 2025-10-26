@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="calendar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { filter } from 'rxjs';
 
@@ -301,8 +299,6 @@ export class ZardCalendarComponent {
 
 ```
 
-
-
 ```angular-ts title="calendar.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
@@ -395,8 +391,6 @@ export type ZardCalendarDayVariants = VariantProps<typeof calendarDayVariants>;
 export type ZardCalendarDayButtonVariants = VariantProps<typeof calendarDayButtonVariants>;
 
 ```
-
-
 
 ```angular-ts title="calendar-grid.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, input, output, signal, viewChild, ViewEncapsulation } from '@angular/core';
@@ -666,8 +660,6 @@ export class ZardCalendarGridComponent {
 
 ```
 
-
-
 ```angular-ts title="calendar-navigation.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
@@ -783,8 +775,6 @@ export class ZardCalendarNavigationComponent {
 
 ```
 
-
-
 ```angular-ts title="calendar.types.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export type CalendarMode = 'single' | 'multiple' | 'range';
 export type CalendarValue = Date | Date[] | null;
@@ -814,8 +804,6 @@ export interface CalendarDayConfig {
 export { type ZardCalendarVariants } from './calendar.variants';
 
 ```
-
-
 
 ```angular-ts title="calendar.utils.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { CalendarDay, CalendarDayConfig, CalendarMode, CalendarValue } from './calendar.types';
@@ -968,4 +956,3 @@ export function getDayAriaLabel(day: CalendarDay): string {
 }
 
 ```
-

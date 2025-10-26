@@ -22,14 +22,15 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 
 import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardSelectItemComponent } from './select-item.component';
+import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -38,7 +39,7 @@ type OnChangeType = (value: string) => void;
   selector: 'z-select, [z-select]',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [OverlayModule],
+  imports: [OverlayModule, ZardIconComponent],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -70,7 +71,7 @@ type OnChangeType = (value: string) => void;
           <span class="text-muted-foreground">{{ zPlaceholder() }}</span>
         }
       </span>
-      <i class="icon-chevron-down size-4 opacity-50"></i>
+      <z-icon zType="chevron-down" zSize="lg" class="opacity-50" />
     </button>
 
     <ng-template #dropdownTemplate>
@@ -496,6 +497,7 @@ export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input, linkedSignal } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 import { selectItemVariants } from './select.variants';
 
 // Interface to avoid circular dependency
@@ -508,7 +510,7 @@ interface SelectHost {
   selector: 'z-select-item, [z-select-item]',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
+  imports: [ZardIconComponent],
   host: {
     '[class]': 'classes()',
     '[attr.value]': 'zValue()',
@@ -522,7 +524,7 @@ interface SelectHost {
   template: `
     <span class="absolute right-2 flex size-3.5 items-center justify-center">
       @if (isSelected()) {
-        <i class="icon-check size-2 contents"></i>
+        <z-icon zType="check" />
       }
     </span>
     <ng-content></ng-content>

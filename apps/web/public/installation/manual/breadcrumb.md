@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="breadcrumb.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ClassValue } from 'clsx';
 
@@ -113,11 +111,15 @@ export class ZardBreadcrumbComponent {
 @Component({
   selector: 'z-breadcrumb-ellipsis',
   exportAs: 'zBreadcrumbEllipsis',
+  standalone: true,
+  imports: [ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <span aria-hidden="true" role="presentation" class="icon-ellipsis"></span> `,
+  template: ` <z-icon zType="ellipsis" /> `,
   host: {
     '[class]': 'classes()',
+    'aria-hidden': 'true',
+    role: 'presentation',
   },
 })
 export class ZardBreadcrumbEllipsisComponent {
@@ -128,8 +130,6 @@ export class ZardBreadcrumbEllipsisComponent {
 }
 
 ```
-
-
 
 ```angular-ts title="breadcrumb.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
@@ -212,8 +212,6 @@ export type ZardBreadcrumbEllipsisVariants = VariantProps<typeof breadcrumbEllip
 
 ```
 
-
-
 ```angular-ts title="breadcrumb.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
@@ -228,4 +226,3 @@ const components = [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBr
 export class ZardBreadcrumbModule {}
 
 ```
-

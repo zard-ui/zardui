@@ -3,15 +3,15 @@ import { filter } from 'rxjs';
 import { ChangeDetectionStrategy, Component, computed, input, linkedSignal, model, viewChild, ViewEncapsulation } from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
 
-import type { ClassValue } from 'clsx';
-
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
-import type { CalendarMode, CalendarValue } from './calendar.types';
 import { generateCalendarDays, getSelectedDatesArray, isSameDay } from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
 
+import type { ClassValue } from 'clsx';
+
+import type { CalendarMode, CalendarValue } from './calendar.types';
 export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
 
 @Component({

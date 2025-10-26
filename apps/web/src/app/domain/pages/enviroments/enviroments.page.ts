@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { SeoService } from '@zard/shared/services/seo.service';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
@@ -12,7 +13,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 @Component({
   selector: 'z-enviroments',
   template: `
-    <z-content [title]="title" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+    <z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
       <z-doc-heading title="Installation" description="How to install dependencies and structure your app." scrollSpyItem="overview" id="overview"></z-doc-heading>
 
       <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="environments" id="environments">
@@ -54,7 +55,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   standalone: true,
   imports: [EnvCardComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardBadgeComponent, ZardAlertComponent],
 })
-export class EnviromentsPage {
+export class EnviromentsPage implements OnInit {
   protected readonly environments = [
     { name: 'angular', icon: 'angular.svg', path: '/docs/installation/angular', available: true },
     { name: 'nx', icon: 'nx.svg', path: '/docs/installation/nx', available: false },
@@ -66,6 +67,10 @@ export class EnviromentsPage {
       { id: 'environments', label: 'Environments', type: 'custom' },
     ],
   };
-  readonly title = 'Installation - zard/ui';
+  private readonly seoService = inject(SeoService);
   activeAnchor?: string;
+
+  ngOnInit(): void {
+    this.seoService.setDocsSeo(`Installation`, `How to install dependencies and structure your app.`, `/docs/installation`, 'og-install.jpg');
+  }
 }

@@ -1,4 +1,4 @@
-import { APP_VERSION } from '../constants/app.constants.js';
+import { APP_VERSION } from '@cli/constants/app.constants.js';
 import { fileURLToPath } from 'url';
 import { access, readFile } from 'node:fs/promises';
 import * as path from 'path';

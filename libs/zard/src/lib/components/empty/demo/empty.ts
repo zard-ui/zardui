@@ -1,14 +1,15 @@
-import { ZardDemoEmptyDefaultComponent } from './default';
-import { ZardDemoEmptyCustomImageComponent } from './custom-image';
+import { ZardDemoEmptyWithoutDescriptionComponent } from './without-description';
+import { ZardDemoEmptyWithOtherComponent } from './with-other-components';
 import { ZardDemoEmptyCustomTemplateComponent } from './custom-template';
 import { ZardDemoEmptyCustomStyleComponent } from './custom-style';
+import { ZardDemoEmptyCustomImageComponent } from './custom-image';
+import { ZardDemoEmptyDefaultComponent } from './default';
 import { ZardDemoEmptySizeComponent } from './size';
-import { ZardDemoEmptyWithOtherComponent } from './with-other-components';
-import { ZardDemoEmptyWithoutDescriptionComponent } from './without-description';
 
 export const EMPTY = {
   componentName: 'empty',
   componentPath: 'empty',
+  description: 'Use the Empty component to display a empty state.',
   examples: [
     {
       name: 'default',

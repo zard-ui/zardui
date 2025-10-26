@@ -7,7 +7,7 @@ import { ZardAlertComponent } from '../alert.component';
   imports: [ZardAlertComponent],
   template: `
     <div class="grid w-full max-w-xl items-start gap-4">
-      <z-alert zIcon="icon-circle-check" zTitle="Success! Your changes have been saved" zDescription="This is an alert with icon, title and description." />
+      <z-alert zIcon="circle-check" zTitle="Success! Your changes have been saved" zDescription="This is an alert with icon, title and description." />
 
       <z-alert [zIcon]="customIcon" zTitle="This Alert has a title and an icon. No description." />
 
@@ -15,7 +15,7 @@ import { ZardAlertComponent } from '../alert.component';
         <span class="icon-popcorn"></span>
       </ng-template>
 
-      <z-alert zType="destructive" zIcon="icon-circle-alert" zTitle="Unable to process your payment." [zDescription]="customDescription" />
+      <z-alert zType="destructive" zIcon="circle-alert" zTitle="Unable to process your payment." [zDescription]="customDescription" />
 
       <ng-template #customDescription>
         <p>Please verify your billing information and try again.</p>

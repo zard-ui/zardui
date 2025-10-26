@@ -33,7 +33,7 @@ The `Command` component provides a command palette interface that allows users t
 | ------------- | -------------------------- | -------- | --------------------------------------------- |
 | `[zValue]`    | `any`                      | Yes      | Used to bind the value of the option          |
 | `[zLabel]`    | `string\|TemplateRef<any>` | Yes      | Used to bind the label of the option          |
-| `[zIcon]`     | `string\|TemplateRef<any>` | No       | Used to bind the icon of the option           |
+| `[zType]`     | `string\|TemplateRef<any>` | No       | Used to bind the icon of the option           |
 | `[zCommand]`  | `string`                   | No       | Used to bind the command of the option        |
 | `[zShortcut]` | `string`                   | No       | Used to bind the shortcut of the option       |
 | `[zDisabled]` | `boolean`                  | No       | Used to bind the disabled state of the option |

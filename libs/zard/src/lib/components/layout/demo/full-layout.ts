@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
-import { ContentComponent } from '../content.component';
-import { FooterComponent } from '../footer.component';
-import { HeaderComponent } from '../header.component';
-import { LayoutComponent } from '../layout.component';
 import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from '../sidebar.component';
+import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardIconComponent } from '../../icon/icon.component';
+import { ContentComponent } from '../content.component';
+import { LayoutComponent } from '../layout.component';
+import { HeaderComponent } from '../header.component';
+import { FooterComponent } from '../footer.component';
 
 @Component({
   selector: 'z-demo-layout-full',
@@ -21,6 +22,7 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
     SidebarGroupLabelComponent,
     ZardButtonComponent,
     ZardSkeletonComponent,
+    ZardIconComponent,
   ],
   template: `
     <z-layout class="min-h-[600px] border rounded-md overflow-hidden">
@@ -32,10 +34,10 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
           </div>
           <div class="flex items-center gap-2">
             <button z-button zType="ghost" zSize="sm">
-              <i class="icon-search"></i>
+              <z-icon zType="search" />
             </button>
             <button z-button zType="ghost" zSize="sm">
-              <i class="icon-bell"></i>
+              <z-icon zType="bell" />
             </button>
           </div>
         </div>
@@ -47,15 +49,15 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
             <z-sidebar-group>
               <z-sidebar-group-label>Menu</z-sidebar-group-label>
               <button z-button zType="secondary" class="justify-start">
-                <i class="icon-house mr-2"></i>
+                <z-icon zType="house" class="mr-2" />
                 Dashboard
               </button>
               <button z-button zType="ghost" class="justify-start">
-                <i class="icon-layers mr-2"></i>
+                <z-icon zType="layers" class="mr-2" />
                 Projects
               </button>
               <button z-button zType="ghost" class="justify-start">
-                <i class="icon-users mr-2"></i>
+                <z-icon zType="users" class="mr-2" />
                 Team
               </button>
             </z-sidebar-group>

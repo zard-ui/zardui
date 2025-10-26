@@ -1,6 +1,6 @@
 {
   "name": "@ngzard/ui",
-  "version": "1.0.0-beta.22",
+  "version": "1.0.0-beta.25",
   "description": "An alternative to shadcn/ui for angular",
   "type": "module",
   "main": "index.js",
@@ -54,5 +54,8 @@
     "ora": "^8.1.1",
     "prompts": "^2.4.2",
     "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "tsc-alias": "^1.8.16"
   }
 }

@@ -122,7 +122,7 @@ import { RouterModule } from '@angular/router';
           </div>
         </div>
 
-        <div class="mt-16 pt-8">
+        <div class="mt-16 pt-4">
           <z-divider class="mb-8"></z-divider>
           <div class="flex flex-col lg:flex-row justify-between items-center space-y-6 lg:space-y-0">
             <div class="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-6 text-sm text-muted-foreground">
@@ -148,7 +148,7 @@ import { RouterModule } from '@angular/router';
               </p>
             </div>
 
-            <div class="flex items-center space-x-2 text-sm">
+            <div class="flex items-center space-x-2 text-sm mb-10 lg:mb-0">
               <div class="px-3 py-1.5 rounded-full bg-background/80 border border-border/50 text-muted-foreground">
                 <span>© {{ currentYear }} ZardUI</span>
               </div>

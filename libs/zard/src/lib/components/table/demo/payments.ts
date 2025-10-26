@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
-import { ZardBadgeComponent } from '../../badge/badge.component';
-import { ZardButtonComponent } from '../../button/button.component';
 import { ZardTableBodyComponent, ZardTableCellComponent, ZardTableComponent, ZardTableHeadComponent, ZardTableHeaderComponent, ZardTableRowComponent } from '../table.component';
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardBadgeComponent } from '../../badge/badge.component';
+import { ZardIconComponent } from '../../icon/icon.component';
 
 export interface Payment {
   id: string;
@@ -22,6 +23,7 @@ export interface Payment {
     ZardTableCellComponent,
     ZardBadgeComponent,
     ZardButtonComponent,
+    ZardIconComponent,
   ],
   template: `
     <div class="w-full">
@@ -52,10 +54,10 @@ export interface Payment {
                 <td z-table-cell>
                   <div class="flex items-center gap-2">
                     <z-button zType="ghost" zSize="icon" (click)="copyPaymentId(payment.id)" title="Copy payment ID">
-                      <div class="icon-copy"></div>
+                      <div z-icon zType="copy"></div>
                     </z-button>
                     <z-button zType="ghost" zSize="icon" (click)="viewDetails(payment)" title="View details">
-                      <div class="icon-eye"></div>
+                      <div z-icon zType="eye"></div>
                     </z-button>
                   </div>
                 </td>

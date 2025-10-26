@@ -7,6 +7,7 @@ import { ZardDemoInputSizeComponent } from './size';
 export const INPUT = {
   componentName: 'input',
   componentType: 'input',
+  description: 'Displays a form input field or a component that looks like an input field.',
   examples: [
     {
       name: 'default',
