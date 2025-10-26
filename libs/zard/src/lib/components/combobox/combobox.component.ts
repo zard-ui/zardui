@@ -82,7 +82,7 @@ export interface ZardComboboxGroup {
       #popoverTrigger
     >
       <span class="flex-1 text-left truncate">
-        {{ displayValue() || placeholder() }}
+        {{ displayValue() ?? placeholder() }}
       </span>
       <z-icon zType="chevrons-up-down" class="ml-2 shrink-0 opacity-50" />
     </button>
@@ -102,14 +102,14 @@ export interface ZardComboboxGroup {
             }
 
             @if (groups().length > 0) {
-              @for (group of groups(); track group.label || $index) {
+              @for (group of groups(); track group.label ?? $index) {
                 @if (group.label) {
                   <z-command-option-group [zLabel]="group.label">
                     @for (option of group.options; track option.value) {
                       <z-command-option
                         [zValue]="option.value"
                         [zLabel]="option.label"
-                        [zDisabled]="option.disabled || false"
+                        [zDisabled]="option.disabled ?? false"
                         [zIcon]="option.icon"
                         [attr.aria-selected]="option.value === getCurrentValue()"
                       >
@@ -125,7 +125,7 @@ export interface ZardComboboxGroup {
                     <z-command-option
                       [zValue]="option.value"
                       [zLabel]="option.label"
-                      [zDisabled]="option.disabled || false"
+                      [zDisabled]="option.disabled ?? false"
                       [zIcon]="option.icon"
                       [attr.aria-selected]="option.value === getCurrentValue()"
                     >
@@ -142,7 +142,7 @@ export interface ZardComboboxGroup {
                 <z-command-option
                   [zValue]="option.value"
                   [zLabel]="option.label"
-                  [zDisabled]="option.disabled || false"
+                  [zDisabled]="option.disabled ?? false"
                   [zIcon]="option.icon"
                   [attr.aria-selected]="option.value === getCurrentValue()"
                 >
@@ -218,7 +218,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
     if (!currentValue) return null;
 
     // Search in groups first
-    if (this.groups().length > 0) {
+    if (this.groups().length) {
       for (const group of this.groups()) {
         const option = group.options.find(opt => opt.value === currentValue);
         if (option) return option.label;
@@ -227,7 +227,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
 
     // Then search in flat options
     const option = this.options().find(opt => opt.value === currentValue);
-    return option?.label || null;
+    return option?.label ?? null;
   });
 
   private onChange: (value: string | null) => void = () => {

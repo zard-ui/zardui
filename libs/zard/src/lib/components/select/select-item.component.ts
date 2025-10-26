@@ -43,7 +43,7 @@ export class ZardSelectItemComponent {
   readonly elementRef = inject(ElementRef);
   readonly label = linkedSignal(() => {
     const element = this.elementRef?.nativeElement;
-    return (element?.textContent || element?.innerText)?.trim() ?? '';
+    return (element?.textContent ?? element?.innerText)?.trim() ?? '';
   });
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));

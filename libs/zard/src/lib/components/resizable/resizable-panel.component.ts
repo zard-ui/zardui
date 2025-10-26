@@ -29,8 +29,8 @@ export class ZardResizablePanelComponent {
 
   protected readonly isCollapsed = computed(() => {
     const element = this.elementRef.nativeElement as HTMLElement;
-    const width = parseFloat(element.style.width || '0');
-    const height = parseFloat(element.style.height || '0');
+    const width = Number.parseFloat(element.style.width || '0');
+    const height = Number.parseFloat(element.style.height || '0');
     return width === 0 || height === 0;
   });
 

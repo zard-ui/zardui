@@ -206,9 +206,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private getDropdownItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(
-      (item: Element) => !item.hasAttribute('data-disabled'),
-    ) as HTMLElement[];
+    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {

@@ -7,7 +7,6 @@ import {
   effect,
   EventEmitter,
   forwardRef,
-  HostListener,
   input,
   Output,
   signal,
@@ -66,6 +65,7 @@ export interface ZardCommandConfig {
     '[attr.role]': '"combobox"',
     '[attr.aria-expanded]': 'true',
     '[attr.aria-haspopup]': '"listbox"',
+    '(keydown)': 'onKeyDown($event)',
   },
   providers: [
     {
@@ -107,19 +107,19 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
     return this.optionComponents().filter(option => {
       const label = option.zLabel().toLowerCase();
-      const command = option.zCommand()?.toLowerCase() || '';
+      const command = option.zCommand()?.toLowerCase() ?? '';
       return label.includes(lowerSearchTerm) || command.includes(lowerSearchTerm);
     });
   });
 
   // Status message for screen readers
   protected readonly statusMessage = computed(() => {
-    const searchTerm = this.searchTerm();
+    const searchTerm = this.searchTerm().trim();
     const filteredCount = this.filteredOptions().length;
 
-    if (searchTerm === '') return '';
+    if (!searchTerm) return '';
 
-    if (filteredCount === 0) {
+    if (!filteredCount) {
       return `No results found for "${searchTerm}"`;
     }
 
@@ -167,7 +167,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
     this.zOnSelect.emit(commandOption);
   }
 
-  @HostListener('keydown', ['$event'])
+  // in @Component host: '(keydown)': 'onKeyDown($event)'
   onKeyDown(event: KeyboardEvent) {
     const filteredOptions = this.filteredOptions();
     if (filteredOptions.length === 0) return;
@@ -214,7 +214,9 @@ export class ZardCommandComponent implements ControlValueAccessor {
     const selectedIndex = this.selectedIndex();
 
     // Clear previous selection
-    filteredOptions.forEach(option => option.setSelected(false));
+    for (const option of filteredOptions) {
+      option.setSelected(false);
+    }
 
     // Set new selection
     if (selectedIndex >= 0 && selectedIndex < filteredOptions.length) {

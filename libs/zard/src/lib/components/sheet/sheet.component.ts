@@ -96,7 +96,7 @@ export class ZardSheetOptions<T, U> {
               <z-icon [zType]="config.zOkIcon" />
             }
 
-            {{ config.zOkText || 'OK' }}
+            {{ config.zOkText ?? 'OK' }}
           </button>
         }
 
@@ -106,7 +106,7 @@ export class ZardSheetOptions<T, U> {
               <z-icon [zType]="config.zCancelIcon" />
             }
 
-            {{ config.zCancelText || 'Cancel' }}
+            {{ config.zCancelText ?? 'Cancel' }}
           </button>
         }
       </footer>
@@ -156,14 +156,14 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
 
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
     if (this.portalOutlet()?.hasAttached()) {
-      throw Error('Attempting to attach modal content after content is already attached');
+      throw new Error('Attempting to attach modal content after content is already attached');
     }
     return this.portalOutlet()?.attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     if (this.portalOutlet()?.hasAttached()) {
-      throw Error('Attempting to attach modal content after content is already attached');
+      throw new Error('Attempting to attach modal content after content is already attached');
     }
 
     return this.portalOutlet()?.attachTemplatePortal(portal);
