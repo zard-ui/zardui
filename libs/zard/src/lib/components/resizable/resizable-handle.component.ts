@@ -7,7 +7,7 @@ import { ZardResizableComponent } from './resizable.component';
 import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
 
 @Component({
-  selector: 'z-resizable-handle',
+  selector: 'z-resizable-handle, [z-resizable-handle]',
   exportAs: 'zResizableHandle',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -37,7 +37,7 @@ export class ZardResizableHandleComponent {
   readonly zHandleIndex = input<number>(0);
   readonly class = input<ClassValue>('');
 
-  protected readonly layout = computed(() => this.resizable?.zLayout() || 'horizontal');
+  protected readonly layout = computed(() => this.resizable?.zLayout() ?? 'horizontal');
 
   protected readonly classes = computed(() =>
     mergeClasses(
@@ -123,10 +123,12 @@ export class ZardResizableHandleComponent {
     if (!leftPanel || !rightPanel) return;
 
     const containerSize = this.resizable.getContainerSize();
-    const leftMin = this.resizable.convertToPercentage(leftPanel.zMin() || 0, containerSize);
-    const leftMax = this.resizable.convertToPercentage(leftPanel.zMax() || 100, containerSize);
-    const rightMin = this.resizable.convertToPercentage(rightPanel.zMin() || 0, containerSize);
-    const rightMax = this.resizable.convertToPercentage(rightPanel.zMax() || 100, containerSize);
+    const { leftMin, leftMax, rightMin, rightMax } = this.normalizeMinMax(
+      this.resizable.convertToPercentage(leftPanel.zMin(), containerSize),
+      this.resizable.convertToPercentage(leftPanel.zMax(), containerSize),
+      this.resizable.convertToPercentage(rightPanel.zMin(), containerSize),
+      this.resizable.convertToPercentage(rightPanel.zMax(), containerSize),
+    );
 
     let newLeftSize = sizes[handleIndex] + delta;
     let newRightSize = sizes[handleIndex + 1] - delta;
@@ -145,7 +147,7 @@ export class ZardResizableHandleComponent {
       this.resizable.updatePanelStyles();
       this.resizable.zResize.emit({
         sizes,
-        layout: this.resizable.zLayout() || 'horizontal',
+        layout: this.resizable.zLayout() ?? 'horizontal',
       });
     }
   }
@@ -163,10 +165,12 @@ export class ZardResizableHandleComponent {
     if (!leftPanel || !rightPanel) return;
 
     const containerSize = this.resizable.getContainerSize();
-    const leftMin = this.resizable.convertToPercentage(leftPanel.zMin() || 0, containerSize);
-    const leftMax = this.resizable.convertToPercentage(leftPanel.zMax() || 100, containerSize);
-    const rightMin = this.resizable.convertToPercentage(rightPanel.zMin() || 0, containerSize);
-    const rightMax = this.resizable.convertToPercentage(rightPanel.zMax() || 100, containerSize);
+    const { leftMin, leftMax, rightMin, rightMax } = this.normalizeMinMax(
+      this.resizable.convertToPercentage(leftPanel.zMin(), containerSize),
+      this.resizable.convertToPercentage(leftPanel.zMax(), containerSize),
+      this.resizable.convertToPercentage(rightPanel.zMin(), containerSize),
+      this.resizable.convertToPercentage(rightPanel.zMax(), containerSize),
+    );
 
     const totalSize = sizes[handleIndex] + sizes[handleIndex + 1];
 
@@ -178,11 +182,27 @@ export class ZardResizableHandleComponent {
       sizes[handleIndex + 1] = rightMin;
     }
 
-    this.resizable['panelSizes'].set(sizes);
-    this.resizable['updatePanelStyles']();
+    this.resizable.panelSizes.set(sizes);
+    this.resizable.updatePanelStyles();
     this.resizable.zResize.emit({
       sizes,
-      layout: this.resizable.zLayout() || 'horizontal',
+      layout: this.resizable.zLayout() ?? 'horizontal',
     });
+  }
+
+  private normalizeMinMax(leftMin: number, leftMax: number, rightMin: number, rightMax: number): { leftMin: number; leftMax: number; rightMin: number; rightMax: number } {
+    if (leftMax < leftMin) {
+      const temp = leftMax;
+      leftMax = leftMin;
+      leftMin = temp;
+    }
+
+    if (rightMax < rightMin) {
+      const temp = rightMax;
+      rightMax = rightMin;
+      rightMin = temp;
+    }
+
+    return { leftMin, leftMax, rightMin, rightMax };
   }
 }

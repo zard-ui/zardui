@@ -1,18 +1,23 @@
 
 
 ```angular-ts title="date-picker.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardCalendarComponent } from '../calendar/calendar.component';
+import { ZardIconComponent } from '../icon/icon.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 import { datePickerVariants, ZardDatePickerVariants } from './date-picker.variants';
-import { ZardCalendarComponent } from '../calendar/calendar.component';
-import { ZardButtonComponent } from '../button/button.component';
-import type { ClassValue } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import { mergeClasses } from '../../shared/utils/utils';
 
-export type { ZardDatePickerVariants };
+import type { ClassValue } from 'clsx';
+
+const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, string> = {
+  sm: 'h-8',
+  default: 'h-10',
+  lg: 'h-12',
+};
 
 @Component({
   selector: 'z-date-picker, [z-date-picker]',
@@ -82,12 +87,9 @@ export class ZardDatePickerComponent {
 
   protected readonly buttonClasses = computed(() => {
     const hasValue = !!this.value();
-    return mergeClasses(
-      'justify-start text-left font-normal',
-      !hasValue && 'text-muted-foreground',
-      this.zSize() === 'sm' ? 'h-8' : this.zSize() === 'lg' ? 'h-12' : 'h-10',
-      'min-w-[240px]',
-    );
+    const size: NonNullable<ZardDatePickerVariants['zSize']> = this.zSize() ?? 'default';
+    const height = HEIGHT_BY_SIZE[size];
+    return mergeClasses('justify-start text-left font-normal', !hasValue && 'text-muted-foreground', height, 'min-w-[240px]');
   });
 
   protected readonly textClasses = computed(() => {
@@ -124,7 +126,7 @@ export class ZardDatePickerComponent {
   }
 
   private formatDate(date: Date, format: string): string {
-    return this.datePipe.transform(date, format) || '';
+    return this.datePipe.transform(date, format) ?? '';
   }
 }
 

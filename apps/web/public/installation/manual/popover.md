@@ -91,10 +91,10 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   readonly zOverlayClickable = input<boolean>(true);
   readonly zVisibleChange = output<boolean>();
 
-  private isVisible = signal(false);
+  private readonly isVisible = signal(false);
 
   get nativeElement() {
-    return this.zOrigin()?.nativeElement || this.elementRef.nativeElement;
+    return this.zOrigin()?.nativeElement ?? this.elementRef.nativeElement;
   }
 
   constructor() {
@@ -209,8 +209,8 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
       originY: primaryConfig.originY as any,
       overlayX: primaryConfig.overlayX as any,
       overlayY: primaryConfig.overlayY as any,
-      offsetX: primaryConfig.offsetX || 0,
-      offsetY: primaryConfig.offsetY || 0,
+      offsetX: primaryConfig.offsetX ?? 0,
+      offsetY: primaryConfig.offsetY ?? 0,
     });
 
     // Fallback positions for better positioning when primary doesn't fit

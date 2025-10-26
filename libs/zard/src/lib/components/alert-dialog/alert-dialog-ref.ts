@@ -5,15 +5,16 @@ import { OverlayRef } from '@angular/cdk/overlay';
 import { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
 export class ZardAlertDialogRef<T = unknown, R = unknown> {
-  componentInstance?: T;
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   private isClosing = false;
   private readonly afterClosedSubject: Subject<R | undefined> = new Subject();
 
+  componentInstance?: T;
+
   constructor(
-    private overlayRef: OverlayRef,
-    private config: ZardAlertDialogOptions<T>,
-    private containerInstance: ZardAlertDialogComponent<T>,
+    private readonly overlayRef: OverlayRef,
+    private readonly config: ZardAlertDialogOptions<T>,
+    private readonly containerInstance: ZardAlertDialogComponent<T>,
   ) {
     containerInstance.cancelTriggered.subscribe(() => {
       this.handleCancel();
@@ -86,9 +87,7 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
       this.overlayRef
         .outsidePointerEvents()
         .pipe(takeUntil(this.destroy$))
-        .subscribe(() => {
-          this.close();
-        });
+        .subscribe(() => this.close());
     }
   }
 

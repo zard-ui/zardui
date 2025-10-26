@@ -96,7 +96,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   protected readonly classes = computed(() => mergeClasses(alertDialogVariants(), this.config.zCustomClasses));
 
-  private alertDialogId = generateId('alert-dialog');
+  private readonly alertDialogId = generateId('alert-dialog');
   protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
   protected readonly descriptionId = computed(() => (this.config.zDescription ? `${this.alertDialogId}-description` : null));
 
@@ -120,14 +120,14 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
     if (this.portalOutlet()?.hasAttached()) {
-      throw Error('Attempting to attach alert dialog content after content is already attached');
+      throw new Error('Attempting to attach alert dialog content after content is already attached');
     }
     return this.portalOutlet()?.attachComponentPortal(portal);
   }
 
   attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     if (this.portalOutlet()?.hasAttached()) {
-      throw Error('Attempting to attach alert dialog content after content is already attached');
+      throw new Error('Attempting to attach alert dialog content after content is already attached');
     }
 
     return this.portalOutlet()?.attachTemplatePortal(portal);
@@ -171,15 +171,16 @@ import { OverlayRef } from '@angular/cdk/overlay';
 import { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
 export class ZardAlertDialogRef<T = unknown, R = unknown> {
-  componentInstance?: T;
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
   private isClosing = false;
   private readonly afterClosedSubject: Subject<R | undefined> = new Subject();
 
+  componentInstance?: T;
+
   constructor(
-    private overlayRef: OverlayRef,
-    private config: ZardAlertDialogOptions<T>,
-    private containerInstance: ZardAlertDialogComponent<T>,
+    private readonly overlayRef: OverlayRef,
+    private readonly config: ZardAlertDialogOptions<T>,
+    private readonly containerInstance: ZardAlertDialogComponent<T>,
   ) {
     containerInstance.cancelTriggered.subscribe(() => {
       this.handleCancel();
@@ -252,9 +253,7 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
       this.overlayRef
         .outsidePointerEvents()
         .pipe(takeUntil(this.destroy$))
-        .subscribe(() => {
-          this.close();
-        });
+        .subscribe(() => this.close());
     }
   }
 
@@ -330,9 +329,9 @@ export const Z_ALERT_MODAL_DATA = new InjectionToken<unknown>('Z_ALERT_MODAL_DAT
   providedIn: 'root',
 })
 export class ZardAlertDialogService {
-  private overlay = inject(Overlay);
-  private injector = inject(Injector);
-  private platformId = inject(PLATFORM_ID);
+  private readonly overlay = inject(Overlay);
+  private readonly injector = inject(Injector);
+  private readonly platformId = inject(PLATFORM_ID);
 
   create<T>(config: ZardAlertDialogOptions<T>): ZardAlertDialogRef<T> {
     return this.open<T>(config.zContent, config);
@@ -346,8 +345,8 @@ export class ZardAlertDialogService {
   ): ZardAlertDialogRef<T> {
     const confirmConfig: ZardAlertDialogOptions<T> = {
       ...config,
-      zOkText: config.zOkText || 'Confirm',
-      zCancelText: config.zCancelText || 'Cancel',
+      zOkText: config.zOkText ?? 'Confirm',
+      zCancelText: config.zCancelText ?? 'Cancel',
       zOkDestructive: config.zOkDestructive ?? false,
     };
     return this.create(confirmConfig);
@@ -356,7 +355,7 @@ export class ZardAlertDialogService {
   warning<T>(config: Omit<ZardAlertDialogOptions<T>, 'zOkText'> & { zOkText?: string }): ZardAlertDialogRef<T> {
     const warningConfig: ZardAlertDialogOptions<T> = {
       ...config,
-      zOkText: config.zOkText || 'OK',
+      zOkText: config.zOkText ?? 'OK',
       zCancelText: null,
     };
     return this.create(warningConfig);
@@ -365,7 +364,7 @@ export class ZardAlertDialogService {
   info<T>(config: Omit<ZardAlertDialogOptions<T>, 'zOkText'> & { zOkText?: string }): ZardAlertDialogRef<T> {
     const infoConfig: ZardAlertDialogOptions<T> = {
       ...config,
-      zOkText: config.zOkText || 'OK',
+      zOkText: config.zOkText ?? 'OK',
       zCancelText: null,
     };
     return this.create(infoConfig);

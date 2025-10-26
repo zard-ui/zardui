@@ -47,9 +47,9 @@ export class ZardToggleComponent implements ControlValueAccessor {
   readonly onHover = output<void>();
   readonly onChange = output<boolean>();
 
-  private isUsingNgModel = signal(false);
+  private readonly isUsingNgModel = signal(false);
 
-  protected readonly value = linkedSignal(() => this.zValue() || this.zDefault());
+  protected readonly value = linkedSignal(() => this.zValue() ?? this.zDefault());
 
   protected readonly disabled = linkedSignal(() => this.zDisabled());
 
