@@ -4,15 +4,15 @@
 
 ### Inputs
 
-| Property      | Description                                       | Type                                                     | Default   |
-| ------------- | ------------------------------------------------- | -------------------------------------------------------- | --------- |
-| `[zSize]`     | Avatar size variant                               | `sm \| default \| md \| lg \| xl \| number`              | `default` |
-| `[zShape]`    | Avatar shape                                      | `circle \| rounded \| square`                            | `circle`  |
-| `[zStatus]`   | Status indicator badge                            | `online \| offline \| doNotDisturb \| away \| invisible` |           |
-| `[zSrc]`      | Image source URL                                  | `string`                                                 |           |
-| `[zAlt]`      | Image alt text for accessibility                  | `string`                                                 | `''`      |
-| `[zFallback]` | Fallback text displayed while loading or on error | `string`                                                 | `''`      |
-| `[class]`     | Additional CSS classes                            | `string`                                                 | `''`      |
+| Property      | Description                                       | Type                                        | Default   |
+| ------------- | ------------------------------------------------- | ------------------------------------------- | --------- |
+| `[zSize]`     | Avatar size variant                               | `sm \| default \| md \| lg \| xl \| number` | `default` |
+| `[zShape]`    | Avatar shape                                      | `circle \| rounded \| square`               | `circle`  |
+| `[zStatus]`   | Status indicator badge                            | `online \| offline \| doNotDisturb \| away` |           |
+| `[zSrc]`      | Image source URL                                  | `string`                                    |           |
+| `[zAlt]`      | Image alt text for accessibility                  | `string`                                    | `''`      |
+| `[zFallback]` | Fallback text displayed while loading or on error | `string`                                    | `''`      |
+| `[class]`     | Additional CSS classes                            | `string`                                    | `''`      |
 
 ## z-avatar-group
 

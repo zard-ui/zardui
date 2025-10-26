@@ -12,7 +12,6 @@ import { ZardAvatarComponent } from '../avatar.component';
     <z-avatar zStatus="offline" zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />
     <z-avatar zStatus="doNotDisturb" zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />
     <z-avatar zStatus="away" zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />
-    <z-avatar zStatus="invisible" zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />
   `,
 })
 export class ZardDemoAvatarStatusComponent {}

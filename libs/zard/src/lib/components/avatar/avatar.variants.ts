@@ -19,7 +19,6 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
       offline: 'offline',
       doNotDisturb: 'doNotDisturb',
       away: 'away',
-      invisible: 'invisible',
     },
   },
   defaultVariants: {

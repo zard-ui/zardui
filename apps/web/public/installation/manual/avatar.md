@@ -88,22 +88,6 @@ import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } 
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="currentColor" />
           </svg>
         }
-        @case ('invisible') {
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="var(--muted-foreground)"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] text-stone-400/90 w-5 h-5 z-20"
-          >
-            <circle cx="12" cy="12" r="10" fill="currentColor" />
-          </svg>
-        }
       }
     }
   `,
@@ -175,7 +159,6 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
       offline: 'offline',
       doNotDisturb: 'doNotDisturb',
       away: 'away',
-      invisible: 'invisible',
     },
   },
   defaultVariants: {

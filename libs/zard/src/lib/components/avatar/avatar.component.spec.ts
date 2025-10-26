@@ -161,13 +161,5 @@ describe('ZardAvatarComponent', () => {
       const statusElement = fixture.debugElement.query(By.css('svg.text-yellow-400'));
       expect(statusElement).toBeTruthy();
     });
-
-    it('should display invisible status indicator', () => {
-      hostComponent.zStatus = 'invisible';
-      fixture.detectChanges();
-
-      const statusElement = fixture.debugElement.query(By.css('svg.text-stone-400\\/90'));
-      expect(statusElement).toBeTruthy();
-    });
   });
 });
