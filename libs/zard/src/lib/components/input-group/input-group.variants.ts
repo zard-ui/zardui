@@ -1,4 +1,4 @@
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const inputGroupVariants = cva(
   'flex items-stretch w-full [&_input[z-input]]:!border-0 [&_input[z-input]]:!bg-transparent [&_input[z-input]]:!outline-none [&_input[z-input]]:!ring-0 [&_input[z-input]]:!ring-offset-0 [&_input[z-input]]:!px-0 [&_input[z-input]]:!py-0 [&_input[z-input]]:!h-full [&_input[z-input]]:flex-1 [&_textarea[z-input]]:!border-0 [&_textarea[z-input]]:!bg-transparent [&_textarea[z-input]]:!outline-none [&_textarea[z-input]]:!ring-0 [&_textarea[z-input]]:!ring-offset-0 [&_textarea[z-input]]:!px-0 [&_textarea[z-input]]:!py-0',

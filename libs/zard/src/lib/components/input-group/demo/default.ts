@@ -1,4 +1,3 @@
-import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 
 import { ZardInputGroupComponent } from '../input-group.component';

@@ -4,28 +4,28 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
+  type ComponentRef,
   computed,
   ElementRef,
-  EmbeddedViewRef,
-  EventEmitter,
+  type EmbeddedViewRef,
+  type EventEmitter,
   inject,
   output,
   signal,
-  TemplateRef,
-  Type,
+  type TemplateRef,
+  type Type,
   viewChild,
-  ViewContainerRef,
+  type ViewContainerRef,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 
-import { sheetVariants, ZardSheetVariants } from './sheet.variants';
+import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardSheetRef } from './sheet-ref';
-import { ZardIcon } from '../icon/icons';
+import type { ZardSheetRef } from './sheet-ref';
+import type { ZardIcon } from '../icon/icons';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -186,7 +186,7 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
 
 
 ```angular-ts title="sheet.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const sheetVariants = cva(
   'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
@@ -252,11 +252,11 @@ export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 ```angular-ts title="sheet-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
 
-import { OverlayRef } from '@angular/cdk/overlay';
+import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
 
-import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
+import type { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
 const enum eTriggerAction {
   CANCEL = 'cancel',
@@ -382,7 +382,7 @@ export class ZardSheetModule {}
 
 ```angular-ts title="sheet.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
-import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
+import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 

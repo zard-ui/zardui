@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 import { DatePipe } from '@angular/common';
 
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
-import { datePickerVariants, ZardDatePickerVariants } from './date-picker.variants';
+import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
 import { ZardCalendarComponent } from '../calendar/calendar.component';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';

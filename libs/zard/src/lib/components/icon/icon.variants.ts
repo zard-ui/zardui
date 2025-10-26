@@ -1,4 +1,4 @@
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const iconVariants = cva('flex items-center justify-center', {
   variants: {

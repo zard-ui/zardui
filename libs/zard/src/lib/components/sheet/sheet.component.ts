@@ -1,28 +1,28 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
+  type ComponentRef,
   computed,
   ElementRef,
-  EmbeddedViewRef,
-  EventEmitter,
+  type EmbeddedViewRef,
+  type EventEmitter,
   inject,
   output,
   signal,
-  TemplateRef,
-  Type,
+  type TemplateRef,
+  type Type,
   viewChild,
-  ViewContainerRef,
+  type ViewContainerRef,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 
-import { sheetVariants, ZardSheetVariants } from './sheet.variants';
+import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardSheetRef } from './sheet-ref';
-import { ZardIcon } from '../icon/icons';
+import type { ZardSheetRef } from './sheet-ref';
+import type { ZardIcon } from '../icon/icons';
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;

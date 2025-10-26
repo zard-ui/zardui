@@ -1,31 +1,31 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
+  type ComponentRef,
   computed,
   ElementRef,
-  EmbeddedViewRef,
-  EventEmitter,
+  type EmbeddedViewRef,
+  type EventEmitter,
   inject,
   NgModule,
   output,
   signal,
-  TemplateRef,
-  Type,
+  type TemplateRef,
+  type Type,
   viewChild,
-  ViewContainerRef,
+  type ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { ClassValue } from 'clsx';
+import type { ClassValue } from 'clsx';
 
-import { alertDialogVariants, ZardAlertDialogVariants } from './alert-dialog.variants';
+import { alertDialogVariants, type ZardAlertDialogVariants } from './alert-dialog.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardAlertDialogService } from './alert-dialog.service';
-import { ZardAlertDialogRef } from './alert-dialog-ref';
+import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
 
 const noopFun = () => void 0;

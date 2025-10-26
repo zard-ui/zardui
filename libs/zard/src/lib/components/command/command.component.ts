@@ -12,14 +12,14 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
-import { commandVariants, ZardCommandVariants } from './command.variants';
+import { commandVariants, type ZardCommandVariants } from './command.variants';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandInputComponent } from './command-input.component';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardIcon } from '../icon/icons';
+import type { ZardIcon } from '../icon/icons';
 
 export interface ZardCommandOption {
   value: unknown;

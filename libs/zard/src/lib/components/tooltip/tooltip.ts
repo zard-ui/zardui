@@ -1,20 +1,20 @@
 import { merge, Subject, take, takeUntil } from 'rxjs';
 
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
+  type ComponentRef,
   computed,
   Directive,
   ElementRef,
   inject,
   input,
   NgModule,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   PLATFORM_ID,
   Renderer2,
@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
+import { TOOLTIP_POSITIONS_MAP, type ZardTooltipPositions } from './tooltip-positions';
 import { tooltipVariants } from './tooltip.variants';
 
 export type ZardTooltipTriggers = 'click' | 'hover';

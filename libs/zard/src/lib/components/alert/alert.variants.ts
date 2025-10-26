@@ -1,4 +1,4 @@
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const alertVariants = cva('relative flex gap-2 w-full rounded-lg p-4', {
   variants: {

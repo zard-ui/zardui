@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
-import { switchVariants, ZardSwitchVariants } from './switch.variants';
+import { switchVariants, type ZardSwitchVariants } from './switch.variants';
 import { mergeClasses, generateId } from '../../shared/utils/utils';
 
 type OnTouchedType = () => any;
