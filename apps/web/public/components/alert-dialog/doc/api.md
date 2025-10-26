@@ -1,5 +1,7 @@
 # API Reference
 
+[ZardAlertDialogService] Service
+
 Configuration options for creating alert dialogs.
 
 | Property            | Type                                      | Default      | Description                                       |
