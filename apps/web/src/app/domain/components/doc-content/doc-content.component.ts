@@ -1,5 +1,5 @@
 import { DynamicAnchorComponent, NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { Component, inject, OnInit, input } from '@angular/core';
+import { Component, inject, OnInit, input, computed } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
 
 @Component({
@@ -13,6 +13,8 @@ export class DocContentComponent implements OnInit {
   readonly navigationConfig = input<NavigationConfig>();
   activeAnchor = input<string>();
   onAnchorClick = input<((anchorId: string) => void | Promise<void>) | null>(null);
+
+  protected readonly hasAnchor = computed(() => !!this.navigationConfig());
 
   ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);

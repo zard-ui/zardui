@@ -22,8 +22,8 @@ import { Component } from '@angular/core';
                   <li class="group/menu-item relative">
                     <a
                       [routerLink]="path.path"
-                      class="peer/menu-button flex w-fit items-center gap-2 overflow-hidden rounded-md p-2 text-left h-[30px] text-sm outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabwidthled:pointer-events-none disabled:opacity-50 3xl:fixed:w-full 3xl:fixed:max-w-48 text-[0.8rem] after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md"
-                      routerLinkActive="bg-accent border-accent relative overflow-visible border border-transparent hover:bg-accent! font-medium"
+                      class="peer/menu-button flex w-fit items-center gap-2 overflow-hidden rounded-md p-2 text-left h-[30px] text-sm font-medium outline-hidden ring-sidebar-ring transition-[width,height,padding] hover:bg-sidebar-accent hover:text-sidebar-accent-foreground focus-visible:ring-2 active:bg-sidebar-accent active:text-sidebar-accent-foreground disabwidthled:pointer-events-none disabled:opacity-50 3xl:fixed:w-full 3xl:fixed:max-w-48 text-[0.8rem] after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md"
+                      routerLinkActive="bg-accent border-accent relative overflow-visible border border-transparent hover:bg-accent!"
                       [routerLinkActiveOptions]="{ exact: true }"
                     >
                       {{ path.name }}

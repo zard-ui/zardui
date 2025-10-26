@@ -9,10 +9,36 @@ export const HEADER_PATHS = [
   { name: 'Themes', path: '/themes', available: false },
 ];
 
-export const DOCS_PATH = {
-  title: 'Getting Started',
+export const SECTIONS = {
+  title: 'Sections',
   data: [
-    { name: 'Introduction', path: '/docs/introduction', available: true },
+    { name: 'Get Started', path: '/docs/introduction', available: true },
+    {
+      name: 'Components',
+      path: '/docs/components',
+      available: true,
+    },
+    {
+      name: 'Registry',
+      path: '/docs/registry',
+      available: false,
+    },
+    {
+      name: 'MCP Server',
+      path: '/docs/mcp',
+      available: false,
+    },
+    {
+      name: 'Changelog',
+      path: '/docs/changelog',
+      available: true,
+    },
+  ],
+};
+
+export const DOCS_PATH = {
+  title: 'Get Started',
+  data: [
     { name: 'Installation', path: '/docs/installation', available: true },
     { name: 'components.json', path: '/docs/components-json', available: true },
     { name: 'Theming', path: '/docs/theming', available: true },
@@ -20,7 +46,8 @@ export const DOCS_PATH = {
     { name: 'CLI', path: '/docs/cli', available: true },
     { name: 'Blocks', path: '/docs', available: false },
     { name: 'Figma', path: '/docs/figma', available: true },
-    { name: 'Changelog', path: '/docs/changelog', available: true },
+    { name: 'llms.txt', path: '/llms.txt', available: true },
+
     { name: 'About & Credits', path: '/docs/about', available: true },
   ],
 };
@@ -66,7 +93,6 @@ export const COMPONENTS_PATH = {
     { name: 'Menu', path: '/docs/components/menu', available: true },
     { name: 'Resizable', path: '/docs/components/resizable', available: true },
     { name: 'Sheet', path: '/docs/components/sheet', available: true },
-    { name: 'Sidebar', path: '/docs/components/layout', available: true },
     { name: 'Radio', path: '/docs/components/radio', available: true },
     { name: 'Segmented', path: '/docs/components/segmented', available: true },
     { name: 'Loader', path: '/docs/components/loader', available: true },
@@ -75,4 +101,4 @@ export const COMPONENTS_PATH = {
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
-export const SIDEBAR_PATHS = [DOCS_PATH, COMPONENTS_PATH];
+export const SIDEBAR_PATHS = [SECTIONS, DOCS_PATH, COMPONENTS_PATH];

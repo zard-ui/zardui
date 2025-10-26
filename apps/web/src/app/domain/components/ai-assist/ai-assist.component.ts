@@ -9,7 +9,7 @@ import { filter, map, startWith } from 'rxjs/operators';
 import { toSignal } from '@angular/core/rxjs-interop';
 import type { ClassValue } from 'clsx';
 
-import { DOCS_PATH, COMPONENTS_PATH } from '../../../shared/constants/routes.constant';
+import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '../../../shared/constants/routes.constant';
 import { environment } from '../../../../environments/environment';
 import type { AiAssistOption } from './ai-assist.types';
 
@@ -28,7 +28,7 @@ export class AiAssistComponent {
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
-  private readonly appRoutes = [...DOCS_PATH.data, ...COMPONENTS_PATH.data].filter(route => route.available);
+  private readonly appRoutes = [...SECTIONS.data, ...DOCS_PATH.data, ...COMPONENTS_PATH.data].filter(route => route.available);
   private readonly baseUrl = 'https://zardui.com';
 
   readonly CopyIcon = Copy;
