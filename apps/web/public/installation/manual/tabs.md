@@ -1,34 +1,33 @@
 
 
 ```angular-ts title="tabs.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { CommonModule } from '@angular/common';
 import {
   afterNextRender,
-  type AfterViewInit,
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
   DestroyRef,
   DOCUMENT,
-  type ElementRef,
+  ElementRef,
   inject,
   Injector,
   input,
   output,
   runInInjectionContext,
   signal,
-  type TemplateRef,
+  TemplateRef,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-
-import clsx from 'clsx';
 import { debounceTime, fromEvent, merge, map, distinctUntilChanged } from 'rxjs';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { CommonModule } from '@angular/common';
 import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
 
-import { tabButtonVariants, tabContainerVariants, tabNavVariants, type ZardTabVariants } from './tabs.variants';
+import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 
@@ -314,9 +313,9 @@ export class ZardTabGroupComponent implements AfterViewInit {
 
 
 ```angular-ts title="tabs.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, VariantProps } from 'class-variance-authority';
 
-import type { zAlign } from './tabs.component';
+import { zAlign } from './tabs.component';
 
 export const tabContainerVariants = cva('flex', {
   variants: {

@@ -76,7 +76,8 @@
       "Bash(npm unlink:*)",
       "Bash(git restore:*)",
       "WebSearch",
-      "Bash(cd:*)"
+      "Bash(cd:*)",
+      "Bash(git checkout:*)"
     ],
     "defaultMode": "acceptEdits"
   },

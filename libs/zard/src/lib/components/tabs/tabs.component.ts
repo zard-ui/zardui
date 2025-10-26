@@ -1,21 +1,21 @@
 import { CommonModule } from '@angular/common';
 import {
   afterNextRender,
-  type AfterViewInit,
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
   DestroyRef,
   DOCUMENT,
-  type ElementRef,
+  ElementRef,
   inject,
   Injector,
   input,
   output,
   runInInjectionContext,
   signal,
-  type TemplateRef,
+  TemplateRef,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -25,7 +25,7 @@ import clsx from 'clsx';
 import { debounceTime, fromEvent, merge, map, distinctUntilChanged } from 'rxjs';
 import { twMerge } from 'tailwind-merge';
 
-import { tabButtonVariants, tabContainerVariants, tabNavVariants, type ZardTabVariants } from './tabs.variants';
+import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 

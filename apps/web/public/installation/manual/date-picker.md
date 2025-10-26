@@ -1,17 +1,17 @@
 
 
 ```angular-ts title="date-picker.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input, output, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+
+import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
+import { datePickerVariants, ZardDatePickerVariants } from './date-picker.variants';
+import { ZardCalendarComponent } from '../calendar/calendar.component';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardIconComponent } from '../icon/icon.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
 import type { ClassValue } from 'clsx';
-
-import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardCalendarComponent } from '../calendar/calendar.component';
-import { ZardIconComponent } from '../icon/icon.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 
 const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, string> = {
   sm: 'h-8',
@@ -51,7 +51,7 @@ const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, strin
 
     <ng-template #calendarTemplate>
       <z-popover [class]="popoverClasses()">
-        <z-calendar #calendar [value]="value()" [minDate]="minDate()" [maxDate]="maxDate()" [disabled]="disabled()" (dateChange)="onDateChange($event)" />
+        <z-calendar #calendar [zSize]="calendarSize()" [value]="value()" [minDate]="minDate()" [maxDate]="maxDate()" [disabled]="disabled()" (dateChange)="onDateChange($event)" />
       </z-popover>
     </ng-template>
   `,
@@ -99,6 +99,8 @@ export class ZardDatePickerComponent {
 
   protected readonly popoverClasses = computed(() => mergeClasses('w-auto p-0'));
 
+  protected readonly calendarSize = computed(() => this.zSize() ?? 'default');
+
   protected readonly displayText = computed(() => {
     const date = this.value();
     if (!date) {
@@ -107,16 +109,15 @@ export class ZardDatePickerComponent {
     return this.formatDate(date, this.zFormat());
   });
 
-  protected onDateChange(date: Date | Date[]): void {
-    // Date picker always uses single mode, so we can safely cast
-    const singleDate = Array.isArray(date) ? (date[0] ?? null) : date;
-    this.dateChange.emit(singleDate);
-
+  protected onDateChange(date: Date): void {
+    this.dateChange.emit(date);
+    // Close popover after selection using direct method call
     this.popoverDirective().hide();
   }
 
   protected onPopoverVisibilityChange(visible: boolean): void {
     if (visible) {
+      // Reset calendar navigation when opening to show correct month/year
       setTimeout(() => {
         if (this.calendar()) {
           this.calendar().resetNavigation();
@@ -135,7 +136,7 @@ export class ZardDatePickerComponent {
 
 
 ```angular-ts title="date-picker.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva, VariantProps } from 'class-variance-authority';
 
 const datePickerVariants = cva('', {
   variants: {

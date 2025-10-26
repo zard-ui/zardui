@@ -1,62 +1,87 @@
-import type { OverlayRef } from '@angular/cdk/overlay';
+import { OverlayRef } from '@angular/cdk/overlay';
 
-import { filter, type Observable, Subject, takeUntil } from 'rxjs';
+import { filter, Observable, Subject, takeUntil } from 'rxjs';
 
-import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
+import { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
 export class ZardAlertDialogRef<T = unknown, R = unknown> {
-  componentInstance?: T;
-
   private readonly destroy$ = new Subject<void>();
-  private readonly afterClosedSubject = new Subject<R | undefined>();
   private isClosing = false;
+  private readonly afterClosedSubject: Subject<R | undefined> = new Subject();
 
-  readonly afterClosed: Observable<R | undefined> = this.afterClosedSubject.asObservable();
+  componentInstance?: T;
 
   constructor(
     private readonly overlayRef: OverlayRef,
     private readonly config: ZardAlertDialogOptions<T>,
     private readonly containerInstance: ZardAlertDialogComponent<T>,
   ) {
-    containerInstance.cancelTriggered.subscribe(() => this.handleCancel());
-    containerInstance.okTriggered.subscribe(() => this.handleOk());
+    containerInstance.cancelTriggered.subscribe(() => {
+      this.handleCancel();
+    });
+
+    containerInstance.okTriggered.subscribe(() => {
+      this.handleOk();
+    });
 
     this.handleMaskClick();
     this.handleEscapeKey();
   }
 
   close(dialogResult?: R): void {
-    if (this.isClosing) return;
-    this.isClosing = true;
-
-    const element = this.containerInstance.getNativeElement?.() ?? null;
-    if (element) {
-      element.classList.add('alert-dialog-leave');
+    if (this.isClosing) {
+      return;
     }
-    this.waitForTransitionEnd(element).then(() => this.dispose(dialogResult));
+
+    this.isClosing = true;
+    this.containerInstance.state.set('close');
+
+    setTimeout(() => {
+      if (this.overlayRef) {
+        this.overlayRef.dispose();
+      }
+
+      this.afterClosedSubject.next(dialogResult);
+      this.afterClosedSubject.complete();
+
+      if (!this.destroy$.closed) {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
+    }, 150);
   }
 
-  private handleCancel(): void {
+  afterClosed(): Observable<R | undefined> {
+    return this.afterClosedSubject.asObservable();
+  }
+
+  private handleCancel() {
     const cancelFn = this.config.zOnCancel;
+
     if (typeof cancelFn === 'function') {
       const result = (cancelFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) this.close(result as R);
+      if (result !== false) {
+        this.close(result as R);
+      }
     } else {
       this.close();
     }
   }
 
-  private handleOk(): void {
+  private handleOk() {
     const okFn = this.config.zOnOk;
+
     if (typeof okFn === 'function') {
       const result = (okFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) this.close(result as R);
+      if (result !== false) {
+        this.close(result as R);
+      }
     } else {
       this.close();
     }
   }
 
-  private handleMaskClick(): void {
+  private handleMaskClick() {
     const hasMaskClosable = this.config.zMaskClosable ?? true;
     if (hasMaskClosable) {
       this.overlayRef
@@ -66,7 +91,7 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     }
   }
 
-  private handleEscapeKey(): void {
+  private handleEscapeKey() {
     this.overlayRef
       .keydownEvents()
       .pipe(
@@ -74,39 +99,5 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
         takeUntil(this.destroy$),
       )
       .subscribe(() => this.close());
-  }
-
-  private async waitForTransitionEnd(element: HTMLElement | null): Promise<void> {
-    if (!element) {
-      await new Promise(resolve => setTimeout(resolve, 150));
-      return;
-    }
-
-    await Promise.race([
-      new Promise<void>(resolve => {
-        const handler = () => {
-          element.removeEventListener('transitionend', handler);
-          resolve();
-        };
-        element.addEventListener('transitionend', handler, { once: true });
-      }),
-      new Promise(resolve => setTimeout(resolve, 150)),
-    ]);
-  }
-
-  private dispose(result?: R): void {
-    try {
-      this.overlayRef?.dispose();
-    } catch {
-      // Overlay already destroyed or SSR
-    }
-
-    this.afterClosedSubject.next(result);
-    this.afterClosedSubject.complete();
-
-    if (!this.destroy$.closed) {
-      this.destroy$.next();
-      this.destroy$.complete();
-    }
   }
 }
