@@ -2,13 +2,13 @@
 
 ## [z-breadcrumb]
 
-| Property       | Description                                                              | Type                     | Default   |
-| -------------- | ------------------------------------------------------------------------ | ------------------------ | --------- |
-| `[class]`      | Custom css classes                                                       | `string`                 | `''`      |
-| `[zSize]`      | Breadcrumb size                                                          | `sm \| md \| lg`         | `'md'`    |
-| `[zAlign]`     | Horizontal alignment                                                     | `start \| center \| end` | `'start'` |
-| `[zWrap]`      | Wrapping behavior                                                        | `wrap \| nowrap`         | `'wrap'`  |
-| `[zSeparator]` | Separator between breadcrumb items. Can be a string or an `ng-template`. | `string \| TemplateRef`  | `null`    |
+| Property       | Description                         | Type                     | Default   |
+| -------------- | ----------------------------------- | ------------------------ | --------- |
+| `[class]`      | Custom css classes                  | `string`                 | `''`      |
+| `[zSize]`      | Breadcrumb size                     | `sm \| md \| lg`         | `'md'`    |
+| `[zAlign]`     | Horizontal alignment                | `start \| center \| end` | `'start'` |
+| `[zWrap]`      | Wrapping behavior                   | `wrap \| nowrap`         | `'wrap'`  |
+| `[zSeparator]` | Separator between breadcrumb items. | `string \| TemplateRef`  | `null`    |
 
 ## [z-breadcrumb-item]
 

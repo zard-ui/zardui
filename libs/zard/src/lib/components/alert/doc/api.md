@@ -6,5 +6,5 @@
 | ---------------- | ----------------- | ----------------------------- | --------- |
 | `[zTitle]`       | Alert title       | `string \| TemplateRef<void>` | `-`       |
 | `[zDescription]` | Alert description | `string \| TemplateRef<void>` | `-`       |
-| `[zIcon]`        | Alert icon        | `string`                      | `-`       |
+| `[zIcon]`        | Alert icon        | `string \| TemplateRef<void>` | `-`       |
 | `[zType]`        | Alert variant     | `default \| destructive`      | `default` |
