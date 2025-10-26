@@ -219,7 +219,6 @@ code[data-line-numbers] > [data-line]::before {
   counter-increment: line;
   content: counter(line);
 
-  /* Other styling */
   display: inline-block;
   width: 0.75rem;
   margin-right: 2rem;
@@ -250,11 +249,51 @@ code[data-theme*=' '] span {
   color: var(--shiki-dark);
 }
 
-/* Remove background from highlighted chars in code blocks */
 code [data-highlighted-chars] {
   background-color: transparent !important;
   box-shadow: none !important;
 }
+
+.component-selector {
+  @apply inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-foreground;
+}
+
+.component-badge {
+  @apply inline-flex items-center rounded-md px-2 py-1 text-xs font-medium;
+}
+
+.component-badge--component {
+  @apply bg-blue-500/10 text-blue-600 dark:text-blue-400;
+}
+
+.component-badge--directive {
+  @apply bg-green-500/10 text-green-600 dark:text-green-400;
+}
+
+.component-badge--service {
+  @apply bg-amber-500/10 text-amber-600 dark:text-amber-400;
+}
+
+.component-badge--pipe {
+  @apply bg-purple-500/10 text-purple-600 dark:text-purple-400;
+}
+
+table.api-table--component tbody td:first-child code {
+  @apply !bg-blue-500/10 !text-blue-600 dark:!text-blue-400 !border-blue-500/20;
+}
+
+table.api-table--directive tbody td:first-child code {
+  @apply !bg-green-500/10 !text-green-600 dark:!text-green-400 !border-green-500/20;
+}
+
+table.api-table--service tbody td:first-child code {
+  @apply !bg-amber-500/10 !text-amber-600 dark:!text-amber-400 !border-amber-500/20;
+}
+
+table.api-table--pipe tbody td:first-child code {
+  @apply !bg-purple-500/10 !text-purple-600 dark:!text-purple-400 !border-purple-500/20;
+}
+
 .embla {
   overflow: hidden;
 }
