@@ -1,3 +1,4 @@
+import { LucideAngularModule, GalleryHorizontal } from 'lucide-angular';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
@@ -10,6 +11,7 @@ import type { Observable } from 'rxjs';
 
 import { DocResearcherComponent } from '../doc-researcher/doc-researcher.component';
 import { DarkModeService } from '../../../shared/services/darkmode.service';
+import { LayoutService } from '../../../shared/services/layout.service';
 import { SOCIAL_MEDIAS } from '../../../shared/constants/medias.constant';
 import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
 import { HEADER_PATHS } from '../../../shared/constants/routes.constant';
@@ -19,7 +21,7 @@ import { GithubService } from '../../../shared/services/github.service';
   selector: 'z-header',
   templateUrl: './header.component.html',
   standalone: true,
-  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe, DocResearcherComponent],
+  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe, DocResearcherComponent, LucideAngularModule],
 })
 export class HeaderComponent {
   readonly docResearcher = viewChild.required(DocResearcherComponent);
@@ -27,8 +29,10 @@ export class HeaderComponent {
   readonly headerPaths = HEADER_PATHS;
   readonly githubData = SOCIAL_MEDIAS.find(media => media.name === 'GitHub');
   readonly appVersion = environment.appVersion;
+  readonly GalleryHorizontalIcon = GalleryHorizontal;
   private readonly githubService = inject(GithubService);
   private readonly darkmodeService = inject(DarkModeService);
+  private readonly layoutService = inject(LayoutService);
   readonly $repoStars: Observable<number> = this.githubService.getStarsCount();
 
   toggleTheme(): void {
@@ -37,6 +41,14 @@ export class HeaderComponent {
 
   getCurrentTheme(): 'light' | 'dark' {
     return this.darkmodeService.getCurrentTheme();
+  }
+
+  toggleLayout(): void {
+    this.layoutService.toggleLayout();
+  }
+
+  isLayoutFixed(): boolean {
+    return this.layoutService.isLayoutFixed();
   }
 
   @HostListener('window:keydown', ['$event'])

@@ -117,7 +117,7 @@ export class MarkdownService {
           if (node.tagName === 'thead') {
             node.properties = {
               ...node.properties,
-              class: ['[&_tr]:text-primary', 'bg-accent'],
+              class: ['[&_tr]:text-primary', 'dark:bg-[oklch(26.9%_0_0)]', 'bg-[oklch(97%_0_0)]'],
             };
           }
 
