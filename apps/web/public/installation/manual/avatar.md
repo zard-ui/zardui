@@ -6,6 +6,8 @@ import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncaps
 import { mergeClasses } from '../../shared/utils/utils';
 import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } from './avatar.variants';
 
+export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
+
 @Component({
   selector: 'z-avatar',
   exportAs: 'zAvatar',
@@ -96,10 +98,11 @@ import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } 
     '[style.width]': 'customSize()',
     '[style.height]': 'customSize()',
     '[attr.data-slot]': '"avatar"',
+    '[attr.data-status]': 'zStatus() ?? null',
   },
 })
 export class ZardAvatarComponent {
-  readonly zStatus = input<ZardAvatarVariants['zStatus']>();
+  readonly zStatus = input<ZardAvatarStatus>();
   readonly zShape = input<ZardImageVariants['zShape']>('circle');
   readonly zSize = input<ZardAvatarVariants['zSize'] | number>('default');
   readonly zSrc = input<string>();
@@ -112,7 +115,7 @@ export class ZardAvatarComponent {
   protected readonly imageLoaded = signal(false);
 
   protected readonly containerClasses = computed(() => {
-    return mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize() as ZardAvatarVariants['zSize'], zStatus: this.zStatus() }), this.class());
+    return mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize() as ZardAvatarVariants['zSize'] }), this.class());
   });
 
   protected readonly customSize = computed(() => {
@@ -154,12 +157,6 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
       rounded: 'rounded-md',
       square: 'rounded-none',
     },
-    zStatus: {
-      online: 'online',
-      offline: 'offline',
-      doNotDisturb: 'doNotDisturb',
-      away: 'away',
-    },
   },
   defaultVariants: {
     zSize: 'default',
@@ -167,7 +164,7 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
   },
 });
 
-export const imageVariants = cva('relative object-cover object-center w-full h-full z-10 ring-1 ring-border', {
+export const imageVariants = cva('relative object-cover object-center w-full h-full z-10', {
   variants: {
     zShape: {
       circle: 'rounded-full',

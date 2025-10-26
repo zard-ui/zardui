@@ -14,12 +14,6 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
       rounded: 'rounded-md',
       square: 'rounded-none',
     },
-    zStatus: {
-      online: 'online',
-      offline: 'offline',
-      doNotDisturb: 'doNotDisturb',
-      away: 'away',
-    },
   },
   defaultVariants: {
     zSize: 'default',
@@ -27,7 +21,7 @@ export const avatarVariants = cva('relative flex flex-row items-center justify-c
   },
 });
 
-export const imageVariants = cva('relative object-cover object-center w-full h-full z-10 ring-1 ring-border', {
+export const imageVariants = cva('relative object-cover object-center w-full h-full z-10', {
   variants: {
     zShape: {
       circle: 'rounded-full',

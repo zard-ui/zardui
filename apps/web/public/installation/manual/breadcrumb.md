@@ -19,7 +19,7 @@ import {
 } from './breadcrumb.variants';
 
 @Component({
-  selector: 'z-breadcrumb-item',
+  selector: 'z-breadcrumb-item, [z-breadcrumb-item]',
   exportAs: 'zBreadcrumbItem',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -74,7 +74,7 @@ export class ZardBreadcrumbItemComponent {
 }
 
 @Component({
-  selector: 'z-breadcrumb',
+  selector: 'z-breadcrumb, [z-breadcrumb]',
   exportAs: 'zBreadcrumb',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -113,7 +113,7 @@ export class ZardBreadcrumbComponent {
 }
 
 @Component({
-  selector: 'z-breadcrumb-ellipsis',
+  selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
   exportAs: 'zBreadcrumbEllipsis',
   standalone: true,
   imports: [ZardIconComponent],

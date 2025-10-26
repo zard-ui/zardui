@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { ZardAvatarComponent } from './avatar.component';
+import { ZardAvatarComponent, ZardAvatarStatus } from './avatar.component';
 import { ZardAvatarVariants, ZardImageVariants } from './avatar.variants';
 
 @Component({
@@ -13,7 +13,7 @@ import { ZardAvatarVariants, ZardImageVariants } from './avatar.variants';
 class TestHostComponent {
   zSize: ZardAvatarVariants['zSize'] = 'default';
   zShape: ZardImageVariants['zShape'] = 'circle';
-  zStatus: ZardAvatarVariants['zStatus'] = null;
+  zStatus: ZardAvatarStatus | null = null;
   zSrc: string | undefined = undefined;
   zAlt = '';
   zFallback = 'ZA';
@@ -130,6 +130,22 @@ describe('ZardAvatarComponent', () => {
   });
 
   describe('Status indicators', () => {
+    it('should set data-status attribute when status is provided', () => {
+      hostComponent.zStatus = 'online';
+      fixture.detectChanges();
+
+      const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
+      expect(avatarElement.getAttribute('data-status')).toBe('online');
+    });
+
+    it('should not set data-status attribute when status is null', () => {
+      hostComponent.zStatus = null;
+      fixture.detectChanges();
+
+      const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
+      expect(avatarElement.getAttribute('data-status')).toBeNull();
+    });
+
     it('should display online status indicator', () => {
       hostComponent.zStatus = 'online';
       fixture.detectChanges();
