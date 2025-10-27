@@ -1,6 +1,6 @@
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content cursor-default w-12 h-12 bg-muted', {
+export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content cursor-default bg-muted', {
   variants: {
     zSize: {
       sm: 'w-8 h-8',

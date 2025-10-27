@@ -8,7 +8,7 @@ import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertV
 
 import type { ClassValue } from 'clsx';
 @Component({
-  selector: 'z-alert',
+  selector: 'z-alert, [z-alert]',
   standalone: true,
   exportAs: 'zAlert',
   imports: [ZardIconComponent, ZardStringTemplateOutletDirective],
@@ -16,9 +16,11 @@ import type { ClassValue } from 'clsx';
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (zIcon() || iconName()) {
-      <ng-container *zStringTemplateOutlet="zIcon()">
-        <z-icon [zType]="iconName()!" />
-      </ng-container>
+      <span [class]="iconClasses()" data-slot="alert-icon">
+        <ng-container *zStringTemplateOutlet="zIcon()">
+          <z-icon [zType]="iconName()!" />
+        </ng-container>
+      </span>
     }
 
     <div class="flex-1">
@@ -50,7 +52,7 @@ export class ZardAlertComponent {
 
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
 
-  protected readonly iconClasses = computed(() => mergeClasses(alertIconVariants(), this.zIcon()));
+  protected readonly iconClasses = computed(() => alertIconVariants());
 
   protected readonly titleClasses = computed(() => alertTitleVariants());
 

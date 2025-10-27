@@ -6,7 +6,7 @@ import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } 
 export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
 
 @Component({
-  selector: 'z-avatar',
+  selector: 'z-avatar, [z-avatar]',
   exportAs: 'zAvatar',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -112,7 +112,10 @@ export class ZardAvatarComponent {
   protected readonly imageLoaded = signal(false);
 
   protected readonly containerClasses = computed(() => {
-    return mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize() as ZardAvatarVariants['zSize'] }), this.class());
+    const size = this.zSize();
+    const zSize = typeof size === 'number' ? undefined : (size as ZardAvatarVariants['zSize']);
+
+    return mergeClasses(avatarVariants({ zShape: this.zShape(), zSize }), this.class());
   });
 
   protected readonly customSize = computed(() => {

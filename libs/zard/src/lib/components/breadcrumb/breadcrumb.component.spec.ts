@@ -1,7 +1,7 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { RouterTestingModule } from '@angular/router/testing';
+import { provideRouter } from '@angular/router';
 
 import { ZardBreadcrumbComponent, ZardBreadcrumbEllipsisComponent, ZardBreadcrumbItemComponent } from './breadcrumb.component';
 
@@ -30,7 +30,8 @@ describe('BreadcrumbComponents Integration', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent, RouterTestingModule.withRoutes([])],
+      imports: [TestHostComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -153,7 +154,8 @@ describe('BreadcrumbComponent - Custom Separator', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestSeparatorComponent, RouterTestingModule.withRoutes([])],
+      imports: [TestSeparatorComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestSeparatorComponent);
@@ -224,7 +226,8 @@ describe('BreadcrumbComponent - Alignment and Wrapping', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestAlignmentComponent, RouterTestingModule.withRoutes([])],
+      imports: [TestAlignmentComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestAlignmentComponent);
@@ -288,7 +291,8 @@ describe('BreadcrumbComponent - Size Variants', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestSizeComponent, RouterTestingModule.withRoutes([])],
+      imports: [TestSizeComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestSizeComponent);
@@ -344,7 +348,8 @@ describe('BreadcrumbEllipsisComponent - Color Variants', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestEllipsisComponent, RouterTestingModule.withRoutes([])],
+      imports: [TestEllipsisComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestEllipsisComponent);

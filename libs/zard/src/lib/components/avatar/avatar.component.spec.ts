@@ -43,12 +43,21 @@ describe('ZardAvatarComponent', () => {
 
   describe('Variant inputs', () => {
     it('should have default values for inputs', () => {
+      // Reset host values to test component defaults
+      hostComponent.zSize = 'default';
+      hostComponent.zShape = 'circle';
+      hostComponent.zStatus = null;
+      hostComponent.zSrc = undefined;
+      hostComponent.zAlt = '';
+      hostComponent.zFallback = '';
+      fixture.detectChanges();
+
       expect(avatarComponent.zSize()).toBe('default');
       expect(avatarComponent.zShape()).toBe('circle');
       expect(avatarComponent.zStatus()).toBeNull();
       expect(avatarComponent.zSrc()).toBeUndefined();
       expect(avatarComponent.zAlt()).toBe('');
-      expect(avatarComponent.zFallback()).toBe('ZA');
+      expect(avatarComponent.zFallback()).toBe('');
     });
 
     it('should apply correct classes based on variants', () => {

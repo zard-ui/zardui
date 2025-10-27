@@ -9,7 +9,7 @@ import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } 
 export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
 
 @Component({
-  selector: 'z-avatar',
+  selector: 'z-avatar, [z-avatar]',
   exportAs: 'zAvatar',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -115,7 +115,10 @@ export class ZardAvatarComponent {
   protected readonly imageLoaded = signal(false);
 
   protected readonly containerClasses = computed(() => {
-    return mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize() as ZardAvatarVariants['zSize'] }), this.class());
+    const size = this.zSize();
+    const zSize = typeof size === 'number' ? undefined : (size as ZardAvatarVariants['zSize']);
+
+    return mergeClasses(avatarVariants({ zShape: this.zShape(), zSize }), this.class());
   });
 
   protected readonly customSize = computed(() => {
@@ -143,7 +146,7 @@ export class ZardAvatarComponent {
 ```angular-ts title="avatar.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, VariantProps } from 'class-variance-authority';
 
-export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content cursor-default w-12 h-12 bg-muted', {
+export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content cursor-default bg-muted', {
   variants: {
     zSize: {
       sm: 'w-8 h-8',

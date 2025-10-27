@@ -1,5 +1,5 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { NgOptimizedImage } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 interface YoutubeVideo {
   id: string;
@@ -25,14 +25,20 @@ interface YoutubeVideo {
         </header>
 
         <main class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
-          @for (video of videos; track video.id) {
+          @for (video of videos; track video.id; let idx = $index) {
             <a [href]="getVideoUrl(video)" target="_blank" rel="noopener noreferrer" class="relative group break-inside-avoid mb-6 block cursor-pointer">
               <div
                 class="absolute -inset-4 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-2xl blur-xl opacity-75 group-hover:opacity-100 transition-opacity duration-300"
               ></div>
 
               <div class="relative aspect-video overflow-hidden rounded-xl border bg-secondary shadow-2xl">
-                <img [ngSrc]="getThumbnailUrl(video.id)" [alt]="video.title" fill priority class="object-cover transition-transform duration-300 group-hover:scale-105" />
+                <img
+                  [ngSrc]="getThumbnailUrl(video.id)"
+                  [alt]="video.title"
+                  fill
+                  [priority]="idx < 3"
+                  class="object-cover transition-transform duration-300 group-hover:scale-105"
+                />
 
                 <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
 
