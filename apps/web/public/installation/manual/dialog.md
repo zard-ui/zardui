@@ -19,7 +19,6 @@ import {
 } from '@angular/core';
 import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
-
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
