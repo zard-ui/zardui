@@ -28,6 +28,7 @@ export type ZardMenuTrigger = 'click' | 'hover';
   },
 })
 export class ZardMenuDirective implements OnInit, OnDestroy {
+  private static readonly MENU_OVERLAY_SELECTOR = '.cdk-overlay-container .cdk-overlay-pane:last-child';
   private static readonly MENU_CONTENT_SELECTOR = '.cdk-overlay-pane [z-menu-content]';
 
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
@@ -116,11 +117,11 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private setupMenuContentListeners(): void {
-    const menuContent = document.querySelector(ZardMenuDirective.MENU_CONTENT_SELECTOR);
-    if (!menuContent) return;
+    const overlay = document.querySelector(ZardMenuDirective.MENU_OVERLAY_SELECTOR);
+    if (!overlay) return;
 
-    this.addEventListenerWithCleanup(menuContent, 'mouseenter', () => this.cancelScheduledClose());
-    this.addEventListenerWithCleanup(menuContent, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
+    this.addEventListenerWithCleanup(overlay, 'mouseenter', () => this.cancelScheduledClose());
+    this.addEventListenerWithCleanup(overlay, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
   }
 
   private cancelScheduledClose(): void {

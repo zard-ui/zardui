@@ -3,7 +3,6 @@
 ```angular-ts title="dropdown.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,12 +21,11 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import { mergeClasses, transform } from '../../shared/utils/utils';
+import { dropdownContentVariants } from './dropdown.variants';
 
 import type { ClassValue } from 'clsx';
-
-import { dropdownContentVariants } from './dropdown.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-
+import { isPlatformBrowser } from '@angular/common';
 @Component({
   selector: 'z-dropdown-menu',
   exportAs: 'zDropdownMenu',
@@ -332,13 +330,13 @@ export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariant
 
 
 ```angular-ts title="dropdown-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
-
 import type { ClassValue } from 'clsx';
 
+import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
+
+import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardDropdownService } from './dropdown.service';
 import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
@@ -431,21 +429,18 @@ export class ZardDropdownMenuLabelComponent {
 
 
 ```angular-ts title="dropdown-menu-content.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Component, computed, input, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
-
 import type { ClassValue } from 'clsx';
 
-import { dropdownContentVariants } from './dropdown.variants';
+import { Component, computed, input, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+
 import { mergeClasses } from '../../shared/utils/utils';
+import { dropdownContentVariants } from './dropdown.variants';
 
 @Component({
   selector: 'z-dropdown-menu-content',
   exportAs: 'zDropdownMenuContent',
   standalone: true,
   encapsulation: ViewEncapsulation.None,
-  host: {
-    '[style.display]': '"none"',
-  },
   template: `
     <ng-template #contentTemplate>
       <div [class]="contentClasses()" role="menu" tabindex="-1" [attr.aria-orientation]="'vertical'">
@@ -635,9 +630,8 @@ export class ZardDropdownModule {}
 ```angular-ts title="dropdown.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
 import { type ElementRef, inject, Injectable, PLATFORM_ID, signal, type TemplateRef, type ViewContainerRef } from '@angular/core';
-
+import { isPlatformBrowser } from '@angular/common';
 import type { Subscription } from 'rxjs';
 
 @Injectable({

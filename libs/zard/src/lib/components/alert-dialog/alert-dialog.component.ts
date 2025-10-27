@@ -1,3 +1,4 @@
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
@@ -12,6 +13,7 @@ import {
   inject,
   NgModule,
   output,
+  signal,
   type TemplateRef,
   type Type,
   viewChild,
@@ -23,10 +25,11 @@ import type { ClassValue } from 'clsx';
 
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
-import { alertDialogVariants } from './alert-dialog.variants';
-import { generateId, mergeClasses, noopFun } from '../../shared/utils/utils';
+import { alertDialogVariants, type ZardAlertDialogVariants } from './alert-dialog.variants';
+import { generateId, mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 
+const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
 export class ZardAlertDialogOptions<T> {
@@ -36,6 +39,7 @@ export class ZardAlertDialogOptions<T> {
   zCustomClasses?: ClassValue;
   zData?: object;
   zDescription?: string;
+  zIcon?: string;
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
@@ -43,6 +47,7 @@ export class ZardAlertDialogOptions<T> {
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zTitle?: string | TemplateRef<T>;
+  zType?: ZardAlertDialogVariants['zType'];
   zViewContainerRef?: ViewContainerRef;
   zWidth?: string;
 }
@@ -57,13 +62,12 @@ export class ZardAlertDialogOptions<T> {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
+    '[@alertDialogAnimation]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
     role: 'alertdialog',
     '[attr.aria-modal]': 'true',
     '[attr.aria-labelledby]': 'titleId()',
     '[attr.aria-describedby]': 'descriptionId()',
-    'animate.enter': 'alert-dialog-enter',
-    'animate.leave': 'alert-dialog-leave',
   },
   styles: [
     `
@@ -73,35 +77,30 @@ export class ZardAlertDialogOptions<T> {
         width: fit-content;
         height: fit-content;
         transform-origin: center center;
-        opacity: 1;
-        transform: scale(1);
-        transition:
-          opacity 150ms ease-out,
-          transform 150ms ease-out;
-      }
-
-      @starting-style {
-        z-alert-dialog {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-      }
-
-      z-alert-dialog.alert-dialog-leave {
-        opacity: 0;
-        transform: scale(0.9);
-        transition:
-          opacity 150ms ease-in,
-          transform 150ms ease-in;
       }
     `,
+  ],
+  animations: [
+    trigger('alertDialogAnimation', [
+      state('close', style({ opacity: 0, transform: 'scale(0.9)' })),
+      state('open', style({ opacity: 1, transform: 'scale(1)' })),
+      transition('close => open', animate('150ms ease-out')),
+      transition('open => close', animate('150ms ease-in')),
+    ]),
   ],
 })
 export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
   protected readonly config = inject(ZardAlertDialogOptions<T>);
 
-  protected readonly classes = computed(() => mergeClasses(alertDialogVariants(), this.config.zCustomClasses));
+  protected readonly classes = computed(() =>
+    mergeClasses(
+      alertDialogVariants({
+        zType: this.config.zType,
+      }),
+      this.config.zCustomClasses,
+    ),
+  );
 
   private readonly alertDialogId = generateId('alert-dialog');
   protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
@@ -115,6 +114,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
+  state = signal<'close' | 'open'>('close');
 
   constructor() {
     super();

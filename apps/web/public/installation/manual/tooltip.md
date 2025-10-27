@@ -1,6 +1,8 @@
 
 
 ```angular-ts title="tooltip.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { merge, Subject, take, takeUntil } from 'rxjs';
+
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -22,11 +24,9 @@ import {
   signal,
 } from '@angular/core';
 
-import { merge, Subject, take, takeUntil } from 'rxjs';
-
+import { mergeClasses } from '../../shared/utils/utils';
 import { TOOLTIP_POSITIONS_MAP, type ZardTooltipPositions } from './tooltip-positions';
 import { tooltipVariants } from './tooltip.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 export type ZardTooltipTriggers = 'click' | 'hover';
 

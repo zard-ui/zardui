@@ -4,8 +4,8 @@
 import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
 import type { ConnectedPosition } from '@angular/cdk/overlay';
-import { isPlatformBrowser } from '@angular/common';
 import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input, type OnDestroy, type OnInit, PLATFORM_ID, untracked } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
 import { ZardMenuManagerService } from './menu-manager.service';
 import { MENU_POSITIONS_MAP, type ZardMenuPlacement } from './menu-positions';
@@ -31,6 +31,7 @@ export type ZardMenuTrigger = 'click' | 'hover';
   },
 })
 export class ZardMenuDirective implements OnInit, OnDestroy {
+  private static readonly MENU_OVERLAY_SELECTOR = '.cdk-overlay-container .cdk-overlay-pane:last-child';
   private static readonly MENU_CONTENT_SELECTOR = '.cdk-overlay-pane [z-menu-content]';
 
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
@@ -119,11 +120,11 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private setupMenuContentListeners(): void {
-    const menuContent = document.querySelector(ZardMenuDirective.MENU_CONTENT_SELECTOR);
-    if (!menuContent) return;
+    const overlay = document.querySelector(ZardMenuDirective.MENU_OVERLAY_SELECTOR);
+    if (!overlay) return;
 
-    this.addEventListenerWithCleanup(menuContent, 'mouseenter', () => this.cancelScheduledClose());
-    this.addEventListenerWithCleanup(menuContent, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
+    this.addEventListenerWithCleanup(overlay, 'mouseenter', () => this.cancelScheduledClose());
+    this.addEventListenerWithCleanup(overlay, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
   }
 
   private cancelScheduledClose(): void {
@@ -248,14 +249,14 @@ export class ZardMenuContentDirective {
 
 
 ```angular-ts title="menu-item.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import type { ClassValue } from 'clsx';
+
 import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuItem } from '@angular/cdk/menu';
 import { booleanAttribute, computed, Directive, effect, inject, input, signal, untracked } from '@angular/core';
 
-import type { ClassValue } from 'clsx';
-
-import { menuItemVariants, type ZardMenuItemVariants } from './menu.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { menuItemVariants, type ZardMenuItemVariants } from './menu.variants';
 
 @Directive({
   selector: 'button[z-menu-item], [z-menu-item]',

@@ -1,9 +1,9 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
-import { datePickerVariants, ZardDatePickerVariants } from './date-picker.variants';
+import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardCalendarComponent } from '../calendar/calendar.component';

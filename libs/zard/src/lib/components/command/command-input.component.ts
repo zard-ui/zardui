@@ -3,20 +3,20 @@ import {
   Component,
   computed,
   DestroyRef,
-  ElementRef,
+  type ElementRef,
   EventEmitter,
   forwardRef,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   Output,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 import { Subject, switchMap, timer } from 'rxjs';

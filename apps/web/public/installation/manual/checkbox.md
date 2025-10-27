@@ -3,7 +3,6 @@
 ```angular-ts title="checkbox.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
 import type { ClassValue } from 'clsx';
 
 import { checkboxLabelVariants, checkboxVariants, type ZardCheckboxVariants } from './checkbox.variants';

@@ -77,7 +77,10 @@
       "Bash(git restore:*)",
       "WebSearch",
       "Bash(cd:*)",
-      "Bash(git checkout:*)"
+      "Bash(git checkout:*)",
+      "Bash(git cherry-pick:*)",
+      "Bash(awk:*)",
+      "Bash(xargs git checkout --theirs)"
     ],
     "defaultMode": "acceptEdits"
   },

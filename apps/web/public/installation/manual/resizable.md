@@ -1,7 +1,8 @@
 
 
 ```angular-ts title="resizable.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { isPlatformBrowser } from '@angular/common';
+import type { ClassValue } from 'clsx';
+
 import {
   type AfterContentInit,
   ChangeDetectionStrategy,
@@ -19,12 +20,11 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 
-import type { ClassValue } from 'clsx';
-
+import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 export interface ZardResizeEvent {
   sizes: number[];
@@ -381,13 +381,13 @@ export * from './resizable.variants';
 
 
 ```angular-ts title="resizable-handle.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
-
 import type { ClassValue } from 'clsx';
 
+import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+
+import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardResizableComponent } from './resizable.component';
 import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-resizable-handle, [z-resizable-handle]',
@@ -595,12 +595,12 @@ export class ZardResizableHandleComponent {
 
 
 ```angular-ts title="resizable-panel.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
-
 import type { ClassValue } from 'clsx';
 
-import { resizablePanelVariants } from './resizable.variants';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
+
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { resizablePanelVariants } from './resizable.variants';
 
 @Component({
   selector: 'z-resizable-panel',

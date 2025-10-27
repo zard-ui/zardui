@@ -10,9 +10,6 @@ import { mergeClasses } from '../../shared/utils/utils';
   exportAs: 'zDropdownMenuContent',
   standalone: true,
   encapsulation: ViewEncapsulation.None,
-  host: {
-    '[style.display]': '"none"',
-  },
   template: `
     <ng-template #contentTemplate>
       <div [class]="contentClasses()" role="menu" tabindex="-1" [attr.aria-orientation]="'vertical'">

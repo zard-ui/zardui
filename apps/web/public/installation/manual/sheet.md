@@ -1,8 +1,6 @@
 
 
 ```angular-ts title="sheet.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -19,14 +17,17 @@ import {
   viewChild,
   type ViewContainerRef,
 } from '@angular/core';
+import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
+import { OverlayModule } from '@angular/cdk/overlay';
 
-import type { ZardSheetRef } from './sheet-ref';
 import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
-import { mergeClasses, noopFun } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
+import { mergeClasses } from '../../shared/utils/utils';
+import type { ZardSheetRef } from './sheet-ref';
 import type { ZardIcon } from '../icon/icons';
 
+const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardSheetOptions<T, U> {
   zCancelIcon?: ZardIcon;
@@ -249,11 +250,11 @@ export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 
 
 ```angular-ts title="sheet-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
+
 import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
-
-import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
 
 import type { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
@@ -380,13 +381,13 @@ export class ZardSheetModule {}
 
 
 ```angular-ts title="sheet.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 
-import { ZardSheetRef } from './sheet-ref';
 import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
+import { ZardSheetRef } from './sheet-ref';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');

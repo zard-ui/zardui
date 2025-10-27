@@ -1,12 +1,12 @@
 
 
 ```angular-ts title="progress-bar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-
 import type { ClassValue } from 'clsx';
 
-import { containerProgressBarVariants, progressBarVariants, type ZardContainerProgressBarVariants, type ZardProgressBarVariants } from './progress-bar.variants';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+
 import { mergeClasses } from '../../shared/utils/utils';
+import { containerProgressBarVariants, progressBarVariants, type ZardContainerProgressBarVariants, type ZardProgressBarVariants } from './progress-bar.variants';
 
 @Component({
   selector: 'z-progress-bar',

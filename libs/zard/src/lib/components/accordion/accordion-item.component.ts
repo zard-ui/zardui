@@ -3,8 +3,6 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject
 import type { ClassValue } from 'clsx';
 
 import type { ZardAccordionComponent } from './accordion.component';
-import { accordionContentVariants, accordionItemVariants, accordionTriggerVariants } from './accordion.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -15,37 +13,42 @@ import { ZardIconComponent } from '../icon/icon.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <button
-      type="button"
-      [id]="'accordion-' + zValue()"
-      [class]="triggerClasses()"
-      (click)="toggle()"
-      (keydown.enter)="onKeydown($any($event))"
-      (keydown.space)="onKeydown($any($event))"
-      [attr.aria-expanded]="isOpen()"
-      [attr.aria-controls]="'content-' + zValue()"
-      tabindex="0"
-    >
-      {{ zTitle() }}
-      <z-icon
-        zType="chevron-down"
-        class="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
-        [class]="isOpen() ? 'rotate-180' : ''"
-      />
-    </button>
+    <div class="border-b border-border flex flex-1 flex-col cursor-pointer" [attr.data-state]="isOpen() ? 'open' : 'closed'">
+      <button
+        type="button"
+        role="button"
+        [id]="'accordion-' + zValue()"
+        class="group flex flex-1 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-offset-2 focus-visible:ring-ring font-medium items-center justify-between px-0.5 py-4 text-sm w-full"
+        [class]="class()"
+        (click)="toggle()"
+        (keydown.enter)="toggle()"
+        (keydown.space)="toggle()"
+        [attr.aria-expanded]="isOpen()"
+        [attr.aria-controls]="'content-' + zValue()"
+        tabindex="0"
+      >
+        <span class="group-hover:underline">
+          {{ zTitle() }}
+        </span>
+        <z-icon zType="chevron-down" class="transition-transform duration-200" [class]="isOpen() ? 'rotate-180' : ''" />
+      </button>
 
-    <div [class]="contentClasses()" [id]="'content-' + zValue()" [attr.data-state]="isOpen() ? 'open' : 'closed'" role="region" [attr.aria-labelledby]="'accordion-' + zValue()">
-      <div class="overflow-hidden">
-        <div class="pt-0 pb-4">
-          <ng-content></ng-content>
+      <div
+        class="grid text-sm transition-all"
+        [class]="isOpen() ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]'"
+        [id]="'content-' + zValue()"
+        [attr.data-state]="isOpen() ? 'open' : 'closed'"
+        role="region"
+        [attr.aria-labelledby]="'accordion-' + zValue()"
+      >
+        <div class="overflow-hidden">
+          <main class="pb-4 pt-1">
+            <ng-content></ng-content>
+          </main>
         </div>
       </div>
     </div>
   `,
-  host: {
-    '[class]': 'itemClasses()',
-    '[attr.data-state]': "isOpen() ? 'open' : 'closed'",
-  },
 })
 export class ZardAccordionItemComponent {
   private cdr = inject(ChangeDetectorRef);
@@ -60,10 +63,6 @@ export class ZardAccordionItemComponent {
 
   isOpen = computed(() => this.isOpenSignal());
 
-  protected readonly itemClasses = computed(() => mergeClasses(accordionItemVariants(), this.class()));
-  protected readonly triggerClasses = computed(() => mergeClasses(accordionTriggerVariants()));
-  protected readonly contentClasses = computed(() => mergeClasses(accordionContentVariants({ isOpen: this.isOpen() })));
-
   setOpen(open: boolean): void {
     this.isOpenSignal.set(open);
     this.cdr.markForCheck();
@@ -75,10 +74,5 @@ export class ZardAccordionItemComponent {
     } else {
       this.setOpen(!this.isOpen());
     }
-  }
-
-  onKeydown(event: KeyboardEvent): void {
-    event.preventDefault();
-    this.toggle();
   }
 }

@@ -6,7 +6,6 @@ import { ZardRadioComponent } from '../../radio/radio.component';
 import { ZardTabComponent, ZardTabGroupComponent, type zPosition } from '../tabs.component';
 
 @Component({
-  selector: 'z-demo-tabs-position',
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardRadioComponent, FormsModule, ZardDividerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,

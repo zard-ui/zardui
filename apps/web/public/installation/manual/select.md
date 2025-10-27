@@ -1,9 +1,6 @@
 
 
 ```angular-ts title="select.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
   ChangeDetectionStrategy,
@@ -25,11 +22,14 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 
-import { ZardSelectItemComponent } from './select-item.component';
 import { selectContentVariants, selectTriggerVariants, type ZardSelectTriggerVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardSelectItemComponent } from './select-item.component';
 import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
@@ -500,9 +500,9 @@ export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 ```angular-ts title="select-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal } from '@angular/core';
 
-import { selectItemVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
+import { selectItemVariants } from './select.variants';
 
 // Interface to avoid circular dependency
 interface SelectHost {

@@ -2,12 +2,11 @@
 
 ```angular-ts title="empty.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
-
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { emptyVariants, type ZardEmptyVariants } from './empty.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 
 @Component({
   selector: 'z-empty',
