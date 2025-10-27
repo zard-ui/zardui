@@ -6,7 +6,7 @@
 
 The trigger directive that opens the menu when interacted with.
 
-| Input               | Description                              | Type                 | Default        |
+| Property            | Description                              | Type                 | Default        |
 | ------------------- | ---------------------------------------- | -------------------- | -------------- |
 | `[zMenuTriggerFor]` | Reference to the menu template           | `TemplateRef`        | `required`     |
 | `[zDisabled]`       | Whether the trigger is disabled          | `boolean`            | `false`        |
@@ -18,7 +18,7 @@ The trigger directive that opens the menu when interacted with.
 
 Container directive for menu items.
 
-| Input     | Description            | Type         | Default |
+| Property  | Description            | Type         | Default |
 | --------- | ---------------------- | ------------ | ------- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''`    |
 
@@ -26,7 +26,7 @@ Container directive for menu items.
 
 Individual menu item directive.
 
-| Input                 | Description                    | Type           | Default |
+| Property              | Description                    | Type           | Default |
 | --------------------- | ------------------------------ | -------------- | ------- |
 | `[zDisabled]`         | Whether the item is disabled   | `boolean`      | `false` |
 | `[zInset]`            | Add left padding for alignment | `boolean`      | `false` |
