@@ -1,35 +1,35 @@
-import { ClassValue } from 'clsx';
+import { type ClassValue } from 'clsx';
 
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
+  type ComponentRef,
   computed,
   ElementRef,
-  EmbeddedViewRef,
-  EventEmitter,
+  type EmbeddedViewRef,
+  type EventEmitter,
   inject,
   NgModule,
   output,
   signal,
-  TemplateRef,
-  Type,
+  type TemplateRef,
+  type Type,
   viewChild,
-  ViewContainerRef,
+  type ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { generateId, mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
-import { ZardAlertDialogRef } from './alert-dialog-ref';
+import { type ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants } from './alert-dialog.variants';
 
 const noopFun = () => void 0;
+
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
 export class ZardAlertDialogOptions<T> {
@@ -60,12 +60,13 @@ export class ZardAlertDialogOptions<T> {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
-    '[@alertDialogAnimation]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
     role: 'alertdialog',
     '[attr.aria-modal]': 'true',
     '[attr.aria-labelledby]': 'titleId()',
     '[attr.aria-describedby]': 'descriptionId()',
+    'animate.enter': 'alert-dialog-enter',
+    'animate.leave': 'alert-dialog-leave',
   },
   styles: [
     `
@@ -75,16 +76,28 @@ export class ZardAlertDialogOptions<T> {
         width: fit-content;
         height: fit-content;
         transform-origin: center center;
+        opacity: 1;
+        transform: scale(1);
+        transition:
+          opacity 150ms ease-out,
+          transform 150ms ease-out;
+      }
+
+      @starting-style {
+        z-alert-dialog {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+      }
+
+      z-alert-dialog.alert-dialog-leave {
+        opacity: 0;
+        transform: scale(0.9);
+        transition:
+          opacity 150ms ease-in,
+          transform 150ms ease-in;
       }
     `,
-  ],
-  animations: [
-    trigger('alertDialogAnimation', [
-      state('close', style({ opacity: 0, transform: 'scale(0.9)' })),
-      state('open', style({ opacity: 1, transform: 'scale(1)' })),
-      transition('close => open', animate('150ms ease-out')),
-      transition('open => close', animate('150ms ease-in')),
-    ]),
   ],
 })
 export class ZardAlertDialogComponent<T> extends BasePortalOutlet {

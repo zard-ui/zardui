@@ -15,22 +15,22 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
-import { ZardCommandComponent, ZardCommandOption } from '../command/command.component';
+import { ZardCommandComponent, type ZardCommandOption } from '../command/command.component';
 import { ZardCommandOptionComponent } from '../command/command-option.component';
 import { ZardCommandInputComponent } from '../command/command-input.component';
 import { ZardCommandEmptyComponent } from '../command/command-empty.component';
 import { ZardCommandListComponent } from '../command/command-list.component';
-import { comboboxVariants, ZardComboboxVariants } from './combobox.variants';
+import { comboboxVariants, type ZardComboboxVariants } from './combobox.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardEmptyComponent } from '../empty/empty.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardIcon } from '../icon/icons';
+import type { ZardIcon } from '../icon/icons';
 
 export interface ZardComboboxOption {
   value: string;

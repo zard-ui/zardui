@@ -1,8 +1,8 @@
-import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { ElementRef, inject, Injectable, PLATFORM_ID, signal, TemplateRef, ViewContainerRef } from '@angular/core';
+import { type ElementRef, inject, Injectable, PLATFORM_ID, signal, type TemplateRef, type ViewContainerRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Subscription } from 'rxjs';
+import type { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',

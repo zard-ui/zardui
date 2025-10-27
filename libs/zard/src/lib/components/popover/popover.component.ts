@@ -1,6 +1,6 @@
 import { merge, Subject, takeUntil } from 'rxjs';
 
-import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { type ConnectedPosition, Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -12,13 +12,13 @@ import {
   ElementRef,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   PLATFORM_ID,
   Renderer2,
   signal,
-  TemplateRef,
+  type TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 

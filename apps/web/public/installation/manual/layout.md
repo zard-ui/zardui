@@ -6,7 +6,7 @@ import type { ClassValue } from 'clsx';
 import { ChangeDetectionStrategy, Component, computed, contentChildren, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { layoutVariants, LayoutVariants } from './layout.variants';
+import { layoutVariants, type LayoutVariants } from './layout.variants';
 import { SidebarComponent } from './sidebar.component';
 
 @Component({
@@ -52,7 +52,7 @@ export class LayoutComponent {
 
 
 ```angular-ts title="layout.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 // Layout Variants
 export const layoutVariants = cva('flex w-full min-h-0', {
@@ -222,14 +222,14 @@ export class LayoutModule {}
 
 
 ```angular-ts title="sidebar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, type TemplateRef, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { sidebarGroupLabelVariants, sidebarGroupVariants, sidebarTriggerVariants, sidebarVariants } from './layout.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
-import { ZardIcon } from '../icon/icons';
+import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-sidebar',

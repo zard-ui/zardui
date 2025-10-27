@@ -2,14 +2,14 @@
 
 ```angular-ts title="date-picker.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardCalendarComponent } from '../calendar/calendar.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
-import { datePickerVariants, ZardDatePickerVariants } from './date-picker.variants';
+import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
 
 import type { ClassValue } from 'clsx';
 
@@ -135,7 +135,7 @@ export class ZardDatePickerComponent {
 
 
 ```angular-ts title="date-picker.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 const datePickerVariants = cva('', {
   variants: {

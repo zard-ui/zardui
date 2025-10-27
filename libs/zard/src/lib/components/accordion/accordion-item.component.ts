@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
-import { ZardAccordionComponent } from './accordion.component';
+import type { ZardAccordionComponent } from './accordion.component';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({

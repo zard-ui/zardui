@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
+import { avatarVariants, imageVariants, type ZardImageVariants, type ZardAvatarVariants } from './avatar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { avatarVariants, imageVariants, ZardAvatarVariants, ZardImageVariants } from './avatar.variants';
 
 export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
 

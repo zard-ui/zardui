@@ -5,9 +5,9 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import { LucideAngularModule } from 'lucide-angular';
 import type { ClassValue } from 'clsx';
 
-import { iconVariants, ZardIconVariants } from './icon.variants';
+import { iconVariants, type ZardIconVariants } from './icon.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZARD_ICONS, ZardIcon } from './icons';
+import { ZARD_ICONS, type ZardIcon } from './icons';
 
 @Component({
   selector: 'z-icon, [z-icon]',
@@ -42,7 +42,7 @@ export class ZardIconComponent {
 
 
 ```angular-ts title="icon.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const iconVariants = cva('flex items-center justify-center', {
   variants: {

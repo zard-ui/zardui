@@ -15,14 +15,14 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
-import { commandVariants, ZardCommandVariants } from './command.variants';
+import { commandVariants, type ZardCommandVariants } from './command.variants';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandInputComponent } from './command-input.component';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardIcon } from '../icon/icons';
+import type { ZardIcon } from '../icon/icons';
 
 export interface ZardCommandOption {
   value: unknown;
@@ -266,7 +266,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
 
 ```angular-ts title="command.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const commandVariants = cva('flex h-full w-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground', {
   variants: {
@@ -438,19 +438,19 @@ import {
   Component,
   computed,
   DestroyRef,
-  ElementRef,
+  type ElementRef,
   EventEmitter,
   forwardRef,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   Output,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, switchMap, timer } from 'rxjs';
 import type { ClassValue } from 'clsx';
 
@@ -635,7 +635,7 @@ export class ZardCommandListComponent {
 
 
 ```angular-ts title="command-option-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
+import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCommandOptionComponent } from './command-option.component';
@@ -703,11 +703,11 @@ export class ZardCommandOptionGroupComponent implements AfterContentInit {
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
-import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
+import { commandItemVariants, commandShortcutVariants, type ZardCommandItemVariants } from './command.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardCommandComponent } from './command.component';
-import { ZardIcon } from '../icon/icons';
+import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-command-option',

@@ -1,7 +1,6 @@
-import { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, input, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
@@ -11,8 +10,8 @@ import {
   breadcrumbItemVariants,
   breadcrumbListVariants,
   breadcrumbVariants,
-  ZardBreadcrumbEllipsisVariants,
-  ZardBreadcrumbVariants,
+  type ZardBreadcrumbEllipsisVariants,
+  type ZardBreadcrumbVariants,
 } from './breadcrumb.variants';
 
 @Component({

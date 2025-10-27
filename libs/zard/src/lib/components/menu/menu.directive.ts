@@ -1,11 +1,11 @@
-import { BooleanInput } from '@angular/cdk/coercion';
+import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { ConnectedPosition } from '@angular/cdk/overlay';
-import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID, untracked } from '@angular/core';
+import type { ConnectedPosition } from '@angular/cdk/overlay';
+import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input, type OnDestroy, type OnInit, PLATFORM_ID, untracked } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
 import { ZardMenuManagerService } from './menu-manager.service';
-import { MENU_POSITIONS_MAP, ZardMenuPlacement } from './menu-positions';
+import { MENU_POSITIONS_MAP, type ZardMenuPlacement } from './menu-positions';
 
 export type ZardMenuTrigger = 'click' | 'hover';
 

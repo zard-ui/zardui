@@ -3,7 +3,7 @@ import type { ClassValue } from 'clsx';
 import { computed, Directive, ElementRef, inject, input } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { inputVariants, ZardInputVariants } from './input.variants';
+import { inputVariants, type ZardInputVariants } from './input.variants';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',

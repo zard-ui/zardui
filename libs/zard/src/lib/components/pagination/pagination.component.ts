@@ -1,6 +1,6 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, computed, forwardRef, input, linkedSignal, output, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'clsx';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import type { ClassValue } from 'clsx';
 
 import {
   paginationContentVariants,
@@ -10,7 +10,7 @@ import {
   paginationPreviousVariants,
   paginationVariants,
 } from './pagination.variants';
-import { buttonVariants, ZardButtonVariants } from '../button/button.variants';
+import { buttonVariants, type ZardButtonVariants } from '../button/button.variants';
 import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
 

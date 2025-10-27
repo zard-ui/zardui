@@ -1,4 +1,4 @@
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content cursor-default bg-muted', {
   variants: {

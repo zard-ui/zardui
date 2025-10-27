@@ -6,8 +6,8 @@ import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewE
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
-import { ZardIcon } from '../icon/icons';
-import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, ZardAlertVariants } from './alert.variants';
+import { type ZardIcon } from '../icon/icons';
+import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, type ZardAlertVariants } from './alert.variants';
 
 import type { ClassValue } from 'clsx';
 @Component({
@@ -81,7 +81,7 @@ export class ZardAlertComponent {
 
 
 ```angular-ts title="alert.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const alertVariants = cva('relative w-full rounded-lg border px-4 py-3 text-sm flex items-center gap-3', {
   variants: {

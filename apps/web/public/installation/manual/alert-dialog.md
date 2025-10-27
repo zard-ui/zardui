@@ -1,38 +1,38 @@
 
 
 ```angular-ts title="alert-dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ClassValue } from 'clsx';
+import { type ClassValue } from 'clsx';
 
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
+  type ComponentRef,
   computed,
   ElementRef,
-  EmbeddedViewRef,
-  EventEmitter,
+  type EmbeddedViewRef,
+  type EventEmitter,
   inject,
   NgModule,
   output,
   signal,
-  TemplateRef,
-  Type,
+  type TemplateRef,
+  type Type,
   viewChild,
-  ViewContainerRef,
+  type ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { generateId, mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
-import { ZardAlertDialogRef } from './alert-dialog-ref';
+import { type ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants } from './alert-dialog.variants';
 
 const noopFun = () => void 0;
+
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
 export class ZardAlertDialogOptions<T> {
@@ -63,12 +63,13 @@ export class ZardAlertDialogOptions<T> {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
-    '[@alertDialogAnimation]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
     role: 'alertdialog',
     '[attr.aria-modal]': 'true',
     '[attr.aria-labelledby]': 'titleId()',
     '[attr.aria-describedby]': 'descriptionId()',
+    'animate.enter': 'alert-dialog-enter',
+    'animate.leave': 'alert-dialog-leave',
   },
   styles: [
     `
@@ -78,16 +79,28 @@ export class ZardAlertDialogOptions<T> {
         width: fit-content;
         height: fit-content;
         transform-origin: center center;
+        opacity: 1;
+        transform: scale(1);
+        transition:
+          opacity 150ms ease-out,
+          transform 150ms ease-out;
+      }
+
+      @starting-style {
+        z-alert-dialog {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+      }
+
+      z-alert-dialog.alert-dialog-leave {
+        opacity: 0;
+        transform: scale(0.9);
+        transition:
+          opacity 150ms ease-in,
+          transform 150ms ease-in;
       }
     `,
-  ],
-  animations: [
-    trigger('alertDialogAnimation', [
-      state('close', style({ opacity: 0, transform: 'scale(0.9)' })),
-      state('open', style({ opacity: 1, transform: 'scale(1)' })),
-      transition('close => open', animate('150ms ease-out')),
-      transition('open => close', animate('150ms ease-in')),
-    ]),
   ],
 })
 export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
@@ -153,7 +166,7 @@ export class ZardAlertDialogModule {}
 
 
 ```angular-ts title="alert-dialog.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg rounded-lg sm:max-w-lg');
 
@@ -164,90 +177,65 @@ export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
 
 ```angular-ts title="alert-dialog-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { filter, Observable, Subject, takeUntil } from 'rxjs';
+import { filter, type Observable, Subject, takeUntil } from 'rxjs';
 
-import { OverlayRef } from '@angular/cdk/overlay';
+import type { OverlayRef } from '@angular/cdk/overlay';
 
-import { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
+import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
 export class ZardAlertDialogRef<T = unknown, R = unknown> {
-  private readonly destroy$ = new Subject<void>();
-  private isClosing = false;
-  private readonly afterClosedSubject: Subject<R | undefined> = new Subject();
-
   componentInstance?: T;
+
+  private readonly destroy$ = new Subject<void>();
+  private readonly afterClosedSubject = new Subject<R | undefined>();
+  private isClosing = false;
+
+  readonly afterClosed: Observable<R | undefined> = this.afterClosedSubject.asObservable();
 
   constructor(
     private readonly overlayRef: OverlayRef,
     private readonly config: ZardAlertDialogOptions<T>,
     private readonly containerInstance: ZardAlertDialogComponent<T>,
   ) {
-    containerInstance.cancelTriggered.subscribe(() => {
-      this.handleCancel();
-    });
-
-    containerInstance.okTriggered.subscribe(() => {
-      this.handleOk();
-    });
+    containerInstance.cancelTriggered.subscribe(() => this.handleCancel());
+    containerInstance.okTriggered.subscribe(() => this.handleOk());
 
     this.handleMaskClick();
     this.handleEscapeKey();
   }
 
   close(dialogResult?: R): void {
-    if (this.isClosing) {
-      return;
-    }
-
+    if (this.isClosing) return;
     this.isClosing = true;
-    this.containerInstance.state.set('close');
 
-    setTimeout(() => {
-      if (this.overlayRef) {
-        this.overlayRef.dispose();
-      }
-
-      this.afterClosedSubject.next(dialogResult);
-      this.afterClosedSubject.complete();
-
-      if (!this.destroy$.closed) {
-        this.destroy$.next();
-        this.destroy$.complete();
-      }
-    }, 150);
+    const element = this.containerInstance.getNativeElement?.() ?? null;
+    if (element) {
+      element.classList.add('alert-dialog-leave');
+    }
+    this.waitForTransitionEnd(element).then(() => this.dispose(dialogResult));
   }
 
-  afterClosed(): Observable<R | undefined> {
-    return this.afterClosedSubject.asObservable();
-  }
-
-  private handleCancel() {
+  private handleCancel(): void {
     const cancelFn = this.config.zOnCancel;
-
     if (typeof cancelFn === 'function') {
       const result = (cancelFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) {
-        this.close(result as R);
-      }
+      if (result !== false) this.close(result as R);
     } else {
       this.close();
     }
   }
 
-  private handleOk() {
+  private handleOk(): void {
     const okFn = this.config.zOnOk;
-
     if (typeof okFn === 'function') {
       const result = (okFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) {
-        this.close(result as R);
-      }
+      if (result !== false) this.close(result as R);
     } else {
       this.close();
     }
   }
 
-  private handleMaskClick() {
+  private handleMaskClick(): void {
     const hasMaskClosable = this.config.zMaskClosable ?? true;
     if (hasMaskClosable) {
       this.overlayRef
@@ -257,7 +245,7 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     }
   }
 
-  private handleEscapeKey() {
+  private handleEscapeKey(): void {
     this.overlayRef
       .keydownEvents()
       .pipe(
@@ -265,6 +253,40 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
         takeUntil(this.destroy$),
       )
       .subscribe(() => this.close());
+  }
+
+  private async waitForTransitionEnd(element: HTMLElement | null): Promise<void> {
+    if (!element) {
+      await new Promise(resolve => setTimeout(resolve, 150));
+      return;
+    }
+
+    await Promise.race([
+      new Promise<void>(resolve => {
+        const handler = () => {
+          element.removeEventListener('transitionend', handler);
+          resolve();
+        };
+        element.addEventListener('transitionend', handler, { once: true });
+      }),
+      new Promise(resolve => setTimeout(resolve, 150)),
+    ]);
+  }
+
+  private dispose(result?: R): void {
+    try {
+      this.overlayRef?.dispose();
+    } catch {
+      // Overlay already destroyed or SSR
+    }
+
+    this.afterClosedSubject.next(result);
+    this.afterClosedSubject.complete();
+
+    if (!this.destroy$.closed) {
+      this.destroy$.next();
+      this.destroy$.complete();
+    }
   }
 }
 
@@ -314,15 +336,16 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 
 ```angular-ts title="alert-dialog.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
+import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 
 import { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string | undefined;
+
 export const Z_ALERT_MODAL_DATA = new InjectionToken<unknown>('Z_ALERT_MODAL_DATA');
 
 @Injectable({
@@ -374,29 +397,27 @@ export class ZardAlertDialogService {
     const overlayRef = this.createOverlay();
 
     if (!overlayRef) {
-      // Return a mock alert dialog ref for SSR environments
       return new ZardAlertDialogRef(undefined as any, config, undefined as any);
     }
 
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
-
     const alertDialogRef = this.attachAlertDialogContent<T>(componentOrTemplateRef, alertDialogContainer, overlayRef, config);
+
     alertDialogContainer.alertDialogRef = alertDialogRef;
 
     return alertDialogRef;
   }
 
   private createOverlay(): OverlayRef | undefined {
-    if (isPlatformBrowser(this.platformId)) {
-      const overlayConfig = new OverlayConfig({
-        hasBackdrop: true,
-        backdropClass: 'cdk-overlay-dark-backdrop',
-        positionStrategy: this.overlay.position().global(),
-      });
+    if (!isPlatformBrowser(this.platformId)) return undefined;
 
-      return this.overlay.create(overlayConfig);
-    }
-    return undefined;
+    const overlayConfig = new OverlayConfig({
+      hasBackdrop: true,
+      backdropClass: 'cdk-overlay-dark-backdrop',
+      positionStrategy: this.overlay.position().global(),
+    });
+
+    return this.overlay.create(overlayConfig);
   }
 
   private attachAlertDialogContainer<T>(overlayRef: OverlayRef, config: ZardAlertDialogOptions<T>) {
@@ -409,11 +430,8 @@ export class ZardAlertDialogService {
     });
 
     const containerPortal = new ComponentPortal<ZardAlertDialogComponent<T>>(ZardAlertDialogComponent, config.zViewContainerRef, injector);
-    const containerRef = overlayRef.attach<ZardAlertDialogComponent<T>>(containerPortal);
 
-    setTimeout(() => {
-      containerRef.instance.state.set('open');
-    }, 0);
+    const containerRef = overlayRef.attach(containerPortal);
 
     return containerRef.instance;
   }
@@ -428,14 +446,13 @@ export class ZardAlertDialogService {
 
     if (componentOrTemplateRef instanceof TemplateRef) {
       alertDialogContainer.attachTemplatePortal(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         new TemplatePortal<T>(componentOrTemplateRef, null!, {
-          alertDialogRef: alertDialogRef,
+          alertDialogRef,
         } as any),
       );
     } else if (componentOrTemplateRef && typeof componentOrTemplateRef !== 'string') {
       const injector = this.createInjector<T>(alertDialogRef, config);
-      const contentRef = alertDialogContainer.attachComponentPortal<T>(new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector));
+      const contentRef = alertDialogContainer.attachComponentPortal(new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector));
       alertDialogRef.componentInstance = contentRef.instance;
     }
 

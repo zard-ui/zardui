@@ -1,10 +1,9 @@
 
 
 ```angular-ts title="breadcrumb.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, input, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
@@ -14,8 +13,8 @@ import {
   breadcrumbItemVariants,
   breadcrumbListVariants,
   breadcrumbVariants,
-  ZardBreadcrumbEllipsisVariants,
-  ZardBreadcrumbVariants,
+  type ZardBreadcrumbEllipsisVariants,
+  type ZardBreadcrumbVariants,
 } from './breadcrumb.variants';
 
 @Component({
@@ -138,7 +137,7 @@ export class ZardBreadcrumbEllipsisComponent {
 
 
 ```angular-ts title="breadcrumb.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const breadcrumbVariants = cva('w-full', {
   variants: {
