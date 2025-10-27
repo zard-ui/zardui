@@ -12,16 +12,13 @@ import {
   inject,
   NgModule,
   output,
-  signal,
   type TemplateRef,
   type Type,
   viewChild,
   type ViewContainerRef,
 } from '@angular/core';
 import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OverlayModule } from '@angular/cdk/overlay';
-
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
@@ -111,16 +108,38 @@ export class ZardDialogOptions<T, U> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
-    '[@dialogAnimation]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
+    'animate.enter': 'dialog-enter',
+    'animate.leave': 'dialog-leave',
   },
-  animations: [
-    trigger('dialogAnimation', [
-      state('close', style({ opacity: 0, transform: 'scale(0.9)' })),
-      state('open', style({ opacity: 1, transform: 'scale(1)' })),
-      transition('close => open', animate('150ms ease-out')),
-      transition('open => close', animate('150ms ease-in')),
-    ]),
+  styles: [
+    `
+      :host {
+        /* Default state when visible */
+        opacity: 1;
+        transform: scale(1);
+        transition:
+          opacity 150ms ease-out,
+          transform 150ms ease-out;
+      }
+
+      /* Initial state when entering */
+      @starting-style {
+        :host {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+      }
+
+      /* Leave animation styles */
+      :host.dialog-leave {
+        opacity: 0;
+        transform: scale(0.9);
+        transition:
+          opacity 150ms ease-in,
+          transform 150ms ease-in;
+      }
+    `,
   ],
 })
 export class ZardDialogComponent<T, U> extends BasePortalOutlet {
@@ -136,7 +155,6 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
-  state = signal<'close' | 'open'>('close');
 
   constructor() {
     super();
@@ -246,8 +264,11 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.isClosing = true;
     this.result = result;
 
-    this.containerInstance.state.set('close');
+    // Add the leave animation class to trigger CSS transition
+    const hostElement = this.containerInstance.getNativeElement();
+    hostElement.classList.add('dialog-leave');
 
+    // Wait for animation to complete before disposing
     setTimeout(() => {
       if (this.overlayRef) {
         if (this.overlayRef.hasAttached()) {
@@ -260,7 +281,7 @@ export class ZardDialogRef<T = any, R = any, U = any> {
         this.destroy$.next();
         this.destroy$.complete();
       }
-    }, 150);
+    }, 150); // Match the animation duration
   }
 
   private trigger(action: eTriggerAction) {
@@ -271,7 +292,9 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     } else if (typeof trigger === 'function') {
       const result = trigger(this.getContentComponent()) as R;
       this.closeWithResult(result);
-    } else this.close();
+    } else {
+      this.close();
+    }
   }
 
   private getContentComponent(): T {
@@ -279,7 +302,9 @@ export class ZardDialogRef<T = any, R = any, U = any> {
   }
 
   private closeWithResult(result: R): void {
-    if (result !== false) this.close(result);
+    if (result !== false) {
+      this.close(result);
+    }
   }
 }
 
@@ -292,11 +317,11 @@ import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
-
 import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
+
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
 
 @Injectable({
@@ -320,8 +345,8 @@ export class ZardDialogService {
     }
 
     const dialogContainer = this.attachDialogContainer<T, U>(overlayRef, config);
-
     const dialogRef = this.attachDialogContent<T, U>(componentOrTemplateRef, dialogContainer, overlayRef, config);
+
     dialogContainer.dialogRef = dialogRef;
 
     return dialogRef;
@@ -336,6 +361,7 @@ export class ZardDialogService {
 
       return this.overlay.create(overlayConfig);
     }
+
     return undefined;
   }
 
@@ -349,11 +375,11 @@ export class ZardDialogService {
     });
 
     const containerPortal = new ComponentPortal<ZardDialogComponent<T, U>>(ZardDialogComponent, config.zViewContainerRef, injector);
+
     const containerRef = overlayRef.attach<ZardDialogComponent<T, U>>(containerPortal);
 
-    setTimeout(() => {
-      containerRef.instance.state.set('open');
-    }, 0);
+    // No need for setTimeout or state.set() anymore!
+    // The animate.enter directive handles the entry animation automatically
 
     return containerRef.instance;
   }
