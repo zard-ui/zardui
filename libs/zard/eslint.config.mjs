@@ -35,7 +35,7 @@ export default [
     },
   },
   {
-    files: ['!**/*.spec.ts', '!**/demo/**/*.ts'],
+    files: ['**/*.spec.ts', '**/demo/**/*.ts'],
     rules: {
       '@angular-eslint/prefer-on-push-component-change-detection': 'off',
     },
