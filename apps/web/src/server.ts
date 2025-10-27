@@ -93,6 +93,7 @@ function getDescriptionForRoute(path: string): string {
   const descriptions: Record<string, string> = {
     '/docs/introduction': 'Core principles, architecture overview, and getting started with Zard UI.',
     '/docs/components': 'Browse all available components in the Zard UI library.',
+    '/docs/roadmap': 'Public roadmap showing our vision, current progress, and future goals.',
     '/docs/changelog': 'Release notes, version history, and updates.',
     '/docs/installation': 'Step-by-step guide to install Zard UI in your Angular project.',
     '/docs/components-json': 'Configuration file for customizing the CLI and component installation.',

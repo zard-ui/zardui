@@ -29,6 +29,11 @@ export const SECTIONS = {
       available: false,
     },
     {
+      name: 'Roadmap',
+      path: '/docs/roadmap',
+      available: true,
+    },
+    {
       name: 'Changelog',
       path: '/docs/changelog',
       available: true,

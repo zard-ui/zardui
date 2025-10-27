@@ -66,6 +66,10 @@ export const appRoutes: Route[] = [
         loadComponent: async () => import('./domain/pages/figma/figma.page').then(m => m.FigmaPage),
       },
       {
+        path: 'roadmap',
+        loadComponent: async () => import('./domain/pages/roadmap/roadmap.page').then(m => m.RoadmapPage),
+      },
+      {
         path: 'changelog',
         loadComponent: async () => import('./domain/pages/change-log/change-log.page').then(m => m.ChangeLogPage),
       },

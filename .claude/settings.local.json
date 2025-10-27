@@ -60,7 +60,6 @@
       "Bash(npx nx run:*)",
       "Bash(sed:*)",
       "mcp__ide__getDiagnostics",
-      "Read(//home/maverick/**)",
       "Bash(for:*)",
       "Bash(do echo \"=== $file ===\")",
       "Bash(head:*)",
@@ -77,13 +76,7 @@
       "Bash(npm unlink:*)",
       "Bash(git restore:*)",
       "WebSearch",
-      "Bash(npx commitlint)",
-      "Bash(npx nx reset)",
-      "Bash(npm whoami:*)",
-      "Bash(git push:*)",
-      "Bash(git tag:*)",
-      "Bash(npm publish:*)",
-      "Bash(npx @ngzard/ui@1.0.0-beta.23 --version)"
+      "Bash(cd:*)"
     ],
     "defaultMode": "acceptEdits"
   },
