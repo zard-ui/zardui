@@ -1,4 +1,3 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import {
@@ -12,7 +11,6 @@ import {
   inject,
   NgModule,
   output,
-  signal,
   type TemplateRef,
   type Type,
   viewChild,
@@ -26,6 +24,7 @@ import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
+// Used by the NgModule provider definition
 
 const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -108,16 +107,35 @@ export class ZardDialogOptions<T, U> {
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
-    '[@dialogAnimation]': 'state()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
+    'animate.enter': 'dialog-enter',
+    'animate.leave': 'dialog-leave',
   },
-  animations: [
-    trigger('dialogAnimation', [
-      state('close', style({ opacity: 0, transform: 'scale(0.9)' })),
-      state('open', style({ opacity: 1, transform: 'scale(1)' })),
-      transition('close => open', animate('150ms ease-out')),
-      transition('open => close', animate('150ms ease-in')),
-    ]),
+  styles: [
+    `
+      :host {
+        opacity: 1;
+        transform: scale(1);
+        transition:
+          opacity 150ms ease-out,
+          transform 150ms ease-out;
+      }
+
+      @starting-style {
+        :host {
+          opacity: 0;
+          transform: scale(0.9);
+        }
+      }
+
+      :host.dialog-leave {
+        opacity: 0;
+        transform: scale(0.9);
+        transition:
+          opacity 150ms ease-in,
+          transform 150ms ease-in;
+      }
+    `,
   ],
 })
 export class ZardDialogComponent<T, U> extends BasePortalOutlet {
@@ -133,7 +151,6 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
-  state = signal<'close' | 'open'>('close');
 
   constructor() {
     super();
