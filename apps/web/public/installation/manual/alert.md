@@ -6,8 +6,9 @@ import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewE
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
-import { type ZardIcon } from '../icon/icons';
 import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, type ZardAlertVariants } from './alert.variants';
+
+import type { ZardIcon } from '../icon/icons';
 
 import type { ClassValue } from 'clsx';
 @Component({

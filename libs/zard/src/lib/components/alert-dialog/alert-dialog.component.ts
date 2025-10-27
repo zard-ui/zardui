@@ -1,5 +1,3 @@
-import { type ClassValue } from 'clsx';
-
 import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
@@ -21,12 +19,13 @@ import {
   type ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+import type { ClassValue } from 'clsx';
 
-import { generateId, mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { type ZardAlertDialogRef } from './alert-dialog-ref';
-import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants } from './alert-dialog.variants';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardAlertDialogService } from './alert-dialog.service';
+import type { ZardAlertDialogRef } from './alert-dialog-ref';
+import { generateId, mergeClasses } from '../../shared/utils/utils';
 
 const noopFun = () => void 0;
 

@@ -109,7 +109,7 @@ import {
   LightbulbOff,
   LoaderCircle,
   LogOut,
-  LucideIconData,
+  type LucideIconData,
   Mail,
   Monitor,
   Moon,
