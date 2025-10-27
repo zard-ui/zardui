@@ -1,5 +1,5 @@
 ```angular-ts showLineNumbers copyButton
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardAlertComponent } from '../alert.component';
@@ -7,6 +7,7 @@ import { ZardAlertComponent } from '../alert.component';
 @Component({
   standalone: true,
   imports: [ZardAlertComponent, ZardIconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="grid w-full max-w-xl items-start gap-4">
       <z-alert zIcon="circle-check" zTitle="Success! Your changes have been saved" zDescription="This is an alert with icon, title and description." />

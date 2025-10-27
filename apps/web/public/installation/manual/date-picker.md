@@ -109,7 +109,7 @@ export class ZardDatePickerComponent {
 
   protected onDateChange(date: Date | Date[]): void {
     // Date picker always uses single mode, so we can safely cast
-    const singleDate = Array.isArray(date) ? date[0] : date;
+    const singleDate = Array.isArray(date) ? (date[0] ?? null) : date;
     this.dateChange.emit(singleDate);
 
     this.popoverDirective().hide();

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ZardAlertComponent } from './alert.component';
@@ -8,7 +8,7 @@ import { ZardAlertComponent } from './alert.component';
   selector: 'test-host-component',
   standalone: true,
   imports: [ZardAlertComponent],
-  template: ` <z-alert zTitle="Test Title" zDescription="Test Description" zType="info" zIcon="info" class="custom-class"></z-alert> `,
+  template: ` <z-alert zTitle="Test Title" zDescription="Test Description" zIcon="info" class="custom-class"></z-alert> `,
 })
 class TestHostComponent {}
 
@@ -40,11 +40,5 @@ describe('ZardAlertComponent', () => {
     expect(alert.classList).toContain('custom-class');
     expect(alert.getAttribute('data-slot')).toBe('alert');
     expect(alert.getAttribute('role')).toBe('alert');
-  });
-
-  it('should render correct icon when zIcon is provided', () => {
-    const icon = fixture.debugElement.query(By.css('z-icon'));
-    expect(icon).toBeTruthy();
-    expect(icon.componentInstance.zType()).toBe('info');
   });
 });

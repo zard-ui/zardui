@@ -10,6 +10,7 @@ import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardTooltipModule } from '../../tooltip/tooltip';
 import { ZardMenuModule } from '../../menu/menu.module';
 import { LayoutModule } from '../layout.module';
+import { RouterLink } from '@angular/router';
 
 interface MenuItem {
   icon: ZardIcon;
@@ -22,6 +23,7 @@ interface MenuItem {
   standalone: true,
   imports: [
     LayoutModule,
+    RouterLink,
     ZardButtonComponent,
     ZardBreadcrumbModule,
     ZardMenuModule,

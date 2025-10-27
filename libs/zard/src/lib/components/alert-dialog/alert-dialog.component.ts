@@ -117,7 +117,6 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
-  state = signal<'close' | 'open'>('close');
 
   constructor() {
     super();

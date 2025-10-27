@@ -1,5 +1,5 @@
 ```angular-ts showLineNumbers copyButton
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { ZardSliderComponent } from '../slider.component';
 
