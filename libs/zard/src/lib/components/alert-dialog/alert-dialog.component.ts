@@ -12,20 +12,20 @@ import {
   inject,
   NgModule,
   output,
-  signal,
   type TemplateRef,
   type Type,
   viewChild,
   type ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { alertDialogVariants } from './alert-dialog.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardAlertDialogService } from './alert-dialog.service';
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
+import { ZardAlertDialogService } from './alert-dialog.service';
+import { alertDialogVariants } from './alert-dialog.variants';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
 
 const noopFun = () => void 0;
 
