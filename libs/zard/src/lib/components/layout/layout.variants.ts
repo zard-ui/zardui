@@ -1,4 +1,4 @@
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 // Layout Variants
 export const layoutVariants = cva('flex w-full min-h-0', {

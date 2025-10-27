@@ -1,5 +1,5 @@
 import {
-  AfterContentInit,
+  type AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -10,21 +10,21 @@ import {
   inject,
   input,
   linkedSignal,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   PLATFORM_ID,
   signal,
-  TemplateRef,
+  type TemplateRef,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 
-import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
+import { selectContentVariants, selectTriggerVariants, type ZardSelectTriggerVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardSelectItemComponent } from './select-item.component';
 import { ZardIconComponent } from '../icon/icon.component';

@@ -1,8 +1,8 @@
-import { filter, Observable, Subject, takeUntil } from 'rxjs';
+import { filter, type Observable, Subject, takeUntil } from 'rxjs';
 
-import { OverlayRef } from '@angular/cdk/overlay';
+import type { OverlayRef } from '@angular/cdk/overlay';
 
-import { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
+import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
 export class ZardAlertDialogRef<T = unknown, R = unknown> {
   private readonly destroy$ = new Subject<void>();

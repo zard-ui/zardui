@@ -4,31 +4,31 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
+  type ComponentRef,
   computed,
   ElementRef,
-  EmbeddedViewRef,
-  EventEmitter,
+  type EmbeddedViewRef,
+  type EventEmitter,
   inject,
   NgModule,
   output,
   signal,
-  TemplateRef,
-  Type,
+  type TemplateRef,
+  type Type,
   viewChild,
-  ViewContainerRef,
+  type ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { ClassValue } from 'clsx';
+import type { ClassValue } from 'clsx';
 
-import { alertDialogVariants, ZardAlertDialogVariants } from './alert-dialog.variants';
+import { alertDialogVariants, type ZardAlertDialogVariants } from './alert-dialog.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardAlertDialogService } from './alert-dialog.service';
-import { ZardAlertDialogRef } from './alert-dialog-ref';
+import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
 
 const noopFun = () => void 0;
@@ -161,7 +161,7 @@ export class ZardAlertDialogModule {}
 
 
 ```angular-ts title="alert-dialog.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg rounded-lg sm:max-w-lg', {
   variants: {
@@ -183,11 +183,11 @@ export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
 
 ```angular-ts title="alert-dialog-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { filter, Observable, Subject, takeUntil } from 'rxjs';
+import { filter, type Observable, Subject, takeUntil } from 'rxjs';
 
-import { OverlayRef } from '@angular/cdk/overlay';
+import type { OverlayRef } from '@angular/cdk/overlay';
 
-import { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
+import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
 export class ZardAlertDialogRef<T = unknown, R = unknown> {
   private readonly destroy$ = new Subject<void>();
@@ -333,7 +333,7 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 
 ```angular-ts title="alert-dialog.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
+import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';

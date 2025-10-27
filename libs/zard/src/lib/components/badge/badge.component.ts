@@ -3,7 +3,7 @@ import type { ClassValue } from 'clsx';
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { badgeVariants, ZardBadgeVariants } from './badge.variants';
+import { badgeVariants, type ZardBadgeVariants } from './badge.variants';
 
 @Component({
   selector: 'z-badge',

@@ -2,7 +2,7 @@ import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 import { DOCUMENT } from '@angular/common';
 import {
-  AfterViewInit,
+  type AfterViewInit,
   booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -14,15 +14,15 @@ import {
   input,
   linkedSignal,
   numberAttribute,
-  OnChanges,
-  OnDestroy,
+  type OnChanges,
+  type OnDestroy,
   output,
   signal,
-  SimpleChanges,
+  type SimpleChanges,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { clamp, convertValueToPercentage, roundToStep } from '../../shared/utils/number';
 import { mergeClasses } from '../../shared/utils/utils';
@@ -210,7 +210,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onTouched: OnTouchedType = () => {};
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onChange: OnChangeType = (value: number) => {};
+  private onChange: OnChangeType = () => {};
 
   private destroy$ = new Subject<void>();
 

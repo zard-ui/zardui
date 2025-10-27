@@ -11,7 +11,7 @@ import {
   tableHeadVariants,
   tableCellVariants,
   tableCaptionVariants,
-  ZardTableVariants,
+  type ZardTableVariants,
 } from './table.variants';
 
 @Component({

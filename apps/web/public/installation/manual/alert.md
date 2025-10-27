@@ -4,10 +4,10 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
-import { alertVariants, ZardAlertVariants } from './alert.variants';
+import { alertVariants, type ZardAlertVariants } from './alert.variants';
 import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardIcon } from '../icon/icons';
+import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-alert',
@@ -64,7 +64,7 @@ export class ZardAlertComponent {
 
 
 ```angular-ts title="alert.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const alertVariants = cva('relative flex gap-2 w-full rounded-lg p-4', {
   variants: {

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewE
 import type { ClassValue } from 'clsx';
 
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { emptyVariants, ZardEmptyVariants } from './empty.variants';
+import { emptyVariants, type ZardEmptyVariants } from './empty.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({

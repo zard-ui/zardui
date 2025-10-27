@@ -6,7 +6,7 @@ import type { ClassValue } from 'clsx';
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { badgeVariants, ZardBadgeVariants } from './badge.variants';
+import { badgeVariants, type ZardBadgeVariants } from './badge.variants';
 
 @Component({
   selector: 'z-badge',
@@ -33,7 +33,7 @@ export class ZardBadgeComponent {
 
 
 ```angular-ts title="badge.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const badgeVariants = cva(
   'inline-flex items-center border text-xs px-2.5 py-0.5 font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',

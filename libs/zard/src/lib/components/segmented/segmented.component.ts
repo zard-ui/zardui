@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, forwardRef, input, OnInit, output, signal, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, forwardRef, input, type OnInit, output, signal, ViewEncapsulation } from '@angular/core';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { segmentedItemVariants, segmentedVariants, ZardSegmentedVariants } from './segmented.variants';
+import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
 
 import type { ClassValue } from 'clsx';
 

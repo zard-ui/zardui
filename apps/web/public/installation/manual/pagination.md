@@ -2,8 +2,8 @@
 
 ```angular-ts title="pagination.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { booleanAttribute, ChangeDetectionStrategy, Component, computed, forwardRef, input, linkedSignal, output, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'clsx';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import type { ClassValue } from 'clsx';
 
 import {
   paginationContentVariants,
@@ -13,7 +13,7 @@ import {
   paginationPreviousVariants,
   paginationVariants,
 } from './pagination.variants';
-import { buttonVariants, ZardButtonVariants } from '../button/button.variants';
+import { buttonVariants, type ZardButtonVariants } from '../button/button.variants';
 import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
 
@@ -254,7 +254,7 @@ export class ZardPaginationComponent implements ControlValueAccessor {
 
 
 ```angular-ts title="pagination.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const paginationContentVariants = cva('flex flex-row items-center gap-1');
 export type ZardPaginationContentVariants = VariantProps<typeof paginationContentVariants>;
