@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewE
 import type { ClassValue } from 'clsx';
 
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { emptyVariants, ZardEmptyVariants } from './empty.variants';
+import { emptyVariants, type ZardEmptyVariants } from './empty.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
@@ -73,7 +73,7 @@ export class ZardEmptyComponent {
 
 
 ```angular-ts title="empty.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const emptyVariants = cva('flex flex-col items-center justify-center text-center', {
   variants: {

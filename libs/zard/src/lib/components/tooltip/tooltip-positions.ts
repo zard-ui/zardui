@@ -1,4 +1,4 @@
-import { ConnectedPosition } from '@angular/cdk/overlay';
+import type { ConnectedPosition } from '@angular/cdk/overlay';
 
 export const TOOLTIP_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
   top: {

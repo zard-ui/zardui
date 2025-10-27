@@ -1,6 +1,6 @@
 import { Component, computed, signal } from '@angular/core';
 
-import { ZardCalendarComponent, ZardCalendarVariants } from '../calendar.component';
+import { ZardCalendarComponent, type ZardCalendarVariants } from '../calendar.component';
 import { ZardSelectItemComponent } from '../../select/select-item.component';
 import { ZardSelectComponent } from '../../select/select.component';
 

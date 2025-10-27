@@ -1,8 +1,10 @@
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-import { OverlayRef } from '@angular/cdk/overlay';
+
+import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
-import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
+
+import type { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
 const enum eTriggerAction {
   CANCEL = 'cancel',

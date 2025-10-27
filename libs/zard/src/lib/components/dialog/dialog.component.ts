@@ -1,27 +1,27 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
+  type ComponentRef,
   computed,
   ElementRef,
-  EmbeddedViewRef,
-  EventEmitter,
+  type EmbeddedViewRef,
+  type EventEmitter,
   inject,
   NgModule,
   output,
-  TemplateRef,
-  Type,
+  type TemplateRef,
+  type Type,
   viewChild,
-  ViewContainerRef,
+  type ViewContainerRef,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, PortalModule, TemplatePortal } from '@angular/cdk/portal';
+import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { ZardButtonComponent } from '../button/button.component';
 import { mergeClasses } from '../../shared/utils/utils';
 import { dialogVariants } from './dialog.variants';
-import { ZardDialogRef } from './dialog-ref';
+import type { ZardDialogRef } from './dialog-ref';
+import type { ZardIcon } from '../icon/icons';
 import { ZardIconComponent } from '../icon/icon.component';
-import { ZardIcon } from '../icon/icons';
 // Used by the NgModule provider definition
 import { ZardDialogService } from './dialog.service';
 

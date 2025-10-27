@@ -1,4 +1,4 @@
-import { AfterContentInit, ChangeDetectionStrategy, Component, contentChildren, input, ViewEncapsulation } from '@angular/core';
+import { type AfterContentInit, ChangeDetectionStrategy, Component, contentChildren, input, ViewEncapsulation } from '@angular/core';
 
 import { ZardAccordionItemComponent } from './accordion-item.component';
 

@@ -1,4 +1,4 @@
-import { ZardIcon } from '../../icon/icons';
+import type { ZardIcon } from '../../icon/icons';
 import { Component } from '@angular/core';
 
 import { ZardAlertComponent } from '../alert.component';

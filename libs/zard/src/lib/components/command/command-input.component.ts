@@ -3,19 +3,19 @@ import {
   Component,
   computed,
   DestroyRef,
-  ElementRef,
+  type ElementRef,
   EventEmitter,
   forwardRef,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   Output,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { Subject, switchMap, timer } from 'rxjs';
 import type { ClassValue } from 'clsx';
 

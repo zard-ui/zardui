@@ -1,4 +1,4 @@
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
@@ -8,12 +8,12 @@ import {
   HostListener,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   PLATFORM_ID,
   signal,
-  TemplateRef,
+  type TemplateRef,
   viewChild,
   ViewContainerRef,
   ViewEncapsulation,

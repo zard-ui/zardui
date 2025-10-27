@@ -1,7 +1,7 @@
 import type { ClassValue } from 'clsx';
 
 import {
-  AfterContentInit,
+  type AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -11,7 +11,7 @@ import {
   EventEmitter,
   inject,
   input,
-  OnDestroy,
+  type OnDestroy,
   Output,
   PLATFORM_ID,
   signal,
@@ -21,7 +21,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
-import { resizableVariants, ZardResizableVariants } from './resizable.variants';
+import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
 
 export interface ZardResizeEvent {
   sizes: number[];

@@ -4,7 +4,7 @@
 import type { ClassValue } from 'clsx';
 
 import {
-  AfterContentInit,
+  type AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -14,7 +14,7 @@ import {
   EventEmitter,
   inject,
   input,
-  OnDestroy,
+  type OnDestroy,
   Output,
   PLATFORM_ID,
   signal,
@@ -24,7 +24,7 @@ import { isPlatformBrowser } from '@angular/common';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
-import { resizableVariants, ZardResizableVariants } from './resizable.variants';
+import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
 
 export interface ZardResizeEvent {
   sizes: number[];
@@ -304,7 +304,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 
 
 ```angular-ts title="resizable.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const resizableVariants = cva('flex h-full w-full data-[layout=vertical]:flex-col overflow-hidden', {
   variants: {
