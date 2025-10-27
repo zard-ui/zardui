@@ -6,31 +6,29 @@
 
 The trigger directive that opens the menu when interacted with.
 
-| Input           | Type               | Default  | Description                              |
-| --------------- | ------------------ | -------- | ---------------------------------------- |
-| zMenuTriggerFor | TemplateRef        | required | Reference to the menu template           |
-| zDisabled       | boolean            | false    | Whether the trigger is disabled          |
-| zTrigger        | 'click' \| 'hover' | 'click'  | How the menu is triggered                |
-| zHoverDelay     | number             | 100      | Delay in ms before closing on hover exit |
+| Input               | Description                              | Type                 | Default        |
+| ------------------- | ---------------------------------------- | -------------------- | -------------- |
+| `[zMenuTriggerFor]` | Reference to the menu template           | `TemplateRef`        | `required`     |
+| `[zDisabled]`       | Whether the trigger is disabled          | `boolean`            | `false`        |
+| `[zTrigger]`        | How the menu is triggered                | `'click' \| 'hover'` | `'click'`      |
+| `[zHoverDelay]`     | Delay in ms before closing on hover exit | `number`             | `100`          |
+| `[zPlacement]`      | Menu position relative to trigger        | `ZardMenuPlacement`  | `'bottomLeft'` |
 
 ### z-menu-content
 
 Container directive for menu items.
 
-| Input | Type       | Default | Description            |
-| ----- | ---------- | ------- | ---------------------- |
-| class | ClassValue | ''      | Additional CSS classes |
+| Input     | Description            | Type         | Default |
+| --------- | ---------------------- | ------------ | ------- |
+| `[class]` | Additional CSS classes | `ClassValue` | `''`    |
 
 ### z-menu-item
 
 Individual menu item directive.
 
-| Input     | Type       | Default | Description                    |
-| --------- | ---------- | ------- | ------------------------------ |
-| zDisabled | boolean    | false   | Whether the item is disabled   |
-| zInset    | boolean    | false   | Add left padding for alignment |
-| class     | ClassValue | ''      | Additional CSS classes         |
-
-| Output            | Type         | Description                |
-| ----------------- | ------------ | -------------------------- |
-| menuItemTriggered | EventEmitter | Emits when item is clicked |
+| Input                 | Description                    | Type           | Default |
+| --------------------- | ------------------------------ | -------------- | ------- |
+| `[zDisabled]`         | Whether the item is disabled   | `boolean`      | `false` |
+| `[zInset]`            | Add left padding for alignment | `boolean`      | `false` |
+| `[class]`             | Additional CSS classes         | `ClassValue`   | `''`    |
+| `[menuItemTriggered]` | Emits when item is clicked     | `EventEmitter` |         |

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
-import { ZardDividerComponent } from '../../divider/divider.component';
 import { ZardButtonComponent } from '../../button/button.component';
+import { ZardDividerComponent } from '../../divider/divider.component';
 import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardMenuModule } from '../menu.module';
 
@@ -75,7 +75,7 @@ import { ZardMenuModule } from '../menu.module';
                   Documentation
                 </button>
 
-                <button z-menu-item z-menu [zMenuTriggerFor]="helpSubmenu" class="justify-between">
+                <button z-menu-item z-menu [zMenuTriggerFor]="helpSubmenu" zPlacement="rightTop" class="justify-between">
                   <div class="flex items-center"><z-icon zType="info" class="mr-2" /> Help & Support</div>
                   <z-icon zType="chevron-right" />
                 </button>
