@@ -20,7 +20,7 @@ export default [
   ...nx.configs['flat/angular'],
   ...nx.configs['flat/angular-template'],
   {
-    files: ['**/*.ts'],
+    files: ['**/*.ts', '!**/*.spec.ts', '!**/demo/**/*.ts'],
     rules: {
       '@angular-eslint/directive-selector': 'off',
       '@angular-eslint/component-selector': 'off',
