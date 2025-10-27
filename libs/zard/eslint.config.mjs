@@ -20,7 +20,7 @@ export default [
   ...nx.configs['flat/angular'],
   ...nx.configs['flat/angular-template'],
   {
-    files: ['**/*.ts', '!**/*.spec.ts', '!**/demo/**/*.ts'],
+    files: ['**/*.ts'],
     rules: {
       '@angular-eslint/directive-selector': 'off',
       '@angular-eslint/component-selector': 'off',
@@ -32,6 +32,12 @@ export default [
           fixStyle: 'inline-type-imports',
         },
       ],
+    },
+  },
+  {
+    files: ['!**/*.spec.ts', '!**/demo/**/*.ts'],
+    rules: {
+      '@angular-eslint/prefer-on-push-component-change-detection': 'off',
     },
   },
   {

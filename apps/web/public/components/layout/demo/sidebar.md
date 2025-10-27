@@ -1,17 +1,16 @@
 ```angular-ts showLineNumbers copyButton
-import type { ZardIcon } from '../../icon/icons';
 import { Component, signal } from '@angular/core';
 
-import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
-import { ZardBreadcrumbModule } from '../../breadcrumb/breadcrumb.module';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardButtonComponent } from '../../button/button.component';
 import { ZardAvatarComponent } from '../../avatar/avatar.component';
+import { ZardBreadcrumbModule } from '../../breadcrumb/breadcrumb.module';
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardDividerComponent } from '../../divider/divider.component';
 import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardTooltipModule } from '../../tooltip/tooltip';
+import type { ZardIcon } from '../../icon/icons';
 import { ZardMenuModule } from '../../menu/menu.module';
+import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
+import { ZardTooltipModule } from '../../tooltip/tooltip';
 import { LayoutModule } from '../layout.module';
-import { RouterLink } from '@angular/router';
 
 interface MenuItem {
   icon: ZardIcon;
@@ -24,7 +23,6 @@ interface MenuItem {
   standalone: true,
   imports: [
     LayoutModule,
-    RouterLink,
     ZardButtonComponent,
     ZardBreadcrumbModule,
     ZardMenuModule,
