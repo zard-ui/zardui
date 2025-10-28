@@ -3,7 +3,6 @@ import { Component, signal } from '@angular/core';
 import { ZardCalendarComponent } from '../calendar.component';
 
 @Component({
-  selector: 'z-demo-calendar-range',
   standalone: true,
   imports: [ZardCalendarComponent],
   template: `

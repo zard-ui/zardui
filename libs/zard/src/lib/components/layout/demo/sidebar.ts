@@ -104,7 +104,7 @@ interface MenuItem {
               zPlacement="rightBottom"
               [class]="'flex items-center justify-center gap-2 cursor-pointer rounded-md hover:bg-accent ' + (sidebarCollapsed() ? 'p-0 m-2' : 'p-2')"
             >
-              <z-avatar zSize="sm" [zImage]="avatar" />
+              <z-avatar zSrc="https://zardui.com/images/avatar/imgs/avatar_image.jpg" zAlt="Zard UI" />
 
               @if (!sidebarCollapsed()) {
                 <div>
@@ -146,16 +146,11 @@ interface MenuItem {
 
           <z-divider zOrientation="vertical" class="h-4 ml-2" />
 
-          <z-breadcrumb>
-            <z-breadcrumb-list zWrap="wrap" zAlign="start">
-              <z-breadcrumb-item>
-                <z-breadcrumb-link zLink="/docs/components/layout">Home</z-breadcrumb-link>
-              </z-breadcrumb-item>
-              <z-breadcrumb-separator />
-              <z-breadcrumb-item>
-                <z-breadcrumb-link zLink="/docs/components/layout">Components</z-breadcrumb-link>
-              </z-breadcrumb-item>
-            </z-breadcrumb-list>
+          <z-breadcrumb zWrap="wrap" zAlign="start">
+            <z-breadcrumb-item [routerLink]="['/docs/components/layout']">Home</z-breadcrumb-item>
+            <z-breadcrumb-item>
+              <span aria-current="page">Components</span>
+            </z-breadcrumb-item>
           </z-breadcrumb>
         </div>
 
@@ -184,12 +179,6 @@ export class LayoutDemoSidebarComponent {
     { icon: 'calendar', label: 'Calendar' },
     { icon: 'search', label: 'Search' },
   ];
-
-  avatar = {
-    fallback: 'ZA',
-    url: '/images/avatar/imgs/avatar_image.jpg',
-    alt: 'ZadUI',
-  };
 
   toggleSidebar() {
     this.sidebarCollapsed.update(collapsed => !collapsed);

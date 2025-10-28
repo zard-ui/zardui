@@ -1,6 +1,10 @@
 # API Reference
 
+<<<<<<< HEAD
 [z-avatar] Component
+=======
+## z-avatar
+>>>>>>> bb985d2 (📦 refactor: review some components (#282))
 
 ### Inputs
 

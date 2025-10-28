@@ -48,7 +48,7 @@ const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, strin
 
     <ng-template #calendarTemplate>
       <z-popover [class]="popoverClasses()">
-        <z-calendar #calendar [zSize]="calendarSize()" [value]="value()" [minDate]="minDate()" [maxDate]="maxDate()" [disabled]="disabled()" (dateChange)="onDateChange($event)" />
+        <z-calendar #calendar [value]="value()" [minDate]="minDate()" [maxDate]="maxDate()" [disabled]="disabled()" (dateChange)="onDateChange($event)" />
       </z-popover>
     </ng-template>
   `,
@@ -96,8 +96,6 @@ export class ZardDatePickerComponent {
 
   protected readonly popoverClasses = computed(() => mergeClasses('w-auto p-0'));
 
-  protected readonly calendarSize = computed(() => this.zSize() ?? 'default');
-
   protected readonly displayText = computed(() => {
     const date = this.value();
     if (!date) {
@@ -106,15 +104,16 @@ export class ZardDatePickerComponent {
     return this.formatDate(date, this.zFormat());
   });
 
-  protected onDateChange(date: Date): void {
-    this.dateChange.emit(date);
-    // Close popover after selection using direct method call
+  protected onDateChange(date: Date | Date[]): void {
+    // Date picker always uses single mode, so we can safely cast
+    const singleDate = Array.isArray(date) ? (date[0] ?? null) : date;
+    this.dateChange.emit(singleDate);
+
     this.popoverDirective().hide();
   }
 
   protected onPopoverVisibilityChange(visible: boolean): void {
     if (visible) {
-      // Reset calendar navigation when opening to show correct month/year
       setTimeout(() => {
         if (this.calendar()) {
           this.calendar().resetNavigation();

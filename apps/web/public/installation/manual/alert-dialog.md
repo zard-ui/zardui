@@ -15,23 +15,20 @@ import {
   inject,
   NgModule,
   output,
-  signal,
   type TemplateRef,
   type Type,
   viewChild,
   type ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { alertDialogVariants, type ZardAlertDialogVariants } from './alert-dialog.variants';
-import { ZardButtonComponent } from '../button/button.component';
-// The service is used in the NgModule providers below, not in the component class.
-import { ZardAlertDialogService } from './alert-dialog.service';
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
-import { generateId, mergeClasses } from '../../shared/utils/utils';
-
-const noopFun = () => void 0;
+import { ZardAlertDialogService } from './alert-dialog.service';
+import { alertDialogVariants } from './alert-dialog.variants';
+import { generateId, mergeClasses, noopFun } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -42,7 +39,6 @@ export class ZardAlertDialogOptions<T> {
   zCustomClasses?: ClassValue;
   zData?: object;
   zDescription?: string;
-  zIcon?: string;
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
@@ -50,7 +46,6 @@ export class ZardAlertDialogOptions<T> {
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zTitle?: string | TemplateRef<T>;
-  zType?: ZardAlertDialogVariants['zType'];
   zViewContainerRef?: ViewContainerRef;
   zWidth?: string;
 }
@@ -109,14 +104,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
   protected readonly config = inject(ZardAlertDialogOptions<T>);
 
-  protected readonly classes = computed(() =>
-    mergeClasses(
-      alertDialogVariants({
-        zType: this.config.zType,
-      }),
-      this.config.zCustomClasses,
-    ),
-  );
+  protected readonly classes = computed(() => mergeClasses(alertDialogVariants(), this.config.zCustomClasses));
 
   private readonly alertDialogId = generateId('alert-dialog');
   protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
@@ -130,7 +118,6 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
-  state = signal<'close' | 'open'>('close');
 
   constructor() {
     super();
@@ -177,18 +164,7 @@ export class ZardAlertDialogModule {}
 ```angular-ts title="alert-dialog.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg rounded-lg sm:max-w-lg', {
-  variants: {
-    zType: {
-      default: '',
-      destructive: 'border-destructive/50 text-destructive dark:border-destructive [&>svg]:text-destructive',
-      warning: 'border-warning/50 text-warning dark:border-warning [&>svg]:text-warning',
-    },
-  },
-  defaultVariants: {
-    zType: 'default',
-  },
-});
+export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg rounded-lg sm:max-w-lg');
 
 export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
@@ -197,9 +173,9 @@ export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
 
 ```angular-ts title="alert-dialog-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { filter, type Observable, Subject, takeUntil } from 'rxjs';
-
 import type { OverlayRef } from '@angular/cdk/overlay';
+
+import { filter, type Observable, Subject, takeUntil } from 'rxjs';
 
 import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
@@ -356,9 +332,9 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
 
 
 ```angular-ts title="alert-dialog.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { isPlatformBrowser } from '@angular/common';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 
 import { ZardAlertDialogRef } from './alert-dialog-ref';
@@ -391,8 +367,6 @@ export class ZardAlertDialogService {
       zOkText: config.zOkText ?? 'Confirm',
       zCancelText: config.zCancelText ?? 'Cancel',
       zOkDestructive: config.zOkDestructive ?? false,
-      zIcon: config.zIcon,
-      zType: config.zType ?? 'default',
     };
     return this.create(confirmConfig);
   }
@@ -402,8 +376,6 @@ export class ZardAlertDialogService {
       ...config,
       zOkText: config.zOkText ?? 'OK',
       zCancelText: null,
-      zIcon: config.zIcon ?? 'alert-triangle',
-      zType: config.zType ?? 'warning',
     };
     return this.create(warningConfig);
   }
@@ -413,8 +385,6 @@ export class ZardAlertDialogService {
       ...config,
       zOkText: config.zOkText ?? 'OK',
       zCancelText: null,
-      zIcon: config.zIcon ?? 'info',
-      zType: config.zType ?? 'default',
     };
     return this.create(infoConfig);
   }

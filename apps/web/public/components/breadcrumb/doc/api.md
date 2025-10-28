@@ -1,6 +1,10 @@
 # API Reference
 
+<<<<<<< HEAD
 [z-breadcrumb] Component
+=======
+## [z-breadcrumb]
+>>>>>>> bb985d2 (📦 refactor: review some components (#282))
 
 | Property       | Description                         | Type                     | Default   |
 | -------------- | ----------------------------------- | ------------------------ | --------- |

@@ -1,6 +1,6 @@
-# API Reference
+# API
 
-[z-avatar] Component
+## z-avatar
 
 ### Inputs
 

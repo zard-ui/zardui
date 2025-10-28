@@ -1,6 +1,6 @@
-# API Reference
+# API
 
-[z-alert] Component
+## z-alert
 
 | Property         | Description       | Type                          | Default   |
 | ---------------- | ----------------- | ----------------------------- | --------- |

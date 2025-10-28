@@ -4,7 +4,6 @@ import { ZardMenuModule } from '../../menu/menu.module';
 import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
-  selector: 'z-demo-breadcrumb-ellipsis',
   standalone: true,
   imports: [ZardBreadcrumbModule, ZardMenuModule],
   template: `

@@ -1,6 +1,8 @@
 
 
 ```angular-ts title="dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { OverlayModule } from '@angular/cdk/overlay';
+import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,17 +19,16 @@ import {
   viewChild,
   type ViewContainerRef,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
-import { OverlayModule } from '@angular/cdk/overlay';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import type { ZardDialogRef } from './dialog-ref';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
-import type { ZardDialogRef } from './dialog-ref';
+import { mergeClasses, noopFun } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
+// Used by the NgModule provider definition
 
-const noopFun = () => void 0;
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardDialogOptions<T, U> {
   zCancelIcon?: ZardIcon;
@@ -115,7 +116,6 @@ export class ZardDialogOptions<T, U> {
   styles: [
     `
       :host {
-        /* Default state when visible */
         opacity: 1;
         transform: scale(1);
         transition:
@@ -123,7 +123,6 @@ export class ZardDialogOptions<T, U> {
           transform 150ms ease-out;
       }
 
-      /* Initial state when entering */
       @starting-style {
         :host {
           opacity: 0;
@@ -131,7 +130,6 @@ export class ZardDialogOptions<T, U> {
         }
       }
 
-      /* Leave animation styles */
       :host.dialog-leave {
         opacity: 0;
         transform: scale(0.9);
@@ -264,11 +262,9 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.isClosing = true;
     this.result = result;
 
-    // Add the leave animation class to trigger CSS transition
     const hostElement = this.containerInstance.getNativeElement();
     hostElement.classList.add('dialog-leave');
 
-    // Wait for animation to complete before disposing
     setTimeout(() => {
       if (this.overlayRef) {
         if (this.overlayRef.hasAttached()) {
@@ -281,7 +277,7 @@ export class ZardDialogRef<T = any, R = any, U = any> {
         this.destroy$.next();
         this.destroy$.complete();
       }
-    }, 150); // Match the animation duration
+    }, 150);
   }
 
   private trigger(action: eTriggerAction) {
@@ -340,7 +336,6 @@ export class ZardDialogService {
     const overlayRef = this.createOverlay();
 
     if (!overlayRef) {
-      // Return a mock dialog ref for SSR environments
       return new ZardDialogRef(undefined as any, config, undefined as any, this.platformId);
     }
 
@@ -378,9 +373,6 @@ export class ZardDialogService {
 
     const containerRef = overlayRef.attach<ZardDialogComponent<T, U>>(containerPortal);
 
-    // No need for setTimeout or state.set() anymore!
-    // The animate.enter directive handles the entry animation automatically
-
     return containerRef.instance;
   }
 
@@ -389,7 +381,6 @@ export class ZardDialogService {
 
     if (componentOrTemplateRef instanceof TemplateRef) {
       dialogContainer.attachTemplatePortal(
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         new TemplatePortal<T>(componentOrTemplateRef, null!, {
           dialogRef: dialogRef,
         } as any),

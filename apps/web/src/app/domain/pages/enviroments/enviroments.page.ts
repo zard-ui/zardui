@@ -1,14 +1,15 @@
 import { Component, inject, OnInit } from '@angular/core';
 
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { SeoService } from '@zard/shared/services/seo.service';
 
-import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { EnvCardComponent } from '@docs/domain/components/env-card/env-card.component';
-import { ScrollSpyItemDirective } from '@docs/domain/directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
-import { SeoService } from '@docs/shared/services/seo.service';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import { EnvCardComponent } from '../../components/env-card/env-card.component';
+import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-enviroments',
@@ -43,11 +44,17 @@ import { SeoService } from '@docs/shared/services/seo.service';
             </div>
           }
         </div>
+        <z-alert
+          zTitle="Framework Support"
+          class="bg-blue-500 dark:text-blue-100 dark:bg-blue-950 border dark:border-blue-800"
+          zDescription="Angular is available now with full documentation and examples. Analog and Nx support are coming soon with dedicated guides and configurations."
+          zAppearance="fill"
+        />
       </section>
     </z-content>
   `,
   standalone: true,
-  imports: [EnvCardComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardBadgeComponent],
+  imports: [EnvCardComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardBadgeComponent, ZardAlertComponent],
 })
 export class EnviromentsPage implements OnInit {
   protected readonly environments = [

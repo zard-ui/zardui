@@ -1,6 +1,6 @@
-# API Reference
+# API
 
-[z-breadcrumb] Component
+## [z-breadcrumb]
 
 | Property       | Description                         | Type                     | Default   |
 | -------------- | ----------------------------------- | ------------------------ | --------- |

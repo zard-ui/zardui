@@ -1,11 +1,10 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, inject, OnInit, input, computed, ChangeDetectionStrategy } from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 
 import { DynamicAnchorComponent, NavigationConfig } from '../dynamic-anchor/dynamic-anchor.component';
 
 @Component({
   selector: 'z-content',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [DynamicAnchorComponent],
   templateUrl: './doc-content.component.html',
 })
@@ -15,8 +14,6 @@ export class DocContentComponent implements OnInit {
   readonly navigationConfig = input<NavigationConfig>();
   activeAnchor = input<string>();
   onAnchorClick = input<((anchorId: string) => void | Promise<void>) | null>(null);
-
-  protected readonly hasAnchor = computed(() => !!this.navigationConfig());
 
   ngOnInit() {
     this.viewportScroller.scrollToPosition([0, 0]);

@@ -1,6 +1,10 @@
 # API Reference
 
+<<<<<<< HEAD
 [z-alert] Component
+=======
+## z-alert
+>>>>>>> bb985d2 (📦 refactor: review some components (#282))
 
 | Property         | Description       | Type                          | Default   |
 | ---------------- | ----------------- | ----------------------------- | --------- |

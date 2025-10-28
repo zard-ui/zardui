@@ -1,61 +1,76 @@
 
 
 ```angular-ts title="alert.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { alertVariants, type ZardAlertVariants } from './alert.variants';
-import { ZardIconComponent } from '../icon/icon.component';
+import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, type ZardAlertVariants } from './alert.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
 
 @Component({
-  selector: 'z-alert',
+  selector: 'z-alert, [z-alert]',
   standalone: true,
-  imports: [ZardIconComponent],
   exportAs: 'zAlert',
+  imports: [ZardIconComponent, ZardStringTemplateOutletDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    @if (iconName()) {
-      <z-icon [zType]="iconName()!" />
+    @if (zIcon() || iconName()) {
+      <span [class]="iconClasses()" data-slot="alert-icon">
+        <ng-container *zStringTemplateOutlet="zIcon()">
+          <z-icon [zType]="iconName()!" />
+        </ng-container>
+      </span>
     }
 
-    <div class="flex flex-col gap-1 w-full">
-      <h5 class="font-medium leading-none tracking-tight mt-1">{{ zTitle() }}</h5>
-      <span class="text-sm leading-[1.625]">{{ zDescription() }}</span>
+    <div class="flex-1">
+      @if (zTitle()) {
+        <div [class]="titleClasses()" data-slot="alert-title">
+          <ng-container *zStringTemplateOutlet="zTitle()">{{ zTitle() }}</ng-container>
+        </div>
+      }
+
+      @if (zDescription()) {
+        <div [class]="descriptionClasses()" data-slot="alert-description">
+          <ng-container *zStringTemplateOutlet="zDescription()">{{ zDescription() }}</ng-container>
+        </div>
+      }
     </div>
   `,
   host: {
+    role: 'alert',
     '[class]': 'classes()',
-    '[attr.data-type]': 'zType()',
-    '[attr.data-appearance]': 'zAppearance()',
+    '[attr.data-slot]': '"alert"',
   },
 })
 export class ZardAlertComponent {
   readonly class = input<ClassValue>('');
-  readonly zTitle = input.required<string>();
-  readonly zDescription = input.required<string>();
-  readonly zIcon = input<ZardIcon>();
+  readonly zTitle = input<string | TemplateRef<void>>('');
+  readonly zDescription = input<string | TemplateRef<void>>('');
+  readonly zIcon = input<ZardIcon | TemplateRef<void>>();
   readonly zType = input<ZardAlertVariants['zType']>('default');
-  readonly zAppearance = input<ZardAlertVariants['zAppearance']>('outline');
 
-  protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType(), zAppearance: this.zAppearance() }), this.class()));
+  protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
 
-  protected readonly iconsType: Record<NonNullable<ZardAlertVariants['zType']>, ZardIcon | ''> = {
-    default: '',
-    info: 'info',
-    success: 'circle-check',
-    warning: 'triangle-alert',
-    error: 'circle-x',
-  };
+  protected readonly iconClasses = computed(() => alertIconVariants());
+
+  protected readonly titleClasses = computed(() => alertTitleVariants());
+
+  protected readonly descriptionClasses = computed(() => alertDescriptionVariants({ zType: this.zType() }));
 
   protected readonly iconName = computed((): ZardIcon | null => {
     const customIcon = this.zIcon();
-    if (customIcon) return customIcon;
+    if (customIcon && !(customIcon instanceof TemplateRef)) {
+      return customIcon;
+    }
 
-    const typeIcon = this.iconsType[this.zType() ?? 'default'];
-    return typeIcon || null;
+    if (this.zType() === 'destructive') return 'circle-alert';
+
+    return null;
   });
 }
 
@@ -66,27 +81,38 @@ export class ZardAlertComponent {
 ```angular-ts title="alert.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const alertVariants = cva('relative flex gap-2 w-full rounded-lg p-4', {
+export const alertVariants = cva('relative w-full rounded-lg border px-4 py-3 text-sm flex items-center gap-3', {
   variants: {
     zType: {
-      default: 'dark:data-[appearance="soft"]:text-zinc-800 data-[appearance="fill"]:text-white',
-      info: 'text-blue-500 data-[appearance="fill"]:text-white',
-      success: 'text-green-600 data-[appearance="fill"]:text-white',
-      warning: 'text-yellow-600 data-[appearance="fill"]:text-white',
-      error: 'text-red-500 data-[appearance="fill"]:text-white',
-    },
-    zAppearance: {
-      outline: 'border data-[type="info"]:border-blue-500 data-[type="success"]:border-green-600 data-[type="warning"]:border-yellow-600 data-[type="error"]:border-red-500',
-      soft: 'bg-zinc-100 data-[type="info"]:bg-blue-50 data-[type="success"]:bg-green-50 data-[type="warning"]:bg-yellow-50 data-[type="error"]:bg-red-50',
-      fill: 'bg-zinc-500 data-[type="info"]:bg-blue-500 data-[type="success"]:bg-green-600 data-[type="warning"]:bg-yellow-600 data-[type="error"]:bg-red-500',
+      default: 'bg-card text-card-foreground',
+      destructive: 'text-destructive bg-card',
     },
   },
   defaultVariants: {
     zType: 'default',
-    zAppearance: 'outline',
   },
 });
+
+export const alertIconVariants = cva('shrink-0 self-start !text-base');
+
+export const alertTitleVariants = cva('font-medium tracking-tight leading-none');
+
+export const alertDescriptionVariants = cva('text-sm leading-relaxed mt-1', {
+  variants: {
+    zType: {
+      default: 'text-muted-foreground',
+      destructive: 'text-destructive/90',
+    },
+  },
+  defaultVariants: {
+    zType: 'default',
+  },
+});
+
 export type ZardAlertVariants = VariantProps<typeof alertVariants>;
+export type ZardAlertIconVariants = VariantProps<typeof alertIconVariants>;
+export type ZardAlertTitleVariants = VariantProps<typeof alertTitleVariants>;
+export type ZardAlertDescriptionVariants = VariantProps<typeof alertDescriptionVariants>;
 
 ```
 
