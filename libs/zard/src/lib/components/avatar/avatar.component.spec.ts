@@ -67,8 +67,7 @@ describe('ZardAvatarComponent', () => {
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
 
-      expect(avatarElement.classList.contains('w-14')).toBeTruthy();
-      expect(avatarElement.classList.contains('h-14')).toBeTruthy();
+      expect(avatarElement.classList.contains('size-14')).toBeTruthy();
       expect(avatarElement.classList.contains('rounded-full')).toBeTruthy();
     });
 
@@ -86,8 +85,7 @@ describe('ZardAvatarComponent', () => {
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('w-8')).toBeTruthy();
-      expect(avatarElement.classList.contains('h-8')).toBeTruthy();
+      expect(avatarElement.classList.contains('size-8')).toBeTruthy();
     });
 
     it('should apply medium size classes', () => {
@@ -95,8 +93,7 @@ describe('ZardAvatarComponent', () => {
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('w-12')).toBeTruthy();
-      expect(avatarElement.classList.contains('h-12')).toBeTruthy();
+      expect(avatarElement.classList.contains('size-12')).toBeTruthy();
     });
 
     it('should apply square shape class', () => {

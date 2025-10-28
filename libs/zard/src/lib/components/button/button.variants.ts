@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const buttonVariants = cva(
-  "cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all active:scale-95 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
+  "cursor-pointer inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all active:scale-97 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive",
   {
     variants: {
       zType: {
@@ -13,10 +13,9 @@ export const buttonVariants = cva(
         link: 'text-primary underline-offset-4 hover:underline',
       },
       zSize: {
-        default: 'h-9 px-4 py-2 has-[>z-icon]:size-9',
-        sm: 'h-8 rounded-md gap-1.5 px-3 has-[>z-icon]:size-8',
-        lg: 'h-10 rounded-md px-6 has-[>z-icon]:size-10',
-        icon: 'size-9',
+        default: 'h-9 px-4 py-2 data-[icon-only]:size-9 data-[icon-only]:p-0',
+        sm: 'h-8 rounded-md gap-1.5 px-3 data-[icon-only]:size-8 data-[icon-only]:p-0',
+        lg: 'h-10 rounded-md px-6 data-[icon-only]:size-10 data-[icon-only]:p-0',
       },
       zShape: {
         default: 'rounded-md',
