@@ -1,4 +1,4 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
+import { afterNextRender, ChangeDetectionStrategy, Component, computed, type OnDestroy, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -24,7 +24,7 @@ import { ZardIconComponent } from '../icon/icon.component';
     '[attr.data-icon-only]': 'iconOnly() || null',
   },
 })
-export class ZardButtonComponent {
+export class ZardButtonComponent implements OnDestroy {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
 
   readonly zType = input<ZardButtonVariants['zType']>('default');
@@ -37,12 +37,14 @@ export class ZardButtonComponent {
   private readonly iconOnlyState = signal(false);
   readonly iconOnly = this.iconOnlyState.asReadonly();
 
+  private _mutationObserver: MutationObserver | null = null;
+
   constructor() {
     afterNextRender(() => {
       const check = () => {
         const el = this.elementRef.nativeElement;
         const hasIcon = el.querySelector('z-icon, [z-icon]') !== null;
-        const children = Array.from(el.childNodes) as Node[];
+        const children = Array.from<Node>(el.childNodes);
         const hasText = children.some(node => {
           if (node.nodeType === 3) {
             return node.textContent?.trim() !== '';
@@ -59,8 +61,16 @@ export class ZardButtonComponent {
       };
 
       check();
-      new MutationObserver(check).observe(this.elementRef.nativeElement, { childList: true, characterData: true, subtree: true });
+      this._mutationObserver = new MutationObserver(check);
+      this._mutationObserver.observe(this.elementRef.nativeElement, { childList: true, characterData: true, subtree: true });
     });
+  }
+
+  ngOnDestroy(): void {
+    if (this._mutationObserver) {
+      this._mutationObserver.disconnect();
+      this._mutationObserver = null;
+    }
   }
 
   protected readonly classes = computed(() =>
