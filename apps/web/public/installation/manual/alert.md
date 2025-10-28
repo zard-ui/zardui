@@ -3,14 +3,14 @@
 ```angular-ts title="alert.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
+import type { ClassValue } from 'clsx';
+
+import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, type ZardAlertVariants } from './alert.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
-import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, type ZardAlertVariants } from './alert.variants';
-
 import type { ZardIcon } from '../icon/icons';
 
-import type { ClassValue } from 'clsx';
 @Component({
   selector: 'z-alert, [z-alert]',
   standalone: true,
@@ -68,12 +68,9 @@ export class ZardAlertComponent {
       return customIcon;
     }
 
-    switch (this.zType()) {
-      case 'destructive':
-        return 'circle-alert';
-      default:
-        return null;
-    }
+    if (this.zType() === 'destructive') return 'circle-alert';
+
+    return null;
   });
 }
 

@@ -3,11 +3,11 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content cursor-default bg-muted', {
   variants: {
     zSize: {
-      sm: 'w-8 h-8',
-      default: 'w-10 h-10',
-      md: 'w-12 h-12',
-      lg: 'w-14 h-14',
-      xl: 'w-16 h-16',
+      sm: 'size-8',
+      default: 'size-10',
+      md: 'size-12',
+      lg: 'size-14',
+      xl: 'size-16',
     },
     zShape: {
       circle: 'rounded-full',

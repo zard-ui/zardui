@@ -24,10 +24,8 @@ import type { ClassValue } from 'clsx';
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants } from './alert-dialog.variants';
-import { generateId, mergeClasses } from '../../shared/utils/utils';
+import { generateId, mergeClasses, noopFun } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
-
-const noopFun = () => void 0;
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 

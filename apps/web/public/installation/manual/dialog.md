@@ -1,6 +1,8 @@
 
 
 ```angular-ts title="dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { OverlayModule } from '@angular/cdk/overlay';
+import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -17,18 +19,16 @@ import {
   viewChild,
   type ViewContainerRef,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
-import { OverlayModule } from '@angular/cdk/overlay';
-import { ZardButtonComponent } from '../button/button.component';
-import { mergeClasses } from '../../shared/utils/utils';
-import { dialogVariants } from './dialog.variants';
-import type { ZardDialogRef } from './dialog-ref';
-import type { ZardIcon } from '../icon/icons';
-import { ZardIconComponent } from '../icon/icon.component';
-// Used by the NgModule provider definition
-import { ZardDialogService } from './dialog.service';
 
-const noopFun = () => void 0;
+import type { ZardDialogRef } from './dialog-ref';
+import { ZardDialogService } from './dialog.service';
+import { dialogVariants } from './dialog.variants';
+import { mergeClasses, noopFun } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardIconComponent } from '../icon/icon.component';
+import type { ZardIcon } from '../icon/icons';
+// Used by the NgModule provider definition
+
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardDialogOptions<T, U> {
   zCancelIcon?: ZardIcon;

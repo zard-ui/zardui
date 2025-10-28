@@ -2,6 +2,7 @@
 
 ```angular-ts title="button.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
 import { buttonVariants, type ZardButtonVariants } from './button.variants';
@@ -17,7 +18,7 @@ import { ZardIconComponent } from '../icon/icon.component';
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (zLoading()) {
-      <z-icon zType="loader-circle" class="animate-spin" />
+      <z-icon zType="loader-circle" class="animate-spin duration-2000" />
     }
     <ng-content></ng-content>
   `,
