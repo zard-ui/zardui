@@ -82,7 +82,8 @@
       "Bash(awk:*)",
       "Bash(xargs git checkout --theirs)",
       "Bash(xargs -r git checkout:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(git show:*)"
     ],
     "defaultMode": "acceptEdits"
   },
