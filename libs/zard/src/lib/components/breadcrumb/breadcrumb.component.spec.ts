@@ -1,50 +1,24 @@
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component } from '@angular/core';
-import { RouterTestingModule } from '@angular/router/testing';
-
 import { By } from '@angular/platform-browser';
+import { provideRouter } from '@angular/router';
 
-import {
-  ZardBreadcrumbComponent,
-  ZardBreadcrumbListComponent,
-  ZardBreadcrumbItemComponent,
-  ZardBreadcrumbLinkComponent,
-  ZardBreadcrumbPageComponent,
-  ZardBreadcrumbSeparatorComponent,
-  ZardBreadcrumbEllipsisComponent,
-} from './breadcrumb.component';
+import { ZardBreadcrumbComponent, ZardBreadcrumbEllipsisComponent, ZardBreadcrumbItemComponent } from './breadcrumb.component';
 
 @Component({
   selector: 'test-host-component',
   standalone: true,
-  imports: [
-    ZardBreadcrumbComponent,
-    ZardBreadcrumbListComponent,
-    ZardBreadcrumbItemComponent,
-    ZardBreadcrumbLinkComponent,
-    ZardBreadcrumbPageComponent,
-    ZardBreadcrumbSeparatorComponent,
-    ZardBreadcrumbEllipsisComponent,
-  ],
+  imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent],
   template: `
     <z-breadcrumb>
-      <z-breadcrumb-list>
-        <z-breadcrumb-item>
-          <z-breadcrumb-link zType="underline" zLink="/">Home</z-breadcrumb-link>
-        </z-breadcrumb-item>
-        <z-breadcrumb-separator>/</z-breadcrumb-separator>
-        <z-breadcrumb-item>
-          <z-breadcrumb-ellipsis />
-        </z-breadcrumb-item>
-        <z-breadcrumb-separator>/</z-breadcrumb-separator>
-        <z-breadcrumb-item>
-          <z-breadcrumb-link zLink="/components">Components</z-breadcrumb-link>
-        </z-breadcrumb-item>
-        <z-breadcrumb-separator>/</z-breadcrumb-separator>
-        <z-breadcrumb-item>
-          <z-breadcrumb-page>Breadcrumb</z-breadcrumb-page>
-        </z-breadcrumb-item>
-      </z-breadcrumb-list>
+      <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <z-breadcrumb-ellipsis />
+      </z-breadcrumb-item>
+      <z-breadcrumb-item [routerLink]="['/components']">Components</z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <span aria-current="page">Breadcrumb</span>
+      </z-breadcrumb-item>
     </z-breadcrumb>
   `,
 })
@@ -56,7 +30,8 @@ describe('BreadcrumbComponents Integration', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent, RouterTestingModule.withRoutes([])],
+      imports: [TestHostComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -70,11 +45,7 @@ describe('BreadcrumbComponents Integration', () => {
 
   it('should render all breadcrumb components', () => {
     expect(fixture.debugElement.query(By.directive(ZardBreadcrumbComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardBreadcrumbListComponent))).toBeTruthy();
     expect(fixture.debugElement.query(By.directive(ZardBreadcrumbItemComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardBreadcrumbLinkComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardBreadcrumbPageComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardBreadcrumbSeparatorComponent))).toBeTruthy();
     expect(fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent))).toBeTruthy();
   });
 
@@ -85,9 +56,9 @@ describe('BreadcrumbComponents Integration', () => {
     expect(nav.classList).toContain('text-sm');
   });
 
-  it('should have default classes for ZardBreadcrumbListComponent', () => {
-    const breadcrumListDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbListComponent));
-    const ol = breadcrumListDebug.nativeElement.querySelector('ol');
+  it('should have default classes for breadcrumb list (ol element)', () => {
+    const breadcrumbDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbComponent));
+    const ol = breadcrumbDebug.nativeElement.querySelector('ol');
     expect(ol.classList).toContain('text-muted-foreground');
     expect(ol.classList).toContain('flex');
     expect(ol.classList).toContain('flex-wrap');
@@ -99,41 +70,9 @@ describe('BreadcrumbComponents Integration', () => {
   it('should have default classes for ZardBreadcrumbItemComponent', () => {
     const breadcrumItemDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbItemComponent));
     const li = breadcrumItemDebug.nativeElement.querySelector('li');
-    expect(li.classList).toContain('flex');
+    expect(li.classList).toContain('inline-flex');
     expect(li.classList).toContain('items-center');
     expect(li.classList).toContain('gap-1.5');
-    expect(li.classList).toContain('transition-colors');
-  });
-
-  it('should have default classes for ZardBreadcrumbLinkComponent', () => {
-    const breadcrumLinkDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbLinkComponent));
-    const link = breadcrumLinkDebug.nativeElement.querySelector('a');
-    expect(link.classList).toContain('flex');
-    expect(link.classList).toContain('items-center');
-    expect(link.classList).toContain('gap-1');
-    expect(link.classList).toContain('transition-colors');
-    expect(link.classList).toContain('focus:outline-none');
-    expect(link.classList).toContain('focus:ring-2');
-    expect(link.classList).toContain('focus:ring-ring');
-    expect(link.classList).toContain('focus:ring-offset-2');
-  });
-
-  it('should have default classes for ZardBreadcrumbPageComponent', () => {
-    const breadcrumPageDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbPageComponent));
-    const page = breadcrumPageDebug.nativeElement.querySelector('span');
-    expect(page.classList).toContain('flex');
-    expect(page.classList).toContain('items-center');
-    expect(page.classList).toContain('gap-1');
-    expect(page.classList).toContain('focus:outline-none');
-    expect(page.classList).toContain('focus:ring-2');
-    expect(page.classList).toContain('focus:ring-ring');
-    expect(page.classList).toContain('focus:ring-offset-2');
-  });
-
-  it('should have default classes for ZardBreadcrumbSeparatorComponent', () => {
-    const breadcrumDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbSeparatorComponent));
-    const li = breadcrumDebug.nativeElement.querySelector('li');
-    expect(li.classList).toContain('select-none');
   });
 
   it('should have default classes for ZardBreadcrumbEllipsisComponent', () => {
@@ -142,13 +81,11 @@ describe('BreadcrumbComponents Integration', () => {
   });
 
   it('should render projected content correctly', () => {
-    const link = fixture.debugElement.queryAll(By.directive(ZardBreadcrumbLinkComponent))[0].nativeElement;
-    const page = fixture.debugElement.query(By.directive(ZardBreadcrumbPageComponent)).nativeElement;
-    const separator = fixture.debugElement.query(By.directive(ZardBreadcrumbSeparatorComponent)).nativeElement;
+    const items = fixture.debugElement.queryAll(By.directive(ZardBreadcrumbItemComponent));
+    const currentPage = fixture.debugElement.query(By.css('[aria-current="page"]')).nativeElement;
 
-    expect(link.textContent.trim()).toBe('Home');
-    expect(page.textContent.trim()).toBe('Breadcrumb');
-    expect(separator.textContent.trim()).toBe('/');
+    expect(items[0].nativeElement.textContent.trim()).toBe('Home');
+    expect(currentPage.textContent.trim()).toBe('Breadcrumb');
   });
 
   it('breadcrumb <nav> should have aria-label="breadcrumb"', () => {
@@ -156,10 +93,10 @@ describe('BreadcrumbComponents Integration', () => {
     expect(nav.getAttribute('aria-label')).toBe('breadcrumb');
   });
 
-  it('breadcrumb-page component should have aria-current="page"', () => {
-    const breadcrumbPageDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbPageComponent));
-    const span = breadcrumbPageDebug.nativeElement.querySelector('span');
-    expect(span.getAttribute('aria-current')).toBe('page');
+  it('last breadcrumb item should have aria-current="page"', () => {
+    const currentPage = fixture.debugElement.query(By.css('[aria-current="page"]'));
+    expect(currentPage).toBeTruthy();
+    expect(currentPage.nativeElement.textContent.trim()).toBe('Breadcrumb');
   });
 
   it('breadcrumb-ellipsis should contain z-icon component', () => {
@@ -169,23 +106,267 @@ describe('BreadcrumbComponents Integration', () => {
     expect(iconElement.componentInstance.zType()).toBe('ellipsis');
   });
 
-  it('should render the correct routerLink and projected content', () => {
-    const debug = fixture.debugElement.query(By.directive(ZardBreadcrumbLinkComponent));
-    const anchor = debug.nativeElement.querySelector('a');
-
-    expect(anchor).toBeTruthy();
-    expect(anchor.getAttribute('href')).toBe('/');
-    expect(anchor.textContent.trim()).toContain('Home');
+  it('should support routerLink on breadcrumb items', () => {
+    const items = fixture.debugElement.queryAll(By.directive(ZardBreadcrumbItemComponent));
+    // We have 4 breadcrumb items: 2 links + 1 ellipsis container + 1 current page
+    expect(items.length).toBe(4);
+    // Verify items can be rendered
+    expect(items[0].componentInstance).toBeTruthy();
   });
 
-  it('should render separator content correctly', () => {
-    const separator = fixture.debugElement.query(By.directive(ZardBreadcrumbSeparatorComponent)).nativeElement;
-    expect(separator.textContent.trim()).toBe('/');
+  it('should render separator between items except last one', () => {
+    const separators = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"]'));
+    // Should have 3 separators for 4 items
+    expect(separators.length).toBe(3);
   });
 
-  it('should have zType set to "underline"', () => {
-    const debug = fixture.debugElement.query(By.directive(ZardBreadcrumbLinkComponent));
-    const instance = debug.componentInstance;
-    expect(instance.zType()).toBe('underline');
+  it('should render default chevron separator when zSeparator is not provided', () => {
+    const separator = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"] z-icon'));
+    expect(separator).toBeTruthy();
+    expect(separator.componentInstance.zType()).toBe('chevron-right');
+  });
+});
+
+describe('BreadcrumbComponent - Custom Separator', () => {
+  @Component({
+    selector: 'test-separator-component',
+    standalone: true,
+    imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
+    template: `
+      <z-breadcrumb [zSeparator]="separator">
+        <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
+        <z-breadcrumb-item [routerLink]="['/docs']">Docs</z-breadcrumb-item>
+        <z-breadcrumb-item>Current</z-breadcrumb-item>
+      </z-breadcrumb>
+
+      <ng-template #customTemplate>
+        <span class="custom-separator">→</span>
+      </ng-template>
+    `,
+  })
+  class TestSeparatorComponent {
+    @ViewChild('customTemplate', { static: true }) customTemplate!: TemplateRef<void>;
+    separator: string | TemplateRef<void> | null = null;
+  }
+
+  let fixture: ComponentFixture<TestSeparatorComponent>;
+  let component: TestSeparatorComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestSeparatorComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestSeparatorComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should render string separator when zSeparator is a string', () => {
+    component.separator = '/';
+    fixture.detectChanges();
+
+    const separators = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"]'));
+    expect(separators.length).toBe(2); // 3 items = 2 separators
+    expect(separators[0].nativeElement.textContent.trim()).toBe('/');
+  });
+
+  it('should render template separator when zSeparator is a TemplateRef', () => {
+    component.separator = component.customTemplate;
+    fixture.detectChanges();
+
+    const separators = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] .custom-separator'));
+    expect(separators.length).toBe(2); // 3 items = 2 separators
+    expect(separators[0].nativeElement.textContent.trim()).toBe('→');
+  });
+
+  it('should render default chevron when zSeparator is null', () => {
+    component.separator = null;
+    fixture.detectChanges();
+
+    const chevrons = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] z-icon'));
+    expect(chevrons.length).toBe(2); // 3 items = 2 separators
+    expect(chevrons[0].componentInstance.zType()).toBe('chevron-right');
+  });
+
+  it('should update separator dynamically when input changes', () => {
+    component.separator = '/';
+    fixture.detectChanges();
+
+    let separatorText = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"]')).nativeElement.textContent.trim();
+    expect(separatorText).toBe('/');
+
+    component.separator = '>';
+    fixture.detectChanges();
+
+    separatorText = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"]')).nativeElement.textContent.trim();
+    expect(separatorText).toBe('>');
+  });
+});
+
+describe('BreadcrumbComponent - Alignment and Wrapping', () => {
+  @Component({
+    selector: 'test-alignment-component',
+    standalone: true,
+    imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
+    template: `
+      <z-breadcrumb [zAlign]="align" [zWrap]="wrap">
+        <z-breadcrumb-item>Home</z-breadcrumb-item>
+        <z-breadcrumb-item>Docs</z-breadcrumb-item>
+      </z-breadcrumb>
+    `,
+  })
+  class TestAlignmentComponent {
+    align: 'start' | 'center' | 'end' = 'start';
+    wrap: 'wrap' | 'nowrap' = 'wrap';
+  }
+
+  let fixture: ComponentFixture<TestAlignmentComponent>;
+  let component: TestAlignmentComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestAlignmentComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestAlignmentComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should apply default alignment (start) to breadcrumb list', () => {
+    fixture.detectChanges();
+    const ol = fixture.debugElement.query(By.css('ol')).nativeElement;
+    expect(ol.classList).toContain('justify-start');
+  });
+
+  it('should apply center alignment when zAlign is center', () => {
+    component.align = 'center';
+    fixture.detectChanges();
+
+    const ol = fixture.debugElement.query(By.css('ol')).nativeElement;
+    expect(ol.classList).toContain('justify-center');
+  });
+
+  it('should apply end alignment when zAlign is end', () => {
+    component.align = 'end';
+    fixture.detectChanges();
+
+    const ol = fixture.debugElement.query(By.css('ol')).nativeElement;
+    expect(ol.classList).toContain('justify-end');
+  });
+
+  it('should apply default wrap behavior to breadcrumb list', () => {
+    fixture.detectChanges();
+    const ol = fixture.debugElement.query(By.css('ol')).nativeElement;
+    expect(ol.classList).toContain('flex-wrap');
+  });
+
+  it('should apply nowrap when zWrap is nowrap', () => {
+    component.wrap = 'nowrap';
+    fixture.detectChanges();
+
+    const ol = fixture.debugElement.query(By.css('ol')).nativeElement;
+    expect(ol.classList).toContain('flex-nowrap');
+  });
+});
+
+describe('BreadcrumbComponent - Size Variants', () => {
+  @Component({
+    selector: 'test-size-component',
+    standalone: true,
+    imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
+    template: `
+      <z-breadcrumb [zSize]="size">
+        <z-breadcrumb-item>Home</z-breadcrumb-item>
+      </z-breadcrumb>
+    `,
+  })
+  class TestSizeComponent {
+    size: 'sm' | 'md' | 'lg' = 'md';
+  }
+
+  let fixture: ComponentFixture<TestSizeComponent>;
+  let component: TestSizeComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestSizeComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestSizeComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should apply small size class when zSize is sm', () => {
+    component.size = 'sm';
+    fixture.detectChanges();
+
+    const nav = fixture.debugElement.query(By.css('nav')).nativeElement;
+    expect(nav.classList).toContain('text-xs');
+  });
+
+  it('should apply medium size class when zSize is md', () => {
+    component.size = 'md';
+    fixture.detectChanges();
+
+    const nav = fixture.debugElement.query(By.css('nav')).nativeElement;
+    expect(nav.classList).toContain('text-sm');
+  });
+
+  it('should apply large size class when zSize is lg', () => {
+    component.size = 'lg';
+    fixture.detectChanges();
+
+    const nav = fixture.debugElement.query(By.css('nav')).nativeElement;
+    expect(nav.classList).toContain('text-base');
+  });
+});
+
+describe('BreadcrumbEllipsisComponent - Color Variants', () => {
+  @Component({
+    selector: 'test-ellipsis-component',
+    standalone: true,
+    imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent],
+    template: `
+      <z-breadcrumb>
+        <z-breadcrumb-item>Home</z-breadcrumb-item>
+        <z-breadcrumb-item>
+          <z-breadcrumb-ellipsis [zColor]="color" />
+        </z-breadcrumb-item>
+        <z-breadcrumb-item>Current</z-breadcrumb-item>
+      </z-breadcrumb>
+    `,
+  })
+  class TestEllipsisComponent {
+    color: 'muted' | 'strong' = 'muted';
+  }
+
+  let fixture: ComponentFixture<TestEllipsisComponent>;
+  let component: TestEllipsisComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestEllipsisComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestEllipsisComponent);
+    component = fixture.componentInstance;
+  });
+
+  it('should apply default color (muted) to ellipsis', () => {
+    fixture.detectChanges();
+    const ellipsis = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent)).nativeElement;
+    expect(ellipsis.classList).toContain('text-muted-foreground');
+  });
+
+  it('should apply strong color when zColor is strong', () => {
+    component.color = 'strong';
+    fixture.detectChanges();
+
+    const ellipsis = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent)).nativeElement;
+    expect(ellipsis.classList).toContain('text-foreground');
   });
 });

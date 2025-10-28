@@ -16,6 +16,7 @@ reviews:
     - '!dist/**'
     - '!.angular/**'
     - '!packages/**'
+    - '!apps/web/public/**'
     - 'apps/**'
     - 'libs/**'
     - 'scripts/**'

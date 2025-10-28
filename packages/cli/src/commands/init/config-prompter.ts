@@ -1,13 +1,13 @@
-import { readFile } from 'node:fs/promises';
-import { existsSync } from 'fs';
-import prompts from 'prompts';
-import * as path from 'path';
 import chalk from 'chalk';
+import { existsSync } from 'fs';
+import { readFile } from 'node:fs/promises';
+import * as path from 'path';
+import * as prompts from 'prompts';
 import { z } from 'zod';
 
-import { getAvailableThemes, getThemeDisplayName } from '@cli/utils/theme-selector.js';
-import { type Config } from '@cli/utils/config.js';
+import { Config } from '@cli/utils/config.js';
 import { logger } from '@cli/utils/logger.js';
+import { getAvailableThemes, getThemeDisplayName } from '@cli/utils/theme-selector.js';
 
 export const configSchema = z.object({
   style: z.enum(['css']),

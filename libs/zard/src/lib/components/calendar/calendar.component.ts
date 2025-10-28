@@ -1,25 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, type ElementRef, input, linkedSignal, model, signal, viewChild, ViewEncapsulation } from '@angular/core';
-import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
-import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
-import { calendarDayButtonVariants, calendarDayVariants, calendarNavVariants, calendarVariants, calendarWeekdayVariants, type ZardCalendarVariants } from './calendar.variants';
-import { ZardSelectItemComponent } from '../select/select-item.component';
-import { ZardSelectComponent } from '../select/select.component';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
+import { ChangeDetectionStrategy, Component, computed, input, linkedSignal, model, viewChild, ViewEncapsulation } from '@angular/core';
+import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
+
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardCalendarGridComponent } from './calendar-grid.component';
+import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
+import { generateCalendarDays, getSelectedDatesArray, isSameDay } from './calendar.utils';
+import { calendarVariants } from './calendar.variants';
 
-export interface CalendarDay {
-  date: Date;
-  isCurrentMonth: boolean;
-  isToday: boolean;
-  isSelected: boolean;
-  isDisabled: boolean;
-  id?: string;
-}
+import type { ClassValue } from 'clsx';
 
-export type { ZardCalendarVariants };
+import type { CalendarMode, CalendarValue } from './calendar.types';
+export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
 
 @Component({
   selector: 'z-calendar, [z-calendar]',
@@ -27,173 +20,93 @@ export type { ZardCalendarVariants };
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardButtonComponent, ZardSelectComponent, ZardSelectItemComponent, ZardIconComponent],
+  imports: [ZardCalendarNavigationComponent, ZardCalendarGridComponent],
   host: {
-    '(keydown)': 'onKeyDown($event)',
     '[attr.tabindex]': '0',
-    '[attr.role]': '"grid"',
-    '[attr.aria-label]': '"Calendar"',
   },
   template: `
-    <div [class]="classes()" #calendarContainer>
-      <!-- Navigation Header -->
-      <div [class]="navClasses()">
-        <button
-          z-button
-          zType="ghost"
-          [zSize]="navButtonSize()"
-          (click)="previousMonth()"
-          [disabled]="isPreviousDisabled()"
-          aria-label="Previous month"
-          [class]="navButtonClasses()"
-        >
-          <z-icon zType="chevron-left" />
-        </button>
+    <div [class]="classes()">
+      <z-calendar-navigation
+        [currentMonth]="currentMonthValue()"
+        [currentYear]="currentYearValue()"
+        [minDate]="minDate()"
+        [maxDate]="maxDate()"
+        [disabled]="disabled()"
+        (monthChange)="onMonthChange($event)"
+        (yearChange)="onYearChange($event)"
+        (previousMonth)="previousMonth()"
+        (nextMonth)="nextMonth()"
+      />
 
-        <!-- Month and Year Selectors -->
-        <div class="flex items-center space-x-2">
-          <!-- Month Select -->
-          <z-select [zSize]="selectSize()" class="min-w-[120px]" [zValue]="currentMonthValue()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
-            @for (month of months; track $index) {
-              <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
-            }
-          </z-select>
-
-          <!-- Year Select -->
-          <z-select [zSize]="selectSize()" class="min-w-[80px]" [zValue]="currentYearValue()" [zLabel]="currentYearValue()" (zSelectionChange)="onYearChange($event)">
-            @for (year of availableYears(); track year) {
-              <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
-            }
-          </z-select>
-        </div>
-
-        <button z-button zType="ghost" [zSize]="navButtonSize()" (click)="nextMonth()" [disabled]="isNextDisabled()" aria-label="Next month" [class]="navButtonClasses()">
-          <z-icon zType="chevron-right" />
-        </button>
-      </div>
-
-      <!-- Weekdays Header -->
-      <div class="grid grid-cols-7 text-center" role="row">
-        @for (weekday of weekdays; track $index) {
-          <div [class]="weekdayClasses()" role="columnheader">
-            {{ weekday }}
-          </div>
-        }
-      </div>
-
-      <!-- Calendar Days Grid -->
-      <div class="grid grid-cols-7 gap-0 mt-2" role="rowgroup">
-        @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
-          <div [class]="dayContainerClasses()" role="gridcell">
-            <button
-              [id]="getDayId(i)"
-              [class]="dayButtonClasses(day)"
-              (click)="selectDate(day.date, i)"
-              [disabled]="day.isDisabled"
-              [attr.aria-selected]="day.isSelected"
-              [attr.aria-label]="getDayAriaLabel(day)"
-              [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
-              role="button"
-            >
-              {{ day.date.getDate() }}
-            </button>
-          </div>
-        }
-      </div>
+      <z-calendar-grid
+        [calendarDays]="calendarDays()"
+        [disabled]="disabled()"
+        (dateSelect)="onDateSelect($event)"
+        (previousMonth)="onGridPreviousMonth($event)"
+        (nextMonth)="onGridNextMonth($event)"
+        (previousYear)="navigateYear(-1)"
+        (nextYear)="navigateYear(1)"
+      />
     </div>
   `,
 })
 export class ZardCalendarComponent {
-  private readonly calendarContainer = viewChild.required<ElementRef<HTMLElement>>('calendarContainer');
+  private readonly gridRef = viewChild.required(ZardCalendarGridComponent);
 
   // Public method to reset navigation (useful for date-picker)
   resetNavigation(): void {
     const value = this.currentDate();
     this.currentMonthValue.set(value.getMonth().toString());
     this.currentYearValue.set(value.getFullYear().toString());
-    this.focusedDayIndex.set(-1);
+    this.gridRef().setFocusedDayIndex(-1);
   }
+
+  // Public inputs
   readonly class = input<ClassValue>('');
-  readonly zSize = input<ZardCalendarVariants['zSize']>('default');
-  readonly value = model<Date | null>(null);
+  readonly zMode = input<CalendarMode>('single');
+  readonly value = model<CalendarValue>(null);
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = input<boolean>(false);
 
+  // Public outputs
   readonly dateChange = outputFromObservable(outputToObservable(this.value).pipe(filter(v => v !== null)));
 
-  private readonly focusedDayIndex = signal<number>(-1);
+  // Internal state
+  private readonly currentDate = computed(() => {
+    const val = this.value();
+    const mode = this.zMode();
 
-  private readonly currentDate = computed(() => this.value() ?? new Date(), {
-    equal: (a, b) => a.getTime() === b.getTime(),
-  });
+    if (!val) return new Date();
 
-  readonly weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
-  readonly months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    // For single mode, val is Date | null
+    if (mode === 'single') return val as Date;
 
-  protected readonly classes = computed(() =>
-    mergeClasses(
-      calendarVariants({
-        zSize: this.zSize(),
-      }),
-      this.class(),
-    ),
-  );
+    // For multiple/range mode, val is Date[]
+    if (Array.isArray(val) && val.length > 0) return val[0];
 
-  protected readonly navClasses = computed(() => mergeClasses(calendarNavVariants()));
-
-  protected readonly weekdayClasses = computed(() => mergeClasses(calendarWeekdayVariants({ zSize: this.zSize() })));
-
-  protected readonly dayContainerClasses = computed(() => mergeClasses(calendarDayVariants({ zSize: this.zSize() })));
-
-  protected readonly selectSize = computed(() => {
-    const size = this.zSize();
-    if (size === 'lg') return 'lg';
-    if (size === 'sm') return 'sm';
-    return 'default';
-  });
-
-  protected readonly navButtonSize = computed(() => {
-    const size = this.zSize();
-    if (size === 'lg') return 'default';
-    return 'sm';
-  });
-
-  protected readonly navButtonClasses = computed(() => {
-    const size = this.zSize();
-    const baseClasses = 'p-0 opacity-50 hover:opacity-100';
-
-    switch (size) {
-      case 'sm':
-        return `h-6 w-6 ${baseClasses}`;
-      case 'lg':
-        return `h-8 w-8 ${baseClasses}`;
-      default:
-        return `h-7 w-7 ${baseClasses}`;
-    }
+    return new Date();
   });
 
   protected readonly currentMonthValue = linkedSignal(() => this.currentDate().getMonth().toString());
   protected readonly currentYearValue = linkedSignal(() => this.currentDate().getFullYear().toString());
 
-  protected readonly availableYears = computed(() => {
-    const currentYear = new Date().getFullYear();
-    const years = [];
-    for (let i = currentYear - 10; i <= currentYear + 10; i++) {
-      years.push(i);
-    }
-    return years;
-  });
+  protected readonly classes = computed(() => mergeClasses(calendarVariants(), this.class()));
 
-  protected readonly currentMonthYear = computed(() => {
-    const date = this.currentDate();
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-  });
+  protected readonly calendarDays = computed(() => {
+    const currentDate = this.currentDate();
+    const navigationDate = new Date(parseInt(this.currentYearValue()), parseInt(this.currentMonthValue()), currentDate.getDate());
+    const selectedDate = isNaN(navigationDate.getTime()) ? currentDate : navigationDate;
 
-  protected readonly currentMonthName = computed(() => {
-    const selectedMonth = parseInt(this.currentMonthValue());
-    if (!isNaN(selectedMonth) && this.months[selectedMonth]) return this.months[selectedMonth];
-    return this.months[this.currentDate().getMonth()];
+    return generateCalendarDays({
+      year: selectedDate.getFullYear(),
+      month: selectedDate.getMonth(),
+      mode: this.zMode(),
+      selectedDates: getSelectedDatesArray(this.value(), this.zMode()),
+      minDate: this.minDate(),
+      maxDate: this.maxDate(),
+      disabled: this.disabled(),
+    });
   });
 
   protected onMonthChange(monthIndex: string): void {
@@ -212,7 +125,7 @@ export class ZardCalendarComponent {
     const selectedYear = parseInt(this.currentYearValue());
     const newDate = new Date(isNaN(selectedYear) ? currentDate.getFullYear() : selectedYear, parsedMonth, 1);
     this.currentMonthValue.set(newDate.getMonth().toString());
-    this.focusedDayIndex.set(-1);
+    this.gridRef().setFocusedDayIndex(-1);
   }
 
   protected onYearChange(year: string): void {
@@ -231,362 +144,154 @@ export class ZardCalendarComponent {
     const selectedMonth = parseInt(this.currentMonthValue());
     const newDate = new Date(parsedYear, isNaN(selectedMonth) ? currentDate.getMonth() : selectedMonth, 1);
     this.currentYearValue.set(newDate.getFullYear().toString());
-    this.focusedDayIndex.set(-1);
+    this.gridRef().setFocusedDayIndex(-1);
   }
 
-  protected readonly calendarDays = computed(() => {
-    const currentDate = this.currentDate();
-    const navigationDate = new Date(parseInt(this.currentYearValue()), parseInt(this.currentMonthValue()), currentDate.getDate());
-    const selectedDate = isNaN(navigationDate.getTime()) ? currentDate : navigationDate;
-    const today = new Date();
-    const minDate = this.minDate();
-    const maxDate = this.maxDate();
-
-    const year = selectedDate.getFullYear();
-    const month = selectedDate.getMonth();
-
-    // Get first day of the month
-    const firstDay = new Date(year, month, 1);
-    // Get last day of the month
-    const lastDay = new Date(year, month + 1, 0);
-
-    // Get the first day of the week for the first day of the month
-    const startDate = new Date(firstDay);
-    startDate.setDate(startDate.getDate() - startDate.getDay());
-
-    // Get the last day of the week for the last day of the month
-    const endDate = new Date(lastDay);
-    endDate.setDate(endDate.getDate() + (6 - endDate.getDay()));
-
-    const days: CalendarDay[] = [];
-    const currentWeekDate = new Date(startDate);
-
-    while (currentWeekDate <= endDate) {
-      const date = new Date(currentWeekDate);
-      const isCurrentMonth = date.getMonth() === month;
-      const isToday = this.isSameDay(date, today);
-      const isSelected = currentDate ? this.isSameDay(date, currentDate) : false;
-      const isDisabled = this.disabled() || this.isDateDisabled(date, minDate, maxDate);
-
-      days.push({
-        date,
-        isCurrentMonth,
-        isToday,
-        isSelected,
-        isDisabled,
-      });
-
-      currentWeekDate.setDate(currentWeekDate.getDate() + 1);
-    }
-
-    return days;
-  });
-
-  protected dayButtonClasses(day: CalendarDay): string {
-    return mergeClasses(
-      calendarDayButtonVariants({
-        zSize: this.zSize(),
-        selected: day.isSelected,
-        today: day.isToday,
-        outside: !day.isCurrentMonth,
-        disabled: day.isDisabled,
-      }),
-    );
-  }
-
-  protected previousMonth() {
+  protected previousMonth(): void {
     const currentDate = this.currentDate();
     const currentMonth = parseInt(this.currentMonthValue());
     const previous = new Date(currentDate.getFullYear(), (isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) - 1, 1);
     this.currentMonthValue.set(previous.getMonth().toString());
-    this.focusedDayIndex.set(-1);
+    this.gridRef().setFocusedDayIndex(-1);
   }
 
-  protected nextMonth() {
+  protected nextMonth(): void {
     const currentDate = this.currentDate();
     const currentMonth = parseInt(this.currentMonthValue());
     const next = new Date(currentDate.getFullYear(), (isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) + 1, 1);
     this.currentMonthValue.set(next.getMonth().toString());
-    this.focusedDayIndex.set(-1);
+    this.gridRef().setFocusedDayIndex(-1);
   }
 
-  protected isPreviousDisabled(): boolean {
-    if (this.disabled()) return true;
-
-    const minDate = this.minDate();
-    if (!minDate) return false;
-
-    const currentDate = this.currentDate();
-    const currentMonth = parseInt(this.currentMonthValue());
-    const lastDayOfPreviousMonth = new Date(currentDate.getFullYear(), isNaN(currentMonth) ? currentDate.getMonth() : currentMonth, 0);
-
-    return lastDayOfPreviousMonth.getTime() < minDate.getTime();
-  }
-
-  protected isNextDisabled(): boolean {
-    if (this.disabled()) return true;
-
-    const maxDate = this.maxDate();
-    if (!maxDate) return false;
-
-    const currentDate = this.currentDate();
-    const currentMonth = parseInt(this.currentMonthValue());
-    const nextMonth = new Date(currentDate.getFullYear(), (isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) + 1, 1);
-
-    return nextMonth.getTime() > maxDate.getTime();
-  }
-
-  selectDate(date: Date, i?: number) {
-    if (this.disabled()) return;
-
-    const minDate = this.minDate();
-    const maxDate = this.maxDate();
-
-    if (this.isDateDisabled(date, minDate, maxDate)) return;
-
-    this.value.set(date);
-    this.focusedDayIndex.set(i ?? this.calendarDays().findIndex(day => this.isSameDay(day.date, date)));
-  }
-
-  protected getDayAriaLabel(day: CalendarDay): string {
-    const dateStr = day.date.toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    });
-
-    const labels = [dateStr];
-
-    if (day.isToday) labels.push('Today');
-    if (day.isSelected) labels.push('Selected');
-    if (!day.isCurrentMonth) labels.push('Outside month');
-    if (day.isDisabled) labels.push('Disabled');
-
-    return labels.join(', ');
-  }
-
-  protected getDayId(index: number): string {
-    return `calendar-day-${index}`;
-  }
-
-  protected getFocusedDayIndex(): number {
-    const focused = this.focusedDayIndex();
-    if (focused >= 0) return focused;
-
-    // Default focus to selected date or today
-    const days = this.calendarDays();
-    const selectedIndex = days.findIndex(day => day.isSelected);
-    if (selectedIndex >= 0) return selectedIndex;
-
-    const todayIndex = days.findIndex(day => day.isToday && day.isCurrentMonth);
-    if (todayIndex >= 0) return todayIndex;
-
-    // Fall back to first enabled day of current month
-    const firstCurrentMonthIndex = days.findIndex(day => day.isCurrentMonth && !day.isDisabled);
-    return firstCurrentMonthIndex >= 0 ? firstCurrentMonthIndex : 0;
-  }
-
-  onKeyDown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
-
-    const days = this.calendarDays();
-    if (days.length === 0) return;
-
-    const currentIndex = this.getFocusedDayIndex();
-    let newIndex: number | null = null;
-
-    switch (event.key) {
-      case 'ArrowLeft':
-        event.preventDefault();
-        newIndex = this.navigate(currentIndex, -1, days);
-        break;
-      case 'ArrowRight':
-        event.preventDefault();
-        newIndex = this.navigate(currentIndex, 1, days);
-        break;
-      case 'ArrowUp':
-        event.preventDefault();
-        newIndex = this.navigate(currentIndex, -7, days);
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        newIndex = this.navigate(currentIndex, 7, days);
-        break;
-      case 'Home':
-        event.preventDefault();
-        newIndex = this.findEnabledInRange(Math.floor(currentIndex / 7) * 7, Math.floor(currentIndex / 7) * 7 + 6, days);
-        break;
-      case 'End':
-        event.preventDefault();
-        newIndex = this.findEnabledInRange(Math.floor(currentIndex / 7) * 7 + 6, Math.floor(currentIndex / 7) * 7, days, true);
-        break;
-      case 'PageUp':
-        event.preventDefault();
-        if (event.ctrlKey) {
-          this.navigateYear(-1);
-        } else {
-          this.previousMonth();
-        }
-        this.resetFocusAfterNavigation();
-        return;
-      case 'PageDown':
-        event.preventDefault();
-        if (event.ctrlKey) {
-          this.navigateYear(1);
-        } else {
-          this.nextMonth();
-        }
-        this.resetFocusAfterNavigation();
-        return;
-      case 'Enter':
-      case ' ': {
-        event.preventDefault();
-        const focusedDay = days[currentIndex];
-        if (focusedDay && !focusedDay.isDisabled) {
-          this.selectDate(focusedDay.date, currentIndex);
-        }
-        return;
-      }
-      default:
-        return;
-    }
-
-    if (newIndex !== null && newIndex !== currentIndex) {
-      this.setFocus(newIndex);
-    }
-  }
-
-  private navigate(currentIndex: number, step: number, days: CalendarDay[]): number | null {
-    const targetIndex = currentIndex + step;
-
-    // If within bounds, find enabled day
-    if (targetIndex >= 0 && targetIndex < days.length) {
-      return this.findEnabledInRange(targetIndex, currentIndex, days);
-    }
-
-    // Handle month boundaries
-    const dayOfWeek = currentIndex % 7;
-
-    if (step === -1) {
-      // Going left - navigate to previous month, focus last day
-      this.previousMonth();
-      setTimeout(() => this.resetFocusAfterNavigation('last'), 0);
-    } else if (step === 1) {
-      // Going right - navigate to next month, focus first day
-      this.nextMonth();
-      setTimeout(() => this.resetFocusAfterNavigation('first'), 0);
-    } else if (step === -7) {
-      // Going up - navigate to previous month, preserve column
-      this.previousMonth();
-      setTimeout(() => this.resetFocusAfterNavigation('lastWeek', dayOfWeek), 0);
-    } else if (step === 7) {
-      // Going down - navigate to next month, preserve column
-      this.nextMonth();
-      setTimeout(() => this.resetFocusAfterNavigation('firstWeek', dayOfWeek), 0);
-    }
-
-    return null;
-  }
-
-  private findEnabledInRange(start: number, fallback: number, days: CalendarDay[], reverse = false): number {
-    const clampedStart = Math.max(0, Math.min(start, days.length - 1));
-    const clampedFallback = Math.max(0, Math.min(fallback, days.length - 1));
-
-    if (!reverse) {
-      // Search forward from start
-      for (let i = clampedStart; i < days.length; i++) {
-        if (!days[i].isDisabled) return i;
-      }
-      // Search backward from start
-      for (let i = clampedStart - 1; i >= 0; i--) {
-        if (!days[i].isDisabled) return i;
-      }
-    } else {
-      // Search backward from start
-      for (let i = clampedStart; i >= 0; i--) {
-        if (!days[i].isDisabled) return i;
-      }
-      // Search forward from start
-      for (let i = clampedStart + 1; i < days.length; i++) {
-        if (!days[i].isDisabled) return i;
-      }
-    }
-
-    return clampedFallback;
-  }
-
-  private setFocus(index: number): void {
-    this.focusedDayIndex.set(index);
-    setTimeout(() => {
-      const dayElement = this.calendarContainer()?.nativeElement.querySelector(`#${this.getDayId(index)}`) as HTMLElement;
-      dayElement?.focus();
-    }, 0);
-  }
-
-  private navigateYear(direction: number): void {
+  protected navigateYear(direction: number): void {
     const current = this.currentDate();
     const newDate = new Date(current.getFullYear() + direction, current.getMonth(), 1);
     this.currentYearValue.set(newDate.getFullYear().toString());
+    setTimeout(() => this.gridRef().resetFocus(), 0);
+  }
+
+  protected onGridPreviousMonth(event: { position: string; dayOfWeek: number }): void {
+    this.previousMonth();
+    setTimeout(() => this.resetFocusAfterNavigation(event.position, event.dayOfWeek), 0);
+  }
+
+  protected onGridNextMonth(event: { position: string; dayOfWeek: number }): void {
+    this.nextMonth();
+    setTimeout(() => this.resetFocusAfterNavigation(event.position, event.dayOfWeek), 0);
+  }
+
+  protected onDateSelect(event: { date: Date; index: number }): void {
+    this.selectDate(event.date, event.index);
+  }
+
+  private selectDate(date: Date, index: number): void {
+    if (this.disabled()) return;
+
+    const mode = this.zMode();
+    const currentValue = this.value();
+
+    if (mode === 'single') {
+      this.value.set(date);
+    } else if (mode === 'multiple') {
+      const selectedDates = Array.isArray(currentValue) ? [...currentValue] : [];
+      const existingIndex = selectedDates.findIndex(d => isSameDay(d, date));
+
+      if (existingIndex >= 0) {
+        // Remove date if already selected
+        selectedDates.splice(existingIndex, 1);
+      } else {
+        // Add date
+        selectedDates.push(date);
+      }
+
+      this.value.set(selectedDates.length > 0 ? selectedDates : null);
+    } else if (mode === 'range') {
+      const selectedDates = Array.isArray(currentValue) ? [...currentValue] : [];
+
+      if (selectedDates.length === 0) {
+        // First date selected - set as range start
+        this.value.set([date]);
+      } else if (selectedDates.length === 1) {
+        // Second date selected - complete the range
+        const start = selectedDates[0];
+        if (date.getTime() < start.getTime()) {
+          // New date is before start, swap them
+          this.value.set([date, start]);
+        } else if (isSameDay(date, start)) {
+          // Same date clicked, reset
+          this.value.set(null);
+        } else {
+          // New date is after start
+          this.value.set([start, date]);
+        }
+      } else {
+        // Range already complete, start new range
+        this.value.set([date]);
+      }
+    }
   }
 
   private resetFocusAfterNavigation(position = 'default', dayOfWeek = -1): void {
-    setTimeout(() => {
-      const days = this.calendarDays();
-      let targetIndex = -1;
+    const days = this.calendarDays();
+    let targetIndex = -1;
 
-      switch (position) {
-        case 'first':
-          // Focus first enabled day
-          targetIndex = days.findIndex(day => !day.isDisabled);
-          break;
-        case 'last':
-          // Focus last enabled day
-          for (let i = days.length - 1; i >= 0; i--) {
-            if (!days[i].isDisabled) {
-              targetIndex = i;
-              break;
-            }
+    switch (position) {
+      case 'first':
+        // Focus first enabled day
+        targetIndex = days.findIndex(day => !day.isDisabled);
+        break;
+      case 'last':
+        // Focus last enabled day
+        for (let i = days.length - 1; i >= 0; i--) {
+          if (!days[i].isDisabled) {
+            targetIndex = i;
+            break;
           }
-          break;
-        case 'firstWeek':
-          // Focus same day of week in first week
-          if (dayOfWeek >= 0 && dayOfWeek < 7) {
-            targetIndex = this.findEnabledInRange(dayOfWeek, 0, days);
-          }
-          break;
-        case 'lastWeek':
-          // Focus same day of week in last week
-          if (dayOfWeek >= 0) {
-            const lastWeekStart = Math.floor((days.length - 1) / 7) * 7;
-            const targetIdx = Math.min(lastWeekStart + dayOfWeek, days.length - 1);
-            targetIndex = this.findEnabledInRange(targetIdx, days.length - 1, days);
-          }
-          break;
-        default: {
-          // Default priority: selected > today > first enabled
-          const selectedIndex = days.findIndex(day => day.isSelected);
-          const todayIndex = days.findIndex(day => day.isToday && day.isCurrentMonth);
-          const firstEnabledIndex = days.findIndex(day => day.isCurrentMonth && !day.isDisabled);
-
-          targetIndex = selectedIndex >= 0 ? selectedIndex : todayIndex >= 0 ? todayIndex : firstEnabledIndex >= 0 ? firstEnabledIndex : 0;
-          break;
         }
-      }
+        break;
+      case 'firstWeek':
+        // Focus same day of week in first week
+        if (dayOfWeek >= 0 && dayOfWeek < 7) {
+          targetIndex = this.findEnabledInRange(dayOfWeek, 0, days);
+        }
+        break;
+      case 'lastWeek':
+        // Focus same day of week in last week
+        if (dayOfWeek >= 0) {
+          const lastWeekStart = Math.floor((days.length - 1) / 7) * 7;
+          const targetIdx = Math.min(lastWeekStart + dayOfWeek, days.length - 1);
+          targetIndex = this.findEnabledInRange(targetIdx, days.length - 1, days);
+        }
+        break;
+      default: {
+        // Default priority: selected > today > first enabled
+        const selectedIndex = days.findIndex(day => day.isSelected);
+        const todayIndex = days.findIndex(day => day.isToday && day.isCurrentMonth);
+        const firstEnabledIndex = days.findIndex(day => day.isCurrentMonth && !day.isDisabled);
 
-      if (targetIndex >= 0) {
-        this.setFocus(targetIndex);
+        targetIndex = selectedIndex >= 0 ? selectedIndex : todayIndex >= 0 ? todayIndex : firstEnabledIndex >= 0 ? firstEnabledIndex : 0;
+        break;
       }
-    }, 0);
+    }
+
+    if (targetIndex >= 0) {
+      this.gridRef().setFocusedDayIndex(targetIndex);
+    }
   }
 
-  private isSameDay(date1: Date, date2: Date): boolean {
-    return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
-  }
+  private findEnabledInRange(start: number, fallback: number, days: { isDisabled: boolean }[]): number {
+    const clampedStart = Math.max(0, Math.min(start, days.length - 1));
+    const clampedFallback = Math.max(0, Math.min(fallback, days.length - 1));
 
-  private isDateDisabled(date: Date, minDate: Date | null, maxDate: Date | null): boolean {
-    if (minDate && date < minDate) return true;
-    if (maxDate && date > maxDate) return true;
-    return false;
+    // Search forward from start
+    for (let i = clampedStart; i < days.length; i++) {
+      if (!days[i].isDisabled) return i;
+    }
+    // Search backward from start
+    for (let i = clampedStart - 1; i >= 0; i--) {
+      if (!days[i].isDisabled) return i;
+    }
+
+    return clampedFallback;
   }
 }

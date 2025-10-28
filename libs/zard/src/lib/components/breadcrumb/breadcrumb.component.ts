@@ -1,151 +1,115 @@
-import { ChangeDetectionStrategy, Component, computed, input, type TemplateRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, input, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import type { ClassValue } from 'clsx';
 
-import {
-  breadcrumbVariants,
-  breadcrumbListVariants,
-  breadcrumbSeparatorVariants,
-  breadcrumbItemVariants,
-  breadcrumbLinkVariants,
-  breadcrumbEllipsisVariants,
-  breadcrumbPageVariants,
-  type ZardBreadcrumbVariants,
-  type ZardBreadcrumbListVariants,
-  type ZardBreadcrumbItemVariants,
-  type ZardBreadcrumbLinkVariants,
-  type ZardBreadcrumbPageVariants,
-  type ZardBreadcrumbSeparatorVariants,
-  type ZardBreadcrumbEllipsisVariants,
-} from './breadcrumb.variants';
-import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardIconComponent } from '../icon/icon.component';
+import {
+  breadcrumbEllipsisVariants,
+  breadcrumbItemVariants,
+  breadcrumbListVariants,
+  breadcrumbVariants,
+  type ZardBreadcrumbEllipsisVariants,
+  type ZardBreadcrumbVariants,
+} from './breadcrumb.variants';
 
 @Component({
-  selector: 'z-breadcrumb',
+  selector: 'z-breadcrumb-item, [z-breadcrumb-item]',
+  exportAs: 'zBreadcrumbItem',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  imports: [ZardStringTemplateOutletDirective, ZardIconComponent],
+  hostDirectives: [
+    {
+      directive: RouterLink,
+      inputs: ['routerLink', 'queryParams', 'fragment', 'queryParamsHandling', 'state', 'relativeTo', 'preserveFragment', 'skipLocationChange', 'replaceUrl'],
+    },
+  ],
+  template: `
+    <li [class]="classes()">
+      <ng-content></ng-content>
+    </li>
+
+    @if (!isLast()) {
+      <li aria-hidden="true" role="presentation" [class]="separatorClasses()" (click)="$event.stopPropagation()">
+        @if (isTemplate(separator())) {
+          <ng-container *zStringTemplateOutlet="separator()"></ng-container>
+        } @else if (separator()) {
+          {{ separator() }}
+        } @else {
+          <z-icon zType="chevron-right"></z-icon>
+        }
+      </li>
+    }
+  `,
+  host: {
+    class: 'inline-flex items-center gap-1.5',
+  },
+})
+export class ZardBreadcrumbItemComponent {
+  readonly class = input<ClassValue>('');
+
+  protected separator = signal<string | TemplateRef<void> | null>(null);
+  protected isLast = signal<boolean>(false);
+
+  protected readonly classes = computed(() => mergeClasses(breadcrumbItemVariants(), this.class()));
+  protected readonly separatorClasses = computed(() => 'text-muted-foreground [&_svg]:size-3.5');
+
+  setSeparator(separator: string | TemplateRef<void> | null): void {
+    this.separator.set(separator);
+  }
+
+  setIsLast(isLast: boolean): void {
+    this.isLast.set(isLast);
+  }
+
+  protected isTemplate(value: string | TemplateRef<void> | null | undefined): value is TemplateRef<void> {
+    return value instanceof TemplateRef;
+  }
+}
+
+@Component({
+  selector: 'z-breadcrumb, [z-breadcrumb]',
   exportAs: 'zBreadcrumb',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <nav aria-label="breadcrumb" [class]="classes()">
-      <ng-content></ng-content>
+    <nav aria-label="breadcrumb" [class]="navClasses()">
+      <ol [class]="listClasses()">
+        <ng-content></ng-content>
+      </ol>
     </nav>
   `,
 })
 export class ZardBreadcrumbComponent {
   readonly zSize = input<ZardBreadcrumbVariants['zSize']>('md');
+  readonly zAlign = input<ZardBreadcrumbVariants['zAlign']>('start');
+  readonly zWrap = input<ZardBreadcrumbVariants['zWrap']>('wrap');
+  readonly zSeparator = input<string | TemplateRef<void> | null>(null);
 
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(breadcrumbVariants({ zSize: this.zSize() }), this.class()));
+  protected readonly items = contentChildren(ZardBreadcrumbItemComponent);
+
+  protected readonly navClasses = computed(() => mergeClasses(breadcrumbVariants({ zSize: this.zSize() }), this.class()));
+  protected readonly listClasses = computed(() => breadcrumbListVariants({ zAlign: this.zAlign(), zWrap: this.zWrap() }));
+
+  constructor() {
+    effect(() => {
+      const itemsList = this.items();
+      const separator = this.zSeparator();
+
+      itemsList.forEach((item, index) => {
+        item.setSeparator(separator);
+        item.setIsLast(index === itemsList.length - 1);
+      });
+    });
+  }
 }
 
 @Component({
-  selector: 'z-breadcrumb-list',
-  exportAs: 'zBreadcrumbList',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: `
-    <ol [class]="classes()">
-      <ng-content></ng-content>
-    </ol>
-  `,
-})
-export class ZardBreadcrumbListComponent {
-  readonly zAlign = input<ZardBreadcrumbListVariants['zAlign']>('start');
-  readonly zWrap = input<ZardBreadcrumbListVariants['zWrap']>('wrap');
-
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(breadcrumbListVariants({ zAlign: this.zAlign(), zWrap: this.zWrap() }), this.class()));
-}
-
-@Component({
-  selector: 'z-breadcrumb-item',
-  exportAs: 'zBreadcrumbItem',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: `
-    <li [class]="classes()">
-      <ng-content></ng-content>
-    </li>
-  `,
-})
-export class ZardBreadcrumbItemComponent {
-  readonly zType = input<ZardBreadcrumbItemVariants['zType']>('default');
-  readonly zShape = input<ZardBreadcrumbItemVariants['zShape']>('default');
-
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(breadcrumbItemVariants({ zType: this.zType(), zShape: this.zShape() }), this.class()));
-}
-
-@Component({
-  selector: 'z-breadcrumb-link',
-  exportAs: 'zBreadcrumbLink',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  imports: [RouterLink],
-  template: `
-    <a [class]="classes()" [routerLink]="zLink()">
-      <ng-content></ng-content>
-    </a>
-  `,
-})
-export class ZardBreadcrumbLinkComponent {
-  readonly zLink = input<string>('/');
-  readonly zType = input<ZardBreadcrumbLinkVariants['zType']>('default');
-
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(breadcrumbLinkVariants({ zType: this.zType() }), this.class()));
-}
-
-@Component({
-  selector: 'z-breadcrumb-page',
-  exportAs: 'zBreadcrumbPage',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: `
-    <span aria-current="page" [class]="classes()">
-      <ng-content></ng-content>
-    </span>
-  `,
-})
-export class ZardBreadcrumbPageComponent {
-  readonly zType = input<ZardBreadcrumbPageVariants['zType']>('default');
-
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(breadcrumbPageVariants({ zType: this.zType() }), this.class()));
-}
-
-@Component({
-  selector: 'z-breadcrumb-separator',
-  exportAs: 'zBreadcrumbSeparator',
-  standalone: true,
-  imports: [ZardIconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: `
-    <li aria-hidden="true" role="presentation" [class]="classes()">
-      <ng-content>
-        <z-icon zType="chevron-right" />
-      </ng-content>
-    </li>
-  `,
-})
-export class ZardBreadcrumbSeparatorComponent {
-  readonly zSeparator = input<string | TemplateRef<void> | null>('/');
-  readonly zType = input<ZardBreadcrumbSeparatorVariants['zType']>('default');
-
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(breadcrumbSeparatorVariants({ zType: this.zType() }), this.class()));
-}
-
-@Component({
-  selector: 'z-breadcrumb-ellipsis',
+  selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
   exportAs: 'zBreadcrumbEllipsis',
   standalone: true,
   imports: [ZardIconComponent],

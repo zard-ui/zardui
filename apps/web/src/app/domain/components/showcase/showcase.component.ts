@@ -1,15 +1,15 @@
-import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
-import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
-import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { Router, RouterModule } from '@angular/router';
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
+import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTooltipModule } from '@zard/components/tooltip/tooltip';
-import { RouterModule, Router } from '@angular/router';
 
 import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/carousel.component';
 
@@ -58,7 +58,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
                           <z-progress-bar [progress]="65"></z-progress-bar>
                         }
                         @case ('avatar') {
-                          <z-avatar [zImage]="{ url: 'https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff', alt: 'John Doe', fallback: 'JD' }"></z-avatar>
+                          <z-avatar zSrc="https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff" zAlt="John Doe"></z-avatar>
                         }
                         @case ('tooltip') {
                           <button zTooltip="This is a helpful tooltip!" class="bg-primary text-primary-foreground px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105">

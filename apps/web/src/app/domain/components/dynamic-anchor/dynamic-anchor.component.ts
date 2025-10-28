@@ -1,6 +1,7 @@
-import { HyphenToSpacePipe } from '@zard/shared/pipes/hyphen-to-space.pipe';
-import { TitleCasePipe, ViewportScroller } from '@angular/common';
+import { Location, TitleCasePipe, ViewportScroller } from '@angular/common';
 import { Component, inject, input, model } from '@angular/core';
+
+import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
 
 export interface NavigationItem {
   id: string;
@@ -19,6 +20,7 @@ export interface NavigationConfig {
   templateUrl: './dynamic-anchor.component.html',
 })
 export class DynamicAnchorComponent {
+  private location = inject(Location);
   private viewportScroller = inject(ViewportScroller);
 
   activeAnchor = model<string | undefined>();
@@ -35,6 +37,9 @@ export class DynamicAnchorComponent {
     const anchorElement = document.getElementById(anchor);
 
     if (anchorElement) {
+      const currentPath = this.location.path().split('#')[0];
+      this.location.replaceState(`${currentPath}#${anchor}`);
+
       const elementTop = anchorElement.offsetTop;
       const windowHeight = window.innerHeight;
       const elementHeight = anchorElement.offsetHeight;

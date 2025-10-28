@@ -1,5 +1,5 @@
-import { twMerge } from 'tailwind-merge';
 import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export function mergeClasses(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -13,3 +13,5 @@ export function generateId(prefix = ''): string {
   const id = crypto.randomUUID();
   return prefix ? `${prefix}-${id}` : id;
 }
+
+export const noopFun = () => void 0;

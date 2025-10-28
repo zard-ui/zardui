@@ -1,15 +1,13 @@
 # API
 
-## [z-alert] <span class="api-type-label component">Component</span>
+## z-alert
 
-> `z-alert` is a component that provides a structured container for displaying content.
+| Property         | Description       | Type                          | Default   |
+| ---------------- | ----------------- | ----------------------------- | --------- |
+| `[zTitle]`       | Alert title       | `string \| TemplateRef<void>` | `-`       |
+| `[zDescription]` | Alert description | `string \| TemplateRef<void>` | `-`       |
+| `[zIcon]`        | Alert icon        | `string \| TemplateRef<void>` | `-`       |
+| `[zType]`        | Alert variant     | `default \| destructive`      | `default` |
 
-To customize the alert, pass the following props to the component.
-
-| Property         | Description       | Type                                             | Default   |
-| ---------------- | ----------------- | ------------------------------------------------ | --------- |
-| `[zTitle]`       | Alert title       | `string`                                         | `-`       |
-| `[zDescription]` | Alert description | `string`                                         | `-`       |
-| `[zType]`        | Alert icon        | `string`                                         | `-`       |
-| `[zType]`        | Alert type        | `default \| info \| success \| warning \| error` | `default` |
-| `[zAppearance]`  | Alert appearance  | `outline \| soft \| fill`                        | `outline` |
+- The `destructive` type displays a `circle-alert` icon by default
+- Setting a custom `[zIcon]` will override the default icon provided by `[zType]`

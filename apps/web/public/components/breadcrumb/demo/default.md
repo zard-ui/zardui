@@ -1,26 +1,20 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
+import { ZardIconComponent } from '../../icon/icon.component';
 
 import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
   standalone: true,
-  imports: [ZardBreadcrumbModule],
+  imports: [ZardBreadcrumbModule, ZardIconComponent],
   template: `
-    <z-breadcrumb>
-      <z-breadcrumb-list zWrap="wrap" zAlign="start">
-        <z-breadcrumb-item>
-          <z-breadcrumb-link zLink="/">Home</z-breadcrumb-link>
-        </z-breadcrumb-item>
-        <z-breadcrumb-separator />
-        <z-breadcrumb-item>
-          <z-breadcrumb-link zLink="/components">Components</z-breadcrumb-link>
-        </z-breadcrumb-item>
-        <z-breadcrumb-separator />
-        <z-breadcrumb-item>
-          <z-breadcrumb-page>Breadcrumb</z-breadcrumb-page>
-        </z-breadcrumb-item>
-      </z-breadcrumb-list>
+    <z-breadcrumb zWrap="wrap" zAlign="start">
+      <z-breadcrumb-item [routerLink]="['/']">
+        <z-icon zType="house"></z-icon>
+        Home
+      </z-breadcrumb-item>
+      <z-breadcrumb-item [routerLink]="['/docs/components']">Components</z-breadcrumb-item>
+      <z-breadcrumb-item>Breadcrumb</z-breadcrumb-item>
     </z-breadcrumb>
   `,
 })

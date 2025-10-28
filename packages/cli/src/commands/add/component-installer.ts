@@ -1,9 +1,10 @@
-import { promises as fs, existsSync } from 'fs';
+import { existsSync, promises as fs } from 'fs';
 import * as path from 'path';
 
-import { ComponentRegistry } from '@cli/core/registry/index.js';
-import { fetchComponentFromGithub } from '@cli/utils/fetch-component.js';
-import { Config } from '@cli/utils/config.js';
+import { ComponentRegistry } from '../../core/registry/index.js';
+import { fetchComponentFromGithub } from '../../utils/fetch-component.js';
+
+import type { Config } from '../../utils/config.js';
 
 export async function installComponent(component: ComponentRegistry, targetDir: string, config: Config & { resolvedPaths: any }, overwrite: boolean): Promise<void> {
   validateInstallation(component, targetDir, overwrite);

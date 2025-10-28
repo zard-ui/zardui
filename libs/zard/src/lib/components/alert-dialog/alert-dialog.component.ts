@@ -12,23 +12,20 @@ import {
   inject,
   NgModule,
   output,
-  signal,
   type TemplateRef,
   type Type,
   viewChild,
   type ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { alertDialogVariants, type ZardAlertDialogVariants } from './alert-dialog.variants';
-import { ZardButtonComponent } from '../button/button.component';
-// The service is used in the NgModule providers below, not in the component class.
-import { ZardAlertDialogService } from './alert-dialog.service';
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
-import { generateId, mergeClasses } from '../../shared/utils/utils';
-
-const noopFun = () => void 0;
+import { ZardAlertDialogService } from './alert-dialog.service';
+import { alertDialogVariants } from './alert-dialog.variants';
+import { generateId, mergeClasses, noopFun } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -39,7 +36,6 @@ export class ZardAlertDialogOptions<T> {
   zCustomClasses?: ClassValue;
   zData?: object;
   zDescription?: string;
-  zIcon?: string;
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
@@ -47,7 +43,6 @@ export class ZardAlertDialogOptions<T> {
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
   zTitle?: string | TemplateRef<T>;
-  zType?: ZardAlertDialogVariants['zType'];
   zViewContainerRef?: ViewContainerRef;
   zWidth?: string;
 }
@@ -106,14 +101,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
   protected readonly config = inject(ZardAlertDialogOptions<T>);
 
-  protected readonly classes = computed(() =>
-    mergeClasses(
-      alertDialogVariants({
-        zType: this.config.zType,
-      }),
-      this.config.zCustomClasses,
-    ),
-  );
+  protected readonly classes = computed(() => mergeClasses(alertDialogVariants(), this.config.zCustomClasses));
 
   private readonly alertDialogId = generateId('alert-dialog');
   protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
@@ -127,7 +115,6 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   okTriggered = output<void>();
   cancelTriggered = output<void>();
-  state = signal<'close' | 'open'>('close');
 
   constructor() {
     super();

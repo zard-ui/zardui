@@ -1,6 +1,6 @@
-import { isPlatformBrowser } from '@angular/common';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 
 import { ZardAlertDialogRef } from './alert-dialog-ref';
@@ -33,8 +33,6 @@ export class ZardAlertDialogService {
       zOkText: config.zOkText ?? 'Confirm',
       zCancelText: config.zCancelText ?? 'Cancel',
       zOkDestructive: config.zOkDestructive ?? false,
-      zIcon: config.zIcon,
-      zType: config.zType ?? 'default',
     };
     return this.create(confirmConfig);
   }
@@ -44,8 +42,6 @@ export class ZardAlertDialogService {
       ...config,
       zOkText: config.zOkText ?? 'OK',
       zCancelText: null,
-      zIcon: config.zIcon ?? 'alert-triangle',
-      zType: config.zType ?? 'warning',
     };
     return this.create(warningConfig);
   }
@@ -55,8 +51,6 @@ export class ZardAlertDialogService {
       ...config,
       zOkText: config.zOkText ?? 'OK',
       zCancelText: null,
-      zIcon: config.zIcon ?? 'info',
-      zType: config.zType ?? 'default',
     };
     return this.create(infoConfig);
   }

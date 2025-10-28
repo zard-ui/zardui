@@ -1,13 +1,9 @@
-import { ZardDemoButtonDestructiveComponent } from './destructive';
-import { ZardDemoButtonSecondaryComponent } from './secondary';
-import { ZardDemoButtonOutlineComponent } from './outline';
-import { ZardDemoButtonLoadingComponent } from './loading';
 import { ZardDemoButtonDefaultComponent } from './default';
-import { ZardDemoButtonShapeComponent } from './shape';
-import { ZardDemoButtonGhostComponent } from './ghost';
-import { ZardDemoButtonSizeComponent } from './size';
-import { ZardDemoButtonLinkComponent } from './link';
 import { ZardDemoButtonFullComponent } from './full';
+import { ZardDemoButtonLoadingComponent } from './loading';
+import { ZardDemoButtonShapeComponent } from './shape';
+import { ZardDemoButtonSizeComponent } from './size';
+import { ZardDemoButtonTypeComponent } from './type';
 
 export const BUTTON = {
   componentName: 'button',
@@ -19,24 +15,8 @@ export const BUTTON = {
       component: ZardDemoButtonDefaultComponent,
     },
     {
-      name: 'secondary',
-      component: ZardDemoButtonSecondaryComponent,
-    },
-    {
-      name: 'destructive',
-      component: ZardDemoButtonDestructiveComponent,
-    },
-    {
-      name: 'outline',
-      component: ZardDemoButtonOutlineComponent,
-    },
-    {
-      name: 'ghost',
-      component: ZardDemoButtonGhostComponent,
-    },
-    {
-      name: 'link',
-      component: ZardDemoButtonLinkComponent,
+      name: 'type',
+      component: ZardDemoButtonTypeComponent,
     },
     {
       name: 'size',
@@ -47,12 +27,12 @@ export const BUTTON = {
       component: ZardDemoButtonShapeComponent,
     },
     {
-      name: 'loading',
-      component: ZardDemoButtonLoadingComponent,
-    },
-    {
       name: 'full',
       component: ZardDemoButtonFullComponent,
+    },
+    {
+      name: 'loading',
+      component: ZardDemoButtonLoadingComponent,
     },
   ],
 };

@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardTabComponent, ZardTabGroupComponent, zPosition } from '../tabs.component';
+import { ZardTabComponent, ZardTabGroupComponent, type zPosition } from '../tabs.component';
 import { ZardRadioComponent } from '../../radio/radio.component';
 import { FormsModule } from '@angular/forms';
 import { ZardDividerComponent } from '../../divider/divider.component';

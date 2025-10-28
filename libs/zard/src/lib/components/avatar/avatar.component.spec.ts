@@ -2,24 +2,21 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { ZardAvatarComponent } from './avatar.component';
-import { ZardAvatarImage, ZardAvatarVariants } from './avatar.variants';
+import { ZardAvatarComponent, ZardAvatarStatus } from './avatar.component';
+import { ZardAvatarVariants, ZardImageVariants } from './avatar.variants';
 
 @Component({
   standalone: true,
   imports: [ZardAvatarComponent],
-  template: `
-    <z-avatar [zType]="zType" [zSize]="zSize" [zShape]="zShape" [zStatus]="zStatus" [zBorder]="zBorder" [zImage]="zImage" [zLoading]="zLoading" [class]="customClass"> </z-avatar>
-  `,
+  template: ` <z-avatar [zSize]="zSize" [zShape]="zShape" [zStatus]="zStatus" [zSrc]="zSrc" [zAlt]="zAlt" [zFallback]="zFallback" [class]="customClass"> </z-avatar> `,
 })
 class TestHostComponent {
-  zType: ZardAvatarVariants['zType'] = 'default';
   zSize: ZardAvatarVariants['zSize'] = 'default';
-  zShape: ZardAvatarVariants['zShape'] = 'default';
-  zStatus: ZardAvatarVariants['zStatus'] = null;
-  zBorder = false;
-  zImage: ZardAvatarImage['zImage'] | null = { fallback: 'ZA' };
-  zLoading = false;
+  zShape: ZardImageVariants['zShape'] = 'circle';
+  zStatus: ZardAvatarStatus | null = null;
+  zSrc: string | undefined = undefined;
+  zAlt = '';
+  zFallback = 'ZA';
   customClass = '';
 }
 
@@ -46,33 +43,32 @@ describe('ZardAvatarComponent', () => {
 
   describe('Variant inputs', () => {
     it('should have default values for inputs', () => {
-      expect(avatarComponent.zType()).toBe('default');
+      // Reset host values to test component defaults
+      hostComponent.zSize = 'default';
+      hostComponent.zShape = 'circle';
+      hostComponent.zStatus = null;
+      hostComponent.zSrc = undefined;
+      hostComponent.zAlt = '';
+      hostComponent.zFallback = '';
+      fixture.detectChanges();
+
       expect(avatarComponent.zSize()).toBe('default');
-      expect(avatarComponent.zShape()).toBe('default');
+      expect(avatarComponent.zShape()).toBe('circle');
       expect(avatarComponent.zStatus()).toBeNull();
-      expect(avatarComponent.zBorder()).toBe(false);
-      expect(avatarComponent.zImage()).toEqual({ fallback: 'ZA' });
-      expect(avatarComponent.zLoading()).toBe(false);
+      expect(avatarComponent.zSrc()).toBeUndefined();
+      expect(avatarComponent.zAlt()).toBe('');
+      expect(avatarComponent.zFallback()).toBe('');
     });
 
     it('should apply correct classes based on variants', () => {
-      hostComponent.zType = 'destructive';
       hostComponent.zSize = 'lg';
       hostComponent.zShape = 'circle';
-      hostComponent.zBorder = true;
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
 
-      expect(avatarElement.classList.contains('bg-destructive')).toBeTruthy();
-      expect(avatarElement.classList.contains('text-destructive-foreground')).toBeTruthy();
-      expect(avatarElement.classList.contains('w-37')).toBeTruthy();
-      expect(avatarElement.classList.contains('h-37')).toBeTruthy();
+      expect(avatarElement.classList.contains('size-14')).toBeTruthy();
       expect(avatarElement.classList.contains('rounded-full')).toBeTruthy();
-      // Check that border-related classes are applied
-      const classListArray = avatarElement.className.split(' ');
-      const hasBorderClasses = classListArray.some((cls: string) => cls.includes('border'));
-      expect(hasBorderClasses).toBeTruthy();
     });
 
     it('should append custom classes', () => {
@@ -84,40 +80,12 @@ describe('ZardAvatarComponent', () => {
       expect(avatarElement.classList.contains(customClass)).toBeTruthy();
     });
 
-    it('should apply secondary variant classes', () => {
-      hostComponent.zType = 'secondary';
-      fixture.detectChanges();
-
-      const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('bg-secondary')).toBeTruthy();
-      expect(avatarElement.classList.contains('text-secondary-foreground')).toBeTruthy();
-    });
-
-    it('should apply outline variant classes', () => {
-      hostComponent.zType = 'outline';
-      fixture.detectChanges();
-
-      const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('border')).toBeTruthy();
-      expect(avatarElement.classList.contains('border-input')).toBeTruthy();
-    });
-
-    it('should apply ghost variant classes', () => {
-      hostComponent.zType = 'ghost';
-      fixture.detectChanges();
-
-      const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('shadow-sm')).toBeTruthy();
-      expect(avatarElement.classList.contains('shadow-black')).toBeTruthy();
-    });
-
     it('should apply small size classes', () => {
       hostComponent.zSize = 'sm';
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('w-10')).toBeTruthy();
-      expect(avatarElement.classList.contains('h-10')).toBeTruthy();
+      expect(avatarElement.classList.contains('size-8')).toBeTruthy();
     });
 
     it('should apply medium size classes', () => {
@@ -125,17 +93,7 @@ describe('ZardAvatarComponent', () => {
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('w-18')).toBeTruthy();
-      expect(avatarElement.classList.contains('h-18')).toBeTruthy();
-    });
-
-    it('should apply full size classes', () => {
-      hostComponent.zSize = 'full';
-      fixture.detectChanges();
-
-      const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('w-full')).toBeTruthy();
-      expect(avatarElement.classList.contains('h-full')).toBeTruthy();
+      expect(avatarElement.classList.contains('size-12')).toBeTruthy();
     });
 
     it('should apply square shape class', () => {
@@ -149,7 +107,8 @@ describe('ZardAvatarComponent', () => {
 
   describe('Image display', () => {
     it('should display image when URL is provided', () => {
-      hostComponent.zImage = { url: 'test-url.jpg', alt: 'Test Alt', fallback: 'ZA' };
+      hostComponent.zSrc = 'test-url.jpg';
+      hostComponent.zAlt = 'Test Alt';
       fixture.detectChanges();
 
       const imgElement = fixture.debugElement.query(By.css('img'));
@@ -158,16 +117,16 @@ describe('ZardAvatarComponent', () => {
       expect(imgElement.nativeElement.alt).toBe('Test Alt');
     });
 
-    it('should use default alt text when not provided', () => {
-      hostComponent.zImage = { url: 'test-url.jpg', fallback: 'ZA' };
+    it('should use empty alt text when not provided', () => {
+      hostComponent.zSrc = 'test-url.jpg';
       fixture.detectChanges();
 
       const imgElement = fixture.debugElement.query(By.css('img'));
-      expect(imgElement.nativeElement.alt).toBe('Avatar');
+      expect(imgElement.nativeElement.alt).toBe('');
     });
 
     it('should display fallback text when no image URL is provided', () => {
-      hostComponent.zImage = { fallback: 'AB' };
+      hostComponent.zFallback = 'AB';
       fixture.detectChanges();
 
       const fallbackElement = fixture.debugElement.query(By.css('span.text-base'));
@@ -176,33 +135,23 @@ describe('ZardAvatarComponent', () => {
     });
   });
 
-  describe('Loading state', () => {
-    it('should display loading spinner when loading is active', () => {
-      hostComponent.zLoading = true;
-      fixture.detectChanges();
-
-      const loaderElement = fixture.debugElement.query(By.css('z-icon'));
-      expect(loaderElement).toBeTruthy();
-      expect(loaderElement.componentInstance.zType()).toBe('loader-circle');
-    });
-
-    it('should hide loading spinner when loading is false', () => {
-      hostComponent.zLoading = true;
-      fixture.detectChanges();
-
-      let loaderElement = fixture.debugElement.query(By.css('z-icon'));
-      expect(loaderElement).toBeTruthy();
-      expect(loaderElement.componentInstance.zType()).toBe('loader-circle');
-
-      hostComponent.zLoading = false;
-      fixture.detectChanges();
-
-      loaderElement = fixture.debugElement.query(By.css('z-icon'));
-      expect(loaderElement).toBeNull();
-    });
-  });
-
   describe('Status indicators', () => {
+    it('should set data-status attribute when status is provided', () => {
+      hostComponent.zStatus = 'online';
+      fixture.detectChanges();
+
+      const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
+      expect(avatarElement.getAttribute('data-status')).toBe('online');
+    });
+
+    it('should not set data-status attribute when status is null', () => {
+      hostComponent.zStatus = null;
+      fixture.detectChanges();
+
+      const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
+      expect(avatarElement.getAttribute('data-status')).toBeNull();
+    });
+
     it('should display online status indicator', () => {
       hostComponent.zStatus = 'online';
       fixture.detectChanges();
@@ -232,14 +181,6 @@ describe('ZardAvatarComponent', () => {
       fixture.detectChanges();
 
       const statusElement = fixture.debugElement.query(By.css('svg.text-yellow-400'));
-      expect(statusElement).toBeTruthy();
-    });
-
-    it('should display invisible status indicator', () => {
-      hostComponent.zStatus = 'invisible';
-      fixture.detectChanges();
-
-      const statusElement = fixture.debugElement.query(By.css('svg.text-stone-400\\/90'));
       expect(statusElement).toBeTruthy();
     });
   });

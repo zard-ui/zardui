@@ -1,57 +1,72 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { alertVariants, type ZardAlertVariants } from './alert.variants';
-import { ZardIconComponent } from '../icon/icon.component';
+import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, type ZardAlertVariants } from './alert.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
 
 @Component({
-  selector: 'z-alert',
+  selector: 'z-alert, [z-alert]',
   standalone: true,
-  imports: [ZardIconComponent],
   exportAs: 'zAlert',
+  imports: [ZardIconComponent, ZardStringTemplateOutletDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    @if (iconName()) {
-      <z-icon [zType]="iconName()!" />
+    @if (zIcon() || iconName()) {
+      <span [class]="iconClasses()" data-slot="alert-icon">
+        <ng-container *zStringTemplateOutlet="zIcon()">
+          <z-icon [zType]="iconName()!" />
+        </ng-container>
+      </span>
     }
 
-    <div class="flex flex-col gap-1 w-full">
-      <h5 class="font-medium leading-none tracking-tight mt-1">{{ zTitle() }}</h5>
-      <span class="text-sm leading-[1.625]">{{ zDescription() }}</span>
+    <div class="flex-1">
+      @if (zTitle()) {
+        <div [class]="titleClasses()" data-slot="alert-title">
+          <ng-container *zStringTemplateOutlet="zTitle()">{{ zTitle() }}</ng-container>
+        </div>
+      }
+
+      @if (zDescription()) {
+        <div [class]="descriptionClasses()" data-slot="alert-description">
+          <ng-container *zStringTemplateOutlet="zDescription()">{{ zDescription() }}</ng-container>
+        </div>
+      }
     </div>
   `,
   host: {
+    role: 'alert',
     '[class]': 'classes()',
-    '[attr.data-type]': 'zType()',
-    '[attr.data-appearance]': 'zAppearance()',
+    '[attr.data-slot]': '"alert"',
   },
 })
 export class ZardAlertComponent {
   readonly class = input<ClassValue>('');
-  readonly zTitle = input.required<string>();
-  readonly zDescription = input.required<string>();
-  readonly zIcon = input<ZardIcon>();
+  readonly zTitle = input<string | TemplateRef<void>>('');
+  readonly zDescription = input<string | TemplateRef<void>>('');
+  readonly zIcon = input<ZardIcon | TemplateRef<void>>();
   readonly zType = input<ZardAlertVariants['zType']>('default');
-  readonly zAppearance = input<ZardAlertVariants['zAppearance']>('outline');
 
-  protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType(), zAppearance: this.zAppearance() }), this.class()));
+  protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
 
-  protected readonly iconsType: Record<NonNullable<ZardAlertVariants['zType']>, ZardIcon | ''> = {
-    default: '',
-    info: 'info',
-    success: 'circle-check',
-    warning: 'triangle-alert',
-    error: 'circle-x',
-  };
+  protected readonly iconClasses = computed(() => alertIconVariants());
+
+  protected readonly titleClasses = computed(() => alertTitleVariants());
+
+  protected readonly descriptionClasses = computed(() => alertDescriptionVariants({ zType: this.zType() }));
 
   protected readonly iconName = computed((): ZardIcon | null => {
     const customIcon = this.zIcon();
-    if (customIcon) return customIcon;
+    if (customIcon && !(customIcon instanceof TemplateRef)) {
+      return customIcon;
+    }
 
-    const typeIcon = this.iconsType[this.zType() ?? 'default'];
-    return typeIcon || null;
+    if (this.zType() === 'destructive') return 'circle-alert';
+
+    return null;
   });
 }

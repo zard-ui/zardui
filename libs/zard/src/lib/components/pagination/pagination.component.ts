@@ -1,5 +1,6 @@
 import { booleanAttribute, ChangeDetectionStrategy, Component, computed, forwardRef, input, linkedSignal, output, ViewEncapsulation } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
 import {
@@ -10,9 +11,10 @@ import {
   paginationPreviousVariants,
   paginationVariants,
 } from './pagination.variants';
-import { buttonVariants, type ZardButtonVariants } from '../button/button.variants';
-import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
+import { type ZardButtonVariants } from '../button/button.variants';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-pagination-content',
@@ -53,16 +55,21 @@ export class ZardPaginationItemComponent {
 @Component({
   selector: 'z-pagination-button',
   exportAs: 'zPaginationButton',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  imports: [ZardButtonComponent],
   template: `
     <button
+      z-button
       data-slot="pagination-button"
       [attr.aria-disabled]="zDisabled() || null"
       [attr.data-disabled]="zDisabled() || null"
       [attr.aria-current]="zActive() ? 'page' : undefined"
       [attr.data-active]="zActive() || null"
-      [class]="classes()"
+      [zType]="zType()"
+      [zSize]="zSize()"
+      [class]="class()"
       (click)="handleClick()"
     >
       <ng-content></ng-content>
@@ -72,14 +79,12 @@ export class ZardPaginationItemComponent {
 export class ZardPaginationButtonComponent {
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zActive = input(false, { transform: booleanAttribute });
-  readonly zSize = input<ZardButtonVariants['zSize']>('icon');
+  readonly zSize = input<ZardButtonVariants['zSize']>();
 
   readonly class = input<ClassValue>('');
   readonly zClick = output<void>();
 
-  protected readonly classes = computed(() => mergeClasses(buttonVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()));
-
-  private readonly zType = computed<ZardButtonVariants['zType']>(() => (this.zActive() ? 'outline' : 'ghost'));
+  protected readonly zType = computed<ZardButtonVariants['zType']>(() => (this.zActive() ? 'outline' : 'ghost'));
 
   handleClick() {
     if (!this.zDisabled() && !this.zActive()) {
@@ -189,7 +194,7 @@ export class ZardPaginationEllipsisComponent {
 export class ZardPaginationComponent implements ControlValueAccessor {
   readonly zPageIndex = input<number>(1);
   readonly zTotal = input<number>(1);
-  readonly zSize = input<ZardButtonVariants['zSize']>('icon');
+  readonly zSize = input<ZardButtonVariants['zSize']>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
 
   readonly class = input<ClassValue>('');

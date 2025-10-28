@@ -1,10 +1,10 @@
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, contentChildren, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { layoutVariants, type LayoutVariants } from './layout.variants';
 import { SidebarComponent } from './sidebar.component';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-layout',
