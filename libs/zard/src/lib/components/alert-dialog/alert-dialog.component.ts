@@ -23,12 +23,10 @@ import type { ClassValue } from 'clsx';
 
 import { alertDialogVariants, type ZardAlertDialogVariants } from './alert-dialog.variants';
 import { ZardButtonComponent } from '../button/button.component';
+// The service is used in the NgModule providers below, not in the component class.
 import { ZardAlertDialogService } from './alert-dialog.service';
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
-// The service is used in the NgModule providers below, not in the component class.
-
-import { ZardAlertDialogService } from './alert-dialog.service';
 
 const noopFun = () => void 0;
 
