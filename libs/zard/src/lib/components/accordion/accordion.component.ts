@@ -1,8 +1,10 @@
-import { type AfterContentInit, ChangeDetectionStrategy, Component, contentChildren, input, ViewEncapsulation } from '@angular/core';
-
-import { ZardAccordionItemComponent } from './accordion-item.component';
+import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
+
+import { ZardAccordionItemComponent } from './accordion-item.component';
+import { accordionVariants } from './accordion.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-accordion',
@@ -10,11 +12,10 @@ import type { ClassValue } from 'clsx';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `
-    <div class="grid w-full" [class]="class()">
-      <ng-content></ng-content>
-    </div>
-  `,
+  template: ` <ng-content></ng-content>`,
+  host: {
+    '[class]': 'classes()',
+  },
 })
 export class ZardAccordionComponent implements AfterContentInit {
   readonly items = contentChildren(ZardAccordionItemComponent);
@@ -23,6 +24,8 @@ export class ZardAccordionComponent implements AfterContentInit {
   readonly zType = input<'single' | 'multiple'>('single');
   readonly zCollapsible = input<boolean>(true);
   readonly zDefaultValue = input<string | string[]>('');
+
+  protected readonly classes = computed(() => mergeClasses(accordionVariants(), this.class()));
 
   ngAfterContentInit(): void {
     setTimeout(() => {
