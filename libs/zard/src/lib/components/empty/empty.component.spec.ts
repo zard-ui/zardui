@@ -13,13 +13,9 @@ describe('ZardEmptyComponent', () => {
   let debugElement: DebugElement;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ZardEmptyComponent],
-    }).compileComponents();
+    const result = await render(ZardEmptyComponent);
 
-    await render(ZardEmptyComponent);
-
-    fixture = TestBed.createComponent(ZardEmptyComponent);
+    fixture = result.fixture;
     component = fixture.componentInstance;
     debugElement = fixture.debugElement;
     fixture.detectChanges();
@@ -30,16 +26,16 @@ describe('ZardEmptyComponent', () => {
   });
 
   it('should render with default empty classes', () => {
-    const cardElement = debugElement.nativeElement;
-    expect(cardElement).toHaveClass(emptyVariants());
+    const emptyElement = debugElement.nativeElement;
+    expect(emptyElement).toHaveClass(emptyVariants());
   });
 
   it('should apply custom classes', () => {
     fixture.componentRef.setInput('class', 'custom-class');
     fixture.detectChanges();
 
-    const cardElement = debugElement.nativeElement;
-    expect(cardElement).toHaveClass('custom-class');
+    const emptyElement = debugElement.nativeElement;
+    expect(emptyElement).toHaveClass('custom-class');
   });
 
   it('should render image when provided', () => {
@@ -77,9 +73,21 @@ describe('ZardEmptyComponent', () => {
     fixture.componentRef.setInput('zDescription', description);
     fixture.detectChanges();
 
-    const titleElement = screen.getByText(description);
-    expect(titleElement).toBeTruthy();
-    expect(titleElement).toHaveClass(emptyDescriptionVariants());
+    const descriptionElement = screen.getByText(description);
+    expect(descriptionElement).toBeTruthy();
+    expect(descriptionElement).toHaveClass(emptyDescriptionVariants());
+  });
+
+  it('should render image over icon when both are provided', () => {
+    fixture.componentRef.setInput('zImage', 'url');
+    fixture.componentRef.setInput('zIcon', 'inbox');
+    fixture.detectChanges();
+
+    const imageElement = screen.getByAltText('Empty');
+    const iconElement = screen.queryByTestId('icon');
+    expect(imageElement).toBeTruthy();
+    expect(imageElement).toHaveAttribute('src', component.zImage());
+    expect(iconElement).toBeFalsy();
   });
 
   it('should render template ref when provided for image', () => {
@@ -101,7 +109,8 @@ describe('ZardEmptyComponent', () => {
 
     const imageElement = hostFixture.debugElement.query(By.css('svg'));
     expect(imageElement).toBeTruthy();
-    expect(imageElement.nativeNode).toContainHTML('<svg viewBox="0 0 10 10" />');
+    expect(imageElement.nativeElement.tagName.toLowerCase()).toBe('svg');
+    expect(imageElement.nativeElement).toHaveAttribute('viewBox', '0 0 10 10');
   });
 
   it('should render template ref when provided for title', () => {
@@ -123,7 +132,7 @@ describe('ZardEmptyComponent', () => {
 
     const titleElement = hostFixture.debugElement.query(By.css('span'));
     expect(titleElement).toBeTruthy();
-    expect(titleElement.nativeNode).toHaveTextContent('Title');
+    expect(titleElement.nativeElement).toHaveTextContent('Title');
   });
 
   it('should render template ref when provided for description', () => {
@@ -145,7 +154,7 @@ describe('ZardEmptyComponent', () => {
 
     const descriptionElement = hostFixture.debugElement.query(By.css('span'));
     expect(descriptionElement).toBeTruthy();
-    expect(descriptionElement.nativeNode).toHaveTextContent('Description');
+    expect(descriptionElement.nativeElement).toHaveTextContent('Description');
   });
 
   it('should render template ref when provided for actions', () => {
@@ -165,8 +174,9 @@ describe('ZardEmptyComponent', () => {
     const hostFixture = TestBed.createComponent(TestHostComponent);
     hostFixture.detectChanges();
 
-    const actionsElement = hostFixture.debugElement.query(By.css('button'));
-    expect(actionsElement).toBeTruthy();
-    expect(actionsElement.nativeNode).toContainHTML('<button z-button="">Action</button>');
+    const btn = hostFixture.debugElement.query(By.css('button')).nativeElement as HTMLButtonElement;
+    expect(btn).toBeTruthy();
+    expect(btn).toHaveTextContent('Action');
+    expect(btn).toHaveAttribute('z-button');
   });
 });

@@ -22,7 +22,7 @@ import { type ZardIcon } from '../icon/icons';
     @let description = zDescription();
     @let actions = zActions();
 
-    <div [class]="hederClasses()">
+    <div [class]="headerClasses()">
       @if (image) {
         <div [class]="imageClasses()">
           <ng-container *zStringTemplateOutlet="image">
@@ -50,7 +50,7 @@ import { type ZardIcon } from '../icon/icons';
 
     @if (actions.length) {
       <div [class]="actionsClasses()">
-        @for (action of actions; track index; let index = $index) {
+        @for (action of actions; track $index) {
           <ng-container *zStringTemplateOutlet="action" />
         }
       </div>
@@ -69,7 +69,7 @@ export class ZardEmptyComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(emptyVariants(), this.class()));
-  protected readonly hederClasses = computed(() => emptyHeaderVariants());
+  protected readonly headerClasses = computed(() => emptyHeaderVariants());
   protected readonly imageClasses = computed(() => emptyImageVariants());
   protected readonly iconClasses = computed(() => emptyIconVariants());
   protected readonly titleClasses = computed(() => emptyTitleVariants());
