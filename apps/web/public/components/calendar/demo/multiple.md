@@ -4,6 +4,7 @@ import { Component, signal } from '@angular/core';
 import { ZardCalendarComponent } from '../calendar.component';
 
 @Component({
+  selector: 'z-demo-calendar-multiple',
   standalone: true,
   imports: [ZardCalendarComponent],
   template: `

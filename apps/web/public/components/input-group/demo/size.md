@@ -6,6 +6,7 @@ import { ZardInputGroupComponent } from '../input-group.component';
 import { ZardInputDirective } from '../../input/input.directive';
 
 @Component({
+  selector: 'z-demo-input-group-size',
   standalone: true,
   imports: [ZardInputGroupComponent, ZardInputDirective, FormsModule],
   template: `

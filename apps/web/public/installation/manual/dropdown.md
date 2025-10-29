@@ -429,18 +429,21 @@ export class ZardDropdownMenuLabelComponent {
 
 
 ```angular-ts title="dropdown-menu-content.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { Component, computed, input, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { dropdownContentVariants } from './dropdown.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-content',
   exportAs: 'zDropdownMenuContent',
   standalone: true,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    '[style.display]': '"none"',
+  },
   template: `
     <ng-template #contentTemplate>
       <div [class]="contentClasses()" role="menu" tabindex="-1" [attr.aria-orientation]="'vertical'">

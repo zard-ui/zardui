@@ -5,6 +5,7 @@ import { ZardAccordionComponent } from '../accordion.component';
 import { ZardAccordionItemComponent } from '../accordion-item.component';
 
 @Component({
+  selector: 'z-demo-accordion-basic',
   standalone: true,
   imports: [ZardAccordionComponent, ZardAccordionItemComponent],
   template: `

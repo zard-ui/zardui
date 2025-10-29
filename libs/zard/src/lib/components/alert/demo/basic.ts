@@ -4,6 +4,7 @@ import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardAlertComponent } from '../alert.component';
 
 @Component({
+  selector: 'z-demo-alert-basic',
   standalone: true,
   imports: [ZardAlertComponent, ZardIconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,

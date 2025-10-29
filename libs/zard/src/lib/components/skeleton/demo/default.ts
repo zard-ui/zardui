@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardSkeletonComponent } from '../skeleton.component';
 
 @Component({
+  selector: 'z-demo-skeleton-default',
   standalone: true,
   imports: [ZardSkeletonComponent],
   template: `
@@ -15,4 +16,4 @@ import { ZardSkeletonComponent } from '../skeleton.component';
     </div>
   `,
 })
-export class ZardDemoSkeletonComponent {}
+export class ZardDemoSkeletonDefaultComponent {}

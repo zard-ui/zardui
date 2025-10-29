@@ -4,6 +4,7 @@ import { ZardAvatarGroupComponent } from '../avatar-group.component';
 import { ZardAvatarComponent } from '../avatar.component';
 
 @Component({
+  selector: 'z-demo-avatar-basic',
   standalone: true,
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent],
   template: `

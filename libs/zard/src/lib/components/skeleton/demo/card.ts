@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardSkeletonComponent } from '../skeleton.component';
 
 @Component({
+  selector: 'z-demo-skeleton-card',
   standalone: true,
   imports: [ZardSkeletonComponent],
   template: `

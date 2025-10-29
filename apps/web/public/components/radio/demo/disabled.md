@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
 import { ZardRadioComponent } from '../radio.component';
 
 @Component({
+  selector: 'z-demo-radio-disabled',
   standalone: true,
   imports: [ZardRadioComponent, FormsModule],
   template: `

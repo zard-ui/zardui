@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ZardDividerComponent } from '../../divider/divider.component';
 
 @Component({
+  selector: 'z-demo-tabs-position',
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardRadioComponent, FormsModule, ZardDividerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,

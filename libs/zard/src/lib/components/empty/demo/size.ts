@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
+  selector: 'z-demo-empty-size',
   standalone: true,
   imports: [ZardEmptyComponent],
   template: `

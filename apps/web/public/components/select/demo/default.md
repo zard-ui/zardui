@@ -6,6 +6,7 @@ import { ZardSelectItemComponent } from '../select-item.component';
 import { ZardSelectComponent } from '../select.component';
 
 @Component({
+  selector: 'z-demo-select-basic',
   standalone: true,
   imports: [FormsModule, ZardSelectComponent, ZardSelectItemComponent],
   template: `

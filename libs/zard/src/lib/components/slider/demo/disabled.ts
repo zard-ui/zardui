@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardSliderComponent } from '../slider.component';
 
 @Component({
+  selector: 'z-demo-slider-disabled',
   standalone: true,
   imports: [ZardSliderComponent],
   template: `
