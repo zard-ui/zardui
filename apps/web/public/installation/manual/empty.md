@@ -33,7 +33,7 @@ import { type ZardIcon } from '../icon/icons';
           </ng-container>
         </div>
       } @else if (icon) {
-        <div [class]="iconClasses()">
+        <div [class]="iconClasses()" data-testid="icon">
           <z-icon [zType]="icon" zSize="xl" />
         </div>
       }

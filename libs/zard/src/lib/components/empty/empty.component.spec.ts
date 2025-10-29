@@ -1,104 +1,172 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, type DebugElement } from '@angular/core';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
+
+import { render, screen } from '@testing-library/angular';
+
 import { ZardEmptyComponent } from './empty.component';
-
-@Component({
-  template: `
-    <z-empty [zImage]="image" [zDescription]="description" [zSize]="size" [class]="customClass"></z-empty>
-
-    <ng-template #tpl>Template Content</ng-template>
-  `,
-  standalone: true,
-  imports: [ZardEmptyComponent],
-})
-class TestHostComponent {
-  image?: string | TemplateRef<unknown>;
-  description: string | TemplateRef<unknown> = 'No data';
-  size: 'default' | 'sm' | 'lg' = 'default';
-  customClass = '';
-
-  @ViewChild('tpl', { static: true }) tpl!: TemplateRef<unknown>;
-}
+import { emptyDescriptionVariants, emptyIconVariants, emptyTitleVariants, emptyVariants } from './empty.variants';
 
 describe('ZardEmptyComponent', () => {
-  let fixture: ComponentFixture<TestHostComponent>;
-  let host: TestHostComponent;
+  let component: ZardEmptyComponent;
+  let fixture: ComponentFixture<ZardEmptyComponent>;
+  let debugElement: DebugElement;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TestHostComponent],
+      imports: [ZardEmptyComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TestHostComponent);
-    host = fixture.componentInstance;
+    await render(ZardEmptyComponent);
+
+    fixture = TestBed.createComponent(ZardEmptyComponent);
+    component = fixture.componentInstance;
+    debugElement = fixture.debugElement;
     fixture.detectChanges();
   });
 
   it('should create', () => {
-    const comp = fixture.debugElement.query(By.directive(ZardEmptyComponent));
-    expect(comp).toBeTruthy();
+    expect(component).toBeTruthy();
   });
 
-  it('should render default svg when no zImage is provided', () => {
-    const svg = fixture.debugElement.query(By.css('svg'));
-    expect(svg).toBeTruthy();
+  it('should render with default empty classes', () => {
+    const cardElement = debugElement.nativeElement;
+    expect(cardElement).toHaveClass(emptyVariants());
   });
 
-  it('should render an <img> when zImage is string URL', () => {
-    host.image = 'https://example.com/test.png';
+  it('should apply custom classes', () => {
+    fixture.componentRef.setInput('class', 'custom-class');
     fixture.detectChanges();
 
-    const img = fixture.debugElement.query(By.css('img'));
-    expect(img).toBeTruthy();
-    expect(img.nativeElement.getAttribute('src')).toBe('https://example.com/test.png');
+    const cardElement = debugElement.nativeElement;
+    expect(cardElement).toHaveClass('custom-class');
   });
 
-  it('should render ng-template when zImage is TemplateRef', () => {
-    host.image = host.tpl;
+  it('should render image when provided', () => {
+    fixture.componentRef.setInput('zImage', 'url');
     fixture.detectChanges();
 
-    const templateContent = fixture.debugElement.nativeElement.textContent;
-    expect(templateContent).toContain('Template Content');
+    const imageElement = screen.getByAltText('Empty');
+    expect(imageElement).toBeTruthy();
+    expect(imageElement).toHaveAttribute('src', component.zImage());
+    expect(imageElement).toHaveClass('mx-auto');
   });
 
-  it('should render default description when none is provided', () => {
-    host.description = 'No data';
+  it('should render an ZardIcon when provided', () => {
+    fixture.componentRef.setInput('zIcon', 'inbox');
     fixture.detectChanges();
 
-    const desc = fixture.debugElement.query(By.css('p'));
-    expect(desc.nativeElement.textContent).toContain('No data');
+    const iconElement = screen.getByTestId('icon');
+    expect(iconElement).toBeTruthy();
+    expect(iconElement).toHaveClass(emptyIconVariants());
+    expect(iconElement).toContainHTML('<z-icon');
   });
 
-  it('should render custom description string', () => {
-    host.description = 'Custom description here';
+  it('should render title when provided', () => {
+    const title = 'No data';
+    fixture.componentRef.setInput('zTitle', title);
     fixture.detectChanges();
 
-    const desc = fixture.debugElement.query(By.css('p'));
-    expect(desc.nativeElement.textContent).toContain('Custom description here');
+    const titleElement = screen.getByText(title);
+    expect(titleElement).toBeTruthy();
+    expect(titleElement).toHaveClass(emptyTitleVariants());
   });
 
-  it('should render template when description is TemplateRef', () => {
-    host.description = host.tpl;
+  it('should render description when provided', () => {
+    const description = 'No data found';
+    fixture.componentRef.setInput('zDescription', description);
     fixture.detectChanges();
 
-    const templateContent = fixture.debugElement.nativeElement.textContent;
-    expect(templateContent).toContain('Template Content');
+    const titleElement = screen.getByText(description);
+    expect(titleElement).toBeTruthy();
+    expect(titleElement).toHaveClass(emptyDescriptionVariants());
   });
 
-  it('should apply small variant classes when zSize="sm"', () => {
-    host.size = 'sm';
-    fixture.detectChanges();
+  it('should render template ref when provided for image', () => {
+    @Component({
+      selector: 'test-host',
+      imports: [ZardEmptyComponent],
+      template: `
+        <z-empty [zImage]="image" />
 
-    const comp = fixture.debugElement.query(By.css('z-empty'));
-    expect(comp.nativeElement.className).toContain('text-xs');
+        <ng-template #image>
+          <svg viewBox="0 0 10 10"></svg>
+        </ng-template>
+      `,
+    })
+    class TestHostComponent {}
+
+    const hostFixture = TestBed.createComponent(TestHostComponent);
+    hostFixture.detectChanges();
+
+    const imageElement = hostFixture.debugElement.query(By.css('svg'));
+    expect(imageElement).toBeTruthy();
+    expect(imageElement.nativeNode).toContainHTML('<svg viewBox="0 0 10 10" />');
   });
 
-  it('should merge custom class with variant classes', () => {
-    host.customClass = 'bg-red-500';
-    fixture.detectChanges();
+  it('should render template ref when provided for title', () => {
+    @Component({
+      selector: 'test-host',
+      imports: [ZardEmptyComponent],
+      template: `
+        <z-empty [zTitle]="title" />
 
-    const comp = fixture.debugElement.query(By.css('z-empty'));
-    expect(comp.nativeElement.className).toContain('bg-red-500');
+        <ng-template #title>
+          <span>Title</span>
+        </ng-template>
+      `,
+    })
+    class TestHostComponent {}
+
+    const hostFixture = TestBed.createComponent(TestHostComponent);
+    hostFixture.detectChanges();
+
+    const titleElement = hostFixture.debugElement.query(By.css('span'));
+    expect(titleElement).toBeTruthy();
+    expect(titleElement.nativeNode).toHaveTextContent('Title');
+  });
+
+  it('should render template ref when provided for description', () => {
+    @Component({
+      selector: 'test-host',
+      imports: [ZardEmptyComponent],
+      template: `
+        <z-empty [zDescription]="description" />
+
+        <ng-template #description>
+          <span>Description</span>
+        </ng-template>
+      `,
+    })
+    class TestHostComponent {}
+
+    const hostFixture = TestBed.createComponent(TestHostComponent);
+    hostFixture.detectChanges();
+
+    const descriptionElement = hostFixture.debugElement.query(By.css('span'));
+    expect(descriptionElement).toBeTruthy();
+    expect(descriptionElement.nativeNode).toHaveTextContent('Description');
+  });
+
+  it('should render template ref when provided for actions', () => {
+    @Component({
+      selector: 'test-host',
+      imports: [ZardEmptyComponent],
+      template: `
+        <z-empty [zActions]="[action]" />
+
+        <ng-template #action>
+          <button z-button>Action</button>
+        </ng-template>
+      `,
+    })
+    class TestHostComponent {}
+
+    const hostFixture = TestBed.createComponent(TestHostComponent);
+    hostFixture.detectChanges();
+
+    const actionsElement = hostFixture.debugElement.query(By.css('button'));
+    expect(actionsElement).toBeTruthy();
+    expect(actionsElement.nativeNode).toContainHTML('<button z-button="">Action</button>');
   });
 });
