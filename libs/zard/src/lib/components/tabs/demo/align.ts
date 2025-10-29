@@ -4,6 +4,7 @@ import { ZardButtonComponent } from '../../button/button.component';
 import { type zAlign, ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
+  selector: 'z-demo-tabs-align',
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardButtonComponent],
   template: `

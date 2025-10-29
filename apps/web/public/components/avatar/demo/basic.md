@@ -5,10 +5,7 @@ import { ZardAvatarGroupComponent } from '../avatar-group.component';
 import { ZardAvatarComponent } from '../avatar.component';
 
 @Component({
-<<<<<<< HEAD
   selector: 'z-demo-avatar-basic',
-=======
->>>>>>> bb985d2 (📦 refactor: review some components (#282))
   standalone: true,
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent],
   template: `

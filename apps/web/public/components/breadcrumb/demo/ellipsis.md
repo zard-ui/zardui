@@ -5,10 +5,7 @@ import { ZardMenuModule } from '../../menu/menu.module';
 import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
-<<<<<<< HEAD
   selector: 'z-demo-breadcrumb-ellipsis',
-=======
->>>>>>> bb985d2 (📦 refactor: review some components (#282))
   standalone: true,
   imports: [ZardBreadcrumbModule, ZardMenuModule],
   template: `

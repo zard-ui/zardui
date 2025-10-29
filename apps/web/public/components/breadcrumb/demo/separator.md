@@ -5,10 +5,7 @@ import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
-<<<<<<< HEAD
   selector: 'z-demo-breadcrumb-separator',
-=======
->>>>>>> bb985d2 (📦 refactor: review some components (#282))
   standalone: true,
   imports: [ZardBreadcrumbModule, ZardIconComponent],
   template: `

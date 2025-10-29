@@ -4,10 +4,7 @@ import { Component } from '@angular/core';
 import { ZardButtonComponent } from '../button.component';
 
 @Component({
-<<<<<<< HEAD
   selector: 'z-demo-button-type',
-=======
->>>>>>> bb985d2 (📦 refactor: review some components (#282))
   standalone: true,
   imports: [ZardButtonComponent],
   template: `
