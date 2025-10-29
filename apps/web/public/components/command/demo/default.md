@@ -5,6 +5,7 @@ import type { ZardCommandOption } from '../command.component';
 import { ZardCommandModule } from '../command.module';
 
 @Component({
+  selector: 'z-demo-command-default',
   standalone: true,
   imports: [ZardCommandModule],
   template: `

@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { ZardInputDirective } from '../input.directive';
 
 @Component({
+  selector: 'z-demo-input-size',
   standalone: true,
   imports: [ZardInputDirective],
   template: `

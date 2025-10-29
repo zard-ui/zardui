@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
 import { generateId } from '../../../shared/utils/utils';
+import { ZardButtonComponent } from '../../button/button.component';
 import { ZardCardComponent } from '../card.component';
 
 @Component({
+  selector: 'z-demo-card-default',
   standalone: true,
   imports: [ZardCardComponent, ZardButtonComponent],
   template: `

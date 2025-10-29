@@ -5,6 +5,7 @@ import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ZardSwitchComponent } from '../switch.component';
 
 @Component({
+  selector: 'z-demo-switch-disabled',
   standalone: true,
   imports: [ZardSwitchComponent, FormsModule, ReactiveFormsModule],
   template: `

@@ -1,4 +1,4 @@
-import { ZardDemoBreadcrumbComponent } from './default';
+import { ZardDemoBreadcrumbDefaultComponent } from './default';
 import { ZardDemoBreadcrumbEllipsisComponent } from './ellipsis';
 import { ZardDemoBreadcrumbSeparatorComponent } from './separator';
 
@@ -9,7 +9,7 @@ export const BREADCRUMB = {
   examples: [
     {
       name: 'default',
-      component: ZardDemoBreadcrumbComponent,
+      component: ZardDemoBreadcrumbDefaultComponent,
     },
     {
       name: 'separator',

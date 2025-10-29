@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
 import { type zAlign, ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
+  selector: 'z-demo-tabs-align',
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardButtonComponent],
   template: `

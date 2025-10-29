@@ -1,9 +1,10 @@
-import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { ZardCheckboxComponent } from '../checkbox.component';
 
 @Component({
+  selector: 'z-demo-checkbox-size',
   standalone: true,
   imports: [ZardCheckboxComponent, FormsModule],
   template: `

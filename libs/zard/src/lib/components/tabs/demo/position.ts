@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { ZardTabComponent, ZardTabGroupComponent, type zPosition } from '../tabs.component';
-import { ZardRadioComponent } from '../../radio/radio.component';
 import { FormsModule } from '@angular/forms';
+
 import { ZardDividerComponent } from '../../divider/divider.component';
+import { ZardRadioComponent } from '../../radio/radio.component';
+import { ZardTabComponent, ZardTabGroupComponent, type zPosition } from '../tabs.component';
 
 @Component({
+  selector: 'z-demo-tabs-position',
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardRadioComponent, FormsModule, ZardDividerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,

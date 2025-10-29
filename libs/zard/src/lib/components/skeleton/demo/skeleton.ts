@@ -1,5 +1,5 @@
 import { ZardDemoSkeletonCardComponent } from './card';
-import { ZardDemoSkeletonComponent } from './default';
+import { ZardDemoSkeletonDefaultComponent } from './default';
 
 export const SKELETON = {
   componentName: 'skeleton',
@@ -9,7 +9,7 @@ export const SKELETON = {
   examples: [
     {
       name: 'default',
-      component: ZardDemoSkeletonComponent,
+      component: ZardDemoSkeletonDefaultComponent,
     },
     {
       name: 'card',

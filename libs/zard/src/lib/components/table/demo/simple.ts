@@ -10,6 +10,7 @@ interface Person {
 }
 
 @Component({
+  selector: 'z-demo-table-simple',
   standalone: true,
   imports: [ZardTableComponent],
   template: `

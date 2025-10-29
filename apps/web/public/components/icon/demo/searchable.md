@@ -11,6 +11,7 @@ import { ZardIconComponent } from '../icon.component';
 import { ZARD_ICONS } from '../icons';
 
 @Component({
+  selector: 'z-demo-icon-searchable',
   standalone: true,
   imports: [CommonModule, ZardIconComponent, ZardInputDirective, ZardButtonComponent, ZardEmptyComponent],
   template: `

@@ -6,6 +6,7 @@ import { generateId } from '../../../shared/utils/utils';
 import { ZardCardComponent } from '../card.component';
 
 @Component({
+  selector: 'z-demo-card-default',
   standalone: true,
   imports: [ZardCardComponent, ZardButtonComponent],
   template: `

@@ -1,9 +1,10 @@
-import { ZardButtonComponent } from '../../button/button.component';
 import { Component } from '@angular/core';
 
+import { ZardButtonComponent } from '../../button/button.component';
 import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
+  selector: 'z-demo-tabs-arrow',
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardButtonComponent],
   template: `

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardSliderComponent } from '../slider.component';
 
 @Component({
+  selector: 'z-demo-slider-default',
   standalone: true,
   imports: [ZardSliderComponent],
   template: `
@@ -11,4 +12,4 @@ import { ZardSliderComponent } from '../slider.component';
     </div>
   `,
 })
-export class ZardDemoSliderComponent {}
+export class ZardDemoSliderDefaultComponent {}
