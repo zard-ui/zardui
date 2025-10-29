@@ -7,6 +7,7 @@ import { ZardButtonComponent } from '../../button/button.component';
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
+  selector: 'z-demo-empty-advanced-customization',
   standalone: true,
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, ZardEmptyComponent],
   template: `

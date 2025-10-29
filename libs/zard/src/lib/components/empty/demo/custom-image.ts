@@ -5,6 +5,7 @@ import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
+  selector: 'z-demo-empty-custom-image',
   standalone: true,
   imports: [ZardButtonComponent, ZardEmptyComponent, ZardIconComponent],
   template: `

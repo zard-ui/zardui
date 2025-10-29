@@ -5,6 +5,7 @@ import { ZardButtonComponent } from '../../button/button.component';
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
+  selector: 'z-demo-empty-actions',
   standalone: true,
   imports: [ZardButtonComponent, ZardEmptyComponent],
   template: `

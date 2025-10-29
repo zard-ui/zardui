@@ -1,5 +1,5 @@
-import { Component, type DebugElement } from '@angular/core';
-import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component } from '@angular/core';
+import { type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { render, screen } from '@testing-library/angular';
@@ -8,89 +8,71 @@ import { ZardEmptyComponent } from './empty.component';
 import { emptyDescriptionVariants, emptyIconVariants, emptyTitleVariants, emptyVariants } from './empty.variants';
 
 describe('ZardEmptyComponent', () => {
-  let component: ZardEmptyComponent;
-  let fixture: ComponentFixture<ZardEmptyComponent>;
-  let debugElement: DebugElement;
+  it('should render with default empty classes', async () => {
+    const fixture: ComponentFixture<ZardEmptyComponent> = (await render(ZardEmptyComponent)).fixture;
 
-  beforeEach(async () => {
-    const result = await render(ZardEmptyComponent);
-
-    fixture = result.fixture;
-    component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fixture.detectChanges();
-  });
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should render with default empty classes', () => {
-    const emptyElement = debugElement.nativeElement;
+    const emptyElement = fixture.debugElement.nativeElement;
     expect(emptyElement).toHaveClass(emptyVariants());
   });
 
-  it('should apply custom classes', () => {
-    fixture.componentRef.setInput('class', 'custom-class');
-    fixture.detectChanges();
+  it('should apply custom classes', async () => {
+    const fixture: ComponentFixture<ZardEmptyComponent> = (await render(ZardEmptyComponent, { inputs: { class: 'custom-class' } })).fixture;
 
-    const emptyElement = debugElement.nativeElement;
+    const emptyElement = fixture.debugElement.nativeElement;
     expect(emptyElement).toHaveClass('custom-class');
   });
 
-  it('should render image when provided', () => {
-    fixture.componentRef.setInput('zImage', 'url');
-    fixture.detectChanges();
+  it('should render image when provided', async () => {
+    const url = 'url';
+    await render(ZardEmptyComponent, { inputs: { zImage: url } });
 
     const imageElement = screen.getByAltText('Empty');
-    expect(imageElement).toBeTruthy();
-    expect(imageElement).toHaveAttribute('src', component.zImage());
+    expect(imageElement).toBeVisible();
+    expect(imageElement).toHaveAttribute('src', url);
     expect(imageElement).toHaveClass('mx-auto');
   });
 
-  it('should render an ZardIcon when provided', () => {
-    fixture.componentRef.setInput('zIcon', 'inbox');
-    fixture.detectChanges();
+  it('should render an ZardIcon when provided', async () => {
+    await render(ZardEmptyComponent, { inputs: { zIcon: 'inbox' } });
 
     const iconElement = screen.getByTestId('icon');
-    expect(iconElement).toBeTruthy();
+    expect(iconElement).toBeVisible();
     expect(iconElement).toHaveClass(emptyIconVariants());
-    expect(iconElement).toContainHTML('<z-icon');
+
+    const zIcon = iconElement.querySelector('z-icon');
+    expect(zIcon).toBeVisible();
+    expect(zIcon).toHaveAttribute('zsize', 'xl');
   });
 
-  it('should render title when provided', () => {
+  it('should render title when provided', async () => {
     const title = 'No data';
-    fixture.componentRef.setInput('zTitle', title);
-    fixture.detectChanges();
+    await render(ZardEmptyComponent, { inputs: { zTitle: title } });
 
     const titleElement = screen.getByText(title);
-    expect(titleElement).toBeTruthy();
+    expect(titleElement).toBeVisible();
     expect(titleElement).toHaveClass(emptyTitleVariants());
   });
 
-  it('should render description when provided', () => {
+  it('should render description when provided', async () => {
     const description = 'No data found';
-    fixture.componentRef.setInput('zDescription', description);
-    fixture.detectChanges();
+    await render(ZardEmptyComponent, { inputs: { zDescription: description } });
 
     const descriptionElement = screen.getByText(description);
-    expect(descriptionElement).toBeTruthy();
+    expect(descriptionElement).toBeVisible();
     expect(descriptionElement).toHaveClass(emptyDescriptionVariants());
   });
 
-  it('should render image over icon when both are provided', () => {
-    fixture.componentRef.setInput('zImage', 'url');
-    fixture.componentRef.setInput('zIcon', 'inbox');
-    fixture.detectChanges();
+  it('should render image over icon when both are provided', async () => {
+    await render(ZardEmptyComponent, { inputs: { zIcon: 'inbox', zImage: 'url' } });
 
     const imageElement = screen.getByAltText('Empty');
     const iconElement = screen.queryByTestId('icon');
-    expect(imageElement).toBeTruthy();
-    expect(imageElement).toHaveAttribute('src', component.zImage());
-    expect(iconElement).toBeFalsy();
+    expect(imageElement).toBeVisible();
+    expect(imageElement).toHaveAttribute('src', 'url');
+    expect(iconElement).toBeNull();
   });
 
-  it('should render template ref when provided for image', () => {
+  it('should render template ref when provided for image', async () => {
     @Component({
       selector: 'test-host',
       imports: [ZardEmptyComponent],
@@ -104,8 +86,7 @@ describe('ZardEmptyComponent', () => {
     })
     class TestHostComponent {}
 
-    const hostFixture = TestBed.createComponent(TestHostComponent);
-    hostFixture.detectChanges();
+    const hostFixture = (await render(TestHostComponent)).fixture;
 
     const imageElement = hostFixture.debugElement.query(By.css('svg'));
     expect(imageElement).toBeTruthy();
@@ -113,7 +94,7 @@ describe('ZardEmptyComponent', () => {
     expect(imageElement.nativeElement).toHaveAttribute('viewBox', '0 0 10 10');
   });
 
-  it('should render template ref when provided for title', () => {
+  it('should render template ref when provided for title', async () => {
     @Component({
       selector: 'test-host',
       imports: [ZardEmptyComponent],
@@ -127,15 +108,14 @@ describe('ZardEmptyComponent', () => {
     })
     class TestHostComponent {}
 
-    const hostFixture = TestBed.createComponent(TestHostComponent);
-    hostFixture.detectChanges();
+    const hostFixture = (await render(TestHostComponent)).fixture;
 
-    const titleElement = hostFixture.debugElement.query(By.css('span'));
-    expect(titleElement).toBeTruthy();
-    expect(titleElement.nativeElement).toHaveTextContent('Title');
+    const titleElement = hostFixture.debugElement.query(By.css('span')).nativeElement;
+    expect(titleElement).toBeVisible();
+    expect(titleElement).toHaveTextContent('Title');
   });
 
-  it('should render template ref when provided for description', () => {
+  it('should render template ref when provided for description', async () => {
     @Component({
       selector: 'test-host',
       imports: [ZardEmptyComponent],
@@ -143,21 +123,21 @@ describe('ZardEmptyComponent', () => {
         <z-empty [zDescription]="description" />
 
         <ng-template #description>
-          <span>Description</span>
+          <span class="text-orange-400">Description</span>
         </ng-template>
       `,
     })
     class TestHostComponent {}
 
-    const hostFixture = TestBed.createComponent(TestHostComponent);
-    hostFixture.detectChanges();
+    const hostFixture = (await render(TestHostComponent)).fixture;
 
-    const descriptionElement = hostFixture.debugElement.query(By.css('span'));
-    expect(descriptionElement).toBeTruthy();
-    expect(descriptionElement.nativeElement).toHaveTextContent('Description');
+    const descriptionElement = hostFixture.debugElement.query(By.css('span')).nativeElement;
+    expect(descriptionElement).toBeVisible();
+    expect(descriptionElement).toHaveTextContent('Description');
+    expect(descriptionElement).toHaveClass('text-orange-400');
   });
 
-  it('should render template ref when provided for actions', () => {
+  it('should render template ref when provided for actions', async () => {
     @Component({
       selector: 'test-host',
       imports: [ZardEmptyComponent],
@@ -171,12 +151,10 @@ describe('ZardEmptyComponent', () => {
     })
     class TestHostComponent {}
 
-    const hostFixture = TestBed.createComponent(TestHostComponent);
-    hostFixture.detectChanges();
+    await render(TestHostComponent);
 
-    const btn = hostFixture.debugElement.query(By.css('button')).nativeElement as HTMLButtonElement;
-    expect(btn).toBeTruthy();
-    expect(btn).toHaveTextContent('Action');
+    const btn = screen.getByRole('button', { name: 'Action' });
+    expect(btn).toBeVisible();
     expect(btn).toHaveAttribute('z-button');
   });
 });
