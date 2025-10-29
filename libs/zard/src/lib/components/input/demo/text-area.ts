@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardInputDirective } from '../input.directive';
 
 @Component({
+  selector: 'z-demo-input-text-area',
   standalone: true,
   imports: [ZardInputDirective],
   template: `

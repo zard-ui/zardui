@@ -3,10 +3,11 @@ import { Component } from '@angular/core';
 import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
+  selector: 'z-demo-tabs-default',
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent],
   template: `
-    <div class="w-full h-[300px]">
+    <div class="h-[300px] w-full">
       <z-tab-group>
         <z-tab label="First">
           <p>Is the default tab component</p>

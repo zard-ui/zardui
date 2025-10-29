@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
-import { ZardIconComponent } from '../../icon/icon.component';
 
+import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardBadgeComponent } from '../badge.component';
 
 @Component({
+  selector: 'z-demo-badge-default',
   standalone: true,
   imports: [ZardBadgeComponent, ZardIconComponent],
   template: `

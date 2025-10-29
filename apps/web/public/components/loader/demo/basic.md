@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { ZardLoaderComponent } from '../loader.component';
 
 @Component({
+  selector: 'z-demo-loader-basic',
   standalone: true,
   imports: [ZardLoaderComponent],
   template: `<z-loader />`,

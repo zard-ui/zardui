@@ -13,6 +13,7 @@ export interface Payment {
 }
 
 @Component({
+  selector: 'z-demo-table-payments',
   standalone: true,
   imports: [
     ZardTableComponent,

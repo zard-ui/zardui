@@ -4,6 +4,7 @@ import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardButtonComponent } from '../button.component';
 
 @Component({
+  selector: 'z-demo-button-size',
   standalone: true,
   imports: [ZardButtonComponent, ZardIconComponent],
   template: `

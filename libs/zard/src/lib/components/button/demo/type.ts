@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardButtonComponent } from '../button.component';
 
 @Component({
+  selector: 'z-demo-button-type',
   standalone: true,
   imports: [ZardButtonComponent],
   template: `

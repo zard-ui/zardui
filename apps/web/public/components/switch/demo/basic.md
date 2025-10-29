@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { ZardSwitchComponent } from '../switch.component';
 
 @Component({
+  selector: 'z-demo-switch-basic',
   standalone: true,
   imports: [ZardSwitchComponent],
   template: `

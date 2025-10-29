@@ -3,6 +3,7 @@ import { Component, signal } from '@angular/core';
 import { ZardPaginationModule } from '../pagination.module';
 
 @Component({
+  selector: 'z-demo-pagination-custom',
   standalone: true,
   imports: [ZardPaginationModule],
   template: `

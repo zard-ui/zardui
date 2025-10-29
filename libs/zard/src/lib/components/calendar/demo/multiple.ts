@@ -3,13 +3,14 @@ import { Component, signal } from '@angular/core';
 import { ZardCalendarComponent } from '../calendar.component';
 
 @Component({
+  selector: 'z-demo-calendar-multiple',
   standalone: true,
   imports: [ZardCalendarComponent],
   template: `
     <div class="space-y-4">
       <z-calendar zMode="multiple" [(value)]="selectedDates" (dateChange)="onDateChange($event)" />
 
-      <div class="text-sm text-muted-foreground mt-2">
+      <div class="text-muted-foreground mt-2 text-sm">
         <p class="font-medium">Selected ({{ selectedDates()?.length ?? 0 }}) date(s).</p>
       </div>
     </div>

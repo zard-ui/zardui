@@ -4,6 +4,7 @@ import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
+  selector: 'z-demo-toggle-with-text',
   standalone: true,
   imports: [ZardToggleComponent, ZardIconComponent],
   template: `
