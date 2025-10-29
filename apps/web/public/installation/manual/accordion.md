@@ -156,7 +156,6 @@ import { ZardIconComponent } from '../icon/icon.component';
   template: `
     <button
       type="button"
-      role="button"
       [id]="'accordion-' + zValue()"
       [class]="triggerClasses()"
       (click)="toggle()"
