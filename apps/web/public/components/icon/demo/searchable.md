@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
-import { toast } from 'ngx-sonner';
-
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
+
+import { toast } from 'ngx-sonner';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardEmptyComponent } from '../../empty/empty.component';
