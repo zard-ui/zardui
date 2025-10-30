@@ -9,7 +9,6 @@ import {
   contentChildren,
   ElementRef,
   forwardRef,
-  HostListener,
   inject,
   input,
   linkedSignal,
@@ -47,6 +46,7 @@ type OnChangeType = (value: string) => void;
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     class: 'relative inline-block w-full',
+    '(document:click)': 'onDocumentClick($event)',
   },
   template: `
     <button
@@ -62,9 +62,9 @@ type OnChangeType = (value: string) => void;
     >
       <span class="flex items-center gap-2 overflow-hidden">
         @if (selectedValue()) {
-          <span class="overflow-hidden text-ellipsis whitespace-nowrap">{{ selectedLabel() }}</span>
+          <span class="truncate">{{ selectedLabel() }}</span>
         } @else {
-          <span class="text-muted-foreground overflow-hidden text-ellipsis whitespace-nowrap">{{ zPlaceholder() }}</span>
+          <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
       </span>
       <z-icon zType="chevron-down" zSize="lg" class="opacity-50" />
@@ -168,7 +168,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     this.destroyOverlay();
   }
 
-  @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     if (!this.elementRef.nativeElement.contains(event.target as Node)) {
       this.close();
@@ -241,10 +240,10 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   open() {
     if (this.isOpen()) return;
 
-    const created = this.overlayRef !== undefined;
+    const overlayCreated = this.overlayRef !== undefined;
 
     // Create overlay if it doesn't exist
-    if (!created) {
+    if (!overlayCreated) {
       this.createOverlay();
     }
 
@@ -254,7 +253,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     this.overlayRef.attach(this.portal);
     this.isOpen.set(true);
 
-    if (!created) {
+    if (!overlayCreated) {
       this.determinePortalWidth();
     }
 
@@ -295,22 +294,28 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   private determinePortalWidth(): void {
     const portalWidth = (this.overlayRef?.getConfig().width as number) ?? 0;
 
-    let itemWidth = 0;
     let paddingOffset = 0;
-    for (const item of this.selectItems()) {
-      itemWidth = Math.max(itemWidth, item.elementRef.nativeElement.scrollWidth);
-      const st = getComputedStyle(item.elementRef.nativeElement);
-      if (paddingOffset === 0) {
-        paddingOffset += Number.parseFloat(st.getPropertyValue('padding-left')) + Number.parseFloat(st.getPropertyValue('padding-right'));
-      }
-    }
-    if (portalWidth < itemWidth) {
-      itemWidth += paddingOffset;
+    if (this.selectItems().length) {
+      const elementStyles = getComputedStyle(this.selectItems()[0].elementRef.nativeElement);
+      const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left'));
+      const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right'));
+
+      paddingOffset += leftPadding + rightPadding;
     }
 
-    itemWidth = Math.max(itemWidth, portalWidth);
-    this.overlayRef?.updateSize({ width: itemWidth, minWidth: itemWidth });
-    this.overlayRef?.updatePosition();
+    let itemMaxWidth = 0;
+    for (const item of this.selectItems()) {
+      itemMaxWidth = Math.max(itemMaxWidth, item.elementRef.nativeElement.scrollWidth);
+    }
+
+    const isOverflow = portalWidth < itemMaxWidth;
+    if (isOverflow) {
+      itemMaxWidth += paddingOffset;
+
+      itemMaxWidth = Math.max(itemMaxWidth, portalWidth);
+      this.overlayRef?.updateSize({ width: itemMaxWidth });
+      this.overlayRef?.updatePosition();
+    }
   }
 
   private createOverlay() {
@@ -345,7 +350,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
           width: elementWidth,
-          minWidth: elementWidth,
           maxHeight: 384, // max-h-96 equivalent
         });
       } catch (error) {

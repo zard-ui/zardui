@@ -8,11 +8,11 @@ import { type zAlign, ZardTabComponent, ZardTabGroupComponent } from '../tabs.co
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardButtonComponent],
   template: `
-    <div class="w-full h-[300px]">
+    <div class="h-[300px] w-full">
       <z-tab-group [zAlignTabs]="zAlignTabs">
         <z-tab label="First">
-          <p class="text-center w-full">zAlignTabs: {{ zAlignTabs }}</p>
-          <div class="flex justify-center items-center gap-2 mt-4">
+          <p class="w-full text-center">zAlignTabs: {{ zAlignTabs }}</p>
+          <div class="mt-4 flex items-center justify-center gap-2">
             <button z-button zType="ghost" (click)="zAlignTabs = 'start'">Start</button>
             <button z-button zType="ghost" (click)="zAlignTabs = 'center'">Center</button>
             <button z-button zType="ghost" (click)="zAlignTabs = 'end'">End</button>

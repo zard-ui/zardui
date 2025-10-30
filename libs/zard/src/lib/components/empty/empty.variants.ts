@@ -1,16 +1,32 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-export const emptyVariants = cva('flex flex-col items-center justify-center text-center', {
-  variants: {
-    zSize: {
-      default: 'text-sm [&_img]:w-40 [&_svg]:w-16 [&_svg]:h-10',
-      sm: 'text-xs [&_img]:w-28 [&_svg]:w-12 [&_svg]:h-8',
-      lg: 'text-base [&_img]:w-52 [&_svg]:w-20 [&_svg]:h-12',
-    },
-  },
-  defaultVariants: {
-    zSize: 'default',
-  },
+export const emptyVariants = cva('flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12', {
+  variants: {},
 });
 
-export type ZardEmptyVariants = VariantProps<typeof emptyVariants>;
+export const emptyHeaderVariants = cva('flex max-w-sm flex-col items-center gap-2 text-center', {
+  variants: {},
+});
+
+export const emptyImageVariants = cva('mb-2 flex shrink-0 items-center justify-center bg-transparent [&_svg]:pointer-events-none [&_svg]:shrink-0', {
+  variants: {},
+});
+
+export const emptyIconVariants = cva(
+  `bg-muted text-foreground mb-2 flex size-10 shrink-0 items-center justify-center rounded-lg [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6`,
+  {
+    variants: {},
+  },
+);
+
+export const emptyTitleVariants = cva('text-lg font-medium tracking-tight', {
+  variants: {},
+});
+
+export const emptyDescriptionVariants = cva('text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4', {
+  variants: {},
+});
+
+export const emptyActionsVariants = cva('flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance', {
+  variants: {},
+});

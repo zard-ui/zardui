@@ -10,7 +10,7 @@ import { ZardCalendarComponent } from '../calendar.component';
     <div class="space-y-4">
       <z-calendar zMode="range" [(value)]="dateRange" (dateChange)="onDateChange($event)" />
 
-      <div class="mt-4 p-4 rounded-lg border bg-muted/50">
+      <div class="bg-muted/50 mt-4 rounded-lg border p-4">
         <div class="space-y-1 text-sm">
           <div class="flex items-center gap-2">
             <span class="text-muted-foreground min-w-12">From:</span>

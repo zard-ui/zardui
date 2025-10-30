@@ -1,6 +1,7 @@
 import {
   ArrowRight,
   ArrowUp,
+  ArrowUpRight,
   BadgeCheck,
   Ban,
   Bell,
@@ -28,6 +29,7 @@ import {
   File,
   FileText,
   Folder,
+  FolderCode,
   FolderOpen,
   FolderPlus,
   Heart,
@@ -49,6 +51,7 @@ import {
   MoveRight,
   Palette,
   PanelLeft,
+  Plus,
   Popcorn,
   Puzzle,
   Save,
@@ -108,6 +111,7 @@ export const ZARD_ICONS = {
   'move-right': MoveRight,
   'arrow-right': ArrowRight,
   'arrow-up': ArrowUp,
+  'arrow-up-right': ArrowUpRight,
   folder: Folder,
   'folder-open': FolderOpen,
   'folder-plus': FolderPlus,
@@ -145,6 +149,8 @@ export const ZARD_ICONS = {
   smartphone: Smartphone,
   tablet: Tablet,
   'badge-check': BadgeCheck,
+  'folder-code': FolderCode,
+  plus: Plus,
 } as const satisfies Record<string, LucideIconData>;
 
 export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;
