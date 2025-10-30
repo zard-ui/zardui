@@ -14,33 +14,33 @@ import { ZARD_ICONS } from '../icons';
   standalone: true,
   imports: [CommonModule, ZardIconComponent, ZardInputDirective, ZardButtonComponent, ZardEmptyComponent],
   template: `
-    <div class="flex flex-col gap-4 w-full">
+    <div class="flex w-full flex-col gap-4">
       <div class="flex flex-col gap-2">
         <div class="relative">
           <input z-input type="text" placeholder="Search icons..." [value]="searchQuery()" (input)="onSearchChange($event)" class="w-full" />
-          <z-icon zType="search" class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
+          <z-icon zType="search" class="text-muted-foreground pointer-events-none absolute top-1/2 right-3 -translate-y-1/2" />
         </div>
-        <div class="text-xs text-muted-foreground leading-relaxed">
+        <div class="text-muted-foreground text-xs leading-relaxed">
           <strong>Note:</strong> These are only the icons currently used in our documentation.
           <br />
           For the complete icon library, visit
-          <a href="https://lucide.dev/icons" target="_blank" rel="noopener noreferrer" class="underline hover:text-foreground transition-colors">lucide.dev/icons.</a>
+          <a href="https://lucide.dev/icons" target="_blank" rel="noopener noreferrer" class="hover:text-foreground underline transition-colors">lucide.dev/icons.</a>
         </div>
       </div>
 
-      <div class="text-sm text-muted-foreground">{{ filteredIcons().length }} of {{ totalIcons }} icons</div>
+      <div class="text-muted-foreground text-sm">{{ filteredIcons().length }} of {{ totalIcons }} icons</div>
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[600px] overflow-y-auto pr-4">
+      <div class="grid max-h-[600px] grid-cols-2 gap-4 overflow-y-auto pr-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4">
         @for (iconName of filteredIcons(); track iconName) {
           <button
             z-button
             zType="outline"
             (click)="copyIconCode(iconName)"
-            class="flex flex-col items-center justify-center gap-2 h-auto min-h-[70px] py-2 px-3 group w-full"
+            class="group flex h-auto min-h-[70px] w-full flex-col items-center justify-center gap-2 px-3 py-2"
             [title]="'Click to copy: <z-icon zType=&quot;' + iconName + '&quot; />'"
           >
-            <z-icon [zType]="iconName" class="group-hover:scale-110 transition-transform shrink-0" />
-            <span class="text-xs text-center group-hover:text-foreground transition-colors break-words w-full leading-relaxed hyphens-auto">
+            <z-icon [zType]="iconName" class="shrink-0 transition-transform group-hover:scale-110" />
+            <span class="group-hover:text-foreground w-full text-center text-xs leading-relaxed break-words hyphens-auto transition-colors">
               {{ iconName }}
             </span>
           </button>

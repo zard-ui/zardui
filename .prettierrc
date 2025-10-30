@@ -1,5 +1,6 @@
 {
   "singleQuote": true,
   "printWidth": 180,
-  "arrowParens": "avoid"
+  "arrowParens": "avoid",
+  "plugins": ["prettier-plugin-tailwindcss"]
 }

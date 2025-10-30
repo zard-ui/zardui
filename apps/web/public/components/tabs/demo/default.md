@@ -8,7 +8,7 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent],
   template: `
-    <div class="w-full h-[300px]">
+    <div class="h-[300px] w-full">
       <z-tab-group>
         <z-tab label="First">
           <p>Is the default tab component</p>

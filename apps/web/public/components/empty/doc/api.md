@@ -6,8 +6,11 @@
 
 To customize the empty, pass the following props to the component.
 
-| Property         | Description                             | Type                             | Default   |
-| ---------------- | --------------------------------------- | -------------------------------- | --------- |
-| `[zImage]`       | custom image (string or template)       | `string \| TemplateRef<unknown>` | `-`       |
-| `[zDescription]` | custom description (string or template) | `string \| TemplateRef<unknown>` | `No data` |
-| `[zSize]`        | component size                          | `default \| sm \| lg`            | `default` |
+| Property       | Description                         | Type                          | Default |
+| -------------- | ----------------------------------- | ----------------------------- | ------- |
+| `zIcon`        | Icon to display                     | `ZardIcon`                    | -       |
+| `zImage`       | Image URL or custom template        | `string \| TemplateRef<void>` | -       |
+| `zDescription` | Description text or custom template | `string \| TemplateRef<void>` | -       |
+| `zTitle`       | Title text or custom template       | `string \| TemplateRef<void>` | -       |
+| `zActions`     | Array of action templates           | `TemplateRef<void>[]`         | []      |
+| `class`        | Custom CSS classes                  | `ClassValue`                  | ' '     |

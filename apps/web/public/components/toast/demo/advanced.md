@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
-import { toast } from 'ngx-sonner';
-
 import { Component } from '@angular/core';
+
+import { toast } from 'ngx-sonner';
 
 import { ZardButtonComponent } from '../../button/button.component';
 
@@ -10,7 +10,7 @@ import { ZardButtonComponent } from '../../button/button.component';
   standalone: true,
   imports: [ZardButtonComponent],
   template: `
-    <div class="flex gap-2 flex-wrap">
+    <div class="flex flex-wrap gap-2">
       <button z-button zType="outline" (click)="showWithAction()">With Action</button>
       <button z-button zType="outline" (click)="showCustomDuration()">Custom Duration</button>
     </div>
