@@ -5,24 +5,22 @@ import { ZardButtonComponent } from '../../button/button.component';
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
-  selector: 'z-demo-empty-custom-image',
+  selector: 'z-demo-empty-actions',
   standalone: true,
   imports: [ZardButtonComponent, ZardEmptyComponent],
   template: `
-    <z-empty
-      zImage="images/avatar/imgs/avatar_image.jpg"
-      zTitle="User Offline"
-      zDescription="This user is currently offline. You can leave a message to notify them or try again later."
-      [zActions]="[actionPrimary]"
-      class="[&_img]:size-12 [&_img]:rounded-full [&_img]:grayscale"
-    />
+    <z-empty zIcon="inbox" zTitle="No messages" zDescription="You don't have any messages yet" [zActions]="[actionPrimary, actionSecondary]"> </z-empty>
 
     <ng-template #actionPrimary>
-      <button z-button>Leave Message</button>
+      <button z-button>New Message</button>
+    </ng-template>
+
+    <ng-template #actionSecondary>
+      <button z-button zType="outline">View Archived</button>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoEmptyCustomImageComponent {}
+export class ZardDemoEmptyActionsComponent {}
 
 ```

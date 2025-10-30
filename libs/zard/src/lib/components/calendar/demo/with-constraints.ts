@@ -12,13 +12,13 @@ const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
   template: `
     <div class="space-y-8">
       <div>
-        <h3 class="text-sm font-medium mb-3">With Min/Max Date</h3>
+        <h3 class="mb-3 text-sm font-medium">With Min/Max Date</h3>
         <z-calendar [minDate]="minDate" [maxDate]="maxDate" (dateChange)="onDateChange($event)" />
-        <p class="text-sm text-muted-foreground mt-2">Available dates: {{ minDate.toLocaleDateString() }} - {{ maxDate.toLocaleDateString() }}</p>
+        <p class="text-muted-foreground mt-2 text-sm">Available dates: {{ minDate.toLocaleDateString() }} - {{ maxDate.toLocaleDateString() }}</p>
       </div>
 
       <div>
-        <h3 class="text-sm font-medium mb-3">Disabled</h3>
+        <h3 class="mb-3 text-sm font-medium">Disabled</h3>
         <z-calendar [disabled]="true" />
       </div>
     </div>

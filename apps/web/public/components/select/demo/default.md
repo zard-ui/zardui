@@ -1,6 +1,6 @@
 ```angular-ts showLineNumbers copyButton
-import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { ZardSelectItemComponent } from '../select-item.component';
 import { ZardSelectComponent } from '../select.component';

@@ -1,71 +1,85 @@
 
 
 ```angular-ts title="empty.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, type TemplateRef, ViewEncapsulation } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { emptyVariants, type ZardEmptyVariants } from './empty.variants';
+import { emptyActionsVariants, emptyDescriptionVariants, emptyHeaderVariants, emptyIconVariants, emptyImageVariants, emptyTitleVariants, emptyVariants } from './empty.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardIconComponent } from '../icon/icon.component';
+import { type ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-empty',
   exportAs: 'zEmpty',
   standalone: true,
+  imports: [ZardIconComponent, ZardStringTemplateOutletDirective],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardStringTemplateOutletDirective],
-  host: {
-    '[class]': 'classes()',
-  },
   template: `
-    @if (zImage()) {
-      @if (isTemplate(zImage())) {
-        <div class="flex justify-center items-center">
-          <ng-container *zStringTemplateOutlet="zImage()"></ng-container>
+    @let image = zImage();
+    @let icon = zIcon();
+    @let title = zTitle();
+    @let description = zDescription();
+    @let actions = zActions();
+
+    <div [class]="headerClasses()">
+      @if (image) {
+        <div [class]="imageClasses()">
+          <ng-container *zStringTemplateOutlet="image">
+            <img [src]="image" alt="Empty" class="mx-auto dark:filter-[invert(75%)]" />
+          </ng-container>
         </div>
-      } @else {
-        <img [src]="zImage()" alt="Empty" class="mx-auto" />
+      } @else if (icon) {
+        <div [class]="iconClasses()" data-testid="icon">
+          <z-icon [zType]="icon" zSize="xl" />
+        </div>
       }
-    } @else {
-      <!-- Default Illustration -->
-      <div class="flex justify-center items-center">
-        <svg viewBox="0 0 64 41" xmlns="http://www.w3.org/2000/svg">
-          <g transform="translate(0 1)" fill="none" fill-rule="evenodd">
-            <ellipse class="fill-gray-100 dark:fill-gray-800 dark:fill-opacity-10" cx="32" cy="33" rx="32" ry="7" />
-            <g class="fill-gray-100 dark:fill-gray-800 stroke-gray-300 dark:stroke-gray-700" fill-rule="nonzero">
-              <path class="fill-transparent" d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z" />
-              <path
-                class="fill-gray-50 dark:fill-gray-800"
-                d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z"
-              />
-            </g>
-          </g>
-        </svg>
-      </div>
-    }
-    @if (zDescription()) {
-      <div class="mt-2">
-        @if (isTemplate(zDescription())) {
-          <ng-container *zStringTemplateOutlet="zDescription()"></ng-container>
-        } @else {
-          <p>{{ zDescription() }}</p>
+
+      @if (title) {
+        <div [class]="titleClasses()">
+          <ng-container *zStringTemplateOutlet="title">{{ title }}</ng-container>
+        </div>
+      }
+
+      @if (description) {
+        <div [class]="descriptionClasses()">
+          <ng-container *zStringTemplateOutlet="description">{{ description }}</ng-container>
+        </div>
+      }
+    </div>
+
+    @if (actions.length) {
+      <div [class]="actionsClasses()">
+        @for (action of actions; track $index) {
+          <ng-container *zStringTemplateOutlet="action" />
         }
       </div>
     }
+
+    <ng-content></ng-content>
   `,
+  host: {
+    '[class]': 'classes()',
+  },
 })
 export class ZardEmptyComponent {
-  readonly zImage = input<string | TemplateRef<unknown>>();
-  readonly zDescription = input<string | TemplateRef<unknown>>('No data');
-  readonly zSize = input<ZardEmptyVariants['zSize']>('default');
+  readonly zActions = input<TemplateRef<void>[]>([]);
+  readonly zIcon = input<ZardIcon>();
+  readonly zImage = input<string | TemplateRef<void>>();
+  readonly zTitle = input<string | TemplateRef<void>>();
+  readonly zDescription = input<string | TemplateRef<void>>();
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(emptyVariants({ zSize: this.zSize() }), this.class()));
-
-  isTemplate(value: string | TemplateRef<unknown> | undefined): value is TemplateRef<unknown> {
-    return value instanceof TemplateRef;
-  }
+  protected readonly classes = computed(() => mergeClasses(emptyVariants(), this.class()));
+  protected readonly headerClasses = computed(() => emptyHeaderVariants());
+  protected readonly imageClasses = computed(() => emptyImageVariants());
+  protected readonly iconClasses = computed(() => emptyIconVariants());
+  protected readonly titleClasses = computed(() => emptyTitleVariants());
+  protected readonly descriptionClasses = computed(() => emptyDescriptionVariants());
+  protected readonly actionsClasses = computed(() => emptyActionsVariants());
 }
 
 ```
@@ -73,22 +87,38 @@ export class ZardEmptyComponent {
 
 
 ```angular-ts title="empty.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-export const emptyVariants = cva('flex flex-col items-center justify-center text-center', {
-  variants: {
-    zSize: {
-      default: 'text-sm [&_img]:w-40 [&_svg]:w-16 [&_svg]:h-10',
-      sm: 'text-xs [&_img]:w-28 [&_svg]:w-12 [&_svg]:h-8',
-      lg: 'text-base [&_img]:w-52 [&_svg]:w-20 [&_svg]:h-12',
-    },
-  },
-  defaultVariants: {
-    zSize: 'default',
-  },
+export const emptyVariants = cva('flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12', {
+  variants: {},
 });
 
-export type ZardEmptyVariants = VariantProps<typeof emptyVariants>;
+export const emptyHeaderVariants = cva('flex max-w-sm flex-col items-center gap-2 text-center', {
+  variants: {},
+});
+
+export const emptyImageVariants = cva('mb-2 flex shrink-0 items-center justify-center bg-transparent [&_svg]:pointer-events-none [&_svg]:shrink-0', {
+  variants: {},
+});
+
+export const emptyIconVariants = cva(
+  `bg-muted text-foreground mb-2 flex size-10 shrink-0 items-center justify-center rounded-lg [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6`,
+  {
+    variants: {},
+  },
+);
+
+export const emptyTitleVariants = cva('text-lg font-medium tracking-tight', {
+  variants: {},
+});
+
+export const emptyDescriptionVariants = cva('text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4', {
+  variants: {},
+});
+
+export const emptyActionsVariants = cva('flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance', {
+  variants: {},
+});
 
 ```
 

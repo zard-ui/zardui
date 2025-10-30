@@ -8,7 +8,7 @@ import { ZardDividerComponent } from '../divider.component';
   standalone: true,
   imports: [ZardDividerComponent],
   template: `
-    <div class="h-20 flex">
+    <div class="flex h-20">
       <p>Left</p>
       <z-divider zOrientation="vertical"></z-divider>
       <p>Right</p>

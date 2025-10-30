@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardAccordionComponent } from '../accordion.component';
 import { ZardAccordionItemComponent } from '../accordion-item.component';
+import { ZardAccordionComponent } from '../accordion.component';
 
 @Component({
   selector: 'z-demo-accordion-multiple',
