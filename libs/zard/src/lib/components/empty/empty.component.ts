@@ -55,6 +55,8 @@ import { type ZardIcon } from '../icon/icons';
         }
       </div>
     }
+
+    <ng-content></ng-content>
   `,
   host: {
     '[class]': 'classes()',

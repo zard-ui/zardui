@@ -1,5 +1,4 @@
-import { ZardDemoEmptyActionsComponent } from './actions';
-import { ZardDemoEmptyAdvancedCustomizationComponent } from './advanced-customization';
+import { ZardDemoEmptyAdvancedComponent } from './advanced';
 import { ZardDemoEmptyCustomImageComponent } from './custom-image';
 import { ZardDemoEmptyDefaultComponent } from './default';
 
@@ -13,16 +12,12 @@ export const EMPTY = {
       component: ZardDemoEmptyDefaultComponent,
     },
     {
-      name: 'actions',
-      component: ZardDemoEmptyActionsComponent,
-    },
-    {
-      name: 'advanced-customization',
-      component: ZardDemoEmptyAdvancedCustomizationComponent,
-    },
-    {
       name: 'custom-image',
       component: ZardDemoEmptyCustomImageComponent,
+    },
+    {
+      name: 'advanced',
+      component: ZardDemoEmptyAdvancedComponent,
     },
   ],
 };

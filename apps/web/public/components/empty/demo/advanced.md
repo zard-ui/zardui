@@ -12,7 +12,7 @@ import { ZardEmptyComponent } from '../empty.component';
   standalone: true,
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, ZardIconComponent, ZardEmptyComponent],
   template: `
-    <z-empty [zImage]="customImage" [zTitle]="customTitle" zDescription="Invite your team to get started" [zActions]="[actionInvite]"> </z-empty>
+    <z-empty [zImage]="customImage" [zTitle]="customTitle" zDescription="Invite your team to collaborate on this project." [zActions]="[actionInvite]"> </z-empty>
 
     <ng-template #customImage>
       <z-avatar-group>
@@ -36,6 +36,6 @@ import { ZardEmptyComponent } from '../empty.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoEmptyAdvancedCustomizationComponent {}
+export class ZardDemoEmptyAdvancedComponent {}
 
 ```
