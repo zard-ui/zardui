@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal } from '@angular/core';
 
+import { selectItemVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
-import { selectItemVariants } from './select.variants';
 
 // Interface to avoid circular dependency
 interface SelectHost {
@@ -12,7 +12,6 @@ interface SelectHost {
 
 @Component({
   selector: 'z-select-item, [z-select-item]',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardIconComponent],
   host: {
@@ -26,11 +25,11 @@ interface SelectHost {
     '(click)': 'onClick()',
   },
   template: `
-    <span class="absolute right-2 flex size-3.5 items-center justify-center">
-      @if (isSelected()) {
+    @if (isSelected()) {
+      <span class="absolute right-2 flex size-3.5 items-center justify-center">
         <z-icon zType="check" />
-      }
-    </span>
+      </span>
+    }
     <ng-content></ng-content>
   `,
 })
