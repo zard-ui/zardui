@@ -21,6 +21,16 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'colors',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./domain/pages/colors/colors.page').then(m => m.ColorsPage),
+      },
+    ],
+  },
+  {
     path: 'docs',
     component: DocumentationLayout,
     children: [

@@ -1,0 +1,24 @@
+<section class="container flex flex-col items-center gap-2 py-8 text-center md:py-16 lg:py-20 xl:gap-4">
+  <h1 class="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter">
+    Tailwind Colors in Every Format
+  </h1>
+  <p class="text-foreground max-w-3xl text-base text-balance sm:text-lg">
+    The complete Tailwind color palette in HEX, RGB, HSL, CSS variables, and classes. Ready to copy and paste into your project.
+  </p>
+  <section class="flex w-full items-center justify-center gap-2 pt-2 **:data-[slot=button]:shadow-none">
+    <a z-button href="/colors#colors"> Browse Colors </a>
+    <a z-button zType="ghost" routerLink="/docs/theming"> Documentation </a>
+  </section>
+</section>
+
+<div class="container-wrapper">
+  <div class="container py-6">
+    <div class="scroll-mt-20">
+      <section id="colors" class="grid gap-8 lg:gap-16 xl:gap-20">
+        @for (palette of palettes; track palette.name) {
+        <z-color-palette [palette]="palette" />
+        }
+      </section>
+    </div>
+  </div>
+</div>

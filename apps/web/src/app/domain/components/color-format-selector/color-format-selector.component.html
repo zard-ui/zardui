@@ -1,0 +1,14 @@
+@if (isLoading()) {
+  <z-skeleton class="h-8 w-[180px]" />
+} @else {
+  <z-select zSize="sm" [zValue]="currentFormat()" (zValueChange)="onFormatChange($any($event))" placeholder="Select format" class="[&_button]:bg-secondary [&_button]:shadow-none">
+    @for (format of formats; track format.value) {
+      <z-select-item [zValue]="format.value">
+        <div class="flex items-center gap-2">
+          <span class="font-medium">{{ format.label }}:</span>
+          <span class="font-mono text-xs text-muted-foreground">{{ format.example }}</span>
+        </div>
+      </z-select-item>
+    }
+  </z-select>
+}
