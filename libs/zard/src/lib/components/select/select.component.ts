@@ -1,3 +1,6 @@
+import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
   ChangeDetectionStrategy,
@@ -6,7 +9,6 @@ import {
   contentChildren,
   ElementRef,
   forwardRef,
-  HostListener,
   inject,
   input,
   linkedSignal,
@@ -19,14 +21,13 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
 
-import { selectContentVariants, selectTriggerVariants, type ZardSelectTriggerVariants } from './select.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardSelectItemComponent } from './select-item.component';
+import { selectContentVariants, selectTriggerVariants, selectVariants, type ZardSelectTriggerVariants } from './select.variants';
+import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
@@ -34,7 +35,6 @@ type OnChangeType = (value: string) => void;
 
 @Component({
   selector: 'z-select, [z-select]',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [OverlayModule, ZardIconComponent],
   providers: [
@@ -47,7 +47,8 @@ type OnChangeType = (value: string) => void;
   host: {
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    class: 'relative inline-block w-full',
+    '[class]': 'classes()',
+    '(document:click)': 'onDocumentClick($event)',
   },
   template: `
     <button
@@ -61,11 +62,11 @@ type OnChangeType = (value: string) => void;
       [attr.data-state]="isOpen() ? 'open' : 'closed'"
       [attr.data-placeholder]="!selectedValue() ? '' : null"
     >
-      <span class="flex items-center gap-2">
+      <span class="flex items-center gap-2 overflow-hidden">
         @if (selectedValue()) {
-          <span>{{ selectedLabel() }}</span>
+          <span class="truncate">{{ selectedLabel() }}</span>
         } @else {
-          <span class="text-muted-foreground">{{ zPlaceholder() }}</span>
+          <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
       </span>
       <z-icon zType="chevron-down" zSize="lg" class="opacity-50" />
@@ -87,9 +88,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
 
-  readonly dropdownTemplate = viewChild.required<TemplateRef<any>>('dropdownTemplate');
-
-  readonly selectItems = contentChildren(ZardSelectItemComponent);
+  readonly dropdownTemplate = viewChild.required<TemplateRef<void>>('dropdownTemplate');
+  protected readonly selectItems = contentChildren(ZardSelectItemComponent);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -99,12 +99,13 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   readonly zPlaceholder = input<string>('Select an option...');
   readonly zValue = input<string>('');
   readonly zLabel = input<string>('');
-  readonly class = input<string>('');
+  readonly class = input<ClassValue>('');
 
   readonly zSelectionChange = output<string>();
 
-  readonly isOpen = signal(false);
+  protected readonly isOpen = signal(false);
   private readonly _selectedValue = signal<string>('');
+
   private readonly _selectedLabel = linkedSignal(() => {
     const currentValue = this.selectedValue();
     if (!this.zLabel() && currentValue) {
@@ -145,6 +146,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     ),
   );
 
+  protected readonly classes = computed(() => mergeClasses(selectVariants(), this.class()));
   protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
 
   ngOnInit() {
@@ -169,7 +171,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     this.destroyOverlay();
   }
 
-  @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     if (!this.elementRef.nativeElement.contains(event.target as Node)) {
       this.close();
@@ -249,9 +250,14 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
     if (!this.overlayRef) return;
 
+    const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
+
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
     this.overlayRef.attach(this.portal);
+    this.overlayRef.updateSize({ width: hostWidth });
     this.isOpen.set(true);
+
+    this.determinePortalWidth(hostWidth);
 
     // Focus dropdown after opening and position on selected item
     setTimeout(() => {
@@ -287,6 +293,30 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     }, 0);
   }
 
+  private determinePortalWidth(portalWidth: number): void {
+    if (!this.overlayRef) return;
+
+    const selectItems = this.selectItems();
+    let itemMaxWidth = 0;
+    for (const item of selectItems) {
+      itemMaxWidth = Math.max(itemMaxWidth, item.elementRef.nativeElement.scrollWidth);
+    }
+
+    const textContentElement = this.elementRef.nativeElement.querySelector('button > span > span') as HTMLElement;
+    const isOverflow = isElementContentTruncated(textContentElement);
+
+    if (isOverflow && selectItems.length) {
+      const elementStyles = getComputedStyle(selectItems[0].elementRef.nativeElement);
+      const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left')) || 0;
+      const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right')) || 0;
+      itemMaxWidth += leftPadding + rightPadding;
+    }
+
+    itemMaxWidth = Math.max(itemMaxWidth, portalWidth);
+    this.overlayRef?.updateSize({ width: itemMaxWidth });
+    this.overlayRef?.updatePosition();
+  }
+
   private createOverlay() {
     if (this.overlayRef) return; // Already created
 
@@ -296,16 +326,16 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
           .flexibleConnectedTo(this.elementRef)
           .withPositions([
             {
-              originX: 'start',
+              originX: 'center',
               originY: 'bottom',
-              overlayX: 'start',
+              overlayX: 'center',
               overlayY: 'top',
               offsetY: 4,
             },
             {
-              originX: 'start',
+              originX: 'center',
               originY: 'top',
-              overlayX: 'start',
+              overlayX: 'center',
               overlayY: 'bottom',
               offsetY: -4,
             },
@@ -319,7 +349,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
           width: elementWidth,
-          minWidth: elementWidth,
           maxHeight: 384, // max-h-96 equivalent
         });
       } catch (error) {

@@ -13,16 +13,7 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@blocks": ["libs/blocks/src/index.ts"],
-      "@cli/*": ["packages/cli/src/*"],
-      "@zard/*": ["libs/zard/src/lib/*"],
-      "@zard/domain/*": ["apps/web/src/app/domain/*"],
-      "@zard/env/*": ["apps/web/src/environments/*"],
-      "@zard/shared/*": ["apps/web/src/app/shared/*"],
-      "@zard/widget/*": ["apps/web/src/app/widget/*"]
-    }
+    "baseUrl": "."
   },
   "exclude": ["node_modules", "tmp"]
 }
