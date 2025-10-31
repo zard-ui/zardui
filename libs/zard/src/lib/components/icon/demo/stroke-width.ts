@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardIconComponent } from '../icon.component';
 
 @Component({
+  selector: 'z-demo-icon-stroke-width',
   standalone: true,
   imports: [ZardIconComponent],
   template: `

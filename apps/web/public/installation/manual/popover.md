@@ -3,7 +3,7 @@
 ```angular-ts title="popover.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { merge, Subject, takeUntil } from 'rxjs';
 
-import { ConnectedPosition, Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { type ConnectedPosition, Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
@@ -15,13 +15,13 @@ import {
   ElementRef,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   PLATFORM_ID,
   Renderer2,
   signal,
-  TemplateRef,
+  type TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
 
@@ -91,10 +91,10 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   readonly zOverlayClickable = input<boolean>(true);
   readonly zVisibleChange = output<boolean>();
 
-  private isVisible = signal(false);
+  private readonly isVisible = signal(false);
 
   get nativeElement() {
-    return this.zOrigin()?.nativeElement || this.elementRef.nativeElement;
+    return this.zOrigin()?.nativeElement ?? this.elementRef.nativeElement;
   }
 
   constructor() {
@@ -209,8 +209,8 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
       originY: primaryConfig.originY as any,
       overlayX: primaryConfig.overlayX as any,
       overlayY: primaryConfig.overlayY as any,
-      offsetX: primaryConfig.offsetX || 0,
-      offsetY: primaryConfig.offsetY || 0,
+      offsetX: primaryConfig.offsetX ?? 0,
+      offsetY: primaryConfig.offsetY ?? 0,
     });
 
     // Fallback positions for better positioning when primary doesn't fit
@@ -375,7 +375,7 @@ export class ZardPopoverComponent {
 
 
 ```angular-ts title="popover.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const popoverVariants = cva(
   'z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',

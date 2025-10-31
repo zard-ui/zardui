@@ -1,9 +1,9 @@
 import { existsSync } from 'fs';
 import * as path from 'path';
 
-import { ComponentRegistry, getRegistryComponent } from '@cli/core/registry/index.js';
-import { Config } from '@cli/utils/config.js';
-import { logger } from '@cli/utils/logger.js';
+import { ComponentRegistry, getRegistryComponent } from '../../core/registry/index.js';
+import { Config } from '../../utils/config.js';
+import { logger } from '../../utils/logger.js';
 
 export interface ResolvedDependencies {
   componentsToInstall: ComponentRegistry[];

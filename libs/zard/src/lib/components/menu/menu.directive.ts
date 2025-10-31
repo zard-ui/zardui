@@ -1,11 +1,11 @@
-import { BooleanInput } from '@angular/cdk/coercion';
+import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { ConnectedPosition } from '@angular/cdk/overlay';
-import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID, untracked } from '@angular/core';
+import type { ConnectedPosition } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
+import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input, type OnDestroy, type OnInit, PLATFORM_ID, untracked } from '@angular/core';
 
 import { ZardMenuManagerService } from './menu-manager.service';
-import { MENU_POSITIONS_MAP, ZardMenuPlacement } from './menu-positions';
+import { MENU_POSITIONS_MAP, type ZardMenuPlacement } from './menu-positions';
 
 export type ZardMenuTrigger = 'click' | 'hover';
 
@@ -28,7 +28,6 @@ export type ZardMenuTrigger = 'click' | 'hover';
   },
 })
 export class ZardMenuDirective implements OnInit, OnDestroy {
-  private static readonly MENU_OVERLAY_SELECTOR = '.cdk-overlay-container .cdk-overlay-pane:last-child';
   private static readonly MENU_CONTENT_SELECTOR = '.cdk-overlay-pane [z-menu-content]';
 
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
@@ -117,11 +116,11 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private setupMenuContentListeners(): void {
-    const overlay = document.querySelector(ZardMenuDirective.MENU_OVERLAY_SELECTOR);
-    if (!overlay) return;
+    const menuContent = document.querySelector(ZardMenuDirective.MENU_CONTENT_SELECTOR);
+    if (!menuContent) return;
 
-    this.addEventListenerWithCleanup(overlay, 'mouseenter', () => this.cancelScheduledClose());
-    this.addEventListenerWithCleanup(overlay, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
+    this.addEventListenerWithCleanup(menuContent, 'mouseenter', () => this.cancelScheduledClose());
+    this.addEventListenerWithCleanup(menuContent, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
   }
 
   private cancelScheduledClose(): void {

@@ -4,6 +4,7 @@ import { ZardButtonComponent } from '../../button/button.component';
 import { ZardSheetService } from '../sheet.service';
 
 @Component({
+  selector: 'z-demo-sheet-dimensions',
   standalone: true,
   imports: [ZardButtonComponent],
   template: `

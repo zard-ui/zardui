@@ -1,10 +1,10 @@
-import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 
-import { ZardInputGroupComponent } from '../input-group.component';
 import { ZardInputDirective } from '../../input/input.directive';
+import { ZardInputGroupComponent } from '../input-group.component';
 
 @Component({
+  selector: 'z-demo-input-group-default',
   standalone: true,
   imports: [ZardInputGroupComponent, ZardInputDirective],
   template: `

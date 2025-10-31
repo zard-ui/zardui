@@ -2,7 +2,7 @@
 
 ```angular-ts title="select.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
-  AfterContentInit,
+  type AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -13,21 +13,21 @@ import {
   inject,
   input,
   linkedSignal,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   PLATFORM_ID,
   signal,
-  TemplateRef,
+  type TemplateRef,
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 
-import { selectContentVariants, selectTriggerVariants, ZardSelectTriggerVariants } from './select.variants';
+import { selectContentVariants, selectTriggerVariants, type ZardSelectTriggerVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardSelectItemComponent } from './select-item.component';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -84,11 +84,11 @@ type OnChangeType = (value: string) => void;
   `,
 })
 export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit, OnDestroy {
-  private elementRef = inject(ElementRef);
-  private overlay = inject(Overlay);
-  private overlayPositionBuilder = inject(OverlayPositionBuilder);
-  private viewContainerRef = inject(ViewContainerRef);
-  private platformId = inject(PLATFORM_ID);
+  private readonly elementRef = inject(ElementRef);
+  private readonly overlay = inject(Overlay);
+  private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
+  private readonly viewContainerRef = inject(ViewContainerRef);
+  private readonly platformId = inject(PLATFORM_ID);
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<any>>('dropdownTemplate');
 
@@ -160,12 +160,12 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
   ngAfterContentInit() {
     // Setup select host reference for each item
-    this.selectItems().forEach(item => {
+    for (const item of this.selectItems()) {
       item.setSelectHost({
         selectedValue: () => this.selectedValue(),
         selectItem: (value: string, label: string) => this.selectItem(value, label),
       });
-    });
+    }
   }
 
   ngOnDestroy() {
@@ -234,8 +234,12 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
   toggle() {
     if (this.zDisabled()) return;
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    this.isOpen() ? this.close() : this.open();
+
+    if (this.isOpen()) {
+      this.close();
+    } else {
+      this.open();
+    }
   }
 
   open() {
@@ -337,7 +341,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   private getSelectItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll('z-select-item, [z-select-item]')).filter((item: Element) => !item.hasAttribute('data-disabled')) as HTMLElement[];
+    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-select-item, [z-select-item]')).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
@@ -361,7 +365,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     if (currentIndex >= 0 && currentIndex < items.length) {
       const item = items[currentIndex];
       const value = item.getAttribute('value');
-      const label = item.textContent?.trim() || '';
+      const label = item.textContent?.trim() ?? '';
 
       if (value === null || value === undefined) {
         console.warn('No value attribute found on selected item:', item);
@@ -388,14 +392,15 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   }
 
   private updateItemFocus(items: HTMLElement[], focusedIndex: number) {
-    items.forEach((item, index) => {
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
       if (index === focusedIndex) {
         item.focus();
         item.setAttribute('aria-selected', 'true');
       } else {
         item.removeAttribute('aria-selected');
       }
-    });
+    }
   }
 
   private focusDropdown() {
@@ -437,8 +442,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
   // ControlValueAccessor implementation
   writeValue(value: string | null): void {
-    const stringValue = value || '';
-    this._selectedValue.set(stringValue);
+    this._selectedValue.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -459,7 +463,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
 
 ```angular-ts title="select.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const selectTriggerVariants = cva(
   'flex w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none cursor-pointer focus-visible:ring-[3px] focus-visible:border-ring focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-[placeholder]:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
@@ -494,7 +498,7 @@ export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 
 ```angular-ts title="select-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input, linkedSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -539,7 +543,7 @@ export class ZardSelectItemComponent {
   readonly elementRef = inject(ElementRef);
   readonly label = linkedSignal(() => {
     const element = this.elementRef?.nativeElement;
-    return (element?.textContent || element?.innerText)?.trim() ?? '';
+    return (element?.textContent ?? element?.innerText)?.trim() ?? '';
   });
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));

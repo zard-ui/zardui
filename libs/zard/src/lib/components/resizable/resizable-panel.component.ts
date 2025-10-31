@@ -1,9 +1,9 @@
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { resizablePanelVariants } from './resizable.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-resizable-panel',
@@ -29,8 +29,8 @@ export class ZardResizablePanelComponent {
 
   protected readonly isCollapsed = computed(() => {
     const element = this.elementRef.nativeElement as HTMLElement;
-    const width = parseFloat(element.style.width || '0');
-    const height = parseFloat(element.style.height || '0');
+    const width = Number.parseFloat(element.style.width || '0');
+    const height = Number.parseFloat(element.style.height || '0');
     return width === 0 || height === 0;
   });
 

@@ -1,11 +1,11 @@
 
 
 ```angular-ts title="segmented.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, forwardRef, input, OnInit, output, signal, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, forwardRef, input, type OnInit, output, signal, ViewEncapsulation } from '@angular/core';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { segmentedItemVariants, segmentedVariants, ZardSegmentedVariants } from './segmented.variants';
+import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
 
 import type { ClassValue } from 'clsx';
 
@@ -132,7 +132,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
     const option = this.zOptions().find(opt => opt.value === value);
     const item = this.items().find(item => item.value() === value);
 
-    if ((option && option.disabled) || (item && item.disabled())) return;
+    if (option?.disabled || item?.disabled()) return;
 
     this.selectedValue.set(value);
     this.onChange(value);
@@ -142,7 +142,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
 
   // ControlValueAccessor implementation
   writeValue(value: string): void {
-    this.selectedValue.set(value || '');
+    this.selectedValue.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -163,7 +163,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
 
 
 ```angular-ts title="segmented.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const segmentedVariants = cva('inline-flex items-center justify-center rounded-md bg-muted p-1 text-muted-foreground', {
   variants: {

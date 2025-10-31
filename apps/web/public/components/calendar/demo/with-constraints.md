@@ -7,6 +7,7 @@ const DAYS_IN_FUTURE = 30;
 const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
 
 @Component({
+  selector: 'z-demo-calendar-with-constraints',
   standalone: true,
   imports: [ZardCalendarComponent],
   template: `
@@ -36,7 +37,7 @@ export class ZardDemoCalendarWithConstraintsComponent {
     this.maxDate.setHours(23, 59, 59, 999);
   }
 
-  onDateChange(date: Date) {
+  onDateChange(date: Date | Date[]) {
     console.log('Selected date:', date);
   }
 }

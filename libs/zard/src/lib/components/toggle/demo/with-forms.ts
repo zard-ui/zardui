@@ -1,10 +1,11 @@
-import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
+  selector: 'z-demo-toggle-with-forms',
   standalone: true,
   imports: [ZardToggleComponent, FormsModule, ZardIconComponent],
   template: `
@@ -17,6 +18,6 @@ import { ZardToggleComponent } from '../toggle.component';
     </z-toggle>
   `,
 })
-export class ZardDemoToggleWithFormComponent {
+export class ZardDemoToggleWithFormsComponent {
   protected lightOn = false;
 }

@@ -1,18 +1,18 @@
-import { writeFile } from 'node:fs/promises';
+import chalk from 'chalk';
 import { Command } from 'commander';
 import { existsSync } from 'fs';
-import prompts from 'prompts';
+import { writeFile } from 'node:fs/promises';
 import * as path from 'path';
-import chalk from 'chalk';
+import * as prompts from 'prompts';
 
-import { detectPackageManager } from '@cli/utils/package-manager.js';
-import { getProjectInfo } from '@cli/utils/get-project-info.js';
-import { logger, spinner } from '@cli/utils/logger.js';
 import { promptForConfig } from '@cli/commands/init/config-prompter.js';
 import { installDependencies } from '@cli/commands/init/dependencies.js';
 import { setupTailwind } from '@cli/commands/init/tailwind-setup.js';
-import { createUtils } from '@cli/commands/init/utils-creator.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
+import { createUtils } from '@cli/commands/init/utils-creator.js';
+import { getProjectInfo } from '@cli/utils/get-project-info.js';
+import { logger, spinner } from '@cli/utils/logger.js';
+import { detectPackageManager } from '@cli/utils/package-manager.js';
 
 export const init = new Command()
   .name('init')

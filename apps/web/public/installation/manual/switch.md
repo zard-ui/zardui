@@ -2,10 +2,10 @@
 
 ```angular-ts title="switch.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
-import { switchVariants, ZardSwitchVariants } from './switch.variants';
+import { switchVariants, type ZardSwitchVariants } from './switch.variants';
 import { mergeClasses, generateId } from '../../shared/utils/utils';
 
 type OnTouchedType = () => any;
@@ -91,7 +91,7 @@ export class ZardSwitchComponent implements ControlValueAccessor {
 
 
 ```angular-ts title="switch.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const switchVariants = cva(
   'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:bg-input',

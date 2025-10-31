@@ -1,7 +1,7 @@
-import { toast } from 'ngx-sonner';
-
 import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
+
+import { toast } from 'ngx-sonner';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardEmptyComponent } from '../../empty/empty.component';
@@ -10,6 +10,7 @@ import { ZardIconComponent } from '../icon.component';
 import { ZARD_ICONS } from '../icons';
 
 @Component({
+  selector: 'z-demo-icon-searchable',
   standalone: true,
   imports: [CommonModule, ZardIconComponent, ZardInputDirective, ZardButtonComponent, ZardEmptyComponent],
   template: `

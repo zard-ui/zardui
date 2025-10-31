@@ -1,10 +1,10 @@
-import type { ClassValue } from 'clsx';
-
 import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardDropdownService } from './dropdown.service';
-import { dropdownItemVariants, ZardDropdownItemVariants } from './dropdown.variants';
+import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
@@ -23,7 +23,7 @@ import { dropdownItemVariants, ZardDropdownItemVariants } from './dropdown.varia
   },
 })
 export class ZardDropdownMenuItemComponent {
-  private dropdownService = inject(ZardDropdownService);
+  private readonly dropdownService = inject(ZardDropdownService);
 
   readonly variant = input<ZardDropdownItemVariants['variant']>('default');
   readonly inset = input(false, { transform });

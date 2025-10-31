@@ -6,7 +6,7 @@ import type { ClassValue } from 'clsx';
 import { computed, Directive, ElementRef, inject, input } from '@angular/core';
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { inputVariants, ZardInputVariants } from './input.variants';
+import { inputVariants, type ZardInputVariants } from './input.variants';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',
@@ -36,7 +36,7 @@ export class ZardInputDirective {
 
 
 ```angular-ts title="input.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export type zInputIcon = 'email' | 'password' | 'text';
 

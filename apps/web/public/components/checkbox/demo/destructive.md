@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
 import { ZardCheckboxComponent } from '../checkbox.component';
 
 @Component({
+  selector: 'z-demo-checkbox-destructive',
   standalone: true,
   imports: [ZardCheckboxComponent, FormsModule],
   template: `

@@ -2,26 +2,29 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
+  DestroyRef,
+  type ElementRef,
   EventEmitter,
   forwardRef,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   Output,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Subject, switchMap, takeUntil, timer } from 'rxjs';
-import type { ClassValue } from 'clsx';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { ZardIconComponent } from '../icon/icon.component';
+import type { ClassValue } from 'clsx';
+import { Subject, switchMap, timer } from 'rxjs';
+
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-command-input',
@@ -62,6 +65,7 @@ import { mergeClasses } from '../../shared/utils/utils';
 })
 export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
+  private readonly destroyRef = inject(DestroyRef);
   readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
   readonly placeholder = input<string>('Type a command or search...');
@@ -70,12 +74,10 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
   @Output() readonly valueChange = new EventEmitter<string>();
 
   readonly searchTerm = signal('');
-  private searchSubject = new Subject<string>();
-  private destroy$ = new Subject<void>();
+  private readonly searchSubject = new Subject<string>();
 
   protected readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onChange = (_: string) => {
     // ControlValueAccessor implementation - intentionally empty
   };
@@ -87,11 +89,9 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
     // Set up debounced search stream - always send to subject
     this.searchSubject
       .pipe(
-        switchMap(value => {
-          // If empty, emit immediately, otherwise debounce
-          return value === '' ? timer(0) : timer(150);
-        }),
-        takeUntil(this.destroy$),
+        // If empty, emit immediately, otherwise debounce
+        switchMap(value => (value ? timer(150) : timer(0))),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
         // Get the current value from the signal to ensure we have the latest
@@ -131,13 +131,12 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
       if (this.commandComponent) {
         this.commandComponent.onKeyDown(event);
       }
-      return;
     }
     // Handle other keys as needed
   }
 
-  writeValue(value: string): void {
-    this.searchTerm.set(value || '');
+  writeValue(value: string | null): void {
+    this.searchTerm.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -148,7 +147,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
     this.onTouched = fn;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setDisabledState(_: boolean): void {
     // Implementation if needed for form control disabled state
   }
@@ -162,8 +160,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
   ngOnDestroy(): void {
     // Complete subjects to clean up subscriptions
-    this.destroy$.next();
-    this.destroy$.complete();
     this.searchSubject.complete();
   }
 }

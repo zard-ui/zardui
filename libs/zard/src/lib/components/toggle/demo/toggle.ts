@@ -1,11 +1,11 @@
-import { ZardDemoToggleWithDefaultComponent } from './with-default';
-import { ZardDemoToggleWithFormComponent } from './with-forms';
-import { ZardDemoToggleWithTextComponent } from './with-text';
+import { ZardDemoToggleDefaultComponent } from './default';
 import { ZardDemoToggleDisabledComponent } from './disabled';
+import { ZardDemoToggleLargeComponent } from './large';
 import { ZardDemoToggleOutlineComponent } from './outline';
 import { ZardDemoToggleSmallComponent } from './small';
-import { ZardDemoToggleLargeComponent } from './large';
-import { ZardDemoToggleComponent } from './default';
+import { ZardDemoToggleWithDefaultComponent } from './with-default';
+import { ZardDemoToggleWithFormsComponent } from './with-forms';
+import { ZardDemoToggleWithTextComponent } from './with-text';
 
 export const TOGGLE = {
   componentName: 'toggle',
@@ -14,11 +14,11 @@ export const TOGGLE = {
   examples: [
     {
       name: 'default',
-      component: ZardDemoToggleComponent,
+      component: ZardDemoToggleDefaultComponent,
     },
     {
       name: 'with-forms',
-      component: ZardDemoToggleWithFormComponent,
+      component: ZardDemoToggleWithFormsComponent,
     },
     {
       name: 'with-default',

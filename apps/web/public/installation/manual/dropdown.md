@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="dropdown.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
@@ -11,12 +11,12 @@ import {
   HostListener,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   PLATFORM_ID,
   signal,
-  TemplateRef,
+  type TemplateRef,
   viewChild,
   ViewContainerRef,
   ViewEncapsulation,
@@ -209,9 +209,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private getDropdownItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(
-      (item: Element) => !item.hasAttribute('data-disabled'),
-    ) as HTMLElement[];
+    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
@@ -286,7 +284,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 
 
 ```angular-ts title="dropdown.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const dropdownContentVariants = cva('bg-popover text-popover-foreground z-50 min-w-[200px] overflow-y-auto rounded-md border py-1 px-1 shadow-md');
 
@@ -338,7 +336,7 @@ import { Component, computed, HostListener, inject, input, ViewEncapsulation } f
 
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardDropdownService } from './dropdown.service';
-import { dropdownItemVariants, ZardDropdownItemVariants } from './dropdown.variants';
+import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
@@ -357,7 +355,7 @@ import { dropdownItemVariants, ZardDropdownItemVariants } from './dropdown.varia
   },
 })
 export class ZardDropdownMenuItemComponent {
-  private dropdownService = inject(ZardDropdownService);
+  private readonly dropdownService = inject(ZardDropdownService);
 
   readonly variant = input<ZardDropdownItemVariants['variant']>('default');
   readonly inset = input(false, { transform });
@@ -431,18 +429,21 @@ export class ZardDropdownMenuLabelComponent {
 
 
 ```angular-ts title="dropdown-menu-content.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { Component, computed, input, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { Component, computed, input, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
-
-import { mergeClasses } from '../../shared/utils/utils';
 import { dropdownContentVariants } from './dropdown.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-content',
   exportAs: 'zDropdownMenuContent',
   standalone: true,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    '[style.display]': '"none"',
+  },
   template: `
     <ng-template #contentTemplate>
       <div [class]="contentClasses()" role="menu" tabindex="-1" [attr.aria-orientation]="'vertical'">
@@ -492,9 +493,9 @@ export class ZardDropdownMenuShortcutComponent {
 
 
 ```angular-ts title="dropdown-trigger.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Directive, ElementRef, HostListener, inject, input, OnInit, ViewContainerRef } from '@angular/core';
+import { Directive, ElementRef, HostListener, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
 
-import { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
+import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';
 
 @Directive({
@@ -510,9 +511,9 @@ import { ZardDropdownService } from './dropdown.service';
   },
 })
 export class ZardDropdownDirective implements OnInit {
-  private elementRef = inject(ElementRef);
-  private viewContainerRef = inject(ViewContainerRef);
-  protected dropdownService = inject(ZardDropdownService);
+  private readonly elementRef = inject(ElementRef);
+  private readonly viewContainerRef = inject(ViewContainerRef);
+  protected readonly dropdownService = inject(ZardDropdownService);
 
   readonly zDropdownMenu = input<ZardDropdownMenuContentComponent>();
   readonly zTrigger = input<'click' | 'hover'>('click');
@@ -522,7 +523,8 @@ export class ZardDropdownDirective implements OnInit {
     // Ensure button has proper accessibility attributes
     const element = this.elementRef.nativeElement;
     if (!element.hasAttribute('aria-label') && !element.hasAttribute('aria-labelledby')) {
-      element.setAttribute('aria-label', element.textContent?.trim() || 'Open menu');
+      const label = element.textContent?.trim();
+      element.setAttribute('aria-label', label?.length ? label : 'Open menu');
     }
   }
 
@@ -629,24 +631,24 @@ export class ZardDropdownModule {}
 
 
 ```angular-ts title="dropdown.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { ElementRef, inject, Injectable, PLATFORM_ID, signal, TemplateRef, ViewContainerRef } from '@angular/core';
+import { type ElementRef, inject, Injectable, PLATFORM_ID, signal, type TemplateRef, type ViewContainerRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Subscription } from 'rxjs';
+import type { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ZardDropdownService {
-  private overlay = inject(Overlay);
-  private overlayPositionBuilder = inject(OverlayPositionBuilder);
-  private platformId = inject(PLATFORM_ID);
+  private readonly overlay = inject(Overlay);
+  private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
+  private readonly platformId = inject(PLATFORM_ID);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
   private triggerElement?: ElementRef;
-  private focusedIndex = signal<number>(-1);
+  private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
 
   readonly isOpen = signal(false);
@@ -784,9 +786,7 @@ export class ZardDropdownService {
   private getDropdownItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(
-      (item: Element) => !item.hasAttribute('data-disabled'),
-    ) as HTMLElement[];
+    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
@@ -827,14 +827,15 @@ export class ZardDropdownService {
   }
 
   private updateItemFocus(items: HTMLElement[], focusedIndex: number) {
-    items.forEach((item, index) => {
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
       if (index === focusedIndex) {
         item.focus();
-        item.setAttribute('data-highlighted', '');
+        item.dataset['highlighted'] = '';
       } else {
-        item.removeAttribute('data-highlighted');
+        delete item.dataset['highlighted'];
       }
-    });
+    }
   }
 }
 

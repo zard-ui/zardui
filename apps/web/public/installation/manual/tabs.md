@@ -3,20 +3,21 @@
 ```angular-ts title="tabs.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   afterNextRender,
-  AfterViewInit,
+  type AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
   DestroyRef,
-  ElementRef,
+  DOCUMENT,
+  type ElementRef,
   inject,
   Injector,
   input,
   output,
   runInInjectionContext,
   signal,
-  TemplateRef,
+  type TemplateRef,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
@@ -26,7 +27,7 @@ import { CommonModule } from '@angular/common';
 import { twMerge } from 'tailwind-merge';
 import clsx from 'clsx';
 
-import { tabButtonVariants, tabContainerVariants, tabNavVariants, ZardTabVariants } from './tabs.variants';
+import { tabButtonVariants, tabContainerVariants, tabNavVariants, type ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 
@@ -153,6 +154,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
   private readonly tabsContainer = viewChild.required<ElementRef>('tabNav');
   private readonly destroyRef = inject(DestroyRef);
   private readonly injector = inject(Injector);
+  private readonly window = inject(DOCUMENT).defaultView;
 
   protected readonly tabs = computed(() => this.tabComponents());
   protected readonly activeTabIndex = signal<number>(0);
@@ -197,7 +199,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
 
       afterNextRender(() => {
         // SSR/browser guard
-        if (typeof window === 'undefined' || typeof ResizeObserver === 'undefined') return;
+        if (!this.window || typeof ResizeObserver === 'undefined') return;
 
         const resizeObserver = new ResizeObserver(() => this.setScrollState());
 
@@ -208,7 +210,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
           this.setScrollState();
         });
 
-        merge(observeInputs$, fromEvent(window, 'resize'))
+        merge(observeInputs$, fromEvent(this.window, 'resize'))
           .pipe(debounceTime(10), takeUntilDestroyed(this.destroyRef))
           .subscribe(() => this.setScrollState());
 
@@ -311,9 +313,9 @@ export class ZardTabGroupComponent implements AfterViewInit {
 
 
 ```angular-ts title="tabs.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-import { zAlign } from './tabs.component';
+import type { zAlign } from './tabs.component';
 
 export const tabContainerVariants = cva('flex', {
   variants: {

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardDividerComponent } from '../divider.component';
 
 @Component({
+  selector: 'z-demo-divider-vertical',
   standalone: true,
   imports: [ZardDividerComponent],
   template: `

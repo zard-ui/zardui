@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
+  selector: 'z-demo-tabs-default',
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent],
   template: `

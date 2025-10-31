@@ -10,20 +10,19 @@ import {
   effect,
   EventEmitter,
   forwardRef,
-  HostListener,
   input,
   Output,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
-import { commandVariants, ZardCommandVariants } from './command.variants';
+import { commandVariants, type ZardCommandVariants } from './command.variants';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandInputComponent } from './command-input.component';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardIcon } from '../icon/icons';
+import type { ZardIcon } from '../icon/icons';
 
 export interface ZardCommandOption {
   value: unknown;
@@ -69,6 +68,7 @@ export interface ZardCommandConfig {
     '[attr.role]': '"combobox"',
     '[attr.aria-expanded]': 'true',
     '[attr.aria-haspopup]': '"listbox"',
+    '(keydown)': 'onKeyDown($event)',
   },
   providers: [
     {
@@ -110,19 +110,19 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
     return this.optionComponents().filter(option => {
       const label = option.zLabel().toLowerCase();
-      const command = option.zCommand()?.toLowerCase() || '';
+      const command = option.zCommand()?.toLowerCase() ?? '';
       return label.includes(lowerSearchTerm) || command.includes(lowerSearchTerm);
     });
   });
 
   // Status message for screen readers
   protected readonly statusMessage = computed(() => {
-    const searchTerm = this.searchTerm();
+    const searchTerm = this.searchTerm().trim();
     const filteredCount = this.filteredOptions().length;
 
-    if (searchTerm === '') return '';
+    if (!searchTerm) return '';
 
-    if (filteredCount === 0) {
+    if (!filteredCount) {
       return `No results found for "${searchTerm}"`;
     }
 
@@ -170,7 +170,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
     this.zOnSelect.emit(commandOption);
   }
 
-  @HostListener('keydown', ['$event'])
+  // in @Component host: '(keydown)': 'onKeyDown($event)'
   onKeyDown(event: KeyboardEvent) {
     const filteredOptions = this.filteredOptions();
     if (filteredOptions.length === 0) return;
@@ -217,7 +217,9 @@ export class ZardCommandComponent implements ControlValueAccessor {
     const selectedIndex = this.selectedIndex();
 
     // Clear previous selection
-    filteredOptions.forEach(option => option.setSelected(false));
+    for (const option of filteredOptions) {
+      option.setSelected(false);
+    }
 
     // Set new selection
     if (selectedIndex >= 0 && selectedIndex < filteredOptions.length) {
@@ -264,7 +266,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
 
 ```angular-ts title="command.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const commandVariants = cva('flex h-full w-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground', {
   variants: {
@@ -435,26 +437,28 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
+  DestroyRef,
+  type ElementRef,
   EventEmitter,
   forwardRef,
   inject,
   input,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   Output,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Subject, switchMap, takeUntil, timer } from 'rxjs';
+import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Subject, switchMap, timer } from 'rxjs';
 import type { ClassValue } from 'clsx';
 
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'z-command-input',
@@ -495,6 +499,7 @@ import { mergeClasses } from '../../shared/utils/utils';
 })
 export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
+  private readonly destroyRef = inject(DestroyRef);
   readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
   readonly placeholder = input<string>('Type a command or search...');
@@ -503,8 +508,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
   @Output() readonly valueChange = new EventEmitter<string>();
 
   readonly searchTerm = signal('');
-  private searchSubject = new Subject<string>();
-  private destroy$ = new Subject<void>();
+  private readonly searchSubject = new Subject<string>();
 
   protected readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
 
@@ -520,11 +524,9 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
     // Set up debounced search stream - always send to subject
     this.searchSubject
       .pipe(
-        switchMap(value => {
-          // If empty, emit immediately, otherwise debounce
-          return value === '' ? timer(0) : timer(150);
-        }),
-        takeUntil(this.destroy$),
+        // If empty, emit immediately, otherwise debounce
+        switchMap(value => (value ? timer(150) : timer(0))),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(() => {
         // Get the current value from the signal to ensure we have the latest
@@ -564,13 +566,12 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
       if (this.commandComponent) {
         this.commandComponent.onKeyDown(event);
       }
-      return;
     }
     // Handle other keys as needed
   }
 
-  writeValue(value: string): void {
-    this.searchTerm.set(value || '');
+  writeValue(value: string | null): void {
+    this.searchTerm.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -595,8 +596,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
   ngOnDestroy(): void {
     // Complete subjects to clean up subscriptions
-    this.destroy$.next();
-    this.destroy$.complete();
     this.searchSubject.complete();
   }
 }
@@ -636,7 +635,7 @@ export class ZardCommandListComponent {
 
 
 ```angular-ts title="command-option-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
+import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCommandOptionComponent } from './command-option.component';
@@ -704,11 +703,11 @@ export class ZardCommandOptionGroupComponent implements AfterContentInit {
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
-import { commandItemVariants, commandShortcutVariants, ZardCommandItemVariants } from './command.variants';
+import { commandItemVariants, commandShortcutVariants, type ZardCommandItemVariants } from './command.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardCommandComponent } from './command.component';
-import { ZardIcon } from '../icon/icons';
+import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-command-option',

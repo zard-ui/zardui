@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { ZardSliderComponent } from '../slider.component';
 
 @Component({
+  selector: 'z-demo-slider-min-max',
   standalone: true,
   imports: [ZardSliderComponent],
   template: `

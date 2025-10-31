@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardComboboxComponent, ZardComboboxGroup, ZardComboboxOption } from '../combobox.component';
+import { ZardComboboxComponent, type ZardComboboxGroup, type ZardComboboxOption } from '../combobox.component';
 
 @Component({
   selector: 'zard-demo-combobox-grouped',

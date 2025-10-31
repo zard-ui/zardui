@@ -1,14 +1,16 @@
 import { Component } from '@angular/core';
-import { ZardEmptyComponent } from '../empty.component';
-import { ZardCommandComponent } from '../../command/command.component';
+
+import { ZardComboboxComponent } from '../../combobox/combobox.component';
 import { ZardCommandEmptyComponent } from '../../command/command-empty.component';
 import { ZardCommandInputComponent } from '../../command/command-input.component';
 import { ZardCommandListComponent } from '../../command/command-list.component';
-import { ZardComboboxComponent } from '../../combobox/combobox.component';
+import { ZardCommandComponent } from '../../command/command.component';
 import { ZardSelectComponent } from '../../select/select.component';
 import { ZardTableComponent } from '../../table/table.component';
+import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
+  selector: 'z-demo-empty-with-other',
   standalone: true,
   imports: [
     ZardCommandComponent,

@@ -1,21 +1,22 @@
-import { Overlay, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { ElementRef, inject, Injectable, PLATFORM_ID, signal, TemplateRef, ViewContainerRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Subscription } from 'rxjs';
+import { type ElementRef, inject, Injectable, PLATFORM_ID, signal, type TemplateRef, type ViewContainerRef } from '@angular/core';
+
+import type { Subscription } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ZardDropdownService {
-  private overlay = inject(Overlay);
-  private overlayPositionBuilder = inject(OverlayPositionBuilder);
-  private platformId = inject(PLATFORM_ID);
+  private readonly overlay = inject(Overlay);
+  private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
+  private readonly platformId = inject(PLATFORM_ID);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
   private triggerElement?: ElementRef;
-  private focusedIndex = signal<number>(-1);
+  private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
 
   readonly isOpen = signal(false);
@@ -153,9 +154,7 @@ export class ZardDropdownService {
   private getDropdownItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(
-      (item: Element) => !item.hasAttribute('data-disabled'),
-    ) as HTMLElement[];
+    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
@@ -196,13 +195,14 @@ export class ZardDropdownService {
   }
 
   private updateItemFocus(items: HTMLElement[], focusedIndex: number) {
-    items.forEach((item, index) => {
+    for (let index = 0; index < items.length; index++) {
+      const item = items[index];
       if (index === focusedIndex) {
         item.focus();
-        item.setAttribute('data-highlighted', '');
+        item.dataset['highlighted'] = '';
       } else {
-        item.removeAttribute('data-highlighted');
+        delete item.dataset['highlighted'];
       }
-    });
+    }
   }
 }

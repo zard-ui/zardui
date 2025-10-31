@@ -150,7 +150,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'alert',
-    registryDependencies: ['icon'],
+    registryDependencies: ['core', 'icon'],
     files: [
       {
         name: 'alert.component.ts',
@@ -400,7 +400,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'breadcrumb',
-    registryDependencies: ['icon'],
+    registryDependencies: ['core', 'icon'],
     files: [
       {
         name: 'breadcrumb.component.ts',

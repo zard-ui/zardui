@@ -1,5 +1,5 @@
 import { ZardDemoPaginationCustomComponent } from './custom';
-import { ZardDemoPaginationComponent } from './default';
+import { ZardDemoPaginationDefaultComponent } from './default';
 
 export const PAGINATION = {
   componentName: 'pagination',
@@ -8,7 +8,7 @@ export const PAGINATION = {
   examples: [
     {
       name: 'default',
-      component: ZardDemoPaginationComponent,
+      component: ZardDemoPaginationDefaultComponent,
     },
     {
       name: 'custom',

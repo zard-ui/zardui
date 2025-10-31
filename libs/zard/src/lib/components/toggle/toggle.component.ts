@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, forwardRef, HostListener, ViewEncapsulation, signal, computed, input, output, linkedSignal } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { ClassValue } from 'clsx';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { toggleVariants, ZardToggleVariants } from './toggle.variants';
+import type { ClassValue } from 'clsx';
+
+import { toggleVariants, type ZardToggleVariants } from './toggle.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 
 type OnTouchedType = () => void;
@@ -47,9 +48,9 @@ export class ZardToggleComponent implements ControlValueAccessor {
   readonly onHover = output<void>();
   readonly onChange = output<boolean>();
 
-  private isUsingNgModel = signal(false);
+  private readonly isUsingNgModel = signal(false);
 
-  protected readonly value = linkedSignal(() => this.zValue() || this.zDefault());
+  protected readonly value = linkedSignal(() => this.zValue() ?? this.zDefault());
 
   protected readonly disabled = linkedSignal(() => this.zDisabled());
 

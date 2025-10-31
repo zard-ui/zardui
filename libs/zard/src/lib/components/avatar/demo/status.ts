@@ -3,21 +3,15 @@ import { Component } from '@angular/core';
 import { ZardAvatarComponent } from '../avatar.component';
 
 @Component({
+  selector: 'z-demo-avatar-status',
   standalone: true,
   imports: [ZardAvatarComponent],
   template: `
-    <z-avatar [zImage]="zImageDefault" />
-    <z-avatar zStatus="online" [zImage]="zImageDefault" />
-    <z-avatar zStatus="offline" [zImage]="zImageDefault" />
-    <z-avatar zStatus="doNotDisturb" [zImage]="zImageDefault" />
-    <z-avatar zStatus="away" [zImage]="zImageDefault" />
-    <z-avatar zStatus="invisible" [zImage]="zImageDefault" />
+    <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />
+    <z-avatar zStatus="online" zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />
+    <z-avatar zStatus="offline" zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />
+    <z-avatar zStatus="doNotDisturb" zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />
+    <z-avatar zStatus="away" zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />
   `,
 })
-export class ZardDemoAvatarStatusComponent {
-  readonly zImageDefault = {
-    fallback: 'ZA',
-    url: '/images/avatar/imgs/avatar_image.jpg',
-    alt: 'ZadUI',
-  };
-}
+export class ZardDemoAvatarStatusComponent {}

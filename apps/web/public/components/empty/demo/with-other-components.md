@@ -10,6 +10,7 @@ import { ZardSelectComponent } from '../../select/select.component';
 import { ZardTableComponent } from '../../table/table.component';
 
 @Component({
+  selector: 'z-demo-empty-with-other',
   standalone: true,
   imports: [
     ZardCommandComponent,

@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { ZardSliderComponent } from '../slider.component';
 
 @Component({
+  selector: 'z-demo-slider-vertical',
   standalone: true,
   imports: [ZardSliderComponent],
   template: `

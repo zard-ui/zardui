@@ -1,6 +1,7 @@
 import { ComponentType } from '@angular/cdk/overlay';
 import { NgComponentOutlet } from '@angular/common';
-import { Component, computed, input, signal } from '@angular/core';
+import { Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
+
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
 
@@ -10,6 +11,33 @@ import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
   selector: 'z-code-box',
   imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent, HyphenToSpacePipe],
   templateUrl: './zard-code-box.component.html',
+  encapsulation: ViewEncapsulation.None,
+  styles: [
+    `
+      z-card.demo-card > div > * {
+        min-width: 20rem;
+        gap: 1rem;
+        align-items: center;
+        justify-content: center;
+      }
+
+      z-card.demo-card.demo-flex > div > * {
+        display: flex;
+      }
+
+      z-card.demo-card.demo-grid > div > * {
+        display: grid;
+      }
+
+      z-card.demo-card.demo-full-width > div > * {
+        width: 100%;
+      }
+
+      z-card.demo-card.demo-full-width > div {
+        width: 100%;
+      }
+    `,
+  ],
 })
 export class ZardCodeBoxComponent {
   readonly componentType = input<string>();
@@ -29,16 +57,16 @@ export class ZardCodeBoxComponent {
   });
 
   readonly cardClasses = computed(() => {
-    const classes = [];
+    const classes = ['demo-card'];
 
     if (this.column()) {
-      classes.push('[&_ng-component]:grid');
+      classes.push('demo-grid');
     } else {
-      classes.push('[&_ng-component]:flex');
+      classes.push('demo-flex');
     }
 
     if (this.fullWidth()) {
-      classes.push('[&_ng-component]:w-full', '[&_div:first-child]:w-full');
+      classes.push('demo-full-width');
     }
 
     if (this.flexAlign()) {

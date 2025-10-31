@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { ZardRadioComponent } from '../radio.component';
 
 @Component({
+  selector: 'z-demo-radio-default',
   standalone: true,
   imports: [ZardRadioComponent, FormsModule],
   template: `

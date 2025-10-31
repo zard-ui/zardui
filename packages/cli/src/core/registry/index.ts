@@ -1,4 +1,4 @@
-import { registry, type ComponentRegistry } from '@cli/core/registry/registry-data.js';
+import { ComponentRegistry, registry } from './registry-data';
 
 export type { ComponentRegistry };
 export { registry };

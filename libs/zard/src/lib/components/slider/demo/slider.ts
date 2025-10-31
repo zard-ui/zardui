@@ -1,7 +1,7 @@
-import { ZardDemoSliderVerticalComponent } from './vertical';
+import { ZardDemoSliderDefaultComponent } from './default';
 import { ZardDemoSliderDisabledComponent } from './disabled';
 import { ZardDemoSliderMinMaxComponent } from './min-max';
-import { ZardDemoSliderComponent } from './default';
+import { ZardDemoSliderVerticalComponent } from './vertical';
 
 export const SLIDER = {
   componentName: 'slider',
@@ -11,7 +11,7 @@ export const SLIDER = {
   examples: [
     {
       name: 'default',
-      component: ZardDemoSliderComponent,
+      component: ZardDemoSliderDefaultComponent,
     },
     {
       name: 'disabled',

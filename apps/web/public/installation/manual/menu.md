@@ -1,14 +1,14 @@
 
 
 ```angular-ts title="menu.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { BooleanInput } from '@angular/cdk/coercion';
+import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuTrigger } from '@angular/cdk/menu';
-import { ConnectedPosition } from '@angular/cdk/overlay';
-import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input, OnDestroy, OnInit, PLATFORM_ID, untracked } from '@angular/core';
+import type { ConnectedPosition } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
+import { booleanAttribute, computed, Directive, effect, ElementRef, inject, input, type OnDestroy, type OnInit, PLATFORM_ID, untracked } from '@angular/core';
 
 import { ZardMenuManagerService } from './menu-manager.service';
-import { MENU_POSITIONS_MAP, ZardMenuPlacement } from './menu-positions';
+import { MENU_POSITIONS_MAP, type ZardMenuPlacement } from './menu-positions';
 
 export type ZardMenuTrigger = 'click' | 'hover';
 
@@ -31,7 +31,6 @@ export type ZardMenuTrigger = 'click' | 'hover';
   },
 })
 export class ZardMenuDirective implements OnInit, OnDestroy {
-  private static readonly MENU_OVERLAY_SELECTOR = '.cdk-overlay-container .cdk-overlay-pane:last-child';
   private static readonly MENU_CONTENT_SELECTOR = '.cdk-overlay-pane [z-menu-content]';
 
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
@@ -120,11 +119,11 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private setupMenuContentListeners(): void {
-    const overlay = document.querySelector(ZardMenuDirective.MENU_OVERLAY_SELECTOR);
-    if (!overlay) return;
+    const menuContent = document.querySelector(ZardMenuDirective.MENU_CONTENT_SELECTOR);
+    if (!menuContent) return;
 
-    this.addEventListenerWithCleanup(overlay, 'mouseenter', () => this.cancelScheduledClose());
-    this.addEventListenerWithCleanup(overlay, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
+    this.addEventListenerWithCleanup(menuContent, 'mouseenter', () => this.cancelScheduledClose());
+    this.addEventListenerWithCleanup(menuContent, 'mouseleave', event => this.scheduleCloseIfNeeded(event as MouseEvent));
   }
 
   private cancelScheduledClose(): void {
@@ -193,7 +192,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
 
 ```angular-ts title="menu.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const menuContentVariants = cva(
   'z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover p-2 text-popover-foreground shadow-lg animate-in data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2',
@@ -251,12 +250,12 @@ export class ZardMenuContentDirective {
 ```angular-ts title="menu-item.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
-import { BooleanInput } from '@angular/cdk/coercion';
+import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuItem } from '@angular/cdk/menu';
 import { booleanAttribute, computed, Directive, effect, inject, input, signal, untracked } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { menuItemVariants, ZardMenuItemVariants } from './menu.variants';
+import { menuItemVariants, type ZardMenuItemVariants } from './menu.variants';
 
 @Directive({
   selector: 'button[z-menu-item], [z-menu-item]',
@@ -342,7 +341,7 @@ export class ZardMenuItemDirective {
 ```angular-ts title="menu-manager.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Injectable } from '@angular/core';
 
-import { ZardMenuDirective } from './menu.directive';
+import type { ZardMenuDirective } from './menu.directive';
 
 @Injectable({
   providedIn: 'root',
@@ -376,7 +375,7 @@ export class ZardMenuManagerService {
 
 
 ```angular-ts title="menu-positions.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ConnectedPosition } from '@angular/cdk/overlay';
+import type { ConnectedPosition } from '@angular/cdk/overlay';
 
 export const MENU_POSITIONS_MAP: { [key: string]: ConnectedPosition[] } = {
   bottomLeft: [

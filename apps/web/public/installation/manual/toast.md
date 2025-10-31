@@ -6,7 +6,7 @@ import { NgxSonnerToaster } from 'ngx-sonner';
 import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { toastVariants, ZardToastVariants } from './toast.variants';
+import { toastVariants, type ZardToastVariants } from './toast.variants';
 
 @Component({
   selector: 'z-toast, z-toaster',
@@ -51,7 +51,7 @@ export class ZardToastComponent {
 
 
 ```angular-ts title="toast.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const toastVariants = cva('group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg', {
   variants: {

@@ -4,6 +4,7 @@ import { Component } from '@angular/core';
 import { ZardProgressBarComponent } from '../progress-bar.component';
 
 @Component({
+  selector: 'z-demo-progress-bar-size',
   standalone: true,
   imports: [ZardProgressBarComponent],
   template: `

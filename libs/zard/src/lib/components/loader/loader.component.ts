@@ -1,8 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
+import { loaderVariants, type ZardLoaderVariants } from './loader.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { loaderVariants, ZardLoaderVariants } from './loader.variants';
 
 @Component({
   selector: 'z-loader',

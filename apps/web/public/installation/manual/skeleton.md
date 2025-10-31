@@ -28,7 +28,7 @@ export class ZardSkeletonComponent {
 
 
 ```angular-ts title="skeleton.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const skeletonVariants = cva('bg-accent animate-pulse rounded-md');
 export type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;

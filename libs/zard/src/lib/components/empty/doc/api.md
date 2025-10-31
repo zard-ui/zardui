@@ -6,8 +6,8 @@
 
 To customize the empty, pass the following props to the component.
 
-| Property         | Description                             | Type                               | Default   |
-|------------------|-----------------------------------------|------------------------------------|-----------|
-| `[zImage]`       | custom image (string or template)       | `string \| TemplateRef<unknown>`   | `-`       |
-| `[zDescription]` | custom description (string or template) | `string \| TemplateRef<unknown>`   | `No data` |
-| `[zSize]`        | component size                          | `default \| sm \| lg`              | `default` |
+| Property         | Description                             | Type                             | Default   |
+| ---------------- | --------------------------------------- | -------------------------------- | --------- |
+| `[zImage]`       | custom image (string or template)       | `string \| TemplateRef<unknown>` | `-`       |
+| `[zDescription]` | custom description (string or template) | `string \| TemplateRef<unknown>` | `No data` |
+| `[zSize]`        | component size                          | `default \| sm \| lg`            | `default` |

@@ -6,6 +6,7 @@ import { Component } from '@angular/core';
 import { ZardButtonComponent } from '../../button/button.component';
 
 @Component({
+  selector: 'z-demo-toast-advanced',
   standalone: true,
   imports: [ZardButtonComponent],
   template: `

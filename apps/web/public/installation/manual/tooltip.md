@@ -3,21 +3,21 @@
 ```angular-ts title="tooltip.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { merge, Subject, take, takeUntil } from 'rxjs';
 
-import { Overlay, OverlayModule, OverlayPositionBuilder, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ComponentRef,
+  type ComponentRef,
   computed,
   Directive,
   ElementRef,
   inject,
   input,
   NgModule,
-  OnDestroy,
-  OnInit,
+  type OnDestroy,
+  type OnInit,
   output,
   PLATFORM_ID,
   Renderer2,
@@ -25,7 +25,7 @@ import {
 } from '@angular/core';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { TOOLTIP_POSITIONS_MAP, ZardTooltipPositions } from './tooltip-positions';
+import { TOOLTIP_POSITIONS_MAP, type ZardTooltipPositions } from './tooltip-positions';
 import { tooltipVariants } from './tooltip.variants';
 
 export type ZardTooltipTriggers = 'click' | 'hover';
@@ -201,7 +201,7 @@ export class ZardTooltipModule {}
 
 
 ```angular-ts title="tooltip.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const tooltipVariants = cva(
   'z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 origin-[--radix-tooltip-content-transform-origin]',
@@ -213,7 +213,7 @@ export type ZardTooltipVariants = VariantProps<typeof tooltipVariants>;
 
 
 ```angular-ts title="tooltip-positions.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ConnectedPosition } from '@angular/cdk/overlay';
+import type { ConnectedPosition } from '@angular/cdk/overlay';
 
 export const TOOLTIP_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
   top: {

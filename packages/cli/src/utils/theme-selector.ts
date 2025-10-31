@@ -33,5 +33,5 @@ export function getThemeDisplayName(themeName: string): string {
     gray: 'Gray',
     slate: 'Slate',
   };
-  return names[themeName] || themeName;
+  return names[themeName] ?? themeName;
 }

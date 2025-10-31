@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '../../shared/utils/utils';
-import { loaderVariants, ZardLoaderVariants } from './loader.variants';
+import { loaderVariants, type ZardLoaderVariants } from './loader.variants';
 
 @Component({
   selector: 'z-loader',
@@ -62,7 +62,7 @@ export class ZardLoaderComponent {
 
 
 ```angular-ts title="loader.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const loaderVariants = cva('', {
   variants: {

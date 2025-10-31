@@ -1,15 +1,20 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, output, TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
 
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
-import { datePickerVariants, ZardDatePickerVariants } from './date-picker.variants';
-import { ZardCalendarComponent } from '../calendar/calendar.component';
-import { ZardButtonComponent } from '../button/button.component';
-import type { ClassValue } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
+import type { ClassValue } from 'clsx';
+
+import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardCalendarComponent } from '../calendar/calendar.component';
+import { ZardIconComponent } from '../icon/icon.component';
+import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 
-export type { ZardDatePickerVariants };
+const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, string> = {
+  sm: 'h-8',
+  default: 'h-10',
+  lg: 'h-12',
+};
 
 @Component({
   selector: 'z-date-picker, [z-date-picker]',
@@ -43,7 +48,7 @@ export type { ZardDatePickerVariants };
 
     <ng-template #calendarTemplate>
       <z-popover [class]="popoverClasses()">
-        <z-calendar #calendar [zSize]="calendarSize()" [value]="value()" [minDate]="minDate()" [maxDate]="maxDate()" [disabled]="disabled()" (dateChange)="onDateChange($event)" />
+        <z-calendar #calendar [value]="value()" [minDate]="minDate()" [maxDate]="maxDate()" [disabled]="disabled()" (dateChange)="onDateChange($event)" />
       </z-popover>
     </ng-template>
   `,
@@ -79,12 +84,9 @@ export class ZardDatePickerComponent {
 
   protected readonly buttonClasses = computed(() => {
     const hasValue = !!this.value();
-    return mergeClasses(
-      'justify-start text-left font-normal',
-      !hasValue && 'text-muted-foreground',
-      this.zSize() === 'sm' ? 'h-8' : this.zSize() === 'lg' ? 'h-12' : 'h-10',
-      'min-w-[240px]',
-    );
+    const size: NonNullable<ZardDatePickerVariants['zSize']> = this.zSize() ?? 'default';
+    const height = HEIGHT_BY_SIZE[size];
+    return mergeClasses('justify-start text-left font-normal', !hasValue && 'text-muted-foreground', height, 'min-w-[240px]');
   });
 
   protected readonly textClasses = computed(() => {
@@ -94,13 +96,6 @@ export class ZardDatePickerComponent {
 
   protected readonly popoverClasses = computed(() => mergeClasses('w-auto p-0'));
 
-  protected readonly calendarSize = computed(() => {
-    const size = this.zSize();
-    if (size === 'sm') return 'sm';
-    if (size === 'lg') return 'lg';
-    return 'default';
-  });
-
   protected readonly displayText = computed(() => {
     const date = this.value();
     if (!date) {
@@ -109,15 +104,16 @@ export class ZardDatePickerComponent {
     return this.formatDate(date, this.zFormat());
   });
 
-  protected onDateChange(date: Date): void {
-    this.dateChange.emit(date);
-    // Close popover after selection using direct method call
+  protected onDateChange(date: Date | Date[]): void {
+    // Date picker always uses single mode, so we can safely cast
+    const singleDate = Array.isArray(date) ? (date[0] ?? null) : date;
+    this.dateChange.emit(singleDate);
+
     this.popoverDirective().hide();
   }
 
   protected onPopoverVisibilityChange(visible: boolean): void {
     if (visible) {
-      // Reset calendar navigation when opening to show correct month/year
       setTimeout(() => {
         if (this.calendar()) {
           this.calendar().resetNavigation();
@@ -127,6 +123,6 @@ export class ZardDatePickerComponent {
   }
 
   private formatDate(date: Date, format: string): string {
-    return this.datePipe.transform(date, format) || '';
+    return this.datePipe.transform(date, format) ?? '';
   }
 }

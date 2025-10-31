@@ -1,8 +1,7 @@
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import {
   tableVariants,
   tableHeaderVariants,
@@ -11,8 +10,9 @@ import {
   tableHeadVariants,
   tableCellVariants,
   tableCaptionVariants,
-  ZardTableVariants,
+  type ZardTableVariants,
 } from './table.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'table[z-table]',

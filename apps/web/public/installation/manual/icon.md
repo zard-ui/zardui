@@ -5,9 +5,9 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import { LucideAngularModule } from 'lucide-angular';
 import type { ClassValue } from 'clsx';
 
-import { iconVariants, ZardIconVariants } from './icon.variants';
+import { iconVariants, type ZardIconVariants } from './icon.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZARD_ICONS, ZardIcon } from './icons';
+import { ZARD_ICONS, type ZardIcon } from './icons';
 
 @Component({
   selector: 'z-icon, [z-icon]',
@@ -42,7 +42,7 @@ export class ZardIconComponent {
 
 
 ```angular-ts title="icon.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, VariantProps } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
 export const iconVariants = cva('flex items-center justify-center', {
   variants: {
@@ -67,6 +67,8 @@ export type ZardIconVariants = VariantProps<typeof iconVariants>;
 ```angular-ts title="icons.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ArrowRight,
+  ArrowUp,
+  BadgeCheck,
   Ban,
   Bell,
   Bold,
@@ -77,8 +79,10 @@ import {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
-  ChevronUp,
   ChevronsUpDown,
+  ChevronUp,
+  Circle,
+  CircleAlert,
   CircleCheck,
   CircleDollarSign,
   CircleX,
@@ -95,21 +99,24 @@ import {
   FolderPlus,
   Heart,
   House,
+  Inbox,
   Info,
   Italic,
-  LayoutDashboard,
   Layers,
   Layers2,
+  LayoutDashboard,
   Lightbulb,
   LightbulbOff,
   LoaderCircle,
   LogOut,
+  type LucideIconData,
   Mail,
   Monitor,
   Moon,
   MoveRight,
   Palette,
   PanelLeft,
+  Popcorn,
   Puzzle,
   Save,
   Search,
@@ -131,9 +138,6 @@ import {
   Users,
   X,
   Zap,
-  type LucideIconData,
-  Circle,
-  Inbox,
 } from 'lucide-angular';
 
 export const ZARD_ICONS = {
@@ -158,6 +162,7 @@ export const ZARD_ICONS = {
   info: Info,
   'triangle-alert': TriangleAlert,
   circle: Circle,
+  'circle-alert': CircleAlert,
   'circle-check': CircleCheck,
   'circle-x': CircleX,
   'circle-dollar-sign': CircleDollarSign,
@@ -169,6 +174,7 @@ export const ZARD_ICONS = {
   'chevrons-up-down': ChevronsUpDown,
   'move-right': MoveRight,
   'arrow-right': ArrowRight,
+  'arrow-up': ArrowUp,
   folder: Folder,
   'folder-open': FolderOpen,
   'folder-plus': FolderPlus,
@@ -191,6 +197,7 @@ export const ZARD_ICONS = {
   heart: Heart,
   star: Star,
   zap: Zap,
+  popcorn: Popcorn,
   shield: Shield,
   puzzle: Puzzle,
   layers: Layers,
@@ -204,6 +211,7 @@ export const ZARD_ICONS = {
   monitor: Monitor,
   smartphone: Smartphone,
   tablet: Tablet,
+  'badge-check': BadgeCheck,
 } as const satisfies Record<string, LucideIconData>;
 
 export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;

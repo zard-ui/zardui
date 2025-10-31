@@ -5,6 +5,7 @@ import { Component } from '@angular/core';
 import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
+  selector: 'z-demo-tabs-arrow',
   standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardButtonComponent],
   template: `

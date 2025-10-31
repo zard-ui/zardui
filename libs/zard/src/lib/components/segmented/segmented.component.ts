@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, forwardRef, input, OnInit, output, signal, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
-import { mergeClasses } from '../../shared/utils/utils';
-import { segmentedItemVariants, segmentedVariants, ZardSegmentedVariants } from './segmented.variants';
+import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, forwardRef, input, type OnInit, output, signal, ViewEncapsulation } from '@angular/core';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
+
+import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export interface SegmentedOption {
   value: string;
@@ -129,7 +129,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
     const option = this.zOptions().find(opt => opt.value === value);
     const item = this.items().find(item => item.value() === value);
 
-    if ((option && option.disabled) || (item && item.disabled())) return;
+    if (option?.disabled || item?.disabled()) return;
 
     this.selectedValue.set(value);
     this.onChange(value);
@@ -139,7 +139,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
 
   // ControlValueAccessor implementation
   writeValue(value: string): void {
-    this.selectedValue.set(value || '');
+    this.selectedValue.set(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {

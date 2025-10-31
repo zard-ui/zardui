@@ -9,4 +9,4 @@ To customize the badge, pass the following props to the component.
 | Property | Description | Type                                             | Default   |
 | -------- | ----------- | ------------------------------------------------ | --------- |
 | `zType`  | Badge type  | `default \| secondary \| destructive \| outline` | `default` |
-| `zShape` | Badge shape | `default \| square`                              | `default` |
+| `zShape` | Badge shape | `default \| square \| pill`                      | `default` |

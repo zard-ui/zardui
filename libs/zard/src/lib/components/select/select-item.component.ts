@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, forwardRef, inject, input, linkedSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal } from '@angular/core';
 
+import { selectItemVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
-import { selectItemVariants } from './select.variants';
 
 // Interface to avoid circular dependency
 interface SelectHost {
@@ -43,7 +43,7 @@ export class ZardSelectItemComponent {
   readonly elementRef = inject(ElementRef);
   readonly label = linkedSignal(() => {
     const element = this.elementRef?.nativeElement;
-    return (element?.textContent || element?.innerText)?.trim() ?? '';
+    return (element?.textContent ?? element?.innerText)?.trim() ?? '';
   });
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
