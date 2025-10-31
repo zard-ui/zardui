@@ -26,8 +26,10 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import type { ClassValue } from 'clsx';
+
 import { ZardSelectItemComponent } from './select-item.component';
-import { selectContentVariants, selectTriggerVariants, type ZardSelectTriggerVariants } from './select.variants';
+import { selectContentVariants, selectTriggerVariants, selectVariants, type ZardSelectTriggerVariants } from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 
@@ -48,7 +50,7 @@ type OnChangeType = (value: string) => void;
   host: {
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    class: 'relative inline-block w-full',
+    '[class]': 'classes()',
     '(document:click)': 'onDocumentClick($event)',
   },
   template: `
@@ -100,7 +102,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   readonly zPlaceholder = input<string>('Select an option...');
   readonly zValue = input<string>('');
   readonly zLabel = input<string>('');
-  readonly class = input<string>('');
+  readonly class = input<ClassValue>('');
 
   readonly zSelectionChange = output<string>();
 
@@ -147,6 +149,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     ),
   );
 
+  protected readonly classes = computed(() => mergeClasses(selectVariants(), this.class()));
   protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
 
   ngOnInit() {
@@ -490,6 +493,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 ```angular-ts title="select.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
+export const selectVariants = cva('relative inline-block w-full');
+
 export const selectTriggerVariants = cva(
   'flex w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none cursor-pointer focus-visible:ring-[3px] focus-visible:border-ring focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
@@ -569,7 +574,6 @@ export class ZardSelectItemComponent {
   });
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
-
   protected readonly isSelected = computed(() => this.select?.selectedValue() === this.zValue());
 
   setSelectHost(selectHost: SelectHost) {

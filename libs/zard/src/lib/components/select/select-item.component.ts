@@ -48,7 +48,6 @@ export class ZardSelectItemComponent {
   });
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
-
   protected readonly isSelected = computed(() => this.select?.selectedValue() === this.zValue());
 
   setSelectHost(selectHost: SelectHost) {

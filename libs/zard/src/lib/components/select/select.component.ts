@@ -23,8 +23,10 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import type { ClassValue } from 'clsx';
+
 import { ZardSelectItemComponent } from './select-item.component';
-import { selectContentVariants, selectTriggerVariants, type ZardSelectTriggerVariants } from './select.variants';
+import { selectContentVariants, selectTriggerVariants, selectVariants, type ZardSelectTriggerVariants } from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 
@@ -45,7 +47,7 @@ type OnChangeType = (value: string) => void;
   host: {
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    class: 'relative inline-block w-full',
+    '[class]': 'classes()',
     '(document:click)': 'onDocumentClick($event)',
   },
   template: `
@@ -97,7 +99,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   readonly zPlaceholder = input<string>('Select an option...');
   readonly zValue = input<string>('');
   readonly zLabel = input<string>('');
-  readonly class = input<string>('');
+  readonly class = input<ClassValue>('');
 
   readonly zSelectionChange = output<string>();
 
@@ -144,6 +146,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     ),
   );
 
+  protected readonly classes = computed(() => mergeClasses(selectVariants(), this.class()));
   protected readonly contentClasses = computed(() => mergeClasses(selectContentVariants()));
 
   ngOnInit() {
