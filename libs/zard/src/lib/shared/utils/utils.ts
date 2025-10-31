@@ -16,7 +16,10 @@ export function generateId(prefix = ''): string {
 
 export const noopFun = () => void 0;
 
-export const isElementContentTruncated = (element: HTMLElement): boolean => {
+export const isElementContentTruncated = (element: HTMLElement | undefined): boolean => {
+  if (!element) {
+    return false;
+  }
   const range = document.createRange();
   range.selectNodeContents(element);
   const rangeWidth = range.getBoundingClientRect().width;

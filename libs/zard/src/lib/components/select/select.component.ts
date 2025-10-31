@@ -296,18 +296,19 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   private determinePortalWidth(portalWidth: number): void {
     if (!this.overlayRef) return;
 
+    const selectItems = this.selectItems();
     let itemMaxWidth = 0;
-    for (const item of this.selectItems()) {
+    for (const item of selectItems) {
       itemMaxWidth = Math.max(itemMaxWidth, item.elementRef.nativeElement.scrollWidth);
     }
 
-    const contentElement = this.elementRef.nativeElement.children[0].children[0];
-    const isOverflow = isElementContentTruncated(contentElement);
-    if (isOverflow && this.selectItems().length) {
-      const elementStyles = getComputedStyle(this.selectItems()[0].elementRef.nativeElement);
-      const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left'));
-      const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right'));
+    const textContentElement = this.elementRef.nativeElement.querySelector('button > span > span') as HTMLElement;
+    const isOverflow = isElementContentTruncated(textContentElement);
 
+    if (isOverflow && selectItems.length) {
+      const elementStyles = getComputedStyle(selectItems[0].elementRef.nativeElement);
+      const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left')) || 0;
+      const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right')) || 0;
       itemMaxWidth += leftPadding + rightPadding;
     }
 
