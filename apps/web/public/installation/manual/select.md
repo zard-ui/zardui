@@ -28,7 +28,7 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { ZardSelectItemComponent } from './select-item.component';
 import { selectContentVariants, selectTriggerVariants, type ZardSelectTriggerVariants } from './select.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
@@ -243,22 +243,21 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   open() {
     if (this.isOpen()) return;
 
-    const overlayCreated = this.overlayRef !== undefined;
-
     // Create overlay if it doesn't exist
-    if (!overlayCreated) {
+    if (!this.overlayRef) {
       this.createOverlay();
     }
 
     if (!this.overlayRef) return;
 
+    const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
+
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
     this.overlayRef.attach(this.portal);
+    this.overlayRef.updateSize({ width: hostWidth });
     this.isOpen.set(true);
 
-    if (!overlayCreated) {
-      this.determinePortalWidth();
-    }
+    this.determinePortalWidth(hostWidth);
 
     // Focus dropdown after opening and position on selected item
     setTimeout(() => {
@@ -294,31 +293,27 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
     }, 0);
   }
 
-  private determinePortalWidth(): void {
-    const portalWidth = (this.overlayRef?.getConfig().width as number) ?? 0;
-
-    let paddingOffset = 0;
-    if (this.selectItems().length) {
-      const elementStyles = getComputedStyle(this.selectItems()[0].elementRef.nativeElement);
-      const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left'));
-      const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right'));
-
-      paddingOffset += leftPadding + rightPadding;
-    }
+  private determinePortalWidth(portalWidth: number): void {
+    if (!this.overlayRef) return;
 
     let itemMaxWidth = 0;
     for (const item of this.selectItems()) {
       itemMaxWidth = Math.max(itemMaxWidth, item.elementRef.nativeElement.scrollWidth);
     }
 
-    const isOverflow = portalWidth < itemMaxWidth;
-    if (isOverflow) {
-      itemMaxWidth += paddingOffset;
+    const contentElement = this.elementRef.nativeElement.children[0].children[0];
+    const isOverflow = isElementContentTruncated(contentElement);
+    if (isOverflow && this.selectItems().length) {
+      const elementStyles = getComputedStyle(this.selectItems()[0].elementRef.nativeElement);
+      const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left'));
+      const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right'));
 
-      itemMaxWidth = Math.max(itemMaxWidth, portalWidth);
-      this.overlayRef?.updateSize({ width: itemMaxWidth });
-      this.overlayRef?.updatePosition();
+      itemMaxWidth += leftPadding + rightPadding;
     }
+
+    itemMaxWidth = Math.max(itemMaxWidth, portalWidth);
+    this.overlayRef?.updateSize({ width: itemMaxWidth });
+    this.overlayRef?.updatePosition();
   }
 
   private createOverlay() {
