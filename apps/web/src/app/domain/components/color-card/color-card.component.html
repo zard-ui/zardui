@@ -1,36 +1,22 @@
-<button
-  type="button"
-  class="group relative flex flex-1 flex-col gap-2 cursor-pointer aspect-[3/1] sm:aspect-[2/3] sm:h-auto sm:w-auto text-(--text) w-full"
-  (click)="copyToClipboard()"
-  [attr.data-last-copied]="isCopied()"
-  [style.--bg]="color().oklch"
-  [style.--text]="color().foreground"
->
-  <!-- Icons -->
-  @if (isCopied()) {
-    <lucide-angular
-      [img]="Check"
-      class="absolute top-4 right-4 z-10 h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100 group-data-[last-copied=true]:opacity-100"
-      [style.color]="color().foreground"
-    />
-  } @else {
-    <lucide-angular [img]="ClipboardIcon" class="absolute top-4 right-4 z-10 h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100" [style.color]="color().foreground" />
-  }
+@if (isCopied()) {
+  <lucide-angular
+    [img]="Check"
+    class="absolute top-4 right-4 z-10 h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100 group-data-[last-copied=true]:opacity-100"
+    [style.color]="color().foreground"
+  />
+} @else {
+  <lucide-angular [img]="ClipboardIcon" class="absolute top-4 right-4 z-10 h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100" [style.color]="color().foreground" />
+}
 
-  <!-- Color Box -->
-  <div class="w-full flex-1 rounded-md md:rounded-lg border-ghost after:border-input after:rounded-lg" [style.background]="color().oklch"></div>
+<div class="w-full flex-1 rounded-md md:rounded-lg border-ghost after:border-input after:rounded-lg" [style.background]="color().oklch"></div>
 
-  <!-- Label -->
-  <div class="flex w-full flex-col items-center justify-center gap-1">
-    <!-- Mobile and XL: show className -->
-    <span class="font-mono text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground group-data-[last-copied=true]:text-primary sm:hidden xl:flex">
-      {{ color().className }}
-    </span>
-    <!-- Tablet only: show scale -->
-    <span
-      class="hidden font-mono text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground group-data-[last-copied=true]:text-primary sm:flex xl:hidden"
-    >
-      {{ color().scale }}
-    </span>
-  </div>
-</button>
+<div class="flex w-full flex-col items-center justify-center gap-1">
+  <span class="font-mono text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground group-data-[last-copied=true]:text-primary sm:hidden xl:flex">
+    {{ color().className }}
+  </span>
+  <span
+    class="hidden font-mono text-xs tabular-nums text-muted-foreground transition-colors group-hover:text-foreground group-data-[last-copied=true]:text-primary sm:flex xl:hidden"
+  >
+    {{ color().scale }}
+  </span>
+</div>
