@@ -7,7 +7,16 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@blocks": ["libs/blocks/src/index.ts"],
+      "@cli/*": ["packages/cli/src/*"],
+      "@zard/*": ["libs/zard/src/lib/*"],
+      "@zard/domain/*": ["apps/web/src/app/domain/*"],
+      "@zard/env/*": ["apps/web/src/environments/*"],
+      "@zard/shared/*": ["apps/web/src/app/shared/*"],
+      "@zard/widget/*": ["apps/web/src/app/widget/*"]
+    }
   },
   "files": [],
   "include": [],

@@ -116,7 +116,7 @@
     "Zard"
   ],
   "[html]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -128,6 +128,9 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[yaml]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
 }

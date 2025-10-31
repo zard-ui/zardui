@@ -29,7 +29,7 @@ import { type ZardIcon } from '../icon/icons';
       @if (image) {
         <div [class]="imageClasses()">
           <ng-container *zStringTemplateOutlet="image">
-            <img [src]="image" alt="Empty" class="mx-auto dark:filter-[invert(75%)]" />
+            <img [src]="image" alt="Empty" class="mx-auto" />
           </ng-container>
         </div>
       } @else if (icon) {

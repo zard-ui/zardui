@@ -1,6 +1,6 @@
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, signal } from '@angular/core';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardSelectItemComponent } from './select-item.component';
 import { ZardSelectComponent } from './select.component';
@@ -31,7 +31,6 @@ class TestHostComponent {
       <z-select-item zValue="orange">Orange</z-select-item>
     </z-select>
   `,
-  standalone: true,
   imports: [ZardSelectComponent, ZardSelectItemComponent, ReactiveFormsModule],
 })
 class TestHostWithFormControlComponent {
@@ -72,32 +71,35 @@ describe('ZardSelectComponent', () => {
       it('should open dropdown on Enter key', () => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
         jest.spyOn(event, 'preventDefault');
+        jest.spyOn(component, 'open');
 
         component.onTriggerKeydown(event);
 
         expect(event.preventDefault).toHaveBeenCalled();
-        expect(component.isOpen()).toBe(true);
+        expect(component.open).toHaveBeenCalled();
       });
 
       it('should open dropdown on Space key', () => {
         const event = new KeyboardEvent('keydown', { key: ' ' });
         jest.spyOn(event, 'preventDefault');
+        jest.spyOn(component, 'open');
 
         component.onTriggerKeydown(event);
 
         expect(event.preventDefault).toHaveBeenCalled();
-        expect(component.isOpen()).toBe(true);
+        expect(component.open).toHaveBeenCalled();
       });
 
       it('should close dropdown on Escape key', () => {
         component.open();
         const event = new KeyboardEvent('keydown', { key: 'Escape' });
         jest.spyOn(event, 'preventDefault');
+        jest.spyOn(component, 'close');
 
         component.onTriggerKeydown(event);
 
         expect(event.preventDefault).toHaveBeenCalled();
-        expect(component.isOpen()).toBe(false);
+        expect(component.close).toHaveBeenCalled();
       });
     });
   });

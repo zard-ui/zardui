@@ -10,39 +10,10 @@
     "importHelpers": true,
     "target": "es2015",
     "module": "esnext",
-    "lib": [
-      "es2020",
-      "dom"
-    ],
+    "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
-    "paths": {
-      "@blocks": [
-        "libs/blocks/src/index.ts"
-      ],
-      "@cli/*": [
-        "packages/cli/src/*"
-      ],
-      "@zard/*": [
-        "libs/zard/src/lib/*"
-      ],
-      "@docs/domain/*": [
-        "apps/web/src/app/domain/*"
-      ],
-      "@docs/env/*": [
-        "apps/web/src/environments/*"
-      ],
-      "@docs/shared/*": [
-        "apps/web/src/app/shared/*"
-      ],
-      "@docs/widget/*": [
-        "apps/web/src/app/widget/*"
-      ]
-    }
+    "baseUrl": "."
   },
-  "exclude": [
-    "node_modules",
-    "tmp"
-  ]
+  "exclude": ["node_modules", "tmp"]
 }
