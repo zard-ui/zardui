@@ -1,7 +1,9 @@
 import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+
+import { Observable, of, firstValueFrom } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Observable, of } from 'rxjs';
+
+import { MarkdownCacheService } from '@zard/shared/services/markdown-cache.service';
 
 export interface ChangelogEntry {
   date: string;
@@ -14,13 +16,13 @@ export interface ChangelogEntry {
   providedIn: 'root',
 })
 export class ChangelogService {
-  private readonly http = inject(HttpClient);
+  private readonly markdownCache = inject(MarkdownCacheService);
   private readonly changelogPath = '/documentation/change-log/';
 
   async loadAllEntries(): Promise<ChangelogEntry[]> {
     try {
       const filenames = await this.getAvailableFiles();
-      const loadPromises = filenames.map(filename => this.loadSingleEntry(filename).toPromise());
+      const loadPromises = filenames.map(filename => firstValueFrom(this.loadSingleEntry(filename)));
       const entries = await Promise.all(loadPromises);
 
       return entries.filter(entry => entry !== null) as ChangelogEntry[];
@@ -33,7 +35,7 @@ export class ChangelogService {
   private loadSingleEntry(filename: string): Observable<ChangelogEntry | null> {
     const filePath = `${this.changelogPath}${filename}`;
 
-    return this.http.get(filePath, { responseType: 'text' }).pipe(
+    return this.markdownCache.loadMarkdown(filePath).pipe(
       map(rawContent => {
         return {
           date: this.extractDateFromFilename(filename).toLocaleDateString('en-US', {
@@ -59,7 +61,7 @@ export class ChangelogService {
 
     for (const filename of knownFiles) {
       try {
-        const response = await this.http.get(`${this.changelogPath}${filename}`, { responseType: 'text' }).toPromise();
+        const response = await firstValueFrom(this.markdownCache.loadMarkdown(`${this.changelogPath}${filename}`));
         if (response) {
           foundFiles.push(filename);
         }

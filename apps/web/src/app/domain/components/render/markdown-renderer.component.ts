@@ -1,9 +1,12 @@
 // markdown-renderer.component.ts
 import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
-import { MarkdownService } from '@zard/shared/services/markdown.service';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { HttpClient } from '@angular/common/http';
+
+import { firstValueFrom } from 'rxjs';
+
+import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
+import { MarkdownCacheService } from '@zard/shared/services/markdown-cache.service';
+import { MarkdownService } from '@zard/shared/services/markdown.service';
 
 @Component({
   selector: 'z-markdown-renderer',
@@ -28,8 +31,8 @@ import { HttpClient } from '@angular/common/http';
 })
 export class MarkdownRendererComponent implements OnChanges, OnInit {
   private readonly markdownService = inject(MarkdownService);
+  private readonly markdownCache = inject(MarkdownCacheService);
   private readonly sanitizer = inject(DomSanitizer);
-  private readonly http = inject(HttpClient);
 
   @Input() markdownUrl!: string;
   @Input() theme: 'light' | 'dark' = 'light';
@@ -70,8 +73,8 @@ export class MarkdownRendererComponent implements OnChanges, OnInit {
 
   private async loadFromUrl(url: string): Promise<string> {
     try {
-      const response = await this.http.get(url, { responseType: 'text' }).toPromise();
-      return response || '';
+      const content = await firstValueFrom(this.markdownCache.loadMarkdown(url));
+      return content || '';
     } catch (error: any) {
       throw new Error(`Could not load file: ${url} - ${error.message || error}`);
     }
