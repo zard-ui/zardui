@@ -551,7 +551,9 @@ interface SelectHost {
         <z-icon zType="check" />
       </span>
     }
-    <ng-content></ng-content>
+    <span class="truncate">
+      <ng-content></ng-content>
+    </span>
   `,
 })
 export class ZardSelectItemComponent {
