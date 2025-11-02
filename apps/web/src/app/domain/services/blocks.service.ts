@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
+
 import type { Block } from '../components/block-container/block-container.component';
 import { BLOCKS_REGISTRY } from '../config/blocks-registry';
 
-export type BlockCategory = 'featured' | 'sidebar' | 'login' | 'signup' | 'otp' | 'calendar' | 'dashboard';
+export type BlockCategory = 'featured' | 'sidebar' | 'login' | 'signup' | 'otp' | 'calendar';
 
 @Injectable({
   providedIn: 'root',

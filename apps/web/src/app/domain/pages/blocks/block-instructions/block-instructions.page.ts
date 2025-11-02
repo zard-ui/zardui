@@ -1,12 +1,19 @@
-import { Component, inject, type OnInit } from '@angular/core';
+import { Component, computed, inject, type OnInit } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
-import { LucideAngularModule, Github, ArrowRight, ExternalLink, Layers, FolderOpen } from 'lucide-angular';
+import { ArrowRight, ExternalLink, FolderOpen, Github, LucideAngularModule } from 'lucide-angular';
 
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardCardComponent } from '@zard/components/card/card.component';
+
+import type { Block } from '@docs/domain/components/block-container/block-container.component';
 import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyItemDirective } from '@docs/domain/directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
+import { BlocksService, type BlockCategory as ServiceBlockCategory } from '@docs/domain/services/blocks.service';
 import { SeoService } from '@docs/shared/services/seo.service';
 
 interface BlockPreview {
@@ -15,30 +22,33 @@ interface BlockPreview {
   description: string;
   category: string;
   image: string;
-  components: number;
   files: number;
-}
-
-interface BlockCategory {
-  name: string;
-  blocks: BlockPreview[];
 }
 
 @Component({
   selector: 'z-block-instructions',
   standalone: true,
-  imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, LucideAngularModule],
+  imports: [
+    RouterLink,
+    ZardBadgeComponent,
+    ZardButtonComponent,
+    ZardCardComponent,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    LucideAngularModule,
+  ],
   templateUrl: './block-instructions.page.html',
 })
 export class BlocksInstructionPage implements OnInit {
   private readonly seoService = inject(SeoService);
+  private readonly blocksService = inject(BlocksService);
   activeAnchor?: string;
 
-  // Lucide icons
   readonly GithubIcon = Github;
   readonly ArrowRightIcon = ArrowRight;
   readonly ExternalLinkIcon = ExternalLink;
-  readonly LayersIcon = Layers;
   readonly FolderOpenIcon = FolderOpen;
 
   readonly navigationConfig: NavigationConfig = {
@@ -51,73 +61,45 @@ export class BlocksInstructionPage implements OnInit {
     ],
   };
 
-  // Mock data - replace with real data from BlocksService
-  readonly availableBlocksCount = 1;
-  readonly categoriesCount = 7;
+  readonly availableBlocksCount = computed(() => {
+    const allBlocks = this.blocksService.getAllBlocks();
+    const uniqueBlocks = new Set(allBlocks.map(block => block.id));
+    return uniqueBlocks.size;
+  });
+  readonly categoriesCount = 5;
 
-  readonly featuredBlocks: BlockPreview[] = [
-    {
-      id: 'authentication-01',
-      title: 'Authentication 01',
-      description:
-        'A beautiful authentication page with form validation, social login options, and forgot password functionality. Built with Angular Reactive Forms and ZardUI components.',
-      category: 'Authentication',
-      image: '/blocks/authentication-01/light.png',
-      components: 8,
-      files: 2,
-    },
-  ];
+  readonly featuredBlocks = computed(() => this.transformBlocks(this.blocksService.getBlocksByCategory('featured')));
 
-  readonly blocksByCategory: BlockCategory[] = [
-    {
-      name: 'Featured',
-      blocks: [
-        {
-          id: 'authentication-01',
-          title: 'Authentication 01',
-          description: 'Modern login page with form validation and social login',
-          category: 'Authentication',
-          image: '/blocks/authentication-01/light.png',
-          components: 8,
-          files: 2,
-        },
-      ],
-    },
-    {
-      name: 'Dashboard',
-      blocks: [],
-    },
-    {
-      name: 'Sidebar',
-      blocks: [],
-    },
-    {
-      name: 'Login',
-      blocks: [
-        {
-          id: 'authentication-01',
-          title: 'Authentication 01',
-          description: 'Modern login page with form validation and social login',
-          category: 'Authentication',
-          image: '/blocks/authentication-01/light.png',
-          components: 8,
-          files: 2,
-        },
-      ],
-    },
-    {
-      name: 'Signup',
-      blocks: [],
-    },
-    {
-      name: 'OTP',
-      blocks: [],
-    },
-    {
-      name: 'Calendar',
-      blocks: [],
-    },
-  ];
+  readonly blocksByCategory = computed(() => {
+    const categories: ServiceBlockCategory[] = ['featured', 'sidebar', 'login', 'signup', 'otp', 'calendar'];
+    return categories.map(category => ({
+      name: this.getCategoryDisplayName(category),
+      blocks: this.transformBlocks(this.blocksService.getBlocksByCategory(category)),
+    }));
+  });
+
+  private transformBlocks(blocks: Block[]): BlockPreview[] {
+    return blocks.map(block => ({
+      id: block.id,
+      title: block.title,
+      description: block.description,
+      category: block.category || '',
+      image: block.image?.light || '',
+      files: block.files.length,
+    }));
+  }
+
+  private getCategoryDisplayName(category: ServiceBlockCategory): string {
+    const displayNames: Record<ServiceBlockCategory, string> = {
+      featured: 'Featured',
+      sidebar: 'Sidebar',
+      login: 'Login',
+      signup: 'Signup',
+      otp: 'OTP',
+      calendar: 'Calendar',
+    };
+    return displayNames[category];
+  }
 
   ngOnInit(): void {
     this.seoService.setDocsSeo(

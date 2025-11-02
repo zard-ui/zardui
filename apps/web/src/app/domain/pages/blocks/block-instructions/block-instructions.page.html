@@ -1,7 +1,6 @@
 <z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
-  <z-doc-heading title="Blocks" description="Beautifully designed. Copy and paste into your apps. Open Source." scrollSpyItem="overview" id="overview"> </z-doc-heading>
+  <z-doc-heading title="Blocks" description="Contribute components to the blocks library." scrollSpyItem="overview" id="overview"> </z-doc-heading>
 
-  <!-- Hero Section -->
   <section scrollSpyItem="overview" id="overview" class="space-y-6">
     <div class="rounded-lg border bg-card p-6 space-y-4">
       <p class="text-muted-foreground leading-7">
@@ -9,25 +8,20 @@
         customizable.
       </p>
       <div class="flex flex-wrap gap-3">
-        <a
-          href="https://github.com/ngzard/ui"
-          target="_blank"
-          class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-        >
+        <a href="https://github.com/ngzard/ui" target="_blank" z-button>
           <lucide-angular [img]="GithubIcon" [size]="16" />
           View on GitHub
         </a>
-        <a href="/blocks" class="inline-flex items-center gap-2 rounded-lg border bg-background px-4 py-2.5 text-sm font-medium hover:bg-accent transition-colors">
+        <a routerLink="/blocks" z-button zType="outline">
           Browse all blocks
           <lucide-angular [img]="ArrowRightIcon" [size]="16" />
         </a>
       </div>
     </div>
 
-    <!-- Stats Cards -->
     <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
       <div class="rounded-lg border bg-card p-6">
-        <div class="text-3xl font-bold tracking-tight">{{ availableBlocksCount }}</div>
+        <div class="text-3xl font-bold tracking-tight">{{ availableBlocksCount() }}</div>
         <p class="text-sm text-muted-foreground mt-1">Available Blocks</p>
       </div>
       <div class="rounded-lg border bg-card p-6">
@@ -41,7 +35,6 @@
     </div>
   </section>
 
-  <!-- Featured Blocks -->
   <section scrollSpyItem="featured" id="featured" class="mt-16 space-y-6">
     <div class="flex items-center justify-between">
       <div>
@@ -51,8 +44,8 @@
     </div>
 
     <div class="grid gap-6 md:grid-cols-2">
-      @for (block of featuredBlocks; track block.id) {
-      <a [href]="'/blocks#' + block.id" class="group rounded-lg border bg-card overflow-hidden hover:shadow-lg transition-all">
+      @for (block of featuredBlocks(); track block.id) {
+      <a [routerLink]="['/blocks']" [fragment]="block.id" class="group rounded-lg border bg-card overflow-hidden hover:shadow-lg transition-all">
         <div class="aspect-video bg-muted relative overflow-hidden">
           <img [src]="block.image" [alt]="block.title" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-300" />
           <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -63,13 +56,9 @@
               <h3 class="font-semibold text-lg group-hover:text-primary transition-colors">{{ block.title }}</h3>
               <p class="text-sm text-muted-foreground mt-2 line-clamp-2">{{ block.description }}</p>
             </div>
-            <span class="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-medium text-primary">{{ block.category }}</span>
+            <span z-badge zVariant="secondary">{{ block.category }}</span>
           </div>
           <div class="flex items-center gap-4 mt-4 text-xs text-muted-foreground">
-            <span class="flex items-center gap-1">
-              <lucide-angular [img]="LayersIcon" [size]="14" />
-              {{ block.components }} components
-            </span>
             <span class="flex items-center gap-1">
               <lucide-angular [img]="FolderOpenIcon" [size]="14" />
               {{ block.files }} files
@@ -81,23 +70,22 @@
     </div>
   </section>
 
-  <!-- All Blocks by Category -->
   <section scrollSpyItem="all-blocks" id="all-blocks" class="mt-16 space-y-8">
     <div>
       <h2 class="text-2xl font-bold tracking-tight">All Blocks</h2>
       <p class="text-muted-foreground mt-1">Browse blocks by category</p>
     </div>
 
-    @for (category of blocksByCategory; track category.name) { @if (category.blocks.length > 0) {
+    @for (category of blocksByCategory(); track category.name) { @if (category.blocks.length > 0) {
     <div class="space-y-4">
       <div class="flex items-center gap-3">
         <h3 class="text-xl font-semibold">{{ category.name }}</h3>
-        <span class="inline-flex items-center rounded-full bg-muted px-2.5 py-0.5 text-xs font-medium">{{ category.blocks.length }}</span>
+        <span z-badge zVariant="outline">{{ category.blocks.length }}</span>
       </div>
 
       <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
         @for (block of category.blocks; track block.id) {
-        <a [href]="'/blocks#' + block.id" class="group rounded-lg border bg-card overflow-hidden hover:shadow-md transition-all">
+        <a [routerLink]="['/blocks']" [fragment]="block.id" class="group rounded-lg border bg-card overflow-hidden hover:shadow-md transition-all">
           <div class="aspect-video bg-muted relative overflow-hidden">
             <img [src]="block.image" [alt]="block.title" class="object-cover w-full h-full group-hover:scale-105 transition-transform duration-200" />
           </div>
@@ -162,28 +150,35 @@
     </div>
   </section>
 
-  <!-- Contributing -->
-  <section scrollSpyItem="contributing" id="contributing" class="mt-16">
+  <section scrollSpyItem="contributing" id="contributing" class="mt-16 space-y-6">
+    <div class="rounded-lg border bg-muted/50 p-6">
+      <div class="flex items-start gap-4">
+        <div class="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+          <lucide-angular [img]="ExternalLinkIcon" [size]="24" class="text-primary" />
+        </div>
+        <div class="flex-1">
+          <h3 class="font-semibold text-lg">CLI Support Coming Soon</h3>
+          <p class="text-sm text-muted-foreground mt-1">
+            We're working on adding blocks support to the ZardUI CLI. Soon you'll be able to add blocks to your project with a single command.
+          </p>
+        </div>
+      </div>
+    </div>
+
     <div class="rounded-lg border bg-linear-to-br from-primary/5 to-primary/10 p-8">
       <div class="max-w-2xl">
         <h2 class="text-2xl font-bold tracking-tight">Want to contribute?</h2>
         <p class="text-muted-foreground mt-2 leading-7">
           Blocks are open source. If you have a block you'd like to share, we'd love to see it! Check out our
-          <a href="https://github.com/ngzard/ui" target="_blank" class="font-medium text-primary hover:underline">contribution guidelines</a>
+          <a href="https://github.com/zard-ui/zardui/tree/master/libs/blocks" target="_blank" class="font-medium text-primary hover:underline">contribution guidelines</a>
           to get started.
         </p>
         <div class="flex flex-wrap gap-3 mt-6">
-          <a
-            href="https://github.com/ngzard/ui/issues/new"
-            target="_blank"
-            class="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors"
-          >
-            Submit a block
+          <a href="https://github.com/zard-ui/zardui/tree/master/libs/blocks" target="_blank" z-button>
+            Contribute on GitHub
             <lucide-angular [img]="ExternalLinkIcon" [size]="16" />
           </a>
-          <a href="/docs/cli" class="inline-flex items-center gap-2 rounded-lg border bg-background px-4 py-2.5 text-sm font-medium hover:bg-accent transition-colors">
-            View documentation
-          </a>
+          <a routerLink="/docs/cli" z-button zType="outline"> View CLI documentation </a>
         </div>
       </div>
     </div>
