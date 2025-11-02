@@ -1,0 +1,261 @@
+<z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <z-doc-heading
+    title="Blocks Library"
+    description="Pre-built, production-ready UI blocks for ZardUI. Complete Angular components showcasing real-world patterns."
+    scrollSpyItem="overview"
+    id="overview"
+  >
+  </z-doc-heading>
+
+  <!-- Overview Section -->
+  <section scrollSpyItem="overview-content" id="overview-content" class="space-y-4">
+    <p class="text-muted-foreground">
+      Blocks are full-page components that showcase real-world use cases, combining multiple ZardUI components into cohesive layouts. They can be used as starting points for
+      building common application pages like dashboards, authentication flows, e-commerce catalogs, and more.
+    </p>
+  </section>
+
+  <!-- Available Blocks Section -->
+  <section scrollSpyItem="available-blocks" id="available-blocks" class="mt-12 space-y-6">
+    <h2 class="text-2xl font-bold tracking-tight">Available Blocks</h2>
+    <div class="rounded-lg border bg-card p-6">
+      <div class="flex items-start gap-4">
+        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <span class="text-lg font-semibold">A</span>
+        </div>
+        <div class="flex-1">
+          <h3 class="font-semibold">authentication-01</h3>
+          <p class="text-sm text-muted-foreground mt-1">Modern login page with form validation, social login, and forgot password functionality</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block Structure Section -->
+  <section scrollSpyItem="block-structure" id="block-structure" class="mt-12 space-y-6">
+    <h2 class="text-2xl font-bold tracking-tight">Block Structure</h2>
+    <p class="text-muted-foreground">Each block follows a standardized directory structure:</p>
+    <z-markdown-renderer markdownUrl="/documentation/blocks/structure.md"></z-markdown-renderer>
+  </section>
+
+  <!-- Adding New Block Section -->
+  <section scrollSpyItem="adding-block" id="adding-block" class="mt-12 space-y-6">
+    <h2 class="text-2xl font-bold tracking-tight">Adding a New Block</h2>
+    <p class="text-muted-foreground">Follow this step-by-step guide to add a new block to the project:</p>
+
+    <!-- Step 1 -->
+    <div class="rounded-lg border bg-card">
+      <div class="border-b p-6">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">1</div>
+          <h3 class="text-lg font-semibold">Create Directory Structure</h3>
+        </div>
+      </div>
+      <div class="p-6">
+        <z-markdown-renderer markdownUrl="/documentation/blocks/step-1-directory.md"></z-markdown-renderer>
+      </div>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="rounded-lg border bg-card">
+      <div class="border-b p-6">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">2</div>
+          <h3 class="text-lg font-semibold">Create the Angular Component</h3>
+        </div>
+      </div>
+      <div class="p-6 space-y-4">
+        <p class="text-sm text-muted-foreground">Create your Angular component with proper form handling and validation using ZardUI components:</p>
+        <z-markdown-renderer markdownUrl="/documentation/blocks/step-2-component.md"></z-markdown-renderer>
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="rounded-lg border bg-card">
+      <div class="border-b p-6">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">3</div>
+          <h3 class="text-lg font-semibold">Create the Template</h3>
+        </div>
+      </div>
+      <div class="p-6 space-y-4">
+        <p class="text-sm text-muted-foreground">Use ZardUI form components for proper validation and error handling:</p>
+        <z-markdown-renderer markdownUrl="/documentation/blocks/step-3-template.md"></z-markdown-renderer>
+      </div>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="rounded-lg border bg-card">
+      <div class="border-b p-6">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">4</div>
+          <h3 class="text-lg font-semibold">Create the Block Metadata File</h3>
+        </div>
+      </div>
+      <div class="p-6 space-y-4">
+        <div class="rounded-lg bg-blue-500/10 border border-blue-500/20 p-4">
+          <p class="text-sm font-medium text-blue-700 dark:text-blue-400">ⓘ This is the most important file - it defines how the block appears in the documentation</p>
+        </div>
+        <z-markdown-renderer markdownUrl="/documentation/blocks/step-4-metadata.md"></z-markdown-renderer>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="rounded-lg border bg-card">
+      <div class="border-b p-6">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">5</div>
+          <h3 class="text-lg font-semibold">Export the Block</h3>
+        </div>
+      </div>
+      <div class="p-6">
+        <z-markdown-renderer markdownUrl="/documentation/blocks/step-5-export.md"></z-markdown-renderer>
+      </div>
+    </div>
+
+    <!-- Step 6 -->
+    <div class="rounded-lg border bg-card">
+      <div class="border-b p-6">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">6</div>
+          <h3 class="text-lg font-semibold">Register in Blocks Registry</h3>
+        </div>
+      </div>
+      <div class="p-6">
+        <z-markdown-renderer markdownUrl="/documentation/blocks/step-6-registry.md"></z-markdown-renderer>
+      </div>
+    </div>
+
+    <!-- Step 7 -->
+    <div class="rounded-lg border bg-card">
+      <div class="border-b p-6">
+        <div class="flex items-center gap-3">
+          <div class="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-primary-foreground text-sm font-semibold">7</div>
+          <h3 class="text-lg font-semibold">Add Preview Images</h3>
+        </div>
+      </div>
+      <div class="p-6 space-y-6">
+        <p class="text-sm text-muted-foreground">Capture screenshots of your block for the documentation:</p>
+
+        <div class="grid gap-4 md:grid-cols-2">
+          <div class="space-y-3">
+            <h4 class="font-semibold text-sm">Light Theme (light.png)</h4>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li class="flex items-start gap-2">
+                <span class="text-primary">•</span>
+                <span>Set the application to light mode</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-primary">•</span>
+                <span>Navigate to the block in full screen</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-primary">•</span>
+                <span>Capture a high-quality screenshot</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-primary">•</span>
+                <span>Save as <code class="text-xs bg-muted px-1 py-0.5 rounded">apps/web/public/blocks/my-block-01/light.png</code></span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="space-y-3">
+            <h4 class="font-semibold text-sm">Dark Theme (dark.png)</h4>
+            <ul class="space-y-2 text-sm text-muted-foreground">
+              <li class="flex items-start gap-2">
+                <span class="text-primary">•</span>
+                <span>Switch to dark mode using the theme toggle</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-primary">•</span>
+                <span>Navigate to the block in full screen</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-primary">•</span>
+                <span>Capture a high-quality screenshot</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-primary">•</span>
+                <span>Save as <code class="text-xs bg-muted px-1 py-0.5 rounded">apps/web/public/blocks/my-block-01/dark.png</code></span>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="rounded-lg border bg-muted/50 p-4">
+          <h4 class="font-semibold text-sm mb-3">Image Specifications</h4>
+          <div class="grid gap-3 text-sm">
+            <div class="flex items-start gap-3">
+              <span class="font-medium min-w-[100px]">Format:</span>
+              <span class="text-muted-foreground">PNG for best quality</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="font-medium min-w-[100px]">Resolution:</span>
+              <span class="text-muted-foreground">Recommended 1920x1080 or higher</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="font-medium min-w-[100px]">Content:</span>
+              <span class="text-muted-foreground">Capture the complete block with all elements visible</span>
+            </div>
+            <div class="flex items-start gap-3">
+              <span class="font-medium min-w-[100px]">Consistency:</span>
+              <span class="text-muted-foreground">Maintain the same viewport size and angle for all blocks</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Block Categories Section -->
+  <section scrollSpyItem="categories" id="categories" class="mt-12 space-y-6">
+    <h2 class="text-2xl font-bold tracking-tight">Block Categories</h2>
+    <p class="text-muted-foreground">Available categories for organizing blocks:</p>
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      @for (category of categories; track category.id) {
+      <div class="rounded-lg border bg-card p-4 hover:bg-accent transition-colors">
+        <h3 class="font-semibold text-sm">{{ category.name }}</h3>
+        <p class="text-xs text-muted-foreground mt-1">{{ category.description }}</p>
+      </div>
+      }
+    </div>
+  </section>
+
+  <!-- Best Practices Section -->
+  <section scrollSpyItem="best-practices" id="best-practices" class="mt-12 space-y-6">
+    <h2 class="text-2xl font-bold tracking-tight">Best Practices</h2>
+    <div class="grid gap-4 md:grid-cols-2">
+      @for (practice of bestPractices; track practice.title) {
+      <div class="rounded-lg border bg-card p-4">
+        <div class="flex items-start gap-3">
+          <div class="flex h-6 w-6 items-center justify-center rounded-full bg-green-500/10 text-green-600 dark:text-green-400 text-xs font-semibold">✓</div>
+          <div class="flex-1">
+            <h3 class="font-semibold text-sm">{{ practice.title }}</h3>
+            <p class="text-xs text-muted-foreground mt-1">{{ practice.description }}</p>
+          </div>
+        </div>
+      </div>
+      }
+    </div>
+  </section>
+
+  <!-- Testing Section -->
+  <section scrollSpyItem="testing" id="testing" class="mt-12 space-y-6">
+    <h2 class="text-2xl font-bold tracking-tight">Testing</h2>
+    <z-markdown-renderer markdownUrl="/documentation/blocks/testing.md"></z-markdown-renderer>
+  </section>
+
+  <!-- Technologies Section -->
+  <section scrollSpyItem="technologies" id="technologies" class="mt-12 space-y-6">
+    <h2 class="text-2xl font-bold tracking-tight">Technologies</h2>
+    <div class="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+      @for (tech of technologies; track tech.name) {
+      <div class="rounded-lg border bg-card p-4">
+        <h3 class="font-semibold">{{ tech.name }}</h3>
+        <p class="text-sm text-muted-foreground mt-1">{{ tech.description }}</p>
+      </div>
+      }
+    </div>
+  </section>
+</z-content>

@@ -5,11 +5,11 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
 
-import { CategoryTabsComponent, CategoryTab } from '../../../shared/components/category-tabs/category-tabs.component';
-import { DarkModeService } from '../../../shared/services/darkmode.service';
-import { SeoService } from '../../../shared/services/seo.service';
-import { BlockContainerComponent, type Block } from '../../components/block-container/block-container.component';
-import { BlocksService, type BlockCategory } from '../../services/blocks.service';
+import { BlockContainerComponent, type Block } from '@docs/domain/components/block-container/block-container.component';
+import { BlocksService, type BlockCategory } from '@docs/domain/services/blocks.service';
+import { CategoryTabsComponent, CategoryTab } from '@docs/shared/components/category-tabs/category-tabs.component';
+import { DarkModeService } from '@docs/shared/services/darkmode.service';
+import { SeoService } from '@docs/shared/services/seo.service';
 
 @Component({
   selector: 'z-blocks',
