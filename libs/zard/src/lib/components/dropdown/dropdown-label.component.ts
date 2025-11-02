@@ -1,9 +1,9 @@
-import type { ClassValue } from 'clsx';
-
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { dropdownLabelVariants } from './dropdown.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',

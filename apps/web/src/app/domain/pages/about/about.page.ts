@@ -1,18 +1,20 @@
-import { SeoService } from '@zard/shared/services/seo.service';
-import { Component, inject, type OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Component, inject, type OnInit } from '@angular/core';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { SeoService } from '@zard/shared/services/seo.service';
+
+import { Contributor, GithubService } from '../../../shared/services/github.service';
 import { ContributorsLoadingComponent } from '../../components/contributors/contributors-loading.component';
+import { ContributorsComponent } from '../../components/contributors/contributors.component';
+import { CreditCardComponent } from '../../components/credit-card/credit-card.component';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { FoundersLoadingComponent } from '../../components/founders/founders-loading.component';
 import { FoundersComponent, FounderData } from '../../components/founders/founders.component';
-import { ContributorsComponent } from '../../components/contributors/contributors.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { CreditCardComponent } from '../../components/credit-card/credit-card.component';
-import { Contributor, GithubService } from '../../../shared/services/github.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
@@ -39,7 +41,12 @@ export class AboutPage implements OnInit {
   activeAnchor?: string;
 
   ngOnInit(): void {
-    this.seoService.setDocsSeo('About', 'Learn more about ZardUI, our team, and the amazing contributors who make this project possible.', '/docs/about', 'og-credits.jpg');
+    this.seoService.setDocsSeo(
+      'About',
+      'Learn more about ZardUI, our team, and the amazing contributors who make this project possible.',
+      '/docs/about',
+      'og-credits.jpg',
+    );
   }
   contributors$: Observable<Contributor[]> = this.githubService.getContributors();
   founders$: Observable<FounderData[]>;
@@ -71,15 +78,18 @@ export class AboutPage implements OnInit {
     },
     {
       title: 'TailwindCSS',
-      description: "The utility-first CSS framework that powers ZardUI's styling system and enables rapid customization.",
+      description:
+        "The utility-first CSS framework that powers ZardUI's styling system and enables rapid customization.",
     },
     {
       title: 'NG-ZORRO',
-      description: 'An enterprise-class Angular UI library that inspired ZardUI with its exceptional developer experience and comprehensive component patterns.',
+      description:
+        'An enterprise-class Angular UI library that inspired ZardUI with its exceptional developer experience and comprehensive component patterns.',
     },
     {
       title: 'Angular',
-      description: "The powerful framework that provides the foundation for ZardUI's reactive and performant components.",
+      description:
+        "The powerful framework that provides the foundation for ZardUI's reactive and performant components.",
     },
     {
       title: 'Nx',
@@ -87,15 +97,19 @@ export class AboutPage implements OnInit {
     },
     {
       title: 'CVA',
-      description: 'Class Variance Authority provides type-safe styling variants that make ZardUI components highly customizable.',
+      description:
+        'Class Variance Authority provides type-safe styling variants that make ZardUI components highly customizable.',
     },
     {
       title: 'Open Source Community',
-      description: 'The amazing developers worldwide who contribute ideas, feedback, and improvements to make ZardUI better.',
+      description:
+        'The amazing developers worldwide who contribute ideas, feedback, and improvements to make ZardUI better.',
     },
   ];
 
-  filteredContributors$ = this.contributors$.pipe(map(contributors => contributors.filter(contributor => !this.isFounder(contributor.login))));
+  filteredContributors$ = this.contributors$.pipe(
+    map(contributors => contributors.filter(contributor => !this.isFounder(contributor.login))),
+  );
 
   constructor() {
     this.founders$ = this.contributors$.pipe(

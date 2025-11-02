@@ -50,7 +50,13 @@ describe('TableComponents', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [ZardTableComponent, TestStripedTableComponent, TestBorderedTableComponent, TestCompactTableComponent, TestComfortableTableComponent],
+        imports: [
+          ZardTableComponent,
+          TestStripedTableComponent,
+          TestBorderedTableComponent,
+          TestCompactTableComponent,
+          TestComfortableTableComponent,
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(ZardTableComponent);

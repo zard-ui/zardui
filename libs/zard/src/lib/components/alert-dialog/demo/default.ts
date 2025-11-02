@@ -1,6 +1,6 @@
-import { ZardButtonComponent } from '../../button/button.component';
 import { Component, inject } from '@angular/core';
 
+import { ZardButtonComponent } from '../../button/button.component';
 import { ZardAlertDialogService } from '../alert-dialog.service';
 
 @Component({
@@ -15,7 +15,8 @@ export class ZardDemoAlertDialogDefaultComponent {
   showDialog() {
     this.alertDialogService.confirm({
       zTitle: 'Are you absolutely sure?',
-      zDescription: 'This action cannot be undone. This will permanently delete your account and remove your data from our servers.',
+      zDescription:
+        'This action cannot be undone. This will permanently delete your account and remove your data from our servers.',
       zOkText: 'Continue',
       zCancelText: 'Cancel',
     });

@@ -1,5 +1,5 @@
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardToggleGroupComponent, ZardToggleGroupItem } from './toggle-group.component';
 
@@ -168,7 +168,9 @@ describe('ZardToggleGroupComponent', () => {
   });
 
   it('should render both icon and label when provided', () => {
-    const itemsWithIconsAndLabels: ZardToggleGroupItem[] = [{ value: 'bold', icon: 'bold', label: 'Bold', ariaLabel: 'Toggle bold' }];
+    const itemsWithIconsAndLabels: ZardToggleGroupItem[] = [
+      { value: 'bold', icon: 'bold', label: 'Bold', ariaLabel: 'Toggle bold' },
+    ];
 
     fixture.componentRef.setInput('items', itemsWithIconsAndLabels);
     fixture.detectChanges();

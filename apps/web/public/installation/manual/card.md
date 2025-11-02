@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="card.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -52,8 +50,6 @@ export class ZardCardComponent {
 
 ```
 
-
-
 ```angular-ts title="card.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -74,10 +70,7 @@ export type ZardCardBodyVariants = VariantProps<typeof cardBodyVariants>;
 
 ```
 
-
-
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export * from './card.component';
 
 ```
-

@@ -1,22 +1,38 @@
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { SeoService } from '@zard/shared/services/seo.service';
 import { Component, inject, type OnInit } from '@angular/core';
 
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
-import { OpenSourceSection } from './sections/open-source.component';
-import { WhyZardUISection } from './sections/why-zardui.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { SeoService } from '@zard/shared/services/seo.service';
+
 import { AIReadySection } from './sections/ai-ready.component';
-import { SupportSection } from './sections/support.component';
 import { CLISection } from './sections/cli.component';
+import { OpenSourceSection } from './sections/open-source.component';
+import { SupportSection } from './sections/support.component';
+import { WhyZardUISection } from './sections/why-zardui.component';
+import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-introduction',
   standalone: true,
-  imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, WhyZardUISection, CLISection, AIReadySection, OpenSourceSection, SupportSection],
+  imports: [
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    WhyZardUISection,
+    CLISection,
+    AIReadySection,
+    OpenSourceSection,
+    SupportSection,
+  ],
   template: `
-    <z-content [title]="title" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+    <z-content
+      [title]="title"
+      [navigationConfig]="navigationConfig"
+      [activeAnchor]="activeAnchor"
+      scrollSpy
+      (scrollSpyChange)="activeAnchor = $event"
+    >
       <z-doc-heading
         title="Introduction"
         description="Built for Angular developers who value both aesthetics and functionality. ZardUI bridges the gap between beautiful design and practical implementation."

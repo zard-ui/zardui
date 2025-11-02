@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="toggle.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, forwardRef, HostListener, ViewEncapsulation, signal, computed, input, output, linkedSignal } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -103,8 +101,6 @@ export class ZardToggleComponent implements ControlValueAccessor {
 
 ```
 
-
-
 ```angular-ts title="toggle.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -131,4 +127,3 @@ export const toggleVariants = cva(
 export type ZardToggleVariants = VariantProps<typeof toggleVariants>;
 
 ```
-

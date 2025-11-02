@@ -11,7 +11,7 @@
 ### ✨ Features
 
 - **cli:** add @cli path alias for cleaner imports
-  - Configured TypeScript path mapping with @cli/* alias
+  - Configured TypeScript path mapping with @cli/\* alias
   - Added tsc-alias to build pipeline for alias resolution
   - Updated all imports to use new path alias
 
@@ -279,6 +279,7 @@ Based on recent commits, ZardUI has received several significant improvements:
 Starting from the next release, this changelog will be automatically generated with detailed commit information, contributors, and links to pull requests.
 
 Each release will include:
+
 - Version number and date
 - Categorized changes (Features, Bug Fixes, etc.)
 - Commit references and PR links

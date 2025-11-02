@@ -30,7 +30,14 @@ export default [
         'warn',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$', '^@zard/domain/.*$', '^@zard/env/.*$', '^@zard/shared/.*$', '^@zard/widget/.*$', '^@cli/.*$'],
+          allow: [
+            '^.*/eslint(\\.base)?\\.config\\.[cm]?js$',
+            '^@zard/domain/.*$',
+            '^@zard/env/.*$',
+            '^@zard/shared/.*$',
+            '^@zard/widget/.*$',
+            '^@cli/.*$',
+          ],
           depConstraints: [
             {
               sourceTag: '*',
@@ -84,6 +91,8 @@ export default [
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts', '**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
     // Override or add rules here
-    rules: {},
+    rules: {
+      'max-len': ['error', { code: 120, ignoreStrings: true, ignoreTemplateLiterals: true, ignoreUrls: true }],
+    },
   },
 ];

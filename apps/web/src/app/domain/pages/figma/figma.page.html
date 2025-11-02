@@ -1,14 +1,25 @@
-<z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
-  <z-doc-heading title="Figma" description="Every component recreated in Figma. With customizable props, typography and icons." scrollSpyItem="overview" id="overview">
+<z-content
+  [navigationConfig]="navigationConfig"
+  [activeAnchor]="activeAnchor"
+  scrollSpy
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Figma"
+    description="Every component recreated in Figma. With customizable props, typography and icons."
+    scrollSpyItem="overview"
+    id="overview"
+  >
   </z-doc-heading>
 
   <z-callout variant="info" title="Important Note" icon="!">
-    ZardUI design is completely based on shadcn/ui and now we don't have our own style guide in Figma, but this is planned for the future. For now you can use the resources created
-    by the community for shadcn/ui listed below.
+    ZardUI design is completely based on shadcn/ui and now we don't have our own style guide in Figma, but this is
+    planned for the future. For now you can use the resources created by the community for shadcn/ui listed below.
   </z-callout>
 
   <z-callout variant="muted" title="Community Contributions" icon="?">
-    The Figma files listed below are contributed by the community. If you have any questions or feedback, please reach out to the respective Figma file maintainers.
+    The Figma files listed below are contributed by the community. If you have any questions or feedback, please reach
+    out to the respective Figma file maintainers.
   </z-callout>
 
   <!-- Paid Resources Section -->
@@ -19,7 +30,13 @@
 
     <div class="flex flex-col gap-6">
       @for (resource of paidResources; track resource.title) {
-      <z-resource-card [title]="resource.title" [author]="resource.author" [description]="resource.description" [badges]="resource.badges" [links]="resource.links">
+      <z-resource-card
+        [title]="resource.title"
+        [author]="resource.author"
+        [description]="resource.description"
+        [badges]="resource.badges"
+        [links]="resource.links"
+      >
       </z-resource-card>
       }
     </div>
@@ -33,7 +50,13 @@
 
     <div class="flex flex-col gap-6">
       @for (resource of freeResources; track resource.title) {
-      <z-resource-card [title]="resource.title" [author]="resource.author" [description]="resource.description" [badges]="resource.badges" [links]="resource.links">
+      <z-resource-card
+        [title]="resource.title"
+        [author]="resource.author"
+        [description]="resource.description"
+        [badges]="resource.badges"
+        [links]="resource.links"
+      >
       </z-resource-card>
       }
     </div>
@@ -42,8 +65,8 @@
   <!-- Future Plans Section -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="future" id="future">
     <z-callout variant="gradient" title="ZardUI Design System - Coming Soon" icon="🎨">
-      We're working on creating our own comprehensive Figma design system specifically for ZardUI. This will include all components, patterns, and guidelines tailored to the
-      Angular ecosystem. Stay tuned for updates!
+      We're working on creating our own comprehensive Figma design system specifically for ZardUI. This will include all
+      components, patterns, and guidelines tailored to the Angular ecosystem. Stay tuned for updates!
     </z-callout>
   </section>
 </z-content>

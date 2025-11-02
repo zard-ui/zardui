@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="progress-bar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -70,8 +68,6 @@ export class ZardProgressBarComponent {
 
 ```
 
-
-
 ```angular-ts title="progress-bar.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -129,4 +125,3 @@ export const progressBarVariants = cva('h-full transition-all', {
 export type ZardProgressBarVariants = VariantProps<typeof progressBarVariants>;
 
 ```
-

@@ -1,6 +1,7 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
+
 import { AiAssistComponent } from '@zard/domain/components/ai-assist/ai-assist.component';
 
 import { ComponentData, COMPONENTS } from '../../../shared/constants/components.constant';
@@ -19,7 +20,15 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent, AiAssistComponent],
+  imports: [
+    DocContentComponent,
+    StepsComponent,
+    ZardCodeBoxComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    MarkdownRendererComponent,
+    AiAssistComponent,
+  ],
 })
 export class ComponentPage {
   private readonly activatedRoute = inject(ActivatedRoute);

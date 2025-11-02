@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="command.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -263,8 +261,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
 ```
 
-
-
 ```angular-ts title="command.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -340,8 +336,6 @@ export type ZardCommandItemVariants = VariantProps<typeof commandItemVariants>;
 
 ```
 
-
-
 ```angular-ts title="command-divider.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
@@ -385,8 +379,6 @@ export class ZardCommandDividerComponent {
 
 ```
 
-
-
 ```angular-ts title="command-empty.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
@@ -429,8 +421,6 @@ export class ZardCommandEmptyComponent {
 }
 
 ```
-
-
 
 ```angular-ts title="command-input.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
@@ -602,8 +592,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
 ```
 
-
-
 ```angular-ts title="command-list.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -631,8 +619,6 @@ export class ZardCommandListComponent {
 }
 
 ```
-
-
 
 ```angular-ts title="command-option-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
@@ -696,8 +682,6 @@ export class ZardCommandOptionGroupComponent implements AfterContentInit {
 }
 
 ```
-
-
 
 ```angular-ts title="command-option.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
@@ -809,8 +793,6 @@ export class ZardCommandOptionComponent {
 
 ```
 
-
-
 ```angular-ts title="command.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
@@ -840,4 +822,3 @@ const COMMAND_COMPONENTS = [
 export class ZardCommandModule {}
 
 ```
-

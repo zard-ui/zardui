@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="input.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -32,8 +30,6 @@ export class ZardInputDirective {
 }
 
 ```
-
-
 
 ```angular-ts title="input.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -71,4 +67,3 @@ export const inputVariants = cva('w-full', {
 export type ZardInputVariants = VariantProps<typeof inputVariants>;
 
 ```
-

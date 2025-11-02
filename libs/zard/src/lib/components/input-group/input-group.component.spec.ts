@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardInputGroupComponent } from './input-group.component';
 import { ZardInputDirective } from '../input/input.directive';

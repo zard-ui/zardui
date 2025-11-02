@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { generateId } from '../../../shared/utils/utils';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
-import { generateId } from '../../../shared/utils/utils';
 import { ZardFormModule } from '../form.module';
 
 @Component({
@@ -13,11 +13,18 @@ import { ZardFormModule } from '../form.module';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <form class="space-y-6 max-w-sm">
+    <form class="max-w-sm space-y-6">
       <z-form-field>
         <label z-form-label zRequired [for]="idFullName">Full Name</label>
         <z-form-control>
-          <input z-input type="text" [id]="idFullName" placeholder="Enter your full name" [(ngModel)]="fullName" name="fullName" />
+          <input
+            z-input
+            type="text"
+            [id]="idFullName"
+            placeholder="Enter your full name"
+            [(ngModel)]="fullName"
+            name="fullName"
+          />
         </z-form-control>
         <z-form-message>This is your display name.</z-form-message>
       </z-form-field>
@@ -33,7 +40,14 @@ import { ZardFormModule } from '../form.module';
       <z-form-field>
         <label z-form-label [for]="idBio">Bio</label>
         <z-form-control>
-          <textarea z-input [id]="idBio" placeholder="Tell us about yourself" rows="3" [(ngModel)]="bio" name="bio"></textarea>
+          <textarea
+            z-input
+            [id]="idBio"
+            placeholder="Tell us about yourself"
+            rows="3"
+            [(ngModel)]="bio"
+            name="bio"
+          ></textarea>
         </z-form-control>
         <z-form-message>Optional: Brief description about yourself.</z-form-message>
       </z-form-field>

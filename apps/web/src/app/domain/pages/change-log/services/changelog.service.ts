@@ -1,7 +1,8 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+
 import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export interface ChangelogEntry {
   date: string;
@@ -53,7 +54,16 @@ export class ChangelogService {
   }
 
   private async getAvailableFiles(): Promise<string[]> {
-    const knownFiles = ['03-2025.md', '04-2025.md', '05-2025.md', '06-2025.md', '07-2025.md', '08-2025.md', '09-2025.md', '10-2025.md'];
+    const knownFiles = [
+      '03-2025.md',
+      '04-2025.md',
+      '05-2025.md',
+      '06-2025.md',
+      '07-2025.md',
+      '08-2025.md',
+      '09-2025.md',
+      '10-2025.md',
+    ];
 
     const foundFiles: string[] = [];
 

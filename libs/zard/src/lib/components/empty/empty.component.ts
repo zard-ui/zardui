@@ -1,8 +1,23 @@
-import { ChangeDetectionStrategy, Component, computed, input, type TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  type TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
-import { emptyActionsVariants, emptyDescriptionVariants, emptyHeaderVariants, emptyIconVariants, emptyImageVariants, emptyTitleVariants, emptyVariants } from './empty.variants';
+import {
+  emptyActionsVariants,
+  emptyDescriptionVariants,
+  emptyHeaderVariants,
+  emptyIconVariants,
+  emptyImageVariants,
+  emptyTitleVariants,
+  emptyVariants,
+} from './empty.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';

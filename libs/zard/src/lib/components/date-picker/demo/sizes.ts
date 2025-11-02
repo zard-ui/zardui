@@ -11,17 +11,32 @@ import { ZardDatePickerComponent } from '../date-picker.component';
     <div class="flex flex-col gap-4">
       <div class="space-y-2">
         <h4 class="text-sm font-medium">Small</h4>
-        <z-date-picker zSize="sm" [value]="selectedDateSm()" placeholder="Pick a date" (dateChange)="onDateChangeSm($event)" />
+        <z-date-picker
+          zSize="sm"
+          [value]="selectedDateSm()"
+          placeholder="Pick a date"
+          (dateChange)="onDateChangeSm($event)"
+        />
       </div>
 
       <div class="space-y-2">
         <h4 class="text-sm font-medium">Default</h4>
-        <z-date-picker zSize="default" [value]="selectedDateDefault()" placeholder="Pick a date" (dateChange)="onDateChangeDefault($event)" />
+        <z-date-picker
+          zSize="default"
+          [value]="selectedDateDefault()"
+          placeholder="Pick a date"
+          (dateChange)="onDateChangeDefault($event)"
+        />
       </div>
 
       <div class="space-y-2">
         <h4 class="text-sm font-medium">Large</h4>
-        <z-date-picker zSize="lg" [value]="selectedDateLg()" placeholder="Pick a date" (dateChange)="onDateChangeLg($event)" />
+        <z-date-picker
+          zSize="lg"
+          [value]="selectedDateLg()"
+          placeholder="Pick a date"
+          (dateChange)="onDateChangeLg($event)"
+        />
       </div>
     </div>
   `,

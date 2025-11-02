@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="slider.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
@@ -393,8 +391,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
 ```
 
-
-
 ```angular-ts title="slider.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -472,4 +468,3 @@ export const sliderOrientationVariants = cva('absolute', {
 export type SliderOrientationVariants = VariantProps<typeof sliderOrientationVariants>;
 
 ```
-

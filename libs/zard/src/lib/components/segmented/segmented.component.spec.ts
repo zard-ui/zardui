@@ -4,7 +4,14 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SegmentedOption, ZardSegmentedComponent, ZardSegmentedItemComponent } from './segmented.component';
 
 @Component({
-  template: ` <z-segmented [zOptions]="options" [zDefaultValue]="defaultValue" [zDisabled]="disabled" (zChange)="onSelectionChange($event)"></z-segmented> `,
+  template: `
+    <z-segmented
+      [zOptions]="options"
+      [zDefaultValue]="defaultValue"
+      [zDisabled]="disabled"
+      (zChange)="onSelectionChange($event)"
+    ></z-segmented>
+  `,
   standalone: true,
   imports: [ZardSegmentedComponent],
 })

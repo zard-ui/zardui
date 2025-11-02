@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="popover.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { merge, Subject, takeUntil } from 'rxjs';
 
@@ -372,8 +370,6 @@ export class ZardPopoverComponent {
 
 ```
 
-
-
 ```angular-ts title="popover.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -384,4 +380,3 @@ export const popoverVariants = cva(
 export type ZardPopoverVariants = VariantProps<typeof popoverVariants>;
 
 ```
-

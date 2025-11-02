@@ -1,13 +1,12 @@
+import { Config } from '@cli/utils/config.js';
+import { logger } from '@cli/utils/logger.js';
+import { getAvailableThemes, getThemeDisplayName } from '@cli/utils/theme-selector.js';
 import chalk from 'chalk';
 import { existsSync } from 'fs';
 import { readFile } from 'node:fs/promises';
 import * as path from 'path';
 import * as prompts from 'prompts';
 import { z } from 'zod';
-
-import { Config } from '@cli/utils/config.js';
-import { logger } from '@cli/utils/logger.js';
-import { getAvailableThemes, getThemeDisplayName } from '@cli/utils/theme-selector.js';
 
 export const configSchema = z.object({
   style: z.enum(['css']),
@@ -23,7 +22,11 @@ export const configSchema = z.object({
   }),
 });
 
-export async function promptForConfig(cwd: string, projectInfo: any, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun'): Promise<Config> {
+export async function promptForConfig(
+  cwd: string,
+  projectInfo: any,
+  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
+): Promise<Config> {
   const highlight = (text: string) => chalk.cyan(text);
 
   const options = await prompts([

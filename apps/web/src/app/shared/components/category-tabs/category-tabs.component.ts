@@ -1,6 +1,7 @@
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { RouterLink, RouterLinkActive } from '@angular/router';
 import { Component, input } from '@angular/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+
+import { ZardButtonComponent } from '@zard/components/button/button.component';
 
 export interface CategoryTab {
   label: string;

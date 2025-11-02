@@ -1,15 +1,26 @@
 @if(installGuide) {
 <z-content [title]="installGuide.title" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor">
-  <z-doc-heading [title]="installGuide.title" [description]="installGuide.description" scrollSpyItem="overview" id="overview"> </z-doc-heading>
+  <z-doc-heading
+    [title]="installGuide.title"
+    [description]="installGuide.description"
+    scrollSpyItem="overview"
+    id="overview"
+  >
+  </z-doc-heading>
   <main class="overflow-hidden transition-all duration-200 ease-in-out">
-    <nav class="flex gap-4 mb-4">
+    <nav class="mb-4 flex gap-4">
       @if(installGuide.cli.length > 0) {
-      <button class="text-base cursor-pointer" (click)="activeTab.set('cli')" [class.font-semibold]="activeTab() === 'cli'" [class.text-foreground]="activeTab() === 'cli'">
+      <button
+        class="cursor-pointer text-base"
+        (click)="activeTab.set('cli')"
+        [class.font-semibold]="activeTab() === 'cli'"
+        [class.text-foreground]="activeTab() === 'cli'"
+      >
         CLI
       </button>
       } @if(installGuide.manual.length > 0) {
       <button
-        class="text-base cursor-pointer"
+        class="cursor-pointer text-base"
         (click)="activeTab.set('manual')"
         [class.font-semibold]="activeTab() === 'manual'"
         [class.text-foreground]="activeTab() === 'manual'"
@@ -18,7 +29,10 @@
       </button>
       }
     </nav>
-    <section class="transition-all" [class]="activeTab() === 'manual' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']">
+    <section
+      class="transition-all"
+      [class]="activeTab() === 'manual' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']"
+    >
       <z-steps [steps]="installGuide.manual"></z-steps>
     </section>
     <section class="transition-all" [class]="activeTab() === 'cli' ? 'translate-x-0' : ['translate-x-full', 'sr-only']">

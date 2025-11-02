@@ -21,13 +21,13 @@ runConfig:
 # Custom build configuration for Nx monorepo
 buildConfig:
   # Build command - use Nx to build the web app
-  buildCommand: "npm run build"
+  buildCommand: 'npm run build'
 
   # Output directory containing the built SSR application
-  outputDirectory: "dist/apps/web"
+  outputDirectory: 'dist/apps/web'
 
   # Server entry point
-  serverEntryPoint: "server/server.mjs"
+  serverEntryPoint: 'server/server.mjs'
 
 # Environment variables
 env:

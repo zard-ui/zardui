@@ -3,7 +3,11 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 
-import { ZardBreadcrumbComponent, ZardBreadcrumbEllipsisComponent, ZardBreadcrumbItemComponent } from './breadcrumb.component';
+import {
+  ZardBreadcrumbComponent,
+  ZardBreadcrumbEllipsisComponent,
+  ZardBreadcrumbItemComponent,
+} from './breadcrumb.component';
 
 @Component({
   selector: 'test-host-component',
@@ -175,7 +179,9 @@ describe('BreadcrumbComponent - Custom Separator', () => {
     component.separator = component.customTemplate;
     fixture.detectChanges();
 
-    const separators = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] .custom-separator'));
+    const separators = fixture.debugElement.queryAll(
+      By.css('li[aria-hidden="true"][role="presentation"] .custom-separator'),
+    );
     expect(separators.length).toBe(2); // 3 items = 2 separators
     expect(separators[0].nativeElement.textContent.trim()).toBe('→');
   });
@@ -193,13 +199,17 @@ describe('BreadcrumbComponent - Custom Separator', () => {
     component.separator = '/';
     fixture.detectChanges();
 
-    let separatorText = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"]')).nativeElement.textContent.trim();
+    let separatorText = fixture.debugElement
+      .query(By.css('li[aria-hidden="true"][role="presentation"]'))
+      .nativeElement.textContent.trim();
     expect(separatorText).toBe('/');
 
     component.separator = '>';
     fixture.detectChanges();
 
-    separatorText = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"]')).nativeElement.textContent.trim();
+    separatorText = fixture.debugElement
+      .query(By.css('li[aria-hidden="true"][role="presentation"]'))
+      .nativeElement.textContent.trim();
     expect(separatorText).toBe('>');
   });
 });

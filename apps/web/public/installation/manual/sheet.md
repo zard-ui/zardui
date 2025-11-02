@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="sheet.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { OverlayModule } from '@angular/cdk/overlay';
 import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
@@ -182,8 +180,6 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
 
 ```
 
-
-
 ```angular-ts title="sheet.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -245,8 +241,6 @@ export const sheetVariants = cva(
 export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 
 ```
-
-
 
 ```angular-ts title="sheet-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
@@ -349,8 +343,6 @@ export class ZardSheetRef<T = any, R = any, U = any> {
 
 ```
 
-
-
 ```angular-ts title="sheet.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
@@ -376,8 +368,6 @@ export class ZardBreadcrumbModule {}
 export class ZardSheetModule {}
 
 ```
-
-
 
 ```angular-ts title="sheet.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
@@ -478,4 +468,3 @@ export class ZardSheetService {
 }
 
 ```
-

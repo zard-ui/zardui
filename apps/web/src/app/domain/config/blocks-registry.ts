@@ -1,5 +1,6 @@
-import type { BlockCategory } from '../services/blocks.service';
 import { authentication01Block } from '@blocks';
+
+import type { BlockCategory } from '../services/blocks.service';
 
 /**
  * Registry of all blocks organized by category

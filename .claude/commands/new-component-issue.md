@@ -26,6 +26,7 @@ Before creating the issue, understand our principles:
 Research existing implementations from shadcn/ui and ng-zorro:
 
 ### 1. shadcn/ui (Visual Reference)
+
 ```
 WebFetch: https://ui.shadcn.com/docs/components/$ARGUMENTS
 Prompt: "Extract the component description, main features, usage examples, and visual patterns.
@@ -33,6 +34,7 @@ Prompt: "Extract the component description, main features, usage examples, and v
 ```
 
 ### 2. ng-zorro (API Reference)
+
 ```
 WebFetch: https://ng.ant.design/components/$ARGUMENTS/en
 Prompt: "Extract the Angular component API (inputs/outputs), usage patterns, and any special
@@ -40,6 +42,7 @@ Prompt: "Extract the Angular component API (inputs/outputs), usage patterns, and
 ```
 
 ### 3. Best Practices
+
 ```
 WebSearch: "$ARGUMENTS component accessibility ARIA best practices 2024"
 ```
@@ -57,8 +60,9 @@ Based on references, determine:
 5. **State Management**: Does it need `zDisabled`? `zLoading`? Form integration?
 
 **Ask yourself**:
+
 - Can this be ONE component? (Prefer yes)
-- Can we use native HTML attributes? (disabled, aria-*, etc.)
+- Can we use native HTML attributes? (disabled, aria-\*, etc.)
 - Do we really need all these props? (Remove non-essential)
 
 ---
@@ -67,7 +71,7 @@ Based on references, determine:
 
 Use this template in `/issues/$ARGUMENTS.md`:
 
-```markdown
+````markdown
 # 🚀 New Component: [Component Name]
 
 ## 📖 Description
@@ -75,6 +79,7 @@ Use this template in `/issues/$ARGUMENTS.md`:
 [2-3 sentences describing the component and its main use cases]
 
 **Use cases**:
+
 - [Use case 1]
 - [Use case 2]
 - [Use case 3]
@@ -90,12 +95,12 @@ Use this template in `/issues/$ARGUMENTS.md`:
 
 ### **z-$ARGUMENTS (Component)**
 
-| Name            | Type                              | Required | Description                          |
-| --------------- | --------------------------------- | -------- | ------------------------------------ |
-| `zType`         | `"default" \| "variant"`          | No       | Visual variant (if applicable)       |
-| `zSize`         | `"sm" \| "default" \| "lg"`       | No       | Size variant (if applicable)         |
-| [essential]     | [type]                            | [yes/no] | [clear description]                  |
-| `class`         | `ClassValue`                      | No       | Custom CSS classes                   |
+| Name        | Type                        | Required | Description                    |
+| ----------- | --------------------------- | -------- | ------------------------------ |
+| `zType`     | `"default" \| "variant"`    | No       | Visual variant (if applicable) |
+| `zSize`     | `"sm" \| "default" \| "lg"` | No       | Size variant (if applicable)   |
+| [essential] | [type]                      | [yes/no] | [clear description]            |
+| `class`     | `ClassValue`                | No       | Custom CSS classes             |
 
 **Note**: Keep API minimal (5-7 props max). Use `string | TemplateRef<void>` for flexible content.
 
@@ -103,29 +108,26 @@ Use this template in `/issues/$ARGUMENTS.md`:
 
 ```html
 <!-- Simple case (most common) -->
-<z-$ARGUMENTS [prop]="value">
-  Content
-</z-$ARGUMENTS>
+<z-$ARGUMENTS [prop]="value"> Content </z-$ARGUMENTS>
 
 <!-- With customization -->
-<z-$ARGUMENTS [prop]="value" [template]="customTpl">
-  Content
-</z-$ARGUMENTS>
-<ng-template #customTpl>
-  Custom content
-</ng-template>
+<z-$ARGUMENTS [prop]="value" [template]="customTpl"> Content </z-$ARGUMENTS>
+<ng-template #customTpl> Custom content </ng-template>
 
 <!-- Advanced case -->
 [Show complex but possible usage]
 ```
+````
 
 ## 🎯 Design Decisions
 
 **Why [decision]?**
+
 - [Reason 1]
 - [Reason 2]
 
 **Why NOT [alternative]?**
+
 - [Clear reasoning against alternatives]
 
 ## ✅ Acceptance Criteria
@@ -142,6 +144,7 @@ Use this template in `/issues/$ARGUMENTS.md`:
 - [ ] Documentation
 
 **Labels:** enhancement
+
 ```
 
 ---
@@ -186,3 +189,4 @@ Before finalizing, verify:
 5. **Type-safe** - TypeScript all the way
 
 When in doubt, look at **Card**, **Empty**, or **Button** components as reference!
+```

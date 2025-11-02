@@ -10,12 +10,12 @@ import { ZardSegmentedComponent } from '../segmented.component';
   template: `
     <div class="space-y-4">
       <div>
-        <label class="block text-sm font-medium mb-2">With disabled options</label>
+        <label class="mb-2 block text-sm font-medium">With disabled options</label>
         <z-segmented [zOptions]="optionsWithDisabled" zDefaultValue="enabled1"> </z-segmented>
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-2">Entire component disabled</label>
+        <label class="mb-2 block text-sm font-medium">Entire component disabled</label>
         <z-segmented [zOptions]="options" zDefaultValue="tab1" [zDisabled]="true"> </z-segmented>
       </div>
     </div>

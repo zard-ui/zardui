@@ -1,10 +1,9 @@
-import { writeFile, readFile } from 'node:fs/promises';
-import { existsSync } from 'fs';
-import * as commentJson from 'comment-json';
-import * as path from 'path';
-
 import { type Config } from '@cli/utils/config.js';
 import { logger } from '@cli/utils/logger.js';
+import * as commentJson from 'comment-json';
+import { existsSync } from 'fs';
+import { writeFile, readFile } from 'node:fs/promises';
+import * as path from 'path';
 
 export async function updateTsConfig(cwd: string, config: Config): Promise<void> {
   const tsconfigPath = path.join(cwd, 'tsconfig.json');

@@ -16,6 +16,7 @@ This command creates a complete ZardUI component named "$ARGUMENTS" with proper 
 ZardUI follows the **shadcn/ui visual style** with **Angular-first patterns**, inspired by ng-zorro's developer experience:
 
 **Core Principles**:
+
 1. **Simple cases should be simple** - Common usage in 1-3 lines, 5-7 props max
 2. **Complex cases should be possible** - Use `string | TemplateRef<void>` for flexibility
 3. **Angular-first** - Signals, content projection, no React patterns
@@ -24,6 +25,7 @@ ZardUI follows the **shadcn/ui visual style** with **Angular-first patterns**, i
 6. **Type-safe everything** - Full TypeScript support with CVA variants
 
 **Standards**:
+
 - **Intuitive API design** with clear, predictable prop names
 - **Consistent component patterns** across the entire library
 - **Excellent TypeScript support** with full type safety
@@ -463,6 +465,7 @@ export const [name]BodyVariants = cva('body-classes-here');
 ### Required Patterns (Analyzed from 20+ Components)
 
 **Core Architecture:**
+
 - **Standalone components** with `standalone: true`
 - **Signal-based inputs** using `input()` function for modern Angular patterns
 - **Signal-based outputs** using `output<T>()` for type-safe event emission
@@ -474,6 +477,7 @@ export const [name]BodyVariants = cva('body-classes-here');
 - **ClassValue** type from 'clsx' for class input (shadcn/ui pattern)
 
 **Naming Conventions:**
+
 - **Component prefix**: All components start with `Zard` (e.g., `ZardButtonComponent`)
 - **Selector prefix**: All selectors start with `z-` (e.g., `z-button`, `z-[name]`)
 - **Attribute selectors**: For directives use `[z-[name]]` (e.g., `[z-button]`)
@@ -483,6 +487,7 @@ export const [name]BodyVariants = cva('body-classes-here');
 - **Protected members**: Use `protected` for internal computed values and methods
 
 **Input Patterns:**
+
 - Use `input<Type>(defaultValue)` for regular inputs
 - Use `input(false, { transform })` for boolean inputs accepting boolean | string
 - Use `input.required<Type>()` for required inputs
@@ -491,11 +496,13 @@ export const [name]BodyVariants = cva('body-classes-here');
 - Use `numberAttribute`, `booleanAttribute` transforms for HTML attribute coercion
 
 **Output Patterns:**
+
 - Use `output<Type>()` for type-safe event emission
 - Name outputs descriptively: `valueChange`, `openChange`, `selectionChange`
 - Emit from user interactions, not from programmatic changes
 
 **Styling Patterns:**
+
 - **TailwindCSS** with `mergeClasses` utility combining `twMerge` and `clsx`
 - **Computed signals** for dynamic class generation (`protected readonly classes`)
 - **CVA variants** with type exports for full TypeScript support
@@ -504,6 +511,7 @@ export const [name]BodyVariants = cva('body-classes-here');
 - **Data attributes** for state: `[attr.data-state]`, `[attr.data-disabled]`
 
 **Form Controls (CVA Pattern):**
+
 - Implement `ControlValueAccessor` for form integration
 - Inject `ChangeDetectorRef` for manual change detection
 - Use `forwardRef(() => Component)` in providers
@@ -512,6 +520,7 @@ export const [name]BodyVariants = cva('body-classes-here');
 - Use empty function placeholders with ESLint ignore comments
 
 **Accessibility:**
+
 - Use semantic HTML elements when possible
 - Add ARIA attributes: `role`, `aria-label`, `aria-expanded`, `aria-selected`
 - Support keyboard navigation with `@HostListener('keydown')`
@@ -519,6 +528,7 @@ export const [name]BodyVariants = cva('body-classes-here');
 - Include `sr-only` text for screen readers
 
 **Advanced Patterns:**
+
 - **Content Children**: Use `contentChildren(ChildComponent)` for parent-child relationships
 - **View Children**: Use `viewChild.required<ElementRef>('ref')` for template references
 - **String/Template Projection**: Accept `string | TemplateRef<void>` for flexible content
@@ -590,6 +600,7 @@ export class ZardDemo[Name]DefaultComponent {}
 ### Documentation Templates
 
 **overview.md:**
+
 ```markdown
 # [Component Name]
 
@@ -597,6 +608,7 @@ Brief description of what the component does and when to use it.
 ```
 
 **api.md:**
+
 ```markdown
 # API
 
@@ -606,17 +618,17 @@ Brief description of what the component does and when to use it.
 
 To get a customized [name], just pass the following props to the component.
 
-| Property   | Description          | Type                                                              | Default   |
-| ---------- | -------------------- | ----------------------------------------------------------------- | --------- |
-| `zType`    | component type       | `default \| secondary \| destructive \| outline \| ghost`         | `default` |
-| `zSize`    | component size       | `default \| sm \| lg`                                             | `default` |
-| `class`    | custom CSS classes   | `ClassValue`                                                      | `''`      |
+| Property | Description        | Type                                                      | Default   |
+| -------- | ------------------ | --------------------------------------------------------- | --------- |
+| `zType`  | component type     | `default \| secondary \| destructive \| outline \| ghost` | `default` |
+| `zSize`  | component size     | `default \| sm \| lg`                                     | `default` |
+| `class`  | custom CSS classes | `ClassValue`                                              | `''`      |
 
 ## Events
 
-| Event Name     | Description                      | Type                      |
-| -------------- | -------------------------------- | ------------------------- |
-| `valueChange`  | Emitted when value changes       | `EventEmitter<any>`       |
+| Event Name    | Description                | Type                |
+| ------------- | -------------------------- | ------------------- |
+| `valueChange` | Emitted when value changes | `EventEmitter<any>` |
 ```
 
 ### Export Requirements

@@ -1,8 +1,23 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, type TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  output,
+  signal,
+  type TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
-import { sidebarGroupLabelVariants, sidebarGroupVariants, sidebarTriggerVariants, sidebarVariants } from './layout.variants';
+import {
+  sidebarGroupLabelVariants,
+  sidebarGroupVariants,
+  sidebarTriggerVariants,
+  sidebarVariants,
+} from './layout.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';

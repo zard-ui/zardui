@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="table.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -148,8 +146,6 @@ export class ZardTableCaptionComponent {
 
 ```
 
-
-
 ```angular-ts title="table.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -215,8 +211,6 @@ export type ZardTableCaptionVariants = VariantProps<typeof tableCaptionVariants>
 
 ```
 
-
-
 ```angular-ts title="table.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
@@ -247,4 +241,3 @@ const TABLE_COMPONENTS = [
 export class ZardTableModule {}
 
 ```
-

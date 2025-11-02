@@ -15,15 +15,16 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Subject, switchMap, timer } from 'rxjs';
-import type { ClassValue } from 'clsx';
 
-import { ZardIconComponent } from '../icon/icon.component';
+import type { ClassValue } from 'clsx';
+import { Subject, switchMap, timer } from 'rxjs';
+
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-command-input',
@@ -77,7 +78,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
   protected readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onChange = (_: string) => {
     // ControlValueAccessor implementation - intentionally empty
   };
@@ -147,7 +147,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
     this.onTouched = fn;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setDisabledState(_: boolean): void {
     // Implementation if needed for form control disabled state
   }

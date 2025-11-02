@@ -1,6 +1,6 @@
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component, inject } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { ZardCheckboxComponent } from './checkbox.component';
@@ -41,7 +41,9 @@ class TestHostWithNgModelComponent {
     <form [formGroup]="form">
       <span z-checkbox formControlName="termsCheckbox"> Agree to Terms </span>
       <span z-checkbox formControlName="newsletterCheckbox"> Subscribe to Newsletter </span>
-      <span z-checkbox formControlName="privacyCheckbox" [disabled]="form.get('privacyCheckbox')?.disabled"> Accept Privacy Policy </span>
+      <span z-checkbox formControlName="privacyCheckbox" [disabled]="form.get('privacyCheckbox')?.disabled">
+        Accept Privacy Policy
+      </span>
     </form>
   `,
 })

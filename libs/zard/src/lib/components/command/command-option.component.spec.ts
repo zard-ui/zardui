@@ -8,7 +8,17 @@ import { ZardCommandOptionComponent } from './command-option.component';
   selector: 'test-host-component',
   standalone: true,
   imports: [ZardCommandOptionComponent],
-  template: ` <z-command-option zLabel="Test Option" zValue="test-value" zShortcut="⌘K" zIcon="search" [zDisabled]="disabled" variant="default"> </z-command-option> `,
+  template: `
+    <z-command-option
+      zLabel="Test Option"
+      zValue="test-value"
+      zShortcut="⌘K"
+      zIcon="search"
+      [zDisabled]="disabled"
+      variant="default"
+    >
+    </z-command-option>
+  `,
 })
 class TestHostComponent {
   disabled = false;

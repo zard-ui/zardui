@@ -1,6 +1,6 @@
 @import 'tailwindcss';
 
-@plugin "tailwindcss-animate";
+@plugin 'tailwindcss-animate';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -195,7 +195,7 @@
   }
 
   .scroll::-webkit-scrollbar {
-    @apply w-1.5 h-1.5;
+    @apply h-1.5 w-1.5;
   }
 
   .scroll::-webkit-scrollbar-track {

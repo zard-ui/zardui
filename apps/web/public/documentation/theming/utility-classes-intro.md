@@ -1,5 +1,5 @@
 ```html
-<div class="bg-zinc-950 dark:bg-white text-zinc-50 dark:text-zinc-950">
+<div class="bg-zinc-950 text-zinc-50 dark:bg-white dark:text-zinc-950">
   <!-- Your ZardUI components here -->
 </div>
 ```

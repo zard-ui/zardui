@@ -13,6 +13,7 @@ assignees: []
 <!-- Describe the purpose of the component in 2-3 sentences and its main use cases -->
 
 **Use cases**:
+
 - Use case 1
 - Use case 2
 - Use case 3
@@ -30,39 +31,35 @@ assignees: []
 
 <!-- Keep API minimal (5-7 props max). Remove unnecessary props. -->
 
-| Name            | Type                              | Required | Description                          |
-| --------------- | --------------------------------- | -------- | ------------------------------------ |
-| `zType`         | `"default" \| "variant"`          | No       | Visual variant (if applicable)       |
-| `zSize`         | `"sm" \| "default" \| "lg"`       | No       | Size variant (if applicable)         |
-| [essential]     | [type]                            | [yes/no] | [clear description]                  |
-| `class`         | `ClassValue`                      | No       | Custom CSS classes                   |
+| Name        | Type                        | Required | Description                    |
+| ----------- | --------------------------- | -------- | ------------------------------ |
+| `zType`     | `"default" \| "variant"`    | No       | Visual variant (if applicable) |
+| `zSize`     | `"sm" \| "default" \| "lg"` | No       | Size variant (if applicable)   |
+| [essential] | [type]                      | [yes/no] | [clear description]            |
+| `class`     | `ClassValue`                | No       | Custom CSS classes             |
 
-**Note**: Use `string | TemplateRef<void>` for flexible content. Prefer native HTML attributes (disabled, aria-*) over component props.
+**Note**: Use `string | TemplateRef<void>` for flexible content. Prefer native HTML attributes (disabled, aria-\*) over component props.
 
 ### 🌟 Examples
 
 ```html
 <!-- Simple case (most common - should be 1-3 lines) -->
-<z-component [prop]="value">
-  Content
-</z-component>
+<z-component [prop]="value"> Content </z-component>
 
 <!-- With customization -->
-<z-component [prop]="value" [template]="customTpl">
-  Content
-</z-component>
-<ng-template #customTpl>
-  Custom content
-</ng-template>
+<z-component [prop]="value" [template]="customTpl"> Content </z-component>
+<ng-template #customTpl> Custom content </ng-template>
 ```
 
 ### 🎯 Design Decisions
 
 **Why [decision]?**
+
 - Reason 1
 - Reason 2
 
 **Why NOT [alternative]?**
+
 - Clear reasoning against alternatives (e.g., why NOT sub-components)
 
 ### ✅ Acceptance Criteria

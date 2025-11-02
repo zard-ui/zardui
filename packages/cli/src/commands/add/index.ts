@@ -1,8 +1,3 @@
-import { Command } from 'commander';
-import { existsSync } from 'fs';
-import * as path from 'path';
-import * as prompts from 'prompts';
-
 import { installComponent } from '@cli/commands/add/component-installer.js';
 import { selectComponents } from '@cli/commands/add/component-selector.js';
 import { resolveDependencies } from '@cli/commands/add/dependency-resolver.js';
@@ -10,6 +5,10 @@ import { getConfig, resolveConfigPaths } from '@cli/utils/config.js';
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { installPackages } from '@cli/utils/package-manager.js';
+import { Command } from 'commander';
+import { existsSync } from 'fs';
+import * as path from 'path';
+import * as prompts from 'prompts';
 
 export const add = new Command()
   .name('add')
@@ -31,7 +30,12 @@ export const add = new Command()
 
     const selectedComponents = await selectComponents(components, options.all);
 
-    const { componentsToInstall, dependenciesToInstall } = resolveDependencies(selectedComponents, resolvedConfig, cwd, options);
+    const { componentsToInstall, dependenciesToInstall } = resolveDependencies(
+      selectedComponents,
+      resolvedConfig,
+      cwd,
+      options,
+    );
 
     if (!options.yes) {
       const shouldProceed = await confirmInstallation(componentsToInstall.length, dependenciesToInstall.size);
@@ -88,7 +92,11 @@ async function confirmInstallation(componentsCount: number, dependenciesCount: n
   return proceed;
 }
 
-async function installDependencies(dependenciesToInstall: Set<string>, cwd: string, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun'): Promise<void> {
+async function installDependencies(
+  dependenciesToInstall: Set<string>,
+  cwd: string,
+  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
+): Promise<void> {
   if (dependenciesToInstall.size === 0) return;
 
   const depsSpinner = spinner('Installing dependencies...').start();
@@ -96,12 +104,19 @@ async function installDependencies(dependenciesToInstall: Set<string>, cwd: stri
   depsSpinner.succeed();
 }
 
-async function installComponents(componentsToInstall: any[], cwd: string, resolvedConfig: any, options: { path?: string; overwrite?: boolean }): Promise<void> {
+async function installComponents(
+  componentsToInstall: any[],
+  cwd: string,
+  resolvedConfig: any,
+  options: { path?: string; overwrite?: boolean },
+): Promise<void> {
   for (const component of componentsToInstall) {
     const componentSpinner = spinner(`Installing ${component.name}...`).start();
 
     try {
-      const targetDir = options.path ? path.resolve(cwd, options.path, component.name) : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
+      const targetDir = options.path
+        ? path.resolve(cwd, options.path, component.name)
+        : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
 
       await installComponent(component, targetDir, resolvedConfig, options.overwrite || false);
       componentSpinner.succeed(`Added ${component.name}`);

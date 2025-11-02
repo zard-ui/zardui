@@ -1,9 +1,9 @@
-import type { ClassValue } from 'clsx';
-
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { dropdownShortcutVariants } from './dropdown.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]',

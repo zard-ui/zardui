@@ -1,4 +1,15 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, type OnDestroy, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  type OnDestroy,
+  ElementRef,
+  inject,
+  input,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -62,7 +73,11 @@ export class ZardButtonComponent implements OnDestroy {
 
       check();
       this._mutationObserver = new MutationObserver(check);
-      this._mutationObserver.observe(this.elementRef.nativeElement, { childList: true, characterData: true, subtree: true });
+      this._mutationObserver.observe(this.elementRef.nativeElement, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
     });
   }
 

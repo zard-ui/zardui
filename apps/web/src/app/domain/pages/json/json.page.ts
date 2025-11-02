@@ -1,16 +1,17 @@
-import { SeoService } from '@zard/shared/services/seo.service';
 import { Component, inject, type OnInit } from '@angular/core';
 
-import { JsonCurrentStructureSectionComponent } from './sections/current-structure-section.component';
-import { JsonPackageManagerSectionComponent } from './sections/package-manager-section.component';
-import { JsonIntroductionSectionComponent } from './sections/introduction-section.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { JsonTailwindSectionComponent } from './sections/tailwind-section.component';
-import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
+import { SeoService } from '@zard/shared/services/seo.service';
+
 import { JsonAliasesSectionComponent } from './sections/aliases-section.component';
+import { JsonCurrentStructureSectionComponent } from './sections/current-structure-section.component';
+import { JsonIntroductionSectionComponent } from './sections/introduction-section.component';
+import { JsonPackageManagerSectionComponent } from './sections/package-manager-section.component';
 import { JsonStyleSectionComponent } from './sections/style-section.component';
+import { JsonTailwindSectionComponent } from './sections/tailwind-section.component';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
@@ -29,8 +30,20 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     JsonCurrentStructureSectionComponent,
   ],
   template: `
-    <z-content [title]="title" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
-      <z-doc-heading title="components.json" description="Configuration for your project." scrollSpyItem="overview" id="overview"> </z-doc-heading>
+    <z-content
+      [title]="title"
+      [navigationConfig]="navigationConfig"
+      [activeAnchor]="activeAnchor"
+      scrollSpy
+      (scrollSpyChange)="activeAnchor = $event"
+    >
+      <z-doc-heading
+        title="components.json"
+        description="Configuration for your project."
+        scrollSpyItem="overview"
+        id="overview"
+      >
+      </z-doc-heading>
 
       <z-json-introduction-section />
       <z-json-style-section />

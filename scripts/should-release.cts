@@ -111,9 +111,7 @@ function setGitHubOutput(key: string, value: string) {
  */
 function isPrerelease(): boolean {
   try {
-    const packageJson = JSON.parse(
-      execSync('cat libs/zard/package.json', { encoding: 'utf-8' })
-    );
+    const packageJson = JSON.parse(execSync('cat libs/zard/package.json', { encoding: 'utf-8' }));
     const version = packageJson.version || '';
     // Check if version contains beta, alpha, rc, etc.
     return /-(beta|alpha|rc|pre|dev)/.test(version);

@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="form.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -96,8 +94,6 @@ export class ZardFormMessageComponent {
 
 ```
 
-
-
 ```angular-ts title="form.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -134,8 +130,6 @@ export type ZardFormMessageVariants = VariantProps<typeof formMessageVariants>;
 
 ```
 
-
-
 ```angular-ts title="form.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
@@ -150,4 +144,3 @@ const FORM_COMPONENTS = [ZardFormFieldComponent, ZardFormLabelComponent, ZardFor
 export class ZardFormModule {}
 
 ```
-

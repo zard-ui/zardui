@@ -1,9 +1,10 @@
-import { HeaderComponent } from '@zard/domain/components/header/header.component';
-import { FooterComponent } from '@zard/domain/components/footer/footer.component';
-import { BannerComponent } from '@zard/domain/components/banner/banner.component';
-import { environment } from '@zard/env/environment';
-import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { BannerComponent } from '@zard/domain/components/banner/banner.component';
+import { FooterComponent } from '@zard/domain/components/footer/footer.component';
+import { HeaderComponent } from '@zard/domain/components/header/header.component';
+import { environment } from '@zard/env/environment';
 
 @Component({
   selector: 'z-shell',
@@ -13,7 +14,7 @@ import { Component } from '@angular/core';
         @if (isDevMode) {
           You're in <b>DEV</b> Mode!
         } @else {
-          Welcome to Zard ui <b class="text-red-400 font-semibold">DEV</b> enviroment!
+          Welcome to Zard ui <b class="font-semibold text-red-400">DEV</b> enviroment!
         }
       </z-banner>
     }

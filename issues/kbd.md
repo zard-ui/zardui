@@ -5,6 +5,7 @@
 The `Kbd` component displays keyboard keys and shortcuts in a visually consistent way. Useful for documentation, tooltips, command palettes, and UI hints showing keyboard shortcuts.
 
 **Use cases**:
+
 - Show keyboard shortcuts in tooltips (`Ctrl+S to save`)
 - Display command hints in buttons (`Press Enter`)
 - Document keyboard navigation
@@ -21,15 +22,15 @@ The `Kbd` component displays keyboard keys and shortcuts in a visually consisten
 
 ### **z-kbd (Single Key)**
 
-| Name    | Type         | Required | Description                     |
-| ------- | ------------ | -------- | ------------------------------- |
-| `class` | `ClassValue` | No       | Custom CSS classes              |
+| Name    | Type         | Required | Description        |
+| ------- | ------------ | -------- | ------------------ |
+| `class` | `ClassValue` | No       | Custom CSS classes |
 
 ### **z-kbd-group (Key Combination)**
 
-| Name    | Type         | Required | Description                     |
-| ------- | ------------ | -------- | ------------------------------- |
-| `class` | `ClassValue` | No       | Custom CSS classes              |
+| Name    | Type         | Required | Description        |
+| ------- | ------------ | -------- | ------------------ |
+| `class` | `ClassValue` | No       | Custom CSS classes |
 
 **Note**: Both components use content projection for maximum flexibility. Keys are displayed with native `<kbd>` semantics.
 
@@ -56,15 +57,15 @@ The `Kbd` component displays keyboard keys and shortcuts in a visually consisten
 </z-kbd-group>
 
 <!-- In a tooltip -->
-<button z-button [zTooltip]="shortcutTip">
-  Save
-</button>
+<button z-button [zTooltip]="shortcutTip">Save</button>
 <ng-template #shortcutTip>
-  Press <z-kbd-group>
+  Press
+  <z-kbd-group>
     <z-kbd>Ctrl</z-kbd>
     <span>+</span>
     <z-kbd>S</z-kbd>
-  </z-kbd-group> to save
+  </z-kbd-group>
+  to save
 </ng-template>
 
 <!-- In a button hint -->
@@ -92,16 +93,19 @@ The `Kbd` component displays keyboard keys and shortcuts in a visually consisten
 ## 🎯 Design Decisions
 
 **Why two components (Kbd + KbdGroup)?**
+
 - **Semantic clarity**: Single key vs combination are different concepts
 - **Styling control**: Group can handle spacing/layout between keys
 - **Flexible separators**: Users can add `+`, `then`, or custom text between keys
 
 **Why content projection instead of input props?**
+
 - **Simple API**: No need for `[keys]="['Ctrl', 'C']"` array inputs
 - **Flexible content**: Can mix text, icons, or custom elements
 - **HTML semantics**: Uses native `<kbd>` element properly
 
 **Why minimal API (only `class` prop)?**
+
 - **Component is presentational**: No state, no logic
 - **Styling via CSS**: Variants can be added with classes if needed
 - **Keeps it simple**: Just wraps content with proper styling

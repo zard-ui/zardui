@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
+import { calendarNavVariants } from './calendar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
-import { calendarNavVariants } from './calendar.variants';
 
 @Component({
   selector: 'z-calendar-navigation',
@@ -16,7 +16,15 @@ import { calendarNavVariants } from './calendar.variants';
   imports: [ZardButtonComponent, ZardIconComponent, ZardSelectComponent, ZardSelectItemComponent],
   template: `
     <div [class]="navClasses()">
-      <button z-button zType="ghost" zSize="sm" (click)="onPreviousClick()" [disabled]="isPreviousDisabled()" aria-label="Previous month" class="p-0 h-7 w-7">
+      <button
+        z-button
+        zType="ghost"
+        zSize="sm"
+        (click)="onPreviousClick()"
+        [disabled]="isPreviousDisabled()"
+        aria-label="Previous month"
+        class="h-7 w-7 p-0"
+      >
         <z-icon zType="chevron-left"></z-icon>
       </button>
 
@@ -37,7 +45,15 @@ import { calendarNavVariants } from './calendar.variants';
         </z-select>
       </div>
 
-      <button z-button zType="ghost" zSize="sm" (click)="onNextClick()" [disabled]="isNextDisabled()" aria-label="Next month" class="p-0 h-7 w-7">
+      <button
+        z-button
+        zType="ghost"
+        zSize="sm"
+        (click)="onNextClick()"
+        [disabled]="isNextDisabled()"
+        aria-label="Next month"
+        class="h-7 w-7 p-0"
+      >
         <z-icon zType="chevron-right"></z-icon>
       </button>
     </div>

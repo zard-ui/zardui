@@ -9,17 +9,14 @@ Here’s an updated version of the guidelines based on the template:
 ## Guidelines for Generating GitHub Issues for Zard UI Components
 
 1. **Issue Title Format**:
-
    - The title of the issue must follow this format: `[Component] <component name>`.
    - For example: `[Component] Button`, `[Component] Dropdown`.
 
 2. **Description**:
-
    - Clearly outline the **purpose** and **expected use cases** of the component.
    - Explain the scenarios where the component can be applied and how it fits into the broader UI context.
 
 3. **References**:
-
    - Include at least three references to similar UI components from popular UI libraries, with both their UI demos and source code.
      - Example references:
        - **shadcn/ui**: [UI](https://ui.shadcn.com/docs/components/<component-name>) | [Source Code](https://github.com/shadcn-ui/ui/blob/main/apps/www/registry/default/ui/<component-name>.tsx)
@@ -27,7 +24,6 @@ Here’s an updated version of the guidelines based on the template:
        - **ng-spartan**: [UI](https://spartan.ng/components/<component-name>) | [Source Code](https://github.com/spartan-ng/spartan/tree/main/libs/ui/<component-name>)
 
 4. **Expected API**:
-
    - Define the expected **Inputs (Props)** and **Outputs (Events)** for the component.
    - Use **tables** to list the properties and events, describing each property’s type, whether it is required, and a brief description.
 
@@ -43,7 +39,6 @@ Here’s an updated version of the guidelines based on the template:
    ```
 
 5. **Acceptance Criteria**:
-
    - Define the **key quality checks** that must be completed for the component.
    - Use checkboxes for each criterion, such as:
      - Matching reference designs
@@ -64,15 +59,12 @@ Here’s an updated version of the guidelines based on the template:
    ```
 
 6. **Labels**:
-
    - The issue should be labeled as `enhancement` to indicate that this is a new feature or improvement.
 
 7. **Consistency**:
-
    - Ensure **consistent formatting** across all component issues, adhering to the structure outlined above.
 
 8. **Component Properties Prefix**:
-
    - Use the prefix `z` for all component properties and events.
      - Example: `zType`, `zSize`, `zActive`, `zOnChange`.
 

@@ -14,8 +14,8 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component
     <ng-template #popoverContent>
       <z-popover>
         <div class="space-y-2">
-          <h4 class="font-medium leading-none">Hover content</h4>
-          <p class="text-sm text-muted-foreground">This popover appears when you hover over the button.</p>
+          <h4 class="leading-none font-medium">Hover content</h4>
+          <p class="text-muted-foreground text-sm">This popover appears when you hover over the button.</p>
         </div>
       </z-popover>
     </ng-template>

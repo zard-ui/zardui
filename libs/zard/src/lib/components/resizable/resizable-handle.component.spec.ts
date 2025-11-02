@@ -13,7 +13,13 @@ import { ZardResizableComponent } from './resizable.component';
   template: `
     <z-resizable [zLayout]="layout">
       <z-resizable-panel [zCollapsible]="panel1Collapsible">Panel 1</z-resizable-panel>
-      <z-resizable-handle [zHandleIndex]="handleIndex" [zWithHandle]="withHandle" [zDisabled]="disabled" [class]="customClass"> </z-resizable-handle>
+      <z-resizable-handle
+        [zHandleIndex]="handleIndex"
+        [zWithHandle]="withHandle"
+        [zDisabled]="disabled"
+        [class]="customClass"
+      >
+      </z-resizable-handle>
       <z-resizable-panel [zCollapsible]="panel2Collapsible">Panel 2</z-resizable-panel>
     </z-resizable>
   `,
@@ -133,7 +139,9 @@ describe('ZardResizableHandleComponent', () => {
       const standaloneFixture = TestBed.createComponent(TestStandaloneHandleComponent);
       standaloneFixture.detectChanges();
 
-      const standaloneElement = standaloneFixture.debugElement.query(By.directive(ZardResizableHandleComponent)).nativeElement;
+      const standaloneElement = standaloneFixture.debugElement.query(
+        By.directive(ZardResizableHandleComponent),
+      ).nativeElement;
       expect(standaloneElement.getAttribute('data-layout')).toBe('horizontal');
     });
   });
@@ -271,7 +279,9 @@ describe('ZardResizableHandleComponent', () => {
       const standaloneFixture = TestBed.createComponent(TestStandaloneHandleComponent);
       standaloneFixture.detectChanges();
 
-      const standaloneElement = standaloneFixture.debugElement.query(By.directive(ZardResizableHandleComponent)).nativeElement;
+      const standaloneElement = standaloneFixture.debugElement.query(
+        By.directive(ZardResizableHandleComponent),
+      ).nativeElement;
       const mouseEvent = new MouseEvent('mousedown', { clientX: 100 });
 
       expect(() => {
@@ -397,7 +407,9 @@ describe('ZardResizableHandleComponent', () => {
       const standaloneFixture = TestBed.createComponent(TestStandaloneHandleComponent);
       standaloneFixture.detectChanges();
 
-      const standaloneHandle = standaloneFixture.debugElement.query(By.directive(ZardResizableHandleComponent)).componentInstance;
+      const standaloneHandle = standaloneFixture.debugElement.query(
+        By.directive(ZardResizableHandleComponent),
+      ).componentInstance;
       const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
 
       expect(() => {

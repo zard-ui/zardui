@@ -1,18 +1,23 @@
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
-import { RouterModule } from '@angular/router';
 import { Component } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { SIDEBAR_PATHS } from '@zard/shared/constants/routes.constant';
 
 @Component({
   selector: 'z-sidebar',
   template: `
-    <aside class="w-[var(--sidebar-width)] max-h-[calc(100vh-5rem)] bg-transparent hidden flex-col lg:flex shrink-0">
-      <nav class="flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto no-scrollbar">
+    <aside class="hidden max-h-[calc(100vh-5rem)] w-[var(--sidebar-width)] shrink-0 flex-col bg-transparent lg:flex">
+      <nav class="no-scrollbar flex min-h-0 flex-1 flex-col gap-2 overflow-y-auto">
         @for (doc of sidebarPaths; track $index) {
           <div class="relative flex w-full min-w-0 flex-col p-2">
             <ul class="flex w-full min-w-0 flex-col gap-0.5">
-              <h1 class="flex shrink-0 items-center h-8 px-2 text-[0.8rem] outline-hidden text-muted-foreground font-medium">{{ doc.title }}</h1>
+              <h1
+                class="text-muted-foreground flex h-8 shrink-0 items-center px-2 text-[0.8rem] font-medium outline-hidden"
+              >
+                {{ doc.title }}
+              </h1>
               @for (path of doc.data; track $index) {
                 <li class="relative">
                   <a
@@ -21,7 +26,7 @@ import { Component } from '@angular/core';
                     zType="ghost"
                     zFull
                     [routerLink]="path.path"
-                    class="justify-between px-2 py-1 font-normal max-w-48"
+                    class="max-w-48 justify-between px-2 py-1 font-normal"
                     routerLinkActive="bg-accent font-semibold"
                     [routerLinkActiveOptions]="{ exact: true }"
                   >

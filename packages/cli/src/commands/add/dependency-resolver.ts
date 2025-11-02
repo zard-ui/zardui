@@ -16,7 +16,9 @@ export function resolveDependencies(
   cwd: string,
   options: { all?: boolean; path?: string },
 ): ResolvedDependencies {
-  const registryComponents = selectedComponents.map((name: string) => getRegistryComponent(name)).filter(Boolean) as ComponentRegistry[];
+  const registryComponents = selectedComponents
+    .map((name: string) => getRegistryComponent(name))
+    .filter(Boolean) as ComponentRegistry[];
 
   if (!registryComponents.length) {
     logger.error('Selected components not found in registry.');
@@ -61,7 +63,9 @@ function resolveRegistryDependencies(
     if (!depComponent) continue;
     if (componentsToInstall.find(c => c.name === dep)) continue;
 
-    const depTargetDir = options.path ? path.resolve(cwd, options.path, dep) : path.resolve(resolvedConfig.resolvedPaths.components, dep);
+    const depTargetDir = options.path
+      ? path.resolve(cwd, options.path, dep)
+      : path.resolve(resolvedConfig.resolvedPaths.components, dep);
 
     if (!existsSync(depTargetDir)) {
       componentsToInstall.push(depComponent);

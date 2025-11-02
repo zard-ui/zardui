@@ -56,5 +56,5 @@ Licensed under the [MIT license](/LICENSE.md).
 <img src="https://dcbadge.limes.pink/api/server/https://discord.com/invite/yP8Uj9rAX9" alt="discord" />
 
 <span>Follow us in</span> <a href="https://x.com/zard_ui" target="_blank">
-  <img src="https://img.shields.io/badge/X-%23000000.svg?logo=X&logoColor=white" alt="X" />
+<img src="https://img.shields.io/badge/X-%23000000.svg?logo=X&logoColor=white" alt="X" />
 </a>

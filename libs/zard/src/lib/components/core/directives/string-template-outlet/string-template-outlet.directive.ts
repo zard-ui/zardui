@@ -1,4 +1,14 @@
-import { Directive, type EmbeddedViewRef, inject, Input, type OnChanges, type SimpleChange, type SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
+import {
+  Directive,
+  type EmbeddedViewRef,
+  inject,
+  Input,
+  type OnChanges,
+  type SimpleChange,
+  type SimpleChanges,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
 
 export function isTemplateRef<T>(value: TemplateRef<T> | unknown): value is TemplateRef<T> {
   return value instanceof TemplateRef;
@@ -17,14 +27,20 @@ export class ZardStringTemplateOutletDirective<_T = unknown> implements OnChange
   @Input() zStringTemplateOutletContext: any | null = null;
   @Input() zStringTemplateOutlet: unknown | TemplateRef<unknown> = null;
 
-  static ngTemplateContextGuard<T>(_dir: ZardStringTemplateOutletDirective<T>, _ctx: unknown): _ctx is ZardStringTemplateOutletContext {
+  static ngTemplateContextGuard<T>(
+    _dir: ZardStringTemplateOutletDirective<T>,
+    _ctx: unknown,
+  ): _ctx is ZardStringTemplateOutletContext {
     return true;
   }
 
   private recreateView(): void {
     this.viewContainer.clear();
     if (isTemplateRef(this.zStringTemplateOutlet)) {
-      this.embeddedViewRef = this.viewContainer.createEmbeddedView(this.zStringTemplateOutlet, this.zStringTemplateOutletContext);
+      this.embeddedViewRef = this.viewContainer.createEmbeddedView(
+        this.zStringTemplateOutlet,
+        this.zStringTemplateOutletContext,
+      );
     } else {
       this.embeddedViewRef = this.viewContainer.createEmbeddedView(this.templateRef, this.context);
     }
@@ -45,7 +61,10 @@ export class ZardStringTemplateOutletDirective<_T = unknown> implements OnChange
     const shouldRecreateView = (): boolean => {
       let shouldOutletRecreate = false;
       if (zStringTemplateOutlet) {
-        shouldOutletRecreate = zStringTemplateOutlet.firstChange || isTemplateRef(zStringTemplateOutlet.previousValue) || isTemplateRef(zStringTemplateOutlet.currentValue);
+        shouldOutletRecreate =
+          zStringTemplateOutlet.firstChange ||
+          isTemplateRef(zStringTemplateOutlet.previousValue) ||
+          isTemplateRef(zStringTemplateOutlet.currentValue);
       }
       const hasContextShapeChanged = (ctxChange: SimpleChange): boolean => {
         const prevCtxKeys = Object.keys(ctxChange.previousValue ?? {});
@@ -61,7 +80,8 @@ export class ZardStringTemplateOutletDirective<_T = unknown> implements OnChange
           return true;
         }
       };
-      const shouldContextRecreate = zStringTemplateOutletContext && hasContextShapeChanged(zStringTemplateOutletContext);
+      const shouldContextRecreate =
+        zStringTemplateOutletContext && hasContextShapeChanged(zStringTemplateOutletContext);
       return shouldContextRecreate || shouldOutletRecreate;
     };
 

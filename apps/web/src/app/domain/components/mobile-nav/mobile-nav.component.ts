@@ -1,9 +1,10 @@
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { RouterModule } from '@angular/router';
 import { Component, signal } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { SIDEBAR_PATHS, HEADER_PATHS } from '@zard/shared/constants/routes.constant';
 import { environment } from '@zard/env/environment';
+import { SIDEBAR_PATHS, HEADER_PATHS } from '@zard/shared/constants/routes.constant';
 
 @Component({
   selector: 'z-mobile-nav',
@@ -12,10 +13,7 @@ import { environment } from '@zard/env/environment';
   imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent],
 })
 export class MobileMenuComponent {
-  readonly mainMenu = [
-    { name: 'Home', path: '/', available: true },
-    ...HEADER_PATHS,
-  ];
+  readonly mainMenu = [{ name: 'Home', path: '/', available: true }, ...HEADER_PATHS];
   readonly sidebarPaths = SIDEBAR_PATHS;
   readonly appVersion = environment.appVersion;
   sidebarState = signal<boolean>(false);

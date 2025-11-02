@@ -23,7 +23,7 @@ import { Component, inject, OnInit } from '@angular/core';
 
 @Component({
   selector: 'z-home',
-  template: `...`
+  template: `...`,
 })
 export class HomePage implements OnInit {
   private readonly seoService = inject(SeoService);
@@ -36,6 +36,7 @@ export class HomePage implements OnInit {
 ```
 
 **JSON-LD gerado:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -58,7 +59,7 @@ import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'z-component',
-  template: `...`
+  template: `...`,
 })
 export class ComponentPage {
   private readonly seoService = inject(SeoService);
@@ -77,6 +78,7 @@ export class ComponentPage {
 **JSON-LD gerado (2 schemas):**
 
 1. **Article Schema:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -102,6 +104,7 @@ export class ComponentPage {
 ```
 
 2. **Breadcrumb Schema:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -137,7 +140,7 @@ import { Component, inject } from '@angular/core';
 
 @Component({
   selector: 'z-install',
-  template: `...`
+  template: `...`,
 })
 export class InstallPage {
   private readonly seoService = inject(SeoService);
@@ -148,13 +151,14 @@ export class InstallPage {
       'Angular Installation',
       'Learn how to install Zard UI in your Angular project...',
       '/docs/installation/angular',
-      'og-angular.jpg'
+      'og-angular.jpg',
     );
   }
 }
 ```
 
 **JSON-LD gerado:**
+
 ```json
 {
   "@context": "https://schema.org",
@@ -188,7 +192,7 @@ import { Component, inject, OnInit } from '@angular/core';
 
 @Component({
   selector: 'z-custom-page',
-  template: `...`
+  template: `...`,
 })
 export class CustomPage implements OnInit {
   private readonly jsonLdService = inject(JsonLdService);
@@ -203,8 +207,8 @@ export class CustomPage implements OnInit {
       description: 'Uma descrição customizada',
       author: {
         '@type': 'Person',
-        name: 'Seu Nome'
-      }
+        name: 'Seu Nome',
+      },
     });
   }
 

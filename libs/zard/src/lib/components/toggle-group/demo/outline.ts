@@ -6,7 +6,14 @@ import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-gr
   selector: 'demo-toggle-group-outline',
   standalone: true,
   imports: [ZardToggleGroupComponent],
-  template: ` <z-toggle-group zMode="multiple" zType="outline" [items]="items" (valueChange)="onToggleChange($event)"></z-toggle-group> `,
+  template: `
+    <z-toggle-group
+      zMode="multiple"
+      zType="outline"
+      [items]="items"
+      (valueChange)="onToggleChange($event)"
+    ></z-toggle-group>
+  `,
 })
 export default class ToggleGroupOutlineComponent {
   items: ZardToggleGroupItem[] = [

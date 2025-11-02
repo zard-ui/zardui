@@ -1,17 +1,25 @@
-import { filter } from 'rxjs';
-
-import { ChangeDetectionStrategy, Component, computed, input, linkedSignal, model, viewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  linkedSignal,
+  model,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+import { filter } from 'rxjs';
+
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
+import type { CalendarMode, CalendarValue } from './calendar.types';
 import { generateCalendarDays, getSelectedDatesArray, isSameDay } from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
-import type { ClassValue } from 'clsx';
-
-import type { CalendarMode, CalendarValue } from './calendar.types';
 export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
 
 @Component({
@@ -95,7 +103,11 @@ export class ZardCalendarComponent {
 
   protected readonly calendarDays = computed(() => {
     const currentDate = this.currentDate();
-    const navigationDate = new Date(parseInt(this.currentYearValue()), parseInt(this.currentMonthValue()), currentDate.getDate());
+    const navigationDate = new Date(
+      parseInt(this.currentYearValue()),
+      parseInt(this.currentMonthValue()),
+      currentDate.getDate(),
+    );
     const selectedDate = isNaN(navigationDate.getTime()) ? currentDate : navigationDate;
 
     return generateCalendarDays({
@@ -150,7 +162,11 @@ export class ZardCalendarComponent {
   protected previousMonth(): void {
     const currentDate = this.currentDate();
     const currentMonth = parseInt(this.currentMonthValue());
-    const previous = new Date(currentDate.getFullYear(), (isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) - 1, 1);
+    const previous = new Date(
+      currentDate.getFullYear(),
+      (isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) - 1,
+      1,
+    );
     this.currentMonthValue.set(previous.getMonth().toString());
     this.gridRef().setFocusedDayIndex(-1);
   }
@@ -158,7 +174,11 @@ export class ZardCalendarComponent {
   protected nextMonth(): void {
     const currentDate = this.currentDate();
     const currentMonth = parseInt(this.currentMonthValue());
-    const next = new Date(currentDate.getFullYear(), (isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) + 1, 1);
+    const next = new Date(
+      currentDate.getFullYear(),
+      (isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) + 1,
+      1,
+    );
     this.currentMonthValue.set(next.getMonth().toString());
     this.gridRef().setFocusedDayIndex(-1);
   }
@@ -269,7 +289,14 @@ export class ZardCalendarComponent {
         const todayIndex = days.findIndex(day => day.isToday && day.isCurrentMonth);
         const firstEnabledIndex = days.findIndex(day => day.isCurrentMonth && !day.isDisabled);
 
-        targetIndex = selectedIndex >= 0 ? selectedIndex : todayIndex >= 0 ? todayIndex : firstEnabledIndex >= 0 ? firstEnabledIndex : 0;
+        targetIndex =
+          selectedIndex >= 0
+            ? selectedIndex
+            : todayIndex >= 0
+              ? todayIndex
+              : firstEnabledIndex >= 0
+                ? firstEnabledIndex
+                : 0;
         break;
       }
     }

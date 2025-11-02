@@ -12,7 +12,7 @@ npx @ngzard/ui@latest init
 ## ✨ Features
 
 - 🎨 **Beautiful Components** - Modern, accessible UI components
-- ⚡ **TailwindCSS v4** - Latest CSS framework with native cascade layers  
+- ⚡ **TailwindCSS v4** - Latest CSS framework with native cascade layers
 - 🔧 **TypeScript First** - Built for modern Angular with full type safety
 - 🎯 **Angular Focused** - Designed specifically for the Angular ecosystem
 - 📱 **Responsive** - Mobile-first components that work everywhere
@@ -46,6 +46,7 @@ npx @ngzard/ui@latest init
 ```
 
 This will:
+
 - Install required dependencies (Tailwind CSS v4, class-variance-authority, etc.)
 - Create `.postcssrc.json` for Tailwind CSS PostCSS plugin
 - Set up `src/styles.css` with Tailwind configuration and design tokens
@@ -53,6 +54,7 @@ This will:
 - Create utility functions in `src/app/shared/utils/`
 
 **Options:**
+
 - `-y, --yes` - Skip confirmation prompts
 - `-c, --cwd <path>` - Specify working directory
 
@@ -65,11 +67,12 @@ npx @ngzard/ui@latest add [components...]
 ```
 
 **Examples:**
+
 ```bash
 # Add a single component
 npx @ngzard/ui@latest add button
 
-# Add multiple components  
+# Add multiple components
 npx @ngzard/ui@latest add button card badge
 
 # Add all components
@@ -80,6 +83,7 @@ npx @ngzard/ui@latest add
 ```
 
 **Options:**
+
 - `-y, --yes` - Skip confirmation prompts
 - `-o, --overwrite` - Overwrite existing files
 - `-c, --cwd <path>` - Specify working directory
@@ -131,7 +135,7 @@ The CLI stores configuration in `components.json`:
 
 ## Requirements
 
-- Angular 19+ 
+- Angular 19+
 - Node.js 20 or 22
 - TypeScript project
 
@@ -169,12 +173,15 @@ ZardUI CLI is built specifically for Tailwind CSS v4, using the new inline confi
 ## Troubleshooting
 
 ### "Configuration not found"
+
 Run `npx @ngzard/ui@latest init` first to initialize your project.
 
 ### "Not an Angular project"
+
 Make sure you're in the root directory of an Angular project with a `package.json` that includes `@angular/core`.
 
 ### Rate limiting from GitHub
+
 The CLI fetches components from GitHub. If you encounter rate limiting, wait a few minutes before retrying.
 
 ## Contributing

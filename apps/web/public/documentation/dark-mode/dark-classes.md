@@ -6,33 +6,27 @@ Apply dark mode styles to your components using the `dark:` prefix:
 
 ```html
 <!-- Background colors -->
-<div class="bg-white dark:bg-gray-900">
-  Light background becomes dark
-</div>
+<div class="bg-white dark:bg-gray-900">Light background becomes dark</div>
 
 <!-- Text colors -->
-<p class="text-gray-900 dark:text-white">
-  Dark text becomes light
-</p>
+<p class="text-gray-900 dark:text-white">Dark text becomes light</p>
 
 <!-- Border colors -->
-<div class="border border-gray-200 dark:border-gray-700">
-  Subtle borders for both themes
-</div>
+<div class="border border-gray-200 dark:border-gray-700">Subtle borders for both themes</div>
 ```
 
 ## Component Styling
 
 ```html
 <!-- Card component with theme support -->
-<div class="p-6 bg-white dark:bg-gray-800 rounded-lg shadow-sm dark:shadow-gray-900/20 border border-gray-200 dark:border-gray-700">
-  <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
-    Card Title
-  </h3>
-  <p class="text-gray-600 dark:text-gray-300">
-    Card description that adapts to both light and dark themes.
-  </p>
-  <button class="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-md transition-colors">
+<div
+  class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-800 dark:shadow-gray-900/20"
+>
+  <h3 class="mb-2 text-lg font-semibold text-gray-900 dark:text-white">Card Title</h3>
+  <p class="text-gray-600 dark:text-gray-300">Card description that adapts to both light and dark themes.</p>
+  <button
+    class="mt-4 rounded-md bg-blue-600 px-4 py-2 text-white transition-colors hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600"
+  >
     Action Button
   </button>
 </div>
@@ -42,14 +36,16 @@ Apply dark mode styles to your components using the `dark:` prefix:
 
 ```html
 <!-- Input with dark mode support -->
-<input 
-  type="text" 
+<input
+  type="text"
   placeholder="Enter text..."
-  class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
->
+  class="w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-transparent focus:ring-2 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder-gray-400"
+/>
 
 <!-- Select dropdown -->
-<select class="px-3 py-2 bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-md">
+<select
+  class="rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-900 dark:border-gray-600 dark:bg-gray-700 dark:text-white"
+>
   <option>Option 1</option>
   <option>Option 2</option>
 </select>
@@ -59,20 +55,26 @@ Apply dark mode styles to your components using the `dark:` prefix:
 
 ```html
 <!-- Navigation bar -->
-<nav class="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-  <div class="max-w-7xl mx-auto px-4">
-    <div class="flex items-center justify-between h-16">
+<nav class="border-b border-gray-200 bg-gray-50 dark:border-gray-700 dark:bg-gray-900">
+  <div class="mx-auto max-w-7xl px-4">
+    <div class="flex h-16 items-center justify-between">
       <!-- Logo -->
       <div class="flex items-center">
-        <img src="/logo.svg" alt="Logo" class="h-8 dark:invert">
+        <img src="/logo.svg" alt="Logo" class="h-8 dark:invert" />
       </div>
-      
+
       <!-- Menu items -->
       <div class="flex space-x-4">
-        <a href="/" class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+        <a
+          href="/"
+          class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+        >
           Home
         </a>
-        <a href="/about" class="text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white px-3 py-2 rounded-md text-sm font-medium">
+        <a
+          href="/about"
+          class="rounded-md px-3 py-2 text-sm font-medium text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-white"
+        >
           About
         </a>
       </div>

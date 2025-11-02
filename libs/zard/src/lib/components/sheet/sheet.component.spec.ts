@@ -1,12 +1,11 @@
-import { Component, inject, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { isPlatformBrowser } from '@angular/common';
+import { Component, inject, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardSheetComponent } from './sheet.component';
-import { ZardSheetService } from './sheet.service';
 import { ZardSheetRef } from './sheet-ref';
+import { ZardSheetService } from './sheet.service';
+import { ZardButtonComponent } from '../button/button.component';
 
 @Component({
   template: `

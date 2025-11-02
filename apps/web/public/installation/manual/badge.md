@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="badge.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -30,8 +28,6 @@ export class ZardBadgeComponent {
 
 ```
 
-
-
 ```angular-ts title="badge.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -61,4 +57,3 @@ export const badgeVariants = cva(
 export type ZardBadgeVariants = VariantProps<typeof badgeVariants>;
 
 ```
-

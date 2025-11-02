@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { OverlayModule } from '@angular/cdk/overlay';
 import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
@@ -194,8 +192,6 @@ export class ZardDialogModule {}
 
 ```
 
-
-
 ```angular-ts title="dialog.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -205,8 +201,6 @@ export const dialogVariants = cva(
 export type ZardDialogVariants = VariantProps<typeof dialogVariants>;
 
 ```
-
-
 
 ```angular-ts title="dialog-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
@@ -306,8 +300,6 @@ export class ZardDialogRef<T = any, R = any, U = any> {
 
 ```
 
-
-
 ```angular-ts title="dialog.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
@@ -406,4 +398,3 @@ export class ZardDialogService {
 }
 
 ```
-

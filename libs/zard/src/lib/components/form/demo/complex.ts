@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, ViewEncapsulation } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { ZardSelectItemComponent } from '../../select/select-item.component';
-import { ZardCheckboxComponent } from '../../checkbox/checkbox.component';
-import { ZardSelectComponent } from '../../select/select.component';
 import { ZardButtonComponent } from '../../button/button.component';
+import { ZardCheckboxComponent } from '../../checkbox/checkbox.component';
 import { ZardInputDirective } from '../../input/input.directive';
+import { ZardSelectItemComponent } from '../../select/select-item.component';
+import { ZardSelectComponent } from '../../select/select.component';
 import { ZardFormModule } from '../form.module';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface FormData {
   firstName: string;
@@ -24,13 +24,21 @@ interface FormData {
 @Component({
   selector: 'zard-demo-form-complex',
   standalone: true,
-  imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardCheckboxComponent, ZardSelectComponent, ZardSelectItemComponent, ZardFormModule],
+  imports: [
+    ReactiveFormsModule,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ZardCheckboxComponent,
+    ZardSelectComponent,
+    ZardSelectItemComponent,
+    ZardFormModule,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <form [formGroup]="form" (ngSubmit)="handleSubmit()" class="space-y-6 max-w-lg">
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()" class="max-w-lg space-y-6">
       <!-- Name Fields Row -->
-      <div class="flex gap-4 items-start">
+      <div class="flex items-start gap-4">
         <z-form-field>
           <label z-form-label zRequired for="firstName">First Name</label>
           <z-form-control [errorMessage]="isFieldInvalid('firstName') ? 'First name is required' : ''">
@@ -89,7 +97,13 @@ interface FormData {
           [errorMessage]="isFieldInvalid('message') ? 'Message is too long (max 500 characters)' : ''"
           [helpText]="!isFieldInvalid('message') ? messageLength() + '/500 characters' : ''"
         >
-          <textarea z-input id="message" rows="4" placeholder="Tell us about your project or inquiry..." formControlName="message"></textarea>
+          <textarea
+            z-input
+            id="message"
+            rows="4"
+            placeholder="Tell us about your project or inquiry..."
+            formControlName="message"
+          ></textarea>
         </z-form-control>
       </z-form-field>
 
@@ -105,7 +119,10 @@ interface FormData {
 
       <!-- Terms Checkbox -->
       <z-form-field>
-        <z-form-control [errorMessage]="isFieldInvalid('terms') ? 'You must accept the terms and conditions' : ''" class="flex flex-col">
+        <z-form-control
+          [errorMessage]="isFieldInvalid('terms') ? 'You must accept the terms and conditions' : ''"
+          class="flex flex-col"
+        >
           <div class="flex items-center space-x-2">
             <z-checkbox id="terms" formControlName="terms" />
             <label z-form-label class="!mb-0" zRequired for="terms">I agree to the terms and conditions</label>
@@ -123,7 +140,7 @@ interface FormData {
 
       <!-- Success Message -->
       @if (showSuccess()) {
-        <div class="p-4 bg-green-50 border border-green-200 rounded-md">
+        <div class="rounded-md border border-green-200 bg-green-50 p-4">
           <z-form-message zType="success">✓ Form submitted successfully! We'll get back to you soon.</z-form-message>
         </div>
       }

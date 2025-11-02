@@ -32,6 +32,8 @@ export default [
           fixStyle: 'inline-type-imports',
         },
       ],
+      '@angular-eslint/component-selector': ['error', { type: 'element', prefix: 'z', style: 'kebab-case' }],
+      '@angular-eslint/directive-selector': ['error', { type: 'attribute', prefix: 'z', style: 'camelCase' }],
     },
   },
   {
@@ -43,6 +45,10 @@ export default [
   {
     files: ['**/*.html'],
     // Override or add rules here
-    rules: {},
+    rules: {
+      '@angular-eslint/template/no-negated-async': 'error',
+      '@angular-eslint/template/banana-in-box': 'error',
+      'max-len': ['error', { code: 120, ignoreStrings: true, ignoreTemplateLiterals: true, ignoreUrls: true }],
+    },
   },
 ];

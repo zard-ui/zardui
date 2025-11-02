@@ -1,6 +1,8 @@
 <section class="mb-10">
   @if (componentType()) {
-    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">{{ componentType()! | hyphenToSpace }}</h3>
+    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">
+      {{ componentType()! | hyphenToSpace }}
+    </h3>
   }
   <main class="overflow-hidden transition-all duration-200 ease-in-out">
     <nav class="mb-4 flex gap-4">
@@ -13,12 +15,20 @@
         Preview
       </button>
       @if (!onlyDemo()) {
-        <button class="cursor-pointer text-base" (click)="activeTab.set('code')" [class.font-semibold]="activeTab() === 'code'" [class.text-foreground]="activeTab() === 'code'">
+        <button
+          class="cursor-pointer text-base"
+          (click)="activeTab.set('code')"
+          [class.font-semibold]="activeTab() === 'code'"
+          [class.text-foreground]="activeTab() === 'code'"
+        >
           Code
         </button>
       }
     </nav>
-    <section class="transition-all" [class]="activeTab() === 'preview' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']">
+    <section
+      class="transition-all"
+      [class]="activeTab() === 'preview' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']"
+    >
       @if (fullScreen()) {
         @if (dynamicComponent()) {
           <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
@@ -31,7 +41,10 @@
         </z-card>
       }
     </section>
-    <section class="transition-all" [class]="activeTab() === 'code' ? 'translate-x-0' : ['translate-x-full', 'sr-only']">
+    <section
+      class="transition-all"
+      [class]="activeTab() === 'code' ? 'translate-x-0' : ['translate-x-full', 'sr-only']"
+    >
       @if (markdownUrl()) {
         <z-markdown-renderer [markdownUrl]="markdownUrl()"></z-markdown-renderer>
       }

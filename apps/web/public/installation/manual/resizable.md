@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="resizable.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -301,8 +299,6 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 
 ```
 
-
-
 ```angular-ts title="resizable.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -368,8 +364,6 @@ export type ZardResizableHandleVariants = VariantProps<typeof resizableHandleVar
 
 ```
 
-
-
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export * from './resizable.component';
 export * from './resizable-panel.component';
@@ -377,8 +371,6 @@ export * from './resizable-handle.component';
 export * from './resizable.variants';
 
 ```
-
-
 
 ```angular-ts title="resizable-handle.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
@@ -592,8 +584,6 @@ export class ZardResizableHandleComponent {
 
 ```
 
-
-
 ```angular-ts title="resizable-panel.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ClassValue } from 'clsx';
 
@@ -635,4 +625,3 @@ export class ZardResizablePanelComponent {
 }
 
 ```
-

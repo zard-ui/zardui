@@ -1,5 +1,6 @@
-import { Step } from '@zard/shared/constants/install.constant';
 import { Component, input } from '@angular/core';
+
+import { Step } from '@zard/shared/constants/install.constant';
 
 import { StepComponent } from '../step/step.component';
 

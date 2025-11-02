@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="icon.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import { LucideAngularModule } from 'lucide-angular';
@@ -39,8 +37,6 @@ export class ZardIconComponent {
 
 ```
 
-
-
 ```angular-ts title="icon.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -61,8 +57,6 @@ export const iconVariants = cva('flex items-center justify-center', {
 export type ZardIconVariants = VariantProps<typeof iconVariants>;
 
 ```
-
-
 
 ```angular-ts title="icons.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
@@ -223,4 +217,3 @@ export const ZARD_ICONS = {
 export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;
 
 ```
-

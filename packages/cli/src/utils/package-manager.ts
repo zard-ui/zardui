@@ -1,5 +1,4 @@
 import { detect } from '@antfu/ni';
-
 import { getConfig } from '@cli/utils/config.js';
 
 export async function detectPackageManager(): Promise<'npm' | 'yarn' | 'pnpm' | 'bun'> {
@@ -39,7 +38,13 @@ export async function getInstallCommand(packageManager: string, isDev = false): 
   }
 }
 
-export async function installPackages(packages: string[], cwd: string, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun', isDev = false, legacyPeerDeps = false): Promise<void> {
+export async function installPackages(
+  packages: string[],
+  cwd: string,
+  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
+  isDev = false,
+  legacyPeerDeps = false,
+): Promise<void> {
   const { execa } = await import('execa');
   const installCmd = await getInstallCommand(packageManager, isDev);
 

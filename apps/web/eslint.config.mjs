@@ -30,6 +30,9 @@ export default [
     rules: {
       '@angular-eslint/template/click-events-have-key-events': 'off',
       '@angular-eslint/template/interactive-supports-focus': 'off',
+      '@angular-eslint/template/no-negated-async': 'error',
+      '@angular-eslint/template/banana-in-box': 'error',
+      'max-len': ['error', { code: 120, ignoreStrings: true, ignoreTemplateLiterals: true, ignoreUrls: true }],
     },
   },
 ];

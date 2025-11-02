@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="switch.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -88,8 +86,6 @@ export class ZardSwitchComponent implements ControlValueAccessor {
 
 ```
 
-
-
 ```angular-ts title="switch.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -117,4 +113,3 @@ export const switchVariants = cva(
 export type ZardSwitchVariants = VariantProps<typeof switchVariants>;
 
 ```
-

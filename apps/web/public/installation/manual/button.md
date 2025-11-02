@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="button.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { afterNextRender, ChangeDetectionStrategy, Component, computed, type OnDestroy, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
 
@@ -92,8 +90,6 @@ export class ZardButtonComponent implements OnDestroy {
 
 ```
 
-
-
 ```angular-ts title="button.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -136,4 +132,3 @@ export const buttonVariants = cva(
 export type ZardButtonVariants = VariantProps<typeof buttonVariants>;
 
 ```
-

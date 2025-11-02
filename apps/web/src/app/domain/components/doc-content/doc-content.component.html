@@ -1,11 +1,17 @@
 <main class="relative flex items-stretch text-sm sm:text-base xl:w-full">
   <section class="flex min-w-0 flex-1 flex-col">
-    <div class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-12 px-4 text-neutral-800 md:px-0 dark:text-neutral-300">
+    <div
+      class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-12 px-4 text-neutral-800 md:px-0 dark:text-neutral-300"
+    >
       <ng-content></ng-content>
     </div>
   </section>
 
   @if (navigationConfig()) {
-    <z-dynamic-anchor [navigation]="navigationConfig()!" [activeAnchor]="activeAnchor() || ''" [onAnchorClick]="onAnchorClick()"></z-dynamic-anchor>
+    <z-dynamic-anchor
+      [navigation]="navigationConfig()!"
+      [activeAnchor]="activeAnchor() || ''"
+      [onAnchorClick]="onAnchorClick()"
+    ></z-dynamic-anchor>
   }
 </main>

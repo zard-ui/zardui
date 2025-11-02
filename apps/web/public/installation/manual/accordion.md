@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="accordion.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, input, ViewEncapsulation } from '@angular/core';
 
@@ -92,8 +90,6 @@ export class ZardAccordionComponent implements AfterContentInit {
 
 ```
 
-
-
 ```angular-ts title="accordion.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -133,8 +129,6 @@ export type ZardAccordionTriggerVariants = VariantProps<typeof accordionTriggerV
 export type ZardAccordionContentVariants = VariantProps<typeof accordionContentVariants>;
 
 ```
-
-
 
 ```angular-ts title="accordion-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
@@ -223,4 +217,3 @@ export class ZardAccordionItemComponent {
 }
 
 ```
-

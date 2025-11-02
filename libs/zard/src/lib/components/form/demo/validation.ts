@@ -12,11 +12,17 @@ import { ZardFormModule } from '../form.module';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <form [formGroup]="validationForm" (ngSubmit)="onSubmit()" class="space-y-6 max-w-sm">
+    <form [formGroup]="validationForm" (ngSubmit)="onSubmit()" class="max-w-sm space-y-6">
       <z-form-field>
         <label z-form-label zRequired>Name</label>
         <z-form-control>
-          <input z-input type="text" placeholder="Your full name" formControlName="name" [zStatus]="nameControl.invalid && nameControl.touched ? 'error' : undefined" />
+          <input
+            z-input
+            type="text"
+            placeholder="Your full name"
+            formControlName="name"
+            [zStatus]="nameControl.invalid && nameControl.touched ? 'error' : undefined"
+          />
         </z-form-control>
         @if (nameControl.hasError('required') && nameControl.touched) {
           <z-form-message zType="error">Name is required.</z-form-message>
@@ -30,7 +36,13 @@ import { ZardFormModule } from '../form.module';
       <z-form-field>
         <label z-form-label zRequired>Email</label>
         <z-form-control>
-          <input z-input type="email" placeholder="your.email@example.com" formControlName="email" [zStatus]="emailControl.invalid && emailControl.touched ? 'error' : undefined" />
+          <input
+            z-input
+            type="email"
+            placeholder="your.email@example.com"
+            formControlName="email"
+            [zStatus]="emailControl.invalid && emailControl.touched ? 'error' : undefined"
+          />
         </z-form-control>
         @if (emailControl.hasError('required') && emailControl.touched) {
           <z-form-message zType="error">Email is required.</z-form-message>
@@ -49,7 +61,13 @@ import { ZardFormModule } from '../form.module';
             type="url"
             placeholder="https://example.com"
             formControlName="website"
-            [zStatus]="websiteControl.invalid && websiteControl.touched ? 'error' : websiteControl.valid && websiteControl.touched ? 'success' : undefined"
+            [zStatus]="
+              websiteControl.invalid && websiteControl.touched
+                ? 'error'
+                : websiteControl.valid && websiteControl.touched
+                  ? 'success'
+                  : undefined
+            "
           />
         </z-form-control>
         @if (websiteControl.hasError('pattern') && websiteControl.touched) {

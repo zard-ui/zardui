@@ -6,7 +6,14 @@ import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-gr
   selector: 'demo-toggle-group-default',
   standalone: true,
   imports: [ZardToggleGroupComponent],
-  template: ` <z-toggle-group zMode="multiple" [items]="items" [defaultValue]="['italic']" (valueChange)="onToggleChange($event)"></z-toggle-group> `,
+  template: `
+    <z-toggle-group
+      zMode="multiple"
+      [items]="items"
+      [defaultValue]="['italic']"
+      (valueChange)="onToggleChange($event)"
+    ></z-toggle-group>
+  `,
 })
 export default class ToggleGroupDefaultComponent {
   items: ZardToggleGroupItem[] = [

@@ -14,25 +14,25 @@ import { DarkModeService } from '../services/darkmode.service';
     <div>
       <p>Current theme: {{ currentTheme }}</p>
       <p>Is dark mode: {{ isDarkMode }}</p>
-      
+
       <!-- Conditional content based on theme -->
       @if (isDarkMode) {
-        <img src="/logo-dark.svg" alt="Dark logo">
+        <img src="/logo-dark.svg" alt="Dark logo" />
       } @else {
-        <img src="/logo-light.svg" alt="Light logo">
+        <img src="/logo-light.svg" alt="Light logo" />
       }
     </div>
-  `
+  `,
 })
 export class ExampleComponent implements OnInit {
   private darkModeService = inject(DarkModeService);
-  
+
   currentTheme: 'light' | 'dark' = 'light';
   isDarkMode = false;
 
   ngOnInit(): void {
     this.updateThemeState();
-    
+
     // Optional: Listen for theme changes
     // You might want to implement an observable in the service for this
   }
@@ -55,7 +55,7 @@ import { DarkModeService } from '../services/darkmode.service';
   template: `
     <div>
       <p>Current theme: {{ currentTheme() }}</p>
-      
+
       <!-- Reactive conditional rendering -->
       @if (currentTheme() === 'dark') {
         <div class="dark-specific-content">
@@ -69,11 +69,11 @@ import { DarkModeService } from '../services/darkmode.service';
         </div>
       }
     </div>
-  `
+  `,
 })
 export class ReactiveExampleComponent {
   private darkModeService = inject(DarkModeService);
-  
+
   currentTheme = signal<'light' | 'dark'>('light');
 
   constructor() {
@@ -98,20 +98,20 @@ import { DarkModeService } from '../services/darkmode.service';
       <h1>Dynamically styled content</h1>
       <p>Background color changes based on theme</p>
     </div>
-  `
+  `,
 })
 export class DynamicStylingComponent {
   private darkModeService = inject(DarkModeService);
 
   dynamicStyles = computed(() => {
     const isDark = this.darkModeService.getCurrentTheme() === 'dark';
-    
+
     return {
       backgroundColor: isDark ? '#1f2937' : '#ffffff',
       color: isDark ? '#ffffff' : '#1f2937',
       padding: '2rem',
       borderRadius: '0.5rem',
-      border: `1px solid ${isDark ? '#374151' : '#e5e7eb'}`
+      border: `1px solid ${isDark ? '#374151' : '#e5e7eb'}`,
     };
   });
 }
@@ -128,15 +128,15 @@ import { DarkModeService } from '../services/darkmode.service';
   selector: 'app-api-example',
   template: `
     <div>
-      <img [src]="logoUrl" alt="Logo">
+      <img [src]="logoUrl" alt="Logo" />
       <div [innerHTML]="styledContent"></div>
     </div>
-  `
+  `,
 })
 export class ApiExampleComponent implements OnInit {
   private http = inject(HttpClient);
   private darkModeService = inject(DarkModeService);
-  
+
   logoUrl = '';
   styledContent = '';
 
@@ -146,15 +146,14 @@ export class ApiExampleComponent implements OnInit {
 
   private loadThemeSpecificContent(): void {
     const theme = this.darkModeService.getCurrentTheme();
-    
+
     // Load different assets based on theme
     this.logoUrl = `/assets/logo-${theme}.svg`;
-    
+
     // Make API calls with theme context
-    this.http.get<{content: string}>(`/api/content?theme=${theme}`)
-      .subscribe(response => {
-        this.styledContent = response.content;
-      });
+    this.http.get<{ content: string }>(`/api/content?theme=${theme}`).subscribe(response => {
+      this.styledContent = response.content;
+    });
   }
 }
 ```
@@ -167,14 +166,12 @@ import { DarkModeService } from '../services/darkmode.service';
 
 @Component({
   selector: 'app-chart-example',
-  template: `
-    <canvas #chartCanvas width="400" height="200"></canvas>
-  `
+  template: ` <canvas #chartCanvas width="400" height="200"></canvas> `,
 })
 export class ChartExampleComponent implements OnInit {
-  @ViewChild('chartCanvas', { static: true }) 
+  @ViewChild('chartCanvas', { static: true })
   canvasRef!: ElementRef<HTMLCanvasElement>;
-  
+
   private darkModeService = inject(DarkModeService);
 
   ngOnInit(): void {
@@ -191,7 +188,7 @@ export class ChartExampleComponent implements OnInit {
       background: isDark ? '#1f2937' : '#ffffff',
       text: isDark ? '#ffffff' : '#1f2937',
       primary: isDark ? '#60a5fa' : '#3b82f6',
-      secondary: isDark ? '#34d399' : '#10b981'
+      secondary: isDark ? '#34d399' : '#10b981',
     };
 
     // Clear canvas with theme background

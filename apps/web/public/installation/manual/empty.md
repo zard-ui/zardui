@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="empty.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, type TemplateRef, ViewEncapsulation } from '@angular/core';
 
@@ -84,8 +82,6 @@ export class ZardEmptyComponent {
 
 ```
 
-
-
 ```angular-ts title="empty.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva } from 'class-variance-authority';
 
@@ -121,4 +117,3 @@ export const emptyActionsVariants = cva('flex w-full max-w-sm min-w-0 items-cent
 });
 
 ```
-

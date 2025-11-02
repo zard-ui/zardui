@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="select.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -489,8 +487,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
 
 ```
 
-
-
 ```angular-ts title="select.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -521,8 +517,6 @@ export type ZardSelectContentVariants = VariantProps<typeof selectContentVariant
 export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 ```
-
-
 
 ```angular-ts title="select-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal } from '@angular/core';
@@ -588,4 +582,3 @@ export class ZardSelectItemComponent {
 }
 
 ```
-

@@ -11,7 +11,9 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
     <div class="h-[300px] w-full">
       <div class="mb-4 text-sm">
         <div class="mt-4 flex items-center justify-center gap-2">
-          <button z-button zType="ghost" type="button" [attr.aria-pressed]="showArrow" (click)="showArrow = !showArrow">{{ showArrow ? 'Hide' : 'Show' }} Arrows</button>
+          <button z-button zType="ghost" type="button" [attr.aria-pressed]="showArrow" (click)="showArrow = !showArrow">
+            {{ showArrow ? 'Hide' : 'Show' }} Arrows
+          </button>
         </div>
       </div>
       <z-tab-group [zShowArrow]="showArrow">

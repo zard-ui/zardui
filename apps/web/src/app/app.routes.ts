@@ -1,8 +1,8 @@
 import { Route } from '@angular/router';
 
 import { DocumentationLayout } from './core/layouts/documentation/documentation.layout';
-import { DEFAULT_DOC } from './shared/constants/routes.constant';
 import { ShellLayout } from './core/layouts/shell/shell.layout';
+import { DEFAULT_DOC } from './shared/constants/routes.constant';
 
 export const appRoutes: Route[] = [
   {

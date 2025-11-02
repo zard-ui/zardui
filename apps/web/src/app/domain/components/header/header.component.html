@@ -1,14 +1,14 @@
 <header class="bg-background sticky top-0 z-50 w-full">
-  <nav class="max-w-[var(--breakpoint-2xl)] h-16 mx-auto px-4 flex items-center justify-between">
+  <nav class="mx-auto flex h-16 max-w-[var(--breakpoint-2xl)] items-center justify-between px-4">
     <menu class="flex items-center gap-4">
-      <a class="hidden xl:flex items-center gap-3" routerLink="/">
+      <a class="hidden items-center gap-3 xl:flex" routerLink="/">
         <img src="images/zard.svg" alt="logo" class="h-6 dark:invert" />
         <z-badge zType="secondary">{{ appVersion }}</z-badge>
       </a>
       <aside class="block xl:hidden">
         <z-mobile-nav></z-mobile-nav>
       </aside>
-      <nav class="items-center gap-0.5 hidden lg:flex">
+      <nav class="hidden items-center gap-0.5 lg:flex">
         @for (path of headerPaths; track $index) {
           <a z-button zType="ghost" [routerLink]="path.path">
             {{ path.name }}
@@ -19,7 +19,7 @@
         }
       </nav>
     </menu>
-    <aside class="ml-auto flex items-center md:flex-1 md:justify-end h-[16px]">
+    <aside class="ml-auto flex h-[16px] items-center md:flex-1 md:justify-end">
       <z-doc-researcher #docResearcher class="hidden xl:block"></z-doc-researcher>
       <z-divider zOrientation="vertical" class="hidden xl:block"></z-divider>
       @if (githubData) {

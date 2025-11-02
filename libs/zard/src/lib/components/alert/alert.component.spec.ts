@@ -8,7 +8,9 @@ import { ZardAlertComponent } from './alert.component';
   selector: 'test-host-component',
   standalone: true,
   imports: [ZardAlertComponent],
-  template: ` <z-alert zTitle="Test Title" zDescription="Test Description" zIcon="info" class="custom-class"></z-alert> `,
+  template: `
+    <z-alert zTitle="Test Title" zDescription="Test Description" zIcon="info" class="custom-class"></z-alert>
+  `,
 })
 class TestHostComponent {}
 

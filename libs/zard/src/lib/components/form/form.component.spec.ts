@@ -1,7 +1,12 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ZardFormFieldComponent, ZardFormControlComponent, ZardFormLabelComponent, ZardFormMessageComponent } from './form.component';
+import {
+  ZardFormFieldComponent,
+  ZardFormControlComponent,
+  ZardFormLabelComponent,
+  ZardFormMessageComponent,
+} from './form.component';
 
 describe('ZardFormFieldComponent', () => {
   let component: ZardFormFieldComponent;

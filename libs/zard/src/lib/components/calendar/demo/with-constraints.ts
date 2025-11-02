@@ -14,7 +14,9 @@ const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
       <div>
         <h3 class="mb-3 text-sm font-medium">With Min/Max Date</h3>
         <z-calendar [minDate]="minDate" [maxDate]="maxDate" (dateChange)="onDateChange($event)" />
-        <p class="text-muted-foreground mt-2 text-sm">Available dates: {{ minDate.toLocaleDateString() }} - {{ maxDate.toLocaleDateString() }}</p>
+        <p class="text-muted-foreground mt-2 text-sm">
+          Available dates: {{ minDate.toLocaleDateString() }} - {{ maxDate.toLocaleDateString() }}
+        </p>
       </div>
 
       <div>

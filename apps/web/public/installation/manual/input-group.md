@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="input-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input, type TemplateRef, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
@@ -139,8 +137,6 @@ export class ZardInputGroupComponent {
 }
 
 ```
-
-
 
 ```angular-ts title="input-group.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -297,11 +293,8 @@ export type ZardInputGroupVariants = VariantProps<typeof inputGroupVariants>;
 
 ```
 
-
-
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export { ZardInputGroupComponent } from './input-group.component';
 export * from './input-group.variants';
 
 ```
-

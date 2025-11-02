@@ -12,7 +12,7 @@ import { ZardFormModule } from '../form.module';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="space-y-6 max-w-sm">
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="max-w-sm space-y-6">
       <z-form-field>
         <label z-form-label zRequired>Username</label>
         <z-form-control>

@@ -1,7 +1,6 @@
-import * as prompts from 'prompts';
-
 import { getAllComponentNames } from '@cli/core/registry/index.js';
 import { logger } from '@cli/utils/logger.js';
+import * as prompts from 'prompts';
 
 export async function selectComponents(components: string[], allFlag: boolean): Promise<string[]> {
   if (allFlag) {

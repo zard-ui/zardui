@@ -1,5 +1,4 @@
-import type { ClassValue } from 'clsx';
-
+import { isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
   ChangeDetectionStrategy,
@@ -17,11 +16,12 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 export interface ZardResizeEvent {
   sizes: number[];
@@ -60,7 +60,9 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   readonly panelSizes = signal<number[]>([]);
   protected readonly isResizing = signal(false);
   protected readonly activeHandleIndex = signal<number | null>(null);
-  protected readonly classes = computed(() => mergeClasses(resizableVariants({ zLayout: this.zLayout() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(resizableVariants({ zLayout: this.zLayout() }), this.class()),
+  );
 
   ngAfterContentInit(): void {
     this.initializePanelSizes();
@@ -148,7 +150,12 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     }
   }
 
-  private handleResize(event: MouseEvent | TouchEvent, handleIndex: number, startPosition: number, startSizes: number[]): void {
+  private handleResize(
+    event: MouseEvent | TouchEvent,
+    handleIndex: number,
+    startPosition: number,
+    startSizes: number[],
+  ): void {
     const currentPosition = this.getEventPosition(event);
     const delta = currentPosition - startPosition;
     const containerSize = this.getContainerSize();

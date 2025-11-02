@@ -1,23 +1,32 @@
-import { LucideAngularModule, Copy, ChevronDown, ArrowLeft, ArrowRight, ChevronUp } from 'lucide-angular';
-import { ChangeDetectionStrategy, Component, computed, inject, input, PLATFORM_ID } from '@angular/core';
-import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { Router, NavigationEnd, RouterLink } from '@angular/router';
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { filter, map, startWith } from 'rxjs/operators';
+import { ChangeDetectionStrategy, Component, computed, inject, input, PLATFORM_ID } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import type { ClassValue } from 'clsx';
+import { Router, NavigationEnd, RouterLink } from '@angular/router';
 
-import { DOCS_PATH, COMPONENTS_PATH } from '../../../shared/constants/routes.constant';
-import { environment } from '../../../../environments/environment';
+import type { ClassValue } from 'clsx';
+import { LucideAngularModule, Copy, ChevronDown, ArrowLeft, ArrowRight, ChevronUp } from 'lucide-angular';
+import { filter, map, startWith } from 'rxjs/operators';
+
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardDividerComponent } from '@zard/components/divider/divider.component';
+import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
+
 import type { AiAssistOption } from './ai-assist.types';
+import { environment } from '../../../../environments/environment';
+import { DOCS_PATH, COMPONENTS_PATH } from '../../../shared/constants/routes.constant';
 
 @Component({
   selector: 'z-assist',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, ZardPopoverComponent, ZardPopoverDirective, ZardDividerComponent, ZardButtonComponent, LucideAngularModule],
+  imports: [
+    RouterLink,
+    ZardPopoverComponent,
+    ZardPopoverDirective,
+    ZardDividerComponent,
+    ZardButtonComponent,
+    LucideAngularModule,
+  ],
   templateUrl: './ai-assist.component.html',
   host: {
     '[class]': 'hostClasses()',

@@ -1,7 +1,7 @@
-import { ZardDemoComboboxDisabledComponent } from './disabled';
-import { ZardDemoComboboxGroupedComponent } from './grouped';
 import { ZardDemoComboboxDefaultComponent } from './default';
+import { ZardDemoComboboxDisabledComponent } from './disabled';
 import { ZardDemoComboboxFormComponent } from './form';
+import { ZardDemoComboboxGroupedComponent } from './grouped';
 
 export const COMBOBOX = {
   componentName: 'combobox',

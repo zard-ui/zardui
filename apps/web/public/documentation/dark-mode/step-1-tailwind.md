@@ -32,9 +32,7 @@ After adding the custom variant, you can use:
 ```html
 <!-- These styles apply when .dark class is present -->
 <div class="bg-white dark:bg-gray-900">
-  <p class="text-black dark:text-white">
-    This text changes color based on theme
-  </p>
+  <p class="text-black dark:text-white">This text changes color based on theme</p>
 </div>
 ```
 

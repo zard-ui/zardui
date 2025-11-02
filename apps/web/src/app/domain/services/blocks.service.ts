@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import type { Block } from '../components/block-container/block-container.component';
 import { BLOCKS_REGISTRY } from '../config/blocks-registry';
 

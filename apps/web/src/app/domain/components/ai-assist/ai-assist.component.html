@@ -1,8 +1,12 @@
 <div
-  class="bg-background/80 border-border/50 fixed lg:absolute lg:top-0 lg:left-0 lg:h-fit lg:justify-end inset-x-0 bottom-0 isolate z-40 flex items-center gap-2 border-t px-4 py-4 backdrop-blur-sm sm:static sm:z-0 sm:border-t-0 sm:bg-transparent sm:px-0 sm:pt-1.5 sm:backdrop-blur-none sm:w-fit sm:ml-auto"
+  class="bg-background/80 border-border/50 fixed inset-x-0 bottom-0 isolate z-40 flex items-center gap-2 border-t px-4 py-4 backdrop-blur-sm sm:static sm:z-0 sm:ml-auto sm:w-fit sm:border-t-0 sm:bg-transparent sm:px-0 sm:pt-1.5 sm:backdrop-blur-none lg:absolute lg:top-0 lg:left-0 lg:h-fit lg:justify-end"
 >
   <div class="bg-secondary group/buttons relative flex rounded-lg">
-    <button z-button zType="secondary" class="text-secondary-foreground rounded-md gap-1.5 px-3 h-8 md:h-7 md:text-[0.8rem]">
+    <button
+      z-button
+      zType="secondary"
+      class="text-secondary-foreground h-8 gap-1.5 rounded-md px-3 md:h-7 md:text-[0.8rem]"
+    >
       @if (featureCopyPage) {
         <span class="flex items-center gap-2">
           <lucide-angular [img]="CopyIcon" [size]="16" />
@@ -13,14 +17,23 @@
       }
     </button>
 
-    <z-divider zOrientation="vertical" class="!h-8 bg-foreground/10 z-10 mx-0 sm:!h-7"></z-divider>
+    <z-divider zOrientation="vertical" class="bg-foreground/10 z-10 mx-0 !h-8 sm:!h-7"></z-divider>
 
-    <button z-button zType="secondary" class="hidden sm:flex peer -ml-0.5 size-8 shadow-none md:size-7 md:text-[0.8rem]" zPopover [zContent]="popoverContent" zPlacement="bottom">
+    <button
+      z-button
+      zType="secondary"
+      class="peer -ml-0.5 hidden size-8 shadow-none sm:flex md:size-7 md:text-[0.8rem]"
+      zPopover
+      [zContent]="popoverContent"
+      zPlacement="bottom"
+    >
       <lucide-angular [img]="ChevronDownIcon" [size]="18" />
     </button>
 
     <ng-template #popoverContent>
-      <z-popover class="p-1 backdrop-blur-sm bg-background/70 dark:bg-background/60 w-44 lg:bg-secondary lg:dark:bg-secondary -ml-[6%] lg:-ml-[40%]">
+      <z-popover
+        class="bg-background/70 dark:bg-background/60 lg:bg-secondary lg:dark:bg-secondary -ml-[6%] w-44 p-1 backdrop-blur-sm lg:-ml-[40%]"
+      >
         <div class="space-y-2">
           @for (option of aiOptions(); track option.id) {
             <a
@@ -28,7 +41,7 @@
               target="_blank"
               rel="noopener noreferrer"
               role="menuitem"
-              class="focus:bg-accent focus:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4 hover:bg-accent"
+              class="focus:bg-accent focus:text-accent-foreground [&_svg:not([class*='text-'])]:text-muted-foreground hover:bg-accent relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-hidden select-none [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4"
               tabindex="-1"
             >
               @switch (option.id) {
@@ -66,13 +79,20 @@
       </z-popover>
     </ng-template>
 
-    <button z-button zType="secondary" class="flex sm:hidden peer -ml-0.5 size-8 shadow-none md:size-7 md:text-[0.8rem]" zPopover [zContent]="popoverContent" zPlacement="top">
+    <button
+      z-button
+      zType="secondary"
+      class="peer -ml-0.5 flex size-8 shadow-none sm:hidden md:size-7 md:text-[0.8rem]"
+      zPopover
+      [zContent]="popoverContent"
+      zPlacement="top"
+    >
       <lucide-angular [img]="ChevronUpIcon" [size]="16" />
     </button>
   </div>
 
   @if (prevUrl()) {
-    <a z-button zType="secondary" class="ml-auto lg:ml-0 size-8 shadow-none md:size-7" [routerLink]="prevUrl()">
+    <a z-button zType="secondary" class="ml-auto size-8 shadow-none md:size-7 lg:ml-0" [routerLink]="prevUrl()">
       <lucide-angular [img]="ArrowLeftIcon" [size]="16" />
       <span class="sr-only">Previous</span>
     </a>

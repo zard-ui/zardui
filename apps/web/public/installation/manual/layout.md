@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="layout.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, contentChildren, input, ViewEncapsulation } from '@angular/core';
 
@@ -48,8 +46,6 @@ export class LayoutComponent {
 }
 
 ```
-
-
 
 ```angular-ts title="layout.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -103,8 +99,6 @@ export const sidebarGroupLabelVariants = cva(
 
 ```
 
-
-
 ```angular-ts title="content.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -136,8 +130,6 @@ export class ContentComponent {
 
 ```
 
-
-
 ```angular-ts title="footer.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
@@ -166,8 +158,6 @@ export class FooterComponent {
 }
 
 ```
-
-
 
 ```angular-ts title="header.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
@@ -198,8 +188,6 @@ export class HeaderComponent {
 
 ```
 
-
-
 ```angular-ts title="layout.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 
@@ -218,8 +206,6 @@ const LAYOUT_COMPONENTS = [LayoutComponent, HeaderComponent, FooterComponent, Co
 export class LayoutModule {}
 
 ```
-
-
 
 ```angular-ts title="sidebar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, type TemplateRef, ViewEncapsulation } from '@angular/core';
@@ -353,4 +339,3 @@ export class SidebarGroupLabelComponent {
 }
 
 ```
-

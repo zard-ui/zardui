@@ -1,14 +1,15 @@
-import { CategoryTabsComponent, type CategoryTab } from '@zard/shared/components/category-tabs/category-tabs.component';
-import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
-import { DarkModeService } from '@zard/shared/services/darkmode.service';
-import { Component, DestroyRef, inject, signal, type OnInit } from '@angular/core';
-import { SeoService } from '@zard/shared/services/seo.service';
-import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ViewportScroller } from '@angular/common';
+import { Component, DestroyRef, inject, signal, type OnInit } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+
+import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
+import { CategoryTabsComponent, type CategoryTab } from '@zard/shared/components/category-tabs/category-tabs.component';
+import { DarkModeService } from '@zard/shared/services/darkmode.service';
+import { SeoService } from '@zard/shared/services/seo.service';
 
 import { BlockContainerComponent, type Block } from '../../components/block-container/block-container.component';
 import { BlocksService, type BlockCategory } from '../../services/blocks.service';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'z-blocks',

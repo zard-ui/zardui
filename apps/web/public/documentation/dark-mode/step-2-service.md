@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 export type Theme = 'light' | 'dark';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DarkModeService {
   private readonly STORAGE_KEY = 'theme';
@@ -32,20 +32,16 @@ export class DarkModeService {
   }
 
   getCurrentTheme(): Theme {
-    return document.documentElement.classList.contains(this.DARK_CLASS) 
-      ? 'dark' 
-      : 'light';
+    return document.documentElement.classList.contains(this.DARK_CLASS) ? 'dark' : 'light';
   }
 
   getSystemTheme(): Theme {
-    return window.matchMedia('(prefers-color-scheme: dark)').matches 
-      ? 'dark' 
-      : 'light';
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
   }
 
   private applyTheme(theme: Theme): void {
     const html = document.documentElement;
-    
+
     if (theme === 'dark') {
       html.classList.add(this.DARK_CLASS);
     } else {

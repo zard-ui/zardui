@@ -1,4 +1,12 @@
-import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, input, ViewEncapsulation } from '@angular/core';
+import {
+  type AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 

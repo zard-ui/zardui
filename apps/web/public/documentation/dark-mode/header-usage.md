@@ -32,7 +32,12 @@ export class HeaderComponent {
 
 ```html
 <!-- header.component.html -->
-<z-button (click)="toggleTheme()" variant="ghost" size="icon" [attr.aria-label]="getCurrentTheme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
+<z-button
+  (click)="toggleTheme()"
+  variant="ghost"
+  size="icon"
+  [attr.aria-label]="getCurrentTheme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
+>
   @if (getCurrentTheme() === 'dark') {
   <svg><!-- sun icon --></svg>
   } @else {

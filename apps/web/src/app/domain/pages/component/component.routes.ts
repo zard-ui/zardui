@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { DEFAULT_COMPONENT } from '@zard/shared/constants/routes.constant';
 
 export const COMPONENTS_ROUTES: Routes = [

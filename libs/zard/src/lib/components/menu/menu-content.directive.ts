@@ -1,10 +1,10 @@
-import type { ClassValue } from 'clsx';
-
 import { CdkMenu } from '@angular/cdk/menu';
 import { computed, Directive, input } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { menuContentVariants } from './menu.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Directive({
   selector: '[z-menu-content]',

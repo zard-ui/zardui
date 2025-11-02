@@ -1,5 +1,6 @@
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { Component, input } from '@angular/core';
+
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 
 export interface ResourceLink {
   url: string;
@@ -18,12 +19,12 @@ export interface ResourceBadge {
   standalone: true,
   imports: [ZardBadgeComponent],
   template: `
-    <div class="rounded-lg border bg-card p-6 sm:p-8 text-card-foreground shadow-sm">
+    <div class="bg-card text-card-foreground rounded-lg border p-6 shadow-sm sm:p-8">
       <div class="flex flex-col gap-4">
         <div class="flex items-start justify-between">
           <div class="flex flex-col gap-2">
             <h3 class="text-lg font-semibold">{{ title() }}</h3>
-            <p class="text-sm text-muted-foreground">
+            <p class="text-muted-foreground text-sm">
               by <strong>{{ author() }}</strong>
             </p>
           </div>
@@ -36,7 +37,7 @@ export interface ResourceBadge {
           }
         </div>
 
-        <p class="text-sm text-muted-foreground leading-relaxed">
+        <p class="text-muted-foreground text-sm leading-relaxed">
           {{ description() }}
         </p>
 
@@ -54,7 +55,12 @@ export interface ResourceBadge {
                   }
                   @case ('external') {
                     <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                      />
                     </svg>
                   }
                   @case ('twitter') {
@@ -83,7 +89,9 @@ export class ResourceCardComponent {
 
   protected getLinkClasses(type: 'primary' | 'secondary'): string {
     const baseClasses = 'inline-flex items-center gap-2 text-sm';
-    return type === 'primary' ? `${baseClasses} text-primary hover:underline` : `${baseClasses} text-muted-foreground hover:text-foreground`;
+    return type === 'primary'
+      ? `${baseClasses} text-primary hover:underline`
+      : `${baseClasses} text-muted-foreground hover:text-foreground`;
   }
 
   protected getBadgeClasses(variant: 'premium' | 'free' | 'license'): string {

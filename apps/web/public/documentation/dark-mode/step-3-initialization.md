@@ -11,7 +11,7 @@ import { DarkModeService } from './services/darkmode.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
   private darkModeService = inject(DarkModeService);
@@ -35,7 +35,7 @@ import { DarkModeService } from './app/services/darkmode.service';
 bootstrapApplication(AppComponent, {
   providers: [
     // other providers
-  ]
+  ],
 }).then(() => {
   // Initialize theme after app bootstrap
   const darkModeService = new DarkModeService();
@@ -53,5 +53,6 @@ bootstrapApplication(AppComponent, {
 ## Verification
 
 After initialization, check your browser's developer tools:
+
 - Light mode: `<html>` has no `.dark` class
 - Dark mode: `<html class="dark">` has the dark class

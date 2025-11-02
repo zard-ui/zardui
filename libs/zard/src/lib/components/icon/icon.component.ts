@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { LucideAngularModule } from 'lucide-angular';
+
 import type { ClassValue } from 'clsx';
+import { LucideAngularModule } from 'lucide-angular';
 
 import { iconVariants, type ZardIconVariants } from './icon.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZARD_ICONS, type ZardIcon } from './icons';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-icon, [z-icon]',
@@ -12,7 +13,14 @@ import { ZARD_ICONS, type ZardIcon } from './icons';
   imports: [LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <lucide-angular [img]="icon()" [strokeWidth]="zStrokeWidth()" [absoluteStrokeWidth]="zAbsoluteStrokeWidth()" [class]="classes()" /> `,
+  template: `
+    <lucide-angular
+      [img]="icon()"
+      [strokeWidth]="zStrokeWidth()"
+      [absoluteStrokeWidth]="zAbsoluteStrokeWidth()"
+      [class]="classes()"
+    />
+  `,
   host: {},
 })
 export class ZardIconComponent {

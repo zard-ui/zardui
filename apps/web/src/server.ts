@@ -1,9 +1,10 @@
-import { CommonEngine, isMainModule } from '@angular/ssr/node';
-import { dirname, join, resolve } from 'node:path';
 import { APP_BASE_HREF } from '@angular/common';
+import { CommonEngine, isMainModule } from '@angular/ssr/node';
+
+import express from 'express';
+import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import xmlbuilder from 'xmlbuilder';
-import express from 'express';
 
 import { HEADER_PATHS, SIDEBAR_PATHS } from './app/shared/constants/routes.constant';
 import bootstrap from './main.server';

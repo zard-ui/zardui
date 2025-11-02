@@ -5,6 +5,7 @@ This document explains how ZardUI CLI ensures component compatibility through ve
 ## 🎯 Problem Statement
 
 When users install a specific version of `@ngzard/ui`, they expect:
+
 1. Components to be compatible with that version
 2. No breaking changes from newer versions
 3. Consistent behavior across installations
@@ -24,11 +25,13 @@ graph LR
 ### Step by Step
 
 1. **User Installation**
+
    ```bash
    npm install @ngzard/ui@1.2.3
    ```
 
 2. **CLI Detects Version**
+
    ```typescript
    // packages/cli/src/utils/fetch-component.ts
    function getCliVersion(): string {
@@ -38,9 +41,10 @@ graph LR
    ```
 
 3. **Constructs GitHub URL**
+
    ```typescript
    const version = getCliVersion(); // "1.2.3"
-   const ref = `v${version}`;       // "v1.2.3"
+   const ref = `v${version}`; // "v1.2.3"
    const url = `https://raw.githubusercontent.com/zard-ui/zardui/v1.2.3/libs/zard/...`;
    ```
 
@@ -66,11 +70,13 @@ Both packages **always have the same version**:
 ```
 
 **Why?**
+
 - Ensures library and CLI are always in sync
 - Users can trust version numbers
 - Simplifies version management
 
 **Configuration:** [`nx.json`](../nx.json)
+
 ```json
 {
   "release": {
@@ -86,12 +92,14 @@ Both packages **always have the same version**:
 The CLI reads its version directly from `package.json` at runtime:
 
 **Before (❌ Hardcoded):**
+
 ```typescript
 // packages/cli/src/constants/app.constants.ts
 export const APP_VERSION = '1.0.0-beta.11'; // ❌ Gets outdated!
 ```
 
 **After (✅ Dynamic):**
+
 ```typescript
 // packages/cli/src/constants/app.constants.ts
 function getAppVersion(): string {
@@ -113,6 +121,7 @@ v2.0.0-beta.1
 ```
 
 **Why this format?**
+
 - ✅ Standard semantic versioning
 - ✅ Compatible with npm version format
 - ✅ Easy to parse and validate
@@ -150,11 +159,13 @@ npm install @ngzard/ui@1.2.3
 ## 🎯 Benefits
 
 ### For Users
+
 - ✅ **Predictable**: Components always match installed version
 - ✅ **Safe**: No breaking changes from master branch
 - ✅ **Reproducible**: Same version = same components
 
 ### For Maintainers
+
 - ✅ **Simple**: One version for everything
 - ✅ **Automatic**: No manual updates needed
 - ✅ **Clear**: Easy to understand and debug
@@ -162,11 +173,13 @@ npm install @ngzard/ui@1.2.3
 ## 🔧 Implementation Files
 
 ### Core Files
+
 - [`packages/cli/src/utils/fetch-component.ts`](../packages/cli/src/utils/fetch-component.ts) - Component fetching logic
 - [`packages/cli/src/constants/app.constants.ts`](../packages/cli/src/constants/app.constants.ts) - Version detection
 - [`nx.json`](../nx.json) - Unified versioning config
 
 ### Related Documentation
+
 - [Release Automation](../RELEASE_AUTOMATION.md) - How releases work
 - [Quick Start](../QUICK_START_RELEASE.md) - Getting started guide
 

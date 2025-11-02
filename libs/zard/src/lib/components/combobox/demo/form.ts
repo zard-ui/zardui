@@ -24,7 +24,7 @@ import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.comp
         <button z-button variant="outline" (click)="logValue()">Log Value</button>
       </div>
 
-      <div class="text-sm text-muted-foreground">Current value: {{ frameworkControl.value ?? 'None' }}</div>
+      <div class="text-muted-foreground text-sm">Current value: {{ frameworkControl.value ?? 'None' }}</div>
     </div>
   `,
 })

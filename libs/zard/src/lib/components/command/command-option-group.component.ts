@@ -1,11 +1,20 @@
-import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  type AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
 import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
-
-import type { ClassValue } from 'clsx';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-option-group',

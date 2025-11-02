@@ -1,3 +1,4 @@
+import { isPlatformBrowser } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
@@ -13,13 +14,18 @@ import {
   signal,
   viewChild,
 } from '@angular/core';
+
+import { clsx } from 'clsx';
 import EmblaCarousel, { type EmblaCarouselType, type EmblaOptionsType } from 'embla-carousel';
-import { isPlatformBrowser } from '@angular/common';
 import Autoplay from 'embla-carousel-autoplay';
 import { twMerge } from 'tailwind-merge';
-import { clsx } from 'clsx';
 
-import { carouselVariants, carouselContentVariants, carouselViewportVariants, type CarouselVariants } from './carousel.variants';
+import {
+  carouselVariants,
+  carouselContentVariants,
+  carouselViewportVariants,
+  type CarouselVariants,
+} from './carousel.variants';
 
 @Component({
   selector: 'z-carousel',
@@ -36,24 +42,42 @@ import { carouselVariants, carouselContentVariants, carouselViewportVariants, ty
       </div>
 
       @if (showNavigation()) {
-        <div class="flex justify-center gap-4 mt-4 mb-8">
+        <div class="mt-4 mb-8 flex justify-center gap-4">
           <button
             (click)="scrollToPrev()"
             [disabled]="!canScrollPrev()"
-            class="flex h-10 w-10 items-center justify-center rounded-full bg-background text-foreground shadow-md hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 border border-border"
+            class="bg-background text-foreground hover:bg-muted border-border flex h-10 w-10 items-center justify-center rounded-full border shadow-md transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Previous slide"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="m15 18-6-6 6-6" />
             </svg>
           </button>
           <button
             (click)="scrollToNext()"
             [disabled]="!canScrollNext()"
-            class="flex h-10 w-10 items-center justify-center rounded-full bg-background text-foreground shadow-md hover:bg-muted disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200 hover:scale-105 border border-border"
+            class="bg-background text-foreground hover:bg-muted border-border flex h-10 w-10 items-center justify-center rounded-full border shadow-md transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Next slide"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="m9 18 6-6-6-6" />
             </svg>
           </button>
@@ -62,11 +86,14 @@ import { carouselVariants, carouselContentVariants, carouselViewportVariants, ty
 
       <!-- Dots indicator -->
       @if (showDots()) {
-        <div class="flex justify-center gap-2 mt-4">
+        <div class="mt-4 flex justify-center gap-2">
           @for (_ of dotsArray(); track _; let i = $index) {
             <button
               (click)="scrollToSlide(i)"
-              [class]="'w-2 h-2 rounded-full transition-all duration-200 border-0 p-0 ' + (currentSlide() === i ? 'bg-primary' : 'bg-muted-foreground/30')"
+              [class]="
+                'h-2 w-2 rounded-full border-0 p-0 transition-all duration-200 ' +
+                (currentSlide() === i ? 'bg-primary' : 'bg-muted-foreground/30')
+              "
               [attr.aria-label]="'Go to slide ' + (i + 1)"
             ></button>
           }

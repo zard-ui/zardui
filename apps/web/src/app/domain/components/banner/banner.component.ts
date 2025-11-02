@@ -4,7 +4,7 @@ import { Component, input } from '@angular/core';
   selector: 'z-banner',
   standalone: true,
   template: `
-    <aside [class]="'w-full text-center py-2 ' + (isDevMode() ? 'bg-red-400' : 'bg-primary')">
+    <aside [class]="'w-full py-2 text-center ' + (isDevMode() ? 'bg-red-400' : 'bg-primary')">
       <h1 [class]="isDevMode() ? 'text-foreground' : 'text-primary-foreground'">
         <ng-content></ng-content>
       </h1>

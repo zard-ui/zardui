@@ -3,9 +3,9 @@ import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ZardButtonComponent } from '../button/button.component';
 import { ZardDialogModule } from './dialog.component';
 import { ZardDialogService } from './dialog.service';
+import { ZardButtonComponent } from '../button/button.component';
 
 @Component({
   template: ` <button z-button zType="outline" (click)="openDialog()">Open dialog</button> `,

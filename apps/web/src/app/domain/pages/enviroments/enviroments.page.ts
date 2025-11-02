@@ -1,4 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
+
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { SeoService } from '@zard/shared/services/seo.service';
@@ -13,15 +14,27 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 @Component({
   selector: 'z-enviroments',
   template: `
-    <z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
-      <z-doc-heading title="Installation" description="How to install dependencies and structure your app." scrollSpyItem="overview" id="overview"></z-doc-heading>
+    <z-content
+      [navigationConfig]="navigationConfig"
+      [activeAnchor]="activeAnchor"
+      scrollSpy
+      (scrollSpyChange)="activeAnchor = $event"
+    >
+      <z-doc-heading
+        title="Installation"
+        description="How to install dependencies and structure your app."
+        scrollSpyItem="overview"
+        id="overview"
+      ></z-doc-heading>
 
       <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="environments" id="environments">
         <div class="flex flex-col gap-6">
-          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Pick Your Environment</h2>
+          <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+            Pick Your Environment
+          </h2>
           <p class="leading-relaxed">
-            Start by selecting your environment of choice. Then, follow the instructions to install the dependencies and structure your app. zard/ui is designed to work seamlessly
-            with Angular projects.
+            Start by selecting your environment of choice. Then, follow the instructions to install the dependencies and
+            structure your app. zard/ui is designed to work seamlessly with Angular projects.
           </p>
         </div>
 
@@ -33,10 +46,10 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
                 [path]="env.path"
                 [icon]="env.icon"
                 [disabled]="!env.available"
-                [class]="!env.available ? 'opacity-50 pointer-events-none' : ''"
+                [class]="!env.available ? 'pointer-events-none opacity-50' : ''"
               ></z-env-card>
               @if (!env.available) {
-                <div class="absolute inset-0 flex items-center justify-center bg-background/80 rounded-xl">
+                <div class="bg-background/80 absolute inset-0 flex items-center justify-center rounded-xl">
                   <z-badge zType="secondary">Coming Soon</z-badge>
                 </div>
               }
@@ -45,7 +58,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
         </div>
         <z-alert
           zTitle="Framework Support"
-          class="bg-blue-500 dark:text-blue-100 dark:bg-blue-950 border dark:border-blue-800"
+          class="border bg-blue-500 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100"
           zDescription="Angular is available now with full documentation and examples. Analog and Nx support are coming soon with dedicated guides and configurations."
           zAppearance="fill"
         />
@@ -53,7 +66,15 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     </z-content>
   `,
   standalone: true,
-  imports: [EnvCardComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardBadgeComponent, ZardAlertComponent],
+  imports: [
+    EnvCardComponent,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    ZardBadgeComponent,
+    ZardAlertComponent,
+  ],
 })
 export class EnviromentsPage implements OnInit {
   protected readonly environments = [
@@ -71,6 +92,11 @@ export class EnviromentsPage implements OnInit {
   activeAnchor?: string;
 
   ngOnInit(): void {
-    this.seoService.setDocsSeo(`Installation`, `How to install dependencies and structure your app.`, `/docs/installation`, 'og-install.jpg');
+    this.seoService.setDocsSeo(
+      `Installation`,
+      `How to install dependencies and structure your app.`,
+      `/docs/installation`,
+      'og-install.jpg',
+    );
   }
 }

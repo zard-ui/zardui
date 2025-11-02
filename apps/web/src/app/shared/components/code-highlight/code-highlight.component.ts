@@ -38,7 +38,13 @@ export class CodeHighlightComponent {
     });
   }
 
-  private async highlightCode(code: string, language: string, filename?: string, showLineNumbers = false, copyButton = true): Promise<string> {
+  private async highlightCode(
+    code: string,
+    language: string,
+    filename?: string,
+    showLineNumbers = false,
+    copyButton = true,
+  ): Promise<string> {
     const meta: string[] = [];
 
     if (filename) {

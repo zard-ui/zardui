@@ -1,12 +1,13 @@
-import rehypePrettyCode from 'rehype-pretty-code';
-import rehypeStringify from 'rehype-stringify';
 import { Injectable } from '@angular/core';
-import remarkRehype from 'remark-rehype';
-import { visit } from 'unist-util-visit';
-import remarkParse from 'remark-parse';
+
+import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
+import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
 
 import { rehypeEnhancedCode, rehypeCodeTabs } from './rehype-enhanced-code';
 
@@ -47,7 +48,14 @@ export class MarkdownService {
             node.properties = {
               ...node.properties,
               style: [],
-              class: ['scroll-m-28', 'font-heading', 'text-xl', 'font-medium', 'tracking-tight', '[&:not(:first-child)]:mt-6'],
+              class: [
+                'scroll-m-28',
+                'font-heading',
+                'text-xl',
+                'font-medium',
+                'tracking-tight',
+                '[&:not(:first-child)]:mt-6',
+              ],
             };
           }
 
@@ -83,7 +91,16 @@ export class MarkdownService {
               // Only style inline code - block code is handled by rehypeEnhancedCode
               node.properties = {
                 ...node.properties,
-                class: ['relative', 'rounded', 'bg-muted', 'px-[0.3rem]', 'py-[0.2rem]', 'font-mono', 'text-sm', 'font-semibold'],
+                class: [
+                  'relative',
+                  'rounded',
+                  'bg-muted',
+                  'px-[0.3rem]',
+                  'py-[0.2rem]',
+                  'font-mono',
+                  'text-sm',
+                  'font-semibold',
+                ],
               };
             }
           }

@@ -1,5 +1,5 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ZardResizablePanelComponent } from './resizable-panel.component';
@@ -9,7 +9,14 @@ import { ZardResizablePanelComponent } from './resizable-panel.component';
   standalone: true,
   imports: [ZardResizablePanelComponent],
   template: `
-    <z-resizable-panel [zDefaultSize]="defaultSize" [zMin]="min" [zMax]="max" [zCollapsible]="collapsible" [zResizable]="resizable" [class]="customClass">
+    <z-resizable-panel
+      [zDefaultSize]="defaultSize"
+      [zMin]="min"
+      [zMax]="max"
+      [zCollapsible]="collapsible"
+      [zResizable]="resizable"
+      [class]="customClass"
+    >
       <div>Panel Content</div>
     </z-resizable-panel>
   `,
@@ -226,7 +233,9 @@ describe('ZardResizablePanelComponent', () => {
       const complexHostComponent = TestBed.createComponent(ComplexContentHostComponent);
       complexHostComponent.detectChanges();
 
-      const complexPanelElement = complexHostComponent.debugElement.query(By.directive(ZardResizablePanelComponent)).nativeElement;
+      const complexPanelElement = complexHostComponent.debugElement.query(
+        By.directive(ZardResizablePanelComponent),
+      ).nativeElement;
 
       expect(complexPanelElement.querySelector('h2')).toBeTruthy();
       expect(complexPanelElement.querySelector('p')).toBeTruthy();

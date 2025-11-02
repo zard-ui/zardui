@@ -67,7 +67,12 @@ export * from './lib/components/command/command.module';
 export * from './lib/components/combobox/combobox.component';
 
 // Dialog
-export { ZardDialogComponent, ZardDialogOptions, ZardDialogModule, OnClickCallback as DialogOnClickCallback } from './lib/components/dialog/dialog.component';
+export {
+  ZardDialogComponent,
+  ZardDialogOptions,
+  ZardDialogModule,
+  OnClickCallback as DialogOnClickCallback,
+} from './lib/components/dialog/dialog.component';
 export * from './lib/components/dialog/dialog.service';
 export * from './lib/components/dialog/dialog-ref';
 

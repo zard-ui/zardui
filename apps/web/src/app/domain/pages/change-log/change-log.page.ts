@@ -1,12 +1,13 @@
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
-import { ZardAlertComponent } from '@zard/components/alert/alert.component';
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { SeoService } from '@zard/shared/services/seo.service';
 import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
+
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
+import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
+import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
+import { SeoService } from '@zard/shared/services/seo.service';
 
 import { ChangelogService, type ChangelogEntry } from './services/changelog.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
@@ -15,7 +16,16 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 @Component({
   selector: 'z-changelog',
   standalone: true,
-  imports: [CommonModule, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardAlertComponent, ZardLoaderComponent, MarkdownRendererComponent],
+  imports: [
+    CommonModule,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    ZardAlertComponent,
+    ZardLoaderComponent,
+    MarkdownRendererComponent,
+  ],
   templateUrl: './change-log.page.html',
 })
 export class ChangeLogPage implements OnInit {

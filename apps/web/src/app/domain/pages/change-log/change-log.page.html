@@ -6,7 +6,12 @@
   scrollSpy
   (scrollSpyChange)="activeAnchor = $event"
 >
-  <z-doc-heading title="Changelog" description="Latest updates and announcements." scrollSpyItem="overview" id="overview" />
+  <z-doc-heading
+    title="Changelog"
+    description="Latest updates and announcements."
+    scrollSpyItem="overview"
+    id="overview"
+  />
 
   <div class="space-y-8">
     @for (entry of entries(); track trackByEntry($index, entry)) {
@@ -14,12 +19,18 @@
       <z-markdown-renderer [markdownUrl]="'/documentation/change-log/' + entry.filename"></z-markdown-renderer>
     </div>
     } @if (isLoading() && entries().length === 0) {
-    <div class="flex justify-center items-center py-8">
+    <div class="flex items-center justify-center py-8">
       <z-loader />
-      <span class="ml-3 text-muted-foreground">Loading changelog entries...</span>
+      <span class="text-muted-foreground ml-3">Loading changelog entries...</span>
     </div>
     } @if (!isLoading() && entries().length === 0) {
-    <z-alert variant="outline" class="mt-8" zTitle="No entries found" zDescription="No changelog entries were found at this time."> </z-alert>
+    <z-alert
+      variant="outline"
+      class="mt-8"
+      zTitle="No entries found"
+      zDescription="No changelog entries were found at this time."
+    >
+    </z-alert>
     }
   </div>
 </z-content>

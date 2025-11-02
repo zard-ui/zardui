@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  computed,
+  inject,
+  input,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -34,7 +43,13 @@ import { ZardIconComponent } from '../icon/icon.component';
       />
     </button>
 
-    <div [class]="contentClasses()" [id]="'content-' + zValue()" [attr.data-state]="isOpen() ? 'open' : 'closed'" role="region" [attr.aria-labelledby]="'accordion-' + zValue()">
+    <div
+      [class]="contentClasses()"
+      [id]="'content-' + zValue()"
+      [attr.data-state]="isOpen() ? 'open' : 'closed'"
+      role="region"
+      [attr.aria-labelledby]="'accordion-' + zValue()"
+    >
       <div class="overflow-hidden">
         <div class="pt-0 pb-4">
           <ng-content></ng-content>

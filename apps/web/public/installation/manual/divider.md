@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="divider.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 import type { ClassValue } from 'clsx';
@@ -37,8 +35,6 @@ export class ZardDividerComponent {
 }
 
 ```
-
-
 
 ```angular-ts title="divider.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -97,4 +93,3 @@ export const dividerVariants = cva('bg-border block', {
 export type ZardDividerVariants = VariantProps<typeof dividerVariants>;
 
 ```
-

@@ -22,35 +22,34 @@ Refactor the `Empty` component to follow the **ZardUI pattern** (like our Card c
 
 ### **z-empty (Single Component)**
 
-| Name            | Type                              | Required | Description                                    |
-| --------------- | --------------------------------- | -------- | ---------------------------------------------- |
-| `zIcon`         | `ZardIcon`                        | No       | Icon to display (easier than image)            |
-| `zImage`        | `string \| TemplateRef<void>`     | No       | Image URL or custom template                   |
-| `zTitle`        | `string \| TemplateRef<void>`     | No       | Title text or custom template                  |
-| `zDescription`  | `string \| TemplateRef<void>`     | No       | Description text or custom template            |
-| `zActions`      | `TemplateRef<void>[]`             | No       | Array of action templates (ng-zorro pattern)   |
-| `class`         | `ClassValue`                      | No       | Custom CSS classes                             |
+| Name           | Type                          | Required | Description                                  |
+| -------------- | ----------------------------- | -------- | -------------------------------------------- |
+| `zIcon`        | `ZardIcon`                    | No       | Icon to display (easier than image)          |
+| `zImage`       | `string \| TemplateRef<void>` | No       | Image URL or custom template                 |
+| `zTitle`       | `string \| TemplateRef<void>` | No       | Title text or custom template                |
+| `zDescription` | `string \| TemplateRef<void>` | No       | Description text or custom template          |
+| `zActions`     | `TemplateRef<void>[]`         | No       | Array of action templates (ng-zorro pattern) |
+| `class`        | `ClassValue`                  | No       | Custom CSS classes                           |
 
 **Note**: Inputs accept both simple strings (for common cases) and TemplateRef (for advanced customization), following the same pattern as our Card component.
 
 ## 🌟 Examples
 
 ### 1️⃣ Simple Case (no actions)
+
 ```html
-<z-empty
-  zIcon="inbox"
-  zTitle="No data"
-  zDescription="No data found">
-</z-empty>
+<z-empty zIcon="inbox" zTitle="No data" zDescription="No data found"> </z-empty>
 ```
 
 ### 2️⃣ With Actions (ng-zorro array pattern)
+
 ```html
 <z-empty
   zIcon="inbox"
   zTitle="No messages"
   zDescription="You don't have any messages yet"
-  [zActions]="[actionPrimary, actionSecondary]">
+  [zActions]="[actionPrimary, actionSecondary]"
+>
 </z-empty>
 
 <ng-template #actionPrimary>
@@ -63,12 +62,14 @@ Refactor the `Empty` component to follow the **ZardUI pattern** (like our Card c
 ```
 
 ### 3️⃣ Advanced Customization (with TemplateRef)
+
 ```html
 <z-empty
   [zImage]="customImage"
   [zTitle]="customTitle"
   zDescription="Invite your team to get started"
-  [zActions]="[actionInvite]">
+  [zActions]="[actionInvite]"
+>
 </z-empty>
 
 <ng-template #customImage>
@@ -88,12 +89,14 @@ Refactor the `Empty` component to follow the **ZardUI pattern** (like our Card c
 ```
 
 ### 4️⃣ With Custom Image
+
 ```html
 <z-empty
   zImage="/illustrations/no-results.svg"
   zTitle="No results found"
   zDescription="Try adjusting your search terms"
-  [zActions]="[actionClear]">
+  [zActions]="[actionClear]"
+>
 </z-empty>
 
 <ng-template #actionClear>
@@ -107,56 +110,51 @@ Refactor the `Empty` component to follow the **ZardUI pattern** (like our Card c
 ## 🎯 Design Decisions
 
 ### Why Array of TemplateRef for Actions?
+
 - **ng-zorro pattern**: Proven in production (see `[nzActions]` in ng-zorro Card)
 - **Flexible**: Can have 0, 1, 2+ actions of any type
 - **Type-safe**: TypeScript validates the templates
 - **Angular-first**: Uses templates, not props with callbacks
 
 ### Why `string | TemplateRef<void>`?
+
 - **Consistent with Card**: Same pattern we already use successfully
 - **Simple for simple cases**: Just pass a string
 - **Powerful for complex cases**: Use TemplateRef for rich content
 - **Progressive enhancement**: Start simple, add complexity only when needed
 
 ### Why Remove `zSize`?
+
 - **Simplicity**: Empty states don't need size variants
 - **Use CSS instead**: Add custom classes if sizing is needed
 - **Less API surface**: Easier to maintain and use
 
 ### Why Not Show Default SVG?
+
 - **Intentional design**: Empty state should be explicit
 - **Cleaner UX**: If no icon/image provided, component is lightweight
 - **Developer control**: Forces developers to think about the empty state
 
 ## 🔄 Migration from Current API
 
-| Current API | New API | Change |
-|-------------|---------|--------|
-| `zImage: string \| TemplateRef` | `zImage: string \| TemplateRef<void>` | ✅ Keep (improved typing) |
-| `zDescription: string \| TemplateRef` | `zDescription: string \| TemplateRef<void>` | ✅ Keep (improved typing) |
-| ❌ N/A | `zIcon: ZardIcon` | ➕ New (easier than image) |
-| ❌ N/A | `zTitle: string \| TemplateRef<void>` | ➕ New (separate from description) |
-| ❌ N/A | `zActions: TemplateRef<void>[]` | ➕ New (array of templates) |
-| `zSize: 'sm' \| 'default' \| 'lg'` | ❌ Removed | ➖ Simplify |
-| Default SVG shown | No default (explicit only) | 🔄 Changed behavior |
+| Current API                           | New API                                     | Change                             |
+| ------------------------------------- | ------------------------------------------- | ---------------------------------- |
+| `zImage: string \| TemplateRef`       | `zImage: string \| TemplateRef<void>`       | ✅ Keep (improved typing)          |
+| `zDescription: string \| TemplateRef` | `zDescription: string \| TemplateRef<void>` | ✅ Keep (improved typing)          |
+| ❌ N/A                                | `zIcon: ZardIcon`                           | ➕ New (easier than image)         |
+| ❌ N/A                                | `zTitle: string \| TemplateRef<void>`       | ➕ New (separate from description) |
+| ❌ N/A                                | `zActions: TemplateRef<void>[]`             | ➕ New (array of templates)        |
+| `zSize: 'sm' \| 'default' \| 'lg'`    | ❌ Removed                                  | ➖ Simplify                        |
+| Default SVG shown                     | No default (explicit only)                  | 🔄 Changed behavior                |
 
 **Migration Example**:
 
 ```html
 <!-- Before -->
-<z-empty
-  [zImage]="customImage"
-  zDescription="No data available"
-  zSize="default">
-</z-empty>
+<z-empty [zImage]="customImage" zDescription="No data available" zSize="default"> </z-empty>
 
 <!-- After -->
-<z-empty
-  [zImage]="customImage"
-  zTitle="No data"
-  zDescription="No data available"
-  [zActions]="[actionAdd]">
-</z-empty>
+<z-empty [zImage]="customImage" zTitle="No data" zDescription="No data available" [zActions]="[actionAdd]"> </z-empty>
 
 <ng-template #actionAdd>
   <button z-button>Add Data</button>

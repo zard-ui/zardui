@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="radio.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -90,8 +88,6 @@ export class ZardRadioComponent implements ControlValueAccessor {
 
 ```
 
-
-
 ```angular-ts title="radio.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva } from 'class-variance-authority';
 
@@ -102,4 +98,3 @@ export const radioVariants = cva(
 export const radioLabelVariants = cva('text-sm empty:hidden peer-disabled:opacity-50 peer-disabled:cursor-not-allowed');
 
 ```
-

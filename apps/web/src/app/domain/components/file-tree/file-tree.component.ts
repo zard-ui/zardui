@@ -1,7 +1,8 @@
-import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { Component, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, input, output } from '@angular/core';
+
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
 
 import type { FileTreeNode, BlockFile } from '../block-container/block-container.component';
 
@@ -13,13 +14,18 @@ import type { FileTreeNode, BlockFile } from '../block-container/block-container
     @for (node of nodes(); track node.path) {
       @if (node.type === 'folder' && node.path) {
         <div class="folder-item">
-          <button (click)="toggleFolder(node.path)" z-button zType="ghost" class="w-full justify-start ring-sidebar-ring">
+          <button
+            (click)="toggleFolder(node.path)"
+            z-button
+            zType="ghost"
+            class="ring-sidebar-ring w-full justify-start"
+          >
             <z-icon zType="chevron-right" zSize="sm" [class.rotate-90]="isOpen(node.path)" />
             <z-icon zType="folder" zSize="sm" />
-            <span class="font-normal truncate">{{ node.name }}</span>
+            <span class="truncate font-normal">{{ node.name }}</span>
           </button>
           @if (isOpen(node.path) && node.children && node.children.length > 0) {
-            <div class="ml-5 mt-0.5 space-y-0.5 pl-2">
+            <div class="mt-0.5 ml-5 space-y-0.5 pl-2">
               <z-file-tree
                 [nodes]="node.children"
                 [openFolders]="openFolders()"
@@ -34,7 +40,7 @@ import type { FileTreeNode, BlockFile } from '../block-container/block-container
         <button
           (click)="selectFile(node.file!)"
           [class]="selectedFilePath() === node.file.path ? 'bg-muted-foreground/15 text-sidebar-accent-foreground' : ''"
-          class=" flex items-center gap-2 py-1 px-2 rounded transition-colors w-full text-left text-sm"
+          class="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-sm transition-colors"
         >
           <z-icon zType="file" zSize="sm" class="flex-shrink-0" />
           <span class="truncate">{{ node.name }}</span>

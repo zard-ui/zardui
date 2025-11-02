@@ -1,5 +1,3 @@
-
-
 ```angular-ts title="tabs.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   afterNextRender,
@@ -310,8 +308,6 @@ export class ZardTabGroupComponent implements AfterViewInit {
 
 ```
 
-
-
 ```angular-ts title="tabs.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
@@ -395,4 +391,3 @@ export const tabButtonVariants = cva('hover:bg-transparent rounded-none flex-shr
 export type ZardTabVariants = VariantProps<typeof tabContainerVariants> & VariantProps<typeof tabNavVariants> & VariantProps<typeof tabButtonVariants> & { zAlignTabs: zAlign };
 
 ```
-

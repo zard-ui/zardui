@@ -68,7 +68,8 @@ export const installations: Installation[] = [
       },
       {
         title: 'Configure styles',
-        subtitle: 'Add the following to your styles.css file. You can learn more about using CSS variables for theming in the',
+        subtitle:
+          'Add the following to your styles.css file. You can learn more about using CSS variables for theming in the',
         url: {
           text: 'theming section.',
           href: '/docs/theming',
