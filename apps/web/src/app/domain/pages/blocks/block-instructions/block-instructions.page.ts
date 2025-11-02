@@ -3,31 +3,29 @@ import { Component, inject, type OnInit } from '@angular/core';
 import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { MarkdownRendererComponent } from '@docs/domain/components/render/markdown-renderer.component';
 import { ScrollSpyItemDirective } from '@docs/domain/directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '@docs/domain/directives/scroll-spy.directive';
 import { SeoService } from '@docs/shared/services/seo.service';
 
-interface Category {
+interface BlockPreview {
   id: string;
-  name: string;
-  description: string;
-}
-
-interface BestPractice {
   title: string;
   description: string;
+  category: string;
+  image: string;
+  components: number;
+  files: number;
 }
 
-interface Technology {
+interface BlockCategory {
   name: string;
-  description: string;
+  blocks: BlockPreview[];
 }
 
 @Component({
   selector: 'z-block-instructions',
   standalone: true,
-  imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
+  imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective],
   templateUrl: './block-instructions.page.html',
 })
 export class BlocksInstructionPage implements OnInit {
@@ -37,51 +35,61 @@ export class BlocksInstructionPage implements OnInit {
   readonly navigationConfig: NavigationConfig = {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
-      { id: 'available-blocks', label: 'Available Blocks', type: 'custom' },
-      { id: 'block-structure', label: 'Block Structure', type: 'custom' },
-      { id: 'adding-block', label: 'Adding New Block', type: 'custom' },
-      { id: 'categories', label: 'Categories', type: 'custom' },
-      { id: 'best-practices', label: 'Best Practices', type: 'custom' },
-      { id: 'testing', label: 'Testing', type: 'custom' },
-      { id: 'technologies', label: 'Technologies', type: 'custom' },
+      { id: 'featured', label: 'Featured', type: 'custom' },
+      { id: 'all-blocks', label: 'All Blocks', type: 'custom' },
+      { id: 'usage', label: 'How to Use', type: 'custom' },
+      { id: 'contributing', label: 'Contributing', type: 'custom' },
     ],
   };
 
-  readonly categories: Category[] = [
-    { id: 'featured', name: 'Featured', description: 'Highlighted blocks on the main page' },
-    { id: 'dashboard', name: 'Dashboard', description: 'Dashboard and analytics layouts' },
-    { id: 'sidebar', name: 'Sidebar', description: 'Sidebar navigation patterns' },
-    { id: 'login', name: 'Login', description: 'Login page designs' },
-    { id: 'signup', name: 'Signup', description: 'Registration and signup flows' },
-    { id: 'otp', name: 'OTP', description: 'OTP verification screens' },
-    { id: 'calendar', name: 'Calendar', description: 'Calendar and scheduling interfaces' },
+  // Mock data - replace with real data from BlocksService
+  readonly availableBlocksCount = 1;
+  readonly categoriesCount = 1;
+
+  readonly featuredBlocks: BlockPreview[] = [
+    {
+      id: 'authentication-01',
+      title: 'Authentication 01',
+      description:
+        'A beautiful authentication page with form validation, social login options, and forgot password functionality. Built with Angular Reactive Forms and ZardUI components.',
+      category: 'Authentication',
+      image: '/blocks/authentication-01/light.png',
+      components: 8,
+      files: 2,
+    },
   ];
 
-  readonly bestPractices: BestPractice[] = [
-    { title: 'Unique IDs', description: 'Ensure each block has a unique identifier' },
-    { title: 'Multiple Categories', description: 'Blocks can appear in multiple categories if relevant' },
-    { title: 'Complete Code', description: 'Include all necessary files in the files array' },
-    { title: 'Standalone Components', description: 'Always use standalone components with explicit imports' },
-    { title: 'Responsive Design', description: 'Ensure blocks work well across all viewport sizes' },
-    { title: 'Accessibility', description: 'Follow ARIA guidelines and semantic HTML' },
-    { title: 'Documentation', description: 'Provide clear descriptions and use cases' },
-    { title: 'Form Validation', description: 'Use ZardUI form components for proper validation and error handling' },
-  ];
-
-  readonly technologies: Technology[] = [
-    { name: 'Angular', description: 'Component framework' },
-    { name: 'TailwindCSS', description: 'Styling and design system' },
-    { name: 'ZardUI Components', description: 'Base component library' },
-    { name: 'DarkModeService', description: 'Theme management' },
-    { name: 'Nx', description: 'Monorepo tooling' },
+  readonly blocksByCategory: BlockCategory[] = [
+    {
+      name: 'Authentication',
+      blocks: [
+        {
+          id: 'authentication-01',
+          title: 'Authentication 01',
+          description: 'Modern login page with form validation and social login',
+          category: 'Authentication',
+          image: '/blocks/authentication-01/light.png',
+          components: 8,
+          files: 2,
+        },
+      ],
+    },
+    {
+      name: 'Dashboard',
+      blocks: [],
+    },
+    {
+      name: 'E-commerce',
+      blocks: [],
+    },
   ];
 
   ngOnInit(): void {
     this.seoService.setDocsSeo(
-      'Blocks Library',
-      'Learn how to create and contribute pre-built, production-ready UI blocks to ZardUI. Complete guide with step-by-step instructions.',
+      'Blocks',
+      'Beautifully designed blocks that you can copy and paste into your apps. Built with Angular and TailwindCSS. Open Source.',
       '/docs/blocks',
-      'og-blocks-instructions.jpg',
+      'og-blocks.jpg',
     );
   }
 }
