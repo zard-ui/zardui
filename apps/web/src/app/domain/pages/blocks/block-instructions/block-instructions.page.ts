@@ -1,5 +1,7 @@
 import { Component, inject, type OnInit } from '@angular/core';
 
+import { LucideAngularModule, Github, ArrowRight, ExternalLink, Layers, FolderOpen } from 'lucide-angular';
+
 import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '@docs/domain/components/dynamic-anchor/dynamic-anchor.component';
@@ -25,12 +27,19 @@ interface BlockCategory {
 @Component({
   selector: 'z-block-instructions',
   standalone: true,
-  imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective],
+  imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, LucideAngularModule],
   templateUrl: './block-instructions.page.html',
 })
 export class BlocksInstructionPage implements OnInit {
   private readonly seoService = inject(SeoService);
   activeAnchor?: string;
+
+  // Lucide icons
+  readonly GithubIcon = Github;
+  readonly ArrowRightIcon = ArrowRight;
+  readonly ExternalLinkIcon = ExternalLink;
+  readonly LayersIcon = Layers;
+  readonly FolderOpenIcon = FolderOpen;
 
   readonly navigationConfig: NavigationConfig = {
     items: [
@@ -44,7 +53,7 @@ export class BlocksInstructionPage implements OnInit {
 
   // Mock data - replace with real data from BlocksService
   readonly availableBlocksCount = 1;
-  readonly categoriesCount = 1;
+  readonly categoriesCount = 7;
 
   readonly featuredBlocks: BlockPreview[] = [
     {
@@ -61,7 +70,7 @@ export class BlocksInstructionPage implements OnInit {
 
   readonly blocksByCategory: BlockCategory[] = [
     {
-      name: 'Authentication',
+      name: 'Featured',
       blocks: [
         {
           id: 'authentication-01',
@@ -79,7 +88,33 @@ export class BlocksInstructionPage implements OnInit {
       blocks: [],
     },
     {
-      name: 'E-commerce',
+      name: 'Sidebar',
+      blocks: [],
+    },
+    {
+      name: 'Login',
+      blocks: [
+        {
+          id: 'authentication-01',
+          title: 'Authentication 01',
+          description: 'Modern login page with form validation and social login',
+          category: 'Authentication',
+          image: '/blocks/authentication-01/light.png',
+          components: 8,
+          files: 2,
+        },
+      ],
+    },
+    {
+      name: 'Signup',
+      blocks: [],
+    },
+    {
+      name: 'OTP',
+      blocks: [],
+    },
+    {
+      name: 'Calendar',
       blocks: [],
     },
   ];
