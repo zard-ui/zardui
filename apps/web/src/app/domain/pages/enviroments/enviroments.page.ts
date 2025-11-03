@@ -1,7 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
+
+import { SeoService } from '@doc/shared/services/seo.service';
+
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { SeoService } from '@zard/shared/services/seo.service';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
@@ -33,10 +35,10 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
                 [path]="env.path"
                 [icon]="env.icon"
                 [disabled]="!env.available"
-                [class]="!env.available ? 'opacity-50 pointer-events-none' : ''"
+                [class]="!env.available ? 'pointer-events-none opacity-50' : ''"
               ></z-env-card>
               @if (!env.available) {
-                <div class="absolute inset-0 flex items-center justify-center bg-background/80 rounded-xl">
+                <div class="bg-background/80 absolute inset-0 flex items-center justify-center rounded-xl">
                   <z-badge zType="secondary">Coming Soon</z-badge>
                 </div>
               }
@@ -45,7 +47,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
         </div>
         <z-alert
           zTitle="Framework Support"
-          class="bg-blue-500 dark:text-blue-100 dark:bg-blue-950 border dark:border-blue-800"
+          class="border bg-blue-500 dark:border-blue-800 dark:bg-blue-950 dark:text-blue-100"
           zDescription="Angular is available now with full documentation and examples. Analog and Nx support are coming soon with dedicated guides and configurations."
           zAppearance="fill"
         />

@@ -1,12 +1,14 @@
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
-import { ZardAlertComponent } from '@zard/components/alert/alert.component';
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { SeoService } from '@zard/shared/services/seo.service';
 import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit, signal, computed } from '@angular/core';
+
+import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
+import { SeoService } from '@doc/shared/services/seo.service';
+
+import { ZardAlertComponent } from '@zard/components/alert/alert.component';
+import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
 
 import { ChangelogService, type ChangelogEntry } from './services/changelog.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';

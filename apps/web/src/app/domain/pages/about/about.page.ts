@@ -1,18 +1,20 @@
-import { SeoService } from '@zard/shared/services/seo.service';
-import { Component, inject, type OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Component, inject, type OnInit } from '@angular/core';
 
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { SeoService } from '@doc/shared/services/seo.service';
+
+import { Contributor, GithubService } from '../../../shared/services/github.service';
 import { ContributorsLoadingComponent } from '../../components/contributors/contributors-loading.component';
+import { ContributorsComponent } from '../../components/contributors/contributors.component';
+import { CreditCardComponent } from '../../components/credit-card/credit-card.component';
+import { DocContentComponent } from '../../components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { FoundersLoadingComponent } from '../../components/founders/founders-loading.component';
 import { FoundersComponent, FounderData } from '../../components/founders/founders.component';
-import { ContributorsComponent } from '../../components/contributors/contributors.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { CreditCardComponent } from '../../components/credit-card/credit-card.component';
-import { Contributor, GithubService } from '../../../shared/services/github.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 

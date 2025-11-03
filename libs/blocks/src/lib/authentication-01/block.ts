@@ -1,4 +1,4 @@
-import type { Block } from '@zard/domain/components/block-container/block-container.component';
+import type { Block } from '@doc/domain/components/block-container/block-container.component';
 
 import { Authentication01Component } from './authentication-01.component';
 
