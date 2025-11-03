@@ -20,6 +20,26 @@ export const appRoutes: Route[] = [
       },
     ],
   },
+  // {
+  //   path: 'colors',
+  //   component: ShellLayout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       loadComponent: () => import('./domain/pages/colors/colors.page').then(c => c.ColorsPage),
+  //     },
+  //   ],
+  // },
+  {
+    path: 'colors',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./domain/pages/colors/colors.page').then(c => c.ColorsPage),
+      },
+    ],
+  },
   {
     path: 'colors',
     component: ShellLayout,
