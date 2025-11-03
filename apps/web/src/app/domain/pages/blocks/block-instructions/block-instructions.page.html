@@ -1,0 +1,185 @@
+<z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <z-doc-heading title="Blocks" description="Contribute components to the blocks library." scrollSpyItem="overview" id="overview"> </z-doc-heading>
+
+  <section scrollSpyItem="overview" id="overview" class="space-y-6">
+    <div class="bg-card space-y-4 rounded-lg border p-6">
+      <p class="text-muted-foreground leading-7">
+        Building blocks for your apps. Blocks are pre-built components that you can use to build your apps faster. They are built with TailwindCSS and Angular, and are fully
+        customizable.
+      </p>
+      <div class="flex flex-wrap gap-3">
+        <a href="https://github.com/zard-ui/zardui" target="_blank" z-button>
+          <lucide-angular [img]="GithubIcon" [size]="16" />
+          View on GitHub
+        </a>
+        <a routerLink="/blocks" z-button zType="outline">
+          Browse all blocks
+          <lucide-angular [img]="ArrowRightIcon" [size]="16" />
+        </a>
+      </div>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div class="bg-card rounded-lg border p-6">
+        <div class="text-3xl font-bold tracking-tight">{{ availableBlocksCount() }}</div>
+        <p class="text-muted-foreground mt-1 text-sm">Available Blocks</p>
+      </div>
+      <div class="bg-card rounded-lg border p-6">
+        <div class="text-3xl font-bold tracking-tight">{{ categoriesCount }}</div>
+        <p class="text-muted-foreground mt-1 text-sm">Categories</p>
+      </div>
+      <div class="bg-card rounded-lg border p-6">
+        <div class="text-3xl font-bold tracking-tight">100%</div>
+        <p class="text-muted-foreground mt-1 text-sm">Open Source</p>
+      </div>
+    </div>
+  </section>
+
+  <section scrollSpyItem="featured" id="featured" class="mt-16 space-y-6">
+    <div class="flex items-center justify-between">
+      <div>
+        <h2 class="text-2xl font-bold tracking-tight">Featured Blocks</h2>
+        <p class="text-muted-foreground mt-1">Hand-picked collection of our best blocks</p>
+      </div>
+    </div>
+
+    <div class="grid gap-6 md:grid-cols-2">
+      @for (block of featuredBlocks(); track block.id) {
+      <a [routerLink]="['/blocks']" [fragment]="block.id" class="group bg-card overflow-hidden rounded-lg border transition-all hover:shadow-lg">
+        <div class="bg-muted relative aspect-video overflow-hidden">
+          <img [src]="block.image" [alt]="block.title" class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105" />
+          <div class="absolute inset-0 bg-linear-to-t from-black/60 to-transparent opacity-0 transition-opacity group-hover:opacity-100"></div>
+        </div>
+        <div class="p-6">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex-1">
+              <h3 class="group-hover:text-primary text-lg font-semibold transition-colors">{{ block.title }}</h3>
+              <p class="text-muted-foreground mt-2 line-clamp-2 text-sm">{{ block.description }}</p>
+            </div>
+            <span z-badge zVariant="secondary">{{ block.category }}</span>
+          </div>
+          <div class="text-muted-foreground mt-4 flex items-center gap-4 text-xs">
+            <span class="flex items-center gap-1">
+              <lucide-angular [img]="FolderOpenIcon" [size]="14" />
+              {{ block.files }} files
+            </span>
+          </div>
+        </div>
+      </a>
+      }
+    </div>
+  </section>
+
+  <section scrollSpyItem="all-blocks" id="all-blocks" class="mt-16 space-y-8">
+    <div>
+      <h2 class="text-2xl font-bold tracking-tight">All Blocks</h2>
+      <p class="text-muted-foreground mt-1">Browse blocks by category</p>
+    </div>
+
+    @for (category of blocksByCategory(); track category.name) { @if (category.blocks.length > 0) {
+    <div class="space-y-4">
+      <div class="flex items-center gap-3">
+        <h3 class="text-xl font-semibold">{{ category.name }}</h3>
+        <span z-badge zVariant="outline">{{ category.blocks.length }}</span>
+      </div>
+
+      <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        @for (block of category.blocks; track block.id) {
+        <a [routerLink]="['/blocks']" [fragment]="block.id" class="group bg-card overflow-hidden rounded-lg border transition-all hover:shadow-md">
+          <div class="bg-muted relative aspect-video overflow-hidden">
+            <img [src]="block.image" [alt]="block.title" class="h-full w-full object-cover transition-transform duration-200 group-hover:scale-105" />
+          </div>
+          <div class="p-4">
+            <h4 class="group-hover:text-primary font-semibold transition-colors">{{ block.title }}</h4>
+            <p class="text-muted-foreground mt-1 line-clamp-2 text-sm">{{ block.description }}</p>
+          </div>
+        </a>
+        }
+      </div>
+    </div>
+    } }
+  </section>
+
+  <section scrollSpyItem="usage" id="usage" class="mt-16 space-y-6">
+    <div>
+      <h2 class="text-2xl font-bold tracking-tight">How to use blocks</h2>
+      <p class="text-muted-foreground mt-1">Learn how to add blocks to your project</p>
+    </div>
+
+    <div class="grid gap-4 md:grid-cols-2">
+      <div class="bg-card rounded-lg border p-6">
+        <div class="flex items-start gap-4">
+          <div class="bg-primary/10 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-semibold">1</div>
+          <div class="flex-1">
+            <h3 class="font-semibold">Browse blocks</h3>
+            <p class="text-muted-foreground mt-2 text-sm">Browse the available blocks and find one that fits your needs. Click on a block to view its details.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-card rounded-lg border p-6">
+        <div class="flex items-start gap-4">
+          <div class="bg-primary/10 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-semibold">2</div>
+          <div class="flex-1">
+            <h3 class="font-semibold">Copy the code</h3>
+            <p class="text-muted-foreground mt-2 text-sm">Copy the component code and paste it into your project. All blocks are built with Angular and TailwindCSS.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-card rounded-lg border p-6">
+        <div class="flex items-start gap-4">
+          <div class="bg-primary/10 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-semibold">3</div>
+          <div class="flex-1">
+            <h3 class="font-semibold">Customize</h3>
+            <p class="text-muted-foreground mt-2 text-sm">Customize the block to fit your design. Change colors, spacing, and layout using TailwindCSS classes.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-card rounded-lg border p-6">
+        <div class="flex items-start gap-4">
+          <div class="bg-primary/10 text-primary flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-semibold">4</div>
+          <div class="flex-1">
+            <h3 class="font-semibold">Ship it</h3>
+            <p class="text-muted-foreground mt-2 text-sm">That's it! Your block is ready to use. Build beautiful apps faster with pre-built components.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section scrollSpyItem="contributing" id="contributing" class="mt-16 space-y-6">
+    <div class="bg-muted/50 rounded-lg border p-6">
+      <div class="flex items-start gap-4">
+        <div class="bg-primary/10 flex h-12 w-12 shrink-0 items-center justify-center rounded-lg">
+          <lucide-angular [img]="ExternalLinkIcon" [size]="24" class="text-primary" />
+        </div>
+        <div class="flex-1">
+          <h3 class="text-lg font-semibold">CLI Support Coming Soon</h3>
+          <p class="text-muted-foreground mt-1 text-sm">
+            We're working on adding blocks support to the ZardUI CLI. Soon you'll be able to add blocks to your project with a single command.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="from-primary/5 to-primary/10 rounded-lg border bg-linear-to-br p-8">
+      <div class="max-w-2xl">
+        <h2 class="text-2xl font-bold tracking-tight">Want to contribute?</h2>
+        <p class="text-muted-foreground mt-2 leading-7">
+          Blocks are open source. If you have a block you'd like to share, we'd love to see it! Check out our
+          <a href="https://github.com/zard-ui/zardui/tree/master/libs/blocks" target="_blank" class="text-primary font-medium hover:underline">contribution guidelines</a>
+          to get started.
+        </p>
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="https://github.com/zard-ui/zardui/tree/master/libs/blocks" target="_blank" z-button>
+            Contribute on GitHub
+            <lucide-angular [img]="ExternalLinkIcon" [size]="16" />
+          </a>
+          <a routerLink="/docs/cli" z-button zType="outline"> View CLI documentation </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</z-content>
