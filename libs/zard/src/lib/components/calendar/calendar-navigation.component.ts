@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
+import { calendarNavVariants } from './calendar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
-import { calendarNavVariants } from './calendar.variants';
 
 @Component({
   selector: 'z-calendar-navigation',
@@ -16,28 +16,28 @@ import { calendarNavVariants } from './calendar.variants';
   imports: [ZardButtonComponent, ZardIconComponent, ZardSelectComponent, ZardSelectItemComponent],
   template: `
     <div [class]="navClasses()">
-      <button z-button zType="ghost" zSize="sm" (click)="onPreviousClick()" [disabled]="isPreviousDisabled()" aria-label="Previous month" class="p-0 h-7 w-7">
+      <button z-button zType="ghost" zSize="sm" (click)="onPreviousClick()" [disabled]="isPreviousDisabled()" aria-label="Previous month" class="h-7 w-7 p-0">
         <z-icon zType="chevron-left"></z-icon>
       </button>
 
       <!-- Month and Year Selectors -->
       <div class="flex items-center space-x-2">
         <!-- Month Select -->
-        <z-select [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="monthChange.emit($event)">
+        <z-select class="min-w-20" [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="monthChange.emit($event)">
           @for (month of months; track $index) {
             <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
           }
         </z-select>
 
         <!-- Year Select -->
-        <z-select [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="yearChange.emit($event)">
+        <z-select class="min-w-21" [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="yearChange.emit($event)">
           @for (year of availableYears(); track year) {
             <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
           }
         </z-select>
       </div>
 
-      <button z-button zType="ghost" zSize="sm" (click)="onNextClick()" [disabled]="isNextDisabled()" aria-label="Next month" class="p-0 h-7 w-7">
+      <button z-button zType="ghost" zSize="sm" (click)="onNextClick()" [disabled]="isNextDisabled()" aria-label="Next month" class="h-7 w-7 p-0">
         <z-icon zType="chevron-right"></z-icon>
       </button>
     </div>
@@ -71,8 +71,8 @@ export class ZardCalendarNavigationComponent {
   });
 
   protected readonly currentMonthName = computed(() => {
-    const selectedMonth = parseInt(this.currentMonth());
-    if (!isNaN(selectedMonth) && this.months[selectedMonth]) return this.months[selectedMonth];
+    const selectedMonth = Number.parseInt(this.currentMonth());
+    if (!Number.isNaN(selectedMonth) && this.months[selectedMonth]) return this.months[selectedMonth];
     return this.months[new Date().getMonth()];
   });
 
@@ -82,8 +82,8 @@ export class ZardCalendarNavigationComponent {
     const minDate = this.minDate();
     if (!minDate) return false;
 
-    const currentMonth = parseInt(this.currentMonth());
-    const currentYear = parseInt(this.currentYear());
+    const currentMonth = Number.parseInt(this.currentMonth());
+    const currentYear = Number.parseInt(this.currentYear());
     const lastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0);
 
     return lastDayOfPreviousMonth.getTime() < minDate.getTime();
@@ -95,8 +95,8 @@ export class ZardCalendarNavigationComponent {
     const maxDate = this.maxDate();
     if (!maxDate) return false;
 
-    const currentMonth = parseInt(this.currentMonth());
-    const currentYear = parseInt(this.currentYear());
+    const currentMonth = Number.parseInt(this.currentMonth());
+    const currentYear = Number.parseInt(this.currentYear());
     const nextMonth = new Date(currentYear, currentMonth + 1, 1);
 
     return nextMonth.getTime() > maxDate.getTime();

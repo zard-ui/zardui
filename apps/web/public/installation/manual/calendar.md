@@ -1,20 +1,19 @@
 
 
 ```angular-ts title="calendar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { filter } from 'rxjs';
-
 import { ChangeDetectionStrategy, Component, computed, input, linkedSignal, model, viewChild, ViewEncapsulation } from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+import { filter } from 'rxjs';
+
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
+import type { CalendarMode, CalendarValue } from './calendar.types';
 import { generateCalendarDays, getSelectedDatesArray, isSameDay } from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
-import type { ClassValue } from 'clsx';
-
-import type { CalendarMode, CalendarValue } from './calendar.types';
 export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
 
 @Component({
@@ -98,8 +97,8 @@ export class ZardCalendarComponent {
 
   protected readonly calendarDays = computed(() => {
     const currentDate = this.currentDate();
-    const navigationDate = new Date(parseInt(this.currentYearValue()), parseInt(this.currentMonthValue()), currentDate.getDate());
-    const selectedDate = isNaN(navigationDate.getTime()) ? currentDate : navigationDate;
+    const navigationDate = new Date(Number.parseInt(this.currentYearValue()), Number.parseInt(this.currentMonthValue()), currentDate.getDate());
+    const selectedDate = Number.isNaN(navigationDate.getTime()) ? currentDate : navigationDate;
 
     return generateCalendarDays({
       year: selectedDate.getFullYear(),
@@ -118,15 +117,15 @@ export class ZardCalendarComponent {
       return;
     }
 
-    const parsedMonth = parseInt(monthIndex, 10);
-    if (isNaN(parsedMonth) || parsedMonth < 0 || parsedMonth > 11) {
+    const parsedMonth = Number.parseInt(monthIndex, 10);
+    if (Number.isNaN(parsedMonth) || parsedMonth < 0 || parsedMonth > 11) {
       console.warn('Invalid month value:', monthIndex, 'parsed as:', parsedMonth);
       return;
     }
 
     const currentDate = this.currentDate();
-    const selectedYear = parseInt(this.currentYearValue());
-    const newDate = new Date(isNaN(selectedYear) ? currentDate.getFullYear() : selectedYear, parsedMonth, 1);
+    const selectedYear = Number.parseInt(this.currentYearValue());
+    const newDate = new Date(Number.isNaN(selectedYear) ? currentDate.getFullYear() : selectedYear, parsedMonth, 1);
     this.currentMonthValue.set(newDate.getMonth().toString());
     this.gridRef().setFocusedDayIndex(-1);
   }
@@ -137,31 +136,31 @@ export class ZardCalendarComponent {
       return;
     }
 
-    const parsedYear = parseInt(year, 10);
-    if (isNaN(parsedYear) || parsedYear < 1900 || parsedYear > 2100) {
+    const parsedYear = Number.parseInt(year, 10);
+    if (Number.isNaN(parsedYear) || parsedYear < 1900 || parsedYear > 2100) {
       console.warn('Invalid year value:', year, 'parsed as:', parsedYear);
       return;
     }
 
     const currentDate = this.currentDate();
-    const selectedMonth = parseInt(this.currentMonthValue());
-    const newDate = new Date(parsedYear, isNaN(selectedMonth) ? currentDate.getMonth() : selectedMonth, 1);
+    const selectedMonth = Number.parseInt(this.currentMonthValue());
+    const newDate = new Date(parsedYear, Number.isNaN(selectedMonth) ? currentDate.getMonth() : selectedMonth, 1);
     this.currentYearValue.set(newDate.getFullYear().toString());
     this.gridRef().setFocusedDayIndex(-1);
   }
 
   protected previousMonth(): void {
     const currentDate = this.currentDate();
-    const currentMonth = parseInt(this.currentMonthValue());
-    const previous = new Date(currentDate.getFullYear(), (isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) - 1, 1);
+    const currentMonth = Number.parseInt(this.currentMonthValue());
+    const previous = new Date(currentDate.getFullYear(), (Number.isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) - 1, 1);
     this.currentMonthValue.set(previous.getMonth().toString());
     this.gridRef().setFocusedDayIndex(-1);
   }
 
   protected nextMonth(): void {
     const currentDate = this.currentDate();
-    const currentMonth = parseInt(this.currentMonthValue());
-    const next = new Date(currentDate.getFullYear(), (isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) + 1, 1);
+    const currentMonth = Number.parseInt(this.currentMonthValue());
+    const next = new Date(currentDate.getFullYear(), (Number.isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) + 1, 1);
     this.currentMonthValue.set(next.getMonth().toString());
     this.gridRef().setFocusedDayIndex(-1);
   }
@@ -671,12 +670,12 @@ export class ZardCalendarGridComponent {
 ```angular-ts title="calendar-navigation.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
+import { calendarNavVariants } from './calendar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
-import { calendarNavVariants } from './calendar.variants';
 
 @Component({
   selector: 'z-calendar-navigation',
@@ -687,28 +686,28 @@ import { calendarNavVariants } from './calendar.variants';
   imports: [ZardButtonComponent, ZardIconComponent, ZardSelectComponent, ZardSelectItemComponent],
   template: `
     <div [class]="navClasses()">
-      <button z-button zType="ghost" zSize="sm" (click)="onPreviousClick()" [disabled]="isPreviousDisabled()" aria-label="Previous month" class="p-0 h-7 w-7">
+      <button z-button zType="ghost" zSize="sm" (click)="onPreviousClick()" [disabled]="isPreviousDisabled()" aria-label="Previous month" class="h-7 w-7 p-0">
         <z-icon zType="chevron-left"></z-icon>
       </button>
 
       <!-- Month and Year Selectors -->
       <div class="flex items-center space-x-2">
         <!-- Month Select -->
-        <z-select [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="monthChange.emit($event)">
+        <z-select class="min-w-20" [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="monthChange.emit($event)">
           @for (month of months; track $index) {
             <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
           }
         </z-select>
 
         <!-- Year Select -->
-        <z-select [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="yearChange.emit($event)">
+        <z-select class="min-w-21" [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="yearChange.emit($event)">
           @for (year of availableYears(); track year) {
             <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
           }
         </z-select>
       </div>
 
-      <button z-button zType="ghost" zSize="sm" (click)="onNextClick()" [disabled]="isNextDisabled()" aria-label="Next month" class="p-0 h-7 w-7">
+      <button z-button zType="ghost" zSize="sm" (click)="onNextClick()" [disabled]="isNextDisabled()" aria-label="Next month" class="h-7 w-7 p-0">
         <z-icon zType="chevron-right"></z-icon>
       </button>
     </div>
@@ -742,8 +741,8 @@ export class ZardCalendarNavigationComponent {
   });
 
   protected readonly currentMonthName = computed(() => {
-    const selectedMonth = parseInt(this.currentMonth());
-    if (!isNaN(selectedMonth) && this.months[selectedMonth]) return this.months[selectedMonth];
+    const selectedMonth = Number.parseInt(this.currentMonth());
+    if (!Number.isNaN(selectedMonth) && this.months[selectedMonth]) return this.months[selectedMonth];
     return this.months[new Date().getMonth()];
   });
 
@@ -753,8 +752,8 @@ export class ZardCalendarNavigationComponent {
     const minDate = this.minDate();
     if (!minDate) return false;
 
-    const currentMonth = parseInt(this.currentMonth());
-    const currentYear = parseInt(this.currentYear());
+    const currentMonth = Number.parseInt(this.currentMonth());
+    const currentYear = Number.parseInt(this.currentYear());
     const lastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0);
 
     return lastDayOfPreviousMonth.getTime() < minDate.getTime();
@@ -766,8 +765,8 @@ export class ZardCalendarNavigationComponent {
     const maxDate = this.maxDate();
     if (!maxDate) return false;
 
-    const currentMonth = parseInt(this.currentMonth());
-    const currentYear = parseInt(this.currentYear());
+    const currentMonth = Number.parseInt(this.currentMonth());
+    const currentYear = Number.parseInt(this.currentYear());
     const nextMonth = new Date(currentYear, currentMonth + 1, 1);
 
     return nextMonth.getTime() > maxDate.getTime();
