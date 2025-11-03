@@ -9,6 +9,7 @@ import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
 import { visit } from 'unist-util-visit';
 
+import { rehypeComponentBadges } from './rehype-component-badges';
 import { rehypeEnhancedCode, rehypeCodeTabs } from './rehype-enhanced-code';
 
 @Injectable({
@@ -117,7 +118,7 @@ export class MarkdownService {
           if (node.tagName === 'thead') {
             node.properties = {
               ...node.properties,
-              class: ['[&_tr]:text-primary', 'bg-accent'],
+              class: ['[&_tr]:text-primary', 'dark:bg-[oklch(26.9%_0_0)]', 'bg-[oklch(97%_0_0)]'],
             };
           }
 
@@ -158,9 +159,6 @@ export class MarkdownService {
                 'text-left',
                 'align-middle',
                 'font-medium',
-                'first:[&_code]:bg-blue-500/10',
-                'first:[&_code]:text-blue-600',
-                'first:[&_code]:dark:text-blue-400',
                 '[&_code]:bg-accent',
                 '[&_code]:rounded-sm',
                 '[&_code]:border-none',
@@ -215,6 +213,7 @@ export class MarkdownService {
       .use(rehypeCodeTabs) // Our custom plugin for code tabs (BEFORE rehypeEnhancedCode)
       .use(rehypeEnhancedCode) // Our custom plugin for enhanced code blocks
       .use(this.rehypeTailwindClasses())
+      .use(rehypeComponentBadges) // Add classes to component badges in API docs (AFTER table wrapper)
       .use(rehypeStringify);
 
     this.initialized = true;

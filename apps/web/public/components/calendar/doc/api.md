@@ -1,6 +1,6 @@
-# Calendar API
+# API Reference
 
-## z-calendar
+[z-calendar] Component
 
 ### Inputs
 
