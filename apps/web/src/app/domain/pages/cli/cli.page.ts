@@ -9,12 +9,22 @@ import { CliCommandsSection } from './sections/commands.component';
 import { CliConfigurationSection } from './sections/configuration.component';
 import { CliInstallationSection } from './sections/installation.component';
 import { CliOverviewSection } from './sections/overview.component';
+import { CliUpdateSection } from './sections/update.component';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-cli',
   standalone: true,
-  imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, CliOverviewSection, CliInstallationSection, CliCommandsSection, CliConfigurationSection],
+  imports: [
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    CliOverviewSection,
+    CliInstallationSection,
+    CliCommandsSection,
+    CliUpdateSection,
+    CliConfigurationSection,
+  ],
   template: `
     <z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
       <z-doc-heading
@@ -28,6 +38,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
       <cli-overview-section scrollSpyItem="cli-overview" id="cli-overview"></cli-overview-section>
       <cli-installation-section scrollSpyItem="installation" id="installation"></cli-installation-section>
       <cli-commands-section scrollSpyItem="commands" id="commands"></cli-commands-section>
+      <cli-update-section scrollSpyItem="update" id="update"></cli-update-section>
       <cli-configuration-section scrollSpyItem="configuration" id="configuration"></cli-configuration-section>
     </z-content>
   `,
@@ -42,6 +53,7 @@ export class CliPage implements OnInit {
       { id: 'cli-overview', label: 'CLI Overview', type: 'custom' },
       { id: 'installation', label: 'Installation', type: 'custom' },
       { id: 'commands', label: 'Commands', type: 'custom' },
+      { id: 'update', label: 'Update', type: 'custom' },
       { id: 'components', label: 'Available Components', type: 'custom' },
       { id: 'configuration', label: 'Configuration', type: 'custom' },
       { id: 'requirements', label: 'Requirements & Troubleshooting', type: 'custom' },
