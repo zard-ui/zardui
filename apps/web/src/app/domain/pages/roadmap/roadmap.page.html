@@ -62,7 +62,7 @@
                 <h3 class="mb-1 text-lg font-bold sm:text-xl">{{ phase.title }}</h3>
               </div>
               <div
-                class="flex-shrink-0 text-2xl font-bold sm:text-3xl"
+                class="shrink-0 text-2xl font-bold sm:text-3xl"
                 [class]="phase.progress === 100 ? 'text-green-500' : phase.progress > 0 ? 'text-blue-500' : 'text-muted-foreground'"
               >
                 {{ phase.progress }}%
@@ -88,11 +88,11 @@
                 @for (deliverable of phase.deliverables; track deliverable.text) {
                 <li class="flex items-start gap-2 text-sm">
                   @if (deliverable.completed) {
-                  <svg class="mt-0.5 size-4 flex-shrink-0 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="mt-0.5 size-4 shrink-0 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
                   </svg>
                   } @else {
-                  <svg class="text-muted-foreground mt-0.5 size-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg class="text-muted-foreground mt-0.5 size-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"></path>
                   </svg>
                   }
@@ -108,7 +108,7 @@
     </div>
   </div>
 
-  <div class="from-primary/10 via-primary/5 border-primary/20 mt-12 rounded-lg border bg-gradient-to-br to-transparent p-8">
+  <div class="from-primary/10 via-primary/5 border-primary/20 mt-12 rounded-lg border bg-linear-to-br to-transparent p-8">
     <div class="mx-auto max-w-3xl space-y-4 text-center">
       <h3 class="text-2xl font-bold">Help Us Reach V1.0</h3>
       <p class="text-muted-foreground">Join our community and contribute to making Zard UI the best Angular component library.</p>

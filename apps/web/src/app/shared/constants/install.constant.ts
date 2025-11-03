@@ -32,9 +32,9 @@ export const installations: Installation[] = [
         title: 'Create project',
         subtitle: 'Start the cli and create an application that uses CSS as default styling.',
         url: {
-          text: "If you don't know, you can follow the initial documentation step by step",
-          href: 'https://angular.dev/installation',
-          external: true,
+          text: 'Since Tailwind is the core of the project, we do not recommend using other pre-processors.',
+          href: '/docs/scss',
+          external: false,
         },
         file: {
           path: '/documentation/setup/angular/manual/install.md',
@@ -106,9 +106,9 @@ export const installations: Installation[] = [
         title: 'Create project',
         subtitle: 'Start the cli and create an application that uses CSS as default styling.',
         url: {
-          text: "If you don't know, you can follow the initial documentation step by step",
-          href: 'https://angular.dev/installation',
-          external: true,
+          text: 'Since Tailwind is the core of the project, we do not recommend using other pre-processors.',
+          href: '/docs/scss',
+          external: false,
         },
         file: {
           path: '/documentation/setup/angular/cli/install.md',

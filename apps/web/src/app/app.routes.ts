@@ -83,10 +83,10 @@ export const appRoutes: Route[] = [
         path: 'roadmap',
         loadComponent: async () => import('./domain/pages/roadmap/roadmap.page').then(c => c.RoadmapPage),
       },
-      // {
-      //   path: 'scss',
-      //   loadComponent: async () => import('./domain/pages/scss/scss.page').then(c => c.ScssPage),
-      // },
+      {
+        path: 'pre-processors',
+        loadComponent: async () => import('./domain/pages/pre-processors/pre-processors.page').then(c => c.PreProcessorsPage),
+      },
       {
         path: 'changelog',
         loadComponent: async () => import('./domain/pages/change-log/change-log.page').then(c => c.ChangeLogPage),

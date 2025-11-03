@@ -51,7 +51,7 @@ export const DOCS_PATH = {
     { name: 'Dark Mode', path: '/docs/dark-mode', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
     { name: 'Blocks', path: '/docs/blocks', available: true },
-    { name: 'Scss', path: '/docs/scss', available: true },
+    { name: 'Pre processors', path: '/docs/pre-processors', available: true },
     { name: 'Figma', path: '/docs/figma', available: true },
     { name: 'llms.txt', path: '/llms.txt', available: true },
 
