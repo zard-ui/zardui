@@ -19,5 +19,4 @@ import { environment } from '@doc/env/environment';
 })
 export class ShellLayout {
   readonly isDevEnv = !environment.production;
-  readonly isDevMode = environment.devMode;
 }

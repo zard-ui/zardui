@@ -33,7 +33,6 @@ export class DocumentationLayout {
   private readonly darkModeService = inject(DarkModeService);
   private readonly destroyRef = inject(DestroyRef);
   readonly isDevEnv = !environment.production;
-  readonly isDevMode = environment.devMode;
 
   private readonly themeSignal = signal<'light' | 'dark'>('light');
   readonly currentTheme = computed(() => this.themeSignal());
