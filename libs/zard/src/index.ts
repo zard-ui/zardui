@@ -94,3 +94,6 @@ export * from './lib/components/menu/menu-item.directive';
 export * from './lib/components/menu/menu.directive';
 export * from './lib/components/menu/menu.variants';
 export * from './lib/components/menu/menu.module';
+
+//Kbd
+export * from './lib/components/kbd/kbd.component';
