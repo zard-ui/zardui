@@ -1,0 +1,22 @@
+@if (isCopied()) {
+  <lucide-angular
+    [img]="Check"
+    class="absolute top-2 right-2 z-10 h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100 group-data-[last-copied=true]:opacity-100"
+    [style.color]="color().foreground"
+  />
+} @else {
+  <lucide-angular [img]="ClipboardIcon" class="absolute top-2 right-2 z-10 h-3.5 w-3.5 opacity-0 transition-opacity group-hover:opacity-100" [style.color]="color().foreground" />
+}
+
+<div class="border-ghost after:border-input w-full flex-1 rounded-md after:rounded-lg md:rounded-lg" [style.background]="color().oklch"></div>
+
+<div class="flex w-full flex-col items-center justify-center gap-1">
+  <span class="text-muted-foreground group-hover:text-foreground group-data-[last-copied=true]:text-primary font-mono text-xs tabular-nums transition-colors sm:hidden xl:flex">
+    {{ color().className }}
+  </span>
+  <span
+    class="text-muted-foreground group-hover:text-foreground group-data-[last-copied=true]:text-primary hidden font-mono text-xs tabular-nums transition-colors sm:flex xl:hidden"
+  >
+    {{ color().scale }}
+  </span>
+</div>
