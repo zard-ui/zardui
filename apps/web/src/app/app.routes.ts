@@ -20,6 +20,16 @@ export const appRoutes: Route[] = [
       },
     ],
   },
+  // {
+  //   path: 'colors',
+  //   component: ShellLayout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       loadComponent: () => import('./domain/pages/colors/colors.page').then(c => c.ColorsPage),
+  //     },
+  //   ],
+  // },
   {
     path: 'docs',
     component: DocumentationLayout,
@@ -46,12 +56,12 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/theming/theming.page').then(c => c.ThemingPage),
       },
       {
-        path: 'dark-mode',
-        loadComponent: () => import('./domain/pages/dark-mode/dark-mode.page').then(c => c.DarkmodePage),
-      },
-      {
         path: 'blocks',
         loadComponent: () => import('./domain/pages/blocks/block-instructions/block-instructions.page').then(c => c.BlocksInstructionPage),
+      },
+      {
+        path: 'dark-mode',
+        loadComponent: () => import('./domain/pages/dark-mode/dark-mode.page').then(c => c.DarkmodePage),
       },
       {
         path: 'cli',
@@ -69,6 +79,14 @@ export const appRoutes: Route[] = [
         path: 'figma',
         loadComponent: async () => import('./domain/pages/figma/figma.page').then(c => c.FigmaPage),
       },
+      {
+        path: 'roadmap',
+        loadComponent: async () => import('./domain/pages/roadmap/roadmap.page').then(c => c.RoadmapPage),
+      },
+      // {
+      //   path: 'scss',
+      //   loadComponent: async () => import('./domain/pages/scss/scss.page').then(c => c.ScssPage),
+      // },
       {
         path: 'changelog',
         loadComponent: async () => import('./domain/pages/change-log/change-log.page').then(c => c.ChangeLogPage),

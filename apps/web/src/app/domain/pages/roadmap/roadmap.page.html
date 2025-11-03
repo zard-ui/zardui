@@ -1,0 +1,140 @@
+<z-content>
+  <z-doc-heading title="Roadmap to V1.0" description="Our journey to building the best Angular component library. See our progress and what's coming next." />
+
+  <div class="border-border bg-card mb-12 rounded-lg border p-6">
+    <div class="mb-4 flex items-center justify-between">
+      <div>
+        <h2 class="mb-1 text-xl font-semibold">Journey to V1.0</h2>
+        <p class="text-muted-foreground text-sm">From zero to production ready - 4 major milestones</p>
+      </div>
+      <div class="text-right">
+        <div class="text-primary mb-1 text-4xl font-bold">{{ overallProgress }}%</div>
+        <p class="text-muted-foreground text-xs">Complete</p>
+      </div>
+    </div>
+    <z-progress-bar [progress]="overallProgress" class="h-2" />
+  </div>
+
+  <div class="relative mx-auto max-w-4xl">
+    <div class="bg-border absolute top-0 bottom-0 left-3 w-0.5 sm:left-5"></div>
+
+    <div class="space-y-6 sm:space-y-8">
+      @for (phase of phases; track phase.id; let last = $last) {
+      <div class="relative pl-10 sm:pl-14">
+        <div
+          class="border-background absolute top-2 left-0 z-10 flex size-6 items-center justify-center rounded-full border-2 sm:size-10 sm:border-4"
+          [class]="
+              phase.status === 'completed'
+                ? 'bg-green-500 text-white'
+                : phase.status === 'in-progress'
+                  ? 'bg-blue-500 text-white'
+                  : 'bg-gray-300 text-gray-600'
+            "
+        >
+          @if (phase.status === 'completed') {
+          <svg class="size-3 sm:size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+          </svg>
+          } @else if (phase.status === 'in-progress') {
+          <svg class="size-3 sm:size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+          </svg>
+          } @else {
+          <svg class="size-3 sm:size-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          }
+        </div>
+
+        <z-card class="relative overflow-hidden transition-all hover:shadow-lg">
+          <div
+            class="absolute top-0 right-0 left-0 h-1"
+            [class]="phase.status === 'completed' ? 'bg-green-500' : phase.status === 'in-progress' ? 'bg-blue-500' : 'bg-gray-300'"
+          ></div>
+
+          <div class="p-4 sm:p-6">
+            <div class="mb-3 flex items-start justify-between gap-2 sm:mb-4">
+              <div class="min-w-0 flex-1">
+                <div class="mb-2 flex flex-wrap items-center gap-2">
+                  <z-badge [zType]="getStatusBadgeVariant(phase.status)" class="text-xs">{{ getStatusText(phase.status) }}</z-badge>
+                  <span class="text-muted-foreground text-xs">{{ phase.period }}</span>
+                </div>
+                <h3 class="mb-1 text-lg font-bold sm:text-xl">{{ phase.title }}</h3>
+              </div>
+              <div
+                class="flex-shrink-0 text-2xl font-bold sm:text-3xl"
+                [class]="phase.progress === 100 ? 'text-green-500' : phase.progress > 0 ? 'text-blue-500' : 'text-muted-foreground'"
+              >
+                {{ phase.progress }}%
+              </div>
+            </div>
+
+            <p class="text-muted-foreground mb-4 text-sm">{{ phase.description }}</p>
+
+            <z-progress-bar [progress]="phase.progress" class="mb-4 h-1.5" />
+
+            <div class="mb-4">
+              <h4 class="text-muted-foreground mb-2 text-xs font-semibold uppercase">Goals</h4>
+              <div class="flex flex-wrap gap-1.5">
+                @for (goal of phase.goals; track goal) {
+                <span class="bg-secondary text-secondary-foreground inline-flex items-center rounded px-2 py-0.5 text-xs">{{ goal }}</span>
+                }
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <h4 class="text-muted-foreground mb-2 text-xs font-semibold uppercase">Deliverables ({{ getCompletedCount(phase.deliverables) }}/{{ phase.deliverables.length }})</h4>
+              <ul class="space-y-2">
+                @for (deliverable of phase.deliverables; track deliverable.text) {
+                <li class="flex items-start gap-2 text-sm">
+                  @if (deliverable.completed) {
+                  <svg class="mt-0.5 size-4 flex-shrink-0 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                  </svg>
+                  } @else {
+                  <svg class="text-muted-foreground mt-0.5 size-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3"></path>
+                  </svg>
+                  }
+                  <span [class]="deliverable.completed ? 'text-foreground' : 'text-muted-foreground'">{{ deliverable.text }}</span>
+                </li>
+                }
+              </ul>
+            </div>
+          </div>
+        </z-card>
+      </div>
+      }
+    </div>
+  </div>
+
+  <div class="from-primary/10 via-primary/5 border-primary/20 mt-12 rounded-lg border bg-gradient-to-br to-transparent p-8">
+    <div class="mx-auto max-w-3xl space-y-4 text-center">
+      <h3 class="text-2xl font-bold">Help Us Reach V1.0</h3>
+      <p class="text-muted-foreground">Join our community and contribute to making Zard UI the best Angular component library.</p>
+      <div class="flex flex-wrap justify-center gap-3 pt-2">
+        <a
+          href="https://github.com/ngzard/ui"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="bg-primary text-primary-foreground hover:bg-primary/90 inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium transition-colors"
+        >
+          <svg class="size-4" fill="currentColor" viewBox="0 0 24 24">
+            <path
+              d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+            />
+          </svg>
+          Contribute on GitHub
+        </a>
+        <a
+          href="https://github.com/ngzard/ui/discussions"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="bg-secondary text-secondary-foreground hover:bg-secondary/80 inline-flex items-center gap-2 rounded-md px-5 py-2.5 text-sm font-medium transition-colors"
+        >
+          Share Feedback
+        </a>
+      </div>
+    </div>
+  </div>
+</z-content>
