@@ -55,7 +55,7 @@ export class ZardSelectItemComponent {
   }
 
   onClick() {
-    if (this.zDisabled() || !this.select) return;
+    if (this.zDisabled()) return;
     this.select()?.selectItem(this.zValue(), this.label());
   }
 }
