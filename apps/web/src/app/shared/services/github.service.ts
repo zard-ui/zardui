@@ -1,6 +1,7 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+
 import { Observable, of } from 'rxjs';
 import { map } from 'rxjs/operators';
 

@@ -1,5 +1,5 @@
-import { Injectable, PLATFORM_ID, inject, Renderer2, RendererFactory2 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Injectable, PLATFORM_ID, inject, Renderer2, RendererFactory2 } from '@angular/core';
 
 export interface JsonLdWebSite {
   '@context': 'https://schema.org';

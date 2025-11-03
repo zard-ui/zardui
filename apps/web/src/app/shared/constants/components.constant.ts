@@ -1,7 +1,8 @@
 import { ComponentType } from '@angular/cdk/overlay';
+
 import { ACCORDION } from '@zard/components/accordion/demo/accordion';
-import { ALERT_DIALOG } from '@zard/components/alert-dialog/demo/alert-dialog';
 import { ALERT } from '@zard/components/alert/demo/alert';
+import { ALERT_DIALOG } from '@zard/components/alert-dialog/demo/alert-dialog';
 import { AVATAR } from '@zard/components/avatar/demo/avatar';
 import { BADGE } from '@zard/components/badge/demo/badge';
 import { BREADCRUMB } from '@zard/components/breadcrumb/demo/breadcrumb';
@@ -18,8 +19,8 @@ import { DROPDOWN } from '@zard/components/dropdown/demo/dropdown';
 import { EMPTY } from '@zard/components/empty/demo/empty';
 import { FORM } from '@zard/components/form/demo/form';
 import { ICON } from '@zard/components/icon/demo/icon';
-import { INPUT_GROUP } from '@zard/components/input-group/demo/input-group';
 import { INPUT } from '@zard/components/input/demo/input';
+import { INPUT_GROUP } from '@zard/components/input-group/demo/input-group';
 import { LAYOUT } from '@zard/components/layout/demo/layout';
 import { LOADER } from '@zard/components/loader/demo/loader';
 import { MENU } from '@zard/components/menu/demo/menu';
@@ -37,8 +38,8 @@ import { SWITCH } from '@zard/components/switch/demo/switch';
 import { TABLE } from '@zard/components/table/demo/table';
 import { TABS } from '@zard/components/tabs/demo/tabs';
 import { TOAST } from '@zard/components/toast/demo/toast';
-import { TOGGLE_GROUP } from '@zard/components/toggle-group/demo/toggle-group';
 import { TOGGLE } from '@zard/components/toggle/demo/toggle';
+import { TOGGLE_GROUP } from '@zard/components/toggle-group/demo/toggle-group';
 import { TOOLTIP } from '@zard/components/tooltip/demo/tooltip';
 
 export interface ComponentData {

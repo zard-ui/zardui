@@ -4,19 +4,20 @@ import { Component, inject, type OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
+import { ContributorsLoadingComponent } from '@doc/domain/components/contributors/contributors-loading.component';
+import { ContributorsComponent } from '@doc/domain/components/contributors/contributors.component';
+import { CreditCardComponent } from '@doc/domain/components/credit-card/credit-card.component';
+import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { FoundersLoadingComponent } from '@doc/domain/components/founders/founders-loading.component';
+import { FoundersComponent, FounderData } from '@doc/domain/components/founders/founders.component';
+import { MaintainersLoadingComponent } from '@doc/domain/components/maintainers/maintainers-loading.component';
+import { MaintainersComponent, MaintainerData } from '@doc/domain/components/maintainers/maintainers.component';
+import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
+import { Contributor, GithubService } from '@doc/shared/services/github.service';
 import { SeoService } from '@doc/shared/services/seo.service';
-
-import { Contributor, GithubService } from '../../../shared/services/github.service';
-import { ContributorsLoadingComponent } from '../../components/contributors/contributors-loading.component';
-import { ContributorsComponent } from '../../components/contributors/contributors.component';
-import { CreditCardComponent } from '../../components/credit-card/credit-card.component';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { FoundersLoadingComponent } from '../../components/founders/founders-loading.component';
-import { FoundersComponent, FounderData } from '../../components/founders/founders.component';
-import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-about',
@@ -30,6 +31,8 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     ScrollSpyItemDirective,
     FoundersComponent,
     FoundersLoadingComponent,
+    MaintainersComponent,
+    MaintainersLoadingComponent,
     ContributorsComponent,
     ContributorsLoadingComponent,
     CreditCardComponent,
@@ -45,11 +48,12 @@ export class AboutPage implements OnInit {
   }
   contributors$: Observable<Contributor[]> = this.githubService.getContributors();
   founders$: Observable<FounderData[]>;
+  maintainers$: Observable<MaintainerData[]>;
 
   private readonly founderMappings = {
     Luizgomess: {
       name: 'Luiz Gomes',
-      role: 'Creator & Founder',
+      role: 'Founder & Core Developer',
     },
     srizzon: {
       name: 'Samuel Rizzon',
@@ -57,10 +61,22 @@ export class AboutPage implements OnInit {
     },
   };
 
+  private readonly maintainerMappings = {
+    ribeiromatheuss: {
+      name: 'Matheus Ribeiro',
+      role: 'Mantainer',
+    },
+    mikij: {
+      name: 'Mickey Lazarevic',
+      role: 'Mantainer',
+    },
+  };
+
   readonly navigationConfig: NavigationConfig = {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
       { id: 'founders', label: 'Founders', type: 'custom' },
+      { id: 'mantainers', label: 'Mantainers', type: 'custom' },
       { id: 'contributors', label: 'Contributors', type: 'custom' },
       { id: 'credits', label: 'Credits', type: 'custom' },
     ],
@@ -97,7 +113,9 @@ export class AboutPage implements OnInit {
     },
   ];
 
-  filteredContributors$ = this.contributors$.pipe(map(contributors => contributors.filter(contributor => !this.isFounder(contributor.login))));
+  filteredContributors$ = this.contributors$.pipe(
+    map(contributors => contributors.filter(contributor => !this.isFounder(contributor.login) && !this.isMaintainer(contributor.login))),
+  );
 
   constructor() {
     this.founders$ = this.contributors$.pipe(
@@ -111,9 +129,25 @@ export class AboutPage implements OnInit {
           .sort((a, b) => b.contributions - a.contributions),
       ),
     );
+
+    this.maintainers$ = this.contributors$.pipe(
+      map(contributors =>
+        contributors
+          .filter(contributor => contributor.login in this.maintainerMappings)
+          .map(contributor => ({
+            ...contributor,
+            ...this.maintainerMappings[contributor.login as keyof typeof this.maintainerMappings],
+          }))
+          .sort((a, b) => b.contributions - a.contributions),
+      ),
+    );
   }
 
   isFounder(login: string): boolean {
     return login in this.founderMappings;
+  }
+
+  isMaintainer(login: string): boolean {
+    return login in this.maintainerMappings;
   }
 }

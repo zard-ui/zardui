@@ -30,6 +30,19 @@
     }
   </section>
 
+  <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="mantainers" id="mantainers">
+    <div class="flex flex-col gap-6">
+      <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Maintainers</h2>
+      <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">The dedicated team members who help maintain and improve ZardUI, ensuring quality and consistency.</p>
+    </div>
+
+    @if (maintainers$ | async; as maintainers) {
+    <z-maintainers [maintainers]="maintainers"></z-maintainers>
+    } @else {
+    <z-maintainers-loading></z-maintainers-loading>
+    }
+  </section>
+
   <!-- Contributors Section -->
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="contributors" id="contributors">
     <div class="flex flex-col gap-6">

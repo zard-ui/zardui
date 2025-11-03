@@ -1,19 +1,19 @@
-<button z-button zType="ghost" (click)="toggleMenu()" aria-label="Toggle Menu" class="!p-0 !h-auto !bg-transparent">
-  <a class="flex xl:hidden justify-center items-center gap-2.5">
+<button z-button zType="ghost" (click)="toggleMenu()" aria-label="Toggle Menu" class="!h-auto !bg-transparent !p-0">
+  <a class="flex items-center justify-center gap-2.5 xl:hidden">
     <div class="relative flex h-8 w-4 items-center justify-center">
       <div class="relative size-4">
         <span
           [class]="
             sidebarState()
-              ? 'bg-foreground absolute left-0 block h-0.5 w-4 transition-all duration-100 top-[0.4rem] rotate-45'
-              : 'bg-foreground absolute left-0 block h-0.5 w-4 transition-all duration-100 top-1'
+              ? 'bg-foreground absolute top-[0.4rem] left-0 block h-0.5 w-4 rotate-45 transition-all duration-100'
+              : 'bg-foreground absolute top-1 left-0 block h-0.5 w-4 transition-all duration-100'
           "
         ></span>
         <span
           [class]="
             sidebarState()
-              ? 'bg-foreground absolute left-0 block h-0.5 w-4 transition-all duration-100 top-[0.4rem] -rotate-45'
-              : 'bg-foreground absolute left-0 block h-0.5 w-4 transition-all duration-100 top-2.5'
+              ? 'bg-foreground absolute top-[0.4rem] left-0 block h-0.5 w-4 -rotate-45 transition-all duration-100'
+              : 'bg-foreground absolute top-2.5 left-0 block h-0.5 w-4 transition-all duration-100'
           "
         ></span>
       </div>
@@ -27,7 +27,7 @@
   <div
     [attr.data-state]="sidebarState() ? 'open' : 'closed'"
     (click)="closeMenu()"
-    class="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 duration-200"
+    class="data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-40 bg-black/50 backdrop-blur-sm duration-200"
     style="top: var(--header-height)"
   ></div>
 
@@ -38,7 +38,7 @@
       [attr.data-state]="sidebarState() ? 'open' : 'closed'"
       (click)="$event.stopPropagation()"
       role="dialog"
-      class="text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 z-50 border outline-hidden bg-background/90 no-scrollbar overflow-y-auto rounded-none border-none p-0 shadow-none backdrop-blur duration-100"
+      class="text-popover-foreground data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 bg-background/90 no-scrollbar z-50 overflow-y-auto rounded-none border border-none p-0 shadow-none outline-hidden backdrop-blur duration-100"
       style="width: 100vw; height: calc(100vh - var(--header-height))"
       tabindex="-1"
     >
@@ -52,7 +52,7 @@
                 routerLinkActive="font-semibold"
                 [routerLinkActiveOptions]="{ exact: true }"
                 (click)="isAvailable(item.available)"
-                class="text-2xl font-medium flex items-center gap-2 capitalize hover:text-foreground transition-colors"
+                class="hover:text-foreground flex items-center gap-2 text-2xl font-medium capitalize transition-colors"
               >
                 {{ item.name }}
                 @if (!item.available) {
@@ -73,7 +73,7 @@
                   routerLinkActive="font-semibold"
                   [routerLinkActiveOptions]="{ exact: true }"
                   (click)="isAvailable(path.available)"
-                  class="text-2xl font-medium flex items-center gap-2 capitalize hover:text-foreground transition-colors"
+                  class="hover:text-foreground flex items-center gap-2 text-2xl font-medium capitalize transition-colors"
                 >
                   {{ path.name }}
                   @if (!path.available) {

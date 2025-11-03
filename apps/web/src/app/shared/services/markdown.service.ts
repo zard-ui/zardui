@@ -1,12 +1,13 @@
-import rehypePrettyCode from 'rehype-pretty-code';
-import rehypeStringify from 'rehype-stringify';
 import { Injectable } from '@angular/core';
-import remarkRehype from 'remark-rehype';
-import { visit } from 'unist-util-visit';
-import remarkParse from 'remark-parse';
+
+import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeSlug from 'rehype-slug';
+import rehypeStringify from 'rehype-stringify';
 import remarkGfm from 'remark-gfm';
+import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
+import { visit } from 'unist-util-visit';
 
 import { rehypeEnhancedCode, rehypeCodeTabs } from './rehype-enhanced-code';
 
