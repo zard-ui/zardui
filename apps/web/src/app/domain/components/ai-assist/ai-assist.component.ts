@@ -31,7 +31,7 @@ export class AiAssistComponent {
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
-  private readonly appRoutes = [...SECTIONS.data, ...DOCS_PATH.data, ...COMPONENTS_PATH.data].filter(route => route.available);
+  private readonly appRoutes = [...SECTIONS.data, ...DOCS_PATH.data, ...COMPONENTS_PATH.data].filter(route => route.available).filter(route => route.path !== '/llms.txt');
   private readonly baseUrl = 'https://zardui.com';
 
   readonly CopyIcon = Copy;

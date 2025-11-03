@@ -93,5 +93,9 @@ export const appRoutes: Route[] = [
       },
     ],
   },
+  {
+    path: 'llms.txt',
+    loadComponent: () => import('./domain/pages/llms/llms.page').then(c => c.LlmsPage),
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
