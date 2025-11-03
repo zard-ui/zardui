@@ -2,11 +2,11 @@ import { ViewportScroller } from '@angular/common';
 import { Component, inject, type OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { SeoService } from '../../../shared/services/seo.service';
-import { BenefitsComponent } from '../../components/benefits/benefits.component';
-import { HeroComponent } from '../../components/hero/hero.component';
-import { ShowcaseComponent } from '../../components/showcase/showcase.component';
-import { YoutubeComponent } from '../../components/youtube/youtube.component';
+import { BenefitsComponent } from '@docs/domain/components/benefits/benefits.component';
+import { HeroComponent } from '@docs/domain/components/hero/hero.component';
+import { ShowcaseComponent } from '@docs/domain/components/showcase/showcase.component';
+import { YoutubeComponent } from '@docs/domain/components/youtube/youtube.component';
+import { SeoService } from '@docs/shared/services/seo.service';
 
 @Component({
   selector: 'z-home',

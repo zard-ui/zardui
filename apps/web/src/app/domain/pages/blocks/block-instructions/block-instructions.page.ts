@@ -3,9 +3,7 @@ import { RouterLink } from '@angular/router';
 
 import { ArrowRight, ExternalLink, FolderOpen, Github, LucideAngularModule } from 'lucide-angular';
 
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
 
 import type { Block } from '@docs/domain/components/block-container/block-container.component';
 import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
@@ -28,17 +26,7 @@ interface BlockPreview {
 @Component({
   selector: 'z-block-instructions',
   standalone: true,
-  imports: [
-    RouterLink,
-    ZardBadgeComponent,
-    ZardButtonComponent,
-    ZardCardComponent,
-    DocContentComponent,
-    DocHeadingComponent,
-    ScrollSpyDirective,
-    ScrollSpyItemDirective,
-    LucideAngularModule,
-  ],
+  imports: [RouterLink, ZardButtonComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, LucideAngularModule],
   templateUrl: './block-instructions.page.html',
 })
 export class BlocksInstructionPage implements OnInit {

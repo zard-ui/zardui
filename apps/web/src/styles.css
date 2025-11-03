@@ -9,7 +9,7 @@
   --header-height: calc(var(--spacing) * 14);
   --footer-height: calc(var(--spacing) * 14);
   --sidebar-width: 16rem;
-  --font-geist-sans: 'Geist', sans-serif;
+  --font-geist-sans: 'Geist sans', sans-serif;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -162,6 +162,10 @@
     @apply scroll-smooth;
   }
 
+  [data-slot='layout'] {
+    @apply 3xl:p-2 3xl:fixed:p-0 overscroll-none;
+  }
+
   a:active,
   button:active {
     @apply opacity-60 md:opacity-100;
@@ -180,7 +184,7 @@
 }
 
 @utility section-soft {
-  @apply from-background to-surface/40 dark:bg-background 3xl:fixed:bg-none bg-gradient-to-b;
+  @apply from-background to-surface/40 dark:bg-background 3xl:fixed:bg-none bg-linear-to-b;
 }
 
 @utility theme-container {
@@ -260,11 +264,11 @@ code [data-highlighted-chars] {
 }
 
 .component-selector {
-  @apply inline-flex items-center rounded-md bg-muted px-2 py-1 text-xs font-medium text-foreground;
+  @apply inline-flex items-center rounded-md bg-muted px-2 py-1 text-sm font-medium text-foreground;
 }
 
 .component-badge {
-  @apply inline-flex items-center rounded-md px-2 py-1 text-xs font-medium;
+  @apply inline-flex items-center rounded-md px-2 py-1 text-sm font-medium;
 }
 
 .component-badge--component {

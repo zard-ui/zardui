@@ -1,8 +1,9 @@
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { RouterModule } from '@angular/router';
+
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 @Component({
   selector: 'z-hero',
@@ -11,18 +12,18 @@ import { RouterModule } from '@angular/router';
   imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, ZardIconComponent],
   template: `
     <section class="relative overflow-hidden p-5 md:p-0">
-      <div class="absolute inset-0 bg-gradient-to-br from-background via-background to-muted/20 dark:from-background dark:via-background dark:to-primary/5"></div>
+      <div class="absolute inset-0 bg-linear-to-br from-background via-background to-muted/20 dark:from-background dark:via-background dark:to-primary/5"></div>
 
-      <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-size-[24px_24px]"></div>
 
       <div class="relative z-10 container mx-auto px-4 min-h-[90vh] flex items-center justify-center">
         <div class="max-w-4xl mx-auto text-center space-y-8">
           <h1 class="text-4xl sm:text-5xl xl:text-7xl font-bold tracking-tight leading-tight">
             Finally, a real
-            <span class="inline-block bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">&#64;shadcn/ui</span>
+            <span class="inline-block bg-linear-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">&#64;shadcn/ui</span>
             <br class="hidden sm:block" />
             alternative for
-            <span class="bg-gradient-to-r from-red-500 to-red-600 dark:from-red-400 dark:to-red-500 bg-clip-text text-transparent">Angular</span>.
+            <span class="bg-linear-to-r from-red-500 to-red-600 dark:from-red-400 dark:to-red-500 bg-clip-text text-transparent">Angular</span>.
           </h1>
 
           <p class="max-w-2xl mx-auto text-lg sm:text-xl text-muted-foreground leading-relaxed">

@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
+import { RouterLinkWithHref } from '@angular/router';
 
 import { DocContentComponent } from '@docs/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@docs/domain/components/doc-heading/doc-heading.component';
@@ -13,7 +14,9 @@ import { SeoService } from '@docs/shared/services/seo.service';
       <div>
         <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:gap-x-16 lg:gap-y-6 xl:gap-x-20">
           @for (component of list; track component.name) {
-            <a [href]="component.path" class="inline-flex items-center gap-2 text-lg font-medium underline-offset-4 hover:underline md:text-base"> {{ component.name }} </a>
+            @if (component.available) {
+              <a [routerLink]="component.path" class="inline-flex items-center gap-2 text-lg font-medium underline-offset-4 hover:underline md:text-base"> {{ component.name }} </a>
+            }
           }
         </section>
       </div>
@@ -21,7 +24,7 @@ import { SeoService } from '@docs/shared/services/seo.service';
   `,
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DocContentComponent, DocHeadingComponent],
+  imports: [DocContentComponent, DocHeadingComponent, RouterLinkWithHref],
 })
 export class ComponentsListPage implements OnInit {
   private readonly seoService = inject(SeoService);
