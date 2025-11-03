@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
+
+import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
 
 @Component({
   selector: 'cli-configuration-section',

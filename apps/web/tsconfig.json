@@ -10,12 +10,11 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@blocks": ["libs/blocks/src/index.ts"],
-      "@cli/*": ["packages/cli/src/*"],
       "@zard/*": ["libs/zard/src/lib/*"],
-      "@zard/domain/*": ["apps/web/src/app/domain/*"],
-      "@zard/env/*": ["apps/web/src/environments/*"],
-      "@zard/shared/*": ["apps/web/src/app/shared/*"],
-      "@zard/widget/*": ["apps/web/src/app/widget/*"]
+      "@doc/domain/*": ["apps/web/src/app/domain/*"],
+      "@doc/env/*": ["apps/web/src/environments/*"],
+      "@doc/shared/*": ["apps/web/src/app/shared/*"],
+      "@doc/widget/*": ["apps/web/src/app/widget/*"]
     }
   },
   "files": [],

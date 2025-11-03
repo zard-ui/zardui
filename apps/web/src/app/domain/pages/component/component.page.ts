@@ -1,7 +1,8 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AiAssistComponent } from '@zard/domain/components/ai-assist/ai-assist.component';
+
+import { AiAssistComponent } from '@doc/domain/components/ai-assist/ai-assist.component';
 
 import { ComponentData, COMPONENTS } from '../../../shared/constants/components.constant';
 import { Step } from '../../../shared/constants/install.constant';

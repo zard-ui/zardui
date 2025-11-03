@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
-import { CalloutComponent } from '@zard/domain/components/callout/callout.component';
+
+import { CalloutComponent } from '@doc/domain/components/callout/callout.component';
+import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
 
 @Component({
   selector: 'z-json-introduction-section',
@@ -8,10 +9,10 @@ import { CalloutComponent } from '@zard/domain/components/callout/callout.compon
   imports: [MarkdownRendererComponent, CalloutComponent],
   template: `
     <div class="flex flex-col gap-6 sm:gap-8">
-      <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">
-        The <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">components.json</code> file holds configuration for your project.
+      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+        The <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code> file holds configuration for your project.
       </p>
-      <p class="text-sm sm:text-base text-muted-foreground leading-relaxed">
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
         We use it to understand how your project is set up and how to generate components customized for your project.
       </p>
 
@@ -20,13 +21,13 @@ import { CalloutComponent } from '@zard/domain/components/callout/callout.compon
       </z-callout>
 
       <div class="flex flex-col gap-4">
-        <p class="text-sm sm:text-base text-muted-foreground">
-          You can create a <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">components.json</code> file in your project by running the following command:
+        <p class="text-muted-foreground text-sm sm:text-base">
+          You can create a <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code> file in your project by running the following command:
         </p>
         <z-markdown-renderer markdownUrl="documentation/json/init-command.md"></z-markdown-renderer>
       </div>
 
-      <p class="text-sm sm:text-base text-muted-foreground">See the CLI section for more information.</p>
+      <p class="text-muted-foreground text-sm sm:text-base">See the CLI section for more information.</p>
     </div>
   `,
 })

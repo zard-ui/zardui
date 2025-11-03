@@ -1,7 +1,8 @@
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
-import eslintPluginImport from 'eslint-plugin-import';
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
+import eslintPluginImport from 'eslint-plugin-import';
 import nx from '@nx/eslint-plugin';
+
 
 export default [
   ...nx.configs['flat/base'],
@@ -30,7 +31,7 @@ export default [
         'warn',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$', '^@zard/domain/.*$', '^@zard/env/.*$', '^@zard/shared/.*$', '^@zard/widget/.*$', '^@cli/.*$'],
+          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$', '^@doc/domain/.*$', '^@doc/env/.*$', '^@doc/shared/.*$', '^@doc/widget/.*$', '^@cli/.*$', '^@zard/.*$'],
           depConstraints: [
             {
               sourceTag: '*',
@@ -60,6 +61,11 @@ export default [
             {
               pattern: '@angular/**',
               group: 'external',
+              position: 'before',
+            },
+            {
+              pattern: '@doc/**',
+              group: 'internal',
               position: 'before',
             },
             {

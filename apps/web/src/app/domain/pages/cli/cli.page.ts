@@ -1,14 +1,15 @@
-import { NavigationConfig } from '@zard/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { DocHeadingComponent } from '@zard/domain/components/doc-heading/doc-heading.component';
-import { DocContentComponent } from '@zard/domain/components/doc-content/doc-content.component';
-import { SeoService } from '@zard/shared/services/seo.service';
 import { Component, inject, type OnInit } from '@angular/core';
 
+import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
+import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
+import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { SeoService } from '@doc/shared/services/seo.service';
+
+import { CliCommandsSection } from './sections/commands.component';
 import { CliConfigurationSection } from './sections/configuration.component';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 import { CliInstallationSection } from './sections/installation.component';
 import { CliOverviewSection } from './sections/overview.component';
-import { CliCommandsSection } from './sections/commands.component';
+import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-cli',
