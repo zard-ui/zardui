@@ -1,8 +1,9 @@
-import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/command/command.component';
 import { AfterViewInit, Component, inject, viewChild, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
+
+import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/command/command.component';
 import { ZardCommandModule } from '@zard/components/command/command.module';
 import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
-import { Router } from '@angular/router';
 
 import { SIDEBAR_PATHS } from '../../../shared/constants/routes.constant';
 

@@ -9,7 +9,7 @@ import { CodeHighlightService } from '../../services/code-highlight.service';
   template: `
     <div class="relative">
       @if (showCopyButton()) {
-        <button (click)="copyCode()" class="absolute top-2 right-2 z-10 p-2 rounded-md bg-muted hover:bg-muted/80 text-muted-foreground transition-colors" title="Copy code">
+        <button (click)="copyCode()" class="bg-muted hover:bg-muted/80 text-muted-foreground absolute top-2 right-2 z-10 rounded-md p-2 transition-colors" title="Copy code">
           <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             @if (copied()) {
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
@@ -26,7 +26,7 @@ import { CodeHighlightService } from '../../services/code-highlight.service';
       }
 
       <div
-        class="[&>pre]:m-0 [&>pre]:rounded-lg [&>pre]:border [&>pre]:border-border [&>pre]:bg-muted/30 [&>pre]:p-4 [&>pre]:overflow-x-auto [&>pre]:text-sm [&_code]:bg-transparent"
+        class="[&>pre]:border-border [&>pre]:bg-muted/30 [&_code]:bg-transparent [&>pre]:m-0 [&>pre]:overflow-x-auto [&>pre]:rounded-lg [&>pre]:border [&>pre]:p-4 [&>pre]:text-sm"
         [innerHTML]="highlightedCode()"
       ></div>
     </div>

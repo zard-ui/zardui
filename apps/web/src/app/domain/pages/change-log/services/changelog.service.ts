@@ -1,7 +1,8 @@
-import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { map, catchError } from 'rxjs/operators';
+import { Injectable, inject } from '@angular/core';
+
 import { Observable, of } from 'rxjs';
+import { map, catchError } from 'rxjs/operators';
 
 export interface ChangelogEntry {
   date: string;

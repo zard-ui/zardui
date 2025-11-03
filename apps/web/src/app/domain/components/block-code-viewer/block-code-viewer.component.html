@@ -1,10 +1,10 @@
-<div class="flex min-h-svh bg-code rounded-lg">
-  <div class="w-64 border-r overflow-auto flex flex-col">
-    <div class="px-4 py-3 border-b border-border">
-      <h4 class="text-sm font-semibold text-code-foreground">Files</h4>
+<div class="bg-code flex min-h-svh rounded-lg">
+  <div class="flex w-64 flex-col overflow-auto border-r">
+    <div class="border-border border-b px-4 py-3">
+      <h4 class="text-code-foreground text-sm font-semibold">Files</h4>
     </div>
 
-    <div class="flex-1 p-3 space-y-0.5 overflow-auto">
+    <div class="flex-1 space-y-0.5 overflow-auto p-3">
       <z-file-tree
         [nodes]="fileTree()"
         [openFolders]="openFolders()"
@@ -15,12 +15,12 @@
     </div>
   </div>
 
-  <div class="flex-1 flex flex-col overflow-hidden rounded-tr-lg rounded-br-lg bg-code">
+  <div class="bg-code flex flex-1 flex-col overflow-hidden rounded-tr-lg rounded-br-lg">
     @if (selectedFile()) {
-      <div class="flex items-center justify-between gap-3 px-4 py-1 border-b border-border">
+      <div class="border-border flex items-center justify-between gap-3 border-b px-4 py-1">
         <div class="flex items-center gap-3">
-          <img [src]="getFileIcon(selectedFile()!.name)" alt="file icon" class="w-4 h-4 dark:invert" />
-          <span class="text-sm text-code-foreground">{{ selectedFile()!.path }}</span>
+          <img [src]="getFileIcon(selectedFile()!.name)" alt="file icon" class="h-4 w-4 dark:invert" />
+          <span class="text-code-foreground text-sm">{{ selectedFile()!.path }}</span>
         </div>
         <button (click)="copyToClipboard()" z-button zType="ghost" title="Copy code">
           <z-icon zType="clipboard" class="text-sm" />
@@ -32,9 +32,9 @@
         <z-simple-code-highlight [code]="selectedFile()!.content" [language]="selectedFile()!.language" [showCopyButton]="false" [showLineNumbers]="true" />
       </div>
     } @else {
-      <div class="flex items-center justify-center h-full">
-        <div class="text-center space-y-3">
-          <svg class="h-12 w-12 mx-auto text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div class="flex h-full items-center justify-center">
+        <div class="space-y-3 text-center">
+          <svg class="mx-auto h-12 w-12 text-zinc-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"

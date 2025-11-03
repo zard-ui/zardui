@@ -1,5 +1,6 @@
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { Component, input } from '@angular/core';
+
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 
 export interface ResourceLink {
   url: string;
@@ -18,12 +19,12 @@ export interface ResourceBadge {
   standalone: true,
   imports: [ZardBadgeComponent],
   template: `
-    <div class="rounded-lg border bg-card p-6 sm:p-8 text-card-foreground shadow-sm">
+    <div class="bg-card text-card-foreground rounded-lg border p-6 shadow-sm sm:p-8">
       <div class="flex flex-col gap-4">
         <div class="flex items-start justify-between">
           <div class="flex flex-col gap-2">
             <h3 class="text-lg font-semibold">{{ title() }}</h3>
-            <p class="text-sm text-muted-foreground">
+            <p class="text-muted-foreground text-sm">
               by <strong>{{ author() }}</strong>
             </p>
           </div>
@@ -36,7 +37,7 @@ export interface ResourceBadge {
           }
         </div>
 
-        <p class="text-sm text-muted-foreground leading-relaxed">
+        <p class="text-muted-foreground text-sm leading-relaxed">
           {{ description() }}
         </p>
 

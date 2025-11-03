@@ -9,9 +9,9 @@ export interface CreditItem {
   selector: 'z-credit-card',
   standalone: true,
   template: `
-    <div class="rounded-lg border bg-muted/30 p-6 sm:p-8">
-      <h3 class="text-base sm:text-lg font-semibold mb-3">{{ title() }}</h3>
-      <p class="text-xs sm:text-sm text-muted-foreground leading-relaxed">
+    <div class="bg-muted/30 rounded-lg border p-6 sm:p-8">
+      <h3 class="mb-3 text-base font-semibold sm:text-lg">{{ title() }}</h3>
+      <p class="text-muted-foreground text-xs leading-relaxed sm:text-sm">
         {{ description() }}
       </p>
     </div>

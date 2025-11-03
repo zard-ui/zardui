@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
+
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
@@ -19,25 +20,25 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="py-24 pl-4">
-      <header class="grid items-center justify-center mb-16 text-center">
-        <h2 class="text-3xl sm:text-4xl xl:text-6xl font-bold tracking-tight mb-4">Beautiful Components</h2>
-        <p class="text-lg sm:text-xl text-muted-foreground max-w-2xl leading-relaxed pr-4 md:pr-0">
+      <header class="mb-16 grid items-center justify-center text-center">
+        <h2 class="mb-4 text-3xl font-bold tracking-tight sm:text-4xl xl:text-6xl">Beautiful Components</h2>
+        <p class="text-muted-foreground max-w-2xl pr-4 text-lg leading-relaxed sm:text-xl md:pr-0">
           Production-ready components that you can copy and paste into your apps. Accessible, customizable, and open source.
         </p>
       </header>
 
       <main class="mb-24 pr-4 md:pr-0">
         <div class="relative overflow-hidden">
-          <z-carousel class="max-w-4xl mx-auto showcase-carousel" [itemsPerView]="3.2" [infinite]="false" [showNavigation]="true" [showDots]="false">
+          <z-carousel class="showcase-carousel mx-auto max-w-4xl" [itemsPerView]="3.2" [infinite]="false" [showNavigation]="true" [showDots]="false">
             @for (component of showcaseComponents(); track component.type; let i = $index) {
               <z-carousel-item class="md:pr-6">
                 <z-card
                   [zTitle]="component.title"
-                  [class]="'h-[340px] w-[94%] md:w-72 flex flex-col pb-6 ' + component.bgClass + (component.isCtaCard ? ' cursor-pointer' : '')"
+                  [class]="'flex h-[340px] w-[94%] flex-col pb-6 md:w-72 ' + component.bgClass + (component.isCtaCard ? ' cursor-pointer' : '')"
                   (click)="component.isCtaCard ? navigateToComponents() : null"
                 >
-                  <div class="flex items-center justify-center flex-1 p-8 min-h-[200px]">
-                    <div class="w-full flex items-center justify-center">
+                  <div class="flex min-h-[200px] flex-1 items-center justify-center p-8">
+                    <div class="flex w-full items-center justify-center">
                       @switch (component.type) {
                         @case ('button') {
                           <z-button>Click me</z-button>
@@ -61,19 +62,19 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
                           <z-avatar zSrc="https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff" zAlt="John Doe"></z-avatar>
                         }
                         @case ('tooltip') {
-                          <button zTooltip="This is a helpful tooltip!" class="bg-primary text-primary-foreground px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105">
+                          <button zTooltip="This is a helpful tooltip!" class="bg-primary text-primary-foreground rounded-lg px-4 py-2 transition-all duration-200 hover:scale-105">
                             Hover me
                           </button>
                         }
                         @case ('cta') {
                           <div class="text-center">
-                            <div class="flex items-center justify-center p-2 rounded-2xl bg-white/10 backdrop-blur-sm">
+                            <div class="flex items-center justify-center rounded-2xl bg-white/10 p-2 backdrop-blur-sm">
                               <z-icon zType="arrow-right" class="text-xl" />
                             </div>
 
                             <div>
-                              <h3 class="text-xl font-semibold mb-2">View All</h3>
-                              <p class="text-sm text-primary-foreground/80 leading-relaxed">30+ components<br />ready to use</p>
+                              <h3 class="mb-2 text-xl font-semibold">View All</h3>
+                              <p class="text-primary-foreground/80 text-sm leading-relaxed">30+ components<br />ready to use</p>
                             </div>
                           </div>
                         }

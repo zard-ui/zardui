@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+
 import { cva, type VariantProps } from 'class-variance-authority';
 
 const calloutVariants = cva('rounded-lg border p-4 sm:p-6', {

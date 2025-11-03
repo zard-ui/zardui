@@ -41,6 +41,16 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'colors',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./domain/pages/colors/colors.page').then(c => c.ColorsPage),
+      },
+    ],
+  },
+  {
     path: 'docs',
     component: DocumentationLayout,
     children: [
@@ -102,6 +112,10 @@ export const appRoutes: Route[] = [
         loadComponent: async () => import('./domain/pages/change-log/change-log.page').then(c => c.ChangeLogPage),
       },
     ],
+  },
+  {
+    path: 'llms.txt',
+    loadComponent: () => import('./domain/pages/llms/llms.page').then(c => c.LlmsPage),
   },
   { path: '**', redirectTo: '', pathMatch: 'full' },
 ];
