@@ -1,14 +1,26 @@
 import { ZardDemoKbdDefaultComponent } from './default';
+import { ZardDemoKbdGroupComponent } from './group';
+import { ZardDemoKbdTooltipComponent } from './tooltip';
 
 export const KBD = {
-  componentName: 'lbd',
+  componentName: 'kbd',
   componentType: 'kbd',
-  description: 'A set of layout components for creating common page structures with header, footer, sidebar, and content areas.',
+  description: 'Used to display textual user input from keyboard.',
   fullWidth: true,
   examples: [
     {
       name: 'default',
       component: ZardDemoKbdDefaultComponent,
+      column: true,
+    },
+    {
+      name: 'group',
+      component: ZardDemoKbdGroupComponent,
+      column: true,
+    },
+    {
+      name: 'tooltip',
+      component: ZardDemoKbdTooltipComponent,
       column: true,
     },
   ],

@@ -1,26 +1,22 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import type { ClassValue } from 'clsx';
+import { type ClassValue } from 'clsx';
 
-import { kbdVariants } from './kbd.variants';
+import { kbdGroupVariants } from './kbd.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
-  selector: 'z-kbd',
-  exportAs: 'zKbd',
+  selector: 'z-kbd-group',
+  exportAs: 'zKbdGroup',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `
-    <kbd>
-      <ng-content></ng-content>
-    </kbd>
-  `,
+  template: ` <ng-content></ng-content> `,
   host: {
     '[class]': 'classes()',
   },
 })
-export class ZardKbdComponent {
+export class ZardKbdGroupComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(kbdVariants(), this.class()));
+  protected readonly classes = computed(() => mergeClasses(kbdGroupVariants(), this.class()));
 }

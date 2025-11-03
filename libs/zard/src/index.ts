@@ -97,3 +97,4 @@ export * from './lib/components/menu/menu.module';
 
 //Kbd
 export * from './lib/components/kbd/kbd.component';
+export * from './lib/components/kbd/kbd-group.component';
