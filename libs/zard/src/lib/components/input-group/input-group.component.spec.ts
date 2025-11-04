@@ -1,8 +1,9 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, type TemplateRef, ViewChild } from '@angular/core';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardInputGroupComponent } from './input-group.component';
 import { ZardInputDirective } from '../input/input.directive';
+import { inputVariants } from '../input/input.variants';
 
 @Component({
   standalone: true,
@@ -446,11 +447,6 @@ describe('ZardInputDirective', () => {
   it('should apply correct classes to input element', () => {
     const inputElement = fixture.debugElement.nativeElement.querySelector('input[z-input]');
     // The input element gets its classes from ZardInputDirective
-    expect(inputElement.className).toContain('bg-transparent');
-    expect(inputElement.className).toContain('placeholder:text-muted-foreground');
-    expect(inputElement.className).toContain('disabled:cursor-not-allowed');
-    expect(inputElement.className).toContain('disabled:opacity-50');
-    expect(inputElement.className).toContain('focus-visible:outline-none');
-    expect(inputElement.className).toContain('focus-visible:ring-2');
+    expect(inputElement).toHaveClass(inputVariants());
   });
 });
