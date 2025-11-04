@@ -1,13 +1,13 @@
 ```angular-ts showLineNumbers copyButton
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardSelectItemComponent } from '../select-item.component';
 import { ZardSelectComponent } from '../select.component';
 
 @Component({
   selector: 'z-demo-select-basic',
-  standalone: true,
   imports: [ZardSelectComponent, ZardSelectItemComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <z-select zPlaceholder="Selecione uma fruta" [(zValue)]="defaultValue">
       <z-select-item zValue="apple">Apple</z-select-item>

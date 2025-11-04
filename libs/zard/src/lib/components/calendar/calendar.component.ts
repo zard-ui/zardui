@@ -110,6 +110,7 @@ export class ZardCalendarComponent {
 
   protected onMonthChange(monthIndex: string | string[]): void {
     if (Array.isArray(monthIndex)) {
+      console.warn('Calendar received array for month selection, expected single value. Ignoring:', monthIndex);
       return;
     }
 
@@ -133,6 +134,7 @@ export class ZardCalendarComponent {
 
   protected onYearChange(year: string | string[]): void {
     if (Array.isArray(year)) {
+      console.warn('Calendar received array for year selection, expected single value. Ignoring:', year);
       return;
     }
 

@@ -113,6 +113,7 @@ export class ZardCalendarComponent {
 
   protected onMonthChange(monthIndex: string | string[]): void {
     if (Array.isArray(monthIndex)) {
+      console.warn('Calendar received array for month selection, expected single value. Ignoring:', monthIndex);
       return;
     }
 
@@ -136,6 +137,7 @@ export class ZardCalendarComponent {
 
   protected onYearChange(year: string | string[]): void {
     if (Array.isArray(year)) {
+      console.warn('Calendar received array for year selection, expected single value. Ignoring:', year);
       return;
     }
 
@@ -701,14 +703,14 @@ import { ZardSelectComponent } from '../select/select.component';
       <!-- Month and Year Selectors -->
       <div class="flex items-center space-x-2">
         <!-- Month Select -->
-        <z-select class="min-w-20" [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="monthChange.emit($event)">
+        <z-select class="min-w-20" [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
           @for (month of months; track $index) {
             <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
           }
         </z-select>
 
         <!-- Year Select -->
-        <z-select class="min-w-21" [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="yearChange.emit($event)">
+        <z-select class="min-w-21" [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="onYearChange($event)">
           @for (year of availableYears(); track year) {
             <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
           }
@@ -730,8 +732,8 @@ export class ZardCalendarNavigationComponent {
   readonly disabled = input<boolean>(false);
 
   // Outputs
-  readonly monthChange = output<string | string[]>();
-  readonly yearChange = output<string | string[]>();
+  readonly monthChange = output<string>();
+  readonly yearChange = output<string>();
   readonly previousMonth = output<void>();
   readonly nextMonth = output<void>();
 
@@ -786,6 +788,22 @@ export class ZardCalendarNavigationComponent {
 
   protected onNextClick(): void {
     this.nextMonth.emit();
+  }
+
+  protected onMonthChange(month: string | string[]): void {
+    if (Array.isArray(month)) {
+      console.warn('Calendar navigation received array for month selection, expected single value. Ignoring:', month);
+      return;
+    }
+    this.monthChange.emit(month);
+  }
+
+  protected onYearChange(year: string | string[]): void {
+    if (Array.isArray(year)) {
+      console.warn('Calendar navigation received array for year selection, expected single value. Ignoring:', year);
+      return;
+    }
+    this.yearChange.emit(year);
   }
 }
 

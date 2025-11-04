@@ -1,13 +1,13 @@
 ```angular-ts showLineNumbers copyButton
-import { Component, effect, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, signal } from '@angular/core';
 
 import { ZardSelectItemComponent } from '../select-item.component';
 import { ZardSelectComponent } from '../select.component';
 
 @Component({
-  selector: 'z-demo-select-basic',
-  standalone: true,
+  selector: 'z-demo-multi-select-basic',
   imports: [ZardSelectComponent, ZardSelectItemComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <z-select zPlaceholder="Select multiple fruits" [zMultiple]="true" [zMaxLabelCount]="2" [(zValue)]="defaultValue">
       <z-select-item zValue="apple">Apple</z-select-item>
