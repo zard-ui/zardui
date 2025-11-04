@@ -1,3 +1,4 @@
+```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
@@ -26,3 +27,5 @@ import { ZardButtonGroupComponent } from '../button-group.component';
   `,
 })
 export class ZardDemoButtonGroupNestedComponent {}
+
+```

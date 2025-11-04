@@ -12,31 +12,31 @@ export const BUTTON_GROUP = {
   description: 'A container that groups related buttons together with consistent styling.',
   examples: [
     {
-      name: 'Default',
+      name: 'default',
       component: ZardDemoButtonGroupDefaultComponent,
     },
     {
-      name: 'Orientation',
+      name: 'orientation',
       component: ZardDemoButtonGroupOrientationComponent,
     },
     {
-      name: 'Size',
+      name: 'size',
       component: ZardDemoButtonGroupSizeComponent,
     },
     {
-      name: 'Nested',
+      name: 'nested',
       component: ZardDemoButtonGroupNestedComponent,
     },
     {
-      name: 'Divider',
+      name: 'divider',
       component: ZardDemoButtonGroupDividerComponent,
     },
     {
-      name: 'Input',
+      name: 'input',
       component: ZardDemoButtonGroupInputComponent,
     },
     {
-      name: 'Select',
+      name: 'select',
       component: ZardDemoButtonGroupSelectComponent,
     },
   ],
