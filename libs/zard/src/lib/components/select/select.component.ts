@@ -62,7 +62,7 @@ type OnChangeType = (value: string) => void;
       [attr.data-state]="isOpen() ? 'open' : 'closed'"
       [attr.data-placeholder]="!zValue() ? '' : null"
     >
-      <span class="flex items-center gap-2 overflow-hidden">
+      <span class="flex flex-1 flex-wrap items-center gap-2">
         @let labels = selectedLabels();
         @for (label of labels; track index; let index = $index) {
           <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }"> </ng-container>
@@ -75,7 +75,7 @@ type OnChangeType = (value: string) => void;
 
     <ng-template #labelsTemplate let-label>
       @if (zMultiple()) {
-        <z-badge>
+        <z-badge zType="secondary">
           <span class="truncate">{{ label }}</span>
         </z-badge>
       } @else {
@@ -156,7 +156,6 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
         selectItem: (value: string, label: string) => this.selectItem(value, label),
       });
     }
-    this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
   }
 
   ngOnDestroy() {
@@ -164,7 +163,11 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   onDocumentClick(event: Event) {
-    if (!this.elementRef.nativeElement.contains(event.target as Node)) {
+    const target = event.target as Node;
+    const clickedInside = this.elementRef.nativeElement.contains(target);
+    const clickedInOverlay = this.overlayRef?.overlayElement?.contains(target);
+
+    if (!clickedInside && !clickedInOverlay) {
       this.close();
     }
   }
@@ -247,12 +250,15 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     });
     this.onChange(value);
     this.zSelectionChange.emit(this.zValue());
-    this.close();
 
-    // Return focus to the button after selection
-    setTimeout(() => {
-      this.focusButton();
-    }, 0);
+    if (!this.zMultiple()) {
+      this.close();
+
+      // Return focus to the button after selection
+      setTimeout(() => {
+        this.focusButton();
+      }, 0);
+    }
   }
 
   private provideLabelsForMultiselectMode(selectedValue: string[]): string[] {
@@ -297,6 +303,12 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
     const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
 
+    if (this.overlayRef.hasAttached()) {
+      this.overlayRef.detach();
+    }
+
+    this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
+
     this.overlayRef.attach(this.portal);
     this.overlayRef.updateSize({ width: hostWidth });
     this.isOpen.set(true);
@@ -324,7 +336,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   private determinePortalWidth(portalWidth: number): void {
-    if (!this.overlayRef) return;
+    if (!this.overlayRef || !this.overlayRef.hasAttached()) return;
 
     const selectItems = this.selectItems();
     let itemMaxWidth = 0;
@@ -343,8 +355,8 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     }
 
     itemMaxWidth = Math.max(itemMaxWidth, portalWidth);
-    this.overlayRef?.updateSize({ width: itemMaxWidth });
-    this.overlayRef?.updatePosition();
+    this.overlayRef.updateSize({ width: itemMaxWidth });
+    this.overlayRef.updatePosition();
   }
 
   private createOverlay() {

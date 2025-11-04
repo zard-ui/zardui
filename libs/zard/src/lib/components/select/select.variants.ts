@@ -3,13 +3,13 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const selectVariants = cva('relative inline-block w-full');
 
 export const selectTriggerVariants = cva(
-  'flex w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 py-2 whitespace-nowrap shadow-xs transition-[color,box-shadow] outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+  'flex w-full justify-between gap-2 rounded-md border border-input bg-transparent px-3 shadow-xs transition-[color,box-shadow] outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
     variants: {
       zSize: {
-        sm: 'h-8 text-xs',
-        default: 'h-9 text-sm',
-        lg: 'h-10 text-base',
+        sm: 'min-h-8 py-1 text-xs',
+        default: 'min-h-9 py-1.5 text-sm',
+        lg: 'min-h-10 py-2 text-base',
       },
     },
     defaultVariants: {
