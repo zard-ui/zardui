@@ -52,8 +52,8 @@ export class ZardCalendarNavigationComponent {
   readonly disabled = input<boolean>(false);
 
   // Outputs
-  readonly monthChange = output<string>();
-  readonly yearChange = output<string>();
+  readonly monthChange = output<string | string[]>();
+  readonly yearChange = output<string | string[]>();
   readonly previousMonth = output<void>();
   readonly nextMonth = output<void>();
 
