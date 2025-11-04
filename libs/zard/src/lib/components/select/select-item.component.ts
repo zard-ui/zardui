@@ -6,7 +6,7 @@ import { ZardIconComponent } from '../icon/icon.component';
 
 // Interface to avoid circular dependency
 interface SelectHost {
-  selectedValue(): string;
+  selectedValue(): string[];
   selectItem(value: string, label: string): void;
 }
 
@@ -42,13 +42,13 @@ export class ZardSelectItemComponent {
 
   private readonly select = signal<SelectHost | null>(null);
   readonly elementRef = inject(ElementRef);
-  readonly label = linkedSignal(() => {
+  readonly label = linkedSignal<string>(() => {
     const element = this.elementRef?.nativeElement;
     return (element?.textContent ?? element?.innerText)?.trim() ?? '';
   });
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
-  protected readonly isSelected = computed(() => this.select()?.selectedValue() === this.zValue());
+  protected readonly isSelected = computed(() => this.select()?.selectedValue().includes(this.zValue()));
 
   setSelectHost(selectHost: SelectHost) {
     this.select.set(selectHost);

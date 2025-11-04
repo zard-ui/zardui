@@ -1,13 +1,14 @@
 import { Component, signal } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 
 import { ZardSelectItemComponent } from './select-item.component';
 import { ZardSelectComponent } from './select.component';
 
 @Component({
   template: `
-    <z-select [zValue]="value()" [zLabel]="label()" [zPlaceholder]="placeholder()" [zDisabled]="disabled()">
+    <z-select [(zValue)]="value" [zLabel]="label()" [zPlaceholder]="placeholder()" [zDisabled]="disabled()">
       <z-select-item zValue="option1">Option 1</z-select-item>
       <z-select-item zValue="option2">Option 2</z-select-item>
       <z-select-item zValue="option3">Option 3</z-select-item>
@@ -61,8 +62,8 @@ describe('ZardSelectComponent', () => {
     });
 
     it('should initialize with default values', () => {
-      expect(component.selectedValue()).toBe('');
-      expect(component.selectedLabel()).toBe('');
+      expect(component.zValue()).toBe('');
+      expect(component.zValue()).toBe('');
       expect(component.zPlaceholder()).toBe('Select an option...');
       expect(component.zDisabled()).toBe(false);
     });
@@ -71,35 +72,32 @@ describe('ZardSelectComponent', () => {
       it('should open dropdown on Enter key', () => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
         jest.spyOn(event, 'preventDefault');
-        jest.spyOn(component, 'open');
 
         component.onTriggerKeydown(event);
 
         expect(event.preventDefault).toHaveBeenCalled();
-        expect(component.open).toHaveBeenCalled();
+        expect(component.isOpen()).toBeTruthy();
       });
 
       it('should open dropdown on Space key', () => {
         const event = new KeyboardEvent('keydown', { key: ' ' });
         jest.spyOn(event, 'preventDefault');
-        jest.spyOn(component, 'open');
 
         component.onTriggerKeydown(event);
 
         expect(event.preventDefault).toHaveBeenCalled();
-        expect(component.open).toHaveBeenCalled();
+        expect(component.isOpen()).toBeTruthy();
       });
 
       it('should close dropdown on Escape key', () => {
-        component.open();
+        component.toggle();
         const event = new KeyboardEvent('keydown', { key: 'Escape' });
         jest.spyOn(event, 'preventDefault');
-        jest.spyOn(component, 'close');
 
         component.onTriggerKeydown(event);
 
         expect(event.preventDefault).toHaveBeenCalled();
-        expect(component.close).toHaveBeenCalled();
+        expect(component.isOpen()).toBeFalsy();
       });
     });
   });
@@ -135,18 +133,18 @@ describe('ZardSelectComponent', () => {
     it('should handle component functionality without selectItems', () => {
       // selectItems was removed to avoid circular dependency
       // The component should still function correctly for basic operations
-      expect(selectComponent.selectedValue).toBeDefined();
-      expect(selectComponent.selectedLabel).toBeDefined();
+      expect(selectComponent.zValue).toBeDefined();
+      expect(selectComponent.selectedLabels).toBeDefined();
     });
 
     it('should update selectedLabel when value changes', () => {
       hostComponent.value.set('option2');
       hostFixture.detectChanges();
 
-      expect(selectComponent.selectedValue()).toBe('option2');
+      expect(selectComponent.zValue()).toBe('option2');
 
       // If contentChildren is not working, the label will be the value
-      const label = selectComponent.selectedLabel();
+      const label = selectComponent.selectedLabels()[0];
       expect(['option2', 'Option 2']).toContain(label);
     });
 
@@ -155,8 +153,8 @@ describe('ZardSelectComponent', () => {
       hostComponent.label.set('Custom Label');
       hostFixture.detectChanges();
 
-      expect(selectComponent.selectedValue()).toBe('option1');
-      expect(selectComponent.selectedLabel()).toBe('Custom Label');
+      expect(selectComponent.zValue()).toBe('option1');
+      expect(selectComponent.selectedLabels()[0]).toBe('Custom Label');
     });
 
     it('should respect disabled state', () => {
@@ -168,7 +166,7 @@ describe('ZardSelectComponent', () => {
     });
 
     it('should display placeholder when no value is selected', () => {
-      const button = hostFixture.nativeElement.querySelector('button');
+      const button = hostFixture.nativeElement.querySelector('button') as HTMLButtonElement;
       expect(button.textContent).toContain('Select an option...');
     });
 
@@ -176,7 +174,7 @@ describe('ZardSelectComponent', () => {
       hostComponent.placeholder.set('Choose a value');
       hostFixture.detectChanges();
 
-      const button = hostFixture.nativeElement.querySelector('button');
+      const button = hostFixture.nativeElement.querySelector('button > span');
       expect(button.textContent).toContain('Choose a value');
     });
   });
@@ -213,10 +211,10 @@ describe('ZardSelectComponent', () => {
       hostComponent.control.setValue('banana');
       hostFixture.detectChanges();
 
-      expect(selectComponent.selectedValue()).toBe('banana');
+      expect(selectComponent.zValue()).toBe('banana');
 
       // If contentChildren is not working, the label will be the value
-      const label = selectComponent.selectedLabel();
+      const label = selectComponent.selectedLabels()[0];
       expect(['banana', 'Banana']).toContain(label);
     });
 
@@ -240,8 +238,8 @@ describe('ZardSelectComponent', () => {
       const onTouchedSpy = jest.fn();
       selectComponent.registerOnTouched(onTouchedSpy);
 
-      selectComponent.open();
-      selectComponent.close();
+      selectComponent.toggle(); // open
+      selectComponent.toggle(); // close
 
       expect(onTouchedSpy).toHaveBeenCalled();
     });
@@ -280,7 +278,7 @@ describe('ZardSelectComponent', () => {
       hostFixture.detectChanges();
 
       // If contentChildren is not working, the label will be the value
-      const label = selectComponent.selectedLabel();
+      const label = selectComponent.selectedLabels()[0];
       expect(['option1', 'Option 1']).toContain(label);
 
       // The computed signal automatically reacts to content children changes
@@ -288,8 +286,106 @@ describe('ZardSelectComponent', () => {
       // This is handled automatically by the contentChildren signal
 
       // Verify the label still reflects the correct item text
-      expect(selectComponent.selectedValue()).toBe('option1');
-      expect(['option1', 'Option 1']).toContain(selectComponent.selectedLabel());
+      expect(selectComponent.zValue()).toBe('option1');
+      expect(['option1', 'Option 1']).toContain(selectComponent.selectedLabels()[0]);
+    });
+  });
+
+  describe('Multiselect mode', () => {
+    @Component({
+      template: `
+        <z-select [(zValue)]="value" [zLabel]="label()" [zPlaceholder]="placeholder()" [zDisabled]="disabled()" [zMultiple]="true" [zMaxLabelCount]="labelsLimit">
+          <z-select-item zValue="option1">OptionOne</z-select-item>
+          <z-select-item zValue="option2">OptionTwo</z-select-item>
+          <z-select-item zValue="option3">OptionThree</z-select-item>
+          <z-select-item zValue="option4">OptionFour</z-select-item>
+        </z-select>
+      `,
+      standalone: true,
+      imports: [ZardSelectComponent, ZardSelectItemComponent],
+    })
+    class TestMultiselectHostComponent {
+      value = signal<string[]>([]);
+      label = signal('');
+      placeholder = signal('Select an option...');
+      disabled = signal(false);
+      labelsLimit = 0;
+    }
+
+    let hostComponent: TestMultiselectHostComponent;
+    let hostFixture: ComponentFixture<TestMultiselectHostComponent>;
+    let selectComponent: ZardSelectComponent;
+
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [TestHostComponent],
+      }).compileComponents();
+
+      hostFixture = TestBed.createComponent(TestMultiselectHostComponent);
+      hostComponent = hostFixture.componentInstance;
+
+      // Initial change detection to create the component tree
+      hostFixture.detectChanges();
+      await hostFixture.whenStable();
+
+      selectComponent = hostFixture.debugElement.query(By.directive(ZardSelectComponent)).componentInstance;
+
+      // Additional change detection to ensure content children are processed
+      hostFixture.detectChanges();
+      await hostFixture.whenStable();
+    });
+
+    afterEach(() => {
+      TestBed.resetTestingModule();
+    });
+
+    it('should create component', () => {
+      expect(hostComponent).toBeTruthy();
+      expect(selectComponent).toBeTruthy();
+      expect(selectComponent.zMultiple).toBeTruthy();
+    });
+
+    it('select two items', () => {
+      hostComponent.labelsLimit = 2;
+      hostFixture.detectChanges();
+
+      selectComponent.selectItem('option1', 'OptionOne');
+      selectComponent.selectItem('option4', 'OptionFour');
+
+      expect(hostComponent.value().length).toBe(2);
+      expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionFour']);
+    });
+
+    it('select three items', () => {
+      hostComponent.labelsLimit = 2;
+      hostFixture.detectChanges();
+
+      selectComponent.selectItem('option1', 'OptionOne');
+      selectComponent.selectItem('option3', 'OptionThree');
+      selectComponent.selectItem('option4', 'OptionFour');
+
+      expect(hostComponent.value().length).toBe(3);
+      expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree', '1 more item selected']);
+    });
+
+    it('select more items with deselect', () => {
+      selectComponent.selectItem('option1', 'OptionOne');
+      selectComponent.selectItem('option2', 'OptionTwo');
+      selectComponent.selectItem('option3', 'OptionThree');
+      selectComponent.selectItem('option2', 'OptionTwo');
+
+      expect(hostComponent.value().length).toBe(2);
+      expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree']);
+    });
+
+    it('select more items with deselect', () => {
+      selectComponent.selectItem('option1', 'OptionOne');
+      selectComponent.selectItem('option2', 'OptionTwo');
+      selectComponent.selectItem('option3', 'OptionThree');
+      selectComponent.selectItem('option2', 'OptionTwo');
+
+      expect(hostComponent.value().length).toBe(2);
+      expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree']);
     });
   });
 });

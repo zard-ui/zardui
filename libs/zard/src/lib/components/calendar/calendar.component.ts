@@ -108,7 +108,12 @@ export class ZardCalendarComponent {
     });
   });
 
-  protected onMonthChange(monthIndex: string): void {
+  protected onMonthChange(monthIndex: string | string[]): void {
+    if (Array.isArray(monthIndex)) {
+      console.warn('Calendar received array for month selection, expected single value. Ignoring:', monthIndex);
+      return;
+    }
+
     if (!monthIndex || monthIndex.trim() === '') {
       console.warn('Invalid month index received:', monthIndex);
       return;
@@ -127,7 +132,12 @@ export class ZardCalendarComponent {
     this.gridRef().setFocusedDayIndex(-1);
   }
 
-  protected onYearChange(year: string): void {
+  protected onYearChange(year: string | string[]): void {
+    if (Array.isArray(year)) {
+      console.warn('Calendar received array for year selection, expected single value. Ignoring:', year);
+      return;
+    }
+
     if (!year || year.trim() === '') {
       console.warn('Invalid year received:', year);
       return;

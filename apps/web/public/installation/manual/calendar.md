@@ -111,7 +111,12 @@ export class ZardCalendarComponent {
     });
   });
 
-  protected onMonthChange(monthIndex: string): void {
+  protected onMonthChange(monthIndex: string | string[]): void {
+    if (Array.isArray(monthIndex)) {
+      console.warn('Calendar received array for month selection, expected single value. Ignoring:', monthIndex);
+      return;
+    }
+
     if (!monthIndex || monthIndex.trim() === '') {
       console.warn('Invalid month index received:', monthIndex);
       return;
@@ -130,7 +135,12 @@ export class ZardCalendarComponent {
     this.gridRef().setFocusedDayIndex(-1);
   }
 
-  protected onYearChange(year: string): void {
+  protected onYearChange(year: string | string[]): void {
+    if (Array.isArray(year)) {
+      console.warn('Calendar received array for year selection, expected single value. Ignoring:', year);
+      return;
+    }
+
     if (!year || year.trim() === '') {
       console.warn('Invalid year received:', year);
       return;
@@ -693,14 +703,14 @@ import { ZardSelectComponent } from '../select/select.component';
       <!-- Month and Year Selectors -->
       <div class="flex items-center space-x-2">
         <!-- Month Select -->
-        <z-select class="min-w-20" [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="monthChange.emit($event)">
+        <z-select class="min-w-20" [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
           @for (month of months; track $index) {
             <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
           }
         </z-select>
 
         <!-- Year Select -->
-        <z-select class="min-w-21" [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="yearChange.emit($event)">
+        <z-select class="min-w-21" [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="onYearChange($event)">
           @for (year of availableYears(); track year) {
             <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
           }
@@ -778,6 +788,22 @@ export class ZardCalendarNavigationComponent {
 
   protected onNextClick(): void {
     this.nextMonth.emit();
+  }
+
+  protected onMonthChange(month: string | string[]): void {
+    if (Array.isArray(month)) {
+      console.warn('Calendar navigation received array for month selection, expected single value. Ignoring:', month);
+      return;
+    }
+    this.monthChange.emit(month);
+  }
+
+  protected onYearChange(year: string | string[]): void {
+    if (Array.isArray(year)) {
+      console.warn('Calendar navigation received array for year selection, expected single value. Ignoring:', year);
+      return;
+    }
+    this.yearChange.emit(year);
   }
 }
 

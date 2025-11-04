@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardSelectItemComponent } from '../../select/select-item.component';
@@ -8,10 +7,10 @@ import { ZardButtonGroupComponent } from '../button-group.component';
 
 @Component({
   selector: 'z-demo-button-group-select',
-  imports: [ZardButtonGroupComponent, ZardSelectComponent, ZardSelectItemComponent, ZardInputDirective, FormsModule],
+  imports: [ZardButtonGroupComponent, ZardSelectComponent, ZardSelectItemComponent, ZardInputDirective],
   template: `
     <z-button-group>
-      <z-select [(ngModel)]="currency" class="w-fit">
+      <z-select [(zValue)]="currency" class="w-fit">
         @for (cur of CURRENCIES; track cur.code) {
           <z-select-item [zValue]="cur.code">{{ cur.symbol }}</z-select-item>
         }

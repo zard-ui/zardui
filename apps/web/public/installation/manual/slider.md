@@ -399,7 +399,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const sliderVariants = cva(
-  'relative flex w-full touch-none items-center select-none data-[disabled]:opacity-50 data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col',
+  'relative flex w-full touch-none items-center select-none data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col',
   {
     variants: {
       orientation: {

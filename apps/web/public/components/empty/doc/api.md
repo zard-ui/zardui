@@ -13,4 +13,4 @@ To customize the empty, pass the following props to the component.
 | `zDescription` | Description text or custom template | `string \| TemplateRef<void>` | -       |
 | `zTitle`       | Title text or custom template       | `string \| TemplateRef<void>` | -       |
 | `zActions`     | Array of action templates           | `TemplateRef<void>[]`         | []      |
-| `class`        | Custom CSS classes                  | `ClassValue`                  | ' '     |
+| `class`        | Custom CSS classes                  | `ClassValue`                  | ''      |
