@@ -7,6 +7,7 @@ import { AVATAR } from '@zard/components/avatar/demo/avatar';
 import { BADGE } from '@zard/components/badge/demo/badge';
 import { BREADCRUMB } from '@zard/components/breadcrumb/demo/breadcrumb';
 import { BUTTON } from '@zard/components/button/demo/button';
+import { BUTTON_GROUP } from '@zard/components/button-group/demo/button-group';
 import { CALENDAR } from '@zard/components/calendar/demo/calendar';
 import { CARD } from '@zard/components/card/demo/card';
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
@@ -67,6 +68,7 @@ export const COMPONENTS: ComponentData[] = [
   AVATAR,
   BADGE,
   BUTTON,
+  BUTTON_GROUP,
   BREADCRUMB,
   CALENDAR,
   CARD,

@@ -24,7 +24,7 @@
           <z-doc-researcher #docResearcher></z-doc-researcher>
         </div>
 
-        <z-divider zOrientation="vertical" class="ml-2 hidden h-4! lg:block"></z-divider>
+        <z-divider zOrientation="vertical" zSpacing="none" class="ml-2 hidden h-4! lg:block"></z-divider>
         @if (githubData) {
           <a z-button class="flex" zType="ghost" zSize="sm" [href]="githubData.url" target="_blank">
             <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />
@@ -35,12 +35,12 @@
             }
           </a>
         }
-        <z-divider zOrientation="vertical" class="3xl:block hidden h-4!"></z-divider>
+        <z-divider zOrientation="vertical" zSpacing="none" class="3xl:block hidden h-4!"></z-divider>
         <button class="3xl:flex hidden" z-button zType="ghost" zSize="sm" (click)="toggleLayout()">
           <lucide-angular [img]="GalleryHorizontalIcon" />
           <span class="sr-only">Toggle layout</span>
         </button>
-        <z-divider zOrientation="vertical" class="hidden h-4! lg:block"></z-divider>
+        <z-divider zOrientation="vertical" zSpacing="none" class="hidden h-4! lg:block"></z-divider>
         <button z-button zType="ghost" zSize="sm" (click)="toggleTheme()">
           <svg
             xmlns="http://www.w3.org/2000/svg"
