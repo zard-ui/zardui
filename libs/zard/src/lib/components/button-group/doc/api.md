@@ -68,7 +68,7 @@ The `ZardButtonGroupTextDirective` applies styles text elements, so that they co
 ```ts
 @Component({
   selector: 'z-example',
-  imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardButtonGroupTextComponent, ZardIconComponent, ZardInputDirective],
+  imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardButtonGroupTextDirective, ZardIconComponent, ZardInputDirective],
   template: `
     <z-button-group>
       <label z-button-group-text for="search">Search</label>

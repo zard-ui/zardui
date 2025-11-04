@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import { ZardDemoButtonGroupDefaultComponent } from './default';
 import { ZardDemoButtonGroupDividerComponent } from './divider';
 import { ZardDemoButtonGroupInputComponent } from './input';
@@ -13,7 +12,7 @@ export const BUTTON_GROUP = {
   description: 'A container that groups related buttons together with consistent styling.',
   examples: [
     {
-      name: 'default',
+      name: 'Default',
       component: ZardDemoButtonGroupDefaultComponent,
     },
     {

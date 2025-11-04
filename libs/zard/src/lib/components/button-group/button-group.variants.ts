@@ -15,7 +15,7 @@ export const buttonGroupVariants = cva('flex w-fit items-stretch [&>*]:focus-vis
 });
 export type ZardButtonGroupVariants = VariantProps<typeof buttonGroupVariants>;
 
-export const buttonGroupDividerVariants = cva('bg-input relative self-stretch grow-0 shrink-0 pointer-events-none select-none aria-hidden', {
+export const buttonGroupDividerVariants = cva('bg-input relative self-stretch grow-0 shrink-0 pointer-events-none select-none', {
   variants: {
     zOrientation: {
       horizontal: 'w-auto',

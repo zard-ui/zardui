@@ -136,6 +136,11 @@ describe('ButtonGroup', () => {
         expect(actual).toContain(cls);
       }
     });
+
+    it('should have an aria-hidden attribute set to true on the divider', async () => {
+      const r = await render(ZardButtonGroupDividerComponent);
+      expect(r.fixture.nativeElement.querySelector('z-divider').getAttribute('aria-hidden')).toBe('true');
+    });
   });
 
   describe('ButtonGroupTextDirective', () => {

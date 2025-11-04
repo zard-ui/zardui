@@ -42,7 +42,7 @@ export class ZardButtonGroupComponent {
   host: {
     class: 'contents',
   },
-  template: `<z-divider [class]="classes()" zSpacing="none" [zOrientation]="orientation()" />`,
+  template: `<z-divider [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />`,
 })
 export class ZardButtonGroupDividerComponent {
   readonly zOrientation = input<ZardDividerVariants['zOrientation']>(null);
