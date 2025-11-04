@@ -46,6 +46,7 @@ import {
   LogOut,
   type LucideIconData,
   Mail,
+  Minus,
   Monitor,
   Moon,
   MoveRight,
@@ -151,6 +152,7 @@ export const ZARD_ICONS = {
   'badge-check': BadgeCheck,
   'folder-code': FolderCode,
   plus: Plus,
+  minus: Minus,
 } as const satisfies Record<string, LucideIconData>;
 
 export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;

@@ -5,6 +5,7 @@ export * from './lib/components/avatar/avatar-group.component';
 export * from './lib/components/badge/badge.component';
 export * from './lib/components/breadcrumb/breadcrumb.component';
 export * from './lib/components/button/button.component';
+export * from './lib/components/button-group/button-group.component';
 export * from './lib/components/calendar/calendar.component';
 export * from './lib/components/card/card.component';
 export * from './lib/components/checkbox/checkbox.component';
