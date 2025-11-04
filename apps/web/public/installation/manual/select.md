@@ -111,7 +111,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   readonly class = input<ClassValue>('');
   readonly zDisabled = input(false, { transform });
   readonly zLabel = input<string>('');
-  readonly zMaxLabelCount = input<number>(0);
+  readonly zMaxLabelCount = input<number>(1);
   readonly zMultiple = input<boolean>(false);
   readonly zPlaceholder = input<string>('Select an option...');
   readonly zSize = input<ZardSelectTriggerVariants['zSize']>('default');

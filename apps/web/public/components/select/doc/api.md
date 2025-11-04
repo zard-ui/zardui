@@ -9,7 +9,7 @@
 | `[class]`          | Custom CSS classes                        | `string`             | `''`                    |
 | `[zDisabled]`      | Disables the select                       | `boolean`            | `false`                 |
 | `[zLabel]`         | Optional label for the select             | `string`             | `''`                    |
-| `[zMaxLabelCount]` | Limits visible labels in multiselect mode | `number`             | `0`                     |
+| `[zMaxLabelCount]` | Limits visible labels in multiselect mode | `number`             | `1`                     |
 | `[zMultiple]`      | Multiselect mode                          | `boolean`            | `false`                 |
 | `[zPlaceholder]`   | Placeholder text                          | `string`             | `'Select an option...'` |
 | `[(zValue)]`       | Selected value                            | `string \| string[]` | `'' \| []`              |
