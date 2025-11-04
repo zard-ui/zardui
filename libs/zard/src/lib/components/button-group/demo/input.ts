@@ -1,0 +1,18 @@
+import { Component } from '@angular/core';
+
+import { ZardButtonComponent } from '../../button/button.component';
+import { ZardIconComponent } from '../../icon/icon.component';
+import { ZardInputDirective } from '../../input/input.directive';
+import { ZardButtonGroupComponent } from '../button-group.component';
+
+@Component({
+  selector: 'z-demo-button-group-input',
+  imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardIconComponent, ZardInputDirective],
+  template: `
+    <z-button-group>
+      <input z-input placeholder="Search..." />
+      <button z-button zType="outline"><i z-icon zType="search"></i></button>
+    </z-button-group>
+  `,
+})
+export class ZardDemoButtonGroupInputComponent {}
