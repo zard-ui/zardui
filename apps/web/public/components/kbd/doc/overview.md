@@ -1,3 +1,3 @@
 # Kbd
 
-The Loader is a visual component that displays a loading animation to indicate that an action or process is in progress.
+Displays keyboard keys and shortcuts in a visually consistent way. Useful for documentation, tooltips, command palettes, and UI hints showing keyboard shortcuts.
