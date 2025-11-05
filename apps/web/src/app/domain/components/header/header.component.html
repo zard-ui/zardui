@@ -1,16 +1,16 @@
 <header class="bg-background sticky top-0 z-50 w-full">
-  <nav class="max-w-[var(--breakpoint-2xl)] h-16 mx-auto px-4 flex items-center justify-between">
-    <menu class="flex items-center gap-4">
-      <a class="hidden xl:flex items-center gap-3" routerLink="/">
+  <nav class="container-wrapper 3xl:fixed:px-0 px-6">
+    <menu class="3xl:fixed:container flex h-(--header-height) items-center gap-2">
+      <a class="hidden items-center gap-3 lg:flex" routerLink="/">
         <img src="images/zard.svg" alt="logo" class="h-6 dark:invert" />
         <z-badge zType="secondary">{{ appVersion }}</z-badge>
       </a>
-      <aside class="block xl:hidden">
+      <div class="flex lg:hidden">
         <z-mobile-nav></z-mobile-nav>
-      </aside>
-      <nav class="items-center gap-0.5 hidden lg:flex">
+      </div>
+      <nav class="hidden flex-1 items-center gap-0.5 lg:flex">
         @for (path of headerPaths; track $index) {
-          <a z-button zType="ghost" [routerLink]="path.path">
+          <a z-button zType="ghost" zSize="sm" [routerLink]="path.path">
             {{ path.name }}
             @if (!path.available) {
               <z-badge class="px-1 py-0">soon</z-badge>
@@ -18,43 +18,52 @@
           </a>
         }
       </nav>
-    </menu>
-    <aside class="ml-auto flex items-center md:flex-1 md:justify-end h-[16px]">
-      <z-doc-researcher #docResearcher class="hidden xl:block"></z-doc-researcher>
-      <z-divider zOrientation="vertical" class="hidden xl:block"></z-divider>
-      @if (githubData) {
-        <a z-button class="flex" zType="ghost" zSize="sm" [href]="githubData.url" target="_blank">
-          <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />
 
-          @let repoStars = $repoStars | async;
-          @if (repoStars) {
-            <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars }}</span>
-          }
-        </a>
-      }
-      <z-divider zOrientation="vertical"></z-divider>
-      <button z-button zType="ghost" zSize="sm" (click)="toggleTheme()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          class="size-4.5"
-        >
-          <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-          <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
-          <path d="M12 3l0 18"></path>
-          <path d="M12 9l4.65 -4.65"></path>
-          <path d="M12 14.3l7.37 -7.37"></path>
-          <path d="M12 19.6l8.85 -8.85"></path>
-        </svg>
-        <span class="sr-only">Toggle theme</span>
-      </button>
-    </aside>
+      <aside class="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
+        <div class="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
+          <z-doc-researcher #docResearcher></z-doc-researcher>
+        </div>
+
+        <z-divider zOrientation="vertical" zSpacing="none" class="ml-2 hidden h-4! lg:block"></z-divider>
+        @if (githubData) {
+          <a z-button class="flex" zType="ghost" zSize="sm" [href]="githubData.url" target="_blank">
+            <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />
+
+            @let repoStars = $repoStars | async;
+            @if (repoStars) {
+              <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars }}</span>
+            }
+          </a>
+        }
+        <z-divider zOrientation="vertical" zSpacing="none" class="3xl:block hidden h-4!"></z-divider>
+        <button class="3xl:flex hidden" z-button zType="ghost" zSize="sm" (click)="toggleLayout()">
+          <lucide-angular [img]="GalleryHorizontalIcon" />
+          <span class="sr-only">Toggle layout</span>
+        </button>
+        <z-divider zOrientation="vertical" zSpacing="none" class="hidden h-4! lg:block"></z-divider>
+        <button z-button zType="ghost" zSize="sm" (click)="toggleTheme()">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="24"
+            height="24"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            class="size-4.5"
+          >
+            <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"></path>
+            <path d="M12 3l0 18"></path>
+            <path d="M12 9l4.65 -4.65"></path>
+            <path d="M12 14.3l7.37 -7.37"></path>
+            <path d="M12 19.6l8.85 -8.85"></path>
+          </svg>
+          <span class="sr-only">Toggle theme</span>
+        </button>
+      </aside>
+    </menu>
   </nav>
 </header>

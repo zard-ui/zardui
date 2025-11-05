@@ -1,4 +1,6 @@
-# Alert Dialog API
+# API Reference
+
+[ZardAlertDialogService] Service
 
 Configuration options for creating alert dialogs.
 

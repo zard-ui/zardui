@@ -1,8 +1,9 @@
+import { Injectable } from '@angular/core';
+
 import rehypePrettyCode from 'rehype-pretty-code';
 import rehypeStringify from 'rehype-stringify';
-import { Injectable } from '@angular/core';
-import remarkRehype from 'remark-rehype';
 import remarkParse from 'remark-parse';
+import remarkRehype from 'remark-rehype';
 import { unified } from 'unified';
 
 @Injectable({
@@ -12,7 +13,7 @@ export class CodeHighlightService {
   private processor: any;
   private initialized = false;
 
-  async initializeProcessor(showLineNumbers: boolean = false) {
+  async initializeProcessor(showLineNumbers = false) {
     this.processor = unified()
       .use(remarkParse, { fragment: true })
       .use(remarkRehype)
@@ -41,7 +42,7 @@ export class CodeHighlightService {
     this.initialized = true;
   }
 
-  async highlightCode(code: string, language: string, showLineNumbers: boolean = false): Promise<string> {
+  async highlightCode(code: string, language: string, showLineNumbers = false): Promise<string> {
     await this.initializeProcessor(showLineNumbers);
 
     const languageTag = showLineNumbers ? `${language} showLineNumbers` : language;

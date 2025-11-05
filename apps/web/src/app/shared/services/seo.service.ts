@@ -1,6 +1,7 @@
+import { isPlatformBrowser } from '@angular/common';
 import { Injectable, PLATFORM_ID, inject } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
-import { isPlatformBrowser } from '@angular/common';
+
 import { JsonLdService } from './json-ld.service';
 
 export interface SeoConfig {

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="scroll scroll-smooth">
+<html lang="en" class="layout-fixed">
   <head>
     <meta charset="utf-8" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -51,7 +51,9 @@
     <title>Zard UI - The @shadcn/ui Alternative for Angular</title>
   </head>
 
-  <body class="antialiased">
-    <z-root></z-root>
+  <body class="text-foreground group/body bg-background overscroll-none antialiased [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)]">
+    <div data-slot="layout" class="bg-background relative z-10 flex min-h-svh flex-col">
+      <z-root></z-root>
+    </div>
   </body>
 </html>

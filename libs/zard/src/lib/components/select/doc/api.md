@@ -4,18 +4,19 @@
 
 > A customizable select component that allows single value selection.
 
-| Input            | Description                   | Type                        | Default                 |
-| ---------------- | ----------------------------- | --------------------------- | ----------------------- |
-| `[class]`        | Custom CSS classes            | `string`                    | `''`                    |
-| `[zSize]`        | Sets the select size          | `'default' \| 'sm' \| 'lg'` | `'default'`             |
-| `[zPlaceholder]` | Placeholder text              | `string`                    | `'Select an option...'` |
-| `[zValue]`       | Selected value                | `string`                    | `''`                    |
-| `[zLabel]`       | Optional label for the select | `string`                    | `''`                    |
-| `[zDisabled]`    | Disables the select           | `boolean`                   | `false`                 |
+| Input              | Description                               | Type                 | Default                 |
+| ------------------ | ----------------------------------------- | -------------------- | ----------------------- |
+| `[class]`          | Custom CSS classes                        | `string`             | `''`                    |
+| `[zDisabled]`      | Disables the select                       | `boolean`            | `false`                 |
+| `[zLabel]`         | Optional label for the select             | `string`             | `''`                    |
+| `[zMaxLabelCount]` | Limits visible labels in multiselect mode | `number`             | `1`                     |
+| `[zMultiple]`      | Multiselect mode                          | `boolean`            | `false`                 |
+| `[zPlaceholder]`   | Placeholder text                          | `string`             | `'Select an option...'` |
+| `[(zValue)]`       | Selected value                            | `string \| string[]` | `'' \| []`              |
 
-| Output              | Description                             | Payload  |
-| ------------------- | --------------------------------------- | -------- |
-| `(selectionChange)` | Emitted when the selected value changes | `string` |
+| Output               | Description                             | Payload              |
+| -------------------- | --------------------------------------- | -------------------- |
+| `(zSelectionChange)` | Emitted when the selected value changes | `string \| string[]` |
 
 ### z-select-item
 

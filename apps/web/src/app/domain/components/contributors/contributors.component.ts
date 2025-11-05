@@ -1,4 +1,5 @@
 import { Component, input } from '@angular/core';
+
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardTooltipModule } from '@zard/components/tooltip/tooltip';
 
@@ -24,7 +25,7 @@ export interface Contributor {
               [zFallback]="contributor.login.substring(0, 2).toUpperCase()"
               zSize="md"
               zShape="rounded"
-              class="ring-2 ring-background hover:ring-primary/20 transition-all"
+              class="ring-background hover:ring-primary/20 ring-2 transition-all"
             ></z-avatar>
           </a>
         </div>

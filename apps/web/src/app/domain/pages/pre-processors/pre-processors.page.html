@@ -1,0 +1,143 @@
+<z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+  <z-doc-heading
+    title="CSS Preprocessors"
+    description="Understanding SCSS/Sass integration with Tailwind v4 - risks, limitations, and alternatives."
+    scrollSpyItem="overview"
+    id="overview"
+  >
+  </z-doc-heading>
+
+  <div class="flex flex-col gap-6">
+    <section scrollSpyItem="why-not" id="why-not">
+      <h2 class="mb-4 text-2xl font-bold">Why Preprocessors Are Not Ideal</h2>
+
+      <p class="text-muted-foreground mb-4 text-sm leading-relaxed sm:text-base">
+        <strong>Official Tailwind CSS Position:</strong> The Tailwind team states that preprocessors are not recommended with v4.
+        <a href="https://tailwindcss.com/docs/compatibility" target="_blank" rel="noopener" class="text-primary font-semibold hover:underline">
+          Read the official documentation →
+        </a>
+      </p>
+
+      <p class="text-muted-foreground mb-4 text-sm leading-relaxed sm:text-base">
+        Tailwind CSS v4 is a complete CSS build tool that replaces preprocessors. It provides import bundling, native nesting, CSS variables, vendor prefixes, and on-demand
+        utilities.
+      </p>
+
+      <p class="text-muted-foreground mb-4 text-sm leading-relaxed sm:text-base">
+        Mixing Sass/SCSS with Tailwind v4 creates <strong>order-of-processing conflicts</strong> because Sass runs first, then Tailwind runs second.
+      </p>
+
+      <p class="mb-2 text-sm font-semibold">Common Issues:</p>
+      <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-1 text-sm">
+        <li>Tailwind's <code class="bg-muted rounded px-1 font-mono text-xs">theme()</code> outputs aren't available to Sass functions</li>
+        <li>Nested SCSS selectors may break <code class="bg-muted rounded px-1 font-mono text-xs">@apply</code></li>
+        <li>
+          <code class="bg-muted rounded px-1 font-mono text-xs">@import "tailwindcss"</code> fails in <code class="bg-muted rounded px-1 font-mono text-xs">.scss</code> files
+        </li>
+        <li>Slower builds from running two preprocessing layers</li>
+      </ul>
+    </section>
+
+    <!-- Key Problems -->
+    <section scrollSpyItem="problems" id="problems">
+      <h2 class="mb-4 text-2xl font-bold">Key Problems</h2>
+
+      <p class="mb-1 text-sm font-semibold">Processing Order</p>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Sass functions can't access Tailwind's <code class="bg-muted rounded px-1 font-mono text-xs">theme()</code> output. Functions like
+        <code class="bg-muted rounded px-1 font-mono text-xs">darken()</code> won't work.
+      </p>
+
+      <p class="mb-1 text-sm font-semibold">!important Syntax</p>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Sass interprets <code class="bg-muted rounded px-1 font-mono text-xs">!important</code> as a syntax error inside
+        <code class="bg-muted rounded px-1 font-mono text-xs">@apply</code>. Use interpolation:
+        <code class="bg-muted rounded px-1 font-mono text-xs">#{{ '{' }}!important{{ '}' }}</code>
+      </p>
+
+      <p class="mb-1 text-sm font-semibold">Import Conflicts</p>
+      <p class="text-muted-foreground mb-4 text-sm">
+        Sass tries to resolve <code class="bg-muted rounded px-1 font-mono text-xs">"tailwindcss"</code> as a Sass partial, causing import failures.
+      </p>
+    </section>
+
+    <!-- Alternatives -->
+    <section scrollSpyItem="alternatives" id="alternatives">
+      <h2 class="mb-4 text-2xl font-bold">If You Must Use SCSS</h2>
+
+      <p class="text-muted-foreground mb-4 text-sm"><strong>Warning:</strong> Use at your own risk. These approaches are unsupported.</p>
+
+      <p class="mb-2 text-sm font-semibold">Approach A: Parallel and Isolated</p>
+      <p class="text-muted-foreground mb-2 text-sm">
+        Keep Tailwind CSS and SCSS completely separate. Don't mix <code class="bg-muted rounded px-1 font-mono text-xs">@apply</code> into SCSS.
+      </p>
+      <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-1 text-sm">
+        <li>Keep Tailwind in a pure CSS file</li>
+        <li>Keep SCSS in its own file(s)</li>
+        <li>Load both in <code class="bg-muted rounded px-1 font-mono text-xs">angular.json</code> (Tailwind first)</li>
+        <li>Use CSS variables to share tokens</li>
+      </ul>
+
+      <p class="mb-2 text-sm font-semibold">Approach B: Double-Pass Pipeline</p>
+      <p class="text-muted-foreground mb-2 text-sm">Compile SCSS to CSS first, then import into Tailwind.</p>
+      <ul class="text-muted-foreground mb-2 list-inside list-disc space-y-1 text-sm">
+        <li>Install <code class="bg-muted rounded px-1 font-mono text-xs">sass</code> and <code class="bg-muted rounded px-1 font-mono text-xs">npm-run-all</code></li>
+        <li>Create parallel watchers for Sass and Tailwind</li>
+        <li>Don't import Tailwind in SCSS files</li>
+      </ul>
+      <p class="text-destructive text-sm">⚠️ Watch mode is unreliable. SCSS changes may not trigger Tailwind rebuild.</p>
+    </section>
+
+    <!-- Best Practices -->
+    <section scrollSpyItem="best-practices" id="best-practices">
+      <h2 class="mb-4 text-2xl font-bold">Best Practices</h2>
+
+      <p class="mb-2 text-sm font-semibold">✅ Do</p>
+      <ul class="text-muted-foreground mb-4 list-inside list-disc space-y-1 text-sm">
+        <li>Keep Tailwind in <code class="bg-muted rounded px-1 font-mono text-xs">.css</code> files</li>
+        <li>Use CSS variables for tokens</li>
+        <li>Leverage native CSS nesting</li>
+        <li>Prefer utility classes in HTML</li>
+      </ul>
+
+      <p class="mb-2 text-sm font-semibold">❌ Avoid</p>
+      <ul class="text-muted-foreground list-inside list-disc space-y-1 text-sm">
+        <li>Mixing Sass functions with <code class="bg-muted rounded px-1 font-mono text-xs">theme()</code></li>
+        <li>Importing Tailwind in SCSS</li>
+        <li>Deep nesting with <code class="bg-muted rounded px-1 font-mono text-xs">@apply</code></li>
+        <li>Heavy reliance on <code class="bg-muted rounded px-1 font-mono text-xs">@apply</code></li>
+      </ul>
+    </section>
+
+    <!-- References -->
+    <section scrollSpyItem="references" id="references">
+      <h2 class="mb-4 text-2xl font-bold">References</h2>
+      <ul class="space-y-2 text-sm">
+        <li>
+          <a href="https://tailwindcss.com/docs/compatibility" target="_blank" rel="noopener" class="text-primary hover:underline"> Tailwind v4 Compatibility </a>
+          <span class="text-muted-foreground"> — Official preprocessor guidance</span>
+        </li>
+        <li>
+          <a href="https://stackoverflow.com/questions/79380519/how-to-upgrade-tailwindcss" target="_blank" rel="noopener" class="text-primary hover:underline">
+            v3 → v4 import changes
+          </a>
+        </li>
+        <li>
+          <a href="https://stackoverflow.com/questions/79743663/how-to-use-apply-in-tailwind-v4" target="_blank" rel="noopener" class="text-primary hover:underline">
+            Using @apply in Tailwind v4
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://stackoverflow.com/questions/79638676/tailwind-css-v4-with-sass-changes-to-scss-not-reflected-automatically"
+            target="_blank"
+            rel="noopener"
+            class="text-primary hover:underline"
+          >
+            Tailwind v4 + Sass watch mode issues
+          </a>
+        </li>
+      </ul>
+    </section>
+  </div>
+</z-content>

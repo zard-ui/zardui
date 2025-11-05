@@ -2,10 +2,10 @@ import { ComponentType } from '@angular/cdk/overlay';
 import { NgComponentOutlet } from '@angular/common';
 import { Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { MarkdownRendererComponent } from '@zard/domain/components/render/markdown-renderer.component';
+import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
+import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 
-import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
+import { ZardCardComponent } from '@zard/components/card/card.component';
 
 @Component({
   selector: 'z-code-box',

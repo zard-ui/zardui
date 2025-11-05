@@ -1,44 +1,38 @@
 import { Component, computed, inject, signal, afterNextRender, DestroyRef } from '@angular/core';
-import { SidebarComponent } from '@zard/domain/components/sidebar/sidebar.component';
-import { HeaderComponent } from '@zard/domain/components/header/header.component';
-import { FooterComponent } from '@zard/domain/components/footer/footer.component';
-import { BannerComponent } from '@zard/domain/components/banner/banner.component';
-import { ZardToastComponent } from '@zard/components/toast/toast.component';
-import { DarkModeService } from '@zard/shared/services/darkmode.service';
-import { environment } from '@zard/env/environment';
 import { RouterModule } from '@angular/router';
+
+import { FooterComponent } from '@doc/domain/components/footer/footer.component';
+import { HeaderComponent } from '@doc/domain/components/header/header.component';
+import { SidebarComponent } from '@doc/domain/components/sidebar/sidebar.component';
+import { environment } from '@doc/env/environment';
+import { DarkModeService } from '@doc/shared/services/darkmode.service';
+
+import { ZardToastComponent } from '@zard/components/toast/toast.component';
 
 @Component({
   selector: 'z-documentation',
   template: `
-    @if (isDevEnv) {
-      <z-banner [isDevMode]="isDevMode">
-        @if (isDevMode) {
-          You're in <b>DEV</b> Mode!
-        } @else {
-          Welcome to Zard ui <b class="text-red-400 font-semibold">DEV</b> enviroment!
-        }
-      </z-banner>
-    }
     <z-header></z-header>
-
-    <main class="flex items-start max-w-[var(--breakpoint-2xl)] min-h-min mx-auto mt-8 relative">
-      <z-sidebar></z-sidebar>
-      <section class="flex-1 min-w-0">
-        <router-outlet></router-outlet>
-      </section>
+    <main class="container-wrapper flex flex-1 flex-col px-2">
+      <div
+        class="group/sidebar-wrapper 3xl:fixed:container 3xl:fixed:px-3 flex min-h-min w-full flex-1 items-start px-0 [--sidebar-width:220px] [--top-spacing:0] lg:grid lg:grid-cols-[var(--sidebar-width)_minmax(0,1fr)] lg:[--sidebar-width:240px] lg:[--top-spacing:calc(var(--spacing)*4)]"
+      >
+        <z-sidebar></z-sidebar>
+        <section class="mt-4 h-full w-full">
+          <router-outlet></router-outlet>
+        </section>
+      </div>
     </main>
     <z-footer></z-footer>
     <z-toaster [theme]="currentTheme()" />
   `,
   standalone: true,
-  imports: [RouterModule, HeaderComponent, FooterComponent, BannerComponent, SidebarComponent, ZardToastComponent],
+  imports: [RouterModule, HeaderComponent, FooterComponent, SidebarComponent, ZardToastComponent],
 })
 export class DocumentationLayout {
   private readonly darkModeService = inject(DarkModeService);
   private readonly destroyRef = inject(DestroyRef);
   readonly isDevEnv = !environment.production;
-  readonly isDevMode = environment.devMode;
 
   private readonly themeSignal = signal<'light' | 'dark'>('light');
   readonly currentTheme = computed(() => this.themeSignal());

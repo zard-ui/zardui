@@ -1,4 +1,5 @@
 import { ZardDemoSelectBasicComponent } from './default';
+import { ZardDemoMultiSelectBasicComponent } from './multi-select';
 
 export const SELECT = {
   componentName: 'select',
@@ -8,6 +9,10 @@ export const SELECT = {
     {
       name: 'default',
       component: ZardDemoSelectBasicComponent,
+    },
+    {
+      name: 'multi-select',
+      component: ZardDemoMultiSelectBasicComponent,
     },
   ],
 };

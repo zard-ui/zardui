@@ -1,5 +1,6 @@
-import type { BlockCategory } from '../services/blocks.service';
 import { authentication01Block } from '@blocks';
+
+import type { BlockCategory } from '../services/blocks.service';
 
 /**
  * Registry of all blocks organized by category
@@ -7,7 +8,6 @@ import { authentication01Block } from '@blocks';
  */
 export const BLOCKS_REGISTRY: Record<BlockCategory, any[]> = {
   featured: [authentication01Block],
-  dashboard: [],
   sidebar: [],
   login: [authentication01Block],
   signup: [],

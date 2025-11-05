@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal, signal } from '@angular/core';
 
 import { selectItemVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -6,7 +6,7 @@ import { ZardIconComponent } from '../icon/icon.component';
 
 // Interface to avoid circular dependency
 interface SelectHost {
-  selectedValue(): string;
+  selectedValue(): string[];
   selectItem(value: string, label: string): void;
 }
 
@@ -40,22 +40,22 @@ export class ZardSelectItemComponent {
   readonly zDisabled = input(false, { transform });
   readonly class = input<string>('');
 
-  private select: SelectHost | null = null;
+  private readonly select = signal<SelectHost | null>(null);
   readonly elementRef = inject(ElementRef);
-  readonly label = linkedSignal(() => {
+  readonly label = linkedSignal<string>(() => {
     const element = this.elementRef?.nativeElement;
     return (element?.textContent ?? element?.innerText)?.trim() ?? '';
   });
 
   protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
-  protected readonly isSelected = computed(() => this.select?.selectedValue() === this.zValue());
+  protected readonly isSelected = computed(() => this.select()?.selectedValue().includes(this.zValue()));
 
   setSelectHost(selectHost: SelectHost) {
-    this.select = selectHost;
+    this.select.set(selectHost);
   }
 
   onClick() {
-    if (this.zDisabled() || !this.select) return;
-    this.select.selectItem(this.zValue(), this.label());
+    if (this.zDisabled()) return;
+    this.select()?.selectItem(this.zValue(), this.label());
   }
 }

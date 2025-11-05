@@ -5,8 +5,8 @@ import { RouterModule } from '@angular/router';
   selector: 'z-env-card',
   template: `
     <a [routerLink]="disabled() ? null : path()" [class]="cardClasses()">
-      <img [src]="'images/envs/' + icon()" class="h-14 w-14 dark:invert invert-0" [alt]="name() + 'logo'" />
-      <p class="font-medium mt-2 first-letter:uppercase">{{ name() }}</p>
+      <img [src]="'images/envs/' + icon()" class="h-14 w-14 invert-0 dark:invert" [alt]="name() + 'logo'" />
+      <p class="mt-2 font-medium first-letter:uppercase">{{ name() }}</p>
     </a>
   `,
   standalone: true,

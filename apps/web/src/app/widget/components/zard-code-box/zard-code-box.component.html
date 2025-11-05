@@ -24,7 +24,7 @@
           <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
         }
       } @else {
-        <z-card class="flex min-h-[450px] w-full items-center justify-center gap-4 p-10" [class]="cardClasses()">
+        <z-card class="flex min-h-[450px] w-full items-center justify-center gap-4 bg-transparent p-10" [class]="cardClasses()">
           @if (dynamicComponent()) {
             <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
           }

@@ -1,6 +1,6 @@
-# API
+# API Reference
 
-## [z-breadcrumb]
+[z-breadcrumb] Component
 
 | Property       | Description                         | Type                     | Default   |
 | -------------- | ----------------------------------- | ------------------------ | --------- |
@@ -10,7 +10,7 @@
 | `[zWrap]`      | Wrapping behavior                   | `wrap \| nowrap`         | `'wrap'`  |
 | `[zSeparator]` | Separator between breadcrumb items. | `string \| TemplateRef`  | `null`    |
 
-## [z-breadcrumb-item]
+[z-breadcrumb-item] Component
 
 | Property        | Description                    | Type     | Default |
 | --------------- | ------------------------------ | -------- | ------- |
@@ -20,7 +20,7 @@
 
 **Note:** All RouterLink inputs are supported through host directives.
 
-## [z-breadcrumb-ellipsis]
+[z-breadcrumb-ellipsis] Component
 
 | Property   | Description        | Type              | Default   |
 | ---------- | ------------------ | ----------------- | --------- |

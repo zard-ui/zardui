@@ -1,8 +1,6 @@
-# API
+# API Reference
 
-## z-avatar
-
-### Inputs
+[z-avatar] Component
 
 | Property      | Description                                       | Type                                        | Default   |
 | ------------- | ------------------------------------------------- | ------------------------------------------- | --------- |
@@ -14,9 +12,7 @@
 | `[zFallback]` | Fallback text displayed while loading or on error | `string`                                    | `''`      |
 | `[class]`     | Additional CSS classes                            | `string`                                    | `''`      |
 
-## z-avatar-group
-
-### Inputs
+[z-avatar-group] Component
 
 | Property         | Description                 | Type                     | Default      |
 | ---------------- | --------------------------- | ------------------------ | ------------ |
