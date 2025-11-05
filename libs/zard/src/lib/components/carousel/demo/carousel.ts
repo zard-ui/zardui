@@ -1,15 +1,14 @@
-import { ZardDemoCarouselOrientationComponent } from './orientation';
-import { ZardDemoCarouselMultipleComponent } from './multiple';
-import { ZardDemoCarouselSpacingComponent } from './spacing';
-import { ZardDemoCarouselPluginsComponent } from './plugins';
-import { ZardDemoCarouselDefaultComponent } from './default';
-import { ZardDemoCarouselThumbsComponent } from './thumbs';
 import { ZardDemoCarouselApiComponent } from './api-demo';
+import { ZardDemoCarouselDefaultComponent } from './default';
+import { ZardDemoCarouselOrientationComponent } from './orientation';
+import { ZardDemoCarouselPluginsComponent } from './plugins';
 import { ZardDemoCarouselSizeComponent } from './size';
+import { ZardDemoCarouselSpacingComponent } from './spacing';
 
 export const CAROUSEL = {
   componentName: 'carousel',
   componentType: 'carousel',
+  description: 'A slideshow component for cycling through elements with support for mouse drag, touch swipe, and automatic playback',
   examples: [
     {
       name: 'default',
@@ -18,10 +17,6 @@ export const CAROUSEL = {
     {
       name: 'orientation',
       component: ZardDemoCarouselOrientationComponent,
-    },
-    {
-      name: 'multiple',
-      component: ZardDemoCarouselMultipleComponent,
     },
     {
       name: 'size',
@@ -38,10 +33,6 @@ export const CAROUSEL = {
     {
       name: 'plugins',
       component: ZardDemoCarouselPluginsComponent,
-    },
-    {
-      name: 'thumbs',
-      component: ZardDemoCarouselThumbsComponent,
     },
   ],
 };

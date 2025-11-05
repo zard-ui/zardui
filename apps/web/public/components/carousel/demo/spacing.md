@@ -1,3 +1,4 @@
+```angular-ts showLineNumbers copyButton
 import { Component, signal, computed } from '@angular/core';
 
 import { mergeClasses } from '../../../shared/utils/utils';
@@ -83,3 +84,5 @@ export class ZardDemoCarouselSpacingComponent {
     this.currentSpacing.set(value as 'sm' | 'md' | 'lg' | 'xl');
   }
 }
+
+```

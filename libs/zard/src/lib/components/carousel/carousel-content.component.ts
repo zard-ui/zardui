@@ -1,26 +1,24 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation, ViewChild, ElementRef, input, computed } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, inject, input } from '@angular/core';
 
+import { type ClassValue } from 'clsx';
+
+import { ZardCarouselComponent } from './carousel.component';
 import { carouselContentVariants } from './carousel.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-carousel-content',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div class="overflow-hidden">
-      <div [ngClass]="classes()" #carouselContent>
-        <ng-content></ng-content>
-      </div>
-    </div>
-  `,
+  imports: [],
+  template: ` <ng-content></ng-content> `,
+  host: {
+    '[class]': 'classes()',
+  },
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardCarouselContentComponent {
-  public readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
-
-  @ViewChild('carouselContent', { static: true }) carouselContentRef!: ElementRef<HTMLElement>;
-
-  protected readonly classes = computed(() => carouselContentVariants({ zOrientation: this.zOrientation() }));
+  readonly #parent = inject(ZardCarouselComponent);
+  readonly #orientation = computed<'horizontal' | 'vertical'>(() => this.#parent.zOrientation());
+  readonly class = input<ClassValue>('');
+  protected readonly classes = computed(() => mergeClasses(carouselContentVariants({ zOrientation: this.#orientation() }), this.class()));
 }

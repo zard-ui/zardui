@@ -1,3 +1,4 @@
+```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
 import { ZardCardComponent } from '../../card';
@@ -26,3 +27,5 @@ import { ZardCarouselModule } from '../carousel.module';
 export class ZardDemoCarouselSizeComponent {
   protected slides = ['1', '2', '3', '4', '5'];
 }
+
+```

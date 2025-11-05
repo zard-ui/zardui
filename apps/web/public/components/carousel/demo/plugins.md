@@ -1,3 +1,4 @@
+```angular-ts showLineNumbers copyButton
 import { Component, type OnInit, inject } from '@angular/core';
 
 import { type EmblaCarouselType, type EmblaPluginType } from 'embla-carousel';
@@ -105,3 +106,5 @@ export class ZardDemoCarouselPluginsComponent implements OnInit {
     }
   }
 }
+
+```

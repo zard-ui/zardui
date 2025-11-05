@@ -1,3 +1,4 @@
+```angular-ts showLineNumbers copyButton
 import { Component, signal } from '@angular/core';
 
 import { type EmblaCarouselType } from 'embla-carousel';
@@ -95,3 +96,5 @@ export class ZardDemoCarouselApiComponent {
     this.carouselApi()?.scrollTo(index);
   }
 }
+
+```

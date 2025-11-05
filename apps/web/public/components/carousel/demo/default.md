@@ -1,3 +1,4 @@
+```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
 import { ZardCardComponent } from '../../card';
@@ -11,8 +12,7 @@ import { ZardCarouselModule } from '../carousel.module';
       <z-carousel>
         <z-carousel-content>
           @for (slide of slides; track slide) {
-            <!-- To set the size of the items, you can use the basis utility class on the <z-carousel-item />. -->
-            <z-carousel-item class="md:basis-1/2 lg:basis-1/3">
+            <z-carousel-item>
               <z-card class="w-full">
                 <div class="flex h-[200px] items-center justify-center text-4xl font-semibold">{{ slide }}</div>
               </z-card>
@@ -23,6 +23,8 @@ import { ZardCarouselModule } from '../carousel.module';
     </div>
   `,
 })
-export class ZardDemoCarouselSizeComponent {
+export class ZardDemoCarouselDefaultComponent {
   protected slides = ['1', '2', '3', '4', '5'];
 }
+
+```

@@ -1,28 +1,27 @@
 import { Component } from '@angular/core';
 
-import { ZardCarouselContentComponent } from '../carousel-content.component';
-import { ZardCarouselItemComponent } from '../carousel-item.component';
-import { ZardCarouselComponent } from '../carousel.component';
+import { ZardCardComponent } from '../../card';
+import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
   standalone: true,
-  imports: [ZardCarouselComponent, ZardCarouselContentComponent, ZardCarouselItemComponent],
+  imports: [ZardCarouselModule, ZardCardComponent],
   template: `
-    <div class="w-full max-w-md mx-auto">
+    <div class="mx-auto w-full max-w-md">
       <z-carousel>
         <z-carousel-content>
-          <z-carousel-item>
-            <div class="p-6 h-48 flex items-center justify-center bg-primary/10 rounded-md">Slide 1</div>
-          </z-carousel-item>
-          <z-carousel-item>
-            <div class="p-6 h-48 flex items-center justify-center bg-primary/10 rounded-md">Slide 2</div>
-          </z-carousel-item>
-          <z-carousel-item>
-            <div class="p-6 h-48 flex items-center justify-center bg-primary/10 rounded-md">Slide 3</div>
-          </z-carousel-item>
+          @for (slide of slides; track slide) {
+            <z-carousel-item>
+              <z-card class="w-full">
+                <div class="flex h-[200px] items-center justify-center text-4xl font-semibold">{{ slide }}</div>
+              </z-card>
+            </z-carousel-item>
+          }
         </z-carousel-content>
       </z-carousel>
     </div>
   `,
 })
-export class ZardDemoCarouselDefaultComponent {}
+export class ZardDemoCarouselDefaultComponent {
+  protected slides = ['1', '2', '3', '4', '5'];
+}

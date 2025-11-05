@@ -1,36 +1,27 @@
 import { Component } from '@angular/core';
 
-import { ZardCarouselContentComponent } from '../carousel-content.component';
-import { ZardCarouselItemComponent } from '../carousel-item.component';
-import { ZardCarouselComponent } from '../carousel.component';
-import { ZardButtonComponent } from '../../components';
+import { ZardCardComponent } from '../../card';
+import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
   standalone: true,
-  imports: [ZardCarouselComponent, ZardCarouselContentComponent, ZardCarouselItemComponent, ZardButtonComponent],
+  imports: [ZardCarouselModule, ZardCardComponent],
   template: `
-    <div class="w-full max-w-md mx-auto">
-      <div class="flex gap-4 mb-4">
-        <button z-button zType="outline" (click)="orientation = 'horizontal'">Horizontal</button>
-        <button z-button zType="outline" (click)="orientation = 'vertical'">Vertical</button>
-      </div>
-
-      <z-carousel [zOrientation]="orientation" style="height: 300px">
-        <z-carousel-content [zOrientation]="orientation">
-          <z-carousel-item [zOrientation]="orientation">
-            <div class="p-6 flex items-center justify-center bg-primary/10 rounded-md h-full">Slide 1</div>
-          </z-carousel-item>
-          <z-carousel-item [zOrientation]="orientation">
-            <div class="p-6 flex items-center justify-center bg-primary/10 rounded-md h-full">Slide 2</div>
-          </z-carousel-item>
-          <z-carousel-item [zOrientation]="orientation">
-            <div class="p-6 flex items-center justify-center bg-primary/10 rounded-md h-full">Slide 3</div>
-          </z-carousel-item>
+    <div class="mx-auto w-[400px] max-w-md">
+      <z-carousel zOrientation="vertical" class="w-full">
+        <z-carousel-content class="h-[300px]">
+          @for (slide of slides; track slide) {
+            <z-carousel-item>
+              <z-card class="w-full">
+                <div class="flex h-[200px] items-center justify-center text-4xl font-semibold">{{ slide }}</div>
+              </z-card>
+            </z-carousel-item>
+          }
         </z-carousel-content>
       </z-carousel>
     </div>
   `,
 })
 export class ZardDemoCarouselOrientationComponent {
-  orientation: 'horizontal' | 'vertical' = 'horizontal';
+  protected slides = ['1', '2', '3', '4', '5'];
 }
