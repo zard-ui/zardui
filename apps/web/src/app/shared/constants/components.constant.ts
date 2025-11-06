@@ -53,6 +53,7 @@ export interface ComponentData {
 
 export interface ExampleData {
   name: string;
+  description?: string;
   type?: string;
   column?: boolean;
   component: ComponentType<unknown>;

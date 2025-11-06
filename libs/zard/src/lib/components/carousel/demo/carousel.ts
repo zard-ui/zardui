@@ -19,11 +19,13 @@ export const CAROUSEL = {
       component: ZardDemoCarouselOrientationComponent,
     },
     {
-      name: 'size',
+      name: 'sizes',
+      description: 'To set the size of the items, you can use the `basis` utility class on the `<z-carousel-item />`.',
       component: ZardDemoCarouselSizeComponent,
     },
     {
       name: 'spacing',
+      description: 'To set the spacing between the items, we use a `pl-[VALUE]` utility on the `<z-carousel-item />` and a negative `-ml-[VALUE]` on the `<z-carousel-content />`.',
       component: ZardDemoCarouselSpacingComponent,
     },
     {
