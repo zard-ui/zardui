@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, signal, ViewEncapsulation, output, computed, viewChild } from '@angular/core';
 
 import { type ClassValue } from 'clsx';
@@ -11,7 +12,7 @@ import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-carousel',
-  imports: [EmblaCarouselDirective, ZardButtonComponent, ZardIconComponent],
+  imports: [CommonModule, EmblaCarouselDirective, ZardButtonComponent, ZardIconComponent],
   template: `
     <div class="relative">
       <div
@@ -28,16 +29,38 @@ import { ZardIconComponent } from '../icon/icon.component';
       >
         <ng-content></ng-content>
 
-        @if (zShowControls()) {
-          <button z-button zType="outline" [class]="prevBtnClasses()" [disabled]="!canScrollPrev()" (click)="slidePrevious()" aria-label="Previous slide">
-            <z-icon zType="chevron-left" class="size-4" />
-          </button>
-          <button z-button zType="outline" [class]="nextBtnClasses()" [disabled]="!canScrollNext()" (click)="slideNext()" aria-label="Next slide">
-            <z-icon zType="chevron-right" class="size-4" />
-          </button>
+        @let controls = zControls();
+        @if (controls === 'button') {
+          <ng-container *ngTemplateOutlet="buttonControls"></ng-container>
+        } @else if (controls === 'dot') {
+          <ng-container *ngTemplateOutlet="dotControls"></ng-container>
         }
       </div>
     </div>
+
+    <ng-template #buttonControls>
+      <button z-button zType="outline" [class]="prevBtnClasses()" [disabled]="!canScrollPrev()" (click)="slidePrevious()" aria-label="Previous slide">
+        <z-icon zType="chevron-left" class="size-4" />
+      </button>
+      <button z-button zType="outline" [class]="nextBtnClasses()" [disabled]="!canScrollNext()" (click)="slideNext()" aria-label="Next slide">
+        <z-icon zType="chevron-right" class="size-4" />
+      </button>
+    </ng-template>
+
+    <ng-template #dotControls>
+      <div class="mt-2 flex justify-center gap-1">
+        @for (dot of dots(); track index; let index = $index) {
+          <span [class]="index === selectedIndex() ? 'cursor-default' : 'cursor-pointer'" role="button" tabindex="0" (click)="goTo(index)">
+            <z-icon
+              zType="circle-small"
+              [zStrokeWidth]="1"
+              class="block size-3"
+              [class]="index === selectedIndex() ? 'fill-primary stroke-primary' : 'fill-border stroke-border'"
+            />
+          </span>
+        }
+      </div>
+    </ng-template>
   `,
   host: { '(keydown)': 'handleKeyDown($event)' },
   encapsulation: ViewEncapsulation.None,
@@ -51,7 +74,7 @@ export class ZardCarouselComponent {
   readonly zOptions = input<EmblaOptionsType>({ loop: false });
   readonly zPlugins = input<EmblaPluginType[]>([]);
   readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
-  readonly zShowControls = input<boolean>(true);
+  readonly zControls = input<'button' | 'dot' | 'none'>('button');
   readonly zInited = output<EmblaCarouselType>();
   readonly zSelected = output<void>();
 
@@ -62,6 +85,7 @@ export class ZardCarouselComponent {
   protected readonly scrollSnaps = signal<number[]>([]);
   protected readonly subscribeToEvents: EmblaEventType[] = ['init', 'select', 'reInit'];
   protected readonly options = computed(() => ({ ...this.zOptions(), axis: this.zOrientation() === 'horizontal' ? 'x' : 'y' }) as EmblaOptionsType);
+  protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
 
   #index = -1;
 
@@ -105,6 +129,13 @@ export class ZardCarouselComponent {
     const emblaRef = this.emblaRef();
     if (emblaRef) {
       emblaRef.scrollNext();
+    }
+  }
+
+  protected goTo(index: number): void {
+    const emblaRef = this.emblaRef();
+    if (emblaRef) {
+      emblaRef.scrollTo(index);
     }
   }
 

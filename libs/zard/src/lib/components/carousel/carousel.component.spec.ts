@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { screen } from '@testing-library/angular';
@@ -28,7 +29,7 @@ describe('ZardCarouselComponent', () => {
     } as unknown as jest.Mocked<EmblaCarouselType>;
 
     await TestBed.configureTestingModule({
-      imports: [ZardCarouselComponent],
+      imports: [ZardCarouselComponent, CommonModule],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ZardCarouselComponent);
@@ -92,6 +93,24 @@ describe('ZardCarouselComponent', () => {
     expect(emitSpy).toHaveBeenCalled();
     expect(component['selectedIndex']()).toBe(0);
     expect(mockEmblaApi.canScrollPrev()).toBeFalsy();
+  });
+
+  it('should handle dot interaction', () => {
+    const emitSpy = jest.spyOn(component.zSelected, 'emit');
+    fixture.componentRef.setInput('zControls', 'dot');
+    fixture.detectChanges();
+
+    // Simulate drag end and slide change
+    screen.getAllByRole('button')[0].click();
+    mockEmblaApi.selectedScrollSnap.mockReturnValue(1);
+    mockEmblaApi.scrollProgress.mockReturnValue(1);
+    mockEmblaApi.canScrollPrev.mockReturnValue(true);
+    component.onEmblaChange('select', mockEmblaApi);
+    fixture.detectChanges();
+
+    expect(emitSpy).toHaveBeenCalled();
+    expect(component['selectedIndex']()).toBe(1);
+    expect(mockEmblaApi.canScrollPrev()).toBeTruthy();
   });
 
   it('should handle drag interaction correctly', () => {

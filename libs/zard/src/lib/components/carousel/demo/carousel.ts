@@ -1,5 +1,6 @@
 import { ZardDemoCarouselApiComponent } from './api-demo';
 import { ZardDemoCarouselDefaultComponent } from './default';
+import { ZardDemoCarouselDotControlsComponent } from './dot-controls';
 import { ZardDemoCarouselOrientationComponent } from './orientation';
 import { ZardDemoCarouselPluginsComponent } from './plugins';
 import { ZardDemoCarouselSizeComponent } from './size';
@@ -13,6 +14,10 @@ export const CAROUSEL = {
     {
       name: 'default',
       component: ZardDemoCarouselDefaultComponent,
+    },
+    {
+      name: 'dot-controls',
+      component: ZardDemoCarouselDotControlsComponent,
     },
     {
       name: 'orientation',
