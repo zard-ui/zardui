@@ -1,5 +1,5 @@
 ```angular-ts showLineNumbers copyButton
-import { Component, type OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
 
 import { type EmblaCarouselType, type EmblaPluginType } from 'embla-carousel';
 
@@ -9,8 +9,8 @@ import { ZardCarouselPluginsService } from '../carousel-plugins.service';
 import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
-  standalone: true,
   imports: [ZardCarouselModule, ZardButtonComponent, ZardCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto w-full max-w-md">
       <div class="mb-4 flex gap-2">
@@ -54,8 +54,8 @@ export class ZardDemoCarouselPluginsComponent implements OnInit {
   protected slides = ['1', '2', '3', '4', '5'];
 
   ngOnInit(): void {
-    // Initialize autoplay plugin by default
-    void this.startAutoplay();
+    // Autoplay by default
+    this.toggleAutoplay();
     this.isAutoplayActive = true;
   }
 
@@ -91,7 +91,8 @@ export class ZardDemoCarouselPluginsComponent implements OnInit {
 
   private async startAutoplay() {
     const autoplayPlugin = await this.pluginsService.createAutoplayPlugin({
-      delay: 3000,
+      stopOnMouseEnter: true,
+      delay: 2000,
       stopOnInteraction: false,
     });
     this.plugins = [...this.plugins.filter(p => p.name !== 'autoplay'), autoplayPlugin];

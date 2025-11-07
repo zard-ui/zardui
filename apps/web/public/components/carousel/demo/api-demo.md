@@ -1,5 +1,5 @@
 ```angular-ts showLineNumbers copyButton
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { type EmblaCarouselType } from 'embla-carousel';
 
@@ -8,19 +8,17 @@ import { ZardCardComponent } from '../../card';
 import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
-  standalone: true,
   imports: [ZardCarouselModule, ZardButtonComponent, ZardCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto w-full max-w-md">
       <z-carousel [zOptions]="{ loop: false }" (zSelected)="onSlideChange()" (zInited)="onCarouselInit($event)">
         <z-carousel-content>
           @for (slide of slides; track slide) {
             <z-carousel-item>
-              <z-carousel-item>
-                <z-card>
-                  <div class="flex h-40 items-center justify-center text-4xl font-semibold">{{ slide }}</div>
-                </z-card>
-              </z-carousel-item>
+              <z-card>
+                <div class="flex h-40 items-center justify-center text-4xl font-semibold">{{ slide }}</div>
+              </z-card>
             </z-carousel-item>
           }
         </z-carousel-content>

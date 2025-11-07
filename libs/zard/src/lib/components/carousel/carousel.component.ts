@@ -66,10 +66,13 @@ export class ZardCarouselComponent {
   #index = -1;
 
   onEmblaChange(type: EmblaEventType, emblaApi: EmblaCarouselType): void {
-    if (type === 'init') {
+    if (type === 'init' || type === 'reInit') {
       this.scrollSnaps.set(emblaApi.scrollSnapList());
       this.checkNavigation(emblaApi);
-      this.zInited.emit(emblaApi);
+      if (type === 'init') {
+        this.zInited.emit(emblaApi);
+      }
+      return;
     }
 
     if (type === 'select' && emblaApi.selectedScrollSnap() !== this.#index) {

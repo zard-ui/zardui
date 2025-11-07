@@ -1,5 +1,5 @@
 ```angular-ts showLineNumbers copyButton
-import { Component, signal, computed } from '@angular/core';
+import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 
 import { mergeClasses } from '../../../shared/utils/utils';
 import { ZardCardComponent } from '../../card';
@@ -7,8 +7,8 @@ import { ZardSegmentedComponent } from '../../segmented/segmented.component';
 import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
-  standalone: true,
   imports: [ZardCarouselModule, ZardSegmentedComponent, ZardCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto w-full max-w-4xl">
       <div class="mb-4 flex justify-center gap-2">

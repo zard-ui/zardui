@@ -8,8 +8,6 @@ describe('ZardCarouselContentComponent', () => {
   let fixture: ComponentFixture<ZardCarouselContentComponent>;
 
   beforeEach(async () => {
-    // Create comprehensive mock of Embla API
-
     await TestBed.configureTestingModule({
       imports: [ZardCarouselContentComponent],
       providers: [ZardCarouselComponent],
@@ -19,7 +17,7 @@ describe('ZardCarouselContentComponent', () => {
     component = fixture.componentInstance;
   });
 
-  it('should create comonent', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
   });
 });

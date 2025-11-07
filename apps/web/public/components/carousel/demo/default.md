@@ -1,12 +1,12 @@
 ```angular-ts showLineNumbers copyButton
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardCardComponent } from '../../card';
 import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
-  standalone: true,
   imports: [ZardCarouselModule, ZardCardComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto w-full max-w-md">
       <z-carousel>

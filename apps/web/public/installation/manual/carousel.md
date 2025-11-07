@@ -69,10 +69,13 @@ export class ZardCarouselComponent {
   #index = -1;
 
   onEmblaChange(type: EmblaEventType, emblaApi: EmblaCarouselType): void {
-    if (type === 'init') {
+    if (type === 'init' || type === 'reInit') {
       this.scrollSnaps.set(emblaApi.scrollSnapList());
       this.checkNavigation(emblaApi);
-      this.zInited.emit(emblaApi);
+      if (type === 'init') {
+        this.zInited.emit(emblaApi);
+      }
+      return;
     }
 
     if (type === 'select' && emblaApi.selectedScrollSnap() !== this.#index) {
@@ -155,7 +158,7 @@ export const carouselItemVariants = cva('min-w-0 shrink-0 grow-0 basis-full', {
   variants: {
     zOrientation: {
       horizontal: 'pl-4',
-      vertical: 'pt-4.5',
+      vertical: 'pt-5',
     },
   },
   defaultVariants: {

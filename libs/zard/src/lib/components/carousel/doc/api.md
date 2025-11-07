@@ -10,7 +10,7 @@
 | `[zPlugins]`      | Embla Carousel plugins                                                                                                                     | `EmblaPluginType[]`      | `[]`            |
 | `[zOrientation]`  | Carousel orientation                                                                                                                       | `horizontal \| vertical` | `horizontal`    |
 | `[zShowControls]` | Show navigation buttons                                                                                                                    | `boolean`                | `true`          |
-| `(zInited)`       | Emits Embla API when caraousel is initialized                                                                                              | `EmblaCarouselType`      | -               |
+| `(zInited)`       | Emits Embla API when carousel is initialized                                                                                               | `EmblaCarouselType`      | -               |
 | `(zSelected)`     | Emitted when a slide is selected                                                                                                           | `void`                   | -               |
 
 ## [z-carousel-content] <span class="api-type-label component">Component</span>
