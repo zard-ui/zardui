@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '../../badge/badge.component';
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardTableBodyComponent, ZardTableCellComponent, ZardTableComponent, ZardTableHeadComponent, ZardTableHeaderComponent, ZardTableRowComponent } from '../table.component';
+import { ZardTableComponent } from '../table.component';
+import { ZardTableModule } from '../table.module';
 
 export interface Payment {
   id: string;
@@ -13,62 +14,49 @@ export interface Payment {
 
 @Component({
   standalone: true,
-  imports: [
-    ZardTableComponent,
-    ZardTableHeaderComponent,
-    ZardTableBodyComponent,
-    ZardTableRowComponent,
-    ZardTableHeadComponent,
-    ZardTableCellComponent,
-    ZardBadgeComponent,
-    ZardButtonComponent,
-  ],
+  imports: [ZardTableComponent, ZardTableModule, ZardBadgeComponent, ZardButtonComponent],
   template: `
-    <div class="w-full">
-      <div class="overflow-hidden rounded-md border">
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Status</th>
-              <th z-table-head>Email</th>
-              <th z-table-head class="text-right">Amount</th>
-              <th z-table-head class="w-16">Actions</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (payment of payments; track payment.id) {
-              <tr z-table-row>
-                <td z-table-cell>
-                  <z-badge [zType]="getStatusVariant(payment.status)">
-                    {{ payment.status }}
-                  </z-badge>
-                </td>
-                <td z-table-cell>
-                  <div class="lowercase">{{ payment.email }}</div>
-                </td>
-                <td z-table-cell>
-                  <div class="text-right font-medium">{{ formatCurrency(payment.amount) }}</div>
-                </td>
-                <td z-table-cell>
-                  <div class="flex items-center gap-2">
-                    <z-button zType="ghost" zSize="icon" (click)="copyPaymentId(payment.id)" title="Copy payment ID">
-                      <div class="icon-copy"></div>
-                    </z-button>
-                    <z-button zType="ghost" zSize="icon" (click)="viewDetails(payment)" title="View details">
-                      <div class="icon-eye"></div>
-                    </z-button>
-                  </div>
-                </td>
-              </tr>
-            } @empty {
-              <tr z-table-row>
-                <td z-table-cell [attr.colspan]="4" class="h-24 text-center">No results.</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
+    <z-table zType="bordered" zSize="default">
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head>Status</th>
+          <th z-table-head colspan="2">Email</th>
+          <th z-table-head class="">Amount</th>
+          <th z-table-head class="text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody z-table-body>
+        @for (payment of payments; track payment.id) {
+          <tr z-table-row>
+            <td z-table-cell>
+              <z-badge [zType]="getStatusVariant(payment.status)">
+                {{ payment.status }}
+              </z-badge>
+            </td>
+            <td z-table-cell colspan="2">
+              <div class="lowercase">{{ payment.email }}</div>
+            </td>
+            <td z-table-cell>
+              <div class="font-medium">{{ formatCurrency(payment.amount) }}</div>
+            </td>
+            <td z-table-cell>
+              <div class="flex items-center gap-2">
+                <z-button zType="ghost" zSize="icon" (click)="copyPaymentId(payment.id)" title="Copy payment ID">
+                  <div class="icon-copy"></div>
+                </z-button>
+                <z-button zType="ghost" zSize="icon" (click)="viewDetails(payment)" title="View details">
+                  <div class="icon-eye"></div>
+                </z-button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr z-table-row>
+            <td z-table-cell [attr.colspan]="4" class="h-24 text-center">No results.</td>
+          </tr>
+        }
+      </tbody>
+    </z-table>
   `,
 })
 export class ZardDemoTablePaymentsComponent {
@@ -110,6 +98,7 @@ export class ZardDemoTablePaymentsComponent {
       email: 'jane.doe@example.com',
     },
   ];
+  zType: any;
 
   formatCurrency(amount: number): string {
     return new Intl.NumberFormat('en-US', {

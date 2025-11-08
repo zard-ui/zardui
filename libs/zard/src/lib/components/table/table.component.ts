@@ -4,11 +4,14 @@ import {
   computed,
   effect,
   ElementRef,
+  forwardRef,
   HostListener,
+  InjectionToken,
   input,
   OnInit,
   output,
   QueryList,
+  Signal,
   signal,
   ViewChild,
   ViewChildren,
@@ -16,18 +19,38 @@ import {
 } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { debounceTime } from 'rxjs';
+import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardInputDirective } from '../input/input.directive';
 import { TableState, ZardTableDataSource } from './table';
 import { ZardTableSortIconComponent } from './table-sort-icon.component';
 import { ZardTableModule } from './table.module';
 import { ZardTableService } from './table.service';
+import { tableVariants } from './table.variants';
+
+export type ZTableType = 'default' | 'striped' | 'bordered';
+export type ZTableSize = 'default' | 'compact' | 'comfortable';
+
+export const Z_TABLE_TYPE = new InjectionToken<Signal<ZTableType> | null>('Z_TABLE_TYPE');
+export const Z_TABLE_SIZE = new InjectionToken<Signal<ZTableSize> | null>('Z_TABLE_SIZE');
 
 @Component({
   selector: 'z-table',
   exportAs: 'zTable',
-  imports: [ZardTableModule, ZardButtonComponent, ZardTableSortIconComponent, ZardInputDirective, ReactiveFormsModule],
-  providers: [ZardTableService],
+  imports: [ZardButtonComponent, ZardTableSortIconComponent, ZardInputDirective, ReactiveFormsModule, ZardTableModule],
+  providers: [
+    ZardTableService,
+    {
+      provide: Z_TABLE_TYPE,
+      useFactory: (self: ZardTableComponent) => self.zType,
+      deps: [forwardRef(() => ZardTableComponent)],
+    },
+    {
+      provide: Z_TABLE_SIZE,
+      useFactory: (self: ZardTableComponent) => self.zSize,
+      deps: [forwardRef(() => ZardTableComponent)],
+    },
+  ],
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -119,14 +142,14 @@ import { ZardTableService } from './table.service';
       </div>
     </div>
     <div z-table-wrapper [zType]="zType()">
-      <table z-table role="table" id="table-id" [zSize]="zSize()" [zType]="zType()">
+      <table role="table" id="table-id" [class]="tableClasses()">
         @if (columns().length && dataSource().data.length) {
-          <thead>
-            <tr>
+          <thead z-table-header [zType]="zType()">
+            <tr z-table-row [zType]="zType()">
               @for (column of columns(); track column.accessor) {
                 @if (visibleColumns()[column.accessor]) {
                   @if (column.sortable) {
-                    <th scope="col" sortable>
+                    <th z-table-head scope="col" sortable [zSize]="zSize()">
                       <span
                         z-th-sortable
                         (click)="toggleSort(column.accessor)"
@@ -142,7 +165,7 @@ import { ZardTableService } from './table.service';
                       </span>
                     </th>
                   } @else {
-                    <th scope="col">
+                    <th z-table-head scope="col" [zSize]="zSize()">
                       {{ column.header }}
                     </th>
                   }
@@ -151,12 +174,12 @@ import { ZardTableService } from './table.service';
             </tr>
           </thead>
 
-          <tbody>
+          <tbody z-table-body [zType]="zType()">
             @for (row of dataSource().data; track row) {
-              <tr>
+              <tr z-table-row [zType]="zType()">
                 @for (column of columns(); track column.accessor) {
                   @if (visibleColumns()[column.accessor]) {
-                    <td>
+                    <td z-table-cell>
                       {{ row[column.accessor] }}
                     </td>
                   }
@@ -186,6 +209,8 @@ export class ZardTableComponent implements OnInit {
 
   readonly zType = input<'default' | 'striped' | 'bordered'>('default');
   readonly zSize = input<'default' | 'compact' | 'comfortable'>('default');
+
+  readonly tableClasses = computed(() => mergeClasses(tableVariants.table({ zSize: this.zSize(), zType: this.zType() })));
 
   readonly enablePagination = input<boolean>();
   readonly disableNext = computed(() => !this.tableService.hasNextPage());

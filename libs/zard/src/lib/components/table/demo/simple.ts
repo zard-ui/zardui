@@ -14,8 +14,8 @@ interface Person {
   standalone: true,
   imports: [ZardTableComponent, ZardTableModule],
   template: `
-    <z-table zType="bordered">
-      <caption class="border-b p-4">
+    <z-table zType="default" zSize="default">
+      <caption class="border-t p-4 caption-bottom">
         A list of your recent invoices.
       </caption>
       <thead>

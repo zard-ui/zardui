@@ -1,63 +1,7 @@
-import { computed, Directive, effect, ElementRef, input, OnDestroy, Renderer2 } from '@angular/core';
+import { computed, Directive, input } from '@angular/core';
 import { ClassValue } from 'clsx';
 import { mergeClasses } from '../../shared/utils/utils';
 import { tableVariants } from './table.variants';
-
-@Directive({
-  selector: 'table[z-table]',
-  standalone: true,
-  exportAs: 'zTable',
-  host: {
-    '[class]': 'classes()',
-  },
-})
-export class ZardTableDirective implements OnDestroy {
-  readonly zType = input<'default' | 'striped' | 'bordered'>('default');
-  readonly zSize = input<'default' | 'compact' | 'comfortable'>('default');
-  readonly userClass = input<ClassValue>('');
-
-  readonly classes = computed(() => mergeClasses(tableVariants.table({ zSize: this.zSize() }), this.userClass()));
-
-  private mo: MutationObserver;
-
-  constructor(
-    private host: ElementRef<HTMLTableElement>,
-    private renderer: Renderer2,
-  ) {
-    const nativeEl = this.host.nativeElement;
-
-    effect(() => {
-      this.applyClassesToChildren();
-    });
-
-    this.mo = new MutationObserver(() => this.applyClassesToChildren());
-    this.mo.observe(nativeEl, { childList: true, subtree: true });
-  }
-
-  ngOnDestroy(): void {
-    this.mo.disconnect();
-  }
-
-  private applyClassesToChildren() {
-    const host = this.host.nativeElement;
-
-    const addClasses = (el: HTMLElement, classValue?: string) => {
-      if (!classValue) return;
-      classValue
-        .split(' ')
-        .filter(Boolean)
-        .forEach(c => this.renderer.addClass(el, c));
-    };
-
-    host.querySelectorAll('thead').forEach(el => addClasses(el as HTMLElement, tableVariants.thead({ zType: this.zType() })));
-
-    host.querySelectorAll('tr').forEach(el => addClasses(el as HTMLElement, tableVariants.tr({ zType: this.zType() })));
-
-    host.querySelectorAll('th').forEach(el => addClasses(el as HTMLElement, tableVariants.th({ zSize: this.zSize() })));
-
-    host.querySelectorAll('td').forEach(el => addClasses(el as HTMLElement, tableVariants.td({ zSize: this.zSize() })));
-  }
-}
 
 @Directive({
   selector: 'span[z-th-sortable]',

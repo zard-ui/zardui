@@ -14,26 +14,48 @@ export const tableVariants = {
     },
   }),
 
-  table: cva('table-fixed w-full', {
-    variants: {
-      zSize: {
-        default: 'text-base',
-        compact: 'text-sm',
-        comfortable: 'text-lg',
+  table: cva(
+    ['table-fixed w-full', '[&_th]:text-left [&_th]:font-medium [&_th]:text-muted-foreground', '[&_td]:border-t', '[&_tr]:hover:bg-neutral-100 [&_tr]:dark:hover:bg-neutral-900'],
+    {
+      variants: {
+        zSize: {
+          compact: ['text-sm', '[&_th]:px-2.5 [&_th]:py-1.5', '[&_td]:px-2.5 [&_td]:py-1.5'],
+          default: ['text-base', '[&_th]:px-3 [&_th]:py-2', '[&_td]:px-3 [&_td]:py-2'],
+          comfortable: ['text-lg', '[&_th]:px-4 [&_th]:py-2.5', '[&_td]:px-4 [&_td]:py-2.5'],
+        },
+        zType: {
+          default: '',
+          striped: ['[&_thead]:bg-neutral-100 [&_thead]:dark:bg-neutral-900', '[&_tr]:even:bg-neutral-100 dark:[&_tr]:even:bg-neutral-900'],
+          bordered: [''],
+        },
+      },
+      defaultVariants: {
+        zSize: 'default',
+        zType: 'default',
       },
     },
-    defaultVariants: {
-      zSize: 'default',
-    },
-  }),
+  ),
 
   thead: cva('border-b', {
     variants: {
       zType: {
-        default: 'border-t',
-        striped: 'border-t',
+        default: '',
+        striped: 'bg-neutral-100 dark:bg-neutral-900',
         bordered: '',
       },
+    },
+  }),
+
+  tBody: cva('[&_tr:last-child]:border-0', {
+    variants: {
+      zType: {
+        default: '',
+        striped: '[&>tr]:even:bg-neutral-100 dark:[&>tr]:even:bg-neutral-900',
+        bordered: '',
+      },
+    },
+    defaultVariants: {
+      zType: 'default',
     },
   }),
 
@@ -41,8 +63,8 @@ export const tableVariants = {
     variants: {
       zType: {
         default: '',
-        striped: '[tbody>&]:odd:bg-neutral-100 dark:[tbody>&]:odd:bg-neutral-900',
-        bordered: 'last:border-0',
+        striped: 'even:bg-neutral-100 dark:even:bg-neutral-900',
+        bordered: '',
       },
     },
     defaultVariants: {
@@ -51,19 +73,6 @@ export const tableVariants = {
   }),
 
   th: cva('text-left text-neutral-950 dark:text-neutral-50', {
-    variants: {
-      zSize: {
-        default: 'p-4',
-        compact: 'p-3',
-        comfortable: 'p-5',
-      },
-    },
-    defaultVariants: {
-      zSize: 'default',
-    },
-  }),
-
-  thSortable: cva('hover:cursor-pointer', {
     variants: {
       zSize: {
         default: '',
@@ -79,9 +88,22 @@ export const tableVariants = {
   td: cva('text-neutral-800 dark:text-neutral-300', {
     variants: {
       zSize: {
-        default: 'p-4',
-        compact: 'p-3',
-        comfortable: 'p-5',
+        default: '',
+        compact: '',
+        comfortable: '',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
+    },
+  }),
+
+  thSortable: cva('hover:cursor-pointer', {
+    variants: {
+      zSize: {
+        default: '',
+        compact: '',
+        comfortable: '',
       },
     },
     defaultVariants: {
@@ -110,4 +132,9 @@ export const tableVariants = {
   dropdownCheckIconWrapper: cva('absolute peer-checked:opacity-100 opacity-0'),
 
   pagination: cva('flex justify-end gap-2 items-center mt-4'),
+
+  tableCaptionVariants: cva('mt-4 text-sm text-muted-foreground', {
+    variants: {},
+    defaultVariants: {},
+  }),
 };
