@@ -6,9 +6,7 @@
     "source.fixAll.stylelint": "explicit"
   },
   "commit-message-editor.view.defaultView": "form",
-  "commit-message-editor.dynamicTemplate": [
-    "{type}{scope}{breaking_change}: {description}{taskid}"
-  ],
+  "commit-message-editor.dynamicTemplate": ["{type}{scope}{breaking_change}: {description}{taskid}"],
   "commit-message-editor.tokens": [
     {
       "label": "Type",
@@ -108,15 +106,9 @@
       "default": false
     }
   ],
-  "cSpell.words": [
-    "Borderless",
-    "ngzard",
-    "testid",
-    "zard",
-    "Zard"
-  ],
+  "cSpell.words": ["Borderless", "ngzard", "testid", "zard", "Zard"],
   "[html]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[markdown]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -132,5 +124,5 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
+  }
 }

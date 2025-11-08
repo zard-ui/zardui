@@ -21,9 +21,15 @@ export default [
   ...nx.configs['flat/angular-template'],
   {
     files: ['**/*.ts'],
+    languageOptions: {
+      parserOptions: {
+        project: ['libs/zard/tsconfig.lib.json', 'libs/zard/tsconfig.spec.json'],
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
     rules: {
-      '@angular-eslint/directive-selector': 'off',
       '@angular-eslint/component-selector': 'off',
+      '@angular-eslint/directive-selector': 'off',
       '@angular-eslint/prefer-on-push-component-change-detection': ['warn'],
       '@typescript-eslint/consistent-type-imports': [
         'error',
@@ -32,6 +38,9 @@ export default [
           fixStyle: 'inline-type-imports',
         },
       ],
+      '@typescript-eslint/no-floating-promises': 'error',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      'no-console': ['error', { allow: ['warn', 'error'] }],
     },
   },
   {
@@ -39,10 +48,5 @@ export default [
     rules: {
       '@angular-eslint/prefer-on-push-component-change-detection': 'off',
     },
-  },
-  {
-    files: ['**/*.html'],
-    // Override or add rules here
-    rules: {},
   },
 ];
