@@ -10,7 +10,7 @@ import { ZardCarouselModule } from '../carousel.module';
   imports: [ZardCarouselModule, ZardSegmentedComponent, ZardCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="mx-auto w-full max-w-4xl">
+    <div class="mx-auto w-3/4 max-w-4xl">
       <div class="mb-4 flex justify-center gap-2">
         <z-segmented [zOptions]="options" zDefaultValue="md" (zChange)="onChange($event)" />
       </div>

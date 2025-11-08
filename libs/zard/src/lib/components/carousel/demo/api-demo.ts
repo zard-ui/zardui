@@ -10,7 +10,7 @@ import { ZardCarouselModule } from '../carousel.module';
   imports: [ZardCarouselModule, ZardButtonComponent, ZardCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="mx-auto w-full max-w-md">
+    <div class="mx-auto w-3/4 max-w-md">
       <z-carousel [zOptions]="{ loop: false }" (zSelected)="onSlideChange()" (zInited)="onCarouselInit($event)">
         <z-carousel-content>
           @for (slide of slides; track slide) {

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, type OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, type OnInit, inject, signal } from '@angular/core';
 
 import { type EmblaCarouselType, type EmblaPluginType } from 'embla-carousel';
 
@@ -11,9 +11,9 @@ import { ZardCarouselModule } from '../carousel.module';
   imports: [ZardCarouselModule, ZardButtonComponent, ZardCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="mx-auto w-full max-w-md">
+    <div class="mx-auto w-3/4 max-w-md">
       <div class="mb-4 flex gap-2">
-        <button z-button zType="outline" (click)="toggleAutoplay()">{{ isAutoplayActive ? 'Pause' : 'Start' }} Autoplay</button>
+        <button z-button zType="outline" (click)="toggleAutoplay()">{{ isAutoplayActive() ? 'Pause' : 'Start' }} Autoplay</button>
         <button z-button zType="outline" (click)="toggleLoop()">{{ carouselOptions.loop ? 'Disable' : 'Enable' }} Loop</button>
       </div>
 
@@ -30,7 +30,7 @@ import { ZardCarouselModule } from '../carousel.module';
       </z-carousel>
 
       <div class="mt-4 text-center text-sm">
-        <p>Current slide: {{ currentSlide }} / {{ totalSlides }}</p>
+        <p>Current slide: {{ currentSlide() }} / {{ totalSlides() }}</p>
       </div>
     </div>
   `,
@@ -46,32 +46,32 @@ export class ZardDemoCarouselPluginsComponent implements OnInit {
   plugins: EmblaPluginType[] = [];
   carouselApi!: EmblaCarouselType;
 
-  isAutoplayActive = false;
-  currentSlide = 1;
-  totalSlides = 0;
+  protected readonly isAutoplayActive = signal(false);
+  protected readonly currentSlide = signal(1);
+  protected readonly totalSlides = signal(0);
 
   protected slides = ['1', '2', '3', '4', '5'];
 
   ngOnInit(): void {
     // Autoplay by default
     this.toggleAutoplay();
-    this.isAutoplayActive = true;
+    this.isAutoplayActive.set(true);
   }
 
   onCarouselInit(api: EmblaCarouselType) {
     this.carouselApi = api;
 
-    this.totalSlides = api.scrollSnapList().length;
-    this.currentSlide = api.selectedScrollSnap() + 1;
+    this.totalSlides.set(api.scrollSnapList().length);
+    this.currentSlide.set(api.selectedScrollSnap() + 1);
   }
 
   protected onSlideChange(): void {
-    this.currentSlide = this.carouselApi.selectedScrollSnap() + 1;
+    this.currentSlide.set(this.carouselApi.selectedScrollSnap() + 1);
   }
 
   async toggleAutoplay() {
-    this.isAutoplayActive = !this.isAutoplayActive;
-    if (this.isAutoplayActive) {
+    this.isAutoplayActive.update(b => !b);
+    if (this.isAutoplayActive()) {
       await this.startAutoplay();
     } else {
       this.pauseAutoplay();

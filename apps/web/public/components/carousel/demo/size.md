@@ -8,14 +8,14 @@ import { ZardCarouselModule } from '../carousel.module';
   imports: [ZardCarouselModule, ZardCardComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="mx-auto w-full max-w-md">
+    <div class="mx-auto w-3/4 max-w-md">
       <z-carousel>
         <z-carousel-content>
           @for (slide of slides; track slide) {
             <!-- To set the size of the items, you can use the basis utility class on the <z-carousel-item />. -->
             <z-carousel-item class="md:basis-1/2 lg:basis-1/3">
-              <z-card class="w-full">
-                <div class="flex h-[200px] items-center justify-center text-4xl font-semibold">{{ slide }}</div>
+              <z-card>
+                <div class="flex h-[100px] items-center justify-center text-4xl font-semibold md:h-[200px]">{{ slide }}</div>
               </z-card>
             </z-carousel-item>
           }
