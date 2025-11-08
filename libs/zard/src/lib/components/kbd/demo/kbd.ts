@@ -5,7 +5,7 @@ import { ZardDemoKbdTooltipComponent } from './tooltip';
 export const KBD = {
   componentName: 'kbd',
   componentType: 'kbd',
-  description: 'Used to display textual user input from keyboard.',
+  description: 'Display content as a keyboard key useful for documentation purposes.',
   fullWidth: true,
   examples: [
     {

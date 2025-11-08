@@ -10,11 +10,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   exportAs: 'zKbd',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `
-    <kbd>
-      <ng-content></ng-content>
-    </kbd>
-  `,
+  template: `<kbd><ng-content></ng-content></kbd> `,
   host: {
     '[class]': 'classes()',
   },

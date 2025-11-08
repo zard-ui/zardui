@@ -172,7 +172,7 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
 
   protected position = signal<ZardTooltipPositions>('top');
   private trigger = signal<ZardTooltipTriggers>('hover');
-  protected text: string | TemplateRef<any> = '';
+  protected text: string | TemplateRef<unknown> | null = null;
 
   state = signal<'closed' | 'opened'>('closed');
 
@@ -197,7 +197,7 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
     this.trigger.set(trigger);
   }
 
-  get templateContent(): TemplateRef<any> | null {
+  get templateContent(): TemplateRef<unknown> | null {
     return this.text instanceof TemplateRef ? this.text : null;
   }
 
