@@ -10,6 +10,7 @@ import { BUTTON } from '@zard/components/button/demo/button';
 import { BUTTON_GROUP } from '@zard/components/button-group/demo/button-group';
 import { CALENDAR } from '@zard/components/calendar/demo/calendar';
 import { CARD } from '@zard/components/card/demo/card';
+import { CAROUSEL } from '@zard/components/carousel/demo/carousel';
 import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
 import { COMBOBOX } from '@zard/components/combobox/demo/combobox';
 import { COMMAND } from '@zard/components/command/demo/command';
@@ -52,6 +53,7 @@ export interface ComponentData {
 
 export interface ExampleData {
   name: string;
+  description?: string;
   type?: string;
   column?: boolean;
   component: ComponentType<unknown>;
@@ -72,6 +74,7 @@ export const COMPONENTS: ComponentData[] = [
   BREADCRUMB,
   CALENDAR,
   CARD,
+  CAROUSEL,
   CHECKBOX,
   COMBOBOX,
   COMMAND,

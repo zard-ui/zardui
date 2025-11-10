@@ -1,6 +1,6 @@
 @if (componentData) {
 <z-content [title]="componentData.componentName" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
-  <div class="flex flex-col gap-5 relative" scrollSpyItem="overview" id="overview">
+  <div class="relative flex flex-col gap-5" scrollSpyItem="overview" id="overview">
     <z-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/overview.md"></z-markdown-renderer>
     <z-assist></z-assist>
     <z-code-box
@@ -16,16 +16,16 @@
   <div class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
     <section class="flex flex-col gap-4" scrollSpyItem="installation" id="installation">
       <header class="mb-3">
-        <h2 class="text-2xl font-semibold mb-5">Installation</h2>
+        <h2 class="mb-5 text-2xl font-semibold">Installation</h2>
         <div class="overflow-hidden transition-all duration-200 ease-in-out">
-          <nav class="flex gap-4 mb-4">
+          <nav class="mb-4 flex gap-4">
             @if(installGuide?.cli) {
-            <button class="text-base cursor-pointer" (click)="activeTab.set('cli')" [class.font-semibold]="activeTab() === 'cli'" [class.text-foreground]="activeTab() === 'cli'">
+            <button class="cursor-pointer text-base" (click)="activeTab.set('cli')" [class.font-semibold]="activeTab() === 'cli'" [class.text-foreground]="activeTab() === 'cli'">
               CLI
             </button>
             } @if(installGuide?.manual) {
             <button
-              class="text-base cursor-pointer"
+              class="cursor-pointer text-base"
               (click)="activeTab.set('manual')"
               [class.font-semibold]="activeTab() === 'manual'"
               [class.text-foreground]="activeTab() === 'manual'"
@@ -45,12 +45,13 @@
     </section>
 
     <section class="flex flex-col gap-4">
-      <h2 class="text-2xl font-semibold mb-5">Examples</h2>
+      <h2 class="mb-5 text-2xl font-semibold">Examples</h2>
       @for (item of componentData.examples; track $index) {
       <z-code-box
         [scrollSpyItem]="item.name"
         [attr.id]="item.name"
         [componentType]="item.name"
+        [demoDescription]="item.description"
         path="{{ componentData.componentName }}/demo/{{ item.name }}"
         [dynamicComponent]="item.component"
         [fullScreen]="item.fullScreen"
