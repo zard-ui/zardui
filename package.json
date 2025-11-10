@@ -46,6 +46,8 @@
     "embla-carousel": "^8.6.0",
     "embla-carousel-angular": "^20.0.0",
     "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-class-names": "^8.6.0",
+    "embla-carousel-wheel-gestures": "^8.1.0",
     "execa": "^8.0.1",
     "express": "^4.21.2",
     "fast-glob": "^3.3.3",

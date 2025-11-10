@@ -3,6 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
+import { lastValueFrom } from 'rxjs';
+
 import { MarkdownService } from '@doc/shared/services/markdown.service';
 
 import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
@@ -35,6 +37,7 @@ export class MarkdownRendererComponent implements OnChanges, OnInit {
 
   @Input() markdownUrl!: string;
   @Input() theme: 'light' | 'dark' = 'light';
+  @Input() markdownText: string | undefined;
 
   processedHtml: SafeHtml = '';
   loading = false;
@@ -44,6 +47,8 @@ export class MarkdownRendererComponent implements OnChanges, OnInit {
     if (this.markdownUrl) {
       this.loadAndProcessMarkdown();
     }
+
+    this.processMarkdownText();
   }
 
   async ngOnChanges(changes: SimpleChanges) {
@@ -52,9 +57,12 @@ export class MarkdownRendererComponent implements OnChanges, OnInit {
         await this.loadAndProcessMarkdown();
       }
     }
+    if (changes['markdownText']) {
+      await this.processMarkdownText();
+    }
   }
 
-  private async loadAndProcessMarkdown() {
+  private async loadAndProcessMarkdown(): Promise<void> {
     this.loading = true;
     this.error = null;
 
@@ -72,10 +80,27 @@ export class MarkdownRendererComponent implements OnChanges, OnInit {
 
   private async loadFromUrl(url: string): Promise<string> {
     try {
-      const response = await this.http.get(url, { responseType: 'text' }).toPromise();
+      const response = await lastValueFrom(this.http.get(url, { responseType: 'text' }));
       return response || '';
     } catch (error: any) {
       throw new Error(`Could not load file: ${url} - ${error.message || error}`);
+    }
+  }
+
+  private async processMarkdownText(): Promise<void> {
+    if (this.markdownText) {
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const html = await this.markdownService.processMarkdown(this.markdownText);
+        this.processedHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+      } catch (error: any) {
+        this.error = `Error processing markdown: ${error.message || error}`;
+        console.error('Error processing markdown:', error);
+      } finally {
+        this.loading = false;
+      }
     }
   }
 }

@@ -34,3 +34,12 @@ class MutationObserverPolyfill implements MutationObserver {
 // Replace the global MutationObserver with our polyfill
 // This ensures compatibility with Angular CDK Overlay
 global.MutationObserver = MutationObserverPolyfill as any;
+
+// Mock IntersectionObserver
+const mockIntersectionObserver = jest.fn();
+mockIntersectionObserver.mockImplementation(() => ({
+  observe: () => null,
+  unobserve: () => null,
+  disconnect: () => null,
+}));
+globalThis.IntersectionObserver = mockIntersectionObserver;

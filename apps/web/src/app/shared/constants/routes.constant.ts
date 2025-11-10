@@ -72,7 +72,7 @@ export const COMPONENTS_PATH = {
     { name: 'Button Group', path: '/docs/components/button-group', available: true },
     { name: 'Calendar', path: '/docs/components/calendar', available: true },
     { name: 'Card', path: '/docs/components/card', available: true },
-    { name: 'Carousel', path: '/docs/components', available: false },
+    { name: 'Carousel', path: '/docs/components/carousel', available: true },
     { name: 'Chart', path: '/docs/components', available: false },
     { name: 'Checkbox', path: '/docs/components/checkbox', available: true },
     { name: 'Combobox', path: '/docs/components/combobox', available: true },

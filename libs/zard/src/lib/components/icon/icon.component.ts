@@ -1,10 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-import { LucideAngularModule } from 'lucide-angular';
+
 import type { ClassValue } from 'clsx';
+import { LucideAngularModule } from 'lucide-angular';
 
 import { iconVariants, type ZardIconVariants } from './icon.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZARD_ICONS, type ZardIcon } from './icons';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-icon, [z-icon]',
@@ -27,7 +28,7 @@ export class ZardIconComponent {
   protected readonly icon = computed(() => {
     const type = this.zType();
     if (typeof type === 'string') {
-      return ZARD_ICONS[type as keyof typeof ZARD_ICONS];
+      return ZARD_ICONS[type];
     }
 
     return type;
