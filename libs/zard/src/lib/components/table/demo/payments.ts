@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '../../badge/badge.component';
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardTableComponent } from '../table.component';
-import { ZardTableModule } from '../table.module';
+import { ZardTableComponent } from '../components/table.component';
+import { ZardTableModule } from '../components/table.module';
 
 export interface Payment {
   id: string;

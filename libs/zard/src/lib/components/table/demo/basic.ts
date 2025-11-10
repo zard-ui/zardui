@@ -1,8 +1,8 @@
 import { Component, OnInit, signal } from '@angular/core';
+import { ZardTableComponent } from '../components/table.component';
+import { ZardTableModule } from '../components/table.module';
 import { TableState, ZardTableDataSource } from '../table';
-import { ZardTableComponent } from '../table.component';
 import { mockFetchUsers } from '../table.mockApi';
-import { ZardTableModule } from '../table.module';
 
 @Component({
   standalone: true,

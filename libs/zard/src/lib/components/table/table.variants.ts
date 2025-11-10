@@ -14,29 +14,26 @@ export const tableVariants = {
     },
   }),
 
-  table: cva(
-    ['table-fixed w-full', '[&_th]:text-left [&_th]:font-medium [&_th]:text-muted-foreground', '[&_td]:border-t', '[&_tr]:hover:bg-neutral-100 [&_tr]:dark:hover:bg-neutral-900'],
-    {
-      variants: {
-        zSize: {
-          compact: ['text-sm', '[&_th]:px-2.5 [&_th]:py-1.5', '[&_td]:px-2.5 [&_td]:py-1.5'],
-          default: ['text-base', '[&_th]:px-3 [&_th]:py-2', '[&_td]:px-3 [&_td]:py-2'],
-          comfortable: ['text-lg', '[&_th]:px-4 [&_th]:py-2.5', '[&_td]:px-4 [&_td]:py-2.5'],
-        },
-        zType: {
-          default: '',
-          striped: ['[&_thead]:bg-neutral-100 [&_thead]:dark:bg-neutral-900', '[&_tr]:even:bg-neutral-100 dark:[&_tr]:even:bg-neutral-900'],
-          bordered: [''],
-        },
+  table: cva(['table-fixed w-full', '[&_th]:text-left', '[&_td]:border-t', '[&_tr]:hover:bg-neutral-100 [&_tr]:dark:hover:bg-neutral-900'], {
+    variants: {
+      zSize: {
+        compact: ['text-sm', '[&_th]:px-2.5 [&_th]:py-1.5', '[&_td]:px-2.5 [&_td]:py-1.5'],
+        default: ['text-base', '[&_th]:px-3 [&_th]:py-2', '[&_td]:px-3 [&_td]:py-2'],
+        comfortable: ['text-lg', '[&_th]:px-4 [&_th]:py-2.5', '[&_td]:px-4 [&_td]:py-2.5'],
       },
-      defaultVariants: {
-        zSize: 'default',
-        zType: 'default',
+      zType: {
+        default: '',
+        striped: ['[&_thead]:bg-neutral-100 [&_thead]:dark:bg-neutral-900', '[&_tr]:even:bg-neutral-100 dark:[&_tr]:even:bg-neutral-900'],
+        bordered: [''],
       },
     },
-  ),
+    defaultVariants: {
+      zSize: 'default',
+      zType: 'default',
+    },
+  }),
 
-  thead: cva('border-b', {
+  tHead: cva('border-b', {
     variants: {
       zType: {
         default: '',
@@ -72,7 +69,7 @@ export const tableVariants = {
     },
   }),
 
-  th: cva('text-left text-neutral-950 dark:text-neutral-50', {
+  th: cva('text-left', {
     variants: {
       zSize: {
         default: '',
@@ -98,7 +95,12 @@ export const tableVariants = {
     },
   }),
 
-  thSortable: cva('hover:cursor-pointer', {
+  tableCaptionVariants: cva('mt-4 text-sm text-muted-foreground', {
+    variants: {},
+    defaultVariants: {},
+  }),
+
+  filtering: cva('mb-4 dark:bg-neutral-900 rounded-md', {
     variants: {
       zSize: {
         default: '',
@@ -111,15 +113,20 @@ export const tableVariants = {
     },
   }),
 
-  toolbar: cva('flex justify-between items-center w-full'),
-
-  toolbarItem: cva('min-w-[1px]'),
-
-  filtering: cva('mb-4 dark:bg-neutral-900 rounded-md'),
-
   details: cva('relative inline-block text-sm font-medium'),
 
-  summary: cva('h-10 flex items-center border gap-2 px-4 py-2 mb-4 rounded-md cursor-pointer dark:bg-neutral-900'),
+  summary: cva('transition-colors flex items-center border gap-2 px-4 mb-4 rounded-md cursor-pointer dark:bg-neutral-900  hover:bg-neutral-100 dark:hover:bg-neutral-800', {
+    variants: {
+      zSize: {
+        default: 'py-2',
+        compact: 'py-1.5',
+        comfortable: 'py-2.5',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
+    },
+  }),
 
   dropdownUl: cva('border absolute z-10 right-0 w-max rounded-md p-1 flex flex-col gap-2 bg-white dark:bg-neutral-800'),
 
@@ -130,11 +137,4 @@ export const tableVariants = {
   dropdownCheckbox: cva('peer appearance-none w-5 h-5 focus:visible focus:outline-none'),
 
   dropdownCheckIconWrapper: cva('absolute peer-checked:opacity-100 opacity-0'),
-
-  pagination: cva('flex justify-end gap-2 items-center mt-4'),
-
-  tableCaptionVariants: cva('mt-4 text-sm text-muted-foreground', {
-    variants: {},
-    defaultVariants: {},
-  }),
 };

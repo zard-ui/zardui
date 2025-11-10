@@ -1,8 +1,31 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 import { ClassValue } from 'clsx';
-import { mergeClasses } from '../../shared/utils/utils';
+import { mergeClasses } from '../../../shared/utils/utils';
+import { tableVariants } from '../table.variants';
 import { Z_TABLE_SIZE, Z_TABLE_TYPE } from './table.component';
-import { tableVariants } from './table.variants';
+
+@Component({
+  selector: 'div[z-table-wrapper]',
+  exportAs: 'zTableWrapper',
+  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  template: `<ng-content />`,
+  host: {
+    '[class]': 'classes()',
+  },
+})
+export class ZardTableWrapperComponent {
+  readonly class = input<ClassValue>('');
+  readonly zType = input<'default' | 'striped' | 'bordered'>();
+
+  private readonly parentType = inject(Z_TABLE_TYPE, { optional: true });
+
+  protected readonly classes = computed(() => {
+    const type = this.zType() ?? this.parentType?.() ?? 'default';
+    return mergeClasses(tableVariants.tWrapper({ zType: type }), this.class());
+  });
+}
 
 @Component({
   selector: 'thead[z-table-header]',
@@ -23,7 +46,7 @@ export class ZardTableHeaderComponent {
 
   protected readonly classes = computed(() => {
     const type = this.zType() ?? this.parentType?.() ?? 'default';
-    return mergeClasses(tableVariants.thead({ zType: type || 'default' }), this.class());
+    return mergeClasses(tableVariants.tHead({ zType: type }), this.class());
   });
 }
 
@@ -88,10 +111,10 @@ export class ZardTableHeadComponent {
   readonly class = input<ClassValue>('');
   readonly zSize = input<'default' | 'compact' | 'comfortable'>();
 
-  private readonly parentType = inject(Z_TABLE_SIZE, { optional: true });
+  private readonly parentSize = inject(Z_TABLE_SIZE, { optional: true });
 
   protected readonly classes = computed(() => {
-    const type = this.zSize() ?? this.parentType?.() ?? 'default';
+    const type = this.zSize() ?? this.parentSize?.() ?? 'default';
     return mergeClasses(tableVariants.th({ zSize: type }), this.class());
   });
 }
@@ -111,10 +134,10 @@ export class ZardTableCellComponent {
   readonly class = input<ClassValue>('');
   readonly zSize = input<'default' | 'compact' | 'comfortable'>();
 
-  private readonly parentType = inject(Z_TABLE_SIZE, { optional: true });
+  private readonly parentSize = inject(Z_TABLE_SIZE, { optional: true });
 
   protected readonly classes = computed(() => {
-    const type = this.zSize() ?? this.parentType?.() ?? 'default';
+    const type = this.zSize() ?? this.parentSize?.() ?? 'default';
     return mergeClasses(tableVariants.td({ zSize: type }), this.class());
   });
 }
