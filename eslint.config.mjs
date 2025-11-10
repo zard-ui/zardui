@@ -2,9 +2,10 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import eslintPluginUnusedImports from 'eslint-plugin-unused-imports';
 import eslintPluginImport from 'eslint-plugin-import';
 import nx from '@nx/eslint-plugin';
-
+import stylistic from '@stylistic/eslint-plugin';
 
 export default [
+  stylistic.configs.recommended,
   ...nx.configs['flat/base'],
   ...nx.configs['flat/typescript'],
   ...nx.configs['flat/javascript'],
@@ -31,7 +32,15 @@ export default [
         'warn',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$', '^@doc/domain/.*$', '^@doc/env/.*$', '^@doc/shared/.*$', '^@doc/widget/.*$', '^@cli/.*$', '^@zard/.*$'],
+          allow: [
+            String.raw`^.*/eslint(\.base)?\.config\.[cm]?js$`,
+            '^@doc/domain/.*$',
+            '^@doc/env/.*$',
+            '^@doc/shared/.*$',
+            '^@doc/widget/.*$',
+            '^@cli/.*$',
+            '^@zard/.*$',
+          ],
           depConstraints: [
             {
               sourceTag: '*',
@@ -90,6 +99,24 @@ export default [
   {
     files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts', '**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
     // Override or add rules here
-    rules: {},
+    rules: {
+      '@stylistic/indent': ['error', 2],
+      '@stylistic/max-len': [
+        'error',
+        { code: 120, ignoreStrings: true, ignoreUrls: true, ignoreTemplateLiterals: true },
+      ],
+    },
+  },
+  {
+    files: ['**/*.html'],
+    // Override or add rules here
+    rules: {
+      '@angular-eslint/template/no-negated-async': 'error',
+      '@angular-eslint/template/banana-in-box': 'error',
+      '@angular-eslint/template/button-has-type': 'warn',
+      '@angular-eslint/template/elements-content': 'warn',
+      '@angular-eslint/template/table-scope': 'error',
+      '@angular-eslint/template/prefer-self-closing-tags': 'warn',
+    },
   },
 ];
