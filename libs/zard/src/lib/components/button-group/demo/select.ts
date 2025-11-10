@@ -26,5 +26,6 @@ export class ZardDemoButtonGroupSelectComponent {
     { symbol: '£', code: 'GBP' },
     { symbol: '¥', code: 'JPY' },
   ];
+
   protected readonly currency = signal(this.CURRENCIES[1].code);
 }

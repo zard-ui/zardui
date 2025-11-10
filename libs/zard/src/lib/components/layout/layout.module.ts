@@ -6,7 +6,15 @@ import { HeaderComponent } from './header.component';
 import { LayoutComponent } from './layout.component';
 import { SidebarGroupLabelComponent, SidebarGroupComponent, SidebarComponent } from './sidebar.component';
 
-const LAYOUT_COMPONENTS = [LayoutComponent, HeaderComponent, FooterComponent, ContentComponent, SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent];
+const LAYOUT_COMPONENTS = [
+  LayoutComponent,
+  HeaderComponent,
+  FooterComponent,
+  ContentComponent,
+  SidebarComponent,
+  SidebarGroupComponent,
+  SidebarGroupLabelComponent,
+];
 
 @NgModule({
   imports: [LAYOUT_COMPONENTS],

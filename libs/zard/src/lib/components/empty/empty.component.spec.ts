@@ -16,7 +16,9 @@ describe('ZardEmptyComponent', () => {
   });
 
   it('should apply custom classes', async () => {
-    const fixture: ComponentFixture<ZardEmptyComponent> = (await render(ZardEmptyComponent, { inputs: { class: 'custom-class' } })).fixture;
+    const fixture: ComponentFixture<ZardEmptyComponent> = (
+      await render(ZardEmptyComponent, { inputs: { class: 'custom-class' } })
+    ).fixture;
 
     const emptyElement = fixture.debugElement.nativeElement;
     expect(emptyElement).toHaveClass('custom-class');

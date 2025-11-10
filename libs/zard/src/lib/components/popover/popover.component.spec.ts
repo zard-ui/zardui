@@ -1,6 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { Component, DebugElement, TemplateRef, viewChild } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, type DebugElement, type TemplateRef, viewChild } from '@angular/core';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ZardPopoverComponent, ZardPopoverDirective } from './popover.component';

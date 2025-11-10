@@ -1,14 +1,24 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { ZardAvatarComponent, ZardAvatarStatus } from './avatar.component';
-import { ZardAvatarVariants, ZardImageVariants } from './avatar.variants';
+import { ZardAvatarComponent, type ZardAvatarStatus } from './avatar.component';
+import { type ZardAvatarVariants, type ZardImageVariants } from './avatar.variants';
 
 @Component({
   standalone: true,
   imports: [ZardAvatarComponent],
-  template: ` <z-avatar [zSize]="zSize" [zShape]="zShape" [zStatus]="zStatus" [zSrc]="zSrc" [zAlt]="zAlt" [zFallback]="zFallback" [class]="customClass"> </z-avatar> `,
+  template: `
+    <z-avatar
+      [zSize]="zSize"
+      [zShape]="zShape"
+      [zStatus]="zStatus"
+      [zSrc]="zSrc"
+      [zAlt]="zAlt"
+      [zFallback]="zFallback"
+      [class]="customClass"
+    />
+  `,
 })
 class TestHostComponent {
   zSize: ZardAvatarVariants['zSize'] = 'default';

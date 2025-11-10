@@ -8,9 +8,9 @@ import { ZardProgressBarComponent } from '../progress-bar.component';
   standalone: true,
   imports: [ZardProgressBarComponent],
   template: `
-    <z-progress-bar [progress]="50" [zShape]="'default'"></z-progress-bar>
-    <z-progress-bar [progress]="50" [zShape]="'circle'"></z-progress-bar>
-    <z-progress-bar [progress]="50" [zShape]="'square'"></z-progress-bar>
+    <z-progress-bar [progress]="50" [zShape]="'default'" />
+    <z-progress-bar [progress]="50" [zShape]="'circle'" />
+    <z-progress-bar [progress]="50" [zShape]="'square'" />
   `,
   styles: [
     `

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ZardCommandDividerComponent } from './command-divider.component';
@@ -24,17 +24,17 @@ import { ZardCommandComponent } from './command.component';
   ],
   template: `
     <z-command>
-      <z-command-input placeholder="Search..."></z-command-input>
+      <z-command-input placeholder="Search..." />
       <z-command-list>
         <z-command-empty>No results found.</z-command-empty>
         <z-command-option-group zLabel="Group 1">
-          <z-command-option zLabel="Option 1" zValue="opt1"></z-command-option>
+          <z-command-option zLabel="Option 1" zValue="opt1" />
         </z-command-option-group>
 
-        <z-command-divider class="test-divider"></z-command-divider>
+        <z-command-divider class="test-divider" />
 
         <z-command-option-group zLabel="Group 2">
-          <z-command-option zLabel="Option 2" zValue="opt2"></z-command-option>
+          <z-command-option zLabel="Option 2" zValue="opt2" />
         </z-command-option-group>
       </z-command-list>
     </z-command>
@@ -46,7 +46,7 @@ class TestHostComponent {}
   selector: 'standalone-test',
   standalone: true,
   imports: [ZardCommandDividerComponent],
-  template: `<z-command-divider class="standalone-divider"></z-command-divider>`,
+  template: `<z-command-divider class="standalone-divider" />`,
 })
 class StandaloneTestComponent {}
 

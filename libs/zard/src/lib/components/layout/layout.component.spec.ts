@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './sidebar.component';
@@ -33,7 +33,7 @@ describe('LayoutComponent', () => {
       imports: [LayoutComponent, SidebarComponent],
       template: `
         <z-layout>
-          <z-sidebar></z-sidebar>
+          <z-sidebar />
         </z-layout>
       `,
     })

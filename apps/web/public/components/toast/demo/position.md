@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
-import { toast } from 'ngx-sonner';
-
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { toast } from 'ngx-sonner';
 
 import { ZardButtonComponent } from '../../button/button.component';
 
@@ -27,7 +27,8 @@ import { ZardButtonComponent } from '../../button/button.component';
   `,
 })
 export class ZardDemoToastPositionComponent {
-  currentPosition: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right' = 'bottom-right';
+  currentPosition: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right' =
+    'bottom-right';
 
   showToast(position: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right') {
     this.currentPosition = position;

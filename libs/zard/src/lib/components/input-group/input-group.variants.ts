@@ -52,23 +52,26 @@ export const inputGroupAddonVariants = cva(
   },
 );
 
-export const inputGroupAffixVariants = cva('absolute inset-y-0 flex items-center text-muted-foreground pointer-events-none z-10', {
-  variants: {
-    zSize: {
-      sm: 'text-xs',
-      default: 'text-sm',
-      lg: 'text-base',
+export const inputGroupAffixVariants = cva(
+  'absolute inset-y-0 flex items-center text-muted-foreground pointer-events-none z-10',
+  {
+    variants: {
+      zSize: {
+        sm: 'text-xs',
+        default: 'text-sm',
+        lg: 'text-base',
+      },
+      zPosition: {
+        prefix: 'left-0 pl-3',
+        suffix: 'right-0 pr-3',
+      },
     },
-    zPosition: {
-      prefix: 'left-0 pl-3',
-      suffix: 'right-0 pr-3',
+    defaultVariants: {
+      zSize: 'default',
+      zPosition: 'prefix',
     },
   },
-  defaultVariants: {
-    zSize: 'default',
-    zPosition: 'prefix',
-  },
-});
+);
 
 export const inputGroupInputVariants = cva(
   'input-wrapper flex h-full w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors',

@@ -1,9 +1,9 @@
-import { ZardDemoToastDestructiveComponent } from './destructive';
-import { ZardDemoToastPositionComponent } from './position';
 import { ZardDemoToastAdvancedComponent } from './advanced';
-import { ZardDemoToastSuccessComponent } from './success';
-import { ZardDemoToastLoadingComponent } from './loading';
 import { ZardDemoToastDefaultComponent } from './default';
+import { ZardDemoToastDestructiveComponent } from './destructive';
+import { ZardDemoToastLoadingComponent } from './loading';
+import { ZardDemoToastPositionComponent } from './position';
+import { ZardDemoToastSuccessComponent } from './success';
 
 export const TOAST = {
   componentName: 'toast',

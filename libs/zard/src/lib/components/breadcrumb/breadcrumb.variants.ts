@@ -25,23 +25,26 @@ export const breadcrumbVariants = cva('w-full', {
 });
 export type ZardBreadcrumbVariants = VariantProps<typeof breadcrumbVariants>;
 
-export const breadcrumbListVariants = cva('text-muted-foreground flex flex-wrap items-center gap-1.5 break-words sm:gap-2.5', {
-  variants: {
-    zAlign: {
-      start: 'justify-start',
-      center: 'justify-center',
-      end: 'justify-end',
+export const breadcrumbListVariants = cva(
+  'text-muted-foreground flex flex-wrap items-center gap-1.5 break-words sm:gap-2.5',
+  {
+    variants: {
+      zAlign: {
+        start: 'justify-start',
+        center: 'justify-center',
+        end: 'justify-end',
+      },
+      zWrap: {
+        wrap: 'flex-wrap',
+        nowrap: 'flex-nowrap',
+      },
     },
-    zWrap: {
-      wrap: 'flex-wrap',
-      nowrap: 'flex-nowrap',
+    defaultVariants: {
+      zAlign: 'start',
+      zWrap: 'wrap',
     },
   },
-  defaultVariants: {
-    zAlign: 'start',
-    zWrap: 'wrap',
-  },
-});
+);
 export type ZardBreadcrumbListVariants = VariantProps<typeof breadcrumbListVariants>;
 
 export const breadcrumbItemVariants = cva(

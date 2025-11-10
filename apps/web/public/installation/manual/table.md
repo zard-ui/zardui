@@ -1,11 +1,10 @@
 
 
 ```angular-ts title="table.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import {
   tableVariants,
   tableHeaderVariants,
@@ -16,6 +15,7 @@ import {
   tableCaptionVariants,
   type ZardTableVariants,
 } from './table.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'table[z-table]',
@@ -190,15 +190,21 @@ export const tableRowVariants = cva('border-b transition-colors hover:bg-muted/5
   defaultVariants: {},
 });
 
-export const tableHeadVariants = cva('h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]', {
-  variants: {},
-  defaultVariants: {},
-});
+export const tableHeadVariants = cva(
+  'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+  {
+    variants: {},
+    defaultVariants: {},
+  },
+);
 
-export const tableCellVariants = cva('p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]', {
-  variants: {},
-  defaultVariants: {},
-});
+export const tableCellVariants = cva(
+  'p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+  {
+    variants: {},
+    defaultVariants: {},
+  },
+);
 
 export const tableCaptionVariants = cva('mt-4 text-sm text-muted-foreground', {
   variants: {},

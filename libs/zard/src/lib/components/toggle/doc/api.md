@@ -13,13 +13,13 @@
 | `[zType]`      | Visual style                                                         | `'default' \| 'outline'` | `'default'` |
 | `[zValue]`     | Toggle value                                                         | `boolean`                | `undefined` |
 | `[zDefault]`   | Default value when uncontrolled (used as initial state only)         | `boolean`                | `false`     |
-| `[disabled]`   | Disables the toggle (also integrates with Angular Forms)             | `boolean`                | `false`     |
-| `[aria-label]` | Accessible label for screen readers (required when using icons only) | `string`                 | `''`        |
+| `[zDisabled]`  | Disables the toggle (also integrates with Angular Forms)             | `boolean`                | `false`     |
+| `[zAriaLabel]` | Accessible label for screen readers (required when using icons only) | `string`                 | `''`        |
 
 ### Events
 
-| Event        | Description                           | Payload   |
-| ------------ | ------------------------------------- | --------- |
-| `(onClick)`  | Emitted when the toggle is clicked    | `void`    |
-| `(onHover)`  | Emitted when the toggle is hovered    | `void`    |
-| `(onChange)` | Emitted when the toggle value changes | `boolean` |
+| Event            | Description                           | Payload   |
+| ---------------- | ------------------------------------- | --------- |
+| `(toggleClick)`  | Emitted when the toggle is clicked    | `void`    |
+| `(toggleHover)`  | Emitted when the toggle is hovered    | `void`    |
+| `(toggleChange)` | Emitted when the toggle value changes | `boolean` |

@@ -1,10 +1,20 @@
-import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  forwardRef,
+  input,
+  output,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
-import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
 
 export interface ZardToggleGroupItem {
@@ -38,7 +48,7 @@ type OnChangeType = (value: string | string[]) => void;
           (click)="toggleItem(item)"
         >
           @if (item.icon) {
-            <span z-icon [zType]="item.icon" class="w-4 h-4 shrink-0"></span>
+            <span z-icon [zType]="item.icon" class="h-4 w-4 shrink-0"></span>
           }
           @if (item.label) {
             <span>{{ item.label }}</span>

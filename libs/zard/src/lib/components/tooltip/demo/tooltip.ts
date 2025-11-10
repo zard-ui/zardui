@@ -1,12 +1,13 @@
-import { ZardDemoTooltipPositionComponent } from './position';
+import { ZardDemoTooltipClickComponent } from './click';
 import { ZardDemoTooltipEventsComponent } from './events';
 import { ZardDemoTooltipHoverComponent } from './hover';
-import { ZardDemoTooltipClickComponent } from './click';
+import { ZardDemoTooltipPositionComponent } from './position';
 
 export const TOOLTIP = {
   componentName: 'tooltip',
   componentType: 'tooltip',
-  description: 'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+  description:
+    'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
   examples: [
     {
       name: 'hover',

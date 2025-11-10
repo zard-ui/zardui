@@ -1,10 +1,10 @@
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardResizableComponent } from './resizable.component';
 import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-resizable-handle, [z-resizable-handle]',
@@ -190,7 +190,12 @@ export class ZardResizableHandleComponent {
     });
   }
 
-  private normalizeMinMax(leftMin: number, leftMax: number, rightMin: number, rightMax: number): { leftMin: number; leftMax: number; rightMin: number; rightMax: number } {
+  private normalizeMinMax(
+    leftMin: number,
+    leftMax: number,
+    rightMin: number,
+    rightMax: number,
+  ): { leftMin: number; leftMax: number; rightMin: number; rightMax: number } {
     if (leftMax < leftMin) {
       const temp = leftMax;
       leftMax = leftMin;

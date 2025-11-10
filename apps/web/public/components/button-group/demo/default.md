@@ -33,7 +33,7 @@ import { ZardButtonGroupComponent } from '../button-group.component';
               <button z-menu-item><i z-icon zType="check"></i> Mark as Read</button>
               <button z-menu-item><i z-icon zType="archive"></i> Archive</button>
 
-              <z-divider zSpacing="sm"></z-divider>
+              <z-divider zSpacing="sm" />
 
               <button z-menu-item><i z-icon zType="clock"></i> Snooze</button>
               <button z-menu-item><i z-icon zType="calendar-plus"></i> Add to Calendar</button>
@@ -51,7 +51,7 @@ import { ZardButtonGroupComponent } from '../button-group.component';
                 </ng-template>
               </button>
 
-              <z-divider zSpacing="sm"></z-divider>
+              <z-divider zSpacing="sm" />
 
               <button z-menu-item class="text-red-500"><i z-icon zType="trash"></i> Trash</button>
             </div>

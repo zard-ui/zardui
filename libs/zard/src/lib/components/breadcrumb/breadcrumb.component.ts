@@ -1,10 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, input, signal, TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  effect,
+  input,
+  signal,
+  TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
 import { RouterLink } from '@angular/router';
+
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { ZardIconComponent } from '../icon/icon.component';
 import {
   breadcrumbEllipsisVariants,
   breadcrumbItemVariants,
@@ -13,6 +21,9 @@ import {
   type ZardBreadcrumbEllipsisVariants,
   type ZardBreadcrumbVariants,
 } from './breadcrumb.variants';
+import { mergeClasses } from '../../shared/utils/utils';
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-breadcrumb-item, [z-breadcrumb-item]',
@@ -23,22 +34,32 @@ import {
   hostDirectives: [
     {
       directive: RouterLink,
-      inputs: ['routerLink', 'queryParams', 'fragment', 'queryParamsHandling', 'state', 'relativeTo', 'preserveFragment', 'skipLocationChange', 'replaceUrl'],
+      inputs: [
+        'routerLink',
+        'queryParams',
+        'fragment',
+        'queryParamsHandling',
+        'state',
+        'relativeTo',
+        'preserveFragment',
+        'skipLocationChange',
+        'replaceUrl',
+      ],
     },
   ],
   template: `
     <li [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </li>
 
     @if (!isLast()) {
       <li aria-hidden="true" role="presentation" [class]="separatorClasses()" (click)="$event.stopPropagation()">
         @if (isTemplate(separator())) {
-          <ng-container *zStringTemplateOutlet="separator()"></ng-container>
+          <ng-container *zStringTemplateOutlet="separator()" />
         } @else if (separator()) {
           {{ separator() }}
         } @else {
-          <z-icon zType="chevron-right"></z-icon>
+          <z-icon zType="chevron-right" />
         }
       </li>
     }
@@ -77,7 +98,7 @@ export class ZardBreadcrumbItemComponent {
   template: `
     <nav aria-label="breadcrumb" [class]="navClasses()">
       <ol [class]="listClasses()">
-        <ng-content></ng-content>
+        <ng-content />
       </ol>
     </nav>
   `,
@@ -92,8 +113,13 @@ export class ZardBreadcrumbComponent {
 
   protected readonly items = contentChildren(ZardBreadcrumbItemComponent);
 
-  protected readonly navClasses = computed(() => mergeClasses(breadcrumbVariants({ zSize: this.zSize() }), this.class()));
-  protected readonly listClasses = computed(() => breadcrumbListVariants({ zAlign: this.zAlign(), zWrap: this.zWrap() }));
+  protected readonly navClasses = computed(() =>
+    mergeClasses(breadcrumbVariants({ zSize: this.zSize() }), this.class()),
+  );
+
+  protected readonly listClasses = computed(() =>
+    breadcrumbListVariants({ zAlign: this.zAlign(), zWrap: this.zWrap() }),
+  );
 
   constructor() {
     effect(() => {
@@ -126,5 +152,7 @@ export class ZardBreadcrumbEllipsisComponent {
   readonly zColor = input<ZardBreadcrumbEllipsisVariants['zColor']>('muted');
 
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(breadcrumbEllipsisVariants({ zColor: this.zColor() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(breadcrumbEllipsisVariants({ zColor: this.zColor() }), this.class()),
+  );
 }

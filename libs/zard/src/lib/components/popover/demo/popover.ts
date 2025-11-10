@@ -1,7 +1,7 @@
-import { ZardDemoPopoverInteractiveComponent } from './interactive';
-import { ZardDemoPopoverPlacementComponent } from './placement';
 import { ZardDemoPopoverDefaultComponent } from './default';
 import { ZardDemoPopoverHoverComponent } from './hover';
+import { ZardDemoPopoverInteractiveComponent } from './interactive';
+import { ZardDemoPopoverPlacementComponent } from './placement';
 
 export const POPOVER = {
   componentName: 'popover',

@@ -1,6 +1,12 @@
 import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
+import {
+  BasePortalOutlet,
+  CdkPortalOutlet,
+  type ComponentPortal,
+  PortalModule,
+  type TemplatePortal,
+} from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -105,7 +111,9 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   private readonly alertDialogId = generateId('alert-dialog');
   protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
-  protected readonly descriptionId = computed(() => (this.config.zDescription ? `${this.alertDialogId}-description` : null));
+  protected readonly descriptionId = computed(() =>
+    this.config.zDescription ? `${this.alertDialogId}-description` : null,
+  );
 
   public alertDialogRef?: ZardAlertDialogRef<T>;
 

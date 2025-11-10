@@ -6,13 +6,15 @@
       }
 
       @if (config.zDescription) {
-        <p data-testid="z-alert-description" [id]="descriptionId()" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+        <p data-testid="z-alert-description" [id]="descriptionId()" class="text-muted-foreground text-sm">
+          {{ config.zDescription }}
+        </p>
       }
     </header>
   }
 
   <main>
-    <ng-template cdkPortalOutlet></ng-template>
+    <ng-template cdkPortalOutlet />
 
     @if (isStringContent) {
       <div data-testid="z-alert-content" [innerHTML]="config.zContent"></div>
@@ -27,7 +29,13 @@
     }
 
     @if (config.zOkText !== null) {
-      <button data-testid="z-alert-ok-button" z-button [zType]="config.zOkDestructive ? 'destructive' : 'default'" [disabled]="config.zOkDisabled" (click)="onOkClick()">
+      <button
+        data-testid="z-alert-ok-button"
+        z-button
+        [zType]="config.zOkDestructive ? 'destructive' : 'default'"
+        [disabled]="config.zOkDisabled"
+        (click)="onOkClick()"
+      >
         {{ config.zOkText || 'Continue' }}
       </button>
     }

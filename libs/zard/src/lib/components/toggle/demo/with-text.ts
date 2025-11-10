@@ -8,7 +8,7 @@ import { ZardToggleComponent } from '../toggle.component';
   standalone: true,
   imports: [ZardToggleComponent, ZardIconComponent],
   template: `
-    <z-toggle>
+    <z-toggle zAriaLabel="Italic toggle">
       <z-icon zType="italic" />
       Italic
     </z-toggle>

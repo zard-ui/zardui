@@ -10,7 +10,7 @@ import { ZardToggleComponent } from '../toggle.component';
   standalone: true,
   imports: [ZardToggleComponent, FormsModule, ZardIconComponent],
   template: `
-    <z-toggle aria-label="Turn on the light" [(ngModel)]="lightOn">
+    <z-toggle zAriaLabel="Turn on the light" [(ngModel)]="lightOn">
       @if (lightOn) {
         <z-icon zType="lightbulb" />
       } @else {

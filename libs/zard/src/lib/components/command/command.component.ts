@@ -13,11 +13,12 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
-import { commandVariants, type ZardCommandVariants } from './command.variants';
-import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandInputComponent } from './command-input.component';
+import { ZardCommandOptionComponent } from './command-option.component';
+import { commandVariants, type ZardCommandVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import type { ZardIcon } from '../icon/icons';
 
@@ -54,11 +55,13 @@ export interface ZardCommandConfig {
   encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()">
-      <div id="command-instructions" class="sr-only">Use arrow keys to navigate, Enter to select, Escape to clear selection.</div>
+      <div id="command-instructions" class="sr-only">
+        Use arrow keys to navigate, Enter to select, Escape to clear selection.
+      </div>
       <div id="command-status" class="sr-only" aria-live="polite" aria-atomic="true">
         {{ statusMessage() }}
       </div>
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
   host: {
@@ -129,6 +132,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
   private onChange = (_value: unknown) => {
     // ControlValueAccessor implementation
   };
+
   private onTouched = () => {
     // ControlValueAccessor implementation
   };

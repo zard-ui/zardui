@@ -23,7 +23,7 @@ export default [
     files: ['**/*.ts'],
     languageOptions: {
       parserOptions: {
-        project: ['libs/zard/tsconfig.lib.json', 'libs/zard/tsconfig.spec.json'],
+        project: ['tsconfig.lib.json', 'tsconfig.spec.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },
@@ -39,14 +39,28 @@ export default [
         },
       ],
       '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+        },
+      ],
       'no-console': ['error', { allow: ['warn', 'error'] }],
+    },
+  },
+  {
+    files: ['**/test-setup.ts'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
   {
     files: ['**/*.spec.ts', '**/demo/**/*.ts'],
     rules: {
       '@angular-eslint/prefer-on-push-component-change-detection': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'no-console': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
     },
   },
 ];

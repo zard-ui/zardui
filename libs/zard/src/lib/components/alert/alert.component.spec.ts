@@ -8,7 +8,7 @@ import { ZardAlertComponent } from './alert.component';
   selector: 'test-host-component',
   standalone: true,
   imports: [ZardAlertComponent],
-  template: ` <z-alert zTitle="Test Title" zDescription="Test Description" zIcon="info" class="custom-class"></z-alert> `,
+  template: ` <z-alert zTitle="Test Title" zDescription="Test Description" zIcon="info" class="custom-class" /> `,
 })
 class TestHostComponent {}
 
@@ -47,7 +47,7 @@ describe('ZardAlertComponent', () => {
       selector: 'test-host-description-only',
       standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zDescription="Only description provided"></z-alert> `,
+      template: ` <z-alert zDescription="Only description provided" /> `,
     })
     class TestHostDescriptionOnly {}
 
@@ -68,7 +68,7 @@ describe('ZardAlertComponent', () => {
       selector: 'test-host-title-only',
       standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zTitle="Only title provided"></z-alert> `,
+      template: ` <z-alert zTitle="Only title provided" /> `,
     })
     class TestHostTitleOnly {}
 
@@ -89,7 +89,7 @@ describe('ZardAlertComponent', () => {
       selector: 'test-host-empty-title',
       standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zTitle="" zDescription="Description with empty title"></z-alert> `,
+      template: ` <z-alert zTitle="" zDescription="Description with empty title" /> `,
     })
     class TestHostEmptyTitle {}
 
@@ -110,7 +110,7 @@ describe('ZardAlertComponent', () => {
       selector: 'test-host-empty-description',
       standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zTitle="Title with empty description" zDescription=""></z-alert> `,
+      template: ` <z-alert zTitle="Title with empty description" zDescription="" /> `,
     })
     class TestHostEmptyDescription {}
 
@@ -140,7 +140,7 @@ describe('ZardAlertComponent', () => {
       selector: 'test-host-no-icon',
       standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zTitle="No icon" zDescription="Alert without icon"></z-alert> `,
+      template: ` <z-alert zTitle="No icon" zDescription="Alert without icon" /> `,
     })
     class TestHostNoIcon {}
 
@@ -158,7 +158,7 @@ describe('ZardAlertComponent', () => {
       selector: 'test-host-destructive',
       standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zType="destructive" zTitle="Error" zDescription="Something went wrong"></z-alert> `,
+      template: ` <z-alert zType="destructive" zTitle="Error" zDescription="Something went wrong" /> `,
     })
     class TestHostDestructive {}
 

@@ -1,5 +1,3 @@
-import { merge, Subject, take, takeUntil } from 'rxjs';
-
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -21,9 +19,11 @@ import {
   signal,
 } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { merge, Subject, take, takeUntil } from 'rxjs';
+
 import { TOOLTIP_POSITIONS_MAP, type ZardTooltipPositions } from './tooltip-positions';
 import { tooltipVariants } from './tooltip.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export type ZardTooltipTriggers = 'click' | 'hover';
 
@@ -65,7 +65,9 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.setTriggers();
 
     if (isPlatformBrowser(this.platformId)) {
-      const positionStrategy = this.overlayPositionBuilder.flexibleConnectedTo(this.elementRef).withPositions([TOOLTIP_POSITIONS_MAP[this.zPosition()]]);
+      const positionStrategy = this.overlayPositionBuilder
+        .flexibleConnectedTo(this.elementRef)
+        .withPositions([TOOLTIP_POSITIONS_MAP[this.zPosition()]]);
       this.overlayRef = this.overlay.create({ positionStrategy });
     }
   }

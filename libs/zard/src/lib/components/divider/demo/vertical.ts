@@ -9,7 +9,7 @@ import { ZardDividerComponent } from '../divider.component';
   template: `
     <div class="flex h-20">
       <p>Left</p>
-      <z-divider zOrientation="vertical"></z-divider>
+      <z-divider zOrientation="vertical" />
       <p>Right</p>
     </div>
   `,

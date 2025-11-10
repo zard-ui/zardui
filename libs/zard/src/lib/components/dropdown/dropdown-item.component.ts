@@ -1,17 +1,17 @@
-import type { ClassValue } from 'clsx';
-
 import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardDropdownService } from './dropdown.service';
 import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
   exportAs: 'zDropdownMenuItem',
   standalone: true,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content></ng-content>`,
+  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
     '[attr.data-disabled]': 'disabled() || null',

@@ -10,18 +10,18 @@ import { ZardSegmentedComponent } from '../segmented.component';
   template: `
     <div class="space-y-4">
       <div>
-        <label class="block text-sm font-medium mb-2">Small</label>
-        <z-segmented zSize="sm" [zOptions]="options" zDefaultValue="tab1"> </z-segmented>
+        <span class="mb-2 block text-sm font-medium">Small</span>
+        <z-segmented zSize="sm" [zOptions]="options" zDefaultValue="tab1" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-2">Default</label>
-        <z-segmented [zOptions]="options" zDefaultValue="tab1"> </z-segmented>
+        <span class="mb-2 block text-sm font-medium">Default</span>
+        <z-segmented [zOptions]="options" zDefaultValue="tab1" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-2">Large</label>
-        <z-segmented zSize="lg" [zOptions]="options" zDefaultValue="tab1"> </z-segmented>
+        <span class="mb-2 block text-sm font-medium">Large</span>
+        <z-segmented zSize="lg" [zOptions]="options" zDefaultValue="tab1" />
       </div>
     </div>
   `,

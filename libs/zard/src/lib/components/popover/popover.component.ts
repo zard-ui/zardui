@@ -1,5 +1,3 @@
-import { merge, Subject, takeUntil } from 'rxjs';
-
 import { type ConnectedPosition, Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -22,8 +20,10 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { merge, Subject, takeUntil } from 'rxjs';
+
 import { popoverVariants } from './popover.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -355,7 +355,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   selector: 'z-popover',
   standalone: true,
   imports: [],
-  template: `<ng-content></ng-content>`,
+  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },

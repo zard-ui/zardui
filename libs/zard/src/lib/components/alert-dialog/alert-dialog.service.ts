@@ -63,7 +63,12 @@ export class ZardAlertDialogService {
     }
 
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
-    const alertDialogRef = this.attachAlertDialogContent<T>(componentOrTemplateRef, alertDialogContainer, overlayRef, config);
+    const alertDialogRef = this.attachAlertDialogContent<T>(
+      componentOrTemplateRef,
+      alertDialogContainer,
+      overlayRef,
+      config,
+    );
 
     alertDialogContainer.alertDialogRef = alertDialogRef;
 
@@ -91,7 +96,11 @@ export class ZardAlertDialogService {
       ],
     });
 
-    const containerPortal = new ComponentPortal<ZardAlertDialogComponent<T>>(ZardAlertDialogComponent, config.zViewContainerRef, injector);
+    const containerPortal = new ComponentPortal<ZardAlertDialogComponent<T>>(
+      ZardAlertDialogComponent,
+      config.zViewContainerRef,
+      injector,
+    );
 
     const containerRef = overlayRef.attach(containerPortal);
 
@@ -114,7 +123,9 @@ export class ZardAlertDialogService {
       );
     } else if (componentOrTemplateRef && typeof componentOrTemplateRef !== 'string') {
       const injector = this.createInjector<T>(alertDialogRef, config);
-      const contentRef = alertDialogContainer.attachComponentPortal(new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector));
+      const contentRef = alertDialogContainer.attachComponentPortal(
+        new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector),
+      );
       alertDialogRef.componentInstance = contentRef.instance;
     }
 

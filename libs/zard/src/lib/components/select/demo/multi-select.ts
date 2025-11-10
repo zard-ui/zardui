@@ -8,7 +8,13 @@ import { ZardSelectComponent } from '../select.component';
   imports: [ZardSelectComponent, ZardSelectItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <z-select zPlaceholder="Select multiple fruits" [zMultiple]="true" [zMaxLabelCount]="4" [(zValue)]="defaultValue" class="w-[300px]">
+    <z-select
+      zPlaceholder="Select multiple fruits"
+      [zMultiple]="true"
+      [zMaxLabelCount]="4"
+      [(zValue)]="defaultValue"
+      class="w-[300px]"
+    >
       <z-select-item zValue="apple">Apple</z-select-item>
       <z-select-item zValue="banana">Banana</z-select-item>
       <z-select-item zValue="blueberry">Blueberry</z-select-item>

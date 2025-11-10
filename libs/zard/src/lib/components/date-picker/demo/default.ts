@@ -7,7 +7,9 @@ import { ZardDatePickerComponent } from '../date-picker.component';
   standalone: true,
   imports: [ZardDatePickerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: ` <z-date-picker [value]="selectedDate()" placeholder="Pick a date" (dateChange)="onDateChange($event)" /> `,
+  template: `
+    <z-date-picker [value]="selectedDate()" placeholder="Pick a date" (dateChange)="onDateChange($event)" />
+  `,
 })
 export class ZardDemoDatePickerDefaultComponent {
   selectedDate = signal<Date | null>(null);
