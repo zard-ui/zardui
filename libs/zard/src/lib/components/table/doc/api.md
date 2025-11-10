@@ -10,28 +10,28 @@
 ### Basic Table
 
 ```html
-<table z-table>
-  <thead z-thead>
-    <tr z-tr>
-      <th z-th>Name</th>
-      <th z-th>Age</th>
+<z-table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Age</th>
     </tr>
   </thead>
   <tbody>
-    <tr z-tr>
-      <td z-td>Douglas</td>
-      <td z-td>19</td>
+    <tr>
+      <td>Douglas</td>
+      <td>19</td>
     </tr>
-    <tr z-tr>
-      <td z-td>Lucas</td>
-      <td z-td>25</td>
+    <tr>
+      <td>Lucas</td>
+      <td>25</td>
     </tr>
-    <tr z-tr>
-      <td z-td>Claudia</td>
-      <td z-td>22</td>
+    <tr>
+      <td>Claudia</td>
+      <td>22</td>
     </tr>
   </tbody>
-</table>
+</z-table>
 ```
 
 ### With Data Binding
@@ -109,3 +109,31 @@ interface ColumnConfig {
   filterable?: boolean;
 }
 ```
+
+## Optional Sub-Components
+
+For more granular control, you can use individual table components:
+
+### [z-table-header] <span class="api-type-label component">Component</span>
+
+> `thead[z-table-header]` applies styles to table header sections.
+
+### [z-table-body] <span class="api-type-label component">Component</span>
+
+> `tbody[z-table-body]` applies styles to table body sections.
+
+### [z-table-row] <span class="api-type-label component">Component</span>
+
+> `tr[z-table-row]` applies styles to table rows.
+
+### [z-table-head] <span class="api-type-label component">Component</span>
+
+> `th[z-table-head]` applies styles to table header cells.
+
+### [z-table-cell] <span class="api-type-label component">Component</span>
+
+> `td[z-table-cell]` applies styles to table data cells.
+
+### [z-table-caption] <span class="api-type-label component">Component</span>
+
+> `caption[z-table-caption]` applies styles to table captions.

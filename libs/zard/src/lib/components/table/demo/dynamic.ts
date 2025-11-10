@@ -21,7 +21,7 @@ import { mockFetchUsers } from '../table.mockApi';
     ></z-table>
   `,
 })
-export class ZardDemoTableBasicComponent implements OnInit {
+export class ZardDemoTableDynamicComponent implements OnInit {
   dataSource = signal<ZardTableDataSource<Record<string, string | number>>>({ data: [] });
 
   columns = [

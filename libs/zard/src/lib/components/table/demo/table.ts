@@ -1,4 +1,4 @@
-import { ZardDemoTableBasicComponent } from './basic';
+import { ZardDemoTableDynamicComponent } from './dynamic';
 import { ZardDemoTablePaymentsComponent } from './payments';
 import { ZardDemoTableSimpleComponent } from './simple';
 
@@ -15,8 +15,8 @@ export const TABLE = {
       component: ZardDemoTablePaymentsComponent,
     },
     {
-      name: 'basic',
-      component: ZardDemoTableBasicComponent,
+      name: 'dynamic',
+      component: ZardDemoTableDynamicComponent,
     },
   ],
 };
