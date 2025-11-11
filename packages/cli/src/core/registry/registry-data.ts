@@ -738,4 +738,21 @@ export const registry: ComponentRegistry[] = [
       },
     ],
   },
+  {
+    name: 'kbd',
+    files: [
+      {
+        name: 'kbd.component.ts',
+        content: '',
+      },
+      {
+        name: 'kbd-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'kbd.variants.ts',
+        content: '',
+      },
+    ],
+  },
 ];

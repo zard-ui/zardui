@@ -8,10 +8,10 @@
   </z-doc-heading>
 
   <div class="flex flex-col gap-6">
-    <p class="text-sm sm:text-base text-muted-foreground leading-relaxed">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
       ZardUI is an open-source Angular component library built with
-      <code class="bg-muted px-2 py-1 rounded text-xs sm:text-sm font-mono">TailwindCSS</code>, inspired by
-      <code class="bg-muted px-2 py-1 rounded text-xs sm:text-sm font-mono">shadcn/ui</code>. Our mission is to provide developers with beautiful, accessible, and highly
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">TailwindCSS</code>, inspired by
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">shadcn/ui</code>. Our mission is to provide developers with beautiful, accessible, and highly
       customizable components that accelerate development while maintaining design consistency.
     </p>
   </div>
@@ -19,8 +19,8 @@
   <!-- Founders Section -->
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="founders" id="founders">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Founders</h2>
-      <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">Meet the people behind ZardUI who started this journey to create exceptional developer experiences.</p>
+      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Founders</h2>
+      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">Meet the people behind ZardUI who started this journey to create exceptional developer experiences.</p>
     </div>
 
     @if (founders$ | async; as founders) {
@@ -32,8 +32,8 @@
 
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="mantainers" id="mantainers">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Maintainers</h2>
-      <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">The dedicated team members who help maintain and improve ZardUI, ensuring quality and consistency.</p>
+      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Maintainers</h2>
+      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">The dedicated team members who help maintain and improve ZardUI, ensuring quality and consistency.</p>
     </div>
 
     @if (maintainers$ | async; as maintainers) {
@@ -46,8 +46,8 @@
   <!-- Contributors Section -->
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="contributors" id="contributors">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Contributors</h2>
-      <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">A huge thank you to all the amazing developers who have contributed to making ZardUI better.</p>
+      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Contributors</h2>
+      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">A huge thank you to all the amazing developers who have contributed to making ZardUI better.</p>
     </div>
 
     @if (filteredContributors$ | async; as contributors) {
@@ -60,8 +60,8 @@
   <!-- Credits Section -->
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="credits" id="credits">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight">Credits & Acknowledgments</h2>
-      <p class="text-base sm:text-lg text-muted-foreground leading-relaxed">ZardUI wouldn't be possible without these amazing projects and communities.</p>
+      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Credits & Acknowledgments</h2>
+      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">ZardUI wouldn't be possible without these amazing projects and communities.</p>
     </div>
 
     <div class="flex flex-col gap-4">

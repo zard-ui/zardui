@@ -23,6 +23,7 @@ import { FORM } from '@zard/components/form/demo/form';
 import { ICON } from '@zard/components/icon/demo/icon';
 import { INPUT } from '@zard/components/input/demo/input';
 import { INPUT_GROUP } from '@zard/components/input-group/demo/input-group';
+import { KBD } from '@zard/components/kbd/demo/kbd';
 import { LAYOUT } from '@zard/components/layout/demo/layout';
 import { LOADER } from '@zard/components/loader/demo/loader';
 import { MENU } from '@zard/components/menu/demo/menu';
@@ -87,6 +88,7 @@ export const COMPONENTS: ComponentData[] = [
   ICON,
   INPUT,
   INPUT_GROUP,
+  KBD,
   LAYOUT,
   LOADER,
   MENU,
