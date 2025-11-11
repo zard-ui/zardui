@@ -50,7 +50,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private componentRef?: ComponentRef<ZardTooltipComponent>;
   private scrollListenerRef?: () => void;
 
-  readonly zTooltip = input<string | TemplateRef<unknown> | null>(null);
+  readonly zTooltip = input<string | TemplateRef<void> | null>(null);
   readonly zPosition = input<ZardTooltipPositions>('top');
   readonly zTrigger = input<ZardTooltipTriggers>('hover');
 
@@ -155,7 +155,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   template: `
     @if (templateContent) {
       <ng-container *ngTemplateOutlet="templateContent"></ng-container>
-    } @else {
+    } @else if (stringContent) {
       {{ stringContent }}
     }
   `,
@@ -172,7 +172,7 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
 
   protected position = signal<ZardTooltipPositions>('top');
   private trigger = signal<ZardTooltipTriggers>('hover');
-  protected text: string | TemplateRef<unknown> | null = null;
+  protected text: string | TemplateRef<void> | null = null;
 
   state = signal<'closed' | 'opened'>('closed');
 
@@ -191,13 +191,13 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
     this.onLoadSubject$.complete();
   }
 
-  setProps(text: string | TemplateRef<unknown> | null, position: ZardTooltipPositions, trigger: ZardTooltipTriggers) {
+  setProps(text: string | TemplateRef<void> | null, position: ZardTooltipPositions, trigger: ZardTooltipTriggers) {
     if (text) this.text = text;
     this.position.set(position);
     this.trigger.set(trigger);
   }
 
-  get templateContent(): TemplateRef<unknown> | null {
+  get templateContent(): TemplateRef<void> | null {
     return this.text instanceof TemplateRef ? this.text : null;
   }
 

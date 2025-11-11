@@ -41,7 +41,7 @@ describe('kbd content', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ZardKbdComponent],
+      imports: [ZardKbdComponent, KbdTestHostComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(KbdTestHostComponent);

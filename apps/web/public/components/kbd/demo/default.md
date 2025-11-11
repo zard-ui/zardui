@@ -7,6 +7,7 @@ import { ZardKbdComponent } from '../kbd.component';
 @Component({
   selector: 'z-demo-kbd-default',
   imports: [ZardKbdComponent, ZardButtonComponent],
+  standalone: true,
   template: `
     <div class="flex flex-col items-center justify-center gap-4">
       <div class="flex items-center gap-2">

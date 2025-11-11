@@ -6,8 +6,9 @@ import { kbdVariants } from './kbd.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
-  selector: 'z-kbd',
+  selector: 'z-kbd, [z-kbd]',
   exportAs: 'zKbd',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `<kbd><ng-content></ng-content></kbd> `,

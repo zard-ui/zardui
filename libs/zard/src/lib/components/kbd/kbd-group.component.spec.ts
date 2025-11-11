@@ -42,7 +42,7 @@ describe('kbd group content', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ZardKbdComponent],
+      imports: [ZardKbdComponent, ZardKbdGroupComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(KbdGroupTestHostComponent);

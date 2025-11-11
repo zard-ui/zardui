@@ -7,11 +7,11 @@ import { ZardKbdComponent } from '../kbd.component';
 @Component({
   selector: 'z-demo-kbd-group',
   imports: [ZardKbdGroupComponent, ZardKbdComponent],
+  standalone: true,
   template: `
     <z-kbd-group>
-      <z-kbd>Ctrl</z-kbd>
-      <span>+</span>
-      <z-kbd>C</z-kbd>
+      Use <z-kbd>Ctrl + K</z-kbd> or <z-kbd>Ctrl + O</z-kbd>
+      to open menu
     </z-kbd-group>
   `,
 })

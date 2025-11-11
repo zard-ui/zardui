@@ -6,8 +6,9 @@ import { kbdGroupVariants } from './kbd.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
-  selector: 'z-kbd-group',
+  selector: 'z-kbd-group, [z-kbd-group]',
   exportAs: 'zKbdGroup',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: ` <ng-content></ng-content> `,
