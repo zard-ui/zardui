@@ -7,7 +7,16 @@
     "composite": true,
     "types": ["node"],
     "module": "ESNext",
-    "target": "ES2022"
+    "target": "ES2022",
+    "paths": {
+      "@blocks": ["libs/blocks/src/index.ts"],
+      "@cli/*": ["packages/cli/src/*"],
+      "@zard/*": ["libs/zard/src/lib/*"],
+      "@zard/domain/*": ["apps/web/src/app/domain/*"],
+      "@zard/env/*": ["apps/web/src/environments/*"],
+      "@zard/shared/*": ["apps/web/src/app/shared/*"],
+      "@zard/widget/*": ["apps/web/src/app/widget/*"]
+    }
   },
   "include": ["src/**/*.ts"],
   "exclude": ["jest.config.ts", "src/**/*.spec.ts", "src/**/*.test.ts"]
