@@ -4,12 +4,12 @@
 
 z-accordion is a component that displays a list of collapsible content sections.
 
-| Property          | Description                              | Type                     | Default    |
-| ----------------- | ---------------------------------------- | ------------------------ | ---------- |
-| `[zType]`         | Single or multiple items can be opened   | `'single' \| 'multiple'` | `'single'` |
-| `[zCollapsible]`  | Whether accordion items can be collapsed | `boolean`                | `true`     |
-| `[zValue]`        | The controlled value of the accordion    | `string \| string[]`     | `''`       |
-| `[zDefaultValue]` | The default value of the accordion       | `string \| string[]`     | `''`       |
+| Property          | Description                                  | Type                     | Default    |
+| ----------------- | -------------------------------------------- | ------------------------ | ---------- |
+| `[zType]`         | Single or multiple items can be opened       | `'single' \| 'multiple'` | `'single'` |
+| `[zCollapsible]`  | Whether all accordion items can be collapsed | `boolean`                | `true`     |
+| `[zValue]`        | The controlled value of the accordion        | `string \| string[]`     | `''`       |
+| `[zDefaultValue]` | The default value of the accordion           | `string \| string[]`     | `''`       |
 
 [z-accordion-item] Component
 
