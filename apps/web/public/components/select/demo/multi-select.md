@@ -9,7 +9,13 @@ import { ZardSelectComponent } from '../select.component';
   imports: [ZardSelectComponent, ZardSelectItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <z-select zPlaceholder="Select multiple fruits" [zMultiple]="true" [zMaxLabelCount]="4" [(zValue)]="defaultValue" class="w-[300px]">
+    <z-select
+      zPlaceholder="Select multiple fruits"
+      [zMultiple]="true"
+      [zMaxLabelCount]="4"
+      [(zValue)]="selectedValues"
+      class="w-[300px]"
+    >
       <z-select-item zValue="apple">Apple</z-select-item>
       <z-select-item zValue="banana">Banana</z-select-item>
       <z-select-item zValue="blueberry">Blueberry</z-select-item>
@@ -23,11 +29,11 @@ import { ZardSelectComponent } from '../select.component';
   `,
 })
 export class ZardDemoMultiSelectBasicComponent {
-  defaultValue = signal<string[]>([]);
+  selectedValues = signal<string[]>([]);
 
   constructor() {
     effect(() => {
-      console.log(this.defaultValue());
+      console.log(this.selectedValues());
     });
   }
 }
