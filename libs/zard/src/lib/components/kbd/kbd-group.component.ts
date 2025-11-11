@@ -11,7 +11,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <ng-content></ng-content> `,
+  template: ` <ng-content /> `,
   host: {
     '[class]': 'classes()',
   },

@@ -7,14 +7,24 @@ import { ZardTooltipModule } from '../tooltip';
   selector: 'z-demo-tooltip-events',
   standalone: true,
   imports: [ZardButtonComponent, ZardTooltipModule],
-  template: ` <button z-button zType="outline" zTooltip="Tooltip content" (zOnShow)="onShow()" (zOnHide)="onHide()">Events</button> `,
+  template: `
+    <div class="flex w-[100px] flex-col gap-4">
+      <button type="button" z-button zType="outline" zTooltip="Tooltip content" (zShow)="onShow()" (zHide)="onHide()">
+        Events
+      </button>
+
+      <span>Event: {{ event }}</span>
+    </div>
+  `,
 })
 export class ZardDemoTooltipEventsComponent {
-  onShow() {
-    console.log('show');
+  protected event!: string;
+
+  protected onShow() {
+    this.event = 'zShow';
   }
 
-  onHide() {
-    console.log('hide');
+  protected onHide() {
+    this.event = 'zHide';
   }
 }

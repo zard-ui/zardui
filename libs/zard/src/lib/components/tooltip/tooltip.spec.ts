@@ -1,6 +1,6 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, ElementRef, viewChild } from '@angular/core';
-import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
 import { ZardTooltipDirective, ZardTooltipModule } from './tooltip';
 
@@ -56,7 +56,7 @@ describe('ZardTooltipDirective', () => {
 
   function waitingForTooltipToggling(): void {
     fixture.detectChanges();
-    tick(1000);
+    tick(500);
     fixture.detectChanges();
   }
 
@@ -69,8 +69,21 @@ describe('ZardTooltipDirective', () => {
       waitingForTooltipToggling();
       expect(overlayContainerElement.textContent).toContain(tooltipTitle);
 
-      const overlayElement = component.hoverTooltipDirective().nativeElement;
-      overlayElement.dispatchEvent(new MouseEvent('mouseleave'));
+      triggerElement.dispatchEvent(new MouseEvent('mouseleave'));
+      waitingForTooltipToggling();
+
+      expect(overlayContainerElement.textContent).not.toContain(tooltipTitle);
+    }));
+
+    it('should show and hide the tooltip on keyboard focus', fakeAsync(() => {
+      const tooltipTitle = 'Test Hover';
+      const triggerElement = component.hoverTooltip().nativeElement;
+
+      triggerElement.dispatchEvent(new KeyboardEvent('focus'));
+      waitingForTooltipToggling();
+      expect(overlayContainerElement.textContent).toContain(tooltipTitle);
+
+      triggerElement.dispatchEvent(new KeyboardEvent('blur'));
       waitingForTooltipToggling();
 
       expect(overlayContainerElement.textContent).not.toContain(tooltipTitle);
@@ -98,9 +111,9 @@ describe('ZardTooltipDirective', () => {
       triggerElement.dispatchEvent(new MouseEvent('mouseenter'));
       waitingForTooltipToggling();
 
-      const tooltipElement = overlayContainerElement.querySelector('[data-side]');
+      const tooltipElement = overlayContainerElement.querySelector('[data-side]') as HTMLElement;
       expect(tooltipElement).toBeTruthy();
-      expect(tooltipElement?.getAttribute('data-side')).toBe('top');
+      expect(tooltipElement?.dataset['side']).toBe('top');
     }));
 
     it('should show the tooltip on bottom', fakeAsync(() => {
@@ -109,9 +122,9 @@ describe('ZardTooltipDirective', () => {
       triggerElement.dispatchEvent(new MouseEvent('mouseenter'));
       waitingForTooltipToggling();
 
-      const tooltipElement = overlayContainerElement.querySelector('[data-side]');
+      const tooltipElement = overlayContainerElement.querySelector('[data-side]') as HTMLElement;
       expect(tooltipElement).toBeTruthy();
-      expect(tooltipElement?.getAttribute('data-side')).toBe('bottom');
+      expect(tooltipElement?.dataset['side']).toBe('bottom');
     }));
 
     it('should show the tooltip on left', fakeAsync(() => {
@@ -120,9 +133,9 @@ describe('ZardTooltipDirective', () => {
       triggerElement.dispatchEvent(new MouseEvent('mouseenter'));
       waitingForTooltipToggling();
 
-      const tooltipElement = overlayContainerElement.querySelector('[data-side]');
+      const tooltipElement = overlayContainerElement.querySelector('[data-side]') as HTMLElement;
       expect(tooltipElement).toBeTruthy();
-      expect(tooltipElement?.getAttribute('data-side')).toBe('left');
+      expect(tooltipElement?.dataset['side']).toBe('left');
     }));
 
     it('should show the tooltip on right', fakeAsync(() => {
@@ -131,19 +144,19 @@ describe('ZardTooltipDirective', () => {
       triggerElement.dispatchEvent(new MouseEvent('mouseenter'));
       waitingForTooltipToggling();
 
-      const tooltipElement = overlayContainerElement.querySelector('[data-side]');
+      const tooltipElement = overlayContainerElement.querySelector('[data-side]') as HTMLElement;
       expect(tooltipElement).toBeTruthy();
-      expect(tooltipElement?.getAttribute('data-side')).toBe('right');
+      expect(tooltipElement?.dataset['side']).toBe('right');
     }));
   });
 
   describe('events', () => {
-    it('should emit zOnShow and zOnHide events', fakeAsync(() => {
+    it('should emit zShow and zHide events', fakeAsync(() => {
       const triggerElement = component.hoverTooltip().nativeElement;
       const tooltipDirective = component.hoverTooltipDirective();
 
-      const spyOnShow = jest.spyOn(tooltipDirective.zOnShow, 'emit');
-      const spyOnHide = jest.spyOn(tooltipDirective.zOnHide, 'emit');
+      const spyOnShow = jest.spyOn(tooltipDirective.zShow, 'emit');
+      const spyOnHide = jest.spyOn(tooltipDirective.zHide, 'emit');
 
       triggerElement.dispatchEvent(new MouseEvent('mouseenter'));
       waitingForTooltipToggling();
