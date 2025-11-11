@@ -23,7 +23,7 @@ export default [
     files: ['**/*.ts'],
     languageOptions: {
       parserOptions: {
-        project: ['libs/zard/tsconfig.lib.json', 'libs/zard/tsconfig.spec.json'],
+        project: ['tsconfig.lib.json', 'tsconfig.spec.json'],
         tsconfigRootDir: import.meta.dirname,
       },
     },
