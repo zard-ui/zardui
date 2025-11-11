@@ -41,6 +41,7 @@ import { ZardCardComponent } from '@zard/components/card/card.component';
 })
 export class ZardCodeBoxComponent {
   readonly componentType = input<string>();
+  readonly demoDescription = input<string | undefined>();
   readonly onlyDemo = input<boolean | undefined>(false);
   readonly fullWidth = input<boolean | undefined>(false);
   readonly fullScreen = input<boolean | undefined>(false);
