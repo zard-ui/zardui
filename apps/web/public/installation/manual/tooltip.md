@@ -104,10 +104,8 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     const tooltipPortal = new ComponentPortal(ZardTooltipComponent);
     this.componentRef = this.overlayRef?.attach(tooltipPortal);
     this.componentRef.onDestroy(() => {
+      this.isClosingClick = false;
       this.componentRef = undefined;
-      setTimeout(() => {
-        this.isClosingClick = false;
-      });
     });
     this.componentRef.instance.setProps(tooltipText, this.zPosition());
     this.componentRef.instance.state.set('opened');
@@ -124,12 +122,13 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.componentRef?.destroy();
   }
 
-  private delay(isShow: boolean, delay = -1): void {
+  private delay(isShow: boolean, delay = -1, isClosingClick = false): void {
     if (this.delayTimer) {
       this.clearTogglingTimer();
     } else if (delay >= 0) {
       this.delayTimer = setTimeout(() => {
         this.delayTimer = undefined;
+        this.isClosingClick = isClosingClick;
         if (isShow) {
           this.show();
         } else {
@@ -148,11 +147,9 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
 
   private initTriggers(showTriggerEvent: string) {
     this.listenersRefs = [
-      this.renderer.listen(this.elementRef.nativeElement, showTriggerEvent, (event: Event) => {
-        event.preventDefault();
-        if (!this.isClosingClick) {
-          this.isClosingClick = true;
-          this.delay(true, this.zShowDelay());
+      this.renderer.listen(this.elementRef.nativeElement, showTriggerEvent, () => {
+        if (showTriggerEvent !== 'click' || !this.isClosingClick) {
+          this.delay(true, this.zShowDelay(), showTriggerEvent === 'click');
         }
       }),
       this.renderer.listen(this.document.defaultView, 'scroll', () => this.delay(false, 0)),
@@ -161,18 +158,9 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     if (this.zTrigger() === 'hover') {
       this.listenersRefs = [
         ...this.listenersRefs,
-        this.renderer.listen(this.elementRef.nativeElement, 'mouseleave', (event: Event) => {
-          event.preventDefault();
-          this.delay(false, this.zHideDelay());
-        }),
-        this.renderer.listen(this.elementRef.nativeElement, 'focus', (event: Event) => {
-          event.preventDefault();
-          this.delay(true, this.zShowDelay());
-        }),
-        this.renderer.listen(this.elementRef.nativeElement, 'blur', (event: Event) => {
-          event.preventDefault();
-          this.delay(false, this.zHideDelay());
-        }),
+        this.renderer.listen(this.elementRef.nativeElement, 'mouseleave', () => this.delay(false, this.zHideDelay())),
+        this.renderer.listen(this.elementRef.nativeElement, 'focus', () => this.delay(true, this.zShowDelay())),
+        this.renderer.listen(this.elementRef.nativeElement, 'blur', () => this.delay(false, this.zHideDelay())),
       ];
     }
   }
@@ -210,7 +198,6 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     '[class]': 'classes()',
     '[attr.data-side]': 'position()',
     '[attr.data-state]': 'state()',
-    '[attr.aria-hidden]': 'true',
     role: 'tooltip',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,

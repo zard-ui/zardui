@@ -19,7 +19,7 @@ import { ZardTooltipModule } from '../tooltip';
   `,
 })
 export class ZardDemoTooltipEventsComponent {
-  protected event!: string;
+  protected event = 'none';
 
   protected onShow() {
     this.event = 'zShow';
