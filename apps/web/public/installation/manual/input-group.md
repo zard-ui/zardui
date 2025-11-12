@@ -157,8 +157,8 @@ export class ZardInputGroupComponent {
     }),
   );
 
-  protected readonly inputWrapperClasses = computed(() => {
-    return mergeClasses(
+  protected readonly inputWrapperClasses = computed(() =>
+    mergeClasses(
       inputGroupInputVariants({
         zSize: this.zSize(),
         zHasPrefix: Boolean(this.zPrefix()),
@@ -169,8 +169,8 @@ export class ZardInputGroupComponent {
         zBorderless: this.zBorderless(),
       }),
       'relative',
-    );
-  });
+    ),
+  );
 }
 
 ```

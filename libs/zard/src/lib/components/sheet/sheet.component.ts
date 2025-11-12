@@ -159,7 +159,7 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
     );
   });
 
-  public sheetRef?: ZardSheetRef<T>;
+  sheetRef?: ZardSheetRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 

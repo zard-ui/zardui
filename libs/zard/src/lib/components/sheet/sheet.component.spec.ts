@@ -28,7 +28,7 @@ class SheetTestHostComponent {
   private sheetService = inject(ZardSheetService);
 
   @ViewChild('testTemplate', { static: true }) testTemplate!: TemplateRef<any>;
-  public lastSheetRef?: ZardSheetRef<any>;
+  lastSheetRef?: ZardSheetRef<any>;
 
   openSheet() {
     this.lastSheetRef = this.sheetService.create({

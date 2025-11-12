@@ -115,7 +115,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
     this.config.zDescription ? `${this.alertDialogId}-description` : null,
   );
 
-  public alertDialogRef?: ZardAlertDialogRef<T>;
+  alertDialogRef?: ZardAlertDialogRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 

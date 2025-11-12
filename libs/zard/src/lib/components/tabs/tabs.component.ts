@@ -191,13 +191,13 @@ export class ZardTabGroupComponent implements AfterViewInit {
     tab: ZardTabComponent;
   }>();
 
-  public readonly zTabsPosition = input<ZardTabVariants['zPosition']>('top');
-  public readonly zActivePosition = input<ZardTabVariants['zActivePosition']>('bottom');
-  public readonly zShowArrow = input(true);
-  public readonly zScrollAmount = input(100);
-  public readonly zAlignTabs = input<zAlign>('start');
+  readonly zTabsPosition = input<ZardTabVariants['zPosition']>('top');
+  readonly zActivePosition = input<ZardTabVariants['zActivePosition']>('bottom');
+  readonly zShowArrow = input(true);
+  readonly zScrollAmount = input(100);
+  readonly zAlignTabs = input<zAlign>('start');
   // Preserve consumer classes on host
-  public readonly class = input<string>('');
+  readonly class = input<string>('');
 
   protected readonly showArrow = computed(() => this.zShowArrow() && this.scrollPresent());
 
@@ -327,7 +327,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
     }
   }
 
-  public selectTabByIndex(index: number): void {
+  selectTabByIndex(index: number): void {
     if (index >= 0 && index < this.tabs().length) {
       this.setActiveTab(index);
     } else {

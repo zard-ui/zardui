@@ -46,6 +46,14 @@ export default [
         },
       ],
       'no-console': ['error', { allow: ['warn', 'error'] }],
+      '@typescript-eslint/no-empty-function': ['warn'],
+      '@typescript-eslint/explicit-member-accessibility': [
+        'warn',
+        {
+          accessibility: 'no-public',
+        },
+      ],
+      'arrow-body-style': ['warn', 'as-needed'],
     },
   },
   {

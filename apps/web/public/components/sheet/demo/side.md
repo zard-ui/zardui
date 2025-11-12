@@ -51,7 +51,7 @@ interface iSheetData {
 export class ZardDemoSheetSideInputComponent {
   private zData: iSheetData = inject(Z_MODAL_DATA);
 
-  public form = new FormGroup({
+  form = new FormGroup({
     name: new FormControl('Matheus Ribeiro'),
     username: new FormControl('@ribeiromatheus.dev'),
   });

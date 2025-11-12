@@ -99,5 +99,5 @@ export class ZardStringTemplateOutletDirective implements OnChanges {
 }
 
 export class ZardStringTemplateOutletContext {
-  public $implicit: unknown;
+  $implicit: unknown;
 }

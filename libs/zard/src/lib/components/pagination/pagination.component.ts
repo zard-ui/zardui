@@ -233,9 +233,7 @@ export class ZardPaginationComponent implements ControlValueAccessor {
 
   protected readonly classes = computed(() => mergeClasses(paginationVariants(), this.class()));
 
-  protected readonly disabled = linkedSignal(() => {
-    return this.zDisabled();
-  });
+  protected readonly disabled = linkedSignal(() => this.zDisabled());
 
   readonly currentPage = linkedSignal(this.zPageIndex);
 
