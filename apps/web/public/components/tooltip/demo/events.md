@@ -14,7 +14,7 @@ import { ZardTooltipModule } from '../tooltip';
         Events
       </button>
 
-      <span>Event: {{ event }}</span>
+      <span class="text-sm">Event: {{ event }}</span>
     </div>
   `,
 })
@@ -22,11 +22,11 @@ export class ZardDemoTooltipEventsComponent {
   protected event = 'none';
 
   protected onShow() {
-    this.event = 'zShow';
+    this.event = '(zShow)';
   }
 
   protected onHide() {
-    this.event = 'zHide';
+    this.event = '(zHide)';
   }
 }
 
