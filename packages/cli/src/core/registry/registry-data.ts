@@ -739,6 +739,19 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'button-group',
+    files: [
+      {
+        name: 'button-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'button-group.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'kbd',
     files: [
       {
@@ -751,6 +764,23 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'kbd.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'carousel',
+    files: [
+      {
+        name: 'carousel.component.ts',
+        content: '',
+      },
+      {
+        name: 'carousel.variants.ts',
+        content: '',
+      },
+      {
+        name: 'carousel.module.ts',
         content: '',
       },
     ],

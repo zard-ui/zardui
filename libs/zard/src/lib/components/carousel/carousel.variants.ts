@@ -6,6 +6,11 @@ export const carouselVariants = cva('overflow-hidden', {
       horizontal: '',
       vertical: 'h-full',
     },
+    zControls: {
+      none: '',
+      button: '',
+      dot: '',
+    },
   },
   defaultVariants: {
     zOrientation: 'horizontal',
@@ -60,8 +65,5 @@ export const carouselNextButtonVariants = cva('absolute size-8 rounded-full', {
   },
 });
 
-export type ZardCarouselVariants = VariantProps<typeof carouselVariants>;
-export type ZardCarouselContentVariants = VariantProps<typeof carouselContentVariants>;
-export type ZardCarouselItemVariants = VariantProps<typeof carouselItemVariants>;
-export type ZardCarouselPreviousButtonVariants = VariantProps<typeof carouselPreviousButtonVariants>;
-export type ZardCarouselNextButtonVariants = VariantProps<typeof carouselNextButtonVariants>;
+export type ZardCarouselOrientationVariants = NonNullable<VariantProps<typeof carouselVariants>['zOrientation']>;
+export type ZardCarouselControlsVariants = NonNullable<VariantProps<typeof carouselVariants>['zControls']>;

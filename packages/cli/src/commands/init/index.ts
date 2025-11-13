@@ -1,10 +1,3 @@
-import chalk from 'chalk';
-import { Command } from 'commander';
-import { existsSync } from 'fs';
-import { writeFile } from 'node:fs/promises';
-import * as path from 'path';
-import * as prompts from 'prompts';
-
 import { promptForConfig } from '@cli/commands/init/config-prompter.js';
 import { installDependencies } from '@cli/commands/init/dependencies.js';
 import { setupTailwind } from '@cli/commands/init/tailwind-setup.js';
@@ -13,6 +6,12 @@ import { createUtils } from '@cli/commands/init/utils-creator.js';
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager } from '@cli/utils/package-manager.js';
+import chalk from 'chalk';
+import { Command } from 'commander';
+import { existsSync } from 'node:fs';
+import { writeFile } from 'node:fs/promises';
+import * as path from 'node:path';
+import prompts from 'prompts';
 
 export const init = new Command()
   .name('init')
@@ -97,7 +96,12 @@ async function confirmConfiguration(): Promise<boolean> {
   return proceed;
 }
 
-async function runInitializationSteps(cwd: string, config: any, projectInfo: any, isReInitializing: boolean): Promise<void> {
+async function runInitializationSteps(
+  cwd: string,
+  config: any,
+  projectInfo: any,
+  isReInitializing: boolean,
+): Promise<void> {
   const configSpinner = spinner('Writing configuration...').start();
   await writeFile(path.resolve(cwd, 'components.json'), JSON.stringify(config, null, 2), 'utf8');
   configSpinner.succeed();
@@ -126,7 +130,12 @@ function displaySuccessMessage(config: any): void {
   logger.success('ZardUI has been initialized successfully!');
   logger.break();
 
-  const runCommand = config.packageManager === 'npm' ? 'npx' : config.packageManager === 'yarn' ? 'yarn dlx' : `${config.packageManager}x`;
+  const runCommand =
+    config.packageManager === 'npm'
+      ? 'npx'
+      : config.packageManager === 'yarn'
+        ? 'yarn dlx'
+        : `${config.packageManager}x`;
 
   logger.info('You can now add components using:');
   logger.info(chalk.bold(`  ${runCommand} @ngzard/ui add [component]`));
