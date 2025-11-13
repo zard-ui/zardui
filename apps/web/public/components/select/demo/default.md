@@ -1,9 +1,9 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { ZardBadgeComponent } from '../../badge/badge.component';
 import { ZardSelectItemComponent } from '../select-item.component';
 import { ZardSelectComponent } from '../select.component';
-import { ZardBadgeComponent } from '../../badge/badge.component';
 
 @Component({
   selector: 'z-demo-select-basic',
