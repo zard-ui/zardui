@@ -1,6 +1,8 @@
 import { ZardDemoInputGroupBorderlessComponent } from './borderless';
 import { ZardDemoInputGroupDefaultComponent } from './default';
+import { ZardDemoInputGroupLoadingComponent } from './loading';
 import { ZardDemoInputGroupSizeComponent } from './size';
+import { ZardDemoInputGroupTextComponent } from './text';
 
 export const INPUT_GROUP = {
   componentName: 'input-group',
@@ -13,6 +15,12 @@ export const INPUT_GROUP = {
       column: true,
     },
     {
+      name: 'text',
+      component: ZardDemoInputGroupTextComponent,
+      column: true,
+    },
+
+    {
       name: 'size',
       component: ZardDemoInputGroupSizeComponent,
       column: true,
@@ -20,6 +28,11 @@ export const INPUT_GROUP = {
     {
       name: 'borderless',
       component: ZardDemoInputGroupBorderlessComponent,
+      column: true,
+    },
+    {
+      name: 'loading',
+      component: ZardDemoInputGroupLoadingComponent,
       column: true,
     },
   ],
