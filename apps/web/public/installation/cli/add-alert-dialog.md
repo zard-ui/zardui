@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add alert-dialog
+npx @ngzard/ui@latest add alert-dialog
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui add alert-dialog
+pnpm dlx @ngzard/ui@latest add alert-dialog
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui add alert-dialog
+yarn dlx @ngzard/ui@latest add alert-dialog
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui add alert-dialog
+bunx @ngzard/ui@latest add alert-dialog
 ```
