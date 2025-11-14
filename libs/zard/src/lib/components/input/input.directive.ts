@@ -9,7 +9,7 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',
-  exportAs: 'Input',
+  exportAs: 'zInput',
   standalone: true,
   host: {
     '[class]': 'classes()',
