@@ -120,7 +120,7 @@ function generateCliInstallDepsMarkdown(dependencies: ComponentDependency[]): st
     'clsx',
     'tailwind-merge',
     'tailwindcss-animate',
-    'lucide-static',
+    'lucide-angular',
     'embla-carousel-angular',
     'embla-carousel-autoplay',
     'embla-carousel-class-names',
