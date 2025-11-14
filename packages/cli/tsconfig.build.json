@@ -13,9 +13,9 @@
     "resolveJsonModule": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "baseUrl": "./src",
+    "baseUrl": ".",
     "paths": {
-      "@cli/*": ["./*"]
+      "@cli/*": ["src/*"]
     }
   },
   "include": ["src/**/*.ts"],

@@ -1,3 +1,24 @@
+## 1.0.0-beta.26 (2025-11-13)
+
+### ✨ Features
+
+- **buton-group:** add button group component ([#308](https://github.com/zard-ui/zardui/pull/308))
+- **carousel:** carousel component implemented ([#311](https://github.com/zard-ui/zardui/pull/311))
+- **kbd:** kbd and kbd-group components implemented ([#314](https://github.com/zard-ui/zardui/pull/314))
+
+### 📦 Code Refactoring
+
+- **select:** enhance select to support multiple selection ([#309](https://github.com/zard-ui/zardui/pull/309))
+- **empty:** Refactor the Empty component to follow the ZardUI pattern ([#296](https://github.com/zard-ui/zardui/pull/296))
+
+### 📝 Documentation
+
+- **accordion:** updated API to reflect all component inputs ([#318](https://github.com/zard-ui/zardui/pull/318))
+
+### 🐛 Bug Fixes
+
+- **select:** z-select-item computed signal does not compute in all cases ([#307](https://github.com/zard-ui/zardui/pull/307))
+
 ## 1.0.0-beta.25 (2025-10-24)
 
 ### 📦 Code Refactoring
@@ -11,7 +32,7 @@
 ### ✨ Features
 
 - **cli:** add @cli path alias for cleaner imports
-  - Configured TypeScript path mapping with @cli/* alias
+  - Configured TypeScript path mapping with @cli/\* alias
   - Added tsc-alias to build pipeline for alias resolution
   - Updated all imports to use new path alias
 
@@ -279,6 +300,7 @@ Based on recent commits, ZardUI has received several significant improvements:
 Starting from the next release, this changelog will be automatically generated with detailed commit information, contributors, and links to pull requests.
 
 Each release will include:
+
 - Version number and date
 - Categorized changes (Features, Bug Fixes, etc.)
 - Commit references and PR links

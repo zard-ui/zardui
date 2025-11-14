@@ -146,6 +146,10 @@ export const registry: ComponentRegistry[] = [
         name: 'accordion-item.component.ts',
         content: '',
       },
+      {
+        name: 'accordion.variants.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -490,6 +494,22 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'calendar-grid.component.ts',
+        content: '',
+      },
+      {
+        name: 'calendar-navigation.component.ts',
+        content: '',
+      },
+      {
+        name: 'calendar.types.ts',
+        content: '',
+      },
+      {
+        name: 'calendar.utils.ts',
+        content: '',
+      },
+      {
         name: 'calendar.variants.ts',
         content: '',
       },
@@ -739,6 +759,20 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'button-group',
+    registryDependencies: ['divider'],
+    files: [
+      {
+        name: 'button-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'button-group.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'kbd',
     files: [
       {
@@ -751,6 +785,42 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'kbd.variants.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'carousel',
+    dependencies: [
+      'embla-carousel-angular',
+      'embla-carousel-autoplay',
+      'embla-carousel-class-names',
+      'embla-carousel-wheel-gestures',
+    ],
+    registryDependencies: ['button', 'icon'],
+    files: [
+      {
+        name: 'carousel.component.ts',
+        content: '',
+      },
+      {
+        name: 'carousel.variants.ts',
+        content: '',
+      },
+      {
+        name: 'carousel-content.component.ts',
+        content: '',
+      },
+      {
+        name: 'carousel-item.component.ts',
+        content: '',
+      },
+      {
+        name: 'carousel-plugins.service.ts',
+        content: '',
+      },
+      {
+        name: 'carousel.module.ts',
         content: '',
       },
     ],

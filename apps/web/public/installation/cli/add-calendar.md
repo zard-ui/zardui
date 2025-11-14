@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add calendar
+npx @ngzard/ui@latest add calendar
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui add calendar
+pnpm dlx @ngzard/ui@latest add calendar
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui add calendar
+yarn dlx @ngzard/ui@latest add calendar
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui add calendar
+bunx @ngzard/ui@latest add calendar
 ```
