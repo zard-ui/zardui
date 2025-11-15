@@ -1,37 +1,20 @@
 
 
 ```angular-ts title="select.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, ElementRef, forwardRef, inject, input, model, type OnDestroy, output, PLATFORM_ID, signal, type TemplateRef, viewChild, ViewContainerRef, } from '@angular/core';
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
-import { TemplatePortal } from '@angular/cdk/portal';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
-import {
-  type AfterContentInit,
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  contentChildren,
-  ElementRef,
-  forwardRef,
-  inject,
-  input,
-  model,
-  type OnDestroy,
-  output,
-  PLATFORM_ID,
-  signal,
-  type TemplateRef,
-  viewChild,
-  ViewContainerRef,
-} from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { TemplatePortal } from '@angular/cdk/portal';
+import { Subject, takeUntil } from 'rxjs';
 import type { ClassValue } from 'clsx';
 
-import { ZardSelectItemComponent } from './select-item.component';
-import { selectContentVariants, selectTriggerVariants, selectVariants, type ZardSelectTriggerVariants } from './select.variants';
+import { selectContentVariants, selectTriggerVariants, selectVariants, type ZardSelectTriggerVariants, } from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
+import { ZardSelectItemComponent } from './select-item.component';
 import { ZardBadgeComponent } from '../badge/badge.component';
 import { ZardIconComponent } from '../icon/icon.component';
+
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -87,7 +70,13 @@ type OnChangeType = (value: string) => void;
     </ng-template>
 
     <ng-template #dropdownTemplate>
-      <div [class]="contentClasses()" role="listbox" [attr.data-state]="'open'" (keydown)="onDropdownKeydown($event)" tabindex="-1">
+      <div
+        [class]="contentClasses()"
+        role="listbox"
+        [attr.data-state]="'open'"
+        (keydown)="onDropdownKeydown($event)"
+        tabindex="-1"
+      >
         <div class="p-1">
           <ng-content></ng-content>
         </div>
@@ -107,6 +96,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
+  private destroy$ = new Subject<void>();
 
   readonly class = input<ClassValue>('');
   readonly zDisabled = input(false, { transform });
@@ -318,6 +308,11 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
     this.determinePortalWidth(hostWidth);
 
+    this.overlayRef
+      .outsidePointerEvents()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => this.close());
+
     // Focus dropdown after opening and position on selected item
     setTimeout(() => {
       this.focusDropdown();
@@ -326,6 +321,11 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   private close() {
+    if (!this.destroy$.closed) {
+      this.destroy$.next();
+      this.destroy$.complete();
+    }
+
     if (this.overlayRef?.hasAttached()) {
       this.overlayRef.detach();
     }
@@ -412,7 +412,9 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   private getSelectItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-select-item, [z-select-item]')).filter(item => item.dataset['disabled'] === undefined);
+    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-select-item, [z-select-item]')).filter(
+      item => item.dataset['disabled'] === undefined,
+    );
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
