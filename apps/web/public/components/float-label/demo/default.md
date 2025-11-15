@@ -1,28 +1,18 @@
 ```angular-ts showLineNumbers copyButton
-import { ZardFormLabelComponent } from '@zard/components/form/form.component';
-import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 
+import { ZardFormLabelComponent } from '../../form/form.component';
+import { ZardInputDirective } from '../../input/input.directive';
 import { ZardFloatLabelComponent } from '../float.label.component';
-
 
 @Component({
   selector: 'z-demo-float-label-default',
-  imports: [
-    ReactiveFormsModule,
-    ZardInputDirective,
-    ZardFloatLabelComponent,
-    ZardFormLabelComponent,
-  ],
+  imports: [ReactiveFormsModule, ZardInputDirective, ZardFloatLabelComponent, ZardFormLabelComponent],
   template: `
     <form [formGroup]="form" class="space-y-6">
       <z-float-label>
-        <input
-          z-input
-          formControlName="name"
-          [zStatus]="form.get('name')?.invalid && form.get('name')?.touched ? 'error' : null"
-        />
+        <input z-input formControlName="name" [zStatus]="form.get('name')?.invalid && form.get('name')?.touched ? 'error' : null" />
         <label z-form-label zRequired>Name</label>
       </z-float-label>
     </form>
@@ -35,4 +25,5 @@ export class ZardDemoFloatLabelDefaultComponent {
     name: ['', Validators.required],
   });
 }
+
 ```

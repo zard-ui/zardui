@@ -1,9 +1,8 @@
 ```angular-ts showLineNumbers copyButton
-import { ZardDemoFloatLabelTextareaComponent } from './text-area';
 import { ZardDemoFloatLabelDefaultComponent } from './default';
-import { ZardDemoFloatLabelStatusComponent } from './status';
 import { ZardDemoFloatLabelSelectComponent } from './select';
-
+import { ZardDemoFloatLabelStatusComponent } from './status';
+import { ZardDemoFloatLabelTextareaComponent } from './text-area';
 
 export const FLOAT_LABEL = {
   componentName: 'float-label',
@@ -32,4 +31,5 @@ export const FLOAT_LABEL = {
     },
   ],
 };
+
 ```

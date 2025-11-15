@@ -1,21 +1,15 @@
 ```angular-ts showLineNumbers copyButton
 // z-demo-float-label-status.component.ts
-import { ZardFormLabelComponent } from '@zard/components/form/form.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
-import { ReactiveFormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
 
+import { ZardFormLabelComponent } from '../../form/form.component';
+import { ZardInputDirective } from '../../input/input.directive';
 import { ZardFloatLabelComponent } from '../float.label.component';
-
 
 @Component({
   selector: 'z-demo-float-label-status',
-  imports: [
-    ReactiveFormsModule,
-    ZardInputDirective,
-    ZardFloatLabelComponent,
-    ZardFormLabelComponent,
-  ],
+  imports: [ReactiveFormsModule, ZardInputDirective, ZardFloatLabelComponent, ZardFormLabelComponent],
   template: `
     <div class="space-y-6">
       <z-float-label>
@@ -35,5 +29,6 @@ import { ZardFloatLabelComponent } from '../float.label.component';
     </div>
   `,
 })
-export class ZardDemoFloatLabelStatusComponent { }
+export class ZardDemoFloatLabelStatusComponent {}
+
 ```
