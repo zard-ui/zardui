@@ -7,6 +7,7 @@ import {
   Component,
   computed,
   contentChildren,
+  DestroyRef,
   ElementRef,
   forwardRef,
   inject,
@@ -20,10 +21,11 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { Subject, takeUntil } from 'rxjs';
+import { filter } from 'rxjs';
 
 import { ZardSelectItemComponent } from './select-item.component';
 import {
@@ -54,7 +56,6 @@ type OnChangeType = (value: string) => void;
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '[class]': 'classes()',
-    '(document:click)': 'onDocumentClick($event)',
   },
   template: `
     <button
@@ -105,6 +106,7 @@ type OnChangeType = (value: string) => void;
   `,
 })
 export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject(ElementRef);
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
@@ -116,7 +118,6 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
-  private readonly destroy$ = new Subject<void>();
 
   readonly class = input<ClassValue>('');
   readonly zDisabled = input(false, { transform });
@@ -173,16 +174,6 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
   ngOnDestroy() {
     this.destroyOverlay();
-  }
-
-  onDocumentClick(event: Event) {
-    const target = event.target as Node;
-    const clickedInside = this.elementRef.nativeElement.contains(target);
-    const clickedInOverlay = this.overlayRef?.overlayElement?.contains(target);
-
-    if (!clickedInside && !clickedInOverlay) {
-      this.close();
-    }
   }
 
   onTriggerKeydown(event: KeyboardEvent) {
@@ -328,11 +319,6 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
     this.determinePortalWidth(hostWidth);
 
-    this.overlayRef
-      .outsidePointerEvents()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.close());
-
     // Focus dropdown after opening and position on selected item
     setTimeout(() => {
       this.focusDropdown();
@@ -341,11 +327,6 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   private close() {
-    if (!this.destroy$.closed) {
-      this.destroy$.next();
-      this.destroy$.complete();
-    }
-
     if (this.overlayRef?.hasAttached()) {
       this.overlayRef.detach();
     }
@@ -418,6 +399,13 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
           width: elementWidth,
           maxHeight: 384, // max-h-96 equivalent
         });
+        this.overlayRef
+          .outsidePointerEvents()
+          .pipe(
+            filter(event => !this.elementRef.nativeElement.contains(event.target)),
+            takeUntilDestroyed(this.destroyRef),
+          )
+          .subscribe(() => this.close());
       } catch (error) {
         console.error('Error creating overlay:', error);
       }
