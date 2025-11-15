@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
 import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
@@ -12,7 +12,14 @@ import { SeoService } from '@doc/shared/services/seo.service';
 @Component({
   selector: 'z-theming',
   standalone: true,
-  imports: [RouterModule, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
+  imports: [
+    RouterModule,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    MarkdownRendererComponent,
+  ],
   templateUrl: './theming.page.html',
 })
 export class ThemingPage implements OnInit {

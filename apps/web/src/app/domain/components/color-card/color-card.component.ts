@@ -4,8 +4,8 @@ import { Component, input, inject, computed, ChangeDetectionStrategy, HostListen
 import { LucideAngularModule, Check, Clipboard as ClipboardIcon } from 'lucide-angular';
 import { toast } from 'ngx-sonner';
 
-import { Color } from '@doc/shared/constants/colors.constant';
-import { ColorsService, ColorFormat } from '@doc/shared/services/colors.service';
+import type { Color } from '@doc/shared/constants/colors.constant';
+import { ColorsService, type ColorFormat } from '@doc/shared/services/colors.service';
 
 @Component({
   selector: 'button[z-color-card]',
@@ -33,7 +33,10 @@ export class ColorCardComponent {
 
   readonly isCopied = computed(() => this.colorsService.lastCopied() === this.formattedValue());
 
-  readonly hostClasses = computed(() => 'group relative flex flex-1 flex-col gap-2 cursor-pointer aspect-[3/1] sm:aspect-[2/3] sm:h-auto sm:w-auto text-(--text) w-full');
+  readonly hostClasses = computed(
+    () =>
+      'group relative flex flex-1 flex-col gap-2 cursor-pointer aspect-[3/1] sm:aspect-[2/3] sm:h-auto sm:w-auto text-(--text) w-full',
+  );
 
   readonly formattedValue = computed(() => {
     const color = this.color();

@@ -1,12 +1,12 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, type OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { StepsComponent } from '@doc/domain/components/steps/steps.component';
-import { Installation, installations } from '@doc/shared/constants/install.constant';
+import { type Installation, installations } from '@doc/shared/constants/install.constant';
 import { SeoService } from '@doc/shared/services/seo.service';
 
 @Component({
@@ -24,6 +24,7 @@ export class InstallPage implements OnInit {
   readonly navigationConfig: NavigationConfig = {
     items: [{ id: 'overview', label: 'Overview', type: 'core' }],
   };
+
   activeAnchor!: string;
 
   activeTab = signal<'manual' | 'cli'>('cli');

@@ -1,4 +1,4 @@
-import { Route } from '@angular/router';
+import type { Route } from '@angular/router';
 
 import { DocumentationLayout } from './core/layouts/documentation/documentation.layout';
 import { ShellLayout } from './core/layouts/shell/shell.layout';
@@ -77,7 +77,8 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'blocks',
-        loadComponent: () => import('./domain/pages/blocks/block-instructions/block-instructions.page').then(c => c.BlocksInstructionPage),
+        loadComponent: () =>
+          import('./domain/pages/blocks/block-instructions/block-instructions.page').then(c => c.BlocksInstructionPage),
       },
       {
         path: 'dark-mode',
@@ -105,7 +106,8 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'pre-processors',
-        loadComponent: async () => import('./domain/pages/pre-processors/pre-processors.page').then(c => c.PreProcessorsPage),
+        loadComponent: async () =>
+          import('./domain/pages/pre-processors/pre-processors.page').then(c => c.PreProcessorsPage),
       },
       {
         path: 'changelog',

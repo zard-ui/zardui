@@ -1,4 +1,4 @@
-import { ComponentType } from '@angular/cdk/overlay';
+import type { ComponentType } from '@angular/cdk/overlay';
 
 import { ACCORDION } from '@zard/components/accordion/demo/accordion';
 import { ALERT } from '@zard/components/alert/demo/alert';

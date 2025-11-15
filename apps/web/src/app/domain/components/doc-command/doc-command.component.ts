@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, inject, viewChild, OnDestroy } from '@angular/core';
+import { type AfterViewInit, Component, inject, viewChild, type OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
 import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/command/command.component';
@@ -12,21 +12,21 @@ import { SIDEBAR_PATHS } from '../../../shared/constants/routes.constant';
   imports: [ZardCommandModule],
   template: `
     <z-command #commandRef class="md:min-w-[500px]" (zOnSelect)="handleCommand($event)">
-      <z-command-input placeholder="Search documentation..."></z-command-input>
+      <z-command-input placeholder="Search documentation..." />
       <z-command-list>
         <z-command-empty>No results found.</z-command-empty>
 
         <z-command-option-group zLabel="Getting Started">
           @for (item of gettingStartedItems; track item.path) {
-            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon="file-text"> </z-command-option>
+            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon="file-text" />
           }
         </z-command-option-group>
 
-        <z-command-divider></z-command-divider>
+        <z-command-divider />
 
         <z-command-option-group zLabel="Components">
           @for (item of componentItems; track item.path) {
-            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon="layers"> </z-command-option>
+            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon="layers" />
           }
         </z-command-option-group>
       </z-command-list>

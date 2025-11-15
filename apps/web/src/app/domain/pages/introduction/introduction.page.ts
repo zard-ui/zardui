@@ -2,7 +2,7 @@ import { Component, inject, type OnInit } from '@angular/core';
 
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { AIReadySection } from './sections/ai-ready.component';
@@ -15,22 +15,36 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 @Component({
   selector: 'z-introduction',
   standalone: true,
-  imports: [DocContentComponent, DocHeadingComponent, ScrollSpyDirective, WhyZardUISection, CLISection, AIReadySection, OpenSourceSection, SupportSection],
+  imports: [
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    WhyZardUISection,
+    CLISection,
+    AIReadySection,
+    OpenSourceSection,
+    SupportSection,
+  ],
   template: `
-    <z-content [title]="title" [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+    <z-content
+      [title]="title"
+      [navigationConfig]="navigationConfig"
+      [activeAnchor]="activeAnchor"
+      scrollSpy
+      (scrollSpyChange)="activeAnchor = $event"
+    >
       <z-doc-heading
         title="Introduction"
         description="Built for Angular developers who value both aesthetics and functionality. ZardUI bridges the gap between beautiful design and practical implementation."
         scrollSpyItem="overview"
         id="overview"
-      >
-      </z-doc-heading>
+      />
 
-      <why-zardui-section scrollSpyItem="why-zardui" id="why-zardui"></why-zardui-section>
-      <cli-section scrollSpyItem="cli" id="cli"></cli-section>
-      <ai-ready-section scrollSpyItem="ai-ready" id="ai-ready"></ai-ready-section>
-      <open-source-section scrollSpyItem="open-source" id="open-source"></open-source-section>
-      <support-section scrollSpyItem="support" id="support"></support-section>
+      <why-zardui-section scrollSpyItem="why-zardui" id="why-zardui" />
+      <cli-section scrollSpyItem="cli" id="cli" />
+      <ai-ready-section scrollSpyItem="ai-ready" id="ai-ready" />
+      <open-source-section scrollSpyItem="open-source" id="open-source" />
+      <support-section scrollSpyItem="support" id="support" />
     </z-content>
   `,
 })

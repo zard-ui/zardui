@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, type OnInit } from '@angular/core';
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
@@ -6,7 +6,7 @@ import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { EnvCardComponent } from '../../components/env-card/env-card.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
@@ -25,7 +25,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
         description="How to install dependencies and structure your app."
         scrollSpyItem="overview"
         id="overview"
-      ></z-doc-heading>
+      />
 
       <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="environments" id="environments">
         <div class="flex flex-col gap-6">
@@ -47,7 +47,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
                 [icon]="env.icon"
                 [disabled]="!env.available"
                 [class]="!env.available ? 'pointer-events-none opacity-50' : ''"
-              ></z-env-card>
+              />
               @if (!env.available) {
                 <div class="bg-background/80 absolute inset-0 flex items-center justify-center rounded-xl">
                   <z-badge zType="secondary">Coming Soon</z-badge>
