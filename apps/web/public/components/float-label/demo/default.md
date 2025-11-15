@@ -1,15 +1,14 @@
 ```angular-ts showLineNumbers copyButton
 import { ZardFormLabelComponent } from '@zard/components/form/form.component';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { Component, inject } from '@angular/core';
 
 import { ZardFloatLabelComponent } from '../float.label.component';
-import { ZardInputDirective } from '../input.directive';
 
 
 @Component({
-  selector: 'z-demo-input-float-input',
-  standalone: true,
+  selector: 'z-demo-float-label-default',
   imports: [
     ReactiveFormsModule,
     ZardInputDirective,
@@ -29,12 +28,11 @@ import { ZardInputDirective } from '../input.directive';
     </form>
   `,
 })
-export class ZardFloatLabelDemoComponent {
+export class ZardDemoFloatLabelDefaultComponent {
   private fb = inject(FormBuilder);
 
   form = this.fb.group({
     name: ['', Validators.required],
   });
 }
-
 ```

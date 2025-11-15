@@ -12,11 +12,10 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',
-  exportAs: 'Input',
-  standalone: true,
+  exportAs: 'zInput',
   host: {
-    '[class]': 'classes()'
-  }
+    '[class]': 'classes()',
+  },
 })
 export class ZardInputDirective implements AfterViewInit, OnDestroy {
   readonly elementRef = inject(ElementRef);
@@ -35,63 +34,57 @@ export class ZardInputDirective implements AfterViewInit, OnDestroy {
 
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => {
-    const isDisabled = this.elementRef.nativeElement.disabled;
-    const status = isDisabled ? undefined : this.zStatus();
-
-    return mergeClasses(
-      inputVariants({
-        zType: this.isTextarea ? 'default' : 'textarea',
-        zSize: this.zSize(),
-        zStatus: status,
-        zBorderless: this.zBorderless()
-      }),
-      this.class()
-    );
-  });
+  protected readonly classes = computed(() =>
+    mergeClasses(inputVariants({ zType: !this.isTextarea ? 'default' : 'textarea', zSize: this.zSize(), zStatus: this.zStatus(), zBorderless: this.zBorderless() }), this.class()),
+  );
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      const nativeElement = this.elementRef.nativeElement;
 
-      const control = this.formControlName || this.formControlDirective || this.ngControl;
-      if (control?.control) {
-        this.subscription.add(control.control.valueChanges.subscribe(() => this.updateInputState()));
-      }
+    const nativeElement = this.elementRef.nativeElement;
 
-      if (this.ngModel?.valueChanges) {
-        this.subscription.add(this.ngModel.valueChanges.subscribe(() => this.updateInputState()));
-      }
+    const control = this.formControlName || this.formControlDirective || this.ngControl;
 
-      this.subscription.add(fromEvent(nativeElement, 'input').subscribe(() => this.updateInputState()));
-      this.subscription.add(fromEvent(nativeElement, 'change').subscribe(() => this.updateInputState()));
+    /** Reactive Forms */
+    if (control?.control) {
+      this.subscription.add(control.control.valueChanges.subscribe(() => this.updateInputState()));
+    }
+    /** Template-driven Forms */
+    if (this.ngModel?.valueChanges) {
+      this.subscription.add(this.ngModel.valueChanges.subscribe(() => this.updateInputState()));
+    }
 
-      this.updateInputState();
-    }, 0);
+    this.subscription.add(fromEvent(nativeElement, 'input').subscribe(() => this.updateInputState()));
+    this.subscription.add(fromEvent(nativeElement, 'change').subscribe(() => this.updateInputState()));
+
+    this.updateInputState();
+
   }
 
   updateInputState = () => {
     const nativeElement = this.elementRef.nativeElement;
     const value = nativeElement.value;
-    const hasValue = value != null && value !== '';
 
-    if (hasValue) {
+    if (value) {
       this.renderer.addClass(nativeElement, 'input-has-value');
     } else {
       this.renderer.removeClass(nativeElement, 'input-has-value');
     }
+
+    this.renderer.setAttribute(this.elementRef.nativeElement, 'data-status', this.zStatus() || 'default');
   };
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
 }
+
 ```
 
 
 
 ```angular-ts title="input.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
+
 
 export type zInputIcon = 'email' | 'password' | 'text';
 
@@ -130,94 +123,121 @@ export type ZardInputVariants = VariantProps<typeof inputVariants>;
 
 
 ```angular-ts title="float.label.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Component, ElementRef, AfterViewInit, ViewEncapsulation, Inject, Renderer2, HostListener } from '@angular/core';
+import { Component, ElementRef, AfterViewInit, HostListener, PLATFORM_ID, ViewEncapsulation, computed, input, inject, } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+
+import { floatLabelStyles } from './float.label.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 
 @Component({
-  selector: 'zard-float-label',
+  selector: 'z-float-label',
   standalone: true,
   template: `<ng-content />`,
   encapsulation: ViewEncapsulation.None,
-  styles: `
-    zard-float-label {
-      display: block;
-      position: relative;
-    }
-
-    zard-float-label label {
-      position: absolute;
-      left: 1rem;
-      top: 50%;
-      transform: translateY(-50%);
-      pointer-events: none;
-      transition: all 0.2s ease-in-out;
-      color: var(--color-muted-foreground);
-      padding: 0;
-      font-size: 0.875rem;
-      line-height: 1;
-      z-index: 1;
-    }
-
-    zard-float-label:has(input:focus) label,
-    zard-float-label:has(textarea:focus) label,
-    zard-float-label:has(button:focus) label,
-    zard-float-label:has(input.input-has-value) label,
-    zard-float-label:has(textarea.input-has-value) label,
-    zard-float-label:has(button.input-has-value) label {
-      top: 0.5rem;
-      font-size: 0.75rem;
-      color: color-mix(in oklab, var(--color-primary) 70%, var(--color-foreground));
-    }
-
-    zard-float-label:has(input.border-destructive:not(:disabled)) label,
-    zard-float-label:has(textarea.border-destructive:not(:disabled)) label,
-    zard-float-label:has(button.border-destructive:not(:disabled)) label {
-      color: var(--color-destructive);
-    }
-
-    zard-float-label:has(input.border-warning:not(:disabled)) label,
-    zard-float-label:has(textarea.border-warning:not(:disabled)) label,
-    zard-float-label:has(button.border-warning:not(:disabled)) label {
-      color: var(--color-yellow-500);
-    }
-
-    zard-float-label:has(input.border-success:not(:disabled)) label,
-    zard-float-label:has(textarea.border-success:not(:disabled)) label,
-    zard-float-label:has(button.border-success:not(:disabled)) label {
-      color: var(--color-green-500);
-    }
-  `
+  host: {
+    '[class]': 'classes()',
+  },
 })
 export class ZardFloatLabelComponent implements AfterViewInit {
-  constructor(
-    private el: ElementRef,
-    private renderer: Renderer2
-  ) {}
+  readonly class = input<string>('');
+
+  private readonly el = inject(ElementRef);
+  private readonly platformId = inject(PLATFORM_ID);
+
+  protected readonly classes = computed(() =>
+    mergeClasses(floatLabelStyles(), this.class())
+  );
 
   ngAfterViewInit() {
     this.updateLabelState();
   }
 
-  @HostListener('input', ['$event'])
-  @HostListener('focus', ['$event'])
-  @HostListener('blur', ['$event'])
-  onInteraction(event: Event) {
+  @HostListener('input')
+  @HostListener('focus')
+  @HostListener('blur')
+  onInteraction() {
     this.updateLabelState();
   }
 
   private updateLabelState() {
-    const input = this.el.nativeElement.querySelector('input, textarea, button');
-    if (input) {
-      const hasValue = !!input.value;
-      const isFocused = document.activeElement === input;
-      if (hasValue || isFocused) {
-        this.renderer.addClass(input, 'input-has-value');
-      } else {
-        this.renderer.removeClass(input, 'input-has-value');
-      }
-    }
+    if (!isPlatformBrowser(this.platformId)) return;
+
+    const input: HTMLInputElement | HTMLTextAreaElement | HTMLButtonElement | null =
+      this.el.nativeElement.querySelector('input, textarea, button');
+
+    if (!input) return;
+
+    const hasValue = !!input.value;
+    input.classList.toggle('input-has-value', hasValue);
   }
 }
+
+```
+
+
+
+```angular-ts title="float.label.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { cva } from 'class-variance-authority';
+
+
+export const floatLabelStyles = cva(
+  [
+    'relative block',
+
+    // base label
+    '[&>label]:absolute',
+    '[&>label]:left-4',
+    '[&>label]:top-1/2',
+    '[&>label]:-translate-y-1/2',
+    '[&>label]:pointer-events-none',
+    '[&>label]:transition-all',
+    '[&>label]:duration-200',
+    '[&>label]:ease-in-out',
+    '[&>label]:text-muted-foreground',
+    '[&>label]:text-sm',
+    '[&>label]:leading-none',
+    '[&>label]:z-10',
+
+    // FOCUS — when input/textarea/button inside receives focus
+    '[&:has(input:focus)>label]:top-2',
+    '[&:has(textarea:focus)>label]:top-2',
+    '[&:has(button:focus)>label]:top-2',
+
+    '[&:has(input:focus)>label]:text-xs',
+    '[&:has(textarea:focus)>label]:text-xs',
+    '[&:has(button:focus)>label]:text-xs',
+
+    '[&:has(input:focus)>label]:text-primary',
+    '[&:has(textarea:focus)>label]:text-primary',
+    '[&:has(button:focus)>label]:text-primary',
+
+    // VALUE — when input has a value
+    '[&:has(input.input-has-value)>label]:top-2',
+    '[&:has(textarea.input-has-value)>label]:top-2',
+    '[&:has(button.input-has-value)>label]:top-2',
+
+    '[&:has(input.input-has-value)>label]:text-xs',
+    '[&:has(textarea.input-has-value)>label]:text-xs',
+    '[&:has(button.input-has-value)>label]:text-xs',
+
+    // STATES — via data-status (sem depender de border-*)
+    '[&:has(input[data-status=error]:not(:disabled))>label]:text-yellow-500',
+    '[&:has(textarea[data-status=error]:not(:disabled))>label]:text-yellow-500',
+    '[&:has(button[data-status=error]:not(:disabled))>label]:text-yellow-500',
+    '[&:has(z-select[data-status=error]:not(:disabled))>label]:text-yellow-500',
+
+    '[&:has(input[data-status=warning]:not(:disabled))>label]:text-destructive',
+    '[&:has(textarea[data-status=warning]:not(:disabled))>label]:text-destructive',
+    '[&:has(button[data-status=warning]:not(:disabled))>label]:text-destructive',
+    '[&:has(z-select[data-status=warning]:not(:disabled))>label]:text-destructive',
+
+    '[&:has(input[data-status=success]:not(:disabled))>label]:text-green-500',
+    '[&:has(textarea[data-status=success]:not(:disabled))>label]:text-green-500',
+    '[&:has(button[data-status=success]:not(:disabled))>label]:text-green-500',
+    '[&:has(z-select[data-status=success]:not(:disabled))>label]:text-green-500',
+  ]
+);
 
 ```
 

@@ -1,10 +1,10 @@
 ```angular-ts showLineNumbers copyButton
 import { ZardFormLabelComponent } from '@zard/components/form/form.component';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
+import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { Component, inject } from '@angular/core';
 
 import { ZardFloatLabelComponent } from '../float.label.component';
-import { ZardInputDirective } from '../input.directive';
 
 
 @Component({

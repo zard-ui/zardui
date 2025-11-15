@@ -1,6 +1,5 @@
 import { ZardDemoInputBorderlessComponent } from './borderless';
 import { ZardDemoInputDefaultComponent } from './default';
-import { ZardFloatLabelDemoComponent } from './float.input';
 import { ZardDemoInputSizeComponent } from './size';
 import { ZardDemoInputStatusComponent } from './status';
 import { ZardDemoInputTextAreaComponent } from './text-area';
@@ -13,11 +12,6 @@ export const INPUT = {
     {
       name: 'default',
       component: ZardDemoInputDefaultComponent,
-      column: true,
-    },
-    {
-      name: 'float-label',
-      component: ZardFloatLabelDemoComponent,
       column: true,
     },
     {

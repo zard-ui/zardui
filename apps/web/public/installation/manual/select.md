@@ -1,36 +1,18 @@
 
 
 ```angular-ts title="select.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import {
-  type AfterContentInit,
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  contentChildren,
-  ElementRef,
-  forwardRef,
-  HostListener,
-  inject,
-  input,
-  linkedSignal,
-  type OnDestroy,
-  type OnInit,
-  output,
-  PLATFORM_ID,
-  signal,
-  type TemplateRef,
-  viewChild,
-  ViewContainerRef,
-} from '@angular/core';
+import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, ElementRef, forwardRef, HostListener, inject, input, linkedSignal, type OnDestroy, type OnInit, output, PLATFORM_ID, Renderer2, signal, type TemplateRef, viewChild, ViewContainerRef, } from '@angular/core';
+import { type ControlValueAccessor, FormControlDirective, FormControlName, NG_VALUE_ACCESSOR, NgControl, NgModel } from '@angular/forms';
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
+import { fromEvent, Subscription } from 'rxjs';
 
 import { selectContentVariants, selectTriggerVariants, type ZardSelectTriggerVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardSelectItemComponent } from './select-item.component';
 import { ZardIconComponent } from '../icon/icon.component';
+
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -68,7 +50,7 @@ type OnChangeType = (value: string) => void;
         @if (selectedValue()) {
           <span>{{ selectedLabel() }}</span>
         } @else {
-          <span class="text-muted-foreground">{{ zPlaceholder() }}</span>
+          <span class="text-muted-foreground" id="select-placeholder">{{ zPlaceholder() }}</span>
         }
       </span>
       <z-icon zType="chevron-down" zSize="lg" class="opacity-50" />
@@ -85,6 +67,7 @@ type OnChangeType = (value: string) => void;
 })
 export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
+  private readonly renderer = inject(Renderer2);
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly viewContainerRef = inject(ViewContainerRef);
@@ -103,6 +86,13 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
   readonly zValue = input<string>('');
   readonly zLabel = input<string>('');
   readonly class = input<string>('');
+
+  readonly ngControl = inject(NgControl, { optional: true, self: true });
+  readonly ngModel = inject(NgModel, { optional: true, self: true });
+  readonly formControlName = inject(FormControlName, { optional: true, self: true });
+  readonly formControlDirective = inject(FormControlDirective, { optional: true, self: true });
+
+  private subscription = new Subscription();
 
   readonly zSelectionChange = output<string>();
 
@@ -166,9 +156,26 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
         selectItem: (value: string, label: string) => this.selectItem(value, label),
       });
     }
+
+    const control = this.formControlName || this.formControlDirective || this.ngControl;
+    if (control?.control) {
+      this.subscription.add(control.control.valueChanges.subscribe(() => this.updateSelectState()));
+    }
+    if (this.ngModel?.valueChanges) {
+      this.subscription.add(this.ngModel.valueChanges.subscribe(() => this.updateSelectState()));
+    }
+
+    const button = this.elementRef.nativeElement.querySelector('button');
+    if (button) {
+      this.subscription.add(fromEvent(button, 'focus').subscribe(() => this.updateSelectState()));
+      this.subscription.add(fromEvent(button, 'blur').subscribe(() => this.updateSelectState()));
+    }
+
+    this.updateSelectState();
   }
 
   ngOnDestroy() {
+    this.subscription.unsubscribe();
     this.destroyOverlay();
   }
 
@@ -289,6 +296,18 @@ export class ZardSelectComponent implements ControlValueAccessor, OnInit, AfterC
       this.focusButton();
     }, 0);
   }
+
+  private updateSelectState = () => {
+    const hasValue = !!this.selectedValue();
+    const button = this.elementRef.nativeElement.querySelector('button');
+    if (button) {
+      if (hasValue) {
+        this.renderer.addClass(button, 'input-has-value');
+      } else {
+        this.renderer.removeClass(button, 'input-has-value');
+      }
+    }
+  };
 
   private createOverlay() {
     if (this.overlayRef) return; // Already created

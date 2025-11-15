@@ -10,7 +10,6 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 @Directive({
   selector: 'input[z-input], textarea[z-input]',
   exportAs: 'zInput',
-  standalone: true,
   host: {
     '[class]': 'classes()',
   },
@@ -37,25 +36,23 @@ export class ZardInputDirective implements AfterViewInit, OnDestroy {
   );
 
   ngAfterViewInit(): void {
-    setTimeout(() => {
-      const nativeElement = this.elementRef.nativeElement;
+    const nativeElement = this.elementRef.nativeElement;
 
-      const control = this.formControlName || this.formControlDirective || this.ngControl;
+    const control = this.formControlName || this.formControlDirective || this.ngControl;
 
-      /** Reactive Forms */
-      if (control?.control) {
-        this.subscription.add(control.control.valueChanges.subscribe(() => this.updateInputState()));
-      }
-      /** Template-driven Forms */
-      if (this.ngModel?.valueChanges) {
-        this.subscription.add(this.ngModel.valueChanges.subscribe(() => this.updateInputState()));
-      }
+    /** Reactive Forms */
+    if (control?.control) {
+      this.subscription.add(control.control.valueChanges.subscribe(() => this.updateInputState()));
+    }
+    /** Template-driven Forms */
+    if (this.ngModel?.valueChanges) {
+      this.subscription.add(this.ngModel.valueChanges.subscribe(() => this.updateInputState()));
+    }
 
-      this.subscription.add(fromEvent(nativeElement, 'input').subscribe(() => this.updateInputState()));
-      this.subscription.add(fromEvent(nativeElement, 'change').subscribe(() => this.updateInputState()));
+    this.subscription.add(fromEvent(nativeElement, 'input').subscribe(() => this.updateInputState()));
+    this.subscription.add(fromEvent(nativeElement, 'change').subscribe(() => this.updateInputState()));
 
-      this.updateInputState();
-    });
+    this.updateInputState();
   }
 
   updateInputState = () => {
@@ -67,6 +64,8 @@ export class ZardInputDirective implements AfterViewInit, OnDestroy {
     } else {
       this.renderer.removeClass(nativeElement, 'input-has-value');
     }
+
+    this.renderer.setAttribute(this.elementRef.nativeElement, 'data-status', this.zStatus() || 'default');
   };
 
   ngOnDestroy(): void {
