@@ -1,20 +1,43 @@
 
 
 ```angular-ts title="select.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, ElementRef, forwardRef, inject, input, model, type OnDestroy, output, PLATFORM_ID, signal, type TemplateRef, viewChild, ViewContainerRef, } from '@angular/core';
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { Subject, takeUntil } from 'rxjs';
-import type { ClassValue } from 'clsx';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import {
+  type AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  ElementRef,
+  forwardRef,
+  inject,
+  input,
+  model,
+  type OnDestroy,
+  output,
+  PLATFORM_ID,
+  signal,
+  type TemplateRef,
+  viewChild,
+  ViewContainerRef,
+} from '@angular/core';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { selectContentVariants, selectTriggerVariants, selectVariants, type ZardSelectTriggerVariants, } from './select.variants';
-import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+import { Subject, takeUntil } from 'rxjs';
+
 import { ZardSelectItemComponent } from './select-item.component';
+import {
+  selectContentVariants,
+  selectTriggerVariants,
+  selectVariants,
+  ZardSelectSizeVariants,
+} from './select.variants';
+import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
 import { ZardIconComponent } from '../icon/icon.component';
-
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -51,7 +74,7 @@ type OnChangeType = (value: string) => void;
       <span class="flex flex-1 flex-wrap items-center gap-2">
         @let labels = selectedLabels();
         @for (label of labels; track index; let index = $index) {
-          <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }"> </ng-container>
+          <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }" />
         } @empty {
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
@@ -78,7 +101,7 @@ type OnChangeType = (value: string) => void;
         tabindex="-1"
       >
         <div class="p-1">
-          <ng-content></ng-content>
+          <ng-content />
         </div>
       </div>
     </ng-template>
@@ -96,7 +119,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   readonly class = input<ClassValue>('');
   readonly zDisabled = input(false, { transform });
@@ -104,7 +127,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   readonly zMaxLabelCount = input<number>(1);
   readonly zMultiple = input<boolean>(false);
   readonly zPlaceholder = input<string>('Select an option...');
-  readonly zSize = input<ZardSelectTriggerVariants['zSize']>('default');
+  readonly zSize = input<ZardSelectSizeVariants>('default');
   readonly zValue = model<string | string[]>(this.zMultiple() ? [] : '');
 
   readonly zSelectionChange = output<string | string[]>();
@@ -339,7 +362,9 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   private determinePortalWidth(portalWidth: number): void {
-    if (!this.overlayRef || !this.overlayRef.hasAttached()) return;
+    if (!this.overlayRef?.hasAttached()) {
+      return;
+    }
 
     const selectItems = this.selectItems();
     let itemMaxWidth = 0;
@@ -545,7 +570,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const selectVariants = cva('relative inline-block w-full');
 
 export const selectTriggerVariants = cva(
-  'flex w-full justify-between gap-2 rounded-md border border-input bg-transparent px-3 shadow-xs transition-[color,box-shadow] outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+  'flex w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 shadow-xs transition-[color,box-shadow] outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
     variants: {
       zSize: {
@@ -559,14 +584,14 @@ export const selectTriggerVariants = cva(
     },
   },
 );
-export const selectContentVariants = cva('z-9999 min-w-full overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95');
+export const selectContentVariants = cva(
+  'z-9999 min-w-full overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95',
+);
 export const selectItemVariants = cva(
   'relative flex min-w-full cursor-pointer text-nowrap items-center gap-2 rounded-sm mb-0.5 py-1.5 pr-8 pl-2 text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground data-selected:bg-accent data-selected:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:hover:bg-transparent data-disabled:hover:text-current [&_svg:not([class*="text-"])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
 );
 
-export type ZardSelectTriggerVariants = VariantProps<typeof selectTriggerVariants>;
-export type ZardSelectContentVariants = VariantProps<typeof selectContentVariants>;
-export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
+export type ZardSelectSizeVariants = NonNullable<VariantProps<typeof selectTriggerVariants>['zSize']>;
 
 ```
 

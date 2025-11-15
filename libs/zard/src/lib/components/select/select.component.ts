@@ -30,7 +30,7 @@ import {
   selectContentVariants,
   selectTriggerVariants,
   selectVariants,
-  type ZardSelectTriggerVariants,
+  ZardSelectSizeVariants,
 } from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
@@ -71,7 +71,7 @@ type OnChangeType = (value: string) => void;
       <span class="flex flex-1 flex-wrap items-center gap-2">
         @let labels = selectedLabels();
         @for (label of labels; track index; let index = $index) {
-          <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }"> </ng-container>
+          <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }" />
         } @empty {
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
@@ -98,7 +98,7 @@ type OnChangeType = (value: string) => void;
         tabindex="-1"
       >
         <div class="p-1">
-          <ng-content></ng-content>
+          <ng-content />
         </div>
       </div>
     </ng-template>
@@ -116,7 +116,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
 
   readonly class = input<ClassValue>('');
   readonly zDisabled = input(false, { transform });
@@ -124,7 +124,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   readonly zMaxLabelCount = input<number>(1);
   readonly zMultiple = input<boolean>(false);
   readonly zPlaceholder = input<string>('Select an option...');
-  readonly zSize = input<ZardSelectTriggerVariants['zSize']>('default');
+  readonly zSize = input<ZardSelectSizeVariants>('default');
   readonly zValue = model<string | string[]>(this.zMultiple() ? [] : '');
 
   readonly zSelectionChange = output<string | string[]>();
@@ -359,7 +359,9 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   private determinePortalWidth(portalWidth: number): void {
-    if (!this.overlayRef || !this.overlayRef.hasAttached()) return;
+    if (!this.overlayRef?.hasAttached()) {
+      return;
+    }
 
     const selectItems = this.selectItems();
     let itemMaxWidth = 0;
