@@ -17,7 +17,13 @@ import { type ClassValue } from 'clsx';
 import type { EmblaCarouselType, EmblaEventType, EmblaPluginType, EmblaOptionsType } from 'embla-carousel';
 import { EmblaCarouselDirective } from 'embla-carousel-angular';
 
-import { carouselNextButtonVariants, carouselPreviousButtonVariants, carouselVariants } from './carousel.variants';
+import {
+  carouselNextButtonVariants,
+  carouselPreviousButtonVariants,
+  carouselVariants,
+  type ZardCarouselControlsVariants,
+  type ZardCarouselOrientationVariants,
+} from './carousel.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -52,6 +58,7 @@ import { ZardIconComponent } from '../icon/icon.component';
 
     <ng-template #buttonControls>
       <button
+        type="button"
         z-button
         zType="outline"
         [class]="prevBtnClasses()"
@@ -62,6 +69,7 @@ import { ZardIconComponent } from '../icon/icon.component';
         <z-icon zType="chevron-left" class="size-4" />
       </button>
       <button
+        type="button"
         z-button
         zType="outline"
         [class]="nextBtnClasses()"
@@ -104,8 +112,8 @@ export class ZardCarouselComponent {
   readonly class = input<ClassValue>('');
   readonly zOptions = input<EmblaOptionsType>({ loop: false });
   readonly zPlugins = input<EmblaPluginType[]>([]);
-  readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
-  readonly zControls = input<'button' | 'dot' | 'none'>('button');
+  readonly zOrientation = input<ZardCarouselOrientationVariants>('horizontal');
+  readonly zControls = input<ZardCarouselControlsVariants>('button');
   readonly zInited = output<EmblaCarouselType>();
   readonly zSelected = output<void>();
 
@@ -206,6 +214,11 @@ export const carouselVariants = cva('overflow-hidden', {
       horizontal: '',
       vertical: 'h-full',
     },
+    zControls: {
+      none: '',
+      button: '',
+      dot: '',
+    },
   },
   defaultVariants: {
     zOrientation: 'horizontal',
@@ -260,11 +273,8 @@ export const carouselNextButtonVariants = cva('absolute size-8 rounded-full', {
   },
 });
 
-export type ZardCarouselVariants = VariantProps<typeof carouselVariants>;
-export type ZardCarouselContentVariants = VariantProps<typeof carouselContentVariants>;
-export type ZardCarouselItemVariants = VariantProps<typeof carouselItemVariants>;
-export type ZardCarouselPreviousButtonVariants = VariantProps<typeof carouselPreviousButtonVariants>;
-export type ZardCarouselNextButtonVariants = VariantProps<typeof carouselNextButtonVariants>;
+export type ZardCarouselOrientationVariants = NonNullable<VariantProps<typeof carouselVariants>['zOrientation']>;
+export type ZardCarouselControlsVariants = NonNullable<VariantProps<typeof carouselVariants>['zControls']>;
 
 ```
 

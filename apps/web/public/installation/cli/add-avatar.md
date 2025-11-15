@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add avatar
+npx @ngzard/ui@latest add avatar
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui add avatar
+pnpm dlx @ngzard/ui@latest add avatar
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui add avatar
+yarn dlx @ngzard/ui@latest add avatar
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui add avatar
+bunx @ngzard/ui@latest add avatar
 ```

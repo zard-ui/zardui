@@ -106,6 +106,7 @@ export const COMPONENTS_PATH = {
     { name: 'Loader', path: '/docs/components/loader', available: true },
     { name: 'Dropdown', path: '/docs/components/dropdown', available: true },
     { name: 'Popover', path: '/docs/components/popover', available: true },
+    { name: 'Kbd', path: '/docs/components/kbd', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 

@@ -14,7 +14,7 @@ import {
 } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { ClassValue } from 'clsx';
+import type { ClassValue } from 'clsx';
 
 import {
   breadcrumbEllipsisVariants,

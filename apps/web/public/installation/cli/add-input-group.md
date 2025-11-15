@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add input-group
+npx @ngzard/ui@latest add input-group
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui add input-group
+pnpm dlx @ngzard/ui@latest add input-group
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui add input-group
+yarn dlx @ngzard/ui@latest add input-group
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui add input-group
+bunx @ngzard/ui@latest add input-group
 ```

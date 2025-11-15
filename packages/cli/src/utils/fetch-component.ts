@@ -1,9 +1,8 @@
-import { join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-import { readFileSync } from 'fs';
-import { execa } from 'execa';
-
 import type { Config } from '@cli/utils/config.js';
+import { execa } from 'execa';
+import { readFileSync } from 'node:fs';
+import { join, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -41,7 +40,14 @@ const GITHUB_RAW = `https://raw.githubusercontent.com/zard-ui/zardui/${GITHUB_RE
 async function fetchFromGitHubAPI(filePath: string): Promise<string> {
   try {
     const apiUrl = `${GITHUB_API}/${filePath}?ref=${GITHUB_REF}`;
-    const { stdout } = await execa('curl', ['-s', '-H', 'Accept: application/vnd.github.v3+json', '-H', 'User-Agent: zard-cli', apiUrl]);
+    const { stdout } = await execa('curl', [
+      '-s',
+      '-H',
+      'Accept: application/vnd.github.v3+json',
+      '-H',
+      'User-Agent: zard-cli',
+      apiUrl,
+    ]);
 
     const response = JSON.parse(stdout);
 
@@ -68,7 +74,11 @@ async function fetchFromGitHubAPI(filePath: string): Promise<string> {
   }
 }
 
-export async function fetchComponentFromGithub(componentName: string, fileName: string, config: Config): Promise<string> {
+export async function fetchComponentFromGithub(
+  componentName: string,
+  fileName: string,
+  config: Config,
+): Promise<string> {
   try {
     const filePath = `libs/zard/src/lib/components/${componentName}/${fileName}`;
 
@@ -88,15 +98,27 @@ function transformContent(content: string, config: Config): string {
   const utilsImportPath = convertPhysicalPathToImportAlias(config.aliases.utils);
   const componentsImportPath = convertPhysicalPathToImportAlias(config.aliases.components);
 
-  transformed = transformed.replace(/from ['"]\.\.\/\.\.\/shared\/utils\/utils['"]/g, `from '${utilsImportPath}/merge-classes'`);
+  transformed = transformed.replace(
+    /from ['"]\.\.\/\.\.\/shared\/utils\/utils['"]/g,
+    `from '${utilsImportPath}/merge-classes'`,
+  );
 
-  transformed = transformed.replace(/from ['"]\.\.\/\.\.\/shared\/utils\/number['"]/g, `from '${utilsImportPath}/number'`);
+  transformed = transformed.replace(
+    /from ['"]\.\.\/\.\.\/shared\/utils\/number['"]/g,
+    `from '${utilsImportPath}/number'`,
+  );
 
   const componentImportRegex = /from ['"]\.\.\/([\w-/]+)['"]/g;
   transformed = transformed.replace(componentImportRegex, `from '${componentsImportPath}/$1'`);
 
-  transformed = transformed.replace(/import \{ ClassValue \} from ['"]class-variance-authority\/dist\/types['"]/g, `import { ClassValue } from 'clsx'`);
-  transformed = transformed.replace(/import \{ ClassValue \} from ['"]class-variance-authority['"]/g, `import { ClassValue } from 'clsx'`);
+  transformed = transformed.replace(
+    /import \{ ClassValue \} from ['"]class-variance-authority\/dist\/types['"]/g,
+    `import { ClassValue } from 'clsx'`,
+  );
+  transformed = transformed.replace(
+    /import \{ ClassValue \} from ['"]class-variance-authority['"]/g,
+    `import { ClassValue } from 'clsx'`,
+  );
 
   return transformed;
 }

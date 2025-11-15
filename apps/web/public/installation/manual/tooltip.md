@@ -3,7 +3,7 @@
 ```angular-ts title="tooltip.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,6 +20,7 @@ import {
   PLATFORM_ID,
   Renderer2,
   signal,
+  TemplateRef,
 } from '@angular/core';
 
 import { merge, Subject, take, takeUntil } from 'rxjs';
@@ -49,7 +50,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private componentRef?: ComponentRef<ZardTooltipComponent>;
   private scrollListenerRef?: () => void;
 
-  readonly zTooltip = input<string | null>(null);
+  readonly zTooltip = input<string | TemplateRef<void> | null>(null);
   readonly zPosition = input<ZardTooltipPositions>('top');
   readonly zTrigger = input<ZardTooltipTriggers>('hover');
 
@@ -84,7 +85,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     if (this.componentRef) return;
 
     const tooltipText = this.zTooltip();
-    if (!tooltipText || tooltipText.trim() === '') return;
+    if (!tooltipText) return;
 
     const tooltipPortal = new ComponentPortal(ZardTooltipComponent);
     this.componentRef = this.overlayRef?.attach(tooltipPortal);
@@ -152,7 +153,14 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
 
 @Component({
   selector: 'z-tooltip',
-  template: `{{ text() }}`,
+  imports: [NgTemplateOutlet],
+  template: `
+    @if (templateContent) {
+      <ng-container *ngTemplateOutlet="templateContent"></ng-container>
+    } @else if (stringContent) {
+      {{ stringContent }}
+    }
+  `,
   host: {
     '[class]': 'classes()',
     '[attr.data-side]': 'position()',
@@ -166,7 +174,7 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
 
   protected position = signal<ZardTooltipPositions>('top');
   private trigger = signal<ZardTooltipTriggers>('hover');
-  protected text = signal<string>('');
+  protected text: string | TemplateRef<void> | null = null;
 
   state = signal<'closed' | 'opened'>('closed');
 
@@ -185,10 +193,18 @@ export class ZardTooltipComponent implements OnInit, OnDestroy {
     this.onLoadSubject$.complete();
   }
 
-  setProps(text: string | null, position: ZardTooltipPositions, trigger: ZardTooltipTriggers) {
-    if (text) this.text.set(text);
+  setProps(text: string | TemplateRef<void> | null, position: ZardTooltipPositions, trigger: ZardTooltipTriggers) {
+    if (text) this.text = text;
     this.position.set(position);
     this.trigger.set(trigger);
+  }
+
+  get templateContent(): TemplateRef<void> | null {
+    return this.text instanceof TemplateRef ? this.text : null;
+  }
+
+  get stringContent(): string | null {
+    return typeof this.text === 'string' ? this.text : null;
   }
 }
 

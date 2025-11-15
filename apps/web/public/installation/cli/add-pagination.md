@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add pagination
+npx @ngzard/ui@latest add pagination
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui add pagination
+pnpm dlx @ngzard/ui@latest add pagination
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui add pagination
+yarn dlx @ngzard/ui@latest add pagination
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui add pagination
+bunx @ngzard/ui@latest add pagination
 ```

@@ -14,7 +14,13 @@ import { type ClassValue } from 'clsx';
 import type { EmblaCarouselType, EmblaEventType, EmblaPluginType, EmblaOptionsType } from 'embla-carousel';
 import { EmblaCarouselDirective } from 'embla-carousel-angular';
 
-import { carouselNextButtonVariants, carouselPreviousButtonVariants, carouselVariants } from './carousel.variants';
+import {
+  carouselNextButtonVariants,
+  carouselPreviousButtonVariants,
+  carouselVariants,
+  type ZardCarouselControlsVariants,
+  type ZardCarouselOrientationVariants,
+} from './carousel.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -49,6 +55,7 @@ import { ZardIconComponent } from '../icon/icon.component';
 
     <ng-template #buttonControls>
       <button
+        type="button"
         z-button
         zType="outline"
         [class]="prevBtnClasses()"
@@ -59,6 +66,7 @@ import { ZardIconComponent } from '../icon/icon.component';
         <z-icon zType="chevron-left" class="size-4" />
       </button>
       <button
+        type="button"
         z-button
         zType="outline"
         [class]="nextBtnClasses()"
@@ -101,8 +109,8 @@ export class ZardCarouselComponent {
   readonly class = input<ClassValue>('');
   readonly zOptions = input<EmblaOptionsType>({ loop: false });
   readonly zPlugins = input<EmblaPluginType[]>([]);
-  readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
-  readonly zControls = input<'button' | 'dot' | 'none'>('button');
+  readonly zOrientation = input<ZardCarouselOrientationVariants>('horizontal');
+  readonly zControls = input<ZardCarouselControlsVariants>('button');
   readonly zInited = output<EmblaCarouselType>();
   readonly zSelected = output<void>();
 

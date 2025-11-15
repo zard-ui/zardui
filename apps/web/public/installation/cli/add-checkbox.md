@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add checkbox
+npx @ngzard/ui@latest add checkbox
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui add checkbox
+pnpm dlx @ngzard/ui@latest add checkbox
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui add checkbox
+yarn dlx @ngzard/ui@latest add checkbox
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui add checkbox
+bunx @ngzard/ui@latest add checkbox
 ```

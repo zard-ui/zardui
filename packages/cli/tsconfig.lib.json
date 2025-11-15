@@ -8,14 +8,9 @@
     "types": ["node"],
     "module": "ESNext",
     "target": "ES2022",
+    "baseUrl": ".",
     "paths": {
-      "@blocks": ["libs/blocks/src/index.ts"],
-      "@cli/*": ["packages/cli/src/*"],
-      "@zard/*": ["libs/zard/src/lib/*"],
-      "@zard/domain/*": ["apps/web/src/app/domain/*"],
-      "@zard/env/*": ["apps/web/src/environments/*"],
-      "@zard/shared/*": ["apps/web/src/app/shared/*"],
-      "@zard/widget/*": ["apps/web/src/app/widget/*"]
+      "@cli/*": ["src/*"]
     }
   },
   "include": ["src/**/*.ts"],

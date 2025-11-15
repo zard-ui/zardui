@@ -1,7 +1,7 @@
-import { installPackages } from '@cli/utils/package-manager.js';
-import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { type Config } from '@cli/utils/config.js';
+import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger } from '@cli/utils/logger.js';
+import { installPackages } from '@cli/utils/package-manager.js';
 
 export async function installDependencies(cwd: string, config: Config): Promise<void> {
   const projectInfo = await getProjectInfo(cwd);
@@ -19,7 +19,7 @@ function getCdkVersion(angularVersion?: string): string {
     return '@angular/cdk';
   }
 
-  const majorVersion = parseInt(angularVersion.split('.')[0]);
+  const majorVersion = Number.parseInt(angularVersion.split('.')[0]);
 
   if (majorVersion === 19) {
     return '@angular/cdk@^19.0.0';
@@ -32,7 +32,12 @@ function getCdkVersion(angularVersion?: string): string {
   return '@angular/cdk';
 }
 
-async function installWithRetry(packages: string[], cwd: string, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun', isDev: boolean): Promise<void> {
+async function installWithRetry(
+  packages: string[],
+  cwd: string,
+  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
+  isDev: boolean,
+): Promise<void> {
   try {
     await installPackages(packages, cwd, packageManager, isDev);
   } catch (error) {

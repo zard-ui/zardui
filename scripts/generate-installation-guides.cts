@@ -114,7 +114,18 @@ function generateCliInstallDepsMarkdown(dependencies: ComponentDependency[]): st
   if (externalDeps.length === 0) return '';
 
   // Basic dependencies that are already included in the main project setup
-  const basicDependencies = ['@angular/cdk', 'class-variance-authority', 'clsx', 'tailwind-merge', 'tailwindcss-animate', 'lucide-static'];
+  const basicDependencies = [
+    '@angular/cdk',
+    'class-variance-authority',
+    'clsx',
+    'tailwind-merge',
+    'tailwindcss-animate',
+    'lucide-angular',
+    'embla-carousel-angular',
+    'embla-carousel-autoplay',
+    'embla-carousel-class-names',
+    'embla-carousel-wheel-gestures',
+  ];
 
   // Filter out basic dependencies - only create file for additional external dependencies
   const additionalDeps = externalDeps.filter(dep => dep.npmPackage && !basicDependencies.includes(dep.npmPackage));
@@ -142,19 +153,19 @@ bun add ${packages}
 
 function generateCliAddComponentMarkdown(componentName: string): string {
   return `\`\`\`bash tab="npm" copyButton
-npx @ngzard/ui add ${componentName}
+npx @ngzard/ui@latest add ${componentName}
 \`\`\`
 
 \`\`\`bash tab="pnpm"
-pnpm dlx @ngzard/ui add ${componentName}
+pnpm dlx @ngzard/ui@latest add ${componentName}
 \`\`\`
 
 \`\`\`bash tab="yarn"
-yarn dlx @ngzard/ui add ${componentName}
+yarn dlx @ngzard/ui@latest add ${componentName}
 \`\`\`
 
 \`\`\`bash tab="bun"
-bunx @ngzard/ui add ${componentName}
+bunx @ngzard/ui@latest add ${componentName}
 \`\`\``;
 }
 
@@ -163,7 +174,14 @@ function generateManualInstallDepsMarkdown(dependencies: ComponentDependency[]):
   if (externalDeps.length === 0) return '';
 
   // Basic dependencies that are already included in the main project setup
-  const basicDependencies = ['@angular/cdk', 'class-variance-authority', 'clsx', 'tailwind-merge', 'tailwindcss-animate', 'lucide-static'];
+  const basicDependencies = [
+    '@angular/cdk',
+    'class-variance-authority',
+    'clsx',
+    'tailwind-merge',
+    'tailwindcss-animate',
+    'lucide-angular',
+  ];
 
   // Filter out basic dependencies - only create file for additional external dependencies
   const additionalDeps = externalDeps.filter(dep => dep.npmPackage && !basicDependencies.includes(dep.npmPackage));
@@ -194,7 +212,12 @@ function generateComponentMarkdown(componentPath: string, componentName: string)
     let markdown = '';
 
     // Check for different file types in order of preference
-    const possibleFiles = [`${componentName}.component.ts`, `${componentName}.directive.ts`, `${componentName}.ts`, `${componentName}.variants.ts`];
+    const possibleFiles = [
+      `${componentName}.component.ts`,
+      `${componentName}.directive.ts`,
+      `${componentName}.ts`,
+      `${componentName}.variants.ts`,
+    ];
 
     possibleFiles.forEach(fileName => {
       const filePath = path.join(componentPath, fileName);
@@ -208,7 +231,12 @@ function generateComponentMarkdown(componentPath: string, componentName: string)
     // Add additional component files (like service files for dialog) and HTML templates
     const additionalFiles = fs.readdirSync(componentPath).filter(file => {
       // Include .ts and .html files but exclude spec files, demo files, and already processed files
-      return (file.endsWith('.ts') || file.endsWith('.html')) && !file.includes('.spec.') && !file.startsWith('demo/') && !possibleFiles.includes(file);
+      return (
+        (file.endsWith('.ts') || file.endsWith('.html')) &&
+        !file.includes('.spec.') &&
+        !file.startsWith('demo/') &&
+        !possibleFiles.includes(file)
+      );
     });
 
     additionalFiles.forEach(fileName => {

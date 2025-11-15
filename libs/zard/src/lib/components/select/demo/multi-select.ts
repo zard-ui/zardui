@@ -12,7 +12,7 @@ import { ZardSelectComponent } from '../select.component';
       zPlaceholder="Select multiple fruits"
       [zMultiple]="true"
       [zMaxLabelCount]="4"
-      [(zValue)]="defaultValue"
+      [(zValue)]="selectedValues"
       class="w-[300px]"
     >
       <z-select-item zValue="apple">Apple</z-select-item>
@@ -28,11 +28,11 @@ import { ZardSelectComponent } from '../select.component';
   `,
 })
 export class ZardDemoMultiSelectBasicComponent {
-  defaultValue = signal<string[]>([]);
+  selectedValues = signal<string[]>([]);
 
   constructor() {
     effect(() => {
-      console.log(this.defaultValue());
+      console.log(this.selectedValues());
     });
   }
 }
