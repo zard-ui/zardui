@@ -13,7 +13,8 @@
     "lib": ["es2020", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "verbatimModuleSyntax": true
   },
   "exclude": ["node_modules", "tmp"]
 }

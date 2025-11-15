@@ -4,13 +4,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AiAssistComponent } from '@doc/domain/components/ai-assist/ai-assist.component';
 
-import { ComponentData, COMPONENTS } from '../../../shared/constants/components.constant';
-import { Step } from '../../../shared/constants/install.constant';
+import { type ComponentData, COMPONENTS } from '../../../shared/constants/components.constant';
+import type { Step } from '../../../shared/constants/install.constant';
 import { DynamicInstallationService } from '../../../shared/services/dynamic-installation.service';
 import { SeoService } from '../../../shared/services/seo.service';
 import { ZardCodeBoxComponent } from '../../../widget/components/zard-code-box/zard-code-box.component';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
 import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
 import { StepsComponent } from '../../components/steps/steps.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
@@ -20,7 +20,15 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent, AiAssistComponent],
+  imports: [
+    DocContentComponent,
+    StepsComponent,
+    ZardCodeBoxComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    MarkdownRendererComponent,
+    AiAssistComponent,
+  ],
 })
 export class ComponentPage {
   private readonly activatedRoute = inject(ActivatedRoute);
@@ -38,6 +46,7 @@ export class ComponentPage {
       { id: 'api', label: 'API', type: 'core' },
     ],
   };
+
   activeTab = signal<'manual' | 'cli'>('cli');
   installGuide!: { manual: Step[]; cli: Step[] } | undefined;
 

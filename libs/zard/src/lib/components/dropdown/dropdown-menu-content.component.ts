@@ -16,7 +16,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   template: `
     <ng-template #contentTemplate>
       <div [class]="contentClasses()" role="menu" tabindex="-1" [attr.aria-orientation]="'vertical'">
-        <ng-content></ng-content>
+        <ng-content />
       </div>
     </ng-template>
   `,

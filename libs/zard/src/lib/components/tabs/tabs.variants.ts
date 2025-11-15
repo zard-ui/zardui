@@ -77,4 +77,6 @@ export const tabButtonVariants = cva('hover:bg-transparent rounded-none flex-shr
   },
 });
 
-export type ZardTabVariants = VariantProps<typeof tabContainerVariants> & VariantProps<typeof tabNavVariants> & VariantProps<typeof tabButtonVariants> & { zAlignTabs: zAlign };
+export type ZardTabVariants = VariantProps<typeof tabContainerVariants> &
+  VariantProps<typeof tabNavVariants> &
+  VariantProps<typeof tabButtonVariants> & { zAlignTabs: zAlign };

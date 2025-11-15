@@ -16,9 +16,7 @@ export class ZardDemoToastLoadingComponent {
 
     toast.promise(promise, {
       loading: 'Loading...',
-      success: (data: any) => {
-        return `${data.name} has been created`;
-      },
+      success: (data: any) => `${data.name} has been created`,
       error: 'Error',
     });
   }

@@ -4,7 +4,14 @@ import { Component } from '@angular/core';
 import { ZardBadgeComponent } from '../../badge/badge.component';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardTableBodyComponent, ZardTableCellComponent, ZardTableComponent, ZardTableHeadComponent, ZardTableHeaderComponent, ZardTableRowComponent } from '../table.component';
+import {
+  ZardTableBodyComponent,
+  ZardTableCellComponent,
+  ZardTableComponent,
+  ZardTableHeadComponent,
+  ZardTableHeaderComponent,
+  ZardTableRowComponent,
+} from '../table.component';
 
 export interface Payment {
   id: string;
@@ -137,8 +144,8 @@ export class ZardDemoTablePaymentsComponent {
     }
   }
 
-  copyPaymentId(id: string): void {
-    navigator.clipboard.writeText(id);
+  async copyPaymentId(id: string): Promise<void> {
+    await navigator.clipboard.writeText(id);
     console.log('Payment ID copied:', id);
   }
 

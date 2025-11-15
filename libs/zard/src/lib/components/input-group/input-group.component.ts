@@ -1,8 +1,22 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input, type TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  type TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
-import { inputGroupAddonVariants, inputGroupAffixVariants, inputGroupInputVariants, inputGroupVariants, type ZardInputGroupVariants } from './input-group.variants';
+import {
+  inputGroupAddonVariants,
+  inputGroupAffixVariants,
+  inputGroupInputVariants,
+  inputGroupVariants,
+  type ZardInputGroupVariants,
+} from './input-group.variants';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 
@@ -24,29 +38,49 @@ import { ZardStringTemplateOutletDirective } from '../core/directives/string-tem
       [attr.data-disabled]="zDisabled()"
     >
       @if (zAddOnBefore()) {
-        <div [class]="addonBeforeClasses()" [id]="addonBeforeId()" [attr.aria-label]="zAddOnBeforeAriaLabel()" [attr.aria-disabled]="zDisabled()">
+        <div
+          [class]="addonBeforeClasses()"
+          [id]="addonBeforeId()"
+          [attr.aria-label]="zAddOnBeforeAriaLabel()"
+          [attr.aria-disabled]="zDisabled()"
+        >
           <ng-container *zStringTemplateOutlet="zAddOnBefore()">{{ zAddOnBefore() }}</ng-container>
         </div>
       }
 
       <div [class]="inputWrapperClasses()">
         @if (zPrefix()) {
-          <div [class]="prefixClasses()" [id]="prefixId()" [attr.aria-label]="zPrefixAriaLabel()" [attr.aria-hidden]="true">
+          <div
+            [class]="prefixClasses()"
+            [id]="prefixId()"
+            [attr.aria-label]="zPrefixAriaLabel()"
+            [attr.aria-hidden]="true"
+          >
             <ng-container *zStringTemplateOutlet="zPrefix()">{{ zPrefix() }}</ng-container>
           </div>
         }
 
-        <ng-content select="input[z-input], textarea[z-input]"></ng-content>
+        <ng-content select="input[z-input], textarea[z-input]" />
 
         @if (zSuffix()) {
-          <div [class]="suffixClasses()" [id]="suffixId()" [attr.aria-label]="zSuffixAriaLabel()" [attr.aria-hidden]="true">
+          <div
+            [class]="suffixClasses()"
+            [id]="suffixId()"
+            [attr.aria-label]="zSuffixAriaLabel()"
+            [attr.aria-hidden]="true"
+          >
             <ng-container *zStringTemplateOutlet="zSuffix()">{{ zSuffix() }}</ng-container>
           </div>
         }
       </div>
 
       @if (zAddOnAfter()) {
-        <div [class]="addonAfterClasses()" [id]="addonAfterId()" [attr.aria-label]="zAddOnAfterAriaLabel()" [attr.aria-disabled]="zDisabled()">
+        <div
+          [class]="addonAfterClasses()"
+          [id]="addonAfterId()"
+          [attr.aria-label]="zAddOnAfterAriaLabel()"
+          [attr.aria-disabled]="zDisabled()"
+        >
           <ng-container *zStringTemplateOutlet="zAddOnAfter()">{{ zAddOnAfter() }}</ng-container>
         </div>
       }
@@ -120,8 +154,8 @@ export class ZardInputGroupComponent {
     }),
   );
 
-  protected readonly inputWrapperClasses = computed(() => {
-    return mergeClasses(
+  protected readonly inputWrapperClasses = computed(() =>
+    mergeClasses(
       inputGroupInputVariants({
         zSize: this.zSize(),
         zHasPrefix: Boolean(this.zPrefix()),
@@ -132,6 +166,6 @@ export class ZardInputGroupComponent {
         zBorderless: this.zBorderless(),
       }),
       'relative',
-    );
-  });
+    ),
+  );
 }

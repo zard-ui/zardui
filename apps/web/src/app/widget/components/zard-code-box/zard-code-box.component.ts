@@ -1,4 +1,4 @@
-import { ComponentType } from '@angular/cdk/overlay';
+import type { ComponentType } from '@angular/cdk/overlay';
 import { NgComponentOutlet } from '@angular/common';
 import { Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 

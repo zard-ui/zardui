@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import {
   ZardTableBodyComponent,
@@ -50,7 +50,13 @@ describe('TableComponents', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [ZardTableComponent, TestStripedTableComponent, TestBorderedTableComponent, TestCompactTableComponent, TestComfortableTableComponent],
+        imports: [
+          ZardTableComponent,
+          TestStripedTableComponent,
+          TestBorderedTableComponent,
+          TestCompactTableComponent,
+          TestComfortableTableComponent,
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(ZardTableComponent);

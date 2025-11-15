@@ -18,7 +18,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   host: {
     '[class]': 'classes()',
   },
-  template: `<ng-content></ng-content>`,
+  template: `<ng-content />`,
 })
 export class LayoutComponent {
   readonly class = input<ClassValue>('');
@@ -121,7 +121,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   encapsulation: ViewEncapsulation.None,
   template: `
     <main>
-      <ng-content></ng-content>
+      <ng-content />
     </main>
   `,
   host: {
@@ -154,7 +154,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   encapsulation: ViewEncapsulation.None,
   template: `
     <footer [class]="classes()" [style.height.px]="zHeight()">
-      <ng-content></ng-content>
+      <ng-content />
     </footer>
   `,
 })
@@ -185,7 +185,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   encapsulation: ViewEncapsulation.None,
   template: `
     <header [class]="classes()" [style.height.px]="zHeight()">
-      <ng-content></ng-content>
+      <ng-content />
     </header>
   `,
 })
@@ -209,7 +209,15 @@ import { HeaderComponent } from './header.component';
 import { LayoutComponent } from './layout.component';
 import { SidebarGroupLabelComponent, SidebarGroupComponent, SidebarComponent } from './sidebar.component';
 
-const LAYOUT_COMPONENTS = [LayoutComponent, HeaderComponent, FooterComponent, ContentComponent, SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent];
+const LAYOUT_COMPONENTS = [
+  LayoutComponent,
+  HeaderComponent,
+  FooterComponent,
+  ContentComponent,
+  SidebarComponent,
+  SidebarGroupComponent,
+  SidebarGroupLabelComponent,
+];
 
 @NgModule({
   imports: [LAYOUT_COMPONENTS],
@@ -222,11 +230,26 @@ export class LayoutModule {}
 
 
 ```angular-ts title="sidebar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, type TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  output,
+  signal,
+  type TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
-import { sidebarGroupLabelVariants, sidebarGroupVariants, sidebarTriggerVariants, sidebarVariants } from './layout.variants';
+import {
+  sidebarGroupLabelVariants,
+  sidebarGroupVariants,
+  sidebarTriggerVariants,
+  sidebarVariants,
+} from './layout.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -242,7 +265,7 @@ import type { ZardIcon } from '../icon/icons';
   template: `
     <aside [class]="classes()" [style.width.px]="currentWidth()" [attr.data-collapsed]="zCollapsed()">
       <div class="flex-1 overflow-auto">
-        <ng-content></ng-content>
+        <ng-content />
       </div>
 
       @if (zCollapsible() && !zTrigger()) {
@@ -261,7 +284,7 @@ import type { ZardIcon } from '../icon/icons';
       }
 
       @if (zCollapsible() && zTrigger()) {
-        <ng-container *zStringTemplateOutlet="zTrigger()"></ng-container>
+        <ng-container *zStringTemplateOutlet="zTrigger()" />
       }
     </aside>
   `,
@@ -324,7 +347,7 @@ export class SidebarComponent {
   encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
 })
@@ -342,7 +365,7 @@ export class SidebarGroupComponent {
   encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
 })

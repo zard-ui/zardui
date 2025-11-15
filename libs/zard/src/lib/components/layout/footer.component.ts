@@ -13,7 +13,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   encapsulation: ViewEncapsulation.None,
   template: `
     <footer [class]="classes()" [style.height.px]="zHeight()">
-      <ng-content></ng-content>
+      <ng-content />
     </footer>
   `,
 })

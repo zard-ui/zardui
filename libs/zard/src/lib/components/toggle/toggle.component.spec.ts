@@ -1,14 +1,14 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ZardIconComponent } from '../icon/icon.component';
 import { ZardToggleComponent } from './toggle.component';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   standalone: true,
   imports: [ZardToggleComponent, ZardIconComponent],
   template: `
-    <z-toggle aria-label="Test component" [zValue]="zValue" [zDefault]="zDefault" [disabled]="disabled">
+    <z-toggle zAriaLabel="Test component" [zValue]="zValue" [zDefault]="zDefault" [zDisabled]="disabled">
       <div z-icon zType="bold"></div>
     </z-toggle>
   `,

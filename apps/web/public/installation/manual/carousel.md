@@ -21,8 +21,8 @@ import {
   carouselNextButtonVariants,
   carouselPreviousButtonVariants,
   carouselVariants,
-  ZardCarouselControlsVariants,
-  ZardCarouselOrientationVariants,
+  type ZardCarouselControlsVariants,
+  type ZardCarouselOrientationVariants,
 } from './carousel.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
@@ -292,7 +292,7 @@ import { mergeClasses } from '../../shared/utils/utils';
 @Component({
   selector: 'z-carousel-content',
   imports: [],
-  template: ` <ng-content></ng-content> `,
+  template: ` <ng-content /> `,
   host: {
     '[class]': 'classes()',
   },
@@ -303,7 +303,9 @@ export class ZardCarouselContentComponent {
   readonly #parent = inject(ZardCarouselComponent);
   readonly #orientation = computed<'horizontal' | 'vertical'>(() => this.#parent.zOrientation());
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(carouselContentVariants({ zOrientation: this.#orientation() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(carouselContentVariants({ zOrientation: this.#orientation() }), this.class()),
+  );
 }
 
 ```
@@ -322,7 +324,7 @@ import { mergeClasses } from '../../shared/utils/utils';
 @Component({
   selector: 'z-carousel-item',
   imports: [],
-  template: ` <ng-content></ng-content> `,
+  template: ` <ng-content /> `,
   host: {
     '[class]': 'classes()',
     role: 'group',
@@ -336,7 +338,9 @@ export class ZardCarouselItemComponent {
 
   readonly #orientation = computed<'horizontal' | 'vertical'>(() => this.#parent.zOrientation());
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(carouselItemVariants({ zOrientation: this.#orientation() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(carouselItemVariants({ zOrientation: this.#orientation() }), this.class()),
+  );
 }
 
 ```

@@ -1,7 +1,17 @@
 
 
 ```angular-ts title="pagination.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, forwardRef, input, linkedSignal, output, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  forwardRef,
+  input,
+  linkedSignal,
+  output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
@@ -26,7 +36,7 @@ import { ZardIconComponent } from '../icon/icon.component';
   encapsulation: ViewEncapsulation.None,
   template: `
     <div [attr.aria-label]="ariaLabel()" role="navigation" data-slot="pagination-content" [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
 })
@@ -45,7 +55,7 @@ export class ZardPaginationContentComponent {
   encapsulation: ViewEncapsulation.None,
   template: `
     <div data-slot="pagination-item" [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
 })
@@ -75,7 +85,7 @@ export class ZardPaginationItemComponent {
       [class]="class()"
       (click)="handleClick()"
     >
-      <ng-content></ng-content>
+      <ng-content />
     </button>
   `,
 })
@@ -159,25 +169,45 @@ export class ZardPaginationEllipsisComponent {
   exportAs: 'zPagination',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardPaginationContentComponent, ZardPaginationItemComponent, ZardPaginationButtonComponent, ZardIconComponent],
+  imports: [
+    ZardPaginationContentComponent,
+    ZardPaginationItemComponent,
+    ZardPaginationButtonComponent,
+    ZardIconComponent,
+  ],
   template: `
     <z-pagination-content>
       <z-pagination-item>
-        <z-pagination-button aria-label="Go to previous page" [zSize]="zSize()" [zDisabled]="disabled() || currentPage() === 1" (zClick)="goToPrevious()">
+        <z-pagination-button
+          aria-label="Go to previous page"
+          [zSize]="zSize()"
+          [zDisabled]="disabled() || currentPage() === 1"
+          (zClick)="goToPrevious()"
+        >
           <z-icon zType="chevron-left" />
         </z-pagination-button>
       </z-pagination-item>
 
       @for (page of pages(); track page) {
         <z-pagination-item>
-          <z-pagination-button [zSize]="zSize()" [zActive]="page === currentPage()" [zDisabled]="disabled()" (zClick)="goToPage(page)">
+          <z-pagination-button
+            [zSize]="zSize()"
+            [zActive]="page === currentPage()"
+            [zDisabled]="disabled()"
+            (zClick)="goToPage(page)"
+          >
             {{ page }}
           </z-pagination-button>
         </z-pagination-item>
       }
 
       <z-pagination-item>
-        <z-pagination-button aria-label="Go to next page" [zSize]="zSize()" [zDisabled]="disabled() || currentPage() === zTotal()" (zClick)="goToNext()">
+        <z-pagination-button
+          aria-label="Go to next page"
+          [zSize]="zSize()"
+          [zDisabled]="disabled() || currentPage() === zTotal()"
+          (zClick)="goToNext()"
+        >
           <z-icon zType="chevron-right" />
         </z-pagination-button>
       </z-pagination-item>
@@ -206,9 +236,7 @@ export class ZardPaginationComponent implements ControlValueAccessor {
 
   protected readonly classes = computed(() => mergeClasses(paginationVariants(), this.class()));
 
-  protected readonly disabled = linkedSignal(() => {
-    return this.zDisabled();
-  });
+  protected readonly disabled = linkedSignal(() => this.zDisabled());
 
   readonly currentPage = linkedSignal(this.zPageIndex);
 

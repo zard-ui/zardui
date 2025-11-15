@@ -1,6 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, type OnInit, inject } from '@angular/core';
 
 @Component({
   selector: 'z-llms',

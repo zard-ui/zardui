@@ -1,12 +1,17 @@
 
 
 ```angular-ts title="progress-bar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
+import type { ClassValue } from 'clsx';
+
+import {
+  containerProgressBarVariants,
+  progressBarVariants,
+  type ZardContainerProgressBarVariants,
+  type ZardProgressBarVariants,
+} from './progress-bar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { containerProgressBarVariants, progressBarVariants, type ZardContainerProgressBarVariants, type ZardProgressBarVariants } from './progress-bar.variants';
 
 @Component({
   selector: 'z-progress-bar',
@@ -60,11 +65,22 @@ export class ZardProgressBarComponent {
   });
 
   protected readonly classes = computed(() =>
-    mergeClasses(containerProgressBarVariants({ zIndeterminate: this.zIndeterminate(), zType: this.zType(), zSize: this.zSize(), zShape: this.zShape() }), this.class()),
+    mergeClasses(
+      containerProgressBarVariants({
+        zIndeterminate: this.zIndeterminate(),
+        zType: this.zType(),
+        zSize: this.zSize(),
+        zShape: this.zShape(),
+      }),
+      this.class(),
+    ),
   );
 
   protected readonly barClasses = computed(() =>
-    mergeClasses(progressBarVariants({ zIndeterminate: this.zIndeterminate(), zType: this.zType(), zShape: this.zShape() }), this.barClass()),
+    mergeClasses(
+      progressBarVariants({ zIndeterminate: this.zIndeterminate(), zType: this.zType(), zShape: this.zShape() }),
+      this.barClass(),
+    ),
   );
 }
 

@@ -39,14 +39,36 @@ export default [
         },
       ],
       '@typescript-eslint/no-floating-promises': 'error',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^_',
+        },
+      ],
       'no-console': ['error', { allow: ['warn', 'error'] }],
+      '@typescript-eslint/no-empty-function': ['warn'],
+      '@typescript-eslint/explicit-member-accessibility': [
+        'warn',
+        {
+          accessibility: 'no-public',
+        },
+      ],
+      'arrow-body-style': ['warn', 'as-needed'],
+    },
+  },
+  {
+    files: ['**/test-setup.ts'],
+    rules: {
+      '@typescript-eslint/no-unused-vars': 'off',
     },
   },
   {
     files: ['**/*.spec.ts', '**/demo/**/*.ts'],
     rules: {
       '@angular-eslint/prefer-on-push-component-change-detection': 'off',
+      '@typescript-eslint/no-unused-vars': 'off',
+      'no-console': 'off',
+      '@typescript-eslint/no-floating-promises': 'off',
     },
   },
 ];

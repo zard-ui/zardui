@@ -10,7 +10,12 @@ import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.comp
     <div class="flex gap-4">
       <z-combobox [options]="frameworks" [placeholder]="'Disabled combobox'" [disabled]="true" />
 
-      <z-combobox [options]="frameworksWithDisabled" [placeholder]="'Select framework...'" [searchPlaceholder]="'Search framework...'" [emptyText]="'No framework found.'" />
+      <z-combobox
+        [options]="frameworksWithDisabled"
+        [placeholder]="'Select framework...'"
+        [searchPlaceholder]="'Search framework...'"
+        [emptyText]="'No framework found.'"
+      />
     </div>
   `,
 })

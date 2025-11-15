@@ -17,8 +17,8 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component
       <z-popover>
         <div class="space-y-4">
           <div class="space-y-2">
-            <h4 class="font-medium leading-none">Settings</h4>
-            <p class="text-sm text-muted-foreground">Manage your account settings.</p>
+            <h4 class="leading-none font-medium">Settings</h4>
+            <p class="text-muted-foreground text-sm">Manage your account settings.</p>
           </div>
           <div class="space-y-2">
             <label for="width" class="text-sm font-medium">Width</label>

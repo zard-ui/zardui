@@ -9,7 +9,7 @@ import { ZardDividerComponent } from '../divider.component';
   template: `
     <div class="flex flex-col">
       <p>Before divider</p>
-      <z-divider></z-divider>
+      <z-divider />
       <p>After divider</p>
     </div>
   `,

@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angula
 
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
 import { SeoService } from '@doc/shared/services/seo.service';

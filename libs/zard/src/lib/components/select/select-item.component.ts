@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 
 import { selectItemVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -31,7 +40,7 @@ interface SelectHost {
       </span>
     }
     <span class="truncate">
-      <ng-content></ng-content>
+      <ng-content />
     </span>
   `,
 })

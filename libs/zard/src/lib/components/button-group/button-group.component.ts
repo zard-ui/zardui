@@ -1,8 +1,21 @@
-import { ChangeDetectionStrategy, Component, computed, Directive, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  Directive,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import { type ClassValue } from 'clsx';
 
-import { buttonGroupDividerVariants, buttonGroupTextVariants, buttonGroupVariants, type ZardButtonGroupVariants } from './button-group.variants';
+import {
+  buttonGroupDividerVariants,
+  buttonGroupTextVariants,
+  buttonGroupVariants,
+  type ZardButtonGroupVariants,
+} from './button-group.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardDividerComponent } from '../divider/divider.component';
 import { type ZardDividerVariants } from '../divider/divider.variants';

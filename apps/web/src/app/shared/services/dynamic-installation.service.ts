@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { Step } from '../constants/install.constant';
+import type { Step } from '../constants/install.constant';
 
 @Injectable({
   providedIn: 'root',

@@ -1,5 +1,5 @@
-import { ZardDemoSegmentedDisabledComponent } from './disabled';
 import { ZardDemoSegmentedDefaultComponent } from './default';
+import { ZardDemoSegmentedDisabledComponent } from './disabled';
 import { ZardDemoSegmentedSizesComponent } from './sizes';
 
 export const SEGMENTED = {

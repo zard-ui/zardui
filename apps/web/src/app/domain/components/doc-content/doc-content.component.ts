@@ -1,7 +1,7 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, type OnInit } from '@angular/core';
 
-import { DynamicAnchorComponent, NavigationConfig } from '../dynamic-anchor/dynamic-anchor.component';
+import { DynamicAnchorComponent, type NavigationConfig } from '../dynamic-anchor/dynamic-anchor.component';
 
 @Component({
   selector: 'z-content',

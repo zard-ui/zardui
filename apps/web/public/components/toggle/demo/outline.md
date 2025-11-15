@@ -9,7 +9,7 @@ import { ZardToggleComponent } from '../toggle.component';
   standalone: true,
   imports: [ZardToggleComponent, ZardIconComponent],
   template: `
-    <z-toggle aria-label="Toggle outline" zType="outline">
+    <z-toggle zAriaLabel="Toggle outline" zType="outline">
       <z-icon zType="bold" />
     </z-toggle>
   `,

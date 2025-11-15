@@ -1,6 +1,6 @@
-import { ZardDemoResizableWithMinMaxComponent } from './with-min-max';
-import { ZardDemoResizableVerticalComponent } from './vertical';
 import { ZardDemoResizableDefaultComponent } from './default';
+import { ZardDemoResizableVerticalComponent } from './vertical';
+import { ZardDemoResizableWithMinMaxComponent } from './with-min-max';
 
 export const RESIZABLE = {
   componentName: 'resizable',

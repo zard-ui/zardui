@@ -1,13 +1,15 @@
 import { PARENT_OR_NEW_MENU_STACK_PROVIDER } from '@angular/cdk/menu';
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ZardMenuDirective } from './menu.directive';
 
 @Component({
   template: `
-    <button z-menu [zMenuTriggerFor]="menuPanel" [zDisabled]="disabled" [zTrigger]="trigger" [zHoverDelay]="hoverDelay">Trigger</button>
+    <button z-menu [zMenuTriggerFor]="menuPanel" [zDisabled]="disabled" [zTrigger]="trigger" [zHoverDelay]="hoverDelay">
+      Trigger
+    </button>
     <div #menuPanel></div>
   `,
   imports: [ZardMenuDirective],
@@ -173,7 +175,9 @@ describe('ZardMenuDirective', () => {
     mockMenuElement.setAttribute('z-menu-content', '');
     mockOverlayPane.appendChild(mockMenuElement);
 
-    jest.spyOn(directive['elementRef'].nativeElement, 'contains').mockImplementation(element => element === mockTriggerElement);
+    jest
+      .spyOn(directive['elementRef'].nativeElement, 'contains')
+      .mockImplementation(element => element === mockTriggerElement);
 
     expect(directive['shouldKeepMenuOpen'](null)).toBe(false);
     expect(directive['shouldKeepMenuOpen'](mockTriggerElement)).toBe(true);

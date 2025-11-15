@@ -1,8 +1,8 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { Component, ElementRef, viewChild } from '@angular/core';
-import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { Component, type ElementRef, viewChild } from '@angular/core';
+import { type ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import { ZardTooltipDirective, ZardTooltipModule } from './tooltip';
+import { type ZardTooltipDirective, ZardTooltipModule } from './tooltip';
 
 @Component({
   template: `

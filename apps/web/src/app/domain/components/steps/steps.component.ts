@@ -1,6 +1,6 @@
 import { Component, input } from '@angular/core';
 
-import { Step } from '@doc/shared/constants/install.constant';
+import type { Step } from '@doc/shared/constants/install.constant';
 
 import { StepComponent } from '../step/step.component';
 
@@ -10,7 +10,7 @@ import { StepComponent } from '../step/step.component';
     @if (steps()) {
       <section>
         @for (step of steps(); track step.title; let index = $index) {
-          <z-step [position]="index + 1" [stepProps]="step"></z-step>
+          <z-step [position]="index + 1" [stepProps]="step" />
         }
       </section>
     }

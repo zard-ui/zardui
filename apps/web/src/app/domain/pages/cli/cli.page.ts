@@ -2,7 +2,7 @@ import { Component, inject, type OnInit } from '@angular/core';
 
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { CliCommandsSection } from './sections/commands.component';
@@ -26,20 +26,24 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     CliConfigurationSection,
   ],
   template: `
-    <z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+    <z-content
+      [navigationConfig]="navigationConfig"
+      [activeAnchor]="activeAnchor"
+      scrollSpy
+      (scrollSpyChange)="activeAnchor = $event"
+    >
       <z-doc-heading
         title="CLI"
         description="Use the ZardUI CLI to add beautiful, accessible components to your Angular project with a single command."
         scrollSpyItem="overview"
         id="overview"
-      >
-      </z-doc-heading>
+      />
 
-      <cli-overview-section scrollSpyItem="cli-overview" id="cli-overview"></cli-overview-section>
-      <cli-installation-section scrollSpyItem="installation" id="installation"></cli-installation-section>
-      <cli-commands-section scrollSpyItem="commands" id="commands"></cli-commands-section>
-      <cli-update-section scrollSpyItem="update" id="update"></cli-update-section>
-      <cli-configuration-section scrollSpyItem="configuration" id="configuration"></cli-configuration-section>
+      <cli-overview-section scrollSpyItem="cli-overview" id="cli-overview" />
+      <cli-installation-section scrollSpyItem="installation" id="installation" />
+      <cli-commands-section scrollSpyItem="commands" id="commands" />
+      <cli-update-section scrollSpyItem="update" id="update" />
+      <cli-configuration-section scrollSpyItem="configuration" id="configuration" />
     </z-content>
   `,
 })

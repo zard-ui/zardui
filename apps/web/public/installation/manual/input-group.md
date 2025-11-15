@@ -1,11 +1,25 @@
 
 
 ```angular-ts title="input-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, input, type TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  type TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
-import { inputGroupAddonVariants, inputGroupAffixVariants, inputGroupInputVariants, inputGroupVariants, type ZardInputGroupVariants } from './input-group.variants';
+import {
+  inputGroupAddonVariants,
+  inputGroupAffixVariants,
+  inputGroupInputVariants,
+  inputGroupVariants,
+  type ZardInputGroupVariants,
+} from './input-group.variants';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 
@@ -27,29 +41,49 @@ import { ZardStringTemplateOutletDirective } from '../core/directives/string-tem
       [attr.data-disabled]="zDisabled()"
     >
       @if (zAddOnBefore()) {
-        <div [class]="addonBeforeClasses()" [id]="addonBeforeId()" [attr.aria-label]="zAddOnBeforeAriaLabel()" [attr.aria-disabled]="zDisabled()">
+        <div
+          [class]="addonBeforeClasses()"
+          [id]="addonBeforeId()"
+          [attr.aria-label]="zAddOnBeforeAriaLabel()"
+          [attr.aria-disabled]="zDisabled()"
+        >
           <ng-container *zStringTemplateOutlet="zAddOnBefore()">{{ zAddOnBefore() }}</ng-container>
         </div>
       }
 
       <div [class]="inputWrapperClasses()">
         @if (zPrefix()) {
-          <div [class]="prefixClasses()" [id]="prefixId()" [attr.aria-label]="zPrefixAriaLabel()" [attr.aria-hidden]="true">
+          <div
+            [class]="prefixClasses()"
+            [id]="prefixId()"
+            [attr.aria-label]="zPrefixAriaLabel()"
+            [attr.aria-hidden]="true"
+          >
             <ng-container *zStringTemplateOutlet="zPrefix()">{{ zPrefix() }}</ng-container>
           </div>
         }
 
-        <ng-content select="input[z-input], textarea[z-input]"></ng-content>
+        <ng-content select="input[z-input], textarea[z-input]" />
 
         @if (zSuffix()) {
-          <div [class]="suffixClasses()" [id]="suffixId()" [attr.aria-label]="zSuffixAriaLabel()" [attr.aria-hidden]="true">
+          <div
+            [class]="suffixClasses()"
+            [id]="suffixId()"
+            [attr.aria-label]="zSuffixAriaLabel()"
+            [attr.aria-hidden]="true"
+          >
             <ng-container *zStringTemplateOutlet="zSuffix()">{{ zSuffix() }}</ng-container>
           </div>
         }
       </div>
 
       @if (zAddOnAfter()) {
-        <div [class]="addonAfterClasses()" [id]="addonAfterId()" [attr.aria-label]="zAddOnAfterAriaLabel()" [attr.aria-disabled]="zDisabled()">
+        <div
+          [class]="addonAfterClasses()"
+          [id]="addonAfterId()"
+          [attr.aria-label]="zAddOnAfterAriaLabel()"
+          [attr.aria-disabled]="zDisabled()"
+        >
           <ng-container *zStringTemplateOutlet="zAddOnAfter()">{{ zAddOnAfter() }}</ng-container>
         </div>
       }
@@ -123,8 +157,8 @@ export class ZardInputGroupComponent {
     }),
   );
 
-  protected readonly inputWrapperClasses = computed(() => {
-    return mergeClasses(
+  protected readonly inputWrapperClasses = computed(() =>
+    mergeClasses(
       inputGroupInputVariants({
         zSize: this.zSize(),
         zHasPrefix: Boolean(this.zPrefix()),
@@ -135,8 +169,8 @@ export class ZardInputGroupComponent {
         zBorderless: this.zBorderless(),
       }),
       'relative',
-    );
-  });
+    ),
+  );
 }
 
 ```
@@ -198,23 +232,26 @@ export const inputGroupAddonVariants = cva(
   },
 );
 
-export const inputGroupAffixVariants = cva('absolute inset-y-0 flex items-center text-muted-foreground pointer-events-none z-10', {
-  variants: {
-    zSize: {
-      sm: 'text-xs',
-      default: 'text-sm',
-      lg: 'text-base',
+export const inputGroupAffixVariants = cva(
+  'absolute inset-y-0 flex items-center text-muted-foreground pointer-events-none z-10',
+  {
+    variants: {
+      zSize: {
+        sm: 'text-xs',
+        default: 'text-sm',
+        lg: 'text-base',
+      },
+      zPosition: {
+        prefix: 'left-0 pl-3',
+        suffix: 'right-0 pr-3',
+      },
     },
-    zPosition: {
-      prefix: 'left-0 pl-3',
-      suffix: 'right-0 pr-3',
+    defaultVariants: {
+      zSize: 'default',
+      zPosition: 'prefix',
     },
   },
-  defaultVariants: {
-    zSize: 'default',
-    zPosition: 'prefix',
-  },
-});
+);
 
 export const inputGroupInputVariants = cva(
   'input-wrapper flex h-full w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-within:outline-none focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 transition-colors',

@@ -6,6 +6,6 @@ import { ZardProgressBarComponent } from '../progress-bar.component';
   selector: 'z-demo-progress-bar-indeterminate',
   standalone: true,
   imports: [ZardProgressBarComponent],
-  template: ` <z-progress-bar [progress]="50" [zShape]="'square'" [zIndeterminate]="true"></z-progress-bar> `,
+  template: ` <z-progress-bar [progress]="50" [zShape]="'square'" [zIndeterminate]="true" /> `,
 })
 export class ZardDemoProgressBarIndeterminateComponent {}

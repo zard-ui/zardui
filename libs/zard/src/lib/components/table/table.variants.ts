@@ -37,15 +37,21 @@ export const tableRowVariants = cva('border-b transition-colors hover:bg-muted/5
   defaultVariants: {},
 });
 
-export const tableHeadVariants = cva('h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]', {
-  variants: {},
-  defaultVariants: {},
-});
+export const tableHeadVariants = cva(
+  'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+  {
+    variants: {},
+    defaultVariants: {},
+  },
+);
 
-export const tableCellVariants = cva('p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]', {
-  variants: {},
-  defaultVariants: {},
-});
+export const tableCellVariants = cva(
+  'p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+  {
+    variants: {},
+    defaultVariants: {},
+  },
+);
 
 export const tableCaptionVariants = cva('mt-4 text-sm text-muted-foreground', {
   variants: {},

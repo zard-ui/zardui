@@ -6,7 +6,7 @@ import { ArrowRight, ExternalLink, FolderOpen, Github, LucideAngularModule } fro
 import type { Block } from '@doc/domain/components/block-container/block-container.component';
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
 import { BlocksService, type BlockCategory as ServiceBlockCategory } from '@doc/domain/services/blocks.service';
@@ -26,7 +26,15 @@ interface BlockPreview {
 @Component({
   selector: 'z-block-instructions',
   standalone: true,
-  imports: [RouterLink, ZardButtonComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, LucideAngularModule],
+  imports: [
+    RouterLink,
+    ZardButtonComponent,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    LucideAngularModule,
+  ],
   templateUrl: './block-instructions.page.html',
 })
 export class BlocksInstructionPage implements OnInit {
@@ -54,6 +62,7 @@ export class BlocksInstructionPage implements OnInit {
     const uniqueBlocks = new Set(allBlocks.map(block => block.id));
     return uniqueBlocks.size;
   });
+
   readonly categoriesCount = 5;
 
   readonly featuredBlocks = computed(() => this.transformBlocks(this.blocksService.getBlocksByCategory('featured')));

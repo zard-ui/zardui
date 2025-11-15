@@ -1,13 +1,25 @@
 
 
 ```angular-ts title="segmented.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, forwardRef, input, type OnInit, output, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  effect,
+  forwardRef,
+  input,
+  type OnInit,
+  output,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
-
 import type { ClassValue } from 'clsx';
+
+import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export interface SegmentedOption {
   value: string;
@@ -17,7 +29,7 @@ export interface SegmentedOption {
 @Component({
   selector: 'z-segmented-item',
   standalone: true,
-  template: `<ng-content></ng-content>`,
+  template: `<ng-content />`,
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardSegmentedItemComponent {
@@ -165,18 +177,21 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
 ```angular-ts title="segmented.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const segmentedVariants = cva('inline-flex items-center justify-center rounded-md bg-muted p-1 text-muted-foreground', {
-  variants: {
-    zSize: {
-      sm: 'h-9 text-xs',
-      default: 'h-10 text-sm',
-      lg: 'h-12 text-base',
+export const segmentedVariants = cva(
+  'inline-flex items-center justify-center rounded-md bg-muted p-1 text-muted-foreground',
+  {
+    variants: {
+      zSize: {
+        sm: 'h-9 text-xs',
+        default: 'h-10 text-sm',
+        lg: 'h-12 text-base',
+      },
+    },
+    defaultVariants: {
+      zSize: 'default',
     },
   },
-  defaultVariants: {
-    zSize: 'default',
-  },
-});
+);
 
 export const segmentedItemVariants = cva(
   'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',

@@ -294,7 +294,14 @@ describe('ZardSelectComponent', () => {
   describe('Multiselect mode', () => {
     @Component({
       template: `
-        <z-select [(zValue)]="value" [zLabel]="label()" [zPlaceholder]="placeholder()" [zDisabled]="disabled()" [zMultiple]="true" [zMaxLabelCount]="labelsLimit">
+        <z-select
+          [(zValue)]="value"
+          [zLabel]="label()"
+          [zPlaceholder]="placeholder()"
+          [zDisabled]="disabled()"
+          [zMultiple]="true"
+          [zMaxLabelCount]="labelsLimit"
+        >
           <z-select-item zValue="option1">OptionOne</z-select-item>
           <z-select-item zValue="option2">OptionTwo</z-select-item>
           <z-select-item zValue="option3">OptionThree</z-select-item>

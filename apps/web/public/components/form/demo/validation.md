@@ -13,15 +13,21 @@ import { ZardFormModule } from '../form.module';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <form [formGroup]="validationForm" (ngSubmit)="onSubmit()" class="space-y-6 max-w-sm">
+    <form [formGroup]="validationForm" (ngSubmit)="onSubmit()" class="max-w-sm space-y-6">
       <z-form-field>
-        <label z-form-label zRequired>Name</label>
+        <label for="name" z-form-label zRequired>Name</label>
         <z-form-control>
-          <input z-input type="text" placeholder="Your full name" formControlName="name" [zStatus]="nameControl.invalid && nameControl.touched ? 'error' : undefined" />
+          <input
+            z-input
+            type="text"
+            placeholder="Your full name"
+            formControlName="name"
+            [zStatus]="nameControl?.invalid && nameControl?.touched ? 'error' : undefined"
+          />
         </z-form-control>
-        @if (nameControl.hasError('required') && nameControl.touched) {
+        @if (nameControl?.hasError('required') && nameControl?.touched) {
           <z-form-message zType="error">Name is required.</z-form-message>
-        } @else if (nameControl.hasError('minlength') && nameControl.touched) {
+        } @else if (nameControl?.hasError('minlength') && nameControl?.touched) {
           <z-form-message zType="error">Name must be at least 2 characters long.</z-form-message>
         } @else {
           <z-form-message>Enter your full name.</z-form-message>
@@ -29,13 +35,19 @@ import { ZardFormModule } from '../form.module';
       </z-form-field>
 
       <z-form-field>
-        <label z-form-label zRequired>Email</label>
+        <label for="email" z-form-label zRequired>Email</label>
         <z-form-control>
-          <input z-input type="email" placeholder="your.email@example.com" formControlName="email" [zStatus]="emailControl.invalid && emailControl.touched ? 'error' : undefined" />
+          <input
+            z-input
+            type="email"
+            placeholder="your.email@example.com"
+            formControlName="email"
+            [zStatus]="emailControl?.invalid && emailControl?.touched ? 'error' : undefined"
+          />
         </z-form-control>
-        @if (emailControl.hasError('required') && emailControl.touched) {
+        @if (emailControl?.hasError('required') && emailControl?.touched) {
           <z-form-message zType="error">Email is required.</z-form-message>
-        } @else if (emailControl.hasError('email') && emailControl.touched) {
+        } @else if (emailControl?.hasError('email') && emailControl?.touched) {
           <z-form-message zType="error">Please enter a valid email address.</z-form-message>
         } @else {
           <z-form-message>We'll never share your email.</z-form-message>
@@ -43,19 +55,25 @@ import { ZardFormModule } from '../form.module';
       </z-form-field>
 
       <z-form-field>
-        <label z-form-label>Website</label>
+        <label for="website" z-form-label>Website</label>
         <z-form-control>
           <input
             z-input
             type="url"
             placeholder="https://example.com"
             formControlName="website"
-            [zStatus]="websiteControl.invalid && websiteControl.touched ? 'error' : websiteControl.valid && websiteControl.touched ? 'success' : undefined"
+            [zStatus]="
+              websiteControl?.invalid && websiteControl?.touched
+                ? 'error'
+                : websiteControl?.valid && websiteControl?.touched
+                  ? 'success'
+                  : undefined
+            "
           />
         </z-form-control>
-        @if (websiteControl.hasError('pattern') && websiteControl.touched) {
+        @if (websiteControl?.hasError('pattern') && websiteControl?.touched) {
           <z-form-message zType="error">Please enter a valid URL starting with http:// or https://</z-form-message>
-        } @else if (websiteControl.valid && websiteControl.touched && websiteControl.value) {
+        } @else if (websiteControl?.valid && websiteControl?.touched && websiteControl?.value) {
           <z-form-message zType="success">Valid website URL!</z-form-message>
         } @else {
           <z-form-message>Optional: Your website or portfolio URL.</z-form-message>
@@ -83,15 +101,15 @@ export class ZardDemoFormValidationComponent {
   });
 
   get nameControl() {
-    return this.validationForm.get('name')!;
+    return this.validationForm.get('name');
   }
 
   get emailControl() {
-    return this.validationForm.get('email')!;
+    return this.validationForm.get('email');
   }
 
   get websiteControl() {
-    return this.validationForm.get('website')!;
+    return this.validationForm.get('website');
   }
 
   onSubmit() {

@@ -13,7 +13,9 @@ import { ZardCarouselModule } from '../carousel.module';
           @for (slide of slides; track slide) {
             <z-carousel-item>
               <z-card class="w-full">
-                <div class="flex h-[100px] items-center justify-center text-4xl font-semibold md:h-[200px]">{{ slide }}</div>
+                <div class="flex h-[100px] items-center justify-center text-4xl font-semibold md:h-[200px]">
+                  {{ slide }}
+                </div>
               </z-card>
             </z-carousel-item>
           }

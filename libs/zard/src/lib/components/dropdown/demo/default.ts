@@ -34,7 +34,7 @@ import { ZardDropdownModule } from '../dropdown.module';
         <z-dropdown-menu-shortcut>⌘K</z-dropdown-menu-shortcut>
       </z-dropdown-menu-item>
 
-      <z-divider zSpacing="sm" class="-mx-1"></z-divider>
+      <z-divider zSpacing="sm" class="-mx-1" />
 
       <z-dropdown-menu-item (click)="onTeam()">Team</z-dropdown-menu-item>
 
@@ -43,13 +43,13 @@ import { ZardDropdownModule } from '../dropdown.module';
         <z-dropdown-menu-shortcut>⌘+T</z-dropdown-menu-shortcut>
       </z-dropdown-menu-item>
 
-      <z-divider zSpacing="sm" class="-mx-1"></z-divider>
+      <z-divider zSpacing="sm" class="-mx-1" />
 
       <z-dropdown-menu-item (click)="onGitHub()">GitHub</z-dropdown-menu-item>
       <z-dropdown-menu-item (click)="onSupport()">Support</z-dropdown-menu-item>
       <z-dropdown-menu-item disabled="true">API</z-dropdown-menu-item>
 
-      <z-divider zSpacing="sm" class="-mx-1"></z-divider>
+      <z-divider zSpacing="sm" class="-mx-1" />
 
       <z-dropdown-menu-item (click)="onLogout()">
         Log out

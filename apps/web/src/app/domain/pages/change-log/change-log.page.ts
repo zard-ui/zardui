@@ -1,9 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, type OnInit, signal, computed } from '@angular/core';
 
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
-import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import type { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
 import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
@@ -17,7 +17,16 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 @Component({
   selector: 'z-changelog',
   standalone: true,
-  imports: [CommonModule, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardAlertComponent, ZardLoaderComponent, MarkdownRendererComponent],
+  imports: [
+    CommonModule,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    ZardAlertComponent,
+    ZardLoaderComponent,
+    MarkdownRendererComponent,
+  ],
   templateUrl: './change-log.page.html',
 })
 export class ChangeLogPage implements OnInit {

@@ -13,7 +13,14 @@ import { mergeClasses } from '../../shared/utils/utils';
   imports: [LucideAngularModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <lucide-angular [img]="icon()" [strokeWidth]="zStrokeWidth()" [absoluteStrokeWidth]="zAbsoluteStrokeWidth()" [class]="classes()" /> `,
+  template: `
+    <lucide-angular
+      [img]="icon()"
+      [strokeWidth]="zStrokeWidth()"
+      [absoluteStrokeWidth]="zAbsoluteStrokeWidth()"
+      [class]="classes()"
+    />
+  `,
   host: {},
 })
 export class ZardIconComponent {

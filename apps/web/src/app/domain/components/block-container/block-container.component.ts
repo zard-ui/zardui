@@ -1,7 +1,7 @@
 import { Component, input, signal } from '@angular/core';
 
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardIcon } from '@zard/components/icon/icons';
+import type { ZardIcon } from '@zard/components/icon/icons';
 import { ZardSegmentedComponent } from '@zard/components/segmented/segmented.component';
 import { ZardToggleGroupComponent } from '@zard/components/toggle-group/toggle-group.component';
 
@@ -45,7 +45,13 @@ export interface ViewportOption {
 @Component({
   selector: 'z-block-container',
   standalone: true,
-  imports: [ZardSegmentedComponent, ZardDividerComponent, ZardToggleGroupComponent, BlockPreviewComponent, BlockCodeViewerComponent],
+  imports: [
+    ZardSegmentedComponent,
+    ZardDividerComponent,
+    ZardToggleGroupComponent,
+    BlockPreviewComponent,
+    BlockCodeViewerComponent,
+  ],
   templateUrl: './block-container.component.html',
 })
 export class BlockContainerComponent {

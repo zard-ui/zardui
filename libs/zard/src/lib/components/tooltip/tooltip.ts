@@ -66,7 +66,9 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.setTriggers();
 
     if (isPlatformBrowser(this.platformId)) {
-      const positionStrategy = this.overlayPositionBuilder.flexibleConnectedTo(this.elementRef).withPositions([TOOLTIP_POSITIONS_MAP[this.zPosition()]]);
+      const positionStrategy = this.overlayPositionBuilder
+        .flexibleConnectedTo(this.elementRef)
+        .withPositions([TOOLTIP_POSITIONS_MAP[this.zPosition()]]);
       this.overlayRef = this.overlay.create({ positionStrategy });
     }
   }

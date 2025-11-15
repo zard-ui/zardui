@@ -13,7 +13,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   encapsulation: ViewEncapsulation.None,
   template: `
     <main>
-      <ng-content></ng-content>
+      <ng-content />
     </main>
   `,
   host: {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ZardResizableHandleComponent } from './resizable-handle.component';
@@ -13,7 +13,12 @@ import { ZardResizableComponent } from './resizable.component';
   template: `
     <z-resizable [zLayout]="layout">
       <z-resizable-panel [zCollapsible]="panel1Collapsible">Panel 1</z-resizable-panel>
-      <z-resizable-handle [zHandleIndex]="handleIndex" [zWithHandle]="withHandle" [zDisabled]="disabled" [class]="customClass"> </z-resizable-handle>
+      <z-resizable-handle
+        [zHandleIndex]="handleIndex"
+        [zWithHandle]="withHandle"
+        [zDisabled]="disabled"
+        [class]="customClass"
+      />
       <z-resizable-panel [zCollapsible]="panel2Collapsible">Panel 2</z-resizable-panel>
     </z-resizable>
   `,
@@ -32,7 +37,7 @@ class TestHandleHostComponent {
   selector: 'test-standalone-handle',
   standalone: true,
   imports: [ZardResizableHandleComponent],
-  template: ` <z-resizable-handle [zHandleIndex]="0" [zWithHandle]="true" [zDisabled]="false"> </z-resizable-handle> `,
+  template: ` <z-resizable-handle [zHandleIndex]="0" [zWithHandle]="true" [zDisabled]="false" /> `,
 })
 class TestStandaloneHandleComponent {}
 
@@ -133,7 +138,9 @@ describe('ZardResizableHandleComponent', () => {
       const standaloneFixture = TestBed.createComponent(TestStandaloneHandleComponent);
       standaloneFixture.detectChanges();
 
-      const standaloneElement = standaloneFixture.debugElement.query(By.directive(ZardResizableHandleComponent)).nativeElement;
+      const standaloneElement = standaloneFixture.debugElement.query(
+        By.directive(ZardResizableHandleComponent),
+      ).nativeElement;
       expect(standaloneElement.getAttribute('data-layout')).toBe('horizontal');
     });
   });
@@ -271,7 +278,9 @@ describe('ZardResizableHandleComponent', () => {
       const standaloneFixture = TestBed.createComponent(TestStandaloneHandleComponent);
       standaloneFixture.detectChanges();
 
-      const standaloneElement = standaloneFixture.debugElement.query(By.directive(ZardResizableHandleComponent)).nativeElement;
+      const standaloneElement = standaloneFixture.debugElement.query(
+        By.directive(ZardResizableHandleComponent),
+      ).nativeElement;
       const mouseEvent = new MouseEvent('mousedown', { clientX: 100 });
 
       expect(() => {
@@ -397,7 +406,9 @@ describe('ZardResizableHandleComponent', () => {
       const standaloneFixture = TestBed.createComponent(TestStandaloneHandleComponent);
       standaloneFixture.detectChanges();
 
-      const standaloneHandle = standaloneFixture.debugElement.query(By.directive(ZardResizableHandleComponent)).componentInstance;
+      const standaloneHandle = standaloneFixture.debugElement.query(
+        By.directive(ZardResizableHandleComponent),
+      ).componentInstance;
       const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
 
       expect(() => {

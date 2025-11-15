@@ -1,9 +1,9 @@
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { commandListVariants } from './command.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-list',
@@ -13,7 +13,7 @@ import { commandListVariants } from './command.variants';
   encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()" role="listbox" id="command-list">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
 })

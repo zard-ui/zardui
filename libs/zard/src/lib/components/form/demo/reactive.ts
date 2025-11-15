@@ -12,9 +12,9 @@ import { ZardFormModule } from '../form.module';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="space-y-6 max-w-sm">
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="max-w-sm space-y-6">
       <z-form-field>
-        <label z-form-label zRequired>Username</label>
+        <label for="username" z-form-label zRequired>Username</label>
         <z-form-control>
           <input z-input type="text" placeholder="Choose a username" formControlName="username" />
         </z-form-control>
@@ -22,7 +22,7 @@ import { ZardFormModule } from '../form.module';
       </z-form-field>
 
       <z-form-field>
-        <label z-form-label zRequired>Email</label>
+        <label for="email" z-form-label zRequired>Email</label>
         <z-form-control>
           <input z-input type="email" placeholder="Enter your email" formControlName="email" />
         </z-form-control>
@@ -30,7 +30,7 @@ import { ZardFormModule } from '../form.module';
       </z-form-field>
 
       <z-form-field>
-        <label z-form-label zRequired>Password</label>
+        <label for="password" z-form-label zRequired>Password</label>
         <z-form-control>
           <input z-input type="password" placeholder="Create a password" formControlName="password" />
         </z-form-control>

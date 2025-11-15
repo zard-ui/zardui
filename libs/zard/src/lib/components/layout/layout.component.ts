@@ -15,7 +15,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   host: {
     '[class]': 'classes()',
   },
-  template: `<ng-content></ng-content>`,
+  template: `<ng-content />`,
 })
 export class LayoutComponent {
   readonly class = input<ClassValue>('');

@@ -8,7 +8,7 @@ import { ZardSliderComponent } from '../slider.component';
   imports: [ZardSliderComponent],
   template: `
     <div class="preview flex min-h-[350px] w-full items-center justify-center p-10">
-      <z-slider [class]="'w-[60%]'" zDefault="50" zDisabled="true" />
+      <z-slider [class]="'w-[60%]'" zDefault="50" zDisabled />
     </div>
   `,
 })

@@ -9,7 +9,7 @@ import { mergeClasses } from '../../shared/utils/utils';
 @Component({
   selector: 'z-carousel-item',
   imports: [],
-  template: ` <ng-content></ng-content> `,
+  template: ` <ng-content /> `,
   host: {
     '[class]': 'classes()',
     role: 'group',
@@ -23,5 +23,7 @@ export class ZardCarouselItemComponent {
 
   readonly #orientation = computed<'horizontal' | 'vertical'>(() => this.#parent.zOrientation());
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(carouselItemVariants({ zOrientation: this.#orientation() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(carouselItemVariants({ zOrientation: this.#orientation() }), this.class()),
+  );
 }

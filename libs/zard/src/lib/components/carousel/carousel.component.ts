@@ -18,8 +18,8 @@ import {
   carouselNextButtonVariants,
   carouselPreviousButtonVariants,
   carouselVariants,
-  ZardCarouselControlsVariants,
-  ZardCarouselOrientationVariants,
+  type ZardCarouselControlsVariants,
+  type ZardCarouselOrientationVariants,
 } from './carousel.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';

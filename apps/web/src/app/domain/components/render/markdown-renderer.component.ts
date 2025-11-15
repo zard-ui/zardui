@@ -1,7 +1,7 @@
 // markdown-renderer.component.ts
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { Component, inject, Input, type OnChanges, type OnInit, type SimpleChanges } from '@angular/core';
+import { DomSanitizer, type SafeHtml } from '@angular/platform-browser';
 
 import { lastValueFrom } from 'rxjs';
 

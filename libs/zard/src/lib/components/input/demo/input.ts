@@ -1,8 +1,8 @@
 import { ZardDemoInputBorderlessComponent } from './borderless';
-import { ZardDemoInputTextAreaComponent } from './text-area';
 import { ZardDemoInputDefaultComponent } from './default';
-import { ZardDemoInputStatusComponent } from './status';
 import { ZardDemoInputSizeComponent } from './size';
+import { ZardDemoInputStatusComponent } from './status';
+import { ZardDemoInputTextAreaComponent } from './text-area';
 
 export const INPUT = {
   componentName: 'input',

@@ -15,7 +15,7 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
     </z-breadcrumb>
 
     <ng-template #customSeparator>
-      <z-icon zType="arrow-right"></z-icon>
+      <z-icon zType="arrow-right" />
     </ng-template>
   `,
 })

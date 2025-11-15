@@ -25,7 +25,12 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardSelectItemComponent } from './select-item.component';
-import { selectContentVariants, selectTriggerVariants, selectVariants, type ZardSelectTriggerVariants } from './select.variants';
+import {
+  selectContentVariants,
+  selectTriggerVariants,
+  selectVariants,
+  type ZardSelectTriggerVariants,
+} from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -65,7 +70,7 @@ type OnChangeType = (value: string) => void;
       <span class="flex flex-1 flex-wrap items-center gap-2">
         @let labels = selectedLabels();
         @for (label of labels; track index; let index = $index) {
-          <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }"> </ng-container>
+          <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }" />
         } @empty {
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
@@ -84,9 +89,15 @@ type OnChangeType = (value: string) => void;
     </ng-template>
 
     <ng-template #dropdownTemplate>
-      <div [class]="contentClasses()" role="listbox" [attr.data-state]="'open'" (keydown)="onDropdownKeydown($event)" tabindex="-1">
+      <div
+        [class]="contentClasses()"
+        role="listbox"
+        [attr.data-state]="'open'"
+        (keydown)="onDropdownKeydown($event)"
+        tabindex="-1"
+      >
         <div class="p-1">
-          <ng-content></ng-content>
+          <ng-content />
         </div>
       </div>
     </ng-template>
@@ -336,7 +347,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   private determinePortalWidth(portalWidth: number): void {
-    if (!this.overlayRef || !this.overlayRef.hasAttached()) return;
+    if (!this.overlayRef?.hasAttached()) return;
 
     const selectItems = this.selectItems();
     let itemMaxWidth = 0;
@@ -409,7 +420,9 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   private getSelectItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-select-item, [z-select-item]')).filter(item => item.dataset['disabled'] === undefined);
+    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-select-item, [z-select-item]')).filter(
+      item => item.dataset['disabled'] === undefined,
+    );
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {

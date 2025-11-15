@@ -1,7 +1,7 @@
 import { Component, input, inject, ChangeDetectionStrategy } from '@angular/core';
 
 import { ColorFormatSelectorComponent } from '@doc/domain/components/color-format-selector/color-format-selector.component';
-import { ColorPalette } from '@doc/shared/constants/colors.constant';
+import { type ColorPalette } from '@doc/shared/constants/colors.constant';
 import { ColorsService } from '@doc/shared/services/colors.service';
 
 import { ColorCardComponent } from '../color-card/color-card.component';
