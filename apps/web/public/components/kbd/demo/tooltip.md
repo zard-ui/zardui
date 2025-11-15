@@ -11,7 +11,8 @@ import { ZardKbdComponent } from '../kbd.component';
   imports: [ZardButtonComponent, ZardTooltipDirective, ZardKbdGroupComponent, ZardKbdComponent],
   standalone: true,
   template: `
-    <button z-button [zTooltip]="shortcutTip">Save</button>
+    <button type="button" z-button [zTooltip]="shortcutTip">Save</button>
+
     <ng-template #shortcutTip>
       Press
       <z-kbd-group>
