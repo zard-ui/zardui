@@ -255,7 +255,11 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.onChange(value);
     this.zSelectionChange.emit(this.zValue());
 
-    if (!this.zMultiple()) {
+    if (this.zMultiple()) {
+      // in multiple mode it can happen that button changes size because of selection badges,
+      // which requires overlay position to update
+      this.updateOverlayPosition();
+    } else {
       this.close();
 
       // Return focus to the button after selection
@@ -263,6 +267,12 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
         this.focusButton();
       }, 0);
     }
+  }
+
+  private updateOverlayPosition(): void {
+    setTimeout(() => {
+      this.overlayRef?.updatePosition();
+    }, 0);
   }
 
   private provideLabelsForMultiselectMode(selectedValue: string[]): string[] {

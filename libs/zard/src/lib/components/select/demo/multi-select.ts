@@ -9,7 +9,7 @@ import { ZardSelectComponent } from '../select.component';
   imports: [ZardBadgeComponent, ZardSelectComponent, ZardSelectItemComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex w-[300px] flex-col gap-4">
+    <div class="flex h-[400px] w-[300px] flex-col gap-4">
       Selected values:
       <span class="flex flex-wrap gap-2">
         @for (value of selectedValues(); track $index) {
