@@ -474,7 +474,7 @@ export * from './carousel-item.component';
 // export * from './carousel-extensions.component';
 
 // Plugin service
-// export * from './carousel-plugins.service';
+export * from './carousel-plugins.service';
 
 // Variants and types
 export * from './carousel.variants';

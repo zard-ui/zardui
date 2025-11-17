@@ -33,7 +33,7 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     if (element) {
       element.classList.add('alert-dialog-leave');
     }
-    this.waitForTransitionEnd(element).then(() => this.dispose(dialogResult));
+    void this.waitForTransitionEnd(element).then(() => this.dispose(dialogResult));
   }
 
   private handleCancel(): void {

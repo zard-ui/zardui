@@ -1,10 +1,10 @@
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 
-import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 import { ZardSheetRef } from './sheet-ref';
+import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
@@ -58,14 +58,23 @@ export class ZardSheetService {
       ],
     });
 
-    const containerPortal = new ComponentPortal<ZardSheetComponent<T, U>>(ZardSheetComponent, config.zViewContainerRef, injector);
+    const containerPortal = new ComponentPortal<ZardSheetComponent<T, U>>(
+      ZardSheetComponent,
+      config.zViewContainerRef,
+      injector,
+    );
     const containerRef = overlayRef.attach<ZardSheetComponent<T, U>>(containerPortal);
     containerRef.instance.state.set('open');
 
     return containerRef.instance;
   }
 
-  private attachSheetContent<T, U>(componentOrTemplateRef: ContentType<T>, sheetContainer: ZardSheetComponent<T, U>, overlayRef: OverlayRef, config: ZardSheetOptions<T, U>) {
+  private attachSheetContent<T, U>(
+    componentOrTemplateRef: ContentType<T>,
+    sheetContainer: ZardSheetComponent<T, U>,
+    overlayRef: OverlayRef,
+    config: ZardSheetOptions<T, U>,
+  ) {
     const sheetRef = new ZardSheetRef<T>(overlayRef, config, sheetContainer, this.platformId);
 
     if (componentOrTemplateRef instanceof TemplateRef) {
@@ -77,7 +86,9 @@ export class ZardSheetService {
       );
     } else if (typeof componentOrTemplateRef !== 'string') {
       const injector = this.createInjector<T, U>(sheetRef, config);
-      const contentRef = sheetContainer.attachComponentPortal<T>(new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector));
+      const contentRef = sheetContainer.attachComponentPortal<T>(
+        new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector),
+      );
       sheetRef.componentInstance = contentRef.instance;
     }
 

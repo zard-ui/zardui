@@ -2,7 +2,13 @@
 
 ```angular-ts title="sheet.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
+import {
+  BasePortalOutlet,
+  CdkPortalOutlet,
+  type ComponentPortal,
+  PortalModule,
+  type TemplatePortal,
+} from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -58,7 +64,15 @@ export class ZardSheetOptions<T, U> {
   imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
-      <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1 cursor-pointer " (click)="onCloseClick()">
+      <button
+        type="button"
+        data-testid="z-close-header-button"
+        z-button
+        zType="ghost"
+        zSize="sm"
+        class="absolute top-1 right-1 cursor-pointer"
+        (click)="onCloseClick()"
+      >
         <z-icon zType="x" />
       </button>
     }
@@ -66,17 +80,21 @@ export class ZardSheetOptions<T, U> {
     @if (config.zTitle || config.zDescription) {
       <header data-slot="sheet-header" class="flex flex-col gap-1.5 p-4">
         @if (config.zTitle) {
-          <h4 data-testid="z-title" data-slot="sheet-title" class="text-lg font-semibold leading-none tracking-tight">{{ config.zTitle }}</h4>
+          <h4 data-testid="z-title" data-slot="sheet-title" class="text-lg leading-none font-semibold tracking-tight">
+            {{ config.zTitle }}
+          </h4>
 
           @if (config.zDescription) {
-            <p data-testid="z-description" data-slot="sheet-description" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+            <p data-testid="z-description" data-slot="sheet-description" class="text-muted-foreground text-sm">
+              {{ config.zDescription }}
+            </p>
           }
         }
       </header>
     }
 
-    <main class="flex flex-col space-y-4 w-full">
-      <ng-template cdkPortalOutlet></ng-template>
+    <main class="flex w-full flex-col space-y-4">
+      <ng-template cdkPortalOutlet />
 
       @if (isStringContent) {
         <div data-testid="z-content" data-slot="sheet-content" [innerHTML]="config.zContent"></div>
@@ -87,6 +105,7 @@ export class ZardSheetOptions<T, U> {
       <footer data-slot="sheet-footer" class="mt-auto flex flex-col gap-2 p-4">
         @if (config.zOkText !== null) {
           <button
+            type="button"
             data-testid="z-ok-button"
             class="cursor-pointer"
             z-button
@@ -103,7 +122,14 @@ export class ZardSheetOptions<T, U> {
         }
 
         @if (config.zCancelText !== null) {
-          <button data-testid="z-cancel-button" class="cursor-pointer" z-button zType="outline" (click)="onCloseClick()">
+          <button
+            type="button"
+            data-testid="z-cancel-button"
+            class="cursor-pointer"
+            z-button
+            zType="outline"
+            (click)="onCloseClick()"
+          >
             @if (config.zCancelIcon) {
               <z-icon [zType]="config.zCancelIcon" />
             }
@@ -138,6 +164,7 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
       this.config.zCustomClasses,
     );
   });
+
   public sheetRef?: ZardSheetRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
@@ -249,11 +276,11 @@ export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 
 
 ```angular-ts title="sheet-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-
 import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
+
+import { filter, fromEvent, Subject, Subscription, takeUntil } from 'rxjs';
 
 import type { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
@@ -267,6 +294,8 @@ export class ZardSheetRef<T = any, R = any, U = any> {
   private isClosing = false;
   protected result?: R;
   componentInstance: T | null = null;
+
+  sub!: Subscription;
 
   constructor(
     private overlayRef: OverlayRef,
@@ -285,7 +314,7 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     }
 
     if (isPlatformBrowser(this.platformId)) {
-      fromEvent<KeyboardEvent>(document, 'keydown')
+      this.sub = fromEvent<KeyboardEvent>(document, 'keydown')
         .pipe(
           filter(event => event.key === 'Escape'),
           takeUntil(this.destroy$),
@@ -321,10 +350,6 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     };
 
     element.addEventListener('animationend', onAnimationEnd);
-
-    setTimeout(() => {
-      onAnimationEnd();
-    }, 300);
   }
 
   private trigger(action: eTriggerAction) {
@@ -380,13 +405,13 @@ export class ZardSheetModule {}
 
 
 ```angular-ts title="sheet.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
+import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
 
-import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 import { ZardSheetRef } from './sheet-ref';
+import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
 export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
@@ -440,14 +465,23 @@ export class ZardSheetService {
       ],
     });
 
-    const containerPortal = new ComponentPortal<ZardSheetComponent<T, U>>(ZardSheetComponent, config.zViewContainerRef, injector);
+    const containerPortal = new ComponentPortal<ZardSheetComponent<T, U>>(
+      ZardSheetComponent,
+      config.zViewContainerRef,
+      injector,
+    );
     const containerRef = overlayRef.attach<ZardSheetComponent<T, U>>(containerPortal);
     containerRef.instance.state.set('open');
 
     return containerRef.instance;
   }
 
-  private attachSheetContent<T, U>(componentOrTemplateRef: ContentType<T>, sheetContainer: ZardSheetComponent<T, U>, overlayRef: OverlayRef, config: ZardSheetOptions<T, U>) {
+  private attachSheetContent<T, U>(
+    componentOrTemplateRef: ContentType<T>,
+    sheetContainer: ZardSheetComponent<T, U>,
+    overlayRef: OverlayRef,
+    config: ZardSheetOptions<T, U>,
+  ) {
     const sheetRef = new ZardSheetRef<T>(overlayRef, config, sheetContainer, this.platformId);
 
     if (componentOrTemplateRef instanceof TemplateRef) {
@@ -459,7 +493,9 @@ export class ZardSheetService {
       );
     } else if (typeof componentOrTemplateRef !== 'string') {
       const injector = this.createInjector<T, U>(sheetRef, config);
-      const contentRef = sheetContainer.attachComponentPortal<T>(new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector));
+      const contentRef = sheetContainer.attachComponentPortal<T>(
+        new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector),
+      );
       sheetRef.componentInstance = contentRef.instance;
     }
 

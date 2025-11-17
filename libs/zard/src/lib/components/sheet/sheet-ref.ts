@@ -1,8 +1,8 @@
-import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
-
 import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
 import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
+
+import { filter, fromEvent, Subject, Subscription, takeUntil } from 'rxjs';
 
 import type { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
@@ -16,6 +16,8 @@ export class ZardSheetRef<T = any, R = any, U = any> {
   private isClosing = false;
   protected result?: R;
   componentInstance: T | null = null;
+
+  sub!: Subscription;
 
   constructor(
     private overlayRef: OverlayRef,
@@ -34,7 +36,7 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     }
 
     if (isPlatformBrowser(this.platformId)) {
-      fromEvent<KeyboardEvent>(document, 'keydown')
+      this.sub = fromEvent<KeyboardEvent>(document, 'keydown')
         .pipe(
           filter(event => event.key === 'Escape'),
           takeUntil(this.destroy$),
@@ -70,10 +72,6 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     };
 
     element.addEventListener('animationend', onAnimationEnd);
-
-    setTimeout(() => {
-      onAnimationEnd();
-    }, 300);
   }
 
   private trigger(action: eTriggerAction) {

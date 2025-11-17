@@ -1,5 +1,3 @@
-import { merge, Subject, takeUntil } from 'rxjs';
-
 import { type ConnectedPosition, Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -7,8 +5,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   Directive,
-  effect,
   ElementRef,
   inject,
   input,
@@ -21,12 +19,17 @@ import {
   type TemplateRef,
   ViewContainerRef,
 } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { filter } from 'rxjs';
+
 import { popoverVariants } from './popover.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
+export type ZardPopoverPositionX = 'center' | 'start' | 'end';
+export type ZardPopoverPositionY = 'center' | 'top' | 'bottom';
 
 const POPOVER_POSITIONS_MAP = {
   top: {
@@ -69,8 +72,7 @@ const POPOVER_POSITIONS_MAP = {
   standalone: true,
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
-  private readonly destroy$ = new Subject<void>();
-  private readonly hidePopover$ = new Subject<void>();
+  private readonly destroyRef = inject(DestroyRef);
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly elementRef = inject(ElementRef);
@@ -79,6 +81,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
 
   private overlayRef?: OverlayRef;
+  private listeners: (() => void)[] = [];
 
   readonly zTrigger = input<ZardPopoverTrigger>('click');
   readonly zContent = input.required<TemplateRef<unknown>>();
@@ -95,13 +98,9 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   constructor() {
-    // Watch for changes to zVisible input
-    // Using untracked for isVisible to avoid circular dependencies
-    effect(() => {
-      const visible = this.zVisible();
-
-      // Defer DOM manipulation to avoid change detection issues
-      setTimeout(() => {
+    toObservable(this.zVisible)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(visible => {
         const currentlyVisible = this.isVisible();
         if (visible && !currentlyVisible) {
           this.show();
@@ -109,23 +108,29 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
           this.hide();
         }
       });
-    });
+
+    toObservable(this.zTrigger)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        if (this.listeners.length) {
+          this.unlistenAll();
+        }
+        this.setupTriggers();
+      });
   }
 
   ngOnInit() {
-    this.setupTriggers();
     this.createOverlay();
   }
 
   ngOnDestroy() {
-    this.hide();
-    this.hidePopover$.complete();
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.unlistenAll();
   }
 
   show() {
-    if (this.isVisible()) return;
+    if (this.isVisible()) {
+      return;
+    }
 
     if (!this.overlayRef) {
       this.createOverlay();
@@ -135,16 +140,11 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     this.overlayRef?.attach(templatePortal);
     this.isVisible.set(true);
     this.zVisibleChange.emit(true);
-
-    if (this.zOverlayClickable() && this.zTrigger() === 'click' && isPlatformBrowser(this.platformId)) {
-      this.setupOutsideClickListener();
-    }
   }
 
   hide() {
     if (!this.isVisible()) return;
 
-    this.hidePopover$.next();
     this.overlayRef?.detach();
     this.isVisible.set(false);
     this.zVisibleChange.emit(false);
@@ -158,23 +158,38 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     }
   }
 
+  private unlistenAll(): void {
+    for (const listener of this.listeners) {
+      listener();
+    }
+    this.listeners = [];
+  }
+
   private setupTriggers() {
     const trigger = this.zTrigger();
-    if (!trigger) return;
+    if (!trigger) {
+      return;
+    }
 
     if (trigger === 'click') {
-      this.renderer.listen(this.nativeElement, 'click', (event: Event) => {
-        event.stopPropagation();
-        this.toggle();
-      });
+      this.listeners.push(
+        this.renderer.listen(this.nativeElement, 'click', (event: Event) => {
+          event.stopPropagation();
+          this.toggle();
+        }),
+      );
     } else if (trigger === 'hover') {
-      this.renderer.listen(this.nativeElement, 'mouseenter', () => {
-        this.show();
-      });
+      this.listeners.push(
+        this.renderer.listen(this.nativeElement, 'mouseenter', () => {
+          this.show();
+        }),
+      );
 
-      this.renderer.listen(this.nativeElement, 'mouseleave', () => {
-        this.hide();
-      });
+      this.listeners.push(
+        this.renderer.listen(this.nativeElement, 'mouseleave', () => {
+          this.hide();
+        }),
+      );
     }
   }
 
@@ -192,6 +207,16 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
         hasBackdrop: false,
         scrollStrategy: this.overlay.scrollStrategies.reposition(),
       });
+
+      if (this.zOverlayClickable() && this.zTrigger() === 'click' && isPlatformBrowser(this.platformId)) {
+        this.overlayRef
+          .outsidePointerEvents()
+          .pipe(
+            filter(event => !this.nativeElement.contains(event.target)),
+            takeUntilDestroyed(this.destroyRef),
+          )
+          .subscribe(() => this.hide());
+      }
     }
   }
 
@@ -202,10 +227,10 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     // Primary position
     const primaryConfig = POPOVER_POSITIONS_MAP[placement];
     positions.push({
-      originX: primaryConfig.originX as any,
-      originY: primaryConfig.originY as any,
-      overlayX: primaryConfig.overlayX as any,
-      overlayY: primaryConfig.overlayY as any,
+      originX: primaryConfig.originX as ZardPopoverPositionX,
+      originY: primaryConfig.originY as ZardPopoverPositionY,
+      overlayX: primaryConfig.overlayX as ZardPopoverPositionX,
+      overlayY: primaryConfig.overlayY as ZardPopoverPositionY,
       offsetX: primaryConfig.offsetX ?? 0,
       offsetY: primaryConfig.offsetY ?? 0,
     });
@@ -332,30 +357,13 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 
     return positions;
   }
-
-  private setupOutsideClickListener() {
-    if (!this.overlayRef) return;
-
-    this.overlayRef
-      .outsidePointerEvents()
-      .pipe(takeUntil(merge(this.hidePopover$, this.destroy$)))
-      .subscribe(event => {
-        const clickTarget = event.target as HTMLElement;
-
-        if (this.nativeElement.contains(clickTarget)) {
-          return;
-        }
-
-        this.hide();
-      });
-  }
 }
 
 @Component({
   selector: 'z-popover',
   standalone: true,
   imports: [],
-  template: `<ng-content></ng-content>`,
+  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
