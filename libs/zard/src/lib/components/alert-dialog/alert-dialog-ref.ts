@@ -1,17 +1,14 @@
 import type { OverlayRef } from '@angular/cdk/overlay';
 
-import { filter, type Observable, Subject, takeUntil } from 'rxjs';
+import { filter, Subject, takeUntil } from 'rxjs';
 
 import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
-export class ZardAlertDialogRef<T = unknown, R = unknown> {
-  componentInstance?: T;
-
+export class ZardAlertDialogRef<T = unknown> {
   private readonly destroy$ = new Subject<void>();
-  private readonly afterClosedSubject = new Subject<R | undefined>();
   private isClosing = false;
 
-  readonly afterClosed: Observable<R | undefined> = this.afterClosedSubject.asObservable();
+  componentInstance?: T;
 
   constructor(
     private readonly overlayRef: OverlayRef,
@@ -25,7 +22,7 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     this.handleEscapeKey();
   }
 
-  close(dialogResult?: R): void {
+  close(): void {
     if (this.isClosing) return;
     this.isClosing = true;
 
@@ -33,14 +30,14 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     if (element) {
       element.classList.add('alert-dialog-leave');
     }
-    void this.waitForTransitionEnd(element).then(() => this.dispose(dialogResult));
+    void this.waitForTransitionEnd(element).then(() => this.dispose());
   }
 
   private handleCancel(): void {
     const cancelFn = this.config.zOnCancel;
     if (typeof cancelFn === 'function') {
       const result = (cancelFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) this.close(result as R);
+      if (result !== false) this.close();
     } else {
       this.close();
     }
@@ -50,7 +47,7 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     const okFn = this.config.zOnOk;
     if (typeof okFn === 'function') {
       const result = (okFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) this.close(result as R);
+      if (result !== false) this.close();
     } else {
       this.close();
     }
@@ -94,15 +91,12 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     ]);
   }
 
-  private dispose(result?: R): void {
+  private dispose(): void {
     try {
       this.overlayRef?.dispose();
     } catch {
       // Overlay already destroyed or SSR
     }
-
-    this.afterClosedSubject.next(result);
-    this.afterClosedSubject.complete();
 
     if (!this.destroy$.closed) {
       this.destroy$.next();

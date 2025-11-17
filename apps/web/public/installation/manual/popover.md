@@ -24,17 +24,15 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
-import { filter } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
 
 import { popoverVariants } from './popover.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
-export type ZardPopoverPositionX = 'center' | 'start' | 'end';
-export type ZardPopoverPositionY = 'center' | 'top' | 'bottom';
 
-const POPOVER_POSITIONS_MAP = {
+const POPOVER_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
   top: {
     originX: 'center',
     originY: 'top',
@@ -84,6 +82,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
 
   private overlayRef?: OverlayRef;
+  private overlayRefSubscription?: Subscription;
   private listeners: (() => void)[] = [];
 
   readonly zTrigger = input<ZardPopoverTrigger>('click');
@@ -114,11 +113,16 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 
     toObservable(this.zTrigger)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => {
+      .subscribe(trigger => {
         if (this.listeners.length) {
           this.unlistenAll();
         }
         this.setupTriggers();
+        this.overlayRefSubscription?.unsubscribe();
+        this.overlayRefSubscription = undefined;
+        if (trigger === 'click') {
+          this.subscribeToOverlayRef();
+        }
       });
   }
 
@@ -128,6 +132,8 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.unlistenAll();
+    this.overlayRefSubscription?.unsubscribe();
+    this.overlayRef?.dispose();
   }
 
   show() {
@@ -161,11 +167,35 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     }
   }
 
-  private unlistenAll(): void {
-    for (const listener of this.listeners) {
-      listener();
+  private createOverlay() {
+    if (isPlatformBrowser(this.platformId)) {
+      const positionStrategy = this.overlayPositionBuilder
+        .flexibleConnectedTo(this.nativeElement)
+        .withPositions(this.getPositions())
+        .withPush(false)
+        .withFlexibleDimensions(false)
+        .withViewportMargin(8);
+
+      this.overlayRef = this.overlay.create({
+        positionStrategy,
+        hasBackdrop: false,
+        scrollStrategy: this.overlay.scrollStrategies.reposition(),
+      });
     }
-    this.listeners = [];
+  }
+
+  private subscribeToOverlayRef(): void {
+    if (
+      this.zOverlayClickable() &&
+      this.zTrigger() === 'click' &&
+      isPlatformBrowser(this.platformId) &&
+      this.overlayRef
+    ) {
+      this.overlayRefSubscription = this.overlayRef
+        .outsidePointerEvents()
+        .pipe(filter(event => !this.nativeElement.contains(event.target)))
+        .subscribe(() => this.hide());
+    }
   }
 
   private setupTriggers() {
@@ -196,31 +226,11 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     }
   }
 
-  private createOverlay() {
-    if (isPlatformBrowser(this.platformId)) {
-      const positionStrategy = this.overlayPositionBuilder
-        .flexibleConnectedTo(this.nativeElement)
-        .withPositions(this.getPositions())
-        .withPush(false)
-        .withFlexibleDimensions(false)
-        .withViewportMargin(8);
-
-      this.overlayRef = this.overlay.create({
-        positionStrategy,
-        hasBackdrop: false,
-        scrollStrategy: this.overlay.scrollStrategies.reposition(),
-      });
-
-      if (this.zOverlayClickable() && this.zTrigger() === 'click' && isPlatformBrowser(this.platformId)) {
-        this.overlayRef
-          .outsidePointerEvents()
-          .pipe(
-            filter(event => !this.nativeElement.contains(event.target)),
-            takeUntilDestroyed(this.destroyRef),
-          )
-          .subscribe(() => this.hide());
-      }
+  private unlistenAll(): void {
+    for (const listener of this.listeners) {
+      listener();
     }
+    this.listeners = [];
   }
 
   private getPositions(): ConnectedPosition[] {
@@ -230,10 +240,10 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     // Primary position
     const primaryConfig = POPOVER_POSITIONS_MAP[placement];
     positions.push({
-      originX: primaryConfig.originX as ZardPopoverPositionX,
-      originY: primaryConfig.originY as ZardPopoverPositionY,
-      overlayX: primaryConfig.overlayX as ZardPopoverPositionX,
-      overlayY: primaryConfig.overlayY as ZardPopoverPositionY,
+      originX: primaryConfig.originX,
+      originY: primaryConfig.originY,
+      overlayX: primaryConfig.overlayX,
+      overlayY: primaryConfig.overlayY,
       offsetX: primaryConfig.offsetX ?? 0,
       offsetY: primaryConfig.offsetY ?? 0,
     });

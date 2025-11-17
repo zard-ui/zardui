@@ -110,7 +110,7 @@ export class ZardDialogOptions<T, U> {
 
         @if (config.zOkText !== null) {
           <button
-            type="submit"
+            type="button"
             data-testid="z-ok-button"
             z-button
             [zType]="config.zOkDestructive ? 'destructive' : 'default'"
@@ -283,8 +283,10 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.isClosing = true;
     this.result = result;
 
-    const hostElement = this.containerInstance.getNativeElement();
-    hostElement.classList.add('dialog-leave');
+    if (isPlatformBrowser(this.platformId)) {
+      const hostElement = this.containerInstance.getNativeElement();
+      hostElement.classList.add('dialog-leave');
+    }
 
     setTimeout(() => {
       if (this.overlayRef) {
@@ -429,7 +431,7 @@ export class ZardDialogService {
           componentOrTemplateRef,
           null as unknown as ViewContainerRef,
           {
-            dialogRef: dialogRef,
+            dialogRef,
           } as T,
         ),
       );

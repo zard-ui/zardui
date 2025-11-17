@@ -1,24 +1,23 @@
-import { Component, inject, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { isPlatformBrowser } from '@angular/common';
+import { Component, inject, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardSheetComponent } from './sheet.component';
-import { ZardSheetService } from './sheet.service';
 import { ZardSheetRef } from './sheet-ref';
+import { ZardSheetService } from './sheet.service';
+import { ZardButtonComponent } from '../button/button.component';
 
 @Component({
   template: `
-    <button z-button zType="outline" (click)="openSheet()">Open basic sheet</button>
-    <button z-button zType="outline" (click)="openSheetWithTemplate()">Open sheet with template</button>
-    <button z-button zType="outline" (click)="openSheetRightSide()">Open right side sheet</button>
-    <button z-button zType="outline" (click)="openSheetWithoutFooter()">Open sheet without footer</button>
+    <button type="button" z-button zType="outline" (click)="openSheet()">Open basic sheet</button>
+    <button type="button" z-button zType="outline" (click)="openSheetWithTemplate()">Open sheet with template</button>
+    <button type="button" z-button zType="outline" (click)="openSheetRightSide()">Open right side sheet</button>
+    <button type="button" z-button zType="outline" (click)="openSheetWithoutFooter()">Open sheet without footer</button>
 
     <ng-template #testTemplate let-sheetRef="sheetRef">
       <div data-testid="template-content">
         <p>Template content</p>
-        <button (click)="sheetRef.close()">Close from template</button>
+        <button type="button" (click)="sheetRef.close()">Close from template</button>
       </div>
     </ng-template>
   `,
@@ -28,8 +27,8 @@ import { ZardSheetRef } from './sheet-ref';
 class SheetTestHostComponent {
   private sheetService = inject(ZardSheetService);
 
-  @ViewChild('testTemplate', { static: true }) testTemplate!: TemplateRef<any>;
-  public lastSheetRef?: ZardSheetRef<any>;
+  @ViewChild('testTemplate', { static: true }) testTemplate!: TemplateRef<void>;
+  public lastSheetRef?: ZardSheetRef<void>;
 
   openSheet() {
     this.lastSheetRef = this.sheetService.create({
@@ -266,7 +265,7 @@ describe('ZardSheetComponent', () => {
     });
 
     it('should apply custom width and height', async () => {
-      const sheetRef = sheetService.create({
+      sheetService.create({
         zTitle: 'Custom Dimensions Sheet',
         zContent: 'Custom content',
         zSide: 'right',
@@ -289,7 +288,7 @@ describe('ZardSheetComponent', () => {
     });
 
     it('should apply default dimensions based on side', async () => {
-      const sheetRef = sheetService.create({
+      sheetService.create({
         zTitle: 'Default Dimensions Sheet',
         zContent: 'Default content',
         zSide: 'left',
@@ -315,7 +314,7 @@ describe('ZardSheetComponent', () => {
       let okClicked = false;
       let cancelClicked = false;
 
-      const sheetRef = sheetService.create({
+      sheetService.create({
         zTitle: 'Callback Sheet',
         zContent: 'Callback content',
         zOnOk: () => {

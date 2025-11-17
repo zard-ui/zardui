@@ -97,7 +97,7 @@ export class ZardDialogService {
           componentOrTemplateRef,
           null as unknown as ViewContainerRef,
           {
-            dialogRef: dialogRef,
+            dialogRef,
           } as T,
         ),
       );

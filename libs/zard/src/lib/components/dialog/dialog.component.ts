@@ -107,7 +107,7 @@ export class ZardDialogOptions<T, U> {
 
         @if (config.zOkText !== null) {
           <button
-            type="submit"
+            type="button"
             data-testid="z-ok-button"
             z-button
             [zType]="config.zOkDestructive ? 'destructive' : 'default'"
