@@ -15,8 +15,8 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
         <ng-template #ellipsisMenu>
           <div z-menu-content class="w-48">
-            <button z-menu-item>Getting Started</button>
-            <button z-menu-item>Installation</button>
+            <button type="button" z-menu-item>Getting Started</button>
+            <button type="button" z-menu-item>Installation</button>
           </div>
         </ng-template>
       </z-breadcrumb-item>

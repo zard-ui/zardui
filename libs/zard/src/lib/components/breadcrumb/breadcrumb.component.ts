@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  contentChild,
   contentChildren,
   inject,
   input,
@@ -27,6 +28,28 @@ import { ZardStringTemplateOutletDirective } from '../core/directives/string-tem
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
+  selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
+  exportAs: 'zBreadcrumbEllipsis',
+  imports: [ZardIconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  template: ` <z-icon zType="ellipsis" /> `,
+  host: {
+    '[class]': 'classes()',
+    'aria-hidden': 'true',
+    role: 'presentation',
+  },
+})
+export class ZardBreadcrumbEllipsisComponent {
+  readonly zColor = input<ZardBreadcrumbEllipsisColorVariants>('muted');
+
+  readonly class = input<ClassValue>('');
+  protected readonly classes = computed(() =>
+    mergeClasses(breadcrumbEllipsisVariants({ zColor: this.zColor() }), this.class()),
+  );
+}
+
+@Component({
   selector: 'z-breadcrumb-item, [z-breadcrumb-item]',
   exportAs: 'zBreadcrumbItem',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,15 +72,21 @@ import { ZardIconComponent } from '../icon/icon.component';
     },
   ],
   template: `
+    <ng-template #itemContent><ng-content /></ng-template>
+
     <li [class]="classes()">
-      <a
-        class="flex items-center gap-1.5"
-        [routerLink]="routerLink()"
-        [queryParams]="queryParams()"
-        [fragment]="fragment()"
-      >
-        <ng-content />
-      </a>
+      @if (isEllipsis()) {
+        <ng-container *zStringTemplateOutlet="itemContent" />
+      } @else {
+        <a
+          class="flex items-center gap-1.5"
+          [routerLink]="routerLink()"
+          [queryParams]="queryParams()"
+          [fragment]="fragment()"
+        >
+          <ng-container *zStringTemplateOutlet="itemContent" />
+        </a>
+      }
     </li>
 
     @if (!isLast()) {
@@ -79,6 +108,7 @@ import { ZardIconComponent } from '../icon/icon.component';
 export class ZardBreadcrumbItemComponent {
   private readonly breadcrumbComponent = inject(ZardBreadcrumbComponent);
 
+  private readonly content = contentChild(ZardBreadcrumbEllipsisComponent);
   /*
     These three inputs are affecting the link so we need them for anchor link.
     They are not part of component API in any sense as that is done through
@@ -92,6 +122,7 @@ export class ZardBreadcrumbItemComponent {
 
   protected readonly separator = computed(() => this.breadcrumbComponent.zSeparator());
   protected readonly isLast = computed<boolean>(() => this === this.breadcrumbComponent.items().at(-1));
+  protected readonly isEllipsis = computed<boolean>(() => this.content() !== undefined);
 
   protected readonly classes = computed(() => mergeClasses(breadcrumbItemVariants(), this.class()));
   protected readonly separatorClasses = computed(() => 'text-muted-foreground [&_svg]:size-3.5');
@@ -130,28 +161,5 @@ export class ZardBreadcrumbComponent {
 
   protected readonly listClasses = computed(() =>
     breadcrumbListVariants({ zAlign: this.zAlign(), zWrap: this.zWrap() }),
-  );
-}
-
-@Component({
-  selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
-  exportAs: 'zBreadcrumbEllipsis',
-  standalone: true,
-  imports: [ZardIconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: ` <z-icon zType="ellipsis" /> `,
-  host: {
-    '[class]': 'classes()',
-    'aria-hidden': 'true',
-    role: 'presentation',
-  },
-})
-export class ZardBreadcrumbEllipsisComponent {
-  readonly zColor = input<ZardBreadcrumbEllipsisColorVariants>('muted');
-
-  readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() =>
-    mergeClasses(breadcrumbEllipsisVariants({ zColor: this.zColor() }), this.class()),
   );
 }
