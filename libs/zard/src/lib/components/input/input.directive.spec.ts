@@ -11,7 +11,7 @@ import { ZardInputDirective } from './input.directive';
 })
 class TestHostComponent {}
 
-describe('InputComponent', () => {
+describe('ZardInputDirective', () => {
   let fixture: ComponentFixture<TestHostComponent>;
   let inputElement: DebugElement;
 
@@ -28,5 +28,12 @@ describe('InputComponent', () => {
   it('should create', () => {
     expect(inputElement).toBeTruthy();
     expect(inputElement.injector.get(ZardInputDirective)).toBeTruthy();
+  });
+
+  it('should disable externally', () => {
+    const directive = inputElement.injector.get(ZardInputDirective);
+    directive.disable(true);
+
+    expect(inputElement.nativeElement).toBeDisabled();
   });
 });
