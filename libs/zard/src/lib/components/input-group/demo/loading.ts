@@ -7,7 +7,6 @@ import { ZardInputGroupComponent } from '../input-group.component';
 @Component({
   selector: 'z-demo-input-group-loading',
   imports: [ZardInputGroupComponent, ZardInputDirective, ZardIconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex flex-col space-y-4">
       <z-input-group [zAddonBefore]="search" zLoading>
@@ -17,5 +16,6 @@ import { ZardInputGroupComponent } from '../input-group.component';
 
     <ng-template #search><z-icon zType="search" /></ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputGroupLoadingComponent {}

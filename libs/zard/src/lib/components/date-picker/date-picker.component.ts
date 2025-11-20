@@ -1,14 +1,24 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input, output, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  output,
+  type TemplateRef,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 
+import type { ClassValue } from 'clsx';
+
+import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardCalendarComponent } from '../calendar/calendar.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
-import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
-
-import type { ClassValue } from 'clsx';
 
 const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, string> = {
   sm: 'h-8',
@@ -18,12 +28,8 @@ const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, strin
 
 @Component({
   selector: 'z-date-picker, [z-date-picker]',
-  exportAs: 'zDatePicker',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [ZardButtonComponent, ZardCalendarComponent, ZardPopoverComponent, ZardPopoverDirective, ZardIconComponent],
-  host: {},
+  standalone: true,
   template: `
     <button
       z-button
@@ -48,11 +54,22 @@ const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, strin
 
     <ng-template #calendarTemplate>
       <z-popover [class]="popoverClasses()">
-        <z-calendar #calendar [value]="value()" [minDate]="minDate()" [maxDate]="maxDate()" [disabled]="disabled()" (dateChange)="onDateChange($event)" />
+        <z-calendar
+          #calendar
+          [value]="value()"
+          [minDate]="minDate()"
+          [maxDate]="maxDate()"
+          [disabled]="disabled()"
+          (dateChange)="onDateChange($event)"
+        />
       </z-popover>
     </ng-template>
   `,
   providers: [DatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {},
+  exportAs: 'zDatePicker',
 })
 export class ZardDatePickerComponent {
   private readonly datePipe = inject(DatePipe);
@@ -86,7 +103,12 @@ export class ZardDatePickerComponent {
     const hasValue = !!this.value();
     const size: NonNullable<ZardDatePickerVariants['zSize']> = this.zSize() ?? 'default';
     const height = HEIGHT_BY_SIZE[size];
-    return mergeClasses('justify-start text-left font-normal', !hasValue && 'text-muted-foreground', height, 'min-w-[240px]');
+    return mergeClasses(
+      'justify-start text-left font-normal',
+      !hasValue && 'text-muted-foreground',
+      height,
+      'min-w-[240px]',
+    );
   });
 
   protected readonly textClasses = computed(() => {

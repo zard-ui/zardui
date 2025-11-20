@@ -1,30 +1,34 @@
 
 
 ```angular-ts title="card.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  type TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { ChangeDetectionStrategy, Component, computed, input, type TemplateRef, ViewEncapsulation } from '@angular/core';
-
+import { cardBodyVariants, cardHeaderVariants, cardVariants } from './card.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { cardBodyVariants, cardHeaderVariants, cardVariants } from './card.variants';
 
 @Component({
   selector: 'z-card',
-  exportAs: 'zCard',
-  standalone: true,
   imports: [ZardStringTemplateOutletDirective],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
     @if (zTitle()) {
       <div [class]="headerClasses()">
-        <div class="text-2xl font-semibold leading-none tracking-tight">
+        <div class="text-2xl leading-none font-semibold tracking-tight">
           <ng-container *zStringTemplateOutlet="zTitle()">{{ zTitle() }}</ng-container>
         </div>
 
         @if (zDescription()) {
-          <div class="text-sm text-muted-foreground">
+          <div class="text-muted-foreground text-sm">
             <ng-container *zStringTemplateOutlet="zDescription()">{{ zDescription() }}</ng-container>
           </div>
         }
@@ -32,12 +36,15 @@ import { cardBodyVariants, cardHeaderVariants, cardVariants } from './card.varia
     }
 
     <div [class]="bodyClasses()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zCard',
 })
 export class ZardCardComponent {
   readonly zTitle = input<string | TemplateRef<void>>();

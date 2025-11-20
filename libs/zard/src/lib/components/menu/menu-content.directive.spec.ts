@@ -5,8 +5,8 @@ import { By } from '@angular/platform-browser';
 import { ZardMenuContentDirective } from './menu-content.directive';
 
 @Component({
-  template: `<div z-menu-content [class]="customClass">Menu Content</div>`,
   imports: [ZardMenuContentDirective],
+  template: `<div z-menu-content [class]="customClass">Menu Content</div>`,
 })
 class TestComponent {
   customClass = '';

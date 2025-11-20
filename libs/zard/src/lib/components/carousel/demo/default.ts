@@ -5,7 +5,6 @@ import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
   imports: [ZardCarouselModule, ZardCardComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <z-carousel>
@@ -13,7 +12,9 @@ import { ZardCarouselModule } from '../carousel.module';
           @for (slide of slides; track slide) {
             <z-carousel-item>
               <z-card>
-                <div class="flex h-[100px] items-center justify-center text-4xl font-semibold md:h-[200px]">{{ slide }}</div>
+                <div class="flex h-[100px] items-center justify-center text-4xl font-semibold md:h-[200px]">
+                  {{ slide }}
+                </div>
               </z-card>
             </z-carousel-item>
           }
@@ -21,6 +22,7 @@ import { ZardCarouselModule } from '../carousel.module';
       </z-carousel>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCarouselDefaultComponent {
   protected slides = ['1', '2', '3', '4', '5'];

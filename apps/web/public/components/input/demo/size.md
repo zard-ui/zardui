@@ -5,8 +5,8 @@ import { ZardInputDirective } from '../input.directive';
 
 @Component({
   selector: 'z-demo-input-size',
-  standalone: true,
   imports: [ZardInputDirective],
+  standalone: true,
   template: `
     <input z-input zSize="sm" placeholder="small size" />
     <input z-input zSize="default" placeholder="default size" />

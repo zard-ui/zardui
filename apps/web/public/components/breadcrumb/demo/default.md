@@ -6,8 +6,8 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
   selector: 'z-demo-breadcrumb-default',
-  standalone: true,
   imports: [ZardBreadcrumbModule, ZardIconComponent],
+  standalone: true,
   template: `
     <z-breadcrumb zWrap="wrap" zAlign="start">
       <z-breadcrumb-item [routerLink]="['/']">

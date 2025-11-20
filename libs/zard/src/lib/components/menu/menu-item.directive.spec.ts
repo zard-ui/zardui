@@ -1,13 +1,13 @@
+import { PARENT_OR_NEW_MENU_STACK_PROVIDER } from '@angular/cdk/menu';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { PARENT_OR_NEW_MENU_STACK_PROVIDER } from '@angular/cdk/menu';
 
 import { ZardMenuItemDirective } from './menu-item.directive';
 
 @Component({
-  template: `<button z-menu-item [zDisabled]="disabled" [zInset]="inset" [class]="customClass">Menu Item</button>`,
   imports: [ZardMenuItemDirective],
+  template: `<button z-menu-item [zDisabled]="disabled" [zInset]="inset" [class]="customClass">Menu Item</button>`,
 })
 class TestComponent {
   disabled = false;

@@ -4,8 +4,8 @@ import { ZardButtonComponent } from '../button.component';
 
 @Component({
   selector: 'z-demo-button-shape',
-  standalone: true,
   imports: [ZardButtonComponent],
+  standalone: true,
   template: `
     <button z-button>Default</button>
     <button z-button zShape="circle">Circle</button>

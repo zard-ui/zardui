@@ -3,6 +3,7 @@
 ```angular-ts title="dropdown.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -21,35 +22,48 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { dropdownContentVariants } from './dropdown.variants';
 
 import type { ClassValue } from 'clsx';
-import { isPlatformBrowser } from '@angular/common';
+
+import { dropdownContentVariants } from './dropdown.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
+
 @Component({
   selector: 'z-dropdown-menu',
-  exportAs: 'zDropdownMenu',
+  imports: [OverlayModule],
   standalone: true,
+  template: `
+    <! -- Dropdown Trigger - ->
+    <div
+      class="trigger-container"
+      (click)="toggle()"
+      (keydown.enter)="toggle()"
+      (keydown.space)="toggle()"
+      tabindex="0"
+    >
+      <ng-content select="[dropdown-trigger]" />
+    </div>
+
+    <! -- Template for overlay content - ->
+    <ng-template #dropdownTemplate>
+      <div
+        [class]="contentClasses()"
+        role="menu"
+        [attr.data-state]="'open'"
+        (keydown)="onDropdownKeydown($event)"
+        tabindex="-1"
+      >
+        <ng-content />
+      </div>
+    </ng-template>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [OverlayModule],
   host: {
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     class: 'relative inline-block text-left',
   },
-  template: `
-    <!-- Dropdown Trigger -->
-    <div class="trigger-container" (click)="toggle()" (keydown.enter)="toggle()" (keydown.space)="toggle()" tabindex="0">
-      <ng-content select="[dropdown-trigger]"></ng-content>
-    </div>
-
-    <!-- Template for overlay content -->
-    <ng-template #dropdownTemplate>
-      <div [class]="contentClasses()" role="menu" [attr.data-state]="'open'" (keydown)="onDropdownKeydown($event)" tabindex="-1">
-        <ng-content></ng-content>
-      </div>
-    </ng-template>
-  `,
+  exportAs: 'zDropdownMenu',
 })
 export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private elementRef = inject(ElementRef);
@@ -209,7 +223,9 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private getDropdownItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(item => item.dataset['disabled'] === undefined);
+    return Array.from(
+      dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]'),
+    ).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
@@ -286,7 +302,9 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 ```angular-ts title="dropdown.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const dropdownContentVariants = cva('bg-popover text-popover-foreground z-50 min-w-[200px] overflow-y-auto rounded-md border py-1 px-1 shadow-md');
+export const dropdownContentVariants = cva(
+  'bg-popover text-popover-foreground z-50 min-w-[200px] overflow-y-auto rounded-md border py-1 px-1 shadow-md',
+);
 
 export const dropdownItemVariants = cva(
   'relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
@@ -294,7 +312,8 @@ export const dropdownItemVariants = cva(
     variants: {
       variant: {
         default: '',
-        destructive: 'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
+        destructive:
+          'text-destructive hover:bg-destructive/10 focus:bg-destructive/10 dark:hover:bg-destructive/20 dark:focus:bg-destructive/20 focus:text-destructive',
       },
       inset: {
         true: 'pl-8',
@@ -308,17 +327,20 @@ export const dropdownItemVariants = cva(
   },
 );
 
-export const dropdownLabelVariants = cva('relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground', {
-  variants: {
-    inset: {
-      true: 'pl-8',
-      false: '',
+export const dropdownLabelVariants = cva(
+  'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
+  {
+    variants: {
+      inset: {
+        true: 'pl-8',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      inset: false,
     },
   },
-  defaultVariants: {
-    inset: false,
-  },
-});
+);
 
 export const dropdownShortcutVariants = cva('ml-auto text-xs tracking-widest text-muted-foreground');
 
@@ -330,20 +352,19 @@ export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariant
 
 
 ```angular-ts title="dropdown-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardDropdownService } from './dropdown.service';
 import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
-  exportAs: 'zDropdownMenuItem',
   standalone: true,
+  template: `<ng-content />`,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content></ng-content>`,
   host: {
     '[class]': 'classes()',
     '[attr.data-disabled]': 'disabled() || null',
@@ -353,6 +374,7 @@ import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.
     role: 'menuitem',
     tabindex: '-1',
   },
+  exportAs: 'zDropdownMenuItem',
 })
 export class ZardDropdownMenuItemComponent {
   private readonly dropdownService = inject(ZardDropdownService);
@@ -392,23 +414,23 @@ export class ZardDropdownMenuItemComponent {
 
 
 ```angular-ts title="dropdown-label.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { dropdownLabelVariants } from './dropdown.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',
-  exportAs: 'zDropdownMenuLabel',
   standalone: true,
+  template: `<ng-content />`,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content></ng-content>`,
   host: {
     '[class]': 'classes()',
     '[attr.data-inset]': 'inset() || null',
   },
+  exportAs: 'zDropdownMenuLabel',
 })
 export class ZardDropdownMenuLabelComponent {
   readonly inset = input(false, { transform });
@@ -438,19 +460,19 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-content',
-  exportAs: 'zDropdownMenuContent',
   standalone: true,
+  template: `
+    <ng-template #contentTemplate>
+      <div [class]="contentClasses()" role="menu" tabindex="-1" [attr.aria-orientation]="'vertical'">
+        <ng-content />
+      </div>
+    </ng-template>
+  `,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[style.display]': '"none"',
   },
-  template: `
-    <ng-template #contentTemplate>
-      <div [class]="contentClasses()" role="menu" tabindex="-1" [attr.aria-orientation]="'vertical'">
-        <ng-content></ng-content>
-      </div>
-    </ng-template>
-  `,
+  exportAs: 'zDropdownMenuContent',
 })
 export class ZardDropdownMenuContentComponent {
   readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('contentTemplate');
@@ -465,22 +487,22 @@ export class ZardDropdownMenuContentComponent {
 
 
 ```angular-ts title="dropdown-shortcut.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { dropdownShortcutVariants } from './dropdown.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]',
-  exportAs: 'zDropdownMenuShortcut',
   standalone: true,
+  template: `<ng-content />`,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content></ng-content>`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zDropdownMenuShortcut',
 })
 export class ZardDropdownMenuShortcutComponent {
   readonly class = input<ClassValue>('');
@@ -500,7 +522,6 @@ import { ZardDropdownService } from './dropdown.service';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
-  exportAs: 'zDropdown',
   standalone: true,
   host: {
     '[attr.tabindex]': '0',
@@ -509,6 +530,7 @@ import { ZardDropdownService } from './dropdown.service';
     '[attr.aria-expanded]': 'dropdownService.isOpen()',
     '[attr.aria-disabled]': 'zDisabled()',
   },
+  exportAs: 'zDropdown',
 })
 export class ZardDropdownDirective implements OnInit {
   private readonly elementRef = inject(ElementRef);
@@ -604,10 +626,10 @@ export class ZardDropdownDirective implements OnInit {
 import { OverlayModule } from '@angular/cdk/overlay';
 import { NgModule } from '@angular/core';
 
+import { ZardDropdownMenuItemComponent } from './dropdown-item.component';
+import { ZardDropdownMenuLabelComponent } from './dropdown-label.component';
 import { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownMenuShortcutComponent } from './dropdown-shortcut.component';
-import { ZardDropdownMenuLabelComponent } from './dropdown-label.component';
-import { ZardDropdownMenuItemComponent } from './dropdown-item.component';
 import { ZardDropdownDirective } from './dropdown-trigger.directive';
 import { ZardDropdownMenuComponent } from './dropdown.component';
 
@@ -633,8 +655,17 @@ export class ZardDropdownModule {}
 ```angular-ts title="dropdown.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { type ElementRef, inject, Injectable, PLATFORM_ID, signal, type TemplateRef, type ViewContainerRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import {
+  type ElementRef,
+  inject,
+  Injectable,
+  PLATFORM_ID,
+  signal,
+  type TemplateRef,
+  type ViewContainerRef,
+} from '@angular/core';
+
 import type { Subscription } from 'rxjs';
 
 @Injectable({
@@ -786,7 +817,9 @@ export class ZardDropdownService {
   private getDropdownItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(item => item.dataset['disabled'] === undefined);
+    return Array.from(
+      dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]'),
+    ).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {

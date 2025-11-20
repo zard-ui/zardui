@@ -5,8 +5,8 @@ import { ZardAvatarComponent } from '../avatar.component';
 
 @Component({
   selector: 'z-demo-avatar-basic',
-  standalone: true,
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent],
+  standalone: true,
   template: `
     <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zFallback="ZA" [zSize]="32" />
     <z-avatar zSrc="error-image.png" zFallback="ZA" zSize="sm" />

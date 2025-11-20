@@ -1,5 +1,5 @@
-import { ZardDemoAccordionMultipleComponent } from './multiple';
 import { ZardDemoAccordionBasicComponent } from './basic';
+import { ZardDemoAccordionMultipleComponent } from './multiple';
 
 export const ACCORDION = {
   componentName: 'accordion',

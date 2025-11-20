@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, input, linkedSignal, model, viewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  linkedSignal,
+  model,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
 
 import type { ClassValue } from 'clsx';
@@ -15,14 +24,8 @@ export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types'
 
 @Component({
   selector: 'z-calendar, [z-calendar]',
-  exportAs: 'zCalendar',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [ZardCalendarNavigationComponent, ZardCalendarGridComponent],
-  host: {
-    '[attr.tabindex]': '0',
-  },
+  standalone: true,
   template: `
     <div [class]="classes()">
       <z-calendar-navigation
@@ -48,6 +51,12 @@ export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types'
       />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[attr.tabindex]': '0',
+  },
+  exportAs: 'zCalendar',
 })
 export class ZardCalendarComponent {
   private readonly gridRef = viewChild.required(ZardCalendarGridComponent);
@@ -94,7 +103,11 @@ export class ZardCalendarComponent {
 
   protected readonly calendarDays = computed(() => {
     const currentDate = this.currentDate();
-    const navigationDate = new Date(Number.parseInt(this.currentYearValue()), Number.parseInt(this.currentMonthValue()), currentDate.getDate());
+    const navigationDate = new Date(
+      Number.parseInt(this.currentYearValue()),
+      Number.parseInt(this.currentMonthValue()),
+      currentDate.getDate(),
+    );
     const selectedDate = Number.isNaN(navigationDate.getTime()) ? currentDate : navigationDate;
 
     return generateCalendarDays({
@@ -159,7 +172,11 @@ export class ZardCalendarComponent {
   protected previousMonth(): void {
     const currentDate = this.currentDate();
     const currentMonth = Number.parseInt(this.currentMonthValue());
-    const previous = new Date(currentDate.getFullYear(), (Number.isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) - 1, 1);
+    const previous = new Date(
+      currentDate.getFullYear(),
+      (Number.isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) - 1,
+      1,
+    );
     this.currentMonthValue.set(previous.getMonth().toString());
     this.gridRef().setFocusedDayIndex(-1);
   }
@@ -167,7 +184,11 @@ export class ZardCalendarComponent {
   protected nextMonth(): void {
     const currentDate = this.currentDate();
     const currentMonth = Number.parseInt(this.currentMonthValue());
-    const next = new Date(currentDate.getFullYear(), (Number.isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) + 1, 1);
+    const next = new Date(
+      currentDate.getFullYear(),
+      (Number.isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) + 1,
+      1,
+    );
     this.currentMonthValue.set(next.getMonth().toString());
     this.gridRef().setFocusedDayIndex(-1);
   }
@@ -190,10 +211,10 @@ export class ZardCalendarComponent {
   }
 
   protected onDateSelect(event: { date: Date; index: number }): void {
-    this.selectDate(event.date, event.index);
+    this.selectDate(event.date);
   }
 
-  private selectDate(date: Date, index: number): void {
+  private selectDate(date: Date): void {
     if (this.disabled()) return;
 
     const mode = this.zMode();
@@ -278,7 +299,8 @@ export class ZardCalendarComponent {
         const todayIndex = days.findIndex(day => day.isToday && day.isCurrentMonth);
         const firstEnabledIndex = days.findIndex(day => day.isCurrentMonth && !day.isDisabled);
 
-        targetIndex = selectedIndex >= 0 ? selectedIndex : todayIndex >= 0 ? todayIndex : Math.max(firstEnabledIndex, 0);
+        targetIndex =
+          selectedIndex >= 0 ? selectedIndex : todayIndex >= 0 ? todayIndex : Math.max(firstEnabledIndex, 0);
         break;
       }
     }

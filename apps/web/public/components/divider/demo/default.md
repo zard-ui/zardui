@@ -5,12 +5,12 @@ import { ZardDividerComponent } from '../divider.component';
 
 @Component({
   selector: 'z-demo-divider-default',
-  standalone: true,
   imports: [ZardDividerComponent],
+  standalone: true,
   template: `
     <div class="flex flex-col">
       <p>Before divider</p>
-      <z-divider></z-divider>
+      <z-divider />
       <p>After divider</p>
     </div>
   `,

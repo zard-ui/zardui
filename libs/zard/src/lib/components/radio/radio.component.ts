@@ -1,5 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  computed,
+  forwardRef,
+  inject,
+  input,
+  output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
 import { radioLabelVariants, radioVariants } from './radio.variants';
@@ -10,15 +21,30 @@ type OnChangeType = (value: unknown) => void;
 
 @Component({
   selector: 'z-radio, [z-radio]',
-  standalone: true,
   imports: [],
-  exportAs: 'zRadio',
+  standalone: true,
   template: `
-    <span class="flex items-center gap-2 relative" [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'" (mousedown)="onRadioChange()">
-      <input #input type="radio" [value]="value()" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onRadioBlur()" [name]="name()" [id]="zId()" />
-      <span class="absolute size-2 rounded-full bg-primary opacity-0 peer-checked:opacity-100 pointer-events-none left-[4px]"></span>
+    <span
+      class="relative flex items-center gap-2"
+      [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'"
+      (mousedown)="onRadioChange()"
+    >
+      <input
+        #input
+        type="radio"
+        [value]="value()"
+        [class]="classes()"
+        [checked]="checked"
+        [disabled]="disabled()"
+        (blur)="onRadioBlur()"
+        [name]="name()"
+        [id]="zId()"
+      />
+      <span
+        class="bg-primary pointer-events-none absolute left-[4px] size-2 rounded-full opacity-0 peer-checked:opacity-100"
+      ></span>
       <label [class]="labelClasses()" [for]="zId()">
-        <ng-content></ng-content>
+        <ng-content />
       </label>
     </span>
   `,
@@ -31,6 +57,7 @@ type OnChangeType = (value: unknown) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  exportAs: 'zRadio',
 })
 export class ZardRadioComponent implements ControlValueAccessor {
   private cdr = inject(ChangeDetectorRef);

@@ -6,6 +6,8 @@ import { By } from '@angular/platform-browser';
 import { ZardPopoverComponent, ZardPopoverDirective } from './popover.component';
 
 @Component({
+  imports: [ZardPopoverDirective, ZardPopoverComponent],
+  standalone: true,
   template: `
     <button zPopover [zContent]="popoverContent" [zTrigger]="trigger" [zPlacement]="placement">Trigger</button>
 
@@ -15,8 +17,6 @@ import { ZardPopoverComponent, ZardPopoverDirective } from './popover.component'
       </z-popover>
     </ng-template>
   `,
-  standalone: true,
-  imports: [ZardPopoverDirective, ZardPopoverComponent],
 })
 class TestComponent {
   readonly popoverContent = viewChild.required<TemplateRef<unknown>>('popoverContent');
@@ -259,6 +259,8 @@ describe('ZardPopoverComponent standalone', () => {
 });
 
 @Component({
+  imports: [ZardPopoverDirective, ZardPopoverComponent],
+  standalone: true,
   template: `
     <button zPopover [zContent]="popoverContent" zTrigger="hover">Hover me</button>
 
@@ -268,8 +270,6 @@ describe('ZardPopoverComponent standalone', () => {
       </z-popover>
     </ng-template>
   `,
-  standalone: true,
-  imports: [ZardPopoverDirective, ZardPopoverComponent],
 })
 class HoverTestComponent {
   readonly popoverContent = viewChild.required<TemplateRef<unknown>>('popoverContent');

@@ -7,6 +7,8 @@ import { ZardSelectItemComponent } from './select-item.component';
 import { ZardSelectComponent } from './select.component';
 
 @Component({
+  imports: [ZardSelectComponent, ZardSelectItemComponent],
+  standalone: true,
   template: `
     <z-select [(zValue)]="value" [zLabel]="label()" [zPlaceholder]="placeholder()" [zDisabled]="disabled()">
       <z-select-item zValue="option1">Option 1</z-select-item>
@@ -14,17 +16,16 @@ import { ZardSelectComponent } from './select.component';
       <z-select-item zValue="option3">Option 3</z-select-item>
     </z-select>
   `,
-  standalone: true,
-  imports: [ZardSelectComponent, ZardSelectItemComponent],
 })
 class TestHostComponent {
-  value = signal('');
-  label = signal('');
-  placeholder = signal('Select an option...');
-  disabled = signal(false);
+  readonly value = signal('');
+  readonly label = signal('');
+  readonly placeholder = signal('Select an option...');
+  readonly disabled = signal(false);
 }
 
 @Component({
+  imports: [ZardSelectComponent, ZardSelectItemComponent, ReactiveFormsModule],
   template: `
     <z-select [formControl]="control">
       <z-select-item zValue="apple">Apple</z-select-item>
@@ -32,7 +33,6 @@ class TestHostComponent {
       <z-select-item zValue="orange">Orange</z-select-item>
     </z-select>
   `,
-  imports: [ZardSelectComponent, ZardSelectItemComponent, ReactiveFormsModule],
 })
 class TestHostWithFormControlComponent {
   control = new FormControl('');
@@ -293,22 +293,29 @@ describe('ZardSelectComponent', () => {
 
   describe('Multiselect mode', () => {
     @Component({
+      imports: [ZardSelectComponent, ZardSelectItemComponent],
+      standalone: true,
       template: `
-        <z-select [(zValue)]="value" [zLabel]="label()" [zPlaceholder]="placeholder()" [zDisabled]="disabled()" [zMultiple]="true" [zMaxLabelCount]="labelsLimit">
+        <z-select
+          [(zValue)]="value"
+          [zLabel]="label()"
+          [zPlaceholder]="placeholder()"
+          [zDisabled]="disabled()"
+          [zMultiple]="true"
+          [zMaxLabelCount]="labelsLimit"
+        >
           <z-select-item zValue="option1">OptionOne</z-select-item>
           <z-select-item zValue="option2">OptionTwo</z-select-item>
           <z-select-item zValue="option3">OptionThree</z-select-item>
           <z-select-item zValue="option4">OptionFour</z-select-item>
         </z-select>
       `,
-      standalone: true,
-      imports: [ZardSelectComponent, ZardSelectItemComponent],
     })
     class TestMultiselectHostComponent {
-      value = signal<string[]>([]);
-      label = signal('');
-      placeholder = signal('Select an option...');
-      disabled = signal(false);
+      readonly value = signal<string[]>([]);
+      readonly label = signal('');
+      readonly placeholder = signal('Select an option...');
+      readonly disabled = signal(false);
       labelsLimit = 0;
     }
 

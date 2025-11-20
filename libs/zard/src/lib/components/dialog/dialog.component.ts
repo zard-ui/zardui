@@ -1,5 +1,11 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
+import {
+  BasePortalOutlet,
+  CdkPortalOutlet,
+  type ComponentPortal,
+  PortalModule,
+  type TemplatePortal,
+} from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -50,11 +56,17 @@ export class ZardDialogOptions<T, U> {
 
 @Component({
   selector: 'z-dialog',
-  exportAs: 'zDialog',
   imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
-      <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1" (click)="onCloseClick()">
+      <button
+        data-testid="z-close-header-button"
+        z-button
+        zType="ghost"
+        zSize="sm"
+        class="absolute top-1 right-1"
+        (click)="onCloseClick()"
+      >
         <z-icon zType="x" />
       </button>
     }
@@ -62,17 +74,17 @@ export class ZardDialogOptions<T, U> {
     @if (config.zTitle || config.zDescription) {
       <header class="flex flex-col space-y-1.5 text-center sm:text-left">
         @if (config.zTitle) {
-          <h4 data-testid="z-title" class="text-lg font-semibold leading-none tracking-tight">{{ config.zTitle }}</h4>
+          <h4 data-testid="z-title" class="text-lg leading-none font-semibold tracking-tight">{{ config.zTitle }}</h4>
 
           @if (config.zDescription) {
-            <p data-testid="z-description" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+            <p data-testid="z-description" class="text-muted-foreground text-sm">{{ config.zDescription }}</p>
           }
         }
       </header>
     }
 
     <main class="flex flex-col space-y-4">
-      <ng-template cdkPortalOutlet></ng-template>
+      <ng-template cdkPortalOutlet />
 
       @if (isStringContent) {
         <div data-testid="z-content" [innerHTML]="config.zContent"></div>
@@ -92,7 +104,13 @@ export class ZardDialogOptions<T, U> {
         }
 
         @if (config.zOkText !== null) {
-          <button data-testid="z-ok-button" z-button [zType]="config.zOkDestructive ? 'destructive' : 'default'" [disabled]="config.zOkDisabled" (click)="onOkClick()">
+          <button
+            data-testid="z-ok-button"
+            z-button
+            [zType]="config.zOkDestructive ? 'destructive' : 'default'"
+            [disabled]="config.zOkDisabled"
+            (click)="onOkClick()"
+          >
             @if (config.zOkIcon) {
               <z-icon [zType]="config.zOkIcon" />
             }
@@ -103,6 +121,30 @@ export class ZardDialogOptions<T, U> {
       </footer>
     }
   `,
+  styles: `
+    :host {
+      opacity: 1;
+      transform: scale(1);
+      transition:
+        opacity 150ms ease-out,
+        transform 150ms ease-out;
+    }
+
+    @starting-style {
+      :host {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+    }
+
+    :host.dialog-leave {
+      opacity: 0;
+      transform: scale(0.9);
+      transition:
+        opacity 150ms ease-in,
+        transform 150ms ease-in;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
@@ -110,39 +152,14 @@ export class ZardDialogOptions<T, U> {
     'animate.enter': 'dialog-enter',
     'animate.leave': 'dialog-leave',
   },
-  styles: [
-    `
-      :host {
-        opacity: 1;
-        transform: scale(1);
-        transition:
-          opacity 150ms ease-out,
-          transform 150ms ease-out;
-      }
-
-      @starting-style {
-        :host {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-      }
-
-      :host.dialog-leave {
-        opacity: 0;
-        transform: scale(0.9);
-        transition:
-          opacity 150ms ease-in,
-          transform 150ms ease-in;
-      }
-    `,
-  ],
+  exportAs: 'zDialog',
 })
 export class ZardDialogComponent<T, U> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
   protected readonly config = inject(ZardDialogOptions<T, U>);
 
   protected readonly classes = computed(() => mergeClasses(dialogVariants(), this.config.zCustomClasses));
-  public dialogRef?: ZardDialogRef<T>;
+  dialogRef?: ZardDialogRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 

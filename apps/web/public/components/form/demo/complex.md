@@ -1,14 +1,14 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, ViewEncapsulation } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { ZardSelectItemComponent } from '../../select/select-item.component';
-import { ZardCheckboxComponent } from '../../checkbox/checkbox.component';
-import { ZardSelectComponent } from '../../select/select.component';
 import { ZardButtonComponent } from '../../button/button.component';
+import { ZardCheckboxComponent } from '../../checkbox/checkbox.component';
 import { ZardInputDirective } from '../../input/input.directive';
+import { ZardSelectItemComponent } from '../../select/select-item.component';
+import { ZardSelectComponent } from '../../select/select.component';
 import { ZardFormModule } from '../form.module';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 interface FormData {
   firstName: string;
@@ -24,14 +24,20 @@ interface FormData {
 
 @Component({
   selector: 'zard-demo-form-complex',
+  imports: [
+    ReactiveFormsModule,
+    ZardButtonComponent,
+    ZardInputDirective,
+    ZardCheckboxComponent,
+    ZardSelectComponent,
+    ZardSelectItemComponent,
+    ZardFormModule,
+  ],
   standalone: true,
-  imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardCheckboxComponent, ZardSelectComponent, ZardSelectItemComponent, ZardFormModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
-    <form [formGroup]="form" (ngSubmit)="handleSubmit()" class="space-y-6 max-w-lg">
-      <!-- Name Fields Row -->
-      <div class="flex gap-4 items-start">
+    <form [formGroup]="form" (ngSubmit)="handleSubmit()" class="max-w-lg space-y-6">
+      <! -- Name Fields Row - ->
+      <div class="flex items-start gap-4">
         <z-form-field>
           <label z-form-label zRequired for="firstName">First Name</label>
           <z-form-control [errorMessage]="isFieldInvalid('firstName') ? 'First name is required' : ''">
@@ -47,7 +53,7 @@ interface FormData {
         </z-form-field>
       </div>
 
-      <!-- Email Field -->
+      <! -- Email Field - ->
       <z-form-field>
         <label z-form-label zRequired for="email">Email</label>
         <z-form-control [errorMessage]="isFieldInvalid('email') ? getEmailError() : ''">
@@ -55,7 +61,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <!-- Phone Field -->
+      <! -- Phone Field - ->
       <z-form-field>
         <label z-form-label for="phone">Phone Number</label>
         <z-form-control helpText="Include country code if outside US">
@@ -63,7 +69,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <!-- Country Selector -->
+      <! -- Country Selector - ->
       <z-form-field>
         <label z-form-label zRequired for="country">Country</label>
         <z-form-control [errorMessage]="isFieldInvalid('country') ? 'Please select a country' : ''">
@@ -75,7 +81,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <!-- Company Field -->
+      <! -- Company Field - ->
       <z-form-field>
         <label z-form-label for="company">Company</label>
         <z-form-control helpText="Optional: Where do you work?">
@@ -83,18 +89,24 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <!-- Message Field -->
+      <! -- Message Field - ->
       <z-form-field>
         <label z-form-label for="message">Message</label>
         <z-form-control
           [errorMessage]="isFieldInvalid('message') ? 'Message is too long (max 500 characters)' : ''"
           [helpText]="!isFieldInvalid('message') ? messageLength() + '/500 characters' : ''"
         >
-          <textarea z-input id="message" rows="4" placeholder="Tell us about your project or inquiry..." formControlName="message"></textarea>
+          <textarea
+            z-input
+            id="message"
+            rows="4"
+            placeholder="Tell us about your project or inquiry..."
+            formControlName="message"
+          ></textarea>
         </z-form-control>
       </z-form-field>
 
-      <!-- Newsletter Checkbox -->
+      <! -- Newsletter Checkbox - ->
       <z-form-field>
         <z-form-control helpText="Get updates about new features and releases" class="flex flex-col">
           <div class="flex items-center space-x-2">
@@ -104,9 +116,12 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <!-- Terms Checkbox -->
+      <! -- Terms Checkbox - ->
       <z-form-field>
-        <z-form-control [errorMessage]="isFieldInvalid('terms') ? 'You must accept the terms and conditions' : ''" class="flex flex-col">
+        <z-form-control
+          [errorMessage]="isFieldInvalid('terms') ? 'You must accept the terms and conditions' : ''"
+          class="flex flex-col"
+        >
           <div class="flex items-center space-x-2">
             <z-checkbox id="terms" formControlName="terms" />
             <label z-form-label class="!mb-0" zRequired for="terms">I agree to the terms and conditions</label>
@@ -114,7 +129,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <!-- Action Buttons -->
+      <! -- Action Buttons - ->
       <div class="flex gap-2 pt-4">
         <button z-button zType="default" type="submit" [disabled]="isSubmitting()">
           {{ isSubmitting() ? 'Submitting...' : 'Submit Form' }}
@@ -122,14 +137,16 @@ interface FormData {
         <button z-button zType="outline" type="button" (click)="resetForm()">Reset</button>
       </div>
 
-      <!-- Success Message -->
+      <! -- Success Message - ->
       @if (showSuccess()) {
-        <div class="p-4 bg-green-50 border border-green-200 rounded-md">
+        <div class="rounded-md border border-green-200 bg-green-50 p-4">
           <z-form-message zType="success">✓ Form submitted successfully! We'll get back to you soon.</z-form-message>
         </div>
       }
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class ZardDemoFormComplexComponent {
   private readonly fb = inject(FormBuilder);

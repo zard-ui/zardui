@@ -6,15 +6,15 @@ import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.comp
 
 @Component({
   selector: 'zard-demo-combobox-form',
-  standalone: true,
   imports: [ReactiveFormsModule, ZardComboboxComponent, ZardButtonComponent],
+  standalone: true,
   template: `
     <div class="flex flex-col gap-4">
       <z-combobox
         [options]="frameworks"
-        [placeholder]="'Select framework...'"
-        [searchPlaceholder]="'Search framework...'"
-        [emptyText]="'No framework found.'"
+        placeholder="Select framework..."
+        searchPlaceholder="Search framework..."
+        emptyText="No framework found."
         [formControl]="frameworkControl"
       />
 
@@ -24,7 +24,7 @@ import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.comp
         <button z-button variant="outline" (click)="logValue()">Log Value</button>
       </div>
 
-      <div class="text-sm text-muted-foreground">Current value: {{ frameworkControl.value ?? 'None' }}</div>
+      <div class="text-muted-foreground text-sm">Current value: {{ frameworkControl.value ?? 'None' }}</div>
     </div>
   `,
 })

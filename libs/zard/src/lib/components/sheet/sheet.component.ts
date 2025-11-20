@@ -1,5 +1,11 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
+import {
+  BasePortalOutlet,
+  CdkPortalOutlet,
+  type ComponentPortal,
+  PortalModule,
+  type TemplatePortal,
+} from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -51,11 +57,17 @@ export class ZardSheetOptions<T, U> {
 
 @Component({
   selector: 'z-sheet',
-  exportAs: 'zSheet',
   imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
-      <button data-testid="z-close-header-button" z-button zType="ghost" zSize="sm" class="absolute right-1 top-1 cursor-pointer " (click)="onCloseClick()">
+      <button
+        data-testid="z-close-header-button"
+        z-button
+        zType="ghost"
+        zSize="sm"
+        class="absolute top-1 right-1 cursor-pointer"
+        (click)="onCloseClick()"
+      >
         <z-icon zType="x" />
       </button>
     }
@@ -63,17 +75,21 @@ export class ZardSheetOptions<T, U> {
     @if (config.zTitle || config.zDescription) {
       <header data-slot="sheet-header" class="flex flex-col gap-1.5 p-4">
         @if (config.zTitle) {
-          <h4 data-testid="z-title" data-slot="sheet-title" class="text-lg font-semibold leading-none tracking-tight">{{ config.zTitle }}</h4>
+          <h4 data-testid="z-title" data-slot="sheet-title" class="text-lg leading-none font-semibold tracking-tight">
+            {{ config.zTitle }}
+          </h4>
 
           @if (config.zDescription) {
-            <p data-testid="z-description" data-slot="sheet-description" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+            <p data-testid="z-description" data-slot="sheet-description" class="text-muted-foreground text-sm">
+              {{ config.zDescription }}
+            </p>
           }
         }
       </header>
     }
 
-    <main class="flex flex-col space-y-4 w-full">
-      <ng-template cdkPortalOutlet></ng-template>
+    <main class="flex w-full flex-col space-y-4">
+      <ng-template cdkPortalOutlet />
 
       @if (isStringContent) {
         <div data-testid="z-content" data-slot="sheet-content" [innerHTML]="config.zContent"></div>
@@ -100,7 +116,13 @@ export class ZardSheetOptions<T, U> {
         }
 
         @if (config.zCancelText !== null) {
-          <button data-testid="z-cancel-button" class="cursor-pointer" z-button zType="outline" (click)="onCloseClick()">
+          <button
+            data-testid="z-cancel-button"
+            class="cursor-pointer"
+            z-button
+            zType="outline"
+            (click)="onCloseClick()"
+          >
             @if (config.zCancelIcon) {
               <z-icon [zType]="config.zCancelIcon" />
             }
@@ -119,6 +141,7 @@ export class ZardSheetOptions<T, U> {
     '[style.width]': 'config.zWidth ? config.zWidth + " !important" : null',
     '[style.height]': 'config.zHeight ? config.zHeight + " !important" : null',
   },
+  exportAs: 'zSheet',
 })
 export class ZardSheetComponent<T, U> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
@@ -135,7 +158,8 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
       this.config.zCustomClasses,
     );
   });
-  public sheetRef?: ZardSheetRef<T>;
+
+  sheetRef?: ZardSheetRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 

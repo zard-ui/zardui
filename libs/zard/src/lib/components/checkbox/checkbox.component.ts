@@ -1,5 +1,16 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, forwardRef, inject, input, output, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  computed,
+  forwardRef,
+  inject,
+  input,
+  output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
 import { checkboxLabelVariants, checkboxVariants, type ZardCheckboxVariants } from './checkbox.variants';
@@ -11,9 +22,8 @@ type OnChangeType = (value: any) => void;
 
 @Component({
   selector: 'z-checkbox, [z-checkbox]',
-  standalone: true,
   imports: [ZardIconComponent],
-  exportAs: 'zCheckbox',
+  standalone: true,
   template: `
     <span
       tabindex="0"
@@ -22,18 +32,26 @@ type OnChangeType = (value: any) => void;
       (click)="onCheckboxChange()"
       (keyup)="onKeyboardEvent($event)"
     >
-      <main class="flex relative">
-        <input #input type="checkbox" [class]="classes()" [checked]="checked" [disabled]="disabled()" (blur)="onCheckboxBlur()" name="checkbox" />
+      <main class="relative flex">
+        <input
+          #input
+          type="checkbox"
+          [class]="classes()"
+          [checked]="checked"
+          [disabled]="disabled()"
+          (blur)="onCheckboxBlur()"
+          name="checkbox"
+        />
         <z-icon
           zType="check"
           [class]="
-            'absolute flex items-center justify-center text-primary-foreground top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none transition-opacity ' +
+            'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-opacity ' +
             (checked ? 'opacity-100' : 'opacity-0')
           "
         />
       </main>
       <label [class]="labelClasses()" for="checkbox">
-        <ng-content></ng-content>
+        <ng-content />
       </label>
     </span>
   `,
@@ -46,6 +64,7 @@ type OnChangeType = (value: any) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  exportAs: 'zCheckbox',
 })
 export class ZardCheckboxComponent implements ControlValueAccessor {
   private cdr = inject(ChangeDetectorRef);
@@ -61,7 +80,10 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onTouched: OnTouchedType = () => {};
 
-  protected readonly classes = computed(() => mergeClasses(checkboxVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(checkboxVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape() }), this.class()),
+  );
+
   protected readonly labelClasses = computed(() => mergeClasses(checkboxLabelVariants({ zSize: this.zSize() })));
   checked = false;
 

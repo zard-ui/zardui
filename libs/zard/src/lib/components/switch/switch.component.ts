@@ -1,5 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, forwardRef, input, output, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  forwardRef,
+  input,
+  output,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
 import { switchVariants, type ZardSwitchVariants } from './switch.variants';
@@ -11,19 +21,29 @@ type OnChangeType = (value: any) => void;
 @Component({
   selector: 'z-switch, [z-switch]',
   standalone: true,
-  exportAs: 'zSwitch',
   template: `
     <span class="flex items-center space-x-2" (mousedown)="onSwitchChange()">
-      <button [id]="zId() || uniqueId()" type="button" role="switch" [attr.data-state]="status()" [attr.aria-checked]="checked()" [disabled]="disabled()" [class]="classes()">
+      <button
+        [id]="zId() || uniqueId()"
+        type="button"
+        role="switch"
+        [attr.data-state]="status()"
+        [attr.aria-checked]="checked()"
+        [disabled]="disabled()"
+        [class]="classes()"
+      >
         <span
           [attr.data-size]="zSize()"
           [attr.data-state]="status()"
-          class="pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 data-[size=sm]:w-4 data-[size=sm]:h-4 data-[size=sm]:data-[state=checked]:translate-x-4 data-[size=sm]:data-[state=unchecked]:translate-x-0 data-[size=lg]:w-6 data-[size=lg]:h-6 data-[size=lg]:data-[state=checked]:translate-x-6 data-[size=lg]:data-[state=unchecked]:translate-x-0"
+          class="bg-background pointer-events-none block h-5 w-5 rounded-full shadow-lg ring-0 transition-transform data-[size=lg]:h-6 data-[size=lg]:w-6 data-[size=sm]:h-4 data-[size=sm]:w-4 data-[state=checked]:translate-x-5 data-[size=lg]:data-[state=checked]:translate-x-6 data-[size=sm]:data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0 data-[size=lg]:data-[state=unchecked]:translate-x-0 data-[size=sm]:data-[state=unchecked]:translate-x-0"
         ></span>
       </button>
 
-      <label class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70" [for]="zId() || uniqueId()">
-        <ng-content></ng-content>
+      <label
+        class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+        [for]="zId() || uniqueId()"
+      >
+        <ng-content />
       </label>
     </span>
   `,
@@ -36,6 +56,7 @@ type OnChangeType = (value: any) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  exportAs: 'zSwitch',
 })
 export class ZardSwitchComponent implements ControlValueAccessor {
   readonly checkChange = output<boolean>();
@@ -50,12 +71,14 @@ export class ZardSwitchComponent implements ControlValueAccessor {
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onTouched: OnTouchedType = () => {};
 
-  protected readonly classes = computed(() => mergeClasses(switchVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(switchVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()),
+  );
 
   protected readonly uniqueId = signal<string>(generateId('switch'));
-  protected checked = signal<boolean>(true);
-  protected status = computed(() => (this.checked() ? 'checked' : 'unchecked'));
-  protected disabled = signal(false);
+  protected readonly checked = signal<boolean>(true);
+  protected readonly status = computed(() => (this.checked() ? 'checked' : 'unchecked'));
+  protected readonly disabled = signal(false);
 
   writeValue(val: boolean): void {
     this.checked.set(val);

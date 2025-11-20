@@ -9,15 +9,23 @@ import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
   imports: [ZardCarouselModule, ZardButtonComponent, ZardCardComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <div class="mb-4 flex gap-2">
-        <button z-button zType="outline" (click)="toggleAutoplay()">{{ isAutoplayActive() ? 'Pause' : 'Start' }} Autoplay</button>
-        <button z-button zType="outline" (click)="toggleLoop()">{{ carouselOptions.loop ? 'Disable' : 'Enable' }} Loop</button>
+        <button z-button zType="outline" (click)="toggleAutoplay()">
+          {{ isAutoplayActive() ? 'Pause' : 'Start' }} Autoplay
+        </button>
+        <button z-button zType="outline" (click)="toggleLoop()">
+          {{ carouselOptions.loop ? 'Disable' : 'Enable' }} Loop
+        </button>
       </div>
 
-      <z-carousel [zOptions]="carouselOptions" [zPlugins]="plugins" (zInited)="onCarouselInit($event)" (zSelected)="onSlideChange()">
+      <z-carousel
+        [zOptions]="carouselOptions"
+        [zPlugins]="plugins"
+        (zInited)="onCarouselInit($event)"
+        (zSelected)="onSlideChange()"
+      >
         <z-carousel-content>
           @for (slide of slides; track slide) {
             <z-carousel-item>
@@ -34,6 +42,7 @@ import { ZardCarouselModule } from '../carousel.module';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCarouselPluginsComponent implements OnInit {
   private readonly pluginsService = inject(ZardCarouselPluginsService);
@@ -96,6 +105,7 @@ export class ZardDemoCarouselPluginsComponent implements OnInit {
     });
     this.plugins = [...this.plugins.filter(p => p.name !== 'autoplay'), autoplayPlugin];
   }
+
   private pauseAutoplay(): void {
     this.plugins = this.plugins.filter(p => p.name !== 'autoplay');
   }

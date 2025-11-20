@@ -2,6 +2,7 @@ import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
+
 import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 
@@ -58,14 +59,23 @@ export class ZardDialogService {
       ],
     });
 
-    const containerPortal = new ComponentPortal<ZardDialogComponent<T, U>>(ZardDialogComponent, config.zViewContainerRef, injector);
+    const containerPortal = new ComponentPortal<ZardDialogComponent<T, U>>(
+      ZardDialogComponent,
+      config.zViewContainerRef,
+      injector,
+    );
 
     const containerRef = overlayRef.attach<ZardDialogComponent<T, U>>(containerPortal);
 
     return containerRef.instance;
   }
 
-  private attachDialogContent<T, U>(componentOrTemplateRef: ContentType<T>, dialogContainer: ZardDialogComponent<T, U>, overlayRef: OverlayRef, config: ZardDialogOptions<T, U>) {
+  private attachDialogContent<T, U>(
+    componentOrTemplateRef: ContentType<T>,
+    dialogContainer: ZardDialogComponent<T, U>,
+    overlayRef: OverlayRef,
+    config: ZardDialogOptions<T, U>,
+  ) {
     const dialogRef = new ZardDialogRef<T>(overlayRef, config, dialogContainer, this.platformId);
 
     if (componentOrTemplateRef instanceof TemplateRef) {
@@ -76,7 +86,9 @@ export class ZardDialogService {
       );
     } else if (typeof componentOrTemplateRef !== 'string') {
       const injector = this.createInjector<T, U>(dialogRef, config);
-      const contentRef = dialogContainer.attachComponentPortal<T>(new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector));
+      const contentRef = dialogContainer.attachComponentPortal<T>(
+        new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector),
+      );
       dialogRef.componentInstance = contentRef.instance;
     }
 

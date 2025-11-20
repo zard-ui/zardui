@@ -9,11 +9,18 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-icon, [z-icon]',
-  standalone: true,
   imports: [LucideAngularModule],
+  standalone: true,
+  template: `
+    <lucide-angular
+      [img]="icon()"
+      [strokeWidth]="zStrokeWidth()"
+      [absoluteStrokeWidth]="zAbsoluteStrokeWidth()"
+      [class]="classes()"
+    />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <lucide-angular [img]="icon()" [strokeWidth]="zStrokeWidth()" [absoluteStrokeWidth]="zAbsoluteStrokeWidth()" [class]="classes()" /> `,
   host: {},
 })
 export class ZardIconComponent {

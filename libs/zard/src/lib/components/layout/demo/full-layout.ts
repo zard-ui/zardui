@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
 
-import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from '../sidebar.component';
-import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardIconComponent } from '../../icon/icon.component';
+import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
 import { ContentComponent } from '../content.component';
-import { LayoutComponent } from '../layout.component';
-import { HeaderComponent } from '../header.component';
 import { FooterComponent } from '../footer.component';
+import { HeaderComponent } from '../header.component';
+import { LayoutComponent } from '../layout.component';
+import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from '../sidebar.component';
 
 @Component({
   selector: 'z-demo-layout-full',
-  standalone: true,
   imports: [
     LayoutComponent,
     HeaderComponent,
@@ -24,11 +23,12 @@ import { FooterComponent } from '../footer.component';
     ZardSkeletonComponent,
     ZardIconComponent,
   ],
+  standalone: true,
   template: `
-    <z-layout class="min-h-[600px] border rounded-md overflow-hidden">
+    <z-layout class="min-h-[600px] overflow-hidden rounded-md border">
       <z-header>
-        <div class="flex items-center justify-between w-full">
-          <div class="font-semibold text-lg flex items-center">
+        <div class="flex w-full items-center justify-between">
+          <div class="flex items-center text-lg font-semibold">
             <img src="images/zard.svg" alt="Logo" width="24" height="24" />
             <span class="ml-2">ZardUI</span>
           </div>
@@ -45,7 +45,7 @@ import { FooterComponent } from '../footer.component';
 
       <z-layout>
         <z-sidebar [zWidth]="200" class="!p-0">
-          <nav class="flex flex-col h-full gap-2 p-4">
+          <nav class="flex h-full flex-col gap-2 p-4">
             <z-sidebar-group>
               <z-sidebar-group-label>Menu</z-sidebar-group-label>
               <button z-button zType="secondary" class="justify-start">
@@ -67,14 +67,16 @@ import { FooterComponent } from '../footer.component';
         <z-layout>
           <z-content class="min-h-[200px]">
             <div class="space-y-4">
-              <z-skeleton class="h-32 w-full"></z-skeleton>
-              <z-skeleton class="h-48 w-full"></z-skeleton>
-              <z-skeleton class="h-24 w-full"></z-skeleton>
+              <z-skeleton class="h-32 w-full" />
+              <z-skeleton class="h-48 w-full" />
+              <z-skeleton class="h-24 w-full" />
             </div>
           </z-content>
 
           <z-footer>
-            <div class="flex items-center justify-center w-full text-sm text-muted-foreground">© {{ year }} ZardUI</div>
+            <div class="text-muted-foreground flex w-full items-center justify-center text-sm">
+              © {{ year }} ZardUI
+            </div>
           </z-footer>
         </z-layout>
       </z-layout>

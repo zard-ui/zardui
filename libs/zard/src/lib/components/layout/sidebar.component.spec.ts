@@ -178,8 +178,8 @@ describe('SidebarComponent', () => {
 
   it('should use custom trigger template when provided', () => {
     @Component({
-      standalone: true,
       imports: [SidebarComponent],
+      standalone: true,
       template: `
         <z-sidebar [zCollapsible]="true" [zTrigger]="customTrigger">
           <ng-template #customTrigger>
@@ -202,8 +202,8 @@ describe('SidebarComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      standalone: true,
       imports: [SidebarComponent],
+      standalone: true,
       template: `<z-sidebar>Test Sidebar Content</z-sidebar>`,
     })
     class TestHostComponent {}
@@ -244,8 +244,8 @@ describe('SidebarGroupComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      standalone: true,
       imports: [SidebarGroupComponent],
+      standalone: true,
       template: `<z-sidebar-group>Group Content</z-sidebar-group>`,
     })
     class TestHostComponent {}
@@ -286,8 +286,8 @@ describe('SidebarGroupLabelComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      standalone: true,
       imports: [SidebarGroupLabelComponent],
+      standalone: true,
       template: `<z-sidebar-group-label>Label Text</z-sidebar-group-label>`,
     })
     class TestHostComponent {}
