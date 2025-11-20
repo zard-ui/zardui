@@ -1,83 +1,101 @@
-import { Directive, type EmbeddedViewRef, inject, Input, type OnChanges, type SimpleChange, type SimpleChanges, TemplateRef, ViewContainerRef } from '@angular/core';
+import {
+  Directive,
+  type EmbeddedViewRef,
+  inject,
+  input,
+  type OnDestroy,
+  TemplateRef,
+  ViewContainerRef,
+  effect,
+  type EffectRef,
+} from '@angular/core';
 
-export function isTemplateRef<T>(value: TemplateRef<T> | unknown): value is TemplateRef<T> {
+// eslint-disable-next-line
+type zAny = any;
+
+export function isTemplateRef<T>(value: TemplateRef<T> | zAny): value is TemplateRef<T> {
   return value instanceof TemplateRef;
+}
+
+export class ZardStringTemplateOutletContext<T> {
+  $implicit?: T;
 }
 
 @Directive({
   selector: '[zStringTemplateOutlet]',
+  standalone: true,
   exportAs: 'zStringTemplateOutlet',
 })
-export class ZardStringTemplateOutletDirective<_T = unknown> implements OnChanges {
+export class ZardStringTemplateOutletDirective<_T = unknown> implements OnDestroy {
   private readonly viewContainer = inject(ViewContainerRef);
-  private readonly templateRef = inject(TemplateRef<unknown>);
+  private readonly defaultTemplateRef = inject(TemplateRef<zAny>);
 
-  private embeddedViewRef: EmbeddedViewRef<unknown> | null = null;
-  private readonly context = new ZardStringTemplateOutletContext();
-  @Input() zStringTemplateOutletContext: any | null = null;
-  @Input() zStringTemplateOutlet: unknown | TemplateRef<unknown> = null;
+  private embeddedViewRef: EmbeddedViewRef<zAny> | null = null;
+  private currentTemplateRef: TemplateRef<zAny> | null = null;
+  private readonly defaultContext = new ZardStringTemplateOutletContext<_T>();
 
-  static ngTemplateContextGuard<T>(_dir: ZardStringTemplateOutletDirective<T>, _ctx: unknown): _ctx is ZardStringTemplateOutletContext {
-    return true;
-  }
+  // Signal-based inputs
+  readonly zStringTemplateOutletContext = input<zAny | null>(null);
+  readonly zStringTemplateOutlet = input<zAny | TemplateRef<zAny>>(null);
 
-  private recreateView(): void {
-    this.viewContainer.clear();
-    if (isTemplateRef(this.zStringTemplateOutlet)) {
-      this.embeddedViewRef = this.viewContainer.createEmbeddedView(this.zStringTemplateOutlet, this.zStringTemplateOutletContext);
+  // Effect to manage view recreation and updates
+  private readonly viewEffect: EffectRef = effect(() => {
+    const contextInput = this.zStringTemplateOutletContext();
+    const outletInput = this.zStringTemplateOutlet();
+
+    const isCustomTemplate = isTemplateRef(outletInput);
+
+    // Determine the template and context to use
+    const templateToUse = isCustomTemplate ? outletInput : this.defaultTemplateRef;
+    const contextToUse = isCustomTemplate ? contextInput : this.defaultContext;
+
+    // --- View Management Logic (Reactive to Signal Changes) ---
+
+    // Check if the template has changed compared to the one currently rendered
+    if (this.currentTemplateRef !== templateToUse) {
+      this.recreateView(templateToUse, contextToUse);
     } else {
-      this.embeddedViewRef = this.viewContainer.createEmbeddedView(this.templateRef, this.context);
+      // Template is the same, just update the context
+      this.updateContext(contextToUse);
     }
+
+    // If using the default template, update the $implicit property on the default context
+    if (!isCustomTemplate && contextToUse) {
+      contextToUse.$implicit = outletInput;
+    }
+  });
+
+  // --- Helper Methods ---
+
+  private recreateView(template: TemplateRef<zAny>, context: zAny): void {
+    this.viewContainer.clear();
+    // 1. Create the new view
+    this.embeddedViewRef = this.viewContainer.createEmbeddedView(template, context);
+    // 2. Store the reference to the template used (THE FIX)
+    this.currentTemplateRef = template;
   }
 
-  private updateContext(): void {
-    const newCtx = isTemplateRef(this.zStringTemplateOutlet) ? this.zStringTemplateOutletContext : this.context;
-    const oldCtx = this.embeddedViewRef?.context as any;
-    if (newCtx) {
+  private updateContext(newCtx: zAny): void {
+    const oldCtx = this.embeddedViewRef?.context;
+    if (newCtx && oldCtx) {
+      // Only copy properties from the new context to the old context object
       for (const propName of Object.keys(newCtx)) {
         oldCtx[propName] = newCtx[propName];
       }
     }
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const { zStringTemplateOutletContext, zStringTemplateOutlet } = changes;
-    const shouldRecreateView = (): boolean => {
-      let shouldOutletRecreate = false;
-      if (zStringTemplateOutlet) {
-        shouldOutletRecreate = zStringTemplateOutlet.firstChange || isTemplateRef(zStringTemplateOutlet.previousValue) || isTemplateRef(zStringTemplateOutlet.currentValue);
-      }
-      const hasContextShapeChanged = (ctxChange: SimpleChange): boolean => {
-        const prevCtxKeys = Object.keys(ctxChange.previousValue ?? {});
-        const currCtxKeys = Object.keys(ctxChange.currentValue ?? {});
-        if (prevCtxKeys.length === currCtxKeys.length) {
-          for (const propName of currCtxKeys) {
-            if (!prevCtxKeys.includes(propName)) {
-              return true;
-            }
-          }
-          return false;
-        } else {
-          return true;
-        }
-      };
-      const shouldContextRecreate = zStringTemplateOutletContext && hasContextShapeChanged(zStringTemplateOutletContext);
-      return shouldContextRecreate || shouldOutletRecreate;
-    };
-
-    if (zStringTemplateOutlet) {
-      this.context.$implicit = zStringTemplateOutlet.currentValue;
-    }
-
-    const recreateView = shouldRecreateView();
-    if (recreateView) {
-      this.recreateView();
-    } else {
-      this.updateContext();
-    }
+  static ngTemplateContextGuard<T>(
+    _dir: ZardStringTemplateOutletDirective<T>,
+    _ctx: ZardStringTemplateOutletContext<T>,
+  ): _ctx is ZardStringTemplateOutletContext<T> {
+    return true;
   }
-}
 
-export class ZardStringTemplateOutletContext {
-  public $implicit: unknown;
+  ngOnDestroy(): void {
+    this.viewEffect.destroy();
+    this.viewContainer.clear();
+    this.embeddedViewRef = null;
+    this.currentTemplateRef = null;
+  }
 }
