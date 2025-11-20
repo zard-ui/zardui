@@ -8,10 +8,15 @@ import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
   selector: 'z-demo-empty-advanced-customization',
-  standalone: true,
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, ZardIconComponent, ZardEmptyComponent],
+  standalone: true,
   template: `
-    <z-empty [zImage]="customImage" [zTitle]="customTitle" zDescription="Invite your team to collaborate on this project." [zActions]="[actionInvite]"> </z-empty>
+    <z-empty
+      [zImage]="customImage"
+      [zTitle]="customTitle"
+      zDescription="Invite your team to collaborate on this project."
+      [zActions]="[actionInvite]"
+    />
 
     <ng-template #customImage>
       <z-avatar-group>

@@ -4,9 +4,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { SegmentedOption, ZardSegmentedComponent, ZardSegmentedItemComponent } from './segmented.component';
 
 @Component({
-  template: ` <z-segmented [zOptions]="options" [zDefaultValue]="defaultValue" [zDisabled]="disabled" (zChange)="onSelectionChange($event)"></z-segmented> `,
-  standalone: true,
   imports: [ZardSegmentedComponent],
+  standalone: true,
+  template: `
+    <z-segmented
+      [zOptions]="options"
+      [zDefaultValue]="defaultValue"
+      [zDisabled]="disabled"
+      (zChange)="onSelectionChange($event)"
+    />
+  `,
 })
 class TestHostComponent {
   options: SegmentedOption[] = [
@@ -14,6 +21,7 @@ class TestHostComponent {
     { value: 'option2', label: 'Option 2' },
     { value: 'option3', label: 'Option 3', disabled: true },
   ];
+
   defaultValue = 'option1';
   disabled = false;
   selectedValue = '';
@@ -24,15 +32,15 @@ class TestHostComponent {
 }
 
 @Component({
+  imports: [ZardSegmentedComponent, ZardSegmentedItemComponent],
+  standalone: true,
   template: `
     <z-segmented>
-      <z-segmented-item value="item1" label="Item 1"></z-segmented-item>
-      <z-segmented-item value="item2" label="Item 2"></z-segmented-item>
-      <z-segmented-item value="item3" label="Item 3" [disabled]="true"></z-segmented-item>
+      <z-segmented-item value="item1" label="Item 1" />
+      <z-segmented-item value="item2" label="Item 2" />
+      <z-segmented-item value="item3" label="Item 3" [disabled]="true" />
     </z-segmented>
   `,
-  standalone: true,
-  imports: [ZardSegmentedComponent, ZardSegmentedItemComponent],
 })
 class TestContentProjectionComponent {}
 

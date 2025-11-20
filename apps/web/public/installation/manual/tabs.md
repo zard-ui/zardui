@@ -1,6 +1,7 @@
 
 
 ```angular-ts title="tabs.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { CommonModule } from '@angular/common';
 import {
   afterNextRender,
   type AfterViewInit,
@@ -21,11 +22,11 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { debounceTime, fromEvent, merge, map, distinctUntilChanged } from 'rxjs';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { CommonModule } from '@angular/common';
-import { twMerge } from 'tailwind-merge';
+
 import clsx from 'clsx';
+import { debounceTime, fromEvent, merge, map, distinctUntilChanged } from 'rxjs';
+import { twMerge } from 'tailwind-merge';
 
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, type ZardTabVariants } from './tabs.variants';
 import { ZardButtonComponent } from '../button/button.component';
@@ -36,28 +37,27 @@ export type zAlign = 'center' | 'start' | 'end';
 
 @Component({
   selector: 'z-tab',
-  standalone: true,
   imports: [],
+  standalone: true,
   template: `
     <ng-template #content>
-      <ng-content></ng-content>
+      <ng-content />
     </ng-template>
   `,
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardTabComponent {
-  label = input.required<string>();
+  readonly label = input.required<string>();
   readonly contentTemplate = viewChild.required<TemplateRef<unknown>>('content');
 }
 
 @Component({
   selector: 'z-tab-group',
-  standalone: true,
   imports: [CommonModule, ZardButtonComponent, ZardIconComponent],
-  host: { '[class]': 'containerClasses()' },
+  standalone: true,
   template: `
     @if (navBeforeContent()) {
-      <ng-container [ngTemplateOutlet]="navigationBlock"></ng-container>
+      <ng-container [ngTemplateOutlet]="navigationBlock" />
     }
 
     <div class="tab-content flex-1">
@@ -68,15 +68,15 @@ export class ZardTabComponent {
           [attr.aria-labelledby]="'tab-' + index"
           [attr.tabindex]="0"
           [hidden]="activeTabIndex() !== index"
-          class="outline-none focus-visible:ring-2 focus-visible:ring-primary/50"
+          class="focus-visible:ring-primary/50 outline-none focus-visible:ring-2"
         >
-          <ng-container [ngTemplateOutlet]="tab.contentTemplate()"></ng-container>
+          <ng-container [ngTemplateOutlet]="tab.contentTemplate()" />
         </div>
       }
     </div>
 
     @if (!navBeforeContent()) {
-      <ng-container [ngTemplateOutlet]="navigationBlock"></ng-container>
+      <ng-container [ngTemplateOutlet]="navigationBlock" />
     }
 
     <ng-template #navigationBlock>
@@ -85,17 +85,30 @@ export class ZardTabComponent {
       <div [class]="navGridClasses()">
         @if (showArrow()) {
           @if (horizontal) {
-            <button class="scroll-btn scroll-left pr-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('left')">
+            <button
+              class="scroll-btn scroll-left cursor-pointer pr-4"
+              [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'"
+              (click)="scrollNav('left')"
+            >
               <z-icon zType="chevron-left" />
             </button>
           } @else {
-            <button class="scroll-btn scroll-up pb-4 cursor-pointer" [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'" (click)="scrollNav('up')">
+            <button
+              class="scroll-btn scroll-up cursor-pointer pb-4"
+              [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'"
+              (click)="scrollNav('up')"
+            >
               <z-icon zType="chevron-up" />
             </button>
           }
         }
 
-        <nav [ngClass]="navClasses()" #tabNav role="tablist" [attr.aria-orientation]="horizontal ? 'horizontal' : 'vertical'">
+        <nav
+          [ngClass]="navClasses()"
+          #tabNav
+          role="tablist"
+          [attr.aria-orientation]="horizontal ? 'horizontal' : 'vertical'"
+        >
           @for (tab of tabs(); track $index; let index = $index) {
             <button
               z-button
@@ -115,11 +128,19 @@ export class ZardTabComponent {
 
         @if (showArrow()) {
           @if (horizontal) {
-            <button class="scroll-btn scroll-right pl-4 cursor-pointer" [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'" (click)="scrollNav('right')">
+            <button
+              class="scroll-btn scroll-right cursor-pointer pl-4"
+              [class]="zTabsPosition() === 'top' ? 'mb-4' : 'mt-4'"
+              (click)="scrollNav('right')"
+            >
               <z-icon zType="chevron-right" />
             </button>
           } @else {
-            <button class="scroll-btn scroll-down pt-4 cursor-pointer" [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'" (click)="scrollNav('down')">
+            <button
+              class="scroll-btn scroll-down cursor-pointer pt-4"
+              [class]="zTabsPosition() === 'left' ? 'mr-4' : 'ml-4'"
+              (click)="scrollNav('down')"
+            >
               <z-icon zType="chevron-down" />
             </button>
           }
@@ -127,27 +148,26 @@ export class ZardTabComponent {
       </div>
     </ng-template>
   `,
+  styles: `
+    .nav-tab-scroll {
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+      &::-webkit-scrollbar-thumb {
+        background-color: rgba(209, 209, 209, 0.2);
+        border-radius: 2px;
+      }
+      &::-webkit-scrollbar {
+        height: 4px;
+        width: 4px;
+      }
+      &::-webkit-scrollbar-button {
+        display: none;
+      }
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  styles: [
-    `
-      .nav-tab-scroll {
-        -webkit-overflow-scrolling: touch;
-        scroll-behavior: smooth;
-        &::-webkit-scrollbar-thumb {
-          background-color: rgba(209, 209, 209, 0.2);
-          border-radius: 2px;
-        }
-        &::-webkit-scrollbar {
-          height: 4px;
-          width: 4px;
-        }
-        &::-webkit-scrollbar-button {
-          display: none;
-        }
-      }
-    `,
-  ],
+  host: { '[class]': 'containerClasses()' },
 })
 export class ZardTabGroupComponent implements AfterViewInit {
   private readonly tabComponents = contentChildren(ZardTabComponent, { descendants: true });
@@ -165,19 +185,20 @@ export class ZardTabGroupComponent implements AfterViewInit {
     label: string;
     tab: ZardTabComponent;
   }>();
+
   protected readonly zDeselect = output<{
     index: number;
     label: string;
     tab: ZardTabComponent;
   }>();
 
-  public readonly zTabsPosition = input<ZardTabVariants['zPosition']>('top');
-  public readonly zActivePosition = input<ZardTabVariants['zActivePosition']>('bottom');
-  public readonly zShowArrow = input(true);
-  public readonly zScrollAmount = input(100);
-  public readonly zAlignTabs = input<zAlign>('start');
+  readonly zTabsPosition = input<ZardTabVariants['zPosition']>('top');
+  readonly zActivePosition = input<ZardTabVariants['zActivePosition']>('bottom');
+  readonly zShowArrow = input(true);
+  readonly zScrollAmount = input(100);
+  readonly zAlignTabs = input<zAlign>('start');
   // Preserve consumer classes on host
-  public readonly class = input<string>('');
+  readonly class = input<string>('');
 
   protected readonly showArrow = computed(() => this.zShowArrow() && this.scrollPresent());
 
@@ -188,7 +209,11 @@ export class ZardTabGroupComponent implements AfterViewInit {
     }
 
     runInInjectionContext(this.injector, () => {
-      const observeInputs$ = merge(toObservable(this.zShowArrow), toObservable(this.tabs), toObservable(this.zTabsPosition));
+      const observeInputs$ = merge(
+        toObservable(this.zShowArrow),
+        toObservable(this.tabs),
+        toObservable(this.zTabsPosition),
+      );
 
       // Re-observe whenever #tabNav reference changes (e.g., when placement toggles)
       let observedEl: HTMLElement | null = null;
@@ -272,9 +297,13 @@ export class ZardTabGroupComponent implements AfterViewInit {
     return 'grid';
   });
 
-  protected readonly containerClasses = computed(() => twMerge(tabContainerVariants({ zPosition: this.zTabsPosition() }), this.class()));
+  protected readonly containerClasses = computed(() =>
+    twMerge(tabContainerVariants({ zPosition: this.zTabsPosition() }), this.class()),
+  );
 
-  protected readonly navClasses = computed(() => tabNavVariants({ zPosition: this.zTabsPosition(), zAlignTabs: this.showArrow() ? 'start' : this.zAlignTabs() }));
+  protected readonly navClasses = computed(() =>
+    tabNavVariants({ zPosition: this.zTabsPosition(), zAlignTabs: this.showArrow() ? 'start' : this.zAlignTabs() }),
+  );
 
   protected readonly buttonClassesSignal = computed(() => {
     const activeIndex = this.activeTabIndex();
@@ -299,7 +328,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
     }
   }
 
-  public selectTabByIndex(index: number): void {
+  selectTabByIndex(index: number): void {
     if (index >= 0 && index < this.tabs().length) {
       this.setActiveTab(index);
     } else {
@@ -392,7 +421,9 @@ export const tabButtonVariants = cva('hover:bg-transparent rounded-none flex-shr
   },
 });
 
-export type ZardTabVariants = VariantProps<typeof tabContainerVariants> & VariantProps<typeof tabNavVariants> & VariantProps<typeof tabButtonVariants> & { zAlignTabs: zAlign };
+export type ZardTabVariants = VariantProps<typeof tabContainerVariants> &
+  VariantProps<typeof tabNavVariants> &
+  VariantProps<typeof tabButtonVariants> & { zAlignTabs: zAlign };
 
 ```
 

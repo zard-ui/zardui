@@ -6,9 +6,19 @@ import { ZardAvatarComponent, ZardAvatarStatus } from './avatar.component';
 import { ZardAvatarVariants, ZardImageVariants } from './avatar.variants';
 
 @Component({
-  standalone: true,
   imports: [ZardAvatarComponent],
-  template: ` <z-avatar [zSize]="zSize" [zShape]="zShape" [zStatus]="zStatus" [zSrc]="zSrc" [zAlt]="zAlt" [zFallback]="zFallback" [class]="customClass"> </z-avatar> `,
+  standalone: true,
+  template: `
+    <z-avatar
+      [zSize]="zSize"
+      [zShape]="zShape"
+      [zStatus]="zStatus"
+      [zSrc]="zSrc"
+      [zAlt]="zAlt"
+      [zFallback]="zFallback"
+      [class]="customClass"
+    />
+  `,
 })
 class TestHostComponent {
   zSize: ZardAvatarVariants['zSize'] = 'default';

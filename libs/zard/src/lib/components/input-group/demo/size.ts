@@ -5,7 +5,6 @@ import { ZardInputGroupComponent } from '../input-group.component';
 
 @Component({
   selector: 'z-demo-input-group-size',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardInputGroupComponent, ZardInputDirective],
   template: `
     <div class="flex flex-col space-y-4">
@@ -22,6 +21,7 @@ import { ZardInputGroupComponent } from '../input-group.component';
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputGroupSizeComponent {
   smallValue = '';

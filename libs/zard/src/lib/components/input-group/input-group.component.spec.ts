@@ -6,8 +6,8 @@ import { ZardInputDirective } from '../input/input.directive';
 import { inputVariants, type ZardInputSizeVariants } from '../input/input.variants';
 
 @Component({
-  standalone: true,
   imports: [ZardInputGroupComponent, ZardInputDirective],
+  standalone: true,
   template: `
     <ng-template #customTemplate>Custom Template</ng-template>
     <z-input-group [zSize]="size" [zDisabled]="disabled" [zAddonBefore]="addonBefore" [zAddonAfter]="addonAfter">

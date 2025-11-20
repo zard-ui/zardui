@@ -5,8 +5,8 @@ import { ZardSwitchComponent } from '../switch.component';
 
 @Component({
   selector: 'z-demo-switch-disabled',
-  standalone: true,
   imports: [ZardSwitchComponent, FormsModule, ReactiveFormsModule],
+  standalone: true,
   template: `
     <z-switch [(ngModel)]="model" disabled>Disabled</z-switch>
     <z-switch [formControl]="checkControl">Disabled in forms</z-switch>

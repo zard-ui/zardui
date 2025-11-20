@@ -7,7 +7,6 @@ import { ZardSelectComponent } from '../select.component';
 @Component({
   selector: 'z-demo-select-basic',
   imports: [ZardBadgeComponent, ZardSelectComponent, ZardSelectItemComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex flex-col gap-4">
       <span>
@@ -22,6 +21,7 @@ import { ZardSelectComponent } from '../select.component';
       </z-select>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSelectBasicComponent {
   selectedValue = 'apple';

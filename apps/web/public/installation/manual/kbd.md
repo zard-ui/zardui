@@ -10,14 +10,14 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-kbd, [z-kbd]',
-  exportAs: 'zKbd',
   standalone: true,
+  template: `<kbd><ng-content /></kbd> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<kbd><ng-content></ng-content></kbd> `,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zKbd',
 })
 export class ZardKbdComponent {
   readonly class = input<ClassValue>('');
@@ -52,14 +52,14 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-kbd-group, [z-kbd-group]',
-  exportAs: 'zKbdGroup',
   standalone: true,
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <ng-content></ng-content> `,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zKbdGroup',
 })
 export class ZardKbdGroupComponent {
   readonly class = input<ClassValue>('');

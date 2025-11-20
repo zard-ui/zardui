@@ -6,8 +6,8 @@ import { ZardButtonComponent } from '../../button/button.component';
 
 @Component({
   selector: 'z-demo-toast-loading',
-  standalone: true,
   imports: [ZardButtonComponent],
+  standalone: true,
   template: ` <button z-button zType="outline" (click)="showToast()">Show Loading Toast</button> `,
 })
 export class ZardDemoToastLoadingComponent {
@@ -16,9 +16,7 @@ export class ZardDemoToastLoadingComponent {
 
     toast.promise(promise, {
       loading: 'Loading...',
-      success: (data: any) => {
-        return `${data.name} has been created`;
-      },
+      success: (data: any) => `${data.name} has been created`,
       error: 'Error',
     });
   }

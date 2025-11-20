@@ -1,11 +1,11 @@
 ```angular-ts showLineNumbers copyButton
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Component, inject } from '@angular/core';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
-import { Z_MODAL_DATA, ZardSheetService } from '../sheet.service';
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardSheetModule } from '../sheet.module';
+import { Z_MODAL_DATA, ZardSheetService } from '../sheet.service';
 
 interface iSheetData {
   name: string;
@@ -14,9 +14,8 @@ interface iSheetData {
 
 @Component({
   selector: 'zard-demo-sheet-basic',
-  exportAs: 'zardDemoSheetBasic',
-  standalone: true,
   imports: [FormsModule, ReactiveFormsModule, ZardInputDirective],
+  standalone: true,
   template: `
     <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
       <div class="grid gap-3">
@@ -28,7 +27,7 @@ interface iSheetData {
         <input
           z-input
           formControlName="name"
-          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
         />
       </div>
 
@@ -41,16 +40,17 @@ interface iSheetData {
         <input
           z-input
           formControlName="username"
-          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive"
+          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
         />
       </div>
     </form>
   `,
+  exportAs: 'zardDemoSheetBasic',
 })
 export class ZardDemoSheetBasicInputComponent {
   private zData: iSheetData = inject(Z_MODAL_DATA);
 
-  public form = new FormGroup({
+  form = new FormGroup({
     name: new FormControl('Matheus Ribeiro'),
     username: new FormControl('@ribeiromatheus.dev'),
   });
@@ -61,8 +61,8 @@ export class ZardDemoSheetBasicInputComponent {
 }
 
 @Component({
-  standalone: true,
   imports: [ZardButtonComponent, ZardSheetModule],
+  standalone: true,
   template: ` <button z-button zType="outline" (click)="openSheet()">Edit profile</button> `,
 })
 export class ZardDemoSheetBasicComponent {

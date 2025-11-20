@@ -1,20 +1,30 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { ZardResizableComponent, ZardResizeEvent } from './resizable.component';
-import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { ZardResizableHandleComponent } from './resizable-handle.component';
+import { ZardResizablePanelComponent } from './resizable-panel.component';
+import { ZardResizableComponent, ZardResizeEvent } from './resizable.component';
 
 @Component({
   selector: 'test-resizable-host',
-  standalone: true,
   imports: [ZardResizableComponent, ZardResizablePanelComponent, ZardResizableHandleComponent],
+  standalone: true,
   template: `
-    <z-resizable [zLayout]="layout" [zLazy]="lazy" (zResizeStart)="onResizeStart($event)" (zResize)="onResize($event)" (zResizeEnd)="onResizeEnd($event)">
-      <z-resizable-panel [zDefaultSize]="defaultSize1" [zMin]="min1" [zMax]="max1" [zCollapsible]="collapsible1"> Panel 1 </z-resizable-panel>
-      <z-resizable-handle [zHandleIndex]="0" [zWithHandle]="withHandle" [zDisabled]="handleDisabled"></z-resizable-handle>
-      <z-resizable-panel [zDefaultSize]="defaultSize2" [zMin]="min2" [zMax]="max2" [zCollapsible]="collapsible2"> Panel 2 </z-resizable-panel>
+    <z-resizable
+      [zLayout]="layout"
+      [zLazy]="lazy"
+      (zResizeStart)="onResizeStart($event)"
+      (zResize)="onResize($event)"
+      (zResizeEnd)="onResizeEnd($event)"
+    >
+      <z-resizable-panel [zDefaultSize]="defaultSize1" [zMin]="min1" [zMax]="max1" [zCollapsible]="collapsible1">
+        Panel 1
+      </z-resizable-panel>
+      <z-resizable-handle [zHandleIndex]="0" [zWithHandle]="withHandle" [zDisabled]="handleDisabled" />
+      <z-resizable-panel [zDefaultSize]="defaultSize2" [zMin]="min2" [zMax]="max2" [zCollapsible]="collapsible2">
+        Panel 2
+      </z-resizable-panel>
     </z-resizable>
   `,
 })
@@ -132,12 +142,12 @@ describe('ZardResizableComponent', () => {
 
       @Component({
         selector: 'test-percentage-host',
-        standalone: true,
         imports: [ZardResizableComponent, ZardResizablePanelComponent, ZardResizableHandleComponent],
+        standalone: true,
         template: `
           <z-resizable>
             <z-resizable-panel zDefaultSize="60%">Panel 1</z-resizable-panel>
-            <z-resizable-handle [zHandleIndex]="0"></z-resizable-handle>
+            <z-resizable-handle [zHandleIndex]="0" />
             <z-resizable-panel zDefaultSize="40%">Panel 2</z-resizable-panel>
           </z-resizable>
         `,
@@ -151,7 +161,9 @@ describe('ZardResizableComponent', () => {
       const percentageFixture = TestBed.createComponent(TestPercentageHostComponent);
       percentageFixture.detectChanges();
 
-      const percentageResizable = percentageFixture.debugElement.query(By.directive(ZardResizableComponent)).componentInstance;
+      const percentageResizable = percentageFixture.debugElement.query(
+        By.directive(ZardResizableComponent),
+      ).componentInstance;
       const sizes = percentageResizable.panelSizes();
       expect(sizes[0]).toBe(60);
       expect(sizes[1]).toBe(40);
@@ -163,12 +175,12 @@ describe('ZardResizableComponent', () => {
 
       @Component({
         selector: 'test-pixel-host',
-        standalone: true,
         imports: [ZardResizableComponent, ZardResizablePanelComponent, ZardResizableHandleComponent],
+        standalone: true,
         template: `
           <z-resizable>
             <z-resizable-panel zDefaultSize="300px">Panel 1</z-resizable-panel>
-            <z-resizable-handle [zHandleIndex]="0"></z-resizable-handle>
+            <z-resizable-handle [zHandleIndex]="0" />
             <z-resizable-panel zDefaultSize="200px">Panel 2</z-resizable-panel>
           </z-resizable>
         `,

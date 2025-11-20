@@ -1,18 +1,21 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const commandVariants = cva('flex h-full w-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground', {
-  variants: {
-    size: {
-      sm: 'min-h-64',
-      default: 'min-h-80',
-      lg: 'min-h-96',
-      xl: 'min-h-[30rem]',
+export const commandVariants = cva(
+  'flex h-full w-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground',
+  {
+    variants: {
+      size: {
+        sm: 'min-h-64',
+        default: 'min-h-80',
+        lg: 'min-h-96',
+        xl: 'min-h-[30rem]',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
     },
   },
-  defaultVariants: {
-    size: 'default',
-  },
-});
+);
 
 export const commandInputVariants = cva(
   'flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
@@ -48,7 +51,8 @@ export const commandItemVariants = cva(
     variants: {
       variant: {
         default: '',
-        destructive: 'aria-selected:bg-destructive aria-selected:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground',
+        destructive:
+          'aria-selected:bg-destructive aria-selected:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground',
       },
     },
     defaultVariants: {

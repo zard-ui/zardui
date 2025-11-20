@@ -28,7 +28,12 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardSelectItemComponent } from './select-item.component';
-import { selectContentVariants, selectTriggerVariants, selectVariants, type ZardSelectTriggerVariants } from './select.variants';
+import {
+  selectContentVariants,
+  selectTriggerVariants,
+  selectVariants,
+  type ZardSelectTriggerVariants,
+} from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -38,21 +43,7 @@ type OnChangeType = (value: string) => void;
 
 @Component({
   selector: 'z-select, [z-select]',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, OverlayModule, ZardBadgeComponent, ZardIconComponent],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ZardSelectComponent),
-      multi: true,
-    },
-  ],
-  host: {
-    '[attr.data-disabled]': 'zDisabled() ? "" : null',
-    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    '[class]': 'classes()',
-    '(document:click)': 'onDocumentClick($event)',
-  },
   template: `
     <button
       type="button"
@@ -68,7 +59,7 @@ type OnChangeType = (value: string) => void;
       <span class="flex flex-1 flex-wrap items-center gap-2">
         @let labels = selectedLabels();
         @for (label of labels; track index; let index = $index) {
-          <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }"> </ng-container>
+          <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }" />
         } @empty {
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
@@ -87,13 +78,33 @@ type OnChangeType = (value: string) => void;
     </ng-template>
 
     <ng-template #dropdownTemplate>
-      <div [class]="contentClasses()" role="listbox" [attr.data-state]="'open'" (keydown)="onDropdownKeydown($event)" tabindex="-1">
+      <div
+        [class]="contentClasses()"
+        role="listbox"
+        [attr.data-state]="'open'"
+        (keydown)="onDropdownKeydown($event)"
+        tabindex="-1"
+      >
         <div class="p-1">
-          <ng-content></ng-content>
+          <ng-content />
         </div>
       </div>
     </ng-template>
   `,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ZardSelectComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[attr.data-disabled]': 'zDisabled() ? "" : null',
+    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
+    '[class]': 'classes()',
+    '(document:click)': 'onDocumentClick($event)',
+  },
 })
 export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
@@ -412,7 +423,9 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   private getSelectItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-select-item, [z-select-item]')).filter(item => item.dataset['disabled'] === undefined);
+    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-select-item, [z-select-item]')).filter(
+      item => item.dataset['disabled'] === undefined,
+    );
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
@@ -557,7 +570,9 @@ export const selectTriggerVariants = cva(
     },
   },
 );
-export const selectContentVariants = cva('z-9999 min-w-full overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95');
+export const selectContentVariants = cva(
+  'z-9999 min-w-full overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95',
+);
 export const selectItemVariants = cva(
   'relative flex min-w-full cursor-pointer text-nowrap items-center gap-2 rounded-sm mb-0.5 py-1.5 pr-8 pl-2 text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground data-selected:bg-accent data-selected:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:hover:bg-transparent data-disabled:hover:text-current [&_svg:not([class*="text-"])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
 );
@@ -571,7 +586,16 @@ export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
 
 
 ```angular-ts title="select-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 
 import { selectItemVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -585,8 +609,18 @@ interface SelectHost {
 
 @Component({
   selector: 'z-select-item, [z-select-item]',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardIconComponent],
+  template: `
+    @if (isSelected()) {
+      <span class="absolute right-2 flex size-3.5 items-center justify-center">
+        <z-icon zType="check" />
+      </span>
+    }
+    <span class="truncate">
+      <ng-content />
+    </span>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
     '[attr.value]': 'zValue()',
@@ -597,16 +631,6 @@ interface SelectHost {
     '[attr.aria-selected]': 'isSelected()',
     '(click)': 'onClick()',
   },
-  template: `
-    @if (isSelected()) {
-      <span class="absolute right-2 flex size-3.5 items-center justify-center">
-        <z-icon zType="check" />
-      </span>
-    }
-    <span class="truncate">
-      <ng-content></ng-content>
-    </span>
-  `,
 })
 export class ZardSelectItemComponent {
   readonly zValue = input.required<string>();

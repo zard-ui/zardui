@@ -1,10 +1,22 @@
-import { ChangeDetectionStrategy, Component, computed, contentChildren, effect, forwardRef, input, type OnInit, output, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  effect,
+  forwardRef,
+  input,
+  type OnInit,
+  output,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { mergeClasses } from '../../shared/utils/utils';
-import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
-
 import type { ClassValue } from 'clsx';
+
+import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export interface SegmentedOption {
   value: string;
@@ -14,7 +26,7 @@ export interface SegmentedOption {
 @Component({
   selector: 'z-segmented-item',
   standalone: true,
-  template: `<ng-content></ng-content>`,
+  template: `<ng-content />`,
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardSegmentedItemComponent {
@@ -25,28 +37,23 @@ export class ZardSegmentedItemComponent {
 
 @Component({
   selector: 'z-segmented',
-  exportAs: 'zSegmented',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()" role="tablist" [attr.aria-label]="zAriaLabel()">
-      @if (zOptions().length > 0) {
-        @for (option of zOptions(); track option.value) {
-          <button
-            type="button"
-            role="tab"
-            [class]="getItemClasses(option.value)"
-            [disabled]="option.disabled || zDisabled()"
-            [attr.aria-selected]="isSelected(option.value)"
-            [attr.aria-controls]="option.value + '-panel'"
-            [attr.id]="option.value + '-tab'"
-            (click)="selectOption(option.value)"
-          >
-            {{ option.label }}
-          </button>
-        }
-      } @else {
+      @for (option of zOptions(); track option.value) {
+        <button
+          type="button"
+          role="tab"
+          [class]="getItemClasses(option.value)"
+          [disabled]="option.disabled || zDisabled()"
+          [attr.aria-selected]="isSelected(option.value)"
+          [attr.aria-controls]="option.value + '-panel'"
+          [attr.id]="option.value + '-tab'"
+          (click)="selectOption(option.value)"
+        >
+          {{ option.label }}
+        </button>
+      } @empty {
         @for (item of items(); track item.value()) {
           <button
             type="button"
@@ -64,9 +71,6 @@ export class ZardSegmentedItemComponent {
       }
     </div>
   `,
-  host: {
-    '[class]': 'wrapperClasses()',
-  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -74,6 +78,12 @@ export class ZardSegmentedItemComponent {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'wrapperClasses()',
+  },
+  exportAs: 'zSegmented',
 })
 export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
   private readonly itemComponents = contentChildren(ZardSegmentedItemComponent);

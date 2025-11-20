@@ -4,8 +4,8 @@ import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
   selector: 'z-demo-tabs-default',
-  standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent],
+  standalone: true,
   template: `
     <div class="h-[300px] w-full">
       <z-tab-group>

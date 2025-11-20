@@ -1,23 +1,28 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, input, output, signal, viewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  HostListener,
+  input,
+  output,
+  signal,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import type { CalendarDay } from './calendar.types';
 import { getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-calendar-grid',
-  exportAs: 'zCalendarGrid',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  host: {
-    '[attr.role]': '"grid"',
-  },
   template: `
     <div #gridContainer>
-      <!-- Weekdays Header -->
-      <div class="grid grid-cols-7 text-center w-fit" role="row">
+      <! -- Weekdays Header - ->
+      <div class="grid w-fit grid-cols-7 text-center" role="row">
         @for (weekday of weekdays; track $index) {
           <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
@@ -25,8 +30,8 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants
         }
       </div>
 
-      <!-- Calendar Days Grid -->
-      <div class="grid grid-cols-7 gap-0 mt-2 auto-rows-min w-fit" role="rowgroup">
+      <! -- Calendar Days Grid - ->
+      <div class="mt-2 grid w-fit auto-rows-min grid-cols-7 gap-0" role="rowgroup">
         @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
           <div [class]="dayContainerClasses()" role="gridcell">
             <button
@@ -46,6 +51,12 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[attr.role]': '"grid"',
+  },
+  exportAs: 'zCalendarGrid',
 })
 export class ZardCalendarGridComponent {
   private readonly gridContainer = viewChild.required<ElementRef<HTMLElement>>('gridContainer');
@@ -159,11 +170,20 @@ export class ZardCalendarGridComponent {
         break;
       case 'Home':
         event.preventDefault();
-        newIndex = this.findEnabledInRange(Math.floor(currentIndex / 7) * 7, Math.floor(currentIndex / 7) * 7 + 6, days);
+        newIndex = this.findEnabledInRange(
+          Math.floor(currentIndex / 7) * 7,
+          Math.floor(currentIndex / 7) * 7 + 6,
+          days,
+        );
         break;
       case 'End':
         event.preventDefault();
-        newIndex = this.findEnabledInRange(Math.floor(currentIndex / 7) * 7 + 6, Math.floor(currentIndex / 7) * 7, days, true);
+        newIndex = this.findEnabledInRange(
+          Math.floor(currentIndex / 7) * 7 + 6,
+          Math.floor(currentIndex / 7) * 7,
+          days,
+          true,
+        );
         break;
       case 'PageUp':
         event.preventDefault();

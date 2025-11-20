@@ -7,12 +7,10 @@ import { ZardFormModule } from '../form.module';
 
 @Component({
   selector: 'zard-demo-form-reactive',
-  standalone: true,
   imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardFormModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
-    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="space-y-6 max-w-sm">
+    <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="max-w-sm space-y-6">
       <z-form-field>
         <label z-form-label zRequired>Username</label>
         <z-form-control>
@@ -40,6 +38,8 @@ import { ZardFormModule } from '../form.module';
       <button z-button zType="default" type="submit" [disabled]="profileForm.invalid">Create Account</button>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class ZardDemoFormReactiveComponent {
   profileForm = new FormGroup({

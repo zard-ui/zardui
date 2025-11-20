@@ -8,7 +8,6 @@ import { ZardInputGroupComponent } from '../input-group.component';
 @Component({
   selector: 'z-demo-input-group-text',
   imports: [ZardInputGroupComponent, ZardInputDirective, ZardButtonComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <z-input-group zAddonBefore="$" zAddonAfter="USD" class="mb-4">
       <input z-input placeholder="0.00" type="number" />
@@ -33,6 +32,7 @@ import { ZardInputGroupComponent } from '../input-group.component';
       </div>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputGroupTextComponent {}
 

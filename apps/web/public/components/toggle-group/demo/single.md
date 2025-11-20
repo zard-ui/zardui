@@ -5,9 +5,11 @@ import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-gr
 
 @Component({
   selector: 'demo-toggle-group-single',
-  standalone: true,
   imports: [ZardToggleGroupComponent],
-  template: ` <z-toggle-group zMode="single" [items]="items" defaultValue="center" (valueChange)="onToggleChange($event)"></z-toggle-group> `,
+  standalone: true,
+  template: `
+    <z-toggle-group zMode="single" [items]="items" defaultValue="center" (valueChange)="onToggleChange($event)" />
+  `,
 })
 export default class ToggleGroupSingleComponent {
   items: ZardToggleGroupItem[] = [

@@ -7,7 +7,6 @@ import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
   imports: [ZardCarouselModule, ZardSegmentedComponent, ZardCardComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto w-3/4 max-w-4xl">
       <div class="mb-4 flex justify-center gap-2">
@@ -32,10 +31,11 @@ import { ZardCarouselModule } from '../carousel.module';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCarouselSpacingComponent {
   protected slides = ['1', '2', '3', '4', '5', '6'];
-  currentSpacing = signal<'sm' | 'md' | 'lg' | 'xl'>('md');
+  readonly currentSpacing = signal<'sm' | 'md' | 'lg' | 'xl'>('md');
 
   // Computed classes based on current spacing
   protected readonly contentSpacingClass = computed(() => {

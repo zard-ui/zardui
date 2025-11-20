@@ -6,8 +6,8 @@ import { ZardRadioComponent } from '../radio.component';
 
 @Component({
   selector: 'z-demo-radio-disabled',
-  standalone: true,
   imports: [ZardRadioComponent, FormsModule],
+  standalone: true,
   template: `
     <span z-radio name="radio" [(ngModel)]="val" value="a" [disabled]="true">Disabled</span>
     <span z-radio name="radio" [(ngModel)]="val" value="b" [disabled]="true">Disabled</span>

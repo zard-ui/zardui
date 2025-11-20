@@ -1,4 +1,12 @@
-import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, input, ViewEncapsulation } from '@angular/core';
+import {
+  type AfterContentInit,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -8,14 +16,14 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-accordion',
-  exportAs: 'zAccordion',
   standalone: true,
+  template: ` <ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <ng-content></ng-content>`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zAccordion',
 })
 export class ZardAccordionComponent implements AfterContentInit {
   readonly items = contentChildren(ZardAccordionItemComponent);

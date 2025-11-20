@@ -5,8 +5,8 @@ import { ZardCheckboxComponent } from '../checkbox.component';
 
 @Component({
   selector: 'z-demo-checkbox-disabled',
-  standalone: true,
   imports: [ZardCheckboxComponent, FormsModule],
+  standalone: true,
   template: `
     <span z-checkbox disabled>Disabled</span>
     <span z-checkbox disabled [(ngModel)]="checked">Disabled</span>

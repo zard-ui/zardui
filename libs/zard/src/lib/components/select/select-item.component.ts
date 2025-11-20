@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 
 import { selectItemVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -12,8 +21,18 @@ interface SelectHost {
 
 @Component({
   selector: 'z-select-item, [z-select-item]',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardIconComponent],
+  template: `
+    @if (isSelected()) {
+      <span class="absolute right-2 flex size-3.5 items-center justify-center">
+        <z-icon zType="check" />
+      </span>
+    }
+    <span class="truncate">
+      <ng-content />
+    </span>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
     '[attr.value]': 'zValue()',
@@ -24,16 +43,6 @@ interface SelectHost {
     '[attr.aria-selected]': 'isSelected()',
     '(click)': 'onClick()',
   },
-  template: `
-    @if (isSelected()) {
-      <span class="absolute right-2 flex size-3.5 items-center justify-center">
-        <z-icon zType="check" />
-      </span>
-    }
-    <span class="truncate">
-      <ng-content></ng-content>
-    </span>
-  `,
 })
 export class ZardSelectItemComponent {
   readonly zValue = input.required<string>();

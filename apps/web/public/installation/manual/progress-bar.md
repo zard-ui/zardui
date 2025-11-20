@@ -1,18 +1,32 @@
 
 
 ```angular-ts title="progress-bar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
+import type { ClassValue } from 'clsx';
+
+import {
+  containerProgressBarVariants,
+  progressBarVariants,
+  type ZardContainerProgressBarVariants,
+  type ZardProgressBarVariants,
+} from './progress-bar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { containerProgressBarVariants, progressBarVariants, type ZardContainerProgressBarVariants, type ZardProgressBarVariants } from './progress-bar.variants';
 
 @Component({
   selector: 'z-progress-bar',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  template: `
+    @if (zIndeterminate()) {
+      <div [class]="classes()">
+        <div [class]="barClasses()"></div>
+      </div>
+    } @else {
+      <div [class]="classes()">
+        <div [style.width.%]="correctedProgress()" [class]="barClasses()" id="bar"></div>
+      </div>
+    }
+  `,
   styles: `
     @keyframes indeterminate {
       0% {
@@ -29,17 +43,8 @@ import { containerProgressBarVariants, progressBarVariants, type ZardContainerPr
       }
     }
   `,
-  template: `
-    @if (zIndeterminate()) {
-      <div [class]="classes()">
-        <div [class]="barClasses()"></div>
-      </div>
-    } @else {
-      <div [class]="classes()">
-        <div [style.width.%]="correctedProgress()" [class]="barClasses()" id="bar"></div>
-      </div>
-    }
-  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     class: 'w-full',
   },
@@ -60,11 +65,22 @@ export class ZardProgressBarComponent {
   });
 
   protected readonly classes = computed(() =>
-    mergeClasses(containerProgressBarVariants({ zIndeterminate: this.zIndeterminate(), zType: this.zType(), zSize: this.zSize(), zShape: this.zShape() }), this.class()),
+    mergeClasses(
+      containerProgressBarVariants({
+        zIndeterminate: this.zIndeterminate(),
+        zType: this.zType(),
+        zSize: this.zSize(),
+        zShape: this.zShape(),
+      }),
+      this.class(),
+    ),
   );
 
   protected readonly barClasses = computed(() =>
-    mergeClasses(progressBarVariants({ zIndeterminate: this.zIndeterminate(), zType: this.zType(), zShape: this.zShape() }), this.barClass()),
+    mergeClasses(
+      progressBarVariants({ zIndeterminate: this.zIndeterminate(), zType: this.zType(), zShape: this.zShape() }),
+      this.barClass(),
+    ),
   );
 }
 

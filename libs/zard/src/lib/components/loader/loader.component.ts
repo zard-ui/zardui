@@ -1,20 +1,18 @@
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { loaderVariants, type ZardLoaderVariants } from './loader.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-loader',
-  exportAs: 'zLoader',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
-    <div class="relative left-1/2 top-1/2 h-[inherit] w-[inherit]">
+    <div class="relative top-1/2 left-1/2 h-[inherit] w-[inherit]">
       @for (_ of bars; track $index) {
         <div
-          class="absolute -left-[10%] -top-[3.9%] h-[8%] w-[24%] animate-spinner rounded-md bg-black dark:bg-white"
+          class="animate-spinner absolute -top-[3.9%] -left-[10%] h-[8%] w-[24%] rounded-md bg-black dark:bg-white"
           [style]="{
             animationDelay: animationDelay($index),
             transform: transform($index),
@@ -39,9 +37,12 @@ import { loaderVariants, type ZardLoaderVariants } from './loader.variants';
       }
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zLoader',
 })
 export class ZardLoaderComponent {
   readonly class = input<ClassValue>('');
