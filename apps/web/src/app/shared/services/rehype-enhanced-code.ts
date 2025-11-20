@@ -86,7 +86,7 @@ function createCopyButton(codeContent: string, hasTitle = false): any {
         'focus-visible:ring-ring',
         'focus-visible:ring-offset-2',
       ],
-      onClick: `copyCodeToClipboard(this, \`${codeContent.replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)`,
+      onClick: `copyCodeToClipboard(this, \`${codeContent.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$/g, '\\$')}\`)`,
       'aria-label': 'Copy code',
       title: 'Copy code',
     },
@@ -211,7 +211,18 @@ function createCodeTitle(filename: string, icon: string | null, copyButton: bool
     type: 'element',
     tagName: 'div',
     properties: {
-      class: ['flex', 'items-center', 'gap-2', 'border-b', 'bg-muted/50', 'px-4', 'py-2', 'text-sm', 'text-muted-foreground', copyButton ?? 'justify-between'],
+      class: [
+        'flex',
+        'items-center',
+        'gap-2',
+        'border-b',
+        'bg-muted/50',
+        'px-4',
+        'py-2',
+        'text-sm',
+        'text-muted-foreground',
+        copyButton ?? 'justify-between',
+      ],
     },
     children: titleChildren,
   };
@@ -438,7 +449,9 @@ export function rehypeCodeTabs() {
               nextNode.tagName === 'p' &&
               (!nextNode.children ||
                 nextNode.children.length === 0 ||
-                (nextNode.children.length === 1 && nextNode.children[0].type === 'text' && nextNode.children[0].value?.trim() === ''))
+                (nextNode.children.length === 1 &&
+                  nextNode.children[0].type === 'text' &&
+                  nextNode.children[0].value?.trim() === ''))
             ) {
               elementsToRemove.push(nextIndex);
               nextIndex++;
@@ -680,7 +693,14 @@ function createTabsWrapper(codeBlocks: any[], tabLabels: string[], hasCopyButton
     type: 'element',
     tagName: 'div',
     properties: {
-      class: ['code-tabs-wrapper', 'my-6', '[&>div:first-child]:px-4', '[&>div:first-child]:py-2', 'bg-muted/50', 'rounded-lg'],
+      class: [
+        'code-tabs-wrapper',
+        'my-6',
+        '[&>div:first-child]:px-4',
+        '[&>div:first-child]:py-2',
+        'bg-muted/50',
+        'rounded-lg',
+      ],
     },
     children: [
       // Tab buttons header
