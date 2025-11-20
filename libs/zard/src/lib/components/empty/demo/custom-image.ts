@@ -5,8 +5,8 @@ import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
   selector: 'z-demo-empty-custom-image',
-  standalone: true,
   imports: [ZardButtonComponent, ZardEmptyComponent],
+  standalone: true,
   template: `
     <z-empty
       zImage="images/avatar/imgs/avatar_image.jpg"

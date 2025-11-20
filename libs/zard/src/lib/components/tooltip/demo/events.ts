@@ -5,7 +5,6 @@ import { ZardTooltipModule } from '../tooltip';
 
 @Component({
   selector: 'z-demo-tooltip-events',
-  standalone: true,
   imports: [ZardButtonComponent, ZardTooltipModule],
   template: `
     <div class="flex w-[100px] flex-col gap-4">

@@ -9,7 +9,6 @@ import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
   imports: [ZardCarouselModule, ZardButtonComponent, ZardCardComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <div class="mb-4 flex gap-2">
@@ -43,6 +42,7 @@ import { ZardCarouselModule } from '../carousel.module';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCarouselPluginsComponent implements OnInit {
   private readonly pluginsService = inject(ZardCarouselPluginsService);

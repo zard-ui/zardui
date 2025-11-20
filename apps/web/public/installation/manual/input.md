@@ -1,34 +1,78 @@
 
 
 ```angular-ts title="input.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { computed, Directive, effect, ElementRef, inject, input, linkedSignal, model } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { computed, Directive, ElementRef, inject, input } from '@angular/core';
-
+import {
+  inputVariants,
+  type ZardInputSizeVariants,
+  type ZardInputStatusVariants,
+  type ZardInputTypeVariants,
+} from './input.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { inputVariants, type ZardInputVariants } from './input.variants';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',
-  exportAs: 'zInput',
-  standalone: true,
   host: {
     '[class]': 'classes()',
+    '(input)': 'updateValue($event.target)',
   },
+  exportAs: 'zInput',
 })
 export class ZardInputDirective {
-  readonly elementRef = inject(ElementRef);
-  private readonly isTextarea = this.elementRef.nativeElement.tagName.toLowerCase() === 'textarea';
-
-  readonly zBorderless = input(false, { transform });
-  readonly zSize = input<ZardInputVariants['zSize']>('default');
-  readonly zStatus = input<ZardInputVariants['zStatus']>();
+  private readonly elementRef = inject(ElementRef);
 
   readonly class = input<ClassValue>('');
+  readonly zBorderless = input(false, { transform });
+  readonly zSize = input<ZardInputSizeVariants>('default');
+  readonly zStatus = input<ZardInputStatusVariants>();
+  readonly value = model<string>('');
+
+  readonly size = linkedSignal<ZardInputSizeVariants>(() => this.zSize());
 
   protected readonly classes = computed(() =>
-    mergeClasses(inputVariants({ zType: !this.isTextarea ? 'default' : 'textarea', zSize: this.zSize(), zStatus: this.zStatus(), zBorderless: this.zBorderless() }), this.class()),
+    mergeClasses(
+      inputVariants({
+        zType: this.getType(),
+        zSize: this.size(),
+        zStatus: this.zStatus(),
+        zBorderless: this.zBorderless(),
+      }),
+      this.class(),
+    ),
   );
+
+  constructor() {
+    effect(() => {
+      const value = this.value();
+
+      if (value !== undefined && value !== null) {
+        this.elementRef.nativeElement.value = value;
+      }
+    });
+  }
+
+  disable(b: boolean): void {
+    this.elementRef.nativeElement.disabled = b;
+  }
+
+  setDataSlot(name: string): void {
+    if (this.elementRef?.nativeElement?.dataset) {
+      this.elementRef.nativeElement.dataset.slot = name;
+    }
+  }
+
+  protected updateValue(target: EventTarget | null): void {
+    const el = target as HTMLInputElement | HTMLTextAreaElement | null;
+    this.value.set(el?.value ?? '');
+  }
+
+  getType(): ZardInputTypeVariants {
+    const isTextarea = this.elementRef.nativeElement.tagName.toLowerCase() === 'textarea';
+    return isTextarea ? 'textarea' : 'default';
+  }
 }
 
 ```
@@ -44,14 +88,14 @@ export const inputVariants = cva('w-full', {
   variants: {
     zType: {
       default:
-        'flex rounded-md border px-4 font-normal border-input bg-transparent text-base md:text-sm file:border-0 file:text-foreground file:bg-transparent file:font-medium placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+        'flex rounded-md border px-4 font-normal border-input bg-transparent file:border-0 file:text-foreground file:bg-transparent file:font-medium placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
       textarea:
-        'flex min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-base placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50 md:text-sm',
+        'flex pb-2 min-h-20 h-auto rounded-md border border-input bg-background px-3 py-2 text-base placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
     },
     zSize: {
-      default: 'h-10 py-2 file:max-md:py-0',
-      sm: 'h-9 file:md:py-2 file:max-md:py-1.5',
-      lg: 'h-11 py-1 file:md:py-3 file:max-md:py-2.5',
+      default: 'text-sm',
+      sm: 'text-xs',
+      lg: 'text-base',
     },
     zStatus: {
       error: 'border-destructive focus-visible:ring-destructive',
@@ -66,9 +110,16 @@ export const inputVariants = cva('w-full', {
     zType: 'default',
     zSize: 'default',
   },
+  compoundVariants: [
+    { zType: 'default', zSize: 'default', class: 'h-9 py-2 file:max-md:py-0' },
+    { zType: 'default', zSize: 'sm', class: 'h-8 file:md:py-2 file:max-md:py-1.5' },
+    { zType: 'default', zSize: 'lg', class: 'h-10 py-1 file:md:py-3 file:max-md:py-2.5' },
+  ],
 });
 
-export type ZardInputVariants = VariantProps<typeof inputVariants>;
+export type ZardInputTypeVariants = NonNullable<VariantProps<typeof inputVariants>['zType']>;
+export type ZardInputSizeVariants = NonNullable<VariantProps<typeof inputVariants>['zSize']>;
+export type ZardInputStatusVariants = NonNullable<VariantProps<typeof inputVariants>['zStatus']>;
 
 ```
 

@@ -5,8 +5,8 @@ import { ZardIconComponent } from '../icon.component';
 
 @Component({
   selector: 'z-demo-icon-colors',
-  standalone: true,
   imports: [ZardIconComponent],
+  standalone: true,
   template: `
     <div class="flex items-center gap-4">
       <z-icon zType="heart" class="text-destructive" />

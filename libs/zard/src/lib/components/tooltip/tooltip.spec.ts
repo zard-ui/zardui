@@ -5,6 +5,8 @@ import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testin
 import { ZardTooltipDirective, ZardTooltipModule } from './tooltip';
 
 @Component({
+  imports: [ZardTooltipModule],
+  standalone: true,
   template: `
     <div #hoverTooltip zTooltip="Test Hover" #hoverDir="zTooltip"></div>
     <div #clickTooltip zTooltip="Test Click" zTrigger="click" #clickDir="zTooltip"></div>
@@ -14,8 +16,6 @@ import { ZardTooltipDirective, ZardTooltipModule } from './tooltip';
     <div #leftTooltip zTooltip="Test Click" zPosition="left" #leftDir="zTooltip"></div>
     <div #rightTooltip zTooltip="Test Click" zPosition="right" #rightDir="zTooltip"></div>
   `,
-  imports: [ZardTooltipModule],
-  standalone: true,
 })
 class TestHostComponent {
   readonly hoverTooltip = viewChild.required<ElementRef>('hoverTooltip');

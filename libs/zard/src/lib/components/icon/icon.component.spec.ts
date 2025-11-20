@@ -1,10 +1,11 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+
 import { ZardIconComponent } from './icon.component';
 
 @Component({
-  standalone: true,
   imports: [ZardIconComponent],
+  standalone: true,
   template: `<z-icon [zType]="iconType" [zSize]="size" />`,
 })
 class TestHostComponent {

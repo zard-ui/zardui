@@ -1,7 +1,18 @@
 
 
 ```angular-ts title="button.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, type OnDestroy, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  type OnDestroy,
+  ElementRef,
+  inject,
+  input,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -11,21 +22,21 @@ import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',
-  exportAs: 'zButton',
-  standalone: true,
   imports: [ZardIconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
     @if (zLoading()) {
       <i z-icon zType="loader-circle" class="animate-spin duration-2000"></i>
     }
-    <ng-content></ng-content>
+    <ng-content />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[attr.data-icon-only]': 'iconOnly() || null',
   },
+  exportAs: 'zButton',
 })
 export class ZardButtonComponent implements OnDestroy {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
@@ -65,7 +76,11 @@ export class ZardButtonComponent implements OnDestroy {
 
       check();
       this._mutationObserver = new MutationObserver(check);
-      this._mutationObserver.observe(this.elementRef.nativeElement, { childList: true, characterData: true, subtree: true });
+      this._mutationObserver.observe(this.elementRef.nativeElement, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
     });
   }
 
@@ -103,8 +118,10 @@ export const buttonVariants = cva(
     variants: {
       zType: {
         default: 'bg-primary text-primary-foreground shadow-xs hover:bg-primary/90',
-        destructive: 'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
-        outline: 'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
+        destructive:
+          'bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+        outline:
+          'border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50',
         secondary: 'bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80',
         ghost: 'hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50',
         link: 'text-primary underline-offset-4 hover:underline',

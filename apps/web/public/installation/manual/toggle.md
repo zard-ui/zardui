@@ -1,8 +1,20 @@
 
 
 ```angular-ts title="toggle.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, forwardRef, HostListener, ViewEncapsulation, signal, computed, input, output, linkedSignal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  forwardRef,
+  HostListener,
+  ViewEncapsulation,
+  signal,
+  computed,
+  input,
+  output,
+  linkedSignal,
+} from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
 import { toggleVariants, type ZardToggleVariants } from './toggle.variants';
@@ -13,9 +25,6 @@ type OnChangeType = (value: boolean) => void;
 
 @Component({
   selector: 'z-toggle',
-  exportAs: 'zToggle',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <button
       type="button"
@@ -26,7 +35,7 @@ type OnChangeType = (value: boolean) => void;
       [disabled]="disabled()"
       (click)="toggle()"
     >
-      <ng-content></ng-content>
+      <ng-content />
     </button>
   `,
   providers: [
@@ -36,6 +45,9 @@ type OnChangeType = (value: boolean) => void;
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zToggle',
 })
 export class ZardToggleComponent implements ControlValueAccessor {
   readonly zValue = input<boolean | undefined>();
@@ -56,7 +68,9 @@ export class ZardToggleComponent implements ControlValueAccessor {
 
   protected readonly disabled = linkedSignal(() => this.zDisabled());
 
-  protected readonly classes = computed(() => mergeClasses(toggleVariants({ zSize: this.zSize(), zType: this.zType() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(toggleVariants({ zSize: this.zSize(), zType: this.zType() }), this.class()),
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onTouched: OnTouchedType = () => {};

@@ -7,13 +7,22 @@ import { ZardCardComponent } from '../card.component';
 
 @Component({
   selector: 'z-demo-card-default',
-  standalone: true,
   imports: [ZardCardComponent, ZardButtonComponent],
+  standalone: true,
   template: `
-    <z-card class="w-full max-w-sm" zTitle="Login to your account" zDescription="Enter your email below to login to your account">
+    <z-card
+      class="w-full max-w-sm"
+      zTitle="Login to your account"
+      zDescription="Enter your email below to login to your account"
+    >
       <div class="space-y-4">
         <div class="space-y-2">
-          <label [for]="idEmail" class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Email </label>
+          <label
+            [for]="idEmail"
+            class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+          >
+            Email
+          </label>
           <input
             [id]="idEmail"
             type="email"
@@ -24,7 +33,12 @@ import { ZardCardComponent } from '../card.component';
         </div>
         <div class="space-y-2">
           <div class="flex items-center">
-            <label [for]="idPassword" class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"> Password </label>
+            <label
+              [for]="idPassword"
+              class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >
+              Password
+            </label>
             <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline"> Forgot your password? </a>
           </div>
           <input

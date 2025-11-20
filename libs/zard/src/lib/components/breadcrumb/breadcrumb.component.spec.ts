@@ -3,12 +3,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 
-import { ZardBreadcrumbComponent, ZardBreadcrumbEllipsisComponent, ZardBreadcrumbItemComponent } from './breadcrumb.component';
+import {
+  ZardBreadcrumbComponent,
+  ZardBreadcrumbEllipsisComponent,
+  ZardBreadcrumbItemComponent,
+} from './breadcrumb.component';
 
 @Component({
   selector: 'test-host-component',
-  standalone: true,
   imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent],
+  standalone: true,
   template: `
     <z-breadcrumb>
       <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
@@ -52,32 +56,24 @@ describe('BreadcrumbComponents Integration', () => {
   it('should have default classes for ZardBreadcrumbComponent', () => {
     const breadcrumDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbComponent));
     const nav = breadcrumDebug.nativeElement.querySelector('nav');
-    expect(nav.classList).toContain('w-full');
-    expect(nav.classList).toContain('text-sm');
+    expect(nav).toHaveClass('w-full text-sm');
   });
 
   it('should have default classes for breadcrumb list (ol element)', () => {
     const breadcrumbDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbComponent));
     const ol = breadcrumbDebug.nativeElement.querySelector('ol');
-    expect(ol.classList).toContain('text-muted-foreground');
-    expect(ol.classList).toContain('flex');
-    expect(ol.classList).toContain('flex-wrap');
-    expect(ol.classList).toContain('items-center');
-    expect(ol.classList).toContain('gap-1.5');
-    expect(ol.classList).toContain('break-words');
+    expect(ol).toHaveClass('text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word');
   });
 
   it('should have default classes for ZardBreadcrumbItemComponent', () => {
     const breadcrumItemDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbItemComponent));
     const li = breadcrumItemDebug.nativeElement.querySelector('li');
-    expect(li.classList).toContain('inline-flex');
-    expect(li.classList).toContain('items-center');
-    expect(li.classList).toContain('gap-1.5');
+    expect(li).toHaveClass('inline-flex items-center gap-1.5');
   });
 
   it('should have default classes for ZardBreadcrumbEllipsisComponent', () => {
     const breadcrumDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent)).nativeElement;
-    expect(breadcrumDebug.classList).toContain('flex');
+    expect(breadcrumDebug).toHaveClass('flex');
   });
 
   it('should render projected content correctly', () => {
@@ -130,8 +126,8 @@ describe('BreadcrumbComponents Integration', () => {
 describe('BreadcrumbComponent - Custom Separator', () => {
   @Component({
     selector: 'test-separator-component',
-    standalone: true,
     imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
+    standalone: true,
     template: `
       <z-breadcrumb [zSeparator]="separator">
         <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
@@ -146,7 +142,7 @@ describe('BreadcrumbComponent - Custom Separator', () => {
   })
   class TestSeparatorComponent {
     @ViewChild('customTemplate', { static: true }) customTemplate!: TemplateRef<void>;
-    separator: string | TemplateRef<void> | null = null;
+    separator: string | TemplateRef<void> = '';
   }
 
   let fixture: ComponentFixture<TestSeparatorComponent>;
@@ -175,13 +171,15 @@ describe('BreadcrumbComponent - Custom Separator', () => {
     component.separator = component.customTemplate;
     fixture.detectChanges();
 
-    const separators = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] .custom-separator'));
+    const separators = fixture.debugElement.queryAll(
+      By.css('li[aria-hidden="true"][role="presentation"] .custom-separator'),
+    );
     expect(separators.length).toBe(2); // 3 items = 2 separators
     expect(separators[0].nativeElement.textContent.trim()).toBe('→');
   });
 
   it('should render default chevron when zSeparator is null', () => {
-    component.separator = null;
+    component.separator = '';
     fixture.detectChanges();
 
     const chevrons = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] z-icon'));
@@ -193,13 +191,17 @@ describe('BreadcrumbComponent - Custom Separator', () => {
     component.separator = '/';
     fixture.detectChanges();
 
-    let separatorText = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"]')).nativeElement.textContent.trim();
+    let separatorText = fixture.debugElement
+      .query(By.css('li[aria-hidden="true"][role="presentation"]'))
+      .nativeElement.textContent.trim();
     expect(separatorText).toBe('/');
 
     component.separator = '>';
     fixture.detectChanges();
 
-    separatorText = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"]')).nativeElement.textContent.trim();
+    separatorText = fixture.debugElement
+      .query(By.css('li[aria-hidden="true"][role="presentation"]'))
+      .nativeElement.textContent.trim();
     expect(separatorText).toBe('>');
   });
 });
@@ -207,8 +209,8 @@ describe('BreadcrumbComponent - Custom Separator', () => {
 describe('BreadcrumbComponent - Alignment and Wrapping', () => {
   @Component({
     selector: 'test-alignment-component',
-    standalone: true,
     imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
+    standalone: true,
     template: `
       <z-breadcrumb [zAlign]="align" [zWrap]="wrap">
         <z-breadcrumb-item>Home</z-breadcrumb-item>
@@ -274,8 +276,8 @@ describe('BreadcrumbComponent - Alignment and Wrapping', () => {
 describe('BreadcrumbComponent - Size Variants', () => {
   @Component({
     selector: 'test-size-component',
-    standalone: true,
     imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
+    standalone: true,
     template: `
       <z-breadcrumb [zSize]="size">
         <z-breadcrumb-item>Home</z-breadcrumb-item>
@@ -327,8 +329,8 @@ describe('BreadcrumbComponent - Size Variants', () => {
 describe('BreadcrumbEllipsisComponent - Color Variants', () => {
   @Component({
     selector: 'test-ellipsis-component',
-    standalone: true,
     imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent],
+    standalone: true,
     template: `
       <z-breadcrumb>
         <z-breadcrumb-item>Home</z-breadcrumb-item>

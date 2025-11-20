@@ -1,6 +1,6 @@
+import { ZardDemoSwitchDefaultComponent } from './default';
 import { ZardDemoSwitchDestructiveComponent } from './destructive';
 import { ZardDemoSwitchDisabledComponent } from './disabled';
-import { ZardDemoSwitchDefaultComponent } from './default';
 import { ZardDemoSwitchSizeComponent } from './size';
 
 export const SWITCH = {

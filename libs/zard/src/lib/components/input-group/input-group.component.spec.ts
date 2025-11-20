@@ -3,42 +3,25 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardInputGroupComponent } from './input-group.component';
 import { ZardInputDirective } from '../input/input.directive';
-import { inputVariants } from '../input/input.variants';
+import { inputVariants, type ZardInputSizeVariants } from '../input/input.variants';
 
 @Component({
-  standalone: true,
   imports: [ZardInputGroupComponent, ZardInputDirective],
+  standalone: true,
   template: `
     <ng-template #customTemplate>Custom Template</ng-template>
-    <z-input-group
-      [zSize]="size"
-      [zDisabled]="disabled"
-      [zBorderless]="borderless"
-      [zAddOnBefore]="addOnBefore"
-      [zAddOnAfter]="addOnAfter"
-      [zPrefix]="prefix"
-      [zSuffix]="suffix"
-      [zAriaLabel]="ariaLabel"
-      [zAriaLabelledBy]="ariaLabelledBy"
-      [zAriaDescribedBy]="ariaDescribedBy"
-    >
+    <z-input-group [zSize]="size" [zDisabled]="disabled" [zAddonBefore]="addonBefore" [zAddonAfter]="addonAfter">
       <input z-input type="text" placeholder="Test input" />
     </z-input-group>
   `,
 })
 class TestHostComponent {
-  @ViewChild('customTemplate', { static: true }) customTemplate!: TemplateRef<any>;
+  @ViewChild('customTemplate', { static: true }) customTemplate!: TemplateRef<void>;
 
-  size: 'sm' | 'default' | 'lg' = 'default';
+  size: ZardInputSizeVariants = 'default';
   disabled = false;
-  borderless = false;
-  addOnBefore: string | TemplateRef<any> | undefined;
-  addOnAfter: string | TemplateRef<any> | undefined;
-  prefix: string | TemplateRef<any> | undefined;
-  suffix: string | TemplateRef<any> | undefined;
-  ariaLabel?: string;
-  ariaLabelledBy?: string;
-  ariaDescribedBy?: string;
+  addonBefore: string | TemplateRef<void> = '';
+  addonAfter: string | TemplateRef<void> = '';
 }
 
 describe('ZardInputGroupComponent', () => {
@@ -67,7 +50,6 @@ describe('ZardInputGroupComponent', () => {
     it('should have default values', () => {
       expect(component.zSize()).toBe('default');
       expect(component.zDisabled()).toBe(false);
-      expect(component.zBorderless()).toBe(false);
     });
   });
 
@@ -79,24 +61,15 @@ describe('ZardInputGroupComponent', () => {
     });
 
     it('should handle size variants', () => {
-      const sizes: Array<'sm' | 'default' | 'lg'> = ['sm', 'default', 'lg'];
+      const sizes: Array<ZardInputSizeVariants> = ['sm', 'default', 'lg'];
 
       sizes.forEach(size => {
         hostComponent.size = size;
         hostFixture.detectChanges();
 
         const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-        expect(wrapper.className).toContain(size === 'sm' ? 'h-9' : size === 'lg' ? 'h-11' : 'h-10');
+        expect(wrapper.className).toContain(size === 'sm' ? 'h-8' : size === 'lg' ? 'h-10' : 'h-9');
       });
-    });
-
-    it('should apply borderless styles', () => {
-      hostComponent.borderless = true;
-      hostFixture.detectChanges();
-
-      const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      // Check for borderless-related styles based on your variants
-      expect(wrapper).toBeTruthy();
     });
 
     it('should apply disabled state', () => {
@@ -116,7 +89,7 @@ describe('ZardInputGroupComponent', () => {
     });
 
     it('should render addon before with string', () => {
-      hostComponent.addOnBefore = 'https://';
+      hostComponent.addonBefore = 'https://';
       hostFixture.detectChanges();
 
       const addon = hostFixture.debugElement.nativeElement.querySelector('[id*="addon-before"]');
@@ -127,7 +100,7 @@ describe('ZardInputGroupComponent', () => {
     });
 
     it('should render addon after with string', () => {
-      hostComponent.addOnAfter = '.com';
+      hostComponent.addonAfter = '.com';
       hostFixture.detectChanges();
 
       const addon = hostFixture.debugElement.nativeElement.querySelector('[id*="addon-after"]');
@@ -138,7 +111,7 @@ describe('ZardInputGroupComponent', () => {
     });
 
     it('should render addon before with template', () => {
-      hostComponent.addOnBefore = hostComponent.customTemplate;
+      hostComponent.addonBefore = hostComponent.customTemplate;
       hostFixture.detectChanges();
 
       const addon = hostFixture.debugElement.nativeElement.querySelector('[id*="addon-before"]');
@@ -147,8 +120,8 @@ describe('ZardInputGroupComponent', () => {
     });
 
     it('should handle both addons together', () => {
-      hostComponent.addOnBefore = 'Before';
-      hostComponent.addOnAfter = 'After';
+      hostComponent.addonBefore = 'Before';
+      hostComponent.addonAfter = 'After';
       hostFixture.detectChanges();
 
       const beforeAddon = hostFixture.debugElement.nativeElement.querySelector('[id*="addon-before"]');
@@ -168,133 +141,6 @@ describe('ZardInputGroupComponent', () => {
     });
   });
 
-  describe('Affix Elements', () => {
-    beforeEach(() => {
-      hostFixture = TestBed.createComponent(TestHostComponent);
-      hostComponent = hostFixture.componentInstance;
-    });
-
-    it('should render prefix with string', () => {
-      hostComponent.prefix = '$';
-      hostFixture.detectChanges();
-
-      const prefix = hostFixture.debugElement.nativeElement.querySelector('[id*="prefix"]');
-      expect(prefix).toBeTruthy();
-      expect(prefix.textContent.trim()).toBe('$');
-      expect(prefix.className).toContain('left-0');
-      expect(prefix.className).toContain('pl-3');
-      expect(prefix.getAttribute('aria-hidden')).toBe('true');
-    });
-
-    it('should render suffix with string', () => {
-      hostComponent.suffix = 'USD';
-      hostFixture.detectChanges();
-
-      const suffix = hostFixture.debugElement.nativeElement.querySelector('[id*="suffix"]');
-      expect(suffix).toBeTruthy();
-      expect(suffix.textContent.trim()).toBe('USD');
-      expect(suffix.className).toContain('right-0');
-      expect(suffix.className).toContain('pr-3');
-      expect(suffix.getAttribute('aria-hidden')).toBe('true');
-    });
-
-    it('should render prefix with template', () => {
-      hostComponent.prefix = hostComponent.customTemplate;
-      hostFixture.detectChanges();
-
-      const prefix = hostFixture.debugElement.nativeElement.querySelector('[id*="prefix"]');
-      expect(prefix).toBeTruthy();
-      expect(prefix.textContent.trim()).toBe('Custom Template');
-    });
-
-    it('should adjust input padding for prefix', () => {
-      hostComponent.prefix = '$';
-      hostComponent.size = 'default';
-      hostFixture.detectChanges();
-
-      const inputWrapper = hostFixture.debugElement.nativeElement.querySelector('.relative');
-      expect(inputWrapper.className).toContain('pl-8');
-    });
-
-    it('should adjust input padding for suffix', () => {
-      hostComponent.suffix = 'USD';
-      hostComponent.size = 'default';
-      hostFixture.detectChanges();
-
-      const inputWrapper = hostFixture.debugElement.nativeElement.querySelector('.relative');
-      expect(inputWrapper.className).toContain('pr-14');
-    });
-
-    it('should handle both prefix and suffix together', () => {
-      hostComponent.prefix = '$';
-      hostComponent.suffix = 'USD';
-      hostComponent.size = 'default';
-      hostFixture.detectChanges();
-
-      const inputWrapper = hostFixture.debugElement.nativeElement.querySelector('.relative');
-      expect(inputWrapper.className).toContain('pl-8');
-      expect(inputWrapper.className).toContain('pr-14');
-    });
-  });
-
-  describe('Accessibility', () => {
-    beforeEach(() => {
-      hostFixture = TestBed.createComponent(TestHostComponent);
-      hostComponent = hostFixture.componentInstance;
-    });
-
-    it('should set proper role attribute', () => {
-      hostFixture.detectChanges();
-
-      const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      expect(wrapper).toBeTruthy();
-    });
-
-    it('should handle aria-label', () => {
-      hostComponent.ariaLabel = 'Test input group';
-      hostFixture.detectChanges();
-
-      const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      expect(wrapper.getAttribute('aria-label')).toBe('Test input group');
-    });
-
-    it('should handle aria-labelledby', () => {
-      hostComponent.ariaLabelledBy = 'label-id';
-      hostFixture.detectChanges();
-
-      const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      expect(wrapper.getAttribute('aria-labelledby')).toBe('label-id');
-    });
-
-    it('should handle aria-describedby', () => {
-      hostComponent.ariaDescribedBy = 'desc-id';
-      hostFixture.detectChanges();
-
-      const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      expect(wrapper.getAttribute('aria-describedby')).toBe('desc-id');
-    });
-
-    it('should set aria-disabled when disabled', () => {
-      hostComponent.disabled = true;
-      hostFixture.detectChanges();
-
-      const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      expect(wrapper.getAttribute('aria-disabled')).toBe('true');
-    });
-
-    it('should set aria-hidden on affix elements', () => {
-      hostComponent.prefix = '$';
-      hostComponent.suffix = 'USD';
-      hostFixture.detectChanges();
-
-      const prefix = hostFixture.debugElement.nativeElement.querySelector('[id*="prefix"]');
-      const suffix = hostFixture.debugElement.nativeElement.querySelector('[id*="suffix"]');
-
-      expect(prefix.getAttribute('aria-hidden')).toBe('true');
-      expect(suffix.getAttribute('aria-hidden')).toBe('true');
-    });
-  });
-
   describe('Size Variations', () => {
     beforeEach(() => {
       hostFixture = TestBed.createComponent(TestHostComponent);
@@ -306,7 +152,7 @@ describe('ZardInputGroupComponent', () => {
       hostFixture.detectChanges();
 
       const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      expect(wrapper.className).toContain('h-9');
+      expect(wrapper.className).toContain('h-8');
     });
 
     it('should apply correct height for large size', () => {
@@ -314,27 +160,17 @@ describe('ZardInputGroupComponent', () => {
       hostFixture.detectChanges();
 
       const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
-      expect(wrapper.className).toContain('h-11');
+      expect(wrapper.className).toContain('h-10');
     });
 
     it('should adjust addon size based on group size', () => {
-      hostComponent.addOnBefore = 'Test';
+      hostComponent.addonBefore = 'Test';
       hostComponent.size = 'sm';
       hostFixture.detectChanges();
 
       const addon = hostFixture.debugElement.nativeElement.querySelector('[id*="addon-before"]');
-      expect(addon.className).toContain('h-9');
-      expect(addon.className).toContain('px-3');
+      expect(addon.className).toContain('h-7.5');
       expect(addon.className).toContain('text-xs');
-    });
-
-    it('should adjust affix size based on group size', () => {
-      hostComponent.prefix = '$';
-      hostComponent.size = 'lg';
-      hostFixture.detectChanges();
-
-      const prefix = hostFixture.debugElement.nativeElement.querySelector('[id*="prefix"]');
-      expect(prefix.className).toContain('text-base');
     });
   });
 
@@ -346,37 +182,23 @@ describe('ZardInputGroupComponent', () => {
 
     it('should handle all props together', () => {
       hostComponent.size = 'lg';
-      hostComponent.borderless = true;
       hostComponent.disabled = true;
-      hostComponent.addOnBefore = 'https://';
-      hostComponent.addOnAfter = '.com';
-      hostComponent.prefix = 'www.';
-      hostComponent.suffix = '/path';
-      hostComponent.ariaLabel = 'Complex input group';
+      hostComponent.addonBefore = 'https://';
+      hostComponent.addonAfter = '.com';
       hostFixture.detectChanges();
 
       const wrapper = hostFixture.debugElement.nativeElement.querySelector('[role="group"]');
       const beforeAddon = hostFixture.debugElement.nativeElement.querySelector('[id*="addon-before"]');
       const afterAddon = hostFixture.debugElement.nativeElement.querySelector('[id*="addon-after"]');
-      const prefix = hostFixture.debugElement.nativeElement.querySelector('[id*="prefix"]');
-      const suffix = hostFixture.debugElement.nativeElement.querySelector('[id*="suffix"]');
 
       // Check wrapper
-      expect(wrapper.className).toContain('h-11'); // lg size
-      expect(wrapper.getAttribute('aria-label')).toBe('Complex input group');
-      expect(wrapper.getAttribute('aria-disabled')).toBe('true');
+      expect(wrapper.className).toContain('h-10'); // lg size
 
       // Check addons
       expect(beforeAddon).toBeTruthy();
       expect(afterAddon).toBeTruthy();
       expect(beforeAddon.textContent.trim()).toBe('https://');
       expect(afterAddon.textContent.trim()).toBe('.com');
-
-      // Check affixes
-      expect(prefix).toBeTruthy();
-      expect(suffix).toBeTruthy();
-      expect(prefix.textContent.trim()).toBe('www.');
-      expect(suffix.textContent.trim()).toBe('/path');
     });
 
     it('should handle input-only scenario', () => {
@@ -401,20 +223,14 @@ describe('ZardInputGroupComponent', () => {
     it('should generate unique IDs', () => {
       fixture.detectChanges();
 
-      const id1 = component['addonBeforeId']();
-      const id2 = component['addonAfterId']();
-      const id3 = component['prefixId']();
-      const id4 = component['suffixId']();
+      const id1 = component['addonBeforeId'];
+      const id2 = component['addonAfterId'];
 
       expect(id1).toMatch(/input-group-.*-addon-before/);
       expect(id2).toMatch(/input-group-.*-addon-after/);
-      expect(id3).toMatch(/input-group-.*-prefix/);
-      expect(id4).toMatch(/input-group-.*-suffix/);
 
       // IDs should be unique
       expect(id1).not.toBe(id2);
-      expect(id1).not.toBe(id3);
-      expect(id1).not.toBe(id4);
     });
 
     it('should compute wrapper classes correctly', () => {
@@ -422,14 +238,13 @@ describe('ZardInputGroupComponent', () => {
       fixture.componentRef.setInput('zDisabled', true);
       fixture.detectChanges();
 
-      const classes = component['wrapperClasses']();
-      expect(classes).toContain('h-11');
+      const classes = component['inputWrapperClasses']();
+      expect(classes).toContain('h-9.5');
     });
   });
 });
 
 describe('ZardInputDirective', () => {
-  let directive: ZardInputDirective;
   let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(async () => {

@@ -1,5 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ZardCalendarComponent, CalendarDay } from './calendar.component';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { ZardCalendarComponent, type CalendarDay } from './calendar.component';
 import { isSameDay, isDateDisabled, getDayAriaLabel, generateCalendarDays } from './calendar.utils';
 
 describe('ZardCalendarComponent', () => {

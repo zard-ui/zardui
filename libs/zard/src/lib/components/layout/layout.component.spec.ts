@@ -29,11 +29,11 @@ describe('LayoutComponent', () => {
 
   it('should auto-detect horizontal direction when sidebar is present', async () => {
     @Component({
-      standalone: true,
       imports: [LayoutComponent, SidebarComponent],
+      standalone: true,
       template: `
         <z-layout>
-          <z-sidebar></z-sidebar>
+          <z-sidebar />
         </z-layout>
       `,
     })
@@ -65,8 +65,8 @@ describe('LayoutComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      standalone: true,
       imports: [LayoutComponent],
+      standalone: true,
       template: `<z-layout>Test Content</z-layout>`,
     })
     class TestHostComponent {}

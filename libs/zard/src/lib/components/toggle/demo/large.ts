@@ -5,8 +5,8 @@ import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
   selector: 'z-demo-toggle-large',
-  standalone: true,
   imports: [ZardToggleComponent, ZardIconComponent],
+  standalone: true,
   template: `
     <z-toggle aria-label="Toggle large" zSize="lg">
       <z-icon zType="bold" />

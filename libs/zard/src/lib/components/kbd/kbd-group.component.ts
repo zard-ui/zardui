@@ -7,14 +7,14 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-kbd-group, [z-kbd-group]',
-  exportAs: 'zKbdGroup',
   standalone: true,
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <ng-content /> `,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zKbdGroup',
 })
 export class ZardKbdGroupComponent {
   readonly class = input<ClassValue>('');

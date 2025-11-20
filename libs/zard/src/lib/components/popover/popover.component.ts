@@ -1,5 +1,3 @@
-import { merge, Subject, takeUntil } from 'rxjs';
-
 import { type ConnectedPosition, Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
@@ -22,8 +20,10 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { merge, Subject, takeUntil } from 'rxjs';
+
 import { popoverVariants } from './popover.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -65,8 +65,8 @@ const POPOVER_POSITIONS_MAP = {
 
 @Directive({
   selector: '[zPopover]',
-  exportAs: 'zPopover',
   standalone: true,
+  exportAs: 'zPopover',
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
@@ -353,13 +353,13 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 
 @Component({
   selector: 'z-popover',
-  standalone: true,
   imports: [],
-  template: `<ng-content></ng-content>`,
+  standalone: true,
+  template: `<ng-content />`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
   },
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardPopoverComponent {
   readonly class = input<string>('');

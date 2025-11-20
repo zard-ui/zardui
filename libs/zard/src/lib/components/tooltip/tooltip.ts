@@ -52,6 +52,9 @@ function throttle(callback: () => void, wait: number) {
 
 @Directive({
   selector: '[zTooltip]',
+  host: {
+    style: 'cursor: pointer',
+  },
   exportAs: 'zTooltip',
 })
 export class ZardTooltipDirective implements OnInit, OnDestroy {
@@ -79,7 +82,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   readonly zShow = output<void>();
   readonly zHide = output<void>();
 
-  private tooltipText = computed<string | TemplateRef<void>>(() => {
+  private readonly tooltipText = computed<string | TemplateRef<void>>(() => {
     let tooltipText = this.zTooltip();
     if (!tooltipText) {
       return '';
@@ -244,6 +247,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
       </svg>
     </span>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
     '[attr.id]': 'tooltipId()',
@@ -251,19 +255,18 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     '[attr.data-state]': 'state()',
     role: 'tooltip',
   },
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardTooltipComponent {
-  protected position = signal<ZardTooltipPositionVariants>('top');
-  protected tooltipText = signal<ZardTooltipType>(null);
+  protected readonly position = signal<ZardTooltipPositionVariants>('top');
+  protected readonly tooltipText = signal<ZardTooltipType>(null);
   protected readonly classes = computed(() => mergeClasses(tooltipVariants()));
   protected readonly arrowClasses = computed(() =>
     mergeClasses(tooltipPositionVariants({ position: this.position() })),
   );
 
-  protected tooltipId = signal('');
+  protected readonly tooltipId = signal('');
 
-  state = signal<'closed' | 'opened'>('closed');
+  readonly state = signal<'closed' | 'opened'>('closed');
 
   setProps(tooltipText: ZardTooltipType, position: ZardTooltipPositionVariants, tooltipId = '') {
     if (tooltipText) {

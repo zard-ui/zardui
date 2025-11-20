@@ -1,13 +1,21 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardPaginationComponent } from './pagination.component';
 
 @Component({
   selector: 'test-host-component',
-  standalone: true,
   imports: [ZardPaginationComponent],
-  template: ` <z-pagination [zPageIndex]="pageIndex" [zTotal]="totalPages" [zSize]="'default'" (zPageIndexChange)="onPageChange($event)" [class]="customClass"></z-pagination> `,
+  standalone: true,
+  template: `
+    <z-pagination
+      [zPageIndex]="pageIndex"
+      [zTotal]="totalPages"
+      zSize="default"
+      (zPageIndexChange)="onPageChange($event)"
+      [class]="customClass"
+    />
+  `,
 })
 class TestHostComponent {
   pageIndex = 1;

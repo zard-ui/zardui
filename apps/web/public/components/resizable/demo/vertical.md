@@ -7,8 +7,8 @@ import { ZardResizableComponent } from '../resizable.component';
 
 @Component({
   selector: 'z-demo-resizable-vertical',
-  standalone: true,
   imports: [ZardResizableComponent, ZardResizablePanelComponent, ZardResizableHandleComponent],
+  standalone: true,
   template: `
     <z-resizable zLayout="vertical" class="h-[400px] w-[500px] max-w-md rounded-lg border">
       <z-resizable-panel [zDefaultSize]="25">

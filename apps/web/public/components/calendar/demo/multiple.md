@@ -5,8 +5,8 @@ import { ZardCalendarComponent } from '../calendar.component';
 
 @Component({
   selector: 'z-demo-calendar-multiple',
-  standalone: true,
   imports: [ZardCalendarComponent],
+  standalone: true,
   template: `
     <div class="space-y-4">
       <z-calendar zMode="multiple" [(value)]="selectedDates" (dateChange)="onDateChange($event)" />
@@ -18,7 +18,7 @@ import { ZardCalendarComponent } from '../calendar.component';
   `,
 })
 export class ZardDemoCalendarMultipleComponent {
-  selectedDates = signal<Date[] | null>(null);
+  readonly selectedDates = signal<Date[] | null>(null);
 
   onDateChange(dates: Date | Date[]) {
     console.log('Selected dates:', dates);

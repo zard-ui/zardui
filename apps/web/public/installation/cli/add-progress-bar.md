@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add progress-bar
+npx @ngzard/ui@latest add progress-bar
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui add progress-bar
+pnpm dlx @ngzard/ui@latest add progress-bar
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui add progress-bar
+yarn dlx @ngzard/ui@latest add progress-bar
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui add progress-bar
+bunx @ngzard/ui@latest add progress-bar
 ```

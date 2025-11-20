@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add segmented
+npx @ngzard/ui@latest add segmented
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui add segmented
+pnpm dlx @ngzard/ui@latest add segmented
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui add segmented
+yarn dlx @ngzard/ui@latest add segmented
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui add segmented
+bunx @ngzard/ui@latest add segmented
 ```

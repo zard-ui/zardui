@@ -6,8 +6,8 @@ import { ZardCommandOptionGroupComponent } from './command-option-group.componen
 
 @Component({
   selector: 'test-host-component',
-  standalone: true,
   imports: [ZardCommandOptionGroupComponent],
+  standalone: true,
   template: `
     <z-command-option-group zLabel="Test Group" class="custom-class">
       <div>Content</div>

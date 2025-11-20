@@ -56,8 +56,8 @@ describe('HeaderComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      standalone: true,
       imports: [HeaderComponent],
+      standalone: true,
       template: `<z-header>Test Header Content</z-header>`,
     })
     class TestHostComponent {}

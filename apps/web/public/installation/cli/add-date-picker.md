@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add date-picker
+npx @ngzard/ui@latest add date-picker
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui add date-picker
+pnpm dlx @ngzard/ui@latest add date-picker
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui add date-picker
+yarn dlx @ngzard/ui@latest add date-picker
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui add date-picker
+bunx @ngzard/ui@latest add date-picker
 ```

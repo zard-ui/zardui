@@ -4,8 +4,8 @@ import { ZardIconComponent } from '../icon.component';
 
 @Component({
   selector: 'z-demo-icon-stroke-width',
-  standalone: true,
   imports: [ZardIconComponent],
+  standalone: true,
   template: `
     <div class="flex items-center gap-6">
       <div class="flex flex-col items-center gap-2">

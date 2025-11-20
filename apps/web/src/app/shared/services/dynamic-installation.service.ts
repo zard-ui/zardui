@@ -80,7 +80,7 @@ export class DynamicInstallationService {
   }
 
   private checkIfComponentHasDependencies(componentName: string): boolean {
-    const componentsWithDeps = ['toast'];
+    const componentsWithDeps = ['toast', 'carousel'];
     return componentsWithDeps.includes(componentName);
   }
 

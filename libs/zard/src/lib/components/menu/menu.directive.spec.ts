@@ -6,11 +6,13 @@ import { By } from '@angular/platform-browser';
 import { ZardMenuDirective } from './menu.directive';
 
 @Component({
+  imports: [ZardMenuDirective],
   template: `
-    <button z-menu [zMenuTriggerFor]="menuPanel" [zDisabled]="disabled" [zTrigger]="trigger" [zHoverDelay]="hoverDelay">Trigger</button>
+    <button z-menu [zMenuTriggerFor]="menuPanel" [zDisabled]="disabled" [zTrigger]="trigger" [zHoverDelay]="hoverDelay">
+      Trigger
+    </button>
     <div #menuPanel></div>
   `,
-  imports: [ZardMenuDirective],
 })
 class TestComponent {
   disabled = false;
@@ -173,7 +175,9 @@ describe('ZardMenuDirective', () => {
     mockMenuElement.setAttribute('z-menu-content', '');
     mockOverlayPane.appendChild(mockMenuElement);
 
-    jest.spyOn(directive['elementRef'].nativeElement, 'contains').mockImplementation(element => element === mockTriggerElement);
+    jest
+      .spyOn(directive['elementRef'].nativeElement, 'contains')
+      .mockImplementation(element => element === mockTriggerElement);
 
     expect(directive['shouldKeepMenuOpen'](null)).toBe(false);
     expect(directive['shouldKeepMenuOpen'](mockTriggerElement)).toBe(true);

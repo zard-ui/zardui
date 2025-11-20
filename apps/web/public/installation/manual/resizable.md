@@ -1,8 +1,7 @@
 
 
 ```angular-ts title="resizable.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
+import { isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
   ChangeDetectionStrategy,
@@ -20,11 +19,12 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 export interface ZardResizeEvent {
   sizes: number[];
@@ -35,15 +35,15 @@ type CleanupFunction = () => void;
 
 @Component({
   selector: 'z-resizable, [z-resizable]',
-  exportAs: 'zResizable',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content></ng-content>`,
   host: {
     '[class]': 'classes()',
     '[attr.data-layout]': 'zLayout()',
   },
+  exportAs: 'zResizable',
 })
 export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
@@ -63,7 +63,9 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   readonly panelSizes = signal<number[]>([]);
   protected readonly isResizing = signal(false);
   protected readonly activeHandleIndex = signal<number | null>(null);
-  protected readonly classes = computed(() => mergeClasses(resizableVariants({ zLayout: this.zLayout() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(resizableVariants({ zLayout: this.zLayout() }), this.class()),
+  );
 
   ngAfterContentInit(): void {
     this.initializePanelSizes();
@@ -151,7 +153,12 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     }
   }
 
-  private handleResize(event: MouseEvent | TouchEvent, handleIndex: number, startPosition: number, startSizes: number[]): void {
+  private handleResize(
+    event: MouseEvent | TouchEvent,
+    handleIndex: number,
+    startPosition: number,
+    startSizes: number[],
+  ): void {
     const currentPosition = this.getEventPosition(event);
     const delta = currentPosition - startPosition;
     const containerSize = this.getContainerSize();
@@ -335,8 +342,10 @@ export const resizableHandleVariants = cva(
   {
     variants: {
       zLayout: {
-        horizontal: 'w-[1px] min-w-[1px] cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2',
-        vertical: 'h-[1px] min-h-[1px] w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-4 after:-translate-y-1/2',
+        horizontal:
+          'w-[1px] min-w-[1px] cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2',
+        vertical:
+          'h-[1px] min-h-[1px] w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-4 after:-translate-y-1/2',
       },
       zDisabled: {
         true: 'cursor-default pointer-events-none opacity-50',
@@ -350,17 +359,20 @@ export const resizableHandleVariants = cva(
   },
 );
 
-export const resizableHandleIndicatorVariants = cva('absolute z-10 bg-muted-foreground/30 transition-colors group-hover:bg-muted-foreground/50 rounded-full', {
-  variants: {
-    zLayout: {
-      vertical: 'w-8 h-px',
-      horizontal: 'w-px h-8',
+export const resizableHandleIndicatorVariants = cva(
+  'absolute z-10 bg-muted-foreground/30 transition-colors group-hover:bg-muted-foreground/50 rounded-full',
+  {
+    variants: {
+      zLayout: {
+        vertical: 'w-8 h-px',
+        horizontal: 'w-px h-8',
+      },
+    },
+    defaultVariants: {
+      zLayout: 'horizontal',
     },
   },
-  defaultVariants: {
-    zLayout: 'horizontal',
-  },
-});
+);
 
 export type ZardResizableVariants = VariantProps<typeof resizableVariants>;
 export type ZardResizablePanelVariants = VariantProps<typeof resizablePanelVariants>;
@@ -381,25 +393,24 @@ export * from './resizable.variants';
 
 
 ```angular-ts title="resizable-handle.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardResizableComponent } from './resizable.component';
 import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-resizable-handle, [z-resizable-handle]',
-  exportAs: 'zResizableHandle',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     @if (zWithHandle()) {
       <div [class]="handleClasses()"></div>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[attr.data-layout]': 'layout()',
@@ -411,6 +422,7 @@ import { resizableHandleIndicatorVariants, resizableHandleVariants } from './res
     '(touchstart)': 'handleTouchStart($event)',
     '(keydown)': 'handleKeyDown($event)',
   },
+  exportAs: 'zResizableHandle',
 })
 export class ZardResizableHandleComponent {
   private readonly resizable = inject(ZardResizableComponent, { optional: true });
@@ -573,7 +585,12 @@ export class ZardResizableHandleComponent {
     });
   }
 
-  private normalizeMinMax(leftMin: number, leftMax: number, rightMin: number, rightMax: number): { leftMin: number; leftMax: number; rightMin: number; rightMax: number } {
+  private normalizeMinMax(
+    leftMin: number,
+    leftMax: number,
+    rightMin: number,
+    rightMax: number,
+  ): { leftMin: number; leftMax: number; rightMin: number; rightMax: number } {
     if (leftMax < leftMin) {
       const temp = leftMax;
       leftMax = leftMin;
@@ -595,24 +612,32 @@ export class ZardResizableHandleComponent {
 
 
 ```angular-ts title="resizable-panel.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, ViewEncapsulation } from '@angular/core';
-
-import { mergeClasses, transform } from '../../shared/utils/utils';
 import { resizablePanelVariants } from './resizable.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-resizable-panel',
-  exportAs: 'zResizablePanel',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content></ng-content>`,
   host: {
     '[class]': 'classes()',
     '[attr.data-collapsed]': 'isCollapsed()',
   },
+  exportAs: 'zResizablePanel',
 })
 export class ZardResizablePanelComponent {
   readonly elementRef = inject(ElementRef);
@@ -631,7 +656,9 @@ export class ZardResizablePanelComponent {
     return width === 0 || height === 0;
   });
 
-  protected readonly classes = computed(() => mergeClasses(resizablePanelVariants({ zCollapsed: this.isCollapsed() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(resizablePanelVariants({ zCollapsed: this.isCollapsed() }), this.class()),
+  );
 }
 
 ```

@@ -17,8 +17,6 @@
       "@doc/widget/*": ["apps/web/src/app/widget/*"]
     }
   },
-  "files": [],
-  "include": [],
   "references": [
     {
       "path": "./tsconfig.editor.json"

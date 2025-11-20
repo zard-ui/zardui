@@ -5,8 +5,8 @@ import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
   selector: 'z-demo-toggle-with-default',
-  standalone: true,
   imports: [ZardToggleComponent, ZardIconComponent],
+  standalone: true,
   template: `
     <z-toggle aria-label="With default" [zDefault]="true">
       <z-icon zType="bold" />

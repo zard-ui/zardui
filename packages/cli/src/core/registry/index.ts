@@ -1,4 +1,4 @@
-import { ComponentRegistry, registry } from './registry-data';
+import { ComponentRegistry, registry } from './registry-data.js';
 
 export type { ComponentRegistry };
 export { registry };

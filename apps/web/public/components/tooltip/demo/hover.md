@@ -6,7 +6,6 @@ import { ZardTooltipModule } from '../tooltip';
 
 @Component({
   selector: 'z-demo-tooltip-hover',
-  standalone: true,
   imports: [ZardButtonComponent, ZardTooltipModule],
   template: ` <button type="button" z-button zType="outline" zTooltip="Tooltip content">Hover</button> `,
 })

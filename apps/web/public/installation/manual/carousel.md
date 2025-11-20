@@ -2,13 +2,28 @@
 
 ```angular-ts title="carousel.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, signal, ViewEncapsulation, output, computed, viewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  signal,
+  ViewEncapsulation,
+  output,
+  computed,
+  viewChild,
+} from '@angular/core';
 
 import { type ClassValue } from 'clsx';
 import type { EmblaCarouselType, EmblaEventType, EmblaPluginType, EmblaOptionsType } from 'embla-carousel';
 import { EmblaCarouselDirective } from 'embla-carousel-angular';
 
-import { carouselNextButtonVariants, carouselPreviousButtonVariants, carouselVariants } from './carousel.variants';
+import {
+  carouselNextButtonVariants,
+  carouselPreviousButtonVariants,
+  carouselVariants,
+  ZardCarouselControlsVariants,
+  ZardCarouselOrientationVariants,
+} from './carousel.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -30,22 +45,38 @@ import { ZardIconComponent } from '../icon/icon.component';
         role="region"
         tabindex="0"
       >
-        <ng-content></ng-content>
+        <ng-content />
 
         @let controls = zControls();
         @if (controls === 'button') {
-          <ng-container *ngTemplateOutlet="buttonControls"></ng-container>
+          <ng-container *ngTemplateOutlet="buttonControls" />
         } @else if (controls === 'dot') {
-          <ng-container *ngTemplateOutlet="dotControls"></ng-container>
+          <ng-container *ngTemplateOutlet="dotControls" />
         }
       </div>
     </div>
 
     <ng-template #buttonControls>
-      <button z-button zType="outline" [class]="prevBtnClasses()" [disabled]="!canScrollPrev()" (click)="slidePrevious()" aria-label="Previous slide">
+      <button
+        type="button"
+        z-button
+        zType="outline"
+        [class]="prevBtnClasses()"
+        [disabled]="!canScrollPrev()"
+        (click)="slidePrevious()"
+        aria-label="Previous slide"
+      >
         <z-icon zType="chevron-left" class="size-4" />
       </button>
-      <button z-button zType="outline" [class]="nextBtnClasses()" [disabled]="!canScrollNext()" (click)="slideNext()" aria-label="Next slide">
+      <button
+        type="button"
+        z-button
+        zType="outline"
+        [class]="nextBtnClasses()"
+        [disabled]="!canScrollNext()"
+        (click)="slideNext()"
+        aria-label="Next slide"
+      >
         <z-icon zType="chevron-right" class="size-4" />
       </button>
     </ng-template>
@@ -53,7 +84,12 @@ import { ZardIconComponent } from '../icon/icon.component';
     <ng-template #dotControls>
       <div class="mt-2 flex justify-center gap-1">
         @for (dot of dots(); track index; let index = $index) {
-          <span [class]="index === selectedIndex() ? 'cursor-default' : 'cursor-pointer'" role="button" tabindex="0" (click)="goTo(index)">
+          <span
+            [class]="index === selectedIndex() ? 'cursor-default' : 'cursor-pointer'"
+            role="button"
+            tabindex="0"
+            (click)="goTo(index)"
+          >
             <z-icon
               zType="circle-small"
               [zStrokeWidth]="1"
@@ -65,9 +101,9 @@ import { ZardIconComponent } from '../icon/icon.component';
       </div>
     </ng-template>
   `,
-  host: { '(keydown)': 'handleKeyDown($event)' },
-  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: { '(keydown)': 'handleKeyDown($event)' },
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);
@@ -76,8 +112,8 @@ export class ZardCarouselComponent {
   readonly class = input<ClassValue>('');
   readonly zOptions = input<EmblaOptionsType>({ loop: false });
   readonly zPlugins = input<EmblaPluginType[]>([]);
-  readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
-  readonly zControls = input<'button' | 'dot' | 'none'>('button');
+  readonly zOrientation = input<ZardCarouselOrientationVariants>('horizontal');
+  readonly zControls = input<ZardCarouselControlsVariants>('button');
   readonly zInited = output<EmblaCarouselType>();
   readonly zSelected = output<void>();
 
@@ -87,7 +123,10 @@ export class ZardCarouselComponent {
   protected readonly canScrollNext = signal<boolean>(false);
   protected readonly scrollSnaps = signal<number[]>([]);
   protected readonly subscribeToEvents: EmblaEventType[] = ['init', 'select', 'reInit'];
-  protected readonly options = computed(() => ({ ...this.zOptions(), axis: this.zOrientation() === 'horizontal' ? 'x' : 'y' }) as EmblaOptionsType);
+  protected readonly options = computed(
+    () => ({ ...this.zOptions(), axis: this.zOrientation() === 'horizontal' ? 'x' : 'y' }) as EmblaOptionsType,
+  );
+
   protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
 
   #index = -1;
@@ -149,9 +188,17 @@ export class ZardCarouselComponent {
     this.canScrollNext.set(emblaApi.canScrollNext());
   }
 
-  protected readonly classes = computed(() => mergeClasses(carouselVariants({ zOrientation: this.zOrientation() }), this.class()));
-  protected readonly prevBtnClasses = computed(() => mergeClasses(carouselPreviousButtonVariants({ zOrientation: this.zOrientation() })));
-  protected readonly nextBtnClasses = computed(() => mergeClasses(carouselNextButtonVariants({ zOrientation: this.zOrientation() })));
+  protected readonly classes = computed(() =>
+    mergeClasses(carouselVariants({ zOrientation: this.zOrientation() }), this.class()),
+  );
+
+  protected readonly prevBtnClasses = computed(() =>
+    mergeClasses(carouselPreviousButtonVariants({ zOrientation: this.zOrientation() })),
+  );
+
+  protected readonly nextBtnClasses = computed(() =>
+    mergeClasses(carouselNextButtonVariants({ zOrientation: this.zOrientation() })),
+  );
 }
 
 ```
@@ -166,6 +213,11 @@ export const carouselVariants = cva('overflow-hidden', {
     zOrientation: {
       horizontal: '',
       vertical: 'h-full',
+    },
+    zControls: {
+      none: '',
+      button: '',
+      dot: '',
     },
   },
   defaultVariants: {
@@ -221,11 +273,8 @@ export const carouselNextButtonVariants = cva('absolute size-8 rounded-full', {
   },
 });
 
-export type ZardCarouselVariants = VariantProps<typeof carouselVariants>;
-export type ZardCarouselContentVariants = VariantProps<typeof carouselContentVariants>;
-export type ZardCarouselItemVariants = VariantProps<typeof carouselItemVariants>;
-export type ZardCarouselPreviousButtonVariants = VariantProps<typeof carouselPreviousButtonVariants>;
-export type ZardCarouselNextButtonVariants = VariantProps<typeof carouselNextButtonVariants>;
+export type ZardCarouselOrientationVariants = NonNullable<VariantProps<typeof carouselVariants>['zOrientation']>;
+export type ZardCarouselControlsVariants = NonNullable<VariantProps<typeof carouselVariants>['zControls']>;
 
 ```
 
@@ -243,18 +292,20 @@ import { mergeClasses } from '../../shared/utils/utils';
 @Component({
   selector: 'z-carousel-content',
   imports: [],
-  template: ` <ng-content></ng-content> `,
+  template: ` <ng-content /> `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
   },
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardCarouselContentComponent {
   readonly #parent = inject(ZardCarouselComponent);
   readonly #orientation = computed<'horizontal' | 'vertical'>(() => this.#parent.zOrientation());
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(carouselContentVariants({ zOrientation: this.#orientation() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(carouselContentVariants({ zOrientation: this.#orientation() }), this.class()),
+  );
 }
 
 ```
@@ -273,21 +324,23 @@ import { mergeClasses } from '../../shared/utils/utils';
 @Component({
   selector: 'z-carousel-item',
   imports: [],
-  template: ` <ng-content></ng-content> `,
+  template: ` <ng-content /> `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     role: 'group',
     'aria-roledescription': 'slide',
   },
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardCarouselItemComponent {
   readonly #parent = inject(ZardCarouselComponent);
 
   readonly #orientation = computed<'horizontal' | 'vertical'>(() => this.#parent.zOrientation());
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(carouselItemVariants({ zOrientation: this.#orientation() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(carouselItemVariants({ zOrientation: this.#orientation() }), this.class()),
+  );
 }
 
 ```
