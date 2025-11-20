@@ -13,11 +13,20 @@ import { ZardCarouselModule } from '../carousel.module';
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <div class="mb-4 flex gap-2">
-        <button z-button zType="outline" (click)="toggleAutoplay()">{{ isAutoplayActive() ? 'Pause' : 'Start' }} Autoplay</button>
-        <button z-button zType="outline" (click)="toggleLoop()">{{ carouselOptions.loop ? 'Disable' : 'Enable' }} Loop</button>
+        <button type="button" z-button zType="outline" (click)="toggleAutoplay()">
+          {{ isAutoplayActive() ? 'Pause' : 'Start' }} Autoplay
+        </button>
+        <button type="button" z-button zType="outline" (click)="toggleLoop()">
+          {{ carouselOptions.loop ? 'Disable' : 'Enable' }} Loop
+        </button>
       </div>
 
-      <z-carousel [zOptions]="carouselOptions" [zPlugins]="plugins" (zInited)="onCarouselInit($event)" (zSelected)="onSlideChange()">
+      <z-carousel
+        [zOptions]="carouselOptions"
+        [zPlugins]="plugins"
+        (zInited)="onCarouselInit($event)"
+        (zSelected)="onSlideChange()"
+      >
         <z-carousel-content>
           @for (slide of slides; track slide) {
             <z-carousel-item>
@@ -54,8 +63,10 @@ export class ZardDemoCarouselPluginsComponent implements OnInit {
 
   ngOnInit(): void {
     // Autoplay by default
-    this.toggleAutoplay();
-    this.isAutoplayActive.set(true);
+    this.toggleAutoplay().catch(err => {
+      console.error('Failed to initialize autoplay:', err);
+      this.isAutoplayActive.set(false);
+    });
   }
 
   onCarouselInit(api: EmblaCarouselType) {
@@ -96,6 +107,7 @@ export class ZardDemoCarouselPluginsComponent implements OnInit {
     });
     this.plugins = [...this.plugins.filter(p => p.name !== 'autoplay'), autoplayPlugin];
   }
+
   private pauseAutoplay(): void {
     this.plugins = this.plugins.filter(p => p.name !== 'autoplay');
   }
