@@ -74,7 +74,7 @@ function createCopyButton(codeContent: string, hasTitle = false): any {
         'items-center',
         'justify-center',
         'rounded-md',
-        hasTitle ?? 'border',
+        !hasTitle && 'border',
         hasTitle ? 'bg-transparent' : 'bg-secondary',
         'text-muted-foreground',
         'transition-all',
@@ -221,7 +221,7 @@ function createCodeTitle(filename: string, icon: string | null, copyButton: bool
         'py-2',
         'text-sm',
         'text-muted-foreground',
-        copyButton ?? 'justify-between',
+        !copyButton && 'justify-between',
       ],
     },
     children: titleChildren,
@@ -230,7 +230,7 @@ function createCodeTitle(filename: string, icon: string | null, copyButton: bool
 
 function extractCodeContent(node: any): string {
   if (node.type === 'text') {
-    return node.value || '';
+    return node.value ?? '';
   }
 
   if (node.children && Array.isArray(node.children)) {
@@ -273,13 +273,13 @@ export function rehypeEnhancedCode() {
 
         // Try to get filename from meta or title attributes
         if (!filename) {
-          const meta = codeNode.data?.meta || '';
+          const meta = codeNode.data?.meta ?? '';
           const titleMatch = meta.match(/title="([^"]+)"/);
           filename = titleMatch ? titleMatch[1] : null;
         }
 
         // Check if showLineNumbers was in the original meta (before rehype-code-titles processing)
-        const originalMeta = codeNode.data?.meta || '';
+        const originalMeta = codeNode.data?.meta ?? '';
         const hasShowLineNumbers = originalMeta.includes('showLineNumbers');
         const hasCopyButton = originalMeta.includes('copyButton');
         const hasTitle = originalMeta.includes('title');
@@ -390,7 +390,7 @@ export function rehypeEnhancedCode() {
           // Add content to wrapper first
           wrapper.children = codeBlockContent.children;
           // Then add the overlay on top
-          const overlay = createExpandableOverlay(expandableTitle || 'View Code');
+          const overlay = createExpandableOverlay(expandableTitle ?? 'View Code');
           wrapper.children.push(overlay);
           // Make wrapper position relative for absolute overlay positioning
           wrapper.properties.class.push('expandable-wrapper');
@@ -422,7 +422,7 @@ export function rehypeCodeTabs() {
 
         if (!codeNode || codeNode.tagName !== 'code') return;
 
-        const meta = codeNode.data?.meta || '';
+        const meta = codeNode.data?.meta ?? '';
         const tabMatch = meta.match(/tab="([^"]+)"/);
 
         if (!tabMatch) return;
@@ -472,7 +472,7 @@ export function rehypeCodeTabs() {
 
           if (!nextCodeNode || nextCodeNode.tagName !== 'code') break;
 
-          const nextMeta = nextCodeNode.data?.meta || '';
+          const nextMeta = nextCodeNode.data?.meta ?? '';
           const nextTabMatch = nextMeta.match(/tab="([^"]+)"/);
 
           if (!nextTabMatch) break;
@@ -504,7 +504,7 @@ export function rehypeCodeTabs() {
           const hasCopyButton = tabGroup.some(block => {
             const preNode = block.children?.find((child: any) => child.tagName === 'pre');
             const codeNode = preNode?.children?.[0];
-            const meta = codeNode?.data?.meta || '';
+            const meta = codeNode?.data?.meta ?? '';
             return meta.includes('copyButton');
           });
 
@@ -664,7 +664,7 @@ function createTabsWrapper(codeBlocks: any[], tabLabels: string[], hasCopyButton
 
       // Add rounded-none class directly to pre to remove border radius
       const existingClasses = preNode.properties.class || [];
-      preNode.properties.class = [...existingClasses, '!rounded-none'];
+      preNode.properties.class = [...existingClasses, 'rounded-none!'];
     }
 
     // Convert figure to a div with tab content styling

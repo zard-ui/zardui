@@ -26,28 +26,32 @@ export class ZardStringTemplateOutletContext<T> {
   standalone: true,
   exportAs: 'zStringTemplateOutlet',
 })
-export class ZardStringTemplateOutletDirective<_T = unknown> implements OnDestroy {
+export class ZardStringTemplateOutletDirective<T = unknown> implements OnDestroy {
   private readonly viewContainer = inject(ViewContainerRef);
-  private readonly defaultTemplateRef = inject(TemplateRef<zAny>);
+  private readonly templateRef = inject(TemplateRef<ZardStringTemplateOutletContext<T>>);
 
   private embeddedViewRef: EmbeddedViewRef<zAny> | null = null;
   private currentTemplateRef: TemplateRef<zAny> | null = null;
-  private readonly defaultContext = new ZardStringTemplateOutletContext<_T>();
+  private readonly context = new ZardStringTemplateOutletContext<T>();
 
   // Signal-based inputs
   readonly zStringTemplateOutletContext = input<zAny | null>(null);
-  readonly zStringTemplateOutlet = input<zAny | TemplateRef<zAny>>(null);
+  readonly zStringTemplateOutlet = input<zAny | TemplateRef<void>>(null);
 
   // Effect to manage view recreation and updates
   private readonly viewEffect: EffectRef = effect(() => {
     const contextInput = this.zStringTemplateOutletContext();
     const outletInput = this.zStringTemplateOutlet();
 
-    const isCustomTemplate = isTemplateRef(outletInput);
+    const isTemplate = isTemplateRef(outletInput);
+
+    if (!isTemplate) {
+      this.context.$implicit = outletInput;
+    }
 
     // Determine the template and context to use
-    const templateToUse = isCustomTemplate ? outletInput : this.defaultTemplateRef;
-    const contextToUse = isCustomTemplate ? contextInput : this.defaultContext;
+    const templateToUse = isTemplate ? outletInput : this.templateRef;
+    const contextToUse = isTemplate ? contextInput : this.context;
 
     // --- View Management Logic (Reactive to Signal Changes) ---
 
@@ -58,16 +62,11 @@ export class ZardStringTemplateOutletDirective<_T = unknown> implements OnDestro
       // Template is the same, just update the context
       this.updateContext(contextToUse);
     }
-
-    // If using the default template, update the $implicit property on the default context
-    if (!isCustomTemplate && contextToUse) {
-      contextToUse.$implicit = outletInput;
-    }
   });
 
   // --- Helper Methods ---
 
-  private recreateView(template: TemplateRef<zAny>, context: zAny): void {
+  private recreateView(template: TemplateRef<void>, context: zAny): void {
     this.viewContainer.clear();
     // 1. Create the new view
     this.embeddedViewRef = this.viewContainer.createEmbeddedView(template, context);
@@ -76,8 +75,12 @@ export class ZardStringTemplateOutletDirective<_T = unknown> implements OnDestro
   }
 
   private updateContext(newCtx: zAny): void {
+    if (!newCtx || typeof newCtx !== 'object') {
+      return;
+    }
+
     const oldCtx = this.embeddedViewRef?.context;
-    if (newCtx && oldCtx) {
+    if (oldCtx) {
       // Only copy properties from the new context to the old context object
       for (const propName of Object.keys(newCtx)) {
         oldCtx[propName] = newCtx[propName];
