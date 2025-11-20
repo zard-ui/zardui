@@ -11,8 +11,8 @@ import {
 
 @Component({
   selector: 'test-host-component',
-  standalone: true,
   imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent],
+  standalone: true,
   template: `
     <z-breadcrumb>
       <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
@@ -126,8 +126,8 @@ describe('BreadcrumbComponents Integration', () => {
 describe('BreadcrumbComponent - Custom Separator', () => {
   @Component({
     selector: 'test-separator-component',
-    standalone: true,
     imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
+    standalone: true,
     template: `
       <z-breadcrumb [zSeparator]="separator">
         <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
@@ -209,8 +209,8 @@ describe('BreadcrumbComponent - Custom Separator', () => {
 describe('BreadcrumbComponent - Alignment and Wrapping', () => {
   @Component({
     selector: 'test-alignment-component',
-    standalone: true,
     imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
+    standalone: true,
     template: `
       <z-breadcrumb [zAlign]="align" [zWrap]="wrap">
         <z-breadcrumb-item>Home</z-breadcrumb-item>
@@ -276,8 +276,8 @@ describe('BreadcrumbComponent - Alignment and Wrapping', () => {
 describe('BreadcrumbComponent - Size Variants', () => {
   @Component({
     selector: 'test-size-component',
-    standalone: true,
     imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
+    standalone: true,
     template: `
       <z-breadcrumb [zSize]="size">
         <z-breadcrumb-item>Home</z-breadcrumb-item>
@@ -329,8 +329,8 @@ describe('BreadcrumbComponent - Size Variants', () => {
 describe('BreadcrumbEllipsisComponent - Color Variants', () => {
   @Component({
     selector: 'test-ellipsis-component',
-    standalone: true,
     imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent],
+    standalone: true,
     template: `
       <z-breadcrumb>
         <z-breadcrumb-item>Home</z-breadcrumb-item>

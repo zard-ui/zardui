@@ -8,14 +8,14 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-layout',
-  exportAs: 'zLayout',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
   },
-  template: `<ng-content></ng-content>`,
+  exportAs: 'zLayout',
 })
 export class LayoutComponent {
   readonly class = input<ClassValue>('');

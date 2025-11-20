@@ -3,7 +3,13 @@
 ```angular-ts title="alert-dialog.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { A11yModule } from '@angular/cdk/a11y';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { BasePortalOutlet, CdkPortalOutlet, type ComponentPortal, PortalModule, type TemplatePortal } from '@angular/cdk/portal';
+import {
+  BasePortalOutlet,
+  CdkPortalOutlet,
+  type ComponentPortal,
+  PortalModule,
+  type TemplatePortal,
+} from '@angular/cdk/portal';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -52,10 +58,38 @@ export class ZardAlertDialogOptions<T> {
 
 @Component({
   selector: 'z-alert-dialog',
-  exportAs: 'zAlertDialog',
-  standalone: true,
   imports: [OverlayModule, PortalModule, ZardButtonComponent, A11yModule],
+  standalone: true,
   templateUrl: './alert-dialog.component.html',
+  styles: `
+    z-alert-dialog {
+      inset: 0;
+      margin: auto;
+      width: fit-content;
+      height: fit-content;
+      transform-origin: center center;
+      opacity: 1;
+      transform: scale(1);
+      transition:
+        opacity 150ms ease-out,
+        transform 150ms ease-out;
+    }
+
+    @starting-style {
+      z-alert-dialog {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+    }
+
+    z-alert-dialog.alert-dialog-leave {
+      opacity: 0;
+      transform: scale(0.9);
+      transition:
+        opacity 150ms ease-in,
+        transform 150ms ease-in;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -68,37 +102,7 @@ export class ZardAlertDialogOptions<T> {
     'animate.enter': 'alert-dialog-enter',
     'animate.leave': 'alert-dialog-leave',
   },
-  styles: [
-    `
-      z-alert-dialog {
-        inset: 0;
-        margin: auto;
-        width: fit-content;
-        height: fit-content;
-        transform-origin: center center;
-        opacity: 1;
-        transform: scale(1);
-        transition:
-          opacity 150ms ease-out,
-          transform 150ms ease-out;
-      }
-
-      @starting-style {
-        z-alert-dialog {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-      }
-
-      z-alert-dialog.alert-dialog-leave {
-        opacity: 0;
-        transform: scale(0.9);
-        transition:
-          opacity 150ms ease-in,
-          transform 150ms ease-in;
-      }
-    `,
-  ],
+  exportAs: 'zAlertDialog',
 })
 export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
@@ -108,9 +112,11 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   private readonly alertDialogId = generateId('alert-dialog');
   protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
-  protected readonly descriptionId = computed(() => (this.config.zDescription ? `${this.alertDialogId}-description` : null));
+  protected readonly descriptionId = computed(() =>
+    this.config.zDescription ? `${this.alertDialogId}-description` : null,
+  );
 
-  public alertDialogRef?: ZardAlertDialogRef<T>;
+  alertDialogRef?: ZardAlertDialogRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 
@@ -164,7 +170,9 @@ export class ZardAlertDialogModule {}
 ```angular-ts title="alert-dialog.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const alertDialogVariants = cva('fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg rounded-lg sm:max-w-lg');
+export const alertDialogVariants = cva(
+  'fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg rounded-lg sm:max-w-lg',
+);
 
 export type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;
 
@@ -302,13 +310,15 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
       }
 
       @if (config.zDescription) {
-        <p data-testid="z-alert-description" [id]="descriptionId()" class="text-sm text-muted-foreground">{{ config.zDescription }}</p>
+        <p data-testid="z-alert-description" [id]="descriptionId()" class="text-muted-foreground text-sm">
+          {{ config.zDescription }}
+        </p>
       }
     </header>
   }
 
   <main>
-    <ng-template cdkPortalOutlet></ng-template>
+    <ng-template cdkPortalOutlet />
 
     @if (isStringContent) {
       <div data-testid="z-alert-content" [innerHTML]="config.zContent"></div>
@@ -323,7 +333,13 @@ export class ZardAlertDialogRef<T = unknown, R = unknown> {
     }
 
     @if (config.zOkText !== null) {
-      <button data-testid="z-alert-ok-button" z-button [zType]="config.zOkDestructive ? 'destructive' : 'default'" [disabled]="config.zOkDisabled" (click)="onOkClick()">
+      <button
+        data-testid="z-alert-ok-button"
+        z-button
+        [zType]="config.zOkDestructive ? 'destructive' : 'default'"
+        [disabled]="config.zOkDisabled"
+        (click)="onOkClick()"
+      >
         {{ config.zOkText || 'Continue' }}
       </button>
     }
@@ -400,7 +416,12 @@ export class ZardAlertDialogService {
     }
 
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
-    const alertDialogRef = this.attachAlertDialogContent<T>(componentOrTemplateRef, alertDialogContainer, overlayRef, config);
+    const alertDialogRef = this.attachAlertDialogContent<T>(
+      componentOrTemplateRef,
+      alertDialogContainer,
+      overlayRef,
+      config,
+    );
 
     alertDialogContainer.alertDialogRef = alertDialogRef;
 
@@ -428,7 +449,11 @@ export class ZardAlertDialogService {
       ],
     });
 
-    const containerPortal = new ComponentPortal<ZardAlertDialogComponent<T>>(ZardAlertDialogComponent, config.zViewContainerRef, injector);
+    const containerPortal = new ComponentPortal<ZardAlertDialogComponent<T>>(
+      ZardAlertDialogComponent,
+      config.zViewContainerRef,
+      injector,
+    );
 
     const containerRef = overlayRef.attach(containerPortal);
 
@@ -451,7 +476,9 @@ export class ZardAlertDialogService {
       );
     } else if (componentOrTemplateRef && typeof componentOrTemplateRef !== 'string') {
       const injector = this.createInjector<T>(alertDialogRef, config);
-      const contentRef = alertDialogContainer.attachComponentPortal(new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector));
+      const contentRef = alertDialogContainer.attachComponentPortal(
+        new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector),
+      );
       alertDialogRef.componentInstance = contentRef.instance;
     }
 

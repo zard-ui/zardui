@@ -10,17 +10,21 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
 
 @Component({
   selector: 'z-avatar, [z-avatar]',
-  exportAs: 'zAvatar',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     @if (zFallback() && (!zSrc() || !imageLoaded())) {
-      <span class="text-base absolute m-auto z-0">{{ zFallback() }}</span>
+      <span class="absolute z-0 m-auto text-base">{{ zFallback() }}</span>
     }
 
     @if (zSrc() && !imageError()) {
-      <img [src]="zSrc()" [alt]="zAlt()" [class]="imgClasses()" [hidden]="!imageLoaded()" (load)="onImageLoad()" (error)="onImageError()" />
+      <img
+        [src]="zSrc()"
+        [alt]="zAlt()"
+        [class]="imgClasses()"
+        [hidden]="!imageLoaded()"
+        (load)="onImageLoad()"
+        (error)="onImageError()"
+      />
     }
 
     @if (zStatus()) {
@@ -36,7 +40,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] text-green-500 w-5 h-5 z-20"
+            class="absolute -right-[5px] -bottom-[5px] z-20 h-5 w-5 text-green-500"
           >
             <circle cx="12" cy="12" r="10" fill="currentColor" />
           </svg>
@@ -52,7 +56,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] text-red-500 w-5 h-5 z-20"
+            class="absolute -right-[5px] -bottom-[5px] z-20 h-5 w-5 text-red-500"
           >
             <circle cx="12" cy="12" r="10" fill="currentColor" />
           </svg>
@@ -68,7 +72,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] text-red-500 w-5 h-5 z-20"
+            class="absolute -right-[5px] -bottom-[5px] z-20 h-5 w-5 text-red-500"
           >
             <circle cx="12" cy="12" r="10" />
             <path d="M8 12h8" fill="currentColor" />
@@ -85,7 +89,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] text-yellow-400 rotate-y-180 w-5 h-5 z-20"
+            class="absolute -right-[5px] -bottom-[5px] z-20 h-5 w-5 rotate-y-180 text-yellow-400"
           >
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="currentColor" />
           </svg>
@@ -93,6 +97,8 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
       }
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'containerClasses()',
     '[style.width]': 'customSize()',
@@ -100,6 +106,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
     '[attr.data-slot]': '"avatar"',
     '[attr.data-status]': 'zStatus() ?? null',
   },
+  exportAs: 'zAvatar',
 })
 export class ZardAvatarComponent {
   readonly zStatus = input<ZardAvatarStatus>();
@@ -146,26 +153,29 @@ export class ZardAvatarComponent {
 ```angular-ts title="avatar.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content cursor-default bg-muted', {
-  variants: {
-    zSize: {
-      sm: 'size-8',
-      default: 'size-10',
-      md: 'size-12',
-      lg: 'size-14',
-      xl: 'size-16',
+export const avatarVariants = cva(
+  'relative flex flex-row items-center justify-center box-content cursor-default bg-muted',
+  {
+    variants: {
+      zSize: {
+        sm: 'size-8',
+        default: 'size-10',
+        md: 'size-12',
+        lg: 'size-14',
+        xl: 'size-16',
+      },
+      zShape: {
+        circle: 'rounded-full',
+        rounded: 'rounded-md',
+        square: 'rounded-none',
+      },
     },
-    zShape: {
-      circle: 'rounded-full',
-      rounded: 'rounded-md',
-      square: 'rounded-none',
+    defaultVariants: {
+      zSize: 'default',
+      zShape: 'circle',
     },
   },
-  defaultVariants: {
-    zSize: 'default',
-    zShape: 'circle',
-  },
-});
+);
 
 export const imageVariants = cva('relative object-cover object-center w-full h-full z-10', {
   variants: {
@@ -202,27 +212,30 @@ export type ZardAvatarGroupVariants = VariantProps<typeof avatarGroupVariants>;
 
 ```angular-ts title="avatar-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { avatarGroupVariants, ZardAvatarGroupVariants } from './avatar.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-avatar-group',
-  exportAs: 'zAvatarGroup',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zAvatarGroup',
 })
 export class ZardAvatarGroupComponent {
   readonly zOrientation = input<ZardAvatarGroupVariants['zOrientation']>('horizontal');
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(avatarGroupVariants({ zOrientation: this.zOrientation() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(avatarGroupVariants({ zOrientation: this.zOrientation() }), this.class()),
+  );
 }
 
 ```

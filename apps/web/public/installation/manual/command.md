@@ -16,11 +16,12 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
-import { commandVariants, type ZardCommandVariants } from './command.variants';
-import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandInputComponent } from './command-input.component';
+import { ZardCommandOptionComponent } from './command-option.component';
+import { commandVariants, type ZardCommandVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import type { ZardIcon } from '../icon/icons';
 
@@ -50,26 +51,19 @@ export interface ZardCommandConfig {
 
 @Component({
   selector: 'z-command',
-  exportAs: 'zCommand',
-  standalone: true,
   imports: [FormsModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
     <div [class]="classes()">
-      <div id="command-instructions" class="sr-only">Use arrow keys to navigate, Enter to select, Escape to clear selection.</div>
+      <div id="command-instructions" class="sr-only">
+        Use arrow keys to navigate, Enter to select, Escape to clear selection.
+      </div>
       <div id="command-status" class="sr-only" aria-live="polite" aria-atomic="true">
         {{ statusMessage() }}
       </div>
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
-  host: {
-    '[attr.role]': '"combobox"',
-    '[attr.aria-expanded]': 'true',
-    '[attr.aria-haspopup]': '"listbox"',
-    '(keydown)': 'onKeyDown($event)',
-  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -77,6 +71,15 @@ export interface ZardCommandConfig {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[attr.role]': '"combobox"',
+    '[attr.aria-expanded]': 'true',
+    '[attr.aria-haspopup]': '"listbox"',
+    '(keydown)': 'onKeyDown($event)',
+  },
+  exportAs: 'zCommand',
 })
 export class ZardCommandComponent implements ControlValueAccessor {
   readonly commandInput = contentChild(ZardCommandInputComponent);
@@ -132,6 +135,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
   private onChange = (_value: unknown) => {
     // ControlValueAccessor implementation
   };
+
   private onTouched = () => {
     // ControlValueAccessor implementation
   };
@@ -268,19 +272,22 @@ export class ZardCommandComponent implements ControlValueAccessor {
 ```angular-ts title="command.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const commandVariants = cva('flex h-full w-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground', {
-  variants: {
-    size: {
-      sm: 'min-h-64',
-      default: 'min-h-80',
-      lg: 'min-h-96',
-      xl: 'min-h-[30rem]',
+export const commandVariants = cva(
+  'flex h-full w-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground',
+  {
+    variants: {
+      size: {
+        sm: 'min-h-64',
+        default: 'min-h-80',
+        lg: 'min-h-96',
+        xl: 'min-h-[30rem]',
+      },
+    },
+    defaultVariants: {
+      size: 'default',
     },
   },
-  defaultVariants: {
-    size: 'default',
-  },
-});
+);
 
 export const commandInputVariants = cva(
   'flex h-11 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50',
@@ -316,7 +323,8 @@ export const commandItemVariants = cva(
     variants: {
       variant: {
         default: '',
-        destructive: 'aria-selected:bg-destructive aria-selected:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground',
+        destructive:
+          'aria-selected:bg-destructive aria-selected:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground',
       },
     },
     defaultVariants: {
@@ -345,22 +353,23 @@ export type ZardCommandItemVariants = VariantProps<typeof commandItemVariants>;
 ```angular-ts title="command-divider.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardCommandComponent } from './command.component';
 import { commandSeparatorVariants } from './command.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
-import type { ClassValue } from 'clsx';
 @Component({
   selector: 'z-command-divider',
-  exportAs: 'zCommandDivider',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()" role="separator"></div>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zCommandDivider',
 })
 export class ZardCommandDividerComponent {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
@@ -390,18 +399,15 @@ export class ZardCommandDividerComponent {
 ```angular-ts title="command-empty.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardCommandComponent } from './command.component';
 import { commandEmptyVariants } from './command.variants';
-
-import type { ClassValue } from 'clsx';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-empty',
-  exportAs: 'zCommandEmpty',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()">
@@ -409,6 +415,9 @@ import type { ClassValue } from 'clsx';
       </div>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zCommandEmpty',
 })
 export class ZardCommandEmptyComponent {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
@@ -450,23 +459,21 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { Subject, switchMap, timer } from 'rxjs';
-import type { ClassValue } from 'clsx';
 
-import { ZardIconComponent } from '../icon/icon.component';
+import type { ClassValue } from 'clsx';
+import { Subject, switchMap, timer } from 'rxjs';
+
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-command-input',
-  exportAs: 'zCommandInput',
-  standalone: true,
   imports: [FormsModule, ZardIconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
       <z-icon zType="search" class="mr-2 shrink-0 opacity-50" />
@@ -496,6 +503,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zCommandInput',
 })
 export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
@@ -512,10 +522,10 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
   protected readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   private onChange = (_: string) => {
     // ControlValueAccessor implementation - intentionally empty
   };
+
   private onTouched = () => {
     // ControlValueAccessor implementation - intentionally empty
   };
@@ -582,7 +592,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
     this.onTouched = fn;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setDisabledState(_: boolean): void {
     // Implementation if needed for form control disabled state
   }
@@ -605,24 +614,24 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
 
 ```angular-ts title="command-list.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { commandListVariants } from './command.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-list',
-  exportAs: 'zCommandList',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()" role="listbox" id="command-list">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zCommandList',
 })
 export class ZardCommandListComponent {
   readonly class = input<ClassValue>('');
@@ -704,22 +713,29 @@ export class ZardCommandOptionGroupComponent {
 
 
 ```angular-ts title="command-option.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
+
 import type { ClassValue } from 'clsx';
 
+import { ZardCommandComponent } from './command.component';
 import { commandItemVariants, commandShortcutVariants, type ZardCommandItemVariants } from './command.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
-import { ZardCommandComponent } from './command.component';
 import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-command-option',
-  exportAs: 'zCommandOption',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [ZardIconComponent],
+  standalone: true,
   template: `
     @if (shouldShow()) {
       <div
@@ -734,7 +750,7 @@ import type { ZardIcon } from '../icon/icons';
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
-          <div z-icon [zType]="zIcon()!" class="mr-2 shrink-0 flex items-center justify-center"></div>
+          <div z-icon [zType]="zIcon()!" class="mr-2 flex shrink-0 items-center justify-center"></div>
         }
         <span class="flex-1">{{ zLabel() }}</span>
         @if (zShortcut()) {
@@ -743,6 +759,9 @@ import type { ZardIcon } from '../icon/icons';
       </div>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zCommandOption',
 })
 export class ZardCommandOptionComponent {
   private readonly elementRef = inject(ElementRef);
@@ -816,15 +835,15 @@ export class ZardCommandOptionComponent {
 
 
 ```angular-ts title="command.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { FormsModule } from '@angular/forms';
 import { NgModule } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
-import { ZardCommandOptionGroupComponent } from './command-option-group.component';
 import { ZardCommandDividerComponent } from './command-divider.component';
-import { ZardCommandOptionComponent } from './command-option.component';
-import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandEmptyComponent } from './command-empty.component';
+import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandListComponent } from './command-list.component';
+import { ZardCommandOptionGroupComponent } from './command-option-group.component';
+import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
 
 const COMMAND_COMPONENTS = [

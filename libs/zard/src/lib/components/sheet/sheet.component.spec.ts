@@ -1,14 +1,15 @@
-import { Component, inject, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { isPlatformBrowser } from '@angular/common';
+import { Component, inject, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardSheetComponent } from './sheet.component';
-import { ZardSheetService } from './sheet.service';
 import { ZardSheetRef } from './sheet-ref';
+import { ZardSheetService } from './sheet.service';
+import { ZardButtonComponent } from '../button/button.component';
 
 @Component({
+  imports: [ZardButtonComponent],
+  standalone: true,
   template: `
     <button z-button zType="outline" (click)="openSheet()">Open basic sheet</button>
     <button z-button zType="outline" (click)="openSheetWithTemplate()">Open sheet with template</button>
@@ -22,14 +23,12 @@ import { ZardSheetRef } from './sheet-ref';
       </div>
     </ng-template>
   `,
-  imports: [ZardButtonComponent],
-  standalone: true,
 })
 class SheetTestHostComponent {
   private sheetService = inject(ZardSheetService);
 
   @ViewChild('testTemplate', { static: true }) testTemplate!: TemplateRef<any>;
-  public lastSheetRef?: ZardSheetRef<any>;
+  lastSheetRef?: ZardSheetRef<any>;
 
   openSheet() {
     this.lastSheetRef = this.sheetService.create({

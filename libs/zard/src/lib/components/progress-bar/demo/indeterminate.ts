@@ -4,8 +4,8 @@ import { ZardProgressBarComponent } from '../progress-bar.component';
 
 @Component({
   selector: 'z-demo-progress-bar-indeterminate',
-  standalone: true,
   imports: [ZardProgressBarComponent],
-  template: ` <z-progress-bar [progress]="50" [zShape]="'square'" [zIndeterminate]="true"></z-progress-bar> `,
+  standalone: true,
+  template: ` <z-progress-bar [progress]="50" zShape="square" [zIndeterminate]="true" /> `,
 })
 export class ZardDemoProgressBarIndeterminateComponent {}

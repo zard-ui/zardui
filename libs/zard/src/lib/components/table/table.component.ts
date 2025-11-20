@@ -1,8 +1,7 @@
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import {
   tableVariants,
   tableHeaderVariants,
@@ -13,17 +12,18 @@ import {
   tableCaptionVariants,
   type ZardTableVariants,
 } from './table.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'table[z-table]',
-  exportAs: 'zTable',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zTable',
 })
 export class ZardTableComponent {
   readonly zType = input<ZardTableVariants['zType']>('default');
@@ -43,14 +43,14 @@ export class ZardTableComponent {
 
 @Component({
   selector: 'thead[z-table-header]',
-  exportAs: 'zTableHeader',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zTableHeader',
 })
 export class ZardTableHeaderComponent {
   readonly class = input<ClassValue>('');
@@ -60,14 +60,14 @@ export class ZardTableHeaderComponent {
 
 @Component({
   selector: 'tbody[z-table-body]',
-  exportAs: 'zTableBody',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zTableBody',
 })
 export class ZardTableBodyComponent {
   readonly class = input<ClassValue>('');
@@ -77,14 +77,14 @@ export class ZardTableBodyComponent {
 
 @Component({
   selector: 'tr[z-table-row]',
-  exportAs: 'zTableRow',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zTableRow',
 })
 export class ZardTableRowComponent {
   readonly class = input<ClassValue>('');
@@ -94,14 +94,14 @@ export class ZardTableRowComponent {
 
 @Component({
   selector: 'th[z-table-head]',
-  exportAs: 'zTableHead',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zTableHead',
 })
 export class ZardTableHeadComponent {
   readonly class = input<ClassValue>('');
@@ -111,14 +111,14 @@ export class ZardTableHeadComponent {
 
 @Component({
   selector: 'td[z-table-cell]',
-  exportAs: 'zTableCell',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zTableCell',
 })
 export class ZardTableCellComponent {
   readonly class = input<ClassValue>('');
@@ -128,14 +128,14 @@ export class ZardTableCellComponent {
 
 @Component({
   selector: 'caption[z-table-caption]',
-  exportAs: 'zTableCaption',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zTableCaption',
 })
 export class ZardTableCaptionComponent {
   readonly class = input<ClassValue>('');

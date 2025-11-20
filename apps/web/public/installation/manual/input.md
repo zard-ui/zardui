@@ -15,11 +15,11 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',
-  exportAs: 'zInput',
   host: {
     '[class]': 'classes()',
     '(input)': 'updateValue($event.target)',
   },
+  exportAs: 'zInput',
 })
 export class ZardInputDirective {
   private readonly elementRef = inject(ElementRef);

@@ -4,8 +4,8 @@ import { ZardSwitchComponent } from '../switch.component';
 
 @Component({
   selector: 'zard-demo-switch',
-  standalone: true,
   imports: [ZardSwitchComponent],
+  standalone: true,
   template: ` <z-switch /> `,
 })
 export class ZardDemoSwitchDefaultComponent {}

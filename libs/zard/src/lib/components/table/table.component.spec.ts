@@ -13,32 +13,32 @@ import {
 
 @Component({
   selector: 'test-striped-table',
-  standalone: true,
   imports: [ZardTableComponent],
+  standalone: true,
   template: `<table z-table zType="striped"></table>`,
 })
 class TestStripedTableComponent {}
 
 @Component({
   selector: 'test-bordered-table',
-  standalone: true,
   imports: [ZardTableComponent],
+  standalone: true,
   template: `<table z-table zType="bordered"></table>`,
 })
 class TestBorderedTableComponent {}
 
 @Component({
   selector: 'test-compact-table',
-  standalone: true,
   imports: [ZardTableComponent],
+  standalone: true,
   template: `<table z-table zSize="compact"></table>`,
 })
 class TestCompactTableComponent {}
 
 @Component({
   selector: 'test-comfortable-table',
-  standalone: true,
   imports: [ZardTableComponent],
+  standalone: true,
   template: `<table z-table zSize="comfortable"></table>`,
 })
 class TestComfortableTableComponent {}
@@ -50,7 +50,13 @@ describe('TableComponents', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [ZardTableComponent, TestStripedTableComponent, TestBorderedTableComponent, TestCompactTableComponent, TestComfortableTableComponent],
+        imports: [
+          ZardTableComponent,
+          TestStripedTableComponent,
+          TestBorderedTableComponent,
+          TestCompactTableComponent,
+          TestComfortableTableComponent,
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(ZardTableComponent);

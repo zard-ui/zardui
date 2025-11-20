@@ -7,7 +7,6 @@ import { ZardInputGroupComponent } from '../input-group.component';
 @Component({
   selector: 'z-demo-input-group-borderless',
   imports: [ZardInputGroupComponent, ZardInputDirective],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex flex-col space-y-4">
       <z-input-group zAddonBefore="$" zAddonAfter="USD" class="border-0">
@@ -23,6 +22,7 @@ import { ZardInputGroupComponent } from '../input-group.component';
       </z-input-group>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputGroupBorderlessComponent {}
 

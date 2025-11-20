@@ -11,15 +11,15 @@ import { mergeClasses } from '../../shared/utils/utils';
 @Component({
   selector: 'z-divider',
   standalone: true,
-  exportAs: 'zDivider',
+  template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: '',
   host: {
     '[attr.role]': `'separator'`,
     '[attr.aria-orientation]': 'zOrientation()',
     '[class]': 'classes()',
   },
+  exportAs: 'zDivider',
 })
 export class ZardDividerComponent {
   readonly zOrientation = input<ZardDividerVariants['zOrientation']>('horizontal');

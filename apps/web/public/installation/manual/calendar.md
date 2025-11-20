@@ -353,7 +353,9 @@ export const calendarWeekdayVariants = cva('text-muted-foreground font-normal te
 
 export const calendarWeekVariants = cva('flex w-full mt-2');
 
-export const calendarDayVariants = cva('p-0 relative focus-within:relative focus-within:z-20 flex mt-1 h-8 w-8 text-sm');
+export const calendarDayVariants = cva(
+  'p-0 relative focus-within:relative focus-within:z-20 flex mt-1 h-8 w-8 text-sm',
+);
 
 export const calendarDayButtonVariants = cva(
   'p-0 font-normal flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground w-full h-full text-sm',
@@ -430,26 +432,31 @@ export type ZardCalendarDayButtonVariants = VariantProps<typeof calendarDayButto
 
 
 ```angular-ts title="calendar-grid.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, ElementRef, HostListener, input, output, signal, viewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  HostListener,
+  input,
+  output,
+  signal,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import type { CalendarDay } from './calendar.types';
 import { getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-calendar-grid',
-  exportAs: 'zCalendarGrid',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  host: {
-    '[attr.role]': '"grid"',
-  },
   template: `
     <div #gridContainer>
-      <!-- Weekdays Header -->
-      <div class="grid grid-cols-7 text-center w-fit" role="row">
+      <! -- Weekdays Header - ->
+      <div class="grid w-fit grid-cols-7 text-center" role="row">
         @for (weekday of weekdays; track $index) {
           <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
@@ -457,8 +464,8 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants
         }
       </div>
 
-      <!-- Calendar Days Grid -->
-      <div class="grid grid-cols-7 gap-0 mt-2 auto-rows-min w-fit" role="rowgroup">
+      <! -- Calendar Days Grid - ->
+      <div class="mt-2 grid w-fit auto-rows-min grid-cols-7 gap-0" role="rowgroup">
         @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
           <div [class]="dayContainerClasses()" role="gridcell">
             <button
@@ -478,6 +485,12 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[attr.role]': '"grid"',
+  },
+  exportAs: 'zCalendarGrid',
 })
 export class ZardCalendarGridComponent {
   private readonly gridContainer = viewChild.required<ElementRef<HTMLElement>>('gridContainer');
@@ -591,11 +604,20 @@ export class ZardCalendarGridComponent {
         break;
       case 'Home':
         event.preventDefault();
-        newIndex = this.findEnabledInRange(Math.floor(currentIndex / 7) * 7, Math.floor(currentIndex / 7) * 7 + 6, days);
+        newIndex = this.findEnabledInRange(
+          Math.floor(currentIndex / 7) * 7,
+          Math.floor(currentIndex / 7) * 7 + 6,
+          days,
+        );
         break;
       case 'End':
         event.preventDefault();
-        newIndex = this.findEnabledInRange(Math.floor(currentIndex / 7) * 7 + 6, Math.floor(currentIndex / 7) * 7, days, true);
+        newIndex = this.findEnabledInRange(
+          Math.floor(currentIndex / 7) * 7 + 6,
+          Math.floor(currentIndex / 7) * 7,
+          days,
+          true,
+        );
         break;
       case 'PageUp':
         event.preventDefault();
@@ -711,39 +733,65 @@ import { ZardSelectComponent } from '../select/select.component';
 
 @Component({
   selector: 'z-calendar-navigation',
-  exportAs: 'zCalendarNavigation',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [ZardButtonComponent, ZardIconComponent, ZardSelectComponent, ZardSelectItemComponent],
+  standalone: true,
   template: `
     <div [class]="navClasses()">
-      <button z-button zType="ghost" zSize="sm" (click)="onPreviousClick()" [disabled]="isPreviousDisabled()" aria-label="Previous month" class="h-7 w-7 p-0">
-        <z-icon zType="chevron-left"></z-icon>
+      <button
+        z-button
+        zType="ghost"
+        zSize="sm"
+        (click)="onPreviousClick()"
+        [disabled]="isPreviousDisabled()"
+        aria-label="Previous month"
+        class="h-7 w-7 p-0"
+      >
+        <z-icon zType="chevron-left" />
       </button>
 
-      <!-- Month and Year Selectors -->
+      <! -- Month and Year Selectors - ->
       <div class="flex items-center space-x-2">
-        <!-- Month Select -->
-        <z-select class="min-w-20" [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
+        <! -- Month Select - ->
+        <z-select
+          class="min-w-20"
+          [zValue]="currentMonth()"
+          [zLabel]="currentMonthName()"
+          (zSelectionChange)="onMonthChange($event)"
+        >
           @for (month of months; track $index) {
             <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
           }
         </z-select>
 
-        <!-- Year Select -->
-        <z-select class="min-w-21" [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="onYearChange($event)">
+        <! -- Year Select - ->
+        <z-select
+          class="min-w-21"
+          [zValue]="currentYear()"
+          [zLabel]="currentYear()"
+          (zSelectionChange)="onYearChange($event)"
+        >
           @for (year of availableYears(); track year) {
             <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
           }
         </z-select>
       </div>
 
-      <button z-button zType="ghost" zSize="sm" (click)="onNextClick()" [disabled]="isNextDisabled()" aria-label="Next month" class="h-7 w-7 p-0">
-        <z-icon zType="chevron-right"></z-icon>
+      <button
+        z-button
+        zType="ghost"
+        zSize="sm"
+        (click)="onNextClick()"
+        [disabled]="isNextDisabled()"
+        aria-label="Next month"
+        class="h-7 w-7 p-0"
+      >
+        <z-icon zType="chevron-right" />
       </button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zCalendarNavigation',
 })
 export class ZardCalendarNavigationComponent {
   // Inputs
@@ -872,7 +920,11 @@ import type { CalendarDay, CalendarDayConfig, CalendarMode, CalendarValue } from
  * Checks if two dates represent the same day (ignoring time)
  */
 export function isSameDay(date1: Date, date2: Date): boolean {
-  return date1.getFullYear() === date2.getFullYear() && date1.getMonth() === date2.getMonth() && date1.getDate() === date2.getDate();
+  return (
+    date1.getFullYear() === date2.getFullYear() &&
+    date1.getMonth() === date2.getMonth() &&
+    date1.getDate() === date2.getDate()
+  );
 }
 
 /**

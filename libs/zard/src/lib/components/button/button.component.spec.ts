@@ -6,8 +6,8 @@ import { ZardButtonComponent } from './button.component';
 describe('ButtonComponent', () => {
   it('should create', () => {
     @Component({
-      standalone: true,
       imports: [ZardButtonComponent],
+      standalone: true,
       template: `<button z-button>Test</button>`,
     })
     class TestComponent {}
@@ -22,8 +22,8 @@ describe('ButtonComponent', () => {
   describe('iconOnly detection', () => {
     it('should set data-icon-only attribute when button has only an icon', async () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button><i z-icon></i></button>`,
       })
       class TestComponent {}
@@ -42,8 +42,8 @@ describe('ButtonComponent', () => {
 
     it('should not set data-icon-only when button has text and icon', async () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button>Button <i z-icon></i></button>`,
       })
       class TestComponent {}
@@ -58,8 +58,8 @@ describe('ButtonComponent', () => {
 
     it('should not set data-icon-only when button has only text', async () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button>Button</button>`,
       })
       class TestComponent {}
@@ -74,8 +74,8 @@ describe('ButtonComponent', () => {
 
     it('should not set data-icon-only when button has icon before text', async () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button><i z-icon></i> Button</button>`,
       })
       class TestComponent {}
@@ -92,8 +92,8 @@ describe('ButtonComponent', () => {
   describe('size variants', () => {
     it('should apply default size classes', () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button>Button</button>`,
       })
       class TestComponent {}
@@ -109,8 +109,8 @@ describe('ButtonComponent', () => {
 
     it('should apply sm size classes', () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button zSize="sm">Button</button>`,
       })
       class TestComponent {}
@@ -125,8 +125,8 @@ describe('ButtonComponent', () => {
 
     it('should apply lg size classes', () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button zSize="lg">Button</button>`,
       })
       class TestComponent {}
@@ -143,8 +143,8 @@ describe('ButtonComponent', () => {
   describe('type variants', () => {
     it('should apply default type classes', () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button>Button</button>`,
       })
       class TestComponent {}
@@ -159,8 +159,8 @@ describe('ButtonComponent', () => {
 
     it('should apply destructive type classes', () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button zType="destructive">Button</button>`,
       })
       class TestComponent {}
@@ -175,8 +175,8 @@ describe('ButtonComponent', () => {
 
     it('should apply outline type classes', () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button zType="outline">Button</button>`,
       })
       class TestComponent {}
@@ -193,8 +193,8 @@ describe('ButtonComponent', () => {
   describe('loading state', () => {
     it('should render loading icon when zLoading is true', () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button [zLoading]="true">Button</button>`,
       })
       class TestComponent {}
@@ -209,8 +209,8 @@ describe('ButtonComponent', () => {
 
     it('should not render loading icon when zLoading is false', () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button [zLoading]="false">Button</button>`,
       })
       class TestComponent {}
@@ -226,8 +226,8 @@ describe('ButtonComponent', () => {
   describe('full width', () => {
     it('should apply w-full class when zFull is true', () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button [zFull]="true">Button</button>`,
       })
       class TestComponent {}
@@ -241,8 +241,8 @@ describe('ButtonComponent', () => {
 
     it('should not apply w-full class when zFull is false', () => {
       @Component({
-        standalone: true,
         imports: [ZardButtonComponent],
+        standalone: true,
         template: `<button z-button [zFull]="false">Button</button>`,
       })
       class TestComponent {}

@@ -7,18 +7,18 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-content',
-  exportAs: 'zContent',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <main>
-      <ng-content></ng-content>
+      <ng-content />
     </main>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zContent',
 })
 export class ContentComponent {
   readonly class = input<ClassValue>('');

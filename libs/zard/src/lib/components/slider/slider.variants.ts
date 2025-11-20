@@ -39,17 +39,20 @@ export const sliderTrackVariants = cva(
 
 export type SliderTrackVariants = VariantProps<typeof sliderTrackVariants>;
 
-export const sliderRangeVariants = cva('bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full', {
-  variants: {
-    zOrientation: {
-      horizontal: 'h-full',
-      vertical: 'w-full',
+export const sliderRangeVariants = cva(
+  'bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
+  {
+    variants: {
+      zOrientation: {
+        horizontal: 'h-full',
+        vertical: 'w-full',
+      },
+    },
+    defaultVariants: {
+      zOrientation: 'horizontal',
     },
   },
-  defaultVariants: {
-    zOrientation: 'horizontal',
-  },
-});
+);
 
 export type SliderRangeVariants = VariantProps<typeof sliderRangeVariants>;
 

@@ -8,9 +8,8 @@ import { ZardTabComponent, ZardTabGroupComponent, type zPosition } from '../tabs
 
 @Component({
   selector: 'z-demo-tabs-position',
-  standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardRadioComponent, FormsModule, ZardDividerComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   template: `
     <div class="flex h-[300px] w-full flex-col justify-between">
       <z-tab-group [zTabsPosition]="zTabsPosition" [zActivePosition]="zActivePosition" class="h-[180px]">
@@ -47,6 +46,7 @@ import { ZardTabComponent, ZardTabGroupComponent, type zPosition } from '../tabs
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTabsPositionComponent {
   protected zTabsPosition: zPosition = 'top';

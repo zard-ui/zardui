@@ -29,8 +29,10 @@ export const resizableHandleVariants = cva(
   {
     variants: {
       zLayout: {
-        horizontal: 'w-[1px] min-w-[1px] cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2',
-        vertical: 'h-[1px] min-h-[1px] w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-4 after:-translate-y-1/2',
+        horizontal:
+          'w-[1px] min-w-[1px] cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2',
+        vertical:
+          'h-[1px] min-h-[1px] w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-4 after:-translate-y-1/2',
       },
       zDisabled: {
         true: 'cursor-default pointer-events-none opacity-50',
@@ -44,17 +46,20 @@ export const resizableHandleVariants = cva(
   },
 );
 
-export const resizableHandleIndicatorVariants = cva('absolute z-10 bg-muted-foreground/30 transition-colors group-hover:bg-muted-foreground/50 rounded-full', {
-  variants: {
-    zLayout: {
-      vertical: 'w-8 h-px',
-      horizontal: 'w-px h-8',
+export const resizableHandleIndicatorVariants = cva(
+  'absolute z-10 bg-muted-foreground/30 transition-colors group-hover:bg-muted-foreground/50 rounded-full',
+  {
+    variants: {
+      zLayout: {
+        vertical: 'w-8 h-px',
+        horizontal: 'w-px h-8',
+      },
+    },
+    defaultVariants: {
+      zLayout: 'horizontal',
     },
   },
-  defaultVariants: {
-    zLayout: 'horizontal',
-  },
-});
+);
 
 export type ZardResizableVariants = VariantProps<typeof resizableVariants>;
 export type ZardResizablePanelVariants = VariantProps<typeof resizablePanelVariants>;

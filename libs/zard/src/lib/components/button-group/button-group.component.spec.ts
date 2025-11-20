@@ -2,7 +2,11 @@ import { Component, input, inputBinding, signal } from '@angular/core';
 
 import { render, screen } from '@testing-library/angular';
 
-import { ZardButtonGroupComponent, ZardButtonGroupDividerComponent, ZardButtonGroupTextDirective } from './button-group.component';
+import {
+  ZardButtonGroupComponent,
+  ZardButtonGroupDividerComponent,
+  ZardButtonGroupTextDirective,
+} from './button-group.component';
 import { buttonGroupDividerVariants, buttonGroupTextVariants, buttonGroupVariants } from './button-group.variants';
 
 describe('ButtonGroup', () => {

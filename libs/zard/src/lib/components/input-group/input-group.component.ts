@@ -31,8 +31,6 @@ import { ZardLoaderComponent } from '../loader/loader.component';
 @Component({
   selector: 'z-input-group',
   imports: [ZardStringTemplateOutletDirective, ZardLoaderComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     @let addonBefore = zAddonBefore();
     @if (addonBefore) {
@@ -56,6 +54,8 @@ import { ZardLoaderComponent } from '../loader/loader.component';
       </div>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[attr.aria-disabled]': 'zDisabled() || zLoading()',

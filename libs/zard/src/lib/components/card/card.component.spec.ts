@@ -81,8 +81,8 @@ describe('ZardCardComponent', () => {
   it('should render ng-content in body', () => {
     @Component({
       selector: 'test-host',
-      standalone: true,
       imports: [ZardCardComponent],
+      standalone: true,
       template: `<z-card>Test Content</z-card>`,
     })
     class TestHostComponent {}
@@ -97,8 +97,8 @@ describe('ZardCardComponent', () => {
   it('should support template ref for title', () => {
     @Component({
       selector: 'test-host',
-      standalone: true,
       imports: [ZardCardComponent],
+      standalone: true,
       template: `
         <z-card [zTitle]="titleTemplate">
           <ng-template #titleTemplate>
@@ -120,8 +120,8 @@ describe('ZardCardComponent', () => {
   it('should support template ref for description', () => {
     @Component({
       selector: 'test-host',
-      standalone: true,
       imports: [ZardCardComponent],
+      standalone: true,
       template: `
         <z-card zTitle="Title" [zDescription]="descriptionTemplate">
           <ng-template #descriptionTemplate>

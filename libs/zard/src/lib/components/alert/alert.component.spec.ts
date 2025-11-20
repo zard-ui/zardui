@@ -6,9 +6,9 @@ import { ZardAlertComponent } from './alert.component';
 
 @Component({
   selector: 'test-host-component',
-  standalone: true,
   imports: [ZardAlertComponent],
-  template: ` <z-alert zTitle="Test Title" zDescription="Test Description" zIcon="info" class="custom-class"></z-alert> `,
+  standalone: true,
+  template: ` <z-alert zTitle="Test Title" zDescription="Test Description" zIcon="info" class="custom-class" /> `,
 })
 class TestHostComponent {}
 
@@ -45,9 +45,9 @@ describe('ZardAlertComponent', () => {
   it('should render only description when title is omitted', () => {
     @Component({
       selector: 'test-host-description-only',
-      standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zDescription="Only description provided"></z-alert> `,
+      standalone: true,
+      template: ` <z-alert zDescription="Only description provided" /> `,
     })
     class TestHostDescriptionOnly {}
 
@@ -66,9 +66,9 @@ describe('ZardAlertComponent', () => {
   it('should render only title when description is omitted', () => {
     @Component({
       selector: 'test-host-title-only',
-      standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zTitle="Only title provided"></z-alert> `,
+      standalone: true,
+      template: ` <z-alert zTitle="Only title provided" /> `,
     })
     class TestHostTitleOnly {}
 
@@ -87,9 +87,9 @@ describe('ZardAlertComponent', () => {
   it('should not render title when empty string is provided', () => {
     @Component({
       selector: 'test-host-empty-title',
-      standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zTitle="" zDescription="Description with empty title"></z-alert> `,
+      standalone: true,
+      template: ` <z-alert zTitle="" zDescription="Description with empty title" /> `,
     })
     class TestHostEmptyTitle {}
 
@@ -108,9 +108,9 @@ describe('ZardAlertComponent', () => {
   it('should not render description when empty string is provided', () => {
     @Component({
       selector: 'test-host-empty-description',
-      standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zTitle="Title with empty description" zDescription=""></z-alert> `,
+      standalone: true,
+      template: ` <z-alert zTitle="Title with empty description" zDescription="" /> `,
     })
     class TestHostEmptyDescription {}
 
@@ -138,9 +138,9 @@ describe('ZardAlertComponent', () => {
   it('should not render icon when zIcon is omitted', () => {
     @Component({
       selector: 'test-host-no-icon',
-      standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zTitle="No icon" zDescription="Alert without icon"></z-alert> `,
+      standalone: true,
+      template: ` <z-alert zTitle="No icon" zDescription="Alert without icon" /> `,
     })
     class TestHostNoIcon {}
 
@@ -156,9 +156,9 @@ describe('ZardAlertComponent', () => {
   it('should render destructive icon automatically for destructive type', () => {
     @Component({
       selector: 'test-host-destructive',
-      standalone: true,
       imports: [ZardAlertComponent],
-      template: ` <z-alert zType="destructive" zTitle="Error" zDescription="Something went wrong"></z-alert> `,
+      standalone: true,
+      template: ` <z-alert zType="destructive" zTitle="Error" zDescription="Something went wrong" /> `,
     })
     class TestHostDestructive {}
 

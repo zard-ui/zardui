@@ -1,13 +1,13 @@
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { Component } from '@angular/core';
 
 import { ZardSkeletonComponent } from './skeleton.component';
 
 @Component({
-  template: `<z-skeleton class="h-4 w-4 rounded" />`,
-  standalone: true,
   imports: [ZardSkeletonComponent],
+  standalone: true,
+  template: `<z-skeleton class="h-4 w-4 rounded" />`,
 })
 class TestSkeletonHostComponent {}
 

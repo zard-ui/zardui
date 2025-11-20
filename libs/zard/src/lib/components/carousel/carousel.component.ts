@@ -98,9 +98,9 @@ import { ZardIconComponent } from '../icon/icon.component';
       </div>
     </ng-template>
   `,
-  host: { '(keydown)': 'handleKeyDown($event)' },
-  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: { '(keydown)': 'handleKeyDown($event)' },
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);

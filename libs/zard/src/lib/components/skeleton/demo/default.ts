@@ -4,8 +4,8 @@ import { ZardSkeletonComponent } from '../skeleton.component';
 
 @Component({
   selector: 'z-demo-skeleton-default',
-  standalone: true,
   imports: [ZardSkeletonComponent],
+  standalone: true,
   template: `
     <div class="flex items-center space-x-4">
       <z-skeleton class="h-12 w-12 rounded-full" />

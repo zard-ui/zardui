@@ -5,8 +5,8 @@ import { type zAlign, ZardTabComponent, ZardTabGroupComponent } from '../tabs.co
 
 @Component({
   selector: 'z-demo-tabs-align',
-  standalone: true,
   imports: [ZardTabComponent, ZardTabGroupComponent, ZardButtonComponent],
+  standalone: true,
   template: `
     <div class="h-[300px] w-full">
       <z-tab-group [zAlignTabs]="zAlignTabs">

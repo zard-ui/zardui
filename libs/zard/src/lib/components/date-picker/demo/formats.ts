@@ -4,9 +4,8 @@ import { ZardDatePickerComponent } from '../date-picker.component';
 
 @Component({
   selector: 'z-date-picker-formats-demo',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardDatePickerComponent],
+  standalone: true,
   template: `
     <div class="flex flex-col gap-4">
       <div class="flex flex-col gap-2">
@@ -40,6 +39,7 @@ import { ZardDatePickerComponent } from '../date-picker.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDatePickerFormatsComponent {
   selectedDate: Date | null = new Date();

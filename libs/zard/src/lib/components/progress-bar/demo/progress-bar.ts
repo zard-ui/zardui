@@ -1,12 +1,13 @@
+import { ZardDemoProgressBarBasicComponent } from './basic';
 import { ZardDemoProgressBarIndeterminateComponent } from './indeterminate';
 import { ZardDemoProgressBarShapeComponent } from './shape';
-import { ZardDemoProgressBarBasicComponent } from './basic';
 import { ZardDemoProgressBarSizeComponent } from './size';
 
 export const PROGRESS_BAR = {
   componentName: 'progress-bar',
   componentType: 'progress-bar',
-  description: 'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
+  description:
+    'Displays an indicator showing the completion progress of a task, typically displayed as a progress bar.',
   fullWidth: true,
   examples: [
     {

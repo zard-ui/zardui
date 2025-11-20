@@ -56,8 +56,8 @@ describe('FooterComponent', () => {
 
   it('should render ng-content', () => {
     @Component({
-      standalone: true,
       imports: [FooterComponent],
+      standalone: true,
       template: `<z-footer>Test Footer Content</z-footer>`,
     })
     class TestHostComponent {}

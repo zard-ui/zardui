@@ -4,8 +4,8 @@ import { ZardLoaderComponent } from '../loader.component';
 
 @Component({
   selector: 'z-demo-loader-default',
-  standalone: true,
   imports: [ZardLoaderComponent],
+  standalone: true,
   template: `<z-loader />`,
 })
 export class ZardDemoLoaderDefaultComponent {}

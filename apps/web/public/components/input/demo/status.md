@@ -5,8 +5,8 @@ import { ZardInputDirective } from '../input.directive';
 
 @Component({
   selector: 'z-demo-input-status',
-  standalone: true,
   imports: [ZardInputDirective],
+  standalone: true,
   template: `
     <input z-input zStatus="error" placeholder="Error" />
     <input z-input zStatus="warning" placeholder="Warning" />

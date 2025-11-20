@@ -4,17 +4,15 @@ import { ZardLoaderComponent } from '../loader.component';
 
 @Component({
   selector: 'z-demo-loader-basic',
-  standalone: true,
   imports: [ZardLoaderComponent],
+  standalone: true,
   template: `<z-loader />`,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 24px;
-      }
-    `,
-  ],
+  styles: `
+    :host {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+  `,
 })
 export class ZardDemoLoaderBasicComponent {}

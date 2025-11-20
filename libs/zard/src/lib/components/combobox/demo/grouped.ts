@@ -4,14 +4,14 @@ import { ZardComboboxComponent, type ZardComboboxGroup, type ZardComboboxOption 
 
 @Component({
   selector: 'zard-demo-combobox-grouped',
-  standalone: true,
   imports: [ZardComboboxComponent],
+  standalone: true,
   template: `
     <z-combobox
       [groups]="techGroups"
-      [placeholder]="'Select technology...'"
-      [searchPlaceholder]="'Search technology...'"
-      [emptyText]="'No technology found.'"
+      placeholder="Select technology..."
+      searchPlaceholder="Search technology..."
+      emptyText="No technology found."
       (zOnSelect)="onSelect($event)"
     />
   `,

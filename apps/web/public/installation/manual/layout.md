@@ -11,14 +11,14 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-layout',
-  exportAs: 'zLayout',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
   },
-  template: `<ng-content></ng-content>`,
+  exportAs: 'zLayout',
 })
 export class LayoutComponent {
   readonly class = input<ClassValue>('');
@@ -115,18 +115,18 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-content',
-  exportAs: 'zContent',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <main>
-      <ng-content></ng-content>
+      <ng-content />
     </main>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zContent',
 })
 export class ContentComponent {
   readonly class = input<ClassValue>('');
@@ -148,15 +148,15 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-footer',
-  exportAs: 'zFooter',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <footer [class]="classes()" [style.height.px]="zHeight()">
-      <ng-content></ng-content>
+      <ng-content />
     </footer>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zFooter',
 })
 export class FooterComponent {
   readonly class = input<ClassValue>('');
@@ -179,15 +179,15 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-header',
-  exportAs: 'zHeader',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <header [class]="classes()" [style.height.px]="zHeight()">
-      <ng-content></ng-content>
+      <ng-content />
     </header>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zHeader',
 })
 export class HeaderComponent {
   readonly class = input<ClassValue>('');
@@ -209,7 +209,15 @@ import { HeaderComponent } from './header.component';
 import { LayoutComponent } from './layout.component';
 import { SidebarGroupLabelComponent, SidebarGroupComponent, SidebarComponent } from './sidebar.component';
 
-const LAYOUT_COMPONENTS = [LayoutComponent, HeaderComponent, FooterComponent, ContentComponent, SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent];
+const LAYOUT_COMPONENTS = [
+  LayoutComponent,
+  HeaderComponent,
+  FooterComponent,
+  ContentComponent,
+  SidebarComponent,
+  SidebarGroupComponent,
+  SidebarGroupLabelComponent,
+];
 
 @NgModule({
   imports: [LAYOUT_COMPONENTS],
@@ -222,11 +230,26 @@ export class LayoutModule {}
 
 
 ```angular-ts title="sidebar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, type TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  output,
+  signal,
+  type TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
-import { sidebarGroupLabelVariants, sidebarGroupVariants, sidebarTriggerVariants, sidebarVariants } from './layout.variants';
+import {
+  sidebarGroupLabelVariants,
+  sidebarGroupVariants,
+  sidebarTriggerVariants,
+  sidebarVariants,
+} from './layout.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -234,15 +257,12 @@ import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-sidebar',
-  exportAs: 'zSidebar',
-  standalone: true,
   imports: [ZardStringTemplateOutletDirective, ZardIconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
     <aside [class]="classes()" [style.width.px]="currentWidth()" [attr.data-collapsed]="zCollapsed()">
       <div class="flex-1 overflow-auto">
-        <ng-content></ng-content>
+        <ng-content />
       </div>
 
       @if (zCollapsible() && !zTrigger()) {
@@ -261,10 +281,13 @@ import type { ZardIcon } from '../icon/icons';
       }
 
       @if (zCollapsible() && zTrigger()) {
-        <ng-container *zStringTemplateOutlet="zTrigger()"></ng-container>
+        <ng-container *zStringTemplateOutlet="zTrigger()" />
       }
     </aside>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zSidebar',
 })
 export class SidebarComponent {
   readonly zWidth = input<string | number>(200);
@@ -318,15 +341,15 @@ export class SidebarComponent {
 
 @Component({
   selector: 'z-sidebar-group',
-  exportAs: 'zSidebarGroup',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zSidebarGroup',
 })
 export class SidebarGroupComponent {
   readonly class = input<ClassValue>('');
@@ -336,15 +359,15 @@ export class SidebarGroupComponent {
 
 @Component({
   selector: 'z-sidebar-group-label',
-  exportAs: 'zSidebarGroupLabel',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zSidebarGroupLabel',
 })
 export class SidebarGroupLabelComponent {
   readonly class = input<ClassValue>('');
