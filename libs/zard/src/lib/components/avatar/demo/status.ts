@@ -4,8 +4,8 @@ import { ZardAvatarComponent } from '../avatar.component';
 
 @Component({
   selector: 'z-demo-avatar-status',
-  standalone: true,
   imports: [ZardAvatarComponent],
+  standalone: true,
   template: `
     <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />
     <z-avatar zStatus="online" zSrc="/images/avatar/imgs/avatar_image.jpg" zAlt="Image" />

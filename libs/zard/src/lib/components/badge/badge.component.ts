@@ -1,20 +1,20 @@
-import type { ClassValue } from 'clsx';
-
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { badgeVariants, type ZardBadgeVariants } from './badge.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-badge',
-  exportAs: 'zBadge',
   standalone: true,
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content />`,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zBadge',
 })
 export class ZardBadgeComponent {
   readonly zType = input<ZardBadgeVariants['zType']>('default');
@@ -22,5 +22,7 @@ export class ZardBadgeComponent {
 
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(badgeVariants({ zType: this.zType(), zShape: this.zShape() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(badgeVariants({ zType: this.zType(), zShape: this.zShape() }), this.class()),
+  );
 }

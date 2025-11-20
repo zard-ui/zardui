@@ -1,8 +1,18 @@
 import { NgModule } from '@angular/core';
 
-import { ZardFormControlComponent, ZardFormFieldComponent, ZardFormLabelComponent, ZardFormMessageComponent } from './form.component';
+import {
+  ZardFormControlComponent,
+  ZardFormFieldComponent,
+  ZardFormLabelComponent,
+  ZardFormMessageComponent,
+} from './form.component';
 
-const FORM_COMPONENTS = [ZardFormFieldComponent, ZardFormLabelComponent, ZardFormControlComponent, ZardFormMessageComponent];
+const FORM_COMPONENTS = [
+  ZardFormFieldComponent,
+  ZardFormLabelComponent,
+  ZardFormControlComponent,
+  ZardFormMessageComponent,
+];
 
 @NgModule({
   imports: [...FORM_COMPONENTS],

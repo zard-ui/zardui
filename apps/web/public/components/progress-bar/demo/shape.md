@@ -5,22 +5,20 @@ import { ZardProgressBarComponent } from '../progress-bar.component';
 
 @Component({
   selector: 'z-demo-progress-bar-shape',
-  standalone: true,
   imports: [ZardProgressBarComponent],
+  standalone: true,
   template: `
-    <z-progress-bar [progress]="50" [zShape]="'default'"></z-progress-bar>
-    <z-progress-bar [progress]="50" [zShape]="'circle'"></z-progress-bar>
-    <z-progress-bar [progress]="50" [zShape]="'square'"></z-progress-bar>
+    <z-progress-bar [progress]="50" zShape="default" />
+    <z-progress-bar [progress]="50" zShape="circle" />
+    <z-progress-bar [progress]="50" zShape="square" />
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        flex-direction: column;
-        gap: 24px;
-      }
-    `,
-  ],
+  styles: `
+    :host {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+  `,
 })
 export class ZardDemoProgressBarShapeComponent {}
 

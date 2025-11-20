@@ -8,6 +8,8 @@ import { ZardSheetService } from './sheet.service';
 import { ZardButtonComponent } from '../button/button.component';
 
 @Component({
+  imports: [ZardButtonComponent],
+  standalone: true,
   template: `
     <button type="button" z-button zType="outline" (click)="openSheet()">Open basic sheet</button>
     <button type="button" z-button zType="outline" (click)="openSheetWithTemplate()">Open sheet with template</button>
@@ -21,14 +23,12 @@ import { ZardButtonComponent } from '../button/button.component';
       </div>
     </ng-template>
   `,
-  imports: [ZardButtonComponent],
-  standalone: true,
 })
 class SheetTestHostComponent {
   private sheetService = inject(ZardSheetService);
 
   @ViewChild('testTemplate', { static: true }) testTemplate!: TemplateRef<void>;
-  public lastSheetRef?: ZardSheetRef<void>;
+  lastSheetRef?: ZardSheetRef<void>;
 
   openSheet() {
     this.lastSheetRef = this.sheetService.create({

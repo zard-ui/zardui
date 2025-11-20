@@ -60,7 +60,6 @@ export class ZardSheetOptions<T, U> {
 
 @Component({
   selector: 'z-sheet',
-  exportAs: 'zSheet',
   imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
@@ -148,6 +147,7 @@ export class ZardSheetOptions<T, U> {
     '[style.width]': 'config.zWidth ? config.zWidth + " !important" : null',
     '[style.height]': 'config.zHeight ? config.zHeight + " !important" : null',
   },
+  exportAs: 'zSheet',
 })
 export class ZardSheetComponent<T, U> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
@@ -165,7 +165,7 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
     );
   });
 
-  public sheetRef?: ZardSheetRef<T>;
+  sheetRef?: ZardSheetRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 
@@ -219,10 +219,12 @@ export const sheetVariants = cva(
   {
     variants: {
       zSide: {
-        right: 'data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 border-l',
+        right:
+          'data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 border-l',
         left: 'data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 border-r',
         top: 'data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 border-b',
-        bottom: 'data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 border-t',
+        bottom:
+          'data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 border-t',
       },
       zSize: {
         default: '',
@@ -395,9 +397,9 @@ import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
-import { ZardButtonComponent } from '../button/button.component';
 import { ZardSheetComponent } from './sheet.component';
 import { ZardSheetService } from './sheet.service';
+import { ZardButtonComponent } from '../button/button.component';
 
 const components = [CommonModule, ZardButtonComponent, ZardSheetComponent, OverlayModule, PortalModule];
 

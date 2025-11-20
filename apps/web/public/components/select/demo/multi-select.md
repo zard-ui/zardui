@@ -8,7 +8,6 @@ import { ZardSelectComponent } from '../select.component';
 @Component({
   selector: 'z-demo-multi-select-basic',
   imports: [ZardBadgeComponent, ZardSelectComponent, ZardSelectItemComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex h-[400px] w-[300px] flex-col gap-4">
       Selected values:
@@ -36,9 +35,10 @@ import { ZardSelectComponent } from '../select.component';
       </z-select>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoMultiSelectBasicComponent {
-  selectedValues = signal<string[]>([]);
+  readonly selectedValues = signal<string[]>([]);
 }
 
 ```

@@ -1,6 +1,10 @@
 import { NgModule } from '@angular/core';
 
-import { ZardBreadcrumbComponent, ZardBreadcrumbEllipsisComponent, ZardBreadcrumbItemComponent } from './breadcrumb.component';
+import {
+  ZardBreadcrumbComponent,
+  ZardBreadcrumbEllipsisComponent,
+  ZardBreadcrumbItemComponent,
+} from './breadcrumb.component';
 
 const components = [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent];
 

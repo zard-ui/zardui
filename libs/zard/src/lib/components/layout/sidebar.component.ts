@@ -1,8 +1,23 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, output, signal, type TemplateRef, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  output,
+  signal,
+  type TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
-import { sidebarGroupLabelVariants, sidebarGroupVariants, sidebarTriggerVariants, sidebarVariants } from './layout.variants';
+import {
+  sidebarGroupLabelVariants,
+  sidebarGroupVariants,
+  sidebarTriggerVariants,
+  sidebarVariants,
+} from './layout.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -10,15 +25,12 @@ import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-sidebar',
-  exportAs: 'zSidebar',
-  standalone: true,
   imports: [ZardStringTemplateOutletDirective, ZardIconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
     <aside [class]="classes()" [style.width.px]="currentWidth()" [attr.data-collapsed]="zCollapsed()">
       <div class="flex-1 overflow-auto">
-        <ng-content></ng-content>
+        <ng-content />
       </div>
 
       @if (zCollapsible() && !zTrigger()) {
@@ -37,10 +49,13 @@ import type { ZardIcon } from '../icon/icons';
       }
 
       @if (zCollapsible() && zTrigger()) {
-        <ng-container *zStringTemplateOutlet="zTrigger()"></ng-container>
+        <ng-container *zStringTemplateOutlet="zTrigger()" />
       }
     </aside>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zSidebar',
 })
 export class SidebarComponent {
   readonly zWidth = input<string | number>(200);
@@ -94,15 +109,15 @@ export class SidebarComponent {
 
 @Component({
   selector: 'z-sidebar-group',
-  exportAs: 'zSidebarGroup',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zSidebarGroup',
 })
 export class SidebarGroupComponent {
   readonly class = input<ClassValue>('');
@@ -112,15 +127,15 @@ export class SidebarGroupComponent {
 
 @Component({
   selector: 'z-sidebar-group-label',
-  exportAs: 'zSidebarGroupLabel',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <div [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zSidebarGroupLabel',
 })
 export class SidebarGroupLabelComponent {
   readonly class = input<ClassValue>('');

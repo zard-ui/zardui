@@ -58,10 +58,38 @@ export class ZardAlertDialogOptions<T> {
 
 @Component({
   selector: 'z-alert-dialog',
-  exportAs: 'zAlertDialog',
-  standalone: true,
   imports: [OverlayModule, PortalModule, ZardButtonComponent, A11yModule],
+  standalone: true,
   templateUrl: './alert-dialog.component.html',
+  styles: `
+    z-alert-dialog {
+      inset: 0;
+      margin: auto;
+      width: fit-content;
+      height: fit-content;
+      transform-origin: center center;
+      opacity: 1;
+      transform: scale(1);
+      transition:
+        opacity 150ms ease-out,
+        transform 150ms ease-out;
+    }
+
+    @starting-style {
+      z-alert-dialog {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+    }
+
+    z-alert-dialog.alert-dialog-leave {
+      opacity: 0;
+      transform: scale(0.9);
+      transition:
+        opacity 150ms ease-in,
+        transform 150ms ease-in;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -74,37 +102,7 @@ export class ZardAlertDialogOptions<T> {
     'animate.enter': 'alert-dialog-enter',
     'animate.leave': 'alert-dialog-leave',
   },
-  styles: [
-    `
-      z-alert-dialog {
-        inset: 0;
-        margin: auto;
-        width: fit-content;
-        height: fit-content;
-        transform-origin: center center;
-        opacity: 1;
-        transform: scale(1);
-        transition:
-          opacity 150ms ease-out,
-          transform 150ms ease-out;
-      }
-
-      @starting-style {
-        z-alert-dialog {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-      }
-
-      z-alert-dialog.alert-dialog-leave {
-        opacity: 0;
-        transform: scale(0.9);
-        transition:
-          opacity 150ms ease-in,
-          transform 150ms ease-in;
-      }
-    `,
-  ],
+  exportAs: 'zAlertDialog',
 })
 export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
@@ -118,7 +116,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
     this.config.zDescription ? `${this.alertDialogId}-description` : null,
   );
 
-  public alertDialogRef?: ZardAlertDialogRef<T>;
+  alertDialogRef?: ZardAlertDialogRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 
@@ -188,6 +186,7 @@ import type { OverlayRef } from '@angular/cdk/overlay';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
+import { noopFun } from '../../shared/utils/utils';
 
 export class ZardAlertDialogRef<T = unknown> {
   private readonly destroy$ = new Subject<void>();
@@ -215,7 +214,9 @@ export class ZardAlertDialogRef<T = unknown> {
     if (element) {
       element.classList.add('alert-dialog-leave');
     }
-    void this.waitForTransitionEnd(element).then(() => this.dispose());
+    this.waitForTransitionEnd(element)
+      .then(() => this.dispose())
+      .catch(noopFun);
   }
 
   private handleCancel(): void {

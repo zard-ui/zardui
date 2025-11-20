@@ -12,7 +12,6 @@ import { ZardCommandComponent } from './command.component';
 
 @Component({
   selector: 'test-host-component',
-  standalone: true,
   imports: [
     ZardCommandComponent,
     ZardCommandInputComponent,
@@ -22,18 +21,19 @@ import { ZardCommandComponent } from './command.component';
     ZardCommandOptionGroupComponent,
     ZardCommandDividerComponent,
   ],
+  standalone: true,
   template: `
     <z-command size="default" (zOnSelect)="onSelect($event)" (zOnChange)="onChange($event)">
-      <z-command-input placeholder="Test placeholder"></z-command-input>
+      <z-command-input placeholder="Test placeholder" />
       <z-command-list>
         <z-command-empty>No results found.</z-command-empty>
         <z-command-option-group zLabel="Test Group">
-          <z-command-option zLabel="Test Option" zValue="test" zShortcut="⌘T" zIcon="search"></z-command-option>
-          <z-command-option zLabel="Disabled Option" zValue="disabled" [zDisabled]="true"></z-command-option>
-          <z-command-option zLabel="Search Option" zValue="search" zCommand="search test"></z-command-option>
+          <z-command-option zLabel="Test Option" zValue="test" zShortcut="⌘T" zIcon="search" />
+          <z-command-option zLabel="Disabled Option" zValue="disabled" [zDisabled]="true" />
+          <z-command-option zLabel="Search Option" zValue="search" zCommand="search test" />
         </z-command-option-group>
-        <z-command-divider></z-command-divider>
-        <z-command-option zLabel="Single Option" zValue="single"></z-command-option>
+        <z-command-divider />
+        <z-command-option zLabel="Single Option" zValue="single" />
       </z-command-list>
     </z-command>
   `,

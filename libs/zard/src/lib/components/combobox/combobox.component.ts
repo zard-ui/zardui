@@ -13,21 +13,22 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
-import { ZardCommandComponent, type ZardCommandOption } from '../command/command.component';
-import { ZardCommandOptionComponent } from '../command/command-option.component';
-import { ZardCommandInputComponent } from '../command/command-input.component';
-import { ZardCommandEmptyComponent } from '../command/command-empty.component';
-import { ZardCommandListComponent } from '../command/command-list.component';
 import { comboboxVariants, type ZardComboboxVariants } from './combobox.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
+import { ZardCommandEmptyComponent } from '../command/command-empty.component';
+import { ZardCommandInputComponent } from '../command/command-input.component';
+import { ZardCommandListComponent } from '../command/command-list.component';
+import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
+import { ZardCommandOptionComponent } from '../command/command-option.component';
+import { ZardCommandComponent, type ZardCommandOption } from '../command/command.component';
 import { ZardEmptyComponent } from '../empty/empty.component';
 import { ZardIconComponent } from '../icon/icon.component';
-import { mergeClasses } from '../../shared/utils/utils';
 import type { ZardIcon } from '../icon/icons';
+import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 
 export interface ZardComboboxOption {
   value: string;
@@ -43,8 +44,6 @@ export interface ZardComboboxGroup {
 
 @Component({
   selector: 'z-combobox',
-  exportAs: 'zCombobox',
-  standalone: true,
   imports: [
     FormsModule,
     ZardButtonComponent,
@@ -59,8 +58,7 @@ export interface ZardComboboxGroup {
     ZardEmptyComponent,
     ZardIconComponent,
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
     <button
       type="button"
@@ -81,7 +79,7 @@ export interface ZardComboboxGroup {
       (zVisibleChange)="setOpen($event)"
       #popoverTrigger
     >
-      <span class="flex-1 text-left truncate">
+      <span class="flex-1 truncate text-left">
         {{ displayValue() ?? placeholder() }}
       </span>
       <z-icon zType="chevrons-up-down" class="ml-2 shrink-0 opacity-50" />
@@ -101,26 +99,9 @@ export interface ZardComboboxGroup {
               </z-command-empty>
             }
 
-            @if (groups().length > 0) {
-              @for (group of groups(); track group.label ?? $index) {
-                @if (group.label) {
-                  <z-command-option-group [zLabel]="group.label">
-                    @for (option of group.options; track option.value) {
-                      <z-command-option
-                        [zValue]="option.value"
-                        [zLabel]="option.label"
-                        [zDisabled]="option.disabled ?? false"
-                        [zIcon]="option.icon"
-                        [attr.aria-selected]="option.value === getCurrentValue()"
-                      >
-                        {{ option.label }}
-                        @if (option.value === getCurrentValue()) {
-                          <z-icon zType="check" class="ml-auto" />
-                        }
-                      </z-command-option>
-                    }
-                  </z-command-option-group>
-                } @else {
+            @for (group of groups(); track group.label ?? $index) {
+              @if (group.label) {
+                <z-command-option-group [zLabel]="group.label">
                   @for (option of group.options; track option.value) {
                     <z-command-option
                       [zValue]="option.value"
@@ -135,22 +116,39 @@ export interface ZardComboboxGroup {
                       }
                     </z-command-option>
                   }
+                </z-command-option-group>
+              } @else {
+                @for (option of group.options; track option.value) {
+                  <z-command-option
+                    [zValue]="option.value"
+                    [zLabel]="option.label"
+                    [zDisabled]="option.disabled ?? false"
+                    [zIcon]="option.icon"
+                    [attr.aria-selected]="option.value === getCurrentValue()"
+                  >
+                    {{ option.label }}
+                    @if (option.value === getCurrentValue()) {
+                      <z-icon zType="check" class="ml-auto" />
+                    }
+                  </z-command-option>
                 }
               }
-            } @else if (options().length > 0) {
-              @for (option of options(); track option.value) {
-                <z-command-option
-                  [zValue]="option.value"
-                  [zLabel]="option.label"
-                  [zDisabled]="option.disabled ?? false"
-                  [zIcon]="option.icon"
-                  [attr.aria-selected]="option.value === getCurrentValue()"
-                >
-                  {{ option.label }}
-                  @if (option.value === getCurrentValue()) {
-                    <z-icon zType="check" class="ml-auto" />
-                  }
-                </z-command-option>
+            } @empty {
+              @if (options().length > 0) {
+                @for (option of options(); track option.value) {
+                  <z-command-option
+                    [zValue]="option.value"
+                    [zLabel]="option.label"
+                    [zDisabled]="option.disabled ?? false"
+                    [zIcon]="option.icon"
+                    [attr.aria-selected]="option.value === getCurrentValue()"
+                  >
+                    {{ option.label }}
+                    @if (option.value === getCurrentValue()) {
+                      <z-icon zType="check" class="ml-auto" />
+                    }
+                  </z-command-option>
+                }
               }
             }
           </z-command-list>
@@ -158,9 +156,6 @@ export interface ZardComboboxGroup {
       </z-popover>
     </ng-template>
   `,
-  host: {
-    '[class]': 'classes()',
-  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -168,6 +163,12 @@ export interface ZardComboboxGroup {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'classes()',
+  },
+  exportAs: 'zCombobox',
 })
 export class ZardComboboxComponent implements ControlValueAccessor {
   readonly class = input<ClassValue>('');
@@ -233,6 +234,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   private onChange: (value: string | null) => void = () => {
     // ControlValueAccessor implementation
   };
+
   private onTouched: () => void = () => {
     // ControlValueAccessor implementation
   };

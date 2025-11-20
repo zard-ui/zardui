@@ -19,7 +19,6 @@ interface MenuItem {
 
 @Component({
   selector: 'z-demo-layout-collapsible',
-  standalone: true,
   imports: [
     LayoutModule,
     ZardButtonComponent,
@@ -31,18 +30,32 @@ interface MenuItem {
     ZardAvatarComponent,
     ZardIconComponent,
   ],
+  standalone: true,
   template: `
-    <!-- border and rounded-md are just for the demo purpose -->
-    <z-layout class="border rounded-md overflow-hidden">
-      <z-sidebar [zWidth]="250" [zCollapsible]="true" [zCollapsed]="sidebarCollapsed()" [zCollapsedWidth]="70" (zCollapsedChange)="onCollapsedChange($event)" class="!p-0">
-        <nav [class]="'flex flex-col h-full overflow-hidden ' + (sidebarCollapsed() ? 'gap-1 p-1 pt-4' : 'gap-4 p-4')">
+    <! -- border and rounded-md are just for the demo purpose - ->
+    <z-layout class="overflow-hidden rounded-md border">
+      <z-sidebar
+        [zWidth]="250"
+        [zCollapsible]="true"
+        [zCollapsed]="sidebarCollapsed()"
+        [zCollapsedWidth]="70"
+        (zCollapsedChange)="onCollapsedChange($event)"
+        class="!p-0"
+      >
+        <nav [class]="'flex h-full flex-col overflow-hidden ' + (sidebarCollapsed() ? 'gap-1 p-1 pt-4' : 'gap-4 p-4')">
           <z-sidebar-group>
             @if (!sidebarCollapsed()) {
               <z-sidebar-group-label>Main</z-sidebar-group-label>
             }
             @for (item of mainMenuItems; track item.label) {
-              <button z-button zType="ghost" [class]="sidebarCollapsed() ? 'justify-center' : 'justify-start'" [zTooltip]="sidebarCollapsed() ? item.label : ''" zPosition="right">
-                <z-icon [zType]="item.icon" [class]="sidebarCollapsed() ? '' : ' mr-2'"></z-icon>
+              <button
+                z-button
+                zType="ghost"
+                [class]="sidebarCollapsed() ? 'justify-center' : 'justify-start'"
+                [zTooltip]="sidebarCollapsed() ? item.label : ''"
+                zPosition="right"
+              >
+                <z-icon [zType]="item.icon" [class]="sidebarCollapsed() ? '' : 'mr-2'" />
                 @if (!sidebarCollapsed()) {
                   <span>{{ item.label }}</span>
                 }
@@ -66,7 +79,7 @@ interface MenuItem {
                   [zTooltip]="sidebarCollapsed() ? item.label : null"
                   zPosition="right"
                 >
-                  <z-icon [zType]="item.icon" [class]="sidebarCollapsed() ? '' : ' mr-2'"></z-icon>
+                  <z-icon [zType]="item.icon" [class]="sidebarCollapsed() ? '' : 'mr-2'" />
                   @if (!sidebarCollapsed()) {
                     <span class="flex-1 text-left">{{ item.label }}</span>
                     <z-icon zType="chevron-right" />
@@ -88,7 +101,7 @@ interface MenuItem {
                   [zTooltip]="sidebarCollapsed() ? item.label : ''"
                   zPosition="right"
                 >
-                  <z-icon [zType]="item.icon" [class]="sidebarCollapsed() ? '' : ' mr-2'"></z-icon>
+                  <z-icon [zType]="item.icon" [class]="sidebarCollapsed() ? '' : 'mr-2'" />
                   @if (!sidebarCollapsed()) {
                     <span>{{ item.label }}</span>
                   }
@@ -102,7 +115,10 @@ interface MenuItem {
               z-menu
               [zMenuTriggerFor]="userMenu"
               zPlacement="rightBottom"
-              [class]="'flex items-center justify-center gap-2 cursor-pointer rounded-md hover:bg-accent ' + (sidebarCollapsed() ? 'p-0 m-2' : 'p-2')"
+              [class]="
+                'hover:bg-accent flex cursor-pointer items-center justify-center gap-2 rounded-md ' +
+                (sidebarCollapsed() ? 'm-2 p-0' : 'p-2')
+              "
             >
               <z-avatar zSrc="https://zardui.com/images/avatar/imgs/avatar_image.jpg" zAlt="Zard UI" />
 
@@ -137,14 +153,14 @@ interface MenuItem {
         </nav>
       </z-sidebar>
 
-      <!-- min-h-[200px] is just for the demo purpose to have a minimum height -->
+      <! -- min-h-[200px] is just for the demo purpose to have a minimum height - ->
       <z-content class="min-h-[200px]">
         <div class="flex items-center">
           <button z-button zType="ghost" zSize="sm" class="-ml-2" (click)="toggleSidebar()">
             <z-icon zType="panel-left" />
           </button>
 
-          <z-divider zOrientation="vertical" class="h-4 ml-2" />
+          <z-divider zOrientation="vertical" class="ml-2 h-4" />
 
           <z-breadcrumb zWrap="wrap" zAlign="start">
             <z-breadcrumb-item [routerLink]="['/docs/components/layout']">Home</z-breadcrumb-item>
@@ -155,15 +171,15 @@ interface MenuItem {
         </div>
 
         <div class="space-y-4 py-4">
-          <z-skeleton class="h-80 w-full"></z-skeleton>
-          <z-skeleton class="h-16 w-full"></z-skeleton>
+          <z-skeleton class="h-80 w-full" />
+          <z-skeleton class="h-16 w-full" />
         </div>
       </z-content>
     </z-layout>
   `,
 })
 export class LayoutDemoSidebarComponent {
-  sidebarCollapsed = signal(false);
+  readonly sidebarCollapsed = signal(false);
 
   mainMenuItems: MenuItem[] = [
     { icon: 'house', label: 'Home' },

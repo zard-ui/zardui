@@ -6,8 +6,8 @@ import { ZardCheckboxComponent } from '../checkbox.component';
 
 @Component({
   selector: 'z-demo-checkbox-destructive',
-  standalone: true,
   imports: [ZardCheckboxComponent, FormsModule],
+  standalone: true,
   template: `
     <span z-checkbox zType="destructive"></span>
     <span z-checkbox zType="destructive" [(ngModel)]="checked">Destructive Checked</span>

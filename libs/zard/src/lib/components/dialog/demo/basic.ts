@@ -13,9 +13,8 @@ interface iDialogData {
 
 @Component({
   selector: 'zard-demo-dialog-basic',
-  exportAs: 'zardDemoDialogBasic',
-  standalone: true,
   imports: [FormsModule, ReactiveFormsModule, ZardInputDirective],
+  standalone: true,
   template: `
     <form [formGroup]="form" class="grid gap-4">
       <div class="grid gap-3">
@@ -37,6 +36,7 @@ interface iDialogData {
       </div>
     </form>
   `,
+  exportAs: 'zardDemoDialogBasic',
 })
 export class ZardDemoDialogBasicInputComponent {
   private zData: iDialogData = inject(Z_MODAL_DATA);
@@ -52,9 +52,9 @@ export class ZardDemoDialogBasicInputComponent {
 }
 
 @Component({
-  standalone: true,
   imports: [ZardButtonComponent, ZardDialogModule],
-  template: ` <button z-button zType="outline" (click)="openDialog()">Edit profile</button> `,
+  standalone: true,
+  template: ` <button type="button" z-button zType="outline" (click)="openDialog()">Edit profile</button> `,
 })
 export class ZardDemoDialogBasicComponent {
   private dialogService = inject(ZardDialogService);

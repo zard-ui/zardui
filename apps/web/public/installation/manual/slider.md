@@ -43,15 +43,15 @@ type OnChangeType = (value: number) => void;
 
 @Component({
   selector: 'z-slider-track',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [],
+  standalone: true,
   template: `
     <span #track data-slot="slider-track" [attr.data-orientation]="orientation()" [class]="classes()">
       <ng-content />
     </span>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': '"data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full"',
     '[attr.data-orientation]': 'orientation()',
@@ -74,10 +74,8 @@ export class ZSliderTrackComponent {
 
 @Component({
   selector: 'z-slider-range',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [],
+  standalone: true,
   template: `
     <span
       data-slot="slider-range"
@@ -89,6 +87,8 @@ export class ZSliderTrackComponent {
       [style.top]="orientation() === 'vertical' ? 100 - percent() + '%' : null"
     ></span>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
 })
 export class ZSliderRangeComponent {
   readonly percent = input(0);
@@ -103,10 +103,8 @@ export class ZSliderRangeComponent {
 
 @Component({
   selector: 'z-slider-thumb',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [],
+  standalone: true,
   template: `
     <span
       #thumb
@@ -120,6 +118,8 @@ export class ZSliderRangeComponent {
       tabindex="0"
     ></span>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'orientationClasses()',
     '[style.left]': 'orientation() === "horizontal" ? "calc(" + percent() + "% + " + offset() + "px)" : null',
@@ -151,18 +151,8 @@ export class ZSliderThumbComponent {
 
 @Component({
   selector: 'z-slider',
-  exportAs: 'zSlider',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [ZSliderTrackComponent, ZSliderRangeComponent, ZSliderThumbComponent],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ZardSliderComponent),
-      multi: true,
-    },
-  ],
+  standalone: true,
   template: `
     <span
       data-slot="slider"
@@ -186,12 +176,22 @@ export class ZSliderThumbComponent {
       />
     </span>
   `,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ZardSliderComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[attr.data-orientation]': 'zOrientation()',
     '[attr.aria-disabled]': 'disabled() ? true : null',
     '[attr.data-disabled]': 'disabled() ? true : null',
   },
+  exportAs: 'zSlider',
 })
 export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit, OnChanges, OnDestroy {
   readonly zMin = input(0, { transform: numberAttribute });
@@ -217,7 +217,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
     mergeClasses(sliderVariants({ orientation: this.zOrientation() }), this.class()),
   );
 
-  protected disabled = linkedSignal(() => this.zDisabled());
+  protected readonly disabled = linkedSignal(() => this.zDisabled());
 
   readonly percentValue = signal(50);
   readonly lastEmittedValue = signal(0);
@@ -450,17 +450,20 @@ export const sliderTrackVariants = cva(
 
 export type SliderTrackVariants = VariantProps<typeof sliderTrackVariants>;
 
-export const sliderRangeVariants = cva('bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full', {
-  variants: {
-    zOrientation: {
-      horizontal: 'h-full',
-      vertical: 'w-full',
+export const sliderRangeVariants = cva(
+  'bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
+  {
+    variants: {
+      zOrientation: {
+        horizontal: 'h-full',
+        vertical: 'w-full',
+      },
+    },
+    defaultVariants: {
+      zOrientation: 'horizontal',
     },
   },
-  defaultVariants: {
-    zOrientation: 'horizontal',
-  },
-});
+);
 
 export type SliderRangeVariants = VariantProps<typeof sliderRangeVariants>;
 

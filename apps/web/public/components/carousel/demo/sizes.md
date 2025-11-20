@@ -6,7 +6,6 @@ import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
   imports: [ZardCarouselModule, ZardCardComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <z-carousel>
@@ -24,6 +23,7 @@ import { ZardCarouselModule } from '../carousel.module';
       </z-carousel>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCarouselSizeComponent {
   protected slides = ['1', '2', '3', '4', '5'];

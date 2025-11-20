@@ -5,22 +5,22 @@ import { ZardSegmentedComponent } from '../segmented.component';
 
 @Component({
   selector: 'zard-demo-segmented-disabled',
-  standalone: true,
   imports: [ZardSegmentedComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   template: `
     <div class="space-y-4">
       <div>
-        <label class="block text-sm font-medium mb-2">With disabled options</label>
-        <z-segmented [zOptions]="optionsWithDisabled" zDefaultValue="enabled1"> </z-segmented>
+        <label class="mb-2 block text-sm font-medium">With disabled options</label>
+        <z-segmented [zOptions]="optionsWithDisabled" zDefaultValue="enabled1" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-2">Entire component disabled</label>
-        <z-segmented [zOptions]="options" zDefaultValue="tab1" [zDisabled]="true"> </z-segmented>
+        <label class="mb-2 block text-sm font-medium">Entire component disabled</label>
+        <z-segmented [zOptions]="options" zDefaultValue="tab1" [zDisabled]="true" />
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSegmentedDisabledComponent {
   options = [

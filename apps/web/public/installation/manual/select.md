@@ -35,7 +35,7 @@ import {
   selectContentVariants,
   selectTriggerVariants,
   selectVariants,
-  ZardSelectSizeVariants,
+  type ZardSelectSizeVariants,
 } from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
@@ -46,20 +46,7 @@ type OnChangeType = (value: string) => void;
 
 @Component({
   selector: 'z-select, [z-select]',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, OverlayModule, ZardBadgeComponent, ZardIconComponent],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ZardSelectComponent),
-      multi: true,
-    },
-  ],
-  host: {
-    '[attr.data-disabled]': 'zDisabled() ? "" : null',
-    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    '[class]': 'classes()',
-  },
   template: `
     <button
       type="button"
@@ -107,6 +94,19 @@ type OnChangeType = (value: string) => void;
       </div>
     </ng-template>
   `,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ZardSelectComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[attr.data-disabled]': 'zDisabled() ? "" : null',
+    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
+    '[class]': 'classes()',
+  },
 })
 export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
@@ -596,7 +596,16 @@ export type ZardSelectSizeVariants = NonNullable<VariantProps<typeof selectTrigg
 
 
 ```angular-ts title="select-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, ElementRef, inject, input, linkedSignal, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  ElementRef,
+  inject,
+  input,
+  linkedSignal,
+  signal,
+} from '@angular/core';
 
 import { selectItemVariants } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
@@ -610,8 +619,18 @@ interface SelectHost {
 
 @Component({
   selector: 'z-select-item, [z-select-item]',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardIconComponent],
+  template: `
+    @if (isSelected()) {
+      <span class="absolute right-2 flex size-3.5 items-center justify-center">
+        <z-icon zType="check" />
+      </span>
+    }
+    <span class="truncate">
+      <ng-content />
+    </span>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
     '[attr.value]': 'zValue()',
@@ -622,16 +641,6 @@ interface SelectHost {
     '[attr.aria-selected]': 'isSelected()',
     '(click)': 'onClick()',
   },
-  template: `
-    @if (isSelected()) {
-      <span class="absolute right-2 flex size-3.5 items-center justify-center">
-        <z-icon zType="check" />
-      </span>
-    }
-    <span class="truncate">
-      <ng-content></ng-content>
-    </span>
-  `,
 })
 export class ZardSelectItemComponent {
   readonly zValue = input.required<string>();

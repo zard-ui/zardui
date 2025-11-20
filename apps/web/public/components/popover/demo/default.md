@@ -7,7 +7,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component
 @Component({
   selector: 'z-popover-default-demo',
   imports: [ZardButtonComponent, ZardPopoverComponent, ZardPopoverDirective],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   template: `
     <button type="button" z-button zPopover [zContent]="popoverContent" zType="outline">Open popover</button>
 
@@ -20,6 +20,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component
       </z-popover>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoPopoverDefaultComponent {}
 

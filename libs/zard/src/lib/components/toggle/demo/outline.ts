@@ -5,8 +5,8 @@ import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
   selector: 'z-demo-toggle-outline',
-  standalone: true,
   imports: [ZardToggleComponent, ZardIconComponent],
+  standalone: true,
   template: `
     <z-toggle aria-label="Toggle outline" zType="outline">
       <z-icon zType="bold" />

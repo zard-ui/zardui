@@ -1,5 +1,5 @@
-import { ZardDemoDividerVerticalComponent } from './vertical';
 import { ZardDemoDividerDefaultComponent } from './default';
+import { ZardDemoDividerVerticalComponent } from './vertical';
 
 export const DIVIDER = {
   componentName: 'divider',

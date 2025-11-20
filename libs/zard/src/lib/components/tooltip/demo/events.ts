@@ -5,9 +5,13 @@ import { ZardTooltipModule } from '../tooltip';
 
 @Component({
   selector: 'z-demo-tooltip-events',
-  standalone: true,
   imports: [ZardButtonComponent, ZardTooltipModule],
-  template: ` <button z-button zType="outline" zTooltip="Tooltip content" (zOnShow)="onShow()" (zOnHide)="onHide()">Events</button> `,
+  standalone: true,
+  template: `
+    <button z-button zType="outline" zTooltip="Tooltip content" (zOnShow)="onShow()" (zOnHide)="onHide()">
+      Events
+    </button>
+  `,
 })
 export class ZardDemoTooltipEventsComponent {
   onShow() {

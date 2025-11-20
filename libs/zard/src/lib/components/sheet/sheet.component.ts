@@ -57,7 +57,6 @@ export class ZardSheetOptions<T, U> {
 
 @Component({
   selector: 'z-sheet',
-  exportAs: 'zSheet',
   imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
@@ -145,6 +144,7 @@ export class ZardSheetOptions<T, U> {
     '[style.width]': 'config.zWidth ? config.zWidth + " !important" : null',
     '[style.height]': 'config.zHeight ? config.zHeight + " !important" : null',
   },
+  exportAs: 'zSheet',
 })
 export class ZardSheetComponent<T, U> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
@@ -162,7 +162,7 @@ export class ZardSheetComponent<T, U> extends BasePortalOutlet {
     );
   });
 
-  public sheetRef?: ZardSheetRef<T>;
+  sheetRef?: ZardSheetRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 

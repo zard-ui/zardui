@@ -5,7 +5,6 @@ import { ZardDropdownService } from './dropdown.service';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
-  exportAs: 'zDropdown',
   standalone: true,
   host: {
     '[attr.tabindex]': '0',
@@ -14,6 +13,7 @@ import { ZardDropdownService } from './dropdown.service';
     '[attr.aria-expanded]': 'dropdownService.isOpen()',
     '[attr.aria-disabled]': 'zDisabled()',
   },
+  exportAs: 'zDropdown',
 })
 export class ZardDropdownDirective implements OnInit {
   private readonly elementRef = inject(ElementRef);

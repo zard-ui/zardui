@@ -6,8 +6,8 @@ import { ZardCheckboxComponent } from '../checkbox.component';
 
 @Component({
   selector: 'z-demo-checkbox-size',
-  standalone: true,
   imports: [ZardCheckboxComponent, FormsModule],
+  standalone: true,
   template: `
     <span z-checkbox>Default</span>
     <span z-checkbox zSize="lg" [(ngModel)]="checked">Large</span>

@@ -5,8 +5,8 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
   selector: 'z-demo-breadcrumb-separator',
-  standalone: true,
   imports: [ZardBreadcrumbModule, ZardIconComponent],
+  standalone: true,
   template: `
     <z-breadcrumb [zSeparator]="customSeparator">
       <z-breadcrumb-item>Home</z-breadcrumb-item>
@@ -15,7 +15,7 @@ import { ZardBreadcrumbModule } from '../breadcrumb.module';
     </z-breadcrumb>
 
     <ng-template #customSeparator>
-      <z-icon zType="arrow-right"></z-icon>
+      <z-icon zType="arrow-right" />
     </ng-template>
   `,
 })

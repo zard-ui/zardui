@@ -101,9 +101,9 @@ import { ZardIconComponent } from '../icon/icon.component';
       </div>
     </ng-template>
   `,
-  host: { '(keydown)': 'handleKeyDown($event)' },
-  encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: { '(keydown)': 'handleKeyDown($event)' },
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);
@@ -292,18 +292,20 @@ import { mergeClasses } from '../../shared/utils/utils';
 @Component({
   selector: 'z-carousel-content',
   imports: [],
-  template: ` <ng-content></ng-content> `,
+  template: ` <ng-content /> `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
   },
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardCarouselContentComponent {
   readonly #parent = inject(ZardCarouselComponent);
   readonly #orientation = computed<'horizontal' | 'vertical'>(() => this.#parent.zOrientation());
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(carouselContentVariants({ zOrientation: this.#orientation() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(carouselContentVariants({ zOrientation: this.#orientation() }), this.class()),
+  );
 }
 
 ```
@@ -322,21 +324,23 @@ import { mergeClasses } from '../../shared/utils/utils';
 @Component({
   selector: 'z-carousel-item',
   imports: [],
-  template: ` <ng-content></ng-content> `,
+  template: ` <ng-content /> `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     role: 'group',
     'aria-roledescription': 'slide',
   },
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardCarouselItemComponent {
   readonly #parent = inject(ZardCarouselComponent);
 
   readonly #orientation = computed<'horizontal' | 'vertical'>(() => this.#parent.zOrientation());
   readonly class = input<ClassValue>('');
-  protected readonly classes = computed(() => mergeClasses(carouselItemVariants({ zOrientation: this.#orientation() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(carouselItemVariants({ zOrientation: this.#orientation() }), this.class()),
+  );
 }
 
 ```

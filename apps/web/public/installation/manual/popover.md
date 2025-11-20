@@ -69,8 +69,8 @@ const POPOVER_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
 
 @Directive({
   selector: '[zPopover]',
-  exportAs: 'zPopover',
   standalone: true,
+  exportAs: 'zPopover',
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
@@ -374,13 +374,13 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
 
 @Component({
   selector: 'z-popover',
-  standalone: true,
   imports: [],
+  standalone: true,
   template: `<ng-content />`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
   },
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardPopoverComponent {
   readonly class = input<string>('');

@@ -3,6 +3,7 @@ import type { OverlayRef } from '@angular/cdk/overlay';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
+import { noopFun } from '../../shared/utils/utils';
 
 export class ZardAlertDialogRef<T = unknown> {
   private readonly destroy$ = new Subject<void>();
@@ -30,7 +31,9 @@ export class ZardAlertDialogRef<T = unknown> {
     if (element) {
       element.classList.add('alert-dialog-leave');
     }
-    void this.waitForTransitionEnd(element).then(() => this.dispose());
+    this.waitForTransitionEnd(element)
+      .then(() => this.dispose())
+      .catch(noopFun);
   }
 
   private handleCancel(): void {

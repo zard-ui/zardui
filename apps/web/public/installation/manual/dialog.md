@@ -59,7 +59,6 @@ export class ZardDialogOptions<T, U> {
 
 @Component({
   selector: 'z-dialog',
-  exportAs: 'zDialog',
   imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
@@ -127,6 +126,30 @@ export class ZardDialogOptions<T, U> {
       </footer>
     }
   `,
+  styles: `
+    :host {
+      opacity: 1;
+      transform: scale(1);
+      transition:
+        opacity 150ms ease-out,
+        transform 150ms ease-out;
+    }
+
+    @starting-style {
+      :host {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+    }
+
+    :host.dialog-leave {
+      opacity: 0;
+      transform: scale(0.9);
+      transition:
+        opacity 150ms ease-in,
+        transform 150ms ease-in;
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
@@ -134,39 +157,14 @@ export class ZardDialogOptions<T, U> {
     'animate.enter': 'dialog-enter',
     'animate.leave': 'dialog-leave',
   },
-  styles: [
-    `
-      :host {
-        opacity: 1;
-        transform: scale(1);
-        transition:
-          opacity 150ms ease-out,
-          transform 150ms ease-out;
-      }
-
-      @starting-style {
-        :host {
-          opacity: 0;
-          transform: scale(0.9);
-        }
-      }
-
-      :host.dialog-leave {
-        opacity: 0;
-        transform: scale(0.9);
-        transition:
-          opacity 150ms ease-in,
-          transform 150ms ease-in;
-      }
-    `,
-  ],
+  exportAs: 'zDialog',
 })
 export class ZardDialogComponent<T, U> extends BasePortalOutlet {
   private readonly host = inject(ElementRef<HTMLElement>);
   protected readonly config = inject(ZardDialogOptions<T, U>);
 
   protected readonly classes = computed(() => mergeClasses(dialogVariants(), this.config.zCustomClasses));
-  public dialogRef?: ZardDialogRef<T>;
+  dialogRef?: ZardDialogRef<T>;
 
   protected readonly isStringContent = typeof this.config.zContent === 'string';
 

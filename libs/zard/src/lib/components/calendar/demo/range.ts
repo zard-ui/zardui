@@ -4,8 +4,8 @@ import { ZardCalendarComponent } from '../calendar.component';
 
 @Component({
   selector: 'z-demo-calendar-range',
-  standalone: true,
   imports: [ZardCalendarComponent],
+  standalone: true,
   template: `
     <div class="space-y-4">
       <z-calendar zMode="range" [(value)]="dateRange" (dateChange)="onDateChange($event)" />
@@ -27,7 +27,7 @@ import { ZardCalendarComponent } from '../calendar.component';
   `,
 })
 export class ZardDemoCalendarRangeComponent {
-  dateRange = signal<Date[] | null>(null);
+  readonly dateRange = signal<Date[] | null>(null);
 
   onDateChange(dates: Date | Date[]) {
     console.log('Selected range:', dates);

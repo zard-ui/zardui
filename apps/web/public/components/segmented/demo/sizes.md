@@ -5,27 +5,27 @@ import { ZardSegmentedComponent } from '../segmented.component';
 
 @Component({
   selector: 'zard-demo-segmented-sizes',
-  standalone: true,
   imports: [ZardSegmentedComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   template: `
     <div class="space-y-4">
       <div>
-        <label class="block text-sm font-medium mb-2">Small</label>
-        <z-segmented zSize="sm" [zOptions]="options" zDefaultValue="tab1"> </z-segmented>
+        <label class="mb-2 block text-sm font-medium">Small</label>
+        <z-segmented zSize="sm" [zOptions]="options" zDefaultValue="tab1" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-2">Default</label>
-        <z-segmented [zOptions]="options" zDefaultValue="tab1"> </z-segmented>
+        <label class="mb-2 block text-sm font-medium">Default</label>
+        <z-segmented [zOptions]="options" zDefaultValue="tab1" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium mb-2">Large</label>
-        <z-segmented zSize="lg" [zOptions]="options" zDefaultValue="tab1"> </z-segmented>
+        <label class="mb-2 block text-sm font-medium">Large</label>
+        <z-segmented zSize="lg" [zOptions]="options" zDefaultValue="tab1" />
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSegmentedSizesComponent {
   options = [

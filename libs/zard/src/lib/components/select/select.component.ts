@@ -32,7 +32,7 @@ import {
   selectContentVariants,
   selectTriggerVariants,
   selectVariants,
-  ZardSelectSizeVariants,
+  type ZardSelectSizeVariants,
 } from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
@@ -43,20 +43,7 @@ type OnChangeType = (value: string) => void;
 
 @Component({
   selector: 'z-select, [z-select]',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [CommonModule, OverlayModule, ZardBadgeComponent, ZardIconComponent],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ZardSelectComponent),
-      multi: true,
-    },
-  ],
-  host: {
-    '[attr.data-disabled]': 'zDisabled() ? "" : null',
-    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    '[class]': 'classes()',
-  },
   template: `
     <button
       type="button"
@@ -104,6 +91,19 @@ type OnChangeType = (value: string) => void;
       </div>
     </ng-template>
   `,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ZardSelectComponent),
+      multi: true,
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[attr.data-disabled]': 'zDisabled() ? "" : null',
+    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
+    '[class]': 'classes()',
+  },
 })
 export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);

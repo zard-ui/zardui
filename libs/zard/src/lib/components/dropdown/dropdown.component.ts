@@ -1,5 +1,6 @@
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,35 +19,48 @@ import {
   ViewContainerRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { dropdownContentVariants } from './dropdown.variants';
 
 import type { ClassValue } from 'clsx';
-import { isPlatformBrowser } from '@angular/common';
+
+import { dropdownContentVariants } from './dropdown.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
+
 @Component({
   selector: 'z-dropdown-menu',
-  exportAs: 'zDropdownMenu',
+  imports: [OverlayModule],
   standalone: true,
+  template: `
+    <! -- Dropdown Trigger - ->
+    <div
+      class="trigger-container"
+      (click)="toggle()"
+      (keydown.enter)="toggle()"
+      (keydown.space)="toggle()"
+      tabindex="0"
+    >
+      <ng-content select="[dropdown-trigger]" />
+    </div>
+
+    <! -- Template for overlay content - ->
+    <ng-template #dropdownTemplate>
+      <div
+        [class]="contentClasses()"
+        role="menu"
+        [attr.data-state]="'open'"
+        (keydown)="onDropdownKeydown($event)"
+        tabindex="-1"
+      >
+        <ng-content />
+      </div>
+    </ng-template>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [OverlayModule],
   host: {
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     class: 'relative inline-block text-left',
   },
-  template: `
-    <!-- Dropdown Trigger -->
-    <div class="trigger-container" (click)="toggle()" (keydown.enter)="toggle()" (keydown.space)="toggle()" tabindex="0">
-      <ng-content select="[dropdown-trigger]"></ng-content>
-    </div>
-
-    <!-- Template for overlay content -->
-    <ng-template #dropdownTemplate>
-      <div [class]="contentClasses()" role="menu" [attr.data-state]="'open'" (keydown)="onDropdownKeydown($event)" tabindex="-1">
-        <ng-content></ng-content>
-      </div>
-    </ng-template>
-  `,
+  exportAs: 'zDropdownMenu',
 })
 export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private elementRef = inject(ElementRef);
@@ -206,7 +220,9 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private getDropdownItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(item => item.dataset['disabled'] === undefined);
+    return Array.from(
+      dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]'),
+    ).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {

@@ -1,4 +1,14 @@
-import { booleanAttribute, ChangeDetectionStrategy, Component, computed, forwardRef, input, linkedSignal, output, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  forwardRef,
+  input,
+  linkedSignal,
+  output,
+  ViewEncapsulation,
+} from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
@@ -18,14 +28,14 @@ import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-pagination-content',
-  exportAs: 'zPaginationContent',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <div [attr.aria-label]="ariaLabel()" role="navigation" data-slot="pagination-content" [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zPaginationContent',
 })
 export class ZardPaginationContentComponent {
   readonly ariaLabel = input<string>('pagination-content');
@@ -37,14 +47,14 @@ export class ZardPaginationContentComponent {
 
 @Component({
   selector: 'z-pagination-item',
-  exportAs: 'zPaginationItem',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <div data-slot="pagination-item" [class]="classes()">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zPaginationItem',
 })
 export class ZardPaginationItemComponent {
   readonly class = input<ClassValue>('');
@@ -54,11 +64,8 @@ export class ZardPaginationItemComponent {
 
 @Component({
   selector: 'z-pagination-button',
-  exportAs: 'zPaginationButton',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [ZardButtonComponent],
+  standalone: true,
   template: `
     <button
       z-button
@@ -72,9 +79,12 @@ export class ZardPaginationItemComponent {
       [class]="class()"
       (click)="handleClick()"
     >
-      <ng-content></ng-content>
+      <ng-content />
     </button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zPaginationButton',
 })
 export class ZardPaginationButtonComponent {
   readonly zDisabled = input(false, { transform: booleanAttribute });
@@ -95,16 +105,16 @@ export class ZardPaginationButtonComponent {
 
 @Component({
   selector: 'z-pagination-previous',
-  exportAs: 'zPaginationPrevious',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [ZardPaginationButtonComponent, ZardIconComponent],
   template: `
-    <z-pagination-button aria-label="Go to previous page" [class]="classes()" [zSize]="'default'">
+    <z-pagination-button aria-label="Go to previous page" [class]="classes()" zSize="default">
       <z-icon zType="chevron-left" />
       <span class="hidden sm:block">Previous</span>
     </z-pagination-button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zPaginationPrevious',
 })
 export class ZardPaginationPreviousComponent {
   readonly class = input<ClassValue>('');
@@ -114,16 +124,16 @@ export class ZardPaginationPreviousComponent {
 
 @Component({
   selector: 'z-pagination-next',
-  exportAs: 'zPaginationNext',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [ZardPaginationButtonComponent, ZardIconComponent],
   template: `
-    <z-pagination-button aria-label="Go to next page" [class]="classes()" [zSize]="'default'">
+    <z-pagination-button aria-label="Go to next page" [class]="classes()" zSize="default">
       <span class="hidden sm:block">Next</span>
       <z-icon zType="chevron-right" />
     </z-pagination-button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zPaginationNext',
 })
 export class ZardPaginationNextComponent {
   readonly class = input<ClassValue>('');
@@ -133,17 +143,17 @@ export class ZardPaginationNextComponent {
 
 @Component({
   selector: 'z-pagination-ellipsis',
-  exportAs: 'zPaginationEllipsis',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [ZardIconComponent],
   template: `
     <z-icon zType="ellipsis" aria-hidden="true" role="presentation" />
     <span class="sr-only">More pages</span>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zPaginationEllipsis',
 })
 export class ZardPaginationEllipsisComponent {
   readonly class = input<ClassValue>('');
@@ -153,36 +163,50 @@ export class ZardPaginationEllipsisComponent {
 
 @Component({
   selector: 'z-pagination',
-  exportAs: 'zPagination',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  imports: [ZardPaginationContentComponent, ZardPaginationItemComponent, ZardPaginationButtonComponent, ZardIconComponent],
+  imports: [
+    ZardPaginationContentComponent,
+    ZardPaginationItemComponent,
+    ZardPaginationButtonComponent,
+    ZardIconComponent,
+  ],
   template: `
     <z-pagination-content>
       <z-pagination-item>
-        <z-pagination-button aria-label="Go to previous page" [zSize]="zSize()" [zDisabled]="disabled() || currentPage() === 1" (zClick)="goToPrevious()">
+        <z-pagination-button
+          aria-label="Go to previous page"
+          [zSize]="zSize()"
+          [zDisabled]="disabled() || currentPage() === 1"
+          (zClick)="goToPrevious()"
+        >
           <z-icon zType="chevron-left" />
         </z-pagination-button>
       </z-pagination-item>
 
       @for (page of pages(); track page) {
         <z-pagination-item>
-          <z-pagination-button [zSize]="zSize()" [zActive]="page === currentPage()" [zDisabled]="disabled()" (zClick)="goToPage(page)">
+          <z-pagination-button
+            [zSize]="zSize()"
+            [zActive]="page === currentPage()"
+            [zDisabled]="disabled()"
+            (zClick)="goToPage(page)"
+          >
             {{ page }}
           </z-pagination-button>
         </z-pagination-item>
       }
 
       <z-pagination-item>
-        <z-pagination-button aria-label="Go to next page" [zSize]="zSize()" [zDisabled]="disabled() || currentPage() === zTotal()" (zClick)="goToNext()">
+        <z-pagination-button
+          aria-label="Go to next page"
+          [zSize]="zSize()"
+          [zDisabled]="disabled() || currentPage() === zTotal()"
+          (zClick)="goToNext()"
+        >
           <z-icon zType="chevron-right" />
         </z-pagination-button>
       </z-pagination-item>
     </z-pagination-content>
   `,
-  host: {
-    '[class]': 'classes()',
-  },
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -190,6 +214,12 @@ export class ZardPaginationEllipsisComponent {
       multi: true,
     },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'classes()',
+  },
+  exportAs: 'zPagination',
 })
 export class ZardPaginationComponent implements ControlValueAccessor {
   readonly zPageIndex = input<number>(1);
@@ -203,9 +233,7 @@ export class ZardPaginationComponent implements ControlValueAccessor {
 
   protected readonly classes = computed(() => mergeClasses(paginationVariants(), this.class()));
 
-  protected readonly disabled = linkedSignal(() => {
-    return this.zDisabled();
-  });
+  protected readonly disabled = linkedSignal(() => this.zDisabled());
 
   readonly currentPage = linkedSignal(this.zPageIndex);
 
