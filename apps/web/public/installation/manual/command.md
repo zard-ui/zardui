@@ -635,21 +635,26 @@ export class ZardCommandListComponent {
 
 
 ```angular-ts title="command-option-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { type AfterContentInit, ChangeDetectionStrategy, Component, computed, contentChildren, inject, input, ViewEncapsulation } from '@angular/core';
-
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardCommandOptionComponent } from './command-option.component';
-import { ZardCommandComponent } from './command.component';
-import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChildren,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import { ZardCommandOptionComponent } from './command-option.component';
+import { ZardCommandComponent } from './command.component';
+import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
+import { mergeClasses } from '../../shared/utils/utils';
+
 @Component({
   selector: 'z-command-option-group',
-  exportAs: 'zCommandOptionGroup',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()" role="group">
@@ -659,13 +664,16 @@ import type { ClassValue } from 'clsx';
           </div>
         }
         <div role="group">
-          <ng-content></ng-content>
+          <ng-content />
         </div>
       </div>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zCommandOptionGroup',
 })
-export class ZardCommandOptionGroupComponent implements AfterContentInit {
+export class ZardCommandOptionGroupComponent {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
 
   readonly optionComponents = contentChildren(ZardCommandOptionComponent, { descendants: true });
@@ -689,10 +697,6 @@ export class ZardCommandOptionGroupComponent implements AfterContentInit {
     // Check if any option in this group is in the filtered list
     return this.optionComponents().some(option => filteredOptions.includes(option));
   });
-
-  ngAfterContentInit() {
-    // Component is ready when content children are initialized
-  }
 }
 
 ```
