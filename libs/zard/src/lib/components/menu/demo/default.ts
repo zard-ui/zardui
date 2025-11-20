@@ -7,8 +7,8 @@ import { ZardMenuModule } from '../menu.module';
 
 @Component({
   selector: 'zard-demo-menu-default',
-  standalone: true,
   imports: [ZardMenuModule, ZardButtonComponent, ZardDividerComponent, ZardIconComponent],
+  standalone: true,
   template: `
     <nav class="flex items-center justify-between p-4">
       <div class="flex items-center space-x-6">
@@ -38,19 +38,23 @@ import { ZardMenuModule } from '../menu.module';
             <ng-template #solutionsMenu>
               <div z-menu-content class="w-80 p-2">
                 <div class="grid gap-1">
-                  <button z-menu-item (click)="log('For Startups')" class="flex flex-col items-start h-auto py-3">
+                  <button z-menu-item (click)="log('For Startups')" class="flex h-auto flex-col items-start py-3">
                     <div class="text-sm font-medium">For Startups</div>
-                    <div class="text-xs text-muted-foreground mt-1">Get started quickly with our startup-friendly tools</div>
+                    <div class="text-muted-foreground mt-1 text-xs">
+                      Get started quickly with our startup-friendly tools
+                    </div>
                   </button>
 
-                  <button z-menu-item (click)="log('For Enterprise')" class="flex flex-col items-start h-auto py-3">
+                  <button z-menu-item (click)="log('For Enterprise')" class="flex h-auto flex-col items-start py-3">
                     <div class="text-sm font-medium">For Enterprise</div>
-                    <div class="text-xs text-muted-foreground mt-1">Scale your business with enterprise-grade features</div>
+                    <div class="text-muted-foreground mt-1 text-xs">
+                      Scale your business with enterprise-grade features
+                    </div>
                   </button>
 
-                  <button z-menu-item (click)="log('For Agencies')" class="flex flex-col items-start h-auto py-3">
+                  <button z-menu-item (click)="log('For Agencies')" class="flex h-auto flex-col items-start py-3">
                     <div class="text-sm font-medium">For Agencies</div>
-                    <div class="text-xs text-muted-foreground mt-1">Manage multiple clients with our agency tools</div>
+                    <div class="text-muted-foreground mt-1 text-xs">Manage multiple clients with our agency tools</div>
                   </button>
                 </div>
               </div>
@@ -75,12 +79,18 @@ import { ZardMenuModule } from '../menu.module';
                   Documentation
                 </button>
 
-                <button z-menu-item z-menu [zMenuTriggerFor]="helpSubmenu" zPlacement="rightTop" class="justify-between">
+                <button
+                  z-menu-item
+                  z-menu
+                  [zMenuTriggerFor]="helpSubmenu"
+                  zPlacement="rightTop"
+                  class="justify-between"
+                >
                   <div class="flex items-center"><z-icon zType="info" class="mr-2" /> Help & Support</div>
                   <z-icon zType="chevron-right" />
                 </button>
 
-                <z-divider zSpacing="sm"></z-divider>
+                <z-divider zSpacing="sm" />
 
                 <button z-menu-item (click)="log('Community')">
                   <z-icon zType="users" class="mr-2" />
@@ -95,7 +105,7 @@ import { ZardMenuModule } from '../menu.module';
                 <button z-menu-item (click)="log('Tutorials')">Tutorials</button>
                 <button z-menu-item (click)="log('FAQ')">FAQ</button>
 
-                <z-divider zSpacing="sm"></z-divider>
+                <z-divider zSpacing="sm" />
 
                 <button z-menu-item (click)="log('Contact Support')">Contact Support</button>
                 <button z-menu-item (click)="log('Live Chat')">Live Chat</button>

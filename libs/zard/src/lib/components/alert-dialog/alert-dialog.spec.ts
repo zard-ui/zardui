@@ -1,8 +1,8 @@
 import { OverlayModule } from '@angular/cdk/overlay';
+import { isPlatformBrowser } from '@angular/common';
 import { Component, PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { isPlatformBrowser } from '@angular/common';
 
 import { ZardAlertDialogComponent } from './alert-dialog.component';
 import { ZardAlertDialogService } from './alert-dialog.service';

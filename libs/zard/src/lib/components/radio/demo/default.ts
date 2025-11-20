@@ -5,8 +5,8 @@ import { ZardRadioComponent } from '../radio.component';
 
 @Component({
   selector: 'z-demo-radio-default',
-  standalone: true,
   imports: [ZardRadioComponent, FormsModule],
+  standalone: true,
   template: `
     <div class="flex flex-col gap-3">
       <span z-radio name="option" [(ngModel)]="selected" value="default">Default</span>

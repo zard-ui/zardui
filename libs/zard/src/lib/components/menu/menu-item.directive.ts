@@ -1,21 +1,15 @@
-import type { ClassValue } from 'clsx';
-
 import type { BooleanInput } from '@angular/cdk/coercion';
 import { CdkMenuItem } from '@angular/cdk/menu';
 import { booleanAttribute, computed, Directive, effect, inject, input, signal, untracked } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { menuItemVariants, type ZardMenuItemVariants } from './menu.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Directive({
   selector: 'button[z-menu-item], [z-menu-item]',
   standalone: true,
-  hostDirectives: [
-    {
-      directive: CdkMenuItem,
-      outputs: ['cdkMenuItemTriggered: menuItemTriggered'],
-    },
-  ],
   host: {
     '[class]': 'classes()',
     '[attr.data-orientation]': "'horizontal'",
@@ -28,6 +22,12 @@ import { menuItemVariants, type ZardMenuItemVariants } from './menu.variants';
     '(blur)': 'onBlur()',
     '(pointermove)': 'onPointerMove($event)',
   },
+  hostDirectives: [
+    {
+      directive: CdkMenuItem,
+      outputs: ['cdkMenuItemTriggered: menuItemTriggered'],
+    },
+  ],
 })
 export class ZardMenuItemDirective {
   private readonly cdkMenuItem = inject(CdkMenuItem, { host: true });

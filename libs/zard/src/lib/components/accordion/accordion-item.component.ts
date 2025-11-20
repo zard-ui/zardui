@@ -1,4 +1,13 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  computed,
+  inject,
+  input,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -9,11 +18,8 @@ import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-accordion-item',
-  exportAs: 'zAccordionItem',
-  standalone: true,
   imports: [ZardIconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
     <button
       type="button"
@@ -34,18 +40,27 @@ import { ZardIconComponent } from '../icon/icon.component';
       />
     </button>
 
-    <div [class]="contentClasses()" [id]="'content-' + zValue()" [attr.data-state]="isOpen() ? 'open' : 'closed'" role="region" [attr.aria-labelledby]="'accordion-' + zValue()">
+    <div
+      [class]="contentClasses()"
+      [id]="'content-' + zValue()"
+      [attr.data-state]="isOpen() ? 'open' : 'closed'"
+      role="region"
+      [attr.aria-labelledby]="'accordion-' + zValue()"
+    >
       <div class="overflow-hidden">
         <div class="pt-0 pb-4">
-          <ng-content></ng-content>
+          <ng-content />
         </div>
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'itemClasses()',
     '[attr.data-state]': "isOpen() ? 'open' : 'closed'",
   },
+  exportAs: 'zAccordionItem',
 })
 export class ZardAccordionItemComponent {
   private cdr = inject(ChangeDetectorRef);
@@ -54,11 +69,11 @@ export class ZardAccordionItemComponent {
   readonly zValue = input<string>('');
   readonly class = input<ClassValue>('');
 
-  private isOpenSignal = signal(false);
+  private readonly isOpenSignal = signal(false);
 
   accordion?: ZardAccordionComponent;
 
-  isOpen = computed(() => this.isOpenSignal());
+  readonly isOpen = computed(() => this.isOpenSignal());
 
   protected readonly itemClasses = computed(() => mergeClasses(accordionItemVariants(), this.class()));
   protected readonly triggerClasses = computed(() => mergeClasses(accordionTriggerVariants()));

@@ -30,10 +30,10 @@ export type ZardTooltipTriggers = 'click' | 'hover';
 
 @Directive({
   selector: '[zTooltip]',
-  exportAs: 'zTooltip',
   host: {
     style: 'cursor: pointer',
   },
+  exportAs: 'zTooltip',
 })
 export class ZardTooltipDirective implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
@@ -66,7 +66,9 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.setTriggers();
 
     if (isPlatformBrowser(this.platformId)) {
-      const positionStrategy = this.overlayPositionBuilder.flexibleConnectedTo(this.elementRef).withPositions([TOOLTIP_POSITIONS_MAP[this.zPosition()]]);
+      const positionStrategy = this.overlayPositionBuilder
+        .flexibleConnectedTo(this.elementRef)
+        .withPositions([TOOLTIP_POSITIONS_MAP[this.zPosition()]]);
       this.overlayRef = this.overlay.create({ positionStrategy });
     }
   }
@@ -151,27 +153,27 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   imports: [NgTemplateOutlet],
   template: `
     @if (templateContent) {
-      <ng-container *ngTemplateOutlet="templateContent"></ng-container>
+      <ng-container *ngTemplateOutlet="templateContent" />
     } @else if (stringContent) {
       {{ stringContent }}
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
     '[attr.data-side]': 'position()',
     '[attr.data-state]': 'state()',
   },
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardTooltipComponent implements OnInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   readonly elementRef = inject(ElementRef);
 
-  protected position = signal<ZardTooltipPositions>('top');
-  private trigger = signal<ZardTooltipTriggers>('hover');
+  protected readonly position = signal<ZardTooltipPositions>('top');
+  private readonly trigger = signal<ZardTooltipTriggers>('hover');
   protected text: string | TemplateRef<void> | null = null;
 
-  state = signal<'closed' | 'opened'>('closed');
+  readonly state = signal<'closed' | 'opened'>('closed');
 
   private onLoadSubject$ = new Subject<void>();
   onLoad$ = this.onLoadSubject$.asObservable();

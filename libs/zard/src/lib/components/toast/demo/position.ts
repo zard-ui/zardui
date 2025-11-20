@@ -1,14 +1,13 @@
-import { toast } from 'ngx-sonner';
-
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { toast } from 'ngx-sonner';
 
 import { ZardButtonComponent } from '../../button/button.component';
 
 @Component({
   selector: 'zard-demo-toast-position',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardButtonComponent],
+  standalone: true,
   template: `
     <div class="flex flex-wrap gap-2">
       <z-button zType="outline" (click)="showToast('top-left')"> Top Left </z-button>
@@ -24,9 +23,11 @@ import { ZardButtonComponent } from '../../button/button.component';
       <z-button zType="outline" (click)="showToast('bottom-right')"> Bottom Right </z-button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoToastPositionComponent {
-  currentPosition: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right' = 'bottom-right';
+  currentPosition: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right' =
+    'bottom-right';
 
   showToast(position: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right') {
     this.currentPosition = position;

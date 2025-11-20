@@ -1,15 +1,28 @@
-import { ChangeDetectionStrategy, Component, computed, Directive, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  Directive,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import { type ClassValue } from 'clsx';
 
-import { buttonGroupDividerVariants, buttonGroupTextVariants, buttonGroupVariants, type ZardButtonGroupVariants } from './button-group.variants';
+import {
+  buttonGroupDividerVariants,
+  buttonGroupTextVariants,
+  buttonGroupVariants,
+  type ZardButtonGroupVariants,
+} from './button-group.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardDividerComponent } from '../divider/divider.component';
 import { type ZardDividerVariants } from '../divider/divider.variants';
 
 @Component({
   selector: 'z-button-group',
-  exportAs: 'zButtonGroup',
+  template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -17,7 +30,7 @@ import { type ZardDividerVariants } from '../divider/divider.variants';
     '[class]': 'classes()',
     '[attr.aria-orientation]': 'zOrientation()',
   },
-  template: `<ng-content />`,
+  exportAs: 'zButtonGroup',
 })
 export class ZardButtonGroupComponent {
   readonly zOrientation = input<Required<ZardButtonGroupVariants>['zOrientation']>('horizontal');
@@ -35,14 +48,14 @@ export class ZardButtonGroupComponent {
 
 @Component({
   selector: 'z-button-group-divider',
-  exportAs: 'zButtonGroupDivider',
+  imports: [ZardDividerComponent],
+  template: `<z-divider [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [ZardDividerComponent],
   host: {
     class: 'contents',
   },
-  template: `<z-divider [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />`,
+  exportAs: 'zButtonGroupDivider',
 })
 export class ZardButtonGroupDividerComponent {
   readonly zOrientation = input<ZardDividerVariants['zOrientation']>(null);
@@ -73,10 +86,10 @@ export class ZardButtonGroupDividerComponent {
 
 @Directive({
   selector: '[z-button-group-text]',
-  exportAs: 'zButtonGroupText',
   host: {
     '[class]': 'classes()',
   },
+  exportAs: 'zButtonGroupText',
 })
 export class ZardButtonGroupTextDirective {
   readonly class = input<ClassValue>('');

@@ -6,7 +6,8 @@
     "target": "es2022",
     "types": ["jest", "node", "@testing-library/jest-dom"],
     "composite": true,
-    "declaration": true
+    "declaration": true,
+    "verbatimModuleSyntax": null
   },
   "files": ["src/test-setup.ts"],
   "include": ["jest.config.ts", "src/**/*.ts", "src/**/*.test.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]

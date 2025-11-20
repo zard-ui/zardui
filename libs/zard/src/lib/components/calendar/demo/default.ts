@@ -4,8 +4,8 @@ import { ZardCalendarComponent } from '../calendar.component';
 
 @Component({
   selector: 'z-demo-calendar-default',
-  standalone: true,
   imports: [ZardCalendarComponent],
+  standalone: true,
   template: ` <z-calendar (dateChange)="onDateChange($event)" /> `,
 })
 export class ZardDemoCalendarDefaultComponent {

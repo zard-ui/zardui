@@ -5,9 +5,9 @@ import { By } from '@angular/platform-browser';
 import { ZardInputDirective } from './input.directive';
 
 @Component({
-  template: `<input z-input />`,
-  standalone: true,
   imports: [ZardInputDirective],
+  standalone: true,
+  template: `<input z-input />`,
 })
 class TestHostComponent {}
 

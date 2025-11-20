@@ -12,7 +12,6 @@ import { ZardCommandComponent } from './command.component';
 
 @Component({
   selector: 'test-host-component',
-  standalone: true,
   imports: [
     ZardCommandComponent,
     ZardCommandInputComponent,
@@ -22,19 +21,20 @@ import { ZardCommandComponent } from './command.component';
     ZardCommandOptionGroupComponent,
     ZardCommandDividerComponent,
   ],
+  standalone: true,
   template: `
     <z-command>
-      <z-command-input placeholder="Search..."></z-command-input>
+      <z-command-input placeholder="Search..." />
       <z-command-list>
         <z-command-empty>No results found.</z-command-empty>
         <z-command-option-group zLabel="Group 1">
-          <z-command-option zLabel="Option 1" zValue="opt1"></z-command-option>
+          <z-command-option zLabel="Option 1" zValue="opt1" />
         </z-command-option-group>
 
-        <z-command-divider class="test-divider"></z-command-divider>
+        <z-command-divider class="test-divider" />
 
         <z-command-option-group zLabel="Group 2">
-          <z-command-option zLabel="Option 2" zValue="opt2"></z-command-option>
+          <z-command-option zLabel="Option 2" zValue="opt2" />
         </z-command-option-group>
       </z-command-list>
     </z-command>
@@ -44,9 +44,9 @@ class TestHostComponent {}
 
 @Component({
   selector: 'standalone-test',
-  standalone: true,
   imports: [ZardCommandDividerComponent],
-  template: `<z-command-divider class="standalone-divider"></z-command-divider>`,
+  standalone: true,
+  template: `<z-command-divider class="standalone-divider" />`,
 })
 class StandaloneTestComponent {}
 

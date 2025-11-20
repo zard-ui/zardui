@@ -7,8 +7,8 @@ import { ZardButtonComponent } from '../../button/button.component';
 
 @Component({
   selector: 'z-demo-toast-advanced',
-  standalone: true,
   imports: [ZardButtonComponent],
+  standalone: true,
   template: `
     <div class="flex flex-wrap gap-2">
       <button z-button zType="outline" (click)="showWithAction()">With Action</button>

@@ -1,17 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { ZardCommandComponent } from './command.component';
 import { commandEmptyVariants } from './command.variants';
-
-import type { ClassValue } from 'clsx';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-empty',
-  exportAs: 'zCommandEmpty',
   standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()">
@@ -19,6 +16,9 @@ import type { ClassValue } from 'clsx';
       </div>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zCommandEmpty',
 })
 export class ZardCommandEmptyComponent {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });

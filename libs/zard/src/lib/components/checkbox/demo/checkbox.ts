@@ -1,6 +1,6 @@
+import { ZardDemoCheckboxDefaultComponent } from './default';
 import { ZardDemoCheckboxDestructiveComponent } from './destructive';
 import { ZardDemoCheckboxDisabledComponent } from './disabled';
-import { ZardDemoCheckboxDefaultComponent } from './default';
 import { ZardDemoCheckboxShapeComponent } from './shape';
 import { ZardDemoCheckboxSizeComponent } from './size';
 

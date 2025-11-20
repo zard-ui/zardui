@@ -6,8 +6,8 @@ import { ZardBadgeComponent } from '../badge.component';
 
 @Component({
   selector: 'z-demo-badge-default',
-  standalone: true,
   imports: [ZardBadgeComponent, ZardIconComponent],
+  standalone: true,
   template: `
     <div class="flex flex-col items-center gap-2">
       <div class="flex w-full flex-wrap gap-2">
@@ -18,7 +18,7 @@ import { ZardBadgeComponent } from '../badge.component';
       </div>
       <div class="flex w-full flex-wrap gap-2">
         <z-badge zType="secondary" class="bg-blue-500 text-white dark:bg-blue-600">
-          <z-icon zType="badge-check"></z-icon>
+          <z-icon zType="badge-check" />
           Verified
         </z-badge>
         <z-badge zShape="pill" class="h-5 min-w-5 px-1 font-mono tabular-nums">8</z-badge>

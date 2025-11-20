@@ -1,20 +1,20 @@
-import type { ClassValue } from 'clsx';
-
 import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import type { ClassValue } from 'clsx';
+
 import { dropdownLabelVariants } from './dropdown.variants';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',
-  exportAs: 'zDropdownMenuLabel',
   standalone: true,
+  template: `<ng-content />`,
   encapsulation: ViewEncapsulation.None,
-  template: `<ng-content></ng-content>`,
   host: {
     '[class]': 'classes()',
     '[attr.data-inset]': 'inset() || null',
   },
+  exportAs: 'zDropdownMenuLabel',
 })
 export class ZardDropdownMenuLabelComponent {
   readonly inset = input(false, { transform });

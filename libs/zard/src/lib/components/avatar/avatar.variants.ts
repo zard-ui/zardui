@@ -1,25 +1,28 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const avatarVariants = cva('relative flex flex-row items-center justify-center box-content cursor-default bg-muted', {
-  variants: {
-    zSize: {
-      sm: 'size-8',
-      default: 'size-10',
-      md: 'size-12',
-      lg: 'size-14',
-      xl: 'size-16',
+export const avatarVariants = cva(
+  'relative flex flex-row items-center justify-center box-content cursor-default bg-muted',
+  {
+    variants: {
+      zSize: {
+        sm: 'size-8',
+        default: 'size-10',
+        md: 'size-12',
+        lg: 'size-14',
+        xl: 'size-16',
+      },
+      zShape: {
+        circle: 'rounded-full',
+        rounded: 'rounded-md',
+        square: 'rounded-none',
+      },
     },
-    zShape: {
-      circle: 'rounded-full',
-      rounded: 'rounded-md',
-      square: 'rounded-none',
+    defaultVariants: {
+      zSize: 'default',
+      zShape: 'circle',
     },
   },
-  defaultVariants: {
-    zSize: 'default',
-    zShape: 'circle',
-  },
-});
+);
 
 export const imageVariants = cva('relative object-cover object-center w-full h-full z-10', {
   variants: {

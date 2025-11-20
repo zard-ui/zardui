@@ -5,8 +5,8 @@ import { ZardPaginationModule } from '../pagination.module';
 
 @Component({
   selector: 'z-demo-pagination-custom',
-  standalone: true,
   imports: [ZardPaginationModule],
+  standalone: true,
   template: `
     <z-pagination-content ariaLabel="Page navigation">
       <z-pagination-item>
@@ -29,9 +29,9 @@ import { ZardPaginationModule } from '../pagination.module';
 })
 export class ZardDemoPaginationCustomComponent {
   readonly totalPages = 5;
-  currentPage = signal(3);
+  readonly currentPage = signal(3);
 
-  pages = signal<number[]>(Array.from({ length: this.totalPages }, (_, i) => i + 1));
+  readonly pages = signal<number[]>(Array.from({ length: this.totalPages }, (_, i) => i + 1));
 
   goToPage(page: number) {
     this.currentPage.set(page);

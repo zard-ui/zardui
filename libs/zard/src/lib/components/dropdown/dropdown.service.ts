@@ -1,7 +1,16 @@
 import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { type ElementRef, inject, Injectable, PLATFORM_ID, signal, type TemplateRef, type ViewContainerRef } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import {
+  type ElementRef,
+  inject,
+  Injectable,
+  PLATFORM_ID,
+  signal,
+  type TemplateRef,
+  type ViewContainerRef,
+} from '@angular/core';
+
 import type { Subscription } from 'rxjs';
 
 @Injectable({
@@ -153,7 +162,9 @@ export class ZardDropdownService {
   private getDropdownItems(): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) return [];
     const dropdownElement = this.overlayRef.overlayElement;
-    return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]')).filter(item => item.dataset['disabled'] === undefined);
+    return Array.from(
+      dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]'),
+    ).filter(item => item.dataset['disabled'] === undefined);
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {

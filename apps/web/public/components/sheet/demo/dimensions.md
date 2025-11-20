@@ -6,8 +6,8 @@ import { ZardSheetService } from '../sheet.service';
 
 @Component({
   selector: 'z-demo-sheet-dimensions',
-  standalone: true,
   imports: [ZardButtonComponent],
+  standalone: true,
   template: `
     <div class="flex flex-wrap gap-4">
       <button z-button zType="outline" (click)="openWideSheet()">Wide Sheet (500px)</button>

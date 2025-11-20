@@ -1,5 +1,5 @@
-import { ZardDemoSheetDimensionsComponent } from './dimensions';
 import { ZardDemoSheetBasicComponent } from './basic';
+import { ZardDemoSheetDimensionsComponent } from './dimensions';
 import { ZardDemoSheetSideComponent } from './side';
 
 export const SHEET = {

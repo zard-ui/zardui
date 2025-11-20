@@ -43,8 +43,8 @@ describe('ContentComponent', () => {
 
   it('should render ng-content inside main element', () => {
     @Component({
-      standalone: true,
       imports: [ContentComponent],
+      standalone: true,
       template: `<z-content>Test Content</z-content>`,
     })
     class TestHostComponent {}

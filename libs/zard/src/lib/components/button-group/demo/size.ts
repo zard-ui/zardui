@@ -7,9 +7,6 @@ import { ZardButtonGroupComponent } from '../button-group.component';
 @Component({
   selector: 'z-demo-button-group-size',
   imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardIconComponent],
-  host: {
-    class: 'flex flex-col items-start gap-4',
-  },
   template: `
     <z-button-group>
       <button z-button zType="outline" zSize="sm">Small</button>
@@ -29,5 +26,8 @@ import { ZardButtonGroupComponent } from '../button-group.component';
       <button z-button zType="outline" zSize="lg"><i z-icon zType="plus"></i></button>
     </z-button-group>
   `,
+  host: {
+    class: 'flex flex-col items-start gap-4',
+  },
 })
 export class ZardDemoButtonGroupSizeComponent {}

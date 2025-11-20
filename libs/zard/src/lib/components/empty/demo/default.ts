@@ -6,8 +6,8 @@ import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
   selector: 'z-demo-empty-default',
-  standalone: true,
   imports: [ZardButtonComponent, ZardEmptyComponent, ZardIconComponent],
+  standalone: true,
   template: `
     <z-empty
       zIcon="folder-code"

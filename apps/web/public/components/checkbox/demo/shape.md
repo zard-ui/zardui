@@ -6,8 +6,8 @@ import { ZardCheckboxComponent } from '../checkbox.component';
 
 @Component({
   selector: 'z-demo-checkbox-shape',
-  standalone: true,
   imports: [ZardCheckboxComponent, FormsModule],
+  standalone: true,
   template: `
     <span z-checkbox zShape="circle" [(ngModel)]="checked">Cicle</span>
     <span z-checkbox zShape="square" [(ngModel)]="checked">Square</span>

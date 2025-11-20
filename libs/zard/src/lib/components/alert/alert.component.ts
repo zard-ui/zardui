@@ -2,7 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewE
 
 import type { ClassValue } from 'clsx';
 
-import { alertDescriptionVariants, alertIconVariants, alertTitleVariants, alertVariants, type ZardAlertVariants } from './alert.variants';
+import {
+  alertDescriptionVariants,
+  alertIconVariants,
+  alertTitleVariants,
+  alertVariants,
+  type ZardAlertVariants,
+} from './alert.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
@@ -10,11 +16,8 @@ import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-alert, [z-alert]',
-  standalone: true,
-  exportAs: 'zAlert',
   imports: [ZardIconComponent, ZardStringTemplateOutletDirective],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
     @if (zIcon() || iconName()) {
       <span [class]="iconClasses()" data-slot="alert-icon">
@@ -38,11 +41,14 @@ import type { ZardIcon } from '../icon/icons';
       }
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     role: 'alert',
     '[class]': 'classes()',
     '[attr.data-slot]': '"alert"',
   },
+  exportAs: 'zAlert',
 })
 export class ZardAlertComponent {
   readonly class = input<ClassValue>('');

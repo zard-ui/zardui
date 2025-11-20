@@ -1,7 +1,7 @@
-import { ZardDemoFormValidationComponent } from './validation';
-import { ZardDemoFormReactiveComponent } from './reactive';
-import { ZardDemoFormDefaultComponent } from './default';
 import { ZardDemoFormComplexComponent } from './complex';
+import { ZardDemoFormDefaultComponent } from './default';
+import { ZardDemoFormReactiveComponent } from './reactive';
+import { ZardDemoFormValidationComponent } from './validation';
 
 export const FORM = {
   componentName: 'form',

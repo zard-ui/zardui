@@ -29,16 +29,16 @@ import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
-  exportAs: 'zBreadcrumbEllipsis',
   imports: [ZardIconComponent],
+  template: ` <z-icon zType="ellipsis" /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  template: ` <z-icon zType="ellipsis" /> `,
   host: {
     '[class]': 'classes()',
     'aria-hidden': 'true',
     role: 'presentation',
   },
+  exportAs: 'zBreadcrumbEllipsis',
 })
 export class ZardBreadcrumbEllipsisComponent {
   readonly zColor = input<ZardBreadcrumbEllipsisColorVariants>('muted');
@@ -51,26 +51,7 @@ export class ZardBreadcrumbEllipsisComponent {
 
 @Component({
   selector: 'z-breadcrumb-item, [z-breadcrumb-item]',
-  exportAs: 'zBreadcrumbItem',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   imports: [ZardStringTemplateOutletDirective, ZardIconComponent, RouterLink],
-  hostDirectives: [
-    {
-      directive: RouterLink,
-      inputs: [
-        'routerLink',
-        'queryParams',
-        'fragment',
-        'queryParamsHandling',
-        'state',
-        'relativeTo',
-        'preserveFragment',
-        'skipLocationChange',
-        'replaceUrl',
-      ],
-    },
-  ],
   template: `
     <ng-template #itemContent><ng-content /></ng-template>
 
@@ -101,9 +82,28 @@ export class ZardBreadcrumbEllipsisComponent {
       </li>
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     class: 'inline-flex items-center gap-1.5',
   },
+  hostDirectives: [
+    {
+      directive: RouterLink,
+      inputs: [
+        'routerLink',
+        'queryParams',
+        'fragment',
+        'queryParamsHandling',
+        'state',
+        'relativeTo',
+        'preserveFragment',
+        'skipLocationChange',
+        'replaceUrl',
+      ],
+    },
+  ],
+  exportAs: 'zBreadcrumbItem',
 })
 export class ZardBreadcrumbItemComponent {
   private readonly breadcrumbComponent = inject(ZardBreadcrumbComponent);
@@ -134,9 +134,6 @@ export class ZardBreadcrumbItemComponent {
 
 @Component({
   selector: 'z-breadcrumb, [z-breadcrumb]',
-  exportAs: 'zBreadcrumb',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   template: `
     <nav aria-label="breadcrumb" [class]="navClasses()">
       <ol [class]="listClasses()">
@@ -144,6 +141,9 @@ export class ZardBreadcrumbItemComponent {
       </ol>
     </nav>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  exportAs: 'zBreadcrumb',
 })
 export class ZardBreadcrumbComponent {
   readonly zSize = input<ZardBreadcrumbSizeVariants>('md');

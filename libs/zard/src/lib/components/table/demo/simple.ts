@@ -11,8 +11,8 @@ interface Person {
 
 @Component({
   selector: 'z-demo-table-simple',
-  standalone: true,
   imports: [ZardTableComponent],
+  standalone: true,
   template: `
     <table z-table>
       <caption>

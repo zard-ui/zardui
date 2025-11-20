@@ -1,4 +1,15 @@
-import { afterNextRender, ChangeDetectionStrategy, Component, computed, type OnDestroy, ElementRef, inject, input, signal, ViewEncapsulation } from '@angular/core';
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  type OnDestroy,
+  ElementRef,
+  inject,
+  input,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -8,21 +19,21 @@ import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',
-  exportAs: 'zButton',
-  standalone: true,
   imports: [ZardIconComponent],
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
+  standalone: true,
   template: `
     @if (zLoading()) {
       <i z-icon zType="loader-circle" class="animate-spin duration-2000"></i>
     }
-    <ng-content></ng-content>
+    <ng-content />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     '[attr.data-icon-only]': 'iconOnly() || null',
   },
+  exportAs: 'zButton',
 })
 export class ZardButtonComponent implements OnDestroy {
   private readonly elementRef = inject(ElementRef<HTMLElement>);
@@ -62,7 +73,11 @@ export class ZardButtonComponent implements OnDestroy {
 
       check();
       this._mutationObserver = new MutationObserver(check);
-      this._mutationObserver.observe(this.elementRef.nativeElement, { childList: true, characterData: true, subtree: true });
+      this._mutationObserver.observe(this.elementRef.nativeElement, {
+        childList: true,
+        characterData: true,
+        subtree: true,
+      });
     });
   }
 
