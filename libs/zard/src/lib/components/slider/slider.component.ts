@@ -271,7 +271,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
         switchMap(() =>
           pointerMove$.pipe(
             takeUntil(pointerUp$),
-            takeUntil(this.destroy$),
             map(event => {
               const coord = this.zOrientation() === 'vertical' ? event.clientY : event.clientX;
               return this.calculatePercentage(coord);

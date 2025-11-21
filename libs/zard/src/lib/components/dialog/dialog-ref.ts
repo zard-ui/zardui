@@ -51,8 +51,10 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.isClosing = true;
     this.result = result;
 
-    const hostElement = this.containerInstance.getNativeElement();
-    hostElement.classList.add('dialog-leave');
+    if (isPlatformBrowser(this.platformId)) {
+      const hostElement = this.containerInstance.getNativeElement();
+      hostElement.classList.add('dialog-leave');
+    }
 
     setTimeout(() => {
       if (this.overlayRef) {

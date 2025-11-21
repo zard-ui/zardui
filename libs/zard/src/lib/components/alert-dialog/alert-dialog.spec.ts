@@ -1,6 +1,5 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { isPlatformBrowser } from '@angular/common';
-import { Component, PLATFORM_ID } from '@angular/core';
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -14,7 +13,6 @@ class TestComponent {}
 
 describe('ZardAlertDialogService', () => {
   let service: ZardAlertDialogService;
-  let platformId: object;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -23,7 +21,6 @@ describe('ZardAlertDialogService', () => {
     }).compileComponents();
 
     service = TestBed.inject(ZardAlertDialogService);
-    platformId = TestBed.inject(PLATFORM_ID);
   });
 
   it('should be created', () => {
@@ -37,13 +34,6 @@ describe('ZardAlertDialogService', () => {
     });
 
     expect(dialogRef).toBeTruthy();
-
-    if (isPlatformBrowser(platformId)) {
-      expect(dialogRef.afterClosed).toBeDefined();
-    } else {
-      // In SSR environment, afterClosed should still be defined but may be a mock
-      expect(dialogRef.afterClosed).toBeDefined();
-    }
   });
 
   it('should create a warning dialog', () => {

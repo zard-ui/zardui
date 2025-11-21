@@ -6,7 +6,8 @@ import { ZardTooltipModule } from '../tooltip';
 @Component({
   selector: 'z-demo-tooltip-click',
   imports: [ZardButtonComponent, ZardTooltipModule],
-  standalone: true,
-  template: ` <button z-button zType="outline" zTooltip="Tooltip content" zTrigger="click">Click</button> `,
+  template: `
+    <button type="button" z-button zType="outline" zTooltip="Tooltip content" zTrigger="click">Click</button>
+  `,
 })
 export class ZardDemoTooltipClickComponent {}

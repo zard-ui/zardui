@@ -60,6 +60,7 @@ export class ZardDialogOptions<T, U> {
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
       <button
+        type="button"
         data-testid="z-close-header-button"
         z-button
         zType="ghost"
@@ -94,7 +95,7 @@ export class ZardDialogOptions<T, U> {
     @if (!config.zHideFooter) {
       <footer class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-0 sm:space-x-2">
         @if (config.zCancelText !== null) {
-          <button data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
+          <button type="button" data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
             @if (config.zCancelIcon) {
               <z-icon [zType]="config.zCancelIcon" />
             }
@@ -105,6 +106,7 @@ export class ZardDialogOptions<T, U> {
 
         @if (config.zOkText !== null) {
           <button
+            type="button"
             data-testid="z-ok-button"
             z-button
             [zType]="config.zOkDestructive ? 'destructive' : 'default'"

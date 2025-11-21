@@ -11,15 +11,15 @@ import { ZardButtonComponent } from '../button/button.component';
   imports: [ZardButtonComponent],
   standalone: true,
   template: `
-    <button z-button zType="outline" (click)="openSheet()">Open basic sheet</button>
-    <button z-button zType="outline" (click)="openSheetWithTemplate()">Open sheet with template</button>
-    <button z-button zType="outline" (click)="openSheetRightSide()">Open right side sheet</button>
-    <button z-button zType="outline" (click)="openSheetWithoutFooter()">Open sheet without footer</button>
+    <button type="button" z-button zType="outline" (click)="openSheet()">Open basic sheet</button>
+    <button type="button" z-button zType="outline" (click)="openSheetWithTemplate()">Open sheet with template</button>
+    <button type="button" z-button zType="outline" (click)="openSheetRightSide()">Open right side sheet</button>
+    <button type="button" z-button zType="outline" (click)="openSheetWithoutFooter()">Open sheet without footer</button>
 
     <ng-template #testTemplate let-sheetRef="sheetRef">
       <div data-testid="template-content">
         <p>Template content</p>
-        <button (click)="sheetRef.close()">Close from template</button>
+        <button type="button" (click)="sheetRef.close()">Close from template</button>
       </div>
     </ng-template>
   `,
@@ -27,8 +27,8 @@ import { ZardButtonComponent } from '../button/button.component';
 class SheetTestHostComponent {
   private sheetService = inject(ZardSheetService);
 
-  @ViewChild('testTemplate', { static: true }) testTemplate!: TemplateRef<any>;
-  lastSheetRef?: ZardSheetRef<any>;
+  @ViewChild('testTemplate', { static: true }) testTemplate!: TemplateRef<void>;
+  lastSheetRef?: ZardSheetRef<void>;
 
   openSheet() {
     this.lastSheetRef = this.sheetService.create({
@@ -265,7 +265,7 @@ describe('ZardSheetComponent', () => {
     });
 
     it('should apply custom width and height', async () => {
-      const sheetRef = sheetService.create({
+      sheetService.create({
         zTitle: 'Custom Dimensions Sheet',
         zContent: 'Custom content',
         zSide: 'right',
@@ -288,7 +288,7 @@ describe('ZardSheetComponent', () => {
     });
 
     it('should apply default dimensions based on side', async () => {
-      const sheetRef = sheetService.create({
+      sheetService.create({
         zTitle: 'Default Dimensions Sheet',
         zContent: 'Default content',
         zSide: 'left',
@@ -314,7 +314,7 @@ describe('ZardSheetComponent', () => {
       let okClicked = false;
       let cancelClicked = false;
 
-      const sheetRef = sheetService.create({
+      sheetService.create({
         zTitle: 'Callback Sheet',
         zContent: 'Callback content',
         zOnOk: () => {

@@ -10,6 +10,7 @@ import {
   Component,
   computed,
   contentChildren,
+  DestroyRef,
   ElementRef,
   forwardRef,
   inject,
@@ -23,16 +24,18 @@ import {
   viewChild,
   ViewContainerRef,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
+import { filter } from 'rxjs';
 
 import { ZardSelectItemComponent } from './select-item.component';
 import {
   selectContentVariants,
   selectTriggerVariants,
   selectVariants,
-  type ZardSelectTriggerVariants,
+  type ZardSelectSizeVariants,
 } from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
@@ -103,10 +106,10 @@ type OnChangeType = (value: string) => void;
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '[class]': 'classes()',
-    '(document:click)': 'onDocumentClick($event)',
   },
 })
 export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
+  private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject(ElementRef);
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
@@ -125,7 +128,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   readonly zMaxLabelCount = input<number>(1);
   readonly zMultiple = input<boolean>(false);
   readonly zPlaceholder = input<string>('Select an option...');
-  readonly zSize = input<ZardSelectTriggerVariants['zSize']>('default');
+  readonly zSize = input<ZardSelectSizeVariants>('default');
   readonly zValue = model<string | string[]>(this.zMultiple() ? [] : '');
 
   readonly zSelectionChange = output<string | string[]>();
@@ -174,16 +177,6 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
   ngOnDestroy() {
     this.destroyOverlay();
-  }
-
-  onDocumentClick(event: Event) {
-    const target = event.target as Node;
-    const clickedInside = this.elementRef.nativeElement.contains(target);
-    const clickedInOverlay = this.overlayRef?.overlayElement?.contains(target);
-
-    if (!clickedInside && !clickedInOverlay) {
-      this.close();
-    }
   }
 
   onTriggerKeydown(event: KeyboardEvent) {
@@ -265,7 +258,11 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.onChange(value);
     this.zSelectionChange.emit(this.zValue());
 
-    if (!this.zMultiple()) {
+    if (this.zMultiple()) {
+      // in multiple mode it can happen that button changes size because of selection badges,
+      // which requires overlay position to update
+      this.updateOverlayPosition();
+    } else {
       this.close();
 
       // Return focus to the button after selection
@@ -273,6 +270,12 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
         this.focusButton();
       }, 0);
     }
+  }
+
+  private updateOverlayPosition(): void {
+    setTimeout(() => {
+      this.overlayRef?.updatePosition();
+    }, 0);
   }
 
   private provideLabelsForMultiselectMode(selectedValue: string[]): string[] {
@@ -350,7 +353,9 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   private determinePortalWidth(portalWidth: number): void {
-    if (!this.overlayRef || !this.overlayRef.hasAttached()) return;
+    if (!this.overlayRef?.hasAttached()) {
+      return;
+    }
 
     const selectItems = this.selectItems();
     let itemMaxWidth = 0;
@@ -407,6 +412,13 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
           width: elementWidth,
           maxHeight: 384, // max-h-96 equivalent
         });
+        this.overlayRef
+          .outsidePointerEvents()
+          .pipe(
+            filter(event => !this.elementRef.nativeElement.contains(event.target)),
+            takeUntilDestroyed(this.destroyRef),
+          )
+          .subscribe(() => this.close());
       } catch (error) {
         console.error('Error creating overlay:', error);
       }
@@ -556,7 +568,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const selectVariants = cva('relative inline-block w-full');
 
 export const selectTriggerVariants = cva(
-  'flex w-full justify-between gap-2 rounded-md border border-input bg-transparent px-3 shadow-xs transition-[color,box-shadow] outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+  'flex w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 shadow-xs transition-[color,box-shadow] outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
   {
     variants: {
       zSize: {
@@ -577,9 +589,7 @@ export const selectItemVariants = cva(
   'relative flex min-w-full cursor-pointer text-nowrap items-center gap-2 rounded-sm mb-0.5 py-1.5 pr-8 pl-2 text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground data-selected:bg-accent data-selected:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:hover:bg-transparent data-disabled:hover:text-current [&_svg:not([class*="text-"])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
 );
 
-export type ZardSelectTriggerVariants = VariantProps<typeof selectTriggerVariants>;
-export type ZardSelectContentVariants = VariantProps<typeof selectContentVariants>;
-export type ZardSelectItemVariants = VariantProps<typeof selectItemVariants>;
+export type ZardSelectSizeVariants = NonNullable<VariantProps<typeof selectTriggerVariants>['zSize']>;
 
 ```
 

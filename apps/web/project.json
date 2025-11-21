@@ -34,7 +34,8 @@
         "prerender": {
           "discoverRoutes": false,
           "routesFile": "apps/web/prerender-routes.txt"
-        }
+        },
+        "allowedCommonJsDependencies": ["xmlbuilder", "parse-numeric-range", "extend"]
       },
       "configurations": {
         "production": {

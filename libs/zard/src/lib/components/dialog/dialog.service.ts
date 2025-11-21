@@ -1,7 +1,15 @@
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
+import {
+  inject,
+  Injectable,
+  InjectionToken,
+  Injector,
+  PLATFORM_ID,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
 
 import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
@@ -26,7 +34,12 @@ export class ZardDialogService {
     const overlayRef = this.createOverlay();
 
     if (!overlayRef) {
-      return new ZardDialogRef(undefined as any, config, undefined as any, this.platformId);
+      return new ZardDialogRef(
+        undefined as unknown as OverlayRef,
+        config,
+        undefined as unknown as ZardDialogComponent<T, U>,
+        this.platformId,
+      );
     }
 
     const dialogContainer = this.attachDialogContainer<T, U>(overlayRef, config);
@@ -80,9 +93,13 @@ export class ZardDialogService {
 
     if (componentOrTemplateRef instanceof TemplateRef) {
       dialogContainer.attachTemplatePortal(
-        new TemplatePortal<T>(componentOrTemplateRef, null!, {
-          dialogRef: dialogRef,
-        } as any),
+        new TemplatePortal<T>(
+          componentOrTemplateRef,
+          null as unknown as ViewContainerRef,
+          {
+            dialogRef,
+          } as T,
+        ),
       );
     } else if (typeof componentOrTemplateRef !== 'string') {
       const injector = this.createInjector<T, U>(dialogRef, config);

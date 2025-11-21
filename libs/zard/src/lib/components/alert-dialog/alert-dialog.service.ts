@@ -1,7 +1,15 @@
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
+import {
+  inject,
+  Injectable,
+  InjectionToken,
+  Injector,
+  PLATFORM_ID,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
 
 import { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
@@ -59,7 +67,11 @@ export class ZardAlertDialogService {
     const overlayRef = this.createOverlay();
 
     if (!overlayRef) {
-      return new ZardAlertDialogRef(undefined as any, config, undefined as any);
+      return new ZardAlertDialogRef(
+        undefined as unknown as OverlayRef,
+        config,
+        undefined as unknown as ZardAlertDialogComponent<T>,
+      );
     }
 
     const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
@@ -117,9 +129,13 @@ export class ZardAlertDialogService {
 
     if (componentOrTemplateRef instanceof TemplateRef) {
       alertDialogContainer.attachTemplatePortal(
-        new TemplatePortal<T>(componentOrTemplateRef, null!, {
-          alertDialogRef,
-        } as any),
+        new TemplatePortal<T>(
+          componentOrTemplateRef,
+          null as unknown as ViewContainerRef,
+          {
+            alertDialogRef,
+          } as T,
+        ),
       );
     } else if (componentOrTemplateRef && typeof componentOrTemplateRef !== 'string') {
       const injector = this.createInjector<T>(alertDialogRef, config);
