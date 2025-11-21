@@ -63,6 +63,7 @@ export class ZardDialogOptions<T, U> {
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
       <button
+        type="button"
         data-testid="z-close-header-button"
         z-button
         zType="ghost"
@@ -97,7 +98,7 @@ export class ZardDialogOptions<T, U> {
     @if (!config.zHideFooter) {
       <footer class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end sm:gap-0 sm:space-x-2">
         @if (config.zCancelText !== null) {
-          <button data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
+          <button type="button" data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
             @if (config.zCancelIcon) {
               <z-icon [zType]="config.zCancelIcon" />
             }
@@ -108,6 +109,7 @@ export class ZardDialogOptions<T, U> {
 
         @if (config.zOkText !== null) {
           <button
+            type="button"
             data-testid="z-ok-button"
             z-button
             [zType]="config.zOkDestructive ? 'destructive' : 'default'"
@@ -279,8 +281,10 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     this.isClosing = true;
     this.result = result;
 
-    const hostElement = this.containerInstance.getNativeElement();
-    hostElement.classList.add('dialog-leave');
+    if (isPlatformBrowser(this.platformId)) {
+      const hostElement = this.containerInstance.getNativeElement();
+      hostElement.classList.add('dialog-leave');
+    }
 
     setTimeout(() => {
       if (this.overlayRef) {
@@ -329,7 +333,15 @@ export class ZardDialogRef<T = any, R = any, U = any> {
 import { type ComponentType, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
-import { inject, Injectable, InjectionToken, Injector, PLATFORM_ID, TemplateRef } from '@angular/core';
+import {
+  inject,
+  Injectable,
+  InjectionToken,
+  Injector,
+  PLATFORM_ID,
+  TemplateRef,
+  ViewContainerRef,
+} from '@angular/core';
 
 import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
@@ -354,7 +366,12 @@ export class ZardDialogService {
     const overlayRef = this.createOverlay();
 
     if (!overlayRef) {
-      return new ZardDialogRef(undefined as any, config, undefined as any, this.platformId);
+      return new ZardDialogRef(
+        undefined as unknown as OverlayRef,
+        config,
+        undefined as unknown as ZardDialogComponent<T, U>,
+        this.platformId,
+      );
     }
 
     const dialogContainer = this.attachDialogContainer<T, U>(overlayRef, config);
@@ -408,9 +425,13 @@ export class ZardDialogService {
 
     if (componentOrTemplateRef instanceof TemplateRef) {
       dialogContainer.attachTemplatePortal(
-        new TemplatePortal<T>(componentOrTemplateRef, null!, {
-          dialogRef: dialogRef,
-        } as any),
+        new TemplatePortal<T>(
+          componentOrTemplateRef,
+          null as unknown as ViewContainerRef,
+          {
+            dialogRef,
+          } as T,
+        ),
       );
     } else if (typeof componentOrTemplateRef !== 'string') {
       const injector = this.createInjector<T, U>(dialogRef, config);

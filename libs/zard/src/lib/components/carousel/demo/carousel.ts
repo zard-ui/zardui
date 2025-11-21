@@ -3,7 +3,7 @@ import { ZardDemoCarouselDefaultComponent } from './default';
 import { ZardDemoCarouselDotControlsComponent } from './dot-controls';
 import { ZardDemoCarouselOrientationComponent } from './orientation';
 import { ZardDemoCarouselPluginsComponent } from './plugins';
-import { ZardDemoCarouselSizeComponent } from './size';
+import { ZardDemoCarouselSizeComponent } from './sizes';
 import { ZardDemoCarouselSpacingComponent } from './spacing';
 
 export const CAROUSEL = {

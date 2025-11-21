@@ -52,28 +52,25 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     this.result = result;
     this.containerInstance.state.set('closed');
 
-    const element = this.containerInstance.getNativeElement();
-    const onAnimationEnd = () => {
-      element.removeEventListener('animationend', onAnimationEnd);
+    if (isPlatformBrowser(this.platformId)) {
+      const element = this.containerInstance.getNativeElement();
+      let cleanupCalled = false;
 
-      if (this.overlayRef) {
-        if (this.overlayRef.hasAttached()) {
-          this.overlayRef.detachBackdrop();
+      const onAnimationEnd = () => {
+        if (cleanupCalled) {
+          return;
         }
-        this.overlayRef.dispose();
-      }
 
-      if (!this.destroy$.closed) {
-        this.destroy$.next();
-        this.destroy$.complete();
-      }
-    };
+        cleanupCalled = true;
+        element.removeEventListener('animationend', onAnimationEnd);
+        this.closeCleanup();
+      };
 
-    element.addEventListener('animationend', onAnimationEnd);
-
-    setTimeout(() => {
-      onAnimationEnd();
-    }, 300);
+      element.addEventListener('animationend', onAnimationEnd);
+      setTimeout(onAnimationEnd, 300); // Fallback after expected animation duration
+    } else {
+      this.closeCleanup();
+    }
   }
 
   private trigger(action: eTriggerAction) {
@@ -93,5 +90,19 @@ export class ZardSheetRef<T = any, R = any, U = any> {
 
   private closeWithResult(result: R): void {
     if (result !== false) this.close(result);
+  }
+
+  private closeCleanup(): void {
+    if (this.overlayRef) {
+      if (this.overlayRef.hasAttached()) {
+        this.overlayRef.detachBackdrop();
+      }
+      this.overlayRef.dispose();
+    }
+
+    if (!this.destroy$.closed) {
+      this.destroy$.next();
+      this.destroy$.complete();
+    }
   }
 }

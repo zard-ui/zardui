@@ -55,7 +55,7 @@ export class ZardDemoDialogBasicInputComponent {
 @Component({
   imports: [ZardButtonComponent, ZardDialogModule],
   standalone: true,
-  template: ` <button z-button zType="outline" (click)="openDialog()">Edit profile</button> `,
+  template: ` <button type="button" z-button zType="outline" (click)="openDialog()">Edit profile</button> `,
 })
 export class ZardDemoDialogBasicComponent {
   private dialogService = inject(ZardDialogService);

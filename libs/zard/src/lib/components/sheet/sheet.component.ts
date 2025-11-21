@@ -61,6 +61,7 @@ export class ZardSheetOptions<T, U> {
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
       <button
+        type="button"
         data-testid="z-close-header-button"
         z-button
         zType="ghost"
@@ -100,6 +101,7 @@ export class ZardSheetOptions<T, U> {
       <footer data-slot="sheet-footer" class="mt-auto flex flex-col gap-2 p-4">
         @if (config.zOkText !== null) {
           <button
+            type="button"
             data-testid="z-ok-button"
             class="cursor-pointer"
             z-button
@@ -117,6 +119,7 @@ export class ZardSheetOptions<T, U> {
 
         @if (config.zCancelText !== null) {
           <button
+            type="button"
             data-testid="z-cancel-button"
             class="cursor-pointer"
             z-button

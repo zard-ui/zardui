@@ -8,7 +8,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component
   imports: [ZardButtonComponent, ZardPopoverComponent, ZardPopoverDirective],
   standalone: true,
   template: `
-    <button z-button zPopover [zContent]="popoverContent" zType="outline">Open popover</button>
+    <button type="button" z-button zPopover [zContent]="popoverContent" zType="outline">Open popover</button>
 
     <ng-template #popoverContent>
       <z-popover>
