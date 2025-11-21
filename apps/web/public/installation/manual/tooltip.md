@@ -3,7 +3,7 @@
 ```angular-ts title="tooltip.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser, NgTemplateOutlet } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -18,7 +18,7 @@ import {
   input,
   NgModule,
   numberAttribute,
-  OnDestroy,
+  type OnDestroy,
   type OnInit,
   output,
   PLATFORM_ID,
@@ -32,8 +32,9 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { filter, map, of, Subject, switchMap, tap, timer } from 'rxjs';
 
 import { TOOLTIP_POSITIONS_MAP } from './tooltip-positions';
-import { tooltipPositionVariants, tooltipVariants, ZardTooltipPositionVariants } from './tooltip.variants';
+import { tooltipPositionVariants, tooltipVariants, type ZardTooltipPositionVariants } from './tooltip.variants';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
+import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 
 export type ZardTooltipTriggers = 'click' | 'hover';
 export type ZardTooltipType = string | TemplateRef<void> | null;
@@ -231,13 +232,10 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
 
 @Component({
   selector: 'z-tooltip',
-  imports: [NgTemplateOutlet],
+  imports: [ZardStringTemplateOutletDirective],
   template: `
-    @if (templateContent()) {
-      <ng-container *ngTemplateOutlet="templateContent()" />
-    } @else if (stringContent()) {
-      {{ stringContent() }}
-    }
+    <ng-container *zStringTemplateOutlet="tooltipText()">{{ tooltipText() }}</ng-container>
+
     <span [class]="arrowClasses()">
       <svg
         class="bg-foreground fill-foreground z-50 block size-2.5 translate-y-[calc(-50%-2px)] rotate-45 rounded-[2px]"
@@ -278,16 +276,6 @@ export class ZardTooltipComponent {
     this.position.set(position);
     this.tooltipId.set(tooltipId);
   }
-
-  protected readonly templateContent = computed(() => {
-    const text = this.tooltipText();
-    return text instanceof TemplateRef ? text : null;
-  });
-
-  protected readonly stringContent = computed(() => {
-    const text = this.tooltipText();
-    return typeof text === 'string' ? text : null;
-  });
 }
 
 @NgModule({
