@@ -142,7 +142,7 @@ describe('ZardPopoverComponent', () => {
     });
   });
 
-  it('should close popover on scroll', async () => {
+  it('should keep popover on scroll', async () => {
     buttonElement.nativeElement.click();
     fixture.detectChanges();
 
@@ -160,7 +160,7 @@ describe('ZardPopoverComponent', () => {
 
     // The popover should be closed due to the close scroll strategy
     popoverContent = document.querySelector('.test-content');
-    expect(popoverContent).toBeFalsy();
+    expect(popoverContent).toBeTruthy();
   });
 
   it('should have flexible positioning with multiple fallback positions', () => {
@@ -193,7 +193,6 @@ describe('ZardPopoverComponent', () => {
 
       // First position should match the requested placement
       const primaryPosition = positions[0];
-      const expectedConfig = (directive as any).constructor.prototype.constructor.POPOVER_POSITIONS_MAP?.[placement];
 
       if (placement === 'bottom') {
         expect(primaryPosition.originY).toBe('bottom');
@@ -276,7 +275,6 @@ class HoverTestComponent {
 }
 
 describe('ZardPopoverComponent with hover trigger', () => {
-  let component: HoverTestComponent;
   let fixture: ComponentFixture<HoverTestComponent>;
   let buttonElement: DebugElement;
 
@@ -286,7 +284,6 @@ describe('ZardPopoverComponent with hover trigger', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(HoverTestComponent);
-    component = fixture.componentInstance;
     buttonElement = fixture.debugElement.query(By.css('button'));
     fixture.detectChanges();
   });

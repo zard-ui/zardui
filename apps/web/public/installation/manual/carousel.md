@@ -21,8 +21,8 @@ import {
   carouselNextButtonVariants,
   carouselPreviousButtonVariants,
   carouselVariants,
-  ZardCarouselControlsVariants,
-  ZardCarouselOrientationVariants,
+  type ZardCarouselControlsVariants,
+  type ZardCarouselOrientationVariants,
 } from './carousel.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
@@ -478,7 +478,7 @@ export * from './carousel-item.component';
 // export * from './carousel-extensions.component';
 
 // Plugin service
-// export * from './carousel-plugins.service';
+export * from './carousel-plugins.service';
 
 // Variants and types
 export * from './carousel.variants';
