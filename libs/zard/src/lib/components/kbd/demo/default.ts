@@ -15,7 +15,7 @@ import { ZardKbdComponent } from '../kbd.component';
         <z-kbd>Ctrl</z-kbd>
       </div>
 
-      <button z-button zType="outline">Submit <z-kbd class="ml-2">Enter</z-kbd></button>
+      <button type="submit" z-button zType="outline">Submit <z-kbd class="ml-2">Enter</z-kbd></button>
     </div>
   `,
 })

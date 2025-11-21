@@ -30,5 +30,3 @@ export const TOOLTIP_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
     offsetX: 8,
   },
 };
-
-export type ZardTooltipPositions = 'top' | 'bottom' | 'left' | 'right';
