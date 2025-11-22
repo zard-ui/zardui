@@ -8,8 +8,6 @@ import {
   ViewContainerRef,
   effect,
   type EffectRef,
-  signal,
-  untracked,
 } from '@angular/core';
 
 export function isTemplateRef<C = unknown>(value: unknown): value is TemplateRef<C> {
@@ -17,6 +15,7 @@ export function isTemplateRef<C = unknown>(value: unknown): value is TemplateRef
 }
 
 export interface ZardStringTemplateOutletContext {
+  $implicit: unknown;
   [key: string]: unknown;
 }
 
@@ -29,12 +28,12 @@ export class ZardStringTemplateOutletDirective<T = unknown> implements OnDestroy
   private readonly templateRef = inject(TemplateRef<void>);
 
   private embeddedViewRef: EmbeddedViewRef<ZardStringTemplateOutletContext> | null = null;
-  private readonly context: ZardStringTemplateOutletContext = {};
+  private readonly context = {} as ZardStringTemplateOutletContext;
 
   #isFirstChange = true;
   #lastOutletWasTemplate = false;
   #lastTemplateRef: TemplateRef<void> | null = null;
-  readonly #lastContext = signal<ZardStringTemplateOutletContext | undefined>(undefined);
+  #lastContext?: ZardStringTemplateOutletContext;
 
   readonly zStringTemplateOutletContext = input<ZardStringTemplateOutletContext | undefined>(undefined);
   readonly zStringTemplateOutlet = input.required<T | TemplateRef<void>>();
@@ -43,12 +42,12 @@ export class ZardStringTemplateOutletDirective<T = unknown> implements OnDestroy
     if (!context) {
       return false;
     }
-    const prevCtxKeys = Object.keys(untracked(this.#lastContext) || {});
+    const prevCtxKeys = Object.keys(this.#lastContext || {});
     const currCtxKeys = Object.keys(context || {});
 
     if (prevCtxKeys.length === currCtxKeys.length) {
       for (const propName of currCtxKeys) {
-        if (prevCtxKeys.indexOf(propName) === -1) {
+        if (!prevCtxKeys.includes(propName)) {
           return true;
         }
       }
@@ -69,20 +68,25 @@ export class ZardStringTemplateOutletDirective<T = unknown> implements OnDestroy
       isTemplate !== this.#lastOutletWasTemplate ||
       (isTemplate && stringTemplateOutlet !== this.#lastTemplateRef);
 
-    if (this.#isFirstChange && !isTemplateRef(stringTemplateOutlet)) {
+    const shouldContextRecreate = this.#hasContextShapeChanged(stringTemplateOutletContext);
+    return shouldContextRecreate || shouldOutletRecreate;
+  }
+
+  #updateTrackingState(
+    stringTemplateOutlet: TemplateRef<void> | T,
+    stringTemplateOutletContext: ZardStringTemplateOutletContext | undefined,
+  ): void {
+    const isTemplate = isTemplateRef(stringTemplateOutlet);
+    if (this.#isFirstChange && !isTemplate) {
       this.#isFirstChange = false;
     }
 
     if (stringTemplateOutletContext !== undefined) {
-      this.#lastContext.set(stringTemplateOutletContext);
+      this.#lastContext = stringTemplateOutletContext;
     }
-
-    const shouldContextRecreate = this.#hasContextShapeChanged(stringTemplateOutletContext);
 
     this.#lastOutletWasTemplate = isTemplate;
     this.#lastTemplateRef = isTemplate ? stringTemplateOutlet : null;
-
-    return shouldContextRecreate || shouldOutletRecreate;
   }
 
   readonly #viewEffect: EffectRef = effect(() => {
@@ -94,10 +98,12 @@ export class ZardStringTemplateOutletDirective<T = unknown> implements OnDestroy
     }
 
     if (!isTemplateRef(stringTemplateOutlet)) {
-      this.context['$implicit'] = stringTemplateOutlet as string;
+      this.context['$implicit'] = stringTemplateOutlet as T;
     }
 
     const recreateView = this.#shouldViewBeRecreated(stringTemplateOutlet, stringTemplateOutletContext);
+    this.#updateTrackingState(stringTemplateOutlet, stringTemplateOutletContext);
+
     if (recreateView) {
       this.#recreateView(
         stringTemplateOutlet as TemplateRef<ZardStringTemplateOutletContext>,
@@ -131,7 +137,7 @@ export class ZardStringTemplateOutletDirective<T = unknown> implements OnDestroy
         oldCtx[propName] = newCtx[propName];
       }
     }
-    this.#lastContext.set(oldCtx);
+    this.#lastContext = oldCtx;
   }
 
   static ngTemplateContextGuard<T>(
