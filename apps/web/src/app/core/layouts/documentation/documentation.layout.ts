@@ -5,7 +5,7 @@ import { FooterComponent } from '@doc/domain/components/footer/footer.component'
 import { HeaderComponent } from '@doc/domain/components/header/header.component';
 import { SidebarComponent } from '@doc/domain/components/sidebar/sidebar.component';
 import { environment } from '@doc/env/environment';
-import { DarkModeService } from '@doc/shared/services/darkmode.service';
+import { DarkModeService, EThemeModes, ThemeOptions } from '@doc/shared/services/darkmode.service';
 
 import { ZardToastComponent } from '@zard/components/toast/toast.component';
 
@@ -34,7 +34,7 @@ export class DocumentationLayout {
   private readonly destroyRef = inject(DestroyRef);
   readonly isDevEnv = !environment.production;
 
-  private readonly themeSignal = signal<'light' | 'dark'>('light');
+  private readonly themeSignal = signal<ThemeOptions>(EThemeModes.LIGHT);
   readonly currentTheme = computed(() => this.themeSignal());
 
   constructor() {

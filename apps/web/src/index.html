@@ -65,18 +65,15 @@
 
         try {
           const theme = localStorage.theme;
+          const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
 
-          const isDark =
-            localStorage.theme === 'dark' ||
-            !('theme' in localStorage) ||
-            (localStorage.theme === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
-
-          if (isDark) {
-            html.classList.add('dark-theme');
-            html.classList.toggle('dark', isDark);
-            html.setAttribute('data-theme', theme);
-            html.style.colorScheme = theme;
-          }
+          const isSystem = theme === 'system' || !('theme' in localStorage);
+          const isDark = theme === 'dark' || (isSystem && prefersDark);
+          const resolvedTheme = isDark ? 'dark' : 'light';
+          html.classList.toggle('dark', isDark);
+          html.classList.toggle('dark-theme', isDark);
+          html.setAttribute('data-theme', theme ?? 'system');
+          html.style.colorScheme = resolvedTheme;
         } catch (_) {}
       })();
     </script>

@@ -1,4 +1,4 @@
-import { Component, inject, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
@@ -6,7 +6,7 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 
-import { DarkModeService } from '../../../shared/services/darkmode.service';
+import { DarkModeService, EThemeModes } from '../../../shared/services/darkmode.service';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
@@ -16,7 +16,6 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-darkmode',
-  standalone: true,
   imports: [
     DocContentComponent,
     DocHeadingComponent,
@@ -28,12 +27,15 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     ZardAlertComponent,
   ],
   templateUrl: './dark-mode.page.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DarkmodePage implements OnInit {
   activeAnchor?: string;
 
-  private readonly darkModeService = inject(DarkModeService);
   private readonly seoService = inject(SeoService);
+
+  protected readonly darkModeService = inject(DarkModeService);
+  protected readonly EThemeModes = EThemeModes;
 
   readonly navigationConfig: NavigationConfig = {
     items: [
@@ -44,14 +46,6 @@ export class DarkmodePage implements OnInit {
       { id: 'demo', label: 'Interactive Demo', type: 'custom' },
     ],
   };
-
-  getCurrentTheme(): 'light' | 'dark' {
-    return this.darkModeService.getCurrentTheme();
-  }
-
-  toggleTheme(): void {
-    this.darkModeService.toggleTheme();
-  }
 
   ngOnInit(): void {
     this.seoService.setDocsSeo('Dark Mode', 'Adding dark mode to your site.', '/docs/dark-mode', 'og-darkmode.jpg');

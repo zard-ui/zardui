@@ -36,7 +36,7 @@ interface FormData {
   standalone: true,
   template: `
     <form [formGroup]="form" (ngSubmit)="handleSubmit()" class="max-w-lg space-y-6">
-      <! -- Name Fields Row - ->
+      <!-- Name Fields Row -->
       <div class="flex items-start gap-4">
         <z-form-field>
           <label z-form-label zRequired for="firstName">First Name</label>
@@ -53,7 +53,7 @@ interface FormData {
         </z-form-field>
       </div>
 
-      <! -- Email Field - ->
+      <!-- Email Field -->
       <z-form-field>
         <label z-form-label zRequired for="email">Email</label>
         <z-form-control [errorMessage]="isFieldInvalid('email') ? getEmailError() : ''">
@@ -61,7 +61,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <! -- Phone Field - ->
+      <!-- Phone Field -->
       <z-form-field>
         <label z-form-label for="phone">Phone Number</label>
         <z-form-control helpText="Include country code if outside US">
@@ -69,7 +69,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <! -- Country Selector - ->
+      <!-- Country Selector -->
       <z-form-field>
         <label z-form-label zRequired for="country">Country</label>
         <z-form-control [errorMessage]="isFieldInvalid('country') ? 'Please select a country' : ''">
@@ -81,7 +81,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <! -- Company Field - ->
+      <!-- Company Field -->
       <z-form-field>
         <label z-form-label for="company">Company</label>
         <z-form-control helpText="Optional: Where do you work?">
@@ -89,7 +89,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <! -- Message Field - ->
+      <!-- Message Field -->
       <z-form-field>
         <label z-form-label for="message">Message</label>
         <z-form-control
@@ -106,7 +106,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <! -- Newsletter Checkbox - ->
+      <!-- Newsletter Checkbox -->
       <z-form-field>
         <z-form-control helpText="Get updates about new features and releases" class="flex flex-col">
           <div class="flex items-center space-x-2">
@@ -116,7 +116,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <! -- Terms Checkbox - ->
+      <!-- Terms Checkbox -->
       <z-form-field>
         <z-form-control
           [errorMessage]="isFieldInvalid('terms') ? 'You must accept the terms and conditions' : ''"
@@ -129,7 +129,7 @@ interface FormData {
         </z-form-control>
       </z-form-field>
 
-      <! -- Action Buttons - ->
+      <!-- Action Buttons -->
       <div class="flex gap-2 pt-4">
         <button z-button zType="default" type="submit" [disabled]="isSubmitting()">
           {{ isSubmitting() ? 'Submitting...' : 'Submit Form' }}
@@ -137,7 +137,7 @@ interface FormData {
         <button z-button zType="outline" type="button" (click)="resetForm()">Reset</button>
       </div>
 
-      <! -- Success Message - ->
+      <!-- Success Message -->
       @if (showSuccess()) {
         <div class="rounded-md border border-green-200 bg-green-50 p-4">
           <z-form-message zType="success">✓ Form submitted successfully! We'll get back to you soon.</z-form-message>
