@@ -136,7 +136,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'accordion',
-    registryDependencies: ['icon'],
+    registryDependencies: ['core', 'icon'],
     files: [
       {
         name: 'accordion.component.ts',
