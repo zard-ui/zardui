@@ -6,7 +6,6 @@ import {
   type AfterViewInit,
   booleanAttribute,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   computed,
   ElementRef,
@@ -137,7 +136,10 @@ export class ZSliderThumbComponent {
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(sliderThumbVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(sliderThumbVariants({ disabled: this.disabled() }), this.class()),
+  );
+
   protected readonly orientationClasses = computed(() =>
     mergeClasses(sliderOrientationVariants({ zOrientation: this.orientation() })),
   );
@@ -210,7 +212,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
   readonly trackRef = viewChild.required(ZSliderTrackComponent);
 
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private cdr = inject(ChangeDetectorRef);
   private document = inject(DOCUMENT);
 
   protected readonly classes = computed(() =>
@@ -248,7 +249,9 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
   ngAfterViewInit() {
     const pointerDown$ = fromEvent<PointerEvent>(this.elementRef.nativeElement, 'pointerdown').pipe(
       tap(event => {
-        if (this.disabled()) return;
+        if (this.disabled()) {
+          return;
+        }
 
         const target = event.target as HTMLElement;
         const isThumb = this.thumbRef().nativeElement.contains(target);
@@ -283,7 +286,9 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
         takeUntil(this.destroy$),
       )
       .subscribe(percentage => {
-        if (this.disabled()) return;
+        if (this.disabled()) {
+          return;
+        }
         this.updateSliderFromPercentage(percentage);
         this.onTouched();
       });
@@ -304,11 +309,12 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
     const clampedValue = clamp(value, [min, max]);
     const roundedValue = roundToStep(clampedValue, min, step);
 
-    if (roundedValue === this.lastEmittedValue()) return;
+    if (roundedValue === this.lastEmittedValue()) {
+      return;
+    }
 
     this.percentValue.set(convertValueToPercentage(roundedValue, min, max));
     this.lastEmittedValue.set(roundedValue);
-    this.cdr.markForCheck();
   }
 
   registerOnChange(fn: (value: number) => void): void {
@@ -321,11 +327,12 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled.set(isDisabled);
-    this.cdr.markForCheck();
   }
 
   handleKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
+    if (this.disabled()) {
+      return;
+    }
 
     const percent = this.percentValue();
     const rawValue = this.zMin() + ((this.zMax() - this.zMin()) * percent) / 100;
@@ -360,7 +367,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
     this.onSlide.emit(newValue);
     this.lastEmittedValue.set(newValue);
     this.onChange(newValue);
-    this.cdr.markForCheck();
     event.preventDefault();
   }
 
@@ -374,7 +380,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
       this.onSlide.emit(value);
       this.lastEmittedValue.set(value);
       this.onChange(value);
-      this.cdr.markForCheck();
     }
   }
 
@@ -468,7 +473,15 @@ export const sliderRangeVariants = cva(
 export type SliderRangeVariants = VariantProps<typeof sliderRangeVariants>;
 
 export const sliderThumbVariants = cva(
-  'border-primary bg-background ring-ring/50 block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] hover:ring-4 focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50',
+  'border-primary bg-background ring-ring/50 block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50',
+  {
+    variants: {
+      disabled: {
+        true: '',
+        false: 'hover:ring-4',
+      },
+    },
+  },
 );
 
 export type SliderThumbVariants = VariantProps<typeof sliderThumbVariants>;
