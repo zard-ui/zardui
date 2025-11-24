@@ -330,7 +330,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'select',
-    registryDependencies: ['icon'],
+    registryDependencies: ['core', 'icon'],
     files: [
       {
         name: 'select.component.ts',
