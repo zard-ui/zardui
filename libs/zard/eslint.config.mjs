@@ -62,8 +62,10 @@ export default [
       '@angular-eslint/prefer-signals': 'warn',
       '@angular-eslint/consistent-component-styles': 'error',
       '@angular-eslint/sort-keys-in-type-decorator': 'error',
-      '@angular-eslint/prefer-output-emitter-ref': 'warn', // should be error
+      'arrow-body-style': ['warn', 'as-needed'],
+      'prefer-destructuring': 'warn',
       // remove following gradually
+      '@angular-eslint/prefer-output-emitter-ref': 'warn', // should be error
       '@angular-eslint/no-output-on-prefix': 'warn',
       '@angular-eslint/no-input-rename': 'warn',
     },

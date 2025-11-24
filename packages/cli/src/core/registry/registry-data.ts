@@ -244,6 +244,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'dropdown',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'dropdown.component.ts',

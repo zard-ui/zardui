@@ -1,7 +1,9 @@
-import { Directive, ElementRef, HostListener, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
+import { Directive, ElementRef, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';
+import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
@@ -12,17 +14,31 @@ import { ZardDropdownService } from './dropdown.service';
     '[attr.aria-haspopup]': '"menu"',
     '[attr.aria-expanded]': 'dropdownService.isOpen()',
     '[attr.aria-disabled]': 'zDisabled()',
+    '(click.prevent-with-stop)': 'onClick()',
+    '(mouseenter)': 'onMouseEnter()',
+    '(mouseleave)': 'onMouseLeave()',
+    '(keydown.enter.prevent-with-stop)': 'toggleDropdown()',
+    '(keydown.space.prevent-with-stop)': 'toggleDropdown()',
+    '(keydown.arrowdown.prevent)': 'openDropdown()',
   },
   exportAs: 'zDropdown',
 })
 export class ZardDropdownDirective implements OnInit {
   private readonly elementRef = inject(ElementRef);
+  private readonly eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
   private readonly viewContainerRef = inject(ViewContainerRef);
   protected readonly dropdownService = inject(ZardDropdownService);
 
   readonly zDropdownMenu = input<ZardDropdownMenuContentComponent>();
   readonly zTrigger = input<'click' | 'hover'>('click');
   readonly zDisabled = input<boolean>(false);
+
+  constructor() {
+    const zardProperlyInitialized = this.eventPlugins?.some(plugin => plugin instanceof ZardEventManagerPlugin);
+    if (!zardProperlyInitialized) {
+      throw new Error("Zard: Initialization missing. Please call `provideZard()` in your app's root providers.");
+    }
+  }
 
   ngOnInit() {
     // Ensure button has proper accessibility attributes
@@ -33,12 +49,8 @@ export class ZardDropdownDirective implements OnInit {
     }
   }
 
-  @HostListener('click', ['$event'])
-  onClick(event: Event) {
+  protected onClick() {
     if (this.zDisabled() || this.zTrigger() !== 'click') return;
-
-    event.preventDefault();
-    event.stopPropagation();
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
@@ -46,8 +58,7 @@ export class ZardDropdownDirective implements OnInit {
     }
   }
 
-  @HostListener('mouseenter')
-  onMouseEnter() {
+  protected onMouseEnter() {
     if (this.zDisabled() || this.zTrigger() !== 'hover') return;
 
     const menuContent = this.zDropdownMenu();
@@ -56,44 +67,28 @@ export class ZardDropdownDirective implements OnInit {
     }
   }
 
-  @HostListener('mouseleave')
-  onMouseLeave() {
+  protected onMouseLeave() {
     if (this.zDisabled() || this.zTrigger() !== 'hover') return;
 
     this.dropdownService.close();
   }
 
-  @HostListener('keydown', ['$event'])
-  onKeydown(event: KeyboardEvent) {
-    if (this.zDisabled()) return;
-
-    switch (event.key) {
-      case 'Enter':
-      case ' ':
-        event.preventDefault();
-        event.stopPropagation();
-        this.toggleDropdown();
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        this.openDropdown();
-        break;
-      case 'Escape':
-        event.preventDefault();
-        this.dropdownService.close();
-        this.elementRef.nativeElement.focus();
-        break;
+  protected toggleDropdown() {
+    if (this.zDisabled()) {
+      return;
     }
-  }
 
-  private toggleDropdown() {
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
       this.dropdownService.toggle(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
     }
   }
 
-  private openDropdown() {
+  protected openDropdown() {
+    if (this.zDisabled()) {
+      return;
+    }
+
     const menuContent = this.zDropdownMenu();
     if (menuContent && !this.dropdownService.isOpen()) {
       this.dropdownService.open(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);

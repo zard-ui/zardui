@@ -6,12 +6,16 @@ import {
   inject,
   Injectable,
   PLATFORM_ID,
+  Renderer2,
+  RendererFactory2,
   signal,
   type TemplateRef,
   type ViewContainerRef,
 } from '@angular/core';
 
 import type { Subscription } from 'rxjs';
+
+import { noopFun } from '../../shared/utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -20,14 +24,21 @@ export class ZardDropdownService {
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly rendererFactory = inject(RendererFactory2);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
   private triggerElement?: ElementRef;
+  private renderer!: Renderer2;
   private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
+  private unlisten: () => void = noopFun;
 
   readonly isOpen = signal(false);
+
+  constructor() {
+    this.renderer = this.rendererFactory.createRenderer(null, null);
+  }
 
   toggle(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
     if (this.isOpen()) {
@@ -69,6 +80,7 @@ export class ZardDropdownService {
     }
     this.isOpen.set(false);
     this.focusedIndex.set(-1);
+    this.unlisten();
     this.destroyOverlay();
   }
 
@@ -107,49 +119,41 @@ export class ZardDropdownService {
   }
 
   private destroyOverlay() {
-    if (this.overlayRef) {
-      this.overlayRef.dispose();
-      this.overlayRef = undefined;
-      if (this.outsideClickSubscription) {
-        this.outsideClickSubscription.unsubscribe();
-      }
-    }
+    this.overlayRef?.dispose();
+    this.overlayRef = undefined;
+    this.outsideClickSubscription?.unsubscribe();
   }
 
   private setupKeyboardNavigation() {
-    if (!this.overlayRef?.hasAttached() || !isPlatformBrowser(this.platformId)) return;
+    if (!this.overlayRef?.hasAttached() || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     const dropdownElement = this.overlayRef.overlayElement.querySelector('[role="menu"]') as HTMLElement;
     if (!dropdownElement) return;
 
-    dropdownElement.addEventListener('keydown', (event: KeyboardEvent) => {
+    this.unlisten = this.renderer.listen(dropdownElement, 'keydown.prevent', (event: KeyboardEvent) => {
       const items = this.getDropdownItems();
 
       switch (event.key) {
         case 'ArrowDown':
-          event.preventDefault();
           this.navigateItems(1, items);
           break;
         case 'ArrowUp':
-          event.preventDefault();
           this.navigateItems(-1, items);
           break;
         case 'Enter':
         case ' ':
-          event.preventDefault();
           this.selectFocusedItem(items);
           break;
         case 'Escape':
-          event.preventDefault();
           this.close();
           this.triggerElement?.nativeElement.focus();
           break;
         case 'Home':
-          event.preventDefault();
           this.focusItemAtIndex(items, 0);
           break;
         case 'End':
-          event.preventDefault();
           this.focusItemAtIndex(items, items.length - 1);
           break;
       }

@@ -352,7 +352,7 @@ export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariant
 
 
 ```angular-ts title="dropdown-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -362,8 +362,8 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
-  standalone: true,
   template: `<ng-content />`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
@@ -371,6 +371,7 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
     '[attr.data-variant]': 'variant()',
     '[attr.data-inset]': 'inset() || null',
     '[attr.aria-disabled]': 'disabled()',
+    '(click.prevent-with-stop)': 'onClick()',
     role: 'menuitem',
     tabindex: '-1',
   },
@@ -384,11 +385,8 @@ export class ZardDropdownMenuItemComponent {
   readonly disabled = input(false, { transform });
   readonly class = input<ClassValue>('');
 
-  @HostListener('click', ['$event'])
-  onClick(event: Event) {
+  onClick() {
     if (this.disabled()) {
-      event.preventDefault();
-      event.stopPropagation();
       return;
     }
 
@@ -414,7 +412,7 @@ export class ZardDropdownMenuItemComponent {
 
 
 ```angular-ts title="dropdown-label.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -423,8 +421,8 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',
-  standalone: true,
   template: `<ng-content />`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
@@ -451,7 +449,15 @@ export class ZardDropdownMenuLabelComponent {
 
 
 ```angular-ts title="dropdown-menu-content.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Component, computed, input, type TemplateRef, viewChild, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  type TemplateRef,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -460,7 +466,6 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-content',
-  standalone: true,
   template: `
     <ng-template #contentTemplate>
       <div [class]="contentClasses()" role="menu" tabindex="-1" [attr.aria-orientation]="'vertical'">
@@ -468,6 +473,7 @@ import { mergeClasses } from '../../shared/utils/utils';
       </div>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[style.display]': '"none"',
@@ -487,7 +493,7 @@ export class ZardDropdownMenuContentComponent {
 
 
 ```angular-ts title="dropdown-shortcut.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Component, computed, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -496,8 +502,8 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]',
-  standalone: true,
   template: `<ng-content />`,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
@@ -515,10 +521,12 @@ export class ZardDropdownMenuShortcutComponent {
 
 
 ```angular-ts title="dropdown-trigger.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Directive, ElementRef, HostListener, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
+import { Directive, ElementRef, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';
+import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
@@ -529,17 +537,31 @@ import { ZardDropdownService } from './dropdown.service';
     '[attr.aria-haspopup]': '"menu"',
     '[attr.aria-expanded]': 'dropdownService.isOpen()',
     '[attr.aria-disabled]': 'zDisabled()',
+    '(click.prevent-with-stop)': 'onClick()',
+    '(mouseenter)': 'onMouseEnter()',
+    '(mouseleave)': 'onMouseLeave()',
+    '(keydown.enter.prevent-with-stop)': 'toggleDropdown()',
+    '(keydown.space.prevent-with-stop)': 'toggleDropdown()',
+    '(keydown.arrowdown.prevent)': 'openDropdown()',
   },
   exportAs: 'zDropdown',
 })
 export class ZardDropdownDirective implements OnInit {
   private readonly elementRef = inject(ElementRef);
+  private readonly eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
   private readonly viewContainerRef = inject(ViewContainerRef);
   protected readonly dropdownService = inject(ZardDropdownService);
 
   readonly zDropdownMenu = input<ZardDropdownMenuContentComponent>();
   readonly zTrigger = input<'click' | 'hover'>('click');
   readonly zDisabled = input<boolean>(false);
+
+  constructor() {
+    const zardProperlyInitialized = this.eventPlugins?.some(plugin => plugin instanceof ZardEventManagerPlugin);
+    if (!zardProperlyInitialized) {
+      throw new Error("Zard: Initialization missing. Please call `provideZard()` in your app's root providers.");
+    }
+  }
 
   ngOnInit() {
     // Ensure button has proper accessibility attributes
@@ -550,12 +572,8 @@ export class ZardDropdownDirective implements OnInit {
     }
   }
 
-  @HostListener('click', ['$event'])
-  onClick(event: Event) {
+  protected onClick() {
     if (this.zDisabled() || this.zTrigger() !== 'click') return;
-
-    event.preventDefault();
-    event.stopPropagation();
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
@@ -563,8 +581,7 @@ export class ZardDropdownDirective implements OnInit {
     }
   }
 
-  @HostListener('mouseenter')
-  onMouseEnter() {
+  protected onMouseEnter() {
     if (this.zDisabled() || this.zTrigger() !== 'hover') return;
 
     const menuContent = this.zDropdownMenu();
@@ -573,44 +590,28 @@ export class ZardDropdownDirective implements OnInit {
     }
   }
 
-  @HostListener('mouseleave')
-  onMouseLeave() {
+  protected onMouseLeave() {
     if (this.zDisabled() || this.zTrigger() !== 'hover') return;
 
     this.dropdownService.close();
   }
 
-  @HostListener('keydown', ['$event'])
-  onKeydown(event: KeyboardEvent) {
-    if (this.zDisabled()) return;
-
-    switch (event.key) {
-      case 'Enter':
-      case ' ':
-        event.preventDefault();
-        event.stopPropagation();
-        this.toggleDropdown();
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        this.openDropdown();
-        break;
-      case 'Escape':
-        event.preventDefault();
-        this.dropdownService.close();
-        this.elementRef.nativeElement.focus();
-        break;
+  protected toggleDropdown() {
+    if (this.zDisabled()) {
+      return;
     }
-  }
 
-  private toggleDropdown() {
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
       this.dropdownService.toggle(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
     }
   }
 
-  private openDropdown() {
+  protected openDropdown() {
+    if (this.zDisabled()) {
+      return;
+    }
+
     const menuContent = this.zDropdownMenu();
     if (menuContent && !this.dropdownService.isOpen()) {
       this.dropdownService.open(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
@@ -661,12 +662,16 @@ import {
   inject,
   Injectable,
   PLATFORM_ID,
+  Renderer2,
+  RendererFactory2,
   signal,
   type TemplateRef,
   type ViewContainerRef,
 } from '@angular/core';
 
 import type { Subscription } from 'rxjs';
+
+import { noopFun } from '../../shared/utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -675,14 +680,21 @@ export class ZardDropdownService {
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly rendererFactory = inject(RendererFactory2);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
   private triggerElement?: ElementRef;
+  private renderer!: Renderer2;
   private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
+  private unlisten: () => void = noopFun;
 
   readonly isOpen = signal(false);
+
+  constructor() {
+    this.renderer = this.rendererFactory.createRenderer(null, null);
+  }
 
   toggle(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
     if (this.isOpen()) {
@@ -724,6 +736,7 @@ export class ZardDropdownService {
     }
     this.isOpen.set(false);
     this.focusedIndex.set(-1);
+    this.unlisten();
     this.destroyOverlay();
   }
 
@@ -762,49 +775,41 @@ export class ZardDropdownService {
   }
 
   private destroyOverlay() {
-    if (this.overlayRef) {
-      this.overlayRef.dispose();
-      this.overlayRef = undefined;
-      if (this.outsideClickSubscription) {
-        this.outsideClickSubscription.unsubscribe();
-      }
-    }
+    this.overlayRef?.dispose();
+    this.overlayRef = undefined;
+    this.outsideClickSubscription?.unsubscribe();
   }
 
   private setupKeyboardNavigation() {
-    if (!this.overlayRef?.hasAttached() || !isPlatformBrowser(this.platformId)) return;
+    if (!this.overlayRef?.hasAttached() || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     const dropdownElement = this.overlayRef.overlayElement.querySelector('[role="menu"]') as HTMLElement;
     if (!dropdownElement) return;
 
-    dropdownElement.addEventListener('keydown', (event: KeyboardEvent) => {
+    this.unlisten = this.renderer.listen(dropdownElement, 'keydown.prevent', (event: KeyboardEvent) => {
       const items = this.getDropdownItems();
 
       switch (event.key) {
         case 'ArrowDown':
-          event.preventDefault();
           this.navigateItems(1, items);
           break;
         case 'ArrowUp':
-          event.preventDefault();
           this.navigateItems(-1, items);
           break;
         case 'Enter':
         case ' ':
-          event.preventDefault();
           this.selectFocusedItem(items);
           break;
         case 'Escape':
-          event.preventDefault();
           this.close();
           this.triggerElement?.nativeElement.focus();
           break;
         case 'Home':
-          event.preventDefault();
           this.focusItemAtIndex(items, 0);
           break;
         case 'End':
-          event.preventDefault();
           this.focusItemAtIndex(items, items.length - 1);
           break;
       }
