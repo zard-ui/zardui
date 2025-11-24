@@ -1,5 +1,4 @@
 import { Directive, ElementRef, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';
@@ -33,8 +32,7 @@ export class ZardDropdownDirective implements OnInit {
   readonly zDisabled = input<boolean>(false);
 
   constructor() {
-    const eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
-    checkForProperZardInitialization(eventPlugins);
+    checkForProperZardInitialization();
   }
 
   ngOnInit() {

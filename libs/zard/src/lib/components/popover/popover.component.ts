@@ -20,7 +20,6 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { filter, Subscription } from 'rxjs';
 
@@ -99,8 +98,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   constructor() {
-    const eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
-    checkForProperZardInitialization(eventPlugins);
+    checkForProperZardInitialization();
 
     toObservable(this.zVisible)
       .pipe(takeUntilDestroyed(this.destroyRef))

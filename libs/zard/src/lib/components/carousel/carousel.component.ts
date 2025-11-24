@@ -23,6 +23,7 @@ import {
 } from './carousel.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
+import { checkForProperZardInitialization } from '../core/config/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -100,7 +101,10 @@ import { ZardIconComponent } from '../icon/icon.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: { '(keydown)': 'handleKeyDown($event)' },
+  host: {
+    '(keydown.arrowleft.prevent)': 'slidePrevious()',
+    '(keydown.arrowright.prevent)': 'slideNext()',
+  },
 })
 export class ZardCarouselComponent {
   protected readonly emblaRef = viewChild(EmblaCarouselDirective);
@@ -128,6 +132,10 @@ export class ZardCarouselComponent {
 
   #index = -1;
 
+  constructor() {
+    checkForProperZardInitialization();
+  }
+
   onEmblaChange(type: EmblaEventType, emblaApi: EmblaCarouselType): void {
     if (type === 'init' || type === 'reInit') {
       this.scrollSnaps.set(emblaApi.scrollSnapList());
@@ -141,19 +149,6 @@ export class ZardCarouselComponent {
     if (type === 'select' && emblaApi.selectedScrollSnap() !== this.#index) {
       this.checkNavigation(emblaApi);
       this.zSelected.emit();
-    }
-  }
-
-  handleKeyDown(event: KeyboardEvent): void {
-    switch (event.key) {
-      case 'ArrowLeft':
-        event.preventDefault();
-        this.slidePrevious();
-        break;
-      case 'ArrowRight':
-        event.preventDefault();
-        this.slideNext();
-        break;
     }
   }
 

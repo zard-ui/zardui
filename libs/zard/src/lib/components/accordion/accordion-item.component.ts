@@ -1,5 +1,4 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import type { ClassValue } from 'clsx';
 
@@ -68,8 +67,7 @@ export class ZardAccordionItemComponent {
   protected readonly contentClasses = computed(() => mergeClasses(accordionContentVariants({ isOpen: this.isOpen() })));
 
   constructor() {
-    const eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
-    checkForProperZardInitialization(eventPlugins);
+    checkForProperZardInitialization();
   }
 
   toggle(): void {

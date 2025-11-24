@@ -437,14 +437,12 @@ import {
   Component,
   computed,
   ElementRef,
-  inject,
   input,
   output,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import type { CalendarDay } from './calendar.types';
 import { getDayAriaLabel, getDayId } from './calendar.utils';
@@ -518,8 +516,7 @@ export class ZardCalendarGridComponent {
   protected readonly dayContainerClasses = computed(() => mergeClasses(calendarDayVariants()));
 
   constructor() {
-    const eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
-    checkForProperZardInitialization(eventPlugins);
+    checkForProperZardInitialization();
   }
 
   protected dayButtonClasses(day: CalendarDay): string {
