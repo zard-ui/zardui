@@ -637,6 +637,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'resizable',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'resizable.component.ts',

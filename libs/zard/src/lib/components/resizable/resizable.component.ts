@@ -7,11 +7,10 @@ import {
   contentChildren,
   DOCUMENT,
   ElementRef,
-  EventEmitter,
   inject,
   input,
   type OnDestroy,
-  Output,
+  output,
   PLATFORM_ID,
   signal,
   ViewEncapsulation,
@@ -22,6 +21,7 @@ import type { ClassValue } from 'clsx';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { checkForProperZardInitialization } from '../core/config/providezard';
 
 export interface ZardResizeEvent {
   sizes: number[];
@@ -32,7 +32,6 @@ type CleanupFunction = () => void;
 
 @Component({
   selector: 'z-resizable, [z-resizable]',
-  standalone: true,
   template: `<ng-content />`,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -52,9 +51,9 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   readonly zLazy = input(false, { transform });
   readonly class = input<ClassValue>('');
 
-  @Output() readonly zResizeStart = new EventEmitter<ZardResizeEvent>();
-  @Output() readonly zResize = new EventEmitter<ZardResizeEvent>();
-  @Output() readonly zResizeEnd = new EventEmitter<ZardResizeEvent>();
+  readonly zResizeStart = output<ZardResizeEvent>();
+  readonly zResize = output<ZardResizeEvent>();
+  readonly zResizeEnd = output<ZardResizeEvent>();
 
   readonly panels = contentChildren(ZardResizablePanelComponent);
   readonly panelSizes = signal<number[]>([]);
@@ -63,6 +62,10 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   protected readonly classes = computed(() =>
     mergeClasses(resizableVariants({ zLayout: this.zLayout() }), this.class()),
   );
+
+  constructor() {
+    checkForProperZardInitialization();
+  }
 
   ngAfterContentInit(): void {
     this.initializePanelSizes();
@@ -94,7 +97,9 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const panels = this.panels();
     const totalPanels = panels.length;
 
-    if (totalPanels === 0) return;
+    if (totalPanels === 0) {
+      return;
+    }
 
     const containerSize = this.getContainerSize();
     const sizes = panels.map(panel => {
@@ -167,7 +172,9 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const leftPanel = panels[handleIndex];
     const rightPanel = panels[handleIndex + 1];
 
-    if (!leftPanel || !rightPanel) return;
+    if (!leftPanel || !rightPanel) {
+      return;
+    }
 
     const leftMin = this.convertToPercentage(leftPanel.zMin(), containerSize);
     const leftMax = this.convertToPercentage(leftPanel.zMax(), containerSize);
@@ -249,7 +256,9 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const panels = this.panels();
     const panel = panels[index];
 
-    if (!panel?.zCollapsible()) return;
+    if (!panel?.zCollapsible()) {
+      return;
+    }
 
     let sizes = [...this.panelSizes()];
     const isCollapsed = sizes[index] === 0;
