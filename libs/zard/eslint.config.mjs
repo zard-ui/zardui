@@ -64,6 +64,7 @@ export default [
       '@angular-eslint/sort-keys-in-type-decorator': 'error',
       'arrow-body-style': ['warn', 'as-needed'],
       'prefer-destructuring': 'warn',
+      curly: 'warn',
       // remove following gradually
       '@angular-eslint/prefer-output-emitter-ref': 'warn', // should be error
       '@angular-eslint/no-output-on-prefix': 'warn',

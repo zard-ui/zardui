@@ -6,7 +6,7 @@ import type { ClassValue } from 'clsx';
 import { ZardAccordionComponent } from './accordion.component';
 import { accordionContentVariants, accordionItemVariants, accordionTriggerVariants } from './accordion.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
+import { checkForProperZardInitialization } from '../core/config/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -56,7 +56,6 @@ import { ZardIconComponent } from '../icon/icon.component';
 })
 export class ZardAccordionItemComponent {
   private accordion = inject(ZardAccordionComponent);
-  private readonly eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
 
   readonly zTitle = input<string>('');
   readonly zValue = input<string>('');
@@ -69,10 +68,8 @@ export class ZardAccordionItemComponent {
   protected readonly contentClasses = computed(() => mergeClasses(accordionContentVariants({ isOpen: this.isOpen() })));
 
   constructor() {
-    const zardProperlyInitialized = this.eventPlugins?.some(plugin => plugin instanceof ZardEventManagerPlugin);
-    if (!zardProperlyInitialized) {
-      throw new Error("Zard: Initialization missing. Please call `provideZard()` in your app's root providers.");
-    }
+    const eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
+    checkForProperZardInitialization(eventPlugins);
   }
 
   toggle(): void {

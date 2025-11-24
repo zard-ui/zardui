@@ -6,7 +6,7 @@ import {
   provideAppInitializer,
   type EnvironmentProviders,
 } from '@angular/core';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+import { EVENT_MANAGER_PLUGINS, type EventManagerPlugin } from '@angular/platform-browser';
 
 import { ZardEventManagerPlugin } from '../zard-event-manager-plugin';
 import { ZardPreset, type ZardConfigType } from './config.types';
@@ -55,3 +55,10 @@ export const withNeutralPreset = (): ZardConfigType => ({ theme: { preset: ZardP
 export const withSlatePreset = (): ZardConfigType => ({ theme: { preset: ZardPreset.SLATE } }) as const;
 export const withStonePreset = (): ZardConfigType => ({ theme: { preset: ZardPreset.STONE } }) as const;
 export const withZincPreset = (): ZardConfigType => ({ theme: { preset: ZardPreset.ZINC } }) as const;
+
+export const checkForProperZardInitialization = (eventPlugins: EventManagerPlugin[] | null): void => {
+  const zardProperlyInitialized = eventPlugins?.some(plugin => plugin instanceof ZardEventManagerPlugin);
+  if (!zardProperlyInitialized) {
+    throw new Error("Zard: Initialization missing. Please call `provideZard()` in your app's root providers.");
+  }
+};

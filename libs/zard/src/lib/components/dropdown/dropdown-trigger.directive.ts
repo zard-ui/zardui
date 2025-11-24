@@ -3,7 +3,7 @@ import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';
-import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
+import { checkForProperZardInitialization } from '../core/config/providezard';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
@@ -25,7 +25,6 @@ import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
 })
 export class ZardDropdownDirective implements OnInit {
   private readonly elementRef = inject(ElementRef);
-  private readonly eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
   private readonly viewContainerRef = inject(ViewContainerRef);
   protected readonly dropdownService = inject(ZardDropdownService);
 
@@ -34,10 +33,8 @@ export class ZardDropdownDirective implements OnInit {
   readonly zDisabled = input<boolean>(false);
 
   constructor() {
-    const zardProperlyInitialized = this.eventPlugins?.some(plugin => plugin instanceof ZardEventManagerPlugin);
-    if (!zardProperlyInitialized) {
-      throw new Error("Zard: Initialization missing. Please call `provideZard()` in your app's root providers.");
-    }
+    const eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
+    checkForProperZardInitialization(eventPlugins);
   }
 
   ngOnInit() {
@@ -50,7 +47,9 @@ export class ZardDropdownDirective implements OnInit {
   }
 
   protected onClick() {
-    if (this.zDisabled() || this.zTrigger() !== 'click') return;
+    if (this.zDisabled() || this.zTrigger() !== 'click') {
+      return;
+    }
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
@@ -59,7 +58,9 @@ export class ZardDropdownDirective implements OnInit {
   }
 
   protected onMouseEnter() {
-    if (this.zDisabled() || this.zTrigger() !== 'hover') return;
+    if (this.zDisabled() || this.zTrigger() !== 'hover') {
+      return;
+    }
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
@@ -68,7 +69,9 @@ export class ZardDropdownDirective implements OnInit {
   }
 
   protected onMouseLeave() {
-    if (this.zDisabled() || this.zTrigger() !== 'hover') return;
+    if (this.zDisabled() || this.zTrigger() !== 'hover') {
+      return;
+    }
 
     this.dropdownService.close();
   }

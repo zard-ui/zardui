@@ -29,7 +29,7 @@ import { filter, Subscription } from 'rxjs';
 
 import { popoverVariants } from './popover.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
+import { checkForProperZardInitialization } from '../core/config/providezard';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -76,7 +76,6 @@ const POPOVER_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly elementRef = inject(ElementRef);
@@ -103,10 +102,8 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   constructor() {
-    const zardProperlyInitialized = this.eventPlugins?.some(plugin => plugin instanceof ZardEventManagerPlugin);
-    if (!zardProperlyInitialized) {
-      throw new Error("Zard: Initialization missing. Please call `provideZard()` in your app's root providers.");
-    }
+    const eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
+    checkForProperZardInitialization(eventPlugins);
 
     toObservable(this.zVisible)
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -160,7 +157,9 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   hide() {
-    if (!this.isVisible()) return;
+    if (!this.isVisible()) {
+      return;
+    }
 
     this.overlayRef?.detach();
     this.isVisible.set(false);
