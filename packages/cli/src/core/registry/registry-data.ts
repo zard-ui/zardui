@@ -518,7 +518,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'combobox',
-    registryDependencies: ['button', 'command', 'popover', 'empty', 'input', 'icon'],
+    registryDependencies: ['button', 'command', 'core', 'popover', 'empty', 'input', 'icon'],
     files: [
       {
         name: 'combobox.component.ts',

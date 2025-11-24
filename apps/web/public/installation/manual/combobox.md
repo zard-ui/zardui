@@ -6,11 +6,9 @@ import {
   Component,
   computed,
   ElementRef,
-  EventEmitter,
   forwardRef,
-  HostListener,
   input,
-  Output,
+  output,
   signal,
   viewChild,
   ViewEncapsulation,
@@ -28,6 +26,7 @@ import { ZardCommandListComponent } from '../command/command-list.component';
 import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
 import { ZardCommandOptionComponent } from '../command/command-option.component';
 import { ZardCommandComponent, type ZardCommandOption } from '../command/command.component';
+import { checkForProperZardInitialization } from '../core/config/providezard';
 import { ZardEmptyComponent } from '../empty/empty.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
@@ -170,6 +169,9 @@ export interface ZardComboboxGroup {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
+    '(document:keydown.escape)': 'onDocumentKeyDown($event)',
+    '(keydown.escape.prevent-with-stop)': 'onKeyDownEscape()',
+    '(keydown.prevent)': 'onKeyDown($event)',
   },
   exportAs: 'zCombobox',
 })
@@ -188,8 +190,8 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   readonly ariaLabel = input<string>('');
   readonly ariaDescribedBy = input<string>('');
 
-  @Output() readonly zValueChange = new EventEmitter<string | null>();
-  @Output() readonly zOnSelect = new EventEmitter<ZardComboboxOption>();
+  readonly zValueChange = output<string | null>();
+  readonly zOnSelect = output<ZardComboboxOption>();
 
   readonly popoverDirective = viewChild.required('popoverTrigger', { read: ZardPopoverDirective });
   readonly buttonRef = viewChild.required('popoverTrigger', { read: ElementRef });
@@ -219,13 +221,17 @@ export class ZardComboboxComponent implements ControlValueAccessor {
 
   protected readonly displayValue = computed(() => {
     const currentValue = this.getCurrentValue();
-    if (!currentValue) return null;
+    if (!currentValue) {
+      return null;
+    }
 
     // Search in groups first
     if (this.groups().length) {
       for (const group of this.groups()) {
         const option = group.options.find(opt => opt.value === currentValue);
-        if (option) return option.label;
+        if (option) {
+          return option.label;
+        }
       }
     }
 
@@ -233,6 +239,10 @@ export class ZardComboboxComponent implements ControlValueAccessor {
     const option = this.options().find(opt => opt.value === currentValue);
     return option?.label ?? null;
   });
+
+  constructor() {
+    checkForProperZardInitialization();
+  }
 
   private onChange: (value: string | null) => void = () => {
     // ControlValueAccessor implementation
@@ -279,7 +289,9 @@ export class ZardComboboxComponent implements ControlValueAccessor {
       if (this.groups().length > 0) {
         for (const group of this.groups()) {
           selectedOption = group.options.find(opt => opt.value === newValue);
-          if (selectedOption) break;
+          if (selectedOption) {
+            break;
+          }
         }
       } else {
         selectedOption = this.options().find(opt => opt.value === newValue);
@@ -297,21 +309,30 @@ export class ZardComboboxComponent implements ControlValueAccessor {
     this.buttonRef().nativeElement.focus();
   }
 
-  @HostListener('keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent) {
-    if (this.disabled()) return;
+  onKeyDownEscape(): void {
+    if (this.open()) {
+      this.popoverDirective().hide();
+      this.buttonRef().nativeElement.focus();
+    } else {
+      if (this.getCurrentValue()) {
+        this.internalValue.set(null);
+        this.onChange(null);
+        this.zValueChange.emit(null);
+      }
+    }
+  }
+
+  onKeyDown(e: Event) {
+    if (this.disabled()) {
+      return;
+    }
+
+    const event = e as KeyboardEvent;
 
     // Handle different keyboard events based on combobox state
     if (this.open()) {
       // When popover is open
       switch (event.key) {
-        case 'Escape':
-          event.preventDefault();
-          event.stopPropagation();
-          this.popoverDirective().hide();
-          this.buttonRef().nativeElement.focus();
-          break;
-
         case 'Tab':
           // Allow tab to close and move to next element
           this.popoverDirective().hide();
@@ -325,7 +346,6 @@ export class ZardComboboxComponent implements ControlValueAccessor {
         case 'PageUp':
         case 'PageDown':
           // Forward navigation to command component
-          event.preventDefault();
           this.commandRef()?.onKeyDown(event);
           break;
       }
@@ -336,24 +356,12 @@ export class ZardComboboxComponent implements ControlValueAccessor {
         case 'ArrowUp':
         case 'Enter':
         case ' ': // Space key
-          event.preventDefault();
           this.popoverDirective().show();
-          break;
-
-        case 'Escape':
-          // Clear selection if there's a value
-          if (this.getCurrentValue()) {
-            event.preventDefault();
-            this.internalValue.set(null);
-            this.onChange(null);
-            this.zValueChange.emit(null);
-          }
           break;
 
         default:
           // For searchable comboboxes, open and start typing
           if (this.searchable() && event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
-            event.preventDefault();
             this.popoverDirective().show();
             // Let the command input handle the character after opening
             setTimeout(() => {
@@ -379,10 +387,9 @@ export class ZardComboboxComponent implements ControlValueAccessor {
     }
   }
 
-  @HostListener('document:keydown', ['$event'])
-  onDocumentKeyDown(event: KeyboardEvent) {
+  onDocumentKeyDown(event: Event) {
     // Close on Escape from anywhere when this combobox is open
-    if (this.open() && event.key === 'Escape') {
+    if (this.open()) {
       const target = event.target as Element;
       const buttonElement = this.buttonRef().nativeElement;
       // Only handle if not already handled by the component itself
