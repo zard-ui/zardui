@@ -12,7 +12,7 @@ import { ZardEventManagerPlugin } from '../zard-event-manager-plugin';
 import { ZardPreset, type ZardConfigType } from './config.types';
 import { updatePreset } from './update-preset';
 
-export const ZARD_UI_CONFIG = new InjectionToken<ZardConfigType>('ZARD_UI_CONFIG');
+export const ZARD_CONFIG = new InjectionToken<ZardConfigType>('ZARD_CONFIG');
 
 /*
   usage:
@@ -24,7 +24,7 @@ export const ZARD_UI_CONFIG = new InjectionToken<ZardConfigType>('ZARD_UI_CONFIG
  */
 export function provideZard(...zardConfig: ZardConfigType[]): EnvironmentProviders {
   const providers = zardConfig?.map(config => ({
-    provide: ZARD_UI_CONFIG,
+    provide: ZARD_CONFIG,
     useValue: config,
     multi: false,
   }));

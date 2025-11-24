@@ -23,11 +23,13 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { filter, Subscription } from 'rxjs';
 
 import { popoverVariants } from './popover.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -74,6 +76,7 @@ const POPOVER_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
 })
 export class ZardPopoverDirective implements OnInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
+  private readonly eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true });
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly elementRef = inject(ElementRef);
@@ -100,6 +103,11 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   constructor() {
+    const zardProperlyInitialized = this.eventPlugins?.some(plugin => plugin instanceof ZardEventManagerPlugin);
+    if (!zardProperlyInitialized) {
+      throw new Error("Zard: Initialization missing. Please call `provideZard()` in your app's root providers.");
+    }
+
     toObservable(this.zVisible)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(visible => {
@@ -205,24 +213,11 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     }
 
     if (trigger === 'click') {
-      this.listeners.push(
-        this.renderer.listen(this.nativeElement, 'click', (event: Event) => {
-          event.stopPropagation();
-          this.toggle();
-        }),
-      );
+      this.listeners.push(this.renderer.listen(this.nativeElement, 'click.stop', () => this.toggle()));
     } else if (trigger === 'hover') {
-      this.listeners.push(
-        this.renderer.listen(this.nativeElement, 'mouseenter', () => {
-          this.show();
-        }),
-      );
+      this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseenter', () => this.show()));
 
-      this.listeners.push(
-        this.renderer.listen(this.nativeElement, 'mouseleave', () => {
-          this.hide();
-        }),
-      );
+      this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseleave', () => this.hide()));
     }
   }
 

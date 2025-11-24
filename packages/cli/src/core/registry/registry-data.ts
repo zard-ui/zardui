@@ -622,6 +622,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'popover',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'popover.component.ts',
