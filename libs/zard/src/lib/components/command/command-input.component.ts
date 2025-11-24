@@ -4,13 +4,12 @@ import {
   computed,
   DestroyRef,
   type ElementRef,
-  EventEmitter,
   forwardRef,
   inject,
   input,
   type OnDestroy,
   type OnInit,
-  Output,
+  output,
   signal,
   viewChild,
   ViewEncapsulation,
@@ -71,7 +70,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
   readonly placeholder = input<string>('Type a command or search...');
   readonly class = input<ClassValue>('');
 
-  @Output() readonly valueChange = new EventEmitter<string>();
+  readonly valueChange = output<string>();
 
   readonly searchTerm = signal('');
   private readonly searchSubject = new Subject<string>();
@@ -103,7 +102,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
 
   onInput(event: Event) {
     const target = event.target as HTMLInputElement;
-    const value = target.value;
+    const { value } = target;
     this.searchTerm.set(value);
 
     // Always send to subject - let the stream handle timing

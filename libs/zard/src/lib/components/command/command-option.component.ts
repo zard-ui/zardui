@@ -31,7 +31,8 @@ import type { ZardIcon } from '../icon/icons';
         [attr.data-disabled]="zDisabled()"
         [attr.tabindex]="0"
         (click)="onClick()"
-        (keydown)="onKeyDown($event)"
+        (keydown.enter.prevent)="onClick()"
+        (keydown.space.prevent)="onClick()"
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
@@ -72,34 +73,35 @@ export class ZardCommandOptionComponent {
   protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants({})));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent) return true;
+    if (!this.commandComponent) {
+      return true;
+    }
 
     const filteredOptions = this.commandComponent.filteredOptions();
     const searchTerm = this.commandComponent.searchTerm();
 
     // If no search term, show all options
-    if (searchTerm === '') return true;
+    if (searchTerm === '') {
+      return true;
+    }
 
     // Check if this option is in the filtered list
     return filteredOptions.includes(this);
   });
 
   onClick() {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
     if (this.commandComponent) {
       this.commandComponent.selectOption(this);
     }
   }
 
-  onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      this.onClick();
-    }
-  }
-
   onMouseEnter() {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
     // Visual feedback for hover
   }
 
