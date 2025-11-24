@@ -19,6 +19,7 @@ import {
   sidebarVariants,
 } from './layout.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { checkForProperZardInitialization } from '../core/config/providezard';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
@@ -37,8 +38,8 @@ import type { ZardIcon } from '../icon/icons';
         <div
           [class]="triggerClasses()"
           (click)="toggleCollapsed()"
-          (keydown.enter)="toggleCollapsed(); $event.preventDefault()"
-          (keydown.space)="toggleCollapsed(); $event.preventDefault()"
+          (keydown.enter.prevent)="toggleCollapsed()"
+          (keydown.space.prevent)="toggleCollapsed()"
           tabindex="0"
           role="button"
           [attr.aria-label]="zCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
@@ -71,6 +72,8 @@ export class SidebarComponent {
   private readonly internalCollapsed = signal(false);
 
   constructor() {
+    checkForProperZardInitialization();
+
     effect(() => {
       this.internalCollapsed.set(this.zCollapsed());
     });
