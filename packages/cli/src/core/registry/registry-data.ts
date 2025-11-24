@@ -208,7 +208,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'checkbox',
-    registryDependencies: ['icon'],
+    registryDependencies: ['core', 'icon'],
     files: [
       {
         name: 'checkbox.component.ts',
