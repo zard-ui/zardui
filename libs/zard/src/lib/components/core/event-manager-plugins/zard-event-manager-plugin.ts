@@ -15,25 +15,31 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
     options?: ListenerOptions,
     // eslint-disable-next-line
   ): Function {
-    const { event, keyword } = this.#provideEventFrom(eventName, this.#keywords);
+    const { event, keyword, keys } = this.#provideEventFrom(eventName, this.#keywords);
     return this.manager.addEventListener(
       element,
       event,
       (event: Event) => {
-        switch (keyword) {
-          case 'stop':
-            event.stopPropagation();
-            break;
-          case 'stop-immediate':
-            event.stopImmediatePropagation();
-            break;
-          case 'prevent-with-stop':
-            event.preventDefault();
-            event.stopPropagation();
-            break;
-          default:
-            event.preventDefault();
-            break;
+        let shouldExecute = false;
+        if (event instanceof KeyboardEvent) {
+          shouldExecute = keys.includes(event.key.toLowerCase());
+        }
+        if (shouldExecute) {
+          switch (keyword) {
+            case 'stop':
+              event.stopPropagation();
+              break;
+            case 'stop-immediate':
+              event.stopImmediatePropagation();
+              break;
+            case 'prevent-with-stop':
+              event.preventDefault();
+              event.stopPropagation();
+              break;
+            default:
+              event.preventDefault();
+              break;
+          }
         }
         handler(event);
       },
@@ -41,23 +47,31 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
     );
   }
 
-  #provideEventFrom(eventName: string, keywords: string[]): { event: string; keyword: string } {
+  #provideEventFrom(eventName: string, keywords: string[]): { event: string; keyword: string; keys: string[] } {
     const eventNameSubstrings = eventName.split('.');
     let event = '';
+    let keys: string[] = [];
     let keyword = '';
+
     for (const substring of eventNameSubstrings) {
-      if (keywords.includes(substring)) {
+      if (substring.startsWith('{')) {
+        keys = this.#extarctKeys(substring);
+        continue;
+      } else if (keywords.includes(substring)) {
         keyword = substring;
         break;
-      }
-
-      if (!event) {
+      } else if (!event) {
         event = substring;
       } else {
         event += `.${substring}`;
       }
     }
 
-    return { event, keyword };
+    return { event, keyword, keys };
+  }
+
+  #extarctKeys(substring: string): string[] {
+    const stringList = substring.substring(1, substring.length - 1);
+    return stringList.split(',');
   }
 }
