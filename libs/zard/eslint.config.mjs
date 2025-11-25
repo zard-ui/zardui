@@ -64,7 +64,7 @@ export default [
       '@angular-eslint/sort-keys-in-type-decorator': 'error',
       '@angular-eslint/prefer-output-emitter-ref': 'warn', // should be error
       // remove following gradually
-      '@angular-eslint/no-output-on-prefix': 'warn',
+      '@angular-eslint/no-output-on-prefix': 'error',
       '@angular-eslint/no-input-rename': 'warn',
     },
   },

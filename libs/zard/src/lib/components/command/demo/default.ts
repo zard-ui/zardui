@@ -8,7 +8,7 @@ import { ZardCommandModule } from '../command.module';
   imports: [ZardCommandModule],
   standalone: true,
   template: `
-    <z-command class="md:min-w-[500px]" (zOnSelect)="handleCommand($event)">
+    <z-command class="md:min-w-[500px]" (zCommandSelected)="handleCommand($event)">
       <z-command-input placeholder="Search actions, files, and more..." />
       <z-command-list>
         <z-command-empty>No commands found.</z-command-empty>

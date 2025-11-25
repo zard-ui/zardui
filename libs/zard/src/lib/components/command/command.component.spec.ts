@@ -23,7 +23,7 @@ import { ZardCommandComponent } from './command.component';
   ],
   standalone: true,
   template: `
-    <z-command size="default" (zOnSelect)="onSelect($event)" (zOnChange)="onChange($event)">
+    <z-command size="default" (zCommandSelected)="onSelect($event)" (zCommandChange)="onChange($event)">
       <z-command-input placeholder="Test placeholder" />
       <z-command-list>
         <z-command-empty>No results found.</z-command-empty>

@@ -13,7 +13,7 @@ import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.comp
       placeholder="Select framework..."
       searchPlaceholder="Search framework..."
       emptyText="No framework found."
-      (zOnSelect)="onSelect($event)"
+      (zComboSelected)="onSelect($event)"
     />
   `,
 })
