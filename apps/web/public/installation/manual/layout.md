@@ -12,7 +12,9 @@ import { mergeClasses } from '../../shared/utils/utils';
 @Component({
   selector: 'z-layout',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -270,8 +272,7 @@ import type { ZardIcon } from '../icon/icons';
         <div
           [class]="triggerClasses()"
           (click)="toggleCollapsed()"
-          (keydown.enter.prevent)="toggleCollapsed()"
-          (keydown.space.prevent)="toggleCollapsed()"
+          (keydown.{enter,space}.prevent)="toggleCollapsed()"
           tabindex="0"
           role="button"
           [attr.aria-label]="zCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"

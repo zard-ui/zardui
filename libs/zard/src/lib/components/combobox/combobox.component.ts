@@ -168,7 +168,7 @@ export interface ZardComboboxGroup {
     '[class]': 'classes()',
     '(document:keydown.escape)': 'onDocumentKeyDown($event)',
     '(keydown.escape.prevent-with-stop)': 'onKeyDownEscape()',
-    '(keydown.prevent)': 'onKeyDown($event)',
+    '(keydown.{tab,arrowdown,arrowup,enter,home,end,pageup,pagedown,space}.prevent)': 'onKeyDown($event)',
   },
   exportAs: 'zCombobox',
 })

@@ -6,7 +6,6 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
-  standalone: true,
   host: {
     '[attr.tabindex]': '0',
     '[attr.role]': '"button"',
@@ -16,8 +15,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
     '(click.prevent-with-stop)': 'onClick()',
     '(mouseenter)': 'onHover()',
     '(mouseleave)': 'onHover()',
-    '(keydown.enter.prevent-with-stop)': 'toggleDropdown()',
-    '(keydown.space.prevent-with-stop)': 'toggleDropdown()',
+    '(keydown.{enter,space}.prevent-with-stop)': 'toggleDropdown()',
     '(keydown.arrowdown.prevent)': 'openDropdown()',
   },
   exportAs: 'zDropdown',

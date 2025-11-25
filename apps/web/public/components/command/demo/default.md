@@ -37,7 +37,7 @@ import { ZardCommandModule } from '../command.module';
     </z-command>
   `,
   host: {
-    '(window:keydown)': 'handleKeydown($event)',
+    '(window:keydown.{n,o,s,1,2,t,d}.prevent)': 'handleKeydown($event)',
   },
 })
 export class ZardDemoCommandDefaultComponent {
@@ -75,13 +75,15 @@ export class ZardDemoCommandDefaultComponent {
   }
 
   // Handle keyboard shortcuts
-  handleKeydown(event: KeyboardEvent) {
-    if (event.metaKey || event.ctrlKey) {
-      if ('nos12td'.includes(event.key.toLowerCase())) {
-        event.preventDefault();
-      }
+  handleKeydown(event: Event) {
+    const { key, metaKey, ctrlKey } = event as KeyboardEvent;
 
-      switch (event.key.toLowerCase()) {
+    if (metaKey || ctrlKey) {
+      // if ('nos12td'.includes(event.key.toLowerCase())) {
+      //   event.preventDefault();
+      // }
+
+      switch (key.toLowerCase()) {
         case 'n':
           this.executeCommand('new-project', 'Create new project');
           break;

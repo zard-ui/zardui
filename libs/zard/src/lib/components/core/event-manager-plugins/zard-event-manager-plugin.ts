@@ -20,11 +20,11 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
       element,
       event,
       (event: Event) => {
-        let shouldExecute = false;
+        let isEventMatches = false;
         if (event instanceof KeyboardEvent) {
-          shouldExecute = keys.includes(event.key.toLowerCase());
+          isEventMatches = keys.includes(event.key.toLowerCase());
         }
-        if (shouldExecute) {
+        if (isEventMatches) {
           switch (keyword) {
             case 'stop':
               event.stopPropagation();
@@ -72,6 +72,6 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
 
   #extarctKeys(substring: string): string[] {
     const stringList = substring.substring(1, substring.length - 1);
-    return stringList.split(',');
+    return stringList.split(',').map(s => (s === 'space' ? ' ' : s.trim()));
   }
 }

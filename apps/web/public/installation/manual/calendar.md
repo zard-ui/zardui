@@ -489,7 +489,8 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.role]': '"grid"',
-    '(keydown.prevent)': 'onKeyDown($event)',
+    '(keydown.{arrowleft,arrowright,arrowup,arrowdown,home,end,pageuppagedown,enter,space}.prevent)':
+      'onKeyDown($event)',
   },
   exportAs: 'zCalendarGrid',
 })

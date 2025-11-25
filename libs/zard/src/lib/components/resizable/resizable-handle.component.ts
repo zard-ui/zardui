@@ -16,15 +16,15 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    role: 'separator',
     '[class]': 'classes()',
     '[attr.data-layout]': 'layout()',
     '[attr.tabindex]': 'zDisabled() ? null : 0',
-    '[attr.role]': '"separator"',
     '[attr.aria-orientation]': 'layout() === "vertical" ? "horizontal" : "vertical"',
     '[attr.aria-disabled]': 'zDisabled()',
     '(mousedown)': 'handleMouseDown($event)',
     '(touchstart)': 'handleTouchStart($event)',
-    '(keydown.prevent)': 'handleKeyDown($event)',
+    '(keydown.{arrowleft,arrowright,arrowup,arrowdown,home,end,enter,space}.prevent)': 'handleKeyDown($event)',
   },
   exportAs: 'zResizableHandle',
 })
@@ -64,20 +64,20 @@ export class ZardResizableHandleComponent {
     this.resizable.startResize(this.zHandleIndex(), event);
   }
 
-  handleKeyDown(e: Event): void {
+  handleKeyDown(event: Event): void {
     if (this.zDisabled() || !this.resizable) {
       return;
     }
-    const event = e as KeyboardEvent;
+    const { key, shiftKey } = event as KeyboardEvent;
 
     const panels = this.resizable.panels();
     const handleIndex = this.zHandleIndex();
     const layout = this.layout();
 
     let delta = 0;
-    const step = event.shiftKey ? 10 : 1;
+    const step = shiftKey ? 10 : 1;
 
-    switch (event.key) {
+    switch (key) {
       case 'ArrowLeft':
         if (layout === 'horizontal') {
           delta = -step;

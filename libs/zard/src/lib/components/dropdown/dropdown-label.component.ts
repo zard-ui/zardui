@@ -7,7 +7,9 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {

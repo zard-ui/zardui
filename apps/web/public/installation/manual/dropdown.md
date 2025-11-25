@@ -34,13 +34,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
   standalone: true,
   template: `
     <!-- Dropdown Trigger -->
-    <div
-      class="trigger-container"
-      (click)="toggle()"
-      (keydown.enter)="toggle()"
-      (keydown.space)="toggle()"
-      tabindex="0"
-    >
+    <div class="trigger-container" (click)="toggle()" (keydown.{enter,space}.prevent)="toggle()" tabindex="0">
       <ng-content select="[dropdown-trigger]" />
     </div>
 
@@ -50,7 +44,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
         [class]="contentClasses()"
         role="menu"
         [attr.data-state]="'open'"
-        (keydown.prevent)="onDropdownKeydown($event)"
+        (keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent)="onDropdownKeydown($event)"
         tabindex="-1"
       >
         <ng-content />
@@ -110,9 +104,9 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 
   onDropdownKeydown(e: Event) {
     const items = this.getDropdownItems();
-    const event = e as KeyboardEvent;
+    const { key } = e as KeyboardEvent;
 
-    switch (event.key) {
+    switch (key) {
       case 'ArrowDown':
         this.navigateItems(1, items);
         break;
@@ -373,7 +367,9 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -432,7 +428,9 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -479,7 +477,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   selector: 'z-dropdown-menu-content',
   template: `
     <ng-template #contentTemplate>
-      <div [class]="contentClasses()" role="menu" tabindex="-1" [attr.aria-orientation]="'vertical'">
+      <div [class]="contentClasses()" role="menu" tabindex="-1" aria-orientation="vertical">
         <ng-content />
       </div>
     </ng-template>
@@ -513,7 +511,9 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]',
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -540,7 +540,6 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
-  standalone: true,
   host: {
     '[attr.tabindex]': '0',
     '[attr.role]': '"button"',
@@ -550,8 +549,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
     '(click.prevent-with-stop)': 'onClick()',
     '(mouseenter)': 'onHover()',
     '(mouseleave)': 'onHover()',
-    '(keydown.enter.prevent-with-stop)': 'toggleDropdown()',
-    '(keydown.space.prevent-with-stop)': 'toggleDropdown()',
+    '(keydown.{enter,space}.prevent-with-stop)': 'toggleDropdown()',
     '(keydown.arrowdown.prevent)': 'openDropdown()',
   },
   exportAs: 'zDropdown',
@@ -793,32 +791,36 @@ export class ZardDropdownService {
       return;
     }
 
-    this.unlisten = this.renderer.listen(dropdownElement, 'keydown.prevent', (event: KeyboardEvent) => {
-      const items = this.getDropdownItems();
+    this.unlisten = this.renderer.listen(
+      dropdownElement,
+      'keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent',
+      (event: KeyboardEvent) => {
+        const items = this.getDropdownItems();
 
-      switch (event.key) {
-        case 'ArrowDown':
-          this.navigateItems(1, items);
-          break;
-        case 'ArrowUp':
-          this.navigateItems(-1, items);
-          break;
-        case 'Enter':
-        case ' ':
-          this.selectFocusedItem(items);
-          break;
-        case 'Escape':
-          this.close();
-          this.triggerElement?.nativeElement.focus();
-          break;
-        case 'Home':
-          this.focusItemAtIndex(items, 0);
-          break;
-        case 'End':
-          this.focusItemAtIndex(items, items.length - 1);
-          break;
-      }
-    });
+        switch (event.key) {
+          case 'ArrowDown':
+            this.navigateItems(1, items);
+            break;
+          case 'ArrowUp':
+            this.navigateItems(-1, items);
+            break;
+          case 'Enter':
+          case ' ':
+            this.selectFocusedItem(items);
+            break;
+          case 'Escape':
+            this.close();
+            this.triggerElement?.nativeElement.focus();
+            break;
+          case 'Home':
+            this.focusItemAtIndex(items, 0);
+            break;
+          case 'End':
+            this.focusItemAtIndex(items, items.length - 1);
+            break;
+        }
+      },
+    );
 
     // Focus dropdown container
     dropdownElement.focus();

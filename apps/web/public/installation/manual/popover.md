@@ -368,7 +368,9 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   selector: 'z-popover',
   imports: [],
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',

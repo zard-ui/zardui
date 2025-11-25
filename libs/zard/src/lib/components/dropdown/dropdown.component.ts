@@ -31,13 +31,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
   standalone: true,
   template: `
     <!-- Dropdown Trigger -->
-    <div
-      class="trigger-container"
-      (click)="toggle()"
-      (keydown.enter)="toggle()"
-      (keydown.space)="toggle()"
-      tabindex="0"
-    >
+    <div class="trigger-container" (click)="toggle()" (keydown.{enter,space}.prevent)="toggle()" tabindex="0">
       <ng-content select="[dropdown-trigger]" />
     </div>
 
@@ -47,7 +41,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
         [class]="contentClasses()"
         role="menu"
         [attr.data-state]="'open'"
-        (keydown.prevent)="onDropdownKeydown($event)"
+        (keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent)="onDropdownKeydown($event)"
         tabindex="-1"
       >
         <ng-content />
@@ -107,9 +101,9 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 
   onDropdownKeydown(e: Event) {
     const items = this.getDropdownItems();
-    const event = e as KeyboardEvent;
+    const { key } = e as KeyboardEvent;
 
-    switch (event.key) {
+    switch (key) {
       case 'ArrowDown':
         this.navigateItems(1, items);
         break;

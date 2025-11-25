@@ -34,8 +34,7 @@ type OnChangeType = (value: any) => void; // eslint-disable-line
       class="flex items-center gap-2"
       [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'"
       (click)="onCheckboxChange()"
-      (keydown.enter.prevent)="onCheckboxChange()"
-      (keydown.space.prevent)="onCheckboxChange()"
+      (keydown.{enter,space}.prevent)="onCheckboxChange()"
     >
       <main class="relative flex">
         <input

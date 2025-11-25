@@ -35,15 +35,15 @@ import { ZardIconComponent } from '../icon/icon.component';
         [(ngModel)]="searchTerm"
         (input.debounce.150)="onInput($event)"
         (keydown)="onKeyDown($event)"
+        aria-controls="command-list"
+        aria-describedby="command-instructions"
+        aria-haspopup="listbox"
+        aria-label="Search commands"
         autocomplete="off"
         autocorrect="off"
         spellcheck="false"
         role="combobox"
         [attr.aria-expanded]="true"
-        [attr.aria-haspopup]="'listbox'"
-        [attr.aria-controls]="'command-list'"
-        [attr.aria-label]="'Search commands'"
-        [attr.aria-describedby]="'command-instructions'"
       />
     </div>
   `,

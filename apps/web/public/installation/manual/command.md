@@ -51,7 +51,6 @@ export interface ZardCommandConfig {
 @Component({
   selector: 'z-command',
   imports: [FormsModule],
-  standalone: true,
   template: `
     <div [class]="classes()">
       <div id="command-instructions" class="sr-only">
@@ -73,10 +72,10 @@ export interface ZardCommandConfig {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.role]': '"combobox"',
+    role: 'combobox',
+    'aria-haspopup': 'listbox',
     '[attr.aria-expanded]': 'true',
-    '[attr.aria-haspopup]': '"listbox"',
-    '(keydown)': 'onKeyDown($event)',
+    '(keydown.{arrodown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',
   },
   exportAs: 'zCommand',
 })
@@ -180,19 +179,17 @@ export class ZardCommandComponent implements ControlValueAccessor {
   }
 
   // in @Component host: '(keydown)': 'onKeyDown($event)'
-  onKeyDown(event: KeyboardEvent) {
+  onKeyDown(event: Event) {
     const filteredOptions = this.filteredOptions();
     if (filteredOptions.length === 0) {
       return;
     }
 
+    const { key } = event as KeyboardEvent;
+
     const currentIndex = this.selectedIndex();
 
-    if (['ArroDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
-      event.preventDefault();
-    }
-
-    switch (event.key) {
+    switch (key) {
       case 'ArrowDown': {
         const nextIndex = currentIndex < filteredOptions.length - 1 ? currentIndex + 1 : 0;
         this.selectedIndex.set(nextIndex);
@@ -417,7 +414,6 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-empty',
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()">
@@ -489,15 +485,15 @@ import { ZardIconComponent } from '../icon/icon.component';
         [(ngModel)]="searchTerm"
         (input.debounce.150)="onInput($event)"
         (keydown)="onKeyDown($event)"
+        aria-controls="command-list"
+        aria-describedby="command-instructions"
+        aria-haspopup="listbox"
+        aria-label="Search commands"
         autocomplete="off"
         autocorrect="off"
         spellcheck="false"
         role="combobox"
         [attr.aria-expanded]="true"
-        [attr.aria-haspopup]="'listbox'"
-        [attr.aria-controls]="'command-list'"
-        [attr.aria-label]="'Search commands'"
-        [attr.aria-describedby]="'command-instructions'"
       />
     </div>
   `,
@@ -725,7 +721,6 @@ import type { ZardIcon } from '../icon/icons';
 @Component({
   selector: 'z-command-option',
   imports: [ZardIconComponent],
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div
@@ -736,7 +731,7 @@ import type { ZardIcon } from '../icon/icons';
         [attr.data-disabled]="zDisabled()"
         [attr.tabindex]="0"
         (click)="onClick()"
-        (keydown)="onKeyDown($event)"
+        (keydown.{enter,space}.prevent)="onClick()"
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
@@ -777,34 +772,35 @@ export class ZardCommandOptionComponent {
   protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants({})));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent) return true;
+    if (!this.commandComponent) {
+      return true;
+    }
 
     const filteredOptions = this.commandComponent.filteredOptions();
     const searchTerm = this.commandComponent.searchTerm();
 
     // If no search term, show all options
-    if (searchTerm === '') return true;
+    if (searchTerm === '') {
+      return true;
+    }
 
     // Check if this option is in the filtered list
     return filteredOptions.includes(this);
   });
 
   onClick() {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
     if (this.commandComponent) {
       this.commandComponent.selectOption(this);
     }
   }
 
-  onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      this.onClick();
-    }
-  }
-
   onMouseEnter() {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
     // Visual feedback for hover
   }
 

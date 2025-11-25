@@ -139,32 +139,36 @@ export class ZardDropdownService {
       return;
     }
 
-    this.unlisten = this.renderer.listen(dropdownElement, 'keydown.prevent', (event: KeyboardEvent) => {
-      const items = this.getDropdownItems();
+    this.unlisten = this.renderer.listen(
+      dropdownElement,
+      'keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent',
+      (event: KeyboardEvent) => {
+        const items = this.getDropdownItems();
 
-      switch (event.key) {
-        case 'ArrowDown':
-          this.navigateItems(1, items);
-          break;
-        case 'ArrowUp':
-          this.navigateItems(-1, items);
-          break;
-        case 'Enter':
-        case ' ':
-          this.selectFocusedItem(items);
-          break;
-        case 'Escape':
-          this.close();
-          this.triggerElement?.nativeElement.focus();
-          break;
-        case 'Home':
-          this.focusItemAtIndex(items, 0);
-          break;
-        case 'End':
-          this.focusItemAtIndex(items, items.length - 1);
-          break;
-      }
-    });
+        switch (event.key) {
+          case 'ArrowDown':
+            this.navigateItems(1, items);
+            break;
+          case 'ArrowUp':
+            this.navigateItems(-1, items);
+            break;
+          case 'Enter':
+          case ' ':
+            this.selectFocusedItem(items);
+            break;
+          case 'Escape':
+            this.close();
+            this.triggerElement?.nativeElement.focus();
+            break;
+          case 'Home':
+            this.focusItemAtIndex(items, 0);
+            break;
+          case 'End':
+            this.focusItemAtIndex(items, items.length - 1);
+            break;
+        }
+      },
+    );
 
     // Focus dropdown container
     dropdownElement.focus();

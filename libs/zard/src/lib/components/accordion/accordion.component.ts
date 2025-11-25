@@ -16,7 +16,9 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-accordion',
-  template: ` <ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {

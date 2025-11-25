@@ -17,7 +17,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   selector: 'z-dropdown-menu-content',
   template: `
     <ng-template #contentTemplate>
-      <div [class]="contentClasses()" role="menu" tabindex="-1" [attr.aria-orientation]="'vertical'">
+      <div [class]="contentClasses()" role="menu" tabindex="-1" aria-orientation="vertical">
         <ng-content />
       </div>
     </ng-template>

@@ -48,7 +48,6 @@ export interface ZardCommandConfig {
 @Component({
   selector: 'z-command',
   imports: [FormsModule],
-  standalone: true,
   template: `
     <div [class]="classes()">
       <div id="command-instructions" class="sr-only">
@@ -70,10 +69,10 @@ export interface ZardCommandConfig {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.role]': '"combobox"',
+    role: 'combobox',
+    'aria-haspopup': 'listbox',
     '[attr.aria-expanded]': 'true',
-    '[attr.aria-haspopup]': '"listbox"',
-    '(keydown)': 'onKeyDown($event)',
+    '(keydown.{arrodown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',
   },
   exportAs: 'zCommand',
 })
@@ -177,19 +176,17 @@ export class ZardCommandComponent implements ControlValueAccessor {
   }
 
   // in @Component host: '(keydown)': 'onKeyDown($event)'
-  onKeyDown(event: KeyboardEvent) {
+  onKeyDown(event: Event) {
     const filteredOptions = this.filteredOptions();
     if (filteredOptions.length === 0) {
       return;
     }
 
+    const { key } = event as KeyboardEvent;
+
     const currentIndex = this.selectedIndex();
 
-    if (['ArroDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
-      event.preventDefault();
-    }
-
-    switch (event.key) {
+    switch (key) {
       case 'ArrowDown': {
         const nextIndex = currentIndex < filteredOptions.length - 1 ? currentIndex + 1 : 0;
         this.selectedIndex.set(nextIndex);

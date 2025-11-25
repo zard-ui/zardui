@@ -17,10 +17,9 @@ import { ZardIconComponent } from '../icon/icon.component';
       [id]="'accordion-' + zValue()"
       [class]="triggerClasses()"
       (click)="toggle()"
-      (keydown.enter.prevent)="toggle()"
-      (keydown.space.prevent)="toggle()"
+      (keydown.{enter,space}.prevent)="toggle()"
       [attr.aria-expanded]="isOpen()"
-      [attr.aria-controls]="'content-' + zValue()"
+      attr.aria-controls="content-{{ zValue() }}"
       tabindex="0"
     >
       {{ zTitle() }}
@@ -32,11 +31,11 @@ import { ZardIconComponent } from '../icon/icon.component';
     </button>
 
     <div
-      [class]="contentClasses()"
-      [id]="'content-' + zValue()"
-      [attr.data-state]="isOpen() ? 'open' : 'closed'"
+      attr.aria-labelledby="accordion-{{ zValue() }}"
+      id="content-{{ zValue() }}"
       role="region"
-      [attr.aria-labelledby]="'accordion-' + zValue()"
+      [attr.data-state]="isOpen() ? 'open' : 'closed'"
+      [class]="contentClasses()"
     >
       <div class="overflow-hidden">
         <div class="pt-0 pb-4">

@@ -38,7 +38,9 @@ class TestHandleHostComponent {
   selector: 'test-standalone-handle',
   imports: [ZardResizableHandleComponent],
   standalone: true,
-  template: ` <z-resizable-handle [zHandleIndex]="0" [zWithHandle]="true" [zDisabled]="false" /> `,
+  template: `
+    <z-resizable-handle [zHandleIndex]="0" [zWithHandle]="true" [zDisabled]="false" />
+  `,
 })
 class TestStandaloneHandleComponent {}
 
