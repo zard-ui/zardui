@@ -70,6 +70,7 @@ import {
   SquareLibrary,
   Star,
   Sun,
+  SunMoon,
   Tablet,
   Tag,
   Terminal,
@@ -169,6 +170,7 @@ export const ZARD_ICONS = {
   'list-filter-plus': ListFilterPlus,
   trash: Trash2,
   tag: Tag,
+  'sun-moon': SunMoon,
 } as const satisfies Record<string, LucideIconData>;
 
 export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;

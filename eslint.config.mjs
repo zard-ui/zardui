@@ -110,6 +110,6 @@ export default [
   {
     files: ['**/*.html'],
     // Override or add rules here
-    rules: {},
+    rules: { '@stylistic/spaced-comment': 'off' },
   },
 ];

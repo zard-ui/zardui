@@ -14,6 +14,7 @@ import { ZardSelectComponent } from '../select/select.component';
   template: `
     <div [class]="navClasses()">
       <button
+        type="button"
         z-button
         zType="ghost"
         zSize="sm"
@@ -25,9 +26,9 @@ import { ZardSelectComponent } from '../select/select.component';
         <z-icon zType="chevron-left" />
       </button>
 
-      <! -- Month and Year Selectors - ->
+      <!-- Month and Year Selectors -->
       <div class="flex items-center space-x-2">
-        <! -- Month Select - ->
+        <!-- Month Select -->
         <z-select
           class="min-w-20"
           [zValue]="currentMonth()"
@@ -39,7 +40,7 @@ import { ZardSelectComponent } from '../select/select.component';
           }
         </z-select>
 
-        <! -- Year Select - ->
+        <!-- Year Select -->
         <z-select
           class="min-w-21"
           [zValue]="currentYear()"
@@ -53,6 +54,7 @@ import { ZardSelectComponent } from '../select/select.component';
       </div>
 
       <button
+        type="button"
         z-button
         zType="ghost"
         zSize="sm"

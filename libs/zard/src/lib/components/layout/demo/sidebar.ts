@@ -32,7 +32,7 @@ interface MenuItem {
   ],
   standalone: true,
   template: `
-    <! -- border and rounded-md are just for the demo purpose - ->
+    <!-- border and rounded-md are just for the demo purpose -->
     <z-layout class="overflow-hidden rounded-md border">
       <z-sidebar
         [zWidth]="250"
@@ -40,7 +40,7 @@ interface MenuItem {
         [zCollapsed]="sidebarCollapsed()"
         [zCollapsedWidth]="70"
         (zCollapsedChange)="onCollapsedChange($event)"
-        class="!p-0"
+        class="p-0!"
       >
         <nav [class]="'flex h-full flex-col overflow-hidden ' + (sidebarCollapsed() ? 'gap-1 p-1 pt-4' : 'gap-4 p-4')">
           <z-sidebar-group>
@@ -49,6 +49,7 @@ interface MenuItem {
             }
             @for (item of mainMenuItems; track item.label) {
               <button
+                type="button"
                 z-button
                 zType="ghost"
                 [class]="sidebarCollapsed() ? 'justify-center' : 'justify-start'"
@@ -70,6 +71,7 @@ interface MenuItem {
             @for (item of workspaceMenuItems; track item.label) {
               @if (item.submenu) {
                 <button
+                  type="button"
                   z-button
                   zType="ghost"
                   z-menu
@@ -89,12 +91,13 @@ interface MenuItem {
                 <ng-template #submenu>
                   <div z-menu-content class="w-48">
                     @for (subitem of item.submenu; track subitem.label) {
-                      <button z-menu-item>{{ subitem.label }}</button>
+                      <button type="button" z-menu-item>{{ subitem.label }}</button>
                     }
                   </div>
                 </ng-template>
               } @else {
                 <button
+                  type="button"
                   z-button
                   zType="ghost"
                   [class]="sidebarCollapsed() ? 'justify-center' : 'justify-start'"
@@ -134,16 +137,16 @@ interface MenuItem {
 
             <ng-template #userMenu>
               <div z-menu-content class="w-48">
-                <button z-menu-item>
+                <button type="button" z-menu-item>
                   <z-icon zType="user" class="mr-2" />
                   Profile
                 </button>
-                <button z-menu-item>
+                <button type="button" z-menu-item>
                   <z-icon zType="settings" class="mr-2" />
                   Settings
                 </button>
                 <z-divider zSpacing="sm" />
-                <button z-menu-item>
+                <button type="button" z-menu-item>
                   <z-icon zType="log-out" class="mr-2" />
                   Logout
                 </button>
@@ -153,10 +156,10 @@ interface MenuItem {
         </nav>
       </z-sidebar>
 
-      <! -- min-h-[200px] is just for the demo purpose to have a minimum height - ->
+      <!-- min-h-[200px] is just for the demo purpose to have a minimum height -->
       <z-content class="min-h-[200px]">
         <div class="flex items-center">
-          <button z-button zType="ghost" zSize="sm" class="-ml-2" (click)="toggleSidebar()">
+          <button type="button" z-button zType="ghost" zSize="sm" class="-ml-2" (click)="toggleSidebar()">
             <z-icon zType="panel-left" />
           </button>
 

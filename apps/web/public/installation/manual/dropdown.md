@@ -33,7 +33,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
   imports: [OverlayModule],
   standalone: true,
   template: `
-    <! -- Dropdown Trigger - ->
+    <!-- Dropdown Trigger -->
     <div
       class="trigger-container"
       (click)="toggle()"
@@ -44,7 +44,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
       <ng-content select="[dropdown-trigger]" />
     </div>
 
-    <! -- Template for overlay content - ->
+    <!-- Template for overlay content -->
     <ng-template #dropdownTemplate>
       <div
         [class]="contentClasses()"

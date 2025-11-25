@@ -20,7 +20,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
   selector: 'z-calendar-grid',
   template: `
     <div #gridContainer>
-      <! -- Weekdays Header - ->
+      <!-- Weekdays Header -->
       <div class="grid w-fit grid-cols-7 text-center" role="row">
         @for (weekday of weekdays; track $index) {
           <div [class]="weekdayClasses()" role="columnheader">
@@ -29,7 +29,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
         }
       </div>
 
-      <! -- Calendar Days Grid - ->
+      <!-- Calendar Days Grid -->
       <div class="mt-2 grid w-fit auto-rows-min grid-cols-7 gap-0" role="rowgroup">
         @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
           <div [class]="dayContainerClasses()" role="gridcell">

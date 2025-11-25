@@ -454,7 +454,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
   selector: 'z-calendar-grid',
   template: `
     <div #gridContainer>
-      <! -- Weekdays Header - ->
+      <!-- Weekdays Header -->
       <div class="grid w-fit grid-cols-7 text-center" role="row">
         @for (weekday of weekdays; track $index) {
           <div [class]="weekdayClasses()" role="columnheader">
@@ -463,7 +463,7 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
         }
       </div>
 
-      <! -- Calendar Days Grid - ->
+      <!-- Calendar Days Grid -->
       <div class="mt-2 grid w-fit auto-rows-min grid-cols-7 gap-0" role="rowgroup">
         @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
           <div [class]="dayContainerClasses()" role="gridcell">
@@ -754,6 +754,7 @@ import { ZardSelectComponent } from '../select/select.component';
   template: `
     <div [class]="navClasses()">
       <button
+        type="button"
         z-button
         zType="ghost"
         zSize="sm"
@@ -765,9 +766,9 @@ import { ZardSelectComponent } from '../select/select.component';
         <z-icon zType="chevron-left" />
       </button>
 
-      <! -- Month and Year Selectors - ->
+      <!-- Month and Year Selectors -->
       <div class="flex items-center space-x-2">
-        <! -- Month Select - ->
+        <!-- Month Select -->
         <z-select
           class="min-w-20"
           [zValue]="currentMonth()"
@@ -779,7 +780,7 @@ import { ZardSelectComponent } from '../select/select.component';
           }
         </z-select>
 
-        <! -- Year Select - ->
+        <!-- Year Select -->
         <z-select
           class="min-w-21"
           [zValue]="currentYear()"
@@ -793,6 +794,7 @@ import { ZardSelectComponent } from '../select/select.component';
       </div>
 
       <button
+        type="button"
         z-button
         zType="ghost"
         zSize="sm"
