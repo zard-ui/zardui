@@ -238,12 +238,18 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 
   private getEventPosition(event: MouseEvent | TouchEvent): number {
     const layout = this.zLayout();
+    let position = 0;
+
     if (event instanceof MouseEvent) {
-      return layout === 'vertical' ? event.clientY : event.clientX;
+      position = layout === 'vertical' ? event.clientY : event.clientX;
     } else {
-      const touch = event.touches[0];
-      return layout === 'vertical' ? touch.clientY : touch.clientX;
+      const touch = event.touches.item(0);
+      if (touch) {
+        position = layout === 'vertical' ? touch?.clientY : touch?.clientX;
+      }
     }
+
+    return position;
   }
 
   getContainerSize(): number {
@@ -252,6 +258,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     return layout === 'vertical' ? element.offsetHeight : element.offsetWidth;
   }
 
+  // TODO this method should be considered for refactoring
   collapsePanel(index: number): void {
     const panels = this.panels();
     const panel = panels[index];
