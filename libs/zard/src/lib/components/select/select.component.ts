@@ -51,7 +51,7 @@ type OnChangeType = (value: string) => void;
       [class]="triggerClasses()"
       [disabled]="zDisabled()"
       (click)="toggle()"
-      (keydown.prevent)="onTriggerKeydown($event)"
+      (keydown.{enter,space,arrowdown,arrowup,escape}.prevent)="onTriggerKeydown($event)"
       [attr.aria-expanded]="isOpen()"
       [attr.aria-haspopup]="'listbox'"
       [attr.data-state]="isOpen() ? 'open' : 'closed'"
@@ -83,7 +83,7 @@ type OnChangeType = (value: string) => void;
         [class]="contentClasses()"
         role="listbox"
         [attr.data-state]="'open'"
-        (keydown.prevent)="onDropdownKeydown($event)"
+        (keydown.{arrowdown,arrowup,enter,escape,home,end}.prevent)="onDropdownKeydown($event)"
         tabindex="-1"
       >
         <div class="p-1">
@@ -202,10 +202,10 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   onDropdownKeydown(e: Event) {
-    const event = e as KeyboardEvent;
+    const { key } = e as KeyboardEvent;
     const items = this.getSelectItems();
 
-    switch (event.key) {
+    switch (key) {
       case 'ArrowDown':
         this.navigateItems(1, items);
         break;
@@ -504,8 +504,10 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
       if (index === focusedIndex) {
         item.focus();
         item.setAttribute('aria-selected', 'true');
+        item.setAttribute('data-selected', 'true');
       } else {
         item.removeAttribute('aria-selected');
+        item.removeAttribute('data-selected');
       }
     }
   }
