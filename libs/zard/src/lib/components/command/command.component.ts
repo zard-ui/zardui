@@ -19,7 +19,6 @@ import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { commandVariants, type ZardCommandVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/config/providezard';
 import type { ZardIcon } from '../icon/icons';
 
 export interface ZardCommandOption {
@@ -74,7 +73,7 @@ export interface ZardCommandConfig {
     '[attr.role]': '"combobox"',
     '[attr.aria-expanded]': 'true',
     '[attr.aria-haspopup]': '"listbox"',
-    '(keydown.prevent)': 'onKeyDown($event)',
+    '(keydown)': 'onKeyDown($event)',
   },
   exportAs: 'zCommand',
 })
@@ -144,8 +143,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
   };
 
   constructor() {
-    checkForProperZardInitialization();
-
     effect(() => {
       this.triggerOptionsUpdate();
     });
@@ -179,8 +176,8 @@ export class ZardCommandComponent implements ControlValueAccessor {
     this.zOnSelect.emit(commandOption);
   }
 
-  onKeyDown(e: Event) {
-    const event = e as KeyboardEvent;
+  // in @Component host: '(keydown)': 'onKeyDown($event)'
+  onKeyDown(event: KeyboardEvent) {
     const filteredOptions = this.filteredOptions();
     if (filteredOptions.length === 0) {
       return;
@@ -190,6 +187,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
     switch (event.key) {
       case 'ArrowDown': {
+        event.preventDefault();
         const nextIndex = currentIndex < filteredOptions.length - 1 ? currentIndex + 1 : 0;
         this.selectedIndex.set(nextIndex);
         this.updateSelectedOption();
@@ -197,6 +195,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
       }
 
       case 'ArrowUp': {
+        event.preventDefault();
         const prevIndex = currentIndex > 0 ? currentIndex - 1 : filteredOptions.length - 1;
         this.selectedIndex.set(prevIndex);
         this.updateSelectedOption();
@@ -204,6 +203,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
       }
 
       case 'Enter':
+        event.preventDefault();
         if (currentIndex >= 0 && currentIndex < filteredOptions.length) {
           const selectedOption = filteredOptions[currentIndex];
           if (!selectedOption.zDisabled()) {
@@ -213,6 +213,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
         break;
 
       case 'Escape':
+        event.preventDefault();
         this.selectedIndex.set(-1);
         this.updateSelectedOption();
         break;

@@ -22,7 +22,6 @@ import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { commandVariants, type ZardCommandVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/config/providezard';
 import type { ZardIcon } from '../icon/icons';
 
 export interface ZardCommandOption {
@@ -77,7 +76,7 @@ export interface ZardCommandConfig {
     '[attr.role]': '"combobox"',
     '[attr.aria-expanded]': 'true',
     '[attr.aria-haspopup]': '"listbox"',
-    '(keydown.prevent)': 'onKeyDown($event)',
+    '(keydown)': 'onKeyDown($event)',
   },
   exportAs: 'zCommand',
 })
@@ -147,8 +146,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
   };
 
   constructor() {
-    checkForProperZardInitialization();
-
     effect(() => {
       this.triggerOptionsUpdate();
     });
@@ -182,8 +179,8 @@ export class ZardCommandComponent implements ControlValueAccessor {
     this.zOnSelect.emit(commandOption);
   }
 
-  onKeyDown(e: Event) {
-    const event = e as KeyboardEvent;
+  // in @Component host: '(keydown)': 'onKeyDown($event)'
+  onKeyDown(event: KeyboardEvent) {
     const filteredOptions = this.filteredOptions();
     if (filteredOptions.length === 0) {
       return;
@@ -193,6 +190,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
     switch (event.key) {
       case 'ArrowDown': {
+        event.preventDefault();
         const nextIndex = currentIndex < filteredOptions.length - 1 ? currentIndex + 1 : 0;
         this.selectedIndex.set(nextIndex);
         this.updateSelectedOption();
@@ -200,6 +198,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
       }
 
       case 'ArrowUp': {
+        event.preventDefault();
         const prevIndex = currentIndex > 0 ? currentIndex - 1 : filteredOptions.length - 1;
         this.selectedIndex.set(prevIndex);
         this.updateSelectedOption();
@@ -207,6 +206,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
       }
 
       case 'Enter':
+        event.preventDefault();
         if (currentIndex >= 0 && currentIndex < filteredOptions.length) {
           const selectedOption = filteredOptions[currentIndex];
           if (!selectedOption.zDisabled()) {
@@ -216,6 +216,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
         break;
 
       case 'Escape':
+        event.preventDefault();
         this.selectedIndex.set(-1);
         this.updateSelectedOption();
         break;
@@ -385,12 +386,16 @@ export class ZardCommandDividerComponent {
   protected readonly classes = computed(() => mergeClasses(commandSeparatorVariants({}), this.class()));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent) return true;
+    if (!this.commandComponent) {
+      return true;
+    }
 
     const searchTerm = this.commandComponent.searchTerm();
 
     // If no search, always show dividers
-    if (searchTerm === '') return true;
+    if (searchTerm === '') {
+      return true;
+    }
 
     // If there's a search term, hide all dividers for now
     // This is a simple approach - we can make it smarter later
@@ -700,13 +705,17 @@ export class ZardCommandOptionGroupComponent {
   protected readonly headingClasses = computed(() => mergeClasses(commandGroupHeadingVariants({})));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent || !this.optionComponents) return true;
+    if (!this.commandComponent || !this.optionComponents) {
+      return true;
+    }
 
     const searchTerm = this.commandComponent.searchTerm();
     const filteredOptions = this.commandComponent.filteredOptions();
 
     // If no search term, show all groups
-    if (searchTerm === '') return true;
+    if (searchTerm === '') {
+      return true;
+    }
 
     // Check if any option in this group is in the filtered list
     return this.optionComponents().some(option => filteredOptions.includes(option));
@@ -751,8 +760,7 @@ import type { ZardIcon } from '../icon/icons';
         [attr.data-disabled]="zDisabled()"
         [attr.tabindex]="0"
         (click)="onClick()"
-        (keydown.enter.prevent)="onClick()"
-        (keydown.space.prevent)="onClick()"
+        (keydown)="onKeyDown($event)"
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
@@ -793,35 +801,34 @@ export class ZardCommandOptionComponent {
   protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants({})));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent) {
-      return true;
-    }
+    if (!this.commandComponent) return true;
 
     const filteredOptions = this.commandComponent.filteredOptions();
     const searchTerm = this.commandComponent.searchTerm();
 
     // If no search term, show all options
-    if (searchTerm === '') {
-      return true;
-    }
+    if (searchTerm === '') return true;
 
     // Check if this option is in the filtered list
     return filteredOptions.includes(this);
   });
 
   onClick() {
-    if (this.zDisabled()) {
-      return;
-    }
+    if (this.zDisabled()) return;
     if (this.commandComponent) {
       this.commandComponent.selectOption(this);
     }
   }
 
-  onMouseEnter() {
-    if (this.zDisabled()) {
-      return;
+  onKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      this.onClick();
     }
+  }
+
+  onMouseEnter() {
+    if (this.zDisabled()) return;
     // Visual feedback for hover
   }
 
