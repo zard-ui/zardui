@@ -90,7 +90,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
     this.updateParentComponents(value);
   }
 
-  private updateParentComponents(value: string): void {
+  updateParentComponents(value: string): void {
     // Send search to appropriate parent component
     if (this.commandComponent) {
       this.commandComponent.onSearch(value);
@@ -118,6 +118,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
 
   writeValue(value: string | null): void {
     this.searchTerm.set(value ?? '');
+    this.updateParentComponents(value ?? '');
   }
 
   registerOnChange(fn: (value: string) => void): void {

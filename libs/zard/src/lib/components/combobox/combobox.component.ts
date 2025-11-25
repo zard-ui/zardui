@@ -324,17 +324,16 @@ export class ZardComboboxComponent implements ControlValueAccessor {
       return;
     }
 
-    const event = e as KeyboardEvent;
+    const { key, ctrlKey, altKey, metaKey } = e as KeyboardEvent;
 
     // Handle different keyboard events based on combobox state
     if (this.open()) {
       // When popover is open
-      switch (event.key) {
+      switch (key) {
         case 'Tab':
           // Allow tab to close and move to next element
           this.popoverDirective().hide();
           break;
-
         case 'ArrowDown':
         case 'ArrowUp':
         case 'Enter':
@@ -343,47 +342,38 @@ export class ZardComboboxComponent implements ControlValueAccessor {
         case 'PageUp':
         case 'PageDown':
           // Forward navigation to command component
-          this.commandRef()?.onKeyDown(event);
+          this.commandRef()?.onKeyDown(e as KeyboardEvent);
           break;
       }
     } else {
       // When popover is closed
-      switch (event.key) {
+      switch (key) {
         case 'ArrowDown':
         case 'ArrowUp':
         case 'Enter':
         case ' ': // Space key
           this.popoverDirective().show();
           break;
-
         default:
           // For searchable comboboxes, open and start typing
-          if (this.searchable() && event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
+          if (this.searchable() && key.length === 1 && !ctrlKey && !altKey && !metaKey) {
             this.popoverDirective().show();
             // Let the command input handle the character after opening
             setTimeout(() => {
               const inputElement = this.commandInputRef();
               if (inputElement) {
+                inputElement.searchInput().nativeElement.value = key;
+                inputElement.updateParentComponents(key);
                 inputElement.focus();
-                // Simulate the key press in the input
-                const input = inputElement as unknown as {
-                  searchInput?: { nativeElement: HTMLInputElement };
-                  searchTerm: { set: (value: string) => void };
-                  searchSubject: { next: (value: string) => void };
-                };
-                if (input.searchInput?.nativeElement) {
-                  input.searchInput.nativeElement.value = event.key;
-                  input.searchTerm.set(event.key);
-                  input.searchSubject.next(event.key);
-                }
               }
-            }, 20);
+            });
           }
           break;
       }
     }
   }
 
+  // needed when component looses focus by keyboard.
   onDocumentKeyDown(event: Event) {
     // Close on Escape from anywhere when this combobox is open
     if (this.open()) {
@@ -408,9 +398,5 @@ export class ZardComboboxComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
-  }
-
-  setDisabledState(): void {
-    // The disabled state is handled by the disabled input
   }
 }
