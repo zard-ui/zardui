@@ -9,12 +9,14 @@ import { LayoutService } from '@doc/shared/services/layout.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 import { environment } from '../../../../environments/environment';
 import { SOCIAL_MEDIAS } from '../../../shared/constants/medias.constant';
 import { HEADER_PATHS } from '../../../shared/constants/routes.constant';
-import { DarkModeService } from '../../../shared/services/darkmode.service';
+import { DarkModeService, ThemeOptions, EThemeModes } from '../../../shared/services/darkmode.service';
 import { GithubService } from '../../../shared/services/github.service';
 import { DocResearcherComponent } from '../doc-researcher/doc-researcher.component';
 import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
@@ -23,7 +25,18 @@ import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
   selector: 'z-header',
   templateUrl: './header.component.html',
   standalone: true,
-  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, MobileMenuComponent, ZardDividerComponent, AsyncPipe, DocResearcherComponent, LucideAngularModule],
+  imports: [
+    RouterModule,
+    ZardButtonComponent,
+    ZardButtonGroupComponent,
+    ZardIconComponent,
+    ZardBadgeComponent,
+    MobileMenuComponent,
+    ZardDividerComponent,
+    AsyncPipe,
+    DocResearcherComponent,
+    LucideAngularModule,
+  ],
 })
 export class HeaderComponent {
   readonly docResearcher = viewChild.required(DocResearcherComponent);
@@ -36,13 +49,11 @@ export class HeaderComponent {
   private readonly darkmodeService = inject(DarkModeService);
   private readonly layoutService = inject(LayoutService);
   readonly $repoStars: Observable<number> = this.githubService.getStarsCount();
+  protected readonly currentTheme = this.darkmodeService.theme;
+  protected readonly EThemeModes = EThemeModes;
 
-  toggleTheme(): void {
-    this.darkmodeService.toggleTheme();
-  }
-
-  getCurrentTheme(): 'light' | 'dark' {
-    return this.darkmodeService.getCurrentTheme();
+  activateTheme(theme: ThemeOptions): void {
+    this.darkmodeService.activateTheme(theme);
   }
 
   toggleLayout(): void {
