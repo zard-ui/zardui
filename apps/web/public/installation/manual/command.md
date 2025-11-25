@@ -188,9 +188,12 @@ export class ZardCommandComponent implements ControlValueAccessor {
 
     const currentIndex = this.selectedIndex();
 
+    if (['ArroDown', 'ArrowUp', 'Enter', 'Escape'].includes(event.key)) {
+      event.preventDefault();
+    }
+
     switch (event.key) {
       case 'ArrowDown': {
-        event.preventDefault();
         const nextIndex = currentIndex < filteredOptions.length - 1 ? currentIndex + 1 : 0;
         this.selectedIndex.set(nextIndex);
         this.updateSelectedOption();
@@ -198,7 +201,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
       }
 
       case 'ArrowUp': {
-        event.preventDefault();
         const prevIndex = currentIndex > 0 ? currentIndex - 1 : filteredOptions.length - 1;
         this.selectedIndex.set(prevIndex);
         this.updateSelectedOption();
@@ -206,7 +208,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
       }
 
       case 'Enter':
-        event.preventDefault();
         if (currentIndex >= 0 && currentIndex < filteredOptions.length) {
           const selectedOption = filteredOptions[currentIndex];
           if (!selectedOption.zDisabled()) {
@@ -216,7 +217,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
         break;
 
       case 'Escape':
-        event.preventDefault();
         this.selectedIndex.set(-1);
         this.updateSelectedOption();
         break;
