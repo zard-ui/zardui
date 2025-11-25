@@ -6,7 +6,7 @@ import { screen } from '@testing-library/angular';
 import { type EmblaCarouselType } from 'embla-carousel';
 
 import { ZardCarouselComponent } from './carousel.component';
-import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../core/event-manager-plugins/zard-event-manager-plugin';
 
 describe('ZardCarouselComponent', () => {
   let component: ZardCarouselComponent;

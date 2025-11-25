@@ -8,7 +8,6 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-divider',
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()" role="separator"></div>

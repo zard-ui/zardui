@@ -4,7 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardPopoverComponent, ZardPopoverDirective } from './popover.component';
-import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../core/event-manager-plugins/zard-event-manager-plugin';
 
 @Component({
   imports: [ZardPopoverDirective, ZardPopoverComponent],

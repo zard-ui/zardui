@@ -10,7 +10,7 @@ import { ZardDropdownModule } from '../dropdown.module';
   imports: [ZardDropdownModule, ZardButtonComponent, ZardDividerComponent],
   standalone: true,
   template: `
-    <button z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
+    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
 
     <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-56">
       <z-dropdown-menu-label>My Account</z-dropdown-menu-label>

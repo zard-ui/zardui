@@ -8,9 +8,10 @@ import {
 } from '@angular/core';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
-import { ZardEventManagerPlugin } from '../zard-event-manager-plugin';
 import { ZardPreset, type ZardConfigType } from './config.types';
 import { updatePreset } from './update-preset';
+import { ZardDebounceEventManagerPlugin } from '../event-manager-plugins/zard-debounce-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../event-manager-plugins/zard-event-manager-plugin';
 
 export const ZARD_CONFIG = new InjectionToken<ZardConfigType>('ZARD_CONFIG');
 
@@ -33,6 +34,11 @@ export function provideZard(...zardConfig: ZardConfigType[]): EnvironmentProvide
     {
       provide: EVENT_MANAGER_PLUGINS,
       useClass: ZardEventManagerPlugin,
+      multi: true,
+    },
+    {
+      provide: EVENT_MANAGER_PLUGINS,
+      useClass: ZardDebounceEventManagerPlugin,
       multi: true,
     },
   ];

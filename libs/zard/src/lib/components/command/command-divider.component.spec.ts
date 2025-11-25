@@ -9,7 +9,8 @@ import { ZardCommandListComponent } from './command-list.component';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
-import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
+import { ZardDebounceEventManagerPlugin } from '../core/event-manager-plugins/zard-debounce-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../core/event-manager-plugins/zard-event-manager-plugin';
 
 @Component({
   selector: 'test-host-component',
@@ -64,6 +65,11 @@ describe('ZardCommandDividerComponent', () => {
           useClass: ZardEventManagerPlugin,
           multi: true,
         },
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardDebounceEventManagerPlugin,
+          multi: true,
+        },
       ],
     }).compileComponents();
 
@@ -115,7 +121,7 @@ describe('ZardCommandDividerComponent', () => {
     input.dispatchEvent(new Event('input'));
 
     // Wait for debounced search to complete (immediate for empty values)
-    await new Promise(resolve => setTimeout(resolve, 50));
+    await new Promise(resolve => setTimeout(resolve, 150));
     fixture.detectChanges();
 
     dividerElement = fixture.nativeElement.querySelector('z-command-divider div');
@@ -156,8 +162,7 @@ describe('ZardCommandDividerComponent', () => {
       input.dispatchEvent(new Event('input'));
 
       // Wait for debounced search to complete
-      const delay = term === '' ? 50 : 200;
-      await new Promise(resolve => setTimeout(resolve, delay));
+      await new Promise(resolve => setTimeout(resolve, 150));
       fixture.detectChanges();
 
       const dividerElement = fixture.nativeElement.querySelector('z-command-divider div');

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardCheckboxComponent } from './checkbox.component';
-import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../core/event-manager-plugins/zard-event-manager-plugin';
 
 @Component({
   imports: [ZardCheckboxComponent, FormsModule],

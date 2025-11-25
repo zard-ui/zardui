@@ -4,7 +4,7 @@ import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './sidebar.component';
-import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../core/event-manager-plugins/zard-event-manager-plugin';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;

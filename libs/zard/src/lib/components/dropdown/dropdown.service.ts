@@ -13,7 +13,7 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
-import type { Subscription } from 'rxjs';
+import { filter, type Subscription } from 'rxjs';
 
 import { noopFun } from '../../shared/utils/utils';
 
@@ -48,7 +48,7 @@ export class ZardDropdownService {
     }
   }
 
-  open(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
+  private open(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
     if (this.isOpen()) {
       this.close();
     }
@@ -56,11 +56,12 @@ export class ZardDropdownService {
     this.triggerElement = triggerElement;
     this.createOverlay(triggerElement);
 
-    if (!this.overlayRef) return;
+    if (!this.overlayRef) {
+      return;
+    }
 
     this.portal = new TemplatePortal(template, viewContainerRef);
     this.overlayRef.attach(this.portal);
-    this.isOpen.set(true);
 
     // Setup keyboard navigation
     setTimeout(() => {
@@ -69,19 +70,23 @@ export class ZardDropdownService {
     }, 0);
 
     // Close on outside click
-    this.outsideClickSubscription = this.overlayRef.outsidePointerEvents().subscribe(() => {
-      this.close();
-    });
+    this.outsideClickSubscription = this.overlayRef
+      .outsidePointerEvents()
+      .pipe(filter(event => !triggerElement.nativeElement.contains(event.target)))
+      .subscribe(() => {
+        this.close();
+      });
+    this.isOpen.set(true);
   }
 
   close() {
     if (this.overlayRef?.hasAttached()) {
       this.overlayRef.detach();
     }
-    this.isOpen.set(false);
     this.focusedIndex.set(-1);
     this.unlisten();
     this.destroyOverlay();
+    this.isOpen.set(false);
   }
 
   private createOverlay(triggerElement: ElementRef) {
@@ -130,7 +135,9 @@ export class ZardDropdownService {
     }
 
     const dropdownElement = this.overlayRef.overlayElement.querySelector('[role="menu"]') as HTMLElement;
-    if (!dropdownElement) return;
+    if (!dropdownElement) {
+      return;
+    }
 
     this.unlisten = this.renderer.listen(dropdownElement, 'keydown.prevent', (event: KeyboardEvent) => {
       const items = this.getDropdownItems();
@@ -164,7 +171,9 @@ export class ZardDropdownService {
   }
 
   private getDropdownItems(): HTMLElement[] {
-    if (!this.overlayRef?.hasAttached()) return [];
+    if (!this.overlayRef?.hasAttached()) {
+      return [];
+    }
     const dropdownElement = this.overlayRef.overlayElement;
     return Array.from(
       dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]'),
@@ -172,7 +181,9 @@ export class ZardDropdownService {
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
-    if (items.length === 0) return;
+    if (items.length === 0) {
+      return;
+    }
 
     const currentIndex = this.focusedIndex();
     let nextIndex = currentIndex + direction;

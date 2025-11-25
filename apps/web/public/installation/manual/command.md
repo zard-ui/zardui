@@ -368,7 +368,6 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-divider',
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()" role="separator"></div>
@@ -457,27 +456,23 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  DestroyRef,
   type ElementRef,
   forwardRef,
   inject,
   input,
-  type OnDestroy,
-  type OnInit,
   output,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { Subject, switchMap, timer } from 'rxjs';
 
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { checkForProperZardInitialization } from '../core/config/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -492,7 +487,7 @@ import { ZardIconComponent } from '../icon/icon.component';
         [class]="classes()"
         [placeholder]="placeholder()"
         [(ngModel)]="searchTerm"
-        (input)="onInput($event)"
+        (input.debounce.150)="onInput($event)"
         (keydown)="onKeyDown($event)"
         autocomplete="off"
         autocorrect="off"
@@ -517,9 +512,8 @@ import { ZardIconComponent } from '../icon/icon.component';
   encapsulation: ViewEncapsulation.None,
   exportAs: 'zCommandInput',
 })
-export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class ZardCommandInputComponent implements ControlValueAccessor {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
-  private readonly destroyRef = inject(DestroyRef);
   readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
   readonly placeholder = input<string>('Type a command or search...');
@@ -528,7 +522,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
   readonly valueChange = output<string>();
 
   readonly searchTerm = signal('');
-  private readonly searchSubject = new Subject<string>();
 
   protected readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
 
@@ -540,28 +533,15 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
     // ControlValueAccessor implementation - intentionally empty
   };
 
-  ngOnInit(): void {
-    // Set up debounced search stream - always send to subject
-    this.searchSubject
-      .pipe(
-        // If empty, emit immediately, otherwise debounce
-        switchMap(value => (value ? timer(150) : timer(0))),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe(() => {
-        // Get the current value from the signal to ensure we have the latest
-        const currentValue = this.searchTerm();
-        this.updateParentComponents(currentValue);
-      });
+  constructor() {
+    checkForProperZardInitialization();
   }
 
   onInput(event: Event) {
     const target = event.target as HTMLInputElement;
     const { value } = target;
     this.searchTerm.set(value);
-
-    // Always send to subject - let the stream handle timing
-    this.searchSubject.next(value);
+    this.updateParentComponents(value);
   }
 
   private updateParentComponents(value: string): void {
@@ -611,11 +591,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
    */
   focus(): void {
     this.searchInput().nativeElement.focus();
-  }
-
-  ngOnDestroy(): void {
-    // Complete subjects to clean up subscriptions
-    this.searchSubject.complete();
   }
 }
 

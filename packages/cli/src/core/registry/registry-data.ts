@@ -532,7 +532,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'command',
-    registryDependencies: ['icon'],
+    registryDependencies: ['core', 'icon'],
     files: [
       {
         name: 'command.component.ts',

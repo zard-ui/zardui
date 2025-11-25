@@ -5,7 +5,7 @@ import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 import { ZardResizableHandleComponent } from './resizable-handle.component';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { ZardResizableComponent, ZardResizeEvent } from './resizable.component';
-import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../core/event-manager-plugins/zard-event-manager-plugin';
 
 @Component({
   selector: 'test-resizable-host',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardCommandDividerComponent } from './command-divider.component';
 import { ZardCommandEmptyComponent } from './command-empty.component';
@@ -9,6 +9,8 @@ import { ZardCommandListComponent } from './command-list.component';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
+import { ZardDebounceEventManagerPlugin } from '../core/event-manager-plugins/zard-debounce-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../core/event-manager-plugins/zard-event-manager-plugin';
 
 const SEARCH_DEBOUNCE_MS = 150;
 
@@ -61,6 +63,18 @@ describe('ZardCommandComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestHostComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardDebounceEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -283,7 +297,7 @@ describe('ZardCommandComponent', () => {
     input.value = '';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    jest.advanceTimersByTime(0);
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
     expect(component.searchTerm()).toBe('');
   });
@@ -304,7 +318,7 @@ describe('ZardCommandComponent', () => {
     input.value = '';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    jest.advanceTimersByTime(0);
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
     expect(component.filteredOptions().length).toBe(4); // All options visible again
   });
