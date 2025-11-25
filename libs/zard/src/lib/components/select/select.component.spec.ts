@@ -1,10 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
+import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardSelectItemComponent } from './select-item.component';
 import { ZardSelectComponent } from './select.component';
+import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
 
 @Component({
   imports: [ZardSelectComponent, ZardSelectItemComponent],
@@ -46,6 +47,13 @@ describe('ZardSelectComponent', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [ZardSelectComponent],
+        providers: [
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
       }).compileComponents();
 
       fixture = TestBed.createComponent(ZardSelectComponent);
@@ -70,33 +78,33 @@ describe('ZardSelectComponent', () => {
 
     describe('keyboard navigation', () => {
       it('should open dropdown on Enter key', () => {
-        const event = new KeyboardEvent('keydown', { key: 'Enter' });
-        jest.spyOn(event, 'preventDefault');
+        const btn = fixture.debugElement.query(By.css('button'));
 
-        component.onTriggerKeydown(event);
+        btn.triggerEventHandler('keydown.prevent', { key: 'Enter', code: 'Enter' });
 
-        expect(event.preventDefault).toHaveBeenCalled();
+        expect(btn.nativeElement).toHaveTextContent('Select an option...');
         expect(component.isOpen()).toBeTruthy();
       });
 
       it('should open dropdown on Space key', () => {
-        const event = new KeyboardEvent('keydown', { key: ' ' });
-        jest.spyOn(event, 'preventDefault');
+        const btn = fixture.debugElement.query(By.css('button'));
 
-        component.onTriggerKeydown(event);
+        btn.triggerEventHandler('keydown.prevent', { key: ' ', code: ' ' });
 
-        expect(event.preventDefault).toHaveBeenCalled();
+        expect(btn.nativeElement).toHaveTextContent('Select an option...');
         expect(component.isOpen()).toBeTruthy();
       });
 
       it('should close dropdown on Escape key', () => {
+        const btn = fixture.debugElement.query(By.css('button'));
+
         component.toggle();
-        const event = new KeyboardEvent('keydown', { key: 'Escape' });
-        jest.spyOn(event, 'preventDefault');
 
-        component.onTriggerKeydown(event);
+        expect(component.isOpen()).toBeTruthy();
 
-        expect(event.preventDefault).toHaveBeenCalled();
+        btn.triggerEventHandler('keydown.prevent', { key: 'Escape', code: 'Escape' });
+
+        expect(btn.nativeElement).toHaveTextContent('Select an option...');
         expect(component.isOpen()).toBeFalsy();
       });
     });
@@ -110,6 +118,13 @@ describe('ZardSelectComponent', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [TestHostComponent],
+        providers: [
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
       }).compileComponents();
 
       hostFixture = TestBed.createComponent(TestHostComponent);
@@ -187,6 +202,13 @@ describe('ZardSelectComponent', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [TestHostWithFormControlComponent],
+        providers: [
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
       }).compileComponents();
 
       hostFixture = TestBed.createComponent(TestHostWithFormControlComponent);
@@ -253,6 +275,13 @@ describe('ZardSelectComponent', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [TestHostComponent],
+        providers: [
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
       }).compileComponents();
 
       hostFixture = TestBed.createComponent(TestHostComponent);
@@ -326,6 +355,13 @@ describe('ZardSelectComponent', () => {
     beforeEach(async () => {
       await TestBed.configureTestingModule({
         imports: [TestHostComponent],
+        providers: [
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
       }).compileComponents();
 
       hostFixture = TestBed.createComponent(TestMultiselectHostComponent);

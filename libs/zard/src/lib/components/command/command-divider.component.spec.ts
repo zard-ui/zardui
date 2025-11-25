@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardCommandDividerComponent } from './command-divider.component';
 import { ZardCommandEmptyComponent } from './command-empty.component';
@@ -9,6 +9,7 @@ import { ZardCommandListComponent } from './command-list.component';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
+import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
 
 @Component({
   selector: 'test-host-component',
@@ -57,6 +58,13 @@ describe('ZardCommandDividerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestHostComponent, StandaloneTestComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);

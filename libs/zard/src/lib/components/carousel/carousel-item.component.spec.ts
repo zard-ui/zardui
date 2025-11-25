@@ -1,7 +1,9 @@
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardCarouselItemComponent } from './carousel-item.component';
 import { ZardCarouselComponent } from './carousel.component';
+import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
 
 describe('ZardCarouselItemComponent', () => {
   let component: ZardCarouselItemComponent;
@@ -10,7 +12,14 @@ describe('ZardCarouselItemComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ZardCarouselItemComponent],
-      providers: [ZardCarouselComponent],
+      providers: [
+        ZardCarouselComponent,
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ZardCarouselItemComponent);

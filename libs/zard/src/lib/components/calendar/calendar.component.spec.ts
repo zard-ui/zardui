@@ -1,7 +1,9 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardCalendarComponent, type CalendarDay } from './calendar.component';
 import { isSameDay, isDateDisabled, getDayAriaLabel, generateCalendarDays } from './calendar.utils';
+import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
 
 describe('ZardCalendarComponent', () => {
   let component: ZardCalendarComponent;
@@ -12,6 +14,13 @@ describe('ZardCalendarComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [ZardCalendarComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ZardCalendarComponent);

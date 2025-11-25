@@ -1,9 +1,10 @@
 import { Component, inject } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
+import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardCheckboxComponent } from './checkbox.component';
+import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
 
 @Component({
   imports: [ZardCheckboxComponent, FormsModule],
@@ -71,6 +72,13 @@ describe('ZardCheckboxComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [TestHostComponent, TestHostWithNgModelComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -219,6 +227,7 @@ describe('ZardCheckboxComponent', () => {
     });
   });
 });
+
 describe('ZardCheckboxComponent with Reactive Forms', () => {
   let fixture: ComponentFixture<TestHostWithReactiveFormsComponent>;
   let component: TestHostWithReactiveFormsComponent;
@@ -227,6 +236,13 @@ describe('ZardCheckboxComponent with Reactive Forms', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestHostWithReactiveFormsComponent, ZardCheckboxComponent, ReactiveFormsModule],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostWithReactiveFormsComponent);

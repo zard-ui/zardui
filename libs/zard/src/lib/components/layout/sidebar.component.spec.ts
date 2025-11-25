@@ -1,8 +1,9 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from './sidebar.component';
+import { ZardEventManagerPlugin } from '../core/zard-event-manager-plugin';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -11,6 +12,13 @@ describe('SidebarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SidebarComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SidebarComponent);

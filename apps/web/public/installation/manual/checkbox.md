@@ -3,12 +3,13 @@
 ```angular-ts title="checkbox.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   computed,
   forwardRef,
+  inject,
   input,
   output,
-  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -41,7 +42,7 @@ type OnChangeType = (value: any) => void; // eslint-disable-line
           #input
           type="checkbox"
           [class]="classes()"
-          [checked]="checked()"
+          [checked]="checked"
           [disabled]="disabled()"
           (blur)="onCheckboxBlur()"
           name="checkbox"
@@ -50,7 +51,7 @@ type OnChangeType = (value: any) => void; // eslint-disable-line
           zType="check"
           [class]="
             'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-opacity ' +
-            (checked() ? 'opacity-100' : 'opacity-0')
+            (checked ? 'opacity-100' : 'opacity-0')
           "
         />
       </main>
@@ -71,6 +72,7 @@ type OnChangeType = (value: any) => void; // eslint-disable-line
   exportAs: 'zCheckbox',
 })
 export class ZardCheckboxComponent implements ControlValueAccessor {
+  private readonly cdr = inject(ChangeDetectorRef);
   readonly checkChange = output<boolean>();
   readonly class = input<ClassValue>('');
   readonly disabled = input(false, { transform });
@@ -87,14 +89,15 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
   );
 
   protected readonly labelClasses = computed(() => mergeClasses(checkboxLabelVariants({ zSize: this.zSize() })));
-  readonly checked = signal(false);
+  checked = false;
 
   constructor() {
     checkForProperZardInitialization();
   }
 
   writeValue(val: boolean): void {
-    this.checked.set(val);
+    this.checked = val;
+    this.cdr.markForCheck();
   }
 
   registerOnChange(fn: OnChangeType): void {
@@ -114,9 +117,9 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
       return;
     }
 
-    this.checked.update(v => !v);
+    this.checked = !this.checked;
     this.onChange(this.checked);
-    this.checkChange.emit(this.checked());
+    this.checkChange.emit(this.checked);
   }
 }
 
