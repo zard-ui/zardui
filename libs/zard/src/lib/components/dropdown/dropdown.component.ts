@@ -6,7 +6,6 @@ import {
   Component,
   computed,
   ElementRef,
-  HostListener,
   inject,
   input,
   type OnDestroy,
@@ -30,7 +29,7 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
   imports: [OverlayModule],
   standalone: true,
   template: `
-    <! -- Dropdown Trigger - ->
+    <!-- Dropdown Trigger -->
     <div
       class="trigger-container"
       (click)="toggle()"
@@ -41,7 +40,7 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
       <ng-content select="[dropdown-trigger]" />
     </div>
 
-    <! -- Template for overlay content - ->
+    <!-- Template for overlay content -->
     <ng-template #dropdownTemplate>
       <div
         [class]="contentClasses()"
@@ -59,6 +58,7 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
   host: {
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     class: 'relative inline-block text-left',
+    '(document:click)': 'onDocumentClick($event)',
   },
   exportAs: 'zDropdownMenu',
 })
@@ -94,7 +94,6 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
     this.destroyOverlay();
   }
 
-  @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event) {
     if (!this.elementRef.nativeElement.contains(event.target as Node)) {
       this.close();
