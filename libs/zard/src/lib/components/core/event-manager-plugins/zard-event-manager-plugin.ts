@@ -1,6 +1,28 @@
 import type { ListenerOptions } from '@angular/core';
 import { EventManagerPlugin } from '@angular/platform-browser';
 
+/**
+ * Angular EventManagerPlugin that provides event modifier syntax for templates.
+ *
+ * Supports modifiers: .prevent, .stop, .stop-immediate, .prevent-with-stop
+ * Supports key filters: enter, escape, {enter,space}
+ *
+ * @example
+ * Prevent default on any click
+ * (click.prevent)="handler()"
+ *
+ * @example
+ * Prevent default only on Enter key
+ * (keydown.enter.prevent)="handler()"
+ *
+ * @example
+ * Prevent default on more keys like Enter and Space key
+ * (keydown.{enter,space}.prevent)="handler()"
+ *
+ * @example
+ * Stop propagation
+ * (click.stop)="handler()"
+ */
 export class ZardEventManagerPlugin extends EventManagerPlugin {
   #keywords = ['prevent', 'stop', 'stop-immediate', 'prevent-with-stop'];
 
@@ -21,7 +43,10 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
       event,
       (event: Event) => {
         const isKeyboardEvent = event instanceof KeyboardEvent;
-        const shouldApplyModifier = !keys.length || (isKeyboardEvent && keys.includes(event.key.toLowerCase()));
+        const isElementDisabled = element.getAttribute('aria-disabled') === 'true';
+        const shouldApplyModifier =
+          (!keys.length || (isKeyboardEvent && keys.includes(event.key.toLowerCase()))) && !isElementDisabled;
+
         if (shouldApplyModifier) {
           switch (keyword) {
             case 'stop':
@@ -72,7 +97,10 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
     const stringList = substring.substring(1, substring.length - 1);
     return stringList
       .split(',')
-      .map(s => (s === 'space' ? ' ' : s.trim()))
+      .map(raw => {
+        const s = raw.toLowerCase().trim();
+        return s === 'space' ? ' ' : s;
+      })
       .filter(Boolean);
   }
 }

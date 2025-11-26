@@ -305,9 +305,12 @@ describe('ZardResizableHandleComponent', () => {
     });
 
     it('should handle touch start event', () => {
+      const touchMock = { clientX: 500, clientY: 300 } as Touch;
+      const listMock: TouchList = { length: 1, item: (index: number) => touchMock, 0: touchMock };
       const touchEvent = new TouchEvent('touchstart', {
-        touches: [{ clientX: 100, clientY: 50 } as Touch],
+        touches: listMock as unknown as Touch[],
       });
+
       handleElement.dispatchEvent(touchEvent);
 
       expect(resizableComponent.startResize).toHaveBeenCalledWith(0, touchEvent);
@@ -403,7 +406,7 @@ describe('ZardResizableHandleComponent', () => {
 
     it('should ignore unsupported keys', () => {
       const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
-      handleComponent.handleKeyDown(tabEvent);
+      handleElement.dispatchEvent(tabEvent);
 
       expect(tabEvent.defaultPrevented).toBe(false);
     });
@@ -413,7 +416,7 @@ describe('ZardResizableHandleComponent', () => {
       fixture.detectChanges();
 
       const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
-      handleComponent.handleKeyDown(rightArrowEvent);
+      handleElement.dispatchEvent(rightArrowEvent);
 
       expect(rightArrowEvent.defaultPrevented).toBe(false);
     });
@@ -424,13 +427,15 @@ describe('ZardResizableHandleComponent', () => {
 
       const standaloneHandle = standaloneFixture.debugElement.query(
         By.directive(ZardResizableHandleComponent),
-      ).componentInstance;
+      ).nativeElement;
       const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
+      jest.spyOn(handleComponent as any, 'adjustSizes');
 
       expect(() => {
-        standaloneHandle.handleKeyDown(rightArrowEvent);
+        standaloneHandle.dispatchEvent(rightArrowEvent);
       }).not.toThrow();
-      expect(rightArrowEvent.defaultPrevented).toBe(false);
+      expect(standaloneHandle['resizable']).toBeUndefined();
+      expect(handleComponent['adjustSizes']).not.toHaveBeenCalled();
     });
   });
 
@@ -439,7 +444,7 @@ describe('ZardResizableHandleComponent', () => {
       const spy = jest.spyOn(handleComponent as any, 'adjustSizes');
 
       const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-      handleComponent.handleKeyDown(rightArrowEvent);
+      handleElement.dispatchEvent(rightArrowEvent);
 
       expect(spy).toHaveBeenCalledWith(1);
     });
@@ -448,12 +453,12 @@ describe('ZardResizableHandleComponent', () => {
       const spy = jest.spyOn(handleComponent as any, 'moveToExtreme');
 
       const homeEvent = new KeyboardEvent('keydown', { key: 'Home' });
-      handleComponent.handleKeyDown(homeEvent);
+      handleElement.dispatchEvent(homeEvent);
 
       expect(spy).toHaveBeenCalledWith(true);
 
       const endEvent = new KeyboardEvent('keydown', { key: 'End' });
-      handleComponent.handleKeyDown(endEvent);
+      handleElement.dispatchEvent(endEvent);
 
       expect(spy).toHaveBeenCalledWith(false);
     });

@@ -94,7 +94,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
     if (this.commandComponent) {
       this.commandComponent.onSearch(value);
     }
-    this.onChange(value);
     this.valueChange.emit(value);
   }
 
@@ -118,9 +117,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
   writeValue(value: string | null): void {
     const normalizedValue = value ?? '';
     this.searchTerm.set(normalizedValue);
-    if (this.commandComponent) {
-      this.commandComponent.onSearch(normalizedValue);
-    }
+    this.updateParentComponents(normalizedValue);
   }
 
   registerOnChange(fn: (value: string) => void): void {
