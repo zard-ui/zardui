@@ -16,12 +16,12 @@ export const authentication01Block: Block = {
     {
       name: 'authentication-01.component.ts',
       path: 'src/components/authentication-01/authentication-01.component.ts',
-      content: `import { ZardFormFieldComponent, ZardFormLabelComponent, ZardFormControlComponent } from '@zard/components/form/form.component';
+      content: `import { ZardFormFieldComponent, ZardFormLabelComponent, ZardFormControlComponent } from '@ngzard/ui/form';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
-import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardCheckboxComponent } from '@ngzard/ui/checkbox';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardInputDirective } from '@ngzard/ui/input';
+import { ZardCardComponent } from '@ngzard/ui/card';
 import { Component, signal } from '@angular/core';
 
 @Component({
