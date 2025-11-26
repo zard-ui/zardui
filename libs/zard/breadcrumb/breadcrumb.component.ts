@@ -9,7 +9,7 @@ import {
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { Params, RouterLink } from '@angular/router';
+import { type Params, RouterLink } from '@angular/router';
 
 import type { ClassValue } from 'clsx';
 
@@ -21,10 +21,10 @@ import {
   breadcrumbItemVariants,
   breadcrumbListVariants,
   breadcrumbVariants,
-  ZardBreadcrumbAlignVariants,
-  ZardBreadcrumbEllipsisColorVariants,
-  ZardBreadcrumbSizeVariants,
-  ZardBreadcrumbWrapVariants,
+  type ZardBreadcrumbAlignVariants,
+  type ZardBreadcrumbEllipsisColorVariants,
+  type ZardBreadcrumbSizeVariants,
+  type ZardBreadcrumbWrapVariants,
 } from './breadcrumb.variants';
 
 @Component({

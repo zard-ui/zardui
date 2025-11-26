@@ -4,7 +4,7 @@ import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@ngzard/ui/core';
 
-import { avatarGroupVariants, ZardAvatarGroupVariants } from './avatar.variants';
+import { avatarGroupVariants, type ZardAvatarGroupVariants } from './avatar.variants';
 
 @Component({
   selector: 'z-avatar-group',

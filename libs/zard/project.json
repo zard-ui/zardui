@@ -6,6 +6,12 @@
   "projectType": "library",
   "tags": [],
   "targets": {
+    "run-scripts": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npm run generate:version"
+      }
+    },
     "build": {
       "executor": "@nx/angular:package",
       "outputs": ["{workspaceRoot}/dist/{projectRoot}"],
@@ -20,6 +26,7 @@
           "tsConfig": "libs/zard/tsconfig.lib.json"
         }
       },
+      "dependsOn": ["run-scripts"],
       "defaultConfiguration": "production"
     },
     "test": {

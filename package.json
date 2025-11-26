@@ -13,6 +13,7 @@
     "test:watch": "nx run-many --target=test --p=libs/* --watch",
     "watch:files": "npx tsx scripts/generate-files.cts",
     "convert:demos": "npx tsx scripts/convert-demos-to-md.cts",
+    "generate:version": "npx tsx scripts/generate-version.cts",
     "generate:installation": "npx tsx scripts/generate-installation-guides.cts",
     "release:cli": "npx nx release --projects=packages/cli",
     "publish:cli": "npx nx run cli:publish",
