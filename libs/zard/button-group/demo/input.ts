@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardButtonGroupComponent } from '@ngzard/ui/button-group';
 import { ZardIconComponent } from '@ngzard/ui/icon';
 import { ZardInputDirective } from '@ngzard/ui/input';
-
-import { ZardButtonGroupComponent } from '../button-group.component';
 
 @Component({
   selector: 'z-demo-button-group-input',

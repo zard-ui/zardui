@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 
-import { ZardCalendarComponent } from '../calendar.component';
+import { ZardCalendarComponent } from '@ngzard/ui/calendar';
 
 @Component({
   selector: 'z-demo-calendar-multiple',

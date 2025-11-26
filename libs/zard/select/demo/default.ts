@@ -1,9 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '@ngzard/ui/badge';
-
-import { ZardSelectItemComponent } from '../select-item.component';
-import { ZardSelectComponent } from '../select.component';
+import { ZardSelectItemComponent, ZardSelectComponent } from '@ngzard/ui/select';
 
 @Component({
   selector: 'z-demo-select-basic',

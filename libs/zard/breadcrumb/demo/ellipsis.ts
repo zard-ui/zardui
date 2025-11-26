@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
+import { ZardBreadcrumbModule } from '@ngzard/ui/breadcrumb';
 import { ZardMenuModule } from '@ngzard/ui/menu';
-
-import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
   selector: 'z-demo-breadcrumb-ellipsis',

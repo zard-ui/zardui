@@ -1,8 +1,7 @@
 import { Component, inject } from '@angular/core';
 
+import { ZardAlertDialogService } from '@ngzard/ui/alert-dialog';
 import { ZardButtonComponent } from '@ngzard/ui/button';
-
-import { ZardAlertDialogService } from '../alert-dialog.service';
 
 @Component({
   selector: 'zard-demo-alert-dialog-default',

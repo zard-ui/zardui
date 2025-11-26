@@ -1,7 +1,10 @@
 import { Component } from '@angular/core';
 
-import { ZardResizableHandleComponent, ZardResizableComponent } from '../resizable-handle.component';
-import { ZardResizablePanelComponent } from '../resizable-panel.component';
+import {
+  ZardResizableHandleComponent,
+  ZardResizableComponent,
+  ZardResizablePanelComponent,
+} from '@ngzard/ui/resizable';
 
 @Component({
   selector: 'z-demo-resizable-vertical',

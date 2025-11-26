@@ -2,10 +2,8 @@ import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardDialogModule, Z_MODAL_DATA, ZardDialogService } from '@ngzard/ui/dialog';
 import { ZardInputDirective } from '@ngzard/ui/input';
-
-import { ZardDialogModule } from '../dialog.component';
-import { Z_MODAL_DATA, ZardDialogService } from '../dialog.service';
 
 interface iDialogData {
   name: string;

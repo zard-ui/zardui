@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardSliderComponent } from '../slider.component';
+import { ZardSliderComponent } from '@ngzard/ui/slider';
 
 @Component({
   selector: 'z-demo-slider-min-max',

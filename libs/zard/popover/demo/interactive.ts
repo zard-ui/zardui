@@ -3,8 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
 import { ZardInputDirective } from '@ngzard/ui/input';
-
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component';
+import { ZardPopoverComponent, ZardPopoverDirective } from '@ngzard/ui/popover';
 
 @Component({
   selector: 'z-popover-interactive-demo',

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardDividerComponent } from '../divider.component';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
 
 @Component({
   selector: 'z-demo-divider-default',

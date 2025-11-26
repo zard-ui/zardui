@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardSegmentedComponent } from '../segmented.component';
+import { ZardSegmentedComponent } from '@ngzard/ui/segmented';
 
 @Component({
   selector: 'zard-demo-segmented-sizes',

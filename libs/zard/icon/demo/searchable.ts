@@ -5,9 +5,8 @@ import { toast } from 'ngx-sonner';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
 import { ZardEmptyComponent } from '@ngzard/ui/empty';
+import { ZardIconComponent, ZARD_ICONS } from '@ngzard/ui/icon';
 import { ZardInputDirective } from '@ngzard/ui/input';
-
-import { ZardIconComponent, ZARD_ICONS } from '../icon.component';
 
 @Component({
   selector: 'z-demo-icon-searchable',

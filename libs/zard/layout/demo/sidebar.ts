@@ -6,11 +6,10 @@ import { ZardButtonComponent } from '@ngzard/ui/button';
 import { ZardDividerComponent } from '@ngzard/ui/divider';
 import { ZardIconComponent } from '@ngzard/ui/icon';
 import type { ZardIcon } from '@ngzard/ui/icon';
+import { LayoutModule } from '@ngzard/ui/layout';
 import { ZardMenuModule } from '@ngzard/ui/menu';
 import { ZardSkeletonComponent } from '@ngzard/ui/skeleton';
 import { ZardTooltipModule } from '@ngzard/ui/tooltip';
-
-import { LayoutModule } from '../layout.module';
 
 interface MenuItem {
   icon: ZardIcon;

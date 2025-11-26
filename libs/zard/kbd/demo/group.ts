@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardKbdGroupComponent } from '../kbd-group.component';
-import { ZardKbdComponent } from '../kbd.component';
+import { ZardKbdGroupComponent, ZardKbdComponent } from '@ngzard/ui/kbd';
 
 @Component({
   selector: 'z-demo-kbd-group',

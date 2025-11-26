@@ -112,4 +112,10 @@ export default [
     // Override or add rules here
     rules: { '@stylistic/spaced-comment': 'off' },
   },
+  {
+    files: ['libs/zard/**/demo/**/*.ts'],
+    rules: {
+      '@nx/enforce-module-boundaries': 'off',
+    },
+  },
 ];

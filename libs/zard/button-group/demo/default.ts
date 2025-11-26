@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardButtonGroupComponent } from '@ngzard/ui/button-group';
 import { ZardDividerComponent } from '@ngzard/ui/divider';
 import { ZardIconComponent } from '@ngzard/ui/icon';
 import { ZardMenuModule } from '@ngzard/ui/menu';
-
-import { ZardButtonGroupComponent } from '../button-group.component';
 
 @Component({
   selector: 'z-demo-button-group-default',

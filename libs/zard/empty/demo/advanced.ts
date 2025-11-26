@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarGroupComponent, ZardAvatarComponent } from '@ngzard/ui/avatar';
 import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardEmptyComponent } from '@ngzard/ui/empty';
 import { ZardIconComponent } from '@ngzard/ui/icon';
-
-import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
   selector: 'z-demo-empty-advanced-customization',

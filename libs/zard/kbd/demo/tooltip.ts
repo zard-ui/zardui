@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardKbdGroupComponent, ZardKbdComponent } from '@ngzard/ui/kbd';
 import { ZardTooltipDirective } from '@ngzard/ui/tooltip';
-
-import { ZardKbdGroupComponent } from '../kbd-group.component';
-import { ZardKbdComponent } from '../kbd.component';
 
 @Component({
   selector: 'z-demo-kbd-tooltip',

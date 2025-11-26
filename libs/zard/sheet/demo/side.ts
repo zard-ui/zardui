@@ -4,9 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { ZardButtonComponent } from '@ngzard/ui/button';
 import { ZardInputDirective } from '@ngzard/ui/input';
 import { ZardRadioComponent } from '@ngzard/ui/radio';
-
-import { ZardSheetModule } from '../sheet.module';
-import { Z_MODAL_DATA, ZardSheetService } from '../sheet.service';
+import { ZardSheetModule, Z_MODAL_DATA, ZardSheetService } from '@ngzard/ui/sheet';
 
 interface iSheetData {
   name: string;

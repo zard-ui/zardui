@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
-
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component';
+import { ZardPopoverComponent, ZardPopoverDirective } from '@ngzard/ui/popover';
 
 @Component({
   selector: 'z-popover-placement-demo',

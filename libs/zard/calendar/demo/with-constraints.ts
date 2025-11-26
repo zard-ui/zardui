@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardCalendarComponent } from '../calendar.component';
+import { ZardCalendarComponent } from '@ngzard/ui/calendar';
 
 const DAYS_IN_FUTURE = 30;
 const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;

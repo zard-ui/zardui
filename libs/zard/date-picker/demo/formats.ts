@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardDatePickerComponent } from '../date-picker.component';
+import { ZardDatePickerComponent } from '@ngzard/ui/date-picker';
 
 @Component({
   selector: 'z-date-picker-formats-demo',

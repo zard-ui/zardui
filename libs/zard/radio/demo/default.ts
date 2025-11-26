@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ZardRadioComponent } from '../radio.component';
+import { ZardRadioComponent } from '@ngzard/ui/radio';
 
 @Component({
   selector: 'z-demo-radio-default',

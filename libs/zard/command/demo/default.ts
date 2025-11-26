@@ -1,7 +1,6 @@
 import { Component, HostListener } from '@angular/core';
 
-import { ZardCommandOption } from '../command.component';
-import { ZardCommandModule } from '../command.module';
+import { ZardCommandOption, ZardCommandModule } from '@ngzard/ui/command';
 
 @Component({
   selector: 'z-demo-command-default',

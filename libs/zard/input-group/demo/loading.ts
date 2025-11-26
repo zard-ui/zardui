@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardIconComponent } from '@ngzard/ui/icon';
 import { ZardInputDirective } from '@ngzard/ui/input';
-
-import { ZardInputGroupComponent } from '../input-group.component';
+import { ZardInputGroupComponent } from '@ngzard/ui/input-group';
 
 @Component({
   selector: 'z-demo-input-group-loading',

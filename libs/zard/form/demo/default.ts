@@ -3,9 +3,8 @@ import { FormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
 import { generateId } from '@ngzard/ui/core';
+import { ZardFormModule } from '@ngzard/ui/form';
 import { ZardInputDirective } from '@ngzard/ui/input';
-
-import { ZardFormModule } from '../form.module';
 
 @Component({
   selector: 'zard-demo-form-default',

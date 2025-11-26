@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
+import { ZardTabComponent, ZardTabGroupComponent } from '@ngzard/ui/tabs';
 
 @Component({
   selector: 'z-demo-tabs-default',

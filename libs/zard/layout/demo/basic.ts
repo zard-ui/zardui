@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
 
-import { ContentComponent } from '../content.component';
-import { FooterComponent } from '../footer.component';
-import { HeaderComponent } from '../header.component';
-import { LayoutComponent, SidebarComponent } from '../layout.component';
+import {
+  ContentComponent,
+  FooterComponent,
+  HeaderComponent,
+  LayoutComponent,
+  SidebarComponent,
+} from '@ngzard/ui/layout';
 
 @Component({
   selector: 'z-demo-layout-basic',

@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
-
-import { ZardKbdComponent } from '../kbd.component';
+import { ZardKbdComponent } from '@ngzard/ui/kbd';
 
 @Component({
   selector: 'z-demo-kbd-default',

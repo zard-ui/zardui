@@ -4,10 +4,9 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
 import { ZardCheckboxComponent } from '@ngzard/ui/checkbox';
+import { ZardFormModule } from '@ngzard/ui/form';
 import { ZardInputDirective } from '@ngzard/ui/input';
 import { ZardSelectItemComponent, ZardSelectComponent } from '@ngzard/ui/select';
-
-import { ZardFormModule } from '../form.module';
 
 interface FormData {
   firstName: string;

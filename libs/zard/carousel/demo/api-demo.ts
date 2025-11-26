@@ -4,8 +4,7 @@ import { type EmblaCarouselType } from 'embla-carousel';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
 import { ZardCardComponent } from '@ngzard/ui/card';
-
-import { ZardCarouselModule } from '../carousel.module';
+import { ZardCarouselModule } from '@ngzard/ui/carousel';
 
 @Component({
   imports: [ZardCarouselModule, ZardButtonComponent, ZardCardComponent],

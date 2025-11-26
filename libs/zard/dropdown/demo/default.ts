@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
 import { ZardDividerComponent } from '@ngzard/ui/divider';
-
-import { ZardDropdownModule } from '../dropdown.module';
+import { ZardDropdownModule } from '@ngzard/ui/dropdown';
 
 @Component({
   selector: 'z-dropdown-demo',

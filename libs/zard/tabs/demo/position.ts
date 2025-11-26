@@ -3,8 +3,7 @@ import { FormsModule } from '@angular/forms';
 
 import { ZardDividerComponent } from '@ngzard/ui/divider';
 import { ZardRadioComponent } from '@ngzard/ui/radio';
-
-import { ZardTabComponent, ZardTabGroupComponent, zPosition } from '../tabs.component';
+import { ZardTabComponent, ZardTabGroupComponent, zPosition } from '@ngzard/ui/tabs';
 
 @Component({
   selector: 'z-demo-tabs-position',

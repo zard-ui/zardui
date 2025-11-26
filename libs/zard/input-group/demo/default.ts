@@ -5,9 +5,8 @@ import { ZardDividerComponent } from '@ngzard/ui/divider';
 import { ZardDropdownModule } from '@ngzard/ui/dropdown';
 import { ZardIconComponent } from '@ngzard/ui/icon';
 import { ZardInputDirective } from '@ngzard/ui/input';
+import { ZardInputGroupComponent } from '@ngzard/ui/input-group';
 import { ZardTooltipDirective } from '@ngzard/ui/tooltip';
-
-import { ZardInputGroupComponent } from '../input-group.component';
 
 @Component({
   selector: 'z-demo-input-group-default',

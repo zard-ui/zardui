@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardComboboxComponent, ZardComboboxGroup, ZardComboboxOption } from '../combobox.component';
+import { ZardComboboxComponent, ZardComboboxGroup, ZardComboboxOption } from '@ngzard/ui/combobox';
 
 @Component({
   selector: 'zard-demo-combobox-grouped',

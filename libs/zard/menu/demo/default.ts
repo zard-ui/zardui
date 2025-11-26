@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 import { ZardButtonComponent } from '@ngzard/ui/button';
 import { ZardDividerComponent } from '@ngzard/ui/divider';
 import { ZardIconComponent } from '@ngzard/ui/icon';
-
-import { ZardMenuModule } from '../menu.module';
+import { ZardMenuModule } from '@ngzard/ui/menu';
 
 @Component({
   selector: 'zard-demo-menu-default',

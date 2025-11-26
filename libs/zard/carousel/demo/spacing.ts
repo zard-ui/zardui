@@ -1,10 +1,9 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardCardComponent } from '@ngzard/ui/card';
+import { ZardCarouselModule } from '@ngzard/ui/carousel';
 import { mergeClasses } from '@ngzard/ui/core';
 import { ZardSegmentedComponent } from '@ngzard/ui/segmented';
-
-import { ZardCarouselModule } from '../carousel.module';
 
 @Component({
   imports: [ZardCarouselModule, ZardSegmentedComponent, ZardCardComponent],

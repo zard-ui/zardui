@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 import { ZardBadgeComponent } from '@ngzard/ui/badge';
 import { ZardButtonComponent } from '@ngzard/ui/button';
 import { ZardIconComponent } from '@ngzard/ui/icon';
-
 import {
   ZardTableBodyComponent,
   ZardTableCellComponent,
@@ -11,7 +10,7 @@ import {
   ZardTableHeadComponent,
   ZardTableHeaderComponent,
   ZardTableRowComponent,
-} from '../table.component';
+} from '@ngzard/ui/table';
 
 export interface Payment {
   id: string;

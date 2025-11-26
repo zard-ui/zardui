@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
 import { ZardIconComponent } from '@ngzard/ui/icon';
-
-import { ZardBadgeComponent } from '../badge.component';
 
 @Component({
   selector: 'z-demo-badge-default',

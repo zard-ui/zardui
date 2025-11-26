@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardTableComponent } from '../table.component';
+import { ZardTableComponent } from '@ngzard/ui/table';
 
 interface Person {
   key: string;

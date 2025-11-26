@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardIconComponent } from '../icon.component';
+import { ZardIconComponent } from '@ngzard/ui/icon';
 
 @Component({
   selector: 'z-demo-icon-stroke-width',

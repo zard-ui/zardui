@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ZardPaginationModule } from '../pagination.module';
+import { ZardPaginationModule } from '@ngzard/ui/pagination';
 
 @Component({
   selector: 'z-demo-pagination-default',

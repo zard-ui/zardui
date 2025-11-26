@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardSkeletonComponent } from '../skeleton.component';
+import { ZardSkeletonComponent } from '@ngzard/ui/skeleton';
 
 @Component({
   selector: 'z-demo-skeleton-default',

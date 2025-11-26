@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { ZardIconComponent } from '@ngzard/ui/icon';
-
-import { ZardToggleComponent } from '../toggle.component';
+import { ZardToggleComponent } from '@ngzard/ui/toggle';
 
 @Component({
   selector: 'z-demo-toggle-small',

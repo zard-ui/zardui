@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardAvatarGroupComponent } from '../avatar-group.component';
-import { ZardAvatarComponent } from '../avatar.component';
+import { ZardAvatarGroupComponent, ZardAvatarComponent } from '@ngzard/ui/avatar';
 
 @Component({
   selector: 'z-demo-avatar-basic',

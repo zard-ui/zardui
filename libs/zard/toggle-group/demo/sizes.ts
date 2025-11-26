@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardToggleGroupComponent, ZardToggleGroupItem } from '../toggle-group.component';
+import { ZardToggleGroupComponent, ZardToggleGroupItem } from '@ngzard/ui/toggle-group';
 
 @Component({
   selector: 'demo-toggle-group-sizes',

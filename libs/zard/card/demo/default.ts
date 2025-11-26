@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardCardComponent } from '@ngzard/ui/card';
 import { generateId } from '@ngzard/ui/core';
-
-import { ZardCardComponent } from '../card.component';
 
 @Component({
   selector: 'z-demo-card-default',

@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardAccordionItemComponent } from '../accordion-item.component';
-import { ZardAccordionComponent } from '../accordion.component';
+import { ZardAccordionItemComponent, ZardAccordionComponent } from '@ngzard/ui/accordion';
 
 @Component({
   selector: 'z-demo-accordion-multiple',
