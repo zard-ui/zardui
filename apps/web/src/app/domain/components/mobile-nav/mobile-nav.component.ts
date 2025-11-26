@@ -4,8 +4,8 @@ import { RouterModule } from '@angular/router';
 import { environment } from '@doc/env/environment';
 import { SIDEBAR_PATHS, HEADER_PATHS } from '@doc/shared/constants/routes.constant';
 
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
+import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
 
 @Component({
   selector: 'z-mobile-nav',

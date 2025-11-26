@@ -10,17 +10,23 @@ import { filter, map, startWith } from 'rxjs/operators';
 import { environment } from '@doc/env/environment';
 import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '@doc/shared/constants/routes.constant';
 
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
-
 import type { AiAssistOption } from './ai-assist.types';
+import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
+import { ZardDividerComponent } from '../../../../../../../libs/zard/divider/divider.component';
+import { ZardPopoverComponent, ZardPopoverDirective } from '../../../../../../../libs/zard/popover/popover.component';
 
 @Component({
   selector: 'z-assist',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, ZardPopoverComponent, ZardPopoverDirective, ZardDividerComponent, ZardButtonComponent, LucideAngularModule],
+  imports: [
+    RouterLink,
+    ZardPopoverComponent,
+    ZardPopoverDirective,
+    ZardDividerComponent,
+    ZardButtonComponent,
+    LucideAngularModule,
+  ],
   templateUrl: './ai-assist.component.html',
   host: {
     '[class]': 'hostClasses()',
@@ -31,7 +37,10 @@ export class AiAssistComponent {
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
-  private readonly appRoutes = [...SECTIONS.data, ...DOCS_PATH.data, ...COMPONENTS_PATH.data].filter(route => route.available).filter(route => route.path !== '/llms.txt');
+  private readonly appRoutes = [...SECTIONS.data, ...DOCS_PATH.data, ...COMPONENTS_PATH.data]
+    .filter(route => route.available)
+    .filter(route => route.path !== '/llms.txt');
+
   private readonly baseUrl = 'https://zardui.com';
 
   readonly CopyIcon = Copy;

@@ -12,7 +12,7 @@ import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive'
 import { BlocksService, type BlockCategory as ServiceBlockCategory } from '@doc/domain/services/blocks.service';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardButtonComponent } from '../../../../../../../../libs/zard/button/button.component';
 
 interface BlockPreview {
   id: string;
@@ -26,7 +26,15 @@ interface BlockPreview {
 @Component({
   selector: 'z-block-instructions',
   standalone: true,
-  imports: [RouterLink, ZardButtonComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, LucideAngularModule],
+  imports: [
+    RouterLink,
+    ZardButtonComponent,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    LucideAngularModule,
+  ],
   templateUrl: './block-instructions.page.html',
 })
 export class BlocksInstructionPage implements OnInit {
@@ -54,6 +62,7 @@ export class BlocksInstructionPage implements OnInit {
     const uniqueBlocks = new Set(allBlocks.map(block => block.id));
     return uniqueBlocks.size;
   });
+
   readonly categoriesCount = 5;
 
   readonly featuredBlocks = computed(() => this.transformBlocks(this.blocksService.getBlocksByCategory('featured')));

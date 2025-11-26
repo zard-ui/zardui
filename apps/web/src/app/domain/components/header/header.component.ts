@@ -7,12 +7,11 @@ import type { Observable } from 'rxjs';
 
 import { LayoutService } from '@doc/shared/services/layout.service';
 
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-
+import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
+import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
+import { ZardButtonGroupComponent } from '../../../../../../../libs/zard/button-group/button-group.component';
+import { ZardDividerComponent } from '../../../../../../../libs/zard/divider/divider.component';
+import { ZardIconComponent } from '../../../../../../../libs/zard/icon/icon.component';
 import { environment } from '../../../../environments/environment';
 import { SOCIAL_MEDIAS } from '../../../shared/constants/medias.constant';
 import { HEADER_PATHS } from '../../../shared/constants/routes.constant';

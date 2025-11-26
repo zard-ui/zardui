@@ -5,9 +5,9 @@ import { DocContentComponent } from '@doc/domain/components/doc-content/doc-cont
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
+import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
+import { ZardCardComponent } from '../../../../../../../libs/zard/card/card.component';
+import { ZardProgressBarComponent } from '../../../../../../../libs/zard/progress-bar/progress-bar.component';
 
 interface RoadmapPhase {
   id: string;
@@ -24,7 +24,14 @@ interface RoadmapPhase {
   selector: 'z-roadmap',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CommonModule, DocContentComponent, DocHeadingComponent, ZardCardComponent, ZardBadgeComponent, ZardProgressBarComponent],
+  imports: [
+    CommonModule,
+    DocContentComponent,
+    DocHeadingComponent,
+    ZardCardComponent,
+    ZardBadgeComponent,
+    ZardProgressBarComponent,
+  ],
   templateUrl: './roadmap.page.html',
 })
 export class RoadmapPage implements OnInit {
@@ -54,7 +61,8 @@ export class RoadmapPage implements OnInit {
       period: 'Completed',
       status: 'completed',
       progress: 100,
-      description: 'Focus on growth and community feedback. Users started adopting the library and providing valuable insights',
+      description:
+        'Focus on growth and community feedback. Users started adopting the library and providing valuable insights',
       goals: ['Community growth', '30+ components', 'CLI improvements', 'Documentation'],
       deliverables: [
         { text: '30+ production-ready components', completed: true },
@@ -72,7 +80,8 @@ export class RoadmapPage implements OnInit {
       period: 'In Progress',
       status: 'in-progress',
       progress: 13,
-      description: 'Current focus: CLI with private registry, improved DX, accessibility, performance, MCP server for AI integration, and comprehensive testing',
+      description:
+        'Current focus: CLI with private registry, improved DX, accessibility, performance, MCP server for AI integration, and comprehensive testing',
       goals: ['Private registry', 'Better DX', 'Accessibility', 'MCP Server', 'Testing'],
       deliverables: [
         { text: 'CLI with private registry (no GitHub fetch)', completed: false },
@@ -102,10 +111,17 @@ export class RoadmapPage implements OnInit {
     },
   ];
 
-  readonly overallProgress = Math.round(this.phases.reduce((acc, phase) => acc + phase.progress, 0) / this.phases.length);
+  readonly overallProgress = Math.round(
+    this.phases.reduce((acc, phase) => acc + phase.progress, 0) / this.phases.length,
+  );
 
   ngOnInit(): void {
-    this.seoService.setDocsSeo('Roadmap', 'Our journey to V1.0 - See our progress and upcoming features for Zard UI', '/doc/roadmap', 'og-roadmap.jpg');
+    this.seoService.setDocsSeo(
+      'Roadmap',
+      'Our journey to V1.0 - See our progress and upcoming features for Zard UI',
+      '/doc/roadmap',
+      'og-roadmap.jpg',
+    );
   }
 
   getStatusBadgeVariant(status: RoadmapPhase['status']): 'default' | 'secondary' | 'outline' | 'destructive' {

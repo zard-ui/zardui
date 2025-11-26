@@ -4,8 +4,8 @@ import { RouterModule } from '@angular/router';
 import { SOCIAL_MEDIAS } from '@doc/shared/constants/medias.constant';
 import { SIDEBAR_PATHS } from '@doc/shared/constants/routes.constant';
 
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
+import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
+import { ZardDividerComponent } from '../../../../../../../libs/zard/divider/divider.component';
 
 @Component({
   selector: 'z-footer',
@@ -20,10 +20,21 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
             <div class="flex flex-col space-y-6">
               <div class="space-y-3">
                 <div class="flex items-center space-x-2">
-                  <div class="from-primary to-primary/80 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br p-1">
-                    <img src="/images/zard.svg" alt="ZardUI Logo" class="fill-primary-foreground h-full w-full object-contain brightness-0 invert dark:invert-0" loading="lazy" />
+                  <div
+                    class="from-primary to-primary/80 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br p-1"
+                  >
+                    <img
+                      src="/images/zard.svg"
+                      alt="ZardUI Logo"
+                      class="fill-primary-foreground h-full w-full object-contain brightness-0 invert dark:invert-0"
+                      loading="lazy"
+                    />
                   </div>
-                  <h3 class="from-foreground to-foreground/80 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent">ZardUI</h3>
+                  <h3
+                    class="from-foreground to-foreground/80 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent"
+                  >
+                    ZardUI
+                  </h3>
                 </div>
                 <p class="text-muted-foreground max-w-xs text-sm leading-relaxed">
                   The &#64;shadcn/ui alternative for Angular. Beautiful, accessible, and customizable components.
@@ -59,7 +70,9 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
           <div class="space-y-4">
             <h4 class="text-foreground relative font-semibold">
               Resources
-              <div class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-gradient-to-r"></div>
+              <div
+                class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-gradient-to-r"
+              ></div>
             </h4>
             <ul class="space-y-3">
               @for (resource of resourceLinks(); track resource.url) {
@@ -70,7 +83,9 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
                     rel="noopener noreferrer"
                     class="group text-muted-foreground hover:text-foreground flex items-center space-x-2 text-sm transition-all duration-200"
                   >
-                    <span class="bg-muted-foreground/30 group-hover:bg-primary h-1.5 w-1.5 rounded-full transition-colors duration-200"></span>
+                    <span
+                      class="bg-muted-foreground/30 group-hover:bg-primary h-1.5 w-1.5 rounded-full transition-colors duration-200"
+                    ></span>
                     <span class="transition-transform duration-200 group-hover:translate-x-1">{{ resource.name }}</span>
                   </a>
                 </li>
@@ -81,13 +96,20 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
           <div class="hidden space-y-4 lg:block">
             <h4 class="text-foreground relative font-semibold">
               Documentation
-              <div class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-gradient-to-r"></div>
+              <div
+                class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-gradient-to-r"
+              ></div>
             </h4>
             <ul class="space-y-3">
               @for (doc of documentationLinks(); track doc.path) {
                 <li>
-                  <a [routerLink]="doc.path" class="group text-muted-foreground hover:text-foreground flex items-center space-x-2 text-sm transition-all duration-200">
-                    <span class="bg-muted-foreground/30 group-hover:bg-primary h-1.5 w-1.5 rounded-full transition-colors duration-200"></span>
+                  <a
+                    [routerLink]="doc.path"
+                    class="group text-muted-foreground hover:text-foreground flex items-center space-x-2 text-sm transition-all duration-200"
+                  >
+                    <span
+                      class="bg-muted-foreground/30 group-hover:bg-primary h-1.5 w-1.5 rounded-full transition-colors duration-200"
+                    ></span>
                     <span class="transition-transform duration-200 group-hover:translate-x-1">{{ doc.name }}</span>
                   </a>
                 </li>
@@ -98,14 +120,23 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
           <div class="hidden space-y-4 lg:block">
             <h4 class="text-foreground relative font-semibold">
               Components
-              <div class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-gradient-to-r"></div>
+              <div
+                class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-gradient-to-r"
+              ></div>
             </h4>
             <ul class="space-y-3">
               @for (component of popularComponents(); track component.path) {
                 <li>
-                  <a [routerLink]="component.path" class="group text-muted-foreground hover:text-foreground flex items-center space-x-2 text-sm transition-all duration-200">
-                    <span class="bg-muted-foreground/30 group-hover:bg-primary h-1.5 w-1.5 rounded-full transition-colors duration-200"></span>
-                    <span class="capitalize transition-transform duration-200 group-hover:translate-x-1">{{ component.name }}</span>
+                  <a
+                    [routerLink]="component.path"
+                    class="group text-muted-foreground hover:text-foreground flex items-center space-x-2 text-sm transition-all duration-200"
+                  >
+                    <span
+                      class="bg-muted-foreground/30 group-hover:bg-primary h-1.5 w-1.5 rounded-full transition-colors duration-200"
+                    ></span>
+                    <span class="capitalize transition-transform duration-200 group-hover:translate-x-1">
+                      {{ component.name }}
+                    </span>
                   </a>
                 </li>
               }
@@ -127,7 +158,9 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
         <div class="mt-16 pt-4">
           <z-divider class="mb-8"></z-divider>
           <div class="flex flex-col items-center justify-between space-y-6 lg:flex-row lg:space-y-0">
-            <div class="text-muted-foreground flex flex-col items-center space-y-3 text-sm sm:flex-row sm:space-y-0 sm:space-x-6">
+            <div
+              class="text-muted-foreground flex flex-col items-center space-y-3 text-sm sm:flex-row sm:space-y-0 sm:space-x-6"
+            >
               <div class="flex items-center space-x-2">
                 <span class="text-red-500">❤️</span>
                 <span>Made with love from</span>

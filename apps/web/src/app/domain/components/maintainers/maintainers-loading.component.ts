@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardSkeletonComponent } from '@zard/components/skeleton/skeleton.component';
+import { ZardSkeletonComponent } from '../../../../../../../libs/zard/skeleton/skeleton.component';
 
 @Component({
   selector: 'z-maintainers-loading',

@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 
-import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
-import { ZardTooltipModule } from '@zard/components/tooltip/tooltip';
+import { ZardAvatarComponent } from '../../../../../../../libs/zard/avatar/avatar.component';
+import { ZardTooltipModule } from '../../../../../../../libs/zard/tooltip/tooltip';
 
 export interface Contributor {
   login: string;
@@ -18,7 +18,12 @@ export interface Contributor {
     <div class="flex flex-wrap gap-4">
       @for (contributor of contributors(); track contributor.login) {
         <div class="relative" [zTooltip]="contributor.login" zPosition="top" zTrigger="hover">
-          <a [href]="contributor.html_url" target="_blank" rel="noopener noreferrer" class="block transition-transform hover:scale-110">
+          <a
+            [href]="contributor.html_url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block transition-transform hover:scale-110"
+          >
             <z-avatar
               [zSrc]="contributor.avatar_url"
               [zAlt]="contributor.login + ' avatar'"

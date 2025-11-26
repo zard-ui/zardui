@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
+import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
+import { ZardCardComponent } from '../../../../../../../libs/zard/card/card.component';
+import { ZardCheckboxComponent } from '../../../../../../../libs/zard/checkbox/checkbox.component';
+import { ZardIconComponent } from '../../../../../../../libs/zard/icon/icon.component';
+import { ZardInputDirective } from '../../../../../../../libs/zard/input/input.directive';
 
 @Component({
   selector: 'z-features',
@@ -32,13 +32,25 @@ import { ZardInputDirective } from '@zard/components/input/input.directive';
         </z-card>
       </main>
       <footer class="mt-8 flex justify-center">
-        <a z-button zType="ghost" routerLink="/components/button" class="group"
-          >View all
-          <z-icon zType="chevron-right" class="shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1" />
+        <a z-button zType="ghost" routerLink="/components/button" class="group">
+          View all
+          <z-icon
+            zType="chevron-right"
+            class="shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1"
+          />
         </a>
       </footer>
     </section>
   `,
-  imports: [RouterModule, ZardCardComponent, ZardButtonComponent, ZardCardComponent, ZardBadgeComponent, ZardCheckboxComponent, ZardInputDirective, ZardIconComponent],
+  imports: [
+    RouterModule,
+    ZardCardComponent,
+    ZardButtonComponent,
+    ZardCardComponent,
+    ZardBadgeComponent,
+    ZardCheckboxComponent,
+    ZardInputDirective,
+    ZardIconComponent,
+  ],
 })
 export class FeaturesComponent {}

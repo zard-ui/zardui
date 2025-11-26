@@ -1,8 +1,7 @@
 import { Component, input, signal, computed } from '@angular/core';
 
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
-
+import { ZardIconComponent } from '../../../../../../../libs/zard/icon/icon.component';
+import { ZardBreadcrumbModule } from '../../../../../../../libs/zard/sheet/sheet.module';
 import { SimpleCodeHighlightComponent } from '../../../shared/components/simple-code-highlight/simple-code-highlight.component';
 import type { BlockFile, FileTreeNode } from '../block-container/block-container.component';
 import { FileTreeComponent } from '../file-tree/file-tree.component';
@@ -112,7 +111,12 @@ export class BlockCodeViewerComponent {
       return '/icons/angular-file.svg';
     }
 
-    if (fileName.includes('.service.ts') || fileName.includes('.module.ts') || fileName.includes('.directive.ts') || fileName.includes('.pipe.ts')) {
+    if (
+      fileName.includes('.service.ts') ||
+      fileName.includes('.module.ts') ||
+      fileName.includes('.directive.ts') ||
+      fileName.includes('.pipe.ts')
+    ) {
       return '/icons/angular-file.svg';
     }
 

@@ -7,7 +7,7 @@ import { SidebarComponent } from '@doc/domain/components/sidebar/sidebar.compone
 import { environment } from '@doc/env/environment';
 import { DarkModeService, EThemeModes, ThemeOptions } from '@doc/shared/services/darkmode.service';
 
-import { ZardToastComponent } from '@zard/components/toast/toast.component';
+import { ZardToastComponent } from '../../../../../../../libs/zard/toast/toast.component';
 
 @Component({
   selector: 'z-documentation',

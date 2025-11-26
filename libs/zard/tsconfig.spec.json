@@ -9,6 +9,6 @@
     "declaration": true,
     "verbatimModuleSyntax": null
   },
-  "files": ["src/test-setup.ts"],
-  "include": ["jest.config.ts", "src/**/*.ts", "src/**/*.test.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
+  "files": ["test-setup.ts"],
+  "include": ["jest.config.ts", "**/*.ts", "**/*.test.ts", "**/*.spec.ts", "**/*.d.ts"]
 }

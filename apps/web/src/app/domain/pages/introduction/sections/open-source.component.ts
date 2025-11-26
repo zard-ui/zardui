@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardIcon } from '@zard/components/icon/icons';
+import { ZardBadgeComponent } from '../../../../../../../../libs/zard/badge/badge.component';
+import { ZardCardComponent } from '../../../../../../../../libs/zard/card/card.component';
+import { ZardIconComponent } from '../../../../../../../../libs/zard/icon/icon.component';
+import { ZardIcon } from '../../../../../../../../libs/zard/icon/icons';
 
 interface OpenSourceFeature {
   title: string;
@@ -27,14 +27,18 @@ interface StandAgainstItem {
           <h2 class="text-3xl font-bold tracking-tight">Open Source Philosophy</h2>
           <z-badge class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">100% Free</z-badge>
         </div>
-        <p class="text-muted-foreground text-base leading-7">Built by the community, for the community. No corporate overlords, no paywalls, no compromises.</p>
+        <p class="text-muted-foreground text-base leading-7">
+          Built by the community, for the community. No corporate overlords, no paywalls, no compromises.
+        </p>
       </div>
 
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         @for (feature of features; track $index) {
           <z-card [zTitle]="title">
             <ng-template #title>
-              <div class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400">
+              <div
+                class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
+              >
                 <z-icon [zType]="feature.icon" class="text-lg font-normal" />
               </div>
               <h3 class="mt-4 text-base font-semibold">{{ feature.title }}</h3>
@@ -69,7 +73,8 @@ export class OpenSourceSection {
   readonly features: OpenSourceFeature[] = [
     {
       title: 'Community Owned',
-      description: "Governed by developers, not corporations. Every decision is made transparently with the community's best interests at heart.",
+      description:
+        "Governed by developers, not corporations. Every decision is made transparently with the community's best interests at heart.",
       icon: 'circle-check',
     },
     {
@@ -79,7 +84,8 @@ export class OpenSourceSection {
     },
     {
       title: 'Built in Public',
-      description: 'All development happens in the open. Watch us build, contribute your ideas, and shape the future together.',
+      description:
+        'All development happens in the open. Watch us build, contribute your ideas, and shape the future together.',
       icon: 'zap',
     },
   ];

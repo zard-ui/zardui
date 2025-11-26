@@ -2,8 +2,7 @@ import { Component, inject, OnInit } from '@angular/core';
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-
+import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';

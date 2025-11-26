@@ -2,7 +2,7 @@ import { Component, input } from '@angular/core';
 
 import { SOCIAL_MEDIAS } from '@doc/shared/constants/medias.constant';
 
-import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
+import { ZardAvatarComponent } from '../../../../../../../libs/zard/avatar/avatar.component';
 
 export interface MaintainerData {
   login: string;

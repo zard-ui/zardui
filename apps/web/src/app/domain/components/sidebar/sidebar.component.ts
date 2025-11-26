@@ -3,14 +3,18 @@ import { RouterModule } from '@angular/router';
 
 import { SIDEBAR_PATHS } from '@doc/shared/constants/routes.constant';
 
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
 
 @Component({
   selector: 'z-sidebar',
   template: `
-    <aside class="sticky top-[calc(var(--header-height)+1px)] z-30 hidden h-[calc(100svh-var(--footer-height)-4rem)] overscroll-none bg-transparent lg:flex">
+    <aside
+      class="sticky top-[calc(var(--header-height)+1px)] z-30 hidden h-[calc(100svh-var(--footer-height)-4rem)] overscroll-none bg-transparent lg:flex"
+    >
       <nav class="no-scrollbar flex min-h-0 flex-1 flex-col gap-2 overflow-auto overflow-x-hidden px-2">
-        <div class="from-background via-background/80 to-background/50 sticky -top-1 z-10 h-2 shrink-0 bg-linear-to-b blur-xs"></div>
+        <div
+          class="from-background via-background/80 to-background/50 sticky -top-1 z-10 h-2 shrink-0 bg-linear-to-b blur-xs"
+        ></div>
         @for (doc of sidebarPaths; track $index) {
           <div class="relative flex w-full min-w-0 flex-col p-2">
             <h2 class="text-muted-foreground flex h-8 shrink-0 items-center px-2 text-xs font-medium">
@@ -38,7 +42,9 @@ import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
             </div>
           </div>
         }
-        <div class="from-background via-background/80 to-background/50 sticky -bottom-1 z-10 h-16 shrink-0 bg-linear-to-t blur-xs"></div>
+        <div
+          class="from-background via-background/80 to-background/50 sticky -bottom-1 z-10 h-16 shrink-0 bg-linear-to-t blur-xs"
+        ></div>
       </nav>
     </aside>
   `,

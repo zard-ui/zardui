@@ -1,8 +1,8 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardIcon } from '@zard/components/icon/icons';
+import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
+import { ZardIconComponent } from '../../../../../../../libs/zard/icon/icon.component';
+import { ZardIcon } from '../../../../../../../libs/zard/icon/icons';
 
 export interface BenefitFeature {
   icon: ZardIcon;
@@ -23,7 +23,9 @@ export interface BenefitFeature {
 
       <!-- Animated background pattern -->
       <div class="absolute inset-0 opacity-30">
-        <div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]"></div>
+        <div
+          class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(120,119,198,0.1),transparent_50%)]"
+        ></div>
         <div
           class="absolute inset-0 animate-[slide_20s_linear_infinite] bg-[linear-gradient(45deg,transparent_48%,rgba(120,119,198,0.1)_49%,rgba(120,119,198,0.1)_51%,transparent_52%)] bg-[length:20px_20px]"
         ></div>
@@ -33,13 +35,17 @@ export interface BenefitFeature {
         <div class="mx-auto max-w-6xl">
           <!-- Header -->
           <div class="mb-16 text-center">
-            <z-badge zType="secondary" class="mb-4"> Why Choose ZardUI? </z-badge>
+            <z-badge zType="secondary" class="mb-4">Why Choose ZardUI?</z-badge>
             <h2 class="mb-6 text-3xl font-bold sm:text-4xl lg:text-5xl">
               Built for
-              <span class="from-primary to-primary/70 bg-gradient-to-r bg-clip-text text-transparent"> Modern Angular </span>
+              <span class="from-primary to-primary/70 bg-gradient-to-r bg-clip-text text-transparent">
+                Modern Angular
+              </span>
               Development
             </h2>
-            <p class="text-muted-foreground mx-auto max-w-2xl text-lg">Experience the perfect blend of beautiful design, developer experience, and performance optimization.</p>
+            <p class="text-muted-foreground mx-auto max-w-2xl text-lg">
+              Experience the perfect blend of beautiful design, developer experience, and performance optimization.
+            </p>
           </div>
 
           <!-- Features Grid -->
@@ -51,7 +57,9 @@ export interface BenefitFeature {
                   class="bg-card/50 hover:shadow-primary/5 hover:border-primary/20 relative rounded-2xl border p-6 backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                 >
                   <!-- Icon container -->
-                  <div class="bg-primary/10 text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110">
+                  <div
+                    class="bg-primary/10 text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
+                  >
                     <z-icon [zType]="feature.icon" class="text-xl" />
                   </div>
 
@@ -66,7 +74,11 @@ export interface BenefitFeature {
                   <!-- Highlight badge for premium features -->
                   @if (feature.highlight) {
                     <div class="absolute -top-2 -right-2">
-                      <z-badge [class]="'from-primary to-primary/80 text-primary-foreground bg-gradient-to-r px-2 py-1 text-xs'">
+                      <z-badge
+                        [class]="
+                          'from-primary to-primary/80 text-primary-foreground bg-gradient-to-r px-2 py-1 text-xs'
+                        "
+                      >
                         {{ feature.highlight }}
                       </z-badge>
                     </div>
@@ -81,7 +93,9 @@ export interface BenefitFeature {
             <div class="grid grid-cols-2 gap-8 lg:grid-cols-4">
               @for (stat of stats(); track stat.label) {
                 <div class="group text-center">
-                  <div class="text-primary mb-2 text-3xl font-bold transition-transform duration-300 group-hover:scale-110 lg:text-4xl">
+                  <div
+                    class="text-primary mb-2 text-3xl font-bold transition-transform duration-300 group-hover:scale-110 lg:text-4xl"
+                  >
                     {{ stat.value }}
                   </div>
                   <div class="text-muted-foreground text-sm font-medium">

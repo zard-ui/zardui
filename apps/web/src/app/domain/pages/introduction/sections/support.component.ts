@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardButtonComponent } from '../../../../../../../../libs/zard/button/button.component';
 
 @Component({
   selector: 'support-section',
@@ -16,15 +16,15 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
             </div>
             <h3 class="text-xl font-semibold">Support Open Source</h3>
             <p class="text-muted-foreground max-w-2xl text-base leading-7">
-              Love what we're building? Support ZardUI through contributions, sponsorships, or simply spreading the word. Every bit helps us maintain our commitment to the
-              community.
+              Love what we're building? Support ZardUI through contributions, sponsorships, or simply spreading the
+              word. Every bit helps us maintain our commitment to the community.
             </p>
             <div class="flex gap-3">
               <a z-button target="_blank" href="https://github.com/zard-ui/zardui">
                 <img src="/icons/github.svg" alt="github icon" class="hidden h-4 w-4 invert md:block dark:invert-0" />
                 Star on GitHub
               </a>
-              <a z-button zType="outline" target="_blank" href="https://github.com/sponsors/zard-ui">Be a Sponsor </a>
+              <a z-button zType="outline" target="_blank" href="https://github.com/sponsors/zard-ui">Be a Sponsor</a>
             </div>
           </div>
         </div>

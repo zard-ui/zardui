@@ -2,10 +2,9 @@ import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angula
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { ZardAlertComponent } from '@zard/components/alert/alert.component';
-import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-
+import { ZardAlertComponent } from '../../../../../../../libs/zard/alert/alert.component';
+import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
+import { ZardCardComponent } from '../../../../../../../libs/zard/card/card.component';
 import { DarkModeService, EThemeModes } from '../../../shared/services/darkmode.service';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';

@@ -7,8 +7,7 @@ import { CategoryTabsComponent, type CategoryTab } from '@doc/shared/components/
 import { DarkModeService } from '@doc/shared/services/darkmode.service';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
-
+import { ZardBreadcrumbModule } from '../../../../../../../libs/zard/sheet/sheet.module';
 import { BlockContainerComponent, type Block } from '../../components/block-container/block-container.component';
 import { BlocksService, type BlockCategory } from '../../services/blocks.service';
 

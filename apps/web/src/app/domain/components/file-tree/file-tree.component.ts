@@ -1,9 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
-
+import { ZardIconComponent } from '../../../../../../../libs/zard/icon/icon.component';
+import { ZardBreadcrumbModule } from '../../../../../../../libs/zard/sheet/sheet.module';
 import type { FileTreeNode, BlockFile } from '../block-container/block-container.component';
 
 @Component({
@@ -14,7 +13,12 @@ import type { FileTreeNode, BlockFile } from '../block-container/block-container
     @for (node of nodes(); track node.path) {
       @if (node.type === 'folder' && node.path) {
         <div class="folder-item">
-          <button (click)="toggleFolder(node.path)" z-button zType="ghost" class="ring-sidebar-ring w-full justify-start">
+          <button
+            (click)="toggleFolder(node.path)"
+            z-button
+            zType="ghost"
+            class="ring-sidebar-ring w-full justify-start"
+          >
             <z-icon zType="chevron-right" zSize="sm" [class.rotate-90]="isOpen(node.path)" />
             <z-icon zType="folder" zSize="sm" />
             <span class="truncate font-normal">{{ node.name }}</span>

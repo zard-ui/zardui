@@ -89,8 +89,6 @@ export default [
       '@angular-eslint/template/no-negated-async': 'error',
       '@angular-eslint/template/banana-in-box': 'error',
       '@angular-eslint/template/button-has-type': 'warn',
-      '@angular-eslint/template/elements-content': 'warn',
-      '@angular-eslint/template/table-scope': 'error',
       '@angular-eslint/template/prefer-self-closing-tags': 'warn',
       '@angular-eslint/template/prefer-at-else': 'warn',
       '@angular-eslint/template/eqeqeq': 'error',

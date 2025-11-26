@@ -108,7 +108,7 @@ export default [
     },
   },
   {
-    files: ['**/*.html'],
+    files: ['**/*.ts', '**/*.html'],
     // Override or add rules here
     rules: { '@stylistic/spaced-comment': 'off' },
   },

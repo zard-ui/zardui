@@ -7,7 +7,7 @@ import { lastValueFrom } from 'rxjs';
 
 import { MarkdownService } from '@doc/shared/services/markdown.service';
 
-import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
+import { ZardLoaderComponent } from '../../../../../../../libs/zard/loader/loader.component';
 
 @Component({
   selector: 'z-markdown-renderer',

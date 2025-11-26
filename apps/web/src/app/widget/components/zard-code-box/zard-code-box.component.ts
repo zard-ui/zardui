@@ -5,7 +5,7 @@ import { Component, computed, input, signal, ViewEncapsulation } from '@angular/
 import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 
-import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardCardComponent } from '../../../../../../../libs/zard/card/card.component';
 
 @Component({
   selector: 'z-code-box',

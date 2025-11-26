@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
-import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardIcon } from '@zard/components/icon/icons';
+import { ZardBadgeComponent } from '../../../../../../../../libs/zard/badge/badge.component';
+import { ZardCardComponent } from '../../../../../../../../libs/zard/card/card.component';
+import { ZardIconComponent } from '../../../../../../../../libs/zard/icon/icon.component';
+import { ZardIcon } from '../../../../../../../../libs/zard/icon/icons';
 
 interface AIFeatureCard {
   title: string;
@@ -23,8 +23,8 @@ interface AIFeatureCard {
           <z-badge zType="secondary">Future Ready</z-badge>
         </div>
         <p class="text-muted-foreground text-base leading-7">
-          ZardUI components are designed with AI development in mind. Clear patterns, consistent APIs, and comprehensive documentation make it easy for AI tools to understand and
-          work with our components.
+          ZardUI components are designed with AI development in mind. Clear patterns, consistent APIs, and comprehensive
+          documentation make it easy for AI tools to understand and work with our components.
         </p>
       </div>
 
@@ -48,12 +48,14 @@ export class AIReadySection {
   readonly cards: AIFeatureCard[] = [
     {
       title: 'Predictable Patterns',
-      description: 'Consistent naming conventions, standardized props, and logical component hierarchies that AI can easily understand and generate code for.',
+      description:
+        'Consistent naming conventions, standardized props, and logical component hierarchies that AI can easily understand and generate code for.',
       icon: 'sun',
     },
     {
       title: 'Rich Documentation',
-      description: 'Comprehensive examples, clear API references, and usage patterns that provide AI tools with the context they need to generate accurate code.',
+      description:
+        'Comprehensive examples, clear API references, and usage patterns that provide AI tools with the context they need to generate accurate code.',
       icon: 'book-open-text',
     },
   ];

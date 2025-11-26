@@ -6,7 +6,7 @@ import { ColorPaletteComponent } from '@doc/domain/components/color-palette/colo
 import { COLOR_PALETTES } from '@doc/shared/constants/colors.constant';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
 
 @Component({
   selector: 'z-colors',

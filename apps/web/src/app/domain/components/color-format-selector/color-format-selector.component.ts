@@ -3,8 +3,8 @@ import { Component, inject, ChangeDetectionStrategy, input, computed } from '@an
 import { COLOR_FORMATS, type Color } from '@doc/shared/constants/colors.constant';
 import { ColorsService, ColorFormat } from '@doc/shared/services/colors.service';
 
-import { ZardSelectItemComponent } from '@zard/components/select/select-item.component';
-import { ZardSelectComponent } from '@zard/components/select/select.component';
+import { ZardSelectItemComponent } from '../../../../../../../libs/zard/select/select-item.component';
+import { ZardSelectComponent } from '../../../../../../../libs/zard/select/select.component';
 
 @Component({
   selector: 'z-color-format-selector',

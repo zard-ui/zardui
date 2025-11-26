@@ -7,17 +7,25 @@ import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-
 import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { ZardAlertComponent } from '@zard/components/alert/alert.component';
-import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
-
 import { ChangelogService, type ChangelogEntry } from './services/changelog.service';
+import { ZardAlertComponent } from '../../../../../../../libs/zard/alert/alert.component';
+import { ZardLoaderComponent } from '../../../../../../../libs/zard/loader/loader.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-changelog',
   standalone: true,
-  imports: [CommonModule, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardAlertComponent, ZardLoaderComponent, MarkdownRendererComponent],
+  imports: [
+    CommonModule,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    ZardAlertComponent,
+    ZardLoaderComponent,
+    MarkdownRendererComponent,
+  ],
   templateUrl: './change-log.page.html',
 })
 export class ChangeLogPage implements OnInit {
