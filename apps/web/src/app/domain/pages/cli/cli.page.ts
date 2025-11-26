@@ -26,14 +26,18 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     CliConfigurationSection,
   ],
   template: `
-    <z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+    <z-content
+      [navigationConfig]="navigationConfig"
+      [activeAnchor]="activeAnchor"
+      scrollSpy
+      (scrollSpyChange)="activeAnchor = $event"
+    >
       <z-doc-heading
         title="CLI"
         description="Use the ZardUI CLI to add beautiful, accessible components to your Angular project with a single command."
         scrollSpyItem="overview"
         id="overview"
-      >
-      </z-doc-heading>
+      ></z-doc-heading>
 
       <cli-overview-section scrollSpyItem="cli-overview" id="cli-overview"></cli-overview-section>
       <cli-installation-section scrollSpyItem="installation" id="installation"></cli-installation-section>

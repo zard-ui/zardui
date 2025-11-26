@@ -3,12 +3,19 @@
     @if (shouldShowImage()) {
       @if (currentImage()) {
         <div class="flex h-full min-h-svh flex-col items-center justify-center gap-4 rounded-lg p-4">
-          <img [src]="currentImage()" [alt]="block()?.title || 'Block preview'" class="h-auto max-w-full rounded-lg shadow-lg" (error)="onImageError($event)" />
+          <img
+            [src]="currentImage()"
+            [alt]="block()?.title || 'Block preview'"
+            class="h-auto max-w-full rounded-lg shadow-lg"
+            (error)="onImageError($event)"
+          />
           <p class="text-muted-foreground text-sm">{{ block()?.title }}</p>
         </div>
       }
     } @else {
-      <div class="bg-surface absolute inset-0 h-full min-h-svh rounded-lg bg-[radial-gradient(#333437_1px,transparent_1px)] [background-size:16px_16px]"></div>
+      <div
+        class="bg-surface absolute inset-0 h-full min-h-svh rounded-lg bg-[radial-gradient(#333437_1px,transparent_1px)] [background-size:16px_16px]"
+      ></div>
       <z-resizable class="min-h-svh w-full rounded-lg">
         <z-resizable-panel [zDefaultSize]="100" class="overflow-y-auto">
           <section class="flex h-full w-full items-center justify-center rounded-lg">

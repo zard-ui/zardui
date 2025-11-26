@@ -19,7 +19,8 @@ export class EnvCardComponent {
   readonly disabled = input(false);
 
   protected cardClasses() {
-    const baseClasses = 'flex w-full flex-col items-center rounded-xl border bg-card p-6 text-card-foreground shadow transition-colors sm:p-10';
+    const baseClasses =
+      'flex w-full flex-col items-center rounded-xl border bg-card p-6 text-card-foreground shadow transition-colors sm:p-10';
 
     if (this.disabled()) {
       return `${baseClasses} cursor-not-allowed`;

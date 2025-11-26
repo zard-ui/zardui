@@ -1,6 +1,7 @@
 import { Component, input } from '@angular/core';
 
-import { ZardAvatarComponent } from '../../../../../../../libs/zard/avatar/avatar.component';
+import { ZardAvatarComponent } from '@ngzard/ui/avatar';
+
 import { SOCIAL_MEDIAS } from '../../../shared/constants/medias.constant';
 
 export interface FounderData {

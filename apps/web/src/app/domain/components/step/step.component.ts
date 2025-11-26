@@ -1,7 +1,8 @@
 import { Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+
 import { Step } from '../../../shared/constants/install.constant';
 import { MarkdownRendererComponent } from '../render/markdown-renderer.component';
 

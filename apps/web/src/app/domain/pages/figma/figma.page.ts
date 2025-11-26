@@ -13,7 +13,14 @@ import { SeoService } from '@doc/shared/services/seo.service';
   selector: 'z-figma',
   templateUrl: './figma.page.html',
   standalone: true,
-  imports: [DocContentComponent, DocHeadingComponent, CalloutComponent, ResourceCardComponent, ScrollSpyDirective, ScrollSpyItemDirective],
+  imports: [
+    DocContentComponent,
+    DocHeadingComponent,
+    CalloutComponent,
+    ResourceCardComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+  ],
 })
 export class FigmaPage implements OnInit {
   private readonly seoService = inject(SeoService);
@@ -41,10 +48,16 @@ export class FigmaPage implements OnInit {
     {
       title: 'shadcn/ui kit',
       author: 'Matt Wierzbicki',
-      description: 'A premium, always up-to-date UI kit for Figma - shadcn/ui compatible and optimized for smooth design-to-dev handoff.',
+      description:
+        'A premium, always up-to-date UI kit for Figma - shadcn/ui compatible and optimized for smooth design-to-dev handoff.',
       badges: [{ text: 'Premium', variant: 'premium' as const }],
       links: [
-        { url: 'https://shadcndesign.com', text: 'Visit shadcndesign.com', icon: 'external' as const, type: 'primary' as const },
+        {
+          url: 'https://shadcndesign.com',
+          text: 'Visit shadcndesign.com',
+          icon: 'external' as const,
+          type: 'primary' as const,
+        },
         { url: 'https://x.com/matsugfx', text: 'matsugfx', icon: 'twitter' as const, type: 'secondary' as const },
       ],
     },
@@ -54,10 +67,16 @@ export class FigmaPage implements OnInit {
     {
       title: 'shadcn/ui design system',
       author: 'Pietro Schirano',
-      description: 'A design companion for shadcn/ui. Each component was painstakingly crafted to perfectly match the code implementation.',
+      description:
+        'A design companion for shadcn/ui. Each component was painstakingly crafted to perfectly match the code implementation.',
       badges: [{ text: 'Free', variant: 'free' as const }],
       links: [
-        { url: 'https://www.figma.com/community/file/1203061493325953101', text: 'Open in Figma Community', icon: 'figma' as const, type: 'primary' as const },
+        {
+          url: 'https://www.figma.com/community/file/1203061493325953101',
+          text: 'Open in Figma Community',
+          icon: 'figma' as const,
+          type: 'primary' as const,
+        },
         { url: 'https://twitter.com/skirano', text: 'skirano', icon: 'twitter' as const, type: 'secondary' as const },
       ],
     },
@@ -70,7 +89,12 @@ export class FigmaPage implements OnInit {
         { text: 'MIT Licensed', variant: 'license' as const },
       ],
       links: [
-        { url: 'https://www.figma.com/community/file/1514746685758799870/obra-shadcn-ui', text: 'Open in Figma Community', icon: 'figma' as const, type: 'primary' as const },
+        {
+          url: 'https://www.figma.com/community/file/1514746685758799870/obra-shadcn-ui',
+          text: 'Open in Figma Community',
+          icon: 'figma' as const,
+          type: 'primary' as const,
+        },
         { url: 'https://obra.studio/', text: 'obra.studio', icon: 'external' as const, type: 'secondary' as const },
       ],
     },

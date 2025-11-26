@@ -6,6 +6,8 @@ import { MarkdownRendererComponent } from '@doc/domain/components/render/markdow
   selector: 'cli-overview-section',
   standalone: true,
   imports: [MarkdownRendererComponent],
-  template: ` <z-markdown-renderer markdownUrl="/documentation/cli/overview.md"></z-markdown-renderer> `,
+  template: `
+    <z-markdown-renderer markdownUrl="/documentation/cli/overview.md"></z-markdown-renderer>
+  `,
 })
 export class CliOverviewSection {}

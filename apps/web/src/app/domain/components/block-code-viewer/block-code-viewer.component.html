@@ -29,7 +29,12 @@
       </div>
 
       <div class="flex-1 overflow-auto p-2.5 text-sm">
-        <z-simple-code-highlight [code]="selectedFile()!.content" [language]="selectedFile()!.language" [showCopyButton]="false" [showLineNumbers]="true" />
+        <z-simple-code-highlight
+          [code]="selectedFile()!.content"
+          [language]="selectedFile()!.language"
+          [showCopyButton]="false"
+          [showLineNumbers]="true"
+        />
       </div>
     } @else {
       <div class="flex h-full items-center justify-center">

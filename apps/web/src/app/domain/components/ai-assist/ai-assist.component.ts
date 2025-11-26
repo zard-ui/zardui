@@ -10,10 +10,11 @@ import { filter, map, startWith } from 'rxjs/operators';
 import { environment } from '@doc/env/environment';
 import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '@doc/shared/constants/routes.constant';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
+import { ZardPopoverComponent, ZardPopoverDirective } from '@ngzard/ui/popover';
+
 import type { AiAssistOption } from './ai-assist.types';
-import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
-import { ZardDividerComponent } from '../../../../../../../libs/zard/divider/divider.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '../../../../../../../libs/zard/popover/popover.component';
 
 @Component({
   selector: 'z-assist',

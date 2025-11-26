@@ -4,8 +4,8 @@ import { RouterModule } from '@angular/router';
 import { SOCIAL_MEDIAS } from '@doc/shared/constants/medias.constant';
 import { SIDEBAR_PATHS } from '@doc/shared/constants/routes.constant';
 
-import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
-import { ZardDividerComponent } from '../../../../../../../libs/zard/divider/divider.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
 
 @Component({
   selector: 'z-footer',

@@ -1,8 +1,7 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 
-import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
-import { ZardIconComponent } from '../../../../../../../libs/zard/icon/icon.component';
-import { ZardIcon } from '../../../../../../../libs/zard/icon/icons';
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
+import { ZardIconComponent, ZardIcon } from '@ngzard/ui/icon';
 
 export interface BenefitFeature {
   icon: ZardIcon;

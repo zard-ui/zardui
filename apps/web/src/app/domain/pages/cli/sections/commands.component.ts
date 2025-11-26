@@ -6,6 +6,8 @@ import { MarkdownRendererComponent } from '@doc/domain/components/render/markdow
   selector: 'cli-commands-section',
   standalone: true,
   imports: [MarkdownRendererComponent],
-  template: ` <z-markdown-renderer markdownUrl="/documentation/cli/commands.md"></z-markdown-renderer> `,
+  template: `
+    <z-markdown-renderer markdownUrl="/documentation/cli/commands.md"></z-markdown-renderer>
+  `,
 })
 export class CliCommandsSection {}

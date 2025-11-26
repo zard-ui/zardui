@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
-import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
-import { ZardCardComponent } from '../../../../../../../libs/zard/card/card.component';
-import { ZardCheckboxComponent } from '../../../../../../../libs/zard/checkbox/checkbox.component';
-import { ZardIconComponent } from '../../../../../../../libs/zard/icon/icon.component';
-import { ZardInputDirective } from '../../../../../../../libs/zard/input/input.directive';
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardCardComponent } from '@ngzard/ui/card';
+import { ZardCheckboxComponent } from '@ngzard/ui/checkbox';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardInputDirective } from '@ngzard/ui/input';
 
 @Component({
   selector: 'z-features',

@@ -8,7 +8,8 @@ const calloutVariants = cva('rounded-lg border p-4 sm:p-6', {
       info: 'border-blue-200 bg-blue-50 dark:border-blue-800 dark:bg-blue-950',
       warning: 'border-yellow-200 bg-yellow-50 dark:border-yellow-800 dark:bg-yellow-950',
       muted: 'border bg-muted/30',
-      gradient: 'bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200 dark:from-purple-950 dark:to-blue-950 dark:border-purple-800',
+      gradient:
+        'bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200 dark:from-purple-950 dark:to-blue-950 dark:border-purple-800',
     },
   },
   defaultVariants: {
@@ -16,19 +17,22 @@ const calloutVariants = cva('rounded-lg border p-4 sm:p-6', {
   },
 });
 
-const iconVariants = cva('flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full text-white text-sm font-bold shrink-0 mt-1', {
-  variants: {
-    variant: {
-      info: 'bg-blue-600',
-      warning: 'bg-yellow-600',
-      muted: 'bg-muted-foreground text-background',
-      gradient: 'bg-purple-600',
+const iconVariants = cva(
+  'flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full text-white text-sm font-bold shrink-0 mt-1',
+  {
+    variants: {
+      variant: {
+        info: 'bg-blue-600',
+        warning: 'bg-yellow-600',
+        muted: 'bg-muted-foreground text-background',
+        gradient: 'bg-purple-600',
+      },
+    },
+    defaultVariants: {
+      variant: 'muted',
     },
   },
-  defaultVariants: {
-    variant: 'muted',
-  },
-});
+);
 
 const titleVariants = cva('text-sm sm:text-base font-semibold', {
   variants: {

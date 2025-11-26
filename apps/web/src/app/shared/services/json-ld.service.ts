@@ -117,7 +117,8 @@ export class JsonLdService {
       '@type': 'WebSite',
       name: 'Zard UI',
       url: this.baseUrl,
-      description: 'Finally, a real @shadcn/ui alternative for Angular. Free and open-source UI components built with Angular, TypeScript, and Tailwind CSS.',
+      description:
+        'Finally, a real @shadcn/ui alternative for Angular. Free and open-source UI components built with Angular, TypeScript, and Tailwind CSS.',
       author: {
         '@type': 'Person',
         name: this.authorName,
@@ -219,7 +220,8 @@ export class JsonLdService {
         price: '0',
       },
       operatingSystem: 'Any',
-      description: 'Finally, a real @shadcn/ui alternative for Angular. Free and open-source UI components built with Angular, TypeScript, and Tailwind CSS.',
+      description:
+        'Finally, a real @shadcn/ui alternative for Angular. Free and open-source UI components built with Angular, TypeScript, and Tailwind CSS.',
       url: this.baseUrl,
       author: {
         '@type': 'Person',

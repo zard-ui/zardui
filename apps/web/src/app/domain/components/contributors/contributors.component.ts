@@ -1,7 +1,7 @@
 import { Component, input } from '@angular/core';
 
-import { ZardAvatarComponent } from '../../../../../../../libs/zard/avatar/avatar.component';
-import { ZardTooltipModule } from '../../../../../../../libs/zard/tooltip/tooltip';
+import { ZardAvatarComponent } from '@ngzard/ui/avatar';
+import { ZardTooltipModule } from '@ngzard/ui/tooltip';
 
 export interface Contributor {
   login: string;

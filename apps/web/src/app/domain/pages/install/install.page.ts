@@ -24,6 +24,7 @@ export class InstallPage implements OnInit {
   readonly navigationConfig: NavigationConfig = {
     items: [{ id: 'overview', label: 'Overview', type: 'core' }],
   };
+
   activeAnchor!: string;
 
   activeTab = signal<'manual' | 'cli'>('cli');

@@ -1,17 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
+import { ZardAvatarComponent } from '@ngzard/ui/avatar';
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardCardComponent } from '@ngzard/ui/card';
+import { ZardCheckboxComponent } from '@ngzard/ui/checkbox';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardInputDirective } from '@ngzard/ui/input';
+import { ZardProgressBarComponent } from '@ngzard/ui/progress-bar';
+import { ZardSwitchComponent } from '@ngzard/ui/switch';
+import { ZardTooltipModule } from '@ngzard/ui/tooltip';
+
 import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/carousel.component';
-import { ZardAvatarComponent } from '../../../../../../../libs/zard/avatar/avatar.component';
-import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
-import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
-import { ZardCardComponent } from '../../../../../../../libs/zard/card/card.component';
-import { ZardCheckboxComponent } from '../../../../../../../libs/zard/checkbox/checkbox.component';
-import { ZardIconComponent } from '../../../../../../../libs/zard/icon/icon.component';
-import { ZardInputDirective } from '../../../../../../../libs/zard/input/input.directive';
-import { ZardProgressBarComponent } from '../../../../../../../libs/zard/progress-bar/progress-bar.component';
-import { ZardSwitchComponent } from '../../../../../../../libs/zard/switch/switch.component';
-import { ZardTooltipModule } from '../../../../../../../libs/zard/tooltip/tooltip';
 
 @Component({
   selector: 'z-showcase',

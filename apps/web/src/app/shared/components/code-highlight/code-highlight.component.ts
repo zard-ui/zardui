@@ -6,7 +6,9 @@ import { MarkdownService } from '../../services/markdown.service';
 @Component({
   selector: 'z-code-highlight',
   standalone: true,
-  template: ` <div [innerHTML]="highlightedCode()"></div> `,
+  template: `
+    <div [innerHTML]="highlightedCode()"></div>
+  `,
 })
 export class CodeHighlightComponent {
   readonly code = input.required<string>();
@@ -38,7 +40,13 @@ export class CodeHighlightComponent {
     });
   }
 
-  private async highlightCode(code: string, language: string, filename?: string, showLineNumbers = false, copyButton = true): Promise<string> {
+  private async highlightCode(
+    code: string,
+    language: string,
+    filename?: string,
+    showLineNumbers = false,
+    copyButton = true,
+  ): Promise<string> {
     const meta: string[] = [];
 
     if (filename) {

@@ -1,6 +1,8 @@
 <section class="mb-10">
   @if (componentType()) {
-    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">{{ componentType()! | hyphenToSpace }}</h3>
+    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">
+      {{ componentType()! | hyphenToSpace }}
+    </h3>
   }
   @let description = demoDescription();
   @if (description) {
@@ -19,25 +21,39 @@
         Preview
       </button>
       @if (!onlyDemo()) {
-        <button class="cursor-pointer text-base" (click)="activeTab.set('code')" [class.font-semibold]="activeTab() === 'code'" [class.text-foreground]="activeTab() === 'code'">
+        <button
+          class="cursor-pointer text-base"
+          (click)="activeTab.set('code')"
+          [class.font-semibold]="activeTab() === 'code'"
+          [class.text-foreground]="activeTab() === 'code'"
+        >
           Code
         </button>
       }
     </nav>
-    <section class="transition-all" [class]="activeTab() === 'preview' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']">
+    <section
+      class="transition-all"
+      [class]="activeTab() === 'preview' ? 'translate-x-0' : ['-translate-x-full', 'sr-only']"
+    >
       @if (fullScreen()) {
         @if (dynamicComponent()) {
           <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
         }
       } @else {
-        <z-card class="flex min-h-[450px] w-full items-center justify-center gap-4 bg-transparent p-3 md:p-10" [class]="cardClasses()">
+        <z-card
+          class="flex min-h-[450px] w-full items-center justify-center gap-4 bg-transparent p-3 md:p-10"
+          [class]="cardClasses()"
+        >
           @if (dynamicComponent()) {
             <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
           }
         </z-card>
       }
     </section>
-    <section class="transition-all" [class]="activeTab() === 'code' ? 'translate-x-0' : ['translate-x-full', 'sr-only']">
+    <section
+      class="transition-all"
+      [class]="activeTab() === 'code' ? 'translate-x-0' : ['translate-x-full', 'sr-only']"
+    >
       @if (markdownUrl()) {
         <z-markdown-renderer [markdownUrl]="markdownUrl()"></z-markdown-renderer>
       }

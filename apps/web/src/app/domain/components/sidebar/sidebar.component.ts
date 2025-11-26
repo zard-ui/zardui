@@ -3,7 +3,7 @@ import { RouterModule } from '@angular/router';
 
 import { SIDEBAR_PATHS } from '@doc/shared/constants/routes.constant';
 
-import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
 
 @Component({
   selector: 'z-sidebar',

@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component, input, output } from '@angular/core';
 
-import { ZardIconComponent } from '../../../../../../../libs/zard/icon/icon.component';
-import { ZardBreadcrumbModule } from '../../../../../../../libs/zard/sheet/sheet.module';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardBreadcrumbModule } from '@ngzard/ui/sheet';
+
 import type { FileTreeNode, BlockFile } from '../block-container/block-container.component';
 
 @Component({

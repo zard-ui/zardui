@@ -20,7 +20,12 @@ import EmblaCarousel, { type EmblaCarouselType, type EmblaOptionsType } from 'em
 import Autoplay from 'embla-carousel-autoplay';
 import { twMerge } from 'tailwind-merge';
 
-import { carouselVariants, carouselContentVariants, carouselViewportVariants, type CarouselVariants } from './carousel.variants';
+import {
+  carouselVariants,
+  carouselContentVariants,
+  carouselViewportVariants,
+  type CarouselVariants,
+} from './carousel.variants';
 
 @Component({
   selector: 'z-carousel',
@@ -44,7 +49,16 @@ import { carouselVariants, carouselContentVariants, carouselViewportVariants, ty
             class="bg-background text-foreground hover:bg-muted border-border flex h-10 w-10 items-center justify-center rounded-full border shadow-md transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Previous slide"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="m15 18-6-6 6-6" />
             </svg>
           </button>
@@ -54,7 +68,16 @@ import { carouselVariants, carouselContentVariants, carouselViewportVariants, ty
             class="bg-background text-foreground hover:bg-muted border-border flex h-10 w-10 items-center justify-center rounded-full border shadow-md transition-all duration-200 hover:scale-105 disabled:cursor-not-allowed disabled:opacity-50"
             aria-label="Next slide"
           >
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
               <path d="m9 18 6-6-6-6" />
             </svg>
           </button>
@@ -67,7 +90,10 @@ import { carouselVariants, carouselContentVariants, carouselViewportVariants, ty
           @for (_ of dotsArray(); track _; let i = $index) {
             <button
               (click)="scrollToSlide(i)"
-              [class]="'h-2 w-2 rounded-full border-0 p-0 transition-all duration-200 ' + (currentSlide() === i ? 'bg-primary' : 'bg-muted-foreground/30')"
+              [class]="
+                'h-2 w-2 rounded-full border-0 p-0 transition-all duration-200 ' +
+                (currentSlide() === i ? 'bg-primary' : 'bg-muted-foreground/30')
+              "
               [attr.aria-label]="'Go to slide ' + (i + 1)"
             ></button>
           }
@@ -210,7 +236,9 @@ export class ZardCarouselComponent implements OnInit, AfterViewInit {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { '[class]': 'classes()' },
-  template: `<ng-content></ng-content>`,
+  template: `
+    <ng-content></ng-content>
+  `,
 })
 export class ZardCarouselItemComponent {
   readonly class = input<string>('');

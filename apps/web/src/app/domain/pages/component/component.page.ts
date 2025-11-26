@@ -20,7 +20,15 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   selector: 'z-component',
   templateUrl: './component.page.html',
   standalone: true,
-  imports: [DocContentComponent, StepsComponent, ZardCodeBoxComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent, AiAssistComponent],
+  imports: [
+    DocContentComponent,
+    StepsComponent,
+    ZardCodeBoxComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    MarkdownRendererComponent,
+    AiAssistComponent,
+  ],
 })
 export class ComponentPage {
   private readonly activatedRoute = inject(ActivatedRoute);
@@ -38,6 +46,7 @@ export class ComponentPage {
       { id: 'api', label: 'API', type: 'core' },
     ],
   };
+
   activeTab = signal<'manual' | 'cli'>('cli');
   installGuide!: { manual: Step[]; cli: Step[] } | undefined;
 

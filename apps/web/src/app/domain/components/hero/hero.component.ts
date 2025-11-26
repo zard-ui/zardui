@@ -1,9 +1,9 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ZardBadgeComponent } from '../../../../../../../libs/zard/badge/badge.component';
-import { ZardButtonComponent } from '../../../../../../../libs/zard/button/button.component';
-import { ZardIconComponent } from '../../../../../../../libs/zard/icon/icon.component';
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardIconComponent } from '@ngzard/ui/icon';
 
 @Component({
   selector: 'z-hero',

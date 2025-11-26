@@ -12,7 +12,14 @@ import { SeoService } from '@doc/shared/services/seo.service';
 @Component({
   selector: 'z-theming',
   standalone: true,
-  imports: [RouterModule, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, MarkdownRendererComponent],
+  imports: [
+    RouterModule,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    MarkdownRendererComponent,
+  ],
   templateUrl: './theming.page.html',
 })
 export class ThemingPage implements OnInit {

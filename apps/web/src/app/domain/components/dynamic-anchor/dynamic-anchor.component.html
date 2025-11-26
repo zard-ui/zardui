@@ -1,4 +1,6 @@
-<section class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex">
+<section
+  class="sticky top-20 z-30 ml-auto hidden h-[calc(100svh-var(--header-height)-var(--footer-height))] w-72 flex-col gap-4 overscroll-none pb-8 xl:flex"
+>
   <aside class="no-scrollbar hidden overflow-y-auto px-8 xl:block">
     <ul class="flex flex-col gap-2 p-2 text-sm">
       <li class="text-muted-foreground flex h-8 shrink-0 items-center text-[0.8rem] font-medium outline-hidden">
@@ -9,11 +11,13 @@
         <li>
           <a
             [class]="
-              'text-muted-foreground hover:text-foreground cursor-pointer text-[0.8rem] no-underline transition-colors ' + (activeAnchor() === item.id ? 'text-primary' : '')
+              'text-muted-foreground hover:text-foreground cursor-pointer text-[0.8rem] no-underline transition-colors ' +
+              (activeAnchor() === item.id ? 'text-primary' : '')
             "
             (click)="scrollToAnchor(item.id)"
-            >{{ item.label | hyphenToSpace }}</a
           >
+            {{ item.label | hyphenToSpace }}
+          </a>
 
           @if (item.children && item.children.length > 0) {
             @for (child of item.children; track child.id) {
@@ -24,8 +28,9 @@
                     (activeAnchor() === child.id ? 'text-primary' : '')
                   "
                   (click)="scrollToAnchor(child.id)"
-                  >{{ child.label | hyphenToSpace | titlecase }}</a
                 >
+                  {{ child.label | hyphenToSpace | titlecase }}
+                </a>
               </div>
             }
           }

@@ -44,8 +44,14 @@ export class AboutPage implements OnInit {
   activeAnchor?: string;
 
   ngOnInit(): void {
-    this.seoService.setDocsSeo('About', 'Learn more about ZardUI, our team, and the amazing contributors who make this project possible.', '/docs/about', 'og-credits.jpg');
+    this.seoService.setDocsSeo(
+      'About',
+      'Learn more about ZardUI, our team, and the amazing contributors who make this project possible.',
+      '/docs/about',
+      'og-credits.jpg',
+    );
   }
+
   contributors$: Observable<Contributor[]> = this.githubService.getContributors();
   founders$: Observable<FounderData[]>;
   maintainers$: Observable<MaintainerData[]>;
@@ -89,15 +95,18 @@ export class AboutPage implements OnInit {
     },
     {
       title: 'TailwindCSS',
-      description: "The utility-first CSS framework that powers ZardUI's styling system and enables rapid customization.",
+      description:
+        "The utility-first CSS framework that powers ZardUI's styling system and enables rapid customization.",
     },
     {
       title: 'NG-ZORRO',
-      description: 'An enterprise-class Angular UI library that inspired ZardUI with its exceptional developer experience and comprehensive component patterns.',
+      description:
+        'An enterprise-class Angular UI library that inspired ZardUI with its exceptional developer experience and comprehensive component patterns.',
     },
     {
       title: 'Angular',
-      description: "The powerful framework that provides the foundation for ZardUI's reactive and performant components.",
+      description:
+        "The powerful framework that provides the foundation for ZardUI's reactive and performant components.",
     },
     {
       title: 'Nx',
@@ -105,16 +114,20 @@ export class AboutPage implements OnInit {
     },
     {
       title: 'CVA',
-      description: 'Class Variance Authority provides type-safe styling variants that make ZardUI components highly customizable.',
+      description:
+        'Class Variance Authority provides type-safe styling variants that make ZardUI components highly customizable.',
     },
     {
       title: 'Open Source Community',
-      description: 'The amazing developers worldwide who contribute ideas, feedback, and improvements to make ZardUI better.',
+      description:
+        'The amazing developers worldwide who contribute ideas, feedback, and improvements to make ZardUI better.',
     },
   ];
 
   filteredContributors$ = this.contributors$.pipe(
-    map(contributors => contributors.filter(contributor => !this.isFounder(contributor.login) && !this.isMaintainer(contributor.login))),
+    map(contributors =>
+      contributors.filter(contributor => !this.isFounder(contributor.login) && !this.isMaintainer(contributor.login)),
+    ),
   );
 
   constructor() {

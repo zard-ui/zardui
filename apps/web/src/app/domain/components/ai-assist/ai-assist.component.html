@@ -2,7 +2,11 @@
   class="bg-background/80 border-border/50 fixed inset-x-0 bottom-0 isolate z-40 flex items-center gap-2 border-t px-4 py-4 backdrop-blur-sm sm:static sm:z-0 sm:ml-auto sm:w-fit sm:border-t-0 sm:bg-transparent sm:px-0 sm:pt-1.5 sm:backdrop-blur-none lg:absolute lg:top-0 lg:left-0 lg:h-fit lg:justify-end"
 >
   <div class="bg-secondary group/buttons relative flex rounded-lg">
-    <button z-button zType="secondary" class="text-secondary-foreground h-8 gap-1.5 rounded-md px-3 md:h-7 md:text-[0.8rem]">
+    <button
+      z-button
+      zType="secondary"
+      class="text-secondary-foreground h-8 gap-1.5 rounded-md px-3 md:h-7 md:text-[0.8rem]"
+    >
       @if (featureCopyPage) {
         <span class="flex items-center gap-2">
           <lucide-angular [img]="CopyIcon" [size]="16" />
@@ -15,12 +19,21 @@
 
     <z-divider zOrientation="vertical" class="bg-foreground/10 z-10 mx-0 h-8! sm:h-7!"></z-divider>
 
-    <button z-button zType="secondary" class="peer -ml-0.5 hidden size-8 shadow-none sm:flex md:size-7 md:text-[0.8rem]" zPopover [zContent]="popoverContent" zPlacement="bottom">
+    <button
+      z-button
+      zType="secondary"
+      class="peer -ml-0.5 hidden size-8 shadow-none sm:flex md:size-7 md:text-[0.8rem]"
+      zPopover
+      [zContent]="popoverContent"
+      zPlacement="bottom"
+    >
       <lucide-angular [img]="ChevronDownIcon" [size]="18" />
     </button>
 
     <ng-template #popoverContent>
-      <z-popover class="bg-background/70 dark:bg-background/60 lg:bg-secondary lg:dark:bg-secondary -ml-[6%] w-44 p-1 backdrop-blur-sm lg:-ml-[40%]">
+      <z-popover
+        class="bg-background/70 dark:bg-background/60 lg:bg-secondary lg:dark:bg-secondary -ml-[6%] w-44 p-1 backdrop-blur-sm lg:-ml-[40%]"
+      >
         <div class="space-y-2">
           @for (option of aiOptions(); track option.id) {
             <a
@@ -66,7 +79,14 @@
       </z-popover>
     </ng-template>
 
-    <button z-button zType="secondary" class="peer -ml-0.5 flex size-8 shadow-none sm:hidden md:size-7 md:text-[0.8rem]" zPopover [zContent]="popoverContent" zPlacement="top">
+    <button
+      z-button
+      zType="secondary"
+      class="peer -ml-0.5 flex size-8 shadow-none sm:hidden md:size-7 md:text-[0.8rem]"
+      zPopover
+      [zContent]="popoverContent"
+      zPlacement="top"
+    >
       <lucide-angular [img]="ChevronUpIcon" [size]="16" />
     </button>
   </div>

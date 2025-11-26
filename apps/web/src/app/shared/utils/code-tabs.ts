@@ -102,7 +102,9 @@ window.copyTabCode = function (button: HTMLButtonElement) {
   if (!tabsWrapper) return;
 
   // Find the active tab button (the one that's currently selected)
-  const activeTabButton = tabsWrapper.querySelector('button[data-tab].bg-background') || tabsWrapper.querySelector('button[data-tab].text-foreground');
+  const activeTabButton =
+    tabsWrapper.querySelector('button[data-tab].bg-background') ||
+    tabsWrapper.querySelector('button[data-tab].text-foreground');
 
   if (!activeTabButton) return;
 
