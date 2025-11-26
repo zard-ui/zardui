@@ -13,5 +13,5 @@ To configure the tab group, pass the following props to the component.
 | `[zShowArrow]`      | Whether to show scroll arrows when content overflows  | `true \| false`                  | `true`   |
 | `[zScrollAmount]`   | Whether to show scroll arrows when content overflows  | `number`                         | `100`    |
 | `[zAlignTabs]`      | Alignment of tabs within the navigation               | `start \| center \| end`         | `start`  |
-| `(zOnTabChange)`    | Emits when a new tab is selected or index signal emit | `$event`                         | `$event` |
+| `(zTabChange)`      | Emits when a new tab is selected or index signal emit | `$event`                         | `$event` |
 | `(zDeselect)`       | Emits when the current tab is deselected              | `$event`                         | `$event` |

@@ -201,7 +201,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
   readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly class = input<ClassValue>('');
 
-  readonly zSliderIndexChange = output<number>();
+  readonly zSlideIndexChange = output<number>();
 
   readonly thumbRef = viewChild.required(ZSliderThumbComponent);
   readonly trackRef = viewChild.required(ZSliderTrackComponent);
@@ -354,7 +354,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
     }
 
     this.percentValue.set(convertValueToPercentage(newValue, this.zMin(), this.zMax()));
-    this.zSliderIndexChange.emit(newValue);
+    this.zSlideIndexChange.emit(newValue);
     this.lastEmittedValue.set(newValue);
     this.onChange(newValue);
     this.cdr.markForCheck();
@@ -368,7 +368,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
     if (value !== this.lastEmittedValue()) {
       this.percentValue.set(convertValueToPercentage(value, this.zMin(), this.zMax()));
-      this.zSliderIndexChange.emit(value);
+      this.zSlideIndexChange.emit(value);
       this.lastEmittedValue.set(value);
       this.onChange(value);
       this.cdr.markForCheck();

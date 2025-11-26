@@ -138,7 +138,7 @@ describe('ZardCommandComponent', () => {
     expect(filteredOptions.length).toBe(0);
   }));
 
-  it('should emit zOnSelect when option is clicked', fakeAsync(() => {
+  it('should emit zCommandSelected when option is clicked', fakeAsync(() => {
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
     const firstOption = optionElements[0];
     const firstOptionDiv = firstOption.querySelector('div');
@@ -152,7 +152,7 @@ describe('ZardCommandComponent', () => {
     expect(hostComponent.selectedOption?.value).toBe('test');
   }));
 
-  it('should emit zOnChange when option is clicked', fakeAsync(() => {
+  it('should emit zCommandChange when option is clicked', fakeAsync(() => {
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
     const firstOption = optionElements[0];
     const firstOptionDiv = firstOption.querySelector('div');

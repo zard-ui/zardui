@@ -88,8 +88,8 @@ export class ZardCommandComponent implements ControlValueAccessor {
   readonly size = input<ZardCommandVariants['size']>('default');
   readonly class = input<ClassValue>('');
 
-  @Output() readonly zOnChange = new EventEmitter<ZardCommandOption>();
-  @Output() readonly zOnSelect = new EventEmitter<ZardCommandOption>();
+  @Output() readonly zCommandChange = new EventEmitter<ZardCommandOption>();
+  @Output() readonly zCommandSelected = new EventEmitter<ZardCommandOption>();
 
   // Internal signals for search functionality
   readonly searchTerm = signal('');
@@ -170,8 +170,8 @@ export class ZardCommandComponent implements ControlValueAccessor {
     };
 
     this.onChange(commandOption.value);
-    this.zOnChange.emit(commandOption);
-    this.zOnSelect.emit(commandOption);
+    this.zCommandChange.emit(commandOption);
+    this.zCommandSelected.emit(commandOption);
   }
 
   // in @Component host: '(keydown)': 'onKeyDown($event)'
