@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardInputDirective } from '../input.directive';
+import { ZardInputDirective } from '@ngzard/ui/input';
 
 @Component({
   selector: 'z-demo-input-status',

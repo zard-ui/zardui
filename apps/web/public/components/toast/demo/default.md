@@ -3,13 +3,15 @@ import { Component } from '@angular/core';
 
 import { toast } from 'ngx-sonner';
 
-import { ZardButtonComponent } from '../../button/button.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
 
 @Component({
   selector: 'zard-demo-toast',
   imports: [ZardButtonComponent],
   standalone: true,
-  template: ` <button z-button zType="outline" (click)="showToast()">Show Toast</button> `,
+  template: `
+    <button z-button zType="outline" (click)="showToast()">Show Toast</button>
+  `,
 })
 export class ZardDemoToastDefaultComponent {
   showToast() {

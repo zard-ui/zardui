@@ -5,12 +5,15 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { skeletonVariants } from './skeleton.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-skeleton',
-  template: `<div data-slot="skeleton" [class]="classes()"></div>`,
+  template: `
+    <div data-slot="skeleton" [class]="classes()"></div>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -33,6 +36,14 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 export const skeletonVariants = cva('bg-accent animate-pulse rounded-md');
 export type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './skeleton.component';
+export * from './skeleton.variants';
 
 ```
 

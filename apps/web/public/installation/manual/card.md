@@ -12,9 +12,9 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective, mergeClasses } from '@ngzard/ui/core';
+
 import { cardBodyVariants, cardHeaderVariants, cardVariants } from './card.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 
 @Component({
   selector: 'z-card',
@@ -85,6 +85,7 @@ export type ZardCardBodyVariants = VariantProps<typeof cardBodyVariants>;
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export * from './card.component';
+export * from './card.variants';
 
 ```
 

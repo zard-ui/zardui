@@ -5,6 +5,10 @@ import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewE
 
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective, mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import {
   alertDescriptionVariants,
   alertIconVariants,
@@ -12,10 +16,6 @@ import {
   alertVariants,
   type ZardAlertVariants,
 } from './alert.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-alert, [z-alert]',
@@ -119,6 +119,14 @@ export type ZardAlertVariants = VariantProps<typeof alertVariants>;
 export type ZardAlertIconVariants = VariantProps<typeof alertIconVariants>;
 export type ZardAlertTitleVariants = VariantProps<typeof alertTitleVariants>;
 export type ZardAlertDescriptionVariants = VariantProps<typeof alertDescriptionVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './alert.component';
+export * from './alert.variants';
 
 ```
 

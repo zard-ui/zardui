@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
-const componentsPath = path.resolve(__dirname, '../libs/zard/src/lib/components');
+const componentsPath = path.resolve(__dirname, '../libs/zard');
 const publicPath = path.resolve(__dirname, '../apps/web/public/components');
 
 console.log('🔄 Converting demo .ts files to .md files...');
@@ -66,7 +66,7 @@ function convertAllDemos() {
 
   components.forEach(componentName => {
     const componentDir = path.join(componentsPath, componentName);
-    const skips = ['styles', 'core', 'components.ts'];
+    const skips = ['styles', 'core', 'src', 'components.ts'];
 
     if (skips.includes(componentName) || !fs.statSync(componentDir).isDirectory()) {
       return;

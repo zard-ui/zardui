@@ -1,9 +1,9 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardDropdownModule } from '../dropdown.module';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
+import { ZardDropdownModule } from '@ngzard/ui/dropdown';
 
 @Component({
   selector: 'z-dropdown-demo',

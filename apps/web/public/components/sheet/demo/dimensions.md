@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component, inject } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardSheetService } from '../sheet.service';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardSheetService } from '@ngzard/ui/sheet';
 
 @Component({
   selector: 'z-demo-sheet-dimensions',

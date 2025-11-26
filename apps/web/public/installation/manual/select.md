@@ -30,6 +30,10 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
+import { isElementContentTruncated, mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { ZardSelectItemComponent } from './select-item.component';
 import {
   selectContentVariants,
@@ -37,9 +41,6 @@ import {
   selectVariants,
   type ZardSelectSizeVariants,
 } from './select.variants';
-import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardBadgeComponent } from '../badge/badge.component';
-import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -595,6 +596,15 @@ export type ZardSelectSizeVariants = NonNullable<VariantProps<typeof selectTrigg
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './select-item.component';
+export * from './select.component';
+export * from './select.variants';
+
+```
+
+
+
 ```angular-ts title="select-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -607,9 +617,10 @@ import {
   signal,
 } from '@angular/core';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { selectItemVariants } from './select.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 // Interface to avoid circular dependency
 interface SelectHost {

@@ -16,9 +16,10 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { checkboxLabelVariants, checkboxVariants, type ZardCheckboxVariants } from './checkbox.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
@@ -172,6 +173,14 @@ export const checkboxLabelVariants = cva('cursor-[unset] text-current empty:hidd
 
 export type ZardCheckboxVariants = VariantProps<typeof checkboxVariants>;
 export type ZardCheckLabelVariants = VariantProps<typeof checkboxLabelVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './checkbox.component';
+export * from './checkbox.variants';
 
 ```
 

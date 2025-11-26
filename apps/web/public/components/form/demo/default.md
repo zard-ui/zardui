@@ -2,10 +2,10 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { generateId } from '../../../shared/utils/utils';
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardFormModule } from '../form.module';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { generateId } from '@ngzard/ui/core';
+import { ZardFormModule } from '@ngzard/ui/form';
+import { ZardInputDirective } from '@ngzard/ui/input';
 
 @Component({
   selector: 'zard-demo-form-default',

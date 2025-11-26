@@ -13,19 +13,22 @@ import {
 
 import { type ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
+import { type ZardDividerVariants } from '@ngzard/ui/divider';
+
 import {
   buttonGroupDividerVariants,
   buttonGroupTextVariants,
   buttonGroupVariants,
   type ZardButtonGroupVariants,
 } from './button-group.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardDividerComponent } from '../divider/divider.component';
-import { type ZardDividerVariants } from '../divider/divider.variants';
 
 @Component({
   selector: 'z-button-group',
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -52,7 +55,9 @@ export class ZardButtonGroupComponent {
 @Component({
   selector: 'z-button-group-divider',
   imports: [ZardDividerComponent],
-  template: `<z-divider [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />`,
+  template: `
+    <z-divider [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -140,6 +145,14 @@ export const buttonGroupDividerVariants = cva(
 export const buttonGroupTextVariants = cva(
   "bg-muted flex items-center gap-2 rounded-md border h-9 px-4 text-sm font-medium shadow-xs [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4",
 );
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './button-group.component';
+export * from './button-group.variants';
 
 ```
 

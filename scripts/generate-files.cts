@@ -3,7 +3,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 
 let watching = false;
-const componentsPath = path.resolve(__dirname, '../libs/zard/src/lib/components');
+const componentsPath = path.resolve(__dirname, '../libs/zard/');
 const publicPath = path.resolve(__dirname, '../apps/web/public/components');
 
 console.log('Watching files change...');
@@ -65,7 +65,7 @@ function generateFiles() {
   componentsDir.forEach((componentName: string) => {
     const componentDirPath = path.join(componentsPath, componentName);
 
-    const skips = ['styles', 'core'];
+    const skips = ['styles', 'core', 'src'];
     if (skips.indexOf(componentName) !== -1) return;
 
     if (fs.statSync(componentDirPath).isDirectory()) {

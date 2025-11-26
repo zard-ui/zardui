@@ -19,11 +19,12 @@ import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angu
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { commandVariants, type ZardCommandVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import type { ZardIcon } from '../icon/icons';
 
 export interface ZardCommandOption {
   value: unknown;
@@ -355,9 +356,10 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { ZardCommandComponent } from './command.component';
 import { commandSeparatorVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-divider',
@@ -401,9 +403,10 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { ZardCommandComponent } from './command.component';
 import { commandEmptyVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-empty',
@@ -465,10 +468,11 @@ import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angu
 import type { ClassValue } from 'clsx';
 import { Subject, switchMap, timer } from 'rxjs';
 
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-command-input',
@@ -618,8 +622,9 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { commandListVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-list',
@@ -656,10 +661,11 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
 import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-option-group',
@@ -726,11 +732,12 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import { ZardCommandComponent } from './command.component';
 import { commandItemVariants, commandShortcutVariants, type ZardCommandItemVariants } from './command.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-command-option',
@@ -861,6 +868,21 @@ const COMMAND_COMPONENTS = [
   exports: [...COMMAND_COMPONENTS],
 })
 export class ZardCommandModule {}
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './command-divider.component';
+export * from './command-empty.component';
+export * from './command-input.component';
+export * from './command-list.component';
+export * from './command-option-group.component';
+export * from './command-option.component';
+export * from './command.component';
+export * from './command.module';
+export * from './command.variants';
 
 ```
 

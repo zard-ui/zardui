@@ -1,9 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-import { ZardBadgeComponent } from '../../badge/badge.component';
-import { ZardSelectItemComponent } from '../select-item.component';
-import { ZardSelectComponent } from '../select.component';
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
+import { ZardSelectItemComponent, ZardSelectComponent } from '@ngzard/ui/select';
 
 @Component({
   selector: 'z-demo-multi-select-basic',
@@ -13,7 +12,7 @@ import { ZardSelectComponent } from '../select.component';
       Selected values:
       <span class="flex flex-wrap gap-2">
         @for (value of selectedValues(); track $index) {
-          <z-badge> {{ value }} </z-badge>
+          <z-badge>{{ value }}</z-badge>
         }
       </span>
 

@@ -2,8 +2,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardToggleComponent } from '../toggle.component';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardToggleComponent } from '@ngzard/ui/toggle';
 
 @Component({
   selector: 'z-demo-toggle-with-forms',

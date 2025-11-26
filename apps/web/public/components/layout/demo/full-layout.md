@@ -1,14 +1,18 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
-import { ContentComponent } from '../content.component';
-import { FooterComponent } from '../footer.component';
-import { HeaderComponent } from '../header.component';
-import { LayoutComponent } from '../layout.component';
-import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from '../sidebar.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import {
+  ContentComponent,
+  FooterComponent,
+  HeaderComponent,
+  LayoutComponent,
+  SidebarComponent,
+  SidebarGroupComponent,
+  SidebarGroupLabelComponent,
+} from '@ngzard/ui/layout';
+import { ZardSkeletonComponent } from '@ngzard/ui/skeleton';
 
 @Component({
   selector: 'z-demo-layout-full',

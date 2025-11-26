@@ -30,11 +30,12 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { generateId, mergeClasses, noopFun } from '@ngzard/ui/core';
+
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants } from './alert-dialog.variants';
-import { generateId, mergeClasses, noopFun } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -185,8 +186,9 @@ import type { OverlayRef } from '@angular/cdk/overlay';
 
 import { filter, Subject, takeUntil } from 'rxjs';
 
+import { noopFun } from '@ngzard/ui/core';
+
 import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
-import { noopFun } from '../../shared/utils/utils';
 
 export class ZardAlertDialogRef<T = unknown> {
   private readonly destroy$ = new Subject<void>();
@@ -506,6 +508,21 @@ export class ZardAlertDialogService {
     });
   }
 }
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './alert-dialog-ref';
+export {
+  ZardAlertDialogComponent,
+  ZardAlertDialogOptions,
+  ZardAlertDialogModule,
+} from '../alert-dialog/alert-dialog.component';
+export type { OnClickCallback as AlertDialogOnClickCallback } from '../alert-dialog/alert-dialog.component';
+export * from './alert-dialog.service';
+export * from './alert-dialog.variants';
 
 ```
 

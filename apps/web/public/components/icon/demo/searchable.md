@@ -4,11 +4,10 @@ import { Component, computed, signal } from '@angular/core';
 
 import { toast } from 'ngx-sonner';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardEmptyComponent } from '../../empty/empty.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardIconComponent } from '../icon.component';
-import { ZARD_ICONS } from '../icons';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardEmptyComponent } from '@ngzard/ui/empty';
+import { ZardIconComponent, ZARD_ICONS } from '@ngzard/ui/icon';
+import { ZardInputDirective } from '@ngzard/ui/input';
 
 @Component({
   selector: 'z-demo-icon-searchable',
@@ -32,7 +31,8 @@ import { ZARD_ICONS } from '../icons';
           />
         </div>
         <div class="text-muted-foreground text-xs leading-relaxed">
-          <strong>Note:</strong> These are only the icons currently used in our documentation.
+          <strong>Note:</strong>
+          These are only the icons currently used in our documentation.
           <br />
           For the complete icon library, visit
           <a
@@ -40,8 +40,9 @@ import { ZARD_ICONS } from '../icons';
             target="_blank"
             rel="noopener noreferrer"
             class="hover:text-foreground underline transition-colors"
-            >lucide.dev/icons.</a
           >
+            lucide.dev/icons.
+          </a>
         </div>
       </div>
 

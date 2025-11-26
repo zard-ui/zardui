@@ -26,8 +26,9 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { filter, Subscription } from 'rxjs';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { popoverVariants } from './popover.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -376,7 +377,9 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   selector: 'z-popover',
   imports: [],
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',
@@ -400,6 +403,14 @@ export const popoverVariants = cva(
 );
 
 export type ZardPopoverVariants = VariantProps<typeof popoverVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './popover.component';
+export * from './popover.variants';
 
 ```
 

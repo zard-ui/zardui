@@ -1,8 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component, HostListener } from '@angular/core';
 
-import type { ZardCommandOption } from '../command.component';
-import { ZardCommandModule } from '../command.module';
+import { ZardCommandOption, ZardCommandModule } from '@ngzard/ui/command';
 
 @Component({
   selector: 'z-demo-command-default',

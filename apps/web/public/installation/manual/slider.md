@@ -28,6 +28,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
+import { clamp, convertValueToPercentage, roundToStep, mergeClasses } from '@ngzard/ui/core';
+
 import {
   sliderOrientationVariants,
   sliderRangeVariants,
@@ -35,8 +37,6 @@ import {
   sliderTrackVariants,
   sliderVariants,
 } from './slider.variants';
-import { clamp, convertValueToPercentage, roundToStep } from '../../shared/utils/number';
-import { mergeClasses } from '../../shared/utils/utils';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: number) => void;
@@ -486,6 +486,14 @@ export const sliderOrientationVariants = cva('absolute', {
 });
 
 export type SliderOrientationVariants = VariantProps<typeof sliderOrientationVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './slider.component';
+export * from './slider.variants';
 
 ```
 

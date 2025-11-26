@@ -15,10 +15,11 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 export interface ZardToggleGroupItem {
   value: string;
@@ -243,6 +244,14 @@ export const toggleGroupItemVariants = cva(
 
 export type ZardToggleGroupVariants = VariantProps<typeof toggleGroupVariants>;
 export type ZardToggleGroupItemVariants = VariantProps<typeof toggleGroupItemVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './toggle-group.component';
+export * from './toggle-group.variants';
 
 ```
 

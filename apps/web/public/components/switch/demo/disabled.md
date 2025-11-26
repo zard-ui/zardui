@@ -2,7 +2,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ZardSwitchComponent } from '../switch.component';
+import { ZardSwitchComponent } from '@ngzard/ui/switch';
 
 @Component({
   selector: 'z-demo-switch-disabled',

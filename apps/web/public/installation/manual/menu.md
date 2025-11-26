@@ -240,14 +240,28 @@ export type ZardMenuItemVariants = VariantProps<typeof menuItemVariants>;
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './menu-content.directive';
+export * from './menu-item.directive';
+export * from './menu-manager.service';
+export * from './menu-positions';
+export * from './menu.directive';
+export * from './menu.module';
+export * from './menu.variants';
+
+```
+
+
+
 ```angular-ts title="menu-content.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { CdkMenu } from '@angular/cdk/menu';
 import { computed, Directive, input } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { menuContentVariants } from './menu.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Directive({
   selector: '[z-menu-content]',
@@ -274,8 +288,9 @@ import { booleanAttribute, computed, Directive, effect, inject, input, signal, u
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { menuItemVariants, type ZardMenuItemVariants } from './menu.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Directive({
   selector: 'button[z-menu-item], [z-menu-item]',

@@ -5,8 +5,9 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { dividerVariants, type ZardDividerVariants } from './divider.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-divider',
@@ -96,6 +97,14 @@ export const dividerVariants = cva('bg-border block', {
 });
 
 export type ZardDividerVariants = VariantProps<typeof dividerVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './divider.component';
+export * from './divider.variants';
 
 ```
 

@@ -1,9 +1,9 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardButtonGroupComponent } from '../button-group.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardButtonGroupComponent } from '@ngzard/ui/button-group';
+import { ZardIconComponent } from '@ngzard/ui/icon';
 
 @Component({
   selector: 'z-demo-button-group-orientation',

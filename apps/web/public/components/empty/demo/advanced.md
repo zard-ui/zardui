@@ -1,11 +1,10 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardAvatarGroupComponent } from '../../avatar/avatar-group.component';
-import { ZardAvatarComponent } from '../../avatar/avatar.component';
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardEmptyComponent } from '../empty.component';
+import { ZardAvatarGroupComponent, ZardAvatarComponent } from '@ngzard/ui/avatar';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardEmptyComponent } from '@ngzard/ui/empty';
+import { ZardIconComponent } from '@ngzard/ui/icon';
 
 @Component({
   selector: 'z-demo-empty-advanced-customization',
@@ -29,7 +28,10 @@ import { ZardEmptyComponent } from '../empty.component';
     </ng-template>
 
     <ng-template #customTitle>
-      <span>No Team <strong>members</strong></span>
+      <span>
+        No Team
+        <strong>members</strong>
+      </span>
     </ng-template>
 
     <ng-template #actionInvite>

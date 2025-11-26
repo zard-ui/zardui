@@ -16,9 +16,10 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { buttonVariants, type ZardButtonVariants } from './button.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',
@@ -151,6 +152,14 @@ export const buttonVariants = cva(
   },
 );
 export type ZardButtonVariants = VariantProps<typeof buttonVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './button.component';
+export * from './button.variants';
 
 ```
 

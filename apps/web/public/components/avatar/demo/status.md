@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardAvatarComponent } from '../avatar.component';
+import { ZardAvatarComponent } from '@ngzard/ui/avatar';
 
 @Component({
   selector: 'z-demo-avatar-status',

@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
-const componentsPath = path.resolve(__dirname, '../libs/zard/src/lib/components');
+const componentsPath = path.resolve(__dirname, '../libs/zard');
 const publicPath = path.resolve(__dirname, '../apps/web/public/installation');
 
 console.log('🔄 Generating installation guides...');
@@ -297,7 +297,7 @@ function generateAllInstallationGuides() {
   const components = fs.readdirSync(componentsPath);
 
   components.forEach(componentName => {
-    const skips = ['styles', 'core', 'components.ts'];
+    const skips = ['styles', 'core', 'src', 'components.ts'];
     if (skips.includes(componentName)) return;
 
     processComponent(componentName);

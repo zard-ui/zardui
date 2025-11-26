@@ -5,6 +5,8 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import {
   tableVariants,
   tableHeaderVariants,
@@ -15,12 +17,13 @@ import {
   tableCaptionVariants,
   type ZardTableVariants,
 } from './table.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'table[z-table]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -47,7 +50,9 @@ export class ZardTableComponent {
 @Component({
   selector: 'thead[z-table-header]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -64,7 +69,9 @@ export class ZardTableHeaderComponent {
 @Component({
   selector: 'tbody[z-table-body]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -81,7 +88,9 @@ export class ZardTableBodyComponent {
 @Component({
   selector: 'tr[z-table-row]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -98,7 +107,9 @@ export class ZardTableRowComponent {
 @Component({
   selector: 'th[z-table-head]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -115,7 +126,9 @@ export class ZardTableHeadComponent {
 @Component({
   selector: 'td[z-table-cell]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -132,7 +145,9 @@ export class ZardTableCellComponent {
 @Component({
   selector: 'caption[z-table-caption]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -218,6 +233,15 @@ export type ZardTableRowVariants = VariantProps<typeof tableRowVariants>;
 export type ZardTableHeadVariants = VariantProps<typeof tableHeadVariants>;
 export type ZardTableCellVariants = VariantProps<typeof tableCellVariants>;
 export type ZardTableCaptionVariants = VariantProps<typeof tableCaptionVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './table.component';
+export * from './table.module';
+export * from './table.variants';
 
 ```
 

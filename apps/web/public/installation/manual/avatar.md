@@ -3,8 +3,9 @@
 ```angular-ts title="avatar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { avatarVariants, imageVariants, type ZardImageVariants, type ZardAvatarVariants } from './avatar.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
 
@@ -215,13 +216,16 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { avatarGroupVariants, ZardAvatarGroupVariants } from './avatar.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+import { mergeClasses } from '@ngzard/ui/core';
+
+import { avatarGroupVariants, type ZardAvatarGroupVariants } from './avatar.variants';
 
 @Component({
   selector: 'z-avatar-group',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -237,6 +241,15 @@ export class ZardAvatarGroupComponent {
     mergeClasses(avatarGroupVariants({ zOrientation: this.zOrientation() }), this.class()),
   );
 }
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './avatar-group.component';
+export * from './avatar.component';
+export * from './avatar.variants';
 
 ```
 

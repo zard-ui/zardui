@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardMenuModule } from '../../menu/menu.module';
-import { ZardBreadcrumbModule } from '../breadcrumb.module';
+import { ZardBreadcrumbModule } from '@ngzard/ui/breadcrumb';
+import { ZardMenuModule } from '@ngzard/ui/menu';
 
 @Component({
   selector: 'z-demo-breadcrumb-ellipsis',

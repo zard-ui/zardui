@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardBreadcrumbModule } from '../breadcrumb.module';
+import { ZardBreadcrumbModule } from '@ngzard/ui/breadcrumb';
+import { ZardIconComponent } from '@ngzard/ui/icon';
 
 @Component({
   selector: 'z-demo-breadcrumb-separator',

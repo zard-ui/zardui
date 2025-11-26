@@ -6,9 +6,10 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 import { LucideAngularModule } from 'lucide-angular';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { iconVariants, type ZardIconVariants } from './icon.variants';
 import { ZARD_ICONS, type ZardIcon } from './icons';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-icon, [z-icon]',
@@ -249,6 +250,15 @@ export const ZARD_ICONS = {
 } as const satisfies Record<string, LucideIconData>;
 
 export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './icon.component';
+export * from './icon.variants';
+export * from './icons';
 
 ```
 

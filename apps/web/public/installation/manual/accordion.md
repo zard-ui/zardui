@@ -13,14 +13,17 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { ZardAccordionItemComponent } from './accordion-item.component';
 import { accordionVariants } from './accordion.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-accordion',
   standalone: true,
-  template: ` <ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -158,10 +161,11 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import type { ZardAccordionComponent } from './accordion.component';
 import { accordionContentVariants, accordionItemVariants, accordionTriggerVariants } from './accordion.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-accordion-item',
@@ -244,6 +248,15 @@ export class ZardAccordionItemComponent {
     this.toggle();
   }
 }
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './accordion-item.component';
+export * from './accordion.component';
+export * from './accordion.variants';
 
 ```
 

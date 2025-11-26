@@ -1,11 +1,13 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ContentComponent } from '../content.component';
-import { FooterComponent } from '../footer.component';
-import { HeaderComponent } from '../header.component';
-import { LayoutComponent } from '../layout.component';
-import { SidebarComponent } from '../sidebar.component';
+import {
+  ContentComponent,
+  FooterComponent,
+  HeaderComponent,
+  LayoutComponent,
+  SidebarComponent,
+} from '@ngzard/ui/layout';
 
 @Component({
   selector: 'z-demo-layout-basic',

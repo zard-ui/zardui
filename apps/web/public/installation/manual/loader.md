@@ -5,8 +5,9 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { loaderVariants, type ZardLoaderVariants } from './loader.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-loader',
@@ -78,6 +79,14 @@ export const loaderVariants = cva('', {
   },
 });
 export type ZardLoaderVariants = VariantProps<typeof loaderVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './loader.component';
+export * from './loader.variants';
 
 ```
 

@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardKbdComponent } from '../kbd.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardKbdComponent } from '@ngzard/ui/kbd';
 
 @Component({
   selector: 'z-demo-kbd-default',
@@ -16,7 +16,10 @@ import { ZardKbdComponent } from '../kbd.component';
         <z-kbd>Ctrl</z-kbd>
       </div>
 
-      <button type="submit" z-button zType="outline">Submit <z-kbd class="ml-2">Enter</z-kbd></button>
+      <button type="submit" z-button zType="outline">
+        Submit
+        <z-kbd class="ml-2">Enter</z-kbd>
+      </button>
     </div>
   `,
 })

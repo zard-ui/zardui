@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardProgressBarComponent } from '../progress-bar.component';
+import { ZardProgressBarComponent } from '@ngzard/ui/progress-bar';
 
 @Component({
   selector: 'z-demo-progress-bar-size',

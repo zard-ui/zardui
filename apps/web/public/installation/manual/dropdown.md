@@ -24,8 +24,9 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { dropdownContentVariants } from './dropdown.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu',
@@ -355,14 +356,17 @@ import { Component, computed, HostListener, inject, input, ViewEncapsulation } f
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { ZardDropdownService } from './dropdown.service';
 import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
@@ -417,13 +421,16 @@ import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { dropdownLabelVariants } from './dropdown.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
@@ -454,8 +461,9 @@ import { Component, computed, input, type TemplateRef, viewChild, ViewEncapsulat
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { dropdownContentVariants } from './dropdown.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-content',
@@ -490,13 +498,16 @@ import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { dropdownShortcutVariants } from './dropdown.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
@@ -870,6 +881,21 @@ export class ZardDropdownService {
     }
   }
 }
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './dropdown-item.component';
+export * from './dropdown-label.component';
+export * from './dropdown-menu-content.component';
+export * from './dropdown-shortcut.component';
+export * from './dropdown-trigger.directive';
+export * from './dropdown.component';
+export * from './dropdown.module';
+export * from './dropdown.service';
+export * from './dropdown.variants';
 
 ```
 

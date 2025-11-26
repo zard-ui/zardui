@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardEmptyComponent } from '../empty.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardEmptyComponent } from '@ngzard/ui/empty';
 
 @Component({
   selector: 'z-demo-empty-custom-image',

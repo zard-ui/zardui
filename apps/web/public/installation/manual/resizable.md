@@ -22,9 +22,10 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 export interface ZardResizeEvent {
   sizes: number[];
@@ -36,7 +37,9 @@ type CleanupFunction = () => void;
 @Component({
   selector: 'z-resizable, [z-resizable]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -383,9 +386,9 @@ export type ZardResizableHandleVariants = VariantProps<typeof resizableHandleVar
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './resizable.component';
-export * from './resizable-panel.component';
 export * from './resizable-handle.component';
+export * from './resizable-panel.component';
+export * from './resizable.component';
 export * from './resizable.variants';
 
 ```
@@ -397,9 +400,10 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { ZardResizableComponent } from './resizable.component';
 import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-resizable-handle, [z-resizable-handle]',
@@ -624,13 +628,16 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { resizablePanelVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-resizable-panel',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {

@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardTooltipModule } from '../tooltip';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardTooltipModule } from '@ngzard/ui/tooltip';
 
 @Component({
   selector: 'z-demo-tooltip-click',

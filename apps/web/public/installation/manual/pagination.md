@@ -16,6 +16,11 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { type ZardButtonVariants } from '@ngzard/ui/button';
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import {
   paginationContentVariants,
   paginationEllipsisVariants,
@@ -24,10 +29,6 @@ import {
   paginationPreviousVariants,
   paginationVariants,
 } from './pagination.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { type ZardButtonVariants } from '../button/button.variants';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-pagination-content',
@@ -306,6 +307,15 @@ export type ZardPaginationEllipsisVariants = VariantProps<typeof paginationEllip
 
 export const paginationVariants = cva('mx-auto flex w-full justify-center');
 export type ZardPaginationVariants = VariantProps<typeof paginationVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './pagination.component';
+export * from './pagination.module';
+export * from './pagination.variants';
 
 ```
 

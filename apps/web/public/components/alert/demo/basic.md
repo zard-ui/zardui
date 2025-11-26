@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardAlertComponent } from '../alert.component';
+import { ZardAlertComponent } from '@ngzard/ui/alert';
+import { ZardIconComponent } from '@ngzard/ui/icon';
 
 @Component({
   selector: 'z-demo-alert-basic',

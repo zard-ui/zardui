@@ -1,9 +1,11 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardResizableHandleComponent } from '../resizable-handle.component';
-import { ZardResizablePanelComponent } from '../resizable-panel.component';
-import { ZardResizableComponent } from '../resizable.component';
+import {
+  ZardResizableHandleComponent,
+  ZardResizableComponent,
+  ZardResizablePanelComponent,
+} from '@ngzard/ui/resizable';
 
 @Component({
   selector: 'z-demo-resizable-default',

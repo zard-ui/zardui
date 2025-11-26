@@ -1,14 +1,16 @@
 ```angular-ts showLineNumbers copyButton
 import { Component, inject } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardAlertDialogService } from '../alert-dialog.service';
+import { ZardAlertDialogService } from '@ngzard/ui/alert-dialog';
+import { ZardButtonComponent } from '@ngzard/ui/button';
 
 @Component({
   selector: 'zard-demo-alert-dialog-default',
   imports: [ZardButtonComponent],
   standalone: true,
-  template: ` <button z-button zType="outline" (click)="showDialog()">Show Dialog</button> `,
+  template: `
+    <button z-button zType="outline" (click)="showDialog()">Show Dialog</button>
+  `,
 })
 export class ZardDemoAlertDialogDefaultComponent {
   private alertDialogService = inject(ZardAlertDialogService);

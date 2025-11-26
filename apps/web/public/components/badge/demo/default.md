@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardBadgeComponent } from '../badge.component';
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
+import { ZardIconComponent } from '@ngzard/ui/icon';
 
 @Component({
   selector: 'z-demo-badge-default',

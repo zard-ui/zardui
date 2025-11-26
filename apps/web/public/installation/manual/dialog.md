@@ -26,13 +26,14 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { mergeClasses, noopFun } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import type { ZardDialogRef } from './dialog-ref';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
-import { mergeClasses, noopFun } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 // Used by the NgModule provider definition
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -454,6 +455,17 @@ export class ZardDialogService {
     });
   }
 }
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './dialog-ref';
+export { ZardDialogComponent, ZardDialogOptions, ZardDialogModule } from '../dialog/dialog.component';
+export type { OnClickCallback as DialogOnClickCallback } from '../dialog/dialog.component';
+export * from './dialog.service';
+export * from './dialog.variants';
 
 ```
 

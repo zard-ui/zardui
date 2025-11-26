@@ -12,28 +12,30 @@ import {
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { Params, RouterLink } from '@angular/router';
+import { type Params, RouterLink } from '@angular/router';
 
 import type { ClassValue } from 'clsx';
+
+import { ZardStringTemplateOutletDirective, mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
 
 import {
   breadcrumbEllipsisVariants,
   breadcrumbItemVariants,
   breadcrumbListVariants,
   breadcrumbVariants,
-  ZardBreadcrumbAlignVariants,
-  ZardBreadcrumbEllipsisColorVariants,
-  ZardBreadcrumbSizeVariants,
-  ZardBreadcrumbWrapVariants,
+  type ZardBreadcrumbAlignVariants,
+  type ZardBreadcrumbEllipsisColorVariants,
+  type ZardBreadcrumbSizeVariants,
+  type ZardBreadcrumbWrapVariants,
 } from './breadcrumb.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
   imports: [ZardIconComponent],
-  template: ` <z-icon zType="ellipsis" /> `,
+  template: `
+    <z-icon zType="ellipsis" />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -251,6 +253,15 @@ const components = [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBr
   exports: components,
 })
 export class ZardBreadcrumbModule {}
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './breadcrumb.component';
+export * from './breadcrumb.module';
+export * from './breadcrumb.variants';
 
 ```
 

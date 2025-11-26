@@ -6,8 +6,9 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 import { NgxSonnerToaster } from 'ngx-sonner';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { toastVariants, type ZardToastVariants } from './toast.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-toast, z-toaster',
@@ -76,6 +77,14 @@ export const toastVariants = cva(
 );
 
 export type ZardToastVariants = VariantProps<typeof toastVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './toast.component';
+export * from './toast.variants';
 
 ```
 

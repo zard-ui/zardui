@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardToggleComponent } from '../toggle.component';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardToggleComponent } from '@ngzard/ui/toggle';
 
 @Component({
   selector: 'z-demo-toggle-disabled',

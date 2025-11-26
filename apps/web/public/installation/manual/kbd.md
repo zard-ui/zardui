@@ -5,13 +5,16 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { kbdVariants } from './kbd.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-kbd, [z-kbd]',
   standalone: true,
-  template: `<kbd><ng-content /></kbd> `,
+  template: `
+    <kbd><ng-content /></kbd>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -42,18 +45,30 @@ export const kbdGroupVariants = cva(`inline-flex items-center gap-1`);
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './kbd-group.component';
+export * from './kbd.component';
+export * from './kbd.variants';
+
+```
+
+
+
 ```angular-ts title="kbd-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import { type ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { kbdGroupVariants } from './kbd.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-kbd-group, [z-kbd-group]',
   standalone: true,
-  template: ` <ng-content /> `,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {

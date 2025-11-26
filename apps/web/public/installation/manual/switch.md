@@ -15,8 +15,9 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, generateId } from '@ngzard/ui/core';
+
 import { switchVariants, type ZardSwitchVariants } from './switch.variants';
-import { mergeClasses, generateId } from '../../shared/utils/utils';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
@@ -138,6 +139,14 @@ export const switchVariants = cva(
 );
 
 export type ZardSwitchVariants = VariantProps<typeof switchVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './switch.component';
+export * from './switch.variants';
 
 ```
 

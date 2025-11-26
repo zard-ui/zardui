@@ -1,8 +1,8 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardButtonGroupComponent, ZardButtonGroupDividerComponent } from '../button-group.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardButtonGroupComponent, ZardButtonGroupDividerComponent } from '@ngzard/ui/button-group';
 
 @Component({
   selector: 'z-demo-button-group-divider',

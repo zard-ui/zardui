@@ -17,8 +17,9 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { toggleVariants, type ZardToggleVariants } from './toggle.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;
@@ -143,6 +144,14 @@ export const toggleVariants = cva(
   },
 );
 export type ZardToggleVariants = VariantProps<typeof toggleVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './toggle.component';
+export * from './toggle.variants';
 
 ```
 

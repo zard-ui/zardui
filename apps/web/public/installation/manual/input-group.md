@@ -15,6 +15,11 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { isTemplateRef, ZardStringTemplateOutletDirective, generateId, mergeClasses } from '@ngzard/ui/core';
+import { ZardInputDirective } from '@ngzard/ui/input';
+import type { ZardInputSizeVariants } from '@ngzard/ui/input';
+import { ZardLoaderComponent } from '@ngzard/ui/loader';
+
 import {
   inputGroupAddonVariants,
   inputGroupInputVariants,
@@ -22,14 +27,6 @@ import {
   type ZardInputGroupAddonAlignVariants,
   type ZardInputGroupAddonPositionVariants,
 } from './input-group.variants';
-import { generateId, mergeClasses } from '../../shared/utils/utils';
-import {
-  isTemplateRef,
-  ZardStringTemplateOutletDirective,
-} from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { ZardInputDirective } from '../input/input.directive';
-import type { ZardInputSizeVariants } from '../input/input.variants';
-import { ZardLoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'z-input-group',
@@ -145,7 +142,7 @@ export class ZardInputGroupComponent {
 ```angular-ts title="input-group.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { mergeClasses } from '@ngzard/ui/core';
 
 export const inputGroupVariants = cva(
   mergeClasses(
@@ -285,7 +282,7 @@ export type ZardInputGroupAddonPositionVariants = NonNullable<
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export { ZardInputGroupComponent } from './input-group.component';
+export * from './input-group.component';
 export * from './input-group.variants';
 
 ```

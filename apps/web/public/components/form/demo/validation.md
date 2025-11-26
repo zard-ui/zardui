@@ -2,9 +2,9 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardFormModule } from '../form.module';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardFormModule } from '@ngzard/ui/form';
+import { ZardInputDirective } from '@ngzard/ui/input';
 
 @Component({
   selector: 'zard-demo-form-validation',

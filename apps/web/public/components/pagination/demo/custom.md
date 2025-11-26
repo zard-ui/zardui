@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component, signal } from '@angular/core';
 
-import { ZardPaginationModule } from '../pagination.module';
+import { ZardPaginationModule } from '@ngzard/ui/pagination';
 
 @Component({
   selector: 'z-demo-pagination-custom',

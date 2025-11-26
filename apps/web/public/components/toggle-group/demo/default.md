@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-group.component';
+import { ZardToggleGroupComponent, ZardToggleGroupItem } from '@ngzard/ui/toggle-group';
 
 @Component({
   selector: 'demo-toggle-group-default',

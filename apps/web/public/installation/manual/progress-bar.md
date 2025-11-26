@@ -5,13 +5,14 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import {
   containerProgressBarVariants,
   progressBarVariants,
   type ZardContainerProgressBarVariants,
   type ZardProgressBarVariants,
 } from './progress-bar.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-progress-bar',
@@ -143,6 +144,14 @@ export const progressBarVariants = cva('h-full transition-all', {
   },
 });
 export type ZardProgressBarVariants = VariantProps<typeof progressBarVariants>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './progress-bar.component';
+export * from './progress-bar.variants';
 
 ```
 

@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-import { ZardDatePickerComponent } from '../date-picker.component';
+import { ZardDatePickerComponent } from '@ngzard/ui/date-picker';
 
 @Component({
   selector: 'zard-demo-date-picker-default',

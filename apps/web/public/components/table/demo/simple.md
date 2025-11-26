@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardTableComponent } from '../table.component';
+import { ZardTableComponent } from '@ngzard/ui/table';
 
 interface Person {
   key: string;
@@ -16,9 +16,7 @@ interface Person {
   standalone: true,
   template: `
     <table z-table>
-      <caption>
-        A list of your recent invoices.
-      </caption>
+      <caption>A list of your recent invoices.</caption>
       <thead>
         <tr>
           <th>Name</th>

@@ -26,12 +26,13 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { mergeClasses, noopFun } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import type { ZardSheetRef } from './sheet-ref';
 import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
-import { mergeClasses, noopFun } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardSheetOptions<T, U> {
@@ -277,6 +278,17 @@ export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './sheet-ref';
+export * from './sheet.component';
+export * from './sheet.module';
+export * from './sheet.service';
+export * from './sheet.variants';
+
+```
+
+
+
 ```angular-ts title="sheet-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
@@ -397,9 +409,10 @@ import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+
 import { ZardSheetComponent } from './sheet.component';
 import { ZardSheetService } from './sheet.service';
-import { ZardButtonComponent } from '../button/button.component';
 
 const components = [CommonModule, ZardButtonComponent, ZardSheetComponent, OverlayModule, PortalModule];
 

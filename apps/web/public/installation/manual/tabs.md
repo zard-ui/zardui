@@ -28,9 +28,10 @@ import clsx from 'clsx';
 import { debounceTime, fromEvent, merge, map, distinctUntilChanged } from 'rxjs';
 import { twMerge } from 'tailwind-merge';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, type ZardTabVariants } from './tabs.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
@@ -424,6 +425,14 @@ export const tabButtonVariants = cva('hover:bg-transparent rounded-none flex-shr
 export type ZardTabVariants = VariantProps<typeof tabContainerVariants> &
   VariantProps<typeof tabNavVariants> &
   VariantProps<typeof tabButtonVariants> & { zAlignTabs: zAlign };
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './tabs.component';
+export * from './tabs.variants';
 
 ```
 

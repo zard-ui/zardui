@@ -5,6 +5,8 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import {
   formFieldVariants,
   formControlVariants,
@@ -12,7 +14,6 @@ import {
   formMessageVariants,
   type ZardFormMessageVariants,
 } from './form.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-form-field, [z-form-field]',
@@ -169,6 +170,15 @@ const FORM_COMPONENTS = [
   exports: [...FORM_COMPONENTS],
 })
 export class ZardFormModule {}
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './form.component';
+export * from './form.module';
+export * from './form.variants';
 
 ```
 

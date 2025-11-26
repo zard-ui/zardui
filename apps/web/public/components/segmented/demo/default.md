@@ -1,13 +1,15 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardSegmentedComponent } from '../segmented.component';
+import { ZardSegmentedComponent } from '@ngzard/ui/segmented';
 
 @Component({
   selector: 'zard-demo-segmented-default',
   imports: [ZardSegmentedComponent],
   standalone: true,
-  template: ` <z-segmented [zOptions]="options" zDefaultValue="all" (zChange)="onSelectionChange($event)" /> `,
+  template: `
+    <z-segmented [zOptions]="options" zDefaultValue="all" (zChange)="onSelectionChange($event)" />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSegmentedDefaultComponent {

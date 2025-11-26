@@ -17,6 +17,10 @@ import { type ClassValue } from 'clsx';
 import type { EmblaCarouselType, EmblaEventType, EmblaPluginType, EmblaOptionsType } from 'embla-carousel';
 import { EmblaCarouselDirective } from 'embla-carousel-angular';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import {
   carouselNextButtonVariants,
   carouselPreviousButtonVariants,
@@ -24,9 +28,6 @@ import {
   type ZardCarouselControlsVariants,
   type ZardCarouselOrientationVariants,
 } from './carousel.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-carousel',
@@ -285,14 +286,17 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, inject
 
 import { type ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { ZardCarouselComponent } from './carousel.component';
 import { carouselContentVariants } from './carousel.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-carousel-content',
   imports: [],
-  template: ` <ng-content /> `,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -317,14 +321,17 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, inject
 
 import { type ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { ZardCarouselComponent } from './carousel.component';
 import { carouselItemVariants } from './carousel.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-carousel-item',
   imports: [],
-  template: ` <ng-content /> `,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -469,18 +476,11 @@ export class ZardCarouselModule {}
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-// Main carousel components
-export * from './carousel.component';
 export * from './carousel-content.component';
 export * from './carousel-item.component';
-
-// Extensions (indicators and thumbnails)
-// export * from './carousel-extensions.component';
-
-// Plugin service
 export * from './carousel-plugins.service';
-
-// Variants and types
+export * from './carousel.component';
+export * from './carousel.module';
 export * from './carousel.variants';
 
 ```

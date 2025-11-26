@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.component';
+import { ZardComboboxComponent, ZardComboboxOption } from '@ngzard/ui/combobox';
 
 @Component({
   selector: 'zard-demo-combobox-default',

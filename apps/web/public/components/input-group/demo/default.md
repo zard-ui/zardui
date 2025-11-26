@@ -1,13 +1,13 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardDropdownModule } from '../../dropdown/dropdown.module';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardTooltipDirective } from '../../tooltip/tooltip';
-import { ZardInputGroupComponent } from '../input-group.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
+import { ZardDropdownModule } from '@ngzard/ui/dropdown';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardInputDirective } from '@ngzard/ui/input';
+import { ZardInputGroupComponent } from '@ngzard/ui/input-group';
+import { ZardTooltipDirective } from '@ngzard/ui/tooltip';
 
 @Component({
   selector: 'z-demo-input-group-default',
@@ -57,9 +57,9 @@ import { ZardInputGroupComponent } from '../input-group.component';
           </button>
           <button type="button" z-button zType="ghost" class="h-6" z-dropdown [zDropdownMenu]="menu">Auto</button>
           <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-10">
-            <z-dropdown-menu-item> Auto </z-dropdown-menu-item>
-            <z-dropdown-menu-item> Agent </z-dropdown-menu-item>
-            <z-dropdown-menu-item> Manual </z-dropdown-menu-item>
+            <z-dropdown-menu-item>Auto</z-dropdown-menu-item>
+            <z-dropdown-menu-item>Agent</z-dropdown-menu-item>
+            <z-dropdown-menu-item>Manual</z-dropdown-menu-item>
           </z-dropdown-menu-content>
         </div>
         <div class="flex h-auto items-center gap-0">

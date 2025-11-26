@@ -1,9 +1,9 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardInputGroupComponent } from '../input-group.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardInputDirective } from '@ngzard/ui/input';
+import { ZardInputGroupComponent } from '@ngzard/ui/input-group';
 
 @Component({
   selector: 'z-demo-input-group-text',
