@@ -12,6 +12,8 @@ import { ZardCommandComponent } from './command.component';
 import { ZardDebounceEventManagerPlugin } from '../core/event-manager-plugins/zard-debounce-event-manager-plugin';
 import { ZardEventManagerPlugin } from '../core/event-manager-plugins/zard-event-manager-plugin';
 
+const SEARCH_DEBOUNCE_MS = 150;
+
 @Component({
   selector: 'test-host-component',
   imports: [
@@ -48,7 +50,9 @@ class TestHostComponent {}
   selector: 'standalone-test',
   imports: [ZardCommandDividerComponent],
   standalone: true,
-  template: `<z-command-divider class="standalone-divider" />`,
+  template: `
+    <z-command-divider class="standalone-divider" />
+  `,
 })
 class StandaloneTestComponent {}
 
@@ -95,7 +99,7 @@ describe('ZardCommandDividerComponent', () => {
     input.dispatchEvent(new Event('input'));
 
     // Wait for debounced search to complete
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise(resolve => setTimeout(resolve, SEARCH_DEBOUNCE_MS));
     fixture.detectChanges();
 
     const dividerElement = fixture.nativeElement.querySelector('z-command-divider div');
@@ -110,7 +114,7 @@ describe('ZardCommandDividerComponent', () => {
     input.dispatchEvent(new Event('input'));
 
     // Wait for debounced search to complete
-    await new Promise(resolve => setTimeout(resolve, 200));
+    await new Promise(resolve => setTimeout(resolve, SEARCH_DEBOUNCE_MS));
     fixture.detectChanges();
 
     let dividerElement = fixture.nativeElement.querySelector('z-command-divider div');
@@ -121,7 +125,7 @@ describe('ZardCommandDividerComponent', () => {
     input.dispatchEvent(new Event('input'));
 
     // Wait for debounced search to complete (immediate for empty values)
-    await new Promise(resolve => setTimeout(resolve, 150));
+    await new Promise(resolve => setTimeout(resolve, SEARCH_DEBOUNCE_MS));
     fixture.detectChanges();
 
     dividerElement = fixture.nativeElement.querySelector('z-command-divider div');
@@ -162,7 +166,7 @@ describe('ZardCommandDividerComponent', () => {
       input.dispatchEvent(new Event('input'));
 
       // Wait for debounced search to complete
-      await new Promise(resolve => setTimeout(resolve, 150));
+      await new Promise(resolve => setTimeout(resolve, SEARCH_DEBOUNCE_MS));
       fixture.detectChanges();
 
       const dividerElement = fixture.nativeElement.querySelector('z-command-divider div');

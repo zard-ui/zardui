@@ -1,11 +1,15 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   forwardRef,
+  inject,
+  Injector,
   input,
   output,
+  runInInjectionContext,
   signal,
   viewChild,
   ViewEncapsulation,
@@ -57,7 +61,6 @@ export interface ZardComboboxGroup {
     ZardEmptyComponent,
     ZardIconComponent,
   ],
-  standalone: true,
   template: `
     <button
       type="button"
@@ -173,6 +176,8 @@ export interface ZardComboboxGroup {
   exportAs: 'zCombobox',
 })
 export class ZardComboboxComponent implements ControlValueAccessor {
+  private readonly injector = inject(Injector);
+
   readonly class = input<ClassValue>('');
   readonly buttonVariant = input<'default' | 'outline' | 'secondary' | 'ghost'>('outline');
   readonly zWidth = input<ZardComboboxVariants['zWidth']>('default');
@@ -252,20 +257,21 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   setOpen(open: boolean) {
     this.open.set(open);
     if (open) {
-      // Give time for the popover content to render and options to be detected
-      setTimeout(() => {
-        const commandRef = this.commandRef();
-        if (commandRef) {
-          // Refresh options to ensure they're detected
-          commandRef.refreshOptions();
-          // Focus on search input if searchable, otherwise on command component
-          if (this.searchable()) {
-            this.commandInputRef()?.focus();
-          } else {
-            commandRef.focus();
+      runInInjectionContext(this.injector, () =>
+        afterNextRender(() => {
+          const commandRef = this.commandRef();
+          if (commandRef) {
+            // Refresh options to ensure they're detected
+            commandRef.refreshOptions();
+            // Focus on search input if searchable, otherwise on command component
+            if (this.searchable()) {
+              this.commandInputRef()?.focus();
+            } else {
+              commandRef.focus();
+            }
           }
-        }
-      }, 10);
+        }),
+      );
     }
   }
 
@@ -310,12 +316,10 @@ export class ZardComboboxComponent implements ControlValueAccessor {
     if (this.open()) {
       this.popoverDirective().hide();
       this.buttonRef().nativeElement.focus();
-    } else {
-      if (this.getCurrentValue()) {
-        this.internalValue.set(null);
-        this.onChange(null);
-        this.zValueChange.emit(null);
-      }
+    } else if (this.getCurrentValue()) {
+      this.internalValue.set(null);
+      this.onChange(null);
+      this.zValueChange.emit(null);
     }
   }
 
@@ -359,21 +363,23 @@ export class ZardComboboxComponent implements ControlValueAccessor {
           if (this.searchable() && key.length === 1 && !ctrlKey && !altKey && !metaKey) {
             this.popoverDirective().show();
             // Let the command input handle the character after opening
-            setTimeout(() => {
-              const inputElement = this.commandInputRef();
-              if (inputElement) {
-                inputElement.searchInput().nativeElement.value = key;
-                inputElement.updateParentComponents(key);
-                inputElement.focus();
-              }
-            });
+            runInInjectionContext(this.injector, () =>
+              afterNextRender(() => {
+                const inputElement = this.commandInputRef();
+                if (inputElement) {
+                  inputElement.searchInput().nativeElement.value = key;
+                  inputElement.updateParentComponents(key);
+                  inputElement.focus();
+                }
+              }),
+            );
           }
           break;
       }
     }
   }
 
-  // needed when component looses focus by keyboard.
+  // needed when component loses focus by keyboard.
   onDocumentKeyDown(event: Event) {
     // Close on Escape from anywhere when this combobox is open
     if (this.open()) {

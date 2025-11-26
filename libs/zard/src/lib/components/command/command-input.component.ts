@@ -11,7 +11,7 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
@@ -23,8 +23,7 @@ import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-command-input',
-  imports: [FormsModule, ZardIconComponent],
-  standalone: true,
+  imports: [ZardIconComponent],
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
       <z-icon zType="search" class="mr-2 shrink-0 opacity-50" />
@@ -32,7 +31,7 @@ import { ZardIconComponent } from '../icon/icon.component';
         #searchInput
         [class]="classes()"
         [placeholder]="placeholder()"
-        [(ngModel)]="searchTerm"
+        [value]="searchTerm()"
         (input.debounce.150)="onInput($event)"
         (keydown)="onKeyDown($event)"
         aria-controls="command-list"
@@ -117,8 +116,11 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
   }
 
   writeValue(value: string | null): void {
-    this.searchTerm.set(value ?? '');
-    this.updateParentComponents(value ?? '');
+    const normalizedValue = value ?? '';
+    this.searchTerm.set(normalizedValue);
+    if (this.commandComponent) {
+      this.commandComponent.onSearch(normalizedValue);
+    }
   }
 
   registerOnChange(fn: (value: string) => void): void {

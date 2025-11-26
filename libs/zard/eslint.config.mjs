@@ -45,7 +45,16 @@ export default [
           argsIgnorePattern: '^_',
         },
       ],
+      curly: 'warn',
       'no-console': ['error', { allow: ['warn', 'error'] }],
+      'arrow-body-style': ['warn', 'as-needed'],
+      'prefer-destructuring': [
+        'warn',
+        {
+          object: true,
+          array: false,
+        },
+      ],
       '@typescript-eslint/no-empty-function': ['warn'],
       '@typescript-eslint/explicit-member-accessibility': [
         'warn',
@@ -53,7 +62,6 @@ export default [
           accessibility: 'no-public',
         },
       ],
-      'arrow-body-style': ['warn', 'as-needed'],
       '@angular-eslint/prefer-host-metadata-property': 'warn',
       '@angular-eslint/no-uncalled-signals': ['error'],
       '@angular-eslint/prefer-inject': 'warn',
@@ -63,9 +71,6 @@ export default [
       '@angular-eslint/consistent-component-styles': 'error',
       '@angular-eslint/sort-keys-in-type-decorator': 'error',
       '@angular-eslint/prefer-output-emitter-ref': 'error',
-      'arrow-body-style': ['warn', 'as-needed'],
-      'prefer-destructuring': 'warn',
-      curly: 'warn',
       // remove following gradually
       '@angular-eslint/no-output-on-prefix': 'warn',
       '@angular-eslint/no-input-rename': 'warn',
@@ -92,8 +97,6 @@ export default [
       '@angular-eslint/template/no-negated-async': 'error',
       '@angular-eslint/template/banana-in-box': 'error',
       '@angular-eslint/template/button-has-type': 'warn',
-      '@angular-eslint/template/elements-content': 'warn',
-      '@angular-eslint/template/table-scope': 'error',
       '@angular-eslint/template/prefer-self-closing-tags': 'warn',
       '@angular-eslint/template/prefer-at-else': 'warn',
       '@angular-eslint/template/eqeqeq': 'error',

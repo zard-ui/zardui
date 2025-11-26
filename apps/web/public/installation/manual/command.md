@@ -75,7 +75,7 @@ export interface ZardCommandConfig {
     role: 'combobox',
     'aria-haspopup': 'listbox',
     '[attr.aria-expanded]': 'true',
-    '(keydown.{arrodown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',
+    '(keydown.{arrowdown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',
   },
   exportAs: 'zCommand',
 })
@@ -461,7 +461,7 @@ import {
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
@@ -473,8 +473,7 @@ import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-command-input',
-  imports: [FormsModule, ZardIconComponent],
-  standalone: true,
+  imports: [ZardIconComponent],
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
       <z-icon zType="search" class="mr-2 shrink-0 opacity-50" />
@@ -482,7 +481,7 @@ import { ZardIconComponent } from '../icon/icon.component';
         #searchInput
         [class]="classes()"
         [placeholder]="placeholder()"
-        [(ngModel)]="searchTerm"
+        [value]="searchTerm()"
         (input.debounce.150)="onInput($event)"
         (keydown)="onKeyDown($event)"
         aria-controls="command-list"
@@ -567,8 +566,11 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
   }
 
   writeValue(value: string | null): void {
-    this.searchTerm.set(value ?? '');
-    this.updateParentComponents(value ?? '');
+    const normalizedValue = value ?? '';
+    this.searchTerm.set(normalizedValue);
+    if (this.commandComponent) {
+      this.commandComponent.onSearch(normalizedValue);
+    }
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -677,18 +679,17 @@ export class ZardCommandOptionGroupComponent {
   protected readonly headingClasses = computed(() => mergeClasses(commandGroupHeadingVariants({})));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent || !this.optionComponents) {
+    if (!this.commandComponent || !this.optionComponents().length) {
       return true;
     }
 
     const searchTerm = this.commandComponent.searchTerm();
-    const filteredOptions = this.commandComponent.filteredOptions();
-
     // If no search term, show all groups
     if (searchTerm === '') {
       return true;
     }
 
+    const filteredOptions = this.commandComponent.filteredOptions();
     // Check if any option in this group is in the filtered list
     return this.optionComponents().some(option => filteredOptions.includes(option));
   });

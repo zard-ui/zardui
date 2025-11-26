@@ -28,7 +28,6 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
 @Component({
   selector: 'z-dropdown-menu',
   imports: [OverlayModule],
-  standalone: true,
   template: `
     <!-- Dropdown Trigger -->
     <div class="trigger-container" (click)="toggle()" (keydown.{enter,space}.prevent)="toggle()" tabindex="0">

@@ -14,13 +14,13 @@ import { ZardIconComponent } from '../icon/icon.component';
   template: `
     <button
       type="button"
+      tabindex="0"
+      [attr.aria-controls]="'content-' + zValue()"
+      [attr.aria-expanded]="isOpen()"
       [id]="'accordion-' + zValue()"
       [class]="triggerClasses()"
       (click)="toggle()"
       (keydown.{enter,space}.prevent)="toggle()"
-      [attr.aria-expanded]="isOpen()"
-      attr.aria-controls="content-{{ zValue() }}"
-      tabindex="0"
     >
       {{ zTitle() }}
       <z-icon
@@ -31,10 +31,10 @@ import { ZardIconComponent } from '../icon/icon.component';
     </button>
 
     <div
-      attr.aria-labelledby="accordion-{{ zValue() }}"
-      id="content-{{ zValue() }}"
       role="region"
+      [attr.aria-labelledby]="'accordion-' + zValue()"
       [attr.data-state]="isOpen() ? 'open' : 'closed'"
+      [id]="'content-' + zValue()"
       [class]="contentClasses()"
     >
       <div class="overflow-hidden">
@@ -53,7 +53,7 @@ import { ZardIconComponent } from '../icon/icon.component';
   exportAs: 'zAccordionItem',
 })
 export class ZardAccordionItemComponent {
-  private accordion = inject(ZardAccordionComponent);
+  private accordion = inject(ZardAccordionComponent, { optional: true });
 
   readonly zTitle = input<string>('');
   readonly zValue = input<string>('');

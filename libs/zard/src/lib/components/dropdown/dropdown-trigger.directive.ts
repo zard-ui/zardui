@@ -13,8 +13,8 @@ import { checkForProperZardInitialization } from '../core/config/providezard';
     '[attr.aria-expanded]': 'dropdownService.isOpen()',
     '[attr.aria-disabled]': 'zDisabled()',
     '(click.prevent-with-stop)': 'onClick()',
-    '(mouseenter)': 'onHover()',
-    '(mouseleave)': 'onHover()',
+    '(mouseenter)': 'onHoverToggle()',
+    '(mouseleave)': 'onHoverToggle()',
     '(keydown.{enter,space}.prevent-with-stop)': 'toggleDropdown()',
     '(keydown.arrowdown.prevent)': 'openDropdown()',
   },
@@ -50,7 +50,7 @@ export class ZardDropdownDirective implements OnInit {
     this.toggleDropdown();
   }
 
-  protected onHover() {
+  protected onHoverToggle() {
     if (this.zTrigger() !== 'hover') {
       return;
     }
@@ -65,7 +65,7 @@ export class ZardDropdownDirective implements OnInit {
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
-      this.dropdownService.toggle(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
+      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
     }
   }
 
@@ -76,7 +76,7 @@ export class ZardDropdownDirective implements OnInit {
 
     const menuContent = this.zDropdownMenu();
     if (menuContent && !this.dropdownService.isOpen()) {
-      this.dropdownService.toggle(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
+      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
     }
   }
 }

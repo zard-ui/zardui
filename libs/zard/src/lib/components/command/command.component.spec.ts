@@ -164,7 +164,7 @@ describe('ZardCommandComponent', () => {
   it('should emit zOnSelect when option is clicked', () => {
     jest.useFakeTimers();
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
-    const firstOption = optionElements[0];
+    const [firstOption] = optionElements;
     const firstOptionDiv = firstOption.querySelector('div');
 
     firstOptionDiv.click();
@@ -179,7 +179,7 @@ describe('ZardCommandComponent', () => {
   it('should emit zOnChange when option is clicked', () => {
     jest.useFakeTimers();
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
-    const firstOption = optionElements[0];
+    const [firstOption] = optionElements;
     const firstOptionDiv = firstOption.querySelector('div');
 
     firstOptionDiv.click();
@@ -193,7 +193,7 @@ describe('ZardCommandComponent', () => {
 
   it('should not emit events for disabled options', () => {
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
-    const disabledOption = optionElements[1]; // "Disabled Option"
+    const [, disabledOption] = optionElements;
 
     disabledOption.click();
     fixture.detectChanges();
@@ -205,7 +205,7 @@ describe('ZardCommandComponent', () => {
   it('should handle keyboard navigation', () => {
     jest.useFakeTimers();
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
-    const firstOption = optionElements[0];
+    const [firstOption] = optionElements;
     const firstOptionDiv = firstOption.querySelector('div');
 
     const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });

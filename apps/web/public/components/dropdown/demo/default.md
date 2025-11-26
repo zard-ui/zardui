@@ -8,7 +8,6 @@ import { ZardDropdownModule } from '../dropdown.module';
 @Component({
   selector: 'z-dropdown-demo',
   imports: [ZardDropdownModule, ZardButtonComponent, ZardDividerComponent],
-  standalone: true,
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
 

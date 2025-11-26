@@ -49,18 +49,17 @@ export class ZardCommandOptionGroupComponent {
   protected readonly headingClasses = computed(() => mergeClasses(commandGroupHeadingVariants({})));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent || !this.optionComponents) {
+    if (!this.commandComponent || !this.optionComponents().length) {
       return true;
     }
 
     const searchTerm = this.commandComponent.searchTerm();
-    const filteredOptions = this.commandComponent.filteredOptions();
-
     // If no search term, show all groups
     if (searchTerm === '') {
       return true;
     }
 
+    const filteredOptions = this.commandComponent.filteredOptions();
     // Check if any option in this group is in the filtered list
     return this.optionComponents().some(option => filteredOptions.includes(option));
   });

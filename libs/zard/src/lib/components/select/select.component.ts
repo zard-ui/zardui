@@ -181,10 +181,9 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.destroyOverlay();
   }
 
-  onTriggerKeydown(e: Event) {
-    const event = e as KeyboardEvent;
-
-    switch (event.key) {
+  onTriggerKeydown(event: Event) {
+    const { key } = event as KeyboardEvent;
+    switch (key) {
       case 'Enter':
       case ' ':
       case 'ArrowDown':

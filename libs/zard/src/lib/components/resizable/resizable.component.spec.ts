@@ -276,8 +276,8 @@ describe('ZardResizableComponent', () => {
     });
 
     it('should handle touch events', () => {
-      const item = () => ({ clientX: 500, clientY: 300 }) as Touch;
-      const listMock: TouchList = { length: 1, item };
+      const touchMock = { clientX: 500, clientY: 300 } as Touch;
+      const listMock: TouchList = { length: 1, item: (index: number) => touchMock, 0: touchMock };
       const touchStartEvent = new TouchEvent('touchstart', {
         touches: listMock as unknown as Touch[],
       });

@@ -23,14 +23,10 @@ export const ZARD_CONFIG = new InjectionToken<ZardConfigType>('ZARD_CONFIG');
 
     ** Note ** styles.css is still required in order to overriding works
  */
-export function provideZard(...zardConfig: ZardConfigType[]): EnvironmentProviders {
-  const providers = zardConfig?.map(config => ({
-    provide: ZARD_CONFIG,
-    useValue: config,
-    multi: false,
-  }));
+export function provideZard(zardConfig?: ZardConfigType): EnvironmentProviders {
+  const zardConfigProvider = zardConfig ? [{ provide: ZARD_CONFIG, useValue: zardConfig }] : [];
 
-  const eventMangerPlugins = [
+  const eventManagerPlugins = [
     {
       provide: EVENT_MANAGER_PLUGINS,
       useClass: ZardEventManagerPlugin,
@@ -45,15 +41,23 @@ export function provideZard(...zardConfig: ZardConfigType[]): EnvironmentProvide
 
   const themeInitializer = provideAppInitializer(() => {
     const document = inject(DOCUMENT);
-    const [config] = zardConfig;
-    if (config?.theme?.preset) {
-      const styleTag = document.createElement('style');
-      styleTag.textContent = updatePreset(config.theme.preset);
-      document.head.appendChild(styleTag);
+    const existingTag = document.head.querySelector('style[data-zard-theme]');
+
+    if (zardConfig?.theme?.preset) {
+      if (existingTag) {
+        existingTag.textContent = updatePreset(zardConfig.theme.preset);
+      } else {
+        const styleTag = document.createElement('style');
+        styleTag.setAttribute('data-zard-theme', '');
+        styleTag.textContent = updatePreset(zardConfig.theme.preset);
+        document.head.appendChild(styleTag);
+      }
+    } else if (existingTag) {
+      existingTag.remove();
     }
   });
 
-  return makeEnvironmentProviders([...providers, ...eventMangerPlugins, themeInitializer]);
+  return makeEnvironmentProviders([...zardConfigProvider, ...eventManagerPlugins, themeInitializer]);
 }
 
 export const withGrayPreset = (): ZardConfigType => ({ theme: { preset: ZardPreset.GRAY } }) as const;
@@ -64,7 +68,9 @@ export const withZincPreset = (): ZardConfigType => ({ theme: { preset: ZardPres
 
 export const checkForProperZardInitialization = (): void => {
   const eventPlugins = inject(EVENT_MANAGER_PLUGINS);
-  const zardProperlyInitialized = eventPlugins.some(plugin => plugin instanceof ZardEventManagerPlugin);
+  const zardProperlyInitialized = eventPlugins.some(
+    plugin => plugin instanceof ZardEventManagerPlugin || plugin instanceof ZardDebounceEventManagerPlugin,
+  );
   if (!zardProperlyInitialized) {
     throw new Error("Zard: Initialization missing. Please call `provideZard()` in your app's root providers.");
   }

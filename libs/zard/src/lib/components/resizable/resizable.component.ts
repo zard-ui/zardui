@@ -247,7 +247,8 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     } else {
       const touch = event.touches.item(0);
       if (touch) {
-        position = layout === 'vertical' ? touch?.clientY : touch?.clientX;
+        const { clientX, clientY } = touch;
+        position = layout === 'vertical' ? clientY : clientX;
       }
     }
 
@@ -257,10 +258,11 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   getContainerSize(): number {
     const element = this.elementRef.nativeElement as HTMLElement;
     const layout = this.zLayout();
-    return layout === 'vertical' ? element.offsetHeight : element.offsetWidth;
+    const { offsetHeight, offsetWidth } = element;
+    return layout === 'vertical' ? offsetHeight : offsetWidth;
   }
 
-  // TODO this method should be considered for refactoring
+  // TODO: Consider simplifying collapse logic - handle edge cases where totalOthers is 0 more explicitly
   collapsePanel(index: number): void {
     const panels = this.panels();
     const panel = panels[index];

@@ -15,6 +15,7 @@ export const updatePreset = (preset: ZardPreset): string => {
       return STONE;
     case ZardPreset.ZINC:
       return ZINC;
+    case ZardPreset.NEUTRAL:
     default:
       return NEUTRAL;
   }

@@ -334,11 +334,9 @@ describe('ZardResizableHandleComponent', () => {
     it('should handle arrow keys for horizontal layout', () => {
       const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
 
-      setTimeout(() => {
-        handleComponent.handleKeyDown(rightArrowEvent);
+      handleElement.dispatchEvent(rightArrowEvent);
 
-        expect(rightArrowEvent.defaultPrevented).toBe(true);
-      });
+      expect(rightArrowEvent.defaultPrevented).toBe(true);
     });
 
     it('should handle arrow keys for vertical layout', () => {
@@ -346,11 +344,9 @@ describe('ZardResizableHandleComponent', () => {
       fixture.detectChanges();
 
       const downArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true });
-      setTimeout(() => {
-        handleComponent.handleKeyDown(downArrowEvent);
+      handleElement.dispatchEvent(downArrowEvent);
 
-        expect(downArrowEvent.defaultPrevented).toBe(true);
-      });
+      expect(downArrowEvent.defaultPrevented).toBe(true);
     });
 
     it('should handle Shift+Arrow for larger steps', () => {
@@ -359,29 +355,26 @@ describe('ZardResizableHandleComponent', () => {
         shiftKey: true,
         cancelable: true,
       });
-      setTimeout(() => {
-        handleComponent.handleKeyDown(shiftRightEvent);
 
-        expect(shiftRightEvent.defaultPrevented).toBe(true);
-      });
+      handleElement.dispatchEvent(shiftRightEvent);
+
+      expect(shiftRightEvent.defaultPrevented).toBe(true);
     });
 
     it('should handle Home key', () => {
       const homeEvent = new KeyboardEvent('keydown', { key: 'Home', cancelable: true });
-      setTimeout(() => {
-        handleComponent.handleKeyDown(homeEvent);
 
-        expect(homeEvent.defaultPrevented).toBe(true);
-      });
+      handleElement.dispatchEvent(homeEvent);
+
+      expect(homeEvent.defaultPrevented).toBe(true);
     });
 
     it('should handle End key', () => {
       const endEvent = new KeyboardEvent('keydown', { key: 'End', cancelable: true });
-      setTimeout(() => {
-        handleComponent.handleKeyDown(endEvent);
 
-        expect(endEvent.defaultPrevented).toBe(true);
-      });
+      handleElement.dispatchEvent(endEvent);
+
+      expect(endEvent.defaultPrevented).toBe(true);
     });
 
     it('should handle Enter/Space for collapsible panels', () => {
@@ -389,12 +382,11 @@ describe('ZardResizableHandleComponent', () => {
       fixture.detectChanges();
 
       const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', cancelable: true });
-      setTimeout(() => {
-        handleComponent.handleKeyDown(enterEvent);
 
-        expect(enterEvent.defaultPrevented).toBe(true);
-        expect(resizableComponent.collapsePanel).toHaveBeenCalledWith(0);
-      });
+      handleElement.dispatchEvent(enterEvent);
+
+      expect(enterEvent.defaultPrevented).toBe(true);
+      expect(resizableComponent.collapsePanel).toHaveBeenCalledWith(0);
     });
 
     it('should handle Space for collapsible panels', () => {
@@ -402,12 +394,11 @@ describe('ZardResizableHandleComponent', () => {
       fixture.detectChanges();
 
       const spaceEvent = new KeyboardEvent('keydown', { key: ' ', cancelable: true });
-      setTimeout(() => {
-        handleComponent.handleKeyDown(spaceEvent);
 
-        expect(spaceEvent.defaultPrevented).toBe(true);
-        expect(resizableComponent.collapsePanel).toHaveBeenCalledWith(1);
-      });
+      handleElement.dispatchEvent(spaceEvent);
+
+      expect(spaceEvent.defaultPrevented).toBe(true);
+      expect(resizableComponent.collapsePanel).toHaveBeenCalledWith(1);
     });
 
     it('should ignore unsupported keys', () => {

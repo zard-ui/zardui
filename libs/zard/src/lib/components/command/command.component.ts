@@ -72,7 +72,7 @@ export interface ZardCommandConfig {
     role: 'combobox',
     'aria-haspopup': 'listbox',
     '[attr.aria-expanded]': 'true',
-    '(keydown.{arrodown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',
+    '(keydown.{arrowdown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',
   },
   exportAs: 'zCommand',
 })

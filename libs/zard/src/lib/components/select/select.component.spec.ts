@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -71,47 +71,50 @@ describe('ZardSelectComponent', () => {
 
     it('should initialize with default values', () => {
       expect(component.zValue()).toBe('');
-      expect(component.zValue()).toBe('');
       expect(component.zPlaceholder()).toBe('Select an option...');
       expect(component.zDisabled()).toBe(false);
     });
 
     describe('keyboard navigation', () => {
-      it('should open dropdown on Enter key', () => {
+      it('should open dropdown on Enter key', fakeAsync(() => {
         const btn = fixture.debugElement.query(By.css('button'));
+        const event = new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter' });
+        jest.spyOn(event, 'preventDefault');
 
-        btn.triggerEventHandler('keydown.prevent', { key: 'Enter', code: 'Enter' });
-        setTimeout(() => {
-          expect(btn.nativeElement).toHaveTextContent('Select an option...');
-          expect(component.isOpen()).toBeTruthy();
-        });
-      });
+        btn.nativeElement.dispatchEvent(event);
+        flush();
+        fixture.detectChanges();
 
-      it('should open dropdown on Space key', () => {
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(component.isOpen()).toBeTruthy();
+      }));
+
+      it('should open dropdown on Space key', fakeAsync(() => {
+        const event = new KeyboardEvent('keydown', { key: ' ' });
         const btn = fixture.debugElement.query(By.css('button'));
+        jest.spyOn(event, 'preventDefault');
 
-        btn.triggerEventHandler('keydown.prevent', { key: ' ', code: ' ' });
-        setTimeout(() => {
-          expect(btn.nativeElement).toHaveTextContent('Select an option...');
-          expect(component.isOpen()).toBeTruthy();
-        });
-      });
+        btn.nativeElement.dispatchEvent(event);
+        flush();
+        fixture.detectChanges();
 
-      it('should close dropdown on Escape key', () => {
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(component.isOpen()).toBeTruthy();
+      }));
+
+      it('should close dropdown on Escape key', fakeAsync(() => {
+        const event = new KeyboardEvent('keydown', { key: 'Escape' });
         const btn = fixture.debugElement.query(By.css('button'));
+        jest.spyOn(event, 'preventDefault');
 
         component.toggle();
+        btn.nativeElement.dispatchEvent(event);
+        flush();
+        fixture.detectChanges();
 
-        setTimeout(() => {
-          expect(component.isOpen()).toBeTruthy();
-        });
-
-        btn.triggerEventHandler('keydown.prevent', { key: 'Escape', code: 'Escape' });
-        setTimeout(() => {
-          expect(btn.nativeElement).toHaveTextContent('Select an option...');
-          expect(component.isOpen()).toBeFalsy();
-        });
-      });
+        expect(event.preventDefault).toHaveBeenCalled();
+        expect(component.isOpen()).toBeFalsy();
+      }));
     });
   });
 
@@ -164,7 +167,7 @@ describe('ZardSelectComponent', () => {
       expect(selectComponent.zValue()).toBe('option2');
 
       // If contentChildren is not working, the label will be the value
-      const label = selectComponent.selectedLabels()[0];
+      const [label] = selectComponent.selectedLabels();
       expect(['option2', 'Option 2']).toContain(label);
     });
 
@@ -241,7 +244,7 @@ describe('ZardSelectComponent', () => {
       expect(selectComponent.zValue()).toBe('banana');
 
       // If contentChildren is not working, the label will be the value
-      const label = selectComponent.selectedLabels()[0];
+      const [label] = selectComponent.selectedLabels();
       expect(['banana', 'Banana']).toContain(label);
     });
 
@@ -312,7 +315,7 @@ describe('ZardSelectComponent', () => {
       hostFixture.detectChanges();
 
       // If contentChildren is not working, the label will be the value
-      const label = selectComponent.selectedLabels()[0];
+      const [label] = selectComponent.selectedLabels();
       expect(['option1', 'Option 1']).toContain(label);
 
       // The computed signal automatically reacts to content children changes
@@ -359,7 +362,7 @@ describe('ZardSelectComponent', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [TestHostComponent],
+        imports: [TestMultiselectHostComponent],
         providers: [
           {
             provide: EVENT_MANAGER_PLUGINS,
@@ -414,16 +417,6 @@ describe('ZardSelectComponent', () => {
 
       expect(hostComponent.value().length).toBe(3);
       expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree', '1 more item selected']);
-    });
-
-    it('select more items with deselect', () => {
-      selectComponent.selectItem('option1', 'OptionOne');
-      selectComponent.selectItem('option2', 'OptionTwo');
-      selectComponent.selectItem('option3', 'OptionThree');
-      selectComponent.selectItem('option2', 'OptionTwo');
-
-      expect(hostComponent.value().length).toBe(2);
-      expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree']);
     });
 
     it('select more items with deselect', () => {

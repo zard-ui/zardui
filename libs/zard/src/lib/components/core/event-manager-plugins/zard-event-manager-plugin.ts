@@ -20,11 +20,9 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
       element,
       event,
       (event: Event) => {
-        let isEventMatches = false;
-        if (event instanceof KeyboardEvent) {
-          isEventMatches = keys.includes(event.key.toLowerCase());
-        }
-        if (isEventMatches) {
+        const isKeyboardEvent = event instanceof KeyboardEvent;
+        const shouldApplyModifier = !keys.length || (isKeyboardEvent && keys.includes(event.key.toLowerCase()));
+        if (shouldApplyModifier) {
           switch (keyword) {
             case 'stop':
               event.stopPropagation();
@@ -55,7 +53,7 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
 
     for (const substring of eventNameSubstrings) {
       if (substring.startsWith('{')) {
-        keys = this.#extarctKeys(substring);
+        keys = this.#extractKeys(substring);
         continue;
       } else if (keywords.includes(substring)) {
         keyword = substring;
@@ -70,8 +68,11 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
     return { event, keyword, keys };
   }
 
-  #extarctKeys(substring: string): string[] {
+  #extractKeys(substring: string): string[] {
     const stringList = substring.substring(1, substring.length - 1);
-    return stringList.split(',').map(s => (s === 'space' ? ' ' : s.trim()));
+    return stringList
+      .split(',')
+      .map(s => (s === 'space' ? ' ' : s.trim()))
+      .filter(Boolean);
   }
 }

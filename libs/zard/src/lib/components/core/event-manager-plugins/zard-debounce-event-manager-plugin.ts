@@ -3,7 +3,7 @@ import { EventManagerPlugin } from '@angular/platform-browser';
 
 export class ZardDebounceEventManagerPlugin extends EventManagerPlugin {
   override supports(eventName: string): boolean {
-    return /debounce/.test(eventName);
+    return /\.debounce(?:\.|$)/.test(eventName);
   }
 
   override addEventListener(
@@ -13,13 +13,20 @@ export class ZardDebounceEventManagerPlugin extends EventManagerPlugin {
     options?: ListenerOptions,
     // eslint-disable-next-line
   ): Function {
+    // Expected format: "event.debounce.delay" (e.g., "input.debounce.150")
+    // If delay is omitted or invalid, defaults to 300ms
     const [event, , delay] = eventName.split('.');
 
     let timeoutId!: ReturnType<typeof setTimeout>;
     const listener = (event: Event) => {
       clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => handler(event), Number.parseInt(delay) || 300);
+      const parsedDelay = Number.parseInt(delay);
+      timeoutId = setTimeout(() => handler(event), Number.isNaN(parsedDelay) ? 300 : parsedDelay);
     };
-    return this.manager.addEventListener(element, event, listener, options);
+    const unsubscribe = this.manager.addEventListener(element, event, listener, options);
+    return () => {
+      clearTimeout(timeoutId);
+      unsubscribe();
+    };
   }
 }
