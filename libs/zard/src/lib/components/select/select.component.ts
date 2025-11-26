@@ -3,6 +3,7 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -11,11 +12,13 @@ import {
   ElementRef,
   forwardRef,
   inject,
+  Injector,
   input,
   model,
   type OnDestroy,
   output,
   PLATFORM_ID,
+  runInInjectionContext,
   signal,
   type TemplateRef,
   viewChild,
@@ -34,7 +37,7 @@ import {
   selectVariants,
   type ZardSelectSizeVariants,
 } from './select.variants';
-import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
 import { ZardIconComponent } from '../icon/icon.component';
 
@@ -108,6 +111,7 @@ type OnChangeType = (value: string) => void;
 export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
   private readonly elementRef = inject(ElementRef);
+  private readonly injector = inject(Injector);
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly viewContainerRef = inject(ViewContainerRef);
@@ -327,13 +331,12 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.overlayRef.updateSize({ width: hostWidth });
     this.isOpen.set(true);
 
-    this.determinePortalWidth(hostWidth);
+    this.determinePortalWidthOnOpen(hostWidth);
+  }
 
-    // Focus dropdown after opening and position on selected item
-    setTimeout(() => {
-      this.focusDropdown();
-      this.focusSelectedItem();
-    }, 0);
+  private setFocusOnOpen(): void {
+    this.focusDropdown();
+    this.focusSelectedItem();
   }
 
   private close() {
@@ -349,30 +352,43 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     return this.selectItems()?.find(item => item.zValue() === value);
   }
 
-  private determinePortalWidth(portalWidth: number): void {
-    if (!this.overlayRef?.hasAttached()) {
-      return;
-    }
+  private determinePortalWidthOnOpen(portalWidth: number): void {
+    runInInjectionContext(this.injector, () => {
+      afterNextRender(() => {
+        if (!this.overlayRef || !this.overlayRef.hasAttached()) {
+          return;
+        }
 
-    const selectItems = this.selectItems();
-    let itemMaxWidth = 0;
-    for (const item of selectItems) {
-      itemMaxWidth = Math.max(itemMaxWidth, item.elementRef.nativeElement.scrollWidth);
-    }
+        const selectItems = this.selectItems();
+        let itemMaxWidth = 0;
+        for (const item of selectItems) {
+          itemMaxWidth = Math.max(itemMaxWidth, item.elementRef.nativeElement.scrollWidth);
+        }
 
-    const textContentElement = this.elementRef.nativeElement.querySelector('button > span > span') as HTMLElement;
-    const isOverflow = isElementContentTruncated(textContentElement);
+        const overlayPaneElement = this.overlayRef.overlayElement;
+        const textElements = Array.from(overlayPaneElement.querySelectorAll<HTMLElement>('z-select-item > span'));
+        let isOverflow = false;
+        for (const textElement of textElements) {
+          if (textElement.scrollWidth > textElement.clientWidth) {
+            isOverflow = true;
+            break;
+          }
+        }
 
-    if (isOverflow && selectItems.length) {
-      const elementStyles = getComputedStyle(selectItems[0].elementRef.nativeElement);
-      const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left')) || 0;
-      const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right')) || 0;
-      itemMaxWidth += leftPadding + rightPadding;
-    }
+        if (isOverflow && selectItems.length) {
+          const elementStyles = getComputedStyle(selectItems[0].elementRef.nativeElement);
+          const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left')) || 0;
+          const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right')) || 0;
+          itemMaxWidth += leftPadding + rightPadding;
+        }
 
-    itemMaxWidth = Math.max(itemMaxWidth, portalWidth);
-    this.overlayRef.updateSize({ width: itemMaxWidth });
-    this.overlayRef.updatePosition();
+        itemMaxWidth = Math.max(itemMaxWidth, portalWidth);
+        this.overlayRef.updateSize({ width: itemMaxWidth });
+        this.overlayRef.updatePosition();
+
+        this.setFocusOnOpen();
+      });
+    });
   }
 
   private createOverlay() {

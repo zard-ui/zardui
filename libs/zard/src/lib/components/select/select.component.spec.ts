@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
@@ -69,25 +69,29 @@ describe('ZardSelectComponent', () => {
     });
 
     describe('keyboard navigation', () => {
-      it('should open dropdown on Enter key', () => {
+      it('should open dropdown on Enter key', fakeAsync(() => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
         jest.spyOn(event, 'preventDefault');
 
         component.onTriggerKeydown(event);
+        flush();
+        fixture.detectChanges();
 
         expect(event.preventDefault).toHaveBeenCalled();
         expect(component.isOpen()).toBeTruthy();
-      });
+      }));
 
-      it('should open dropdown on Space key', () => {
+      it('should open dropdown on Space key', fakeAsync(() => {
         const event = new KeyboardEvent('keydown', { key: ' ' });
         jest.spyOn(event, 'preventDefault');
 
         component.onTriggerKeydown(event);
+        flush();
+        fixture.detectChanges();
 
         expect(event.preventDefault).toHaveBeenCalled();
         expect(component.isOpen()).toBeTruthy();
-      });
+      }));
 
       it('should close dropdown on Escape key', () => {
         component.toggle();
@@ -234,15 +238,16 @@ describe('ZardSelectComponent', () => {
       expect(onChangeSpy).toHaveBeenCalledWith('apple');
     });
 
-    it('should call onTouched when dropdown closes', () => {
+    it('should call onTouched when dropdown closes', fakeAsync(() => {
       const onTouchedSpy = jest.fn();
       selectComponent.registerOnTouched(onTouchedSpy);
 
       selectComponent.toggle(); // open
+      flush();
       selectComponent.toggle(); // close
 
       expect(onTouchedSpy).toHaveBeenCalled();
-    });
+    }));
   });
 
   describe('signal reactivity', () => {
