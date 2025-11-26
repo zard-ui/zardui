@@ -299,19 +299,19 @@ code [data-highlighted-chars] {
 }
 
 table.api-table--component tbody td:first-child code {
-  @apply !border-blue-500/20 !bg-blue-500/10 !text-blue-600 dark:!text-blue-400;
+  @apply border-blue-500/20! bg-blue-500/10! text-blue-600! dark:text-blue-400!;
 }
 
 table.api-table--directive tbody td:first-child code {
-  @apply !border-green-500/20 !bg-green-500/10 !text-green-600 dark:!text-green-400;
+  @apply border-green-500/20! bg-green-500/10! text-green-600! dark:text-green-400!;
 }
 
 table.api-table--service tbody td:first-child code {
-  @apply !border-amber-500/20 !bg-amber-500/10 !text-amber-600 dark:!text-amber-400;
+  @apply border-amber-500/20! bg-amber-500/10! text-amber-600! dark:text-amber-400!;
 }
 
 table.api-table--pipe tbody td:first-child code {
-  @apply !border-purple-500/20 !bg-purple-500/10 !text-purple-600 dark:!text-purple-400;
+  @apply border-purple-500/20! bg-purple-500/10! text-purple-600! dark:text-purple-400!;
 }
 
 .embla {

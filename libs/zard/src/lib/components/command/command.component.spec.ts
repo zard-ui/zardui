@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { ZardCommandDividerComponent } from './command-divider.component';
@@ -9,6 +9,8 @@ import { ZardCommandListComponent } from './command-list.component';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
+
+const SEARCH_DEBOUNCE_MS = 150;
 
 @Component({
   selector: 'test-host-component',
@@ -67,6 +69,10 @@ describe('ZardCommandComponent', () => {
     fixture.detectChanges();
   });
 
+  afterEach(() => {
+    jest.useRealTimers();
+  });
+
   it('should create', () => {
     expect(component).toBeTruthy();
   });
@@ -76,18 +82,19 @@ describe('ZardCommandComponent', () => {
     expect(input.placeholder).toBe('Test placeholder');
   });
 
-  it('should handle search input', fakeAsync(() => {
+  it('should handle search input', () => {
+    jest.useFakeTimers();
     const input = fixture.nativeElement.querySelector('input');
     const searchTerm = 'test search';
 
     input.value = searchTerm;
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
 
     expect(component.searchTerm()).toBe(searchTerm);
-  }));
+  });
 
   it('should have proper ARIA attributes', () => {
     const commandElement = fixture.nativeElement.querySelector('[role="combobox"]');
@@ -112,59 +119,63 @@ describe('ZardCommandComponent', () => {
     expect(divider).toBeTruthy();
   });
 
-  it('should filter options based on search term', fakeAsync(() => {
+  it('should filter options based on search term', () => {
+    jest.useFakeTimers();
     const input = fixture.nativeElement.querySelector('input');
 
     input.value = 'test';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
 
     const filteredOptions = component.filteredOptions();
     expect(filteredOptions.length).toBe(2); // "Test Option" and "Search Option" (has "test" in command)
-  }));
+  });
 
-  it('should show empty state when no results', fakeAsync(() => {
+  it('should show empty state when no results', () => {
+    jest.useFakeTimers();
     const input = fixture.nativeElement.querySelector('input');
 
     input.value = 'nonexistent';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
 
     const filteredOptions = component.filteredOptions();
     expect(filteredOptions.length).toBe(0);
-  }));
+  });
 
-  it('should emit zCommandSelected when option is clicked', fakeAsync(() => {
+  it('should emit zCommandSelected when option is clicked', () => {
+    jest.useFakeTimers();
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
     const firstOption = optionElements[0];
     const firstOptionDiv = firstOption.querySelector('div');
 
     firstOptionDiv.click();
-    tick();
+    jest.advanceTimersByTime(0);
     fixture.detectChanges();
 
     expect(hostComponent.selectedOption).toBeTruthy();
     expect(hostComponent.selectedOption?.label).toBe('Test Option');
     expect(hostComponent.selectedOption?.value).toBe('test');
-  }));
+  });
 
-  it('should emit zCommandChange when option is clicked', fakeAsync(() => {
+  it('should emit zCommandChange when option is clicked', () => {
+    jest.useFakeTimers();
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
     const firstOption = optionElements[0];
     const firstOptionDiv = firstOption.querySelector('div');
 
     firstOptionDiv.click();
-    tick();
+    jest.advanceTimersByTime(0);
     fixture.detectChanges();
 
     expect(hostComponent.changedOption).toBeTruthy();
     expect(hostComponent.changedOption?.label).toBe('Test Option');
     expect(hostComponent.changedOption?.value).toBe('test');
-  }));
+  });
 
   it('should not emit events for disabled options', () => {
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
@@ -177,19 +188,20 @@ describe('ZardCommandComponent', () => {
     expect(hostComponent.changedOption).toBeNull();
   });
 
-  it('should handle keyboard navigation', fakeAsync(() => {
+  it('should handle keyboard navigation', () => {
+    jest.useFakeTimers();
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
     const firstOption = optionElements[0];
     const firstOptionDiv = firstOption.querySelector('div');
 
     const enterEvent = new KeyboardEvent('keydown', { key: 'Enter' });
     firstOptionDiv.dispatchEvent(enterEvent);
-    tick();
+    jest.advanceTimersByTime(0);
     fixture.detectChanges();
 
     expect(hostComponent.selectedOption).toBeTruthy();
     expect(hostComponent.selectedOption?.label).toBe('Test Option');
-  }));
+  });
 
   it('should render option with icon and shortcut', () => {
     const optionElement = fixture.nativeElement.querySelector('z-command-option');
@@ -198,21 +210,23 @@ describe('ZardCommandComponent', () => {
     expect(optionElement.textContent).toContain('⌘T');
   });
 
-  it('should hide groups when no matching options', fakeAsync(() => {
+  it('should hide groups when no matching options', () => {
+    jest.useFakeTimers();
     const input = fixture.nativeElement.querySelector('input');
 
     input.value = 'single';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
 
     const filteredOptions = component.filteredOptions();
     expect(filteredOptions.length).toBe(1); // Only "Single Option" should match
     expect(filteredOptions[0].zLabel()).toBe('Single Option');
-  }));
+  });
 
-  it('should hide dividers during search', fakeAsync(() => {
+  it('should hide dividers during search', () => {
+    jest.useFakeTimers();
     const input = fixture.nativeElement.querySelector('input');
 
     // Initially dividers should be visible
@@ -223,35 +237,37 @@ describe('ZardCommandComponent', () => {
     input.value = 'test';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
 
     // Check that search is active
     expect(component.searchTerm()).toBe('test');
-  }));
+  });
 
-  it('should filter by command property', fakeAsync(() => {
+  it('should filter by command property', () => {
+    jest.useFakeTimers();
     const input = fixture.nativeElement.querySelector('input');
 
     input.value = 'search';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
 
     const filteredOptions = component.filteredOptions();
     expect(filteredOptions.length).toBe(1); // Only "Search Option" has "search test" in command
     expect(filteredOptions[0].zLabel()).toBe('Search Option');
-  }));
+  });
 
-  it('should maintain search state across multiple searches', fakeAsync(() => {
+  it('should maintain search state across multiple searches', () => {
+    jest.useFakeTimers();
     const input = fixture.nativeElement.querySelector('input');
 
     // First search
     input.value = 'test';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
     expect(component.searchTerm()).toBe('test');
 
@@ -259,7 +275,7 @@ describe('ZardCommandComponent', () => {
     input.value = 'single';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
     expect(component.searchTerm()).toBe('single');
 
@@ -267,19 +283,20 @@ describe('ZardCommandComponent', () => {
     input.value = '';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(0); // No debounce for empty string
+    jest.advanceTimersByTime(0);
     fixture.detectChanges();
     expect(component.searchTerm()).toBe('');
-  }));
+  });
 
-  it('should show all options when search is cleared', fakeAsync(() => {
+  it('should show all options when search is cleared', () => {
+    jest.useFakeTimers();
     const input = fixture.nativeElement.querySelector('input');
 
     // Search to filter
     input.value = 'test';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
     expect(component.filteredOptions().length).toBe(2);
 
@@ -287,36 +304,38 @@ describe('ZardCommandComponent', () => {
     input.value = '';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(0); // No debounce for empty string
+    jest.advanceTimersByTime(0);
     fixture.detectChanges();
     expect(component.filteredOptions().length).toBe(4); // All options visible again
-  }));
+  });
 
-  it('should handle case-insensitive search', fakeAsync(() => {
+  it('should handle case-insensitive search', () => {
+    jest.useFakeTimers();
     const input = fixture.nativeElement.querySelector('input');
 
     input.value = 'TEST';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
 
     const filteredOptions = component.filteredOptions();
     expect(filteredOptions.length).toBe(2); // Should match "Test Option" and "Search Option"
-  }));
+  });
 
-  it('should update filtered options reactively', fakeAsync(() => {
+  it('should update filtered options reactively', () => {
+    jest.useFakeTimers();
     const initialOptions = component.filteredOptions();
 
     const input = fixture.nativeElement.querySelector('input');
     input.value = 'test';
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
-    tick(150); // Wait for debounce
+    jest.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
     fixture.detectChanges();
 
     const filteredOptions = component.filteredOptions();
     expect(filteredOptions.length).toBeLessThanOrEqual(initialOptions.length);
     expect(component.searchTerm()).toBe('test');
-  }));
+  });
 });
