@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   forwardRef,
-  HostListener,
   ViewEncapsulation,
   signal,
   computed,
@@ -44,6 +43,9 @@ type OnChangeType = (value: boolean) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    '(mouseenter)': 'handleHover()',
+  },
   exportAs: 'zToggle',
 })
 export class ZardToggleComponent implements ControlValueAccessor {
@@ -74,7 +76,6 @@ export class ZardToggleComponent implements ControlValueAccessor {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onChangeFn: OnChangeType = () => {};
 
-  @HostListener('mouseenter')
   handleHover() {
     this.zToggleHover.emit();
   }

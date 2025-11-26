@@ -11,10 +11,10 @@ The main command palette container that handles search input and keyboard naviga
 
 ### Events
 
-| Event              | Description                            | Type                              |
-| ------------------ | -------------------------------------- | --------------------------------- |
-| `zCommandChange`   | Fired when the selected option changes | `EventEmitter<ZardCommandOption>` |
-| `zCommandSelected` | Fired when an option is selected       | `EventEmitter<ZardCommandOption>` |
+| Event              | Description                            | Type                        |
+| ------------------ | -------------------------------------- | --------------------------- |
+| `zCommandChange`   | Fired when the selected option changes | `output<ZardCommandOption>` |
+| `zCommandSelected` | Fired when an option is selected       | `output<ZardCommandOption>` |
 
 ---
 

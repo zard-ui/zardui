@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 
 import type { ZardCommandOption } from '../command.component';
 import { ZardCommandModule } from '../command.module';
@@ -35,6 +35,9 @@ import { ZardCommandModule } from '../command.module';
       </z-command-list>
     </z-command>
   `,
+  host: {
+    '(window:keydown)': 'handleKeydown($event)',
+  },
 })
 export class ZardDemoCommandDefaultComponent {
   // Handle command selection
@@ -71,7 +74,6 @@ export class ZardDemoCommandDefaultComponent {
   }
 
   // Handle keyboard shortcuts
-  @HostListener('window:keydown', ['$event'])
   handleKeydown(event: KeyboardEvent) {
     if (event.metaKey || event.ctrlKey) {
       switch (event.key.toLowerCase()) {

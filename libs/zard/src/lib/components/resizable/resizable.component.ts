@@ -7,11 +7,10 @@ import {
   contentChildren,
   DOCUMENT,
   ElementRef,
-  EventEmitter,
   inject,
   input,
   type OnDestroy,
-  Output,
+  output,
   PLATFORM_ID,
   signal,
   ViewEncapsulation,
@@ -33,7 +32,9 @@ type CleanupFunction = () => void;
 @Component({
   selector: 'z-resizable, [z-resizable]',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -52,9 +53,9 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   readonly zLazy = input(false, { transform });
   readonly class = input<ClassValue>('');
 
-  @Output() readonly zResizeStart = new EventEmitter<ZardResizeEvent>();
-  @Output() readonly zResize = new EventEmitter<ZardResizeEvent>();
-  @Output() readonly zResizeEnd = new EventEmitter<ZardResizeEvent>();
+  readonly zResizeStart = output<ZardResizeEvent>();
+  readonly zResize = output<ZardResizeEvent>();
+  readonly zResizeEnd = output<ZardResizeEvent>();
 
   readonly panels = contentChildren(ZardResizablePanelComponent);
   readonly panelSizes = signal<number[]>([]);

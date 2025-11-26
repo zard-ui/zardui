@@ -5,10 +5,9 @@ import {
   contentChild,
   contentChildren,
   effect,
-  EventEmitter,
   forwardRef,
   input,
-  Output,
+  output,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
@@ -85,8 +84,8 @@ export class ZardCommandComponent implements ControlValueAccessor {
   readonly size = input<ZardCommandVariants['size']>('default');
   readonly class = input<ClassValue>('');
 
-  @Output() readonly zCommandChange = new EventEmitter<ZardCommandOption>();
-  @Output() readonly zCommandSelected = new EventEmitter<ZardCommandOption>();
+  readonly zCommandChange = output<ZardCommandOption>();
+  readonly zCommandSelected = output<ZardCommandOption>();
 
   // Internal signals for search functionality
   readonly searchTerm = signal('');
