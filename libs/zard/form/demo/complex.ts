@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, ViewEnc
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardCheckboxComponent } from '../../checkbox/checkbox.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardSelectItemComponent } from '../../select/select-item.component';
-import { ZardSelectComponent } from '../../select/select.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardCheckboxComponent } from '@ngzard/ui/checkbox';
+import { ZardInputDirective } from '@ngzard/ui/input';
+import { ZardSelectItemComponent, ZardSelectComponent } from '@ngzard/ui/select';
+
 import { ZardFormModule } from '../form.module';
 
 interface FormData {

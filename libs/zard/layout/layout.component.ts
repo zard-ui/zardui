@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, computed, contentChildren, input, V
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { layoutVariants, type LayoutVariants } from './layout.variants';
 import { SidebarComponent } from './sidebar.component';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-layout',

@@ -13,6 +13,11 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { type ZardButtonVariants } from '@ngzard/ui/button';
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import {
   paginationContentVariants,
   paginationEllipsisVariants,
@@ -21,10 +26,6 @@ import {
   paginationPreviousVariants,
   paginationVariants,
 } from './pagination.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { type ZardButtonVariants } from '../button/button.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-pagination-content',

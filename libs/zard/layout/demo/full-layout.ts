@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardSkeletonComponent } from '@ngzard/ui/skeleton';
+
 import { ContentComponent } from '../content.component';
 import { FooterComponent } from '../footer.component';
 import { HeaderComponent } from '../header.component';
-import { LayoutComponent } from '../layout.component';
-import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from '../sidebar.component';
+import { LayoutComponent, SidebarComponent } from '../layout.component';
+import { SidebarGroupComponent, SidebarGroupLabelComponent } from '../sidebar.component';
 
 @Component({
   selector: 'z-demo-layout-full',

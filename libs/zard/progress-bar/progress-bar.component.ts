@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import {
   containerProgressBarVariants,
   progressBarVariants,
   type ZardContainerProgressBarVariants,
   type ZardProgressBarVariants,
 } from './progress-bar.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-progress-bar',

@@ -2,8 +2,9 @@ import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { dropdownShortcutVariants } from './dropdown.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]',

@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { type EmblaCarouselType } from 'embla-carousel';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardCardComponent } from '../../card';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardCardComponent } from '@ngzard/ui/card';
+
 import { ZardCarouselModule } from '../carousel.module';
 
 @Component({

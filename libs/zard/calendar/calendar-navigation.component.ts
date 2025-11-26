@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardSelectItemComponent, ZardSelectComponent } from '@ngzard/ui/select';
+
 import { calendarNavVariants } from './calendar.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { mergeClasses } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import { ZardSelectItemComponent } from '../select/select-item.component';
-import { ZardSelectComponent } from '../select/select.component';
 
 @Component({
   selector: 'z-calendar-navigation',

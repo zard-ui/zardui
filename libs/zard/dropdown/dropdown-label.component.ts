@@ -2,8 +2,9 @@ import { Component, computed, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { dropdownLabelVariants } from './dropdown.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',

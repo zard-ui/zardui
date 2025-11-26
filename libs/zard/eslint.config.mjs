@@ -81,6 +81,7 @@ export default [
       '@typescript-eslint/no-unused-vars': 'off',
       'no-console': 'off',
       '@typescript-eslint/no-floating-promises': 'off',
+      '@nx/enforce-module-boundaries': 'off',
     },
   },
   {

@@ -14,6 +14,10 @@ import { type ClassValue } from 'clsx';
 import type { EmblaCarouselType, EmblaEventType, EmblaPluginType, EmblaOptionsType } from 'embla-carousel';
 import { EmblaCarouselDirective } from 'embla-carousel-angular';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import {
   carouselNextButtonVariants,
   carouselPreviousButtonVariants,
@@ -21,9 +25,6 @@ import {
   type ZardCarouselControlsVariants,
   type ZardCarouselOrientationVariants,
 } from './carousel.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { mergeClasses } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-carousel',

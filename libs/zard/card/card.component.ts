@@ -9,9 +9,9 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective, mergeClasses } from '@ngzard/ui/core';
+
 import { cardBodyVariants, cardHeaderVariants, cardVariants } from './card.variants';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-card',

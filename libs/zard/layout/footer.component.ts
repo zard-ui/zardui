@@ -2,8 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { footerVariants } from './layout.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-footer',

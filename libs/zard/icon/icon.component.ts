@@ -3,9 +3,10 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 import { LucideAngularModule } from 'lucide-angular';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { iconVariants, type ZardIconVariants } from './icon.variants';
 import { ZARD_ICONS, type ZardIcon } from './icons';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-icon, [z-icon]',

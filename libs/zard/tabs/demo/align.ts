@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { type zAlign, ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+
+import { zAlign, ZardTabComponent, ZardTabGroupComponent } from '../tabs.component';
 
 @Component({
   selector: 'z-demo-tabs-align',

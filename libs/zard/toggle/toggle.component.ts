@@ -14,8 +14,9 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { toggleVariants, type ZardToggleVariants } from './toggle.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;

@@ -12,16 +12,16 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective, mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import {
   sidebarGroupLabelVariants,
   sidebarGroupVariants,
   sidebarTriggerVariants,
   sidebarVariants,
 } from './layout.variants';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-sidebar',

@@ -25,9 +25,10 @@ import clsx from 'clsx';
 import { debounceTime, fromEvent, merge, map, distinctUntilChanged } from 'rxjs';
 import { twMerge } from 'tailwind-merge';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { tabButtonVariants, tabContainerVariants, tabNavVariants, type ZardTabVariants } from './tabs.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';

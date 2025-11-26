@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardMenuModule } from '../../menu/menu.module';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardMenuModule } from '@ngzard/ui/menu';
+
 import { ZardButtonGroupComponent } from '../button-group.component';
 
 @Component({

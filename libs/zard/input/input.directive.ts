@@ -2,13 +2,14 @@ import { computed, Directive, effect, ElementRef, inject, input, linkedSignal, m
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import {
   inputVariants,
   type ZardInputSizeVariants,
   type ZardInputStatusVariants,
   type ZardInputTypeVariants,
 } from './input.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',

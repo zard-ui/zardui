@@ -13,9 +13,10 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { checkboxLabelVariants, checkboxVariants, type ZardCheckboxVariants } from './checkbox.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;

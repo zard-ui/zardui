@@ -1,14 +1,15 @@
 import { Component, signal } from '@angular/core';
 
-import { ZardAvatarComponent } from '../../avatar/avatar.component';
-import { ZardBreadcrumbModule } from '../../breadcrumb/breadcrumb.module';
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import type { ZardIcon } from '../../icon/icons';
-import { ZardMenuModule } from '../../menu/menu.module';
-import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
-import { ZardTooltipModule } from '../../tooltip/tooltip';
+import { ZardAvatarComponent } from '@ngzard/ui/avatar';
+import { ZardBreadcrumbModule } from '@ngzard/ui/breadcrumb';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+import { ZardMenuModule } from '@ngzard/ui/menu';
+import { ZardSkeletonComponent } from '@ngzard/ui/skeleton';
+import { ZardTooltipModule } from '@ngzard/ui/tooltip';
+
 import { LayoutModule } from '../layout.module';
 
 interface MenuItem {

@@ -23,13 +23,14 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { mergeClasses, noopFun } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import type { ZardDialogRef } from './dialog-ref';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { mergeClasses, noopFun } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 // Used by the NgModule provider definition
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;

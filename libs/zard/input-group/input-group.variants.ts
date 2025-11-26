@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { mergeClasses } from '../core/shared/utils/utils';
+import { mergeClasses } from '@ngzard/ui/core';
 
 export const inputGroupVariants = cva(
   mergeClasses(

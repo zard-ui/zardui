@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import {
   tableVariants,
   tableHeaderVariants,
@@ -12,7 +14,6 @@ import {
   tableCaptionVariants,
   type ZardTableVariants,
 } from './table.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'table[z-table]',

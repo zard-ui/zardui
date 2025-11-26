@@ -10,9 +10,10 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { ZardAccordionItemComponent } from './accordion-item.component';
 import { accordionVariants } from './accordion.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-accordion',

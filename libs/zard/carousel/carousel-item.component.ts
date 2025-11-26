@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, inject
 
 import { type ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { ZardCarouselComponent } from './carousel.component';
 import { carouselItemVariants } from './carousel.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-carousel-item',

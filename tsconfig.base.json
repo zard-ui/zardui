@@ -13,7 +13,11 @@
     "lib": ["es2022", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": "."
+    "baseUrl": ".",
+    "paths": {
+      "@ngzard/ui": ["libs/zard/src/index.ts"],
+      "@ngzard/ui/*": ["libs/zard/*/index.ts"],
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

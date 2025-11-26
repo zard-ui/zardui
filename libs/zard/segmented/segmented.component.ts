@@ -15,8 +15,9 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 export interface SegmentedOption {
   value: string;

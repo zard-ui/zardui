@@ -3,9 +3,10 @@ import { PortalModule } from '@angular/cdk/portal';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+
 import { ZardSheetComponent } from './sheet.component';
 import { ZardSheetService } from './sheet.service';
-import { ZardButtonComponent } from '../button/button.component';
 
 const components = [CommonModule, ZardButtonComponent, ZardSheetComponent, OverlayModule, PortalModule];
 

@@ -11,11 +11,12 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import { ZardCommandComponent } from './command.component';
 import { commandItemVariants, commandShortcutVariants, type ZardCommandItemVariants } from './command.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-command-option',

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardTooltipDirective } from '../../tooltip/tooltip';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardTooltipDirective } from '@ngzard/ui/tooltip';
+
 import { ZardKbdGroupComponent } from '../kbd-group.component';
 import { ZardKbdComponent } from '../kbd.component';
 

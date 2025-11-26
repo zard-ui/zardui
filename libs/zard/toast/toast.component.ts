@@ -3,8 +3,9 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 import { NgxSonnerToaster } from 'ngx-sonner';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { toastVariants, type ZardToastVariants } from './toast.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-toast, z-toaster',

@@ -3,8 +3,7 @@ import { Component } from '@angular/core';
 import { ContentComponent } from '../content.component';
 import { FooterComponent } from '../footer.component';
 import { HeaderComponent } from '../header.component';
-import { LayoutComponent } from '../layout.component';
-import { SidebarComponent } from '../sidebar.component';
+import { LayoutComponent, SidebarComponent } from '../layout.component';
 
 @Component({
   selector: 'z-demo-layout-basic',

@@ -23,12 +23,13 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { mergeClasses, noopFun } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import type { ZardSheetRef } from './sheet-ref';
 import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { mergeClasses, noopFun } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardSheetOptions<T, U> {

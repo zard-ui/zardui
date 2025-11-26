@@ -19,9 +19,10 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
 
 export interface ZardResizeEvent {
   sizes: number[];

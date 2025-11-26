@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardAvatarGroupComponent } from '../../avatar/avatar-group.component';
-import { ZardAvatarComponent } from '../../avatar/avatar.component';
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
+import { ZardAvatarGroupComponent, ZardAvatarComponent } from '@ngzard/ui/avatar';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({

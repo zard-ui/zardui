@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 
-import { ZardBadgeComponent } from '../../badge/badge.component';
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import {
   ZardTableBodyComponent,
   ZardTableCellComponent,

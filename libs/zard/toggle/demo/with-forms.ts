@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ZardIconComponent } from '../../icon/icon.component';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { ZardToggleComponent } from '../toggle.component';
 
 @Component({

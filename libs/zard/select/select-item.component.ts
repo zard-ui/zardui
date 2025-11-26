@@ -9,9 +9,10 @@ import {
   signal,
 } from '@angular/core';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { selectItemVariants } from './select.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 // Interface to avoid circular dependency
 interface SelectHost {

@@ -21,8 +21,9 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { dropdownContentVariants } from './dropdown.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu',

@@ -11,10 +11,11 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import type { CalendarDay } from './calendar.types';
 import { getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-calendar-grid',

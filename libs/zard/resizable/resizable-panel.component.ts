@@ -10,8 +10,9 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { resizablePanelVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-resizable-panel',

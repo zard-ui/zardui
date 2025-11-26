@@ -27,11 +27,12 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { generateId, mergeClasses, noopFun } from '@ngzard/ui/core';
+
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants } from './alert-dialog.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { generateId, mergeClasses, noopFun } from '../core/shared/utils/utils';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 

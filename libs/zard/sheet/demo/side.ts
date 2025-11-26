@@ -1,9 +1,10 @@
 import { Component, inject, signal } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardRadioComponent } from '../../radio/radio.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardInputDirective } from '@ngzard/ui/input';
+import { ZardRadioComponent } from '@ngzard/ui/radio';
+
 import { ZardSheetModule } from '../sheet.module';
 import { Z_MODAL_DATA, ZardSheetService } from '../sheet.service';
 

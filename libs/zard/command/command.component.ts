@@ -16,11 +16,12 @@ import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angu
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { commandVariants, type ZardCommandVariants } from './command.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
-import type { ZardIcon } from '../icon/icons';
 
 export interface ZardCommandOption {
   value: unknown;

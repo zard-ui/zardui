@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import { ZardResizableComponent } from './resizable.component';
 import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-resizable-handle, [z-resizable-handle]',

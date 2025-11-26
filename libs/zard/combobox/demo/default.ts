@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.component';
+import { ZardComboboxComponent, ZardComboboxOption } from '../combobox.component';
 
 @Component({
   selector: 'zard-demo-combobox-default',

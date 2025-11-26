@@ -2,6 +2,10 @@ import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewE
 
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective, mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+
 import {
   alertDescriptionVariants,
   alertIconVariants,
@@ -9,10 +13,6 @@ import {
   alertVariants,
   type ZardAlertVariants,
 } from './alert.variants';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { mergeClasses } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-alert, [z-alert]',

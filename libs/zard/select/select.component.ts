@@ -27,6 +27,10 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
+import { ZardBadgeComponent } from '@ngzard/ui/badge';
+import { isElementContentTruncated, mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { ZardSelectItemComponent } from './select-item.component';
 import {
   selectContentVariants,
@@ -34,9 +38,6 @@ import {
   selectVariants,
   type ZardSelectSizeVariants,
 } from './select.variants';
-import { ZardBadgeComponent } from '../badge/badge.component';
-import { isElementContentTruncated, mergeClasses, transform } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;

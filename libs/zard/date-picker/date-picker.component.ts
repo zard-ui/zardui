@@ -13,12 +13,13 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardCalendarComponent } from '@ngzard/ui/calendar';
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardPopoverComponent, ZardPopoverDirective } from '@ngzard/ui/popover';
+
 import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardCalendarComponent } from '../calendar/calendar.component';
-import { mergeClasses } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 
 const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, string> = {
   sm: 'h-8',

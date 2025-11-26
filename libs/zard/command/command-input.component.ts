@@ -21,10 +21,11 @@ import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angu
 import type { ClassValue } from 'clsx';
 import { Subject, switchMap, timer } from 'rxjs';
 
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-command-input',

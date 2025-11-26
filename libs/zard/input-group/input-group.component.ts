@@ -12,6 +12,11 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { isTemplateRef, ZardStringTemplateOutletDirective, generateId, mergeClasses } from '@ngzard/ui/core';
+import { ZardInputDirective } from '@ngzard/ui/input';
+import type { ZardInputSizeVariants } from '@ngzard/ui/input';
+import { ZardLoaderComponent } from '@ngzard/ui/loader';
+
 import {
   inputGroupAddonVariants,
   inputGroupInputVariants,
@@ -19,14 +24,6 @@ import {
   type ZardInputGroupAddonAlignVariants,
   type ZardInputGroupAddonPositionVariants,
 } from './input-group.variants';
-import {
-  isTemplateRef,
-  ZardStringTemplateOutletDirective,
-} from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { generateId, mergeClasses } from '../core/shared/utils/utils';
-import { ZardInputDirective } from '../input/input.directive';
-import type { ZardInputSizeVariants } from '../input/input.variants';
-import { ZardLoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'z-input-group',

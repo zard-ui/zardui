@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
+
 import { ZardDropdownModule } from '../dropdown.module';
 
 @Component({

@@ -13,9 +13,10 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { buttonVariants, type ZardButtonVariants } from './button.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',

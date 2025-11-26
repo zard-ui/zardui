@@ -3,8 +3,9 @@ import { computed, Directive, input } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { menuContentVariants } from './menu.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Directive({
   selector: '[z-menu-content]',

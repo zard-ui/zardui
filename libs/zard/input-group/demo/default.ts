@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardDropdownModule } from '../../dropdown/dropdown.module';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardTooltipDirective } from '../../tooltip/tooltip';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
+import { ZardDropdownModule } from '@ngzard/ui/dropdown';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { ZardInputDirective } from '@ngzard/ui/input';
+import { ZardTooltipDirective } from '@ngzard/ui/tooltip';
+
 import { ZardInputGroupComponent } from '../input-group.component';
 
 @Component({

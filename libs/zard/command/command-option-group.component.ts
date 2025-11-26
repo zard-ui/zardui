@@ -10,10 +10,11 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
 import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-command-option-group',

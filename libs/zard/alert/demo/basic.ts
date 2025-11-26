@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardIconComponent } from '../../icon/icon.component';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { ZardAlertComponent } from '../alert.component';
 
 @Component({

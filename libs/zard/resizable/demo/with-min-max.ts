@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
-import { ZardResizableHandleComponent } from '../resizable-handle.component';
+import { ZardResizableHandleComponent, ZardResizableComponent } from '../resizable-handle.component';
 import { ZardResizablePanelComponent } from '../resizable-panel.component';
-import { ZardResizableComponent } from '../resizable.component';
 
 @Component({
   selector: 'z-demo-resizable-with-min-max',

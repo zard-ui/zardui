@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses, transform } from '@ngzard/ui/core';
+
 import {
   formFieldVariants,
   formControlVariants,
@@ -9,7 +11,6 @@ import {
   formMessageVariants,
   type ZardFormMessageVariants,
 } from './form.variants';
-import { mergeClasses, transform } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-form-field, [z-form-field]',

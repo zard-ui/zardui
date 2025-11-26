@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { ZardToggleComponent } from './toggle.component';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   imports: [ZardToggleComponent, ZardIconComponent],

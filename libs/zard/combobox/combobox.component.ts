@@ -16,19 +16,22 @@ import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angu
 
 import type { ClassValue } from 'clsx';
 
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import {
+  ZardCommandEmptyComponent,
+  ZardCommandInputComponent,
+  ZardCommandListComponent,
+  ZardCommandOptionGroupComponent,
+  ZardCommandOptionComponent,
+} from '@ngzard/ui/command';
+import { ZardCommandComponent, type ZardCommandOption } from '@ngzard/ui/command';
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardEmptyComponent } from '@ngzard/ui/empty';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import type { ZardIcon } from '@ngzard/ui/icon';
+import { ZardPopoverComponent, ZardPopoverDirective } from '@ngzard/ui/popover';
+
 import { comboboxVariants, type ZardComboboxVariants } from './combobox.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardCommandEmptyComponent } from '../command/command-empty.component';
-import { ZardCommandInputComponent } from '../command/command-input.component';
-import { ZardCommandListComponent } from '../command/command-list.component';
-import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
-import { ZardCommandOptionComponent } from '../command/command-option.component';
-import { ZardCommandComponent, type ZardCommandOption } from '../command/command.component';
-import { mergeClasses } from '../core/shared/utils/utils';
-import { ZardEmptyComponent } from '../empty/empty.component';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 
 export interface ZardComboboxOption {
   value: string;

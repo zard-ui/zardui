@@ -3,11 +3,11 @@ import { Component, computed, signal } from '@angular/core';
 
 import { toast } from 'ngx-sonner';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardEmptyComponent } from '../../empty/empty.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardIconComponent } from '../icon.component';
-import { ZARD_ICONS } from '../icons';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardEmptyComponent } from '@ngzard/ui/empty';
+import { ZardInputDirective } from '@ngzard/ui/input';
+
+import { ZardIconComponent, ZARD_ICONS } from '../icon.component';
 
 @Component({
   selector: 'z-demo-icon-searchable',

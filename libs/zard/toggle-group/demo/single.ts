@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-group.component';
+import { ZardToggleGroupComponent, ZardToggleGroupItem } from '../toggle-group.component';
 
 @Component({
   selector: 'demo-toggle-group-single',

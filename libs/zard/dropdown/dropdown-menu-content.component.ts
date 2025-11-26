@@ -2,8 +2,9 @@ import { Component, computed, input, type TemplateRef, viewChild, ViewEncapsulat
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { dropdownContentVariants } from './dropdown.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-content',

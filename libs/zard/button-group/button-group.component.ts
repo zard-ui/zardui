@@ -10,15 +10,16 @@ import {
 
 import { type ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+import { ZardDividerComponent } from '@ngzard/ui/divider';
+import { type ZardDividerVariants } from '@ngzard/ui/divider';
+
 import {
   buttonGroupDividerVariants,
   buttonGroupTextVariants,
   buttonGroupVariants,
   type ZardButtonGroupVariants,
 } from './button-group.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
-import { ZardDividerComponent } from '../divider/divider.component';
-import { type ZardDividerVariants } from '../divider/divider.variants';
 
 @Component({
   selector: 'z-button-group',

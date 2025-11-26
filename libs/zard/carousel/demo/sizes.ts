@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardCardComponent } from '../../card';
+import { ZardCardComponent } from '@ngzard/ui/card';
+
 import { ZardCarouselModule } from '../carousel.module';
 
 @Component({

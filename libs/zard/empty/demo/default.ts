@@ -1,7 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({

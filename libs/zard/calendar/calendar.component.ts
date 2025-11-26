@@ -13,12 +13,13 @@ import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-int
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
 import type { CalendarMode, CalendarValue } from './calendar.types';
 import { generateCalendarDays, getSelectedDatesArray, isSameDay } from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
 

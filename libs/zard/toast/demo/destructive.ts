@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { toast } from 'ngx-sonner';
 
-import { ZardButtonComponent } from '../../button/button.component';
+import { ZardButtonComponent } from '@ngzard/ui/button';
 
 @Component({
   selector: 'zard-demo-toast-destructive',

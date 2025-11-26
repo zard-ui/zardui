@@ -4,8 +4,9 @@ import { booleanAttribute, computed, Directive, effect, inject, input, signal, u
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@ngzard/ui/core';
+
 import { menuItemVariants, type ZardMenuItemVariants } from './menu.variants';
-import { mergeClasses } from '../core/shared/utils/utils';
 
 @Directive({
   selector: 'button[z-menu-item], [z-menu-item]',

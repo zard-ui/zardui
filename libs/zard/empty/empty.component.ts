@@ -9,6 +9,10 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective, mergeClasses } from '@ngzard/ui/core';
+import { ZardIconComponent } from '@ngzard/ui/icon';
+import { type ZardIcon } from '@ngzard/ui/icon';
+
 import {
   emptyActionsVariants,
   emptyDescriptionVariants,
@@ -18,10 +22,6 @@ import {
   emptyTitleVariants,
   emptyVariants,
 } from './empty.variants';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { mergeClasses } from '../core/shared/utils/utils';
-import { ZardIconComponent } from '../icon/icon.component';
-import { type ZardIcon } from '../icon/icons';
 
 @Component({
   selector: 'z-empty',

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { generateId } from '../../core/shared/utils/utils';
+import { ZardButtonComponent } from '@ngzard/ui/button';
+import { generateId } from '@ngzard/ui/core';
+
 import { ZardCardComponent } from '../card.component';
 
 @Component({

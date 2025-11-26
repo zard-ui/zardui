@@ -1,8 +1,8 @@
 import { Component, signal } from '@angular/core';
 
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardSelectItemComponent } from '../../select/select-item.component';
-import { ZardSelectComponent } from '../../select/select.component';
+import { ZardInputDirective } from '@ngzard/ui/input';
+import { ZardSelectItemComponent, ZardSelectComponent } from '@ngzard/ui/select';
+
 import { ZardButtonGroupComponent } from '../button-group.component';
 
 @Component({

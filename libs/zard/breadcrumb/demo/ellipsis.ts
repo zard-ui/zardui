@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 
-import { ZardMenuModule } from '../../menu/menu.module';
+import { ZardMenuModule } from '@ngzard/ui/menu';
+
 import { ZardBreadcrumbModule } from '../breadcrumb.module';
 
 @Component({
