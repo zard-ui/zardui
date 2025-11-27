@@ -8,7 +8,6 @@ import { ZardSelectComponent } from './select.component';
 
 @Component({
   imports: [ZardSelectComponent, ZardSelectItemComponent],
-  standalone: true,
   template: `
     <z-select [(zValue)]="value" [zLabel]="label()" [zPlaceholder]="placeholder()" [zDisabled]="disabled()">
       <z-select-item zValue="option1">Option 1</z-select-item>
@@ -45,7 +44,7 @@ describe('ZardSelectComponent', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [ZardSelectComponent],
+        imports: [TestHostComponent, ZardSelectItemComponent],
       }).compileComponents();
 
       fixture = TestBed.createComponent(ZardSelectComponent);
@@ -380,7 +379,7 @@ describe('ZardSelectComponent', () => {
       expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree', '1 more item selected']);
     });
 
-    it('select more items with deselect', () => {
+    it('should handle multiple deselects correctly', () => {
       selectComponent.selectItem('option1', 'OptionOne');
       selectComponent.selectItem('option2', 'OptionTwo');
       selectComponent.selectItem('option3', 'OptionThree');

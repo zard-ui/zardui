@@ -12,6 +12,7 @@ import {
   computed,
   contentChildren,
   DestroyRef,
+  effect,
   ElementRef,
   forwardRef,
   inject,
@@ -47,6 +48,8 @@ import { ZardIconComponent } from '../icon/icon.component';
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
 
+const COMPACT_MODE_WIDTH_THRESHOLD = 100;
+
 @Component({
   selector: 'z-select, [z-select]',
   imports: [CommonModule, OverlayModule, ZardBadgeComponent, ZardIconComponent],
@@ -61,6 +64,9 @@ type OnChangeType = (value: string) => void;
       [attr.aria-haspopup]="'listbox'"
       [attr.data-state]="isOpen() ? 'open' : 'closed'"
       [attr.data-placeholder]="!zValue() ? '' : null"
+      [tabIndex]="0"
+      (focus)="onFocus()"
+      (blur)="!isOpen() && isFocus.set(false)"
     >
       <span class="flex flex-1 flex-wrap items-center gap-2">
         @let labels = selectedLabels();
@@ -113,7 +119,7 @@ type OnChangeType = (value: string) => void;
 })
 export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
   private readonly injector = inject(Injector);
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
@@ -121,7 +127,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   private readonly platformId = inject(PLATFORM_ID);
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<void>>('dropdownTemplate');
-  protected readonly selectItems = contentChildren(ZardSelectItemComponent);
+  readonly selectItems = contentChildren(ZardSelectItemComponent);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -139,6 +145,14 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
   readonly isOpen = signal(false);
   readonly focusedIndex = signal<number>(-1);
+  protected readonly isFocus = signal(false);
+  protected readonly isCompact = signal(false);
+
+  protected onFocus(): void {
+    if (this.isCompact()) {
+      this.isFocus.set(true);
+    }
+  }
 
   // Compute the label based on selected value
   readonly selectedLabels = computed<string[]>(() => {
@@ -169,13 +183,30 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     ),
   );
 
+  constructor() {
+    effect(() => {
+      if (this.isFocus()) {
+        this.elementRef.nativeElement.setAttribute('data-active', '');
+      } else {
+        this.elementRef.nativeElement.removeAttribute('data-active');
+      }
+    });
+  }
+
   ngAfterContentInit() {
+    const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
     // Setup select host reference for each item
     for (const item of this.selectItems()) {
       item.setSelectHost({
         selectedValue: () => (this.zMultiple() ? (this.zValue() as string[]) : [this.zValue() as string]),
         selectItem: (value: string, label: string) => this.selectItem(value, label),
       });
+      item.zSize.set(this.zSize());
+
+      if (hostWidth <= COMPACT_MODE_WIDTH_THRESHOLD) {
+        this.isCompact.set(true);
+        item.zMode.set('compact');
+      }
     }
   }
 
@@ -362,24 +393,32 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
           return;
         }
 
+        const overlayPaneElement = this.overlayRef.overlayElement;
+        const textElements = Array.from(
+          overlayPaneElement.querySelectorAll<HTMLElement>('z-select-item > span.truncate'),
+        );
+        let isOverflow = false;
+        for (const textElement of textElements) {
+          if (textElement.scrollWidth > textElement.clientWidth + 1) {
+            isOverflow = true;
+            break;
+          }
+        }
+
+        if (!isOverflow) {
+          this.setFocusOnOpen();
+          return;
+        }
+
         const selectItems = this.selectItems();
         let itemMaxWidth = 0;
         for (const item of selectItems) {
           itemMaxWidth = Math.max(itemMaxWidth, item.elementRef.nativeElement.scrollWidth);
         }
 
-        const overlayPaneElement = this.overlayRef.overlayElement;
-        const textElements = Array.from(overlayPaneElement.querySelectorAll<HTMLElement>('z-select-item > span'));
-        let isOverflow = false;
-        for (const textElement of textElements) {
-          if (textElement.scrollWidth > textElement.clientWidth) {
-            isOverflow = true;
-            break;
-          }
-        }
-
-        if (isOverflow && selectItems.length) {
-          const elementStyles = getComputedStyle(selectItems[0].elementRef.nativeElement);
+        const [selectItem] = selectItems;
+        if (isOverflow && selectItem) {
+          const elementStyles = getComputedStyle(selectItem.elementRef.nativeElement);
           const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left')) || 0;
           const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right')) || 0;
           itemMaxWidth += leftPadding + rightPadding;
@@ -434,7 +473,10 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
             filter(event => !this.elementRef.nativeElement.contains(event.target)),
             takeUntilDestroyed(this.destroyRef),
           )
-          .subscribe(() => this.close());
+          .subscribe(() => {
+            this.isFocus.set(false);
+            this.close();
+          });
       } catch (error) {
         console.error('Error creating overlay:', error);
       }
@@ -533,11 +575,17 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
   private focusSelectedItem() {
     const items = this.getSelectItems();
-    if (items.length === 0) return;
+    if (items.length === 0) {
+      return;
+    }
 
     // Find the index of the currently selected item
-    const selectedValue = this.zValue();
+    let selectedValue = this.zValue();
     let selectedIndex = -1;
+
+    if (Array.isArray(selectedValue)) {
+      [selectedValue] = this.zValue();
+    }
 
     if (selectedValue) {
       selectedIndex = items.findIndex(item => item.getAttribute('value') === selectedValue);
@@ -581,16 +629,26 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 ```angular-ts title="select.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const selectVariants = cva('relative inline-block w-full');
+import { mergeClasses } from '../../shared/utils/utils';
+
+export const selectVariants = cva(
+  'relative inline-block w-full rounded-md group data-active:border data-active:border-ring data-active:ring-ring/50 data-active:ring-[3px]',
+);
 
 export const selectTriggerVariants = cva(
-  'flex w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent px-3 shadow-xs transition-[color,box-shadow] outline-none cursor-pointer disabled:cursor-not-allowed disabled:opacity-50 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+  mergeClasses(
+    'flex w-full items-center justify-between gap-2 rounded-md border border-input bg-transparent',
+    'shadow-xs transition-[color,box-shadow] outline-none cursor-pointer disabled:cursor-not-allowed',
+    'disabled:opacity-50 data-placeholder:text-muted-foreground [&_svg:not([class*="text-"])]:text-muted-foreground',
+    'dark:bg-input/30 dark:hover:bg-input/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
+    'aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+  ),
   {
     variants: {
       zSize: {
-        sm: 'min-h-8 py-1 text-xs',
-        default: 'min-h-9 py-1.5 text-sm',
-        lg: 'min-h-10 py-2 text-base',
+        sm: 'min-h-8 py-1 text-xs px-2',
+        default: 'min-h-9 py-1.5 px-3 text-sm',
+        lg: 'min-h-10 py-2 text-base px-4',
       },
     },
     defaultVariants: {
@@ -599,13 +657,56 @@ export const selectTriggerVariants = cva(
   },
 );
 export const selectContentVariants = cva(
-  'z-9999 min-w-full overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95',
+  'z-9999 min-w-full scrollbar-hide overflow-y-auto rounded-md border bg-popover text-popover-foreground shadow-lg animate-in fade-in-0 zoom-in-95',
 );
 export const selectItemVariants = cva(
-  'relative flex min-w-full cursor-pointer text-nowrap items-center gap-2 rounded-sm mb-0.5 py-1.5 pr-8 pl-2 text-sm outline-hidden select-none hover:bg-accent hover:text-accent-foreground data-selected:bg-accent data-selected:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:hover:bg-transparent data-disabled:hover:text-current [&_svg:not([class*="text-"])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+  'relative flex min-w-full cursor-pointer text-nowrap items-center gap-2 rounded-sm mb-0.5 outline-hidden select-none hover:bg-accent hover:text-accent-foreground data-selected:bg-accent data-selected:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed data-disabled:hover:bg-transparent data-disabled:hover:text-current [&_svg:not([class*="text-"])]:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*="size-"])]:size-4',
+  {
+    variants: {
+      zSize: {
+        sm: 'min-h-8 py-1 text-xs',
+        default: 'min-h-9 py-1.5 text-sm',
+        lg: 'min-h-10 py-2 text-base',
+      },
+      zMode: {
+        normal: 'pr-8 pl-2',
+        compact: 'pl-6.5 pr-2',
+      },
+    },
+    compoundVariants: [
+      {
+        zMode: 'compact',
+        zSize: 'sm',
+        class: 'pl-5 pr-2',
+      },
+    ],
+  },
 );
 
+export const selectItemIconVariants = cva('absolute flex size-3.5 items-center justify-center', {
+  variants: {
+    // zSize variants are placeholders for compound variant matching
+    zSize: {
+      sm: '',
+      default: '',
+      lg: '',
+    },
+    zMode: {
+      normal: 'right-2',
+      compact: 'left-2',
+    },
+  },
+  compoundVariants: [
+    {
+      zMode: 'compact',
+      zSize: 'sm',
+      class: 'left-1',
+    },
+  ],
+});
+
 export type ZardSelectSizeVariants = NonNullable<VariantProps<typeof selectTriggerVariants>['zSize']>;
+export type ZardSelectItemModeVariants = NonNullable<VariantProps<typeof selectItemVariants>['zMode']>;
 
 ```
 
@@ -623,7 +724,12 @@ import {
   signal,
 } from '@angular/core';
 
-import { selectItemVariants } from './select.variants';
+import {
+  selectItemIconVariants,
+  selectItemVariants,
+  type ZardSelectItemModeVariants,
+  type ZardSelectSizeVariants,
+} from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 
@@ -638,8 +744,8 @@ interface SelectHost {
   imports: [ZardIconComponent],
   template: `
     @if (isSelected()) {
-      <span class="absolute right-2 flex size-3.5 items-center justify-center">
-        <z-icon zType="check" />
+      <span [class]="iconClasses()">
+        <z-icon zType="check" [zStrokeWidth]="strokeWidth()" />
       </span>
     }
     <span class="truncate">
@@ -659,18 +765,32 @@ interface SelectHost {
   },
 })
 export class ZardSelectItemComponent {
+  readonly elementRef = inject(ElementRef<HTMLElement>);
+
   readonly zValue = input.required<string>();
   readonly zDisabled = input(false, { transform });
   readonly class = input<string>('');
 
   private readonly select = signal<SelectHost | null>(null);
-  readonly elementRef = inject(ElementRef);
+
   readonly label = linkedSignal<string>(() => {
     const element = this.elementRef?.nativeElement;
     return (element?.textContent ?? element?.innerText)?.trim() ?? '';
   });
 
-  protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
+  readonly zMode = signal<ZardSelectItemModeVariants>('normal');
+  readonly zSize = signal<ZardSelectSizeVariants>('default');
+
+  protected readonly classes = computed(() =>
+    mergeClasses(selectItemVariants({ zMode: this.zMode(), zSize: this.zSize() ?? 'default' }), this.class()),
+  );
+
+  protected readonly iconClasses = computed(() =>
+    mergeClasses(selectItemIconVariants({ zMode: this.zMode(), zSize: this.zSize() ?? 'default' })),
+  );
+
+  protected readonly strokeWidth = computed(() => (this.zMode() === 'compact' ? 3 : 2));
+
   protected readonly isSelected = computed(() => this.select()?.selectedValue().includes(this.zValue()));
 
   setSelectHost(selectHost: SelectHost) {

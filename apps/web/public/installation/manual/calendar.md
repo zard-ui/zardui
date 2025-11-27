@@ -754,24 +754,14 @@ import { ZardSelectComponent } from '../select/select.component';
       <!-- Month and Year Selectors -->
       <div class="flex items-center space-x-2">
         <!-- Month Select -->
-        <z-select
-          class="min-w-20"
-          [zValue]="currentMonth()"
-          [zLabel]="currentMonthName()"
-          (zSelectionChange)="onMonthChange($event)"
-        >
+        <z-select [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
           @for (month of months; track $index) {
             <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
           }
         </z-select>
 
         <!-- Year Select -->
-        <z-select
-          class="min-w-21"
-          [zValue]="currentYear()"
-          [zLabel]="currentYear()"
-          (zSelectionChange)="onYearChange($event)"
-        >
+        <z-select [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="onYearChange($event)">
           @for (year of availableYears(); track year) {
             <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
           }
