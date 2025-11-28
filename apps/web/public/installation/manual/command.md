@@ -468,7 +468,7 @@ import type { ClassValue } from 'clsx';
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/config/providezard';
+import { checkForProperZardInitialization } from '../core/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -482,8 +482,10 @@ import { ZardIconComponent } from '../icon/icon.component';
         [class]="classes()"
         [placeholder]="placeholder()"
         [value]="searchTerm()"
+        [disabled]="disabled()"
         (input.debounce.150)="onInput($event)"
         (keydown)="onKeyDown($event)"
+        (blur)="onTouched()"
         aria-controls="command-list"
         aria-describedby="command-instructions"
         aria-haspopup="listbox"
@@ -518,13 +520,15 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
 
   readonly searchTerm = signal('');
 
-  protected readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
+  readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
 
-  private onChange = (_: string) => {
+  readonly disabled = signal(false);
+
+  protected onChange = (_: string) => {
     // ControlValueAccessor implementation - intentionally empty
   };
 
-  private onTouched = () => {
+  protected onTouched = () => {
     // ControlValueAccessor implementation - intentionally empty
   };
 
@@ -544,6 +548,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
     if (this.commandComponent) {
       this.commandComponent.onSearch(value);
     }
+    this.onChange(value);
     this.valueChange.emit(value);
   }
 
@@ -567,7 +572,9 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
   writeValue(value: string | null): void {
     const normalizedValue = value ?? '';
     this.searchTerm.set(normalizedValue);
-    this.updateParentComponents(normalizedValue);
+    if (this.commandComponent) {
+      this.commandComponent.onSearch(normalizedValue);
+    }
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -578,8 +585,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  setDisabledState(_: boolean): void {
-    // Implementation if needed for form control disabled state
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
   }
 
   /**

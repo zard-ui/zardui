@@ -28,7 +28,7 @@ import { filter, Subscription } from 'rxjs';
 
 import { popoverVariants } from './popover.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/config/providezard';
+import { checkForProperZardInitialization } from '../core/providezard';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';

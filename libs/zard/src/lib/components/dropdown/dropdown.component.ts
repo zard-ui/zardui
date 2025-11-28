@@ -23,7 +23,7 @@ import type { ClassValue } from 'clsx';
 
 import { dropdownContentVariants } from './dropdown.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/config/providezard';
+import { checkForProperZardInitialization } from '../core/providezard';
 
 @Component({
   selector: 'z-dropdown-menu',

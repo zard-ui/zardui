@@ -1,5 +1,5 @@
+import { DOCUMENT } from '@angular/common';
 import {
-  DOCUMENT,
   inject,
   InjectionToken,
   makeEnvironmentProviders,
@@ -8,20 +8,21 @@ import {
 } from '@angular/core';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
-import { ZardPreset, type ZardConfigType } from './config.types';
-import { updatePreset } from './update-preset';
-import { ZardDebounceEventManagerPlugin } from '../event-manager-plugins/zard-debounce-event-manager-plugin';
-import { ZardEventManagerPlugin } from '../event-manager-plugins/zard-event-manager-plugin';
+import { ZardPreset, type ZardConfigType } from './config/config.types';
+import { updatePreset } from './config/update-preset';
+import { ZardDebounceEventManagerPlugin } from '../core/event-manager-plugins/zard-debounce-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../core/event-manager-plugins/zard-event-manager-plugin';
 
 export const ZARD_CONFIG = new InjectionToken<ZardConfigType>('ZARD_CONFIG');
 
 /*
-  usage:
-    - provideZard(): this will use styles.css only
-    - provideZard(withSlatePreset()): sets from app.config what base colors are used and
+    usage:
+    - provideZard(): uses the theme defined in styles.css only
+    - provideZard(withSlatePreset()): selects a base color preset from app.config and
       overrides what is defined in styles.css
 
-    ** Note ** styles.css is still required in order to overriding works
+      ** Note ** styles.css is still required for overrides to work.
+      The CLI will automatically add `provideZard()` to your app configuration in future releases.
  */
 export function provideZard(zardConfig?: ZardConfigType): EnvironmentProviders {
   const zardConfigProvider = zardConfig ? [{ provide: ZARD_CONFIG, useValue: zardConfig }] : [];
@@ -67,7 +68,7 @@ export const withStonePreset = (): ZardConfigType => ({ theme: { preset: ZardPre
 export const withZincPreset = (): ZardConfigType => ({ theme: { preset: ZardPreset.ZINC } }) as const;
 
 export const checkForProperZardInitialization = (): void => {
-  const eventPlugins = inject(EVENT_MANAGER_PLUGINS);
+  const eventPlugins = inject(EVENT_MANAGER_PLUGINS, { optional: true }) ?? [];
   const zardProperlyInitialized = eventPlugins.some(
     plugin => plugin instanceof ZardEventManagerPlugin || plugin instanceof ZardDebounceEventManagerPlugin,
   );

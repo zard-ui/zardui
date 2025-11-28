@@ -17,6 +17,46 @@ export const registry: ComponentRegistry[] = [
         name: 'directives/string-template-outlet/string-template-outlet.directive.ts',
         content: '',
       },
+      {
+        name: 'config/styles/gray.ts',
+        content: '',
+      },
+      {
+        name: 'config/styles/neutral.ts',
+        content: '',
+      },
+      {
+        name: 'config/styles/slate.ts',
+        content: '',
+      },
+      {
+        name: 'config/styles/stone.ts',
+        content: '',
+      },
+      {
+        name: 'config/styles/zinc.ts',
+        content: '',
+      },
+      {
+        name: 'config/update-preset.ts',
+        content: '',
+      },
+      {
+        name: 'config/config.types.ts',
+        content: '',
+      },
+      {
+        name: 'event-manager-plugins/zard-debounce-event-manager-plugin.ts',
+        content: '',
+      },
+      {
+        name: 'event-manager-plugins/zard-event-manager-plugin.ts',
+        content: '',
+      },
+      {
+        name: 'providezard.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -55,7 +95,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'button',
-    registryDependencies: ['icon'],
+    registryDependencies: ['core', 'icon'],
     files: [
       {
         name: 'button.component.ts',
@@ -69,7 +109,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'sheet',
-    registryDependencies: ['button', 'icon'],
+    registryDependencies: ['button', 'core', 'icon'],
     files: [
       {
         name: 'sheet.component.ts',
@@ -109,7 +149,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'empty',
-    registryDependencies: ['core'],
+    registryDependencies: ['core', 'icon'],
     files: [
       {
         name: 'empty.component.ts',
@@ -123,6 +163,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'badge',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'badge.component.ts',
@@ -168,7 +209,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'alert-dialog',
-    registryDependencies: ['button'],
+    registryDependencies: ['button', 'core'],
     files: [
       {
         name: 'alert-dialog.component.ts',
@@ -194,7 +235,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'avatar',
-    registryDependencies: ['icon'],
+    registryDependencies: ['core', 'icon'],
     files: [
       {
         name: 'avatar.component.ts',
@@ -222,7 +263,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'dialog',
-    registryDependencies: ['button', 'icon'],
+    registryDependencies: ['button', 'core', 'icon'],
     files: [
       {
         name: 'dialog.component.ts',
@@ -286,6 +327,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'icon',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'icon.component.ts',
@@ -303,6 +345,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'input',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'input.directive.ts',
@@ -330,7 +373,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'select',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['badge', 'core', 'icon'],
     files: [
       {
         name: 'select.component.ts',
@@ -348,6 +391,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'switch',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'switch.component.ts',
@@ -361,7 +405,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tabs',
-    registryDependencies: ['button', 'icon'],
+    registryDependencies: ['button', 'core', 'icon'],
     files: [
       {
         name: 'tabs.component.ts',
@@ -375,6 +419,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'toggle',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'toggle.component.ts',
@@ -388,6 +433,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tooltip',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'tooltip.ts',
@@ -423,6 +469,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'divider',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'divider.component.ts',
@@ -436,6 +483,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'loader',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'loader.component.ts',
@@ -449,6 +497,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'progress-bar',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'progress-bar.component.ts',
@@ -462,6 +511,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'radio',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'radio.component.ts',
@@ -475,6 +525,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'slider',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'slider.component.ts',
@@ -574,7 +625,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'date-picker',
-    registryDependencies: ['button', 'calendar', 'popover', 'input', 'icon'],
+    registryDependencies: ['button', 'calendar', 'core', 'popover', 'input', 'icon'],
     files: [
       {
         name: 'date-picker.component.ts',
@@ -588,6 +639,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'form',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'form.component.ts',
@@ -605,7 +657,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'pagination',
-    registryDependencies: ['button', 'icon'],
+    registryDependencies: ['button', 'core', 'icon'],
     files: [
       {
         name: 'pagination.component.ts',
@@ -659,6 +711,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'segmented',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'segmented.component.ts',
@@ -672,6 +725,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'skeleton',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'skeleton.component.ts',
@@ -685,6 +739,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'table',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'table.component.ts',
@@ -703,6 +758,7 @@ export const registry: ComponentRegistry[] = [
   {
     name: 'toast',
     dependencies: ['ngx-sonner'],
+    registryDependencies: ['core'],
     files: [
       {
         name: 'toast.component.ts',
@@ -716,7 +772,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'toggle-group',
-    registryDependencies: ['toggle', 'icon'],
+    registryDependencies: ['core', 'toggle', 'icon'],
     files: [
       {
         name: 'toggle-group.component.ts',
@@ -730,6 +786,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'menu',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'menu.directive.ts',
@@ -763,7 +820,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'button-group',
-    registryDependencies: ['divider'],
+    registryDependencies: ['core', 'divider'],
     files: [
       {
         name: 'button-group.component.ts',
@@ -777,6 +834,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'kbd',
+    registryDependencies: ['core'],
     files: [
       {
         name: 'kbd.component.ts',

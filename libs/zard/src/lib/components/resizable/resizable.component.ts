@@ -21,7 +21,7 @@ import type { ClassValue } from 'clsx';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/config/providezard';
+import { checkForProperZardInitialization } from '../core/providezard';
 
 export interface ZardResizeEvent {
   sizes: number[];

@@ -36,7 +36,7 @@ import {
 } from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
-import { checkForProperZardInitialization } from '../core/config/providezard';
+import { checkForProperZardInitialization } from '../core/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
@@ -534,12 +534,14 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     }
 
     // Find the index of the currently selected item
-    const selectedValue = this.zValue();
-    let selectedIndex = -1;
-
-    if (selectedValue) {
-      selectedIndex = items.findIndex(item => item.getAttribute('value') === selectedValue);
+    let selectedValue;
+    if (Array.isArray(this.zValue()) && this.zValue().length) {
+      [selectedValue] = this.zValue();
+    } else {
+      selectedValue = this.zValue();
     }
+
+    let selectedIndex = items.findIndex(item => item.getAttribute('value') === selectedValue);
 
     // If no item is selected, focus the first item
     if (selectedIndex === -1) {

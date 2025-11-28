@@ -30,7 +30,7 @@ import { ZardCommandListComponent } from '../command/command-list.component';
 import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
 import { ZardCommandOptionComponent } from '../command/command-option.component';
 import { ZardCommandComponent, type ZardCommandOption } from '../command/command.component';
-import { checkForProperZardInitialization } from '../core/config/providezard';
+import { checkForProperZardInitialization } from '../core/providezard';
 import { ZardEmptyComponent } from '../empty/empty.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
@@ -174,7 +174,8 @@ export interface ZardComboboxGroup {
     '[class]': 'classes()',
     '(document:keydown.escape)': 'onDocumentKeyDown($event)',
     '(keydown.escape.prevent-with-stop)': 'onKeyDownEscape()',
-    '(keydown.{tab,arrowdown,arrowup,enter,home,end,pageup,pagedown,space}.prevent)': 'onKeyDown($event)',
+    '(keydown.{arrowdown,arrowup,enter,home,end,pageup,pagedown,space}.prevent)': 'onKeyDown($event)',
+    '(keydown.tab)': 'onKeyDown($event)',
   },
   exportAs: 'zCombobox',
 })

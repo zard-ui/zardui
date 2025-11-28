@@ -26,7 +26,7 @@ import {
 } from './carousel.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
-import { checkForProperZardInitialization } from '../core/config/providezard';
+import { checkForProperZardInitialization } from '../core/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({

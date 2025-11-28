@@ -171,7 +171,7 @@ export class ZSliderThumbComponent {
         [min]="zMin()"
         [max]="zMax()"
         [disabled]="disabled()"
-        (keydown)="handleKeydown($event)"
+        (keydown.{home,end,arrowleft,arrowright,arrowdown,arrowup}.prevent)="handleKeydown($event)"
       />
     </span>
   `,
@@ -326,7 +326,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
     this.disabled.set(isDisabled);
   }
 
-  handleKeydown(event: KeyboardEvent): void {
+  handleKeydown(event: Event): void {
     if (this.disabled()) {
       return;
     }
@@ -337,7 +337,9 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
     let newValue = currentValue;
 
-    switch (event.key) {
+    const { key } = event as KeyboardEvent;
+
+    switch (key) {
       case 'Home':
         newValue = this.zMin();
         break;
@@ -345,26 +347,24 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
         newValue = this.zMax();
         break;
       case 'ArrowLeft':
-        newValue = Math.max(currentValue - this.zStep(), this.zMin());
-        break;
-      case 'ArrowRight':
-        newValue = Math.min(currentValue + this.zStep(), this.zMax());
-        break;
       case 'ArrowDown':
         newValue = Math.max(currentValue - this.zStep(), this.zMin());
         break;
+      case 'ArrowRight':
       case 'ArrowUp':
         newValue = Math.min(currentValue + this.zStep(), this.zMax());
         break;
+
       default:
         return;
     }
 
-    this.percentValue.set(convertValueToPercentage(newValue, this.zMin(), this.zMax()));
-    this.onSlide.emit(newValue);
-    this.lastEmittedValue.set(newValue);
-    this.onChange(newValue);
-    event.preventDefault();
+    if (newValue !== currentValue) {
+      this.percentValue.set(convertValueToPercentage(newValue, this.zMin(), this.zMax()));
+      this.onSlide.emit(newValue);
+      this.lastEmittedValue.set(newValue);
+      this.onChange(newValue);
+    }
   }
 
   private updateSliderFromPercentage(percentage: number): void {

@@ -5,7 +5,7 @@ import type { ClassValue } from 'clsx';
 import { ZardAccordionComponent } from './accordion.component';
 import { accordionContentVariants, accordionItemVariants, accordionTriggerVariants } from './accordion.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/config/providezard';
+import { checkForProperZardInitialization } from '../core/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -14,7 +14,6 @@ import { ZardIconComponent } from '../icon/icon.component';
   template: `
     <button
       type="button"
-      tabindex="0"
       [attr.aria-controls]="'content-' + zValue()"
       [attr.aria-expanded]="isOpen()"
       [id]="'accordion-' + zValue()"

@@ -1,4 +1,17 @@
+// Core
 export * from './lib/components/core/directives/string-template-outlet/string-template-outlet.directive';
+export * from './lib/components/core/config/update-preset';
+export * from './lib/components/core/config/config.types';
+export * from './lib/components/core/config/styles/gray';
+export * from './lib/components/core/config/styles/neutral';
+export * from './lib/components/core/config/styles/slate';
+export * from './lib/components/core/config/styles/stone';
+export * from './lib/components/core/config/styles/zinc';
+export * from './lib/components/core/event-manager-plugins/zard-debounce-event-manager-plugin';
+export * from './lib/components/core/event-manager-plugins/zard-event-manager-plugin';
+export * from './lib/components/core/providezard';
+
+// UI components
 export * from './lib/components/alert/alert.component';
 export * from './lib/components/avatar/avatar.component';
 export * from './lib/components/avatar/avatar-group.component';
@@ -49,8 +62,8 @@ export {
   ZardAlertDialogComponent,
   ZardAlertDialogOptions,
   ZardAlertDialogModule,
-  OnClickCallback as AlertDialogOnClickCallback,
 } from './lib/components/alert-dialog/alert-dialog.component';
+export { type OnClickCallback as AlertDialogOnClickCallback } from './lib/components/alert-dialog/alert-dialog.component';
 export * from './lib/components/alert-dialog/alert-dialog.service';
 export * from './lib/components/alert-dialog/alert-dialog-ref';
 
@@ -68,12 +81,8 @@ export * from './lib/components/command/command.module';
 export * from './lib/components/combobox/combobox.component';
 
 // Dialog
-export {
-  ZardDialogComponent,
-  ZardDialogOptions,
-  ZardDialogModule,
-  OnClickCallback as DialogOnClickCallback,
-} from './lib/components/dialog/dialog.component';
+export { ZardDialogComponent, ZardDialogOptions, ZardDialogModule } from './lib/components/dialog/dialog.component';
+export { type OnClickCallback as DialogOnClickCallback } from './lib/components/dialog/dialog.component';
 export * from './lib/components/dialog/dialog.service';
 export * from './lib/components/dialog/dialog-ref';
 
