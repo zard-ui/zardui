@@ -17,6 +17,6 @@
 
 ### Events
 
-| Event       | Description                           | Type     |
-| ----------- | ------------------------------------- | -------- |
-| `(onSlide)` | Emitted when the slider value changes | `number` |
+| Event                 | Description                           | Type     |
+| --------------------- | ------------------------------------- | -------- |
+| `(zSlideIndexChange)` | Emitted when the slider value changes | `number` |
