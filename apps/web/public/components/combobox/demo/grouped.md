@@ -13,7 +13,7 @@ import { ZardComboboxComponent, type ZardComboboxGroup, type ZardComboboxOption 
       placeholder="Select technology..."
       searchPlaceholder="Search technology..."
       emptyText="No technology found."
-      (zOnSelect)="onSelect($event)"
+      (zComboSelected)="onSelect($event)"
     />
   `,
 })

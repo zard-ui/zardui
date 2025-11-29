@@ -18,7 +18,7 @@
 
 ### Outputs
 
-| Event          | Type                               | Description                        |
-| -------------- | ---------------------------------- | ---------------------------------- |
-| `zValueChange` | `EventEmitter<string \| null>`     | Emitted when the value changes     |
-| `zOnSelect`    | `EventEmitter<ZardComboboxOption>` | Emitted when an option is selected |
+| Event            | Type                         | Description                        |
+| ---------------- | ---------------------------- | ---------------------------------- |
+| `zValueChange`   | `output<string \| null>`     | Emitted when the value changes     |
+| `zComboSelected` | `output<ZardComboboxOption>` | Emitted when an option is selected |

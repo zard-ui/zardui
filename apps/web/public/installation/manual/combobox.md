@@ -6,11 +6,9 @@ import {
   Component,
   computed,
   ElementRef,
-  EventEmitter,
   forwardRef,
-  HostListener,
   input,
-  Output,
+  output,
   signal,
   viewChild,
   ViewEncapsulation,
@@ -90,7 +88,7 @@ export interface ZardComboboxGroup {
 
     <ng-template #popoverContent>
       <z-popover [class]="popoverClasses()">
-        <z-command class="min-h-auto" (zOnSelect)="handleSelect($event)" #commandRef>
+        <z-command class="min-h-auto" (zCommandSelected)="handleSelect($event)" #commandRef>
           @if (searchable()) {
             <z-command-input [placeholder]="searchPlaceholder()" #commandInputRef />
           }
@@ -170,6 +168,8 @@ export interface ZardComboboxGroup {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
+    '(keydown)': 'onKeyDown($event)',
+    '(document:keydown)': 'onDocumentKeyDown($event)',
   },
   exportAs: 'zCombobox',
 })
@@ -188,8 +188,8 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   readonly ariaLabel = input<string>('');
   readonly ariaDescribedBy = input<string>('');
 
-  @Output() readonly zValueChange = new EventEmitter<string | null>();
-  @Output() readonly zOnSelect = new EventEmitter<ZardComboboxOption>();
+  readonly zValueChange = output<string | null>();
+  readonly zComboSelected = output<ZardComboboxOption>();
 
   readonly popoverDirective = viewChild.required('popoverTrigger', { read: ZardPopoverDirective });
   readonly buttonRef = viewChild.required('popoverTrigger', { read: ElementRef });
@@ -286,7 +286,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
       }
 
       if (selectedOption) {
-        this.zOnSelect.emit(selectedOption);
+        this.zComboSelected.emit(selectedOption);
       }
     }
 
@@ -297,7 +297,6 @@ export class ZardComboboxComponent implements ControlValueAccessor {
     this.buttonRef().nativeElement.focus();
   }
 
-  @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent) {
     if (this.disabled()) return;
 
@@ -379,7 +378,6 @@ export class ZardComboboxComponent implements ControlValueAccessor {
     }
   }
 
-  @HostListener('document:keydown', ['$event'])
   onDocumentKeyDown(event: KeyboardEvent) {
     // Close on Escape from anywhere when this combobox is open
     if (this.open() && event.key === 'Escape') {
