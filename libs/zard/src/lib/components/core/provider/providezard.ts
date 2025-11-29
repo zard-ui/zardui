@@ -10,8 +10,8 @@ import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardPreset, type ZardConfigType } from './config/config.types';
 import { updatePreset } from './config/update-preset';
-import { ZardDebounceEventManagerPlugin } from '../core/event-manager-plugins/zard-debounce-event-manager-plugin';
-import { ZardEventManagerPlugin } from '../core/event-manager-plugins/zard-event-manager-plugin';
+import { ZardDebounceEventManagerPlugin } from './event-manager-plugins/zard-debounce-event-manager-plugin';
+import { ZardEventManagerPlugin } from './event-manager-plugins/zard-event-manager-plugin';
 
 export const ZARD_CONFIG = new InjectionToken<ZardConfigType>('ZARD_CONFIG');
 
@@ -21,8 +21,7 @@ export const ZARD_CONFIG = new InjectionToken<ZardConfigType>('ZARD_CONFIG');
     - provideZard(withSlatePreset()): selects a base color preset from app.config and
       overrides what is defined in styles.css
 
-      ** Note ** styles.css is still required for overrides to work.
-      The CLI will automatically add `provideZard()` to your app configuration in future releases.
+      ** Note ** styles.css from CLI is still required for overrides to work.
  */
 export function provideZard(zardConfig?: ZardConfigType): EnvironmentProviders {
   const zardConfigProvider = zardConfig ? [{ provide: ZARD_CONFIG, useValue: zardConfig }] : [];
@@ -45,13 +44,17 @@ export function provideZard(zardConfig?: ZardConfigType): EnvironmentProviders {
     const existingTag = document.head.querySelector('style[data-zard-theme]');
 
     if (zardConfig?.theme?.preset) {
-      if (existingTag) {
-        existingTag.textContent = updatePreset(zardConfig.theme.preset);
-      } else {
-        const styleTag = document.createElement('style');
-        styleTag.setAttribute('data-zard-theme', '');
-        styleTag.textContent = updatePreset(zardConfig.theme.preset);
-        document.head.appendChild(styleTag);
+      try {
+        if (existingTag) {
+          existingTag.textContent = updatePreset(zardConfig.theme.preset);
+        } else {
+          const styleTag = document.createElement('style');
+          styleTag.setAttribute('data-zard-theme', '');
+          styleTag.textContent = updatePreset(zardConfig.theme.preset);
+          document.head.appendChild(styleTag);
+        }
+      } catch (error) {
+        console.error('Failed to apply Zard theme preset:', error);
       }
     } else if (existingTag) {
       existingTag.remove();

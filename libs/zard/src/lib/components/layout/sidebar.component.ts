@@ -20,7 +20,7 @@ import {
 } from './layout.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
-import { checkForProperZardInitialization } from '../core/providezard';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
 

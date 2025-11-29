@@ -22,7 +22,7 @@ import {
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { filter, fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 import {
   sliderOrientationVariants,
@@ -245,11 +245,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
   ngAfterViewInit() {
     const pointerDown$ = fromEvent<PointerEvent>(this.elementRef.nativeElement, 'pointerdown').pipe(
+      filter(() => !this.disabled()),
       tap(event => {
-        if (this.disabled()) {
-          return;
-        }
-
         const target = event.target as HTMLElement;
         const isThumb = this.thumbRef().nativeElement.contains(target);
         const isTrack = this.trackRef().nativeElement.contains(target);

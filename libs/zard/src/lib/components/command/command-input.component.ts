@@ -18,7 +18,7 @@ import type { ClassValue } from 'clsx';
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/providezard';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({

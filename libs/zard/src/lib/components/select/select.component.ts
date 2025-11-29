@@ -36,7 +36,7 @@ import {
 } from './select.variants';
 import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
-import { checkForProperZardInitialization } from '../core/providezard';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
@@ -83,7 +83,7 @@ type OnChangeType = (value: string) => void;
         [class]="contentClasses()"
         role="listbox"
         [attr.data-state]="'open'"
-        (keydown.{arrowdown,arrowup,enter,escape,home,end}.prevent)="onDropdownKeydown($event)"
+        (keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent)="onDropdownKeydown($event)"
         tabindex="-1"
       >
         <div class="p-1">

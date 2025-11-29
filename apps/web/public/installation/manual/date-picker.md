@@ -6,13 +6,16 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  forwardRef,
   inject,
   input,
+  model,
   output,
-  type TemplateRef,
   viewChild,
   ViewEncapsulation,
+  type TemplateRef,
 } from '@angular/core';
+import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
@@ -68,13 +71,20 @@ const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, strin
       </z-popover>
     </ng-template>
   `,
-  providers: [DatePipe],
+  providers: [
+    DatePipe,
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ZardDatePickerComponent),
+      multi: true,
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {},
   exportAs: 'zDatePicker',
 })
-export class ZardDatePickerComponent {
+export class ZardDatePickerComponent implements ControlValueAccessor {
   private readonly datePipe = inject(DatePipe);
 
   readonly calendarTemplate = viewChild.required<TemplateRef<unknown>>('calendarTemplate');
@@ -84,14 +94,19 @@ export class ZardDatePickerComponent {
   readonly class = input<ClassValue>('');
   readonly zType = input<ZardDatePickerVariants['zType']>('outline');
   readonly zSize = input<ZardDatePickerVariants['zSize']>('default');
-  readonly value = input<Date | null>(null);
+  readonly value = model<Date | null>(null);
   readonly placeholder = input<string>('Pick a date');
   readonly zFormat = input<string>('MMMM d, yyyy');
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
-  readonly disabled = input<boolean>(false);
+  readonly disabled = model<boolean>(false);
 
   readonly dateChange = output<Date | null>();
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private onChange: (value: Date | null) => void = () => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private onTouched: () => void = () => {};
 
   protected readonly classes = computed(() =>
     mergeClasses(
@@ -132,6 +147,9 @@ export class ZardDatePickerComponent {
   protected onDateChange(date: Date | Date[]): void {
     // Date picker always uses single mode, so we can safely cast
     const singleDate = Array.isArray(date) ? (date[0] ?? null) : date;
+    this.value.set(singleDate);
+    this.onChange(singleDate);
+    this.onTouched();
     this.dateChange.emit(singleDate);
 
     this.popoverDirective().hide();
@@ -149,6 +167,22 @@ export class ZardDatePickerComponent {
 
   private formatDate(date: Date, format: string): string {
     return this.datePipe.transform(date, format) ?? '';
+  }
+
+  writeValue(value: Date | null): void {
+    this.value.set(value);
+  }
+
+  registerOnChange(fn: (value: Date | null) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
   }
 }
 

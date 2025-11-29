@@ -27,7 +27,7 @@ import { ZardCommandListComponent } from '../command/command-list.component';
 import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
 import { ZardCommandOptionComponent } from '../command/command-option.component';
 import { ZardCommandComponent, type ZardCommandOption } from '../command/command.component';
-import { checkForProperZardInitialization } from '../core/providezard';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardEmptyComponent } from '../empty/empty.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';

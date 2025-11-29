@@ -14,7 +14,7 @@ import type { CalendarDay } from './calendar.types';
 import { getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/providezard';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 @Component({
   selector: 'z-calendar-grid',

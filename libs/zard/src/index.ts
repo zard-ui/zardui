@@ -1,15 +1,15 @@
 // Core
 export * from './lib/components/core/directives/string-template-outlet/string-template-outlet.directive';
-export * from './lib/components/core/config/update-preset';
-export * from './lib/components/core/config/config.types';
-export * from './lib/components/core/config/styles/gray';
-export * from './lib/components/core/config/styles/neutral';
-export * from './lib/components/core/config/styles/slate';
-export * from './lib/components/core/config/styles/stone';
-export * from './lib/components/core/config/styles/zinc';
-export * from './lib/components/core/event-manager-plugins/zard-debounce-event-manager-plugin';
-export * from './lib/components/core/event-manager-plugins/zard-event-manager-plugin';
-export * from './lib/components/core/providezard';
+export * from './lib/components/core/provider/config/update-preset';
+export * from './lib/components/core/provider/config/config.types';
+export * from './lib/components/core/provider/config/styles/gray';
+export * from './lib/components/core/provider/config/styles/neutral';
+export * from './lib/components/core/provider/config/styles/slate';
+export * from './lib/components/core/provider/config/styles/stone';
+export * from './lib/components/core/provider/config/styles/zinc';
+export * from './lib/components/core/provider/event-manager-plugins/zard-debounce-event-manager-plugin';
+export * from './lib/components/core/provider/event-manager-plugins/zard-event-manager-plugin';
+export * from './lib/components/core/provider/providezard';
 
 // UI components
 export * from './lib/components/alert/alert.component';

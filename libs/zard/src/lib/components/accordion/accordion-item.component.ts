@@ -5,7 +5,7 @@ import type { ClassValue } from 'clsx';
 import { ZardAccordionComponent } from './accordion.component';
 import { accordionContentVariants, accordionItemVariants, accordionTriggerVariants } from './accordion.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/providezard';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({

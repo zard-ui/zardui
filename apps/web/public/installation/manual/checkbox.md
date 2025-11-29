@@ -18,7 +18,7 @@ import type { ClassValue } from 'clsx';
 
 import { checkboxLabelVariants, checkboxVariants, type ZardCheckboxVariants } from './checkbox.variants';
 import { generateId, mergeClasses, transform } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/providezard';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
