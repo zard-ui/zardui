@@ -150,3 +150,16 @@ export function getDayAriaLabel(day: CalendarDay): string {
 
   return labels.join(', ');
 }
+
+/**
+ * Creates a date positioned safely at midday to avoid timezone-based
+ * month/day shifts triggered by local DST or UTC conversions.
+ *
+ * Useful when constructing calendar/navigation dates where 00:00
+ * may incorrectly roll the date backward or forward.
+ */
+export function makeSafeDate(year: number, month: number, day = 1): Date {
+  const date = new Date(year, month, day);
+  date.setHours(12, 0, 0, 0);
+  return date;
+}
