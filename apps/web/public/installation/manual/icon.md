@@ -33,7 +33,9 @@ export class ZardIconComponent {
   readonly zAbsoluteStrokeWidth = input<boolean>(false);
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(iconVariants({ zSize: this.zSize() }), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(iconVariants({ zSize: this.zSize() }), this.class(), this.zStrokeWidth() === 0 ? 'stroke-none' : ''),
+  );
 
   protected readonly icon = computed(() => {
     const type = this.zType();
