@@ -1,7 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, inject, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ZardSheetRef } from './sheet-ref';
 import { ZardSheetService } from './sheet.service';
@@ -70,7 +69,7 @@ describe('ZardSheetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SheetTestHostComponent, BrowserAnimationsModule],
+      imports: [SheetTestHostComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SheetTestHostComponent);

@@ -35,9 +35,7 @@ type CleanupFunction = () => void;
 
 @Component({
   selector: 'z-resizable, [z-resizable]',
-  template: `
-    <ng-content />
-  `,
+  template: ` <ng-content /> `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {

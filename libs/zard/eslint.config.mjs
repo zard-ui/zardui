@@ -71,8 +71,8 @@ export default [
       '@angular-eslint/consistent-component-styles': 'error',
       '@angular-eslint/sort-keys-in-type-decorator': 'error',
       '@angular-eslint/prefer-output-emitter-ref': 'error',
+      '@angular-eslint/no-output-on-prefix': 'error',
       // remove following gradually
-      '@angular-eslint/no-output-on-prefix': 'warn',
       '@angular-eslint/no-input-rename': 'warn',
     },
   },

@@ -27,7 +27,7 @@ const SEARCH_DEBOUNCE_MS = 150;
   ],
   standalone: true,
   template: `
-    <z-command size="default" (zOnSelect)="onSelect($event)" (zOnChange)="onChange($event)">
+    <z-command size="default" (zCommandSelected)="onSelect($event)" (zCommandChange)="onChange($event)">
       <z-command-input placeholder="Test placeholder" />
       <z-command-list>
         <z-command-empty>No results found.</z-command-empty>
@@ -161,7 +161,7 @@ describe('ZardCommandComponent', () => {
     expect(filteredOptions.length).toBe(0);
   });
 
-  it('should emit zOnSelect when option is clicked', () => {
+  it('should emit zCommandSelected when option is clicked', () => {
     jest.useFakeTimers();
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
     const [firstOption] = optionElements;
@@ -176,7 +176,7 @@ describe('ZardCommandComponent', () => {
     expect(hostComponent.selectedOption?.value).toBe('test');
   });
 
-  it('should emit zOnChange when option is clicked', () => {
+  it('should emit zCommandChange when option is clicked', () => {
     jest.useFakeTimers();
     const optionElements = fixture.nativeElement.querySelectorAll('z-command-option');
     const [firstOption] = optionElements;

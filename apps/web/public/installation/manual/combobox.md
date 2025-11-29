@@ -92,7 +92,7 @@ export interface ZardComboboxGroup {
 
     <ng-template #popoverContent>
       <z-popover [class]="popoverClasses()">
-        <z-command class="min-h-auto" (zOnSelect)="handleSelect($event)" #commandRef>
+        <z-command class="min-h-auto" (zCommandSelected)="handleSelect($event)" #commandRef>
           @if (searchable()) {
             <z-command-input [placeholder]="searchPlaceholder()" #commandInputRef />
           }
@@ -197,7 +197,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   readonly ariaDescribedBy = input<string>('');
 
   readonly zValueChange = output<string | null>();
-  readonly zOnSelect = output<ZardComboboxOption>();
+  readonly zComboSelected = output<ZardComboboxOption>();
 
   readonly popoverDirective = viewChild.required('popoverTrigger', { read: ZardPopoverDirective });
   readonly buttonRef = viewChild.required('popoverTrigger', { read: ElementRef });
@@ -305,7 +305,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
       }
 
       if (selectedOption) {
-        this.zOnSelect.emit(selectedOption);
+        this.zComboSelected.emit(selectedOption);
       }
     }
 
