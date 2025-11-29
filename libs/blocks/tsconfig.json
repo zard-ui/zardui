@@ -6,7 +6,10 @@
     "noImplicitOverride": true,
     "noPropertyAccessFromIndexSignature": true,
     "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+    "paths": {
+      "@zard/*": ["libs/zard/src/lib/*"]
+    }
   },
   "files": [],
   "include": [],
