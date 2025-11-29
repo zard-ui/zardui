@@ -92,9 +92,8 @@ import { ZardIconComponent } from '../icon/icon.component';
           >
             <z-icon
               zType="circle-small"
-              [zStrokeWidth]="1"
-              class="block size-3"
-              [class]="index === selectedIndex() ? 'fill-primary stroke-primary' : 'fill-border stroke-border'"
+              [zStrokeWidth]="0"
+              [class]="'block size-4' + (index === selectedIndex() ? 'fill-primary' : 'fill-border')"
             />
           </span>
         }
