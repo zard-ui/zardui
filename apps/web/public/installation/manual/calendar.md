@@ -15,7 +15,7 @@ import {
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCalendarGridComponent } from './calendar-grid.component';
@@ -95,7 +95,12 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly disabled = model<boolean>(false);
 
   // Public outputs
-  readonly dateChange = outputFromObservable(outputToObservable(this.value).pipe(filter(v => v !== null)));
+  readonly dateChange = outputFromObservable(
+    outputToObservable(this.value).pipe(
+      map(v => normalizeCalendarValue(v)),
+      filter(v => v !== null),
+    ),
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onChange: (value: CalendarValue) => void = () => {};
@@ -484,10 +489,10 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import type { CalendarDay } from './calendar.types';
 import { getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-calendar-grid',
@@ -765,12 +770,12 @@ export class ZardCalendarGridComponent {
 ```angular-ts title="calendar-navigation.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
+import { calendarNavVariants } from './calendar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
-import { calendarNavVariants } from './calendar.variants';
 
 @Component({
   selector: 'z-calendar-navigation',
@@ -1147,17 +1152,30 @@ export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
  * If the conversion fails, the current date is returned instead.
  */
 export function toValidDate(value: unknown): Date {
-  if (value instanceof Date) {
-    return value;
+  if (value instanceof Date) return value;
+
+  if (typeof value === 'number' && value.toString().length === 8) {
+    const s = value.toString();
+    const y = +s.slice(0, 4);
+    const m = +s.slice(4, 6) - 1;
+    const d = +s.slice(6, 8);
+
+    return makeSafeDate(y, m, d);
   }
 
-  const d = new Date(value as any);
+  if (typeof value === 'string' && /^\d{8}$/.test(value)) {
+    const y = +value.slice(0, 4);
+    const m = +value.slice(4, 6) - 1;
+    const d = +value.slice(6, 8);
 
-  if (isNaN(d.getTime())) {
-    return new Date();
+    return makeSafeDate(y, m, d);
   }
 
-  return d;
+  const date = new Date(value as string | number | Date);
+
+  if (isNaN(date.getTime())) return null as any;
+
+  return makeSafeDate(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 ```

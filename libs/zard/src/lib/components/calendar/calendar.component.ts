@@ -13,7 +13,7 @@ import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-int
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
@@ -93,7 +93,12 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly disabled = model<boolean>(false);
 
   // Public outputs
-  readonly dateChange = outputFromObservable(outputToObservable(this.value).pipe(filter(v => v !== null)));
+  readonly dateChange = outputFromObservable(
+    outputToObservable(this.value).pipe(
+      map(v => normalizeCalendarValue(v)),
+      filter(v => v !== null),
+    ),
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onChange: (value: CalendarValue) => void = () => {};

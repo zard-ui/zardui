@@ -187,15 +187,28 @@ export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
  * If the conversion fails, the current date is returned instead.
  */
 export function toValidDate(value: unknown): Date {
-  if (value instanceof Date) {
-    return value;
+  if (value instanceof Date) return value;
+
+  if (typeof value === 'number' && value.toString().length === 8) {
+    const s = value.toString();
+    const y = +s.slice(0, 4);
+    const m = +s.slice(4, 6) - 1;
+    const d = +s.slice(6, 8);
+
+    return makeSafeDate(y, m, d);
   }
 
-  const d = new Date(value as any);
+  if (typeof value === 'string' && /^\d{8}$/.test(value)) {
+    const y = +value.slice(0, 4);
+    const m = +value.slice(4, 6) - 1;
+    const d = +value.slice(6, 8);
 
-  if (isNaN(d.getTime())) {
-    return new Date();
+    return makeSafeDate(y, m, d);
   }
 
-  return d;
+  const date = new Date(value as string | number | Date);
+
+  if (isNaN(date.getTime())) return null as any;
+
+  return makeSafeDate(date.getFullYear(), date.getMonth(), date.getDate());
 }
