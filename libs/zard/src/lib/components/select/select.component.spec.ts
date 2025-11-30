@@ -1,5 +1,5 @@
 import { Component, signal } from '@angular/core';
-import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, fakeAsync, flush, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
@@ -8,7 +8,6 @@ import { ZardSelectComponent } from './select.component';
 
 @Component({
   imports: [ZardSelectComponent, ZardSelectItemComponent],
-  standalone: true,
   template: `
     <z-select [(zValue)]="value" [zLabel]="label()" [zPlaceholder]="placeholder()" [zDisabled]="disabled()">
       <z-select-item zValue="option1">Option 1</z-select-item>
@@ -45,7 +44,7 @@ describe('ZardSelectComponent', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [ZardSelectComponent],
+        imports: [TestHostComponent, ZardSelectItemComponent],
       }).compileComponents();
 
       fixture = TestBed.createComponent(ZardSelectComponent);
@@ -69,25 +68,29 @@ describe('ZardSelectComponent', () => {
     });
 
     describe('keyboard navigation', () => {
-      it('should open dropdown on Enter key', () => {
+      it('should open dropdown on Enter key', fakeAsync(() => {
         const event = new KeyboardEvent('keydown', { key: 'Enter' });
         jest.spyOn(event, 'preventDefault');
 
         component.onTriggerKeydown(event);
+        flush();
+        fixture.detectChanges();
 
         expect(event.preventDefault).toHaveBeenCalled();
         expect(component.isOpen()).toBeTruthy();
-      });
+      }));
 
-      it('should open dropdown on Space key', () => {
+      it('should open dropdown on Space key', fakeAsync(() => {
         const event = new KeyboardEvent('keydown', { key: ' ' });
         jest.spyOn(event, 'preventDefault');
 
         component.onTriggerKeydown(event);
+        flush();
+        fixture.detectChanges();
 
         expect(event.preventDefault).toHaveBeenCalled();
         expect(component.isOpen()).toBeTruthy();
-      });
+      }));
 
       it('should close dropdown on Escape key', () => {
         component.toggle();
@@ -234,15 +237,16 @@ describe('ZardSelectComponent', () => {
       expect(onChangeSpy).toHaveBeenCalledWith('apple');
     });
 
-    it('should call onTouched when dropdown closes', () => {
+    it('should call onTouched when dropdown closes', fakeAsync(() => {
       const onTouchedSpy = jest.fn();
       selectComponent.registerOnTouched(onTouchedSpy);
 
       selectComponent.toggle(); // open
+      flush();
       selectComponent.toggle(); // close
 
       expect(onTouchedSpy).toHaveBeenCalled();
-    });
+    }));
   });
 
   describe('signal reactivity', () => {
@@ -375,7 +379,7 @@ describe('ZardSelectComponent', () => {
       expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree', '1 more item selected']);
     });
 
-    it('select more items with deselect', () => {
+    it('should handle multiple deselects correctly', () => {
       selectComponent.selectItem('option1', 'OptionOne');
       selectComponent.selectItem('option2', 'OptionTwo');
       selectComponent.selectItem('option3', 'OptionThree');

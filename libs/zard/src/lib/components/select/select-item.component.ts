@@ -9,7 +9,12 @@ import {
   signal,
 } from '@angular/core';
 
-import { selectItemVariants } from './select.variants';
+import {
+  selectItemIconVariants,
+  selectItemVariants,
+  type ZardSelectItemModeVariants,
+  type ZardSelectSizeVariants,
+} from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 
@@ -24,8 +29,8 @@ interface SelectHost {
   imports: [ZardIconComponent],
   template: `
     @if (isSelected()) {
-      <span class="absolute right-2 flex size-3.5 items-center justify-center">
-        <z-icon zType="check" />
+      <span [class]="iconClasses()">
+        <z-icon zType="check" [zStrokeWidth]="strokeWidth()" />
       </span>
     }
     <span class="truncate">
@@ -45,18 +50,32 @@ interface SelectHost {
   },
 })
 export class ZardSelectItemComponent {
+  readonly elementRef = inject(ElementRef<HTMLElement>);
+
   readonly zValue = input.required<string>();
   readonly zDisabled = input(false, { transform });
   readonly class = input<string>('');
 
   private readonly select = signal<SelectHost | null>(null);
-  readonly elementRef = inject(ElementRef);
+
   readonly label = linkedSignal<string>(() => {
     const element = this.elementRef?.nativeElement;
     return (element?.textContent ?? element?.innerText)?.trim() ?? '';
   });
 
-  protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
+  readonly zMode = signal<ZardSelectItemModeVariants>('normal');
+  readonly zSize = signal<ZardSelectSizeVariants>('default');
+
+  protected readonly classes = computed(() =>
+    mergeClasses(selectItemVariants({ zMode: this.zMode(), zSize: this.zSize() ?? 'default' }), this.class()),
+  );
+
+  protected readonly iconClasses = computed(() =>
+    mergeClasses(selectItemIconVariants({ zMode: this.zMode(), zSize: this.zSize() ?? 'default' })),
+  );
+
+  protected readonly strokeWidth = computed(() => (this.zMode() === 'compact' ? 3 : 2));
+
   protected readonly isSelected = computed(() => this.select()?.selectedValue().includes(this.zValue()));
 
   setSelectHost(selectHost: SelectHost) {

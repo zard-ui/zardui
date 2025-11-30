@@ -3,19 +3,23 @@ import { TemplatePortal } from '@angular/cdk/portal';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
   DestroyRef,
+  effect,
   ElementRef,
   forwardRef,
   inject,
+  Injector,
   input,
   model,
   type OnDestroy,
   output,
   PLATFORM_ID,
+  runInInjectionContext,
   signal,
   type TemplateRef,
   viewChild,
@@ -34,12 +38,14 @@ import {
   selectVariants,
   type ZardSelectSizeVariants,
 } from './select.variants';
-import { isElementContentTruncated, mergeClasses, transform } from '../../shared/utils/utils';
+import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
 import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
+
+const COMPACT_MODE_WIDTH_THRESHOLD = 100;
 
 @Component({
   selector: 'z-select, [z-select]',
@@ -55,6 +61,9 @@ type OnChangeType = (value: string) => void;
       [attr.aria-haspopup]="'listbox'"
       [attr.data-state]="isOpen() ? 'open' : 'closed'"
       [attr.data-placeholder]="!zValue() ? '' : null"
+      [tabIndex]="0"
+      (focus)="onFocus()"
+      (blur)="!isOpen() && isFocus.set(false)"
     >
       <span class="flex flex-1 flex-wrap items-center gap-2">
         @let labels = selectedLabels();
@@ -107,14 +116,15 @@ type OnChangeType = (value: string) => void;
 })
 export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
+  private readonly injector = inject(Injector);
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<void>>('dropdownTemplate');
-  protected readonly selectItems = contentChildren(ZardSelectItemComponent);
+  readonly selectItems = contentChildren(ZardSelectItemComponent);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -132,6 +142,14 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
   readonly isOpen = signal(false);
   readonly focusedIndex = signal<number>(-1);
+  protected readonly isFocus = signal(false);
+  protected readonly isCompact = signal(false);
+
+  protected onFocus(): void {
+    if (this.isCompact()) {
+      this.isFocus.set(true);
+    }
+  }
 
   // Compute the label based on selected value
   readonly selectedLabels = computed<string[]>(() => {
@@ -162,13 +180,30 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     ),
   );
 
+  constructor() {
+    effect(() => {
+      if (this.isFocus()) {
+        this.elementRef.nativeElement.setAttribute('data-active', '');
+      } else {
+        this.elementRef.nativeElement.removeAttribute('data-active');
+      }
+    });
+  }
+
   ngAfterContentInit() {
+    const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
     // Setup select host reference for each item
     for (const item of this.selectItems()) {
       item.setSelectHost({
         selectedValue: () => (this.zMultiple() ? (this.zValue() as string[]) : [this.zValue() as string]),
         selectItem: (value: string, label: string) => this.selectItem(value, label),
       });
+      item.zSize.set(this.zSize());
+
+      if (hostWidth <= COMPACT_MODE_WIDTH_THRESHOLD) {
+        this.isCompact.set(true);
+        item.zMode.set('compact');
+      }
     }
   }
 
@@ -327,13 +362,12 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.overlayRef.updateSize({ width: hostWidth });
     this.isOpen.set(true);
 
-    this.determinePortalWidth(hostWidth);
+    this.determinePortalWidthOnOpen(hostWidth);
+  }
 
-    // Focus dropdown after opening and position on selected item
-    setTimeout(() => {
-      this.focusDropdown();
-      this.focusSelectedItem();
-    }, 0);
+  private setFocusOnOpen(): void {
+    this.focusDropdown();
+    this.focusSelectedItem();
   }
 
   private close() {
@@ -349,30 +383,51 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     return this.selectItems()?.find(item => item.zValue() === value);
   }
 
-  private determinePortalWidth(portalWidth: number): void {
-    if (!this.overlayRef?.hasAttached()) {
-      return;
-    }
+  private determinePortalWidthOnOpen(portalWidth: number): void {
+    runInInjectionContext(this.injector, () => {
+      afterNextRender(() => {
+        if (!this.overlayRef || !this.overlayRef.hasAttached()) {
+          return;
+        }
 
-    const selectItems = this.selectItems();
-    let itemMaxWidth = 0;
-    for (const item of selectItems) {
-      itemMaxWidth = Math.max(itemMaxWidth, item.elementRef.nativeElement.scrollWidth);
-    }
+        const overlayPaneElement = this.overlayRef.overlayElement;
+        const textElements = Array.from(
+          overlayPaneElement.querySelectorAll<HTMLElement>('z-select-item > span.truncate'),
+        );
+        let isOverflow = false;
+        for (const textElement of textElements) {
+          if (textElement.scrollWidth > textElement.clientWidth + 1) {
+            isOverflow = true;
+            break;
+          }
+        }
 
-    const textContentElement = this.elementRef.nativeElement.querySelector('button > span > span') as HTMLElement;
-    const isOverflow = isElementContentTruncated(textContentElement);
+        if (!isOverflow) {
+          this.setFocusOnOpen();
+          return;
+        }
 
-    if (isOverflow && selectItems.length) {
-      const elementStyles = getComputedStyle(selectItems[0].elementRef.nativeElement);
-      const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left')) || 0;
-      const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right')) || 0;
-      itemMaxWidth += leftPadding + rightPadding;
-    }
+        const selectItems = this.selectItems();
+        let itemMaxWidth = 0;
+        for (const item of selectItems) {
+          itemMaxWidth = Math.max(itemMaxWidth, item.elementRef.nativeElement.scrollWidth);
+        }
 
-    itemMaxWidth = Math.max(itemMaxWidth, portalWidth);
-    this.overlayRef.updateSize({ width: itemMaxWidth });
-    this.overlayRef.updatePosition();
+        const [selectItem] = selectItems;
+        if (isOverflow && selectItem) {
+          const elementStyles = getComputedStyle(selectItem.elementRef.nativeElement);
+          const leftPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-left')) || 0;
+          const rightPadding = Number.parseFloat(elementStyles.getPropertyValue('padding-right')) || 0;
+          itemMaxWidth += leftPadding + rightPadding;
+        }
+
+        itemMaxWidth = Math.max(itemMaxWidth, portalWidth);
+        this.overlayRef.updateSize({ width: itemMaxWidth });
+        this.overlayRef.updatePosition();
+
+        this.setFocusOnOpen();
+      });
+    });
   }
 
   private createOverlay() {
@@ -415,7 +470,10 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
             filter(event => !this.elementRef.nativeElement.contains(event.target)),
             takeUntilDestroyed(this.destroyRef),
           )
-          .subscribe(() => this.close());
+          .subscribe(() => {
+            this.isFocus.set(false);
+            this.close();
+          });
       } catch (error) {
         console.error('Error creating overlay:', error);
       }
@@ -514,11 +572,17 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
   private focusSelectedItem() {
     const items = this.getSelectItems();
-    if (items.length === 0) return;
+    if (items.length === 0) {
+      return;
+    }
 
     // Find the index of the currently selected item
-    const selectedValue = this.zValue();
+    let selectedValue = this.zValue();
     let selectedIndex = -1;
+
+    if (Array.isArray(selectedValue)) {
+      [selectedValue] = this.zValue();
+    }
 
     if (selectedValue) {
       selectedIndex = items.findIndex(item => item.getAttribute('value') === selectedValue);
