@@ -9,7 +9,6 @@ import {
   computed,
   contentChildren,
   DestroyRef,
-  effect,
   ElementRef,
   forwardRef,
   inject,
@@ -109,6 +108,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    '[attr.data-active]': 'isFocus() ? "" : null',
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '[class]': 'classes()',
@@ -176,19 +176,8 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
       selectTriggerVariants({
         zSize: this.zSize(),
       }),
-      this.class(),
     ),
   );
-
-  constructor() {
-    effect(() => {
-      if (this.isFocus()) {
-        this.elementRef.nativeElement.setAttribute('data-active', '');
-      } else {
-        this.elementRef.nativeElement.removeAttribute('data-active');
-      }
-    });
-  }
 
   ngAfterContentInit() {
     const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
@@ -392,7 +381,9 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
         const overlayPaneElement = this.overlayRef.overlayElement;
         const textElements = Array.from(
-          overlayPaneElement.querySelectorAll<HTMLElement>('z-select-item > span.truncate'),
+          overlayPaneElement.querySelectorAll<HTMLElement>(
+            'z-select-item > span.truncate, [z-select-item] > span.truncate',
+          ),
         );
         let isOverflow = false;
         for (const textElement of textElements) {

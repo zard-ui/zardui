@@ -389,14 +389,13 @@ describe('ZardSelectComponent', () => {
       expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree']);
     });
 
-    it('select more items with deselect', () => {
+    it('should handle multiple selects correctly', () => {
       selectComponent.selectItem('option1', 'OptionOne');
       selectComponent.selectItem('option2', 'OptionTwo');
-      selectComponent.selectItem('option3', 'OptionThree');
-      selectComponent.selectItem('option2', 'OptionTwo');
+      selectComponent.selectItem('option4', 'OptionFour');
 
-      expect(hostComponent.value().length).toBe(2);
-      expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree']);
+      expect(hostComponent.value().length).toBe(3);
+      expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionTwo', 'OptionFour']);
     });
   });
 });

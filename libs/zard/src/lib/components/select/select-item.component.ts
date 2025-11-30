@@ -30,7 +30,7 @@ interface SelectHost {
   template: `
     @if (isSelected()) {
       <span [class]="iconClasses()">
-        <z-icon zType="check" [zStrokeWidth]="strokeWidth()" />
+        <z-icon zType="check" [zStrokeWidth]="strokeWidth()" aria-hidden="true" />
       </span>
     }
     <span class="truncate">
@@ -39,10 +39,10 @@ interface SelectHost {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[class]': 'classes()',
-    '[attr.value]': 'zValue()',
     role: 'option',
     tabindex: '-1',
+    '[class]': 'classes()',
+    '[attr.value]': 'zValue()',
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-selected]': 'isSelected() ? "" : null',
     '[attr.aria-selected]': 'isSelected()',
@@ -59,24 +59,24 @@ export class ZardSelectItemComponent {
   private readonly select = signal<SelectHost | null>(null);
 
   readonly label = linkedSignal<string>(() => {
-    const element = this.elementRef?.nativeElement;
-    return (element?.textContent ?? element?.innerText)?.trim() ?? '';
+    const element = this.elementRef.nativeElement;
+    return (element.textContent ?? element.innerText)?.trim() ?? '';
   });
 
   readonly zMode = signal<ZardSelectItemModeVariants>('normal');
   readonly zSize = signal<ZardSelectSizeVariants>('default');
 
   protected readonly classes = computed(() =>
-    mergeClasses(selectItemVariants({ zMode: this.zMode(), zSize: this.zSize() ?? 'default' }), this.class()),
+    mergeClasses(selectItemVariants({ zMode: this.zMode(), zSize: this.zSize() }), this.class()),
   );
 
   protected readonly iconClasses = computed(() =>
-    mergeClasses(selectItemIconVariants({ zMode: this.zMode(), zSize: this.zSize() ?? 'default' })),
+    mergeClasses(selectItemIconVariants({ zMode: this.zMode(), zSize: this.zSize() })),
   );
 
   protected readonly strokeWidth = computed(() => (this.zMode() === 'compact' ? 3 : 2));
 
-  protected readonly isSelected = computed(() => this.select()?.selectedValue().includes(this.zValue()));
+  protected readonly isSelected = computed(() => this.select()?.selectedValue().includes(this.zValue()) ?? false);
 
   setSelectHost(selectHost: SelectHost) {
     this.select.set(selectHost);

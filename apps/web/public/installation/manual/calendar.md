@@ -1,19 +1,29 @@
 
 
 ```angular-ts title="calendar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, forwardRef, input, linkedSignal, model, viewChild, ViewEncapsulation, } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  forwardRef,
+  input,
+  linkedSignal,
+  model,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
-import { generateCalendarDays, getSelectedDatesArray, isSameDay, makeSafeDate } from './calendar.utils';
-import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
 import { ZardCalendarGridComponent } from './calendar-grid.component';
+import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
 import type { CalendarMode, CalendarValue } from './calendar.types';
-import { mergeClasses } from '../../shared/utils/utils';
+import { generateCalendarDays, getSelectedDatesArray, isSameDay, makeSafeDate } from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
-
+import { mergeClasses } from '../../shared/utils/utils';
 
 export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
 
