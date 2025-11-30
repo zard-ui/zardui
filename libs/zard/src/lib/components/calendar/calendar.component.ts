@@ -18,7 +18,13 @@ import { filter } from 'rxjs';
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
 import type { CalendarMode, CalendarValue } from './calendar.types';
-import { generateCalendarDays, getSelectedDatesArray, isSameDay, makeSafeDate } from './calendar.utils';
+import {
+  generateCalendarDays,
+  getSelectedDatesArray,
+  isSameDay,
+  makeSafeDate,
+  normalizeCalendarValue,
+} from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
@@ -95,8 +101,9 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   private onTouched: () => void = () => {};
 
   // Internal state
+  private normalizedValue = computed(() => normalizeCalendarValue(this.value()));
   private readonly currentDate = computed(() => {
-    const val = this.value();
+    const val = this.normalizedValue();
     const mode = this.zMode();
 
     if (!val) return new Date();
@@ -128,7 +135,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       year: selectedDate.getFullYear(),
       month: selectedDate.getMonth(),
       mode: this.zMode(),
-      selectedDates: getSelectedDatesArray(this.value(), this.zMode()),
+      selectedDates: getSelectedDatesArray(this.normalizedValue(), this.zMode()),
       minDate: this.minDate(),
       maxDate: this.maxDate(),
       disabled: this.disabled(),
@@ -232,7 +239,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     if (this.disabled()) return;
 
     const mode = this.zMode();
-    const currentValue = this.value();
+    const currentValue = this.normalizedValue();
 
     if (mode === 'single') {
       this.value.set(date);
@@ -274,7 +281,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       }
     }
 
-    this.onChange(this.value());
+    this.onChange(this.normalizedValue());
     this.onTouched();
   }
 

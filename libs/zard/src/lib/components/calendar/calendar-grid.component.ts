@@ -56,6 +56,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.role]': '"grid"',
+    class: 'flex justify-center',
   },
   exportAs: 'zCalendarGrid',
 })

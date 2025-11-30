@@ -163,3 +163,39 @@ export function makeSafeDate(year: number, month: number, day = 1): Date {
   date.setHours(12, 0, 0, 0);
   return date;
 }
+
+/**
+ * Normalizes any calendar value into a valid Date or array of Dates.
+ * Returns null for empty values, validates single Dates, converts arrays,
+ * and attempts to parse any other type into a Date.
+ */
+export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
+  if (!v) return null;
+
+  if (v instanceof Date) return toValidDate(v);
+
+  if (Array.isArray(v)) {
+    return v.map(d => toValidDate(d));
+  }
+
+  return toValidDate(v);
+}
+
+/**
+ * Converts any value into a valid Date.
+ * If it is already a Date, it is returned as is.
+ * If the conversion fails, the current date is returned instead.
+ */
+export function toValidDate(value: unknown): Date {
+  if (value instanceof Date) {
+    return value;
+  }
+
+  const d = new Date(value as any);
+
+  if (isNaN(d.getTime())) {
+    return new Date();
+  }
+
+  return d;
+}
