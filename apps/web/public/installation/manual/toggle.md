@@ -5,7 +5,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   forwardRef,
-  HostListener,
   ViewEncapsulation,
   signal,
   computed,
@@ -47,6 +46,9 @@ type OnChangeType = (value: boolean) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    '(mouseenter)': 'handleHover()',
+  },
   exportAs: 'zToggle',
 })
 export class ZardToggleComponent implements ControlValueAccessor {
@@ -58,9 +60,9 @@ export class ZardToggleComponent implements ControlValueAccessor {
   readonly zAriaLabel = input<string>('', { alias: 'aria-label' });
   readonly class = input<ClassValue>('');
 
-  readonly onClick = output<void>();
-  readonly onHover = output<void>();
-  readonly onChange = output<boolean>();
+  readonly zToggleClick = output<void>();
+  readonly zToggleHover = output<void>();
+  readonly zToggleChange = output<boolean>();
 
   private readonly isUsingNgModel = signal(false);
 
@@ -77,9 +79,8 @@ export class ZardToggleComponent implements ControlValueAccessor {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onChangeFn: OnChangeType = () => {};
 
-  @HostListener('mouseenter')
   handleHover() {
-    this.onHover.emit();
+    this.zToggleHover.emit();
   }
 
   toggle() {
@@ -91,8 +92,8 @@ export class ZardToggleComponent implements ControlValueAccessor {
       this.value.set(next);
     }
 
-    this.onClick.emit();
-    this.onChange.emit(next);
+    this.zToggleClick.emit();
+    this.zToggleChange.emit(next);
     this.onChangeFn(next);
     this.onTouched();
   }

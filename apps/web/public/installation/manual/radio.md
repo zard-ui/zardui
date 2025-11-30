@@ -44,7 +44,7 @@ type OnChangeType = (value: unknown) => void;
         [id]="zId()"
       />
       <span
-        class="bg-primary pointer-events-none absolute left-[4px] size-2 rounded-full opacity-0 peer-checked:opacity-100"
+        class="bg-primary pointer-events-none absolute left-1 size-2 rounded-full opacity-0 peer-checked:opacity-100"
       ></span>
       <label [class]="labelClasses()" [for]="zId()">
         <ng-content />

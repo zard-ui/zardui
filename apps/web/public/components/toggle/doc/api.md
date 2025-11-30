@@ -18,8 +18,8 @@
 
 ### Events
 
-| Event        | Description                           | Payload   |
-| ------------ | ------------------------------------- | --------- |
-| `(onClick)`  | Emitted when the toggle is clicked    | `void`    |
-| `(onHover)`  | Emitted when the toggle is hovered    | `void`    |
-| `(onChange)` | Emitted when the toggle value changes | `boolean` |
+| Event             | Description                           | Payload   |
+| ----------------- | ------------------------------------- | --------- |
+| `(zToggleClick)`  | Emitted when the toggle is clicked    | `void`    |
+| `(zToggleHover)`  | Emitted when the toggle is hovered    | `void`    |
+| `(zToggleChange)` | Emitted when the toggle value changes | `boolean` |

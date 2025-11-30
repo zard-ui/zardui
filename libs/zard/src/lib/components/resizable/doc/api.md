@@ -18,11 +18,11 @@ The main container component that manages resizable panels.
 
 ### Outputs
 
-| Output         | Type                            | Description                |
-| -------------- | ------------------------------- | -------------------------- |
-| `zResizeStart` | `EventEmitter<ZardResizeEvent>` | Emitted when resize starts |
-| `zResize`      | `EventEmitter<ZardResizeEvent>` | Emitted during resize      |
-| `zResizeEnd`   | `EventEmitter<ZardResizeEvent>` | Emitted when resize ends   |
+| Output         | Type                      | Description                |
+| -------------- | ------------------------- | -------------------------- |
+| `zResizeStart` | `output<ZardResizeEvent>` | Emitted when resize starts |
+| `zResize`      | `output<ZardResizeEvent>` | Emitted during resize      |
+| `zResizeEnd`   | `output<ZardResizeEvent>` | Emitted when resize ends   |
 
 ### Methods
 

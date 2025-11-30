@@ -177,7 +177,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
   protected readonly activeTabIndex = signal<number>(0);
   protected readonly scrollPresent = signal<boolean>(false);
 
-  protected readonly zOnTabChange = output<{
+  protected readonly zTabChange = output<{
     index: number;
     label: string;
     tab: ZardTabComponent;
@@ -268,7 +268,7 @@ export class ZardTabGroupComponent implements AfterViewInit {
     this.activeTabIndex.set(index);
     const activeTabComponent = this.tabs()[index];
     if (activeTabComponent) {
-      this.zOnTabChange.emit({
+      this.zTabChange.emit({
         index,
         label: activeTabComponent.label(),
         tab: activeTabComponent,

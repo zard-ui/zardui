@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  forwardRef,
   input,
   linkedSignal,
   model,
@@ -9,6 +10,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
+import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
@@ -16,7 +18,7 @@ import { filter } from 'rxjs';
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
 import type { CalendarMode, CalendarValue } from './calendar.types';
-import { generateCalendarDays, getSelectedDatesArray, isSameDay } from './calendar.utils';
+import { generateCalendarDays, getSelectedDatesArray, isSameDay, makeSafeDate } from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
@@ -51,6 +53,13 @@ export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types'
       />
     </div>
   `,
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => ZardCalendarComponent),
+      multi: true,
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -58,7 +67,7 @@ export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types'
   },
   exportAs: 'zCalendar',
 })
-export class ZardCalendarComponent {
+export class ZardCalendarComponent implements ControlValueAccessor {
   private readonly gridRef = viewChild.required(ZardCalendarGridComponent);
 
   // Public method to reset navigation (useful for date-picker)
@@ -75,10 +84,15 @@ export class ZardCalendarComponent {
   readonly value = model<CalendarValue>(null);
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
-  readonly disabled = input<boolean>(false);
+  readonly disabled = model<boolean>(false);
 
   // Public outputs
   readonly dateChange = outputFromObservable(outputToObservable(this.value).pipe(filter(v => v !== null)));
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private onChange: (value: CalendarValue) => void = () => {};
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  private onTouched: () => void = () => {};
 
   // Internal state
   private readonly currentDate = computed(() => {
@@ -103,7 +117,7 @@ export class ZardCalendarComponent {
 
   protected readonly calendarDays = computed(() => {
     const currentDate = this.currentDate();
-    const navigationDate = new Date(
+    const navigationDate = makeSafeDate(
       Number.parseInt(this.currentYearValue()),
       Number.parseInt(this.currentMonthValue()),
       currentDate.getDate(),
@@ -140,7 +154,7 @@ export class ZardCalendarComponent {
 
     const currentDate = this.currentDate();
     const selectedYear = Number.parseInt(this.currentYearValue());
-    const newDate = new Date(Number.isNaN(selectedYear) ? currentDate.getFullYear() : selectedYear, parsedMonth, 1);
+    const newDate = makeSafeDate(Number.isNaN(selectedYear) ? currentDate.getFullYear() : selectedYear, parsedMonth, 1);
     this.currentMonthValue.set(newDate.getMonth().toString());
     this.gridRef().setFocusedDayIndex(-1);
   }
@@ -164,38 +178,38 @@ export class ZardCalendarComponent {
 
     const currentDate = this.currentDate();
     const selectedMonth = Number.parseInt(this.currentMonthValue());
-    const newDate = new Date(parsedYear, Number.isNaN(selectedMonth) ? currentDate.getMonth() : selectedMonth, 1);
+    const newDate = makeSafeDate(parsedYear, Number.isNaN(selectedMonth) ? currentDate.getMonth() : selectedMonth, 1);
     this.currentYearValue.set(newDate.getFullYear().toString());
     this.gridRef().setFocusedDayIndex(-1);
   }
 
   protected previousMonth(): void {
-    const currentDate = this.currentDate();
-    const currentMonth = Number.parseInt(this.currentMonthValue());
-    const previous = new Date(
-      currentDate.getFullYear(),
-      (Number.isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) - 1,
-      1,
-    );
-    this.currentMonthValue.set(previous.getMonth().toString());
+    const month = Number.parseInt(this.currentMonthValue());
+    const year = Number.parseInt(this.currentYearValue());
+
+    const date = makeSafeDate(year, month - 1, 1);
+
+    this.currentMonthValue.set(date.getMonth().toString());
+    this.currentYearValue.set(date.getFullYear().toString());
+
     this.gridRef().setFocusedDayIndex(-1);
   }
 
   protected nextMonth(): void {
-    const currentDate = this.currentDate();
-    const currentMonth = Number.parseInt(this.currentMonthValue());
-    const next = new Date(
-      currentDate.getFullYear(),
-      (Number.isNaN(currentMonth) ? currentDate.getMonth() : currentMonth) + 1,
-      1,
-    );
-    this.currentMonthValue.set(next.getMonth().toString());
+    const month = Number.parseInt(this.currentMonthValue());
+    const year = Number.parseInt(this.currentYearValue());
+
+    const date = makeSafeDate(year, month + 1, 1);
+
+    this.currentMonthValue.set(date.getMonth().toString());
+    this.currentYearValue.set(date.getFullYear().toString());
+
     this.gridRef().setFocusedDayIndex(-1);
   }
 
   protected navigateYear(direction: number): void {
     const current = this.currentDate();
-    const newDate = new Date(current.getFullYear() + direction, current.getMonth(), 1);
+    const newDate = makeSafeDate(current.getFullYear() + direction, current.getMonth(), 1);
     this.currentYearValue.set(newDate.getFullYear().toString());
     setTimeout(() => this.gridRef().resetFocus(), 0);
   }
@@ -259,6 +273,9 @@ export class ZardCalendarComponent {
         this.value.set([date]);
       }
     }
+
+    this.onChange(this.value());
+    this.onTouched();
   }
 
   private resetFocusAfterNavigation(position = 'default', dayOfWeek = -1): void {
@@ -324,5 +341,21 @@ export class ZardCalendarComponent {
     }
 
     return clampedFallback;
+  }
+
+  writeValue(value: CalendarValue): void {
+    this.value.set(value);
+  }
+
+  registerOnChange(fn: (value: CalendarValue) => void): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: () => void): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
   }
 }
