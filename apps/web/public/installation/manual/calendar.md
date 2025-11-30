@@ -1,19 +1,34 @@
 
 
 ```angular-ts title="calendar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, forwardRef, input, linkedSignal, model, viewChild, ViewEncapsulation, } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  forwardRef,
+  input,
+  linkedSignal,
+  model,
+  viewChild,
+  ViewEncapsulation,
+} from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 
-import { generateCalendarDays, getSelectedDatesArray, isSameDay, makeSafeDate } from './calendar.utils';
-import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
-import { ZardCalendarGridComponent } from './calendar-grid.component';
-import type { CalendarMode, CalendarValue } from './calendar.types';
 import { mergeClasses } from '../../shared/utils/utils';
+import { ZardCalendarGridComponent } from './calendar-grid.component';
+import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
+import type { CalendarMode, CalendarValue } from './calendar.types';
+import {
+  generateCalendarDays,
+  getSelectedDatesArray,
+  isSameDay,
+  makeSafeDate,
+  normalizeCalendarValue,
+} from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
-
 
 export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
 
@@ -80,7 +95,12 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly disabled = model<boolean>(false);
 
   // Public outputs
-  readonly dateChange = outputFromObservable(outputToObservable(this.value).pipe(filter(v => v !== null)));
+  readonly dateChange = outputFromObservable(
+    outputToObservable(this.value).pipe(
+      map(v => normalizeCalendarValue(v)),
+      filter(v => v !== null),
+    ),
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onChange: (value: CalendarValue) => void = () => {};
@@ -88,8 +108,9 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   private onTouched: () => void = () => {};
 
   // Internal state
+  private normalizedValue = computed(() => normalizeCalendarValue(this.value()));
   private readonly currentDate = computed(() => {
-    const val = this.value();
+    const val = this.normalizedValue();
     const mode = this.zMode();
 
     if (!val) return new Date();
@@ -121,7 +142,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       year: selectedDate.getFullYear(),
       month: selectedDate.getMonth(),
       mode: this.zMode(),
-      selectedDates: getSelectedDatesArray(this.value(), this.zMode()),
+      selectedDates: getSelectedDatesArray(this.normalizedValue(), this.zMode()),
       minDate: this.minDate(),
       maxDate: this.maxDate(),
       disabled: this.disabled(),
@@ -225,7 +246,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     if (this.disabled()) return;
 
     const mode = this.zMode();
-    const currentValue = this.value();
+    const currentValue = this.normalizedValue();
 
     if (mode === 'single') {
       this.value.set(date);
@@ -267,7 +288,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       }
     }
 
-    this.onChange(this.value());
+    this.onChange(this.normalizedValue());
     this.onTouched();
   }
 
@@ -513,6 +534,7 @@ import { mergeClasses } from '../../shared/utils/utils';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.role]': '"grid"',
+    class: 'flex justify-center',
   },
   exportAs: 'zCalendarGrid',
 })
@@ -838,9 +860,10 @@ export class ZardCalendarNavigationComponent {
   protected readonly navClasses = computed(() => mergeClasses(calendarNavVariants()));
 
   protected readonly availableYears = computed(() => {
-    const currentYear = new Date().getFullYear();
+    const minYear = this.minDate()?.getFullYear() ?? new Date().getFullYear() - 10;
+    const maxYear = this.maxDate()?.getFullYear() ?? new Date().getFullYear() + 10;
     const years = [];
-    for (let i = currentYear - 10; i <= currentYear + 10; i++) {
+    for (let i = minYear; i <= maxYear; i++) {
       years.push(i);
     }
     return years;
@@ -1104,6 +1127,55 @@ export function makeSafeDate(year: number, month: number, day = 1): Date {
   const date = new Date(year, month, day);
   date.setHours(12, 0, 0, 0);
   return date;
+}
+
+/**
+ * Normalizes any calendar value into a valid Date or array of Dates.
+ * Returns null for empty values, validates single Dates, converts arrays,
+ * and attempts to parse any other type into a Date.
+ */
+export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
+  if (!v) return null;
+
+  if (v instanceof Date) return toValidDate(v);
+
+  if (Array.isArray(v)) {
+    return v.map(d => toValidDate(d));
+  }
+
+  return toValidDate(v);
+}
+
+/**
+ * Converts any value into a valid Date.
+ * If it is already a Date, it is returned as is.
+ * If the conversion fails, the current date is returned instead.
+ */
+export function toValidDate(value: unknown): Date {
+  if (value instanceof Date) return value;
+
+  if (typeof value === 'number' && value.toString().length === 8) {
+    const s = value.toString();
+    const y = +s.slice(0, 4);
+    const m = +s.slice(4, 6) - 1;
+    const d = +s.slice(6, 8);
+
+    return makeSafeDate(y, m, d);
+  }
+
+  if (typeof value === 'string' && /^\d{8}$/.test(value)) {
+    const y = +value.slice(0, 4);
+    const m = +value.slice(4, 6) - 1;
+    const d = +value.slice(6, 8);
+
+    return makeSafeDate(y, m, d);
+  }
+
+  const date = new Date(value as string | number | Date);
+
+  if (isNaN(date.getTime())) return null as any;
+
+  return makeSafeDate(date.getFullYear(), date.getMonth(), date.getDate());
 }
 
 ```

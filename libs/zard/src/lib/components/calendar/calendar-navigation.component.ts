@@ -90,9 +90,10 @@ export class ZardCalendarNavigationComponent {
   protected readonly navClasses = computed(() => mergeClasses(calendarNavVariants()));
 
   protected readonly availableYears = computed(() => {
-    const currentYear = new Date().getFullYear();
+    const minYear = this.minDate()?.getFullYear() ?? new Date().getFullYear() - 10;
+    const maxYear = this.maxDate()?.getFullYear() ?? new Date().getFullYear() + 10;
     const years = [];
-    for (let i = currentYear - 10; i <= currentYear + 10; i++) {
+    for (let i = minYear; i <= maxYear; i++) {
       years.push(i);
     }
     return years;

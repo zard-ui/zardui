@@ -13,12 +13,18 @@ import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-int
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { filter } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
 import type { CalendarMode, CalendarValue } from './calendar.types';
-import { generateCalendarDays, getSelectedDatesArray, isSameDay, makeSafeDate } from './calendar.utils';
+import {
+  generateCalendarDays,
+  getSelectedDatesArray,
+  isSameDay,
+  makeSafeDate,
+  normalizeCalendarValue,
+} from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
@@ -87,7 +93,12 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly disabled = model<boolean>(false);
 
   // Public outputs
-  readonly dateChange = outputFromObservable(outputToObservable(this.value).pipe(filter(v => v !== null)));
+  readonly dateChange = outputFromObservable(
+    outputToObservable(this.value).pipe(
+      map(v => normalizeCalendarValue(v)),
+      filter(v => v !== null),
+    ),
+  );
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onChange: (value: CalendarValue) => void = () => {};
@@ -95,8 +106,9 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   private onTouched: () => void = () => {};
 
   // Internal state
+  private normalizedValue = computed(() => normalizeCalendarValue(this.value()));
   private readonly currentDate = computed(() => {
-    const val = this.value();
+    const val = this.normalizedValue();
     const mode = this.zMode();
 
     if (!val) return new Date();
@@ -128,7 +140,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       year: selectedDate.getFullYear(),
       month: selectedDate.getMonth(),
       mode: this.zMode(),
-      selectedDates: getSelectedDatesArray(this.value(), this.zMode()),
+      selectedDates: getSelectedDatesArray(this.normalizedValue(), this.zMode()),
       minDate: this.minDate(),
       maxDate: this.maxDate(),
       disabled: this.disabled(),
@@ -232,7 +244,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     if (this.disabled()) return;
 
     const mode = this.zMode();
-    const currentValue = this.value();
+    const currentValue = this.normalizedValue();
 
     if (mode === 'single') {
       this.value.set(date);
@@ -274,7 +286,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       }
     }
 
-    this.onChange(this.value());
+    this.onChange(this.normalizedValue());
     this.onTouched();
   }
 
