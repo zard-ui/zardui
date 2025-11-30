@@ -1,8 +1,9 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from './sidebar.component';
+import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;
@@ -11,6 +12,13 @@ describe('SidebarComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SidebarComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(SidebarComponent);
@@ -204,7 +212,9 @@ describe('SidebarComponent', () => {
     @Component({
       imports: [SidebarComponent],
       standalone: true,
-      template: `<z-sidebar>Test Sidebar Content</z-sidebar>`,
+      template: `
+        <z-sidebar>Test Sidebar Content</z-sidebar>
+      `,
     })
     class TestHostComponent {}
 
@@ -246,7 +256,9 @@ describe('SidebarGroupComponent', () => {
     @Component({
       imports: [SidebarGroupComponent],
       standalone: true,
-      template: `<z-sidebar-group>Group Content</z-sidebar-group>`,
+      template: `
+        <z-sidebar-group>Group Content</z-sidebar-group>
+      `,
     })
     class TestHostComponent {}
 
@@ -288,7 +300,9 @@ describe('SidebarGroupLabelComponent', () => {
     @Component({
       imports: [SidebarGroupLabelComponent],
       standalone: true,
-      template: `<z-sidebar-group-label>Label Text</z-sidebar-group-label>`,
+      template: `
+        <z-sidebar-group-label>Label Text</z-sidebar-group-label>
+      `,
     })
     class TestHostComponent {}
 

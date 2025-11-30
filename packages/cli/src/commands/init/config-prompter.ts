@@ -10,6 +10,7 @@ import { z } from 'zod';
 
 export const configSchema = z.object({
   style: z.enum(['css']),
+  appConfigFile: z.string(),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']),
   tailwind: z.object({
     css: z.string(),
@@ -42,6 +43,12 @@ export async function promptForConfig(
     },
     {
       type: 'text',
+      name: 'app.config',
+      message: `Where is your ${highlight('app.config.ts')} file?`,
+      initial: projectInfo.hasNx ? 'apps/[app]/src/app/app.config.ts' : 'src/app/app.config.ts',
+    },
+    {
+      type: 'text',
       name: 'tailwindCss',
       message: `Where is your ${highlight('global CSS')} file?`,
       initial: projectInfo.hasNx ? 'apps/[app]/src/styles.css' : 'src/styles.css',
@@ -64,6 +71,7 @@ export async function promptForConfig(
 
   const config = configSchema.parse({
     style: 'css',
+    appConfigFile: 'src/app/app.config.ts',
     packageManager,
     tailwind: {
       css: options.tailwindCss,

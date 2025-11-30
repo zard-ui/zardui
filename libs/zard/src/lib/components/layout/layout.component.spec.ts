@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { LayoutComponent } from './layout.component';
 import { SidebarComponent } from './sidebar.component';
+import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 describe('LayoutComponent', () => {
   let component: LayoutComponent;
@@ -11,6 +13,13 @@ describe('LayoutComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [LayoutComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(LayoutComponent);
@@ -67,7 +76,9 @@ describe('LayoutComponent', () => {
     @Component({
       imports: [LayoutComponent],
       standalone: true,
-      template: `<z-layout>Test Content</z-layout>`,
+      template: `
+        <z-layout>Test Content</z-layout>
+      `,
     })
     class TestHostComponent {}
 

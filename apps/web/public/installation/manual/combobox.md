@@ -2,13 +2,17 @@
 
 ```angular-ts title="combobox.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   computed,
   ElementRef,
   forwardRef,
+  inject,
+  Injector,
   input,
   output,
+  runInInjectionContext,
   signal,
   viewChild,
   ViewEncapsulation,
@@ -26,6 +30,7 @@ import { ZardCommandListComponent } from '../command/command-list.component';
 import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
 import { ZardCommandOptionComponent } from '../command/command-option.component';
 import { ZardCommandComponent, type ZardCommandOption } from '../command/command.component';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardEmptyComponent } from '../empty/empty.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
@@ -59,7 +64,6 @@ export interface ZardComboboxGroup {
     ZardEmptyComponent,
     ZardIconComponent,
   ],
-  standalone: true,
   template: `
     <button
       type="button"
@@ -168,12 +172,16 @@ export interface ZardComboboxGroup {
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
-    '(keydown)': 'onKeyDown($event)',
-    '(document:keydown)': 'onDocumentKeyDown($event)',
+    '(document:keydown.escape)': 'onDocumentKeyDown($event)',
+    '(keydown.escape.prevent-with-stop)': 'onKeyDownEscape()',
+    '(keydown.{arrowdown,arrowup,enter,home,end,pageup,pagedown,space}.prevent)': 'onKeyDown($event)',
+    '(keydown.tab)': 'onKeyDown($event)',
   },
   exportAs: 'zCombobox',
 })
 export class ZardComboboxComponent implements ControlValueAccessor {
+  private readonly injector = inject(Injector);
+
   readonly class = input<ClassValue>('');
   readonly buttonVariant = input<'default' | 'outline' | 'secondary' | 'ghost'>('outline');
   readonly zWidth = input<ZardComboboxVariants['zWidth']>('default');
@@ -219,13 +227,17 @@ export class ZardComboboxComponent implements ControlValueAccessor {
 
   protected readonly displayValue = computed(() => {
     const currentValue = this.getCurrentValue();
-    if (!currentValue) return null;
+    if (!currentValue) {
+      return null;
+    }
 
     // Search in groups first
     if (this.groups().length) {
       for (const group of this.groups()) {
         const option = group.options.find(opt => opt.value === currentValue);
-        if (option) return option.label;
+        if (option) {
+          return option.label;
+        }
       }
     }
 
@@ -233,6 +245,10 @@ export class ZardComboboxComponent implements ControlValueAccessor {
     const option = this.options().find(opt => opt.value === currentValue);
     return option?.label ?? null;
   });
+
+  constructor() {
+    checkForProperZardInitialization();
+  }
 
   private onChange: (value: string | null) => void = () => {
     // ControlValueAccessor implementation
@@ -245,20 +261,21 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   setOpen(open: boolean) {
     this.open.set(open);
     if (open) {
-      // Give time for the popover content to render and options to be detected
-      setTimeout(() => {
-        const commandRef = this.commandRef();
-        if (commandRef) {
-          // Refresh options to ensure they're detected
-          commandRef.refreshOptions();
-          // Focus on search input if searchable, otherwise on command component
-          if (this.searchable()) {
-            this.commandInputRef()?.focus();
-          } else {
-            commandRef.focus();
+      runInInjectionContext(this.injector, () =>
+        afterNextRender(() => {
+          const commandRef = this.commandRef();
+          if (commandRef) {
+            // Refresh options to ensure they're detected
+            commandRef.refreshOptions();
+            // Focus on search input if searchable, otherwise on command component
+            if (this.searchable()) {
+              this.commandInputRef()?.focus();
+            } else {
+              commandRef.focus();
+            }
           }
-        }
-      }, 10);
+        }),
+      );
     }
   }
 
@@ -279,7 +296,9 @@ export class ZardComboboxComponent implements ControlValueAccessor {
       if (this.groups().length > 0) {
         for (const group of this.groups()) {
           selectedOption = group.options.find(opt => opt.value === newValue);
-          if (selectedOption) break;
+          if (selectedOption) {
+            break;
+          }
         }
       } else {
         selectedOption = this.options().find(opt => opt.value === newValue);
@@ -297,25 +316,32 @@ export class ZardComboboxComponent implements ControlValueAccessor {
     this.buttonRef().nativeElement.focus();
   }
 
-  onKeyDown(event: KeyboardEvent) {
-    if (this.disabled()) return;
+  onKeyDownEscape(): void {
+    if (this.open()) {
+      this.popoverDirective().hide();
+      this.buttonRef().nativeElement.focus();
+    } else if (this.getCurrentValue()) {
+      this.internalValue.set(null);
+      this.onChange(null);
+      this.zValueChange.emit(null);
+    }
+  }
+
+  onKeyDown(e: Event) {
+    if (this.disabled()) {
+      return;
+    }
+
+    const { key, ctrlKey, altKey, metaKey } = e as KeyboardEvent;
 
     // Handle different keyboard events based on combobox state
     if (this.open()) {
       // When popover is open
-      switch (event.key) {
-        case 'Escape':
-          event.preventDefault();
-          event.stopPropagation();
-          this.popoverDirective().hide();
-          this.buttonRef().nativeElement.focus();
-          break;
-
+      switch (key) {
         case 'Tab':
           // Allow tab to close and move to next element
           this.popoverDirective().hide();
           break;
-
         case 'ArrowDown':
         case 'ArrowUp':
         case 'Enter':
@@ -324,63 +350,43 @@ export class ZardComboboxComponent implements ControlValueAccessor {
         case 'PageUp':
         case 'PageDown':
           // Forward navigation to command component
-          event.preventDefault();
-          this.commandRef()?.onKeyDown(event);
+          this.commandRef()?.onKeyDown(e as KeyboardEvent);
           break;
       }
     } else {
       // When popover is closed
-      switch (event.key) {
+      switch (key) {
         case 'ArrowDown':
         case 'ArrowUp':
         case 'Enter':
         case ' ': // Space key
-          event.preventDefault();
           this.popoverDirective().show();
           break;
-
-        case 'Escape':
-          // Clear selection if there's a value
-          if (this.getCurrentValue()) {
-            event.preventDefault();
-            this.internalValue.set(null);
-            this.onChange(null);
-            this.zValueChange.emit(null);
-          }
-          break;
-
         default:
           // For searchable comboboxes, open and start typing
-          if (this.searchable() && event.key.length === 1 && !event.ctrlKey && !event.altKey && !event.metaKey) {
-            event.preventDefault();
+          if (this.searchable() && key.length === 1 && !ctrlKey && !altKey && !metaKey) {
             this.popoverDirective().show();
             // Let the command input handle the character after opening
-            setTimeout(() => {
-              const inputElement = this.commandInputRef();
-              if (inputElement) {
-                inputElement.focus();
-                // Simulate the key press in the input
-                const input = inputElement as unknown as {
-                  searchInput?: { nativeElement: HTMLInputElement };
-                  searchTerm: { set: (value: string) => void };
-                  searchSubject: { next: (value: string) => void };
-                };
-                if (input.searchInput?.nativeElement) {
-                  input.searchInput.nativeElement.value = event.key;
-                  input.searchTerm.set(event.key);
-                  input.searchSubject.next(event.key);
+            runInInjectionContext(this.injector, () =>
+              afterNextRender(() => {
+                const inputElement = this.commandInputRef();
+                if (inputElement) {
+                  inputElement.searchInput().nativeElement.value = key;
+                  inputElement.updateParentComponents(key);
+                  inputElement.focus();
                 }
-              }
-            }, 20);
+              }),
+            );
           }
           break;
       }
     }
   }
 
-  onDocumentKeyDown(event: KeyboardEvent) {
+  // needed when component loses focus by keyboard.
+  onDocumentKeyDown(event: Event) {
     // Close on Escape from anywhere when this combobox is open
-    if (this.open() && event.key === 'Escape') {
+    if (this.open()) {
       const target = event.target as Element;
       const buttonElement = this.buttonRef().nativeElement;
       // Only handle if not already handled by the component itself
@@ -402,10 +408,6 @@ export class ZardComboboxComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
-  }
-
-  setDisabledState(): void {
-    // The disabled state is handled by the disabled input
   }
 }
 

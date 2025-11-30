@@ -16,8 +16,9 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-accordion',
-  standalone: true,
-  template: ` <ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -36,28 +37,22 @@ export class ZardAccordionComponent implements AfterContentInit {
   protected readonly classes = computed(() => mergeClasses(accordionVariants(), this.class()));
 
   ngAfterContentInit(): void {
-    setTimeout(() => {
-      this.items().forEach(item => {
-        item.accordion = this;
-      });
-
-      const defaultValue = this.zDefaultValue();
-      if (defaultValue) {
-        if (typeof defaultValue === 'string') {
-          const item = this.items().find(i => i.zValue() === defaultValue);
+    const defaultValue = this.zDefaultValue();
+    if (defaultValue) {
+      if (typeof defaultValue === 'string') {
+        const item = this.items().find(i => i.zValue() === defaultValue);
+        if (item) {
+          item.isOpen.set(true);
+        }
+      } else if (Array.isArray(defaultValue)) {
+        for (const value of defaultValue) {
+          const item = this.items().find(item => item.zValue() === value);
           if (item) {
-            item.setOpen(true);
+            item.isOpen.set(true);
           }
-        } else if (Array.isArray(defaultValue)) {
-          defaultValue.forEach(value => {
-            const item = this.items().find(i => i.zValue() === value);
-            if (item) {
-              item.setOpen(true);
-            }
-          });
         }
       }
-    });
+    }
   }
 
   toggleItem(selectedItem: ZardAccordionItemComponent): void {
@@ -68,10 +63,10 @@ export class ZardAccordionComponent implements AfterContentInit {
         return;
       }
 
-      this.items().forEach(item => {
+      for (const item of this.items()) {
         const shouldBeOpen = item === selectedItem ? !item.isOpen() : false;
-        item.setOpen(shouldBeOpen);
-      });
+        item.isOpen.set(shouldBeOpen);
+      }
     } else {
       if (isClosing && !this.zCollapsible()) {
         const openItemsCount = this.countOpenItems();
@@ -80,7 +75,7 @@ export class ZardAccordionComponent implements AfterContentInit {
         }
       }
 
-      selectedItem.setOpen(!selectedItem.isOpen());
+      selectedItem.isOpen.update(v => !v);
     }
   }
 

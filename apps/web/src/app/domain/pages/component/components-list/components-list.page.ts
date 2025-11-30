@@ -10,12 +10,22 @@ import { SeoService } from '@doc/shared/services/seo.service';
   selector: 'z-components-list',
   template: `
     <z-content>
-      <z-doc-heading title="Components" description="Here you can find all the components available in the library. We are working on adding more components."> </z-doc-heading>
+      <z-doc-heading
+        title="Components"
+        description="Here you can find all the components available in the library. We are working on adding more components."
+      ></z-doc-heading>
       <div>
-        <section class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:gap-x-16 lg:gap-y-6 xl:gap-x-20">
+        <section
+          class="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 md:gap-x-8 lg:gap-x-16 lg:gap-y-6 xl:gap-x-20"
+        >
           @for (component of list; track component.name) {
             @if (component.available) {
-              <a [routerLink]="component.path" class="inline-flex items-center gap-2 text-lg font-medium underline-offset-4 hover:underline md:text-base"> {{ component.name }} </a>
+              <a
+                [routerLink]="component.path"
+                class="inline-flex items-center gap-2 text-lg font-medium underline-offset-4 hover:underline md:text-base"
+              >
+                {{ component.name }}
+              </a>
             }
           }
         </section>

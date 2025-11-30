@@ -3,7 +3,6 @@ import {
   type AfterViewInit,
   booleanAttribute,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   computed,
   ElementRef,
@@ -23,7 +22,7 @@ import {
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { filter, fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 import {
   sliderOrientationVariants,
@@ -134,7 +133,10 @@ export class ZSliderThumbComponent {
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(sliderThumbVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(sliderThumbVariants({ disabled: this.disabled() }), this.class()),
+  );
+
   protected readonly orientationClasses = computed(() =>
     mergeClasses(sliderOrientationVariants({ zOrientation: this.orientation() })),
   );
@@ -169,7 +171,7 @@ export class ZSliderThumbComponent {
         [min]="zMin()"
         [max]="zMax()"
         [disabled]="disabled()"
-        (keydown)="handleKeydown($event)"
+        (keydown.{home,end,arrowleft,arrowright,arrowdown,arrowup}.prevent)="handleKeydown($event)"
       />
     </span>
   `,
@@ -207,7 +209,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
   readonly trackRef = viewChild.required(ZSliderTrackComponent);
 
   private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private cdr = inject(ChangeDetectorRef);
   private document = inject(DOCUMENT);
 
   protected readonly classes = computed(() =>
@@ -244,9 +245,8 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
   ngAfterViewInit() {
     const pointerDown$ = fromEvent<PointerEvent>(this.elementRef.nativeElement, 'pointerdown').pipe(
+      filter(() => !this.disabled()),
       tap(event => {
-        if (this.disabled()) return;
-
         const target = event.target as HTMLElement;
         const isThumb = this.thumbRef().nativeElement.contains(target);
         const isTrack = this.trackRef().nativeElement.contains(target);
@@ -280,7 +280,9 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
         takeUntil(this.destroy$),
       )
       .subscribe(percentage => {
-        if (this.disabled()) return;
+        if (this.disabled()) {
+          return;
+        }
         this.updateSliderFromPercentage(percentage);
         this.onTouched();
       });
@@ -301,11 +303,12 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
     const clampedValue = clamp(value, [min, max]);
     const roundedValue = roundToStep(clampedValue, min, step);
 
-    if (roundedValue === this.lastEmittedValue()) return;
+    if (roundedValue === this.lastEmittedValue()) {
+      return;
+    }
 
     this.percentValue.set(convertValueToPercentage(roundedValue, min, max));
     this.lastEmittedValue.set(roundedValue);
-    this.cdr.markForCheck();
   }
 
   registerOnChange(fn: (value: number) => void): void {
@@ -318,11 +321,12 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled.set(isDisabled);
-    this.cdr.markForCheck();
   }
 
-  handleKeydown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
+  handleKeydown(event: Event): void {
+    if (this.disabled()) {
+      return;
+    }
 
     const percent = this.percentValue();
     const rawValue = this.zMin() + ((this.zMax() - this.zMin()) * percent) / 100;
@@ -330,7 +334,9 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
     let newValue = currentValue;
 
-    switch (event.key) {
+    const { key } = event as KeyboardEvent;
+
+    switch (key) {
       case 'Home':
         newValue = this.zMin();
         break;
@@ -338,27 +344,24 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
         newValue = this.zMax();
         break;
       case 'ArrowLeft':
-        newValue = Math.max(currentValue - this.zStep(), this.zMin());
-        break;
-      case 'ArrowRight':
-        newValue = Math.min(currentValue + this.zStep(), this.zMax());
-        break;
       case 'ArrowDown':
         newValue = Math.max(currentValue - this.zStep(), this.zMin());
         break;
+      case 'ArrowRight':
       case 'ArrowUp':
         newValue = Math.min(currentValue + this.zStep(), this.zMax());
         break;
+
       default:
         return;
     }
 
-    this.percentValue.set(convertValueToPercentage(newValue, this.zMin(), this.zMax()));
-    this.zSlideIndexChange.emit(newValue);
-    this.lastEmittedValue.set(newValue);
-    this.onChange(newValue);
-    this.cdr.markForCheck();
-    event.preventDefault();
+    if (newValue !== currentValue) {
+      this.percentValue.set(convertValueToPercentage(newValue, this.zMin(), this.zMax()));
+      this.zSlideIndexChange.emit(newValue);
+      this.lastEmittedValue.set(newValue);
+      this.onChange(newValue);
+    }
   }
 
   private updateSliderFromPercentage(percentage: number): void {
@@ -371,7 +374,6 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
       this.zSlideIndexChange.emit(value);
       this.lastEmittedValue.set(value);
       this.onChange(value);
-      this.cdr.markForCheck();
     }
   }
 

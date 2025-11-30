@@ -8,7 +8,6 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-empty',
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()">
