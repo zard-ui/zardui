@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardResizableHandleComponent } from './resizable-handle.component';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { ZardResizableComponent, ZardResizeEvent } from './resizable.component';
+import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 @Component({
   selector: 'test-resizable-host',
@@ -68,6 +69,13 @@ describe('ZardResizableComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [TestResizableHostComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestResizableHostComponent);
@@ -156,6 +164,13 @@ describe('ZardResizableComponent', () => {
 
       TestBed.configureTestingModule({
         imports: [TestPercentageHostComponent],
+        providers: [
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
       });
 
       const percentageFixture = TestBed.createComponent(TestPercentageHostComponent);
@@ -189,6 +204,13 @@ describe('ZardResizableComponent', () => {
 
       TestBed.configureTestingModule({
         imports: [TestPixelHostComponent],
+        providers: [
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
       });
 
       const pixelFixture = TestBed.createComponent(TestPixelHostComponent);
@@ -254,8 +276,10 @@ describe('ZardResizableComponent', () => {
     });
 
     it('should handle touch events', () => {
+      const touchMock = { clientX: 500, clientY: 300 } as Touch;
+      const listMock: TouchList = { length: 1, item: (index: number) => touchMock, 0: touchMock };
       const touchStartEvent = new TouchEvent('touchstart', {
-        touches: [{ clientX: 500, clientY: 300 } as Touch],
+        touches: listMock as unknown as Touch[],
       });
       resizableComponent.startResize(0, touchStartEvent);
 

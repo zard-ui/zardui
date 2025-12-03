@@ -1,17 +1,22 @@
-import { Directive, ElementRef, HostListener, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
+import { Directive, ElementRef, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
-  standalone: true,
   host: {
     '[attr.tabindex]': '0',
     '[attr.role]': '"button"',
     '[attr.aria-haspopup]': '"menu"',
     '[attr.aria-expanded]': 'dropdownService.isOpen()',
     '[attr.aria-disabled]': 'zDisabled()',
+    '(click.prevent-with-stop)': 'onClick()',
+    '(mouseenter)': 'onHoverToggle()',
+    '(mouseleave)': 'onHoverToggle()',
+    '(keydown.{enter,space}.prevent-with-stop)': 'toggleDropdown()',
+    '(keydown.arrowdown.prevent)': 'openDropdown()',
   },
   exportAs: 'zDropdown',
 })
@@ -24,6 +29,10 @@ export class ZardDropdownDirective implements OnInit {
   readonly zTrigger = input<'click' | 'hover'>('click');
   readonly zDisabled = input<boolean>(false);
 
+  constructor() {
+    checkForProperZardInitialization();
+  }
+
   ngOnInit() {
     // Ensure button has proper accessibility attributes
     const element = this.elementRef.nativeElement;
@@ -33,70 +42,41 @@ export class ZardDropdownDirective implements OnInit {
     }
   }
 
-  @HostListener('click', ['$event'])
-  onClick(event: Event) {
-    if (this.zDisabled() || this.zTrigger() !== 'click') return;
+  protected onClick() {
+    if (this.zTrigger() !== 'click') {
+      return;
+    }
 
-    event.preventDefault();
-    event.stopPropagation();
+    this.toggleDropdown();
+  }
+
+  protected onHoverToggle() {
+    if (this.zTrigger() !== 'hover') {
+      return;
+    }
+
+    this.toggleDropdown();
+  }
+
+  protected toggleDropdown() {
+    if (this.zDisabled()) {
+      return;
+    }
 
     const menuContent = this.zDropdownMenu();
     if (menuContent) {
-      this.dropdownService.toggle(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
+      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
     }
   }
 
-  @HostListener('mouseenter')
-  onMouseEnter() {
-    if (this.zDisabled() || this.zTrigger() !== 'hover') return;
-
-    const menuContent = this.zDropdownMenu();
-    if (menuContent) {
-      this.dropdownService.open(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
+  protected openDropdown() {
+    if (this.zDisabled()) {
+      return;
     }
-  }
 
-  @HostListener('mouseleave')
-  onMouseLeave() {
-    if (this.zDisabled() || this.zTrigger() !== 'hover') return;
-
-    this.dropdownService.close();
-  }
-
-  @HostListener('keydown', ['$event'])
-  onKeydown(event: KeyboardEvent) {
-    if (this.zDisabled()) return;
-
-    switch (event.key) {
-      case 'Enter':
-      case ' ':
-        event.preventDefault();
-        event.stopPropagation();
-        this.toggleDropdown();
-        break;
-      case 'ArrowDown':
-        event.preventDefault();
-        this.openDropdown();
-        break;
-      case 'Escape':
-        event.preventDefault();
-        this.dropdownService.close();
-        this.elementRef.nativeElement.focus();
-        break;
-    }
-  }
-
-  private toggleDropdown() {
-    const menuContent = this.zDropdownMenu();
-    if (menuContent) {
-      this.dropdownService.toggle(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
-    }
-  }
-
-  private openDropdown() {
     const menuContent = this.zDropdownMenu();
     if (menuContent && !this.dropdownService.isOpen()) {
-      this.dropdownService.open(this.elementRef, menuContent?.contentTemplate?.(), this.viewContainerRef);
+      this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
     }
   }
 }

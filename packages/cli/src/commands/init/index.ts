@@ -3,6 +3,7 @@ import { installDependencies } from '@cli/commands/init/dependencies.js';
 import { setupTailwind } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { createUtils } from '@cli/commands/init/utils-creator.js';
+import { Config } from '@cli/utils/config.js';
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager } from '@cli/utils/package-manager.js';
@@ -12,6 +13,8 @@ import { existsSync } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
 import prompts from 'prompts';
+
+import { updateAngularConfig } from './update-angular-config.js';
 
 export const init = new Command()
   .name('init')
@@ -110,6 +113,10 @@ async function runInitializationSteps(
   await installDependencies(cwd, config);
   dependenciesSpinner.succeed();
 
+  const appConfigSpinner = spinner('Updating app.config.ts...').start();
+  await updateAngularConfig(cwd, config);
+  appConfigSpinner.succeed();
+
   if (!projectInfo.hasTailwind || isReInitializing) {
     const tailwindSpinner = spinner('Setting up Tailwind CSS...').start();
     await setupTailwind(cwd, config);
@@ -125,7 +132,7 @@ async function runInitializationSteps(
   tsconfigSpinner.succeed();
 }
 
-function displaySuccessMessage(config: any): void {
+function displaySuccessMessage(config: Config): void {
   logger.break();
   logger.success('ZardUI has been initialized successfully!');
   logger.break();

@@ -3,6 +3,8 @@ import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } fr
 import { BrowserModule, provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
+import { provideZard } from '@zard/components/core/provider/providezard';
+
 import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
@@ -18,5 +20,6 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideHttpClient(withFetch()),
+    provideZard(),
   ],
 };

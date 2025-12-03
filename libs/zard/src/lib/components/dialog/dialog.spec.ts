@@ -10,7 +10,7 @@ import { ZardButtonComponent } from '../button/button.component';
   imports: [ZardButtonComponent, ZardDialogModule],
   standalone: true,
   template: `
-    <button z-button zType="outline" (click)="openDialog()">Open dialog</button>
+    <button type="button" z-button zType="outline" (click)="openDialog()">Open dialog</button>
   `,
 })
 class DialogTestHostComponent {
