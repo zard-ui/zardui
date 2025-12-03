@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardDatePickerComponent } from '../date-picker.component';
 
-
 @Component({
   selector: 'zard-demo-date-picker-default',
   imports: [ZardDatePickerComponent],
