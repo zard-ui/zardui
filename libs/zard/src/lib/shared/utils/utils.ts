@@ -15,15 +15,3 @@ export function generateId(prefix = ''): string {
 }
 
 export const noopFun = () => void 0;
-
-export const isElementContentTruncated = (element: HTMLElement | undefined): boolean => {
-  if (!element) {
-    return false;
-  }
-  const range = document.createRange();
-  range.selectNodeContents(element);
-  const rangeWidth = range.getBoundingClientRect().width;
-  const elementWidth = element.getBoundingClientRect().width;
-
-  return rangeWidth > elementWidth;
-};

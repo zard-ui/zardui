@@ -20,7 +20,13 @@ export class ScrollOnActiveDirective implements OnInit {
   }
 
   private scrollToElement(): void {
-    this.el.nativeElement.scrollIntoView({
+    const element = this.el.nativeElement;
+    if (!element.scrollIntoView) {
+      // on mobile scrollIntoView is undefined
+      return;
+    }
+
+    element.scrollIntoView({
       behavior: 'smooth',
       block: 'center',
     });

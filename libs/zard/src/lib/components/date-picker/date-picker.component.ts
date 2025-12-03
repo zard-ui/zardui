@@ -36,6 +36,7 @@ const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, strin
   template: `
     <button
       z-button
+      type="button"
       [zType]="zType()"
       [zSize]="zSize()"
       [disabled]="disabled()"
@@ -59,6 +60,7 @@ const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, strin
       <z-popover [class]="popoverClasses()">
         <z-calendar
           #calendar
+          class="border-0"
           [value]="value()"
           [minDate]="minDate()"
           [maxDate]="maxDate()"

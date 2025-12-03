@@ -9,7 +9,6 @@ import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/z
 
 @Component({
   imports: [ZardSelectComponent, ZardSelectItemComponent],
-  standalone: true,
   template: `
     <z-select [(zValue)]="value" [zLabel]="label()" [zPlaceholder]="placeholder()" [zDisabled]="disabled()">
       <z-select-item zValue="option1">Option 1</z-select-item>
@@ -46,7 +45,7 @@ describe('ZardSelectComponent', () => {
 
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [ZardSelectComponent],
+        imports: [TestHostComponent, ZardSelectItemComponent],
         providers: [
           {
             provide: EVENT_MANAGER_PLUGINS,
@@ -264,15 +263,16 @@ describe('ZardSelectComponent', () => {
       expect(onChangeSpy).toHaveBeenCalledWith('apple');
     });
 
-    it('should call onTouched when dropdown closes', () => {
+    it('should call onTouched when dropdown closes', fakeAsync(() => {
       const onTouchedSpy = jest.fn();
       selectComponent.registerOnTouched(onTouchedSpy);
 
       selectComponent.toggle(); // open
+      flush();
       selectComponent.toggle(); // close
 
       expect(onTouchedSpy).toHaveBeenCalled();
-    });
+    }));
   });
 
   describe('signal reactivity', () => {
@@ -419,7 +419,7 @@ describe('ZardSelectComponent', () => {
       expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree', '1 more item selected']);
     });
 
-    it('select more items with deselect', () => {
+    it('should handle multiple deselects correctly', () => {
       selectComponent.selectItem('option1', 'OptionOne');
       selectComponent.selectItem('option2', 'OptionTwo');
       selectComponent.selectItem('option3', 'OptionThree');
@@ -427,6 +427,15 @@ describe('ZardSelectComponent', () => {
 
       expect(hostComponent.value().length).toBe(2);
       expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionThree']);
+    });
+
+    it('should handle multiple selects correctly', () => {
+      selectComponent.selectItem('option1', 'OptionOne');
+      selectComponent.selectItem('option2', 'OptionTwo');
+      selectComponent.selectItem('option4', 'OptionFour');
+
+      expect(hostComponent.value().length).toBe(3);
+      expect(selectComponent.selectedLabels()).toEqual(['OptionOne', 'OptionTwo', 'OptionFour']);
     });
   });
 });

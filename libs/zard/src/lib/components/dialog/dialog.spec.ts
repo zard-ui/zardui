@@ -98,7 +98,6 @@ describe('ZardDialogComponent', () => {
         cancelButton?.click();
         fixture.detectChanges();
 
-        // Wait for animation to complete
         await new Promise(resolve => setTimeout(resolve, 200));
         fixture.detectChanges();
 
@@ -170,8 +169,6 @@ describe('ZardDialogComponent', () => {
 
       const dialogElement = document.querySelector('z-dialog');
       expect(dialogElement).toBeTruthy();
-      // With animations, state should be 'open'
-      // Note: NoopAnimationsModule is used in tests so animation states still work
     });
 
     it('should handle closing animation gracefully', async () => {
