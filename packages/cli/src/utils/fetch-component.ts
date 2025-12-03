@@ -107,8 +107,7 @@ function transformContent(content: string, config: Config): string {
     /from ['"]\.\.\/\.\.\/shared\/utils\/number['"]/g,
     `from '${utilsImportPath}/number'`,
   );
-
-  const componentImportRegex = /from ['"]\.\.\/([\w-/]+)['"]/g;
+  const componentImportRegex = /from ['"]\.\.\/([\w-/.]+)['"]/g;
   transformed = transformed.replace(componentImportRegex, `from '${componentsImportPath}/$1'`);
 
   transformed = transformed.replace(

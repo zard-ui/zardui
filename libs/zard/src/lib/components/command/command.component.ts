@@ -48,7 +48,6 @@ export interface ZardCommandConfig {
 @Component({
   selector: 'z-command',
   imports: [FormsModule],
-  standalone: true,
   template: `
     <div [class]="classes()">
       <div id="command-instructions" class="sr-only">
@@ -70,10 +69,10 @@ export interface ZardCommandConfig {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.role]': '"combobox"',
+    role: 'combobox',
+    'aria-haspopup': 'listbox',
     '[attr.aria-expanded]': 'true',
-    '[attr.aria-haspopup]': '"listbox"',
-    '(keydown)': 'onKeyDown($event)',
+    '(keydown.{arrowdown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',
   },
   exportAs: 'zCommand',
 })
@@ -102,10 +101,14 @@ export class ZardCommandComponent implements ControlValueAccessor {
     // Include the trigger signal to make this computed reactive to option changes
     this.optionsUpdateTrigger();
 
-    if (!this.optionComponents()) return [];
+    if (!this.optionComponents()) {
+      return [];
+    }
 
     const lowerSearchTerm = searchTerm.toLowerCase().trim();
-    if (lowerSearchTerm === '') return this.optionComponents();
+    if (!lowerSearchTerm) {
+      return this.optionComponents();
+    }
 
     return this.optionComponents().filter(option => {
       const label = option.zLabel().toLowerCase();
@@ -119,7 +122,9 @@ export class ZardCommandComponent implements ControlValueAccessor {
     const searchTerm = this.searchTerm().trim();
     const filteredCount = this.filteredOptions().length;
 
-    if (!searchTerm) return '';
+    if (!searchTerm) {
+      return searchTerm;
+    }
 
     if (!filteredCount) {
       return `No results found for "${searchTerm}"`;
@@ -171,15 +176,18 @@ export class ZardCommandComponent implements ControlValueAccessor {
   }
 
   // in @Component host: '(keydown)': 'onKeyDown($event)'
-  onKeyDown(event: KeyboardEvent) {
+  onKeyDown(event: Event) {
     const filteredOptions = this.filteredOptions();
-    if (filteredOptions.length === 0) return;
+    if (filteredOptions.length === 0) {
+      return;
+    }
+
+    const { key } = event as KeyboardEvent;
 
     const currentIndex = this.selectedIndex();
 
-    switch (event.key) {
+    switch (key) {
       case 'ArrowDown': {
-        event.preventDefault();
         const nextIndex = currentIndex < filteredOptions.length - 1 ? currentIndex + 1 : 0;
         this.selectedIndex.set(nextIndex);
         this.updateSelectedOption();
@@ -187,7 +195,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
       }
 
       case 'ArrowUp': {
-        event.preventDefault();
         const prevIndex = currentIndex > 0 ? currentIndex - 1 : filteredOptions.length - 1;
         this.selectedIndex.set(prevIndex);
         this.updateSelectedOption();
@@ -195,7 +202,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
       }
 
       case 'Enter':
-        event.preventDefault();
         if (currentIndex >= 0 && currentIndex < filteredOptions.length) {
           const selectedOption = filteredOptions[currentIndex];
           if (!selectedOption.zDisabled()) {
@@ -205,7 +211,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
         break;
 
       case 'Escape':
-        event.preventDefault();
         this.selectedIndex.set(-1);
         this.updateSelectedOption();
         break;

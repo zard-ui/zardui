@@ -1,7 +1,6 @@
 import { isPlatformBrowser } from '@angular/common';
 import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ZardDialogModule } from './dialog.component';
 import { ZardDialogService } from './dialog.service';
@@ -10,7 +9,9 @@ import { ZardButtonComponent } from '../button/button.component';
 @Component({
   imports: [ZardButtonComponent, ZardDialogModule],
   standalone: true,
-  template: ` <button z-button zType="outline" (click)="openDialog()">Open dialog</button> `,
+  template: `
+    <button type="button" z-button zType="outline" (click)="openDialog()">Open dialog</button>
+  `,
 })
 class DialogTestHostComponent {
   private dialogService = inject(ZardDialogService);
@@ -31,7 +32,7 @@ describe('ZardDialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DialogTestHostComponent, NoopAnimationsModule],
+      imports: [DialogTestHostComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(DialogTestHostComponent);

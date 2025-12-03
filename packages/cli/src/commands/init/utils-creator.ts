@@ -1,9 +1,8 @@
-import { writeFile, mkdir } from 'node:fs/promises';
-import { existsSync } from 'fs';
-import * as path from 'path';
-
-import { UTILS } from '@cli/utils/templates.js';
 import { type Config } from '@cli/utils/config.js';
+import { UTILS } from '@cli/utils/templates.js';
+import { existsSync } from 'fs';
+import { writeFile, mkdir } from 'node:fs/promises';
+import * as path from 'path';
 
 export async function createUtils(cwd: string, config: Config): Promise<void> {
   const utilsPath = path.join(cwd, config.aliases.utils);

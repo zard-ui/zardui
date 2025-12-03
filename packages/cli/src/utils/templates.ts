@@ -1,12 +1,6 @@
 export const UTILS = {
-  cn: `import { clsx, type ClassValue } from "clsx"
-import { twMerge } from "tailwind-merge"
-
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs))
-}
-`,
-  'merge-classes': `import { twMerge } from 'tailwind-merge';
+  'merge-classes': `
+import { twMerge } from 'tailwind-merge';
 import { ClassValue, clsx } from 'clsx';
 
 export type { ClassValue };

@@ -25,6 +25,7 @@ import { filter, Subscription } from 'rxjs';
 
 import { popoverVariants } from './popover.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -97,6 +98,8 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   constructor() {
+    checkForProperZardInitialization();
+
     toObservable(this.zVisible)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(visible => {
@@ -149,7 +152,9 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   hide() {
-    if (!this.isVisible()) return;
+    if (!this.isVisible()) {
+      return;
+    }
 
     this.overlayRef?.detach();
     this.isVisible.set(false);
@@ -202,24 +207,11 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     }
 
     if (trigger === 'click') {
-      this.listeners.push(
-        this.renderer.listen(this.nativeElement, 'click', (event: Event) => {
-          event.stopPropagation();
-          this.toggle();
-        }),
-      );
+      this.listeners.push(this.renderer.listen(this.nativeElement, 'click.stop', () => this.toggle()));
     } else if (trigger === 'hover') {
-      this.listeners.push(
-        this.renderer.listen(this.nativeElement, 'mouseenter', () => {
-          this.show();
-        }),
-      );
+      this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseenter', () => this.show()));
 
-      this.listeners.push(
-        this.renderer.listen(this.nativeElement, 'mouseleave', () => {
-          this.hide();
-        }),
-      );
+      this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseleave', () => this.hide()));
     }
   }
 
@@ -373,7 +365,9 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   selector: 'z-popover',
   imports: [],
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[class]': 'classes()',

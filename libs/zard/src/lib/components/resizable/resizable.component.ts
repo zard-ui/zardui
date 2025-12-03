@@ -21,6 +21,7 @@ import type { ClassValue } from 'clsx';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 export interface ZardResizeEvent {
   sizes: number[];
@@ -31,7 +32,6 @@ type CleanupFunction = () => void;
 
 @Component({
   selector: 'z-resizable, [z-resizable]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -65,6 +65,10 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     mergeClasses(resizableVariants({ zLayout: this.zLayout() }), this.class()),
   );
 
+  constructor() {
+    checkForProperZardInitialization();
+  }
+
   ngAfterContentInit(): void {
     this.initializePanelSizes();
   }
@@ -95,7 +99,9 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const panels = this.panels();
     const totalPanels = panels.length;
 
-    if (totalPanels === 0) return;
+    if (totalPanels === 0) {
+      return;
+    }
 
     const containerSize = this.getContainerSize();
     const sizes = panels.map(panel => {
@@ -168,7 +174,9 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     const leftPanel = panels[handleIndex];
     const rightPanel = panels[handleIndex + 1];
 
-    if (!leftPanel || !rightPanel) return;
+    if (!leftPanel || !rightPanel) {
+      return;
+    }
 
     const leftMin = this.convertToPercentage(leftPanel.zMin(), containerSize);
     const leftMax = this.convertToPercentage(leftPanel.zMax(), containerSize);
@@ -232,25 +240,36 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 
   private getEventPosition(event: MouseEvent | TouchEvent): number {
     const layout = this.zLayout();
+    let position = 0;
+
     if (event instanceof MouseEvent) {
-      return layout === 'vertical' ? event.clientY : event.clientX;
+      position = layout === 'vertical' ? event.clientY : event.clientX;
     } else {
-      const touch = event.touches[0];
-      return layout === 'vertical' ? touch.clientY : touch.clientX;
+      const touch = event.touches.item(0);
+      if (touch) {
+        const { clientX, clientY } = touch;
+        position = layout === 'vertical' ? clientY : clientX;
+      }
     }
+
+    return position;
   }
 
   getContainerSize(): number {
     const element = this.elementRef.nativeElement as HTMLElement;
     const layout = this.zLayout();
-    return layout === 'vertical' ? element.offsetHeight : element.offsetWidth;
+    const { offsetHeight, offsetWidth } = element;
+    return layout === 'vertical' ? offsetHeight : offsetWidth;
   }
 
+  // TODO: Consider simplifying collapse logic - handle edge cases where totalOthers is 0 more explicitly
   collapsePanel(index: number): void {
     const panels = this.panels();
     const panel = panels[index];
 
-    if (!panel?.zCollapsible()) return;
+    if (!panel?.zCollapsible()) {
+      return;
+    }
 
     let sizes = [...this.panelSizes()];
     const isCollapsed = sizes[index] === 0;

@@ -8,7 +8,6 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-divider',
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()" role="separator"></div>
@@ -26,12 +25,16 @@ export class ZardCommandDividerComponent {
   protected readonly classes = computed(() => mergeClasses(commandSeparatorVariants({}), this.class()));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent) return true;
+    if (!this.commandComponent) {
+      return true;
+    }
 
     const searchTerm = this.commandComponent.searchTerm();
 
     // If no search, always show dividers
-    if (searchTerm === '') return true;
+    if (searchTerm === '') {
+      return true;
+    }
 
     // If there's a search term, hide all dividers for now
     // This is a simple approach - we can make it smarter later
