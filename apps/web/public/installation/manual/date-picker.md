@@ -1,18 +1,30 @@
 
 
 ```angular-ts title="date-picker.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, forwardRef, inject, input, model, output, viewChild, ViewEncapsulation, type TemplateRef, } from '@angular/core';
-import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  forwardRef,
+  inject,
+  input,
+  model,
+  output,
+  viewChild,
+  ViewEncapsulation,
+  type TemplateRef,
+} from '@angular/core';
+import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
-import { ZardCalendarComponent } from '../calendar/calendar.component';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
 import { mergeClasses } from '../../shared/utils/utils';
-
+import { ZardButtonComponent } from '../button/button.component';
+import { ZardCalendarComponent } from '../calendar/calendar.component';
+import { ZardIconComponent } from '../icon/icon.component';
+import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 
 const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, string> = {
   sm: 'h-8',

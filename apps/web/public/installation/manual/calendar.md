@@ -14,10 +14,10 @@ import {
 } from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
+
 import type { ClassValue } from 'clsx';
 import { filter, map } from 'rxjs';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
 import type { CalendarMode, CalendarValue } from './calendar.types';
@@ -29,6 +29,7 @@ import {
   normalizeCalendarValue,
 } from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
+import { mergeClasses } from '../../shared/utils/utils';
 
 export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
 

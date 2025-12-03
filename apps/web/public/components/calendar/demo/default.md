@@ -3,7 +3,6 @@ import { Component } from '@angular/core';
 
 import { ZardCalendarComponent } from '../calendar.component';
 
-
 @Component({
   selector: 'z-demo-calendar-default',
   imports: [ZardCalendarComponent],
