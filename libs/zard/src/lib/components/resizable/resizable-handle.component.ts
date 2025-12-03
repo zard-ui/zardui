@@ -8,7 +8,6 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-resizable-handle, [z-resizable-handle]',
-  standalone: true,
   template: `
     @if (zWithHandle()) {
       <div [class]="handleClasses()"></div>
@@ -17,15 +16,15 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    role: 'separator',
     '[class]': 'classes()',
     '[attr.data-layout]': 'layout()',
     '[attr.tabindex]': 'zDisabled() ? null : 0',
-    '[attr.role]': '"separator"',
     '[attr.aria-orientation]': 'layout() === "vertical" ? "horizontal" : "vertical"',
     '[attr.aria-disabled]': 'zDisabled()',
     '(mousedown)': 'handleMouseDown($event)',
     '(touchstart)': 'handleTouchStart($event)',
-    '(keydown)': 'handleKeyDown($event)',
+    '(keydown.{arrowleft,arrowright,arrowup,arrowdown,home,end,enter,space}.prevent)': 'handleKeyDown($event)',
   },
   exportAs: 'zResizableHandle',
 })
@@ -52,66 +51,79 @@ export class ZardResizableHandleComponent {
   protected readonly handleClasses = computed(() => resizableHandleIndicatorVariants({ zLayout: this.layout() }));
 
   handleMouseDown(event: MouseEvent): void {
-    if (this.zDisabled() || !this.resizable) return;
+    if (this.zDisabled() || !this.resizable) {
+      return;
+    }
     this.resizable.startResize(this.zHandleIndex(), event);
   }
 
   handleTouchStart(event: TouchEvent): void {
-    if (this.zDisabled() || !this.resizable) return;
+    if (this.zDisabled() || !this.resizable) {
+      return;
+    }
     this.resizable.startResize(this.zHandleIndex(), event);
   }
 
-  handleKeyDown(event: KeyboardEvent): void {
-    if (this.zDisabled() || !this.resizable) return;
+  handleKeyDown(event: Event): void {
+    if (this.zDisabled() || !this.resizable) {
+      return;
+    }
+    const { key, shiftKey } = event as KeyboardEvent;
 
     const panels = this.resizable.panels();
     const handleIndex = this.zHandleIndex();
     const layout = this.layout();
 
     let delta = 0;
-    const step = event.shiftKey ? 10 : 1;
+    const step = shiftKey ? 10 : 1;
 
-    switch (event.key) {
+    switch (key) {
       case 'ArrowLeft':
-        if (layout === 'horizontal') delta = -step;
+        if (layout === 'horizontal') {
+          delta = -step;
+        }
         break;
       case 'ArrowRight':
-        if (layout === 'horizontal') delta = step;
+        if (layout === 'horizontal') {
+          delta = step;
+        }
         break;
       case 'ArrowUp':
-        if (layout === 'vertical') delta = -step;
+        if (layout === 'vertical') {
+          delta = -step;
+        }
         break;
       case 'ArrowDown':
-        if (layout === 'vertical') delta = step;
+        if (layout === 'vertical') {
+          delta = step;
+        }
         break;
       case 'Home':
-        event.preventDefault();
         this.moveToExtreme(true);
-        return;
+        break;
       case 'End':
-        event.preventDefault();
         this.moveToExtreme(false);
-        return;
+        break;
       case 'Enter':
       case ' ':
-        event.preventDefault();
         if (panels[handleIndex]?.zCollapsible() || panels[handleIndex + 1]?.zCollapsible()) {
           const collapsibleIndex = panels[handleIndex]?.zCollapsible() ? handleIndex : handleIndex + 1;
           this.resizable.collapsePanel(collapsibleIndex);
         }
-        return;
+        break;
       default:
-        return;
+        break;
     }
 
     if (delta !== 0) {
-      event.preventDefault();
       this.adjustSizes(delta);
     }
   }
 
   private adjustSizes(delta: number): void {
-    if (!this.resizable) return;
+    if (!this.resizable) {
+      return;
+    }
 
     const panels = this.resizable.panels();
     const handleIndex = this.zHandleIndex();
@@ -120,7 +132,9 @@ export class ZardResizableHandleComponent {
     const leftPanel = panels[handleIndex];
     const rightPanel = panels[handleIndex + 1];
 
-    if (!leftPanel || !rightPanel) return;
+    if (!leftPanel || !rightPanel) {
+      return;
+    }
 
     const containerSize = this.resizable.getContainerSize();
     const { leftMin, leftMax, rightMin, rightMax } = this.normalizeMinMax(
@@ -153,7 +167,9 @@ export class ZardResizableHandleComponent {
   }
 
   private moveToExtreme(toMin: boolean): void {
-    if (!this.resizable) return;
+    if (!this.resizable) {
+      return;
+    }
 
     const panels = this.resizable.panels();
     const handleIndex = this.zHandleIndex();
@@ -162,7 +178,9 @@ export class ZardResizableHandleComponent {
     const leftPanel = panels[handleIndex];
     const rightPanel = panels[handleIndex + 1];
 
-    if (!leftPanel || !rightPanel) return;
+    if (!leftPanel || !rightPanel) {
+      return;
+    }
 
     const containerSize = this.resizable.getContainerSize();
     const { leftMin, leftMax, rightMin, rightMax } = this.normalizeMinMax(

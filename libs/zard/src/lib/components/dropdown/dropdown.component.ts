@@ -23,20 +23,14 @@ import type { ClassValue } from 'clsx';
 
 import { dropdownContentVariants } from './dropdown.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 @Component({
   selector: 'z-dropdown-menu',
   imports: [OverlayModule],
-  standalone: true,
   template: `
     <!-- Dropdown Trigger -->
-    <div
-      class="trigger-container"
-      (click)="toggle()"
-      (keydown.enter)="toggle()"
-      (keydown.space)="toggle()"
-      tabindex="0"
-    >
+    <div class="trigger-container" (click)="toggle()" (keydown.{enter,space}.prevent)="toggle()" tabindex="0">
       <ng-content select="[dropdown-trigger]" />
     </div>
 
@@ -46,7 +40,7 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
         [class]="contentClasses()"
         role="menu"
         [attr.data-state]="'open'"
-        (keydown)="onDropdownKeydown($event)"
+        (keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent)="onDropdownKeydown($event)"
         tabindex="-1"
       >
         <ng-content />
@@ -56,8 +50,8 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     class: 'relative inline-block text-left',
+    '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '(document:click)': 'onDocumentClick($event)',
   },
   exportAs: 'zDropdownMenu',
@@ -84,6 +78,10 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
 
+  constructor() {
+    checkForProperZardInitialization();
+  }
+
   ngOnInit() {
     setTimeout(() => {
       this.createOverlay();
@@ -100,41 +98,38 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDropdownKeydown(event: KeyboardEvent) {
+  onDropdownKeydown(e: Event) {
     const items = this.getDropdownItems();
+    const { key } = e as KeyboardEvent;
 
-    switch (event.key) {
+    switch (key) {
       case 'ArrowDown':
-        event.preventDefault();
         this.navigateItems(1, items);
         break;
       case 'ArrowUp':
-        event.preventDefault();
         this.navigateItems(-1, items);
         break;
       case 'Enter':
       case ' ':
-        event.preventDefault();
         this.selectFocusedItem(items);
         break;
       case 'Escape':
-        event.preventDefault();
         this.close();
         this.focusTrigger();
         break;
       case 'Home':
-        event.preventDefault();
         this.focusFirstItem(items);
         break;
       case 'End':
-        event.preventDefault();
         this.focusLastItem(items);
         break;
     }
   }
 
   toggle() {
-    if (this.disabled()) return;
+    if (this.disabled()) {
+      return;
+    }
     if (this.isOpen()) {
       this.close();
     } else {
@@ -143,13 +138,17 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   }
 
   open() {
-    if (this.isOpen()) return;
+    if (this.isOpen()) {
+      return;
+    }
 
     if (!this.overlayRef) {
       this.createOverlay();
     }
 
-    if (!this.overlayRef) return;
+    if (!this.overlayRef) {
+      return;
+    }
 
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
     this.overlayRef.attach(this.portal);
@@ -172,7 +171,9 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   }
 
   private createOverlay() {
-    if (this.overlayRef) return;
+    if (this.overlayRef) {
+      return;
+    }
 
     if (isPlatformBrowser(this.platformId)) {
       try {
@@ -217,7 +218,9 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   }
 
   private getDropdownItems(): HTMLElement[] {
-    if (!this.overlayRef?.hasAttached()) return [];
+    if (!this.overlayRef?.hasAttached()) {
+      return [];
+    }
     const dropdownElement = this.overlayRef.overlayElement;
     return Array.from(
       dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]'),
@@ -225,7 +228,9 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
-    if (items.length === 0) return;
+    if (items.length === 0) {
+      return;
+    }
 
     const currentIndex = this.focusedIndex();
     let nextIndex = currentIndex + direction;

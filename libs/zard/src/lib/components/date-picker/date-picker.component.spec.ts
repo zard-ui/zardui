@@ -1,6 +1,8 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardDatePickerComponent } from './date-picker.component';
+import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 describe('ZardDatePickerComponent', () => {
   let component: ZardDatePickerComponent;
@@ -9,6 +11,13 @@ describe('ZardDatePickerComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ZardDatePickerComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ZardDatePickerComponent);

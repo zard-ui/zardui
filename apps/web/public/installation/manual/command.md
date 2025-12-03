@@ -51,7 +51,6 @@ export interface ZardCommandConfig {
 @Component({
   selector: 'z-command',
   imports: [FormsModule],
-  standalone: true,
   template: `
     <div [class]="classes()">
       <div id="command-instructions" class="sr-only">
@@ -73,10 +72,10 @@ export interface ZardCommandConfig {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.role]': '"combobox"',
+    role: 'combobox',
+    'aria-haspopup': 'listbox',
     '[attr.aria-expanded]': 'true',
-    '[attr.aria-haspopup]': '"listbox"',
-    '(keydown)': 'onKeyDown($event)',
+    '(keydown.{arrowdown,arrowup,enter,escape}.prevent)': 'onKeyDown($event)',
   },
   exportAs: 'zCommand',
 })
@@ -105,10 +104,14 @@ export class ZardCommandComponent implements ControlValueAccessor {
     // Include the trigger signal to make this computed reactive to option changes
     this.optionsUpdateTrigger();
 
-    if (!this.optionComponents()) return [];
+    if (!this.optionComponents()) {
+      return [];
+    }
 
     const lowerSearchTerm = searchTerm.toLowerCase().trim();
-    if (lowerSearchTerm === '') return this.optionComponents();
+    if (!lowerSearchTerm) {
+      return this.optionComponents();
+    }
 
     return this.optionComponents().filter(option => {
       const label = option.zLabel().toLowerCase();
@@ -122,7 +125,9 @@ export class ZardCommandComponent implements ControlValueAccessor {
     const searchTerm = this.searchTerm().trim();
     const filteredCount = this.filteredOptions().length;
 
-    if (!searchTerm) return '';
+    if (!searchTerm) {
+      return searchTerm;
+    }
 
     if (!filteredCount) {
       return `No results found for "${searchTerm}"`;
@@ -174,15 +179,18 @@ export class ZardCommandComponent implements ControlValueAccessor {
   }
 
   // in @Component host: '(keydown)': 'onKeyDown($event)'
-  onKeyDown(event: KeyboardEvent) {
+  onKeyDown(event: Event) {
     const filteredOptions = this.filteredOptions();
-    if (filteredOptions.length === 0) return;
+    if (filteredOptions.length === 0) {
+      return;
+    }
+
+    const { key } = event as KeyboardEvent;
 
     const currentIndex = this.selectedIndex();
 
-    switch (event.key) {
+    switch (key) {
       case 'ArrowDown': {
-        event.preventDefault();
         const nextIndex = currentIndex < filteredOptions.length - 1 ? currentIndex + 1 : 0;
         this.selectedIndex.set(nextIndex);
         this.updateSelectedOption();
@@ -190,7 +198,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
       }
 
       case 'ArrowUp': {
-        event.preventDefault();
         const prevIndex = currentIndex > 0 ? currentIndex - 1 : filteredOptions.length - 1;
         this.selectedIndex.set(prevIndex);
         this.updateSelectedOption();
@@ -198,7 +205,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
       }
 
       case 'Enter':
-        event.preventDefault();
         if (currentIndex >= 0 && currentIndex < filteredOptions.length) {
           const selectedOption = filteredOptions[currentIndex];
           if (!selectedOption.zDisabled()) {
@@ -208,7 +214,6 @@ export class ZardCommandComponent implements ControlValueAccessor {
         break;
 
       case 'Escape':
-        event.preventDefault();
         this.selectedIndex.set(-1);
         this.updateSelectedOption();
         break;
@@ -360,7 +365,6 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-divider',
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()" role="separator"></div>
@@ -378,12 +382,16 @@ export class ZardCommandDividerComponent {
   protected readonly classes = computed(() => mergeClasses(commandSeparatorVariants({}), this.class()));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent) return true;
+    if (!this.commandComponent) {
+      return true;
+    }
 
     const searchTerm = this.commandComponent.searchTerm();
 
     // If no search, always show dividers
-    if (searchTerm === '') return true;
+    if (searchTerm === '') {
+      return true;
+    }
 
     // If there's a search term, hide all dividers for now
     // This is a simple approach - we can make it smarter later
@@ -406,7 +414,6 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-command-empty',
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()">
@@ -445,33 +452,28 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  DestroyRef,
   type ElementRef,
   forwardRef,
   inject,
   input,
-  type OnDestroy,
-  type OnInit,
   output,
   signal,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { Subject, switchMap, timer } from 'rxjs';
 
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-command-input',
-  imports: [FormsModule, ZardIconComponent],
-  standalone: true,
+  imports: [ZardIconComponent],
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
       <z-icon zType="search" class="mr-2 shrink-0 opacity-50" />
@@ -479,18 +481,20 @@ import { ZardIconComponent } from '../icon/icon.component';
         #searchInput
         [class]="classes()"
         [placeholder]="placeholder()"
-        [(ngModel)]="searchTerm"
-        (input)="onInput($event)"
+        [value]="searchTerm()"
+        [disabled]="disabled()"
+        (input.debounce.150)="onInput($event)"
         (keydown)="onKeyDown($event)"
+        (blur)="onTouched()"
+        aria-controls="command-list"
+        aria-describedby="command-instructions"
+        aria-haspopup="listbox"
+        aria-label="Search commands"
         autocomplete="off"
         autocorrect="off"
         spellcheck="false"
         role="combobox"
         [attr.aria-expanded]="true"
-        [attr.aria-haspopup]="'listbox'"
-        [attr.aria-controls]="'command-list'"
-        [attr.aria-label]="'Search commands'"
-        [attr.aria-describedby]="'command-instructions'"
       />
     </div>
   `,
@@ -505,9 +509,8 @@ import { ZardIconComponent } from '../icon/icon.component';
   encapsulation: ViewEncapsulation.None,
   exportAs: 'zCommandInput',
 })
-export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, OnDestroy {
+export class ZardCommandInputComponent implements ControlValueAccessor {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
-  private readonly destroyRef = inject(DestroyRef);
   readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
 
   readonly placeholder = input<string>('Type a command or search...');
@@ -516,43 +519,31 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
   readonly valueChange = output<string>();
 
   readonly searchTerm = signal('');
-  private readonly searchSubject = new Subject<string>();
 
-  protected readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
+  readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
 
-  private onChange = (_: string) => {
+  readonly disabled = signal(false);
+
+  protected onChange = (_: string) => {
     // ControlValueAccessor implementation - intentionally empty
   };
 
-  private onTouched = () => {
+  protected onTouched = () => {
     // ControlValueAccessor implementation - intentionally empty
   };
 
-  ngOnInit(): void {
-    // Set up debounced search stream - always send to subject
-    this.searchSubject
-      .pipe(
-        // If empty, emit immediately, otherwise debounce
-        switchMap(value => (value ? timer(150) : timer(0))),
-        takeUntilDestroyed(this.destroyRef),
-      )
-      .subscribe(() => {
-        // Get the current value from the signal to ensure we have the latest
-        const currentValue = this.searchTerm();
-        this.updateParentComponents(currentValue);
-      });
+  constructor() {
+    checkForProperZardInitialization();
   }
 
   onInput(event: Event) {
     const target = event.target as HTMLInputElement;
-    const value = target.value;
+    const { value } = target;
     this.searchTerm.set(value);
-
-    // Always send to subject - let the stream handle timing
-    this.searchSubject.next(value);
+    this.updateParentComponents(value);
   }
 
-  private updateParentComponents(value: string): void {
+  updateParentComponents(value: string): void {
     // Send search to appropriate parent component
     if (this.commandComponent) {
       this.commandComponent.onSearch(value);
@@ -579,7 +570,11 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
   }
 
   writeValue(value: string | null): void {
-    this.searchTerm.set(value ?? '');
+    const normalizedValue = value ?? '';
+    this.searchTerm.set(normalizedValue);
+    if (this.commandComponent) {
+      this.commandComponent.onSearch(normalizedValue);
+    }
   }
 
   registerOnChange(fn: (value: string) => void): void {
@@ -590,8 +585,8 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
     this.onTouched = fn;
   }
 
-  setDisabledState(_: boolean): void {
-    // Implementation if needed for form control disabled state
+  setDisabledState(isDisabled: boolean): void {
+    this.disabled.set(isDisabled);
   }
 
   /**
@@ -599,11 +594,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor, OnInit, 
    */
   focus(): void {
     this.searchInput().nativeElement.focus();
-  }
-
-  ngOnDestroy(): void {
-    // Complete subjects to clean up subscriptions
-    this.searchSubject.complete();
   }
 }
 
@@ -693,14 +683,17 @@ export class ZardCommandOptionGroupComponent {
   protected readonly headingClasses = computed(() => mergeClasses(commandGroupHeadingVariants({})));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent || !this.optionComponents) return true;
+    if (!this.commandComponent || !this.optionComponents().length) {
+      return true;
+    }
 
     const searchTerm = this.commandComponent.searchTerm();
-    const filteredOptions = this.commandComponent.filteredOptions();
-
     // If no search term, show all groups
-    if (searchTerm === '') return true;
+    if (searchTerm === '') {
+      return true;
+    }
 
+    const filteredOptions = this.commandComponent.filteredOptions();
     // Check if any option in this group is in the filtered list
     return this.optionComponents().some(option => filteredOptions.includes(option));
   });
@@ -733,7 +726,6 @@ import type { ZardIcon } from '../icon/icons';
 @Component({
   selector: 'z-command-option',
   imports: [ZardIconComponent],
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div
@@ -744,7 +736,7 @@ import type { ZardIcon } from '../icon/icons';
         [attr.data-disabled]="zDisabled()"
         [attr.tabindex]="0"
         (click)="onClick()"
-        (keydown)="onKeyDown($event)"
+        (keydown.{enter,space}.prevent)="onClick()"
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
@@ -785,34 +777,35 @@ export class ZardCommandOptionComponent {
   protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants({})));
 
   protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent) return true;
+    if (!this.commandComponent) {
+      return true;
+    }
 
     const filteredOptions = this.commandComponent.filteredOptions();
     const searchTerm = this.commandComponent.searchTerm();
 
     // If no search term, show all options
-    if (searchTerm === '') return true;
+    if (searchTerm === '') {
+      return true;
+    }
 
     // Check if this option is in the filtered list
     return filteredOptions.includes(this);
   });
 
   onClick() {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
     if (this.commandComponent) {
       this.commandComponent.selectOption(this);
     }
   }
 
-  onKeyDown(event: KeyboardEvent) {
-    if (event.key === 'Enter' || event.key === ' ') {
-      event.preventDefault();
-      this.onClick();
-    }
-  }
-
   onMouseEnter() {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
     // Visual feedback for hover
   }
 

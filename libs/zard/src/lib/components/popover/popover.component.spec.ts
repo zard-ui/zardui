@@ -1,9 +1,10 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { Component, DebugElement, TemplateRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardPopoverComponent, ZardPopoverDirective } from './popover.component';
+import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 @Component({
   imports: [ZardPopoverDirective, ZardPopoverComponent],
@@ -32,6 +33,13 @@ describe('ZardPopoverComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [OverlayModule, TestComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
@@ -192,7 +200,7 @@ describe('ZardPopoverComponent', () => {
       expect(positions.length).toBeGreaterThanOrEqual(2);
 
       // First position should match the requested placement
-      const primaryPosition = positions[0];
+      const [primaryPosition] = positions;
 
       if (placement === 'bottom') {
         expect(primaryPosition.originY).toBe('bottom');
@@ -237,6 +245,13 @@ describe('ZardPopoverComponent standalone', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ZardPopoverComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ZardPopoverComponent);
@@ -281,6 +296,13 @@ describe('ZardPopoverComponent with hover trigger', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [OverlayModule, HoverTestComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(HoverTestComponent);
