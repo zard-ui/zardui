@@ -6,25 +6,33 @@ import { ZardPaginationModule } from '../pagination.module';
 @Component({
   selector: 'z-demo-pagination-custom',
   imports: [ZardPaginationModule],
-  standalone: true,
   template: `
-    <z-pagination-content ariaLabel="Page navigation">
-      <z-pagination-item>
-        <z-pagination-previous (click)="goToPrevious()" />
-      </z-pagination-item>
+    <z-pagination [zTotal]="totalPages" [(zPageIndex)]="currentPage" [zContent]="content" />
 
-      @for (page of pages(); track page) {
-        <z-pagination-item>
-          <z-pagination-button [zActive]="page === currentPage()" (click)="goToPage(page)">
-            {{ page }}
-          </z-pagination-button>
-        </z-pagination-item>
-      }
+    <ng-template #content>
+      <ul z-pagination-content>
+        <li z-pagination-item>
+          <z-pagination-previous (click)="goToPrevious()" [zDisabled]="currentPage() === 1" />
+        </li>
 
-      <z-pagination-item>
-        <z-pagination-next (click)="goToNext()" />
-      </z-pagination-item>
-    </z-pagination-content>
+        @for (page of pages(); track page) {
+          <li z-pagination-item>
+            <button type="button" z-pagination-button [zActive]="page === currentPage()" (click)="goToPage(page)">
+              <span class="sr-only">To page</span>
+              {{ page }}
+            </button>
+          </li>
+        }
+
+        <li z-pagination-item>
+          <z-pagination-ellipsis />
+        </li>
+
+        <li z-pagination-item>
+          <z-pagination-next (click)="goToNext()" [zDisabled]="currentPage() === totalPages" />
+        </li>
+      </ul>
+    </ng-template>
   `,
 })
 export class ZardDemoPaginationCustomComponent {

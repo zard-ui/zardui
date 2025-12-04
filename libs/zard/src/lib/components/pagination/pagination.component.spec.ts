@@ -9,7 +9,7 @@ import { ZardPaginationComponent } from './pagination.component';
   standalone: true,
   template: `
     <z-pagination
-      [zPageIndex]="pageIndex"
+      [(zPageIndex)]="pageIndex"
       [zTotal]="totalPages"
       zSize="default"
       (zPageIndexChange)="onPageChange($event)"
@@ -25,7 +25,6 @@ class TestHostComponent {
 
   onPageChange(page: number) {
     this.lastEmittedPage = page;
-    this.pageIndex = page;
   }
 }
 
@@ -34,7 +33,7 @@ describe('ZardPaginationComponent Integration (Jest)', () => {
   let hostComponent: TestHostComponent;
   let nativeEl: HTMLElement;
 
-  const getButtons = (): NodeListOf<HTMLButtonElement> => nativeEl.querySelectorAll('z-pagination-button > button');
+  const getButtons = (): NodeListOf<HTMLButtonElement> => nativeEl.querySelectorAll('button[z-pagination-button]');
 
   const getPrevButton = (): HTMLButtonElement | null => getButtons()[0] ?? null;
 
@@ -59,7 +58,7 @@ describe('ZardPaginationComponent Integration (Jest)', () => {
   });
 
   it('should render the correct number of page buttons (including prev and next)', () => {
-    const pageButtons = nativeEl.querySelectorAll('z-pagination-button');
+    const pageButtons = nativeEl.querySelectorAll('button[z-pagination-button]');
     // prev + next + page buttons
     expect(pageButtons.length).toBe(hostComponent.totalPages + 2);
   });
@@ -68,14 +67,16 @@ describe('ZardPaginationComponent Integration (Jest)', () => {
     const activeButton = Array.from(getButtons()).find(btn => btn.getAttribute('aria-current') === 'page');
 
     expect(activeButton).toBeTruthy();
-    expect(activeButton!.textContent?.trim()).toBe(hostComponent.pageIndex.toString());
+    expect(activeButton?.textContent?.trim()).toBe('To page ' + hostComponent.pageIndex.toString());
   });
 
   it('should emit zPageIndexChange when clicking a different page button', () => {
-    const page3Button = Array.from(getButtons()).find(btn => btn.textContent?.trim() === '3');
-    expect(page3Button).toBeTruthy();
+    const page3Button = Array.from(getButtons()).find(btn => btn.textContent?.trim() === 'To page 3');
 
-    page3Button!.click();
+    expect(page3Button).toBeTruthy();
+    expect(page3Button).toHaveTextContent('To page 3');
+
+    page3Button?.click();
     fixture.detectChanges();
 
     expect(hostComponent.lastEmittedPage).toBe(3);
@@ -84,23 +85,39 @@ describe('ZardPaginationComponent Integration (Jest)', () => {
 
   it('should not emit zPageIndexChange when clicking the active page button', () => {
     const activeButton = Array.from(getButtons()).find(btn => btn.getAttribute('aria-current') === 'page');
+
     expect(activeButton).toBeTruthy();
 
     hostComponent.lastEmittedPage = null;
-    activeButton!.click();
+    activeButton?.click();
     fixture.detectChanges();
 
     expect(hostComponent.lastEmittedPage).toBeNull();
   });
 
+  it('should indicate last page for screen reader', () => {
+    const lastPageButton = Array.from(getButtons()).find(btn => btn.textContent?.trim() === 'To last page, page 5');
+
+    expect(lastPageButton).toBeTruthy();
+    expect(lastPageButton).toHaveTextContent('To last page, page 5');
+
+    lastPageButton?.click();
+    fixture.detectChanges();
+
+    expect(hostComponent.lastEmittedPage).toBe(5);
+    expect(hostComponent.pageIndex).toBe(5);
+  });
+
   describe('Previous button behavior', () => {
-    it('should disable "Previous" button on first page and not emit', () => {
+    it('should disable "Previous" button on first page', () => {
       const prevBtn = getPrevButton();
       expect(prevBtn).toBeTruthy();
-      expect(prevBtn!.getAttribute('aria-disabled')).toBe('true');
+      expect(prevBtn).toHaveTextContent('To previous page');
+      expect(prevBtn).toHaveAttribute('data-slot', 'pagination-button');
+      expect(prevBtn).toHaveAttribute('disabled');
 
       hostComponent.lastEmittedPage = null;
-      prevBtn!.click();
+      prevBtn?.click();
       fixture.detectChanges();
 
       expect(hostComponent.lastEmittedPage).toBeNull();
@@ -112,10 +129,10 @@ describe('ZardPaginationComponent Integration (Jest)', () => {
 
       const prevBtn = getPrevButton();
       expect(prevBtn).toBeTruthy();
-      expect(prevBtn!.getAttribute('aria-disabled')).toBeNull();
+      expect(prevBtn).not.toHaveAttribute('disabled');
 
       hostComponent.lastEmittedPage = null;
-      prevBtn!.click();
+      prevBtn?.click();
       fixture.detectChanges();
 
       expect(hostComponent.lastEmittedPage).toBe(1);
@@ -129,10 +146,12 @@ describe('ZardPaginationComponent Integration (Jest)', () => {
 
       const nextBtn = getNextButton();
       expect(nextBtn).toBeTruthy();
-      expect(nextBtn!.getAttribute('aria-disabled')).toBe('true');
+      expect(nextBtn).toHaveTextContent('To next page');
+      expect(nextBtn).toHaveAttribute('data-slot', 'pagination-button');
+      expect(nextBtn).toHaveAttribute('disabled');
 
       hostComponent.lastEmittedPage = null;
-      nextBtn!.click();
+      nextBtn?.click();
       fixture.detectChanges();
 
       expect(hostComponent.lastEmittedPage).toBeNull();
@@ -144,10 +163,10 @@ describe('ZardPaginationComponent Integration (Jest)', () => {
 
       const nextBtn = getNextButton();
       expect(nextBtn).toBeTruthy();
-      expect(nextBtn!.getAttribute('aria-disabled')).toBeNull();
+      expect(nextBtn).not.toHaveAttribute('disabled');
 
       hostComponent.lastEmittedPage = null;
-      nextBtn!.click();
+      nextBtn?.click();
       fixture.detectChanges();
 
       expect(hostComponent.lastEmittedPage).toBe(hostComponent.totalPages);
@@ -158,6 +177,6 @@ describe('ZardPaginationComponent Integration (Jest)', () => {
     const paginationHost = nativeEl.querySelector('z-pagination');
 
     expect(paginationHost).toBeTruthy();
-    expect(paginationHost!.classList).toContain(hostComponent.customClass);
+    expect(paginationHost).toHaveClass(hostComponent.customClass);
   });
 });

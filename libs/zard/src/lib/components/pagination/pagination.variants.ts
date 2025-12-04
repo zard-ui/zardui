@@ -3,9 +3,6 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const paginationContentVariants = cva('flex flex-row items-center gap-1');
 export type ZardPaginationContentVariants = VariantProps<typeof paginationContentVariants>;
 
-export const paginationItemVariants = cva('');
-export type ZardPaginationItemVariants = VariantProps<typeof paginationItemVariants>;
-
 export const paginationPreviousVariants = cva('gap-1 px-2.5 sm:pl-2.5');
 export type ZardPaginationPreviousVariants = VariantProps<typeof paginationPreviousVariants>;
 
