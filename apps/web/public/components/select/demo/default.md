@@ -2,12 +2,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '../../badge/badge.component';
-import { ZardSelectItemComponent } from '../select-item.component';
-import { ZardSelectComponent } from '../select.component';
+import { ZardSelectModule } from '../select.module';
 
 @Component({
   selector: 'z-demo-select-basic',
-  imports: [ZardBadgeComponent, ZardSelectComponent, ZardSelectItemComponent],
+  imports: [ZardBadgeComponent, ZardSelectModule],
   template: `
     <div class="flex flex-col gap-4">
       <span>

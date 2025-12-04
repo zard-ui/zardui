@@ -22,6 +22,7 @@ import { ZardIconComponent } from '../icon/icon.component';
 interface SelectHost {
   selectedValue(): string[];
   selectItem(value: string, label: string): void;
+  navigateTo(): void;
 }
 
 @Component({
@@ -47,6 +48,7 @@ interface SelectHost {
     '[attr.data-selected]': 'isSelected() ? "" : null',
     '[attr.aria-selected]': 'isSelected()',
     '(click)': 'onClick()',
+    '(mouseenter)': 'onMouseEnter()',
   },
 })
 export class ZardSelectItemComponent {
@@ -80,6 +82,13 @@ export class ZardSelectItemComponent {
 
   setSelectHost(selectHost: SelectHost) {
     this.select.set(selectHost);
+  }
+
+  onMouseEnter() {
+    if (this.zDisabled()) {
+      return;
+    }
+    this.select()?.navigateTo();
   }
 
   onClick() {

@@ -1,18 +1,17 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardBadgeComponent } from '../../badge/badge.component';
-import { ZardSelectItemComponent } from '../select-item.component';
-import { ZardSelectComponent } from '../select.component';
+import { ZardSelectModule } from '../select.module';
 
 @Component({
   selector: 'z-demo-multi-select-basic',
-  imports: [ZardBadgeComponent, ZardSelectComponent, ZardSelectItemComponent],
+  imports: [ZardBadgeComponent, ZardSelectModule],
   template: `
     <div class="flex h-[400px] w-[300px] flex-col gap-4">
       Selected values:
       <span class="flex flex-wrap gap-2">
         @for (value of selectedValues(); track $index) {
-          <z-badge> {{ value }} </z-badge>
+          <z-badge>{{ value }}</z-badge>
         }
       </span>
 

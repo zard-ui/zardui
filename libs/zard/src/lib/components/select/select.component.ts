@@ -56,12 +56,8 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
       [class]="triggerClasses()"
       [disabled]="zDisabled()"
       (click)="toggle()"
-      (keydown.{enter,space,arrowdown,arrowup,escape}.prevent)="onTriggerKeydown($event)"
-      [attr.aria-expanded]="isOpen()"
       [attr.aria-haspopup]="'listbox'"
-      [attr.data-state]="isOpen() ? 'open' : 'closed'"
       [attr.data-placeholder]="!zValue() ? '' : null"
-      [tabIndex]="0"
       (focus)="onFocus()"
       (blur)="!isOpen() && isFocus.set(false)"
     >
@@ -109,10 +105,12 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    '[attr.aria-expanded]': 'isOpen()',
     '[attr.data-active]': 'isFocus() ? "" : null',
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '[class]': 'classes()',
+    '(keydown.{enter,space,arrowdown,arrowup,escape}.prevent)': 'onTriggerKeydown($event)',
   },
 })
 export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
@@ -187,12 +185,15 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   ngAfterContentInit() {
     const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
     // Setup select host reference for each item
+    let i = 0;
     for (const item of this.selectItems()) {
       item.setSelectHost({
         selectedValue: () => (this.zMultiple() ? (this.zValue() as string[]) : [this.zValue() as string]),
         selectItem: (value: string, label: string) => this.selectItem(value, label),
+        navigateTo: () => this.navigateTo(item, i),
       });
       item.zSize.set(this.zSize());
+      i++;
 
       if (hostWidth <= COMPACT_MODE_WIDTH_THRESHOLD) {
         this.isCompact.set(true);
@@ -292,6 +293,11 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
         this.focusButton();
       }, 0);
     }
+  }
+
+  navigateTo(element: ZardSelectItemComponent, index: number): void {
+    this.focusedIndex.set(index);
+    this.updateItemFocus(this.getSelectItems(true), index);
   }
 
   private updateOverlayPosition(): void {
@@ -487,13 +493,13 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     }
   }
 
-  private getSelectItems(): HTMLElement[] {
+  private getSelectItems(ignoreFilter = false): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) {
       return [];
     }
     const dropdownElement = this.overlayRef.overlayElement;
     return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-select-item, [z-select-item]')).filter(
-      item => item.dataset['disabled'] === undefined,
+      item => ignoreFilter || item.dataset['disabled'] === undefined,
     );
   }
 
