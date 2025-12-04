@@ -1,7 +1,6 @@
 import { OverlayModule } from '@angular/cdk/overlay';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ZardAlertDialogComponent } from './alert-dialog.component';
 import { ZardAlertDialogService } from './alert-dialog.service';
@@ -16,7 +15,7 @@ describe('ZardAlertDialogService', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ZardAlertDialogComponent, NoopAnimationsModule, OverlayModule],
+      imports: [ZardAlertDialogComponent, OverlayModule],
       providers: [ZardAlertDialogService],
     }).compileComponents();
 
@@ -69,7 +68,7 @@ describe('ZardAlertDialogService', () => {
 describe('ZardAlertDialogComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ZardAlertDialogComponent, NoopAnimationsModule, OverlayModule],
+      imports: [ZardAlertDialogComponent, OverlayModule],
     }).compileComponents();
   });
 

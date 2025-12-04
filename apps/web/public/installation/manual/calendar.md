@@ -482,7 +482,6 @@ import {
   Component,
   computed,
   ElementRef,
-  HostListener,
   input,
   output,
   signal,
@@ -494,10 +493,10 @@ import type { CalendarDay } from './calendar.types';
 import { getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
+import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 @Component({
   selector: 'z-calendar-grid',
-  standalone: true,
   template: `
     <div #gridContainer>
       <!-- Weekdays Header -->
@@ -534,8 +533,10 @@ import { mergeClasses } from '../../shared/utils/utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.role]': '"grid"',
     class: 'flex justify-center',
+    '[attr.role]': '"grid"',
+    '(keydown.{arrowleft,arrowright,arrowup,arrowdown,home,end,pageup,pagedown,enter,space}.prevent)':
+      'onKeyDown($event)',
   },
   exportAs: 'zCalendarGrid',
 })
@@ -561,6 +562,10 @@ export class ZardCalendarGridComponent {
 
   protected readonly dayContainerClasses = computed(() => mergeClasses(calendarDayVariants()));
 
+  constructor() {
+    checkForProperZardInitialization();
+  }
+
   protected dayButtonClasses(day: CalendarDay): string {
     return mergeClasses(
       calendarDayButtonVariants({
@@ -576,7 +581,9 @@ export class ZardCalendarGridComponent {
   }
 
   protected onDayClick(date: Date, index: number): void {
-    if (this.disabled()) return;
+    if (this.disabled()) {
+      return;
+    }
     this.focusedDayIndex.set(index);
     this.dateSelect.emit({ date, index });
   }
@@ -591,15 +598,21 @@ export class ZardCalendarGridComponent {
 
   protected getFocusedDayIndex(): number {
     const focused = this.focusedDayIndex();
-    if (focused >= 0) return focused;
+    if (focused >= 0) {
+      return focused;
+    }
 
     // Default focus to selected date or today
     const days = this.calendarDays();
     const selectedIndex = days.findIndex(day => day.isSelected);
-    if (selectedIndex >= 0) return selectedIndex;
+    if (selectedIndex >= 0) {
+      return selectedIndex;
+    }
 
     const todayIndex = days.findIndex(day => day.isToday && day.isCurrentMonth);
-    if (todayIndex >= 0) return todayIndex;
+    if (todayIndex >= 0) {
+      return todayIndex;
+    }
 
     // Fall back to first enabled day of current month
     const firstCurrentMonthIndex = days.findIndex(day => day.isCurrentMonth && !day.isDisabled);
@@ -622,35 +635,34 @@ export class ZardCalendarGridComponent {
     this.setFocus(targetIndex);
   }
 
-  @HostListener('keydown', ['$event'])
-  onKeyDown(event: KeyboardEvent): void {
-    if (this.disabled()) return;
+  onKeyDown(e: Event): void {
+    if (this.disabled()) {
+      return;
+    }
 
+    const event = e as KeyboardEvent;
     const days = this.calendarDays();
-    if (days.length === 0) return;
+    if (days.length === 0) {
+      return;
+    }
 
     const currentIndex = this.getFocusedDayIndex();
     let newIndex: number | null = null;
 
     switch (event.key) {
       case 'ArrowLeft':
-        event.preventDefault();
         newIndex = this.navigate(currentIndex, -1, days);
         break;
       case 'ArrowRight':
-        event.preventDefault();
         newIndex = this.navigate(currentIndex, 1, days);
         break;
       case 'ArrowUp':
-        event.preventDefault();
         newIndex = this.navigate(currentIndex, -7, days);
         break;
       case 'ArrowDown':
-        event.preventDefault();
         newIndex = this.navigate(currentIndex, 7, days);
         break;
       case 'Home':
-        event.preventDefault();
         newIndex = this.findEnabledInRange(
           Math.floor(currentIndex / 7) * 7,
           Math.floor(currentIndex / 7) * 7 + 6,
@@ -658,7 +670,6 @@ export class ZardCalendarGridComponent {
         );
         break;
       case 'End':
-        event.preventDefault();
         newIndex = this.findEnabledInRange(
           Math.floor(currentIndex / 7) * 7 + 6,
           Math.floor(currentIndex / 7) * 7,
@@ -667,32 +678,29 @@ export class ZardCalendarGridComponent {
         );
         break;
       case 'PageUp':
-        event.preventDefault();
         if (event.ctrlKey) {
           this.previousYear.emit();
         } else {
           this.previousMonth.emit({ position: 'default', dayOfWeek: -1 });
         }
-        return;
+        break;
       case 'PageDown':
-        event.preventDefault();
         if (event.ctrlKey) {
           this.nextYear.emit();
         } else {
           this.nextMonth.emit({ position: 'default', dayOfWeek: -1 });
         }
-        return;
+        break;
       case 'Enter':
       case ' ': {
-        event.preventDefault();
         const focusedDay = days[currentIndex];
         if (focusedDay && !focusedDay.isDisabled) {
           this.dateSelect.emit({ date: focusedDay.date, index: currentIndex });
         }
-        return;
+        break;
       }
       default:
-        return;
+        break;
     }
 
     if (newIndex !== null && newIndex !== currentIndex) {
@@ -735,20 +743,28 @@ export class ZardCalendarGridComponent {
     if (!reverse) {
       // Search forward from start
       for (let i = clampedStart; i < days.length; i++) {
-        if (!days[i].isDisabled) return i;
+        if (!days[i].isDisabled) {
+          return i;
+        }
       }
       // Search backward from start
       for (let i = clampedStart - 1; i >= 0; i--) {
-        if (!days[i].isDisabled) return i;
+        if (!days[i].isDisabled) {
+          return i;
+        }
       }
     } else {
       // Search backward from start
       for (let i = clampedStart; i >= 0; i--) {
-        if (!days[i].isDisabled) return i;
+        if (!days[i].isDisabled) {
+          return i;
+        }
       }
       // Search forward from start
       for (let i = clampedStart + 1; i < days.length; i++) {
-        if (!days[i].isDisabled) return i;
+        if (!days[i].isDisabled) {
+          return i;
+        }
       }
     }
 
@@ -800,24 +816,14 @@ import { ZardSelectComponent } from '../select/select.component';
       <!-- Month and Year Selectors -->
       <div class="flex items-center space-x-2">
         <!-- Month Select -->
-        <z-select
-          class="min-w-20"
-          [zValue]="currentMonth()"
-          [zLabel]="currentMonthName()"
-          (zSelectionChange)="onMonthChange($event)"
-        >
+        <z-select [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
           @for (month of months; track $index) {
             <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
           }
         </z-select>
 
         <!-- Year Select -->
-        <z-select
-          class="min-w-21"
-          [zValue]="currentYear()"
-          [zLabel]="currentYear()"
-          (zSelectionChange)="onYearChange($event)"
-        >
+        <z-select [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="onYearChange($event)">
           @for (year of availableYears(); track year) {
             <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
           }

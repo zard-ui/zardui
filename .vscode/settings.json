@@ -124,5 +124,6 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
-  }
+  },
+  "CodeGPT.apiKey": "Perplexity"
 }

@@ -18,8 +18,11 @@ import { SIDEBAR_PATHS } from '../../../shared/constants/routes.constant';
 
         <z-command-option-group zLabel="Getting Started">
           @for (item of gettingStartedItems; track item.path) {
-            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon="file-text">
-            </z-command-option>
+            <z-command-option
+              [zLabel]="item.name"
+              [zValue]="'navigate:' + item.path"
+              zIcon="file-text"
+            ></z-command-option>
           }
         </z-command-option-group>
 
@@ -27,8 +30,7 @@ import { SIDEBAR_PATHS } from '../../../shared/constants/routes.constant';
 
         <z-command-option-group zLabel="Components">
           @for (item of componentItems; track item.path) {
-            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon="layers">
-            </z-command-option>
+            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon="layers"></z-command-option>
           }
         </z-command-option-group>
       </z-command-list>

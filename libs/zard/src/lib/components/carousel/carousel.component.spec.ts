@@ -1,10 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { screen } from '@testing-library/angular';
 import { type EmblaCarouselType } from 'embla-carousel';
 
 import { ZardCarouselComponent } from './carousel.component';
+import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 describe('ZardCarouselComponent', () => {
   let component: ZardCarouselComponent;
@@ -30,6 +32,13 @@ describe('ZardCarouselComponent', () => {
 
     await TestBed.configureTestingModule({
       imports: [ZardCarouselComponent, CommonModule],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(ZardCarouselComponent);

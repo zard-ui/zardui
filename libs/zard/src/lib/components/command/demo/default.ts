@@ -76,33 +76,30 @@ export class ZardDemoCommandDefaultComponent {
   // Handle keyboard shortcuts
   handleKeydown(event: KeyboardEvent) {
     if (event.metaKey || event.ctrlKey) {
+      if ('nos12td'.includes(event.key.toLowerCase())) {
+        event.preventDefault();
+      }
+
       switch (event.key.toLowerCase()) {
         case 'n':
-          event.preventDefault();
           this.executeCommand('new-project', 'Create new project');
           break;
         case 'o':
-          event.preventDefault();
           this.executeCommand('open-file', 'Open file');
           break;
         case 's':
-          event.preventDefault();
           this.executeCommand('save-all', 'Save all');
           break;
         case '1':
-          event.preventDefault();
           this.executeCommand('dashboard', 'Go to Dashboard');
           break;
         case '2':
-          event.preventDefault();
           this.executeCommand('projects', 'Go to Projects');
           break;
         case 't':
-          event.preventDefault();
           this.executeCommand('terminal', 'Open terminal');
           break;
         case 'd':
-          event.preventDefault();
           this.executeCommand('theme', 'Toggle theme');
           break;
       }

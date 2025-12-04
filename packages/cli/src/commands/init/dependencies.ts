@@ -21,15 +21,7 @@ function getCdkVersion(angularVersion?: string): string {
 
   const majorVersion = Number.parseInt(angularVersion.split('.')[0]);
 
-  if (majorVersion === 19) {
-    return '@angular/cdk@^19.0.0';
-  } else if (majorVersion === 18) {
-    return '@angular/cdk@^18.0.0';
-  } else if (majorVersion === 17) {
-    return '@angular/cdk@^17.0.0';
-  }
-
-  return '@angular/cdk';
+  return `@angular/cdk@^${majorVersion}`;
 }
 
 async function installWithRetry(

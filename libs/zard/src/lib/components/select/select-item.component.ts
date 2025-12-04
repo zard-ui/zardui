@@ -9,7 +9,12 @@ import {
   signal,
 } from '@angular/core';
 
-import { selectItemVariants } from './select.variants';
+import {
+  selectItemIconVariants,
+  selectItemVariants,
+  type ZardSelectItemModeVariants,
+  type ZardSelectSizeVariants,
+} from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 
@@ -24,8 +29,8 @@ interface SelectHost {
   imports: [ZardIconComponent],
   template: `
     @if (isSelected()) {
-      <span class="absolute right-2 flex size-3.5 items-center justify-center">
-        <z-icon zType="check" />
+      <span [class]="iconClasses()">
+        <z-icon zType="check" [zStrokeWidth]="strokeWidth()" aria-hidden="true" />
       </span>
     }
     <span class="truncate">
@@ -34,10 +39,10 @@ interface SelectHost {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[class]': 'classes()',
-    '[attr.value]': 'zValue()',
     role: 'option',
     tabindex: '-1',
+    '[class]': 'classes()',
+    '[attr.value]': 'zValue()',
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-selected]': 'isSelected() ? "" : null',
     '[attr.aria-selected]': 'isSelected()',
@@ -45,26 +50,42 @@ interface SelectHost {
   },
 })
 export class ZardSelectItemComponent {
+  readonly elementRef = inject(ElementRef<HTMLElement>);
+
   readonly zValue = input.required<string>();
   readonly zDisabled = input(false, { transform });
   readonly class = input<string>('');
 
   private readonly select = signal<SelectHost | null>(null);
-  readonly elementRef = inject(ElementRef);
+
   readonly label = linkedSignal<string>(() => {
-    const element = this.elementRef?.nativeElement;
-    return (element?.textContent ?? element?.innerText)?.trim() ?? '';
+    const element = this.elementRef.nativeElement;
+    return (element.textContent ?? element.innerText)?.trim() ?? '';
   });
 
-  protected readonly classes = computed(() => mergeClasses(selectItemVariants(), this.class()));
-  protected readonly isSelected = computed(() => this.select()?.selectedValue().includes(this.zValue()));
+  readonly zMode = signal<ZardSelectItemModeVariants>('normal');
+  readonly zSize = signal<ZardSelectSizeVariants>('default');
+
+  protected readonly classes = computed(() =>
+    mergeClasses(selectItemVariants({ zMode: this.zMode(), zSize: this.zSize() }), this.class()),
+  );
+
+  protected readonly iconClasses = computed(() =>
+    mergeClasses(selectItemIconVariants({ zMode: this.zMode(), zSize: this.zSize() })),
+  );
+
+  protected readonly strokeWidth = computed(() => (this.zMode() === 'compact' ? 3 : 2));
+
+  protected readonly isSelected = computed(() => this.select()?.selectedValue().includes(this.zValue()) ?? false);
 
   setSelectHost(selectHost: SelectHost) {
     this.select.set(selectHost);
   }
 
   onClick() {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
     this.select()?.selectItem(this.zValue(), this.label());
   }
 }

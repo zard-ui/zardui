@@ -1,4 +1,4 @@
-import { Component, computed, HostListener, inject, input, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -8,8 +8,10 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
-  standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
@@ -17,6 +19,7 @@ import { mergeClasses, transform } from '../../shared/utils/utils';
     '[attr.data-variant]': 'variant()',
     '[attr.data-inset]': 'inset() || null',
     '[attr.aria-disabled]': 'disabled()',
+    '(click.prevent-with-stop)': 'onClick()',
     role: 'menuitem',
     tabindex: '-1',
   },
@@ -30,11 +33,8 @@ export class ZardDropdownMenuItemComponent {
   readonly disabled = input(false, { transform });
   readonly class = input<ClassValue>('');
 
-  @HostListener('click', ['$event'])
-  onClick(event: Event) {
+  onClick() {
     if (this.disabled()) {
-      event.preventDefault();
-      event.stopPropagation();
       return;
     }
 

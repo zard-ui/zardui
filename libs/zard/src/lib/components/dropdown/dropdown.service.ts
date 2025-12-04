@@ -6,12 +6,16 @@ import {
   inject,
   Injectable,
   PLATFORM_ID,
+  Renderer2,
+  RendererFactory2,
   signal,
   type TemplateRef,
   type ViewContainerRef,
 } from '@angular/core';
 
-import type { Subscription } from 'rxjs';
+import { filter, type Subscription } from 'rxjs';
+
+import { noopFun } from '../../shared/utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -20,14 +24,21 @@ export class ZardDropdownService {
   private readonly overlay = inject(Overlay);
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly rendererFactory = inject(RendererFactory2);
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
   private triggerElement?: ElementRef;
+  private renderer!: Renderer2;
   private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
+  private unlisten: () => void = noopFun;
 
   readonly isOpen = signal(false);
+
+  constructor() {
+    this.renderer = this.rendererFactory.createRenderer(null, null);
+  }
 
   toggle(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
     if (this.isOpen()) {
@@ -37,7 +48,7 @@ export class ZardDropdownService {
     }
   }
 
-  open(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
+  private open(triggerElement: ElementRef, template: TemplateRef<unknown>, viewContainerRef: ViewContainerRef) {
     if (this.isOpen()) {
       this.close();
     }
@@ -45,11 +56,12 @@ export class ZardDropdownService {
     this.triggerElement = triggerElement;
     this.createOverlay(triggerElement);
 
-    if (!this.overlayRef) return;
+    if (!this.overlayRef) {
+      return;
+    }
 
     this.portal = new TemplatePortal(template, viewContainerRef);
     this.overlayRef.attach(this.portal);
-    this.isOpen.set(true);
 
     // Setup keyboard navigation
     setTimeout(() => {
@@ -58,18 +70,23 @@ export class ZardDropdownService {
     }, 0);
 
     // Close on outside click
-    this.outsideClickSubscription = this.overlayRef.outsidePointerEvents().subscribe(() => {
-      this.close();
-    });
+    this.outsideClickSubscription = this.overlayRef
+      .outsidePointerEvents()
+      .pipe(filter(event => !triggerElement.nativeElement.contains(event.target)))
+      .subscribe(() => {
+        this.close();
+      });
+    this.isOpen.set(true);
   }
 
   close() {
     if (this.overlayRef?.hasAttached()) {
       this.overlayRef.detach();
     }
-    this.isOpen.set(false);
     this.focusedIndex.set(-1);
+    this.unlisten();
     this.destroyOverlay();
+    this.isOpen.set(false);
   }
 
   private createOverlay(triggerElement: ElementRef) {
@@ -107,60 +124,60 @@ export class ZardDropdownService {
   }
 
   private destroyOverlay() {
-    if (this.overlayRef) {
-      this.overlayRef.dispose();
-      this.overlayRef = undefined;
-      if (this.outsideClickSubscription) {
-        this.outsideClickSubscription.unsubscribe();
-      }
-    }
+    this.overlayRef?.dispose();
+    this.overlayRef = undefined;
+    this.outsideClickSubscription?.unsubscribe();
   }
 
   private setupKeyboardNavigation() {
-    if (!this.overlayRef?.hasAttached() || !isPlatformBrowser(this.platformId)) return;
+    if (!this.overlayRef?.hasAttached() || !isPlatformBrowser(this.platformId)) {
+      return;
+    }
 
     const dropdownElement = this.overlayRef.overlayElement.querySelector('[role="menu"]') as HTMLElement;
-    if (!dropdownElement) return;
+    if (!dropdownElement) {
+      return;
+    }
 
-    dropdownElement.addEventListener('keydown', (event: KeyboardEvent) => {
-      const items = this.getDropdownItems();
+    this.unlisten = this.renderer.listen(
+      dropdownElement,
+      'keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent',
+      (event: KeyboardEvent) => {
+        const items = this.getDropdownItems();
 
-      switch (event.key) {
-        case 'ArrowDown':
-          event.preventDefault();
-          this.navigateItems(1, items);
-          break;
-        case 'ArrowUp':
-          event.preventDefault();
-          this.navigateItems(-1, items);
-          break;
-        case 'Enter':
-        case ' ':
-          event.preventDefault();
-          this.selectFocusedItem(items);
-          break;
-        case 'Escape':
-          event.preventDefault();
-          this.close();
-          this.triggerElement?.nativeElement.focus();
-          break;
-        case 'Home':
-          event.preventDefault();
-          this.focusItemAtIndex(items, 0);
-          break;
-        case 'End':
-          event.preventDefault();
-          this.focusItemAtIndex(items, items.length - 1);
-          break;
-      }
-    });
+        switch (event.key) {
+          case 'ArrowDown':
+            this.navigateItems(1, items);
+            break;
+          case 'ArrowUp':
+            this.navigateItems(-1, items);
+            break;
+          case 'Enter':
+          case ' ':
+            this.selectFocusedItem(items);
+            break;
+          case 'Escape':
+            this.close();
+            this.triggerElement?.nativeElement.focus();
+            break;
+          case 'Home':
+            this.focusItemAtIndex(items, 0);
+            break;
+          case 'End':
+            this.focusItemAtIndex(items, items.length - 1);
+            break;
+        }
+      },
+    );
 
     // Focus dropdown container
     dropdownElement.focus();
   }
 
   private getDropdownItems(): HTMLElement[] {
-    if (!this.overlayRef?.hasAttached()) return [];
+    if (!this.overlayRef?.hasAttached()) {
+      return [];
+    }
     const dropdownElement = this.overlayRef.overlayElement;
     return Array.from(
       dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]'),
@@ -168,7 +185,9 @@ export class ZardDropdownService {
   }
 
   private navigateItems(direction: number, items: HTMLElement[]) {
-    if (items.length === 0) return;
+    if (items.length === 0) {
+      return;
+    }
 
     const currentIndex = this.focusedIndex();
     let nextIndex = currentIndex + direction;
