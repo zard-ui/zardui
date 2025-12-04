@@ -54,6 +54,7 @@ import { checkForProperZardInitialization } from '../core/provider/providezard';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    class: 'flex justify-center',
     '[attr.role]': '"grid"',
     '(keydown.{arrowleft,arrowright,arrowup,arrowdown,home,end,pageup,pagedown,enter,space}.prevent)':
       'onKeyDown($event)',

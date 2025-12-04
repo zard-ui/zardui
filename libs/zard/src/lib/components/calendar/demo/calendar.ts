@@ -1,4 +1,5 @@
 import { ZardDemoCalendarDefaultComponent } from './default';
+import { ZardDemoCalendarExpandYearSelectionRangeComponent } from './expand-year-selection-range';
 import { ZardDemoCalendarMultipleComponent } from './multiple';
 import { ZardDemoCalendarRangeComponent } from './range';
 import { ZardDemoCalendarWithConstraintsComponent } from './with-constraints';
@@ -25,6 +26,10 @@ export const CALENDAR = {
     {
       name: 'with-constraints',
       component: ZardDemoCalendarWithConstraintsComponent,
+    },
+    {
+      name: 'expand-year-selection-range',
+      component: ZardDemoCalendarExpandYearSelectionRangeComponent,
     },
   ],
 };
