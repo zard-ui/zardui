@@ -1,3 +1,27 @@
+## 1.0.0-beta.27 (2025-12-08)
+
+### ✨ Features
+
+- **calendar:** expand the year range using the min and max date validators ([#355](https://github.com/zard-ui/zardui/pull/355))
+- **select:** compact mode introduced to provide new look in calendar ([#352](https://github.com/zard-ui/zardui/pull/352))
+- **event manager plugins:** introduced event manager plugins with CLI update ([#348](https://github.com/zard-ui/zardui/pull/348))
+
+### 🐛 Bug Fixes
+
+- **select:** visual and keyboard issues related to focus ([#363](https://github.com/zard-ui/zardui/pull/363))
+- **pagination:** a11y fixes, component API changes ([#361](https://github.com/zard-ui/zardui/pull/361))
+- **date picker, select:** CVA fix and navigation update ([#353](https://github.com/zard-ui/zardui/pull/353))
+- **select:** add outsidePointerEvents to prevent overlapping components from being closed ([#328](https://github.com/zard-ui/zardui/pull/328))
+
+### 📦 Code Refactoring
+
+- **accordion:** code improvement and missing test added ([#365](https://github.com/zard-ui/zardui/pull/365))
+- **library:** fixed output event names for throughout the libarary ([#347](https://github.com/zard-ui/zardui/pull/347))
+- **string template outlet directive:** refactored to use signal inputs ([#333](https://github.com/zard-ui/zardui/pull/333))
+- **tooltip:** changed tooltip look to follow shadcn/ui look ([#320](https://github.com/zard-ui/zardui/pull/320))
+- **input group:** reduced API, look like shadcn/ui variant ([#329](https://github.com/zard-ui/zardui/pull/329))
+- **breadcrumb:** code cleanup with improvements ([#324](https://github.com/zard-ui/zardui/pull/324))
+
 ## 1.0.0-beta.26 (2025-11-13)
 
 ### ✨ Features
