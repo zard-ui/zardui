@@ -277,6 +277,18 @@ export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export { type OnClickCallback as SheetOnClickCallback } from './sheet.component';
+export { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
+export * from './sheet.service';
+export * from './sheet-ref';
+export * from './sheet.module';
+export * from './sheet.variants';
+
+```
+
+
+
 ```angular-ts title="sheet-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
@@ -361,7 +373,9 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     } else if (typeof trigger === 'function') {
       const result = trigger(this.getContentComponent()) as R;
       this.closeWithResult(result);
-    } else this.close();
+    } else {
+      this.close();
+    }
   }
 
   private getContentComponent(): T {
@@ -369,7 +383,9 @@ export class ZardSheetRef<T = any, R = any, U = any> {
   }
 
   private closeWithResult(result: R): void {
-    if (result !== false) this.close(result);
+    if (result !== false) {
+      this.close(result);
+    }
   }
 
   private closeCleanup(): void {
@@ -429,7 +445,7 @@ import { ZardSheetRef } from './sheet-ref';
 import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
-export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
+export const Z_SHEET_DATA = new InjectionToken<any>('Z_MODAL_DATA');
 
 @Injectable({
   providedIn: 'root',
@@ -522,7 +538,7 @@ export class ZardSheetService {
       parent: this.injector,
       providers: [
         { provide: ZardSheetRef, useValue: sheetRef },
-        { provide: Z_MODAL_DATA, useValue: config.zData },
+        { provide: Z_SHEET_DATA, useValue: config.zData },
       ],
     });
   }

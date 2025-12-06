@@ -154,3 +154,11 @@ export type ZardButtonVariants = VariantProps<typeof buttonVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './button.component';
+export * from './button.variants';
+
+```
+

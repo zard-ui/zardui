@@ -42,6 +42,15 @@ export const kbdGroupVariants = cva(`inline-flex items-center gap-1`);
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './kbd.component';
+export * from './kbd-group.component';
+export * from './kbd.variants';
+
+```
+
+
+
 ```angular-ts title="kbd-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
 

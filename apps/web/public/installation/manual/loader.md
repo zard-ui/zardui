@@ -81,3 +81,11 @@ export type ZardLoaderVariants = VariantProps<typeof loaderVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './loader.component';
+export * from './loader.variants';
+
+```
+

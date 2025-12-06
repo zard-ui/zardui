@@ -285,7 +285,8 @@ export type ZardInputGroupAddonPositionVariants = NonNullable<
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export { ZardInputGroupComponent } from './input-group.component';
+export * from './input-group.component';
+export * from './input-group.variants';
 export * from './input-group.variants';
 
 ```

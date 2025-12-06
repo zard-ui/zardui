@@ -1,4 +1,4 @@
-## 1.0.0-beta.27 (2025-12-08)
+## 1.0.0-beta.27 (2025-12-xx)
 
 ### ✨ Features
 
@@ -8,6 +8,7 @@
 
 ### 🐛 Bug Fixes
 
+- **progress:** fixed variant classes ([#367](https://github.com/zard-ui/zardui/pull/367))
 - **select:** visual and keyboard issues related to focus ([#363](https://github.com/zard-ui/zardui/pull/363))
 - **pagination:** a11y fixes, component API changes ([#361](https://github.com/zard-ui/zardui/pull/361))
 - **date picker, select:** CVA fix and navigation update ([#353](https://github.com/zard-ui/zardui/pull/353))

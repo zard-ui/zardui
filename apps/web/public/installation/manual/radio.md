@@ -130,3 +130,11 @@ export const radioLabelVariants = cva('text-sm empty:hidden peer-disabled:opacit
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './radio.component';
+export * from './radio.variants';
+
+```
+

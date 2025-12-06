@@ -146,3 +146,11 @@ export type ZardProgressBarVariants = VariantProps<typeof progressBarVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './progress-bar.component';
+export * from './progress-bar.variants';
+
+```
+

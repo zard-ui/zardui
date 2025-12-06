@@ -99,3 +99,11 @@ export type ZardDividerVariants = VariantProps<typeof dividerVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './divider.component';
+export * from './divider.variants';
+
+```
+

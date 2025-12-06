@@ -177,3 +177,11 @@ export type ZardCheckLabelVariants = VariantProps<typeof checkboxLabelVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './checkbox.component';
+export * from './checkbox.variants';
+
+```
+

@@ -855,3 +855,18 @@ export class ZardCommandModule {}
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './command.component';
+export * from './command-input.component';
+export * from './command-list.component';
+export * from './command-empty.component';
+export * from './command-option.component';
+export * from './command-option-group.component';
+export * from './command-divider.component';
+export * from './command.module';
+export * from './command.variants';
+
+```
+

@@ -311,6 +311,15 @@ export type ZardPaginationVariants = VariantProps<typeof paginationVariants>;
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './pagination.component';
+export * from './pagination.module';
+export * from './pagination.variants';
+
+```
+
+
+
 ```angular-ts title="pagination.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 

@@ -79,3 +79,11 @@ export type ZardToastVariants = VariantProps<typeof toastVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './toast.component';
+export * from './toast.variants';
+
+```
+

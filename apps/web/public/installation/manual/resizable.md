@@ -406,6 +406,7 @@ export type ZardResizableHandleVariants = VariantProps<typeof resizableHandleVar
 export * from './resizable.component';
 export * from './resizable-panel.component';
 export * from './resizable-handle.component';
+export * from './resizable.module';
 export * from './resizable.variants';
 
 ```
@@ -700,6 +701,25 @@ export class ZardResizablePanelComponent {
     mergeClasses(resizablePanelVariants({ zCollapsed: this.isCollapsed() }), this.class()),
   );
 }
+
+```
+
+
+
+```angular-ts title="resizable.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { NgModule } from '@angular/core';
+
+import { ZardResizableHandleComponent } from './resizable-handle.component';
+import { ZardResizablePanelComponent } from './resizable-panel.component';
+import { ZardResizableComponent } from './resizable.component';
+
+const RESIZABLE_COMPONENTS = [ZardResizableComponent, ZardResizableHandleComponent, ZardResizablePanelComponent];
+
+@NgModule({
+  imports: [...RESIZABLE_COMPONENTS],
+  exports: [...RESIZABLE_COMPONENTS],
+})
+export class ResizbleModule {}
 
 ```
 

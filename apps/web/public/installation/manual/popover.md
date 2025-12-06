@@ -397,3 +397,11 @@ export type ZardPopoverVariants = VariantProps<typeof popoverVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './popover.component';
+export * from './popover.variants';
+
+```
+

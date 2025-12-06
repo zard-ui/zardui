@@ -725,6 +725,16 @@ export type ZardSelectItemModeVariants = NonNullable<VariantProps<typeof selectI
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './select.component';
+export * from './select-item.component';
+export * from './select.module';
+export * from './select.variants';
+
+```
+
+
+
 ```angular-ts title="select-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,

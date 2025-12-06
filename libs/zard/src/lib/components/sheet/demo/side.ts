@@ -5,7 +5,7 @@ import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardRadioComponent } from '../../radio/radio.component';
 import { ZardSheetModule } from '../sheet.module';
-import { Z_MODAL_DATA, ZardSheetService } from '../sheet.service';
+import { Z_SHEET_DATA, ZardSheetService } from '../sheet.service';
 
 interface iSheetData {
   name: string;
@@ -22,8 +22,9 @@ interface iSheetData {
         <label
           for="name"
           class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-          >Name</label
         >
+          Name
+        </label>
         <input
           z-input
           formControlName="name"
@@ -35,8 +36,9 @@ interface iSheetData {
         <label
           for="username"
           class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-          >Username</label
         >
+          Username
+        </label>
         <input
           z-input
           formControlName="username"
@@ -48,7 +50,7 @@ interface iSheetData {
   exportAs: 'zardDemoSheetSide',
 })
 export class ZardDemoSheetSideInputComponent {
-  private zData: iSheetData = inject(Z_MODAL_DATA);
+  private zData: iSheetData = inject(Z_SHEET_DATA);
 
   form = new FormGroup({
     name: new FormControl('Matheus Ribeiro'),

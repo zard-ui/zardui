@@ -172,3 +172,12 @@ export class ZardFormModule {}
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './form.component';
+export * from './form.module';
+export * from './form.variants';
+
+```
+

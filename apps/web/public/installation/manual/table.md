@@ -223,6 +223,15 @@ export type ZardTableCaptionVariants = VariantProps<typeof tableCaptionVariants>
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './table.component';
+export * from './table.module';
+export * from './table.variants';
+
+```
+
+
+
 ```angular-ts title="table.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 

@@ -437,3 +437,11 @@ export type ZardComboboxVariants = VariantProps<typeof comboboxVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './combobox.component';
+export * from './combobox.variants';
+
+```
+

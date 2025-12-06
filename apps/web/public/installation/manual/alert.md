@@ -122,3 +122,11 @@ export type ZardAlertDescriptionVariants = VariantProps<typeof alertDescriptionV
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './alert.component';
+export * from './alert.variants';
+
+```
+

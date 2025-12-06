@@ -313,6 +313,15 @@ export type ZardTooltipPositionVariants = NonNullable<VariantProps<typeof toolti
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './tooltip';
+export * from './tooltip.variants';
+export * from './tooltip-positions';
+
+```
+
+
+
 ```angular-ts title="tooltip-positions.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { ConnectedPosition } from '@angular/cdk/overlay';
 
