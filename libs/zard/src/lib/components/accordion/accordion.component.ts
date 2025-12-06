@@ -34,58 +34,56 @@ export class ZardAccordionComponent implements AfterContentInit {
   readonly zCollapsible = input<boolean>(true);
   readonly zDefaultValue = input<string | string[]>('');
 
+  private readonly defaultValue = computed(() => {
+    const defaultValue = this.zDefaultValue();
+    if (typeof defaultValue === 'string') {
+      return defaultValue ? [defaultValue] : [];
+    } else if (this.zType() === 'single') {
+      throw new Error('Array of default values is supported only for multiple zType');
+    }
+    return defaultValue;
+  });
+
   protected readonly classes = computed(() => mergeClasses(accordionVariants(), this.class()));
 
   ngAfterContentInit(): void {
-    const defaultValue = this.zDefaultValue();
-    if (defaultValue) {
-      if (typeof defaultValue === 'string') {
-        const item = this.items().find(i => i.zValue() === defaultValue);
-        if (item) {
-          item.isOpen.set(true);
-        }
-      } else if (Array.isArray(defaultValue)) {
-        for (const value of defaultValue) {
-          const item = this.items().find(item => item.zValue() === value);
-          if (item) {
-            item.isOpen.set(true);
-          }
-        }
-      }
+    for (const item of this.items()) {
+      item.accordion = this;
+      item.isOpen.set(this.defaultValue().includes(item.zValue()));
     }
   }
 
   toggleItem(selectedItem: ZardAccordionItemComponent): void {
-    const isClosing = selectedItem.isOpen();
-
     if (this.zType() === 'single') {
-      if (isClosing && !this.zCollapsible()) {
-        return;
-      }
-
-      for (const item of this.items()) {
-        const shouldBeOpen = item === selectedItem ? !item.isOpen() : false;
-        item.isOpen.set(shouldBeOpen);
-      }
+      this.toggleForSingleType(selectedItem);
     } else {
-      if (isClosing && !this.zCollapsible()) {
-        const openItemsCount = this.countOpenItems();
-        if (openItemsCount <= 1) {
-          return;
-        }
-      }
-
-      selectedItem.isOpen.update(v => !v);
+      this.toggleForMultipleType(selectedItem);
     }
   }
 
+  private toggleForSingleType(selectedItem: ZardAccordionItemComponent): void {
+    const isClosing = selectedItem.isOpen();
+
+    if (isClosing && !this.zCollapsible()) {
+      return;
+    }
+
+    for (const item of this.items()) {
+      const shouldBeOpen = item === selectedItem ? !item.isOpen() : false;
+      item.isOpen.set(shouldBeOpen);
+    }
+  }
+
+  private toggleForMultipleType(selectedItem: ZardAccordionItemComponent): void {
+    const isClosing = selectedItem.isOpen();
+    if (isClosing && !this.zCollapsible() && this.countOpenItems() <= 1) {
+      return;
+    }
+
+    selectedItem.isOpen.update(v => !v);
+  }
+
   private countOpenItems(): number {
-    let count = 0;
-    this.items().forEach(item => {
-      if (item.isOpen()) {
-        count++;
-      }
-    });
-    return count;
+    return this.items().reduce((counter, item) => (item.isOpen() ? ++counter : counter), 0);
   }
 }

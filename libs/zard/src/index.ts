@@ -52,10 +52,7 @@ export * from './lib/components/skeleton/skeleton.component';
 export * from './lib/components/slider/slider.component';
 export * from './lib/components/toggle/toggle.component';
 export * from './lib/components/pagination/pagination.component';
-
-// Accordion
-export * from './lib/components/accordion/accordion.component';
-export * from './lib/components/accordion/accordion-item.component';
+export * from './lib/components/accordion';
 
 // Alert Dialog
 export {

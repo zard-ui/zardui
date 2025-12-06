@@ -37,59 +37,57 @@ export class ZardAccordionComponent implements AfterContentInit {
   readonly zCollapsible = input<boolean>(true);
   readonly zDefaultValue = input<string | string[]>('');
 
+  private readonly defaultValue = computed(() => {
+    const defaultValue = this.zDefaultValue();
+    if (typeof defaultValue === 'string') {
+      return defaultValue ? [defaultValue] : [];
+    } else if (this.zType() === 'single') {
+      throw new Error('Array of default values is supported only for multiple zType');
+    }
+    return defaultValue;
+  });
+
   protected readonly classes = computed(() => mergeClasses(accordionVariants(), this.class()));
 
   ngAfterContentInit(): void {
-    const defaultValue = this.zDefaultValue();
-    if (defaultValue) {
-      if (typeof defaultValue === 'string') {
-        const item = this.items().find(i => i.zValue() === defaultValue);
-        if (item) {
-          item.isOpen.set(true);
-        }
-      } else if (Array.isArray(defaultValue)) {
-        for (const value of defaultValue) {
-          const item = this.items().find(item => item.zValue() === value);
-          if (item) {
-            item.isOpen.set(true);
-          }
-        }
-      }
+    for (const item of this.items()) {
+      item.accordion = this;
+      item.isOpen.set(this.defaultValue().includes(item.zValue()));
     }
   }
 
   toggleItem(selectedItem: ZardAccordionItemComponent): void {
-    const isClosing = selectedItem.isOpen();
-
     if (this.zType() === 'single') {
-      if (isClosing && !this.zCollapsible()) {
-        return;
-      }
-
-      for (const item of this.items()) {
-        const shouldBeOpen = item === selectedItem ? !item.isOpen() : false;
-        item.isOpen.set(shouldBeOpen);
-      }
+      this.toggleForSingleType(selectedItem);
     } else {
-      if (isClosing && !this.zCollapsible()) {
-        const openItemsCount = this.countOpenItems();
-        if (openItemsCount <= 1) {
-          return;
-        }
-      }
-
-      selectedItem.isOpen.update(v => !v);
+      this.toggleForMultipleType(selectedItem);
     }
   }
 
+  private toggleForSingleType(selectedItem: ZardAccordionItemComponent): void {
+    const isClosing = selectedItem.isOpen();
+
+    if (isClosing && !this.zCollapsible()) {
+      return;
+    }
+
+    for (const item of this.items()) {
+      const shouldBeOpen = item === selectedItem ? !item.isOpen() : false;
+      item.isOpen.set(shouldBeOpen);
+    }
+  }
+
+  private toggleForMultipleType(selectedItem: ZardAccordionItemComponent): void {
+    const isClosing = selectedItem.isOpen();
+    if (isClosing && !this.zCollapsible() && this.countOpenItems() <= 1) {
+      return;
+    }
+
+    selectedItem.isOpen.update(v => !v);
+  }
+
   private countOpenItems(): number {
-    let count = 0;
-    this.items().forEach(item => {
-      if (item.isOpen()) {
-        count++;
-      }
-    });
-    return count;
+    return this.items().reduce((counter, item) => (item.isOpen() ? ++counter : counter), 0);
   }
 }
 
@@ -140,14 +138,13 @@ export type ZardAccordionContentVariants = VariantProps<typeof accordionContentV
 
 
 ```angular-ts title="accordion-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
 import { ZardAccordionComponent } from './accordion.component';
 import { accordionContentVariants, accordionItemVariants, accordionTriggerVariants } from './accordion.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -161,7 +158,6 @@ import { ZardIconComponent } from '../icon/icon.component';
       [id]="'accordion-' + zValue()"
       [class]="triggerClasses()"
       (click)="toggle()"
-      (keydown.{enter,space}.prevent)="toggle()"
     >
       {{ zTitle() }}
       <z-icon
@@ -194,21 +190,16 @@ import { ZardIconComponent } from '../icon/icon.component';
   exportAs: 'zAccordionItem',
 })
 export class ZardAccordionItemComponent {
-  private accordion = inject(ZardAccordionComponent, { optional: true });
-
   readonly zTitle = input<string>('');
   readonly zValue = input<string>('');
   readonly class = input<ClassValue>('');
 
+  accordion!: ZardAccordionComponent;
   readonly isOpen = signal(false);
 
   protected readonly itemClasses = computed(() => mergeClasses(accordionItemVariants(), this.class()));
   protected readonly triggerClasses = computed(() => mergeClasses(accordionTriggerVariants()));
   protected readonly contentClasses = computed(() => mergeClasses(accordionContentVariants({ isOpen: this.isOpen() })));
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   toggle(): void {
     if (this.accordion) {
@@ -218,6 +209,31 @@ export class ZardAccordionItemComponent {
     }
   }
 }
+
+```
+
+
+
+```angular-ts title="accordion.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { NgModule } from '@angular/core';
+
+import { ZardAccordionItemComponent } from './accordion-item.component';
+import { ZardAccordionComponent } from './accordion.component';
+
+@NgModule({
+  imports: [ZardAccordionComponent, ZardAccordionItemComponent],
+  exports: [ZardAccordionComponent, ZardAccordionItemComponent],
+})
+export class ZardAccordionModule {}
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './accordion.component';
+export * from './accordion-item.component';
+export * from './accordion.module';
 
 ```
 
