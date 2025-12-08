@@ -3,9 +3,9 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const containerProgressBarVariants = cva('w-full transition-all', {
   variants: {
     zType: {
-      default: 'bg-primary-foreground hover:bg-primary/10',
-      destructive: 'bg-primary-foreground dark:text-secondary-foreground hover:bg-destructive/10',
-      accent: 'bg-primary-foreground hover:bg-primary/10',
+      default: 'bg-primary/20',
+      destructive: 'bg-destructive/20',
+      accent: 'bg-chart-1/20',
     },
     zSize: {
       default: 'h-2',
@@ -13,8 +13,7 @@ export const containerProgressBarVariants = cva('w-full transition-all', {
       lg: 'h-5',
     },
     zShape: {
-      default: 'rounded-sm',
-      circle: 'rounded-full',
+      default: 'rounded-full',
       square: 'rounded-none',
     },
     zIndeterminate: {
@@ -28,7 +27,7 @@ export const containerProgressBarVariants = cva('w-full transition-all', {
     zShape: 'default',
   },
 });
-export type ZardContainerProgressBarVariants = VariantProps<typeof containerProgressBarVariants>;
+export type ZardProgressBarSizeVariants = NonNullable<VariantProps<typeof containerProgressBarVariants>['zSize']>;
 
 export const progressBarVariants = cva('h-full transition-all', {
   variants: {
@@ -38,8 +37,7 @@ export const progressBarVariants = cva('h-full transition-all', {
       accent: 'bg-chart-1',
     },
     zShape: {
-      default: 'rounded-sm',
-      circle: 'rounded-full ',
+      default: 'rounded-full',
       square: 'rounded-none',
     },
     zIndeterminate: {
@@ -51,4 +49,5 @@ export const progressBarVariants = cva('h-full transition-all', {
     zShape: 'default',
   },
 });
-export type ZardProgressBarVariants = VariantProps<typeof progressBarVariants>;
+export type ZardProgressBarTypeVariants = NonNullable<VariantProps<typeof progressBarVariants>['zType']>;
+export type ZardProgressBarShapeVariants = NonNullable<VariantProps<typeof progressBarVariants>['zShape']>;

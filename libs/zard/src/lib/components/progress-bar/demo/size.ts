@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardProgressBarComponent } from '../progress-bar.component';
 
 @Component({
   selector: 'z-demo-progress-bar-size',
   imports: [ZardProgressBarComponent],
-  standalone: true,
   template: `
     <z-progress-bar [progress]="50" zSize="default" />
     <z-progress-bar [progress]="50" zSize="sm" />
@@ -18,5 +17,6 @@ import { ZardProgressBarComponent } from '../progress-bar.component';
       gap: 24px;
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoProgressBarSizeComponent {}
