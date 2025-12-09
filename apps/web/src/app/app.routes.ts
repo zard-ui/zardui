@@ -77,10 +77,11 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'blocks',
-        loadComponent: () => import('./domain/pages/blocks/block-instructions/block-instructions.page').then(c => c.BlocksInstructionPage),
+        loadComponent: () =>
+          import('./domain/pages/blocks/block-instructions/block-instructions.page').then(c => c.BlocksInstructionPage),
       },
       {
-        path: 'dark-mode',
+        path: 'appearance',
         loadComponent: () => import('./domain/pages/dark-mode/dark-mode.page').then(c => c.DarkmodePage),
       },
       {
@@ -105,7 +106,8 @@ export const appRoutes: Route[] = [
       },
       {
         path: 'pre-processors',
-        loadComponent: async () => import('./domain/pages/pre-processors/pre-processors.page').then(c => c.PreProcessorsPage),
+        loadComponent: async () =>
+          import('./domain/pages/pre-processors/pre-processors.page').then(c => c.PreProcessorsPage),
       },
       {
         path: 'changelog',

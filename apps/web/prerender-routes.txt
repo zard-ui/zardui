@@ -10,7 +10,7 @@
 /docs/installation
 /docs/components-json
 /docs/theming
-/docs/dark-mode
+/docs/appearance
 /docs/cli
 /docs/blocks
 /docs/pre-processors

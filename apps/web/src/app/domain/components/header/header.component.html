@@ -47,9 +47,9 @@
             z-button
             zType="ghost"
             zSize="sm"
-            [disabled]="theme === EThemeModes.SYSTEM"
-            [aria-pressed]="theme === EThemeModes.SYSTEM"
-            (click)="activateTheme(EThemeModes.SYSTEM)"
+            [disabled]="theme === EAppearanceModes.SYSTEM"
+            [aria-pressed]="theme === EAppearanceModes.SYSTEM"
+            (click)="activateTheme(EAppearanceModes.SYSTEM)"
           >
             <z-icon zType="sun-moon" />
             <span class="sr-only">Use system theme</span>
@@ -58,9 +58,9 @@
             z-button
             zType="ghost"
             zSize="sm"
-            [disabled]="theme === EThemeModes.LIGHT"
-            [aria-pressed]="theme === EThemeModes.LIGHT"
-            (click)="activateTheme(EThemeModes.LIGHT)"
+            [disabled]="theme === EAppearanceModes.LIGHT"
+            [aria-pressed]="theme === EAppearanceModes.LIGHT"
+            (click)="activateTheme(EAppearanceModes.LIGHT)"
           >
             <z-icon zType="sun" />
             <span class="sr-only">Light theme</span>
@@ -69,9 +69,9 @@
             z-button
             zType="ghost"
             zSize="sm"
-            [disabled]="theme === EThemeModes.DARK"
-            [aria-pressed]="theme === EThemeModes.DARK"
-            (click)="activateTheme(EThemeModes.DARK)"
+            [disabled]="theme === EAppearanceModes.DARK"
+            [aria-pressed]="theme === EAppearanceModes.DARK"
+            (click)="activateTheme(EAppearanceModes.DARK)"
           >
             <z-icon zType="moon" />
             <span class="sr-only">Dark theme</span>

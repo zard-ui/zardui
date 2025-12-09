@@ -1,11 +1,10 @@
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import {
   type AfterContentInit,
   ChangeDetectionStrategy,
   Component,
   computed,
   contentChildren,
-  DOCUMENT,
   ElementRef,
   inject,
   input,
@@ -21,14 +20,11 @@ import type { ClassValue } from 'clsx';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 export interface ZardResizeEvent {
   sizes: number[];
   layout: 'horizontal' | 'vertical';
 }
-
-type CleanupFunction = () => void;
 
 @Component({
   selector: 'z-resizable, [z-resizable]',
@@ -47,7 +43,9 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private readonly elementRef = inject(ElementRef);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly document = inject(DOCUMENT);
-  private readonly listenersCleanup: CleanupFunction[] = [];
+
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private listenersCleanup!: () => void;
 
   readonly zLayout = input<ZardResizableVariants['zLayout']>('horizontal');
   readonly zLazy = input(false, { transform });
@@ -65,12 +63,12 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     mergeClasses(resizableVariants({ zLayout: this.zLayout() }), this.class()),
   );
 
-  constructor() {
-    checkForProperZardInitialization();
-  }
-
   ngAfterContentInit(): void {
     this.initializePanelSizes();
+  }
+
+  ngOnDestroy(): void {
+    this.listenersCleanup?.();
   }
 
   convertToPercentage(value: number | string, containerSize: number): number {
@@ -133,27 +131,23 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 
     const handleEnd = () => {
       this.endResize();
-      if (isPlatformBrowser(this.platformId)) {
-        this.document.removeEventListener('mousemove', handleMove);
-        this.document.removeEventListener('touchmove', handleMove);
-        this.document.removeEventListener('mouseup', handleEnd);
-        this.document.removeEventListener('touchend', handleEnd);
+      if (this.isBrowser) {
+        this.listenersCleanup?.();
       }
-      this.listenersCleanup.pop();
     };
 
-    if (isPlatformBrowser(this.platformId)) {
+    if (this.isBrowser) {
       this.document.addEventListener('mousemove', handleMove);
       this.document.addEventListener('touchmove', handleMove);
       this.document.addEventListener('mouseup', handleEnd);
       this.document.addEventListener('touchend', handleEnd);
 
-      this.listenersCleanup.push(() => {
+      this.listenersCleanup = () => {
         this.document.removeEventListener('mousemove', handleMove);
         this.document.removeEventListener('touchmove', handleMove);
         this.document.removeEventListener('mouseup', handleEnd);
         this.document.removeEventListener('touchend', handleEnd);
-      });
+      };
     }
   }
 
@@ -306,12 +300,6 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
     this.panelSizes.set(sizes);
     this.updatePanelStyles();
     this.zResize.emit({ sizes, layout: this.zLayout() ?? 'horizontal' });
-  }
-
-  ngOnDestroy(): void {
-    for (const cleanup of this.listenersCleanup) {
-      cleanup();
-    }
   }
 
   private scaleSizes(sizes: number[], index: number, scale: number): number[] {

@@ -1,12 +1,6 @@
 // Core
 export * from './lib/components/core/directives/string-template-outlet/string-template-outlet.directive';
-export * from './lib/components/core/provider/config/update-preset';
-export * from './lib/components/core/provider/config/config.types';
-export * from './lib/components/core/provider/config/styles/gray';
-export * from './lib/components/core/provider/config/styles/neutral';
-export * from './lib/components/core/provider/config/styles/slate';
-export * from './lib/components/core/provider/config/styles/stone';
-export * from './lib/components/core/provider/config/styles/zinc';
+export * from './lib/components/core/provider/services/appearance';
 export * from './lib/components/core/provider/event-manager-plugins/zard-debounce-event-manager-plugin';
 export * from './lib/components/core/provider/event-manager-plugins/zard-event-manager-plugin';
 export * from './lib/components/core/provider/providezard';

@@ -30,7 +30,6 @@ import { ZardCommandListComponent } from '../command/command-list.component';
 import { ZardCommandOptionGroupComponent } from '../command/command-option-group.component';
 import { ZardCommandOptionComponent } from '../command/command-option.component';
 import { ZardCommandComponent, type ZardCommandOption } from '../command/command.component';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardEmptyComponent } from '../empty/empty.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
@@ -245,10 +244,6 @@ export class ZardComboboxComponent implements ControlValueAccessor {
     const option = this.options().find(opt => opt.value === currentValue);
     return option?.label ?? null;
   });
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   private onChange: (value: string | null) => void = () => {
     // ControlValueAccessor implementation
