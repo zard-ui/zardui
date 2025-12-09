@@ -21,6 +21,11 @@ bunx @ngzard/ui init
 This command will guide you through an interactive setup:
 
 ```bash title="terminal"
+Initializing ZardUI...
+
+
+✔ Where is your app.config.ts file? … src/app/app.config.ts
+✔ Where is your index.html file? … src/index.html
 ✔ Choose a theme for your components: › Neutral (Default)
 ✔ Where is your global CSS file? … src/styles.css
 ✔ Configure the import alias for components: … src/app/shared/components
@@ -28,10 +33,6 @@ This command will guide you through an interactive setup:
 ✔ Your CSS file already has content. This will overwrite everything with ZardUI theme configuration. Continue? … yes
 ✔ Write configuration to components.json? … yes
 ✔ Writing configuration...
-✔ Installing dependencies...
-✔ Setting up Tailwind CSS...
-✔ Creating utils...
-✔ Updating tsconfig.json...
 
 ZardUI has been initialized successfully!
 

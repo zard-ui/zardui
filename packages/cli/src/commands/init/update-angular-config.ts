@@ -40,7 +40,7 @@ export async function updateAngularConfig(cwd: string, config: Config): Promise<
         content = ZARD_PROVIDER_IMPORT + content;
       }
     } else {
-      logger.warn('⚠️ Import statement already exists. Skipping.');
+      logger.warn('Import statement already exists. Skipping.');
     }
 
     // Add the provider to the providers array
@@ -50,7 +50,7 @@ export async function updateAngularConfig(cwd: string, config: Config): Promise<
       content = content.replace(providersRegex, (match: string, providersContent: string): string => {
         const entryToCheck = ZARD_PROVIDER_ENTRY.replace(/,$/, '').trim();
         if (providersContent.includes(entryToCheck)) {
-          logger.warn('⚠️ Provider already exists in the list. Skipping.');
+          logger.warn('Provider already exists in the list. Skipping.');
           return match;
         }
 
@@ -71,7 +71,7 @@ export async function updateAngularConfig(cwd: string, config: Config): Promise<
       });
     } else {
       logger.error(
-        '❌ Could not find the "providers: [...]" array in app.config.ts. The file structure may be unsupported.',
+        'Could not find the "providers: [...]" array in app.config.ts. The file structure may be unsupported.',
       );
       return;
     }
@@ -81,9 +81,9 @@ export async function updateAngularConfig(cwd: string, config: Config): Promise<
     if (e && typeof e === 'object' && 'code' in e && e.code === 'ENOENT') {
       logger.error(`Error: Configuration file not found at ${appConfigPath}`);
     } else if (e instanceof Error) {
-      logger.error('\n❌ An error occurred during file operation:', e.message);
+      logger.error('An error occurred during file operation:', e.message);
     } else {
-      logger.error('\n❌ An unknown error occurred:', e);
+      logger.error('An unknown error occurred:', e);
     }
     throw e;
   }

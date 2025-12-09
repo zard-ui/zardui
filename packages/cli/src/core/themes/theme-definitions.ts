@@ -70,6 +70,23 @@ const layerBase = `
 }
 `;
 
+const windowsScrollbar = `
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background: var(--muted);
+}
+`;
+
 export const neutral = `
 ${tailwindConfiguration}
 
@@ -143,8 +160,8 @@ ${tailwindConfiguration}
 }
 
 ${inlineTheme}
-
 ${layerBase}
+${windowsScrollbar}
 `;
 
 export const stone = `
@@ -220,8 +237,8 @@ ${tailwindConfiguration}
 }
 
 ${inlineTheme}
-
 ${layerBase}
+${windowsScrollbar}
 `;
 
 export const zinc = `
@@ -297,8 +314,8 @@ ${tailwindConfiguration}
 }
 
 ${inlineTheme}
-
 ${layerBase}
+${windowsScrollbar}
 `;
 
 export const gray = `
@@ -374,8 +391,8 @@ ${tailwindConfiguration}
 }
 
 ${inlineTheme}
-
 ${layerBase}
+${windowsScrollbar}
 `;
 
 export const slate = `
@@ -451,6 +468,6 @@ ${tailwindConfiguration}
 }
 
 ${inlineTheme}
-
 ${layerBase}
+${windowsScrollbar}
 `;

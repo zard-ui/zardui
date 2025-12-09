@@ -6,8 +6,8 @@
 >
   <!-- Overview Section -->
   <z-doc-heading
-    title="Dark Mode"
-    description="Complete dark mode system in ZardUI using TailwindCSS v4 custom variants and DarkModeService for seamless theme switching."
+    title="Appearance"
+    description="Complete appearance system in ZardUI using TailwindCSS v4 custom variants and ZardAppearance service for seamless theme switching."
     scrollSpyItem="overview"
     id="overview"
   />
@@ -17,14 +17,11 @@
       ZardUI implements a robust dark mode system using
       <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">&#64;custom-variant dark</code>
       from TailwindCSS v4 combined with an Angular
-      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">DarkModeService</code>
-      for state management and persistence.
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">Appearance Service</code>
+      for state management and persistence. This service is part of
+      <b>core</b>
+      component and you can inject it where you need it.
     </p>
-
-    <z-alert
-      zTitle="Current Implementation Status"
-      zDescription="Currently, dark mode works via CSS class variations. In the future, we plan to add a CLI option for automatic service installation."
-    ></z-alert>
   </div>
 
   <!-- Current Implementation Section -->
@@ -42,7 +39,7 @@
   <!-- Service Details Section -->
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="service-details" id="service-details">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">DarkMode Service</h2>
+      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Appearance Service</h2>
       <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
         The core of the system is an Angular service that manages theme state, persistence, and CSS class application.
       </p>
@@ -56,19 +53,14 @@
     <div class="flex flex-col gap-6">
       <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Usage in Application</h2>
       <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
-        See how the service is used in the AppComponent for initialization and in the HeaderComponent for toggle
-        control.
+        The service is initialized in Zard provider. The HeaderComponent constains an example of how to use the service
+        for toggle control.
       </p>
     </div>
 
     <div class="flex flex-col gap-6">
       <div>
-        <h3 class="mb-6 text-base font-semibold sm:text-lg">App Component</h3>
-        <z-markdown-renderer markdownUrl="/documentation/dark-mode/app-usage.md"></z-markdown-renderer>
-      </div>
-
-      <div>
-        <h3 class="mb-6 text-base font-semibold sm:text-lg">Header Component</h3>
+        <h1 class="mb-6 text-base font-semibold sm:text-lg">Header Component</h1>
         <z-markdown-renderer markdownUrl="/documentation/dark-mode/header-usage.md"></z-markdown-renderer>
       </div>
     </div>
@@ -89,12 +81,45 @@
           <h3 class="text-lg font-semibold">Theme Control</h3>
           <p class="text-muted-foreground text-sm">
             Current theme:
-            <strong>{{ darkModeService.theme() }}</strong>
+            <strong>{{ appearanceService.theme() }}</strong>
           </p>
         </div>
-        <z-button variant="outline">
-          {{ darkModeService.theme() === EThemeModes.DARK ? '☀️ Light Mode' : '🌙 Dark Mode' }}
-        </z-button>
+        @let theme = currentTheme();
+        <z-button-group>
+          <button
+            z-button
+            zType="ghost"
+            zSize="sm"
+            [disabled]="theme === EAppearanceModes.SYSTEM"
+            [aria-pressed]="theme === EAppearanceModes.SYSTEM"
+            (click)="activateTheme(EAppearanceModes.SYSTEM)"
+          >
+            <z-icon zType="sun-moon" />
+            <span class="sr-only">Use system theme</span>
+          </button>
+          <button
+            z-button
+            zType="ghost"
+            zSize="sm"
+            [disabled]="theme === EAppearanceModes.LIGHT"
+            [aria-pressed]="theme === EAppearanceModes.LIGHT"
+            (click)="activateTheme(EAppearanceModes.LIGHT)"
+          >
+            <z-icon zType="sun" />
+            <span class="sr-only">Light theme</span>
+          </button>
+          <button
+            z-button
+            zType="ghost"
+            zSize="sm"
+            [disabled]="theme === EAppearanceModes.DARK"
+            [aria-pressed]="theme === EAppearanceModes.DARK"
+            (click)="activateTheme(EAppearanceModes.DARK)"
+          >
+            <z-icon zType="moon" />
+            <span class="sr-only">Dark theme</span>
+          </button>
+        </z-button-group>
       </div>
 
       <div class="grid grid-cols-1 gap-4 md:grid-cols-3">

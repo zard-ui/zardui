@@ -1,35 +1,45 @@
 <section class="container flex flex-col items-center gap-2 py-8 text-center md:py-16 lg:py-20 xl:gap-4">
-  <h1 class="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter">
+  <h1
+    class="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter"
+  >
     Building Blocks for the Web
   </h1>
   <p class="text-foreground max-w-3xl text-base text-balance sm:text-lg">
-    Clean, modern building blocks. Copy and paste into your apps. Works with all Angular Ecosystem. Open Source. Free forever.
+    Clean, modern building blocks. Copy and paste into your apps. Works with all Angular Ecosystem. Open Source. Free
+    forever.
   </p>
   <section class="flex w-full items-center justify-center gap-2 pt-2 **:data-[slot=button]:shadow-none">
-    <a z-button href="/blocks#blocks"> Browse Blocks </a>
-    <a z-button zType="ghost" routerLink="/docs/blocks"> Add a block </a>
+    <a z-button href="/blocks#blocks">Browse Blocks</a>
+    <a z-button zType="ghost" routerLink="/docs/blocks">Add a block</a>
   </section>
 </section>
 
 <z-category-tabs [tabs]="categoryTabs" browseAllRoute="/blocks/sidebar" browseAllLabel="Browse all blocks" />
 
-<section class="container mx-auto px-4 pt-8 pb-16 min-h-svh">
-  <div class="xl:py-8 space-y-12">
+<section class="container mx-auto min-h-svh px-4 pt-8 pb-16">
+  <div class="space-y-12 xl:py-8">
     @if (blocks().length > 0) { @for (block of blocks(); track block.id) {
-    <div class="lg:hidden space-y-3">
-      <h3 class="text-sm font-semibold text-foreground">{{ block.title }}</h3>
+    <div class="space-y-3 lg:hidden">
+      <h3 class="text-foreground text-sm font-semibold">{{ block.title }}</h3>
       @if (block.image) {
-      <img width="1440" height="900" loading="lazy" [src]="getCurrentBlockImage(block)" [alt]="block.title" class="w-full h-[220px] rounded-lg border border-border shadow-sm" />
+      <img
+        width="1440"
+        height="900"
+        loading="lazy"
+        [src]="getCurrentBlockImage(block)"
+        [alt]="block.title"
+        class="border-border h-[220px] w-full rounded-lg border shadow-sm"
+      />
       }
     </div>
     <div class="hidden lg:block">
       <z-block-container [block]="block" />
     </div>
     } } @else {
-    <div class="flex items-center justify-center min-h-svh rounded-lg border border-border bg-muted/20">
-      <div class="text-center space-y-2">
-        <p class="text-lg font-medium text-muted-foreground">No blocks available yet</p>
-        <p class="text-sm text-muted-foreground">Blocks will be added soon for this category</p>
+    <div class="border-border bg-muted/20 flex min-h-svh items-center justify-center rounded-lg border">
+      <div class="space-y-2 text-center">
+        <p class="text-muted-foreground text-lg font-medium">No blocks available yet</p>
+        <p class="text-muted-foreground text-sm">Blocks will be added soon for this category</p>
       </div>
     </div>
     }
@@ -37,7 +47,11 @@
 </section>
 
 <div class="container flex justify-center py-6">
-  <a z-button class="border bg-background shadow-xs hover:bg-accent text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50" routerLink="/blocks/sidebar"
-    >Browse more blocks</a
+  <a
+    z-button
+    class="bg-background hover:bg-accent text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs"
+    routerLink="/blocks/sidebar"
   >
+    Browse more blocks
+  </a>
 </div>

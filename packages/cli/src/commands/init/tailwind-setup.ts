@@ -1,10 +1,9 @@
-import { writeFile } from 'node:fs/promises';
-import * as path from 'path';
-
-import { getThemeContent, getThemeDisplayName } from '@cli/utils/theme-selector.js';
-import { POSTCSS_CONFIG } from '@cli/utils/templates.js';
 import { type Config } from '@cli/utils/config.js';
 import { logger } from '@cli/utils/logger.js';
+import { POSTCSS_CONFIG } from '@cli/utils/templates.js';
+import { getThemeContent, getThemeDisplayName } from '@cli/utils/theme-selector.js';
+import { writeFile } from 'node:fs/promises';
+import * as path from 'path';
 
 export async function setupTailwind(cwd: string, config: Config): Promise<void> {
   await createPostCssConfig(cwd);

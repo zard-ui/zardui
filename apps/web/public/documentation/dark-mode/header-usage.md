@@ -1,42 +1,77 @@
-# Usage in Header Component
+## Usage in Header Component
 
-## (or any component you want to use to trigger the theme)
+### (or any component you want to use to trigger the theme)
 
 The header uses the service to implement the theme toggle button, allowing users to switch between light and dark mode.
 
-```typescript
+```typescript expandable="true"
 // header.component.ts
-import { Component, inject } from '@angular/core';
-import { DarkModeService } from '@zard/shared/services/darkmode.service';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+
+import { AppearanceOptions, EAppearanceModes, ZardAppearance } from '@shared/components/core/services/appearance';
 
 @Component({
   selector: 'z-header',
   templateUrl: './header.component.html',
-  standalone: true,
-  imports: [RouterModule, ZardButtonComponent /* other imports */],
+  imports: [
+    RouterModule,
+    ZardButtonComponent,
+    ZardButtonGroupComponent,
+    ZardIconComponent,
+    /* other imports */
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  private readonly darkmodeService = inject(DarkModeService);
+  private readonly appearanceService = inject(ZardAppearance);
 
-  toggleTheme(): void {
-    this.darkmodeService.toggleTheme();
-  }
+  readonly EAppearanceModes = EAppearanceModes;
+  readonly currentTheme = this.appearanceService.theme;
 
-  getCurrentTheme(): 'light' | 'dark' {
-    return this.darkmodeService.getCurrentTheme();
+  activateTheme(theme: AppearanceOptions): void {
+    this.appearanceService.activateAppearance(theme);
   }
 }
 ```
 
 ## Button Template
 
-```html
+```html expandable="true"
 <!-- header.component.html -->
-<z-button (click)="toggleTheme()" variant="ghost" size="icon" [attr.aria-label]="getCurrentTheme() === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'">
-  @if (getCurrentTheme() === 'dark') {
-  <svg><!-- sun icon --></svg>
-  } @else {
-  <svg><!-- moon icon --></svg>
-  }
-</z-button>
+@let theme = currentTheme();
+<z-button-group>
+  <button
+    z-button
+    zType="ghost"
+    zSize="sm"
+    [disabled]="theme === EAppearanceModes.SYSTEM"
+    [aria-pressed]="theme === EAppearanceModes.SYSTEM"
+    (click)="activateTheme(EAppearanceModes.SYSTEM)"
+  >
+    <z-icon zType="sun-moon" />
+    <span class="sr-only">Use system theme</span>
+  </button>
+  <button
+    z-button
+    zType="ghost"
+    zSize="sm"
+    [disabled]="theme === EAppearanceModes.LIGHT"
+    [aria-pressed]="theme === EAppearanceModes.LIGHT"
+    (click)="activateTheme(EAppearanceModes.LIGHT)"
+  >
+    <z-icon zType="sun" />
+    <span class="sr-only">Light theme</span>
+  </button>
+  <button
+    z-button
+    zType="ghost"
+    zSize="sm"
+    [disabled]="theme === EAppearanceModes.DARK"
+    [aria-pressed]="theme === EAppearanceModes.DARK"
+    (click)="activateTheme(EAppearanceModes.DARK)"
+  >
+    <z-icon zType="moon" />
+    <span class="sr-only">Dark theme</span>
+  </button>
+</z-button-group>
 ```

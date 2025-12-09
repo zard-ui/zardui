@@ -493,7 +493,6 @@ import type { CalendarDay } from './calendar.types';
 import { getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 @Component({
   selector: 'z-calendar-grid',
@@ -561,10 +560,6 @@ export class ZardCalendarGridComponent {
   protected readonly weekdayClasses = computed(() => mergeClasses(calendarWeekdayVariants()));
 
   protected readonly dayContainerClasses = computed(() => mergeClasses(calendarDayVariants()));
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   protected dayButtonClasses(day: CalendarDay): string {
     return mergeClasses(
