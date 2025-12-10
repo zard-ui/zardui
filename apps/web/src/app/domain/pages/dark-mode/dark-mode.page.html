@@ -1,7 +1,7 @@
 <z-content
-  [navigationConfig]="navigationConfig"
-  [activeAnchor]="activeAnchor"
   scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
   (scrollSpyChange)="activeAnchor = $event"
 >
   <!-- Overview Section -->
@@ -92,7 +92,7 @@
             zSize="sm"
             [disabled]="theme === EDarkModes.SYSTEM"
             [aria-pressed]="theme === EDarkModes.SYSTEM"
-            (click)="activateTheme(EDarkModes.SYSTEM)"
+            (click)="darkModeService.toggleTheme(EDarkModes.SYSTEM)"
           >
             <z-icon zType="sun-moon" />
             <span class="sr-only">Use system theme</span>
@@ -103,7 +103,7 @@
             zSize="sm"
             [disabled]="theme === EDarkModes.LIGHT"
             [aria-pressed]="theme === EDarkModes.LIGHT"
-            (click)="activateTheme(EDarkModes.LIGHT)"
+            (click)="darkModeService.toggleTheme(EDarkModes.LIGHT)"
           >
             <z-icon zType="sun" />
             <span class="sr-only">Light theme</span>
@@ -114,7 +114,7 @@
             zSize="sm"
             [disabled]="theme === EDarkModes.DARK"
             [aria-pressed]="theme === EDarkModes.DARK"
-            (click)="activateTheme(EDarkModes.DARK)"
+            (click)="darkModeService.toggleTheme(EDarkModes.DARK)"
           >
             <z-icon zType="moon" />
             <span class="sr-only">Dark theme</span>
