@@ -56,13 +56,16 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
   template: `
     <button
       type="button"
+      role="combobox"
+      aria-controls="dropdown"
       [class]="triggerClasses()"
       [disabled]="zDisabled()"
-      (click)="toggle()"
+      [attr.aria-expanded]="isOpen()"
       [attr.aria-haspopup]="'listbox'"
       [attr.data-placeholder]="!zValue() ? '' : null"
-      (focus)="onFocus()"
       (blur)="!isOpen() && isFocus.set(false)"
+      (click)="toggle()"
+      (focus)="onFocus()"
     >
       <span class="flex flex-1 flex-wrap items-center gap-2">
         @let labels = selectedLabels();
@@ -87,6 +90,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
 
     <ng-template #dropdownTemplate>
       <div
+        id="dropdown"
         [class]="contentClasses()"
         role="listbox"
         [attr.data-state]="'open'"
@@ -108,7 +112,6 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[attr.aria-expanded]': 'isOpen()',
     '[attr.data-active]': 'isFocus() ? "" : null',
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
@@ -298,7 +301,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     }
   }
 
-  navigateTo(element: ZardSelectItemComponent, index: number): void {
+  private navigateTo(element: ZardSelectItemComponent, index: number): void {
     this.focusedIndex.set(index);
     this.updateItemFocus(this.getSelectItems(true), index);
   }
@@ -366,6 +369,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.overlayRef.attach(this.portal);
     this.overlayRef.updateSize({ width: hostWidth });
     this.isOpen.set(true);
+    this.updateFocusWhenNormalMode();
 
     this.determinePortalWidthOnOpen(hostWidth);
   }
@@ -382,6 +386,13 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.isOpen.set(false);
     this.focusedIndex.set(-1);
     this.onTouched();
+    this.updateFocusWhenNormalMode();
+  }
+
+  private updateFocusWhenNormalMode(): void {
+    if (!this.isCompact()) {
+      this.isFocus.set(!this.isOpen());
+    }
   }
 
   private getMatchingItem(value: string): ZardSelectItemComponent | undefined {
@@ -743,7 +754,7 @@ import {
   type ZardSelectItemModeVariants,
   type ZardSelectSizeVariants,
 } from './select.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import { mergeClasses, noopFun, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 
 // Interface to avoid circular dependency
@@ -777,6 +788,7 @@ interface SelectHost {
     '[attr.aria-selected]': 'isSelected()',
     '(click)': 'onClick()',
     '(mouseenter)': 'onMouseEnter()',
+    '(keydown.{tab}.prevent)': 'noopFun',
   },
 })
 export class ZardSelectItemComponent {
@@ -787,6 +799,7 @@ export class ZardSelectItemComponent {
   readonly class = input<string>('');
 
   private readonly select = signal<SelectHost | null>(null);
+  noopFun = noopFun;
 
   readonly label = linkedSignal<string>(() => {
     const element = this.elementRef.nativeElement;
