@@ -48,7 +48,7 @@ export const DOCS_PATH = {
     { name: 'Installation', path: '/docs/installation', available: true },
     { name: 'components.json', path: '/docs/components-json', available: true },
     { name: 'Theming', path: '/docs/theming', available: true },
-    { name: 'Appearance', path: '/docs/dark-mode', available: true },
+    { name: 'Dark Mode', path: '/docs/dark-mode', available: true },
     { name: 'CLI', path: '/docs/cli', available: true },
     { name: 'Blocks', path: '/docs/blocks', available: true },
     { name: 'Pre processors', path: '/docs/pre-processors', available: true },

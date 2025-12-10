@@ -1,6 +1,6 @@
 // Core
 export * from './lib/components/core/directives/string-template-outlet/string-template-outlet.directive';
-export * from './lib/components/core/provider/services/appearance';
+export * from './lib/components/core/provider/services/dark-mode';
 export * from './lib/components/core/provider/event-manager-plugins/zard-debounce-event-manager-plugin';
 export * from './lib/components/core/provider/event-manager-plugins/zard-event-manager-plugin';
 export * from './lib/components/core/provider/providezard';

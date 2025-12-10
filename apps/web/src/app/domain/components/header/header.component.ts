@@ -10,11 +10,7 @@ import { LayoutService } from '@doc/shared/services/layout.service';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
-import {
-  AppearanceOptions,
-  EAppearanceModes,
-  ZardAppearance,
-} from '@zard/components/core/provider/services/appearance';
+import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
@@ -53,14 +49,14 @@ export class HeaderComponent {
   readonly appVersion = environment.appVersion;
   readonly GalleryHorizontalIcon = GalleryHorizontal;
   private readonly githubService = inject(GithubService);
-  private readonly appearanceService = inject(ZardAppearance);
+  private readonly darkModeService = inject(ZardDarkMode);
   private readonly layoutService = inject(LayoutService);
   readonly $repoStars: Observable<number> = this.githubService.getStarsCount();
-  protected readonly currentTheme = this.appearanceService.theme;
-  protected readonly EAppearanceModes = EAppearanceModes;
+  protected readonly currentTheme = this.darkModeService.theme;
+  protected readonly EDarkModes = EDarkModes;
 
-  activateTheme(theme: AppearanceOptions): void {
-    this.appearanceService.activateAppearance(theme);
+  activateTheme(theme: DarkModeOptions): void {
+    this.darkModeService.activateTheme(theme);
   }
 
   toggleLayout(): void {

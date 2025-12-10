@@ -1,7 +1,7 @@
 import { NgComponentOutlet } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 
-import { EAppearanceModes, ZardAppearance } from '@zard/components/core/provider/services/appearance';
+import { EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardResizablePanelComponent } from '@zard/components/resizable/resizable-panel.component';
 import { ZardResizableComponent } from '@zard/components/resizable/resizable.component';
 
@@ -18,14 +18,14 @@ export class BlockPreviewComponent {
   readonly viewportSize = input<'desktop' | 'tablet' | 'mobile'>('desktop');
   readonly block = input<Block>();
 
-  private readonly appearanceService = inject(ZardAppearance);
+  private readonly darkModeService = inject(ZardDarkMode);
 
   protected readonly currentImage = computed(() => {
     const blockData = this.block();
     if (!blockData?.image) return undefined;
 
-    const theme = this.appearanceService.themeMode();
-    return theme === EAppearanceModes.DARK ? blockData.image.dark : blockData.image.light;
+    const theme = this.darkModeService.themeMode();
+    return theme === EDarkModes.DARK ? blockData.image.dark : blockData.image.light;
   });
 
   protected getViewportWidth(): string {
@@ -48,7 +48,7 @@ export class BlockPreviewComponent {
     console.error('Erro ao carregar imagem:', {
       src: img.src,
       block: this.block()?.id,
-      theme: this.appearanceService.getCurrentAppearance(),
+      theme: this.darkModeService.getCurrentTheme(),
       currentImage: this.currentImage(),
     });
   }

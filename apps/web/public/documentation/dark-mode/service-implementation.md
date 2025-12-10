@@ -1,12 +1,12 @@
-```typescript title="appearance.page.ts" expandable="true" copyButton
-import { ZardAppearance } from '@zard/components/core/services/appearance';
+```typescript title="dark-mode.page.ts" expandable="true" copyButton
+import { ZardDarkMode } from '@zard/components/core/services/dark-mode';
 
 @Component({
   selector: '...',
   template: '',
 })
-export class AppearancePage {
-  protected readonly appearanceService = inject(ZardAppearance);
+export class DarkModePage {
+  protected readonly darkModeService = inject(ZardDarkMode);
 
   // ...
 }

@@ -6,7 +6,7 @@ import { HeaderComponent } from '@doc/domain/components/header/header.component'
 import { SidebarComponent } from '@doc/domain/components/sidebar/sidebar.component';
 import { environment } from '@doc/env/environment';
 
-import { AppearanceOptions, ZardAppearance } from '@zard/components/core/provider/services/appearance';
+import { DarkModeOptions, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardToastComponent } from '@zard/components/toast/toast.component';
 
 @Component({
@@ -30,11 +30,11 @@ import { ZardToastComponent } from '@zard/components/toast/toast.component';
   imports: [RouterModule, HeaderComponent, FooterComponent, SidebarComponent, ZardToastComponent],
 })
 export class DocumentationLayout {
-  private readonly appearanceService = inject(ZardAppearance);
+  private readonly darkModeService = inject(ZardDarkMode);
   private readonly destroyRef = inject(DestroyRef);
   readonly isDevEnv = !environment.production;
 
-  private readonly themeSignal = signal<AppearanceOptions>(this.appearanceService.getCurrentAppearance());
+  private readonly themeSignal = signal<DarkModeOptions>(this.darkModeService.getCurrentTheme());
   readonly currentTheme = computed(() => this.themeSignal());
 
   constructor() {
@@ -44,7 +44,7 @@ export class DocumentationLayout {
       }
 
       const observer = new MutationObserver(() => {
-        const newTheme = this.appearanceService.getCurrentAppearance();
+        const newTheme = this.darkModeService.getCurrentTheme();
         if (newTheme !== this.themeSignal()) {
           this.themeSignal.set(newTheme);
         }

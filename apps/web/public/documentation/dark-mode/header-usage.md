@@ -8,7 +8,7 @@ The header uses the service to implement the theme toggle button, allowing users
 // header.component.ts
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 
-import { AppearanceOptions, EAppearanceModes, ZardAppearance } from '@shared/components/core/services/appearance';
+import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core/services/dark-mode';
 
 @Component({
   selector: 'z-header',
@@ -23,13 +23,13 @@ import { AppearanceOptions, EAppearanceModes, ZardAppearance } from '@shared/com
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  private readonly appearanceService = inject(ZardAppearance);
+  private readonly darkModeService = inject(ZardDarkMode);
 
-  readonly EAppearanceModes = EAppearanceModes;
-  readonly currentTheme = this.appearanceService.theme;
+  readonly EDarkModes = EDarkModes;
+  readonly currentTheme = this.darkModeService.theme;
 
-  activateTheme(theme: AppearanceOptions): void {
-    this.appearanceService.activateAppearance(theme);
+  activateTheme(theme: DarkModeOptions): void {
+    this.darkModeService.activateTheme(theme);
   }
 }
 ```
@@ -44,9 +44,9 @@ export class HeaderComponent {
     z-button
     zType="ghost"
     zSize="sm"
-    [disabled]="theme === EAppearanceModes.SYSTEM"
-    [aria-pressed]="theme === EAppearanceModes.SYSTEM"
-    (click)="activateTheme(EAppearanceModes.SYSTEM)"
+    [disabled]="theme === EDarkModes.SYSTEM"
+    [aria-pressed]="theme === EDarkModes.SYSTEM"
+    (click)="activateTheme(EDarkModes.SYSTEM)"
   >
     <z-icon zType="sun-moon" />
     <span class="sr-only">Use system theme</span>
@@ -55,9 +55,9 @@ export class HeaderComponent {
     z-button
     zType="ghost"
     zSize="sm"
-    [disabled]="theme === EAppearanceModes.LIGHT"
-    [aria-pressed]="theme === EAppearanceModes.LIGHT"
-    (click)="activateTheme(EAppearanceModes.LIGHT)"
+    [disabled]="theme === EDarkModes.LIGHT"
+    [aria-pressed]="theme === EDarkModes.LIGHT"
+    (click)="activateTheme(EDarkModes.LIGHT)"
   >
     <z-icon zType="sun" />
     <span class="sr-only">Light theme</span>
@@ -66,9 +66,9 @@ export class HeaderComponent {
     z-button
     zType="ghost"
     zSize="sm"
-    [disabled]="theme === EAppearanceModes.DARK"
-    [aria-pressed]="theme === EAppearanceModes.DARK"
-    (click)="activateTheme(EAppearanceModes.DARK)"
+    [disabled]="theme === EDarkModes.DARK"
+    [aria-pressed]="theme === EDarkModes.DARK"
+    (click)="activateTheme(EDarkModes.DARK)"
   >
     <z-icon zType="moon" />
     <span class="sr-only">Dark theme</span>

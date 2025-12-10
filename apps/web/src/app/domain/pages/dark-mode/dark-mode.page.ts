@@ -5,11 +5,7 @@ import { SeoService } from '@doc/shared/services/seo.service';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import {
-  AppearanceOptions,
-  EAppearanceModes,
-  ZardAppearance,
-} from '@zard/components/core/provider/services/appearance';
+import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
@@ -40,15 +36,15 @@ export class DarkmodePage implements OnInit {
 
   private readonly seoService = inject(SeoService);
 
-  protected readonly appearanceService = inject(ZardAppearance);
-  protected readonly currentTheme = this.appearanceService.theme;
-  protected readonly EAppearanceModes = EAppearanceModes;
+  protected readonly darkModeService = inject(ZardDarkMode);
+  protected readonly currentTheme = this.darkModeService.theme;
+  protected readonly EDarkModes = EDarkModes;
 
   readonly navigationConfig: NavigationConfig = {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
       { id: 'current-implementation', label: 'Current Implementation', type: 'core' },
-      { id: 'service-details', label: 'Appearance Service', type: 'core' },
+      { id: 'service-details', label: 'Dark Mode Service', type: 'core' },
       { id: 'usage-in-app', label: 'Usage in Application', type: 'core' },
       { id: 'demo', label: 'Interactive Demo', type: 'custom' },
     ],
@@ -56,14 +52,14 @@ export class DarkmodePage implements OnInit {
 
   ngOnInit(): void {
     this.seoService.setDocsSeo(
-      'Appearance',
-      'Changing the appearance to your site.',
+      'Dark Mode',
+      'Complete dark mode system with theme switching and persistence.',
       '/docs/dark-mode',
       'og-darkmode.jpg',
     );
   }
 
-  activateTheme(theme: AppearanceOptions): void {
-    this.appearanceService.activateAppearance(theme);
+  activateTheme(theme: DarkModeOptions): void {
+    this.darkModeService.activateTheme(theme);
   }
 }

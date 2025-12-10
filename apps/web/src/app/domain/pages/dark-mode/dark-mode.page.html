@@ -6,8 +6,8 @@
 >
   <!-- Overview Section -->
   <z-doc-heading
-    title="Appearance"
-    description="Complete appearance system in ZardUI using TailwindCSS v4 custom variants and ZardAppearance service for seamless theme switching."
+    title="Dark Mode"
+    description="Complete dark mode system in ZardUI using TailwindCSS v4 custom variants and ZardDarkMode service for seamless theme switching."
     scrollSpyItem="overview"
     id="overview"
   />
@@ -17,7 +17,7 @@
       ZardUI implements a robust dark mode system using
       <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">&#64;custom-variant dark</code>
       from TailwindCSS v4 combined with an Angular
-      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">Appearance Service</code>
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">Dark Mode Service</code>
       for state management and persistence. This service is part of
       <b>core</b>
       component and you can inject it where you need it.
@@ -39,7 +39,7 @@
   <!-- Service Details Section -->
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="service-details" id="service-details">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Appearance Service</h2>
+      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Dark Mode Service</h2>
       <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
         The core of the system is an Angular service that manages theme state, persistence, and CSS class application.
       </p>
@@ -81,7 +81,7 @@
           <h3 class="text-lg font-semibold">Theme Control</h3>
           <p class="text-muted-foreground text-sm">
             Current theme:
-            <strong>{{ appearanceService.theme() }}</strong>
+            <strong>{{ darkModeService.theme() }}</strong>
           </p>
         </div>
         @let theme = currentTheme();
@@ -90,9 +90,9 @@
             z-button
             zType="ghost"
             zSize="sm"
-            [disabled]="theme === EAppearanceModes.SYSTEM"
-            [aria-pressed]="theme === EAppearanceModes.SYSTEM"
-            (click)="activateTheme(EAppearanceModes.SYSTEM)"
+            [disabled]="theme === EDarkModes.SYSTEM"
+            [aria-pressed]="theme === EDarkModes.SYSTEM"
+            (click)="activateTheme(EDarkModes.SYSTEM)"
           >
             <z-icon zType="sun-moon" />
             <span class="sr-only">Use system theme</span>
@@ -101,9 +101,9 @@
             z-button
             zType="ghost"
             zSize="sm"
-            [disabled]="theme === EAppearanceModes.LIGHT"
-            [aria-pressed]="theme === EAppearanceModes.LIGHT"
-            (click)="activateTheme(EAppearanceModes.LIGHT)"
+            [disabled]="theme === EDarkModes.LIGHT"
+            [aria-pressed]="theme === EDarkModes.LIGHT"
+            (click)="activateTheme(EDarkModes.LIGHT)"
           >
             <z-icon zType="sun" />
             <span class="sr-only">Light theme</span>
@@ -112,9 +112,9 @@
             z-button
             zType="ghost"
             zSize="sm"
-            [disabled]="theme === EAppearanceModes.DARK"
-            [aria-pressed]="theme === EAppearanceModes.DARK"
-            (click)="activateTheme(EAppearanceModes.DARK)"
+            [disabled]="theme === EDarkModes.DARK"
+            [aria-pressed]="theme === EDarkModes.DARK"
+            (click)="activateTheme(EDarkModes.DARK)"
           >
             <z-icon zType="moon" />
             <span class="sr-only">Dark theme</span>
