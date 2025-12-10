@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, signal, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -18,7 +18,6 @@ import { ZardIconComponent } from '../icon/icon.component';
       [id]="'accordion-' + zValue()"
       [class]="triggerClasses()"
       (click)="toggle()"
-      (keydown.{enter,space}.prevent)="toggle()"
     >
       {{ zTitle() }}
       <z-icon
@@ -51,12 +50,11 @@ import { ZardIconComponent } from '../icon/icon.component';
   exportAs: 'zAccordionItem',
 })
 export class ZardAccordionItemComponent {
-  private accordion = inject(ZardAccordionComponent, { optional: true });
-
   readonly zTitle = input<string>('');
   readonly zValue = input<string>('');
   readonly class = input<ClassValue>('');
 
+  accordion!: ZardAccordionComponent;
   readonly isOpen = signal(false);
 
   protected readonly itemClasses = computed(() => mergeClasses(accordionItemVariants(), this.class()));
