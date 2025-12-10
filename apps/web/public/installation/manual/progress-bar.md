@@ -1,21 +1,28 @@
 
 
 ```angular-ts title="progress-bar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
 import {
   containerProgressBarVariants,
   progressBarVariants,
-  type ZardContainerProgressBarVariants,
-  type ZardProgressBarVariants,
+  type ZardProgressBarShapeVariants,
+  type ZardProgressBarSizeVariants,
+  type ZardProgressBarTypeVariants,
 } from './progress-bar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-progress-bar',
-  standalone: true,
   template: `
     @if (zIndeterminate()) {
       <div [class]="classes()">
@@ -50,17 +57,20 @@ import { mergeClasses } from '../../shared/utils/utils';
   },
 })
 export class ZardProgressBarComponent {
-  readonly zType = input<ZardProgressBarVariants['zType']>('default');
-  readonly zSize = input<ZardContainerProgressBarVariants['zSize']>('default');
-  readonly zShape = input<ZardProgressBarVariants['zShape']>('default');
-  readonly zIndeterminate = input<ZardProgressBarVariants['zIndeterminate']>(undefined);
+  readonly zType = input<ZardProgressBarTypeVariants>('default');
+  readonly zSize = input<ZardProgressBarSizeVariants>('default');
+  readonly zShape = input<ZardProgressBarShapeVariants>('default');
+  readonly zIndeterminate = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
   readonly barClass = input<ClassValue>('');
   readonly progress = input(0);
 
   readonly correctedProgress = computed(() => {
-    if (this.progress() > 100) return 100;
-    if (this.progress() < 0) return 0;
+    if (this.progress() > 100) {
+      return 100;
+    } else if (this.progress() < 0) {
+      return 0;
+    }
     return this.progress();
   });
 
@@ -94,9 +104,9 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const containerProgressBarVariants = cva('w-full transition-all', {
   variants: {
     zType: {
-      default: 'bg-primary-foreground hover:bg-primary/10',
-      destructive: 'bg-primary-foreground dark:text-secondary-foreground hover:bg-destructive/10',
-      accent: 'bg-primary-foreground hover:bg-primary/10',
+      default: 'bg-primary/20',
+      destructive: 'bg-destructive/20',
+      accent: 'bg-chart-1/20',
     },
     zSize: {
       default: 'h-2',
@@ -104,8 +114,7 @@ export const containerProgressBarVariants = cva('w-full transition-all', {
       lg: 'h-5',
     },
     zShape: {
-      default: 'rounded-sm',
-      circle: 'rounded-full',
+      default: 'rounded-full',
       square: 'rounded-none',
     },
     zIndeterminate: {
@@ -119,7 +128,7 @@ export const containerProgressBarVariants = cva('w-full transition-all', {
     zShape: 'default',
   },
 });
-export type ZardContainerProgressBarVariants = VariantProps<typeof containerProgressBarVariants>;
+export type ZardProgressBarSizeVariants = NonNullable<VariantProps<typeof containerProgressBarVariants>['zSize']>;
 
 export const progressBarVariants = cva('h-full transition-all', {
   variants: {
@@ -129,8 +138,7 @@ export const progressBarVariants = cva('h-full transition-all', {
       accent: 'bg-chart-1',
     },
     zShape: {
-      default: 'rounded-sm',
-      circle: 'rounded-full ',
+      default: 'rounded-full',
       square: 'rounded-none',
     },
     zIndeterminate: {
@@ -142,7 +150,8 @@ export const progressBarVariants = cva('h-full transition-all', {
     zShape: 'default',
   },
 });
-export type ZardProgressBarVariants = VariantProps<typeof progressBarVariants>;
+export type ZardProgressBarTypeVariants = NonNullable<VariantProps<typeof progressBarVariants>['zType']>;
+export type ZardProgressBarShapeVariants = NonNullable<VariantProps<typeof progressBarVariants>['zShape']>;
 
 ```
 

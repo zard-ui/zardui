@@ -1,18 +1,25 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
 import {
   containerProgressBarVariants,
   progressBarVariants,
-  type ZardContainerProgressBarVariants,
-  type ZardProgressBarVariants,
+  type ZardProgressBarShapeVariants,
+  type ZardProgressBarSizeVariants,
+  type ZardProgressBarTypeVariants,
 } from './progress-bar.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 
 @Component({
   selector: 'z-progress-bar',
-  standalone: true,
   template: `
     @if (zIndeterminate()) {
       <div [class]="classes()">
@@ -47,17 +54,20 @@ import { mergeClasses } from '../../shared/utils/utils';
   },
 })
 export class ZardProgressBarComponent {
-  readonly zType = input<ZardProgressBarVariants['zType']>('default');
-  readonly zSize = input<ZardContainerProgressBarVariants['zSize']>('default');
-  readonly zShape = input<ZardProgressBarVariants['zShape']>('default');
-  readonly zIndeterminate = input<ZardProgressBarVariants['zIndeterminate']>(undefined);
+  readonly zType = input<ZardProgressBarTypeVariants>('default');
+  readonly zSize = input<ZardProgressBarSizeVariants>('default');
+  readonly zShape = input<ZardProgressBarShapeVariants>('default');
+  readonly zIndeterminate = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
   readonly barClass = input<ClassValue>('');
   readonly progress = input(0);
 
   readonly correctedProgress = computed(() => {
-    if (this.progress() > 100) return 100;
-    if (this.progress() < 0) return 0;
+    if (this.progress() > 100) {
+      return 100;
+    } else if (this.progress() < 0) {
+      return 0;
+    }
     return this.progress();
   });
 

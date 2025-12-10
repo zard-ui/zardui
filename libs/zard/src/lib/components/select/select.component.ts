@@ -39,7 +39,6 @@ import {
 } from './select.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
@@ -159,10 +158,6 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 
     return this.provideLabelForSingleSelectMode(selectedValue as string);
   });
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   private onChange: OnChangeType = (_value: string) => {
     // ControlValueAccessor onChange callback

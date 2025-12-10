@@ -1,9 +1,10 @@
 // markdown-renderer.component.ts
 import { HttpClient } from '@angular/common/http';
-import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { lastValueFrom } from 'rxjs';
+import { lastValueFrom, merge } from 'rxjs';
 
 import { MarkdownService } from '@doc/shared/services/markdown.service';
 
@@ -13,68 +14,69 @@ import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
   selector: 'z-markdown-renderer',
   template: `
     <div class="markdown-content">
-      @if (loading) {
+      @if (loading()) {
         <div class="flex items-center justify-center p-8">
           <z-loader />
           <span class="ml-2 text-gray-600">Loading...</span>
         </div>
-      } @else if (error) {
-        <div class="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">{{ error }}</div>
+      } @else if (error()) {
+        <div class="rounded-lg border border-red-200 bg-red-50 p-4 text-red-700">{{ error() }}</div>
       } @else {
         <main class="relative">
-          <div class="" [innerHTML]="processedHtml"></div>
+          <div [innerHTML]="processedHtml() ?? ''"></div>
         </main>
       }
     </div>
   `,
-  standalone: true,
   imports: [ZardLoaderComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MarkdownRendererComponent implements OnChanges, OnInit {
+export class MarkdownRendererComponent implements OnInit {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly http = inject(HttpClient);
   private readonly markdownService = inject(MarkdownService);
   private readonly sanitizer = inject(DomSanitizer);
-  private readonly http = inject(HttpClient);
 
-  @Input() markdownUrl!: string;
-  @Input() theme: 'light' | 'dark' = 'light';
-  @Input() markdownText: string | undefined;
+  readonly markdownUrl = input('');
+  readonly theme = input<'light' | 'dark'>('light');
+  readonly markdownText = input<string | undefined>();
 
-  processedHtml: SafeHtml = '';
-  loading = false;
-  error: string | null = null;
+  readonly processedHtml = signal<SafeHtml | null>(null);
+  readonly loading = signal(false);
+  readonly error = signal<string | null>(null);
+
+  constructor() {
+    merge(toObservable(this.markdownUrl), toObservable(this.theme))
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(async () => {
+        const url = this.markdownUrl();
+        if (url) {
+          await this.loadAndProcessMarkdown();
+        }
+      });
+
+    toObservable(this.markdownText)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(async () => await this.processMarkdownText());
+  }
 
   ngOnInit() {
-    if (this.markdownUrl) {
-      this.loadAndProcessMarkdown();
-    }
-
     this.processMarkdownText();
   }
 
-  async ngOnChanges(changes: SimpleChanges) {
-    if (changes['markdownUrl'] || changes['theme']) {
-      if (this.markdownUrl) {
-        await this.loadAndProcessMarkdown();
-      }
-    }
-    if (changes['markdownText']) {
-      await this.processMarkdownText();
-    }
-  }
-
   private async loadAndProcessMarkdown(): Promise<void> {
-    this.loading = true;
-    this.error = null;
+    this.loading.set(true);
+    this.error.set(null);
 
     try {
-      const markdownText = await this.loadFromUrl(this.markdownUrl);
+      const markdownText = await this.loadFromUrl(this.markdownUrl());
       const html = await this.markdownService.processMarkdown(markdownText);
-      this.processedHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+      this.processedHtml.set(this.sanitizer.bypassSecurityTrustHtml(html));
     } catch (err: any) {
-      this.error = `Error loading markdown: ${err.message || err}`;
+      this.error.set(`Error loading markdown: ${err.message || err}`);
       console.error('Error processing markdown:', err);
     } finally {
-      this.loading = false;
+      this.loading.set(false);
     }
   }
 
@@ -88,18 +90,19 @@ export class MarkdownRendererComponent implements OnChanges, OnInit {
   }
 
   private async processMarkdownText(): Promise<void> {
-    if (this.markdownText) {
-      this.loading = true;
-      this.error = null;
+    const markdownText = this.markdownText();
+    if (markdownText) {
+      this.loading.set(true);
+      this.error.set(null);
 
       try {
-        const html = await this.markdownService.processMarkdown(this.markdownText);
-        this.processedHtml = this.sanitizer.bypassSecurityTrustHtml(html);
+        const html = await this.markdownService.processMarkdown(markdownText);
+        this.processedHtml.set(this.sanitizer.bypassSecurityTrustHtml(html));
       } catch (error: any) {
-        this.error = `Error processing markdown: ${error.message || error}`;
+        this.error.set(`Error processing markdown: ${error.message || error}`);
         console.error('Error processing markdown:', error);
       } finally {
-        this.loading = false;
+        this.loading.set(false);
       }
     }
   }

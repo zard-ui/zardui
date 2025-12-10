@@ -4,9 +4,9 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { CategoryTabsComponent, type CategoryTab } from '@doc/shared/components/category-tabs/category-tabs.component';
-import { DarkModeService } from '@doc/shared/services/darkmode.service';
 import { SeoService } from '@doc/shared/services/seo.service';
 
+import { EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
 
 import { BlockContainerComponent, type Block } from '../../components/block-container/block-container.component';
@@ -23,7 +23,7 @@ export class BlocksPage implements OnInit {
   private readonly viewportScroller = inject(ViewportScroller);
   private readonly route = inject(ActivatedRoute);
   private readonly blocksService = inject(BlocksService);
-  private readonly darkModeService = inject(DarkModeService);
+  private readonly darkModeService = inject(ZardDarkMode);
   private readonly destroyRef = inject(DestroyRef);
 
   protected readonly blocks = signal<Block[]>([]);
@@ -68,7 +68,7 @@ export class BlocksPage implements OnInit {
 
   protected getCurrentBlockImage(block: Block): string {
     if (!block.image) return '';
-    const theme = this.darkModeService.theme();
-    return theme === 'dark' ? block.image.dark : block.image.light;
+    const themeMode = this.darkModeService.themeMode();
+    return themeMode === EDarkModes.DARK ? block.image.dark : block.image.light;
   }
 }

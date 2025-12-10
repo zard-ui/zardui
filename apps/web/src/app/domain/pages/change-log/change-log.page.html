@@ -6,20 +6,58 @@
   scrollSpy
   (scrollSpyChange)="activeAnchor = $event"
 >
-  <z-doc-heading title="Changelog" description="Latest updates and announcements." scrollSpyItem="overview" id="overview" />
+  <z-doc-heading
+    title="Changelog"
+    description="Latest updates, new components, and improvements to ZardUI."
+    scrollSpyItem="overview"
+    id="overview"
+  />
 
-  <div class="space-y-8">
+  <div class="mt-8 space-y-16">
     @for (entry of entries(); track trackByEntry($index, entry)) {
-    <div [id]="entry.id" class="no-bullets" scrollSpyItem [scrollSpyItem]="entry.id">
-      <z-markdown-renderer [markdownUrl]="'/documentation/change-log/' + entry.filename"></z-markdown-renderer>
+    <!-- Month Block -->
+    <div [id]="entry.id" scrollSpyItem [scrollSpyItem]="entry.id" class="scroll-mt-20">
+      <!-- Month Header -->
+      <div class="mb-8">
+        <div class="mb-4 flex items-center justify-between">
+          <h2 class="text-3xl font-bold">{{ entry.meta.month }}</h2>
+        </div>
+        <p class="text-muted-foreground">{{ entry.overview }}</p>
+      </div>
+
+      <!-- Installation Section -->
+      @if (entry.examples && entry.examples.length > 0) {
+      <section class="mb-8">
+        <h3 class="mb-4 text-xl font-semibold">New Components</h3>
+
+        @for (example of entry.examples; track $index) {
+        <div class="mb-8">
+          <h4 class="mb-3 text-lg font-medium capitalize">{{ example.componentName }}</h4>
+
+          <!-- CLI Installation -->
+          <div class="mb-6">
+            <z-steps [steps]="getInstallSteps(example.componentName)"></z-steps>
+          </div>
+
+          <!-- Component Example -->
+          <z-code-box
+            [componentType]="example.name"
+            [demoDescription]="example.description"
+            [path]="example.componentName + '/demo/' + example.name"
+            [dynamicComponent]="example.component"
+          ></z-code-box>
+        </div>
+        }
+      </section>
+      }
     </div>
-    } @if (isLoading() && entries().length === 0) {
-    <div class="flex justify-center items-center py-8">
-      <z-loader />
-      <span class="ml-3 text-muted-foreground">Loading changelog entries...</span>
-    </div>
-    } @if (!isLoading() && entries().length === 0) {
-    <z-alert variant="outline" class="mt-8" zTitle="No entries found" zDescription="No changelog entries were found at this time."> </z-alert>
+    } @if (entries().length === 0) {
+    <z-alert
+      variant="outline"
+      class="mt-8"
+      zTitle="No entries found"
+      zDescription="No changelog entries are available at this time."
+    />
     }
   </div>
 </z-content>

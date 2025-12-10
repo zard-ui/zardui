@@ -18,39 +18,15 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'provider/config/styles/gray.ts',
-        content: '',
-      },
-      {
-        name: 'provider/config/styles/neutral.ts',
-        content: '',
-      },
-      {
-        name: 'provider/config/styles/slate.ts',
-        content: '',
-      },
-      {
-        name: 'provider/config/styles/stone.ts',
-        content: '',
-      },
-      {
-        name: 'provider/config/styles/zinc.ts',
-        content: '',
-      },
-      {
-        name: 'provider/config/update-preset.ts',
-        content: '',
-      },
-      {
-        name: 'provider/config/config.types.ts',
-        content: '',
-      },
-      {
         name: 'provider/event-manager-plugins/zard-debounce-event-manager-plugin.ts',
         content: '',
       },
       {
         name: 'provider/event-manager-plugins/zard-event-manager-plugin.ts',
+        content: '',
+      },
+      {
+        name: 'provider/services/appearance.ts',
         content: '',
       },
       {

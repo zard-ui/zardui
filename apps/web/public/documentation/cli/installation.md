@@ -25,16 +25,18 @@ bunx @ngzard/ui init
 The init command will guide you through an interactive setup:
 
 ```bash title="terminal"
+Initializing ZardUI...
+
+
+✔ Where is your app.config.ts file? … src/app/app.config.ts
+✔ Where is your index.html file? … src/index.html
 ✔ Choose a theme for your components: › Neutral (Default)
-✔ Where is your global CSS file? src/styles.css
-✔ Configure the import alias for components: src/app/shared/components
-✔ Configure the import alias for utils: src/app/shared/utils
-✔ Write configuration to components.json? yes
+✔ Where is your global CSS file? … src/styles.css
+✔ Configure the import alias for components: … src/app/shared/components
+✔ Configure the import alias for utils: … src/app/shared/utils
+✔ Your CSS file already has content. This will overwrite everything with ZardUI theme configuration. Continue? … yes
+✔ Write configuration to components.json? … yes
 ✔ Writing configuration...
-✔ Installing dependencies...
-✔ Setting up Tailwind CSS...
-✔ Creating utils...
-✔ Updating tsconfig.json...
 
 ZardUI has been initialized successfully!
 
@@ -65,12 +67,14 @@ bunx @ngzard/ui add button card dialog
 Expected output:
 
 ```bash
-✓ Ready to install 3 component(s) and 0 dependencies. Proceed? … yes
-✓ Installing dependencies...
-✓ Added button
-✓ Added card
-✓ Added dialog
-✓ Done!
+✔ Ready to install 5 component(s) and 0 dependencies. Proceed? … yes
+✔ Added button
+✔ Added core
+✔ Added icon
+✔ Added card
+✔ Added dialog
+
+Done!
 ```
 
 ### Step 3: Import and use
@@ -82,9 +86,10 @@ import { ButtonComponent } from '@shared/components/button';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
   imports: [ButtonComponent],
-  template: `<z-button>Click me</z-button>`,
+  template: `
+    <z-button>Click me</z-button>
+  `,
 })
 export class AppComponent {}
 ```

@@ -20,6 +20,7 @@ async function readJson(filePath: string): Promise<any> {
 const configSchema = z.object({
   $schema: z.string().optional(),
   appConfigFile: z.string().default('src/app/app.config.ts'),
+  indexFile: z.string().default('src/index.html'),
   style: z.enum(['css']).default('css'),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']).default('npm'),
   tailwind: z
@@ -42,6 +43,7 @@ export type Config = z.infer<typeof configSchema>;
 export const DEFAULT_CONFIG: Config = {
   style: 'css',
   appConfigFile: 'src/app/app.config.ts',
+  indexFile: 'src/index.html',
   packageManager: 'npm',
   tailwind: {
     css: 'src/styles.css',

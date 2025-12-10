@@ -1,4 +1,5 @@
 import { Config } from '@cli/utils/config.js';
+import { ProjectInfo } from '@cli/utils/get-project-info';
 import { logger } from '@cli/utils/logger.js';
 import { getAvailableThemes, getThemeDisplayName } from '@cli/utils/theme-selector.js';
 import chalk from 'chalk';
@@ -11,6 +12,7 @@ import { z } from 'zod';
 export const configSchema = z.object({
   style: z.enum(['css']),
   appConfigFile: z.string(),
+  indexFile: z.string(),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']),
   tailwind: z.object({
     css: z.string(),
@@ -25,12 +27,24 @@ export const configSchema = z.object({
 
 export async function promptForConfig(
   cwd: string,
-  projectInfo: any,
+  projectInfo: ProjectInfo,
   packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
 ): Promise<Config> {
   const highlight = (text: string) => chalk.cyan(text);
 
   const options = await prompts([
+    {
+      type: 'text',
+      name: 'app.config',
+      message: `Where is your ${highlight('app.config.ts')} file?`,
+      initial: projectInfo.hasNx ? 'apps/[app]/src/app/app.config.ts' : 'src/app/app.config.ts',
+    },
+    {
+      type: 'text',
+      name: 'index.html',
+      message: `Where is your ${highlight('index.html')} file?`,
+      initial: projectInfo.hasNx ? 'apps/[app]/src/index.html' : 'src/index.html',
+    },
     {
       type: 'select',
       name: 'theme',
@@ -40,12 +54,6 @@ export async function promptForConfig(
         value: theme,
       })),
       initial: 0,
-    },
-    {
-      type: 'text',
-      name: 'app.config',
-      message: `Where is your ${highlight('app.config.ts')} file?`,
-      initial: projectInfo.hasNx ? 'apps/[app]/src/app/app.config.ts' : 'src/app/app.config.ts',
     },
     {
       type: 'text',
@@ -72,6 +80,7 @@ export async function promptForConfig(
   const config = configSchema.parse({
     style: 'css',
     appConfigFile: 'src/app/app.config.ts',
+    indexFile: 'src/index.html',
     packageManager,
     tailwind: {
       css: options.tailwindCss,

@@ -1,10 +1,10 @@
 import { promptForConfig } from '@cli/commands/init/config-prompter.js';
 import { installDependencies } from '@cli/commands/init/dependencies.js';
-import { setupTailwind } from '@cli/commands/init/tailwind-setup.js';
+import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { createUtils } from '@cli/commands/init/utils-creator.js';
 import { Config } from '@cli/utils/config.js';
-import { getProjectInfo } from '@cli/utils/get-project-info.js';
+import { getProjectInfo, ProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager } from '@cli/utils/package-manager.js';
 import chalk from 'chalk';
@@ -14,6 +14,7 @@ import { writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
 import prompts from 'prompts';
 
+import { injectThemeScript } from './theme-loader.js';
 import { updateAngularConfig } from './update-angular-config.js';
 
 export const init = new Command()
@@ -68,7 +69,7 @@ function validateWorkingDirectory(cwd: string): void {
   }
 }
 
-function validateAngularProject(projectInfo: any): void {
+function validateAngularProject(projectInfo: ProjectInfo): void {
   if (projectInfo.framework !== 'angular') {
     logger.error('This project does not appear to be an Angular project.');
     logger.error('Please run this command in an Angular project.');
@@ -101,27 +102,35 @@ async function confirmConfiguration(): Promise<boolean> {
 
 async function runInitializationSteps(
   cwd: string,
-  config: any,
-  projectInfo: any,
-  isReInitializing: boolean,
+  config: Config,
+  projectInfo: ProjectInfo,
+  _isReInitializing: boolean,
 ): Promise<void> {
   const configSpinner = spinner('Writing configuration...').start();
   await writeFile(path.resolve(cwd, 'components.json'), JSON.stringify(config, null, 2), 'utf8');
   configSpinner.succeed();
 
   const dependenciesSpinner = spinner('Installing dependencies...').start();
-  await installDependencies(cwd, config);
+  await installDependencies(cwd, config, projectInfo);
   dependenciesSpinner.succeed();
 
   const appConfigSpinner = spinner('Updating app.config.ts...').start();
   await updateAngularConfig(cwd, config);
   appConfigSpinner.succeed();
 
-  if (!projectInfo.hasTailwind || isReInitializing) {
-    const tailwindSpinner = spinner('Setting up Tailwind CSS...').start();
-    await setupTailwind(cwd, config);
-    tailwindSpinner.succeed();
+  const appIndexSpinner = spinner('Updating index.html...').start();
+  await injectThemeScript(cwd, config);
+  appIndexSpinner.succeed();
+
+  if (!projectInfo.hasTailwind) {
+    const postcssSpinner = spinner('Creating PostCSS configuration...').start();
+    await createPostCssConfig(cwd);
+    postcssSpinner.succeed();
   }
+
+  const themeSpinner = spinner('Applying theme to styles...').start();
+  await applyThemeToStyles(cwd, config);
+  themeSpinner.succeed();
 
   const utilsSpinner = spinner('Creating utils...').start();
   await createUtils(cwd, config);

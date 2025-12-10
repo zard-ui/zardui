@@ -2,11 +2,12 @@ import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angula
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
+import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
+import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
-import { DarkModeService, EThemeModes } from '../../../shared/services/darkmode.service';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
@@ -24,7 +25,8 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     MarkdownRendererComponent,
     ZardButtonComponent,
     ZardCardComponent,
-    ZardAlertComponent,
+    ZardIconComponent,
+    ZardButtonGroupComponent,
   ],
   templateUrl: './dark-mode.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,20 +36,30 @@ export class DarkmodePage implements OnInit {
 
   private readonly seoService = inject(SeoService);
 
-  protected readonly darkModeService = inject(DarkModeService);
-  protected readonly EThemeModes = EThemeModes;
+  protected readonly darkModeService = inject(ZardDarkMode);
+  protected readonly currentTheme = this.darkModeService.theme;
+  protected readonly EDarkModes = EDarkModes;
 
   readonly navigationConfig: NavigationConfig = {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
       { id: 'current-implementation', label: 'Current Implementation', type: 'core' },
-      { id: 'service-details', label: 'DarkMode Service', type: 'core' },
+      { id: 'service-details', label: 'Dark Mode Service', type: 'core' },
       { id: 'usage-in-app', label: 'Usage in Application', type: 'core' },
       { id: 'demo', label: 'Interactive Demo', type: 'custom' },
     ],
   };
 
   ngOnInit(): void {
-    this.seoService.setDocsSeo('Dark Mode', 'Adding dark mode to your site.', '/docs/dark-mode', 'og-darkmode.jpg');
+    this.seoService.setDocsSeo(
+      'Dark Mode',
+      'Complete dark mode system with theme switching and persistence.',
+      '/docs/dark-mode',
+      'og-darkmode.jpg',
+    );
+  }
+
+  activateTheme(theme: DarkModeOptions): void {
+    this.darkModeService.activateTheme(theme);
   }
 }
