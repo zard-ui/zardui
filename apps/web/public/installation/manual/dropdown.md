@@ -26,7 +26,6 @@ import type { ClassValue } from 'clsx';
 
 import { dropdownContentVariants } from './dropdown.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 @Component({
   selector: 'z-dropdown-menu',
@@ -80,10 +79,6 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   readonly focusedIndex = signal<number>(-1);
 
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   ngOnInit() {
     setTimeout(() => {
@@ -535,7 +530,6 @@ import { Directive, ElementRef, inject, input, type OnInit, ViewContainerRef } f
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
@@ -561,10 +555,6 @@ export class ZardDropdownDirective implements OnInit {
   readonly zDropdownMenu = input<ZardDropdownMenuContentComponent>();
   readonly zTrigger = input<'click' | 'hover'>('click');
   readonly zDisabled = input<boolean>(false);
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   ngOnInit() {
     // Ensure button has proper accessibility attributes

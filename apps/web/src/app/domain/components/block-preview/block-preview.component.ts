@@ -1,10 +1,10 @@
 import { NgComponentOutlet } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 
+import { EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardResizablePanelComponent } from '@zard/components/resizable/resizable-panel.component';
 import { ZardResizableComponent } from '@zard/components/resizable/resizable.component';
 
-import { DarkModeService } from '../../../shared/services/darkmode.service';
 import type { Block } from '../block-container/block-container.component';
 
 @Component({
@@ -18,14 +18,14 @@ export class BlockPreviewComponent {
   readonly viewportSize = input<'desktop' | 'tablet' | 'mobile'>('desktop');
   readonly block = input<Block>();
 
-  private readonly darkModeService = inject(DarkModeService);
+  private readonly darkModeService = inject(ZardDarkMode);
 
   protected readonly currentImage = computed(() => {
     const blockData = this.block();
     if (!blockData?.image) return undefined;
 
-    const theme = this.darkModeService.theme();
-    return theme === 'dark' ? blockData.image.dark : blockData.image.light;
+    const theme = this.darkModeService.themeMode();
+    return theme === EDarkModes.DARK ? blockData.image.dark : blockData.image.light;
   });
 
   protected getViewportWidth(): string {

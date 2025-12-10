@@ -7,8 +7,6 @@ export function getAvailableThemes(): string[] {
 export function getThemeContent(themeName: string): string {
   const content = (() => {
     switch (themeName) {
-      case 'neutral':
-        return themes.neutral;
       case 'stone':
         return themes.stone;
       case 'zinc':
@@ -17,6 +15,7 @@ export function getThemeContent(themeName: string): string {
         return themes.gray;
       case 'slate':
         return themes.slate;
+      case 'neutral':
       default:
         return themes.neutral;
     }

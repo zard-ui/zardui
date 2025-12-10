@@ -23,7 +23,7 @@ const packageJsonSchema = z.object({
   devDependencies: z.record(z.string()).optional(),
 });
 
-type ProjectInfo = {
+export type ProjectInfo = {
   framework: 'angular' | 'unknown';
   hasTypeScript: boolean;
   hasTailwind: boolean;

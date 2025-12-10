@@ -26,7 +26,6 @@ import {
 } from './carousel.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -133,10 +132,6 @@ export class ZardCarouselComponent {
   protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
 
   #index = -1;
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   onEmblaChange(type: EmblaEventType, emblaApi: EmblaCarouselType): void {
     if (type === 'init' || type === 'reInit') {

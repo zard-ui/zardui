@@ -1,83 +1,118 @@
-<z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
-  <z-doc-heading title="Theming" description="Using CSS Variables and OKLCH colors for theming." scrollSpyItem="overview" id="overview"> </z-doc-heading>
+<z-content
+  [navigationConfig]="navigationConfig"
+  [activeAnchor]="activeAnchor"
+  scrollSpy
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Theming"
+    description="Using CSS Variables and OKLCH colors for theming."
+    scrollSpyItem="overview"
+    id="overview"
+  ></z-doc-heading>
 
   <div class="flex flex-col gap-4">
-    <p class="text-sm sm:text-base text-muted-foreground">You can choose between using CSS variables (recommended) or utility classes for theming.</p>
+    <p class="text-muted-foreground text-sm sm:text-base">
+      You can choose between using CSS variables (recommended) or utility classes for theming.
+    </p>
   </div>
 
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="css-variables" id="css-variables">
     <div class="flex flex-col gap-4">
-      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">CSS Variables</h2>
-      <z-markdown-renderer markdownUrl="/documentation/theming/css-variables-intro.md"></z-markdown-renderer>
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        CSS Variables
+      </h2>
+      <z-markdown-renderer markdownUrl="/documentation/theming/css-variables-intro.md" />
     </div>
 
     <div class="">
-      <h3 class="text-base sm:text-lg font-semibold mb-4">TailwindCSS v4 Configuration</h3>
-      <p class="text-xs sm:text-sm text-muted-foreground mb-4">
+      <h3 class="mb-4 text-base font-semibold sm:text-lg">TailwindCSS v4 Configuration</h3>
+      <p class="text-muted-foreground mb-4 text-xs sm:text-sm">
         Copy and paste the following into your
-        <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">src/styles.css</code> file:
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/styles.css</code>
+        file:
       </p>
-      <z-markdown-renderer markdownUrl="/documentation/theming/css-variables-v4.md"></z-markdown-renderer>
+      <z-markdown-renderer markdownUrl="/documentation/theming/css-variables-v4.md" />
+      <p class="text-muted-foreground my-4 text-xs sm:text-sm">
+        Update your
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/app/app.config.ts</code>
+        file in case CLI did not modify it:
+      </p>
+      <z-markdown-renderer markdownUrl="/documentation/theming/app.config.md" />
     </div>
   </section>
 
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="utility-classes" id="utility-classes">
     <div class="flex flex-col gap-4">
-      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Utility classes</h2>
-      <z-markdown-renderer markdownUrl="/documentation/theming/utility-classes-intro.md"></z-markdown-renderer>
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Utility classes
+      </h2>
+      <z-markdown-renderer markdownUrl="/documentation/theming/utility-classes-intro.md" />
     </div>
   </section>
 
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="convention" id="convention">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Convention</h2>
-      <p class="text-base sm:text-lg text-muted-foreground">
-        We use a simple <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">background</code> and
-        <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">foreground</code> convention for colors. The
-        <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">background</code> variable is used for the component background and the
-        <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">foreground</code> variable is used for the text color.
+      <p class="text-muted-foreground text-base sm:text-lg">
+        We use a simple
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">background</code>
+        and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">foreground</code>
+        convention for colors. The
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">background</code>
+        variable is used for the component background and the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">foreground</code>
+        variable is used for the text color.
       </p>
     </div>
 
-    <div class="rounded-lg border bg-card p-4 sm:p-6">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-base sm:text-lg font-semibold">Background and foreground</h3>
+    <div class="bg-card rounded-lg border p-4 sm:p-6">
+      <div class="mb-4 flex items-center justify-between">
+        <h3 class="text-base font-semibold sm:text-lg">Background and foreground</h3>
       </div>
       <div class="grid gap-4 sm:grid-cols-2">
         <div class="flex items-center gap-3">
-          <div class="h-8 w-8 sm:h-10 sm:w-10 rounded-md bg-background border border-border flex items-center justify-center">
-            <div class="h-4 w-4 sm:h-6 sm:w-6 rounded bg-primary"></div>
+          <div
+            class="bg-background border-border flex h-8 w-8 items-center justify-center rounded-md border sm:h-10 sm:w-10"
+          >
+            <div class="bg-primary h-4 w-4 rounded sm:h-6 sm:w-6"></div>
           </div>
           <div class="flex flex-col">
             <code class="text-xs sm:text-sm">background</code>
-            <p class="text-xs text-muted-foreground">Component background color</p>
+            <p class="text-muted-foreground text-xs">Component background color</p>
           </div>
         </div>
         <div class="flex items-center gap-3">
-          <div class="h-8 w-8 sm:h-10 sm:w-10 rounded-md bg-primary flex items-center justify-center">
-            <div class="h-4 w-4 sm:h-6 sm:w-6 rounded bg-primary-foreground"></div>
+          <div class="bg-primary flex h-8 w-8 items-center justify-center rounded-md sm:h-10 sm:w-10">
+            <div class="bg-primary-foreground h-4 w-4 rounded sm:h-6 sm:w-6"></div>
           </div>
           <div class="flex flex-col">
             <code class="text-xs sm:text-sm">foreground</code>
-            <p class="text-xs text-muted-foreground">Component text color</p>
+            <p class="text-muted-foreground text-xs">Component text color</p>
           </div>
         </div>
       </div>
     </div>
 
     <div class="rounded-lg border p-4 sm:p-6">
-      <h3 class="text-base sm:text-lg font-semibold mb-4">Given the following OKLCH variables:</h3>
+      <h3 class="mb-4 text-base font-semibold sm:text-lg">Given the following OKLCH variables:</h3>
       <z-markdown-renderer markdownUrl="/documentation/theming/convention-example.md"></z-markdown-renderer>
-      <p class="text-xs sm:text-sm text-muted-foreground mt-4">
-        The <code class="bg-muted px-1.5 py-0.5 rounded text-xs">primary</code> variable is the background color and the
-        <code class="bg-muted px-1.5 py-0.5 rounded text-xs">primary-foreground</code> variable is the text color.
+      <p class="text-muted-foreground mt-4 text-xs sm:text-sm">
+        The
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">primary</code>
+        variable is the background color and the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">primary-foreground</code>
+        variable is the text color.
       </p>
     </div>
 
-    <div class="rounded-lg border bg-muted/30 p-4 sm:p-6">
-      <p class="text-xs sm:text-sm text-muted-foreground">
-        <strong>Note:</strong> The <code class="bg-muted px-1.5 py-0.5 rounded text-xs">background</code> suffix is omitted when the variable is used for the background color of
-        the component.
+    <div class="bg-muted/30 rounded-lg border p-4 sm:p-6">
+      <p class="text-muted-foreground text-xs sm:text-sm">
+        <strong>Note:</strong>
+        The
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">background</code>
+        suffix is omitted when the variable is used for the background color of the component.
       </p>
     </div>
   </section>
@@ -85,18 +120,25 @@
   <!-- Variables List Section -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="variables-list" id="variables-list">
     <div class="flex flex-col gap-4">
-      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">List of variables</h2>
-      <p class="text-base sm:text-lg text-muted-foreground">Here's the list of variables available for customization:</p>
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        List of variables
+      </h2>
+      <p class="text-muted-foreground text-base sm:text-lg">
+        Here's the list of variables available for customization:
+      </p>
     </div>
     <z-markdown-renderer markdownUrl="/documentation/theming/variables-list.md"></z-markdown-renderer>
   </section>
 
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="adding-new-colors" id="adding-new-colors">
     <div class="flex flex-col gap-4">
-      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Adding new colors</h2>
-      <p class="text-base sm:text-lg text-muted-foreground">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Adding new colors
+      </h2>
+      <p class="text-muted-foreground text-base sm:text-lg">
         To add new colors, you need to add them to your CSS file using the TailwindCSS v4
-        <code class="bg-muted px-1.5 py-0.5 rounded text-xs sm:text-sm">&#64;theme</code> directive.
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;theme</code>
+        directive.
       </p>
     </div>
     <z-markdown-renderer markdownUrl="/documentation/theming/adding-colors-example.md"></z-markdown-renderer>
@@ -104,8 +146,12 @@
 
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="base-colors" id="base-colors">
     <div class="flex flex-col gap-4">
-      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Base Colors</h2>
-      <p class="text-base sm:text-lg text-muted-foreground">For reference, here's a list of the base colors that are available.</p>
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Base Colors
+      </h2>
+      <p class="text-muted-foreground text-base sm:text-lg">
+        For reference, here's a list of the base colors that are available.
+      </p>
     </div>
 
     <div>
@@ -114,7 +160,7 @@
     </div>
 
     <div>
-      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">stone</h1>
+      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Stone</h1>
       <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-stone.md"></z-markdown-renderer>
     </div>
 
@@ -136,7 +182,9 @@
 
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="other-formats" id="other-formats">
     <div class="flex flex-col gap-4">
-      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Other color formats</h2>
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Other color formats
+      </h2>
       <z-markdown-renderer markdownUrl="/documentation/theming/other-color-formats.md"></z-markdown-renderer>
     </div>
   </section>
