@@ -5,7 +5,6 @@ import type { ClassValue } from 'clsx';
 import { ZardAccordionComponent } from './accordion.component';
 import { accordionContentVariants, accordionItemVariants, accordionTriggerVariants } from './accordion.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
@@ -63,10 +62,6 @@ export class ZardAccordionItemComponent {
   protected readonly itemClasses = computed(() => mergeClasses(accordionItemVariants(), this.class()));
   protected readonly triggerClasses = computed(() => mergeClasses(accordionTriggerVariants()));
   protected readonly contentClasses = computed(() => mergeClasses(accordionContentVariants({ isOpen: this.isOpen() })));
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   toggle(): void {
     if (this.accordion) {

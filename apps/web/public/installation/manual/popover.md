@@ -28,7 +28,6 @@ import { filter, Subscription } from 'rxjs';
 
 import { popoverVariants } from './popover.variants';
 import { mergeClasses } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
@@ -101,8 +100,6 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   }
 
   constructor() {
-    checkForProperZardInitialization();
-
     toObservable(this.zVisible)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(visible => {

@@ -1,6 +1,6 @@
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
-import { isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,7 +8,6 @@ import {
   computed,
   DestroyRef,
   Directive,
-  DOCUMENT,
   ElementRef,
   inject,
   Injector,
@@ -216,14 +215,14 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   }
 
   private hide() {
-    if (!this.componentRef) return;
+    if (!this.componentRef) {
+      return;
+    }
 
     this.renderer.removeAttribute(this.elementRef.nativeElement, 'aria-describedby');
-    this.componentRef?.instance.state.set('closed');
+    this.componentRef.instance.state.set('closed');
     this.zHide.emit();
-
     this.overlayRef?.detach();
-    this.componentRef?.destroy();
   }
 }
 

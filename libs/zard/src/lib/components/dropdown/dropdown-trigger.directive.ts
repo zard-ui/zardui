@@ -2,7 +2,6 @@ import { Directive, ElementRef, inject, input, type OnInit, ViewContainerRef } f
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
@@ -28,10 +27,6 @@ export class ZardDropdownDirective implements OnInit {
   readonly zDropdownMenu = input<ZardDropdownMenuContentComponent>();
   readonly zTrigger = input<'click' | 'hover'>('click');
   readonly zDisabled = input<boolean>(false);
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   ngOnInit() {
     // Ensure button has proper accessibility attributes

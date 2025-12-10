@@ -18,7 +18,6 @@ import type { ClassValue } from 'clsx';
 
 import { checkboxLabelVariants, checkboxVariants, type ZardCheckboxVariants } from './checkbox.variants';
 import { generateId, mergeClasses, transform } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
@@ -27,7 +26,6 @@ type OnChangeType = (value: boolean) => void;
 @Component({
   selector: 'z-checkbox, [z-checkbox]',
   imports: [ZardIconComponent],
-  standalone: true,
   template: `
     <span
       tabindex="0"
@@ -94,10 +92,6 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
   protected readonly labelClasses = computed(() => mergeClasses(checkboxLabelVariants({ zSize: this.zSize() })));
   checked = false;
   protected readonly id = generateId('checkbox');
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   writeValue(val: boolean): void {
     this.checked = val;

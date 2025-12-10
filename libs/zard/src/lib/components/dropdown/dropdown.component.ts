@@ -23,7 +23,6 @@ import type { ClassValue } from 'clsx';
 
 import { dropdownContentVariants } from './dropdown.variants';
 import { mergeClasses, transform } from '../../shared/utils/utils';
-import { checkForProperZardInitialization } from '../core/provider/providezard';
 
 @Component({
   selector: 'z-dropdown-menu',
@@ -77,10 +76,6 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   readonly focusedIndex = signal<number>(-1);
 
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
-
-  constructor() {
-    checkForProperZardInitialization();
-  }
 
   ngOnInit() {
     setTimeout(() => {
