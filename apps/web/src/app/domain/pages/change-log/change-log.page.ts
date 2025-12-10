@@ -1,23 +1,32 @@
-import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
 
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
+import { StepsComponent } from '@doc/domain/components/steps/steps.component';
+import { Step } from '@doc/shared/constants/install.constant';
 import { SeoService } from '@doc/shared/services/seo.service';
+import { ZardCodeBoxComponent } from '@doc/widget/components/zard-code-box/zard-code-box.component';
 
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
-import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
 
-import { ChangelogService, type ChangelogEntry } from './services/changelog.service';
+import { type ChangelogEntryConfig } from './entries/changelog-entry.interface';
+import { ChangelogService } from './services/changelog.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-changelog',
   standalone: true,
-  imports: [CommonModule, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, ZardAlertComponent, ZardLoaderComponent, MarkdownRendererComponent],
+  imports: [
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+    ZardAlertComponent,
+    StepsComponent,
+    ZardCodeBoxComponent,
+  ],
   templateUrl: './change-log.page.html',
 })
 export class ChangeLogPage implements OnInit {
@@ -27,46 +36,48 @@ export class ChangeLogPage implements OnInit {
   readonly title = 'Changelog - zard/ui';
   activeAnchor?: string;
 
-  readonly entries = signal<ChangelogEntry[]>([]);
-  readonly isLoading = signal(false);
+  readonly entries = signal<ChangelogEntryConfig[]>([]);
 
   readonly navigationConfig = computed<NavigationConfig>(() => {
     const items = [{ id: 'overview', label: 'Overview', type: 'core' as const }];
 
     const entryItems = this.entries().map(entry => ({
       id: entry.id,
-      label: entry.date,
+      label: entry.meta.month,
       type: 'core' as const,
     }));
 
     return { items: [...items, ...entryItems] };
   });
 
-  async ngOnInit() {
+  ngOnInit() {
     this.seoService.setDocsSeo('Changelog', 'Latest updates and announcements.', '/docs/changelog', 'og-changelog.jpg');
-    await this.loadAllEntries();
+    this.loadAllEntries();
   }
 
-  private async loadAllEntries() {
-    if (this.isLoading()) return;
-
-    this.isLoading.set(true);
-
-    try {
-      const allEntries = await this.changelogService.loadAllEntries();
-      this.entries.set(allEntries);
-    } catch (error) {
-      console.error('Error loading changelog entries:', error);
-    } finally {
-      this.isLoading.set(false);
-    }
+  private loadAllEntries() {
+    const allEntries = this.changelogService.getAllEntries();
+    this.entries.set(allEntries);
   }
 
-  trackByEntry(_: number, entry: ChangelogEntry): string {
+  trackByEntry(_: number, entry: ChangelogEntryConfig): string {
     return entry.id;
   }
 
   async onAnchorClick(anchorId: string) {
     return;
+  }
+
+  getInstallSteps(componentName: string): Step[] {
+    return [
+      {
+        title: 'Run the CLI',
+        subtitle: `Use the CLI to add ${componentName} to your project.`,
+        file: {
+          path: `/installation/cli/add-${componentName}.md`,
+          lineNumber: false,
+        },
+      },
+    ];
   }
 }

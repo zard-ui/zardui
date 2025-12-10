@@ -9,7 +9,6 @@ import { LayoutService } from '@doc/shared/services/layout.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
@@ -28,7 +27,6 @@ import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
   imports: [
     RouterModule,
     ZardButtonComponent,
-    ZardButtonGroupComponent,
     ZardIconComponent,
     ZardBadgeComponent,
     MobileMenuComponent,
@@ -57,6 +55,12 @@ export class HeaderComponent {
 
   activateTheme(theme: DarkModeOptions): void {
     this.darkModeService.activateTheme(theme);
+  }
+
+  toggleTheme(): void {
+    const current = this.currentTheme();
+    const next = current === EDarkModes.DARK ? EDarkModes.LIGHT : EDarkModes.DARK;
+    this.darkModeService.activateTheme(next);
   }
 
   toggleLayout(): void {

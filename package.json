@@ -51,6 +51,7 @@
     "express": "^4.21.2",
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.2",
+    "gsap": "^3.14.1",
     "lucide-angular": "^0.555.0",
     "ngx-sonner": "^3.1.0",
     "ora": "^8.2.0",
