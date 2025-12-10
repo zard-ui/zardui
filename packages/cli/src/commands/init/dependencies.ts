@@ -3,15 +3,31 @@ import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger } from '@cli/utils/logger.js';
 import { installPackages } from '@cli/utils/package-manager.js';
 
-export async function installDependencies(cwd: string, config: Config): Promise<void> {
-  const projectInfo = await getProjectInfo(cwd);
+type ProjectInfo = {
+  framework: string;
+  hasTypeScript: boolean;
+  hasTailwind: boolean;
+  hasNx: boolean;
+  angularVersion: string | null;
+};
 
-  const cdkVersion = getCdkVersion(projectInfo.angularVersion);
+export async function installDependencies(cwd: string, config: Config, projectInfo?: ProjectInfo): Promise<void> {
+  const info = projectInfo || (await getProjectInfo(cwd));
+
+  const cdkVersion = getCdkVersion(info.angularVersion);
   const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-angular'];
-  const devDeps = ['tailwindcss', '@tailwindcss/postcss', 'postcss', 'tailwindcss-animate'];
+
+  const devDeps = info.hasTailwind ? [] : ['tailwindcss', '@tailwindcss/postcss', 'postcss', 'tailwindcss-animate'];
+
+  if (info.hasTailwind) {
+    logger.info('Tailwind CSS is already installed. Skipping Tailwind dependencies installation.');
+  }
 
   await installWithRetry(deps, cwd, config.packageManager, false);
-  await installWithRetry(devDeps, cwd, config.packageManager, true);
+
+  if (devDeps.length > 0) {
+    await installWithRetry(devDeps, cwd, config.packageManager, true);
+  }
 }
 
 function getCdkVersion(angularVersion?: string): string {
@@ -32,7 +48,7 @@ async function installWithRetry(
 ): Promise<void> {
   try {
     await installPackages(packages, cwd, packageManager, isDev);
-  } catch (error) {
+  } catch {
     logger.warn('Installation failed, retrying with --legacy-peer-deps...');
     await installPackages(packages, cwd, packageManager, isDev, true);
   }

@@ -1,6 +1,6 @@
 import { promptForConfig } from '@cli/commands/init/config-prompter.js';
 import { installDependencies } from '@cli/commands/init/dependencies.js';
-import { setupTailwind } from '@cli/commands/init/tailwind-setup.js';
+import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { createUtils } from '@cli/commands/init/utils-creator.js';
 import { Config } from '@cli/utils/config.js';
@@ -103,25 +103,29 @@ async function runInitializationSteps(
   cwd: string,
   config: any,
   projectInfo: any,
-  isReInitializing: boolean,
+  _isReInitializing: boolean,
 ): Promise<void> {
   const configSpinner = spinner('Writing configuration...').start();
   await writeFile(path.resolve(cwd, 'components.json'), JSON.stringify(config, null, 2), 'utf8');
   configSpinner.succeed();
 
   const dependenciesSpinner = spinner('Installing dependencies...').start();
-  await installDependencies(cwd, config);
+  await installDependencies(cwd, config, projectInfo);
   dependenciesSpinner.succeed();
 
   const appConfigSpinner = spinner('Updating app.config.ts...').start();
   await updateAngularConfig(cwd, config);
   appConfigSpinner.succeed();
 
-  if (!projectInfo.hasTailwind || isReInitializing) {
-    const tailwindSpinner = spinner('Setting up Tailwind CSS...').start();
-    await setupTailwind(cwd, config);
-    tailwindSpinner.succeed();
+  if (!projectInfo.hasTailwind) {
+    const postcssSpinner = spinner('Creating PostCSS configuration...').start();
+    await createPostCssConfig(cwd);
+    postcssSpinner.succeed();
   }
+
+  const themeSpinner = spinner('Applying theme to styles...').start();
+  await applyThemeToStyles(cwd, config);
+  themeSpinner.succeed();
 
   const utilsSpinner = spinner('Creating utils...').start();
   await createUtils(cwd, config);
