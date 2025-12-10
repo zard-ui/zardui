@@ -2,6 +2,8 @@
 
 ### ✨ Features
 
+- **CLI:** updating the CLI to detect pre-installed tailwind (Angular 21), updating change log layout,
+  updating zard/ui hero section ([#370](https://github.com/zard-ui/zardui/pull/370))
 - **calendar:** expand the year range using the min and max date validators ([#355](https://github.com/zard-ui/zardui/pull/355))
 - **select:** compact mode introduced to provide new look in calendar ([#352](https://github.com/zard-ui/zardui/pull/352))
 - **event manager plugins:** introduced event manager plugins with CLI update ([#348](https://github.com/zard-ui/zardui/pull/348))
