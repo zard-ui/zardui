@@ -26,7 +26,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'provider/services/appearance.ts',
+        name: 'provider/services/dark-mode.ts',
         content: '',
       },
       {

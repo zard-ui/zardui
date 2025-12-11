@@ -1,0 +1,21 @@
+{
+  "name": "kbd",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "kbd.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { kbdVariants } from './kbd.variants';\nimport { mergeClasses } from '../../shared/utils/utils';\n\n@Component({\n  selector: 'z-kbd, [z-kbd]',\n  standalone: true,\n  template: `<kbd><ng-content /></kbd> `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    '[class]': 'classes()',\n  },\n  exportAs: 'zKbd',\n})\nexport class ZardKbdComponent {\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() => mergeClasses(kbdVariants(), this.class()));\n}\n"
+    },
+    {
+      "name": "kbd-group.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\n\nimport { type ClassValue } from 'clsx';\n\nimport { kbdGroupVariants } from './kbd.variants';\nimport { mergeClasses } from '../../shared/utils/utils';\n\n@Component({\n  selector: 'z-kbd-group, [z-kbd-group]',\n  standalone: true,\n  template: ` <ng-content /> `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    '[class]': 'classes()',\n  },\n  exportAs: 'zKbdGroup',\n})\nexport class ZardKbdGroupComponent {\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() => mergeClasses(kbdGroupVariants(), this.class()));\n}\n"
+    },
+    {
+      "name": "kbd.variants.ts",
+      "content": "import { cva } from 'class-variance-authority';\n\nexport const kbdVariants = cva(\n  `min-w-5 w-fit h-5 inline-flex items-center justify-center gap-1 text-xs font-medium font-mono bg-muted text-muted-foreground pointer-events-none rounded-sm px-1 select-none [&_svg:not([class*='size-'])]:size-3 [[data-slot=tooltip-content]_&]:bg-background/20 [[data-slot=tooltip-content]_&]:text-background dark:[[data-slot=tooltip-content]_&]:bg-background/10`,\n);\n\nexport const kbdGroupVariants = cva(`inline-flex items-center gap-1`);\n"
+    }
+  ],
+  "registryDependencies": [
+    "core"
+  ]
+}

@@ -1,6 +1,6 @@
 import { installComponent } from '@cli/commands/add/component-installer.js';
 import { selectComponents } from '@cli/commands/add/component-selector.js';
-import { resolveDependencies } from '@cli/commands/add/dependency-resolver.js';
+import { resolveDependencies, type ComponentMeta } from '@cli/commands/add/dependency-resolver.js';
 import { getConfig, resolveConfigPaths } from '@cli/utils/config.js';
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
@@ -28,9 +28,11 @@ export const add = new Command()
     await validateProject(cwd);
     const resolvedConfig = await resolveConfigPaths(cwd, config);
 
+    const fetchingSpinner = spinner('Fetching registry...').start();
     const selectedComponents = await selectComponents(components, options.all);
+    fetchingSpinner.succeed('Registry loaded');
 
-    const { componentsToInstall, dependenciesToInstall } = resolveDependencies(
+    const { componentsToInstall, dependenciesToInstall } = await resolveDependencies(
       selectedComponents,
       resolvedConfig,
       cwd,
@@ -63,7 +65,7 @@ async function loadConfiguration(cwd: string) {
   const config = await getConfig(cwd);
 
   if (!config) {
-    logger.error('Configuration not found. Please run `zard init` first.');
+    logger.error('Configuration not found. Please run `ngzard init` first.');
     process.exit(1);
   }
 
@@ -105,7 +107,7 @@ async function installDependencies(
 }
 
 async function installComponents(
-  componentsToInstall: any[],
+  componentsToInstall: ComponentMeta[],
   cwd: string,
   resolvedConfig: any,
   options: { path?: string; overwrite?: boolean },
@@ -118,7 +120,7 @@ async function installComponents(
         ? path.resolve(cwd, options.path, component.name)
         : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
 
-      await installComponent(component, targetDir, resolvedConfig, options.overwrite || false);
+      await installComponent(component.name, targetDir, resolvedConfig, options.overwrite || false);
       componentSpinner.succeed(`Added ${component.name}`);
     } catch (error) {
       componentSpinner.fail(`Failed to install ${component.name}`);

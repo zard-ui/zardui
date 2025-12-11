@@ -6,7 +6,13 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import xmlbuilder from 'xmlbuilder';
 
-import { HEADER_PATHS, SIDEBAR_PATHS, SECTIONS, DOCS_PATH, COMPONENTS_PATH } from './app/shared/constants/routes.constant';
+import {
+  HEADER_PATHS,
+  SIDEBAR_PATHS,
+  SECTIONS,
+  DOCS_PATH,
+  COMPONENTS_PATH,
+} from './app/shared/constants/routes.constant';
 import bootstrap from './main.server';
 
 const serverDistFolder = dirname(fileURLToPath(import.meta.url));
@@ -78,7 +84,9 @@ function generateLlmsTxt(): string {
   Object.entries(componentsByCategory).forEach(([category, components]) => {
     sections.push(`### ${category}\n`);
     components.forEach(component => {
-      sections.push(`- [${component.name}](${baseUrl}${component.path}): ${component.name} component for Angular applications.`);
+      sections.push(
+        `- [${component.name}](${baseUrl}${component.path}): ${component.name} component for Angular applications.`,
+      );
     });
     sections.push('');
   });
@@ -95,7 +103,8 @@ function getDescriptionForRoute(path: string): string {
     '/docs/installation': 'Step-by-step guide to install Zard UI in your Angular project.',
     '/docs/components-json': 'Configuration file for customizing the CLI and component installation.',
     '/docs/theming': 'Guide to customizing colors, typography, and design tokens with TailwindCSS v4.',
-    '/docs/pre-processors': 'Understanding SCSS/Sass integration with Tailwind v4 - risks, limitations, and alternatives.',
+    '/docs/pre-processors':
+      'Understanding SCSS/Sass integration with Tailwind v4 - risks, limitations, and alternatives.',
     '/docs/dark-mode': 'Implementing dark mode in your Angular application.',
     '/docs/cli': 'Command-line tool for installing and managing Zard UI components.',
     '/docs/figma': 'Figma design resources and component library.',
@@ -121,7 +130,22 @@ function categorizeComponents(): Record<string, Array<{ name: string; path: stri
     .forEach(item => {
       const component = { name: item.name, path: item.path };
 
-      if (['Button', 'Input', 'Checkbox', 'Radio', 'Select', 'Switch', 'Slider', 'Calendar', 'Date Picker', 'Combobox', 'Form', 'Input Group'].includes(item.name)) {
+      if (
+        [
+          'Button',
+          'Input',
+          'Checkbox',
+          'Radio',
+          'Select',
+          'Switch',
+          'Slider',
+          'Calendar',
+          'Date Picker',
+          'Combobox',
+          'Form',
+          'Input Group',
+        ].includes(item.name)
+      ) {
         categories['Form & Input'].push(component);
       } else if (['Accordion', 'Breadcrumb', 'Menu', 'Tabs', 'Divider', 'Resizable'].includes(item.name)) {
         categories['Layout & Navigation'].push(component);
@@ -171,6 +195,24 @@ app.get('/sitemap.xml', (req, res) => {
   res.header('Content-Type', 'application/xml');
   res.send(root.end({ pretty: true }));
 });
+
+app.use(
+  '/r',
+  express.static(join(browserDistFolder, 'r'), {
+    maxAge: '1y',
+    immutable: true,
+    setHeaders: (res, path) => {
+      if (path.endsWith('.json') && !path.endsWith('registry.json')) {
+        res.setHeader('Cache-Control', 'public, max-age=31536000, immutable');
+      }
+      if (path.endsWith('registry.json')) {
+        res.setHeader('Cache-Control', 'public, max-age=3600, must-revalidate');
+      }
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Content-Type', 'application/json; charset=utf-8');
+    },
+  }),
+);
 
 app.use((req, res, next) => {
   if (req.path === '/sitemap.xml' || req.path === '/llms.txt') {

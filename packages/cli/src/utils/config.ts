@@ -23,6 +23,7 @@ const configSchema = z.object({
   indexFile: z.string().default('src/index.html'),
   style: z.enum(['css']).default('css'),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']).default('npm'),
+  registryUrl: z.string().optional(),
   tailwind: z
     .object({
       css: z.string().default('src/styles.css'),

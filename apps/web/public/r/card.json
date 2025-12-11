@@ -1,0 +1,17 @@
+{
+  "name": "card",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "card.component.ts",
+      "content": "import {\n  ChangeDetectionStrategy,\n  Component,\n  computed,\n  input,\n  type TemplateRef,\n  ViewEncapsulation,\n} from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { cardBodyVariants, cardHeaderVariants, cardVariants } from './card.variants';\nimport { mergeClasses } from '../../shared/utils/utils';\nimport { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';\n\n@Component({\n  selector: 'z-card',\n  imports: [ZardStringTemplateOutletDirective],\n  standalone: true,\n  template: `\n    @if (zTitle()) {\n      <div [class]=\"headerClasses()\">\n        <div class=\"text-2xl leading-none font-semibold tracking-tight\">\n          <ng-container *zStringTemplateOutlet=\"zTitle()\">{{ zTitle() }}</ng-container>\n        </div>\n\n        @if (zDescription()) {\n          <div class=\"text-muted-foreground text-sm\">\n            <ng-container *zStringTemplateOutlet=\"zDescription()\">{{ zDescription() }}</ng-container>\n          </div>\n        }\n      </div>\n    }\n\n    <div [class]=\"bodyClasses()\">\n      <ng-content />\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    '[class]': 'classes()',\n  },\n  exportAs: 'zCard',\n})\nexport class ZardCardComponent {\n  readonly zTitle = input<string | TemplateRef<void>>();\n  readonly zDescription = input<string | TemplateRef<void>>();\n\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() => mergeClasses(cardVariants(), this.class()));\n  protected readonly headerClasses = computed(() => mergeClasses(cardHeaderVariants()));\n  protected readonly bodyClasses = computed(() => mergeClasses(cardBodyVariants()));\n}\n"
+    },
+    {
+      "name": "card.variants.ts",
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const cardVariants = cva('block rounded-lg border bg-card text-card-foreground shadow-sm w-full p-6', {\n  variants: {},\n});\nexport type ZardCardVariants = VariantProps<typeof cardVariants>;\n\nexport const cardHeaderVariants = cva('w-full flex flex-col space-y-1.5 pb-0 gap-1.5', {\n  variants: {},\n});\nexport type ZardCardHeaderVariants = VariantProps<typeof cardHeaderVariants>;\n\nexport const cardBodyVariants = cva('w-full block mt-6', {\n  variants: {},\n});\nexport type ZardCardBodyVariants = VariantProps<typeof cardBodyVariants>;\n"
+    }
+  ],
+  "registryDependencies": [
+    "core"
+  ]
+}
