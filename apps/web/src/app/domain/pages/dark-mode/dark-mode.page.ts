@@ -5,7 +5,7 @@ import { SeoService } from '@doc/shared/services/seo.service';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
+import { EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
@@ -57,9 +57,5 @@ export class DarkmodePage implements OnInit {
       '/docs/dark-mode',
       'og-darkmode.jpg',
     );
-  }
-
-  activateTheme(theme: DarkModeOptions): void {
-    this.darkModeService.activateTheme(theme);
   }
 }

@@ -20,7 +20,7 @@ export class ZardDarkMode implements OnDestroy {
   private readonly themeSignal = signal<DarkModeOptions>(EDarkModes.SYSTEM);
   private darkModeQuery?: MediaQueryList;
 
-  readonly theme = computed(() => this.themeSignal());
+  readonly theme = this.themeSignal.asReadonly();
 
   readonly themeMode = computed(() => {
     if (this.themeSignal() === EDarkModes.SYSTEM) {
@@ -41,27 +41,17 @@ export class ZardDarkMode implements OnDestroy {
     this.applyTheme(this.getStoredTheme() ?? EDarkModes.SYSTEM);
   }
 
-  toggleTheme(): void {
-    const currentTheme = this.getCurrentTheme();
+  toggleTheme(targetMode?: DarkModeOptions): void {
     if (!this.isBrowser) {
       return;
     }
 
-    if (currentTheme === EDarkModes.SYSTEM) {
-      this.applyTheme(EDarkModes.LIGHT);
-    } else if (currentTheme === EDarkModes.LIGHT) {
-      this.applyTheme(EDarkModes.DARK);
+    if (targetMode) {
+      this.applyTheme(targetMode);
     } else {
-      this.applyTheme(EDarkModes.SYSTEM);
+      const next = this.themeMode() === EDarkModes.DARK ? EDarkModes.LIGHT : EDarkModes.DARK;
+      this.applyTheme(next);
     }
-  }
-
-  activateTheme(theme: DarkModeOptions): void {
-    if (!this.isBrowser) {
-      return;
-    }
-
-    this.applyTheme(theme);
   }
 
   getCurrentTheme(): DarkModeOptions {

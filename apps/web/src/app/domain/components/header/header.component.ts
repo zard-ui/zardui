@@ -2,14 +2,14 @@ import { AsyncPipe } from '@angular/common';
 import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { LucideAngularModule, GalleryHorizontal } from 'lucide-angular';
+import { GalleryHorizontal } from 'lucide-angular';
 import type { Observable } from 'rxjs';
 
 import { LayoutService } from '@doc/shared/services/layout.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
+import { ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
@@ -25,15 +25,14 @@ import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
   templateUrl: './header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    RouterModule,
-    ZardButtonComponent,
-    ZardIconComponent,
-    ZardBadgeComponent,
-    MobileMenuComponent,
-    ZardDividerComponent,
     AsyncPipe,
     DocResearcherComponent,
-    LucideAngularModule,
+    ZardBadgeComponent,
+    MobileMenuComponent,
+    RouterModule,
+    ZardButtonComponent,
+    ZardDividerComponent,
+    ZardIconComponent,
   ],
   host: {
     '(window:keydown)': 'handleKeyboardShortcut($event)',
@@ -50,17 +49,9 @@ export class HeaderComponent {
   private readonly darkModeService = inject(ZardDarkMode);
   private readonly layoutService = inject(LayoutService);
   readonly $repoStars: Observable<number> = this.githubService.getStarsCount();
-  protected readonly currentTheme = this.darkModeService.theme;
-  protected readonly EDarkModes = EDarkModes;
-
-  activateTheme(theme: DarkModeOptions): void {
-    this.darkModeService.activateTheme(theme);
-  }
 
   toggleTheme(): void {
-    const current = this.currentTheme();
-    const next = current === EDarkModes.DARK ? EDarkModes.LIGHT : EDarkModes.DARK;
-    this.darkModeService.activateTheme(next);
+    this.darkModeService.toggleTheme();
   }
 
   toggleLayout(): void {
