@@ -20,7 +20,6 @@ async function readJson(filePath: string): Promise<any> {
 const configSchema = z.object({
   $schema: z.string().optional(),
   appConfigFile: z.string().default('src/app/app.config.ts'),
-  indexFile: z.string().default('src/index.html'),
   style: z.enum(['css']).default('css'),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']).default('npm'),
   registryUrl: z.string().optional(),
@@ -35,6 +34,8 @@ const configSchema = z.object({
     .object({
       components: z.string().default('src/app/shared/components'),
       utils: z.string().default('src/app/shared/utils'),
+      core: z.string().default('src/app/shared/core'),
+      services: z.string().default('src/app/shared/services'),
     })
     .default({}),
 });
@@ -44,7 +45,6 @@ export type Config = z.infer<typeof configSchema>;
 export const DEFAULT_CONFIG: Config = {
   style: 'css',
   appConfigFile: 'src/app/app.config.ts',
-  indexFile: 'src/index.html',
   packageManager: 'npm',
   tailwind: {
     css: 'src/styles.css',
@@ -54,6 +54,8 @@ export const DEFAULT_CONFIG: Config = {
   aliases: {
     components: 'src/app/shared/components',
     utils: 'src/app/shared/utils',
+    core: 'src/app/shared/core',
+    services: 'src/app/shared/services',
   },
 };
 
@@ -80,6 +82,8 @@ export async function resolveConfigPaths(cwd: string, config: Config) {
       tailwindCss: path.resolve(cwd, config.tailwind.css),
       components: path.resolve(cwd, config.aliases.components),
       utils: path.resolve(cwd, config.aliases.utils),
+      core: path.resolve(cwd, config.aliases.core),
+      services: path.resolve(cwd, config.aliases.services),
     },
   };
 }

@@ -16,8 +16,36 @@ function isComponentInstalled(dir: string): boolean {
   }
 }
 
+export function getTargetDir(
+  component: ComponentMeta,
+  resolvedConfig: Config & { resolvedPaths: any },
+  cwd: string,
+  customPath?: string,
+): string {
+  const basePath = component.basePath ?? component.name;
+
+  if (customPath) {
+    return path.resolve(cwd, customPath, basePath);
+  }
+
+  if (basePath === 'core' || component.name === 'core') {
+    return resolvedConfig.resolvedPaths.core;
+  }
+
+  if (basePath === 'services') {
+    return resolvedConfig.resolvedPaths.services;
+  }
+
+  if (basePath === 'utils') {
+    return resolvedConfig.resolvedPaths.utils;
+  }
+
+  return path.resolve(resolvedConfig.resolvedPaths.components, basePath);
+}
+
 export interface ComponentMeta {
   name: string;
+  basePath?: string;
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
@@ -44,6 +72,7 @@ export async function getComponentMeta(name: string): Promise<ComponentMeta | un
 
   return {
     name: item.name,
+    basePath: item.basePath,
     dependencies: item.dependencies,
     devDependencies: item.devDependencies,
     registryDependencies: item.registryDependencies,
@@ -79,9 +108,7 @@ export async function resolveDependencies(
   const componentsToInstall: ComponentMeta[] = [];
 
   for (const component of componentMetas) {
-    const targetDir = options.path
-      ? path.resolve(cwd, options.path, component.name)
-      : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
+    const targetDir = getTargetDir(component, resolvedConfig, cwd, options.path);
 
     if (isComponentInstalled(targetDir) && !options.overwrite) {
       continue;
@@ -128,9 +155,7 @@ async function resolveRegistryDependencies(
     if (!depComponent) continue;
     if (componentsToInstall.find(c => c.name === dep)) continue;
 
-    const depTargetDir = options.path
-      ? path.resolve(cwd, options.path, dep)
-      : path.resolve(resolvedConfig.resolvedPaths.components, dep);
+    const depTargetDir = getTargetDir(depComponent, resolvedConfig, cwd, options.path);
 
     if (!isComponentInstalled(depTargetDir) || options.overwrite) {
       componentsToInstall.push(depComponent);

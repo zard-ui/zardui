@@ -9,6 +9,7 @@ export const DEFAULT_REGISTRY_URL =
 export interface RegistryItem {
   name: string;
   type: 'registry:component';
+  basePath?: string;
   files: Array<{
     name: string;
     content: string;
@@ -26,6 +27,7 @@ export interface RegistryIndex {
   items: Array<{
     name: string;
     type: string;
+    basePath?: string;
     dependencies?: string[];
     devDependencies?: string[];
     registryDependencies?: string[];

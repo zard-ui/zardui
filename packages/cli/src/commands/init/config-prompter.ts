@@ -15,7 +15,6 @@ export const configSchema = z.object({
   $schema: z.string(),
   style: z.enum(['css']),
   appConfigFile: z.string(),
-  indexFile: z.string(),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']),
   tailwind: z.object({
     css: z.string(),
@@ -25,6 +24,8 @@ export const configSchema = z.object({
   aliases: z.object({
     components: z.string(),
     utils: z.string(),
+    core: z.string(),
+    services: z.string(),
   }),
 });
 
@@ -41,12 +42,6 @@ export async function promptForConfig(
       name: 'app.config',
       message: `Where is your ${highlight('app.config.ts')} file?`,
       initial: projectInfo.hasNx ? 'apps/[app]/src/app/app.config.ts' : 'src/app/app.config.ts',
-    },
-    {
-      type: 'text',
-      name: 'index.html',
-      message: `Where is your ${highlight('index.html')} file?`,
-      initial: projectInfo.hasNx ? 'apps/[app]/src/index.html' : 'src/index.html',
     },
     {
       type: 'select',
@@ -80,11 +75,13 @@ export async function promptForConfig(
 
   await validateCssFile(cwd, options.tailwindCss);
 
+  const componentsPath = options.components;
+  const parentPath = path.dirname(componentsPath);
+
   const config = configSchema.parse({
     $schema: SCHEMA_URL,
     style: 'css',
     appConfigFile: options['app.config'],
-    indexFile: options['index.html'],
     packageManager,
     tailwind: {
       css: options.tailwindCss,
@@ -92,8 +89,10 @@ export async function promptForConfig(
       cssVariables: true,
     },
     aliases: {
-      components: options.components,
+      components: componentsPath,
       utils: options.utils,
+      core: path.join(parentPath, 'core'),
+      services: path.join(parentPath, 'services'),
     },
   });
 

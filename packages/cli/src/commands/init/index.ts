@@ -1,20 +1,19 @@
+import { installComponent } from '@cli/commands/add/component-installer.js';
 import { promptForConfig } from '@cli/commands/init/config-prompter.js';
 import { installDependencies } from '@cli/commands/init/dependencies.js';
 import { setupTailwind } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
-import { createUtils } from '@cli/commands/init/utils-creator.js';
-import { Config } from '@cli/utils/config.js';
+import { Config, resolveConfigPaths } from '@cli/utils/config.js';
 import { getProjectInfo, ProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager } from '@cli/utils/package-manager.js';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
 import prompts from 'prompts';
 
-import { injectThemeScript } from './theme-loader.js';
 import { updateAngularConfig } from './update-angular-config.js';
 
 export const init = new Command()
@@ -115,18 +114,29 @@ async function runInitializationSteps(
 
   initSpinner.text = 'Configuring Angular...';
   await updateAngularConfig(cwd, config);
-  await injectThemeScript(cwd, config);
 
   if (!projectInfo.hasTailwind || isReInitializing) {
     initSpinner.text = 'Setting up Tailwind CSS...';
     await setupTailwind(cwd, config);
   }
 
-  initSpinner.text = 'Creating utilities...';
-  await createUtils(cwd, config);
+  initSpinner.text = 'Updating TypeScript config...';
   await updateTsConfig(cwd, config);
 
+  initSpinner.text = 'Installing core dependencies...';
+  await installCoreDependencies(cwd, config);
+
   initSpinner.succeed('Project initialized');
+}
+
+async function installCoreDependencies(cwd: string, config: Config): Promise<void> {
+  const resolvedConfig = await resolveConfigPaths(cwd, config);
+
+  await mkdir(resolvedConfig.resolvedPaths.core, { recursive: true });
+  await mkdir(resolvedConfig.resolvedPaths.utils, { recursive: true });
+
+  await installComponent('core', resolvedConfig.resolvedPaths.core, resolvedConfig);
+  await installComponent('utils', resolvedConfig.resolvedPaths.utils, resolvedConfig);
 }
 
 function displaySuccessMessage(config: Config): void {

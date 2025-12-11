@@ -1,5 +1,6 @@
 export type ComponentRegistry = {
   name: string;
+  basePath?: string;
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
@@ -26,11 +27,33 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'provider/services/dark-mode.ts',
+        name: 'provider/providezard.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'dark-mode',
+    basePath: 'services',
+    registryDependencies: ['core'],
+    files: [
+      {
+        name: 'dark-mode.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'utils',
+    basePath: 'utils',
+    dependencies: ['tailwind-merge', 'clsx'],
+    files: [
+      {
+        name: 'merge-classes.ts',
         content: '',
       },
       {
-        name: 'provider/providezard.ts',
+        name: 'number.ts',
         content: '',
       },
     ],

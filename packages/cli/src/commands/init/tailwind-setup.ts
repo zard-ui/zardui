@@ -1,8 +1,14 @@
 import { type Config } from '@cli/utils/config.js';
-import { POSTCSS_CONFIG } from '@cli/utils/templates.js';
 import { getThemeContent } from '@cli/utils/theme-selector.js';
 import { writeFile } from 'node:fs/promises';
 import * as path from 'path';
+
+const POSTCSS_CONFIG = `{
+  "plugins": {
+    "@tailwindcss/postcss": {}
+  }
+}
+`;
 
 export async function setupTailwind(cwd: string, config: Config): Promise<void> {
   await createPostCssConfig(cwd);

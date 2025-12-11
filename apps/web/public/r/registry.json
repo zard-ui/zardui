@@ -11,8 +11,31 @@
         "directives/string-template-outlet/string-template-outlet.directive.ts",
         "provider/event-manager-plugins/zard-debounce-event-manager-plugin.ts",
         "provider/event-manager-plugins/zard-event-manager-plugin.ts",
-        "provider/services/dark-mode.ts",
         "provider/providezard.ts"
+      ]
+    },
+    {
+      "name": "dark-mode",
+      "type": "registry:component",
+      "basePath": "services",
+      "registryDependencies": [
+        "core"
+      ],
+      "files": [
+        "dark-mode.ts"
+      ]
+    },
+    {
+      "name": "utils",
+      "type": "registry:component",
+      "basePath": "utils",
+      "dependencies": [
+        "tailwind-merge",
+        "clsx"
+      ],
+      "files": [
+        "merge-classes.ts",
+        "number.ts"
       ]
     },
     {

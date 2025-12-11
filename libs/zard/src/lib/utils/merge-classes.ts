@@ -1,7 +1,5 @@
-export const UTILS = {
-  'merge-classes': `
-import { twMerge } from 'tailwind-merge';
 import { ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
 
 export type { ClassValue };
 
@@ -15,7 +13,7 @@ export function transform(value: boolean | string): boolean {
 
 export function generateId(prefix = ''): string {
   const id = crypto.randomUUID();
-  return prefix ? \`\${prefix}-\${id}\` : id;
+  return prefix ? `${prefix}-${id}` : id;
 }
 
 export const noopFun = () => void 0;
@@ -31,26 +29,3 @@ export const isElementContentTruncated = (element: HTMLElement | undefined): boo
 
   return rangeWidth > elementWidth;
 };
-`,
-  number: `function clamp(value: number, [min, max]: [number, number]): number {
-  return Math.min(max, Math.max(min, value));
-}
-
-function roundToStep(value: number, min: number, step: number): number {
-  return Math.round((value - min) / step) * step + min;
-}
-
-function convertValueToPercentage(value: number, min: number, max: number): number {
-  return ((value - min) / (max - min)) * 100;
-}
-
-export { clamp, roundToStep, convertValueToPercentage };
-`,
-};
-
-export const POSTCSS_CONFIG = `{
-  "plugins": {
-    "@tailwindcss/postcss": {}
-  }
-}
-`;

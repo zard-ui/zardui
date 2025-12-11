@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { registry, type ComponentRegistry } from '../packages/cli/src/core/registry/registry-data';
 
-const COMPONENTS_PATH = path.resolve(__dirname, '../libs/zard/src/lib/components');
+const LIB_PATH = path.resolve(__dirname, '../libs/zard/src/lib');
 const OUTPUT_PATH = path.resolve(__dirname, '../apps/web/public/r');
 
 interface RegistryFile {
@@ -13,6 +13,7 @@ interface RegistryFile {
 interface RegistryItem {
   name: string;
   type: 'registry:component';
+  basePath?: string;
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
@@ -27,6 +28,7 @@ interface RegistryIndex {
   items: Array<{
     name: string;
     type: string;
+    basePath?: string;
     dependencies?: string[];
     devDependencies?: string[];
     registryDependencies?: string[];
@@ -44,8 +46,17 @@ function getCliVersion(): string {
   }
 }
 
-function readComponentFile(componentName: string, fileName: string): string | null {
-  const filePath = path.join(COMPONENTS_PATH, componentName, fileName);
+function getSourcePath(componentName: string, basePath: string): string {
+  const nonComponentPaths = ['core', 'services', 'utils'];
+  if (nonComponentPaths.includes(basePath)) {
+    return path.join(LIB_PATH, basePath);
+  }
+  return path.join(LIB_PATH, 'components', basePath);
+}
+
+function readComponentFile(componentName: string, basePath: string, fileName: string): string | null {
+  const sourcePath = getSourcePath(componentName, basePath);
+  const filePath = path.join(sourcePath, fileName);
   try {
     if (fs.existsSync(filePath)) {
       return fs.readFileSync(filePath, 'utf8');
@@ -60,9 +71,10 @@ function readComponentFile(componentName: string, fileName: string): string | nu
 
 function buildComponentJson(component: ComponentRegistry): RegistryItem | null {
   const files: RegistryFile[] = [];
+  const basePath = component.basePath ?? component.name;
 
   for (const file of component.files) {
-    const content = readComponentFile(component.name, file.name);
+    const content = readComponentFile(component.name, basePath, file.name);
     if (content !== null) {
       files.push({
         name: file.name,
@@ -81,6 +93,10 @@ function buildComponentJson(component: ComponentRegistry): RegistryItem | null {
     type: 'registry:component',
     files,
   };
+
+  if (component.basePath) {
+    item.basePath = component.basePath;
+  }
 
   if (component.dependencies?.length) {
     item.dependencies = component.dependencies;
@@ -106,6 +122,7 @@ function buildRegistryIndex(items: RegistryItem[]): RegistryIndex {
     items: items.map(item => ({
       name: item.name,
       type: item.type,
+      ...(item.basePath && { basePath: item.basePath }),
       ...(item.dependencies?.length && { dependencies: item.dependencies }),
       ...(item.devDependencies?.length && { devDependencies: item.devDependencies }),
       ...(item.registryDependencies?.length && { registryDependencies: item.registryDependencies }),
