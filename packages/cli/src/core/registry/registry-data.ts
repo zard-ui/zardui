@@ -45,11 +45,11 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'utils',
-    basePath: 'utils',
+    basePath: 'shared/utils',
     dependencies: ['tailwind-merge', 'clsx'],
     files: [
       {
-        name: 'merge-classes.ts',
+        name: 'utils.ts',
         content: '',
       },
       {

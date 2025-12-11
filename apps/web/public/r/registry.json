@@ -28,13 +28,13 @@
     {
       "name": "utils",
       "type": "registry:component",
-      "basePath": "utils",
+      "basePath": "shared/utils",
       "dependencies": [
         "tailwind-merge",
         "clsx"
       ],
       "files": [
-        "merge-classes.ts",
+        "utils.ts",
         "number.ts"
       ]
     },

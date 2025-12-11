@@ -47,7 +47,7 @@ function getCliVersion(): string {
 }
 
 function getSourcePath(componentName: string, basePath: string): string {
-  const nonComponentPaths = ['core', 'services', 'utils'];
+  const nonComponentPaths = ['core', 'services', 'shared/utils'];
   if (nonComponentPaths.includes(basePath)) {
     return path.join(LIB_PATH, basePath);
   }
