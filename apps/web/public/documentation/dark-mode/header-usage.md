@@ -8,7 +8,7 @@ The header uses the service to implement the theme toggle button, allowing users
 // header.component.ts
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 
-import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core/services/dark-mode';
+import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/services/dark-mode';
 
 @Component({
   selector: 'z-header',

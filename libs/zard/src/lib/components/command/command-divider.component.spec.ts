@@ -9,8 +9,8 @@ import { ZardCommandListComponent } from './command-list.component';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
-import { ZardDebounceEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-debounce-event-manager-plugin';
-import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-event-manager-plugin';
+import { ZardDebounceEventManagerPlugin } from '../../core/provider/event-manager-plugins/zard-debounce-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../../core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 const SEARCH_DEBOUNCE_MS = 150;
 

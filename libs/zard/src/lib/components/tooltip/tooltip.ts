@@ -29,8 +29,8 @@ import { filter, map, of, Subject, switchMap, tap, timer } from 'rxjs';
 
 import { TOOLTIP_POSITIONS_MAP } from './tooltip-positions';
 import { tooltipPositionVariants, tooltipVariants, type ZardTooltipPositionVariants } from './tooltip.variants';
+import { ZardStringTemplateOutletDirective } from '../../core/directives/string-template-outlet/string-template-outlet.directive';
 import { generateId, mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 
 export type ZardTooltipTriggers = 'click' | 'hover';
 export type ZardTooltipType = string | TemplateRef<void> | null;

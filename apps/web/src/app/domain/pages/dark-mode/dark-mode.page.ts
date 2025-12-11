@@ -5,8 +5,8 @@ import { SeoService } from '@doc/shared/services/seo.service';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { EDarkModes, ZardDarkMode } from '@zard/services/dark-mode';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';

@@ -1,5 +1,5 @@
 ```typescript title="dark-mode.page.ts" expandable="true" copyButton
-import { ZardDarkMode } from '@zard/components/core/services/dark-mode';
+import { ZardDarkMode } from '@zard/services/dark-mode';
 
 @Component({
   selector: '...',

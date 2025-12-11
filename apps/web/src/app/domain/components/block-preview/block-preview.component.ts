@@ -1,9 +1,9 @@
 import { NgComponentOutlet } from '@angular/common';
 import { Component, computed, inject, input } from '@angular/core';
 
-import { EDarkModes, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardResizablePanelComponent } from '@zard/components/resizable/resizable-panel.component';
 import { ZardResizableComponent } from '@zard/components/resizable/resizable.component';
+import { EDarkModes, ZardDarkMode } from '@zard/services/dark-mode';
 
 import type { Block } from '../block-container/block-container.component';
 

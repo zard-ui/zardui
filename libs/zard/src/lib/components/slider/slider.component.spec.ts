@@ -8,7 +8,7 @@ import {
   ZSliderThumbComponent,
   ZSliderTrackComponent,
 } from './slider.component';
-import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../../core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 @Component({
   selector: 'test-slider-host',

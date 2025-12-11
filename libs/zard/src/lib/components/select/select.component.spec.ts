@@ -5,7 +5,7 @@ import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardSelectItemComponent } from './select-item.component';
 import { ZardSelectComponent } from './select.component';
-import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../../core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 @Component({
   imports: [ZardSelectComponent, ZardSelectItemComponent],

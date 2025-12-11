@@ -3,7 +3,7 @@ import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardCalendarComponent, type CalendarDay } from './calendar.component';
 import { isSameDay, isDateDisabled, getDayAriaLabel, generateCalendarDays } from './calendar.utils';
-import { ZardEventManagerPlugin } from '../core/provider/event-manager-plugins/zard-event-manager-plugin';
+import { ZardEventManagerPlugin } from '../../core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 describe('ZardCalendarComponent', () => {
   let component: ZardCalendarComponent;
