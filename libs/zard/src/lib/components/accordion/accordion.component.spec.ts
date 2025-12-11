@@ -9,6 +9,9 @@ import { mergeClasses } from '../../shared/utils/utils';
 
 jest.mock('../../shared/utils/utils', () => ({
   mergeClasses: jest.fn().mockImplementation((variants, cls) => cls || 'default-classes'),
+  transform: jest.fn(value => value),
+  generateId: jest.fn().mockReturnValue('accordion-test-id'),
+  noopFun: jest.fn(),
 }));
 
 const getHostComponent = (

@@ -37,46 +37,14 @@
         }
         <z-divider zOrientation="vertical" zSpacing="none" class="3xl:block hidden h-4!"></z-divider>
         <button class="3xl:flex hidden" z-button zType="ghost" zSize="sm" (click)="toggleLayout()">
-          <lucide-angular [img]="GalleryHorizontalIcon" />
+          <z-icon [zType]="GalleryHorizontalIcon" zSize="lg" />
           <span class="sr-only">Toggle layout</span>
         </button>
-        <z-divider zOrientation="vertical" zSpacing="none" class="hidden h-4! lg:block"></z-divider>
-        @let theme = currentTheme();
-        <z-button-group>
-          <button
-            z-button
-            zType="ghost"
-            zSize="sm"
-            [disabled]="theme === EDarkModes.SYSTEM"
-            [aria-pressed]="theme === EDarkModes.SYSTEM"
-            (click)="activateTheme(EDarkModes.SYSTEM)"
-          >
-            <z-icon zType="sun-moon" />
-            <span class="sr-only">Use system theme</span>
-          </button>
-          <button
-            z-button
-            zType="ghost"
-            zSize="sm"
-            [disabled]="theme === EDarkModes.LIGHT"
-            [aria-pressed]="theme === EDarkModes.LIGHT"
-            (click)="activateTheme(EDarkModes.LIGHT)"
-          >
-            <z-icon zType="sun" />
-            <span class="sr-only">Light theme</span>
-          </button>
-          <button
-            z-button
-            zType="ghost"
-            zSize="sm"
-            [disabled]="theme === EDarkModes.DARK"
-            [aria-pressed]="theme === EDarkModes.DARK"
-            (click)="activateTheme(EDarkModes.DARK)"
-          >
-            <z-icon zType="moon" />
-            <span class="sr-only">Dark theme</span>
-          </button>
-        </z-button-group>
+        <z-divider zOrientation="vertical" zSpacing="none" class="h-4!"></z-divider>
+        <button z-button zType="ghost" zSize="sm" (click)="toggleTheme()">
+          <z-icon zType="dark-mode" class="size-4.5" />
+          <span class="sr-only">Toggle theme</span>
+        </button>
       </aside>
     </menu>
   </nav>

@@ -1,7 +1,7 @@
 import { installComponent } from '@cli/commands/add/component-installer.js';
 import { promptForConfig } from '@cli/commands/init/config-prompter.js';
 import { installDependencies } from '@cli/commands/init/dependencies.js';
-import { setupTailwind } from '@cli/commands/init/tailwind-setup.js';
+import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { Config, resolveConfigPaths } from '@cli/utils/config.js';
 import { getProjectInfo, ProjectInfo } from '@cli/utils/get-project-info.js';
@@ -110,15 +110,18 @@ async function runInitializationSteps(
   await writeFile(path.resolve(cwd, 'components.json'), JSON.stringify(config, null, 2), 'utf8');
 
   initSpinner.text = 'Installing dependencies...';
-  await installDependencies(cwd, config);
+  await installDependencies(cwd, config, projectInfo);
 
   initSpinner.text = 'Configuring Angular...';
   await updateAngularConfig(cwd, config);
 
   if (!projectInfo.hasTailwind || isReInitializing) {
-    initSpinner.text = 'Setting up Tailwind CSS...';
-    await setupTailwind(cwd, config);
+    initSpinner.text = 'Setting up PostCSS...';
+    await createPostCssConfig(cwd);
   }
+
+  initSpinner.text = 'Applying theme...';
+  await applyThemeToStyles(cwd, config);
 
   initSpinner.text = 'Updating TypeScript config...';
   await updateTsConfig(cwd, config);
