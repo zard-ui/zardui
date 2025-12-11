@@ -106,35 +106,27 @@ async function runInitializationSteps(
   projectInfo: ProjectInfo,
   isReInitializing: boolean,
 ): Promise<void> {
-  const configSpinner = spinner('Writing configuration...').start();
+  const initSpinner = spinner('Initializing project...').start();
+
   await writeFile(path.resolve(cwd, 'components.json'), JSON.stringify(config, null, 2), 'utf8');
-  configSpinner.succeed();
 
-  const dependenciesSpinner = spinner('Installing dependencies...').start();
+  initSpinner.text = 'Installing dependencies...';
   await installDependencies(cwd, config);
-  dependenciesSpinner.succeed();
 
-  const appConfigSpinner = spinner('Updating app.config.ts...').start();
+  initSpinner.text = 'Configuring Angular...';
   await updateAngularConfig(cwd, config);
-  appConfigSpinner.succeed();
-
-  const appIndexSpinner = spinner('Updating index.html...').start();
   await injectThemeScript(cwd, config);
-  appIndexSpinner.succeed();
 
   if (!projectInfo.hasTailwind || isReInitializing) {
-    const tailwindSpinner = spinner('Setting up Tailwind CSS...').start();
+    initSpinner.text = 'Setting up Tailwind CSS...';
     await setupTailwind(cwd, config);
-    tailwindSpinner.succeed();
   }
 
-  const utilsSpinner = spinner('Creating utils...').start();
+  initSpinner.text = 'Creating utilities...';
   await createUtils(cwd, config);
-  utilsSpinner.succeed();
-
-  const tsconfigSpinner = spinner('Updating tsconfig.json...').start();
   await updateTsConfig(cwd, config);
-  tsconfigSpinner.succeed();
+
+  initSpinner.succeed('Project initialized');
 }
 
 function displaySuccessMessage(config: Config): void {

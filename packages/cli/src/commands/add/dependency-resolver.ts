@@ -1,9 +1,20 @@
-import { existsSync } from 'fs';
+import { existsSync, readdirSync } from 'fs';
 import * as path from 'path';
 
 import { Config } from '../../utils/config.js';
 import { logger } from '../../utils/logger.js';
 import { fetchRegistryIndex, type RegistryIndex } from '../../utils/registry.js';
+
+function isComponentInstalled(dir: string): boolean {
+  if (!existsSync(dir)) return false;
+
+  try {
+    const files = readdirSync(dir);
+    return files.length > 0;
+  } catch {
+    return false;
+  }
+}
 
 export interface ComponentMeta {
   name: string;
@@ -48,7 +59,7 @@ export async function resolveDependencies(
   selectedComponents: string[],
   resolvedConfig: Config & { resolvedPaths: any },
   cwd: string,
-  options: { all?: boolean; path?: string },
+  options: { all?: boolean; path?: string; overwrite?: boolean },
 ): Promise<ResolvedDependencies> {
   const componentMetas: ComponentMeta[] = [];
 
@@ -68,6 +79,14 @@ export async function resolveDependencies(
   const componentsToInstall: ComponentMeta[] = [];
 
   for (const component of componentMetas) {
+    const targetDir = options.path
+      ? path.resolve(cwd, options.path, component.name)
+      : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
+
+    if (isComponentInstalled(targetDir) && !options.overwrite) {
+      continue;
+    }
+
     componentsToInstall.push(component);
     addComponentDependencies(component, dependenciesToInstall);
 
@@ -99,7 +118,7 @@ async function resolveRegistryDependencies(
   dependenciesToInstall: Set<string>,
   resolvedConfig: Config & { resolvedPaths: any },
   cwd: string,
-  options: { path?: string },
+  options: { path?: string; overwrite?: boolean },
 ): Promise<void> {
   if (!component.registryDependencies) return;
 
@@ -113,7 +132,7 @@ async function resolveRegistryDependencies(
       ? path.resolve(cwd, options.path, dep)
       : path.resolve(resolvedConfig.resolvedPaths.components, dep);
 
-    if (!existsSync(depTargetDir)) {
+    if (!isComponentInstalled(depTargetDir) || options.overwrite) {
       componentsToInstall.push(depComponent);
       addComponentDependencies(depComponent, dependenciesToInstall);
 

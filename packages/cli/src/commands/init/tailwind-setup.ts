@@ -1,7 +1,6 @@
 import { type Config } from '@cli/utils/config.js';
-import { logger } from '@cli/utils/logger.js';
 import { POSTCSS_CONFIG } from '@cli/utils/templates.js';
-import { getThemeContent, getThemeDisplayName } from '@cli/utils/theme-selector.js';
+import { getThemeContent } from '@cli/utils/theme-selector.js';
 import { writeFile } from 'node:fs/promises';
 import * as path from 'path';
 
@@ -21,6 +20,4 @@ async function applyThemeToStyles(cwd: string, config: Config): Promise<void> {
   const themeContent = getThemeContent(selectedTheme);
 
   await writeFile(stylesPath, themeContent, 'utf8');
-
-  logger.info(`Applied ${getThemeDisplayName(selectedTheme)} theme configuration to your CSS file`);
 }

@@ -28,16 +28,21 @@ export const add = new Command()
     await validateProject(cwd);
     const resolvedConfig = await resolveConfigPaths(cwd, config);
 
-    const fetchingSpinner = spinner('Fetching registry...').start();
     const selectedComponents = await selectComponents(components, options.all);
-    fetchingSpinner.succeed('Registry loaded');
 
+    const addSpinner = spinner('Resolving components...').start();
     const { componentsToInstall, dependenciesToInstall } = await resolveDependencies(
       selectedComponents,
       resolvedConfig,
       cwd,
       options,
     );
+    addSpinner.stop();
+
+    if (componentsToInstall.length === 0) {
+      logger.info('All components already installed.');
+      return;
+    }
 
     if (!options.yes) {
       const shouldProceed = await confirmInstallation(componentsToInstall.length, dependenciesToInstall.size);
@@ -47,7 +52,6 @@ export const add = new Command()
     }
 
     await installDependencies(dependenciesToInstall, cwd, config.packageManager);
-
     await installComponents(componentsToInstall, cwd, resolvedConfig, options);
 
     logger.break();
@@ -103,28 +107,37 @@ async function installDependencies(
 
   const depsSpinner = spinner('Installing dependencies...').start();
   await installPackages(Array.from(dependenciesToInstall), cwd, packageManager, false);
-  depsSpinner.succeed();
+  depsSpinner.succeed('Dependencies installed');
 }
 
 async function installComponents(
   componentsToInstall: ComponentMeta[],
   cwd: string,
   resolvedConfig: any,
-  options: { path?: string; overwrite?: boolean },
+  options: { path?: string },
 ): Promise<void> {
-  for (const component of componentsToInstall) {
-    const componentSpinner = spinner(`Installing ${component.name}...`).start();
+  const installSpinner = spinner('Installing components...').start();
+  const installed: string[] = [];
+  const failed: string[] = [];
 
+  for (const component of componentsToInstall) {
     try {
+      installSpinner.text = `Installing ${component.name}...`;
+
       const targetDir = options.path
         ? path.resolve(cwd, options.path, component.name)
         : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
 
-      await installComponent(component.name, targetDir, resolvedConfig, options.overwrite || false);
-      componentSpinner.succeed(`Added ${component.name}`);
+      await installComponent(component.name, targetDir, resolvedConfig);
+      installed.push(component.name);
     } catch (error) {
-      componentSpinner.fail(`Failed to install ${component.name}`);
-      logger.error(error);
+      failed.push(component.name);
     }
+  }
+
+  if (failed.length > 0) {
+    installSpinner.fail(`Failed to install: ${failed.join(', ')}`);
+  } else {
+    installSpinner.succeed(`Installed ${installed.length} component${installed.length > 1 ? 's' : ''}`);
   }
 }

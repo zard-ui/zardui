@@ -10,6 +10,7 @@
     "build:registry": "npx tsx scripts/build-registry.cts",
     "build:cli": "npx nx run cli:build",
     "dev:cli": "npx nx run cli:build:dev",
+    "cli": "npm run dev:cli && npm run serve:registry",
     "serve:registry": "npx tsx scripts/serve-registry.cts",
     "test": "nx run-many --target=test --p=libs/*",
     "test:watch": "nx run-many --target=test --p=libs/* --watch",

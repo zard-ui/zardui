@@ -9,7 +9,10 @@ import * as path from 'node:path';
 import prompts from 'prompts';
 import { z } from 'zod';
 
+export const SCHEMA_URL = 'https://zardui.com/schema.json';
+
 export const configSchema = z.object({
+  $schema: z.string(),
   style: z.enum(['css']),
   appConfigFile: z.string(),
   indexFile: z.string(),
@@ -78,9 +81,10 @@ export async function promptForConfig(
   await validateCssFile(cwd, options.tailwindCss);
 
   const config = configSchema.parse({
+    $schema: SCHEMA_URL,
     style: 'css',
-    appConfigFile: 'src/app/app.config.ts',
-    indexFile: 'src/index.html',
+    appConfigFile: options['app.config'],
+    indexFile: options['index.html'],
     packageManager,
     tailwind: {
       css: options.tailwindCss,
