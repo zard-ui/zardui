@@ -17,8 +17,9 @@ import {
 import type { ClassValue } from 'clsx';
 
 import { buttonVariants, type ZardButtonVariants } from './button.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',

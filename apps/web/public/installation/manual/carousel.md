@@ -24,9 +24,10 @@ import {
   type ZardCarouselControlsVariants,
   type ZardCarouselOrientationVariants,
 } from './carousel.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-carousel',
@@ -276,7 +277,8 @@ import { type ClassValue } from 'clsx';
 
 import { ZardCarouselComponent } from './carousel.component';
 import { carouselContentVariants } from './carousel.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-carousel-content',
@@ -310,7 +312,8 @@ import { type ClassValue } from 'clsx';
 
 import { ZardCarouselComponent } from './carousel.component';
 import { carouselItemVariants } from './carousel.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-carousel-item',

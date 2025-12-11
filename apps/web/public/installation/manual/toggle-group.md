@@ -16,9 +16,10 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardToggleGroupItem {
   value: string;

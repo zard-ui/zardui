@@ -34,8 +34,9 @@ import {
   sliderTrackVariants,
   sliderVariants,
 } from './slider.variants';
-import { clamp, convertValueToPercentage, roundToStep } from '../../shared/utils/number';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { clamp, convertValueToPercentage, roundToStep } from '@/shared/utils/number';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: number) => void;

@@ -40,9 +40,10 @@ import {
   selectVariants,
   type ZardSelectSizeVariants,
 } from './select.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardBadgeComponent } from '../badge/badge.component';
 import { ZardIconComponent } from '../icon/icon.component';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -628,7 +629,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
 ```angular-ts title="select.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export const selectVariants = cva(
   'relative inline-block w-full rounded-md group data-active:border data-active:border-ring data-active:ring-ring/50 data-active:ring-[3px]',
@@ -729,8 +730,9 @@ import {
   type ZardSelectItemModeVariants,
   type ZardSelectSizeVariants,
 } from './select.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 // Interface to avoid circular dependency
 interface SelectHost {

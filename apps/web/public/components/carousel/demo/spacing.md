@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 
-import { mergeClasses } from '../../../shared/utils/utils';
+import { mergeClasses } from '../../../utils/merge-classes';
 import { ZardCardComponent } from '../../card';
 import { ZardSegmentedComponent } from '../../segmented/segmented.component';
 import { ZardCarouselModule } from '../carousel.module';

@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { generateId } from '../../../shared/utils/utils';
+import { generateId } from '../../../utils/merge-classes';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardCardComponent } from '../card.component';
 

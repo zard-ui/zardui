@@ -36,7 +36,7 @@ export function getTargetDir(
     return resolvedConfig.resolvedPaths.services;
   }
 
-  if (basePath === 'utils' || basePath === 'shared/utils') {
+  if (basePath === 'utils') {
     return resolvedConfig.resolvedPaths.utils;
   }
 

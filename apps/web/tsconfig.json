@@ -10,9 +10,8 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@blocks": ["libs/blocks/src/index.ts"],
-      "@zard/*": ["libs/zard/src/lib/*"],
-      "@zard/core/*": ["libs/zard/src/lib/core/*"],
-      "@zard/services/*": ["libs/zard/src/lib/services/*"],
+      "@zard/*": ["libs/zard/src/lib/shared/*"],
+      "@/*": ["libs/zard/src/lib/*"],
       "@doc/domain/*": ["apps/web/src/app/domain/*"],
       "@doc/env/*": ["apps/web/src/environments/*"],
       "@doc/shared/*": ["apps/web/src/app/shared/*"],

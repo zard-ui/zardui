@@ -2,7 +2,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 import { registry, type ComponentRegistry } from '../packages/cli/src/core/registry/registry-data';
 
-const LIB_PATH = path.resolve(__dirname, '../libs/zard/src/lib');
+const LIB_PATH = path.resolve(__dirname, '../libs/zard/src/lib/shared');
 const OUTPUT_PATH = path.resolve(__dirname, '../apps/web/public/r');
 
 interface RegistryFile {
@@ -47,7 +47,7 @@ function getCliVersion(): string {
 }
 
 function getSourcePath(componentName: string, basePath: string): string {
-  const nonComponentPaths = ['core', 'services', 'shared/utils'];
+  const nonComponentPaths = ['core', 'services', 'utils'];
   if (nonComponentPaths.includes(basePath)) {
     return path.join(LIB_PATH, basePath);
   }
