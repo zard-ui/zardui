@@ -13,7 +13,7 @@ import { ZardSelectComponent } from '../select.component';
       Selected values:
       <span class="flex flex-wrap gap-2">
         @for (value of selectedValues(); track $index) {
-          <z-badge> {{ value }} </z-badge>
+          <z-badge>{{ value }}</z-badge>
         }
       </span>
 

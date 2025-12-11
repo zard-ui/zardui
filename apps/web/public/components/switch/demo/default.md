@@ -7,7 +7,9 @@ import { ZardSwitchComponent } from '../switch.component';
   selector: 'zard-demo-switch',
   imports: [ZardSwitchComponent],
   standalone: true,
-  template: ` <z-switch /> `,
+  template: `
+    <z-switch />
+  `,
 })
 export class ZardDemoSwitchDefaultComponent {}
 

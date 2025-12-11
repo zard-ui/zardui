@@ -27,8 +27,14 @@ import { ZardCarouselModule } from '../carousel.module';
       </z-carousel>
 
       <div class="mt-4 text-center text-sm">
-        <p><strong>Content class:</strong> {{ contentSpacingClass() }}</p>
-        <p><strong>Item class:</strong> {{ itemSpacingClass() }}</p>
+        <p>
+          <strong>Content class:</strong>
+          {{ contentSpacingClass() }}
+        </p>
+        <p>
+          <strong>Item class:</strong>
+          {{ itemSpacingClass() }}
+        </p>
       </div>
     </div>
   `,

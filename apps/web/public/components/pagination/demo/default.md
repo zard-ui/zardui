@@ -8,7 +8,9 @@ import { ZardPaginationModule } from '../pagination.module';
   selector: 'z-demo-pagination-default',
   imports: [ZardPaginationModule, FormsModule],
   standalone: true,
-  template: ` <z-pagination [zPageIndex]="currentPage" [zTotal]="5" [(ngModel)]="currentPage" /> `,
+  template: `
+    <z-pagination [zPageIndex]="currentPage" [zTotal]="5" [(ngModel)]="currentPage" />
+  `,
 })
 export class ZardDemoPaginationDefaultComponent {
   protected currentPage = 2;

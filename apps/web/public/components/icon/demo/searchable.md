@@ -32,7 +32,8 @@ import { ZARD_ICONS } from '../icons';
           />
         </div>
         <div class="text-muted-foreground text-xs leading-relaxed">
-          <strong>Note:</strong> These are only the icons currently used in our documentation.
+          <strong>Note:</strong>
+          These are only the icons currently used in our documentation.
           <br />
           For the complete icon library, visit
           <a
@@ -40,8 +41,9 @@ import { ZARD_ICONS } from '../icons';
             target="_blank"
             rel="noopener noreferrer"
             class="hover:text-foreground underline transition-colors"
-            >lucide.dev/icons.</a
           >
+            lucide.dev/icons.
+          </a>
         </div>
       </div>
 

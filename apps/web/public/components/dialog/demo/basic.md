@@ -22,8 +22,9 @@ interface iDialogData {
         <label
           for="name"
           class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-          >Name</label
         >
+          Name
+        </label>
         <input z-input formControlName="name" />
       </div>
 
@@ -31,8 +32,9 @@ interface iDialogData {
         <label
           for="username"
           class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-          >Username</label
         >
+          Username
+        </label>
         <input z-input formControlName="username" />
       </div>
     </form>
@@ -55,7 +57,9 @@ export class ZardDemoDialogBasicInputComponent {
 @Component({
   imports: [ZardButtonComponent, ZardDialogModule],
   standalone: true,
-  template: ` <button type="button" z-button zType="outline" (click)="openDialog()">Edit profile</button> `,
+  template: `
+    <button type="button" z-button zType="outline" (click)="openDialog()">Edit profile</button>
+  `,
 })
 export class ZardDemoDialogBasicComponent {
   private dialogService = inject(ZardDialogService);

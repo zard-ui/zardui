@@ -8,7 +8,9 @@ import { ZardAlertDialogService } from '../alert-dialog.service';
   selector: 'zard-demo-alert-dialog-default',
   imports: [ZardButtonComponent],
   standalone: true,
-  template: ` <button z-button zType="outline" (click)="showDialog()">Show Dialog</button> `,
+  template: `
+    <button z-button zType="outline" (click)="showDialog()">Show Dialog</button>
+  `,
 })
 export class ZardDemoAlertDialogDefaultComponent {
   private alertDialogService = inject(ZardAlertDialogService);

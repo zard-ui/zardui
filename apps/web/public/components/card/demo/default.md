@@ -39,7 +39,7 @@ import { ZardCardComponent } from '../card.component';
             >
               Password
             </label>
-            <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline"> Forgot your password? </a>
+            <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
           </div>
           <input
             [id]="idPassword"

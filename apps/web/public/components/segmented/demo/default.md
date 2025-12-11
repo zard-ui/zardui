@@ -7,7 +7,9 @@ import { ZardSegmentedComponent } from '../segmented.component';
   selector: 'zard-demo-segmented-default',
   imports: [ZardSegmentedComponent],
   standalone: true,
-  template: ` <z-segmented [zOptions]="options" zDefaultValue="all" (zChange)="onSelectionChange($event)" /> `,
+  template: `
+    <z-segmented [zOptions]="options" zDefaultValue="all" (zChange)="onSelectionChange($event)" />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSegmentedDefaultComponent {
