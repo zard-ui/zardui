@@ -21,8 +21,8 @@ import {
   emptyTitleVariants,
   emptyVariants,
 } from './empty.variants';
+import { ZardStringTemplateOutletDirective } from '../../core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
 import { type ZardIcon } from '../icon/icons';
 

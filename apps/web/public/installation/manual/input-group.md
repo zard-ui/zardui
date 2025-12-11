@@ -22,11 +22,11 @@ import {
   type ZardInputGroupAddonAlignVariants,
   type ZardInputGroupAddonPositionVariants,
 } from './input-group.variants';
-import { generateId, mergeClasses } from '../../shared/utils/utils';
 import {
   isTemplateRef,
   ZardStringTemplateOutletDirective,
-} from '../core/directives/string-template-outlet/string-template-outlet.directive';
+} from '../../core/directives/string-template-outlet/string-template-outlet.directive';
+import { generateId, mergeClasses } from '../../shared/utils/utils';
 import { ZardInputDirective } from '../input/input.directive';
 import type { ZardInputSizeVariants } from '../input/input.variants';
 import { ZardLoaderComponent } from '../loader/loader.component';

@@ -26,14 +26,16 @@ import {
   ZardBreadcrumbSizeVariants,
   ZardBreadcrumbWrapVariants,
 } from './breadcrumb.variants';
+import { ZardStringTemplateOutletDirective } from '../../core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
   imports: [ZardIconComponent],
-  template: ` <z-icon zType="ellipsis" /> `,
+  template: `
+    <z-icon zType="ellipsis" />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
