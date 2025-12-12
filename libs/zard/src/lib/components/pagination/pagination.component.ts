@@ -1,116 +1,110 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
-  forwardRef,
   input,
-  linkedSignal,
+  model,
   output,
+  TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
 import {
   paginationContentVariants,
   paginationEllipsisVariants,
-  paginationItemVariants,
   paginationNextVariants,
   paginationPreviousVariants,
   paginationVariants,
 } from './pagination.variants';
 import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
-import { type ZardButtonVariants } from '../button/button.variants';
+import { type ZardButtonSizeVariants, type ZardButtonTypeVariants } from '../button/button.variants';
 import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
-  selector: 'z-pagination-content',
+  selector: 'ul[z-pagination-content]',
   template: `
-    <div [attr.aria-label]="ariaLabel()" role="navigation" data-slot="pagination-content" [class]="classes()">
-      <ng-content />
-    </div>
+    <ng-content />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'pagination-content',
+    '[class]': 'classes()',
+  },
   exportAs: 'zPaginationContent',
 })
 export class ZardPaginationContentComponent {
-  readonly ariaLabel = input<string>('pagination-content');
-
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(paginationContentVariants(), this.class()));
 }
 
 @Component({
-  selector: 'z-pagination-item',
+  selector: 'li[z-pagination-item]',
   template: `
-    <div data-slot="pagination-item" [class]="classes()">
-      <ng-content />
-    </div>
+    <ng-content />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'pagination-item',
+  },
   exportAs: 'zPaginationItem',
 })
-export class ZardPaginationItemComponent {
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(paginationItemVariants(), this.class()));
-}
+export class ZardPaginationItemComponent {}
+// Structural wrapper component for pagination items (<li>). No inputs required.
 
 @Component({
-  selector: 'z-pagination-button',
+  selector: 'button[z-pagination-button], a[z-pagination-button]',
   imports: [ZardButtonComponent],
-  standalone: true,
   template: `
-    <button
-      z-button
-      data-slot="pagination-button"
-      [attr.aria-disabled]="zDisabled() || null"
-      [attr.data-disabled]="zDisabled() || null"
-      [attr.aria-current]="zActive() ? 'page' : undefined"
+    <z-button
       [attr.data-active]="zActive() || null"
-      [zType]="zType()"
-      [zSize]="zSize()"
       [class]="class()"
-      (click)="handleClick()"
+      [zDisabled]="zDisabled()"
+      [zSize]="zSize()"
+      [zType]="zType()"
     >
       <ng-content />
-    </button>
+    </z-button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'pagination-button',
+  },
   exportAs: 'zPaginationButton',
 })
 export class ZardPaginationButtonComponent {
-  readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly zActive = input(false, { transform: booleanAttribute });
-  readonly zSize = input<ZardButtonVariants['zSize']>();
-
   readonly class = input<ClassValue>('');
-  readonly zClick = output<void>();
+  readonly zActive = input(false, { transform: booleanAttribute });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zSize = input<ZardButtonSizeVariants>('default');
 
-  protected readonly zType = computed<ZardButtonVariants['zType']>(() => (this.zActive() ? 'outline' : 'ghost'));
-
-  handleClick() {
-    if (!this.zDisabled() && !this.zActive()) {
-      this.zClick.emit();
-    }
-  }
+  protected readonly zType = computed<ZardButtonTypeVariants>(() => (this.zActive() ? 'outline' : 'ghost'));
 }
 
 @Component({
   selector: 'z-pagination-previous',
   imports: [ZardPaginationButtonComponent, ZardIconComponent],
   template: `
-    <z-pagination-button aria-label="Go to previous page" [class]="classes()" zSize="default">
-      <z-icon zType="chevron-left" />
-      <span class="hidden sm:block">Previous</span>
-    </z-pagination-button>
+    <button
+      type="button"
+      z-pagination-button
+      [attr.disabled]="zDisabled() ? '' : null"
+      [class]="classes()"
+      [zSize]="zSize()"
+      [zDisabled]="zDisabled()"
+    >
+      <span class="sr-only">To previous page</span>
+      <z-icon zType="chevron-left" aria-hidden="true" />
+      <span class="hidden sm:block" aria-hidden="true">Previous</span>
+    </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -118,6 +112,8 @@ export class ZardPaginationButtonComponent {
 })
 export class ZardPaginationPreviousComponent {
   readonly class = input<ClassValue>('');
+  readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zSize = input<ZardButtonSizeVariants>('default');
 
   protected readonly classes = computed(() => mergeClasses(paginationPreviousVariants(), this.class()));
 }
@@ -126,10 +122,18 @@ export class ZardPaginationPreviousComponent {
   selector: 'z-pagination-next',
   imports: [ZardPaginationButtonComponent, ZardIconComponent],
   template: `
-    <z-pagination-button aria-label="Go to next page" [class]="classes()" zSize="default">
-      <span class="hidden sm:block">Next</span>
-      <z-icon zType="chevron-right" />
-    </z-pagination-button>
+    <button
+      type="button"
+      z-pagination-button
+      [attr.disabled]="zDisabled() ? '' : null"
+      [class]="classes()"
+      [zDisabled]="zDisabled()"
+      [zSize]="zSize()"
+    >
+      <span class="sr-only">To next page</span>
+      <span class="hidden sm:block" aria-hidden="true">Next</span>
+      <z-icon zType="chevron-right" aria-hidden="true" />
+    </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -137,6 +141,8 @@ export class ZardPaginationPreviousComponent {
 })
 export class ZardPaginationNextComponent {
   readonly class = input<ClassValue>('');
+  readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zSize = input<ZardButtonSizeVariants>('default');
 
   protected readonly classes = computed(() => mergeClasses(paginationNextVariants(), this.class()));
 }
@@ -145,13 +151,13 @@ export class ZardPaginationNextComponent {
   selector: 'z-pagination-ellipsis',
   imports: [ZardIconComponent],
   template: `
-    <z-icon zType="ellipsis" aria-hidden="true" role="presentation" />
-    <span class="sr-only">More pages</span>
+    <z-icon zType="ellipsis" aria-hidden="true" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
+    'aria-hidden': 'true',
   },
   exportAs: 'zPaginationEllipsis',
 })
@@ -167,114 +173,84 @@ export class ZardPaginationEllipsisComponent {
     ZardPaginationContentComponent,
     ZardPaginationItemComponent,
     ZardPaginationButtonComponent,
-    ZardIconComponent,
+    ZardPaginationPreviousComponent,
+    ZardPaginationNextComponent,
+    NgTemplateOutlet,
   ],
   template: `
-    <z-pagination-content>
-      <z-pagination-item>
-        <z-pagination-button
-          aria-label="Go to previous page"
-          [zSize]="zSize()"
-          [zDisabled]="disabled() || currentPage() === 1"
-          (zClick)="goToPrevious()"
-        >
-          <z-icon zType="chevron-left" />
-        </z-pagination-button>
-      </z-pagination-item>
-
-      @for (page of pages(); track page) {
-        <z-pagination-item>
-          <z-pagination-button
+    @if (zContent()) {
+      <ng-container *ngTemplateOutlet="zContent()" />
+    } @else {
+      <ul z-pagination-content>
+        <li z-pagination-item>
+          @let pagePrevious = Math.max(1, zPageIndex() - 1);
+          <z-pagination-previous
             [zSize]="zSize()"
-            [zActive]="page === currentPage()"
-            [zDisabled]="disabled()"
-            (zClick)="goToPage(page)"
-          >
-            {{ page }}
-          </z-pagination-button>
-        </z-pagination-item>
-      }
+            [zDisabled]="zDisabled() || zPageIndex() === 1"
+            (click)="goToPage(pagePrevious)"
+          />
+        </li>
 
-      <z-pagination-item>
-        <z-pagination-button
-          aria-label="Go to next page"
-          [zSize]="zSize()"
-          [zDisabled]="disabled() || currentPage() === zTotal()"
-          (zClick)="goToNext()"
-        >
-          <z-icon zType="chevron-right" />
-        </z-pagination-button>
-      </z-pagination-item>
-    </z-pagination-content>
+        @for (page of pages(); track page) {
+          <li z-pagination-item>
+            <button
+              z-pagination-button
+              type="button"
+              class="focus-visible:rounded-md"
+              [attr.aria-current]="page === zPageIndex() ? 'page' : null"
+              [attr.aria-disabled]="zDisabled() || null"
+              [zActive]="page === zPageIndex()"
+              [zDisabled]="zDisabled()"
+              [zSize]="zSize()"
+              (click)="goToPage(page)"
+            >
+              <span class="sr-only">{{ pages().length === page ? 'To last page, page' : 'To page' }}</span>
+              {{ page }}
+            </button>
+          </li>
+        }
+
+        <li z-pagination-item>
+          @let pageNext = Math.min(zPageIndex() + 1, zTotal());
+          <z-pagination-next
+            [zSize]="zSize()"
+            [zDisabled]="zDisabled() || zPageIndex() === zTotal()"
+            (click)="goToPage(pageNext)"
+          />
+        </li>
+      </ul>
+    }
   `,
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => ZardPaginationComponent),
-      multi: true,
-    },
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    role: 'group',
+    '[attr.aria-label]': 'zAriaLabel()',
+    'data-slot': 'pagination',
     '[class]': 'classes()',
   },
   exportAs: 'zPagination',
 })
-export class ZardPaginationComponent implements ControlValueAccessor {
-  readonly zPageIndex = input<number>(1);
+export class ZardPaginationComponent {
+  readonly zPageIndex = model<number>(1);
   readonly zTotal = input<number>(1);
-  readonly zSize = input<ZardButtonVariants['zSize']>();
+  readonly zSize = input<ZardButtonSizeVariants>('default');
   readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zContent = input<TemplateRef<void> | undefined>();
+  readonly zAriaLabel = input('Pagination');
 
   readonly class = input<ClassValue>('');
 
   readonly zPageIndexChange = output<number>();
+  readonly Math = Math;
 
   protected readonly classes = computed(() => mergeClasses(paginationVariants(), this.class()));
-
-  protected readonly disabled = linkedSignal(() => this.zDisabled());
-
-  readonly currentPage = linkedSignal(this.zPageIndex);
-
   readonly pages = computed<number[]>(() => Array.from({ length: Math.max(0, this.zTotal()) }, (_, i) => i + 1));
 
   goToPage(page: number): void {
-    if (this.disabled()) return;
-    if (page !== this.currentPage() && page >= 1 && page <= this.zTotal()) {
-      this.currentPage.set(page);
+    if (!this.zDisabled() && page !== this.zPageIndex()) {
+      this.zPageIndex.set(page);
       this.zPageIndexChange.emit(page);
-      this.onChange(page);
-      this.onTouched();
     }
-  }
-
-  goToPrevious() {
-    this.goToPage(this.currentPage() - 1);
-  }
-
-  goToNext() {
-    this.goToPage(this.currentPage() + 1);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onChange: (value: number) => void = () => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onTouched: () => void = () => {};
-
-  writeValue(value: number): void {
-    this.currentPage.set(value);
-  }
-
-  registerOnChange(fn: any): void {
-    this.onChange = fn;
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
   }
 }
