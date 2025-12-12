@@ -35,7 +35,6 @@ export const registry: ComponentRegistry[] = [
   {
     name: 'dark-mode',
     basePath: 'services',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'dark-mode.ts',
@@ -60,7 +59,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'layout',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'layout.component.ts',
@@ -94,7 +93,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'button',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'button.component.ts',
@@ -108,7 +107,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'sheet',
-    registryDependencies: ['button', 'core', 'icon'],
+    registryDependencies: ['button', 'icon'],
     files: [
       {
         name: 'sheet.component.ts',
@@ -134,7 +133,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'card',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'card.component.ts',
@@ -148,7 +146,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'empty',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'empty.component.ts',
@@ -162,7 +160,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'badge',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'badge.component.ts',
@@ -176,7 +173,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'accordion',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'accordion.component.ts',
@@ -194,7 +191,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'alert',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'alert.component.ts',
@@ -208,7 +205,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'alert-dialog',
-    registryDependencies: ['button', 'core'],
+    registryDependencies: ['button'],
     files: [
       {
         name: 'alert-dialog.component.ts',
@@ -234,7 +231,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'avatar',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'avatar.component.ts',
@@ -248,7 +245,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'checkbox',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'checkbox.component.ts',
@@ -262,7 +259,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'dialog',
-    registryDependencies: ['button', 'core', 'icon'],
+    registryDependencies: ['button', 'icon'],
     files: [
       {
         name: 'dialog.component.ts',
@@ -284,7 +281,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'dropdown',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'dropdown.component.ts',
@@ -326,7 +322,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'icon',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'icon.component.ts',
@@ -344,7 +339,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'input',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'input.directive.ts',
@@ -358,7 +352,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'input-group',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'input-group.component.ts',
@@ -372,7 +365,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'select',
-    registryDependencies: ['badge', 'core', 'icon'],
+    registryDependencies: ['badge', 'icon'],
     files: [
       {
         name: 'select.component.ts',
@@ -390,7 +383,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'switch',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'switch.component.ts',
@@ -404,7 +396,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tabs',
-    registryDependencies: ['button', 'core', 'icon'],
+    registryDependencies: ['button', 'icon'],
     files: [
       {
         name: 'tabs.component.ts',
@@ -418,7 +410,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'toggle',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'toggle.component.ts',
@@ -432,7 +423,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tooltip',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'tooltip.ts',
@@ -450,7 +440,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'breadcrumb',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'breadcrumb.component.ts',
@@ -468,7 +458,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'divider',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'divider.component.ts',
@@ -482,7 +471,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'loader',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'loader.component.ts',
@@ -496,7 +484,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'progress-bar',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'progress-bar.component.ts',
@@ -510,7 +497,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'radio',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'radio.component.ts',
@@ -524,7 +510,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'slider',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'slider.component.ts',
@@ -538,7 +523,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'calendar',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'calendar.component.ts',
@@ -568,7 +553,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'combobox',
-    registryDependencies: ['button', 'command', 'core', 'popover', 'empty', 'input', 'icon'],
+    registryDependencies: ['button', 'command', 'popover', 'empty', 'input', 'icon'],
     files: [
       {
         name: 'combobox.component.ts',
@@ -582,7 +567,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'command',
-    registryDependencies: ['core', 'icon'],
+    registryDependencies: ['icon'],
     files: [
       {
         name: 'command.component.ts',
@@ -624,7 +609,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'date-picker',
-    registryDependencies: ['button', 'calendar', 'core', 'popover', 'input', 'icon'],
+    registryDependencies: ['button', 'calendar', 'popover', 'input', 'icon'],
     files: [
       {
         name: 'date-picker.component.ts',
@@ -638,7 +623,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'form',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'form.component.ts',
@@ -656,7 +640,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'pagination',
-    registryDependencies: ['button', 'core', 'icon'],
+    registryDependencies: ['button', 'icon'],
     files: [
       {
         name: 'pagination.component.ts',
@@ -674,7 +658,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'popover',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'popover.component.ts',
@@ -688,7 +671,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'resizable',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'resizable.component.ts',
@@ -710,7 +692,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'segmented',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'segmented.component.ts',
@@ -724,7 +705,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'skeleton',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'skeleton.component.ts',
@@ -738,7 +718,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'table',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'table.component.ts',
@@ -757,7 +736,6 @@ export const registry: ComponentRegistry[] = [
   {
     name: 'toast',
     dependencies: ['ngx-sonner'],
-    registryDependencies: ['core'],
     files: [
       {
         name: 'toast.component.ts',
@@ -771,7 +749,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'toggle-group',
-    registryDependencies: ['core', 'toggle', 'icon'],
+    registryDependencies: ['toggle', 'icon'],
     files: [
       {
         name: 'toggle-group.component.ts',
@@ -785,7 +763,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'menu',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'menu.directive.ts',
@@ -819,7 +796,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'button-group',
-    registryDependencies: ['core', 'divider'],
+    registryDependencies: ['divider'],
     files: [
       {
         name: 'button-group.component.ts',
@@ -833,7 +810,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'kbd',
-    registryDependencies: ['core'],
     files: [
       {
         name: 'kbd.component.ts',
@@ -857,7 +833,7 @@ export const registry: ComponentRegistry[] = [
       'embla-carousel-class-names',
       'embla-carousel-wheel-gestures',
     ],
-    registryDependencies: ['button', 'core', 'icon'],
+    registryDependencies: ['button', 'icon'],
     files: [
       {
         name: 'carousel.component.ts',
