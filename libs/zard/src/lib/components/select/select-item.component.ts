@@ -15,13 +15,14 @@ import {
   type ZardSelectItemModeVariants,
   type ZardSelectSizeVariants,
 } from './select.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+import { mergeClasses, noopFun, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 
 // Interface to avoid circular dependency
 interface SelectHost {
   selectedValue(): string[];
   selectItem(value: string, label: string): void;
+  navigateTo(): void;
 }
 
 @Component({
@@ -47,6 +48,8 @@ interface SelectHost {
     '[attr.data-selected]': 'isSelected() ? "" : null',
     '[attr.aria-selected]': 'isSelected()',
     '(click)': 'onClick()',
+    '(mouseenter)': 'onMouseEnter()',
+    '(keydown.{tab}.prevent)': 'noopFun',
   },
 })
 export class ZardSelectItemComponent {
@@ -57,6 +60,7 @@ export class ZardSelectItemComponent {
   readonly class = input<string>('');
 
   private readonly select = signal<SelectHost | null>(null);
+  noopFun = noopFun;
 
   readonly label = linkedSignal<string>(() => {
     const element = this.elementRef.nativeElement;
@@ -80,6 +84,13 @@ export class ZardSelectItemComponent {
 
   setSelectHost(selectHost: SelectHost) {
     this.select.set(selectHost);
+  }
+
+  onMouseEnter() {
+    if (this.zDisabled()) {
+      return;
+    }
+    this.select()?.navigateTo();
   }
 
   onClick() {

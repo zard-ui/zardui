@@ -3,7 +3,10 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { mergeClasses } from '../../shared/utils/utils';
 
 export const selectVariants = cva(
-  'relative inline-block w-full rounded-md group data-active:border data-active:border-ring data-active:ring-ring/50 data-active:ring-[3px]',
+  mergeClasses(
+    'relative inline-block w-full rounded-md group data-active:border data-active:border-ring data-active:ring-ring/50 data-active:ring-[3px]',
+    '[&_button]:focus-visible:border [&_button]:focus-visible:border-ring [&_button]:focus-visible:ring-ring/50 [&_button]:focus-visible:ring-[3px]',
+  ),
 );
 
 export const selectTriggerVariants = cva(
