@@ -33,14 +33,6 @@ export class ZardDarkMode implements OnDestroy {
     this.handleSystemChanges(false);
   }
 
-  init(): void {
-    if (!this.isBrowser) {
-      return;
-    }
-
-    this.applyTheme(this.getStoredTheme() ?? EDarkModes.SYSTEM);
-  }
-
   toggleTheme(targetMode?: DarkModeOptions): void {
     if (!this.isBrowser) {
       return;

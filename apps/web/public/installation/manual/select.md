@@ -744,8 +744,6 @@ import {
   signal,
 } from '@angular/core';
 
-import { mergeClasses, noopFun, transform } from '@/shared/utils/merge-classes';
-
 import {
   selectItemIconVariants,
   selectItemVariants,
@@ -753,6 +751,8 @@ import {
   type ZardSelectSizeVariants,
 } from './select.variants';
 import { ZardIconComponent } from '../icon/icon.component';
+
+import { mergeClasses, noopFun, transform } from '@/shared/utils/merge-classes';
 
 // Interface to avoid circular dependency
 interface SelectHost {
