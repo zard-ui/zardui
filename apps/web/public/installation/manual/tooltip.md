@@ -1,6 +1,9 @@
 
 
 ```angular-ts title="tooltip.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
+import { ComponentPortal } from '@angular/cdk/portal';
+import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -23,16 +26,15 @@ import {
   signal,
   TemplateRef,
 } from '@angular/core';
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { filter, map, of, Subject, switchMap, tap, timer } from 'rxjs';
-import { generateId, mergeClasses } from '@/shared/utils/merge-classes';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { ComponentPortal } from '@angular/cdk/portal';
 
-import { tooltipPositionVariants, tooltipVariants, type ZardTooltipPositionVariants } from './tooltip.variants';
+import { filter, map, of, Subject, switchMap, tap, timer } from 'rxjs';
+
 import { TOOLTIP_POSITIONS_MAP } from './tooltip-positions';
+import { tooltipPositionVariants, tooltipVariants, type ZardTooltipPositionVariants } from './tooltip.variants';
+
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { generateId, mergeClasses } from '@/shared/utils/merge-classes';
 
 export type ZardTooltipTriggers = 'click' | 'hover';
 export type ZardTooltipType = string | TemplateRef<void> | null;

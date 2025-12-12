@@ -12,11 +12,7 @@ import {
   type TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import {
-  isTemplateRef,
-  ZardStringTemplateOutletDirective,
-} from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { generateId, mergeClasses } from '@/shared/utils/merge-classes';
+
 import type { ClassValue } from 'clsx';
 
 import {
@@ -26,9 +22,15 @@ import {
   type ZardInputGroupAddonAlignVariants,
   type ZardInputGroupAddonPositionVariants,
 } from './input-group.variants';
+import { ZardInputDirective } from '../input/input.directive';
 import type { ZardInputSizeVariants } from '../input/input.variants';
 import { ZardLoaderComponent } from '../loader/loader.component';
-import { ZardInputDirective } from '../input/input.directive';
+
+import {
+  isTemplateRef,
+  ZardStringTemplateOutletDirective,
+} from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { generateId, mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-input-group',

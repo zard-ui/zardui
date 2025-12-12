@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { TestBed, ComponentFixtureAutoDetect } from '@angular/core/testing';
 
 import { ZardButtonComponent } from './button.component';
+import { ZardIconComponent } from '../icon/icon.component';
 
 describe('ButtonComponent', () => {
   it('should create', () => {
@@ -9,7 +10,7 @@ describe('ButtonComponent', () => {
       imports: [ZardButtonComponent],
       standalone: true,
       template: `
-        <button z-button>Test</button>
+        <button type="button" z-button>Test</button>
       `,
     })
     class TestComponent {}
@@ -21,13 +22,31 @@ describe('ButtonComponent', () => {
     expect(buttonEl).toBeTruthy();
   });
 
+  it('should apply disabled classes when zDisabled is true', () => {
+    @Component({
+      imports: [ZardButtonComponent],
+      standalone: true,
+      template: `
+        <button type="button" z-button [zDisabled]="true">Button</button>
+      `,
+    })
+    class TestComponent {}
+
+    const fixture = TestBed.createComponent(TestComponent);
+    fixture.detectChanges();
+
+    const buttonEl = fixture.nativeElement.querySelector('button');
+    expect(buttonEl.classList.contains('pointer-events-none')).toBe(true);
+    expect(buttonEl.classList.contains('opacity-50')).toBe(true);
+  });
+
   describe('iconOnly detection', () => {
     it('should set data-icon-only attribute when button has only an icon', async () => {
       @Component({
-        imports: [ZardButtonComponent],
+        imports: [ZardButtonComponent, ZardIconComponent],
         standalone: true,
         template: `
-          <button z-button><i z-icon></i></button>
+          <button type="button" z-button><z-icon zType="sun" /></button>
         `,
       })
       class TestComponent {}
@@ -46,12 +65,12 @@ describe('ButtonComponent', () => {
 
     it('should not set data-icon-only when button has text and icon', async () => {
       @Component({
-        imports: [ZardButtonComponent],
+        imports: [ZardButtonComponent, ZardIconComponent],
         standalone: true,
         template: `
-          <button z-button>
+          <button type="button" z-button>
             Button
-            <i z-icon></i>
+            <z-icon zType="sun" />
           </button>
         `,
       })
@@ -67,10 +86,10 @@ describe('ButtonComponent', () => {
 
     it('should not set data-icon-only when button has only text', async () => {
       @Component({
-        imports: [ZardButtonComponent],
+        imports: [ZardButtonComponent, ZardIconComponent],
         standalone: true,
         template: `
-          <button z-button>Button</button>
+          <button type="button" z-button>Button</button>
         `,
       })
       class TestComponent {}
@@ -85,11 +104,11 @@ describe('ButtonComponent', () => {
 
     it('should not set data-icon-only when button has icon before text', async () => {
       @Component({
-        imports: [ZardButtonComponent],
+        imports: [ZardButtonComponent, ZardIconComponent],
         standalone: true,
         template: `
-          <button z-button>
-            <i z-icon></i>
+          <button type="button" z-button>
+            <z-icon zType="sun" />
             Button
           </button>
         `,
@@ -111,7 +130,7 @@ describe('ButtonComponent', () => {
         imports: [ZardButtonComponent],
         standalone: true,
         template: `
-          <button z-button>Button</button>
+          <button type="button" z-button>Button</button>
         `,
       })
       class TestComponent {}
@@ -130,7 +149,7 @@ describe('ButtonComponent', () => {
         imports: [ZardButtonComponent],
         standalone: true,
         template: `
-          <button z-button zSize="sm">Button</button>
+          <button type="button" z-button zSize="sm">Button</button>
         `,
       })
       class TestComponent {}
@@ -148,7 +167,7 @@ describe('ButtonComponent', () => {
         imports: [ZardButtonComponent],
         standalone: true,
         template: `
-          <button z-button zSize="lg">Button</button>
+          <button type="button" z-button zSize="lg">Button</button>
         `,
       })
       class TestComponent {}
@@ -168,7 +187,7 @@ describe('ButtonComponent', () => {
         imports: [ZardButtonComponent],
         standalone: true,
         template: `
-          <button z-button>Button</button>
+          <button type="button" z-button>Button</button>
         `,
       })
       class TestComponent {}
@@ -186,7 +205,7 @@ describe('ButtonComponent', () => {
         imports: [ZardButtonComponent],
         standalone: true,
         template: `
-          <button z-button zType="destructive">Button</button>
+          <button type="button" z-button zType="destructive">Button</button>
         `,
       })
       class TestComponent {}
@@ -204,7 +223,7 @@ describe('ButtonComponent', () => {
         imports: [ZardButtonComponent],
         standalone: true,
         template: `
-          <button z-button zType="outline">Button</button>
+          <button type="button" z-button zType="outline">Button</button>
         `,
       })
       class TestComponent {}
@@ -221,10 +240,10 @@ describe('ButtonComponent', () => {
   describe('loading state', () => {
     it('should render loading icon when zLoading is true', () => {
       @Component({
-        imports: [ZardButtonComponent],
+        imports: [ZardButtonComponent, ZardIconComponent],
         standalone: true,
         template: `
-          <button z-button [zLoading]="true">Button</button>
+          <button type="button" z-button [zLoading]="true">Button</button>
         `,
       })
       class TestComponent {}
@@ -232,7 +251,7 @@ describe('ButtonComponent', () => {
       const fixture = TestBed.createComponent(TestComponent);
       fixture.detectChanges();
 
-      const loadingIcon = fixture.nativeElement.querySelector('[z-icon]');
+      const loadingIcon = fixture.nativeElement.querySelector('z-icon');
       expect(loadingIcon).toBeTruthy();
       expect(loadingIcon.classList.contains('animate-spin')).toBe(true);
     });
@@ -242,7 +261,7 @@ describe('ButtonComponent', () => {
         imports: [ZardButtonComponent],
         standalone: true,
         template: `
-          <button z-button [zLoading]="false">Button</button>
+          <button type="button" z-button [zLoading]="false">Button</button>
         `,
       })
       class TestComponent {}
@@ -250,7 +269,7 @@ describe('ButtonComponent', () => {
       const fixture = TestBed.createComponent(TestComponent);
       fixture.detectChanges();
 
-      const loadingIcon = fixture.nativeElement.querySelector('[z-icon]');
+      const loadingIcon = fixture.nativeElement.querySelector('z-icon');
       expect(loadingIcon).toBeFalsy();
     });
   });
@@ -261,7 +280,7 @@ describe('ButtonComponent', () => {
         imports: [ZardButtonComponent],
         standalone: true,
         template: `
-          <button z-button [zFull]="true">Button</button>
+          <button type="button" z-button [zFull]="true">Button</button>
         `,
       })
       class TestComponent {}
@@ -278,7 +297,7 @@ describe('ButtonComponent', () => {
         imports: [ZardButtonComponent],
         standalone: true,
         template: `
-          <button z-button [zFull]="false">Button</button>
+          <button type="button" z-button [zFull]="false">Button</button>
         `,
       })
       class TestComponent {}

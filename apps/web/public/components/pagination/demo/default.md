@@ -1,15 +1,13 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
 import { ZardPaginationModule } from '../pagination.module';
 
 @Component({
   selector: 'z-demo-pagination-default',
-  imports: [ZardPaginationModule, FormsModule],
-  standalone: true,
+  imports: [ZardPaginationModule],
   template: `
-    <z-pagination [zPageIndex]="currentPage" [zTotal]="5" [(ngModel)]="currentPage" />
+    <z-pagination [zTotal]="5" [(zPageIndex)]="currentPage" />
   `,
 })
 export class ZardDemoPaginationDefaultComponent {

@@ -77,11 +77,10 @@ describe('ZardSelectComponent', () => {
 
     describe('keyboard navigation', () => {
       it('should open dropdown on Enter key', fakeAsync(() => {
-        const btn = fixture.debugElement.query(By.css('button'));
         const event = new KeyboardEvent('keydown', { key: 'Enter', code: 'Enter' });
         jest.spyOn(event, 'preventDefault');
 
-        btn.nativeElement.dispatchEvent(event);
+        fixture.debugElement.nativeElement.dispatchEvent(event);
         flush();
         fixture.detectChanges();
 
@@ -91,10 +90,9 @@ describe('ZardSelectComponent', () => {
 
       it('should open dropdown on Space key', fakeAsync(() => {
         const event = new KeyboardEvent('keydown', { key: ' ' });
-        const btn = fixture.debugElement.query(By.css('button'));
         jest.spyOn(event, 'preventDefault');
 
-        btn.nativeElement.dispatchEvent(event);
+        fixture.debugElement.nativeElement.dispatchEvent(event);
         flush();
         fixture.detectChanges();
 
@@ -104,11 +102,10 @@ describe('ZardSelectComponent', () => {
 
       it('should close dropdown on Escape key', fakeAsync(() => {
         const event = new KeyboardEvent('keydown', { key: 'Escape' });
-        const btn = fixture.debugElement.query(By.css('button'));
         jest.spyOn(event, 'preventDefault');
 
         component.toggle();
-        btn.nativeElement.dispatchEvent(event);
+        fixture.debugElement.nativeElement.dispatchEvent(event);
         flush();
         fixture.detectChanges();
 

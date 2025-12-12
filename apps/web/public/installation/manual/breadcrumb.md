@@ -12,9 +12,8 @@ import {
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { Params, RouterLink } from '@angular/router';
-import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import type { ClassValue } from 'clsx';
 
 import {
@@ -28,6 +27,9 @@ import {
   ZardBreadcrumbWrapVariants,
 } from './breadcrumb.variants';
 import { ZardIconComponent } from '../icon/icon.component';
+
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',

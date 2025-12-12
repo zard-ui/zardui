@@ -56,17 +56,16 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
   template: `
     <button
       type="button"
+      role="combobox"
+      aria-controls="dropdown"
       [class]="triggerClasses()"
       [disabled]="zDisabled()"
-      (click)="toggle()"
-      (keydown.{enter,space,arrowdown,arrowup,escape}.prevent)="onTriggerKeydown($event)"
       [attr.aria-expanded]="isOpen()"
       [attr.aria-haspopup]="'listbox'"
-      [attr.data-state]="isOpen() ? 'open' : 'closed'"
       [attr.data-placeholder]="!zValue() ? '' : null"
-      [tabIndex]="0"
-      (focus)="onFocus()"
       (blur)="!isOpen() && isFocus.set(false)"
+      (click)="toggle()"
+      (focus)="onFocus()"
     >
       <span class="flex flex-1 flex-wrap items-center gap-2">
         @let labels = selectedLabels();
@@ -91,6 +90,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
 
     <ng-template #dropdownTemplate>
       <div
+        id="dropdown"
         [class]="contentClasses()"
         role="listbox"
         [attr.data-state]="'open'"
@@ -116,6 +116,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '[class]': 'classes()',
+    '(keydown.{enter,space,arrowdown,arrowup,escape}.prevent)': 'onTriggerKeydown($event)',
   },
 })
 export class ZardSelectComponent implements ControlValueAccessor, AfterContentInit, OnDestroy {
@@ -186,12 +187,15 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   ngAfterContentInit() {
     const hostWidth = this.elementRef.nativeElement.offsetWidth || 0;
     // Setup select host reference for each item
+    let i = 0;
     for (const item of this.selectItems()) {
       item.setSelectHost({
         selectedValue: () => (this.zMultiple() ? (this.zValue() as string[]) : [this.zValue() as string]),
         selectItem: (value: string, label: string) => this.selectItem(value, label),
+        navigateTo: () => this.navigateTo(item, i),
       });
       item.zSize.set(this.zSize());
+      i++;
 
       if (hostWidth <= COMPACT_MODE_WIDTH_THRESHOLD) {
         this.isCompact.set(true);
@@ -293,6 +297,11 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     }
   }
 
+  private navigateTo(element: ZardSelectItemComponent, index: number): void {
+    this.focusedIndex.set(index);
+    this.updateItemFocus(this.getSelectItems(true), index);
+  }
+
   private updateOverlayPosition(): void {
     setTimeout(() => {
       this.overlayRef?.updatePosition();
@@ -356,6 +365,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.overlayRef.attach(this.portal);
     this.overlayRef.updateSize({ width: hostWidth });
     this.isOpen.set(true);
+    this.updateFocusWhenNormalMode();
 
     this.determinePortalWidthOnOpen(hostWidth);
   }
@@ -372,6 +382,13 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.isOpen.set(false);
     this.focusedIndex.set(-1);
     this.onTouched();
+    this.updateFocusWhenNormalMode();
+  }
+
+  private updateFocusWhenNormalMode(): void {
+    if (!this.isCompact()) {
+      this.isFocus.set(!this.isOpen());
+    }
   }
 
   private getMatchingItem(value: string): ZardSelectItemComponent | undefined {
@@ -486,13 +503,13 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     }
   }
 
-  private getSelectItems(): HTMLElement[] {
+  private getSelectItems(ignoreFilter = false): HTMLElement[] {
     if (!this.overlayRef?.hasAttached()) {
       return [];
     }
     const dropdownElement = this.overlayRef.overlayElement;
     return Array.from(dropdownElement.querySelectorAll<HTMLElement>('z-select-item, [z-select-item]')).filter(
-      item => item.dataset['disabled'] === undefined,
+      item => ignoreFilter || item.dataset['disabled'] === undefined,
     );
   }
 
@@ -632,7 +649,10 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export const selectVariants = cva(
-  'relative inline-block w-full rounded-md group data-active:border data-active:border-ring data-active:ring-ring/50 data-active:ring-[3px]',
+  mergeClasses(
+    'relative inline-block w-full rounded-md group data-active:border data-active:border-ring data-active:ring-ring/50 data-active:ring-[3px]',
+    '[&_button]:focus-visible:border [&_button]:focus-visible:border-ring [&_button]:focus-visible:ring-ring/50 [&_button]:focus-visible:ring-[3px]',
+  ),
 );
 
 export const selectTriggerVariants = cva(
@@ -724,6 +744,8 @@ import {
   signal,
 } from '@angular/core';
 
+import { mergeClasses, noopFun, transform } from '@/shared/utils/merge-classes';
+
 import {
   selectItemIconVariants,
   selectItemVariants,
@@ -732,12 +754,11 @@ import {
 } from './select.variants';
 import { ZardIconComponent } from '../icon/icon.component';
 
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
-
 // Interface to avoid circular dependency
 interface SelectHost {
   selectedValue(): string[];
   selectItem(value: string, label: string): void;
+  navigateTo(): void;
 }
 
 @Component({
@@ -763,6 +784,8 @@ interface SelectHost {
     '[attr.data-selected]': 'isSelected() ? "" : null',
     '[attr.aria-selected]': 'isSelected()',
     '(click)': 'onClick()',
+    '(mouseenter)': 'onMouseEnter()',
+    '(keydown.{tab}.prevent)': 'noopFun',
   },
 })
 export class ZardSelectItemComponent {
@@ -773,6 +796,7 @@ export class ZardSelectItemComponent {
   readonly class = input<string>('');
 
   private readonly select = signal<SelectHost | null>(null);
+  noopFun = noopFun;
 
   readonly label = linkedSignal<string>(() => {
     const element = this.elementRef.nativeElement;
@@ -798,6 +822,13 @@ export class ZardSelectItemComponent {
     this.select.set(selectHost);
   }
 
+  onMouseEnter() {
+    if (this.zDisabled()) {
+      return;
+    }
+    this.select()?.navigateTo();
+  }
+
   onClick() {
     if (this.zDisabled()) {
       return;
@@ -805,6 +836,24 @@ export class ZardSelectItemComponent {
     this.select()?.selectItem(this.zValue(), this.label());
   }
 }
+
+```
+
+
+
+```angular-ts title="select.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { NgModule } from '@angular/core';
+
+import { ZardSelectItemComponent } from './select-item.component';
+import { ZardSelectComponent } from './select.component';
+
+const components = [ZardSelectComponent, ZardSelectItemComponent];
+
+@NgModule({
+  imports: components,
+  exports: components,
+})
+export class ZardSelectModule {}
 
 ```
 

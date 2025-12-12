@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 const datePickerVariants = cva('', {
   variants: {
@@ -20,4 +20,3 @@ const datePickerVariants = cva('', {
 });
 
 export { datePickerVariants };
-export type ZardDatePickerVariants = VariantProps<typeof datePickerVariants>;

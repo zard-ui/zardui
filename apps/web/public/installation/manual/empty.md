@@ -9,8 +9,7 @@ import {
   type TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import type { ClassValue } from 'clsx';
 
 import {
@@ -24,6 +23,9 @@ import {
 } from './empty.variants';
 import { ZardIconComponent } from '../icon/icon.component';
 import { type ZardIcon } from '../icon/icons';
+
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-empty',

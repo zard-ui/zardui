@@ -19,15 +19,15 @@ import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { datePickerVariants, type ZardDatePickerVariants } from './date-picker.variants';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import { ZardButtonComponent } from '../button/button.component';
+import type { ZardButtonSizeVariants, ZardButtonTypeVariants } from '../button/button.variants';
 import { ZardCalendarComponent } from '../calendar/calendar.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
-const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, string> = {
+const HEIGHT_BY_SIZE: Record<NonNullable<ZardButtonSizeVariants>, string> = {
   sm: 'h-8',
   default: 'h-10',
   lg: 'h-12',
@@ -84,7 +84,9 @@ const HEIGHT_BY_SIZE: Record<NonNullable<ZardDatePickerVariants['zSize']>, strin
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: {},
+  host: {
+    '[class]': 'class()',
+  },
   exportAs: 'zDatePicker',
 })
 export class ZardDatePickerComponent implements ControlValueAccessor {
@@ -95,8 +97,8 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
   readonly calendar = viewChild.required<ZardCalendarComponent>('calendar');
 
   readonly class = input<ClassValue>('');
-  readonly zType = input<ZardDatePickerVariants['zType']>('outline');
-  readonly zSize = input<ZardDatePickerVariants['zSize']>('default');
+  readonly zType = input<ZardButtonTypeVariants>('outline');
+  readonly zSize = input<ZardButtonSizeVariants>('default');
   readonly value = model<Date | null>(null);
   readonly placeholder = input<string>('Pick a date');
   readonly zFormat = input<string>('MMMM d, yyyy');
@@ -111,18 +113,9 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onTouched: () => void = () => {};
 
-  protected readonly classes = computed(() =>
-    mergeClasses(
-      datePickerVariants({
-        zSize: this.zSize(),
-      }),
-      this.class(),
-    ),
-  );
-
   protected readonly buttonClasses = computed(() => {
     const hasValue = !!this.value();
-    const size: NonNullable<ZardDatePickerVariants['zSize']> = this.zSize() ?? 'default';
+    const size = this.zSize();
     const height = HEIGHT_BY_SIZE[size];
     return mergeClasses(
       'justify-start text-left font-normal',
@@ -194,7 +187,7 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
 
 
 ```angular-ts title="date-picker.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 const datePickerVariants = cva('', {
   variants: {
@@ -216,7 +209,6 @@ const datePickerVariants = cva('', {
 });
 
 export { datePickerVariants };
-export type ZardDatePickerVariants = VariantProps<typeof datePickerVariants>;
 
 ```
 
