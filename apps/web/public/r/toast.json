@@ -13,8 +13,5 @@
   ],
   "dependencies": [
     "ngx-sonner"
-  ],
-  "registryDependencies": [
-    "core"
   ]
 }

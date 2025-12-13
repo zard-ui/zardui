@@ -6,7 +6,7 @@ export const HEADER_PATHS = [
   { name: 'Components', path: '/docs/components', available: true },
   { name: 'Blocks', path: '/blocks', available: true },
   { name: 'Charts', path: '/charts', available: false },
-  { name: 'Themes', path: '/themes', available: false },
+  { name: 'Themes', path: '/themes', available: true },
   { name: 'Colors', path: '/colors', available: true },
 ];
 

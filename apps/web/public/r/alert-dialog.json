@@ -24,7 +24,6 @@
     }
   ],
   "registryDependencies": [
-    "button",
-    "core"
+    "button"
   ]
 }

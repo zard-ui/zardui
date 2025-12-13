@@ -1,0 +1,75 @@
+<div class="flex h-full flex-col">
+  <div class="flex items-center justify-between px-4 py-3">
+    <div>
+      <h2 class="text-sm font-semibold">Customize</h2>
+      <p class="text-muted-foreground text-xs">Pick a style and color</p>
+    </div>
+    <button z-button zType="ghost" zSize="sm" (click)="toggleDarkMode()" class="size-8 p-0">
+      @if (previewDarkMode()) {
+        <z-icon zType="moon" class="size-4" />
+      } @else {
+        <z-icon zType="sun" class="size-4" />
+      }
+    </button>
+  </div>
+
+  <div class="flex-1 overflow-y-auto p-4">
+    <div class="space-y-2">
+      <label class="text-muted-foreground text-xs font-medium tracking-wide uppercase">Presets</label>
+      <div class="grid grid-cols-2 gap-2">
+        @for (preset of presets; track preset.name) {
+          <app-theme-preset-card
+            [preset]="preset"
+            [isActive]="activePreset() === preset.name"
+            (select)="onPresetSelect($event)"
+          />
+        }
+      </div>
+    </div>
+
+    <div class="mt-6 space-y-2">
+      <div class="flex items-center justify-between">
+        <label class="text-muted-foreground text-xs font-medium tracking-wide uppercase">Radius</label>
+        <span class="text-muted-foreground text-xs">{{ theme().radius }}</span>
+      </div>
+      <z-slider
+        [zMin]="0"
+        [zMax]="1"
+        [zStep]="0.125"
+        [zValue]="radiusValue()"
+        (zSlideIndexChange)="onRadiusChange($event)"
+      />
+    </div>
+
+    <div class="mt-6">
+      <label class="text-muted-foreground mb-2 block text-xs font-medium tracking-wide uppercase">Colors</label>
+      <z-accordion zType="multiple" [zDefaultValue]="['base']">
+        @for (group of colorGroups; track group.key) {
+          <z-accordion-item [zValue]="group.key" [zTitle]="group.label">
+            <div class="space-y-4 py-2">
+              @for (colorKey of group.colors; track colorKey) {
+                <app-color-picker-field
+                  [colorKey]="colorKey"
+                  [value]="currentColors()[colorKey]"
+                  (valueChange)="onColorChange(colorKey, $event)"
+                />
+              }
+            </div>
+          </z-accordion-item>
+        }
+      </z-accordion>
+    </div>
+  </div>
+
+  <div class="py-4 pr-4">
+    <button z-button zFull (click)="copyToClipboard()">
+      @if (copySuccess()) {
+        <z-icon zType="check" class="mr-2 size-4" />
+        Copied!
+      } @else {
+        <z-icon zType="copy" class="mr-2 size-4" />
+        Copy CSS
+      }
+    </button>
+  </div>
+</div>

@@ -89,7 +89,11 @@
       "Bash(apps/web/src/app/domain/pages/dark-mode/dark-mode.page.ts )",
       "Bash(apps/web/src/app/domain/components/header/header.component.ts)",
       "Bash(timeout 45 bash:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(./packages/cli/dist/index.js:*)",
+      "Bash(npm i:*)",
+      "Bash(pkill:*)",
+      "Bash(lsof:*)"
     ],
     "defaultMode": "acceptEdits"
   },

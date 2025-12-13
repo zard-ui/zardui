@@ -1,0 +1,221 @@
+<div
+  class="bg-background text-foreground flex h-full items-center justify-center rounded-xl border shadow-sm md:hidden"
+>
+  <z-empty
+    zIcon="monitor"
+    zTitle="Desktop Only"
+    zDescription="The theme generator is only available on desktop devices for the best experience."
+  />
+</div>
+
+<div
+  class="bg-background text-foreground hidden h-full overflow-hidden rounded-xl border shadow-sm md:block"
+  [class.dark]="previewDarkMode()"
+  [style]="scopedStyles()"
+>
+  <z-tab-group class="flex h-full flex-col" zTabsPosition="top">
+    <z-tab label="Showcase">
+      <div
+        class="[&:hover::-webkit-scrollbar-thumb]:bg-border h-full overflow-y-auto p-8 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-transparent [&::-webkit-scrollbar-track]:bg-transparent"
+      >
+        <div class="mx-auto max-w-5xl">
+          <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <z-card zTitle="Buttons" zDescription="Button variants and states">
+              <div class="flex flex-wrap gap-2">
+                <button z-button>Default</button>
+                <button z-button zType="secondary">Secondary</button>
+                <button z-button zType="outline">Outline</button>
+                <button z-button zType="ghost">Ghost</button>
+                <button z-button zType="destructive">Destructive</button>
+                <button z-button zType="link">Link</button>
+              </div>
+            </z-card>
+
+            <z-card zTitle="Badges" zDescription="Badge variants">
+              <div class="flex flex-wrap gap-2">
+                <z-badge>Default</z-badge>
+                <z-badge zType="secondary">Secondary</z-badge>
+                <z-badge zType="outline">Outline</z-badge>
+                <z-badge zType="destructive">Destructive</z-badge>
+              </div>
+            </z-card>
+
+            <z-card zTitle="Avatar" zDescription="User avatars with fallback">
+              <div class="flex gap-4">
+                <z-avatar zSrc="https://github.com/shadcn.png" zFallback="CN" />
+                <z-avatar zFallback="AB" />
+                <z-avatar zFallback="ZD" />
+              </div>
+            </z-card>
+
+            <z-card zTitle="Form Controls" zDescription="Input, checkbox, switch">
+              <div class="space-y-4">
+                <div class="space-y-2">
+                  <label class="text-sm font-medium">Email</label>
+                  <input z-input placeholder="email@example.com" />
+                </div>
+                <div class="flex items-center gap-2">
+                  <z-checkbox>Accept terms</z-checkbox>
+                </div>
+                <div class="flex items-center gap-2">
+                  <z-switch>Enable notifications</z-switch>
+                </div>
+              </div>
+            </z-card>
+
+            <z-card zTitle="Progress" zDescription="Progress indicators">
+              <div class="space-y-4">
+                <z-progress-bar [progress]="33" />
+                <z-progress-bar [progress]="66" />
+                <z-progress-bar [progress]="100" />
+              </div>
+            </z-card>
+
+            <z-card zTitle="Slider" zDescription="Range input slider">
+              <div class="space-y-4">
+                <z-slider [zDefault]="50" />
+                <z-slider [zDefault]="25" />
+              </div>
+            </z-card>
+
+            <z-card zTitle="Alerts" zDescription="Alert messages" class="md:col-span-2 lg:col-span-3">
+              <div class="grid gap-4 md:grid-cols-2">
+                <z-alert zTitle="Default Alert" zDescription="This is an informational message." zIcon="terminal" />
+                <z-alert
+                  zType="destructive"
+                  zTitle="Destructive Alert"
+                  zDescription="Something went wrong. Please try again."
+                />
+              </div>
+            </z-card>
+
+            <z-card zTitle="Skeleton" zDescription="Loading placeholders" class="md:col-span-2 lg:col-span-3">
+              <div class="flex items-center gap-4">
+                <z-skeleton class="size-12 rounded-full" />
+                <div class="flex-1 space-y-2">
+                  <z-skeleton class="h-4 w-3/4" />
+                  <z-skeleton class="h-4 w-1/2" />
+                </div>
+              </div>
+            </z-card>
+          </div>
+        </div>
+      </div>
+    </z-tab>
+
+    <z-tab label="Dashboard">
+      <div
+        class="[&:hover::-webkit-scrollbar-thumb]:bg-border h-full overflow-y-auto p-8 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-transparent [&::-webkit-scrollbar-track]:bg-transparent"
+      >
+        <div class="mx-auto max-w-6xl">
+          <div class="grid gap-6 lg:grid-cols-4">
+            <z-card zTitle="$45,231.89" zDescription="Total Revenue">
+              <p class="text-muted-foreground text-xs">+20.1% from last month</p>
+            </z-card>
+
+            <z-card zTitle="+2,350" zDescription="Subscriptions">
+              <p class="text-muted-foreground text-xs">+180.1% from last month</p>
+            </z-card>
+
+            <z-card zTitle="+12,234" zDescription="Sales">
+              <p class="text-muted-foreground text-xs">+19% from last month</p>
+            </z-card>
+
+            <z-card zTitle="+573" zDescription="Active Now">
+              <p class="text-muted-foreground text-xs">+201 since last hour</p>
+            </z-card>
+
+            <z-card zTitle="Overview" class="lg:col-span-2">
+              <div class="flex h-[200px] items-end gap-2">
+                @for (height of chartHeights; track $index) {
+                  <div class="bg-primary flex-1 rounded-t" [style.height.%]="height"></div>
+                }
+              </div>
+              <div class="text-muted-foreground mt-2 flex justify-between text-xs">
+                <span>Jan</span>
+                <span>Feb</span>
+                <span>Mar</span>
+                <span>Apr</span>
+                <span>May</span>
+                <span>Jun</span>
+                <span>Jul</span>
+                <span>Aug</span>
+                <span>Sep</span>
+                <span>Oct</span>
+                <span>Nov</span>
+                <span>Dec</span>
+              </div>
+            </z-card>
+
+            <z-card zTitle="Recent Sales" zDescription="You made 265 sales this month." class="lg:col-span-2">
+              <div class="space-y-4">
+                @for (sale of recentSales; track sale.email) {
+                  <div class="flex items-center gap-4">
+                    <z-avatar [zFallback]="sale.initials" />
+                    <div class="flex-1 space-y-1">
+                      <p class="text-sm leading-none font-medium">{{ sale.name }}</p>
+                      <p class="text-muted-foreground text-sm">{{ sale.email }}</p>
+                    </div>
+                    <div class="font-medium">+${{ sale.amount }}</div>
+                  </div>
+                }
+              </div>
+            </z-card>
+
+            <z-card zTitle="Team Members" zDescription="Invite your team members to collaborate." class="lg:col-span-2">
+              <div class="space-y-4">
+                @for (member of teamMembers; track member.email) {
+                  <div class="flex items-center gap-4">
+                    <z-avatar [zFallback]="member.initials" />
+                    <div class="flex-1 space-y-1">
+                      <p class="text-sm leading-none font-medium">{{ member.name }}</p>
+                      <p class="text-muted-foreground text-sm">{{ member.email }}</p>
+                    </div>
+                    <z-badge zType="secondary">{{ member.role }}</z-badge>
+                  </div>
+                }
+              </div>
+              <z-divider zSpacing="lg" />
+              <button z-button zType="outline" zFull>
+                <z-icon zType="plus" class="mr-2 size-4" />
+                Invite Member
+              </button>
+            </z-card>
+
+            <z-card
+              zTitle="Notifications"
+              zDescription="Configure how you receive notifications."
+              class="lg:col-span-2"
+            >
+              <div class="space-y-4">
+                <div class="flex items-center justify-between">
+                  <div class="space-y-0.5">
+                    <p class="text-sm font-medium">Push Notifications</p>
+                    <p class="text-muted-foreground text-sm">Receive push notifications on your device.</p>
+                  </div>
+                  <z-switch />
+                </div>
+                <z-divider />
+                <div class="flex items-center justify-between">
+                  <div class="space-y-0.5">
+                    <p class="text-sm font-medium">Email Notifications</p>
+                    <p class="text-muted-foreground text-sm">Receive email updates about your activity.</p>
+                  </div>
+                  <z-switch [ngModel]="true" />
+                </div>
+                <z-divider />
+                <div class="flex items-center justify-between">
+                  <div class="space-y-0.5">
+                    <p class="text-sm font-medium">Marketing Emails</p>
+                    <p class="text-muted-foreground text-sm">Receive emails about new products and features.</p>
+                  </div>
+                  <z-switch />
+                </div>
+              </div>
+            </z-card>
+          </div>
+        </div>
+      </div>
+    </z-tab>
+  </z-tab-group>
+</div>

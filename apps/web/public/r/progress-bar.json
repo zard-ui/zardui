@@ -10,8 +10,5 @@
       "name": "progress-bar.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const containerProgressBarVariants = cva('w-full transition-all', {\n  variants: {\n    zType: {\n      default: 'bg-primary/20',\n      destructive: 'bg-destructive/20',\n      accent: 'bg-chart-1/20',\n    },\n    zSize: {\n      default: 'h-2',\n      sm: 'h-3',\n      lg: 'h-5',\n    },\n    zShape: {\n      default: 'rounded-full',\n      square: 'rounded-none',\n    },\n    zIndeterminate: {\n      true: 'relative',\n    },\n  },\n\n  defaultVariants: {\n    zType: 'default',\n    zSize: 'default',\n    zShape: 'default',\n  },\n});\nexport type ZardProgressBarSizeVariants = NonNullable<VariantProps<typeof containerProgressBarVariants>['zSize']>;\n\nexport const progressBarVariants = cva('h-full transition-all', {\n  variants: {\n    zType: {\n      default: 'bg-primary',\n      destructive: 'bg-destructive',\n      accent: 'bg-chart-1',\n    },\n    zShape: {\n      default: 'rounded-full',\n      square: 'rounded-none',\n    },\n    zIndeterminate: {\n      true: 'absolute animate-[indeterminate_1.5s_infinite_ease-out]',\n    },\n  },\n  defaultVariants: {\n    zType: 'default',\n    zShape: 'default',\n  },\n});\nexport type ZardProgressBarTypeVariants = NonNullable<VariantProps<typeof progressBarVariants>['zType']>;\nexport type ZardProgressBarShapeVariants = NonNullable<VariantProps<typeof progressBarVariants>['zShape']>;\n"
     }
-  ],
-  "registryDependencies": [
-    "core"
   ]
 }

@@ -13,7 +13,6 @@
   ],
   "registryDependencies": [
     "button",
-    "core",
     "icon"
   ]
 }
