@@ -25,7 +25,9 @@ export class ZardAlertDialogRef<T = unknown> {
   }
 
   close(): void {
-    if (this.isClosing) return;
+    if (this.isClosing) {
+      return;
+    }
     this.isClosing = true;
 
     const element = this.containerInstance.getNativeElement?.() ?? null;
@@ -41,7 +43,9 @@ export class ZardAlertDialogRef<T = unknown> {
     const cancelFn = this.config.zOnCancel;
     if (typeof cancelFn === 'function') {
       const result = (cancelFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) this.close();
+      if (result !== false) {
+        this.close();
+      }
     } else {
       this.close();
     }
@@ -51,7 +55,9 @@ export class ZardAlertDialogRef<T = unknown> {
     const okFn = this.config.zOnOk;
     if (typeof okFn === 'function') {
       const result = (okFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) this.close();
+      if (result !== false) {
+        this.close();
+      }
     } else {
       this.close();
     }

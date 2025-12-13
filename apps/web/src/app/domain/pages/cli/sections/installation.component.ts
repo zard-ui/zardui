@@ -4,7 +4,6 @@ import { MarkdownRendererComponent } from '@doc/domain/components/render/markdow
 
 @Component({
   selector: 'cli-installation-section',
-  standalone: true,
   imports: [MarkdownRendererComponent],
   template: `
     <z-markdown-renderer markdownUrl="/documentation/cli/installation.md"></z-markdown-renderer>
