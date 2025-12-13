@@ -19,8 +19,8 @@ export const configSchema = z.object({
   tailwind: z.object({
     css: z.string(),
     baseColor: z.string(),
-    cssVariables: z.boolean(),
   }),
+  baseUrl: z.string(),
   aliases: z.object({
     components: z.string(),
     utils: z.string(),
@@ -63,20 +63,21 @@ export async function promptForConfig(
       type: 'text',
       name: 'components',
       message: `Configure the import alias for ${highlight('components')}:`,
-      initial: projectInfo.hasNx ? 'libs/ui/src/lib/components' : 'src/app/shared/components',
+      initial: '@/shared/components',
     },
     {
       type: 'text',
       name: 'utils',
       message: `Configure the import alias for ${highlight('utils')}:`,
-      initial: projectInfo.hasNx ? 'libs/ui/src/lib/utils' : 'src/app/shared/utils',
+      initial: '@/shared/utils',
     },
   ]);
 
   await validateCssFile(cwd, options.tailwindCss);
 
-  const componentsPath = options.components;
-  const parentPath = path.dirname(componentsPath);
+  const componentsAlias = options.components;
+  const utilsAlias = options.utils;
+  const sharedBase = path.dirname(componentsAlias);
 
   const config = configSchema.parse({
     $schema: SCHEMA_URL,
@@ -86,13 +87,13 @@ export async function promptForConfig(
     tailwind: {
       css: options.tailwindCss,
       baseColor: options.theme,
-      cssVariables: true,
     },
+    baseUrl: 'src/app',
     aliases: {
-      components: componentsPath,
-      utils: options.utils,
-      core: path.join(parentPath, 'core'),
-      services: path.join(parentPath, 'services'),
+      components: componentsAlias,
+      utils: utilsAlias,
+      core: `${sharedBase}/core`,
+      services: `${sharedBase}/services`,
     },
   });
 

@@ -1,4 +1,5 @@
 import type { Config } from '@cli/utils/config.js';
+import { transformContent } from '@cli/utils/registry.js';
 import { execa } from 'execa';
 import { readFileSync } from 'node:fs';
 import { join, dirname } from 'node:path';
@@ -90,40 +91,4 @@ export async function fetchComponentFromGithub(
   } catch (error) {
     throw new Error(`Failed to fetch component ${componentName}/${fileName}: ${error}`);
   }
-}
-
-function transformContent(content: string, config: Config): string {
-  let transformed = content;
-
-  const utilsImportPath = convertPhysicalPathToImportAlias(config.aliases.utils);
-  const componentsImportPath = convertPhysicalPathToImportAlias(config.aliases.components);
-
-  transformed = transformed.replace(
-    /from ['"]\.\.\/\.\.\/shared\/utils\/utils['"]/g,
-    `from '${utilsImportPath}/merge-classes'`,
-  );
-
-  transformed = transformed.replace(
-    /from ['"]\.\.\/\.\.\/shared\/utils\/number['"]/g,
-    `from '${utilsImportPath}/number'`,
-  );
-  const componentImportRegex = /from ['"]\.\.\/([\w-/.]+)['"]/g;
-  transformed = transformed.replace(componentImportRegex, `from '${componentsImportPath}/$1'`);
-
-  transformed = transformed.replace(
-    /import \{ ClassValue \} from ['"]class-variance-authority\/dist\/types['"]/g,
-    `import { ClassValue } from 'clsx'`,
-  );
-  transformed = transformed.replace(
-    /import \{ ClassValue \} from ['"]class-variance-authority['"]/g,
-    `import { ClassValue } from 'clsx'`,
-  );
-
-  return transformed;
-}
-
-function convertPhysicalPathToImportAlias(physicalPath: string): string {
-  const withoutSrc = physicalPath.replace(/^src\/app\//, '@').replace(/^libs\/[^/]+\/src\/lib\//, '@');
-
-  return withoutSrc;
 }

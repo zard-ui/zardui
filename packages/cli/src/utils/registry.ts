@@ -85,22 +85,24 @@ export async function getAvailableComponents(registryUrl?: string): Promise<stri
 export function transformContent(content: string, config: Config): string {
   let transformed = content;
 
-  const utilsImportPath = convertPhysicalPathToImportAlias(config.aliases.utils);
-  const componentsImportPath = convertPhysicalPathToImportAlias(config.aliases.components);
+  const { aliases } = config;
 
+  // Replace utils imports
   transformed = transformed.replace(
     /from ['"]\.\.\/\.\.\/shared\/utils\/utils['"]/g,
-    `from '${utilsImportPath}/merge-classes'`,
+    `from '${aliases.utils}/merge-classes'`,
   );
 
   transformed = transformed.replace(
     /from ['"]\.\.\/\.\.\/shared\/utils\/number['"]/g,
-    `from '${utilsImportPath}/number'`,
+    `from '${aliases.utils}/number'`,
   );
 
+  // Replace relative component imports with aliased imports
   const componentImportRegex = /from ['"]\.\.\/([\w-/.]+)['"]/g;
-  transformed = transformed.replace(componentImportRegex, `from '${componentsImportPath}/$1'`);
+  transformed = transformed.replace(componentImportRegex, `from '${aliases.components}/$1'`);
 
+  // Replace ClassValue imports
   transformed = transformed.replace(
     /import \{ ClassValue \} from ['"]class-variance-authority\/dist\/types['"]/g,
     `import { ClassValue } from 'clsx'`,
@@ -111,11 +113,6 @@ export function transformContent(content: string, config: Config): string {
   );
 
   return transformed;
-}
-
-function convertPhysicalPathToImportAlias(physicalPath: string): string {
-  const withoutSrc = physicalPath.replace(/^src\/app\//, '@').replace(/^libs\/[^/]+\/src\/lib\//, '@');
-  return withoutSrc;
 }
 
 export async function fetchComponent(

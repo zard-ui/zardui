@@ -27,15 +27,15 @@ const configSchema = z.object({
     .object({
       css: z.string().default('src/styles.css'),
       baseColor: z.string().default('slate'),
-      cssVariables: z.boolean().default(true),
     })
     .default({}),
+  baseUrl: z.string().default('src/app'),
   aliases: z
     .object({
-      components: z.string().default('src/app/shared/components'),
-      utils: z.string().default('src/app/shared/utils'),
-      core: z.string().default('src/app/shared/core'),
-      services: z.string().default('src/app/shared/services'),
+      components: z.string().default('@/shared/components'),
+      utils: z.string().default('@/shared/utils'),
+      core: z.string().default('@/shared/core'),
+      services: z.string().default('@/shared/services'),
     })
     .default({}),
 });
@@ -49,13 +49,13 @@ export const DEFAULT_CONFIG: Config = {
   tailwind: {
     css: 'src/styles.css',
     baseColor: 'slate',
-    cssVariables: true,
   },
+  baseUrl: 'src/app',
   aliases: {
-    components: 'src/app/shared/components',
-    utils: 'src/app/shared/utils',
-    core: 'src/app/shared/core',
-    services: 'src/app/shared/services',
+    components: '@/shared/components',
+    utils: '@/shared/utils',
+    core: '@/shared/core',
+    services: '@/shared/services',
   },
 };
 
@@ -75,15 +75,22 @@ export async function getConfig(cwd: string): Promise<Config | null> {
   }
 }
 
+export function resolveAliasToPath(alias: string, baseUrl: string): string {
+  return alias.replace(/^@\//, `${baseUrl}/`);
+}
+
 export async function resolveConfigPaths(cwd: string, config: Config) {
+  const { baseUrl, aliases } = config;
+
   return {
     ...config,
     resolvedPaths: {
       tailwindCss: path.resolve(cwd, config.tailwind.css),
-      components: path.resolve(cwd, config.aliases.components),
-      utils: path.resolve(cwd, config.aliases.utils),
-      core: path.resolve(cwd, config.aliases.core),
-      services: path.resolve(cwd, config.aliases.services),
+      baseUrl: path.resolve(cwd, baseUrl),
+      components: path.resolve(cwd, resolveAliasToPath(aliases.components, baseUrl)),
+      utils: path.resolve(cwd, resolveAliasToPath(aliases.utils, baseUrl)),
+      core: path.resolve(cwd, resolveAliasToPath(aliases.core, baseUrl)),
+      services: path.resolve(cwd, resolveAliasToPath(aliases.services, baseUrl)),
     },
   };
 }
