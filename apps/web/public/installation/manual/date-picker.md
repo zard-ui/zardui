@@ -19,14 +19,15 @@ import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import type { ZardButtonSizeVariants, ZardButtonTypeVariants } from '../button/button.variants';
 import { ZardCalendarComponent } from '../calendar/calendar.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
 
-const HEIGHT_BY_SIZE: Record<ZardButtonSizeVariants, string> = {
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
+const HEIGHT_BY_SIZE: Record<NonNullable<ZardButtonSizeVariants>, string> = {
   sm: 'h-8',
   default: 'h-10',
   lg: 'h-12',

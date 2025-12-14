@@ -1,10 +1,13 @@
 import { installComponent } from '@cli/commands/add/component-installer.js';
 import { selectComponents } from '@cli/commands/add/component-selector.js';
-import { resolveDependencies } from '@cli/commands/add/dependency-resolver.js';
+import { updateProvideZardWithDarkMode } from '@cli/commands/add/dark-mode-setup.js';
+import { resolveDependencies, getTargetDir, type ComponentMeta } from '@cli/commands/add/dependency-resolver.js';
+import { injectThemeScript } from '@cli/commands/init/theme-loader.js';
 import { getConfig, resolveConfigPaths } from '@cli/utils/config.js';
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { installPackages } from '@cli/utils/package-manager.js';
+import chalk from 'chalk';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
@@ -30,12 +33,19 @@ export const add = new Command()
 
     const selectedComponents = await selectComponents(components, options.all);
 
-    const { componentsToInstall, dependenciesToInstall } = resolveDependencies(
+    const addSpinner = spinner('Resolving components...').start();
+    const { componentsToInstall, dependenciesToInstall } = await resolveDependencies(
       selectedComponents,
       resolvedConfig,
       cwd,
       options,
     );
+    addSpinner.stop();
+
+    if (componentsToInstall.length === 0) {
+      logger.info('All components already installed.');
+      return;
+    }
 
     if (!options.yes) {
       const shouldProceed = await confirmInstallation(componentsToInstall.length, dependenciesToInstall.size);
@@ -45,8 +55,12 @@ export const add = new Command()
     }
 
     await installDependencies(dependenciesToInstall, cwd, config.packageManager);
-
     await installComponents(componentsToInstall, cwd, resolvedConfig, options);
+
+    const isDarkModeBeingInstalled = componentsToInstall.some(c => c.name === 'dark-mode');
+    if (isDarkModeBeingInstalled) {
+      await setupDarkMode(cwd, resolvedConfig);
+    }
 
     logger.break();
     logger.success('Done!');
@@ -63,7 +77,7 @@ async function loadConfiguration(cwd: string) {
   const config = await getConfig(cwd);
 
   if (!config) {
-    logger.error('Configuration not found. Please run `zard init` first.');
+    logger.error('Configuration not found. Please run `ngzard init` first.');
     process.exit(1);
   }
 
@@ -101,28 +115,63 @@ async function installDependencies(
 
   const depsSpinner = spinner('Installing dependencies...').start();
   await installPackages(Array.from(dependenciesToInstall), cwd, packageManager, false);
-  depsSpinner.succeed();
+  depsSpinner.succeed('Dependencies installed');
 }
 
 async function installComponents(
-  componentsToInstall: any[],
+  componentsToInstall: ComponentMeta[],
   cwd: string,
   resolvedConfig: any,
-  options: { path?: string; overwrite?: boolean },
+  options: { path?: string },
 ): Promise<void> {
+  const installSpinner = spinner('Installing components...').start();
+  const installed: string[] = [];
+  const failed: string[] = [];
+
   for (const component of componentsToInstall) {
-    const componentSpinner = spinner(`Installing ${component.name}...`).start();
-
     try {
-      const targetDir = options.path
-        ? path.resolve(cwd, options.path, component.name)
-        : path.resolve(resolvedConfig.resolvedPaths.components, component.name);
+      installSpinner.text = `Installing ${component.name}...`;
 
-      await installComponent(component, targetDir, resolvedConfig, options.overwrite || false);
-      componentSpinner.succeed(`Added ${component.name}`);
+      const targetDir = getTargetDir(component, resolvedConfig, cwd, options.path);
+
+      await installComponent(component.name, targetDir, resolvedConfig);
+      installed.push(component.name);
     } catch (error) {
-      componentSpinner.fail(`Failed to install ${component.name}`);
-      logger.error(error);
+      failed.push(component.name);
     }
+  }
+
+  if (failed.length > 0) {
+    installSpinner.fail(`Failed to install: ${failed.join(', ')}`);
+  } else {
+    installSpinner.succeed(`Installed ${installed.length} component${installed.length > 1 ? 's' : ''}`);
+  }
+}
+
+async function setupDarkMode(cwd: string, resolvedConfig: any): Promise<void> {
+  logger.break();
+  logger.info('Dark mode requires additional configuration.');
+
+  const { indexFile } = await prompts({
+    type: 'text',
+    name: 'indexFile',
+    message: `Where is your ${chalk.cyan('index.html')} file?`,
+    initial: 'src/index.html',
+  });
+
+  if (!indexFile) {
+    logger.warn('Skipping dark mode script injection.');
+    return;
+  }
+
+  const darkModeSpinner = spinner('Configuring dark mode...').start();
+
+  try {
+    await injectThemeScript(cwd, indexFile);
+    await updateProvideZardWithDarkMode(cwd, resolvedConfig);
+    darkModeSpinner.succeed('Dark mode configured');
+  } catch (error) {
+    darkModeSpinner.fail('Failed to configure dark mode');
+    logger.error(error);
   }
 }

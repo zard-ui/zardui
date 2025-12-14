@@ -1,0 +1,17 @@
+{
+  "name": "divider",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "divider.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { dividerVariants, type ZardDividerVariants } from './divider.variants';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\n@Component({\n  selector: 'z-divider',\n  standalone: true,\n  template: '',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    '[attr.role]': `'separator'`,\n    '[attr.aria-orientation]': 'zOrientation()',\n    '[class]': 'classes()',\n  },\n  exportAs: 'zDivider',\n})\nexport class ZardDividerComponent {\n  readonly zOrientation = input<ZardDividerVariants['zOrientation']>('horizontal');\n  readonly zSpacing = input<ZardDividerVariants['zSpacing']>('default');\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() =>\n    mergeClasses(\n      dividerVariants({\n        zOrientation: this.zOrientation(),\n        zSpacing: this.zSpacing(),\n      }),\n      this.class(),\n    ),\n  );\n}\n"
+    },
+    {
+      "name": "divider.variants.ts",
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const dividerVariants = cva('bg-border block', {\n  variants: {\n    zOrientation: {\n      horizontal: 'h-px w-full',\n      vertical: 'w-px h-full inline-block',\n    },\n    zSpacing: {\n      none: '',\n      sm: '',\n      default: '',\n      lg: '',\n    },\n  },\n  defaultVariants: {\n    zOrientation: 'horizontal',\n    zSpacing: 'default',\n  },\n  compoundVariants: [\n    {\n      zOrientation: 'horizontal',\n      zSpacing: 'sm',\n      class: 'my-2',\n    },\n    {\n      zOrientation: 'horizontal',\n      zSpacing: 'default',\n      class: 'my-4',\n    },\n    {\n      zOrientation: 'horizontal',\n      zSpacing: 'lg',\n      class: 'my-8',\n    },\n    {\n      zOrientation: 'vertical',\n      zSpacing: 'sm',\n      class: 'mx-2',\n    },\n    {\n      zOrientation: 'vertical',\n      zSpacing: 'default',\n      class: 'mx-4',\n    },\n    {\n      zOrientation: 'vertical',\n      zSpacing: 'lg',\n      class: 'mx-8',\n    },\n  ],\n});\n\nexport type ZardDividerVariants = VariantProps<typeof dividerVariants>;\n"
+    }
+  ],
+  "registryDependencies": [
+    "core"
+  ]
+}

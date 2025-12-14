@@ -29,7 +29,10 @@ import { ZardEmptyComponent } from '../empty.component';
     </ng-template>
 
     <ng-template #customTitle>
-      <span>No Team <strong>members</strong></span>
+      <span>
+        No Team
+        <strong>members</strong>
+      </span>
     </ng-template>
 
     <ng-template #actionInvite>

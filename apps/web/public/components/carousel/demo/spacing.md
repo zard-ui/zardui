@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 
-import { mergeClasses } from '../../../shared/utils/utils';
+import { mergeClasses } from '../../../utils/merge-classes';
 import { ZardCardComponent } from '../../card';
 import { ZardSegmentedComponent } from '../../segmented/segmented.component';
 import { ZardCarouselModule } from '../carousel.module';
@@ -27,8 +27,14 @@ import { ZardCarouselModule } from '../carousel.module';
       </z-carousel>
 
       <div class="mt-4 text-center text-sm">
-        <p><strong>Content class:</strong> {{ contentSpacingClass() }}</p>
-        <p><strong>Item class:</strong> {{ itemSpacingClass() }}</p>
+        <p>
+          <strong>Content class:</strong>
+          {{ contentSpacingClass() }}
+        </p>
+        <p>
+          <strong>Item class:</strong>
+          {{ itemSpacingClass() }}
+        </p>
       </div>
     </div>
   `,

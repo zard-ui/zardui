@@ -57,9 +57,9 @@ import { ZardInputGroupComponent } from '../input-group.component';
           </button>
           <button type="button" z-button zType="ghost" class="h-6" z-dropdown [zDropdownMenu]="menu">Auto</button>
           <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-10">
-            <z-dropdown-menu-item> Auto </z-dropdown-menu-item>
-            <z-dropdown-menu-item> Agent </z-dropdown-menu-item>
-            <z-dropdown-menu-item> Manual </z-dropdown-menu-item>
+            <z-dropdown-menu-item>Auto</z-dropdown-menu-item>
+            <z-dropdown-menu-item>Agent</z-dropdown-menu-item>
+            <z-dropdown-menu-item>Manual</z-dropdown-menu-item>
           </z-dropdown-menu-content>
         </div>
         <div class="flex h-auto items-center gap-0">

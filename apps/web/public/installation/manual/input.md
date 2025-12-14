@@ -11,7 +11,8 @@ import {
   type ZardInputStatusVariants,
   type ZardInputTypeVariants,
 } from './input.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',

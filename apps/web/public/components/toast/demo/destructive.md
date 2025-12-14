@@ -9,7 +9,9 @@ import { ZardButtonComponent } from '../../button/button.component';
   selector: 'zard-demo-toast-destructive',
   imports: [ZardButtonComponent],
   standalone: true,
-  template: ` <button z-button zType="outline" (click)="showToast()">Show Error Toast</button> `,
+  template: `
+    <button z-button zType="outline" (click)="showToast()">Show Error Toast</button>
+  `,
 })
 export class ZardDemoToastDestructiveComponent {
   showToast() {

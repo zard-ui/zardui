@@ -22,14 +22,15 @@ import {
   type ZardInputGroupAddonAlignVariants,
   type ZardInputGroupAddonPositionVariants,
 } from './input-group.variants';
-import { generateId, mergeClasses } from '../../shared/utils/utils';
-import {
-  isTemplateRef,
-  ZardStringTemplateOutletDirective,
-} from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardInputDirective } from '../input/input.directive';
 import type { ZardInputSizeVariants } from '../input/input.variants';
 import { ZardLoaderComponent } from '../loader/loader.component';
+
+import {
+  isTemplateRef,
+  ZardStringTemplateOutletDirective,
+} from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { generateId, mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-input-group',
@@ -145,7 +146,7 @@ export class ZardInputGroupComponent {
 ```angular-ts title="input-group.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export const inputGroupVariants = cva(
   mergeClasses(

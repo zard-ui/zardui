@@ -1,7 +1,7 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
 
-const componentsPath = path.resolve(__dirname, '../libs/zard/src/lib/components');
+const componentsPath = path.resolve(__dirname, '../libs/zard/src/lib/shared/components');
 const publicPath = path.resolve(__dirname, '../apps/web/public/installation');
 
 console.log('🔄 Generating installation guides...');

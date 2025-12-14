@@ -23,10 +23,11 @@ import {
   paginationPreviousVariants,
   paginationVariants,
 } from './pagination.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { type ZardButtonSizeVariants, type ZardButtonTypeVariants } from '../button/button.variants';
 import { ZardIconComponent } from '../icon/icon.component';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'ul[z-pagination-content]',

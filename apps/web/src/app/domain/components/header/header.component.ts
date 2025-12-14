@@ -9,9 +9,9 @@ import { LayoutService } from '@doc/shared/services/layout.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { ZardDarkMode } from '@zard/services/dark-mode';
 
 import { environment } from '../../../../environments/environment';
 import { SOCIAL_MEDIAS } from '../../../shared/constants/medias.constant';

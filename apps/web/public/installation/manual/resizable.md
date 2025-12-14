@@ -22,7 +22,8 @@ import type { ClassValue } from 'clsx';
 
 import { ZardResizablePanelComponent } from './resizable-panel.component';
 import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 export interface ZardResizeEvent {
   sizes: number[];
@@ -407,7 +408,8 @@ import type { ClassValue } from 'clsx';
 
 import { ZardResizableComponent } from './resizable.component';
 import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-resizable-handle, [z-resizable-handle]',
@@ -651,7 +653,8 @@ import {
 import type { ClassValue } from 'clsx';
 
 import { resizablePanelVariants } from './resizable.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-resizable-panel',

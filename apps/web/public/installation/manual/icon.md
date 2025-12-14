@@ -8,7 +8,8 @@ import { LucideAngularModule } from 'lucide-angular';
 
 import { iconVariants, type ZardIconVariants } from './icon.variants';
 import { ZARD_ICONS, type ZardIcon } from './icons';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-icon, [z-icon]',

@@ -247,7 +247,8 @@ import { computed, Directive, input } from '@angular/core';
 import type { ClassValue } from 'clsx';
 
 import { menuContentVariants } from './menu.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Directive({
   selector: '[z-menu-content]',
@@ -275,7 +276,8 @@ import { booleanAttribute, computed, Directive, effect, inject, input, signal, u
 import type { ClassValue } from 'clsx';
 
 import { menuItemVariants, type ZardMenuItemVariants } from './menu.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Directive({
   selector: 'button[z-menu-item], [z-menu-item]',

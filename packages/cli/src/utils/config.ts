@@ -20,20 +20,22 @@ async function readJson(filePath: string): Promise<any> {
 const configSchema = z.object({
   $schema: z.string().optional(),
   appConfigFile: z.string().default('src/app/app.config.ts'),
-  indexFile: z.string().default('src/index.html'),
   style: z.enum(['css']).default('css'),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']).default('npm'),
+  registryUrl: z.string().optional(),
   tailwind: z
     .object({
       css: z.string().default('src/styles.css'),
       baseColor: z.string().default('slate'),
-      cssVariables: z.boolean().default(true),
     })
     .default({}),
+  baseUrl: z.string().default('src/app'),
   aliases: z
     .object({
-      components: z.string().default('src/app/shared/components'),
-      utils: z.string().default('src/app/shared/utils'),
+      components: z.string().default('@/shared/components'),
+      utils: z.string().default('@/shared/utils'),
+      core: z.string().default('@/shared/core'),
+      services: z.string().default('@/shared/services'),
     })
     .default({}),
 });
@@ -43,16 +45,17 @@ export type Config = z.infer<typeof configSchema>;
 export const DEFAULT_CONFIG: Config = {
   style: 'css',
   appConfigFile: 'src/app/app.config.ts',
-  indexFile: 'src/index.html',
   packageManager: 'npm',
   tailwind: {
     css: 'src/styles.css',
     baseColor: 'slate',
-    cssVariables: true,
   },
+  baseUrl: 'src/app',
   aliases: {
-    components: 'src/app/shared/components',
-    utils: 'src/app/shared/utils',
+    components: '@/shared/components',
+    utils: '@/shared/utils',
+    core: '@/shared/core',
+    services: '@/shared/services',
   },
 };
 
@@ -72,13 +75,22 @@ export async function getConfig(cwd: string): Promise<Config | null> {
   }
 }
 
+export function resolveAliasToPath(alias: string, baseUrl: string): string {
+  return alias.replace(/^@\//, `${baseUrl}/`);
+}
+
 export async function resolveConfigPaths(cwd: string, config: Config) {
+  const { baseUrl, aliases } = config;
+
   return {
     ...config,
     resolvedPaths: {
       tailwindCss: path.resolve(cwd, config.tailwind.css),
-      components: path.resolve(cwd, config.aliases.components),
-      utils: path.resolve(cwd, config.aliases.utils),
+      baseUrl: path.resolve(cwd, baseUrl),
+      components: path.resolve(cwd, resolveAliasToPath(aliases.components, baseUrl)),
+      utils: path.resolve(cwd, resolveAliasToPath(aliases.utils, baseUrl)),
+      core: path.resolve(cwd, resolveAliasToPath(aliases.core, baseUrl)),
+      services: path.resolve(cwd, resolveAliasToPath(aliases.services, baseUrl)),
     },
   };
 }

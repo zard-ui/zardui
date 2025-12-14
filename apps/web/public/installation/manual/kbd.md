@@ -6,12 +6,15 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import { kbdVariants } from './kbd.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-kbd, [z-kbd]',
   standalone: true,
-  template: `<kbd><ng-content /></kbd> `,
+  template: `
+    <kbd><ng-content /></kbd>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -48,12 +51,15 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import { type ClassValue } from 'clsx';
 
 import { kbdGroupVariants } from './kbd.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-kbd-group, [z-kbd-group]',
   standalone: true,
-  template: ` <ng-content /> `,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {

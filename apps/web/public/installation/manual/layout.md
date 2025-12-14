@@ -7,7 +7,8 @@ import type { ClassValue } from 'clsx';
 
 import { layoutVariants, type LayoutVariants } from './layout.variants';
 import { SidebarComponent } from './sidebar.component';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-layout',
@@ -113,7 +114,8 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import { contentVariants } from './layout.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-content',
@@ -146,7 +148,8 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import { footerVariants } from './layout.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-footer',
@@ -177,7 +180,8 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import { headerVariants } from './layout.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-header',
@@ -252,10 +256,11 @@ import {
   sidebarTriggerVariants,
   sidebarVariants,
 } from './layout.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
+
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-sidebar',

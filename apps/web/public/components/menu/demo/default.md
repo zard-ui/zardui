@@ -87,7 +87,10 @@ import { ZardMenuModule } from '../menu.module';
                   zPlacement="rightTop"
                   class="justify-between"
                 >
-                  <div class="flex items-center"><z-icon zType="info" class="mr-2" /> Help & Support</div>
+                  <div class="flex items-center">
+                    <z-icon zType="info" class="mr-2" />
+                    Help & Support
+                  </div>
                   <z-icon zType="chevron-right" />
                 </button>
 

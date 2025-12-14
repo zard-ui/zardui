@@ -7,7 +7,9 @@ import { ZardLoaderComponent } from '../loader.component';
   selector: 'z-demo-loader-default',
   imports: [ZardLoaderComponent],
   standalone: true,
-  template: `<z-loader />`,
+  template: `
+    <z-loader />
+  `,
 })
 export class ZardDemoLoaderDefaultComponent {}
 

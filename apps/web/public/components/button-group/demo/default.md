@@ -30,16 +30,34 @@ import { ZardButtonGroupComponent } from '../button-group.component';
 
           <ng-template #menu>
             <div z-menu-content class="w-48">
-              <button z-menu-item><i z-icon zType="check"></i> Mark as Read</button>
-              <button z-menu-item><i z-icon zType="archive"></i> Archive</button>
+              <button z-menu-item>
+                <i z-icon zType="check"></i>
+                Mark as Read
+              </button>
+              <button z-menu-item>
+                <i z-icon zType="archive"></i>
+                Archive
+              </button>
 
               <z-divider zSpacing="sm" />
 
-              <button z-menu-item><i z-icon zType="clock"></i> Snooze</button>
-              <button z-menu-item><i z-icon zType="calendar-plus"></i> Add to Calendar</button>
-              <button z-menu-item><i z-icon zType="list-filter-plus"></i> Add to List</button>
+              <button z-menu-item>
+                <i z-icon zType="clock"></i>
+                Snooze
+              </button>
+              <button z-menu-item>
+                <i z-icon zType="calendar-plus"></i>
+                Add to Calendar
+              </button>
+              <button z-menu-item>
+                <i z-icon zType="list-filter-plus"></i>
+                Add to List
+              </button>
               <button z-menu-item z-menu [zMenuTriggerFor]="subMenu" zPlacement="rightTop" class="justify-between">
-                <div class="flex items-center"><i z-icon zType="tag" class="mr-1"></i> Label as</div>
+                <div class="flex items-center">
+                  <i z-icon zType="tag" class="mr-1"></i>
+                  Label as
+                </div>
                 <i z-icon zType="chevron-right"></i>
 
                 <ng-template #subMenu>
@@ -53,7 +71,10 @@ import { ZardButtonGroupComponent } from '../button-group.component';
 
               <z-divider zSpacing="sm" />
 
-              <button z-menu-item class="text-red-500"><i z-icon zType="trash"></i> Trash</button>
+              <button z-menu-item class="text-red-500">
+                <i z-icon zType="trash"></i>
+                Trash
+              </button>
             </div>
           </ng-template>
         </button>

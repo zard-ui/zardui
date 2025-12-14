@@ -18,9 +18,7 @@
       <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">&#64;custom-variant dark</code>
       from TailwindCSS v4 combined with an Angular
       <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">Dark Mode Service</code>
-      for state management and persistence. This service is part of
-      <b>core</b>
-      component and you can inject it where you need it.
+      for state management and persistence.
     </p>
   </div>
 
@@ -42,10 +40,19 @@
       <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Dark Mode Service</h2>
       <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
         The core of the system is an Angular service that manages theme state, persistence, and CSS class application.
+        To install it, use CLI:
       </p>
     </div>
 
-    <z-markdown-renderer markdownUrl="/documentation/dark-mode/service-implementation.md"></z-markdown-renderer>
+    <z-markdown-renderer markdownUrl="/documentation/dark-mode/service-installation.md"></z-markdown-renderer>
+
+    <div class="flex flex-col gap-6">
+      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+        It will also update
+        <b>index.html</b>
+        to set appropriate dark mode theme before Angular is initialized and rendered.
+      </p>
+    </div>
   </section>
 
   <!-- Usage in App Section -->
@@ -53,8 +60,9 @@
     <div class="flex flex-col gap-6">
       <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Usage in Application</h2>
       <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
-        The service is initialized in Zard provider. The HeaderComponent constains an example of how to use the service
-        for toggle control.
+        The service is initialized within
+        <b>index.html</b>
+        . The HeaderComponent contains an example of how to use the service for toggle control.
       </p>
     </div>
 

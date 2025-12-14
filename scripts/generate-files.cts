@@ -3,7 +3,7 @@ import * as fs from 'fs-extra';
 import * as path from 'path';
 
 let watching = false;
-const componentsPath = path.resolve(__dirname, '../libs/zard/src/lib/components');
+const componentsPath = path.resolve(__dirname, '../libs/zard/src/lib/shared/components');
 const publicPath = path.resolve(__dirname, '../apps/web/public/components');
 
 console.log('Watching files change...');

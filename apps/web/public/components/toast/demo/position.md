@@ -11,17 +11,17 @@ import { ZardButtonComponent } from '../../button/button.component';
   standalone: true,
   template: `
     <div class="flex flex-wrap gap-2">
-      <z-button zType="outline" (click)="showToast('top-left')"> Top Left </z-button>
+      <z-button zType="outline" (click)="showToast('top-left')">Top Left</z-button>
 
-      <z-button zType="outline" (click)="showToast('top-center')"> Top Center </z-button>
+      <z-button zType="outline" (click)="showToast('top-center')">Top Center</z-button>
 
-      <z-button zType="outline" (click)="showToast('top-right')"> Top Right </z-button>
+      <z-button zType="outline" (click)="showToast('top-right')">Top Right</z-button>
 
-      <z-button zType="outline" (click)="showToast('bottom-left')"> Bottom Left </z-button>
+      <z-button zType="outline" (click)="showToast('bottom-left')">Bottom Left</z-button>
 
-      <z-button zType="outline" (click)="showToast('bottom-center')"> Bottom Center </z-button>
+      <z-button zType="outline" (click)="showToast('bottom-center')">Bottom Center</z-button>
 
-      <z-button zType="outline" (click)="showToast('bottom-right')"> Bottom Right </z-button>
+      <z-button zType="outline" (click)="showToast('bottom-right')">Bottom Right</z-button>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

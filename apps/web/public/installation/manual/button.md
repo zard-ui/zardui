@@ -23,8 +23,9 @@ import {
   type ZardButtonSizeVariants,
   type ZardButtonTypeVariants,
 } from './button.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',
@@ -136,7 +137,7 @@ export class ZardButtonComponent implements OnDestroy {
 ```angular-ts title="button.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { mergeClasses } from '../../shared/utils/utils';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export const buttonVariants = cva(
   mergeClasses(

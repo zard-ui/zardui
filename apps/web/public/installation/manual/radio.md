@@ -17,7 +17,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { radioLabelVariants, radioVariants } from './radio.variants';
-import { generateId, mergeClasses, transform } from '../../shared/utils/utils';
+
+import { generateId, mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => unknown;
 type OnChangeType = (value: unknown) => void;

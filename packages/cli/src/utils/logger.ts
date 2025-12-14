@@ -21,10 +21,8 @@ export const logger = {
 
 export function spinner(text: string) {
   return ora({
-    text,
-    spinner: {
-      interval: 80,
-      frames: ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'],
-    },
+    text: chalk.dim(text),
+    spinner: 'dots',
+    color: 'cyan',
   });
 }
