@@ -1,3 +1,4 @@
+export * from './lib/shared/core';
 export * from './lib/shared/components/accordion';
 export * from './lib/shared/components/alert';
 export * from './lib/shared/components/alert-dialog';

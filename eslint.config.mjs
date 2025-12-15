@@ -82,6 +82,11 @@ export default [
               group: 'internal',
               position: 'before',
             },
+            {
+              pattern: '@/**',
+              group: 'internal',
+              position: 'before',
+            },
           ],
           pathGroupsExcludedImportTypes: ['builtin'],
           'newlines-between': 'always',

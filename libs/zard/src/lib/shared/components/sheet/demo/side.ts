@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, type AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
@@ -49,16 +49,18 @@ interface iSheetData {
   `,
   exportAs: 'zardDemoSheetSide',
 })
-export class ZardDemoSheetSideInputComponent {
+export class ZardDemoSheetSideInputComponent implements AfterViewInit {
   private zData: iSheetData = inject(Z_SHEET_DATA);
 
   form = new FormGroup({
-    name: new FormControl('Matheus Ribeiro'),
-    username: new FormControl('@ribeiromatheus.dev'),
+    name: new FormControl(''),
+    username: new FormControl(''),
   });
 
-  constructor() {
-    if (this.zData) this.form.patchValue(this.zData);
+  ngAfterViewInit() {
+    if (this.zData) {
+      this.form.patchValue(this.zData);
+    }
   }
 }
 
@@ -73,7 +75,7 @@ export class ZardDemoSheetSideInputComponent {
         <span z-radio name="left" [(ngModel)]="placement" value="left">left</span>
         <span z-radio name="right" [(ngModel)]="placement" value="right">right</span>
       </div>
-      <button z-button zType="outline" (click)="openSheet()">Edit profile</button>
+      <button type="button" z-button zType="outline" (click)="openSheet()">Edit profile</button>
     </div>
   `,
 })
@@ -90,7 +92,7 @@ export class ZardDemoSheetSideComponent {
       zData: {
         name: 'Matheus Ribeiro',
         username: '@ribeiromatheus.dev',
-      } as iSheetData,
+      },
       zOkText: 'Save changes',
       zOnOk: instance => {
         console.log('Form submitted:', instance.form.value);
