@@ -16,7 +16,7 @@
   <main>
     <ng-template cdkPortalOutlet />
 
-    @if (isStringContent) {
+    @if (isStringContent()) {
       <div data-testid="z-alert-content" [innerHTML]="config.zContent"></div>
     }
   </main>
@@ -34,7 +34,7 @@
         data-testid="z-alert-ok-button"
         z-button
         [zType]="config.zOkDestructive ? 'destructive' : 'default'"
-        [disabled]="config.zOkDisabled"
+        [zDisabled]="config.zOkDisabled"
         (click)="onOkClick()"
       >
         {{ config.zOkText || 'Continue' }}

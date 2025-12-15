@@ -27,12 +27,12 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { generateId, mergeClasses, noopFun } from '@/shared/utils/merge-classes';
+
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants } from './alert-dialog.variants';
 import { ZardButtonComponent } from '../button/button.component';
-
-import { generateId, mergeClasses, noopFun } from '@/shared/utils/merge-classes';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -116,7 +116,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   alertDialogRef?: ZardAlertDialogRef<T>;
 
-  protected readonly isStringContent = typeof this.config.zContent === 'string';
+  protected readonly isStringContent = computed(() => typeof this.config.zContent === 'string');
 
   readonly portalOutlet = viewChild.required(CdkPortalOutlet);
 

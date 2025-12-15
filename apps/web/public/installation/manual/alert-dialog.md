@@ -30,12 +30,12 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { generateId, mergeClasses, noopFun } from '@/shared/utils/merge-classes';
+
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants } from './alert-dialog.variants';
 import { ZardButtonComponent } from '../button/button.component';
-
-import { generateId, mergeClasses, noopFun } from '@/shared/utils/merge-classes';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -119,7 +119,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   alertDialogRef?: ZardAlertDialogRef<T>;
 
-  protected readonly isStringContent = typeof this.config.zContent === 'string';
+  protected readonly isStringContent = computed(() => typeof this.config.zContent === 'string');
 
   readonly portalOutlet = viewChild.required(CdkPortalOutlet);
 
@@ -322,7 +322,7 @@ export class ZardAlertDialogRef<T = unknown> {
   <main>
     <ng-template cdkPortalOutlet />
 
-    @if (isStringContent) {
+    @if (isStringContent()) {
       <div data-testid="z-alert-content" [innerHTML]="config.zContent"></div>
     }
   </main>
@@ -340,7 +340,7 @@ export class ZardAlertDialogRef<T = unknown> {
         data-testid="z-alert-ok-button"
         z-button
         [zType]="config.zOkDestructive ? 'destructive' : 'default'"
-        [disabled]="config.zOkDisabled"
+        [zDisabled]="config.zOkDisabled"
         (click)="onOkClick()"
       >
         {{ config.zOkText || 'Continue' }}

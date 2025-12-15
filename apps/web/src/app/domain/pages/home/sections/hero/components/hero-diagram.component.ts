@@ -67,7 +67,7 @@ const INPUT_FILE_SETS = [
   imports: [SvgInputsComponent, SvgOutputsComponent],
   template: `
     <div
-      class="pointer-events-none relative left-[calc(50%-815px)] -mt-40 w-[1630px] overflow-hidden max-md:scale-90"
+      class="pointer-events-none relative left-[calc(50%-815px)] -mt-40 w-407.5 overflow-hidden max-md:scale-90"
       id="hero-diagram"
     >
       <!-- Input Lines -->
@@ -78,7 +78,7 @@ const INPUT_FILE_SETS = [
 
       <!-- ZardUI Chip -->
       <div
-        class="chip-container absolute top-[260px] left-[748px] h-[134px] w-[134px] transform-[translate3d(0,0,0)_scale(0.85)] overflow-hidden rounded-[10px] transition-all duration-600 ease-out"
+        class="chip-container absolute top-65 left-187 h-33.5 w-33.5 transform-[translate3d(0,0,0)_scale(0.85)] overflow-hidden rounded-[10px] transition-all duration-600 ease-out"
         [class.chip-active]="illuminateLogo()"
         [class.chip-highlight]="logoHighlight()"
       >
@@ -94,7 +94,7 @@ const INPUT_FILE_SETS = [
         <img
           src="images/zard.svg"
           alt="ZardUI Logo"
-          class="chip-logo absolute top-1/2 left-1/2 z-3 w-[65px] -translate-x-1/2 -translate-y-1/2 scale-90 invert transition-all duration-200 ease-in-out dark:invert-0"
+          class="chip-logo absolute top-1/2 left-1/2 z-3 w-16.25 -translate-x-1/2 -translate-y-1/2 scale-90 invert transition-all duration-200 ease-in-out dark:invert-0"
         />
       </div>
     </div>
