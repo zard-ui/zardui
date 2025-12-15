@@ -1,0 +1,17 @@
+{
+  "name": "badge",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "badge.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { badgeVariants, type ZardBadgeVariants } from './badge.variants';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\n@Component({\n  selector: 'z-badge',\n  standalone: true,\n  template: `\n    <ng-content />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    '[class]': 'classes()',\n  },\n  exportAs: 'zBadge',\n})\nexport class ZardBadgeComponent {\n  readonly zType = input<ZardBadgeVariants['zType']>('default');\n  readonly zShape = input<ZardBadgeVariants['zShape']>('default');\n\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() =>\n    mergeClasses(badgeVariants({ zType: this.zType(), zShape: this.zShape() }), this.class()),\n  );\n}\n"
+    },
+    {
+      "name": "badge.variants.ts",
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const badgeVariants = cva(\n  'inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden',\n  {\n    variants: {\n      zType: {\n        default: 'border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90',\n        secondary: 'border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90',\n        destructive:\n          'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',\n        outline: 'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',\n      },\n      zShape: {\n        default: 'rounded-md',\n        square: 'rounded-none',\n        pill: 'rounded-full',\n      },\n    },\n    defaultVariants: {\n      zType: 'default',\n      zShape: 'default',\n    },\n  },\n);\nexport type ZardBadgeVariants = VariantProps<typeof badgeVariants>;\n"
+    }
+  ],
+  "registryDependencies": [
+    "core"
+  ]
+}

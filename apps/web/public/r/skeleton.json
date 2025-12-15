@@ -1,0 +1,17 @@
+{
+  "name": "skeleton",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "skeleton.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { skeletonVariants } from './skeleton.variants';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\n@Component({\n  selector: 'z-skeleton',\n  template: `\n    <div data-slot=\"skeleton\" [class]=\"classes()\"></div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    class: 'block',\n  },\n  exportAs: 'zSkeleton',\n})\nexport class ZardSkeletonComponent {\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() => mergeClasses(skeletonVariants(), this.class()));\n}\n"
+    },
+    {
+      "name": "skeleton.variants.ts",
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const skeletonVariants = cva('bg-accent animate-pulse rounded-md');\nexport type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;\n"
+    }
+  ],
+  "registryDependencies": [
+    "core"
+  ]
+}

@@ -1,4 +1,3 @@
-import { Config } from '@cli/utils/config.js';
 import { logger } from '@cli/utils/logger.js';
 import * as fsPromises from 'fs/promises';
 import * as path from 'path';
@@ -26,13 +25,8 @@ const THEME_SCRIPT_CONTENT = `
     </script>
 `;
 
-/**
- * Asynchronously reads, modifies, and writes the index.html file to inject the theme script.
- * @returns {Promise<void>} A promise that resolves when the file operation is complete.
- */
-export async function injectThemeScript(cwd: string, config: Config): Promise<void> {
-  console.log(`Reading index.html file: ${config.indexFile}`);
-  const indexConfigPath = path.join(cwd, config.indexFile);
+export async function injectThemeScript(cwd: string, indexFile: string): Promise<void> {
+  const indexConfigPath = path.join(cwd, indexFile);
 
   try {
     await fsPromises.access(indexConfigPath);

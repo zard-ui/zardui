@@ -1,0 +1,17 @@
+{
+  "name": "loader",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "loader.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { loaderVariants, type ZardLoaderVariants } from './loader.variants';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\n@Component({\n  selector: 'z-loader',\n  standalone: true,\n  template: `\n    <div class=\"relative top-1/2 left-1/2 h-[inherit] w-[inherit]\">\n      @for (_ of bars; track $index) {\n        <div\n          class=\"animate-spinner absolute -top-[3.9%] -left-[10%] h-[8%] w-[24%] rounded-md bg-black dark:bg-white\"\n          [style]=\"{\n            animationDelay: animationDelay($index),\n            transform: transform($index),\n          }\"\n        ></div>\n      }\n    </div>\n  `,\n  styles: `\n    @layer utilities {\n      @keyframes spinner {\n        0% {\n          opacity: 1;\n        }\n        100% {\n          opacity: 0.15;\n        }\n      }\n\n      .animate-spinner {\n        animation: spinner 1.2s linear infinite;\n      }\n    }\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    '[class]': 'classes()',\n  },\n  exportAs: 'zLoader',\n})\nexport class ZardLoaderComponent {\n  readonly class = input<ClassValue>('');\n  readonly zSize = input<ZardLoaderVariants['zSize']>('default');\n\n  protected readonly bars = Array.from({ length: 12 });\n  protected readonly animationDelay = (index: number) => `-${1.3 - index * 0.1}s`;\n  protected readonly transform = (index: number) => `rotate(${30 * index}deg) translate(146%)`;\n\n  protected readonly classes = computed(() => mergeClasses(loaderVariants({ zSize: this.zSize() }), this.class()));\n}\n"
+    },
+    {
+      "name": "loader.variants.ts",
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const loaderVariants = cva('', {\n  variants: {\n    zSize: {\n      default: 'size-6',\n      sm: 'size-4',\n      lg: 'size-8',\n    },\n  },\n  defaultVariants: {\n    zSize: 'default',\n  },\n});\nexport type ZardLoaderVariants = VariantProps<typeof loaderVariants>;\n"
+    }
+  ],
+  "registryDependencies": [
+    "core"
+  ]
+}

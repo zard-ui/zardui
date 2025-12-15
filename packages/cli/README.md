@@ -119,19 +119,21 @@ The CLI stores configuration in `components.json`:
   "style": "css",
   "tailwind": {
     "css": "src/styles.css",
-    "baseColor": "slate",
-    "cssVariables": true
+    "baseColor": "slate"
   },
+  "baseUrl": "src/app",
   "aliases": {
-    "components": "src/app/shared/components",
-    "utils": "src/app/shared/utils"
+    "components": "@/shared/components",
+    "utils": "@/shared/utils",
+    "core": "@/shared/core",
+    "services": "@/shared/services"
   }
 }
 ```
 
 ## Requirements
 
-- Angular 19+ 
+- Angular 19+
 - Node.js 20 or 22
 - TypeScript project
 
@@ -144,7 +146,7 @@ The CLI automatically configures TypeScript path mappings in your `tsconfig.json
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@shared/*": ["src/app/shared/*"]
+      "@/*": ["src/app/*"]
     }
   }
 }
@@ -153,8 +155,8 @@ The CLI automatically configures TypeScript path mappings in your `tsconfig.json
 This allows you to import components and utilities using clean paths:
 
 ```typescript
-import { ZardButtonComponent } from '@shared/components/button';
-import { mergeClasses } from '@shared/utils/merge-classes';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 ```
 
 ## Tailwind CSS v4 Support

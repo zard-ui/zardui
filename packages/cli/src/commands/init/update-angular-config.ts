@@ -4,7 +4,7 @@ import { existsSync } from 'fs';
 import * as fsPromises from 'fs/promises';
 import * as path from 'path';
 
-const ZARD_PROVIDER_IMPORT = "import { provideZard } from '@shared/components/core/provider/providezard';\n";
+const ZARD_PROVIDER_IMPORT = "import { provideZard } from '@shared/core/provider/providezard';\n";
 const ZARD_PROVIDER_ENTRY = 'provideZard(),';
 
 /**

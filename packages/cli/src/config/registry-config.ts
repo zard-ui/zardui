@@ -1,0 +1,1 @@
+export const DEFAULT_REGISTRY_URL = '__REGISTRY_URL__';

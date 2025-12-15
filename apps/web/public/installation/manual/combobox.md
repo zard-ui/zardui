@@ -22,7 +22,6 @@ import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angu
 import type { ClassValue } from 'clsx';
 
 import { comboboxVariants, type ZardComboboxVariants } from './combobox.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardCommandEmptyComponent } from '../command/command-empty.component';
 import { ZardCommandInputComponent } from '../command/command-input.component';
@@ -34,6 +33,8 @@ import { ZardEmptyComponent } from '../empty/empty.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardComboboxOption {
   value: string;

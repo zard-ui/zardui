@@ -28,10 +28,11 @@ import {
 
 import type { ZardSheetRef } from './sheet-ref';
 import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
-import { mergeClasses, noopFun } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
+
+import { mergeClasses, noopFun } from '@/shared/utils/merge-classes';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardSheetOptions<T, U> {
@@ -445,7 +446,7 @@ import { ZardSheetRef } from './sheet-ref';
 import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
-export const Z_SHEET_DATA = new InjectionToken<any>('Z_MODAL_DATA');
+export const Z_SHEET_DATA = new InjectionToken<any>('Z_SHEET_DATA');
 
 @Injectable({
   providedIn: 'root',

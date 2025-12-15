@@ -7,7 +7,9 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-loading',
   imports: [ZardButtonComponent],
   standalone: true,
-  template: ` <button z-button zLoading>Default</button> `,
+  template: `
+    <button z-button zLoading>Default</button>
+  `,
 })
 export class ZardDemoButtonLoadingComponent {}
 

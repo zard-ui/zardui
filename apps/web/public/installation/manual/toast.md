@@ -7,7 +7,8 @@ import type { ClassValue } from 'clsx';
 import { NgxSonnerToaster } from 'ngx-sonner';
 
 import { toastVariants, type ZardToastVariants } from './toast.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-toast, z-toaster',

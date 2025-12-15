@@ -25,7 +25,8 @@ import {
 import type { ClassValue } from 'clsx';
 
 import { dropdownContentVariants } from './dropdown.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-dropdown-menu',
@@ -357,7 +358,8 @@ import type { ClassValue } from 'clsx';
 
 import { ZardDropdownService } from './dropdown.service';
 import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
@@ -418,7 +420,8 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import { dropdownLabelVariants } from './dropdown.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',
@@ -465,7 +468,8 @@ import {
 import type { ClassValue } from 'clsx';
 
 import { dropdownContentVariants } from './dropdown.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-dropdown-menu-content',
@@ -501,7 +505,8 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import { dropdownShortcutVariants } from './dropdown.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]',
@@ -656,7 +661,7 @@ import {
 
 import { filter, type Subscription } from 'rxjs';
 
-import { noopFun } from '../../shared/utils/utils';
+import { noopFun } from '@/shared/utils/merge-classes';
 
 @Injectable({
   providedIn: 'root',

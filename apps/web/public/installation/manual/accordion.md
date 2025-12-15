@@ -15,7 +15,8 @@ import type { ClassValue } from 'clsx';
 
 import { ZardAccordionItemComponent } from './accordion-item.component';
 import { accordionVariants } from './accordion.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-accordion',
@@ -144,8 +145,9 @@ import type { ClassValue } from 'clsx';
 
 import { ZardAccordionComponent } from './accordion.component';
 import { accordionContentVariants, accordionItemVariants, accordionTriggerVariants } from './accordion.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-accordion-item',

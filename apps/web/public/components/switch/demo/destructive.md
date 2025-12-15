@@ -7,7 +7,9 @@ import { ZardSwitchComponent } from '../switch.component';
   selector: 'z-demo-switch-destructive',
   imports: [ZardSwitchComponent],
   standalone: true,
-  template: ` <z-switch zType="destructive" /> `,
+  template: `
+    <z-switch zType="destructive" />
+  `,
 })
 export class ZardDemoSwitchDestructiveComponent {}
 

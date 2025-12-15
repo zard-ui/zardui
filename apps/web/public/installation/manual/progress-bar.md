@@ -19,7 +19,8 @@ import {
   type ZardProgressBarSizeVariants,
   type ZardProgressBarTypeVariants,
 } from './progress-bar.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-progress-bar',

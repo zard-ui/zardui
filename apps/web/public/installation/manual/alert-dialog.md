@@ -33,8 +33,9 @@ import type { ClassValue } from 'clsx';
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants } from './alert-dialog.variants';
-import { generateId, mergeClasses, noopFun } from '../../shared/utils/utils';
 import { ZardButtonComponent } from '../button/button.component';
+
+import { generateId, mergeClasses, noopFun } from '@/shared/utils/merge-classes';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -186,7 +187,8 @@ import type { OverlayRef } from '@angular/cdk/overlay';
 import { filter, Subject, takeUntil } from 'rxjs';
 
 import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
-import { noopFun } from '../../shared/utils/utils';
+
+import { noopFun } from '@/shared/utils/merge-classes';
 
 export class ZardAlertDialogRef<T = unknown> {
   private readonly destroy$ = new Subject<void>();
@@ -207,7 +209,9 @@ export class ZardAlertDialogRef<T = unknown> {
   }
 
   close(): void {
-    if (this.isClosing) return;
+    if (this.isClosing) {
+      return;
+    }
     this.isClosing = true;
 
     const element = this.containerInstance.getNativeElement?.() ?? null;
@@ -223,7 +227,9 @@ export class ZardAlertDialogRef<T = unknown> {
     const cancelFn = this.config.zOnCancel;
     if (typeof cancelFn === 'function') {
       const result = (cancelFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) this.close();
+      if (result !== false) {
+        this.close();
+      }
     } else {
       this.close();
     }
@@ -233,7 +239,9 @@ export class ZardAlertDialogRef<T = unknown> {
     const okFn = this.config.zOnOk;
     if (typeof okFn === 'function') {
       const result = (okFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) this.close();
+      if (result !== false) {
+        this.close();
+      }
     } else {
       this.close();
     }

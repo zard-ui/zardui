@@ -11,7 +11,10 @@ import { ZardButtonComponent } from '../button.component';
   template: `
     <button z-button zType="outline">Button</button>
     <button z-button zType="outline"><i z-icon zType="arrow-up"></i></button>
-    <button z-button zType="outline">Button <i z-icon zType="popcorn"></i></button>
+    <button z-button zType="outline">
+      Button
+      <i z-icon zType="popcorn"></i>
+    </button>
   `,
 })
 export class ZardDemoButtonDefaultComponent {}

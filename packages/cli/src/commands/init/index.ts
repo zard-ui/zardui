@@ -1,20 +1,19 @@
+import { installComponent } from '@cli/commands/add/component-installer.js';
 import { promptForConfig } from '@cli/commands/init/config-prompter.js';
 import { installDependencies } from '@cli/commands/init/dependencies.js';
 import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
-import { createUtils } from '@cli/commands/init/utils-creator.js';
-import { Config } from '@cli/utils/config.js';
+import { Config, resolveConfigPaths } from '@cli/utils/config.js';
 import { getProjectInfo, ProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager } from '@cli/utils/package-manager.js';
 import chalk from 'chalk';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
 import prompts from 'prompts';
 
-import { injectThemeScript } from './theme-loader.js';
 import { updateAngularConfig } from './update-angular-config.js';
 
 export const init = new Command()
@@ -104,41 +103,43 @@ async function runInitializationSteps(
   cwd: string,
   config: Config,
   projectInfo: ProjectInfo,
-  _isReInitializing: boolean,
+  isReInitializing: boolean,
 ): Promise<void> {
-  const configSpinner = spinner('Writing configuration...').start();
+  const initSpinner = spinner('Initializing project...').start();
+
   await writeFile(path.resolve(cwd, 'components.json'), JSON.stringify(config, null, 2), 'utf8');
-  configSpinner.succeed();
 
-  const dependenciesSpinner = spinner('Installing dependencies...').start();
+  initSpinner.text = 'Installing dependencies...';
   await installDependencies(cwd, config, projectInfo);
-  dependenciesSpinner.succeed();
 
-  const appConfigSpinner = spinner('Updating app.config.ts...').start();
+  initSpinner.text = 'Configuring Angular...';
   await updateAngularConfig(cwd, config);
-  appConfigSpinner.succeed();
 
-  const appIndexSpinner = spinner('Updating index.html...').start();
-  await injectThemeScript(cwd, config);
-  appIndexSpinner.succeed();
-
-  if (!projectInfo.hasTailwind) {
-    const postcssSpinner = spinner('Creating PostCSS configuration...').start();
+  if (!projectInfo.hasTailwind || isReInitializing) {
+    initSpinner.text = 'Setting up PostCSS...';
     await createPostCssConfig(cwd);
-    postcssSpinner.succeed();
   }
 
-  const themeSpinner = spinner('Applying theme to styles...').start();
+  initSpinner.text = 'Applying theme...';
   await applyThemeToStyles(cwd, config);
-  themeSpinner.succeed();
 
-  const utilsSpinner = spinner('Creating utils...').start();
-  await createUtils(cwd, config);
-  utilsSpinner.succeed();
-
-  const tsconfigSpinner = spinner('Updating tsconfig.json...').start();
+  initSpinner.text = 'Updating TypeScript config...';
   await updateTsConfig(cwd, config);
-  tsconfigSpinner.succeed();
+
+  initSpinner.text = 'Installing core dependencies...';
+  await installCoreDependencies(cwd, config);
+
+  initSpinner.succeed('Project initialized');
+}
+
+async function installCoreDependencies(cwd: string, config: Config): Promise<void> {
+  const resolvedConfig = await resolveConfigPaths(cwd, config);
+
+  await mkdir(resolvedConfig.resolvedPaths.core, { recursive: true });
+  await mkdir(resolvedConfig.resolvedPaths.utils, { recursive: true });
+
+  await installComponent('core', resolvedConfig.resolvedPaths.core, resolvedConfig);
+  await installComponent('utils', resolvedConfig.resolvedPaths.utils, resolvedConfig);
 }
 
 function displaySuccessMessage(config: Config): void {

@@ -12,10 +12,11 @@ import {
   alertVariants,
   type ZardAlertVariants,
 } from './alert.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
+
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-alert, [z-alert]',

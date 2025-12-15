@@ -16,9 +16,7 @@ interface Person {
   standalone: true,
   template: `
     <table z-table>
-      <caption>
-        A list of your recent invoices.
-      </caption>
+      <caption>A list of your recent invoices.</caption>
       <thead>
         <tr>
           <th>Name</th>

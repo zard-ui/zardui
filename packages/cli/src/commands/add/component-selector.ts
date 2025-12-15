@@ -1,6 +1,7 @@
-import { getAllComponentNames } from '@cli/core/registry/index.js';
 import { logger } from '@cli/utils/logger.js';
 import prompts from 'prompts';
+
+import { getAllComponentNames } from './dependency-resolver.js';
 
 export async function selectComponents(components: string[], allFlag: boolean): Promise<string[]> {
   if (allFlag) {
@@ -15,12 +16,14 @@ export async function selectComponents(components: string[], allFlag: boolean): 
 }
 
 async function promptForComponents(): Promise<string[]> {
+  const allNames = await getAllComponentNames();
+
   const { components: selected } = await prompts({
     type: 'multiselect',
     name: 'components',
     message: 'Which components would you like to add?',
     hint: 'Space to select. A to toggle all. Enter to submit.',
-    choices: getAllComponentNames().map(name => ({
+    choices: allNames.map(name => ({
       title: name,
       value: name,
     })),

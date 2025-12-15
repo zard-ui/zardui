@@ -19,13 +19,16 @@ import {
   buttonGroupVariants,
   type ZardButtonGroupVariants,
 } from './button-group.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardDividerComponent } from '../divider/divider.component';
 import { type ZardDividerVariants } from '../divider/divider.variants';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 @Component({
   selector: 'z-button-group',
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -52,7 +55,9 @@ export class ZardButtonGroupComponent {
 @Component({
   selector: 'z-button-group-divider',
   imports: [ZardDividerComponent],
-  template: `<z-divider [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />`,
+  template: `
+    <z-divider [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {

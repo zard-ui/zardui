@@ -19,7 +19,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface SegmentedOption {
   value: string;
@@ -29,7 +30,9 @@ export interface SegmentedOption {
 @Component({
   selector: 'z-segmented-item',
   standalone: true,
-  template: `<ng-content />`,
+  template: `
+    <ng-content />
+  `,
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardSegmentedItemComponent {

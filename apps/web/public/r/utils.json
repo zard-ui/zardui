@@ -1,0 +1,19 @@
+{
+  "name": "utils",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "merge-classes.ts",
+      "content": "import { type ClassValue, clsx } from 'clsx';\nimport { twMerge } from 'tailwind-merge';\n\nexport type { ClassValue };\n\nexport function mergeClasses(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n\nexport function transform(value: boolean | string): boolean {\n  return typeof value === 'string' ? value === '' : value;\n}\n\nexport function generateId(prefix = ''): string {\n  const id = crypto.randomUUID();\n  return prefix ? `${prefix}-${id}` : id;\n}\n\nexport const noopFun = () => void 0;\n\nexport const isElementContentTruncated = (element: HTMLElement | undefined): boolean => {\n  if (!element) {\n    return false;\n  }\n  const range = document.createRange();\n  range.selectNodeContents(element);\n  const rangeWidth = range.getBoundingClientRect().width;\n  const elementWidth = element.getBoundingClientRect().width;\n\n  return rangeWidth > elementWidth;\n};\n"
+    },
+    {
+      "name": "number.ts",
+      "content": "function clamp(value: number, [min, max]: [number, number]): number {\n  return Math.min(max, Math.max(min, value));\n}\n\nfunction roundToStep(value: number, min: number, step: number): number {\n  return Math.round((value - min) / step) * step + min;\n}\n\nfunction convertValueToPercentage(value: number, min: number, max: number): number {\n  return ((value - min) / (max - min)) * 100;\n}\n\nexport { clamp, roundToStep, convertValueToPercentage };\n"
+    }
+  ],
+  "basePath": "utils",
+  "dependencies": [
+    "tailwind-merge",
+    "clsx"
+  ]
+}

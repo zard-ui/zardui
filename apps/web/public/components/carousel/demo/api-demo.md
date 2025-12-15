@@ -30,11 +30,26 @@ import { ZardCarouselModule } from '../carousel.module';
       </div>
 
       <div class="mt-4 space-y-2 text-center text-sm">
-        <p><strong>Current slide:</strong> {{ currentSlide() }} / {{ totalSlides() }}</p>
-        <p><strong>Scroll progress:</strong> {{ Math.round(scrollProgress() * 100) }}%</p>
-        <p><strong>Can scroll prev:</strong> {{ canScrollPrev() ? 'Yes' : 'No' }}</p>
-        <p><strong>Can scroll next:</strong> {{ canScrollNext() ? 'Yes' : 'No' }}</p>
-        <p><strong>Slides in view:</strong> {{ slidesInView().join(', ') }}</p>
+        <p>
+          <strong>Current slide:</strong>
+          {{ currentSlide() }} / {{ totalSlides() }}
+        </p>
+        <p>
+          <strong>Scroll progress:</strong>
+          {{ Math.round(scrollProgress() * 100) }}%
+        </p>
+        <p>
+          <strong>Can scroll prev:</strong>
+          {{ canScrollPrev() ? 'Yes' : 'No' }}
+        </p>
+        <p>
+          <strong>Can scroll next:</strong>
+          {{ canScrollNext() ? 'Yes' : 'No' }}
+        </p>
+        <p>
+          <strong>Slides in view:</strong>
+          {{ slidesInView().join(', ') }}
+        </p>
       </div>
     </div>
   `,

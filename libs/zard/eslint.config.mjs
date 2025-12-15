@@ -104,7 +104,7 @@ export default [
       '@angular-eslint/template/prefer-at-empty': 'warn',
       '@angular-eslint/template/no-nested-tags': 'error',
       '@angular-eslint/template/prefer-ngsrc': 'warn',
-      // ay11
+      // a11y
       '@angular-eslint/template/label-has-associated-control': 'warn', // should be error
       '@angular-eslint/template/click-events-have-key-events': 'error',
       '@angular-eslint/template/elements-content': 'error',

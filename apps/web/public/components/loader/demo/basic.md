@@ -7,7 +7,9 @@ import { ZardLoaderComponent } from '../loader.component';
   selector: 'z-demo-loader-basic',
   imports: [ZardLoaderComponent],
   standalone: true,
-  template: `<z-loader />`,
+  template: `
+    <z-loader />
+  `,
   styles: `
     :host {
       display: flex;

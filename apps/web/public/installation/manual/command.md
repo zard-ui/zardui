@@ -21,8 +21,9 @@ import type { ClassValue } from 'clsx';
 import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { commandVariants, type ZardCommandVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import type { ZardIcon } from '../icon/icons';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardCommandOption {
   value: unknown;
@@ -361,7 +362,8 @@ import type { ClassValue } from 'clsx';
 
 import { ZardCommandComponent } from './command.component';
 import { commandSeparatorVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-divider',
@@ -410,7 +412,8 @@ import type { ClassValue } from 'clsx';
 
 import { ZardCommandComponent } from './command.component';
 import { commandEmptyVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-empty',
@@ -467,8 +470,9 @@ import type { ClassValue } from 'clsx';
 
 import { ZardCommandComponent } from './command.component';
 import { commandInputVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-input',
@@ -602,7 +606,8 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import { commandListVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-list',
@@ -642,7 +647,8 @@ import type { ClassValue } from 'clsx';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
 import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-option-group',
@@ -714,9 +720,10 @@ import type { ClassValue } from 'clsx';
 
 import { ZardCommandComponent } from './command.component';
 import { commandItemVariants, commandShortcutVariants, type ZardCommandItemVariants } from './command.variants';
-import { mergeClasses, transform } from '../../shared/utils/utils';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
+
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-option',

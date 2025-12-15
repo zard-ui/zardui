@@ -8,7 +8,7 @@ The header uses the service to implement the theme toggle button, allowing users
 // header.component.ts
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 
-import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core/services/dark-mode';
+import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/services/dark-mode';
 
 @Component({
   selector: 'z-header',
@@ -16,7 +16,6 @@ import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core
   imports: [
     RouterModule,
     ZardButtonComponent,
-    ZardButtonGroupComponent,
     ZardIconComponent,
     /* other imports */
   ],
@@ -25,11 +24,8 @@ import { DarkModeOptions, EDarkModes, ZardDarkMode } from '@zard/components/core
 export class HeaderComponent {
   private readonly darkModeService = inject(ZardDarkMode);
 
-  readonly EDarkModes = EDarkModes;
-  readonly currentTheme = this.darkModeService.theme;
-
-  activateTheme(theme: DarkModeOptions): void {
-    this.darkModeService.activateTheme(theme);
+  toggleTheme(): void {
+    this.darkModeService.toggleTheme();
   }
 }
 ```
@@ -38,40 +34,8 @@ export class HeaderComponent {
 
 ```html expandable="true"
 <!-- header.component.html -->
-@let theme = currentTheme();
-<z-button-group>
-  <button
-    z-button
-    zType="ghost"
-    zSize="sm"
-    [disabled]="theme === EDarkModes.SYSTEM"
-    [aria-pressed]="theme === EDarkModes.SYSTEM"
-    (click)="activateTheme(EDarkModes.SYSTEM)"
-  >
-    <z-icon zType="sun-moon" />
-    <span class="sr-only">Use system theme</span>
-  </button>
-  <button
-    z-button
-    zType="ghost"
-    zSize="sm"
-    [disabled]="theme === EDarkModes.LIGHT"
-    [aria-pressed]="theme === EDarkModes.LIGHT"
-    (click)="activateTheme(EDarkModes.LIGHT)"
-  >
-    <z-icon zType="sun" />
-    <span class="sr-only">Light theme</span>
-  </button>
-  <button
-    z-button
-    zType="ghost"
-    zSize="sm"
-    [disabled]="theme === EDarkModes.DARK"
-    [aria-pressed]="theme === EDarkModes.DARK"
-    (click)="activateTheme(EDarkModes.DARK)"
-  >
-    <z-icon zType="moon" />
-    <span class="sr-only">Dark theme</span>
-  </button>
-</z-button-group>
+<button z-button zType="ghost" zSize="sm" (click)="toggleTheme()">
+  <z-icon zType="dark-mode" class="size-4.5" />
+  <span class="sr-only">Toggle theme</span>
+</button>
 ```

@@ -7,7 +7,9 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-link',
   imports: [ZardButtonComponent],
   standalone: true,
-  template: ` <button z-button zType="link">Link</button> `,
+  template: `
+    <button z-button zType="link">Link</button>
+  `,
 })
 export class ZardDemoButtonLinkComponent {}
 

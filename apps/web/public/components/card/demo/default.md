@@ -1,7 +1,7 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { generateId } from '../../../shared/utils/utils';
+import { generateId } from '../../../utils/merge-classes';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardCardComponent } from '../card.component';
 
@@ -39,7 +39,7 @@ import { ZardCardComponent } from '../card.component';
             >
               Password
             </label>
-            <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline"> Forgot your password? </a>
+            <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
           </div>
           <input
             [id]="idPassword"

@@ -6,8 +6,8 @@ import { HeaderComponent } from '@doc/domain/components/header/header.component'
 import { SidebarComponent } from '@doc/domain/components/sidebar/sidebar.component';
 import { environment } from '@doc/env/environment';
 
-import { DarkModeOptions, ZardDarkMode } from '@zard/components/core/provider/services/dark-mode';
 import { ZardToastComponent } from '@zard/components/toast/toast.component';
+import { DarkModeOptions, ZardDarkMode } from '@zard/services/dark-mode';
 
 @Component({
   selector: 'z-documentation',

@@ -13,8 +13,9 @@ import {
 import type { ClassValue } from 'clsx';
 
 import { cardBodyVariants, cardHeaderVariants, cardVariants } from './card.variants';
-import { mergeClasses } from '../../shared/utils/utils';
-import { ZardStringTemplateOutletDirective } from '../core/directives/string-template-outlet/string-template-outlet.directive';
+
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-card',

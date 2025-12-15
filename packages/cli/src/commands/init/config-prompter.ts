@@ -9,19 +9,23 @@ import * as path from 'node:path';
 import prompts from 'prompts';
 import { z } from 'zod';
 
+export const SCHEMA_URL = 'https://zardui.com/schema.json';
+
 export const configSchema = z.object({
+  $schema: z.string(),
   style: z.enum(['css']),
   appConfigFile: z.string(),
-  indexFile: z.string(),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']),
   tailwind: z.object({
     css: z.string(),
     baseColor: z.string(),
-    cssVariables: z.boolean(),
   }),
+  baseUrl: z.string(),
   aliases: z.object({
     components: z.string(),
     utils: z.string(),
+    core: z.string(),
+    services: z.string(),
   }),
 });
 
@@ -38,12 +42,6 @@ export async function promptForConfig(
       name: 'app.config',
       message: `Where is your ${highlight('app.config.ts')} file?`,
       initial: projectInfo.hasNx ? 'apps/[app]/src/app/app.config.ts' : 'src/app/app.config.ts',
-    },
-    {
-      type: 'text',
-      name: 'index.html',
-      message: `Where is your ${highlight('index.html')} file?`,
-      initial: projectInfo.hasNx ? 'apps/[app]/src/index.html' : 'src/index.html',
     },
     {
       type: 'select',
@@ -65,31 +63,37 @@ export async function promptForConfig(
       type: 'text',
       name: 'components',
       message: `Configure the import alias for ${highlight('components')}:`,
-      initial: projectInfo.hasNx ? 'libs/ui/src/lib/components' : 'src/app/shared/components',
+      initial: '@/shared/components',
     },
     {
       type: 'text',
       name: 'utils',
       message: `Configure the import alias for ${highlight('utils')}:`,
-      initial: projectInfo.hasNx ? 'libs/ui/src/lib/utils' : 'src/app/shared/utils',
+      initial: '@/shared/utils',
     },
   ]);
 
   await validateCssFile(cwd, options.tailwindCss);
 
+  const componentsAlias = options.components;
+  const utilsAlias = options.utils;
+  const sharedBase = path.dirname(componentsAlias);
+
   const config = configSchema.parse({
+    $schema: SCHEMA_URL,
     style: 'css',
-    appConfigFile: 'src/app/app.config.ts',
-    indexFile: 'src/index.html',
+    appConfigFile: options['app.config'],
     packageManager,
     tailwind: {
       css: options.tailwindCss,
       baseColor: options.theme,
-      cssVariables: true,
     },
+    baseUrl: 'src/app',
     aliases: {
-      components: options.components,
-      utils: options.utils,
+      components: componentsAlias,
+      utils: utilsAlias,
+      core: `${sharedBase}/core`,
+      services: `${sharedBase}/services`,
     },
   });
 

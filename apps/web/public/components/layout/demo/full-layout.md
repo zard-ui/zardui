@@ -75,9 +75,7 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
           </z-content>
 
           <z-footer>
-            <div class="text-muted-foreground flex w-full items-center justify-center text-sm">
-              © {{ year }} ZardUI
-            </div>
+            <div class="text-muted-foreground flex w-full items-center justify-center text-sm">© {{ year }} ZardUI</div>
           </z-footer>
         </z-layout>
       </z-layout>

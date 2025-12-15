@@ -6,11 +6,14 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import { skeletonVariants } from './skeleton.variants';
-import { mergeClasses } from '../../shared/utils/utils';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-skeleton',
-  template: `<div data-slot="skeleton" [class]="classes()"></div>`,
+  template: `
+    <div data-slot="skeleton" [class]="classes()"></div>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {

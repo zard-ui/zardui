@@ -16,7 +16,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { switchVariants, type ZardSwitchVariants } from './switch.variants';
-import { mergeClasses, generateId } from '../../shared/utils/utils';
+
+import { mergeClasses, generateId } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
