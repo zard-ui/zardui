@@ -82,14 +82,13 @@
       "Bash(npm whoami:*)",
       "Bash(git push:*)",
       "Bash(git tag:*)",
-      "Bash(npm publish:*)",
-      "Bash(npx @ngzard/ui@1.0.0-beta.23 --version)",
       "Bash(apps/web/src/app/core/layouts/documentation/documentation.layout.ts )",
       "Bash(apps/web/src/app/domain/pages/blocks/blocks.page.ts )",
       "Bash(apps/web/src/app/domain/pages/dark-mode/dark-mode.page.ts )",
       "Bash(apps/web/src/app/domain/components/header/header.component.ts)",
       "Bash(timeout 45 bash:*)",
-      "Bash(xargs:*)"
+      "Bash(xargs:*)",
+      "Bash(npm dist-tag:*)"
     ],
     "defaultMode": "acceptEdits"
   },
