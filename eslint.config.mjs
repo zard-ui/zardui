@@ -115,6 +115,9 @@ export default [
   {
     files: ['**/*.html'],
     // Override or add rules here
-    rules: { '@stylistic/spaced-comment': 'off' },
+    rules: {
+      '@stylistic/spaced-comment': 'off',
+      'prettier/prettier': ['error', { parser: 'angular' }],
+    },
   },
 ];

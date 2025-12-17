@@ -1,18 +1,19 @@
 import { Component } from '@angular/core';
 
-import { generateId } from '../../../utils/merge-classes';
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardCardComponent } from '../card.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardComponent } from '@/shared/components/card/card.component';
+import { generateId } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-demo-card-default',
   imports: [ZardCardComponent, ZardButtonComponent],
-  standalone: true,
   template: `
     <z-card
-      class="w-full max-w-sm"
+      class="w-full md:w-94"
       zTitle="Login to your account"
       zDescription="Enter your email below to login to your account"
+      zAction="Sign Up"
+      (zActionClick)="onActionClick()"
     >
       <div class="space-y-4">
         <div class="space-y-2">
@@ -47,10 +48,10 @@ import { ZardCardComponent } from '../card.component';
             required
           />
         </div>
-        <div class="space-y-2">
-          <z-button zType="default" class="w-full">Login</z-button>
-          <z-button zType="outline" class="w-full">Login with Google</z-button>
-        </div>
+      </div>
+      <div card-footer class="flex w-full flex-col gap-2">
+        <z-button zType="default">Login</z-button>
+        <z-button zType="outline">Login with Google</z-button>
       </div>
     </z-card>
   `,
@@ -58,4 +59,8 @@ import { ZardCardComponent } from '../card.component';
 export class ZardDemoCardDefaultComponent {
   protected readonly idEmail = generateId('email');
   protected readonly idPassword = generateId('password');
+
+  protected onActionClick(): void {
+    alert('Redirect to Sign Up');
+  }
 }

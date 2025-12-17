@@ -1,106 +1,88 @@
-import { Component, DebugElement } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { Component } from '@angular/core';
+
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 
 import { ZardCardComponent } from './card.component';
 
 describe('ZardCardComponent', () => {
-  let component: ZardCardComponent;
-  let fixture: ComponentFixture<ZardCardComponent>;
-  let debugElement: DebugElement;
+  it('renders card with default styling', async () => {
+    const { debugElement } = await render(ZardCardComponent);
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ZardCardComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(ZardCardComponent);
-    component = fixture.componentInstance;
-    debugElement = fixture.debugElement;
-    fixture.detectChanges();
+    const card = debugElement.nativeElement;
+    expect(card).toHaveClass('rounded-xl', 'border', 'bg-card', 'text-card-foreground', 'shadow-sm');
+    expect(card).toHaveClass('flex', 'flex-col', 'gap-6', 'py-6');
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('applies custom classes when provided', async () => {
+    const { debugElement } = await render(ZardCardComponent, {
+      inputs: { class: 'custom-class' },
+    });
+
+    const card = debugElement.nativeElement;
+    expect(card).toHaveClass('custom-class');
   });
 
-  it('should render with default card classes', () => {
-    const cardElement = debugElement.nativeElement;
-    expect(cardElement.classList.contains('rounded-lg')).toBeTruthy();
-    expect(cardElement.classList.contains('border')).toBeTruthy();
-    expect(cardElement.classList.contains('bg-card')).toBeTruthy();
-    expect(cardElement.classList.contains('text-card-foreground')).toBeTruthy();
-    expect(cardElement.classList.contains('shadow-sm')).toBeTruthy();
+  it('renders title when zTitle input is provided', async () => {
+    await render(ZardCardComponent, {
+      inputs: { zTitle: 'Test Title' },
+    });
+
+    expect(screen.getByText('Test Title')).toBeInTheDocument();
+    const titleElement = screen.getByText('Test Title');
+    expect(titleElement).toHaveClass('leading-none', 'font-semibold');
   });
 
-  it('should apply custom classes', () => {
-    fixture.componentRef.setInput('class', 'custom-class');
-    fixture.detectChanges();
+  it('does not render header when title is not provided', async () => {
+    const { container } = await render(ZardCardComponent);
 
-    const cardElement = debugElement.nativeElement;
-    expect(cardElement.classList.contains('custom-class')).toBeTruthy();
+    const header = container.querySelector('[data-slot="card-header"]');
+    expect(header).toBeNull();
   });
 
-  it('should render title when provided', () => {
-    fixture.componentRef.setInput('zTitle', 'Test Title');
-    fixture.detectChanges();
+  it('renders description when both title and description inputs are provided', async () => {
+    await render(ZardCardComponent, {
+      inputs: {
+        zTitle: 'Test Title',
+        zDescription: 'Test Description',
+      },
+    });
 
-    const titleElement = debugElement.query(By.css('.text-2xl.font-semibold'));
-    expect(titleElement).toBeTruthy();
-    expect(titleElement.nativeElement.textContent.trim()).toBe('Test Title');
+    expect(screen.getByText('Test Title')).toBeInTheDocument();
+    expect(screen.getByText('Test Description')).toBeInTheDocument();
   });
 
-  it('should not render header when title is not provided', () => {
-    const headerElement = debugElement.query(By.css('.flex.flex-col.space-y-1\\.5.pb-0.gap-1\\.5'));
-    expect(headerElement).toBeFalsy();
+  it('does not render description when only description is provided without title', async () => {
+    await render(ZardCardComponent, {
+      inputs: { zDescription: 'Test Description' },
+    });
+
+    expect(screen.queryByText('Test Description')).not.toBeInTheDocument();
   });
 
-  it('should render description when both title and description are provided', () => {
-    fixture.componentRef.setInput('zTitle', 'Test Title');
-    fixture.componentRef.setInput('zDescription', 'Test Description');
-    fixture.detectChanges();
+  it('renders body section with correct styling', async () => {
+    const { container } = await render(ZardCardComponent);
 
-    const descriptionElement = debugElement.query(By.css('.text-sm.text-muted-foreground'));
-    expect(descriptionElement).toBeTruthy();
-    expect(descriptionElement.nativeElement.textContent.trim()).toBe('Test Description');
+    const body = container.querySelector('[data-slot="card-content"]');
+    expect(body).toHaveClass('px-6');
   });
 
-  it('should not render description when only description is provided without title', () => {
-    fixture.componentRef.setInput('zDescription', 'Test Description');
-    fixture.detectChanges();
-
-    const descriptionElement = debugElement.query(By.css('.text-sm.text-muted-foreground'));
-    expect(descriptionElement).toBeFalsy();
-  });
-
-  it('should render body content with correct classes', () => {
-    const bodyElement = debugElement.query(By.css('.block.mt-6'));
-    expect(bodyElement).toBeTruthy();
-  });
-
-  it('should render ng-content in body', () => {
+  it('renders ng-content in body section', async () => {
     @Component({
       selector: 'test-host',
       imports: [ZardCardComponent],
-      standalone: true,
-      template: `
-        <z-card>Test Content</z-card>
-      `,
+      template: '<z-card>Test Content</z-card>',
     })
     class TestHostComponent {}
 
-    const hostFixture = TestBed.createComponent(TestHostComponent);
-    hostFixture.detectChanges();
-
-    const bodyElement = hostFixture.debugElement.query(By.css('.block.mt-6'));
-    expect(bodyElement.nativeElement.textContent).toContain('Test Content');
+    await render(TestHostComponent);
+    expect(screen.getByText('Test Content')).toBeInTheDocument();
   });
 
-  it('should support template ref for title', () => {
+  it('supports template reference for title input', async () => {
     @Component({
       selector: 'test-host',
       imports: [ZardCardComponent],
-      standalone: true,
       template: `
         <z-card [zTitle]="titleTemplate">
           <ng-template #titleTemplate>
@@ -111,19 +93,14 @@ describe('ZardCardComponent', () => {
     })
     class TestHostComponent {}
 
-    const hostFixture = TestBed.createComponent(TestHostComponent);
-    hostFixture.detectChanges();
-
-    const customTitleElement = hostFixture.debugElement.query(By.css('.custom-title'));
-    expect(customTitleElement).toBeTruthy();
-    expect(customTitleElement.nativeElement.textContent).toBe('Custom Title Template');
+    await render(TestHostComponent);
+    expect(screen.getByText('Custom Title Template')).toBeInTheDocument();
   });
 
-  it('should support template ref for description', () => {
+  it('supports template reference for description input', async () => {
     @Component({
       selector: 'test-host',
       imports: [ZardCardComponent],
-      standalone: true,
       template: `
         <z-card zTitle="Title" [zDescription]="descriptionTemplate">
           <ng-template #descriptionTemplate>
@@ -134,23 +111,191 @@ describe('ZardCardComponent', () => {
     })
     class TestHostComponent {}
 
-    const hostFixture = TestBed.createComponent(TestHostComponent);
-    hostFixture.detectChanges();
-
-    const customDescriptionElement = hostFixture.debugElement.query(By.css('.custom-description'));
-    expect(customDescriptionElement).toBeTruthy();
-    expect(customDescriptionElement.nativeElement.textContent).toBe('Custom Description Template');
+    await render(TestHostComponent);
+    expect(screen.getByText('Custom Description Template')).toBeInTheDocument();
   });
 
-  it('should have correct CSS classes structure when fully populated', () => {
-    fixture.componentRef.setInput('zTitle', 'Test Title');
-    fixture.componentRef.setInput('zDescription', 'Test Description');
-    fixture.detectChanges();
+  it('renders action button when zAction input is provided', async () => {
+    await render(ZardCardComponent, {
+      inputs: {
+        zTitle: 'Test Title',
+        zAction: 'Edit',
+      },
+    });
 
-    const headerElement = debugElement.query(By.css('.flex.flex-col.space-y-1\\.5.pb-0.gap-1\\.5'));
-    const bodyElement = debugElement.query(By.css('.block.mt-6'));
+    const actionButton = screen.getByRole('button', { name: 'Edit' });
+    expect(actionButton).toBeInTheDocument();
+  });
 
-    expect(headerElement).toBeTruthy();
-    expect(bodyElement).toBeTruthy();
+  it('emits zActionClick event when action button is clicked', async () => {
+    const user = userEvent.setup();
+    const mockClick = jest.fn();
+
+    @Component({
+      selector: 'test-host',
+      imports: [ZardCardComponent],
+      template: '<z-card zTitle="Test Title" zAction="Edit" (zActionClick)="onActionClick()" />',
+    })
+    class TestHostComponent {
+      onActionClick = mockClick;
+    }
+
+    await render(TestHostComponent);
+
+    const actionButton = screen.getByRole('button', { name: 'Edit' });
+    await user.click(actionButton);
+
+    expect(mockClick).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not render action button when zAction is not provided', async () => {
+    await render(ZardCardComponent, {
+      inputs: { zTitle: 'Test Title' },
+    });
+
+    const actionButton = screen.queryByRole('button');
+    expect(actionButton).not.toBeInTheDocument();
+  });
+
+  it('applies header border when zHeaderBorder is true', async () => {
+    const { container } = await render(ZardCardComponent, {
+      inputs: {
+        zTitle: 'Test Title',
+        zHeaderBorder: true,
+      },
+    });
+
+    const header = container.querySelector('[data-slot="card-header"]');
+    expect(header).toHaveClass('border-b');
+  });
+
+  it('applies footer border when zFooterBorder is true', async () => {
+    const { container } = await render(ZardCardComponent, {
+      inputs: { zFooterBorder: true },
+    });
+
+    const footer = container.querySelector('[data-slot="card-footer"]');
+    expect(footer).toHaveClass('border-t');
+  });
+
+  it('renders footer content when projected', async () => {
+    @Component({
+      selector: 'test-host',
+      imports: [ZardCardComponent],
+      template: `
+        <z-card>
+          Card Content
+          <div card-footer>Footer Content</div>
+        </z-card>
+      `,
+    })
+    class TestHostComponent {}
+
+    await render(TestHostComponent);
+    expect(screen.getByText('Footer Content')).toBeInTheDocument();
+  });
+
+  it('renders footer with default styling', async () => {
+    @Component({
+      selector: 'test-host',
+      imports: [ZardCardComponent],
+      template: `
+        <z-card>
+          <div card-footer>Footer Content</div>
+        </z-card>
+      `,
+    })
+    class TestHostComponent {}
+
+    await render(TestHostComponent);
+
+    const footer = screen.getByText('Footer Content').closest('[data-slot="card-footer"]');
+    expect(footer).toHaveClass('flex', 'flex-col', 'gap-2', 'items-center', 'px-6');
+  });
+
+  describe('accessibility', () => {
+    it('does not set aria-labelledby when no title is provided', async () => {
+      const { debugElement } = await render(ZardCardComponent);
+
+      const card = debugElement.nativeElement;
+      expect(card).not.toHaveAttribute('aria-labelledby');
+    });
+
+    it('sets aria-labelledby when title is provided', async () => {
+      const { debugElement } = await render(ZardCardComponent, {
+        inputs: { zTitle: 'Test Title' },
+      });
+
+      const card = debugElement.nativeElement;
+      expect(card).toHaveAttribute('aria-labelledby');
+      const labelledById = card.getAttribute('aria-labelledby');
+      expect(labelledById).toBeTruthy();
+
+      const titleElement = card.querySelector('[data-slot="card-title"]');
+      expect(titleElement).toHaveAttribute('id', labelledById);
+    });
+
+    it('does not set aria-describedby when no description is provided', async () => {
+      const { debugElement } = await render(ZardCardComponent, {
+        inputs: { zTitle: 'Test Title' },
+      });
+
+      const card = debugElement.nativeElement;
+      expect(card).not.toHaveAttribute('aria-describedby');
+    });
+
+    it('sets aria-describedby when description is provided', async () => {
+      const { debugElement } = await render(ZardCardComponent, {
+        inputs: {
+          zTitle: 'Test Title',
+          zDescription: 'Test Description',
+        },
+      });
+
+      const card = debugElement.nativeElement;
+      expect(card).toHaveAttribute('aria-describedby');
+      const describedById = card.getAttribute('aria-describedby');
+      expect(describedById).toBeTruthy();
+
+      const descriptionElement = card.querySelector('[data-slot="card-description"]');
+      expect(descriptionElement).toHaveAttribute('id', describedById);
+    });
+
+    it('action button is keyboard accessible', async () => {
+      await render(ZardCardComponent, {
+        inputs: {
+          zTitle: 'Test Title',
+          zAction: 'Edit',
+        },
+      });
+
+      const actionButton = screen.getByRole('button', { name: 'Edit' });
+      expect(actionButton).toBeInTheDocument();
+      expect(actionButton.tagName).toBe('BUTTON');
+    });
+
+    it('maintains stable aria-labelledby ID when zTitle content changes', async () => {
+      const { debugElement, rerender } = await render(ZardCardComponent, {
+        inputs: { zTitle: 'Initial Title' },
+      });
+
+      // Capture initial aria-labelledby value
+      const card = debugElement.nativeElement;
+      const initialAriaLabelledBy = card.getAttribute('aria-labelledby');
+      expect(initialAriaLabelledBy).toBeTruthy();
+
+      // Rerender with different zTitle content
+      await rerender({
+        inputs: { zTitle: 'Updated Title' },
+      });
+
+      // Assert aria-labelledby remains unchanged
+      const updatedAriaLabelledBy = card.getAttribute('aria-labelledby');
+      expect(updatedAriaLabelledBy).toBe(initialAriaLabelledBy);
+
+      // Verify the title element still has the same ID
+      const titleElement = card.querySelector('[data-slot="card-title"]');
+      expect(titleElement).toHaveAttribute('id', initialAriaLabelledBy);
+    });
   });
 });

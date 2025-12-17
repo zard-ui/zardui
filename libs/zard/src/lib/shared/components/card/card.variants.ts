@@ -1,16 +1,18 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-export const cardVariants = cva('block rounded-lg border bg-card text-card-foreground shadow-sm w-full p-6', {
-  variants: {},
-});
-export type ZardCardVariants = VariantProps<typeof cardVariants>;
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
-export const cardHeaderVariants = cva('w-full flex flex-col space-y-1.5 pb-0 gap-1.5', {
-  variants: {},
-});
-export type ZardCardHeaderVariants = VariantProps<typeof cardHeaderVariants>;
+export const cardVariants = cva('bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm');
 
-export const cardBodyVariants = cva('w-full block mt-6', {
-  variants: {},
-});
-export type ZardCardBodyVariants = VariantProps<typeof cardBodyVariants>;
+export const cardHeaderVariants = cva(
+  mergeClasses(
+    '@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6',
+    'has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6',
+  ),
+);
+
+export const cardActionVariants = cva('col-start-2 row-span-2 row-start-1 self-start justify-self-end');
+
+export const cardBodyVariants = cva('px-6');
+
+export const cardFooterVariants = cva('flex flex-col gap-2 items-center px-6 [.border-t]:pt-6');
