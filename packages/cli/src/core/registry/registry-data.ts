@@ -133,6 +133,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'card',
+    registryDependencies: ['button'],
     files: [
       {
         name: 'card.component.ts',
