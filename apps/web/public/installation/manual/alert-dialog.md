@@ -30,12 +30,12 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { generateId, mergeClasses, noopFun } from '@/shared/utils/merge-classes';
+
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
 import { alertDialogVariants } from './alert-dialog.variants';
 import { ZardButtonComponent } from '../button/button.component';
-
-import { generateId, mergeClasses, noopFun } from '@/shared/utils/merge-classes';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 
@@ -119,7 +119,7 @@ export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
 
   alertDialogRef?: ZardAlertDialogRef<T>;
 
-  protected readonly isStringContent = typeof this.config.zContent === 'string';
+  protected readonly isStringContent = computed(() => typeof this.config.zContent === 'string');
 
   readonly portalOutlet = viewChild.required(CdkPortalOutlet);
 
@@ -209,7 +209,9 @@ export class ZardAlertDialogRef<T = unknown> {
   }
 
   close(): void {
-    if (this.isClosing) return;
+    if (this.isClosing) {
+      return;
+    }
     this.isClosing = true;
 
     const element = this.containerInstance.getNativeElement?.() ?? null;
@@ -225,7 +227,9 @@ export class ZardAlertDialogRef<T = unknown> {
     const cancelFn = this.config.zOnCancel;
     if (typeof cancelFn === 'function') {
       const result = (cancelFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) this.close();
+      if (result !== false) {
+        this.close();
+      }
     } else {
       this.close();
     }
@@ -235,7 +239,9 @@ export class ZardAlertDialogRef<T = unknown> {
     const okFn = this.config.zOnOk;
     if (typeof okFn === 'function') {
       const result = (okFn as OnClickCallback<T>)(this.componentInstance as T);
-      if (result !== false) this.close();
+      if (result !== false) {
+        this.close();
+      }
     } else {
       this.close();
     }
@@ -316,7 +322,7 @@ export class ZardAlertDialogRef<T = unknown> {
   <main>
     <ng-template cdkPortalOutlet />
 
-    @if (isStringContent) {
+    @if (isStringContent()) {
       <div data-testid="z-alert-content" [innerHTML]="config.zContent"></div>
     }
   </main>
@@ -334,7 +340,7 @@ export class ZardAlertDialogRef<T = unknown> {
         data-testid="z-alert-ok-button"
         z-button
         [zType]="config.zOkDestructive ? 'destructive' : 'default'"
-        [disabled]="config.zOkDisabled"
+        [zDisabled]="config.zOkDisabled"
         (click)="onOkClick()"
       >
         {{ config.zOkText || 'Continue' }}
@@ -508,6 +514,17 @@ export class ZardAlertDialogService {
     });
   }
 }
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export { ZardAlertDialogComponent, ZardAlertDialogOptions, ZardAlertDialogModule } from './alert-dialog.component';
+export { type OnClickCallback as AlertDialogOnClickCallback } from './alert-dialog.component';
+export * from './alert-dialog.service';
+export * from './alert-dialog-ref';
+export * from './alert-dialog.variants';
 
 ```
 

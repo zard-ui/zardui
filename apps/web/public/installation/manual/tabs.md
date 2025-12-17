@@ -427,3 +427,11 @@ export type ZardTabVariants = VariantProps<typeof tabContainerVariants> &
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './tabs.component';
+export * from './tabs.variants';
+
+```
+

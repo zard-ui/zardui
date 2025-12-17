@@ -7,7 +7,7 @@ import { ZardSheetRef } from './sheet-ref';
 import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
-export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
+export const Z_SHEET_DATA = new InjectionToken<any>('Z_SHEET_DATA');
 
 @Injectable({
   providedIn: 'root',
@@ -100,7 +100,7 @@ export class ZardSheetService {
       parent: this.injector,
       providers: [
         { provide: ZardSheetRef, useValue: sheetRef },
-        { provide: Z_MODAL_DATA, useValue: config.zData },
+        { provide: Z_SHEET_DATA, useValue: config.zData },
       ],
     });
   }

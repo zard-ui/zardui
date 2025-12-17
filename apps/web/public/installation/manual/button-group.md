@@ -148,3 +148,11 @@ export const buttonGroupTextVariants = cva(
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './button-group.component';
+export * from './button-group.variants';
+
+```
+

@@ -29,7 +29,7 @@ The CLI automatically configures TypeScript path mappings in your `tsconfig.json
   "compilerOptions": {
     "baseUrl": "./",
     "paths": {
-      "@shared/*": ["src/app/shared/*"]
+      "@/shared/*": ["src/app/shared/*"]
     }
   }
 }
@@ -38,6 +38,6 @@ The CLI automatically configures TypeScript path mappings in your `tsconfig.json
 This allows you to import components and utilities using clean paths:
 
 ```typescript title="example.component.ts" copyButton
-import { ButtonComponent } from '@shared/components/button';
-import { mergeClasses } from '@shared/utils/merge-classes';
+import { ButtonComponent } from '@/shared/components/button';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 ```

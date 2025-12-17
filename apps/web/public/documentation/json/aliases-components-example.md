@@ -1,7 +1,7 @@
 ```json
 {
   "aliases": {
-    "components": "src/app/shared/components"
+    "components": "@/shared/components"
   }
 }
 ```

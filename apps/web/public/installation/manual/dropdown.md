@@ -884,3 +884,18 @@ export class ZardDropdownService {
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './dropdown.component';
+export * from './dropdown-item.component';
+export * from './dropdown-label.component';
+export * from './dropdown-shortcut.component';
+export * from './dropdown-menu-content.component';
+export * from './dropdown-trigger.directive';
+export * from './dropdown.service';
+export * from './dropdown.module';
+export * from './dropdown.variants';
+
+```
+

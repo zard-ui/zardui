@@ -247,3 +247,11 @@ export type ZardToggleGroupItemVariants = VariantProps<typeof toggleGroupItemVar
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './toggle-group.component';
+export * from './toggle-group.variants';
+
+```
+

@@ -124,3 +124,11 @@ export type ZardInputStatusVariants = NonNullable<VariantProps<typeof inputVaria
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './input.directive';
+export * from './input.variants';
+
+```
+

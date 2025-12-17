@@ -26,13 +26,13 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
+import { mergeClasses, noopFun } from '@/shared/utils/merge-classes';
+
 import type { ZardSheetRef } from './sheet-ref';
 import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
-
-import { mergeClasses, noopFun } from '@/shared/utils/merge-classes';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardSheetOptions<T, U> {
@@ -278,6 +278,18 @@ export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export { type OnClickCallback as SheetOnClickCallback } from './sheet.component';
+export { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
+export * from './sheet.service';
+export * from './sheet-ref';
+export * from './sheet.module';
+export * from './sheet.variants';
+
+```
+
+
+
 ```angular-ts title="sheet-ref.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
@@ -362,7 +374,9 @@ export class ZardSheetRef<T = any, R = any, U = any> {
     } else if (typeof trigger === 'function') {
       const result = trigger(this.getContentComponent()) as R;
       this.closeWithResult(result);
-    } else this.close();
+    } else {
+      this.close();
+    }
   }
 
   private getContentComponent(): T {
@@ -370,7 +384,9 @@ export class ZardSheetRef<T = any, R = any, U = any> {
   }
 
   private closeWithResult(result: R): void {
-    if (result !== false) this.close(result);
+    if (result !== false) {
+      this.close(result);
+    }
   }
 
   private closeCleanup(): void {
@@ -430,7 +446,7 @@ import { ZardSheetRef } from './sheet-ref';
 import { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
 type ContentType<T> = ComponentType<T> | TemplateRef<T> | string;
-export const Z_MODAL_DATA = new InjectionToken<any>('Z_MODAL_DATA');
+export const Z_SHEET_DATA = new InjectionToken<any>('Z_SHEET_DATA');
 
 @Injectable({
   providedIn: 'root',
@@ -523,7 +539,7 @@ export class ZardSheetService {
       parent: this.injector,
       providers: [
         { provide: ZardSheetRef, useValue: sheetRef },
-        { provide: Z_MODAL_DATA, useValue: config.zData },
+        { provide: Z_SHEET_DATA, useValue: config.zData },
       ],
     });
   }

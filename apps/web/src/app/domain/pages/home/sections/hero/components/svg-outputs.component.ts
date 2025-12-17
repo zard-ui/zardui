@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, input, WritableSignal, CUSTOM_ELEME
 
 import { SvgNodeProps } from './svg-node-props.interface';
 
-const OUTPUT_PATH = 'M843.463 1.3315L245.316 5.47507L0.633077 4.69725';
+const OUTPUT_PATH = 'M843.463 25 L245.316 25 L0.633077 25';
 
 @Component({
   selector: 'z-svg-outputs',
@@ -15,12 +15,12 @@ const OUTPUT_PATH = 'M843.463 1.3315L245.316 5.47507L0.633077 4.69725';
       xmlns="http://www.w3.org/2000/svg"
       width="844"
       height="80"
-      viewBox="0 0 844 40"
+      viewBox="0 0 844 80"
       fill="none"
       class="output-line"
       style="opacity: 0.8"
     >
-      <path d="M843.463 1.3315L245.316 5.47507L0.633077 4.69725" stroke="url(#output_gradient)" stroke-width="1.2" />
+      <path [attr.d]="OUTPUT_PATH" stroke="url(#output_gradient)" stroke-width="1.2" />
       @for (outputLine of outputLines(); track $index) {
         @if (outputLine().visible) {
           <circle

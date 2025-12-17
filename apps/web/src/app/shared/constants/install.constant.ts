@@ -42,15 +42,6 @@ export const installations: Installation[] = [
         },
       },
       {
-        title: 'Add Tailwind CSS',
-        subtitle: 'Components are styled using Tailwind CSS. You need to install Tailwind CSS in your project.',
-        url: {
-          text: 'Follow the Tailwind CSS installation instructions to get started.',
-          href: 'https://tailwindcss.com/docs/installation/framework-guides/angular',
-          external: true,
-        },
-      },
-      {
         title: 'Add dependencies',
         subtitle: 'Add the following dependencies to your project:',
         file: {
@@ -60,7 +51,7 @@ export const installations: Installation[] = [
       },
       {
         title: 'Configure path aliases',
-        subtitle: 'Configure the path aliases in your tsconfig.json file.',
+        subtitle: 'add these lines inside your compilerOptions on the tsconfig.json',
         file: {
           path: '/documentation/setup/angular/manual/tsconfig.md',
           lineNumber: true,
@@ -76,6 +67,15 @@ export const installations: Installation[] = [
         },
         file: {
           path: '/documentation/setup/angular/manual/styles.md',
+          lineNumber: true,
+        },
+      },
+      {
+        title: 'Add the core utilities to zard',
+        subtitle: 'Create a folder called core inside your app folder',
+        path: 'shared/core',
+        file: {
+          path: '/documentation/setup/angular/manual/core.md',
           lineNumber: true,
         },
       },
@@ -105,7 +105,7 @@ export const installations: Installation[] = [
     cli: [
       {
         title: 'Create project',
-        subtitle: 'Start the cli and create an application that uses CSS as default styling.',
+        subtitle: 'Start the cli and create an application that uses Tailwind as default styling.',
         url: {
           text: 'Since Tailwind is the core of the project, we do not recommend using other pre-processors.',
           href: '/docs/scss',

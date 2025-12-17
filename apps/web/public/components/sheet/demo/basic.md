@@ -1,11 +1,11 @@
 ```angular-ts showLineNumbers copyButton
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, type AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardSheetModule } from '../sheet.module';
-import { Z_MODAL_DATA, ZardSheetService } from '../sheet.service';
+import { Z_SHEET_DATA, ZardSheetService } from '../sheet.service';
 
 interface iSheetData {
   name: string;
@@ -15,7 +15,6 @@ interface iSheetData {
 @Component({
   selector: 'zard-demo-sheet-basic',
   imports: [FormsModule, ReactiveFormsModule, ZardInputDirective],
-  standalone: true,
   template: `
     <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
       <div class="grid gap-3">
@@ -47,18 +46,21 @@ interface iSheetData {
       </div>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   exportAs: 'zardDemoSheetBasic',
 })
-export class ZardDemoSheetBasicInputComponent {
-  private zData: iSheetData = inject(Z_MODAL_DATA);
+export class ZardDemoSheetBasicInputComponent implements AfterViewInit {
+  private zData: iSheetData = inject(Z_SHEET_DATA);
 
   form = new FormGroup({
-    name: new FormControl('Matheus Ribeiro'),
-    username: new FormControl('@ribeiromatheus.dev'),
+    name: new FormControl(''),
+    username: new FormControl(''),
   });
 
-  constructor() {
-    if (this.zData) this.form.patchValue(this.zData);
+  ngAfterViewInit(): void {
+    if (this.zData) {
+      this.form.patchValue(this.zData);
+    }
   }
 }
 
@@ -66,7 +68,7 @@ export class ZardDemoSheetBasicInputComponent {
   imports: [ZardButtonComponent, ZardSheetModule],
   standalone: true,
   template: `
-    <button z-button zType="outline" (click)="openSheet()">Edit profile</button>
+    <button type="button" z-button zType="outline" (click)="openSheet()">Edit profile</button>
   `,
 })
 export class ZardDemoSheetBasicComponent {
@@ -80,7 +82,7 @@ export class ZardDemoSheetBasicComponent {
       zData: {
         name: 'Matheus Ribeiro',
         username: '@ribeiromatheus.dev',
-      } as iSheetData,
+      },
       zOkText: 'Save changes',
       zOnOk: instance => {
         console.log('Form submitted:', instance.form.value);

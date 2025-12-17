@@ -212,3 +212,11 @@ export { datePickerVariants };
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './date-picker.component';
+export * from './date-picker.variants';
+
+```
+

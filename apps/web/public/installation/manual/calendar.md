@@ -1185,3 +1185,11 @@ export function toValidDate(value: unknown): Date {
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './calendar.component';
+export * from './calendar.variants';
+
+```
+

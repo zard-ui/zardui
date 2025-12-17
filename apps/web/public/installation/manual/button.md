@@ -191,3 +191,11 @@ export type ZardButtonTypeVariants = NonNullable<VariantProps<typeof buttonVaria
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './button.component';
+export * from './button.variants';
+
+```
+

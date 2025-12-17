@@ -33,6 +33,8 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+
 import { ZardSelectItemComponent } from './select-item.component';
 import {
   selectContentVariants,
@@ -42,8 +44,6 @@ import {
 } from './select.variants';
 import { ZardBadgeComponent } from '../badge/badge.component';
 import { ZardIconComponent } from '../icon/icon.component';
-
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -727,6 +727,16 @@ export const selectItemIconVariants = cva('absolute flex size-3.5 items-center j
 
 export type ZardSelectSizeVariants = NonNullable<VariantProps<typeof selectTriggerVariants>['zSize']>;
 export type ZardSelectItemModeVariants = NonNullable<VariantProps<typeof selectItemVariants>['zMode']>;
+
+```
+
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './select.component';
+export * from './select-item.component';
+export * from './select.module';
+export * from './select.variants';
 
 ```
 

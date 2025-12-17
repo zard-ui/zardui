@@ -500,3 +500,11 @@ export type SliderOrientationVariants = VariantProps<typeof sliderOrientationVar
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './slider.component';
+export * from './slider.variants';
+
+```
+

@@ -150,3 +150,11 @@ export const emptyActionsVariants = cva(
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './empty.component';
+export * from './empty.variants';
+
+```
+

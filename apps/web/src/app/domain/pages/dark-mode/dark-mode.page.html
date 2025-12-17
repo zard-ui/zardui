@@ -98,7 +98,7 @@
             z-button
             zType="ghost"
             zSize="sm"
-            [disabled]="theme === EDarkModes.SYSTEM"
+            [zDisabled]="theme === EDarkModes.SYSTEM"
             [aria-pressed]="theme === EDarkModes.SYSTEM"
             (click)="darkModeService.toggleTheme(EDarkModes.SYSTEM)"
           >
@@ -109,7 +109,7 @@
             z-button
             zType="ghost"
             zSize="sm"
-            [disabled]="theme === EDarkModes.LIGHT"
+            [zDisabled]="theme === EDarkModes.LIGHT"
             [aria-pressed]="theme === EDarkModes.LIGHT"
             (click)="darkModeService.toggleTheme(EDarkModes.LIGHT)"
           >
@@ -120,7 +120,7 @@
             z-button
             zType="ghost"
             zSize="sm"
-            [disabled]="theme === EDarkModes.DARK"
+            [zDisabled]="theme === EDarkModes.DARK"
             [aria-pressed]="theme === EDarkModes.DARK"
             (click)="darkModeService.toggleTheme(EDarkModes.DARK)"
           >

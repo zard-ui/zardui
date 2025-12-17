@@ -67,3 +67,11 @@ export type ZardBadgeVariants = VariantProps<typeof badgeVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './badge.component';
+export * from './badge.variants';
+
+```
+

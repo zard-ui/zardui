@@ -240,6 +240,17 @@ export type ZardMenuItemVariants = VariantProps<typeof menuItemVariants>;
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './menu-content.directive';
+export * from './menu-item.directive';
+export * from './menu.directive';
+export * from './menu.module';
+export * from './menu.variants';
+
+```
+
+
+
 ```angular-ts title="menu-content.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { CdkMenu } from '@angular/cdk/menu';
 import { computed, Directive, input } from '@angular/core';

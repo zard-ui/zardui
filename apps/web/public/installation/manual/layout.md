@@ -206,6 +206,18 @@ export class HeaderComponent {
 
 
 
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './layout.component';
+export * from './header.component';
+export * from './footer.component';
+export * from './content.component';
+export * from './sidebar.component';
+export * from './layout.variants';
+
+```
+
+
+
 ```angular-ts title="layout.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { NgModule } from '@angular/core';
 

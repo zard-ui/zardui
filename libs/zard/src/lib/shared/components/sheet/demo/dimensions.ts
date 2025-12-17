@@ -9,10 +9,10 @@ import { ZardSheetService } from '../sheet.service';
   standalone: true,
   template: `
     <div class="flex flex-wrap gap-4">
-      <button z-button zType="outline" (click)="openWideSheet()">Wide Sheet (500px)</button>
-      <button z-button zType="outline" (click)="openTallSheet()">Tall Sheet (80vh)</button>
-      <button z-button zType="outline" (click)="openCustomSheet()">Custom Dimensions</button>
-      <button z-button zType="outline" (click)="openTopSheet()">Top Sheet</button>
+      <button z-button type="button" zType="outline" (click)="openWideSheet()">Wide Sheet (500px)</button>
+      <button z-button type="button" zType="outline" (click)="openTallSheet()">Tall Sheet (80vh)</button>
+      <button z-button type="button" zType="outline" (click)="openCustomSheet()">Custom Dimensions</button>
+      <button z-button type="button" zType="outline" (click)="openTopSheet()">Top Sheet</button>
     </div>
   `,
 })

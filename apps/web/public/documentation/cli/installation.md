@@ -82,7 +82,7 @@ Done!
 Import the components in your Angular modules or standalone components and start using them in your templates.
 
 ```typescript title="app.component.ts" copyButton
-import { ButtonComponent } from '@shared/components/button';
+import { ButtonComponent } from '@/shared/components/button';
 
 @Component({
   selector: 'app-root',

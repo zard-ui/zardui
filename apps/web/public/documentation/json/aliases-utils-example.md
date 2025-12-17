@@ -1,7 +1,7 @@
 ```json
 {
   "aliases": {
-    "utils": "src/app/shared/utils"
+    "utils": "@/shared/utils"
   }
 }
 ```

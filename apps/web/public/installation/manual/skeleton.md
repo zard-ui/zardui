@@ -39,3 +39,11 @@ export type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './skeleton.component';
+export * from './skeleton.variants';
+
+```
+

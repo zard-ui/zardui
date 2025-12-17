@@ -264,3 +264,12 @@ export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './icon.component';
+export * from './icons';
+export * from './icon.variants';
+
+```
+

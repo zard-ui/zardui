@@ -1,6 +1,8 @@
-```typescript title="utils/merge-classes.ts" copyButton showLineNumbers
+```typescript title="utils/merge-classes.ts" expandable="true" copyButton showLineNumbers
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+
+export type { ClassValue };
 
 export function mergeClasses(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -28,21 +30,6 @@ export const isElementContentTruncated = (element: HTMLElement | undefined): boo
 
   return rangeWidth > elementWidth;
 };
-```
-
-```typescript title="utils/cn.ts" expandable="true" copyButton showLineNumbers
-import { twMerge } from 'tailwind-merge';
-import { ClassValue, clsx } from 'clsx';
-
-export type { ClassValue };
-
-export function mergeClasses(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
-}
-
-export function transform(value: boolean | string): boolean {
-  return typeof value === 'string' ? value === '' : value;
-}
 ```
 
 ```typescript title="utils/numbers.ts" expandable="true" copyButton showLineNumbers

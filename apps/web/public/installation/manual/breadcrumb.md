@@ -257,3 +257,11 @@ export class ZardBreadcrumbModule {}
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './breadcrumb.component';
+export * from './breadcrumb.variants';
+
+```
+

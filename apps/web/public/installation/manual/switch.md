@@ -142,3 +142,11 @@ export type ZardSwitchVariants = VariantProps<typeof switchVariants>;
 
 ```
 
+
+
+```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export * from './switch.component';
+export * from './switch.variants';
+
+```
+
