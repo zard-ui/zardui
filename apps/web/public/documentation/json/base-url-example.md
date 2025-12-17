@@ -1,0 +1,5 @@
+```json
+{
+  "baseUrl": "src/app"
+}
+```
