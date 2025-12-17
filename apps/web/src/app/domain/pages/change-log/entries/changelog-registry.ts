@@ -2,6 +2,7 @@ import { Type } from '@angular/core';
 
 import { April2025Component } from './2025/april-2025.component';
 import { August2025Component } from './2025/august-2025.component';
+import { December2025Component } from './2025/december-2025.component';
 import { July2025Component } from './2025/july-2025.component';
 import { June2025Component } from './2025/june-2025.component';
 import { March2025Component } from './2025/march-2025.component';
@@ -21,6 +22,7 @@ import { type ChangelogEntryComponent, type ChangelogEntryConfig } from './chang
  * - examples: ChangelogExample[] (components to showcase with demos)
  */
 const CHANGELOG_COMPONENTS: Record<string, Type<ChangelogEntryComponent>> = {
+  '12-2025': December2025Component,
   '11-2025': November2025Component,
   '10-2025': October2025Component,
   '09-2025': September2025Component,
@@ -47,6 +49,7 @@ export class ChangelogRegistry {
           meta: instance.meta,
           overview: instance.overview,
           examples: instance.examples,
+          highlights: instance.highlights,
         };
       })
       .sort((a, b) => b.meta.date.getTime() - a.meta.date.getTime());
