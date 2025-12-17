@@ -25,9 +25,14 @@
         <header class="mb-3">
           <h2 class="mb-5 text-2xl font-semibold">Installation</h2>
           <div class="overflow-hidden transition-all duration-200 ease-in-out">
-            <nav class="mb-4 flex gap-4">
+            <nav class="mb-4 flex gap-4" role="tablist" aria-label="Installation method">
               @if (installGuide?.cli) {
                 <button
+                  id="cli-tab"
+                  role="tab"
+                  [attr.aria-selected]="activeTab() === 'cli'"
+                  [attr.aria-controls]="'cli-panel'"
+                  [attr.tabindex]="activeTab() === 'cli' ? 0 : -1"
                   class="cursor-pointer text-base"
                   (click)="activeTab.set('cli')"
                   [class.font-semibold]="activeTab() === 'cli'"
@@ -38,6 +43,11 @@
               }
               @if (installGuide?.manual) {
                 <button
+                  id="manual-tab"
+                  role="tab"
+                  [attr.aria-selected]="activeTab() === 'manual'"
+                  [attr.aria-controls]="'manual-panel'"
+                  [attr.tabindex]="activeTab() === 'manual' ? 0 : -1"
                   class="cursor-pointer text-base"
                   (click)="activeTab.set('manual')"
                   [class.font-semibold]="activeTab() === 'manual'"
@@ -48,14 +58,32 @@
               }
             </nav>
             <section
-              class="transition-all"
-              [class]="activeTab() === 'cli' ? 'translate-x-0' : 'sr-only -translate-x-full'"
+              role="tabpanel"
+              id="cli-panel"
+              [attr.aria-labelledby]="'cli-tab'"
+              class="transition-all duration-200 ease-in-out"
+              [class.translate-x-0]="activeTab() === 'cli'"
+              [class.-translate-x-full]="activeTab() !== 'cli'"
+              [class.opacity-0]="activeTab() !== 'cli'"
+              [class.invisible]="activeTab() !== 'cli'"
+              [class.h-0]="activeTab() !== 'cli'"
+              [class.overflow-hidden]="activeTab() !== 'cli'"
+              [class.pointer-events-none]="activeTab() !== 'cli'"
             >
               <z-steps [steps]="installGuide?.cli"></z-steps>
             </section>
             <section
-              class="transition-all"
-              [class]="activeTab() === 'manual' ? 'translate-x-0' : 'sr-only translate-x-full'"
+              role="tabpanel"
+              id="manual-panel"
+              [attr.aria-labelledby]="'manual-tab'"
+              class="transition-all duration-200 ease-in-out"
+              [class.translate-x-0]="activeTab() === 'manual'"
+              [class.translate-x-full]="activeTab() !== 'manual'"
+              [class.opacity-0]="activeTab() !== 'manual'"
+              [class.invisible]="activeTab() !== 'manual'"
+              [class.h-0]="activeTab() !== 'manual'"
+              [class.overflow-hidden]="activeTab() !== 'manual'"
+              [class.pointer-events-none]="activeTab() !== 'manual'"
             >
               <z-steps [steps]="installGuide?.manual"></z-steps>
             </section>

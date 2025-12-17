@@ -1,9 +1,9 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { generateId } from '../../../utils/merge-classes';
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardCardComponent } from '../card.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardComponent } from '@/shared/components/card/card.component';
+import { generateId } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-demo-card-default',

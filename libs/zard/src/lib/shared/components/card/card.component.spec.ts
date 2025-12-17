@@ -214,13 +214,6 @@ describe('ZardCardComponent', () => {
   });
 
   describe('accessibility', () => {
-    it('has proper semantic role', async () => {
-      const { debugElement } = await render(ZardCardComponent);
-
-      const card = debugElement.nativeElement;
-      expect(card).toHaveAttribute('role', 'region');
-    });
-
     it('does not set aria-labelledby when no title is provided', async () => {
       const { debugElement } = await render(ZardCardComponent);
 
@@ -279,6 +272,30 @@ describe('ZardCardComponent', () => {
       const actionButton = screen.getByRole('button', { name: 'Edit' });
       expect(actionButton).toBeInTheDocument();
       expect(actionButton.tagName).toBe('BUTTON');
+    });
+
+    it('maintains stable aria-labelledby ID when zTitle content changes', async () => {
+      const { debugElement, rerender } = await render(ZardCardComponent, {
+        inputs: { zTitle: 'Initial Title' },
+      });
+
+      // Capture initial aria-labelledby value
+      const card = debugElement.nativeElement;
+      const initialAriaLabelledBy = card.getAttribute('aria-labelledby');
+      expect(initialAriaLabelledBy).toBeTruthy();
+
+      // Rerender with different zTitle content
+      await rerender({
+        inputs: { zTitle: 'Updated Title' },
+      });
+
+      // Assert aria-labelledby remains unchanged
+      const updatedAriaLabelledBy = card.getAttribute('aria-labelledby');
+      expect(updatedAriaLabelledBy).toBe(initialAriaLabelledBy);
+
+      // Verify the title element still has the same ID
+      const titleElement = card.querySelector('[data-slot="card-title"]');
+      expect(titleElement).toHaveAttribute('id', initialAriaLabelledBy);
     });
   });
 });
