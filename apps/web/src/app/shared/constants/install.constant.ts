@@ -51,7 +51,7 @@ export const installations: Installation[] = [
       },
       {
         title: 'Configure path aliases',
-        subtitle: 'add this lines inside your compilerOptions on the tsconfig.json',
+        subtitle: 'add these lines inside your compilerOptions on the tsconfig.json',
         file: {
           path: '/documentation/setup/angular/manual/tsconfig.md',
           lineNumber: true,
