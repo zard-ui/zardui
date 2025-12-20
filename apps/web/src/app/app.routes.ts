@@ -96,6 +96,16 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'themes',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./domain/pages/themes/themes.page').then(c => c.ThemesPage),
+      },
+    ],
+  },
+  {
     path: 'llms.txt',
     loadComponent: () => import('./domain/pages/llms/llms.page').then(c => c.LlmsPage),
   },

@@ -1,0 +1,334 @@
+<div class="bg-muted/50 text-foreground flex h-full items-center justify-center md:hidden">
+  <z-empty
+    zIcon="monitor"
+    zTitle="Desktop Only"
+    zDescription="The theme generator is only available on desktop devices for the best experience."
+  />
+</div>
+
+<div
+  class="bg-background text-foreground hidden h-full overflow-hidden md:flex md:flex-col"
+  [class.dark]="previewDarkMode()"
+  [style]="scopedStyles()"
+>
+  <div class="bg-muted/30 flex items-center justify-between border-b px-6 py-3">
+    <div class="flex items-center gap-3">
+      <div class="flex items-center gap-1.5">
+        <div class="size-3 rounded-full bg-red-400"></div>
+        <div class="size-3 rounded-full bg-yellow-400"></div>
+        <div class="size-3 rounded-full bg-green-400"></div>
+      </div>
+      <span class="text-muted-foreground text-xs font-medium">Live Preview</span>
+    </div>
+    <div class="bg-muted text-muted-foreground flex items-center gap-2 rounded-md px-3 py-1 text-xs">
+      <z-icon zType="clock" class="size-3" />
+      Real-time updates
+    </div>
+  </div>
+
+  <z-tab-group class="flex flex-1 flex-col overflow-hidden" zTabsPosition="top">
+    <z-tab label="Components" class="mb-0">
+      <div
+        class="[&:hover::-webkit-scrollbar-thumb]:bg-border h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-transparent [&::-webkit-scrollbar-track]:bg-transparent"
+      >
+        <div class="p-6 lg:p-8">
+          <div class="mx-auto max-w-5xl">
+            <div class="mb-6">
+              <h3 class="text-foreground text-lg font-semibold">Component Showcase</h3>
+              <p class="text-muted-foreground text-sm">Preview how your theme looks on different components</p>
+            </div>
+
+            <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              <z-card zTitle="Buttons" zDescription="All button variants">
+                <div class="flex flex-wrap gap-2">
+                  <button z-button zSize="sm">Default</button>
+                  <button z-button zType="secondary" zSize="sm">Secondary</button>
+                  <button z-button zType="outline" zSize="sm">Outline</button>
+                  <button z-button zType="ghost" zSize="sm">Ghost</button>
+                  <button z-button zType="destructive" zSize="sm">Destructive</button>
+                  <button z-button zType="link" zSize="sm">Link</button>
+                </div>
+              </z-card>
+
+              <z-card zTitle="Badges" zDescription="Status indicators">
+                <div class="flex flex-wrap gap-2">
+                  <z-badge>Default</z-badge>
+                  <z-badge zType="secondary">Secondary</z-badge>
+                  <z-badge zType="outline">Outline</z-badge>
+                  <z-badge zType="destructive">Destructive</z-badge>
+                </div>
+              </z-card>
+
+              <z-card zTitle="Avatars" zDescription="User profile images">
+                <div class="flex items-center gap-3">
+                  <z-avatar zSrc="https://github.com/shadcn.png" zFallback="CN" />
+                  <z-avatar zFallback="AB" />
+                  <z-avatar zFallback="ZD" />
+                  <z-avatar zFallback="MK" />
+                </div>
+              </z-card>
+
+              <z-card zTitle="Form Controls" zDescription="Input elements">
+                <div class="space-y-4">
+                  <div class="space-y-1.5">
+                    <label class="text-sm font-medium">Email</label>
+                    <input z-input placeholder="you@example.com" />
+                  </div>
+                  <div class="flex items-center gap-4">
+                    <z-checkbox>Remember me</z-checkbox>
+                  </div>
+                  <div class="flex items-center justify-between">
+                    <span class="text-sm">Notifications</span>
+                    <z-switch />
+                  </div>
+                </div>
+              </z-card>
+
+              <z-card zTitle="Progress" zDescription="Loading states">
+                <div class="space-y-4">
+                  <div class="space-y-1.5">
+                    <div class="flex justify-between text-xs">
+                      <span class="text-muted-foreground">Processing</span>
+                      <span class="text-foreground font-medium">33%</span>
+                    </div>
+                    <z-progress-bar [progress]="33" />
+                  </div>
+                  <div class="space-y-1.5">
+                    <div class="flex justify-between text-xs">
+                      <span class="text-muted-foreground">Uploading</span>
+                      <span class="text-foreground font-medium">66%</span>
+                    </div>
+                    <z-progress-bar [progress]="66" />
+                  </div>
+                  <div class="space-y-1.5">
+                    <div class="flex justify-between text-xs">
+                      <span class="text-muted-foreground">Complete</span>
+                      <span class="text-foreground font-medium">100%</span>
+                    </div>
+                    <z-progress-bar [progress]="100" />
+                  </div>
+                </div>
+              </z-card>
+
+              <z-card zTitle="Slider" zDescription="Range selection">
+                <div class="space-y-6">
+                  <div class="space-y-2">
+                    <div class="flex justify-between text-xs">
+                      <span class="text-muted-foreground">Volume</span>
+                      <span class="text-foreground font-medium">50%</span>
+                    </div>
+                    <z-slider [zDefault]="50" />
+                  </div>
+                  <div class="space-y-2">
+                    <div class="flex justify-between text-xs">
+                      <span class="text-muted-foreground">Brightness</span>
+                      <span class="text-foreground font-medium">25%</span>
+                    </div>
+                    <z-slider [zDefault]="25" />
+                  </div>
+                </div>
+              </z-card>
+
+              <z-card zTitle="Alerts" zDescription="Notification messages" class="md:col-span-2 lg:col-span-3">
+                <div class="grid gap-3 md:grid-cols-2">
+                  <z-alert
+                    zTitle="Information"
+                    zDescription="Your session will expire in 5 minutes."
+                    zIcon="terminal"
+                  />
+                  <z-alert
+                    zType="destructive"
+                    zTitle="Error"
+                    zDescription="Failed to save changes. Please try again."
+                  />
+                </div>
+              </z-card>
+
+              <z-card zTitle="Skeleton" zDescription="Loading placeholders" class="md:col-span-2 lg:col-span-3">
+                <div class="flex items-center gap-4">
+                  <z-skeleton class="size-14 shrink-0 rounded-full" />
+                  <div class="flex-1 space-y-2">
+                    <z-skeleton class="h-4 w-3/4" />
+                    <z-skeleton class="h-4 w-1/2" />
+                  </div>
+                  <z-skeleton class="h-9 w-24 rounded-md" />
+                </div>
+              </z-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </z-tab>
+
+    <z-tab label="Dashboard">
+      <div
+        class="bg-muted/20 [&:hover::-webkit-scrollbar-thumb]:bg-border h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-transparent [&::-webkit-scrollbar-track]:bg-transparent"
+      >
+        <div class="p-6 lg:p-8">
+          <div class="mx-auto max-w-6xl">
+            <div class="mb-6">
+              <h3 class="text-foreground text-lg font-semibold">Dashboard Preview</h3>
+              <p class="text-muted-foreground text-sm">See your theme in a real-world dashboard layout</p>
+            </div>
+
+            <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <z-card>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-muted-foreground text-sm">Total Revenue</p>
+                    <p class="text-foreground text-2xl font-bold">$45,231</p>
+                  </div>
+                  <div class="bg-primary/10 rounded-full p-3">
+                    <z-icon zType="dollar-sign" class="text-primary size-5" />
+                  </div>
+                </div>
+                <p class="text-muted-foreground mt-2 text-xs">
+                  <span class="text-green-500">+20.1%</span>
+                  from last month
+                </p>
+              </z-card>
+
+              <z-card>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-muted-foreground text-sm">Subscriptions</p>
+                    <p class="text-foreground text-2xl font-bold">+2,350</p>
+                  </div>
+                  <div class="bg-primary/10 rounded-full p-3">
+                    <z-icon zType="user-plus" class="text-primary size-5" />
+                  </div>
+                </div>
+                <p class="text-muted-foreground mt-2 text-xs">
+                  <span class="text-green-500">+180.1%</span>
+                  from last month
+                </p>
+              </z-card>
+
+              <z-card>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-muted-foreground text-sm">Sales</p>
+                    <p class="text-foreground text-2xl font-bold">+12,234</p>
+                  </div>
+                  <div class="bg-primary/10 rounded-full p-3">
+                    <z-icon zType="credit-card" class="text-primary size-5" />
+                  </div>
+                </div>
+                <p class="text-muted-foreground mt-2 text-xs">
+                  <span class="text-green-500">+19%</span>
+                  from last month
+                </p>
+              </z-card>
+
+              <z-card>
+                <div class="flex items-center justify-between">
+                  <div>
+                    <p class="text-muted-foreground text-sm">Active Now</p>
+                    <p class="text-foreground text-2xl font-bold">+573</p>
+                  </div>
+                  <div class="bg-primary/10 rounded-full p-3">
+                    <z-icon zType="activity" class="text-primary size-5" />
+                  </div>
+                </div>
+                <p class="text-muted-foreground mt-2 text-xs">
+                  <span class="text-green-500">+201</span>
+                  since last hour
+                </p>
+              </z-card>
+            </div>
+
+            <div class="grid gap-4 lg:grid-cols-7">
+              <z-card zTitle="Overview" class="lg:col-span-4">
+                <div class="flex h-55 items-end gap-1.5 pt-2">
+                  @for (height of chartHeights; track $index) {
+                    <div
+                      class="bg-primary/80 hover:bg-primary flex-1 rounded-t transition-colors"
+                      [style.height.%]="height"
+                    ></div>
+                  }
+                </div>
+                <div class="text-muted-foreground mt-3 flex justify-between text-[10px] font-medium">
+                  <span>Jan</span>
+                  <span>Feb</span>
+                  <span>Mar</span>
+                  <span>Apr</span>
+                  <span>May</span>
+                  <span>Jun</span>
+                  <span>Jul</span>
+                  <span>Aug</span>
+                  <span>Sep</span>
+                  <span>Oct</span>
+                  <span>Nov</span>
+                  <span>Dec</span>
+                </div>
+              </z-card>
+
+              <z-card zTitle="Recent Sales" zDescription="265 sales this month" class="lg:col-span-3">
+                <div class="space-y-4">
+                  @for (sale of recentSales; track sale.email) {
+                    <div class="flex items-center gap-3">
+                      <z-avatar [zFallback]="sale.initials" />
+                      <div class="min-w-0 flex-1">
+                        <p class="text-foreground truncate text-sm font-medium">{{ sale.name }}</p>
+                        <p class="text-muted-foreground truncate text-xs">{{ sale.email }}</p>
+                      </div>
+                      <div class="text-foreground shrink-0 text-sm font-semibold">+${{ sale.amount }}</div>
+                    </div>
+                  }
+                </div>
+              </z-card>
+
+              <z-card zTitle="Team Members" zDescription="Invite your team to collaborate" class="lg:col-span-4">
+                <div class="space-y-3">
+                  @for (member of teamMembers; track member.email) {
+                    <div class="flex items-center gap-3">
+                      <z-avatar [zFallback]="member.initials" />
+                      <div class="min-w-0 flex-1">
+                        <p class="text-foreground text-sm font-medium">{{ member.name }}</p>
+                        <p class="text-muted-foreground truncate text-xs">{{ member.email }}</p>
+                      </div>
+                      <z-badge zType="secondary">{{ member.role }}</z-badge>
+                    </div>
+                  }
+                </div>
+                <z-divider zSpacing="lg" />
+                <button z-button zType="outline" zFull zSize="sm">
+                  <z-icon zType="plus" class="mr-2 size-4" />
+                  Invite Member
+                </button>
+              </z-card>
+
+              <z-card zTitle="Notifications" zDescription="Manage your preferences" class="lg:col-span-3">
+                <div class="space-y-4">
+                  <div class="flex items-center justify-between gap-4">
+                    <div class="min-w-0">
+                      <p class="text-foreground text-sm font-medium">Push Notifications</p>
+                      <p class="text-muted-foreground truncate text-xs">Receive on your device</p>
+                    </div>
+                    <z-switch />
+                  </div>
+                  <z-divider />
+                  <div class="flex items-center justify-between gap-4">
+                    <div class="min-w-0">
+                      <p class="text-foreground text-sm font-medium">Email Updates</p>
+                      <p class="text-muted-foreground truncate text-xs">Activity notifications</p>
+                    </div>
+                    <z-switch [ngModel]="true" />
+                  </div>
+                  <z-divider />
+                  <div class="flex items-center justify-between gap-4">
+                    <div class="min-w-0">
+                      <p class="text-foreground text-sm font-medium">Marketing</p>
+                      <p class="text-muted-foreground truncate text-xs">Product updates</p>
+                    </div>
+                    <z-switch />
+                  </div>
+                </div>
+              </z-card>
+            </div>
+          </div>
+        </div>
+      </div>
+    </z-tab>
+  </z-tab-group>
+</div>
