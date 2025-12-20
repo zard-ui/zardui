@@ -16,7 +16,6 @@
     }
   ],
   "registryDependencies": [
-    "core",
     "icon"
   ]
 }

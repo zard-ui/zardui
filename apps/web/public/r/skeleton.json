@@ -10,8 +10,5 @@
       "name": "skeleton.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const skeletonVariants = cva('bg-accent animate-pulse rounded-md');\nexport type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;\n"
     }
-  ],
-  "registryDependencies": [
-    "core"
   ]
 }
