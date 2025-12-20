@@ -1,3 +1,4 @@
+export * from './context-menu.directive';
 export * from './menu-content.directive';
 export * from './menu-item.directive';
 export * from './menu.directive';
