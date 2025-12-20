@@ -2,13 +2,12 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardDividerComponent } from '@/shared/components/divider';
-import { ZardDropdownMenuShortcutComponent } from '@/shared/components/dropdown';
 import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 
 @Component({
   selector: 'z-demo-context-menu',
-  imports: [ZardMenuImports, ZardDropdownMenuShortcutComponent, ZardDividerComponent, ZardIconComponent],
+  imports: [ZardMenuImports, ZardDividerComponent, ZardIconComponent],
   standalone: true,
   template: `
     <div
@@ -23,15 +22,15 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
       <div z-menu-content class="w-48">
         <button type="button" z-menu-item (click)="log('Back')">
           Back
-          <z-dropdown-menu-shortcut>⌘[</z-dropdown-menu-shortcut>
+          <z-menu-shortcut>⌘[</z-menu-shortcut>
         </button>
         <button type="button" z-menu-item (click)="log('Forward')" zDisabled>
           Forward
-          <z-dropdown-menu-shortcut>⌘]</z-dropdown-menu-shortcut>
+          <z-menu-shortcut>⌘]</z-menu-shortcut>
         </button>
         <button type="button" z-menu-item (click)="log('Reload')">
           Reload
-          <z-dropdown-menu-shortcut>⌘R</z-dropdown-menu-shortcut>
+          <z-menu-shortcut>⌘R</z-menu-shortcut>
         </button>
         <z-divider zSpacing="sm" />
         <button

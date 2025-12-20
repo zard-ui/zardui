@@ -32,12 +32,13 @@ export const menuItemVariants = cva(
   },
 );
 
-// Variant pour les icônes de sous-menu
 export const submenuArrowVariants = cva([
   'ml-auto opacity-60 transition-opacity duration-150',
   'text-muted-foreground dark:text-gray-400',
   'group-hover:opacity-100 group-focus:opacity-100',
 ]);
+
+export const menuShortcutVariants = cva('ml-auto text-xs tracking-widest text-muted-foreground');
 
 export type ZardMenuItemInsetVariants = NonNullable<VariantProps<typeof menuItemVariants>['inset']>;
 export type ZardMenuItemTypeVariants = NonNullable<VariantProps<typeof menuItemVariants>['zType']>;

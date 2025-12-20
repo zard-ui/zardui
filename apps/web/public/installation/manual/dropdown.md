@@ -303,7 +303,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const dropdownContentVariants = cva(
-  'bg-popover text-popover-foreground z-50 min-w-[200px] overflow-y-auto rounded-md border py-1 px-1 shadow-md',
+  'bg-popover text-popover-foreground z-50 min-w-50 overflow-y-auto rounded-md border py-1 px-1 shadow-md',
 );
 
 export const dropdownItemVariants = cva(
@@ -341,8 +341,6 @@ export const dropdownLabelVariants = cva(
     },
   },
 );
-
-export const dropdownShortcutVariants = cva('ml-auto text-xs tracking-widest text-muted-foreground');
 
 export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>;
 export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariants>;
@@ -499,37 +497,6 @@ export class ZardDropdownMenuContentComponent {
 
 
 
-```angular-ts title="dropdown-shortcut.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-
-import type { ClassValue } from 'clsx';
-
-import { dropdownShortcutVariants } from './dropdown.variants';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
-@Component({
-  selector: 'z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]',
-  template: `
-    <ng-content />
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  host: {
-    '[class]': 'classes()',
-  },
-  exportAs: 'zDropdownMenuShortcut',
-})
-export class ZardDropdownMenuShortcutComponent {
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() => mergeClasses(dropdownShortcutVariants(), this.class()));
-}
-
-```
-
-
-
 ```angular-ts title="dropdown-trigger.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Directive, ElementRef, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
 
@@ -613,31 +580,20 @@ export class ZardDropdownDirective implements OnInit {
 
 
 
-```angular-ts title="dropdown.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { OverlayModule } from '@angular/cdk/overlay';
-import { NgModule } from '@angular/core';
+```angular-ts title="dropdown.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ZardDropdownMenuItemComponent } from '@/shared/components/dropdown/dropdown-item.component';
+import { ZardDropdownMenuLabelComponent } from '@/shared/components/dropdown/dropdown-label.component';
+import { ZardDropdownMenuContentComponent } from '@/shared/components/dropdown/dropdown-menu-content.component';
+import { ZardDropdownDirective } from '@/shared/components/dropdown/dropdown-trigger.directive';
+import { ZardDropdownMenuComponent } from '@/shared/components/dropdown/dropdown.component';
 
-import { ZardDropdownMenuItemComponent } from './dropdown-item.component';
-import { ZardDropdownMenuLabelComponent } from './dropdown-label.component';
-import { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
-import { ZardDropdownMenuShortcutComponent } from './dropdown-shortcut.component';
-import { ZardDropdownDirective } from './dropdown-trigger.directive';
-import { ZardDropdownMenuComponent } from './dropdown.component';
-
-const DROPDOWN_COMPONENTS = [
+export const ZardDropdownImports = [
   ZardDropdownMenuComponent,
   ZardDropdownMenuItemComponent,
   ZardDropdownMenuLabelComponent,
-  ZardDropdownMenuShortcutComponent,
   ZardDropdownMenuContentComponent,
   ZardDropdownDirective,
-];
-
-@NgModule({
-  imports: [OverlayModule, ...DROPDOWN_COMPONENTS],
-  exports: [...DROPDOWN_COMPONENTS],
-})
-export class ZardDropdownModule {}
+] as const;
 
 ```
 
@@ -890,11 +846,10 @@ export class ZardDropdownService {
 export * from './dropdown.component';
 export * from './dropdown-item.component';
 export * from './dropdown-label.component';
-export * from './dropdown-shortcut.component';
 export * from './dropdown-menu-content.component';
 export * from './dropdown-trigger.directive';
 export * from './dropdown.service';
-export * from './dropdown.module';
+export * from './dropdown.imports';
 export * from './dropdown.variants';
 
 ```

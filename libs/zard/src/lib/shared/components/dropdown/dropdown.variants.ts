@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const dropdownContentVariants = cva(
-  'bg-popover text-popover-foreground z-50 min-w-[200px] overflow-y-auto rounded-md border py-1 px-1 shadow-md',
+  'bg-popover text-popover-foreground z-50 min-w-50 overflow-y-auto rounded-md border py-1 px-1 shadow-md',
 );
 
 export const dropdownItemVariants = cva(
@@ -39,8 +39,6 @@ export const dropdownLabelVariants = cva(
     },
   },
 );
-
-export const dropdownShortcutVariants = cva('ml-auto text-xs tracking-widest text-muted-foreground');
 
 export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>;
 export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariants>;

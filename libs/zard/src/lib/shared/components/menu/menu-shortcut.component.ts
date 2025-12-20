@@ -2,12 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { dropdownShortcutVariants } from './dropdown.variants';
-
+import { menuShortcutVariants } from '@/shared/components/menu/menu.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
-  selector: 'z-dropdown-menu-shortcut, [z-dropdown-menu-shortcut]',
+  selector: 'z-menu-shortcut, [z-menu-shortcut]',
   template: `
     <ng-content />
   `,
@@ -16,10 +15,10 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   host: {
     '[class]': 'classes()',
   },
-  exportAs: 'zDropdownMenuShortcut',
+  exportAs: 'zMenuShortcut',
 })
-export class ZardDropdownMenuShortcutComponent {
+export class ZardMenuShortcutComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(dropdownShortcutVariants(), this.class()));
+  protected readonly classes = computed(() => mergeClasses(menuShortcutVariants(), this.class()));
 }

@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardDropdownModule } from '../dropdown.module';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDividerComponent } from '@/shared/components/divider';
+import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
+import { ZardMenuShortcutComponent } from '@/shared/components/menu';
 
 @Component({
   selector: 'z-dropdown-demo',
-  imports: [ZardDropdownModule, ZardButtonComponent, ZardDividerComponent],
+  imports: [ZardDropdownImports, ZardButtonComponent, ZardDividerComponent, ZardMenuShortcutComponent],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
 
@@ -15,22 +16,22 @@ import { ZardDropdownModule } from '../dropdown.module';
 
       <z-dropdown-menu-item (click)="onProfile()">
         Profile
-        <z-dropdown-menu-shortcut>⇧⌘P</z-dropdown-menu-shortcut>
+        <z-menu-shortcut>⇧⌘P</z-menu-shortcut>
       </z-dropdown-menu-item>
 
       <z-dropdown-menu-item (click)="onBilling()">
         Billing
-        <z-dropdown-menu-shortcut>⌘B</z-dropdown-menu-shortcut>
+        <z-menu-shortcut>⌘B</z-menu-shortcut>
       </z-dropdown-menu-item>
 
       <z-dropdown-menu-item (click)="onSettings()">
         Settings
-        <z-dropdown-menu-shortcut>⌘S</z-dropdown-menu-shortcut>
+        <z-menu-shortcut>⌘S</z-menu-shortcut>
       </z-dropdown-menu-item>
 
       <z-dropdown-menu-item (click)="onKeyboardShortcuts()">
         Keyboard shortcuts
-        <z-dropdown-menu-shortcut>⌘K</z-dropdown-menu-shortcut>
+        <z-menu-shortcut>⌘K</z-menu-shortcut>
       </z-dropdown-menu-item>
 
       <z-divider zSpacing="sm" class="-mx-1" />
@@ -39,7 +40,7 @@ import { ZardDropdownModule } from '../dropdown.module';
 
       <z-dropdown-menu-item (click)="onNewTeam()">
         New Team
-        <z-dropdown-menu-shortcut>⌘+T</z-dropdown-menu-shortcut>
+        <z-menu-shortcut>⌘+T</z-menu-shortcut>
       </z-dropdown-menu-item>
 
       <z-divider zSpacing="sm" class="-mx-1" />
@@ -52,7 +53,7 @@ import { ZardDropdownModule } from '../dropdown.module';
 
       <z-dropdown-menu-item (click)="onLogout()">
         Log out
-        <z-dropdown-menu-shortcut>⇧⌘Q</z-dropdown-menu-shortcut>
+        <z-menu-shortcut>⇧⌘Q</z-menu-shortcut>
       </z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,

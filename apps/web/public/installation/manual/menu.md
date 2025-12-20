@@ -246,12 +246,13 @@ export const menuItemVariants = cva(
   },
 );
 
-// Variant pour les icônes de sous-menu
 export const submenuArrowVariants = cva([
   'ml-auto opacity-60 transition-opacity duration-150',
   'text-muted-foreground dark:text-gray-400',
   'group-hover:opacity-100 group-focus:opacity-100',
 ]);
+
+export const menuShortcutVariants = cva('ml-auto text-xs tracking-widest text-muted-foreground');
 
 export type ZardMenuItemInsetVariants = NonNullable<VariantProps<typeof menuItemVariants>['inset']>;
 export type ZardMenuItemTypeVariants = NonNullable<VariantProps<typeof menuItemVariants>['zType']>;
@@ -393,6 +394,7 @@ export * from '@/shared/components/menu/menu.directive';
 export * from '@/shared/components/menu/menu.variants';
 export * from '@/shared/components/menu/menu.imports';
 export * from '@/shared/components/menu/menu-positions';
+export * from '@/shared/components/menu/menu-shortcut.component';
 
 ```
 
@@ -778,10 +780,41 @@ export type ZardMenuPlacement =
 
 
 
+```angular-ts title="menu-shortcut.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+
+import type { ClassValue } from 'clsx';
+
+import { menuShortcutVariants } from '@/shared/components/menu/menu.variants';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
+@Component({
+  selector: 'z-menu-shortcut, [z-menu-shortcut]',
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'classes()',
+  },
+  exportAs: 'zMenuShortcut',
+})
+export class ZardMenuShortcutComponent {
+  readonly class = input<ClassValue>('');
+
+  protected readonly classes = computed(() => mergeClasses(menuShortcutVariants(), this.class()));
+}
+
+```
+
+
+
 ```angular-ts title="menu.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ZardContextMenuDirective } from '@/shared/components/menu/context-menu.directive';
 import { ZardMenuContentDirective } from '@/shared/components/menu/menu-content.directive';
 import { ZardMenuItemDirective } from '@/shared/components/menu/menu-item.directive';
+import { ZardMenuShortcutComponent } from '@/shared/components/menu/menu-shortcut.component';
 import { ZardMenuDirective } from '@/shared/components/menu/menu.directive';
 
 export const ZardMenuImports = [
@@ -789,6 +822,7 @@ export const ZardMenuImports = [
   ZardMenuContentDirective,
   ZardMenuItemDirective,
   ZardMenuDirective,
+  ZardMenuShortcutComponent,
 ] as const;
 
 ```

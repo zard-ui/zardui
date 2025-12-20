@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardDropdownModule } from '../../dropdown/dropdown.module';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardTooltipDirective } from '../../tooltip/tooltip';
-import { ZardInputGroupComponent } from '../input-group.component';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDividerComponent } from '@/shared/components/divider';
+import { ZardDropdownImports } from '@/shared/components/dropdown';
+import { ZardIconComponent } from '@/shared/components/icon';
+import { ZardInputDirective } from '@/shared/components/input/input.directive';
+import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';
+import { ZardTooltipDirective } from '@/shared/components/tooltip';
 
 @Component({
   selector: 'z-demo-input-group-default',
   imports: [
     ZardButtonComponent,
-    ZardDropdownModule,
+    ZardDropdownImports,
     ZardIconComponent,
     ZardInputDirective,
     ZardInputGroupComponent,
@@ -20,7 +20,7 @@ import { ZardInputGroupComponent } from '../input-group.component';
     ZardTooltipDirective,
   ],
   template: `
-    <div class="flex w-[380px] flex-col space-y-4">
+    <div class="flex w-95 flex-col space-y-4">
       <z-input-group [zAddonBefore]="search" zAddonAfter="12 results" class="mb-4">
         <input z-input placeholder="Search..." />
       </z-input-group>
