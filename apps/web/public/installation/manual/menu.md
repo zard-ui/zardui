@@ -252,9 +252,23 @@ export const submenuArrowVariants = cva([
   'group-hover:opacity-100 group-focus:opacity-100',
 ]);
 
+export const menuLabelVariants = cva(
+  'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
+  {
+    variants: {
+      inset: {
+        true: 'pl-8',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      inset: false,
+    },
+  },
+);
+
 export const menuShortcutVariants = cva('ml-auto text-xs tracking-widest text-muted-foreground');
 
-export type ZardMenuItemInsetVariants = NonNullable<VariantProps<typeof menuItemVariants>['inset']>;
 export type ZardMenuItemTypeVariants = NonNullable<VariantProps<typeof menuItemVariants>['zType']>;
 
 ```
@@ -395,6 +409,7 @@ export * from '@/shared/components/menu/menu.variants';
 export * from '@/shared/components/menu/menu.imports';
 export * from '@/shared/components/menu/menu-positions';
 export * from '@/shared/components/menu/menu-shortcut.component';
+export * from '@/shared/components/menu/menu-label.component';
 
 ```
 
@@ -436,7 +451,7 @@ import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { menuItemVariants, type ZardMenuItemTypeVariants, type ZardMenuItemInsetVariants } from './menu.variants';
+import { menuItemVariants, type ZardMenuItemTypeVariants } from './menu.variants';
 
 @Directive({
   selector: 'button[z-menu-item], [z-menu-item]',
@@ -465,7 +480,7 @@ export class ZardMenuItemDirective {
   private readonly cdkMenuItem = inject(CdkMenuItem, { host: true });
 
   readonly zDisabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
-  readonly zInset = input<ZardMenuItemInsetVariants>(false);
+  readonly zInset = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
   readonly zType = input<ZardMenuItemTypeVariants>('default');
   readonly class = input<ClassValue>('');
 
@@ -522,6 +537,53 @@ export class ZardMenuItemDirective {
       event.preventDefault();
     }
   }
+}
+
+```
+
+
+
+```angular-ts title="menu-label.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import type { BooleanInput } from '@angular/cdk/coercion';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
+
+import type { ClassValue } from 'clsx';
+
+import { menuLabelVariants } from '@/shared/components/menu/menu.variants';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
+@Component({
+  selector: 'z-menu-label, [z-menu-label]',
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'classes()',
+    '[attr.data-inset]': 'inset() || null',
+  },
+  exportAs: 'zMenuLabel',
+})
+export class ZardMenuLabelComponent {
+  readonly class = input<ClassValue>('');
+  readonly inset = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
+
+  protected readonly classes = computed(() =>
+    mergeClasses(
+      menuLabelVariants({
+        inset: this.inset(),
+      }),
+      this.class(),
+    ),
+  );
 }
 
 ```
@@ -814,6 +876,7 @@ export class ZardMenuShortcutComponent {
 import { ZardContextMenuDirective } from '@/shared/components/menu/context-menu.directive';
 import { ZardMenuContentDirective } from '@/shared/components/menu/menu-content.directive';
 import { ZardMenuItemDirective } from '@/shared/components/menu/menu-item.directive';
+import { ZardMenuLabelComponent } from '@/shared/components/menu/menu-label.component';
 import { ZardMenuShortcutComponent } from '@/shared/components/menu/menu-shortcut.component';
 import { ZardMenuDirective } from '@/shared/components/menu/menu.directive';
 
@@ -822,6 +885,7 @@ export const ZardMenuImports = [
   ZardMenuContentDirective,
   ZardMenuItemDirective,
   ZardMenuDirective,
+  ZardMenuLabelComponent,
   ZardMenuShortcutComponent,
 ] as const;
 

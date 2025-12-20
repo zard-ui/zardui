@@ -292,15 +292,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'dropdown-label.component.ts',
-        content: '',
-      },
-      {
         name: 'dropdown-menu-content.component.ts',
-        content: '',
-      },
-      {
-        name: 'dropdown-shortcut.component.ts',
         content: '',
       },
       {
@@ -308,7 +300,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'dropdown.module.ts',
+        name: 'dropdown.imports.ts',
         content: '',
       },
       {
@@ -786,11 +778,19 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'menu.module.ts',
+        name: 'menu.imports.ts',
         content: '',
       },
       {
         name: 'menu-positions.ts',
+        content: '',
+      },
+      {
+        name: 'menu-label.component.ts',
+        content: '',
+      },
+      {
+        name: 'menu-shortcut.component.ts',
         content: '',
       },
     ],

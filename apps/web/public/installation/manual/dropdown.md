@@ -307,7 +307,7 @@ export const dropdownContentVariants = cva(
 );
 
 export const dropdownItemVariants = cva(
-  'relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-[highlighted]:bg-accent data-[highlighted]:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -327,23 +327,7 @@ export const dropdownItemVariants = cva(
   },
 );
 
-export const dropdownLabelVariants = cva(
-  'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
-  {
-    variants: {
-      inset: {
-        true: 'pl-8',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      inset: false,
-    },
-  },
-);
-
 export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>;
-export type ZardDropdownLabelVariants = VariantProps<typeof dropdownLabelVariants>;
 
 ```
 
@@ -412,46 +396,6 @@ export class ZardDropdownMenuItemComponent {
 
 
 
-```angular-ts title="dropdown-label.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
-
-import type { ClassValue } from 'clsx';
-
-import { dropdownLabelVariants } from './dropdown.variants';
-
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
-
-@Component({
-  selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',
-  template: `
-    <ng-content />
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  host: {
-    '[class]': 'classes()',
-    '[attr.data-inset]': 'inset() || null',
-  },
-  exportAs: 'zDropdownMenuLabel',
-})
-export class ZardDropdownMenuLabelComponent {
-  readonly inset = input(false, { transform });
-  readonly class = input<ClassValue>('');
-
-  protected readonly classes = computed(() =>
-    mergeClasses(
-      dropdownLabelVariants({
-        inset: this.inset(),
-      }),
-      this.class(),
-    ),
-  );
-}
-
-```
-
-
-
 ```angular-ts title="dropdown-menu-content.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ChangeDetectionStrategy,
@@ -465,8 +409,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { dropdownContentVariants } from './dropdown.variants';
-
+import { dropdownContentVariants } from '@/shared/components/dropdown/dropdown.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -582,15 +525,15 @@ export class ZardDropdownDirective implements OnInit {
 
 ```angular-ts title="dropdown.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ZardDropdownMenuItemComponent } from '@/shared/components/dropdown/dropdown-item.component';
-import { ZardDropdownMenuLabelComponent } from '@/shared/components/dropdown/dropdown-label.component';
 import { ZardDropdownMenuContentComponent } from '@/shared/components/dropdown/dropdown-menu-content.component';
 import { ZardDropdownDirective } from '@/shared/components/dropdown/dropdown-trigger.directive';
 import { ZardDropdownMenuComponent } from '@/shared/components/dropdown/dropdown.component';
+import { ZardMenuLabelComponent } from '@/shared/components/menu/menu-label.component';
 
 export const ZardDropdownImports = [
   ZardDropdownMenuComponent,
   ZardDropdownMenuItemComponent,
-  ZardDropdownMenuLabelComponent,
+  ZardMenuLabelComponent,
   ZardDropdownMenuContentComponent,
   ZardDropdownDirective,
 ] as const;
@@ -845,7 +788,6 @@ export class ZardDropdownService {
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export * from './dropdown.component';
 export * from './dropdown-item.component';
-export * from './dropdown-label.component';
 export * from './dropdown-menu-content.component';
 export * from './dropdown-trigger.directive';
 export * from './dropdown.service';

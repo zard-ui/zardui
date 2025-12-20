@@ -31,7 +31,6 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
           Reload
           <z-menu-shortcut>⌘R</z-menu-shortcut>
         </button>
-        <z-divider zSpacing="sm" />
         <button
           type="button"
           z-menu-item
@@ -43,6 +42,10 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
           <div class="flex items-center">More Tools</div>
           <z-icon zType="chevron-right" />
         </button>
+        <z-divider zSpacing="sm" />
+        <z-menu-label>People</z-menu-label>
+        <button type="button" z-menu-item (click)="log('Pedro Duarte')">Pedro Duarte</button>
+        <button type="button" z-menu-item (click)="log('Colm Tuite')">Colm Tuite</button>
       </div>
     </ng-template>
 

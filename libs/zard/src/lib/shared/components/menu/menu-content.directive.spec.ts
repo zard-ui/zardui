@@ -49,7 +49,7 @@ describe('ZardMenuContentDirective', () => {
 
   it('should apply default variant classes', () => {
     expect(element.className).toContain('z-50');
-    expect(element.className).toContain('min-w-[8rem]');
+    expect(element.className).toContain('min-w-32');
     expect(element.className).toContain('rounded-md');
     expect(element.className).toContain('border');
     expect(element.className).toContain('bg-popover');

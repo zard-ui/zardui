@@ -6,7 +6,7 @@ import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { menuItemVariants, type ZardMenuItemTypeVariants, type ZardMenuItemInsetVariants } from './menu.variants';
+import { menuItemVariants, type ZardMenuItemTypeVariants } from './menu.variants';
 
 @Directive({
   selector: 'button[z-menu-item], [z-menu-item]',
@@ -35,7 +35,7 @@ export class ZardMenuItemDirective {
   private readonly cdkMenuItem = inject(CdkMenuItem, { host: true });
 
   readonly zDisabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
-  readonly zInset = input<ZardMenuItemInsetVariants>(false);
+  readonly zInset = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
   readonly zType = input<ZardMenuItemTypeVariants>('default');
   readonly class = input<ClassValue>('');
 

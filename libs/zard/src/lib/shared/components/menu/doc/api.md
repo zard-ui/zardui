@@ -1,8 +1,31 @@
 # Menu API Reference
 
+## Components
+
+### z-menu-label <span class="api-type-label component">Component</span>
+
+Label component for grouping menu items.
+
+### Properties
+
+| Property  | Description                     | Type         | Default |
+| --------- | ------------------------------- | ------------ | ------- |
+| `[class]` | Additional CSS classes          | `ClassValue` | `''`    |
+| `[inset]` | Adds left padding for alignment | `boolean`    | `false` |
+
+### z-menu-shortcut <span class="api-type-label component">Component</span>
+
+Component for displaying keyboard shortcuts in menu items.
+
+### Properties
+
+| Property  | Description            | Type         | Default |
+| --------- | ---------------------- | ------------ | ------- |
+| `[class]` | Additional CSS classes | `ClassValue` | `''`    |
+
 ## Directives
 
-### z-menu
+### z-menu <span class="api-type-label directive">Directive</span>
 
 The trigger directive that opens the menu when interacted with.
 
@@ -14,7 +37,7 @@ The trigger directive that opens the menu when interacted with.
 | `[zHoverDelay]`     | Delay in ms before closing on hover exit | `number`             | `100`          |
 | `[zPlacement]`      | Menu position relative to trigger        | `ZardMenuPlacement`  | `'bottomLeft'` |
 
-### z-context-menu
+### z-context-menu <span class="api-type-label directive">Directive</span>
 
 The trigger directive that opens context menu
 
@@ -22,7 +45,7 @@ The trigger directive that opens context menu
 | -------------------------- | ------------------------------------- | ------------------- | ---------- |
 | `[zContextMenuTriggerFor]` | Reference to the context menu content | `TemplateRef<void>` | `required` |
 
-### z-menu-content
+### z-menu-content <span class="api-type-label directive">Directive</span>
 
 Container directive for menu items.
 
@@ -30,7 +53,7 @@ Container directive for menu items.
 | --------- | ---------------------- | ------------ | ------- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''`    |
 
-### z-menu-item
+### z-menu-item <span class="api-type-label directive">Directive</span>
 
 Individual menu item directive.
 

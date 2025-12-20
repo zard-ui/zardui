@@ -3,16 +3,16 @@ import { Component } from '@angular/core';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
-import { ZardMenuShortcutComponent } from '@/shared/components/menu';
+import { ZardMenuImports } from '@/shared/components/menu';
 
 @Component({
   selector: 'z-dropdown-demo',
-  imports: [ZardDropdownImports, ZardButtonComponent, ZardDividerComponent, ZardMenuShortcutComponent],
+  imports: [ZardDropdownImports, ZardButtonComponent, ZardDividerComponent, ZardMenuImports],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
 
     <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-56">
-      <z-dropdown-menu-label>My Account</z-dropdown-menu-label>
+      <z-menu-label>My Account</z-menu-label>
 
       <z-dropdown-menu-item (click)="onProfile()">
         Profile

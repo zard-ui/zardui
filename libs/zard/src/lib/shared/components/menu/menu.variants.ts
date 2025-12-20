@@ -38,7 +38,21 @@ export const submenuArrowVariants = cva([
   'group-hover:opacity-100 group-focus:opacity-100',
 ]);
 
+export const menuLabelVariants = cva(
+  'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
+  {
+    variants: {
+      inset: {
+        true: 'pl-8',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      inset: false,
+    },
+  },
+);
+
 export const menuShortcutVariants = cva('ml-auto text-xs tracking-widest text-muted-foreground');
 
-export type ZardMenuItemInsetVariants = NonNullable<VariantProps<typeof menuItemVariants>['inset']>;
 export type ZardMenuItemTypeVariants = NonNullable<VariantProps<typeof menuItemVariants>['zType']>;
