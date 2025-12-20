@@ -7,14 +7,6 @@ import { ZardSheetComponent } from './sheet.component';
 import { ZardSheetService } from './sheet.service';
 import { ZardButtonComponent } from '../button/button.component';
 
-const components = [CommonModule, ZardButtonComponent, ZardSheetComponent, OverlayModule, PortalModule];
-
-@NgModule({
-  imports: components,
-  exports: components,
-})
-export class ZardBreadcrumbModule {}
-
 @NgModule({
   imports: [CommonModule, ZardButtonComponent, ZardSheetComponent, OverlayModule, PortalModule],
   providers: [ZardSheetService],

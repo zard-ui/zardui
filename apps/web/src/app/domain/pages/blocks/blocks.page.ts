@@ -6,7 +6,6 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { CategoryTabsComponent, type CategoryTab } from '@doc/shared/components/category-tabs/category-tabs.component';
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
 import { EDarkModes, ZardDarkMode } from '@zard/services/dark-mode';
 
 import { BlockContainerComponent, type Block } from '../../components/block-container/block-container.component';
@@ -15,7 +14,7 @@ import { BlocksService, type BlockCategory } from '../../services/blocks.service
 @Component({
   selector: 'z-blocks',
   standalone: true,
-  imports: [BlockContainerComponent, RouterLink, ZardBreadcrumbModule, CategoryTabsComponent],
+  imports: [BlockContainerComponent, RouterLink, CategoryTabsComponent],
   templateUrl: './blocks.page.html',
 })
 export class BlocksPage implements OnInit {

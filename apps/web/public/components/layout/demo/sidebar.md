@@ -1,16 +1,15 @@
 ```angular-ts showLineNumbers copyButton
 import { Component, signal } from '@angular/core';
 
-import { ZardAvatarComponent } from '../../avatar/avatar.component';
-import { ZardBreadcrumbModule } from '../../breadcrumb/breadcrumb.module';
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import type { ZardIcon } from '../../icon/icons';
-import { ZardMenuModule } from '../../menu/menu.module';
-import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
-import { ZardTooltipModule } from '../../tooltip/tooltip';
-import { LayoutModule } from '../layout.module';
+import { ZardAvatarComponent } from '@/shared/components/avatar';
+import { ZardBreadcrumbModule } from '@/shared/components/breadcrumb/breadcrumb.module';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDividerComponent } from '@/shared/components/divider';
+import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
+import { LayoutModule } from '@/shared/components/layout/layout.module';
+import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+import { ZardSkeletonComponent } from '@/shared/components/skeleton';
+import { ZardTooltipModule } from '@/shared/components/tooltip';
 
 interface MenuItem {
   icon: ZardIcon;
@@ -24,7 +23,7 @@ interface MenuItem {
     LayoutModule,
     ZardButtonComponent,
     ZardBreadcrumbModule,
-    ZardMenuModule,
+    ZardMenuImports,
     ZardSkeletonComponent,
     ZardTooltipModule,
     ZardDividerComponent,

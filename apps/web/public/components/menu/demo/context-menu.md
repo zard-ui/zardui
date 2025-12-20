@@ -1,14 +1,14 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardDropdownMenuShortcutComponent } from '../../dropdown/dropdown-shortcut.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardMenuModule } from '../menu.module';
+import { ZardDividerComponent } from '@/shared/components/divider';
+import { ZardDropdownMenuShortcutComponent } from '@/shared/components/dropdown';
+import { ZardIconComponent } from '@/shared/components/icon';
+import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 
 @Component({
   selector: 'z-demo-context-menu',
-  imports: [ZardMenuModule, ZardDividerComponent, ZardIconComponent, ZardDropdownMenuShortcutComponent],
+  imports: [ZardMenuImports, ZardDropdownMenuShortcutComponent, ZardDividerComponent, ZardIconComponent],
   standalone: true,
   template: `
     <div

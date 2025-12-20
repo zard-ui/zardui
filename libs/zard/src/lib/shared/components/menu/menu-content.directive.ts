@@ -3,13 +3,12 @@ import { computed, Directive, input } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
-import { menuContentVariants } from './menu.variants';
-
 import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { menuContentVariants } from './menu.variants';
 
 @Directive({
   selector: '[z-menu-content]',
-  standalone: true,
   host: {
     '[class]': 'classes()',
   },

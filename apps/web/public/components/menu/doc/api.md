@@ -8,11 +8,19 @@ The trigger directive that opens the menu when interacted with.
 
 | Property            | Description                              | Type                 | Default        |
 | ------------------- | ---------------------------------------- | -------------------- | -------------- |
-| `[zMenuTriggerFor]` | Reference to the menu template           | `TemplateRef`        | `required`     |
+| `[zMenuTriggerFor]` | Reference to the menu template           | `TemplateRef<void>`  | `required`     |
 | `[zDisabled]`       | Whether the trigger is disabled          | `boolean`            | `false`        |
 | `[zTrigger]`        | How the menu is triggered                | `'click' \| 'hover'` | `'click'`      |
 | `[zHoverDelay]`     | Delay in ms before closing on hover exit | `number`             | `100`          |
 | `[zPlacement]`      | Menu position relative to trigger        | `ZardMenuPlacement`  | `'bottomLeft'` |
+
+### z-context-menu
+
+The trigger directive that opens context menu
+
+| Property                   | Description                           | Type                | Default    |
+| -------------------------- | ------------------------------------- | ------------------- | ---------- |
+| `[zContextMenuTriggerFor]` | Reference to the context menu content | `TemplateRef<void>` | `required` |
 
 ### z-menu-content
 
