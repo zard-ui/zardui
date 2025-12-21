@@ -22,6 +22,10 @@ on:
           - minor
           - major
 
+env:
+  # Disable nx release interactive prompts
+  NX_NON_NATIVE_HASHER: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -87,33 +91,35 @@ jobs:
 
       - name: Release (Dry Run)
         if: ${{ inputs.dry_run == true }}
-        run: npm run release:dry-run
+        run: npx nx release --dry-run --verbose
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 1: Version bump
       - name: Version Bump (Auto)
         if: ${{ inputs.dry_run != true && (inputs.force_bump == 'auto' || inputs.force_bump == '') }}
         run: |
-          # Try conventional commits first
-          npx nx release version --yes 2>&1 || true
+          # Try conventional commits first, skip git operations for now
+          npx nx release version --git-commit=false --git-tag=false --verbose || true
 
           # Check if version changed
-          if git diff --quiet libs/zard/package.json packages/cli/package.json; then
+          if git diff --quiet libs/zard/package.json packages/cli/package.json 2>/dev/null; then
             echo "No version bump from conventional commits, forcing patch..."
-            npx nx release version patch --yes
+            npx nx release version patch --git-commit=false --git-tag=false --verbose
           fi
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Version Bump (Forced)
         if: ${{ inputs.dry_run != true && inputs.force_bump != 'auto' && inputs.force_bump != '' }}
-        run: npx nx release version ${{ inputs.force_bump }} --yes
+        run: npx nx release version ${{ inputs.force_bump }} --git-commit=false --git-tag=false --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Step 2: Generate changelog
       - name: Generate Changelog
         if: ${{ inputs.dry_run != true }}
-        run: npx nx release changelog --yes
+        run: npx nx release changelog --git-commit=false --git-tag=false --verbose
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -127,7 +133,10 @@ jobs:
         if: ${{ inputs.dry_run != true }}
         run: |
           git add -A
-          git diff --staged --quiet || git commit -m "🔧 chore: update registry and prepare release [skip ci]"
+          # Get new version from package.json
+          VERSION=$(node -p "require('./libs/zard/package.json').version")
+          git diff --staged --quiet || git commit -m "🔖 chore(release): publish v${VERSION} [skip ci]"
+          git tag -a "v${VERSION}" -m "v${VERSION}" || true
 
       # Step 5: Build libraries (after version bump so CLI copies updated package.json)
       - name: Build Libraries
@@ -139,7 +148,7 @@ jobs:
       # Step 6: Publish
       - name: Publish to npm
         if: ${{ inputs.dry_run != true }}
-        run: npx nx release publish --yes
+        run: npx nx release publish --verbose
         env:
           NPM_CONFIG_PROVENANCE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
