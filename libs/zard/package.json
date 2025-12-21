@@ -1,5 +1,5 @@
 {
-  "name": "@ngzard/ui",
+  "name": "zard-cli",
   "version": "1.0.0-beta.31",
   "peerDependencies": {
     "@angular/core": "20.3.14",
