@@ -17,16 +17,18 @@ import {
 import type { ClassValue } from 'clsx';
 
 import {
+  ZardButtonComponent,
+  type ZardButtonSizeVariants,
+  type ZardButtonTypeVariants,
+} from '@/shared/components/button';
+import { ZardIconComponent } from '@/shared/components/icon';
+import {
   paginationContentVariants,
   paginationEllipsisVariants,
   paginationNextVariants,
   paginationPreviousVariants,
   paginationVariants,
-} from './pagination.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { type ZardButtonSizeVariants, type ZardButtonTypeVariants } from '../button/button.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-
+} from '@/shared/components/pagination/pagination.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -286,17 +288,15 @@ export type ZardPaginationVariants = VariantProps<typeof paginationVariants>;
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './pagination.component';
-export * from './pagination.module';
-export * from './pagination.variants';
+export * from '@/shared/components/pagination/pagination.component';
+export * from '@/shared/components/pagination/pagination.imports';
+export * from '@/shared/components/pagination/pagination.variants';
 
 ```
 
 
 
-```angular-ts title="pagination.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { NgModule } from '@angular/core';
-
+```angular-ts title="pagination.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ZardPaginationButtonComponent,
   ZardPaginationComponent,
@@ -305,9 +305,9 @@ import {
   ZardPaginationItemComponent,
   ZardPaginationNextComponent,
   ZardPaginationPreviousComponent,
-} from './pagination.component';
+} from '@/shared/components/pagination/pagination.component';
 
-const components = [
+export const ZardPaginationImports = [
   ZardPaginationContentComponent,
   ZardPaginationItemComponent,
   ZardPaginationButtonComponent,
@@ -315,13 +315,7 @@ const components = [
   ZardPaginationNextComponent,
   ZardPaginationEllipsisComponent,
   ZardPaginationComponent,
-];
-
-@NgModule({
-  imports: components,
-  exports: components,
-})
-export class ZardPaginationModule {}
+] as const;
 
 ```
 

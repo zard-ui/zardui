@@ -1,5 +1,3 @@
-import { NgModule } from '@angular/core';
-
 import {
   ZardPaginationButtonComponent,
   ZardPaginationComponent,
@@ -8,9 +6,9 @@ import {
   ZardPaginationItemComponent,
   ZardPaginationNextComponent,
   ZardPaginationPreviousComponent,
-} from './pagination.component';
+} from '@/shared/components/pagination/pagination.component';
 
-const components = [
+export const ZardPaginationImports = [
   ZardPaginationContentComponent,
   ZardPaginationItemComponent,
   ZardPaginationButtonComponent,
@@ -18,10 +16,4 @@ const components = [
   ZardPaginationNextComponent,
   ZardPaginationEllipsisComponent,
   ZardPaginationComponent,
-];
-
-@NgModule({
-  imports: components,
-  exports: components,
-})
-export class ZardPaginationModule {}
+] as const;

@@ -1,3 +1,3 @@
-export * from './pagination.component';
-export * from './pagination.module';
-export * from './pagination.variants';
+export * from '@/shared/components/pagination/pagination.component';
+export * from '@/shared/components/pagination/pagination.imports';
+export * from '@/shared/components/pagination/pagination.variants';
