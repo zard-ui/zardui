@@ -3,21 +3,20 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import {
-  tableVariants,
-  tableHeaderVariants,
+  type ZardTableSizeVariants,
+  type ZardTableTypeVariants,
   tableBodyVariants,
-  tableRowVariants,
-  tableHeadVariants,
-  tableCellVariants,
   tableCaptionVariants,
-  type ZardTableVariants,
-} from './table.variants';
-
+  tableCellVariants,
+  tableHeaderVariants,
+  tableHeadVariants,
+  tableRowVariants,
+  tableVariants,
+} from '@/shared/components/table/table.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'table[z-table]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -29,8 +28,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   exportAs: 'zTable',
 })
 export class ZardTableComponent {
-  readonly zType = input<ZardTableVariants['zType']>('default');
-  readonly zSize = input<ZardTableVariants['zSize']>('default');
+  readonly zType = input<ZardTableTypeVariants>('default');
+  readonly zSize = input<ZardTableSizeVariants>('default');
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() =>
@@ -46,7 +45,6 @@ export class ZardTableComponent {
 
 @Component({
   selector: 'thead[z-table-header]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -65,7 +63,6 @@ export class ZardTableHeaderComponent {
 
 @Component({
   selector: 'tbody[z-table-body]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -84,7 +81,6 @@ export class ZardTableBodyComponent {
 
 @Component({
   selector: 'tr[z-table-row]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -103,7 +99,6 @@ export class ZardTableRowComponent {
 
 @Component({
   selector: 'th[z-table-head]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -122,7 +117,6 @@ export class ZardTableHeadComponent {
 
 @Component({
   selector: 'td[z-table-cell]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -141,7 +135,6 @@ export class ZardTableCellComponent {
 
 @Component({
   selector: 'caption[z-table-caption]',
-  standalone: true,
   template: `
     <ng-content />
   `,

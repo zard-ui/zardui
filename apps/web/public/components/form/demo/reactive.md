@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
-import { ZardFormImports } from '../form.module';
+import { ZardFormImports } from '../form.imports';
 
 @Component({
   selector: 'zard-demo-form-reactive',

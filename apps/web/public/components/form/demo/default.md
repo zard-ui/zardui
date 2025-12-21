@@ -5,7 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { generateId } from '../../../utils/merge-classes';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
-import { ZardFormImports } from '../form.module';
+import { ZardFormImports } from '../form.imports';
 
 @Component({
   selector: 'zard-demo-form-default',

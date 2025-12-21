@@ -1,5 +1,3 @@
-import { NgModule } from '@angular/core';
-
 import {
   ZardTableComponent,
   ZardTableHeaderComponent,
@@ -8,9 +6,9 @@ import {
   ZardTableHeadComponent,
   ZardTableCellComponent,
   ZardTableCaptionComponent,
-} from './table.component';
+} from '@/shared/components/table/table.component';
 
-const TABLE_COMPONENTS = [
+export const ZardTableImports = [
   ZardTableComponent,
   ZardTableHeaderComponent,
   ZardTableBodyComponent,
@@ -18,10 +16,4 @@ const TABLE_COMPONENTS = [
   ZardTableHeadComponent,
   ZardTableCellComponent,
   ZardTableCaptionComponent,
-];
-
-@NgModule({
-  imports: [...TABLE_COMPONENTS],
-  exports: [...TABLE_COMPONENTS],
-})
-export class ZardTableModule {}
+] as const;
