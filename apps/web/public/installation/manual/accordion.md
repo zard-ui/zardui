@@ -13,9 +13,8 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { ZardAccordionItemComponent } from './accordion-item.component';
-import { accordionVariants } from './accordion.variants';
-
+import { ZardAccordionItemComponent } from '@/shared/components/accordion/accordion-item.component';
+import { accordionVariants } from '@/shared/components/accordion/accordion.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -143,10 +142,13 @@ import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
-import { ZardAccordionComponent } from './accordion.component';
-import { accordionContentVariants, accordionItemVariants, accordionTriggerVariants } from './accordion.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-
+import type { ZardAccordionComponent } from '@/shared/components/accordion/accordion.component';
+import {
+  accordionContentVariants,
+  accordionItemVariants,
+  accordionTriggerVariants,
+} from '@/shared/components/accordion/accordion.variants';
+import { ZardIconComponent } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -216,27 +218,21 @@ export class ZardAccordionItemComponent {
 
 
 
-```angular-ts title="accordion.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { NgModule } from '@angular/core';
+```angular-ts title="accordion.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ZardAccordionItemComponent } from '@/shared/components/accordion/accordion-item.component';
+import { ZardAccordionComponent } from '@/shared/components/accordion/accordion.component';
 
-import { ZardAccordionItemComponent } from './accordion-item.component';
-import { ZardAccordionComponent } from './accordion.component';
-
-@NgModule({
-  imports: [ZardAccordionComponent, ZardAccordionItemComponent],
-  exports: [ZardAccordionComponent, ZardAccordionItemComponent],
-})
-export class ZardAccordionModule {}
+export const ZardAccordionImports = [ZardAccordionComponent, ZardAccordionItemComponent] as const;
 
 ```
 
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './accordion.component';
-export * from './accordion-item.component';
-export * from './accordion.variants';
-export * from './accordion.module';
+export * from '@/shared/components/accordion/accordion.component';
+export * from '@/shared/components/accordion/accordion-item.component';
+export * from '@/shared/components/accordion/accordion.variants';
+export * from '@/shared/components/accordion/accordion.imports';
 
 ```
 

@@ -2,10 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
-import { ZardAccordionComponent } from './accordion.component';
-import { accordionContentVariants, accordionItemVariants, accordionTriggerVariants } from './accordion.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-
+import type { ZardAccordionComponent } from '@/shared/components/accordion/accordion.component';
+import {
+  accordionContentVariants,
+  accordionItemVariants,
+  accordionTriggerVariants,
+} from '@/shared/components/accordion/accordion.variants';
+import { ZardIconComponent } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({

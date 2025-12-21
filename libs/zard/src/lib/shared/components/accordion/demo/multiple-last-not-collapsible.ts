@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardAccordionItemComponent } from '../accordion-item.component';
-import { ZardAccordionComponent } from '../accordion.component';
+import { ZardAccordionImports } from '@/shared/components/accordion/accordion.imports';
 
 @Component({
   selector: 'z-demo-accordion-multiple-last-not-collapsible',
-  imports: [ZardAccordionComponent, ZardAccordionItemComponent],
+  imports: [ZardAccordionImports],
   template: `
     <z-accordion zType="multiple" [zDefaultValue]="defaults" [zCollapsible]="false">
       <z-accordion-item zValue="item-1" zTitle="A Study in Scarlet">
@@ -24,6 +23,7 @@ import { ZardAccordionComponent } from '../accordion.component';
       </z-accordion-item>
     </z-accordion>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoAccordionMultipleLastNotCollapsibleComponent {
   readonly defaults: string[] = ['item-1', 'item-3'];

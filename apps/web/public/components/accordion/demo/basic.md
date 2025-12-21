@@ -1,12 +1,11 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardAccordionItemComponent } from '../accordion-item.component';
-import { ZardAccordionComponent } from '../accordion.component';
+import { ZardAccordionImports } from '@/shared/components/accordion/accordion.imports';
 
 @Component({
   selector: 'z-demo-accordion-basic',
-  imports: [ZardAccordionComponent, ZardAccordionItemComponent],
+  imports: [ZardAccordionImports],
   template: `
     <z-accordion zDefaultValue="item-2">
       <z-accordion-item zValue="item-1" zTitle="A Study in Scarlet">
