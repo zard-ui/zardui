@@ -11,9 +11,12 @@ import {
 } from '@angular/core';
 
 import { type ClassValue } from 'clsx';
-import type { EmblaCarouselType, EmblaEventType, EmblaPluginType, EmblaOptionsType } from 'embla-carousel';
+import type { EmblaCarouselType, EmblaEventType } from 'embla-carousel';
 import { EmblaCarouselDirective } from 'embla-carousel-angular';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import type { CarouselOptions, CarouselPlugins } from './carousel.types';
 import {
   carouselNextButtonVariants,
   carouselPreviousButtonVariants,
@@ -23,8 +26,6 @@ import {
 } from './carousel.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-carousel',
@@ -110,8 +111,8 @@ export class ZardCarouselComponent {
 
   // Public signals and outputs
   readonly class = input<ClassValue>('');
-  readonly zOptions = input<EmblaOptionsType>({ loop: false });
-  readonly zPlugins = input<EmblaPluginType[]>([]);
+  readonly zOptions = input<CarouselOptions>({ loop: false });
+  readonly zPlugins = input<CarouselPlugins>([]);
   readonly zOrientation = input<ZardCarouselOrientationVariants>('horizontal');
   readonly zControls = input<ZardCarouselControlsVariants>('button');
   readonly zInited = output<EmblaCarouselType>();
@@ -123,9 +124,10 @@ export class ZardCarouselComponent {
   protected readonly canScrollNext = signal<boolean>(false);
   protected readonly scrollSnaps = signal<number[]>([]);
   protected readonly subscribeToEvents: EmblaEventType[] = ['init', 'select', 'reInit'];
-  protected readonly options = computed(
-    () => ({ ...this.zOptions(), axis: this.zOrientation() === 'horizontal' ? 'x' : 'y' }) as EmblaOptionsType,
-  );
+  protected readonly options = computed<CarouselOptions>(() => ({
+    ...this.zOptions(),
+    axis: this.zOrientation() === 'horizontal' ? 'x' : 'y',
+  }));
 
   protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
 

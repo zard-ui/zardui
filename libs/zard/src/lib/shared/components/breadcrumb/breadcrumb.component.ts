@@ -9,24 +9,26 @@ import {
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { Params, RouterLink } from '@angular/router';
+import { type Params, RouterLink } from '@angular/router';
 
 import type { ClassValue } from 'clsx';
+
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
   breadcrumbEllipsisVariants,
   breadcrumbItemVariants,
   breadcrumbListVariants,
   breadcrumbVariants,
+} from './breadcrumb.variants';
+import type {
   ZardBreadcrumbAlignVariants,
   ZardBreadcrumbEllipsisColorVariants,
   ZardBreadcrumbSizeVariants,
   ZardBreadcrumbWrapVariants,
 } from './breadcrumb.variants';
 import { ZardIconComponent } from '../icon/icon.component';
-
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',

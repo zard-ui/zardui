@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import type { CarouselPlugin } from './carousel.types';
+
 /**
  * Service to create and manage Embla Carousel plugins
  */
@@ -19,7 +21,7 @@ export class ZardCarouselPluginsService {
       playOnInit?: boolean;
       rootNode?: (emblaRoot: HTMLElement) => HTMLElement | null;
     } = {},
-  ) {
+  ): Promise<CarouselPlugin> {
     try {
       const AutoplayModule = await import('embla-carousel-autoplay');
       const Autoplay = AutoplayModule.default;
@@ -43,7 +45,7 @@ export class ZardCarouselPluginsService {
       playOnInit?: boolean;
       rootElement?: HTMLElement;
     } = {},
-  ) {
+  ): Promise<CarouselPlugin> {
     const { rootElement, ...restOptions } = options;
     const autoplayOptions = {
       ...restOptions,
@@ -64,7 +66,7 @@ export class ZardCarouselPluginsService {
       dragging?: string;
       draggable?: string;
     } = {},
-  ) {
+  ): Promise<CarouselPlugin> {
     try {
       const ClassNamesModule = await import('embla-carousel-class-names');
       const ClassNames = ClassNamesModule.default;
@@ -84,7 +86,7 @@ export class ZardCarouselPluginsService {
       forceWheelAxis?: 'x' | 'y';
       target?: Element;
     } = {},
-  ) {
+  ): Promise<CarouselPlugin> {
     try {
       const { WheelGesturesPlugin } = await import('embla-carousel-wheel-gestures');
       return WheelGesturesPlugin(options);

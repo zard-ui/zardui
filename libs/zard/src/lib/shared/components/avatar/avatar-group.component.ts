@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { avatarGroupVariants, ZardAvatarGroupVariants } from './avatar.variants';
-
 import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { avatarGroupVariants } from './avatar.variants';
+import type { ZardAvatarGroupVariants } from './avatar.variants';
 
 @Component({
   selector: 'z-avatar-group',
