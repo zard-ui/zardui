@@ -20,9 +20,8 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { ZardResizablePanelComponent } from './resizable-panel.component';
-import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
-
+import { ZardResizablePanelComponent } from '@/shared/components/resizable/resizable-panel.component';
+import { resizableVariants, type ZardResizableLayoutVariants } from '@/shared/components/resizable/resizable.variants';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 export interface ZardResizeEvent {
@@ -51,7 +50,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private listenersCleanup!: () => void | undefined;
 
-  readonly zLayout = input<ZardResizableVariants['zLayout']>('horizontal');
+  readonly zLayout = input<ZardResizableLayoutVariants>('horizontal');
   readonly zLazy = input(false, { transform });
   readonly class = input<ClassValue>('');
 
@@ -334,7 +333,7 @@ export const resizableVariants = cva('flex h-full w-full data-[layout=vertical]:
   },
 });
 
-export const resizablePanelVariants = cva('relative overflow-hidden flex-shrink-0 h-full', {
+export const resizablePanelVariants = cva('relative overflow-hidden shrink-0 h-full', {
   variants: {
     zCollapsed: {
       true: 'hidden',
@@ -347,14 +346,14 @@ export const resizablePanelVariants = cva('relative overflow-hidden flex-shrink-
 });
 
 export const resizableHandleVariants = cva(
-  'group relative flex flex-shrink-0 items-center justify-center bg-border transition-colors hover:bg-border/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1',
+  'group relative flex shrink-0 items-center justify-center bg-border transition-colors hover:bg-border/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1',
   {
     variants: {
       zLayout: {
         horizontal:
-          'w-[1px] min-w-[1px] cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2',
+          'w-px min-w-px cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2',
         vertical:
-          'h-[1px] min-h-[1px] w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-4 after:-translate-y-1/2',
+          'h-px min-h-px w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-4 after:-translate-y-1/2',
       },
       zDisabled: {
         true: 'cursor-default pointer-events-none opacity-50',
@@ -383,20 +382,18 @@ export const resizableHandleIndicatorVariants = cva(
   },
 );
 
-export type ZardResizableVariants = VariantProps<typeof resizableVariants>;
-export type ZardResizablePanelVariants = VariantProps<typeof resizablePanelVariants>;
-export type ZardResizableHandleVariants = VariantProps<typeof resizableHandleVariants>;
+export type ZardResizableLayoutVariants = NonNullable<VariantProps<typeof resizableVariants>['zLayout']>;
 
 ```
 
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './resizable.component';
-export * from './resizable-panel.component';
-export * from './resizable-handle.component';
-export * from './resizable.module';
-export * from './resizable.variants';
+export * from '@/shared/components/resizable/resizable.component';
+export * from '@/shared/components/resizable/resizable-panel.component';
+export * from '@/shared/components/resizable/resizable-handle.component';
+export * from '@/shared/components/resizable/resizable.imports';
+export * from '@/shared/components/resizable/resizable.variants';
 
 ```
 
@@ -407,9 +404,11 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
-import { ZardResizableComponent } from './resizable.component';
-import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
-
+import { ZardResizableComponent } from '@/shared/components/resizable/resizable.component';
+import {
+  resizableHandleIndicatorVariants,
+  resizableHandleVariants,
+} from '@/shared/components/resizable/resizable.variants';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -653,8 +652,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { resizablePanelVariants } from './resizable.variants';
-
+import { resizablePanelVariants } from '@/shared/components/resizable/resizable.variants';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -697,20 +695,16 @@ export class ZardResizablePanelComponent {
 
 
 
-```angular-ts title="resizable.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { NgModule } from '@angular/core';
+```angular-ts title="resizable.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ZardResizableHandleComponent } from '@/shared/components/resizable/resizable-handle.component';
+import { ZardResizablePanelComponent } from '@/shared/components/resizable/resizable-panel.component';
+import { ZardResizableComponent } from '@/shared/components/resizable/resizable.component';
 
-import { ZardResizableHandleComponent } from './resizable-handle.component';
-import { ZardResizablePanelComponent } from './resizable-panel.component';
-import { ZardResizableComponent } from './resizable.component';
-
-const RESIZABLE_COMPONENTS = [ZardResizableComponent, ZardResizableHandleComponent, ZardResizablePanelComponent];
-
-@NgModule({
-  imports: [...RESIZABLE_COMPONENTS],
-  exports: [...RESIZABLE_COMPONENTS],
-})
-export class ResizbleModule {}
+export const ResizableImports = [
+  ZardResizableComponent,
+  ZardResizableHandleComponent,
+  ZardResizablePanelComponent,
+] as const;
 
 ```
 

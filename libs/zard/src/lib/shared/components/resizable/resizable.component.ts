@@ -17,9 +17,8 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { ZardResizablePanelComponent } from './resizable-panel.component';
-import { resizableVariants, type ZardResizableVariants } from './resizable.variants';
-
+import { ZardResizablePanelComponent } from '@/shared/components/resizable/resizable-panel.component';
+import { resizableVariants, type ZardResizableLayoutVariants } from '@/shared/components/resizable/resizable.variants';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 export interface ZardResizeEvent {
@@ -48,7 +47,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private listenersCleanup!: () => void | undefined;
 
-  readonly zLayout = input<ZardResizableVariants['zLayout']>('horizontal');
+  readonly zLayout = input<ZardResizableLayoutVariants>('horizontal');
   readonly zLazy = input(false, { transform });
   readonly class = input<ClassValue>('');
 
