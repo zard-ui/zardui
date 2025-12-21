@@ -18,9 +18,6 @@
       "name": "dark-mode",
       "type": "registry:component",
       "basePath": "services",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "dark-mode.ts"
       ]
@@ -42,7 +39,6 @@
       "name": "layout",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "icon"
       ],
       "files": [
@@ -59,7 +55,6 @@
       "name": "button",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "icon"
       ],
       "files": [
@@ -72,7 +67,6 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "core",
         "icon"
       ],
       "files": [
@@ -87,7 +81,7 @@
       "name": "card",
       "type": "registry:component",
       "registryDependencies": [
-        "core"
+        "button"
       ],
       "files": [
         "card.component.ts",
@@ -98,7 +92,6 @@
       "name": "empty",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "icon"
       ],
       "files": [
@@ -109,9 +102,6 @@
     {
       "name": "badge",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "badge.component.ts",
         "badge.variants.ts"
@@ -121,7 +111,6 @@
       "name": "accordion",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "icon"
       ],
       "files": [
@@ -134,7 +123,6 @@
       "name": "alert",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "icon"
       ],
       "files": [
@@ -146,8 +134,7 @@
       "name": "alert-dialog",
       "type": "registry:component",
       "registryDependencies": [
-        "button",
-        "core"
+        "button"
       ],
       "files": [
         "alert-dialog.component.ts",
@@ -161,7 +148,6 @@
       "name": "avatar",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "icon"
       ],
       "files": [
@@ -173,7 +159,6 @@
       "name": "checkbox",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "icon"
       ],
       "files": [
@@ -186,7 +171,6 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "core",
         "icon"
       ],
       "files": [
@@ -199,9 +183,6 @@
     {
       "name": "dropdown",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "dropdown.component.ts",
         "dropdown-item.component.ts",
@@ -217,9 +198,6 @@
     {
       "name": "icon",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "icon.component.ts",
         "icon.variants.ts",
@@ -229,9 +207,6 @@
     {
       "name": "input",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "input.directive.ts",
         "input.variants.ts"
@@ -240,9 +215,6 @@
     {
       "name": "input-group",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "input-group.component.ts",
         "input-group.variants.ts"
@@ -253,7 +225,6 @@
       "type": "registry:component",
       "registryDependencies": [
         "badge",
-        "core",
         "icon"
       ],
       "files": [
@@ -265,9 +236,6 @@
     {
       "name": "switch",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "switch.component.ts",
         "switch.variants.ts"
@@ -278,7 +246,6 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "core",
         "icon"
       ],
       "files": [
@@ -289,9 +256,6 @@
     {
       "name": "toggle",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "toggle.component.ts",
         "toggle.variants.ts"
@@ -300,9 +264,6 @@
     {
       "name": "tooltip",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "tooltip.ts",
         "tooltip-positions.ts",
@@ -313,7 +274,6 @@
       "name": "breadcrumb",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "icon"
       ],
       "files": [
@@ -325,9 +285,6 @@
     {
       "name": "divider",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "divider.component.ts",
         "divider.variants.ts"
@@ -336,9 +293,6 @@
     {
       "name": "loader",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "loader.component.ts",
         "loader.variants.ts"
@@ -347,9 +301,6 @@
     {
       "name": "progress-bar",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "progress-bar.component.ts",
         "progress-bar.variants.ts"
@@ -358,9 +309,6 @@
     {
       "name": "radio",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "radio.component.ts",
         "radio.variants.ts"
@@ -369,9 +317,6 @@
     {
       "name": "slider",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "slider.component.ts",
         "slider.variants.ts"
@@ -381,7 +326,6 @@
       "name": "calendar",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "icon"
       ],
       "files": [
@@ -399,7 +343,6 @@
       "registryDependencies": [
         "button",
         "command",
-        "core",
         "popover",
         "empty",
         "input",
@@ -414,7 +357,6 @@
       "name": "command",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "icon"
       ],
       "files": [
@@ -435,7 +377,6 @@
       "registryDependencies": [
         "button",
         "calendar",
-        "core",
         "popover",
         "input",
         "icon"
@@ -448,9 +389,6 @@
     {
       "name": "form",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "form.component.ts",
         "form.module.ts",
@@ -462,7 +400,6 @@
       "type": "registry:component",
       "registryDependencies": [
         "button",
-        "core",
         "icon"
       ],
       "files": [
@@ -474,9 +411,6 @@
     {
       "name": "popover",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "popover.component.ts",
         "popover.variants.ts"
@@ -485,9 +419,6 @@
     {
       "name": "resizable",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "resizable.component.ts",
         "resizable-panel.component.ts",
@@ -498,9 +429,6 @@
     {
       "name": "segmented",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "segmented.component.ts",
         "segmented.variants.ts"
@@ -509,9 +437,6 @@
     {
       "name": "skeleton",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "skeleton.component.ts",
         "skeleton.variants.ts"
@@ -520,9 +445,6 @@
     {
       "name": "table",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "table.component.ts",
         "table.module.ts",
@@ -535,9 +457,6 @@
       "dependencies": [
         "ngx-sonner"
       ],
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "toast.component.ts",
         "toast.variants.ts"
@@ -547,7 +466,6 @@
       "name": "toggle-group",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "toggle",
         "icon"
       ],
@@ -559,9 +477,6 @@
     {
       "name": "menu",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "menu.directive.ts",
         "menu.variants.ts",
@@ -576,7 +491,6 @@
       "name": "button-group",
       "type": "registry:component",
       "registryDependencies": [
-        "core",
         "divider"
       ],
       "files": [
@@ -587,9 +501,6 @@
     {
       "name": "kbd",
       "type": "registry:component",
-      "registryDependencies": [
-        "core"
-      ],
       "files": [
         "kbd.component.ts",
         "kbd-group.component.ts",
@@ -607,7 +518,6 @@
       ],
       "registryDependencies": [
         "button",
-        "core",
         "icon"
       ],
       "files": [

@@ -10,8 +10,5 @@
       "name": "loader.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const loaderVariants = cva('', {\n  variants: {\n    zSize: {\n      default: 'size-6',\n      sm: 'size-4',\n      lg: 'size-8',\n    },\n  },\n  defaultVariants: {\n    zSize: 'default',\n  },\n});\nexport type ZardLoaderVariants = VariantProps<typeof loaderVariants>;\n"
     }
-  ],
-  "registryDependencies": [
-    "core"
   ]
 }

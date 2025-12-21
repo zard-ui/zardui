@@ -1,4 +1,5 @@
 import {
+  Activity,
   Archive,
   ArrowLeft,
   ArrowRight,
@@ -29,6 +30,8 @@ import {
   Code,
   CodeXml,
   Copy,
+  CreditCard,
+  DollarSign,
   Ellipsis,
   Eye,
   File,
@@ -67,6 +70,7 @@ import {
   Shield,
   Smartphone,
   Sparkles,
+  Square,
   SquareLibrary,
   Star,
   Sun,
@@ -81,6 +85,7 @@ import {
   TriangleAlert,
   Underline,
   User,
+  UserPlus,
   Users,
   X,
   Zap,
@@ -180,6 +185,11 @@ export const ZARD_ICONS = {
   tag: Tag,
   'sun-moon': SunMoon,
   'dark-mode': DarkMode,
+  square: Square,
+  'dollar-sign': DollarSign,
+  'user-plus': UserPlus,
+  'credit-card': CreditCard,
+  activity: Activity,
 } as const satisfies Record<string, LucideIconData>;
 
 export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;

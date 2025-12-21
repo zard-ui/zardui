@@ -1,0 +1,101 @@
+<div class="bg-background/50 sticky top-0 z-10 border-b backdrop-blur-sm">
+  <div class="flex items-center justify-between px-5 py-4">
+    <div>
+      <h2 class="text-foreground text-base font-semibold tracking-tight">Customize</h2>
+      <p class="text-muted-foreground text-xs">Pick a style and color for your theme</p>
+    </div>
+    <button
+      z-button
+      zType="outline"
+      zSize="sm"
+      (click)="toggleDarkMode()"
+      class="size-9 p-0"
+      title="Toggle preview mode"
+    >
+      @if (previewDarkMode()) {
+        <z-icon zType="moon" class="size-4" />
+      } @else {
+        <z-icon zType="sun" class="size-4" />
+      }
+    </button>
+  </div>
+</div>
+
+<div
+  class="[&:hover::-webkit-scrollbar-thumb]:bg-border flex-1 overflow-y-auto px-5 py-5 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-transparent [&::-webkit-scrollbar-track]:bg-transparent"
+>
+  <div class="space-y-3">
+    <div class="flex items-center gap-2">
+      <div class="bg-primary/10 rounded-md p-1.5">
+        <z-icon zType="moon" class="text-primary size-3.5" />
+      </div>
+      <label class="text-foreground text-sm font-medium">Presets</label>
+    </div>
+    <div class="grid grid-cols-2 gap-2">
+      @for (preset of presets; track preset.name) {
+        <app-theme-preset-card
+          [preset]="preset"
+          [isActive]="activePreset() === preset.name"
+          (select)="onPresetSelect($event)"
+        />
+      }
+    </div>
+  </div>
+
+  <div class="mt-8 space-y-3">
+    <div class="flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <div class="bg-primary/10 rounded-md p-1.5">
+          <z-icon zType="square" class="text-primary size-3.5" />
+        </div>
+        <label class="text-foreground text-sm font-medium">Radius</label>
+      </div>
+      <span class="bg-muted text-muted-foreground rounded-md px-2 py-0.5 font-mono text-xs">{{ theme().radius }}</span>
+    </div>
+    <div class="rounded-lg border bg-white/50 p-3 dark:bg-white/5">
+      <z-slider
+        [zMin]="0"
+        [zMax]="1"
+        [zStep]="0.125"
+        [zValue]="radiusValue()"
+        (zSlideIndexChange)="onRadiusChange($event)"
+      />
+    </div>
+  </div>
+
+  <div class="mt-8">
+    <div class="mb-3 flex items-center gap-2">
+      <div class="bg-primary/10 rounded-md p-1.5">
+        <z-icon zType="palette" class="text-primary size-3.5" />
+      </div>
+      <label class="text-foreground text-sm font-medium">Colors</label>
+    </div>
+    <z-accordion zType="multiple" [zDefaultValue]="['base']" class="space-y-1">
+      @for (group of colorGroups; track group.key) {
+        <z-accordion-item [zValue]="group.key" [zTitle]="group.label">
+          <div class="space-y-4 py-3">
+            @for (colorKey of group.colors; track colorKey) {
+              <app-color-picker-field
+                [colorKey]="colorKey"
+                [value]="currentColors()[colorKey]"
+                (valueChange)="onColorChange(colorKey, $event)"
+              />
+            }
+          </div>
+        </z-accordion-item>
+      }
+    </z-accordion>
+  </div>
+</div>
+
+<div class="bg-background/50 border-t p-4 backdrop-blur-sm">
+  <button z-button zFull (click)="copyToClipboard()" class="h-10 gap-2 font-medium">
+    @if (copySuccess()) {
+      <z-icon zType="check" class="size-4" />
+      Copied to clipboard!
+    } @else {
+      <z-icon zType="copy" class="size-4" />
+      Copy CSS Variables
+    }
+  </button>
+</div>
