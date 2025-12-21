@@ -3,16 +3,16 @@ import { By } from '@angular/platform-browser';
 
 import { render } from '@testing-library/angular';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import { ZardAccordionItemComponent } from './accordion-item.component';
 import { ZardAccordionComponent } from './accordion.component';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 jest.mock('../../utils/merge-classes', () => ({
   mergeClasses: jest.fn().mockImplementation((variants, cls) => cls || 'default-classes'),
   transform: jest.fn(value => value),
   generateId: jest.fn().mockReturnValue('accordion-test-id'),
-  noopFun: jest.fn(),
+  noopFn: jest.fn(),
 }));
 
 const getHostComponent = (

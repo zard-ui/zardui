@@ -59,27 +59,6 @@ Individual clickable items within the dropdown menu.
 | `[disabled]` | Disables the dropdown item      | `boolean`                    | `false`     |
 | `[class]`    | Additional CSS classes          | `ClassValue`                 | `''`        |
 
-## z-dropdown-menu-label <span class="api-type-label component">Component</span>
-
-Label component for grouping dropdown items.
-
-### Properties
-
-| Property  | Description                     | Type         | Default |
-| --------- | ------------------------------- | ------------ | ------- |
-| `[inset]` | Adds left padding for alignment | `boolean`    | `false` |
-| `[class]` | Additional CSS classes          | `ClassValue` | `''`    |
-
-## z-dropdown-menu-shortcut <span class="api-type-label component">Component</span>
-
-Component for displaying keyboard shortcuts in dropdown items.
-
-### Properties
-
-| Property  | Description            | Type         | Default |
-| --------- | ---------------------- | ------------ | ------- |
-| `[class]` | Additional CSS classes | `ClassValue` | `''`    |
-
 ## ZardDropdownService <span class="api-type-label service">Service</span>
 
 Global service for managing dropdown state and interactions.

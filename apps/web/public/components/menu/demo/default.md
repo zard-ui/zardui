@@ -1,37 +1,37 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDividerComponent } from '../../divider/divider.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardMenuModule } from '../menu.module';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDividerComponent } from '@/shared/components/divider';
+import { ZardIconComponent } from '@/shared/components/icon';
+import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 
 @Component({
   selector: 'zard-demo-menu-default',
-  imports: [ZardMenuModule, ZardButtonComponent, ZardDividerComponent, ZardIconComponent],
+  imports: [ZardMenuImports, ZardButtonComponent, ZardDividerComponent, ZardIconComponent],
   standalone: true,
   template: `
     <nav class="flex items-center justify-between p-4">
       <div class="flex items-center space-x-6">
         <div class="flex items-center space-x-1">
           <div class="relative">
-            <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="productsMenu">
+            <button type="button" z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="productsMenu">
               Products
               <z-icon zType="chevron-down" class="ml-1" />
             </button>
 
             <ng-template #productsMenu>
               <div z-menu-content class="w-48">
-                <button z-menu-item (click)="log('Analytics')">Analytics</button>
-                <button z-menu-item (click)="log('Dashboard')">Dashboard</button>
-                <button z-menu-item (click)="log('Reports')">Reports</button>
-                <button z-menu-item zDisabled (click)="log('Insights')">Insights</button>
+                <button type="button" z-menu-item (click)="log('Analytics')">Analytics</button>
+                <button type="button" z-menu-item (click)="log('Dashboard')">Dashboard</button>
+                <button type="button" z-menu-item (click)="log('Reports')">Reports</button>
+                <button type="button" z-menu-item zDisabled (click)="log('Insights')">Insights</button>
               </div>
             </ng-template>
           </div>
 
           <div class="relative">
-            <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="solutionsMenu">
+            <button type="button" z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="solutionsMenu">
               Solutions
               <z-icon zType="chevron-down" class="ml-1" />
             </button>
@@ -39,21 +39,36 @@ import { ZardMenuModule } from '../menu.module';
             <ng-template #solutionsMenu>
               <div z-menu-content class="w-80 p-2">
                 <div class="grid gap-1">
-                  <button z-menu-item (click)="log('For Startups')" class="flex h-auto flex-col items-start py-3">
+                  <button
+                    type="button"
+                    z-menu-item
+                    (click)="log('For Startups')"
+                    class="flex h-auto flex-col items-start py-3"
+                  >
                     <div class="text-sm font-medium">For Startups</div>
                     <div class="text-muted-foreground mt-1 text-xs">
                       Get started quickly with our startup-friendly tools
                     </div>
                   </button>
 
-                  <button z-menu-item (click)="log('For Enterprise')" class="flex h-auto flex-col items-start py-3">
+                  <button
+                    type="button"
+                    z-menu-item
+                    (click)="log('For Enterprise')"
+                    class="flex h-auto flex-col items-start py-3"
+                  >
                     <div class="text-sm font-medium">For Enterprise</div>
                     <div class="text-muted-foreground mt-1 text-xs">
                       Scale your business with enterprise-grade features
                     </div>
                   </button>
 
-                  <button z-menu-item (click)="log('For Agencies')" class="flex h-auto flex-col items-start py-3">
+                  <button
+                    type="button"
+                    z-menu-item
+                    (click)="log('For Agencies')"
+                    class="flex h-auto flex-col items-start py-3"
+                  >
                     <div class="text-sm font-medium">For Agencies</div>
                     <div class="text-muted-foreground mt-1 text-xs">Manage multiple clients with our agency tools</div>
                   </button>
@@ -63,24 +78,25 @@ import { ZardMenuModule } from '../menu.module';
           </div>
 
           <div class="relative">
-            <button z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="resourcesMenu">
+            <button type="button" z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="resourcesMenu">
               Resources
               <z-icon zType="chevron-down" />
             </button>
 
             <ng-template #resourcesMenu>
               <div z-menu-content class="w-56">
-                <button z-menu-item (click)="log('Blog')">
+                <button type="button" z-menu-item (click)="log('Blog')">
                   <z-icon zType="book-open" class="mr-2" />
                   Blog
                 </button>
 
-                <button z-menu-item (click)="log('Documentation')">
+                <button type="button" z-menu-item (click)="log('Documentation')">
                   <z-icon zType="file-text" class="mr-2" />
                   Documentation
                 </button>
 
                 <button
+                  type="button"
                   z-menu-item
                   z-menu
                   [zMenuTriggerFor]="helpSubmenu"
@@ -96,7 +112,7 @@ import { ZardMenuModule } from '../menu.module';
 
                 <z-divider zSpacing="sm" />
 
-                <button z-menu-item (click)="log('Community')">
+                <button type="button" z-menu-item (click)="log('Community')">
                   <z-icon zType="users" class="mr-2" />
                   Community
                 </button>
@@ -105,14 +121,14 @@ import { ZardMenuModule } from '../menu.module';
 
             <ng-template #helpSubmenu>
               <div z-menu-content class="w-48">
-                <button z-menu-item (click)="log('Getting Started')">Getting Started</button>
-                <button z-menu-item (click)="log('Tutorials')">Tutorials</button>
-                <button z-menu-item (click)="log('FAQ')">FAQ</button>
+                <button type="button" z-menu-item (click)="log('Getting Started')">Getting Started</button>
+                <button type="button" z-menu-item (click)="log('Tutorials')">Tutorials</button>
+                <button type="button" z-menu-item (click)="log('FAQ')">FAQ</button>
 
                 <z-divider zSpacing="sm" />
 
-                <button z-menu-item (click)="log('Contact Support')">Contact Support</button>
-                <button z-menu-item (click)="log('Live Chat')">Live Chat</button>
+                <button type="button" z-menu-item (click)="log('Contact Support')">Contact Support</button>
+                <button type="button" z-menu-item (click)="log('Live Chat')">Live Chat</button>
               </div>
             </ng-template>
           </div>

@@ -26,7 +26,7 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
-import { mergeClasses, noopFun } from '@/shared/utils/merge-classes';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import type { ZardSheetRef } from './sheet-ref';
 import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
@@ -50,8 +50,8 @@ export class ZardSheetOptions<T, U> {
   zOkDisabled?: boolean;
   zOkIcon?: ZardIcon;
   zOkText?: string | null;
-  zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
-  zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
+  zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
+  zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
   zSide?: ZardSheetVariants['zSide'] = 'left';
   zSize?: ZardSheetVariants['zSize'] = 'default';
   zTitle?: string | TemplateRef<T>;
@@ -417,14 +417,6 @@ import { NgModule } from '@angular/core';
 import { ZardSheetComponent } from './sheet.component';
 import { ZardSheetService } from './sheet.service';
 import { ZardButtonComponent } from '../button/button.component';
-
-const components = [CommonModule, ZardButtonComponent, ZardSheetComponent, OverlayModule, PortalModule];
-
-@NgModule({
-  imports: components,
-  exports: components,
-})
-export class ZardBreadcrumbModule {}
 
 @NgModule({
   imports: [CommonModule, ZardButtonComponent, ZardSheetComponent, OverlayModule, PortalModule],

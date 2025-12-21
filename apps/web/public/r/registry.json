@@ -186,11 +186,9 @@
       "files": [
         "dropdown.component.ts",
         "dropdown-item.component.ts",
-        "dropdown-label.component.ts",
         "dropdown-menu-content.component.ts",
-        "dropdown-shortcut.component.ts",
         "dropdown-trigger.directive.ts",
-        "dropdown.module.ts",
+        "dropdown.imports.ts",
         "dropdown.service.ts",
         "dropdown.variants.ts"
       ]
@@ -483,8 +481,10 @@
         "menu-content.directive.ts",
         "menu-item.directive.ts",
         "menu-manager.service.ts",
-        "menu.module.ts",
-        "menu-positions.ts"
+        "menu.imports.ts",
+        "menu-positions.ts",
+        "menu-label.component.ts",
+        "menu-shortcut.component.ts"
       ]
     },
     {

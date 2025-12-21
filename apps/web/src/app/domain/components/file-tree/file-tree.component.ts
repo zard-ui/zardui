@@ -1,20 +1,23 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardBreadcrumbModule } from '@zard/components/sheet/sheet.module';
 
 import type { FileTreeNode, BlockFile } from '../block-container/block-container.component';
 
 @Component({
   selector: 'z-file-tree',
-  standalone: true,
-  imports: [CommonModule, FileTreeComponent, ZardBreadcrumbModule, ZardIconComponent],
+  imports: [CommonModule, FileTreeComponent, ZardIconComponent],
   template: `
     @for (node of nodes(); track node.path) {
       @if (node.type === 'folder' && node.path) {
         <div class="folder-item">
-          <button (click)="toggleFolder(node.path)" z-button zType="ghost" class="ring-sidebar-ring w-full justify-start">
+          <button
+            (click)="toggleFolder(node.path)"
+            z-button
+            zType="ghost"
+            class="ring-sidebar-ring w-full justify-start"
+          >
             <z-icon zType="chevron-right" zSize="sm" [class.rotate-90]="isOpen(node.path)" />
             <z-icon zType="folder" zSize="sm" />
             <span class="truncate font-normal">{{ node.name }}</span>
@@ -37,12 +40,13 @@ import type { FileTreeNode, BlockFile } from '../block-container/block-container
           [class]="selectedFilePath() === node.file.path ? 'bg-muted-foreground/15 text-sidebar-accent-foreground' : ''"
           class="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-sm transition-colors"
         >
-          <z-icon zType="file" zSize="sm" class="flex-shrink-0" />
+          <z-icon zType="file" zSize="sm" class="shrink-0" />
           <span class="truncate">{{ node.name }}</span>
         </button>
       }
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileTreeComponent {
   readonly nodes = input.required<FileTreeNode[]>();
