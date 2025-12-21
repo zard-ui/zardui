@@ -1,5 +1,5 @@
 ```angular-ts showLineNumbers copyButton
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardSheetService } from '../sheet.service';
@@ -7,15 +7,15 @@ import { ZardSheetService } from '../sheet.service';
 @Component({
   selector: 'z-demo-sheet-dimensions',
   imports: [ZardButtonComponent],
-  standalone: true,
   template: `
-    <div class="flex flex-wrap gap-4">
+    <div class="flex flex-col gap-4">
       <button z-button type="button" zType="outline" (click)="openWideSheet()">Wide Sheet (500px)</button>
       <button z-button type="button" zType="outline" (click)="openTallSheet()">Tall Sheet (80vh)</button>
       <button z-button type="button" zType="outline" (click)="openCustomSheet()">Custom Dimensions</button>
       <button z-button type="button" zType="outline" (click)="openTopSheet()">Top Sheet</button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSheetDimensionsComponent {
   private sheetService = inject(ZardSheetService);

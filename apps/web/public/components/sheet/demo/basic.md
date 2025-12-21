@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
-import { ZardSheetModule } from '../sheet.module';
+import { ZardSheetImports } from '../sheet.imports';
 import { Z_SHEET_DATA, ZardSheetService } from '../sheet.service';
 
 interface iSheetData {
@@ -65,7 +65,7 @@ export class ZardDemoSheetBasicInputComponent implements AfterViewInit {
 }
 
 @Component({
-  imports: [ZardButtonComponent, ZardSheetModule],
+  imports: [ZardButtonComponent, ZardSheetImports],
   standalone: true,
   template: `
     <button type="button" z-button zType="outline" (click)="openSheet()">Edit profile</button>
