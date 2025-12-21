@@ -9,7 +9,7 @@ import {
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { Params, RouterLink } from '@angular/router';
+import { type Params, RouterLink } from '@angular/router';
 
 import type { ClassValue } from 'clsx';
 
@@ -18,13 +18,12 @@ import {
   breadcrumbItemVariants,
   breadcrumbListVariants,
   breadcrumbVariants,
-  ZardBreadcrumbAlignVariants,
-  ZardBreadcrumbEllipsisColorVariants,
-  ZardBreadcrumbSizeVariants,
-  ZardBreadcrumbWrapVariants,
-} from './breadcrumb.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-
+  type ZardBreadcrumbAlignVariants,
+  type ZardBreadcrumbEllipsisColorVariants,
+  type ZardBreadcrumbSizeVariants,
+  type ZardBreadcrumbWrapVariants,
+} from '@/shared/components/breadcrumb/breadcrumb.variants';
+import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 

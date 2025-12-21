@@ -1,7 +1,7 @@
 import { Component, signal } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar';
-import { ZardBreadcrumbModule } from '@/shared/components/breadcrumb/breadcrumb.module';
+import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
@@ -21,7 +21,7 @@ interface MenuItem {
   imports: [
     LayoutImports,
     ZardButtonComponent,
-    ZardBreadcrumbModule,
+    ZardBreadcrumbImports,
     ZardMenuImports,
     ZardSkeletonComponent,
     ZardTooltipModule,
