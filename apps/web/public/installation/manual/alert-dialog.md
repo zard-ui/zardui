@@ -186,9 +186,9 @@ import type { OverlayRef } from '@angular/cdk/overlay';
 
 import { filter, Subject, takeUntil } from 'rxjs';
 
-import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
-
 import { noopFn } from '@/shared/utils/merge-classes';
+
+import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
 export class ZardAlertDialogRef<T = unknown> {
   private readonly destroy$ = new Subject<void>();
