@@ -9,15 +9,14 @@ import {
   signal,
 } from '@angular/core';
 
-import { mergeClasses, noopFn, transform } from '@/shared/utils/merge-classes';
-
+import { ZardIconComponent } from '@/shared/components/icon';
 import {
   selectItemIconVariants,
   selectItemVariants,
   type ZardSelectItemModeVariants,
   type ZardSelectSizeVariants,
-} from './select.variants';
-import { ZardIconComponent } from '../icon/icon.component';
+} from '@/shared/components/select/select.variants';
+import { mergeClasses, noopFn, transform } from '@/shared/utils/merge-classes';
 
 // Interface to avoid circular dependency
 interface SelectHost {

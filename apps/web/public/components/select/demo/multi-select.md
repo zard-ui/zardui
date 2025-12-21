@@ -1,14 +1,14 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-import { ZardBadgeComponent } from '../../badge/badge.component';
-import { ZardSelectModule } from '../select.module';
+import { ZardBadgeComponent } from '@/shared/components/badge';
+import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
   selector: 'z-demo-multi-select-basic',
-  imports: [ZardBadgeComponent, ZardSelectModule],
+  imports: [ZardBadgeComponent, ZardSelectImports],
   template: `
-    <div class="flex h-[400px] w-[300px] flex-col gap-4">
+    <div class="flex h-100 w-75 flex-col gap-4">
       Selected values:
       <span class="flex flex-wrap gap-2">
         @for (value of selectedValues(); track $index) {

@@ -33,17 +33,16 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
-
-import { ZardSelectItemComponent } from './select-item.component';
+import { ZardBadgeComponent } from '@/shared/components/badge';
+import { ZardIconComponent } from '@/shared/components/icon';
+import { ZardSelectItemComponent } from '@/shared/components/select/select-item.component';
 import {
   selectContentVariants,
   selectTriggerVariants,
   selectVariants,
   type ZardSelectSizeVariants,
-} from './select.variants';
-import { ZardBadgeComponent } from '../badge/badge.component';
-import { ZardIconComponent } from '../icon/icon.component';
+} from '@/shared/components/select/select.variants';
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -733,10 +732,10 @@ export type ZardSelectItemModeVariants = NonNullable<VariantProps<typeof selectI
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './select.component';
-export * from './select-item.component';
-export * from './select.module';
-export * from './select.variants';
+export * from '@/shared/components/select/select.component';
+export * from '@/shared/components/select/select-item.component';
+export * from '@/shared/components/select/select.imports';
+export * from '@/shared/components/select/select.variants';
 
 ```
 
@@ -754,15 +753,14 @@ import {
   signal,
 } from '@angular/core';
 
-import { mergeClasses, noopFn, transform } from '@/shared/utils/merge-classes';
-
+import { ZardIconComponent } from '@/shared/components/icon';
 import {
   selectItemIconVariants,
   selectItemVariants,
   type ZardSelectItemModeVariants,
   type ZardSelectSizeVariants,
-} from './select.variants';
-import { ZardIconComponent } from '../icon/icon.component';
+} from '@/shared/components/select/select.variants';
+import { mergeClasses, noopFn, transform } from '@/shared/utils/merge-classes';
 
 // Interface to avoid circular dependency
 interface SelectHost {
@@ -851,19 +849,11 @@ export class ZardSelectItemComponent {
 
 
 
-```angular-ts title="select.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { NgModule } from '@angular/core';
+```angular-ts title="select.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ZardSelectItemComponent } from '@/shared/components/select/select-item.component';
+import { ZardSelectComponent } from '@/shared/components/select/select.component';
 
-import { ZardSelectItemComponent } from './select-item.component';
-import { ZardSelectComponent } from './select.component';
-
-const components = [ZardSelectComponent, ZardSelectItemComponent];
-
-@NgModule({
-  imports: components,
-  exports: components,
-})
-export class ZardSelectModule {}
+export const ZardSelectImports = [ZardSelectComponent, ZardSelectItemComponent] as const;
 
 ```
 
