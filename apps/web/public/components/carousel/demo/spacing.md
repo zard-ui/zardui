@@ -4,10 +4,10 @@ import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/c
 import { mergeClasses } from '../../../utils/merge-classes';
 import { ZardCardComponent } from '../../card';
 import { ZardSegmentedComponent } from '../../segmented/segmented.component';
-import { ZardCarouselModule } from '../carousel.module';
+import { ZardCarouselImports } from '../carousel.imports';
 
 @Component({
-  imports: [ZardCarouselModule, ZardSegmentedComponent, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardSegmentedComponent, ZardCardComponent],
   template: `
     <div class="mx-auto w-3/4 max-w-4xl">
       <div class="mb-4 flex justify-center gap-2">

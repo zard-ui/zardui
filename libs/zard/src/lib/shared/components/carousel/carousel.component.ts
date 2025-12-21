@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -8,27 +8,28 @@ import {
   output,
   computed,
   viewChild,
+  type InputSignal,
+  type Signal,
 } from '@angular/core';
 
-import { type ClassValue } from 'clsx';
-import type { EmblaCarouselType, EmblaEventType, EmblaPluginType, EmblaOptionsType } from 'embla-carousel';
+import type { ClassValue } from 'clsx';
+import type { EmblaCarouselType, EmblaEventType, EmblaOptionsType, EmblaPluginType } from 'embla-carousel';
 import { EmblaCarouselDirective } from 'embla-carousel-angular';
 
+import { ZardButtonComponent } from '@/shared/components/button';
 import {
   carouselNextButtonVariants,
   carouselPreviousButtonVariants,
   carouselVariants,
   type ZardCarouselControlsVariants,
   type ZardCarouselOrientationVariants,
-} from './carousel.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
-
+} from '@/shared/components/carousel/carousel.variants';
+import { ZardIconComponent } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-carousel',
-  imports: [CommonModule, EmblaCarouselDirective, ZardButtonComponent, ZardIconComponent],
+  imports: [NgTemplateOutlet, EmblaCarouselDirective, ZardButtonComponent, ZardIconComponent],
   template: `
     <div class="relative">
       <div
@@ -110,8 +111,8 @@ export class ZardCarouselComponent {
 
   // Public signals and outputs
   readonly class = input<ClassValue>('');
-  readonly zOptions = input<EmblaOptionsType>({ loop: false });
-  readonly zPlugins = input<EmblaPluginType[]>([]);
+  readonly zOptions: InputSignal<EmblaOptionsType> = input<EmblaOptionsType>({ loop: false });
+  readonly zPlugins: InputSignal<EmblaPluginType[]> = input<EmblaPluginType[]>([]);
   readonly zOrientation = input<ZardCarouselOrientationVariants>('horizontal');
   readonly zControls = input<ZardCarouselControlsVariants>('button');
   readonly zInited = output<EmblaCarouselType>();
@@ -123,9 +124,10 @@ export class ZardCarouselComponent {
   protected readonly canScrollNext = signal<boolean>(false);
   protected readonly scrollSnaps = signal<number[]>([]);
   protected readonly subscribeToEvents: EmblaEventType[] = ['init', 'select', 'reInit'];
-  protected readonly options = computed(
-    () => ({ ...this.zOptions(), axis: this.zOrientation() === 'horizontal' ? 'x' : 'y' }) as EmblaOptionsType,
-  );
+  protected readonly options: Signal<EmblaOptionsType> = computed(() => ({
+    ...this.zOptions(),
+    axis: this.zOrientation() === 'horizontal' ? 'x' : 'y',
+  }));
 
   protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
 

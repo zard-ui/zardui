@@ -5,10 +5,10 @@ import { type EmblaCarouselType } from 'embla-carousel';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardCardComponent } from '../../card';
-import { ZardCarouselModule } from '../carousel.module';
+import { ZardCarouselImports } from '../carousel.imports';
 
 @Component({
-  imports: [ZardCarouselModule, ZardButtonComponent, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardButtonComponent, ZardCardComponent],
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <z-carousel [zOptions]="{ loop: false }" (zSelected)="onSlideChange()" (zInited)="onCarouselInit($event)">
@@ -24,9 +24,11 @@ import { ZardCarouselModule } from '../carousel.module';
       </z-carousel>
 
       <div class="mt-4 flex justify-center gap-2">
-        <button z-button zType="outline" (click)="goToPrevious()" [disabled]="!canScrollPrev()">Previous</button>
-        <button z-button zType="outline" (click)="goToNext()" [disabled]="!canScrollNext()">Next</button>
-        <button z-button zType="outline" (click)="goToSlide(2)">Go to Slide 3</button>
+        <button type="button" z-button zType="outline" (click)="goToPrevious()" [disabled]="!canScrollPrev()">
+          Previous
+        </button>
+        <button type="button" z-button zType="outline" (click)="goToNext()" [disabled]="!canScrollNext()">Next</button>
+        <button type="button" z-button zType="outline" (click)="goToSlide(2)">Go to Slide 3</button>
       </div>
 
       <div class="mt-4 space-y-2 text-center text-sm">

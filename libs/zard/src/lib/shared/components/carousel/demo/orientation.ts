@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardCardComponent } from '../../card';
-import { ZardCarouselModule } from '../carousel.module';
+import { ZardCarouselImports } from '../carousel.imports';
 
 @Component({
-  imports: [ZardCarouselModule, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardCardComponent],
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <z-carousel zOrientation="vertical" class="w-full">

@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="carousel.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { CommonModule } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,27 +11,28 @@ import {
   output,
   computed,
   viewChild,
+  type InputSignal,
+  type Signal,
 } from '@angular/core';
 
-import { type ClassValue } from 'clsx';
-import type { EmblaCarouselType, EmblaEventType, EmblaPluginType, EmblaOptionsType } from 'embla-carousel';
+import type { ClassValue } from 'clsx';
+import type { EmblaCarouselType, EmblaEventType, EmblaOptionsType, EmblaPluginType } from 'embla-carousel';
 import { EmblaCarouselDirective } from 'embla-carousel-angular';
 
+import { ZardButtonComponent } from '@/shared/components/button';
 import {
   carouselNextButtonVariants,
   carouselPreviousButtonVariants,
   carouselVariants,
   type ZardCarouselControlsVariants,
   type ZardCarouselOrientationVariants,
-} from './carousel.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
-
+} from '@/shared/components/carousel/carousel.variants';
+import { ZardIconComponent } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-carousel',
-  imports: [CommonModule, EmblaCarouselDirective, ZardButtonComponent, ZardIconComponent],
+  imports: [NgTemplateOutlet, EmblaCarouselDirective, ZardButtonComponent, ZardIconComponent],
   template: `
     <div class="relative">
       <div
@@ -113,8 +114,8 @@ export class ZardCarouselComponent {
 
   // Public signals and outputs
   readonly class = input<ClassValue>('');
-  readonly zOptions = input<EmblaOptionsType>({ loop: false });
-  readonly zPlugins = input<EmblaPluginType[]>([]);
+  readonly zOptions: InputSignal<EmblaOptionsType> = input<EmblaOptionsType>({ loop: false });
+  readonly zPlugins: InputSignal<EmblaPluginType[]> = input<EmblaPluginType[]>([]);
   readonly zOrientation = input<ZardCarouselOrientationVariants>('horizontal');
   readonly zControls = input<ZardCarouselControlsVariants>('button');
   readonly zInited = output<EmblaCarouselType>();
@@ -126,9 +127,10 @@ export class ZardCarouselComponent {
   protected readonly canScrollNext = signal<boolean>(false);
   protected readonly scrollSnaps = signal<number[]>([]);
   protected readonly subscribeToEvents: EmblaEventType[] = ['init', 'select', 'reInit'];
-  protected readonly options = computed(
-    () => ({ ...this.zOptions(), axis: this.zOrientation() === 'horizontal' ? 'x' : 'y' }) as EmblaOptionsType,
-  );
+  protected readonly options: Signal<EmblaOptionsType> = computed(() => ({
+    ...this.zOptions(),
+    axis: this.zOrientation() === 'horizontal' ? 'x' : 'y',
+  }));
 
   protected readonly dots = computed(() => new Array<string>(this.scrollSnaps().length).fill('.'));
 
@@ -275,9 +277,8 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, inject
 
 import { type ClassValue } from 'clsx';
 
-import { ZardCarouselComponent } from './carousel.component';
-import { carouselContentVariants } from './carousel.variants';
-
+import { ZardCarouselComponent } from '@/shared/components/carousel/carousel.component';
+import { carouselContentVariants } from '@/shared/components/carousel/carousel.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -310,14 +311,12 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, inject
 
 import { type ClassValue } from 'clsx';
 
-import { ZardCarouselComponent } from './carousel.component';
-import { carouselItemVariants } from './carousel.variants';
-
+import { ZardCarouselComponent } from '@/shared/components/carousel/carousel.component';
+import { carouselItemVariants } from '@/shared/components/carousel/carousel.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-carousel-item',
-  imports: [],
   template: `
     <ng-content />
   `,
@@ -345,6 +344,8 @@ export class ZardCarouselItemComponent {
 
 ```angular-ts title="carousel-plugins.service.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Injectable } from '@angular/core';
+
+import type { EmblaPluginType } from 'embla-carousel';
 
 /**
  * Service to create and manage Embla Carousel plugins
@@ -410,7 +411,7 @@ export class ZardCarouselPluginsService {
       dragging?: string;
       draggable?: string;
     } = {},
-  ) {
+  ): Promise<EmblaPluginType> {
     try {
       const ClassNamesModule = await import('embla-carousel-class-names');
       const ClassNames = ClassNamesModule.default;
@@ -445,31 +446,27 @@ export class ZardCarouselPluginsService {
 
 
 
-```angular-ts title="carousel.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { NgModule } from '@angular/core';
-
+```angular-ts title="carousel.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ZardCarouselContentComponent } from './carousel-content.component';
 import { ZardCarouselItemComponent } from './carousel-item.component';
 import { ZardCarouselComponent } from './carousel.component';
 
-const CAROUSEL_COMPONENTS = [ZardCarouselComponent, ZardCarouselContentComponent, ZardCarouselItemComponent];
-
-@NgModule({
-  imports: [CAROUSEL_COMPONENTS],
-  exports: [CAROUSEL_COMPONENTS],
-})
-export class ZardCarouselModule {}
+export const ZardCarouselImports = [
+  ZardCarouselComponent,
+  ZardCarouselContentComponent,
+  ZardCarouselItemComponent,
+] as const;
 
 ```
 
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './carousel.component';
-export * from './carousel-content.component';
-export * from './carousel-item.component';
-export * from './carousel-plugins.service';
-export * from './carousel.variants';
+export * from '@/shared/components/carousel/carousel.component';
+export * from '@/shared/components/carousel/carousel-content.component';
+export * from '@/shared/components/carousel/carousel-item.component';
+export * from '@/shared/components/carousel/carousel-plugins.service';
+export * from '@/shared/components/carousel/carousel.variants';
 
 ```
 

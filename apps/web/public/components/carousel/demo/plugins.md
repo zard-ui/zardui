@@ -6,10 +6,10 @@ import { type EmblaCarouselType, type EmblaPluginType } from 'embla-carousel';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardCardComponent } from '../../card';
 import { ZardCarouselPluginsService } from '../carousel-plugins.service';
-import { ZardCarouselModule } from '../carousel.module';
+import { ZardCarouselImports } from '../carousel.imports';
 
 @Component({
-  imports: [ZardCarouselModule, ZardButtonComponent, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardButtonComponent, ZardCardComponent],
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <div class="mb-4 flex gap-2">
