@@ -5,7 +5,7 @@ import { ZardBreadcrumbModule } from '@/shared/components/breadcrumb/breadcrumb.
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
-import { LayoutModule } from '@/shared/components/layout/layout.module';
+import { LayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 import { ZardTooltipModule } from '@/shared/components/tooltip';
@@ -19,7 +19,7 @@ interface MenuItem {
 @Component({
   selector: 'z-demo-layout-collapsible',
   imports: [
-    LayoutModule,
+    LayoutImports,
     ZardButtonComponent,
     ZardBreadcrumbModule,
     ZardMenuImports,
@@ -29,7 +29,6 @@ interface MenuItem {
     ZardAvatarComponent,
     ZardIconComponent,
   ],
-  standalone: true,
   template: `
     <!-- border and rounded-md are just for the demo purpose -->
     <z-layout class="overflow-hidden rounded-md border">
@@ -156,7 +155,7 @@ interface MenuItem {
       </z-sidebar>
 
       <!-- min-h-[200px] is just for the demo purpose to have a minimum height -->
-      <z-content class="min-h-[200px]">
+      <z-content class="min-h-50">
         <div class="flex items-center">
           <button type="button" z-button zType="ghost" zSize="sm" class="-ml-2" (click)="toggleSidebar()">
             <z-icon zType="panel-left" />

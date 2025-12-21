@@ -2,13 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { footerVariants } from './layout.variants';
-
+import { footerVariants } from '@/shared/components/layout/layout.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-footer',
-  standalone: true,
   template: `
     <footer [class]="classes()" [style.height.px]="zHeight()">
       <ng-content />

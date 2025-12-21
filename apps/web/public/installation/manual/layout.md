@@ -5,14 +5,12 @@ import { ChangeDetectionStrategy, Component, computed, contentChildren, input, V
 
 import type { ClassValue } from 'clsx';
 
-import { layoutVariants, type LayoutVariants } from './layout.variants';
-import { SidebarComponent } from './sidebar.component';
-
+import { layoutVariants, type LayoutVariants } from '@/shared/components/layout/layout.variants';
+import { SidebarComponent } from '@/shared/components/layout/sidebar.component';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-layout',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -25,7 +23,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 })
 export class LayoutComponent {
   readonly class = input<ClassValue>('');
-  readonly zDirection = input<LayoutVariants['zDirection']>('auto');
+  readonly zDirection = input<LayoutVariants>('auto');
 
   // Query for direct sidebar children to auto-detect layout direction
   private readonly sidebars = contentChildren(SidebarComponent, { descendants: false });
@@ -43,7 +41,7 @@ export class LayoutComponent {
   protected readonly classes = computed(() =>
     mergeClasses(
       layoutVariants({
-        zDirection: this.detectedDirection() as LayoutVariants['zDirection'],
+        zDirection: this.detectedDirection(),
       }),
       this.class(),
     ),
@@ -70,23 +68,20 @@ export const layoutVariants = cva('flex w-full min-h-0', {
     zDirection: 'auto',
   },
 });
-export type LayoutVariants = VariantProps<typeof layoutVariants>;
+export type LayoutVariants = NonNullable<VariantProps<typeof layoutVariants>['zDirection']>;
 
 // Header Variants
 export const headerVariants = cva('flex items-center px-4 bg-background border-b border-border shrink-0', {
   variants: {},
 });
-export type HeaderVariants = VariantProps<typeof headerVariants>;
 
 // Footer Variants
 export const footerVariants = cva('flex items-center px-6 bg-background border-t border-border shrink-0', {
   variants: {},
 });
-export type FooterVariants = VariantProps<typeof footerVariants>;
 
 // Content Variants
 export const contentVariants = cva('flex-1 flex flex-col overflow-auto bg-background p-6 min-h-dvh');
-export type ContentVariants = VariantProps<typeof contentVariants>;
 
 // Sidebar Variants
 export const sidebarVariants = cva(
@@ -113,13 +108,11 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { contentVariants } from './layout.variants';
-
+import { contentVariants } from '@/shared/components/layout/layout.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-content',
-  standalone: true,
   template: `
     <main>
       <ng-content />
@@ -147,13 +140,11 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { footerVariants } from './layout.variants';
-
+import { footerVariants } from '@/shared/components/layout/layout.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-footer',
-  standalone: true,
   template: `
     <footer [class]="classes()" [style.height.px]="zHeight()">
       <ng-content />
@@ -179,13 +170,11 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { headerVariants } from './layout.variants';
-
+import { headerVariants } from '@/shared/components/layout/layout.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-header',
-  standalone: true,
   template: `
     <header [class]="classes()" [style.height.px]="zHeight()">
       <ng-content />
@@ -207,27 +196,29 @@ export class HeaderComponent {
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './layout.component';
-export * from './header.component';
-export * from './footer.component';
-export * from './content.component';
-export * from './sidebar.component';
-export * from './layout.variants';
+export * from '@/shared/components/layout/layout.component';
+export * from '@/shared/components/layout/header.component';
+export * from '@/shared/components/layout/footer.component';
+export * from '@/shared/components/layout/content.component';
+export * from '@/shared/components/layout/sidebar.component';
+export * from '@/shared/components/layout/layout.variants';
 
 ```
 
 
 
-```angular-ts title="layout.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { NgModule } from '@angular/core';
+```angular-ts title="layout.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ContentComponent } from '@/shared/components/layout/content.component';
+import { FooterComponent } from '@/shared/components/layout/footer.component';
+import { HeaderComponent } from '@/shared/components/layout/header.component';
+import { LayoutComponent } from '@/shared/components/layout/layout.component';
+import {
+  SidebarComponent,
+  SidebarGroupComponent,
+  SidebarGroupLabelComponent,
+} from '@/shared/components/layout/sidebar.component';
 
-import { ContentComponent } from './content.component';
-import { FooterComponent } from './footer.component';
-import { HeaderComponent } from './header.component';
-import { LayoutComponent } from './layout.component';
-import { SidebarGroupLabelComponent, SidebarGroupComponent, SidebarComponent } from './sidebar.component';
-
-const LAYOUT_COMPONENTS = [
+export const LayoutImports = [
   LayoutComponent,
   HeaderComponent,
   FooterComponent,
@@ -235,13 +226,7 @@ const LAYOUT_COMPONENTS = [
   SidebarComponent,
   SidebarGroupComponent,
   SidebarGroupLabelComponent,
-];
-
-@NgModule({
-  imports: [LAYOUT_COMPONENTS],
-  exports: [LAYOUT_COMPONENTS],
-})
-export class LayoutModule {}
+] as const;
 
 ```
 
@@ -262,15 +247,13 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
 import {
   sidebarGroupLabelVariants,
   sidebarGroupVariants,
   sidebarTriggerVariants,
   sidebarVariants,
-} from './layout.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
-
+} from '@/shared/components/layout/layout.variants';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
@@ -359,7 +342,6 @@ export class SidebarComponent {
 
 @Component({
   selector: 'z-sidebar-group',
-  standalone: true,
   template: `
     <div [class]="classes()">
       <ng-content />
@@ -377,7 +359,6 @@ export class SidebarGroupComponent {
 
 @Component({
   selector: 'z-sidebar-group-label',
-  standalone: true,
   template: `
     <div [class]="classes()">
       <ng-content />

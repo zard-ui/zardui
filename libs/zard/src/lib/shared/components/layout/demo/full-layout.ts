@@ -1,42 +1,27 @@
-import { Component } from '@angular/core';
+import { NgOptimizedImage } from '@angular/common';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardSkeletonComponent } from '../../skeleton/skeleton.component';
-import { ContentComponent } from '../content.component';
-import { FooterComponent } from '../footer.component';
-import { HeaderComponent } from '../header.component';
-import { LayoutComponent } from '../layout.component';
-import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from '../sidebar.component';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardIconComponent } from '@/shared/components/icon';
+import { LayoutImports } from '@/shared/components/layout/layout.imports';
+import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'z-demo-layout-full',
-  imports: [
-    LayoutComponent,
-    HeaderComponent,
-    ContentComponent,
-    FooterComponent,
-    SidebarComponent,
-    SidebarGroupComponent,
-    SidebarGroupLabelComponent,
-    ZardButtonComponent,
-    ZardSkeletonComponent,
-    ZardIconComponent,
-  ],
-  standalone: true,
+  imports: [LayoutImports, ZardButtonComponent, ZardSkeletonComponent, ZardIconComponent, NgOptimizedImage],
   template: `
-    <z-layout class="min-h-[600px] overflow-hidden rounded-md border">
+    <z-layout class="min-h-150 overflow-hidden rounded-md border">
       <z-header>
         <div class="flex w-full items-center justify-between">
           <div class="flex items-center text-lg font-semibold">
-            <img src="images/zard.svg" alt="Logo" width="24" height="24" />
+            <img ngSrc="images/zard.svg" class="dark:invert" alt="Logo" width="24" height="24" />
             <span class="ml-2">ZardUI</span>
           </div>
           <div class="flex items-center gap-2">
-            <button z-button zType="ghost" zSize="sm">
+            <button type="button" z-button zType="ghost" zSize="sm">
               <z-icon zType="search" />
             </button>
-            <button z-button zType="ghost" zSize="sm">
+            <button type="button" z-button zType="ghost" zSize="sm">
               <z-icon zType="bell" />
             </button>
           </div>
@@ -44,19 +29,19 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
       </z-header>
 
       <z-layout>
-        <z-sidebar [zWidth]="200" class="!p-0">
+        <z-sidebar [zWidth]="200" class="p-0!">
           <nav class="flex h-full flex-col gap-2 p-4">
             <z-sidebar-group>
               <z-sidebar-group-label>Menu</z-sidebar-group-label>
-              <button z-button zType="secondary" class="justify-start">
+              <button type="button" z-button zType="secondary" class="justify-start">
                 <z-icon zType="house" class="mr-2" />
                 Dashboard
               </button>
-              <button z-button zType="ghost" class="justify-start">
+              <button type="button" z-button zType="ghost" class="justify-start">
                 <z-icon zType="layers" class="mr-2" />
                 Projects
               </button>
-              <button z-button zType="ghost" class="justify-start">
+              <button type="button" z-button zType="ghost" class="justify-start">
                 <z-icon zType="users" class="mr-2" />
                 Team
               </button>
@@ -65,7 +50,7 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
         </z-sidebar>
 
         <z-layout>
-          <z-content class="min-h-[200px]">
+          <z-content class="min-h-50">
             <div class="space-y-4">
               <z-skeleton class="h-32 w-full" />
               <z-skeleton class="h-48 w-full" />
@@ -80,6 +65,7 @@ import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } f
       </z-layout>
     </z-layout>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LayoutDemoFullComponent {
   year = new Date().getFullYear();

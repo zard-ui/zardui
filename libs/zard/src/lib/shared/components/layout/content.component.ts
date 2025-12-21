@@ -2,13 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { contentVariants } from './layout.variants';
-
+import { contentVariants } from '@/shared/components/layout/layout.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-content',
-  standalone: true,
   template: `
     <main>
       <ng-content />
