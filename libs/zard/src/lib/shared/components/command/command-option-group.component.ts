@@ -17,7 +17,6 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-option-group',
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()" role="group">

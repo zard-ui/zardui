@@ -1,9 +1,9 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 
-import { mergeClasses } from '../../../utils/merge-classes';
-import { ZardCardComponent } from '../../card';
-import { ZardSegmentedComponent } from '../../segmented/segmented.component';
-import { ZardCarouselImports } from '../carousel.imports';
+import { ZardCardComponent } from '@/shared/components/card';
+import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
+import { ZardSegmentedComponent } from '@/shared/components/segmented';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   imports: [ZardCarouselImports, ZardSegmentedComponent, ZardCardComponent],

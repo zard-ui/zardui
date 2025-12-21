@@ -25,7 +25,6 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 @Component({
   selector: 'z-sidebar',
   imports: [ZardStringTemplateOutletDirective, ZardIconComponent],
-  standalone: true,
   template: `
     <aside [class]="classes()" [style.width.px]="currentWidth()" [attr.data-collapsed]="zCollapsed()">
       <div class="flex-1 overflow-auto">

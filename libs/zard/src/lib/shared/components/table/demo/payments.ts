@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
@@ -15,7 +15,6 @@ export interface Payment {
 @Component({
   selector: 'z-demo-table-payments',
   imports: [ZardTableImports, ZardBadgeComponent, ZardButtonComponent, ZardIconComponent],
-  standalone: true,
   template: `
     <div class="w-full">
       <div class="overflow-hidden rounded-md border">
@@ -63,6 +62,7 @@ export interface Payment {
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTablePaymentsComponent {
   payments: Payment[] = [

@@ -71,7 +71,7 @@ export class ZardCommandOptionComponent {
     return mergeClasses(baseClasses, selectedClasses, this.class());
   });
 
-  protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants({})));
+  protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants()));
 
   protected readonly shouldShow = computed(() => {
     if (!this.commandComponent) {

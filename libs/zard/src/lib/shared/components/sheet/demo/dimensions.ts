@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardSheetService } from '../sheet.service';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
 
 @Component({
   selector: 'z-demo-sheet-dimensions',

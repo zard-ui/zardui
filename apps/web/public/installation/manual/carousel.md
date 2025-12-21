@@ -447,9 +447,9 @@ export class ZardCarouselPluginsService {
 
 
 ```angular-ts title="carousel.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ZardCarouselContentComponent } from './carousel-content.component';
-import { ZardCarouselItemComponent } from './carousel-item.component';
-import { ZardCarouselComponent } from './carousel.component';
+import { ZardCarouselContentComponent } from '@/shared/components/carousel/carousel-content.component';
+import { ZardCarouselItemComponent } from '@/shared/components/carousel/carousel-item.component';
+import { ZardCarouselComponent } from '@/shared/components/carousel/carousel.component';
 
 export const ZardCarouselImports = [
   ZardCarouselComponent,
@@ -467,6 +467,7 @@ export * from '@/shared/components/carousel/carousel-content.component';
 export * from '@/shared/components/carousel/carousel-item.component';
 export * from '@/shared/components/carousel/carousel-plugins.service';
 export * from '@/shared/components/carousel/carousel.variants';
+export * from '@/shared/components/carousel/carousel.imports';
 
 ```
 

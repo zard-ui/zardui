@@ -1,11 +1,11 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ResizableImports } from '@/shared/components/resizable/resizable.imports';
+import { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';
 
 @Component({
   selector: 'z-demo-resizable-vertical',
-  imports: [ResizableImports],
+  imports: [ZardResizableImports],
   standalone: true,
   template: `
     <z-resizable zLayout="vertical" class="h-100 w-125 max-w-md rounded-lg border">

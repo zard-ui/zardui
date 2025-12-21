@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardBadgeComponent } from '../../badge/badge.component';
-import { ZardSelectImports } from '../select.imports';
+import { ZardBadgeComponent } from '@/shared/components/badge';
+import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
   selector: 'z-demo-select-basic',

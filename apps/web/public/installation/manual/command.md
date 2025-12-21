@@ -606,7 +606,6 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-list',
-  standalone: true,
   template: `
     <div [class]="classes()" role="listbox" id="command-list">
       <ng-content />
@@ -646,7 +645,6 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-option-group',
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()" role="group">
@@ -772,7 +770,7 @@ export class ZardCommandOptionComponent {
     return mergeClasses(baseClasses, selectedClasses, this.class());
   });
 
-  protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants({})));
+  protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants()));
 
   protected readonly shouldShow = computed(() => {
     if (!this.commandComponent) {

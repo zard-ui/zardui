@@ -7,7 +7,6 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-list',
-  standalone: true,
   template: `
     <div [class]="classes()" role="listbox" id="command-list">
       <ng-content />

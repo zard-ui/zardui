@@ -2,10 +2,10 @@ import { ChangeDetectionStrategy, Component, type OnInit, inject, signal } from 
 
 import { type EmblaCarouselType, type EmblaPluginType } from 'embla-carousel';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardCardComponent } from '../../card';
-import { ZardCarouselPluginsService } from '../carousel-plugins.service';
-import { ZardCarouselImports } from '../carousel.imports';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardCardComponent } from '@/shared/components/card';
+import { ZardCarouselPluginsService } from '@/shared/components/carousel/carousel-plugins.service';
+import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
   imports: [ZardCarouselImports, ZardButtonComponent, ZardCardComponent],

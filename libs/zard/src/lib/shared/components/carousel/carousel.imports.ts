@@ -1,6 +1,6 @@
-import { ZardCarouselContentComponent } from './carousel-content.component';
-import { ZardCarouselItemComponent } from './carousel-item.component';
-import { ZardCarouselComponent } from './carousel.component';
+import { ZardCarouselContentComponent } from '@/shared/components/carousel/carousel-content.component';
+import { ZardCarouselItemComponent } from '@/shared/components/carousel/carousel-item.component';
+import { ZardCarouselComponent } from '@/shared/components/carousel/carousel.component';
 
 export const ZardCarouselImports = [
   ZardCarouselComponent,

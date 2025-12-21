@@ -202,6 +202,7 @@ export * from '@/shared/components/layout/footer.component';
 export * from '@/shared/components/layout/content.component';
 export * from '@/shared/components/layout/sidebar.component';
 export * from '@/shared/components/layout/layout.variants';
+export * from '@/shared/components/layout/layout.imports';
 
 ```
 
@@ -260,7 +261,6 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 @Component({
   selector: 'z-sidebar',
   imports: [ZardStringTemplateOutletDirective, ZardIconComponent],
-  standalone: true,
   template: `
     <aside [class]="classes()" [style.width.px]="currentWidth()" [attr.data-collapsed]="zCollapsed()">
       <div class="flex-1 overflow-auto">

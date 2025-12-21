@@ -140,7 +140,7 @@ describe('ZardResizablePanelComponent', () => {
     it('should apply default CSS classes', () => {
       expect(panelElement.classList).toContain('relative');
       expect(panelElement.classList).toContain('overflow-hidden');
-      expect(panelElement.classList).toContain('flex-shrink-0');
+      expect(panelElement.classList).toContain('shrink-0');
       expect(panelElement.classList).toContain('h-full');
     });
 
@@ -156,7 +156,7 @@ describe('ZardResizablePanelComponent', () => {
       fixture.detectChanges();
 
       expect(panelElement.classList).toContain('relative');
-      expect(panelElement.classList).toContain('flex-shrink-0');
+      expect(panelElement.classList).toContain('shrink-0');
       expect(panelElement.classList).toContain('bg-red-500');
       expect(panelElement.classList).toContain('p-4');
     });
@@ -211,7 +211,7 @@ describe('ZardResizablePanelComponent', () => {
 
   describe('Host Bindings', () => {
     it('should bind classes to host element', () => {
-      expect(panelElement.getAttribute('class')).toContain('flex');
+      expect(panelElement.getAttribute('class')).toContain('shrink-0');
     });
 
     it('should bind data-collapsed attribute to host element', () => {

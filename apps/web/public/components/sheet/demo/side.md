@@ -3,11 +3,10 @@ import { ChangeDetectionStrategy, Component, inject, signal, type AfterViewInit 
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardRadioComponent } from '../../radio/radio.component';
-import { ZardSheetImports } from '../sheet.imports';
-import { Z_SHEET_DATA, ZardSheetService } from '../sheet.service';
+import { ZardInputDirective } from '@/shared/components/input';
+import { ZardRadioComponent } from '@/shared/components/radio';
+import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
+import { Z_SHEET_DATA, ZardSheetService } from '@/shared/components/sheet/sheet.service';
 
 interface iSheetData {
   name: string;
@@ -17,7 +16,6 @@ interface iSheetData {
 @Component({
   selector: 'zard-demo-sheet-side',
   imports: [FormsModule, ReactiveFormsModule, ZardInputDirective],
-  standalone: true,
   template: `
     <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
       <div class="grid gap-3">
@@ -49,6 +47,7 @@ interface iSheetData {
       </div>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   exportAs: 'zardDemoSheetSide',
 })
 export class ZardDemoSheetSideInputComponent implements AfterViewInit {

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardCardComponent } from '../../card';
-import { ZardCarouselImports } from '../carousel.imports';
+import { ZardCardComponent } from '@/shared/components/card';
+import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
   imports: [ZardCarouselImports, ZardCardComponent],
@@ -12,7 +12,7 @@ import { ZardCarouselImports } from '../carousel.imports';
           @for (slide of slides; track slide) {
             <z-carousel-item>
               <z-card>
-                <div class="flex h-[100px] items-center justify-center text-4xl font-semibold md:h-[200px]">
+                <div class="flex h-25 items-center justify-center text-4xl font-semibold md:h-50">
                   {{ slide }}
                 </div>
               </z-card>

@@ -2,10 +2,10 @@
 import { ChangeDetectionStrategy, Component, inject, type AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardSheetImports } from '../sheet.imports';
-import { Z_SHEET_DATA, ZardSheetService } from '../sheet.service';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardInputDirective } from '@/shared/components/input';
+import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
+import { Z_SHEET_DATA, ZardSheetService } from '@/shared/components/sheet/sheet.service';
 
 interface iSheetData {
   name: string;
@@ -66,10 +66,10 @@ export class ZardDemoSheetBasicInputComponent implements AfterViewInit {
 
 @Component({
   imports: [ZardButtonComponent, ZardSheetImports],
-  standalone: true,
   template: `
     <button type="button" z-button zType="outline" (click)="openSheet()">Edit profile</button>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSheetBasicComponent {
   private sheetService = inject(ZardSheetService);
