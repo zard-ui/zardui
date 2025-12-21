@@ -11,11 +11,13 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandComponent } from './command.component';
-import { commandItemVariants, commandShortcutVariants, type ZardCommandItemVariants } from './command.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
-
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import {
+  commandItemVariants,
+  commandShortcutVariants,
+  type ZardCommandItemVariants,
+} from '@/shared/components/command/command.variants';
+import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -58,7 +60,7 @@ export class ZardCommandOptionComponent {
   readonly zIcon = input<ZardIcon>();
   readonly zShortcut = input<string>('');
   readonly zDisabled = input(false, { transform });
-  readonly variant = input<ZardCommandItemVariants['variant']>('default');
+  readonly variant = input<ZardCommandItemVariants>('default');
   readonly class = input<ClassValue>('');
 
   readonly isSelected = signal(false);

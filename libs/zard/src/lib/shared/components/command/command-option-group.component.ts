@@ -10,10 +10,9 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandOptionComponent } from './command-option.component';
-import { ZardCommandComponent } from './command.component';
-import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
-
+import { ZardCommandOptionComponent } from '@/shared/components/command/command-option.component';
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { commandGroupHeadingVariants, commandGroupVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({

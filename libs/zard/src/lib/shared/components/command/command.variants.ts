@@ -8,7 +8,7 @@ export const commandVariants = cva(
         sm: 'min-h-64',
         default: 'min-h-80',
         lg: 'min-h-96',
-        xl: 'min-h-[30rem]',
+        xl: 'min-h-120',
       },
     },
     defaultVariants: {
@@ -25,7 +25,7 @@ export const commandInputVariants = cva(
   },
 );
 
-export const commandListVariants = cva('max-h-[300px] overflow-y-auto overflow-x-hidden p-1', {
+export const commandListVariants = cva('max-h-75 overflow-y-auto overflow-x-hidden p-1', {
   variants: {},
   defaultVariants: {},
 });
@@ -71,5 +71,5 @@ export const commandShortcutVariants = cva('ml-auto text-xs tracking-widest text
   defaultVariants: {},
 });
 
-export type ZardCommandVariants = VariantProps<typeof commandVariants>;
-export type ZardCommandItemVariants = VariantProps<typeof commandItemVariants>;
+export type ZardCommandSizeVariants = NonNullable<VariantProps<typeof commandVariants>['size']>;
+export type ZardCommandItemVariants = NonNullable<VariantProps<typeof commandItemVariants>['variant']>;

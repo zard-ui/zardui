@@ -2,8 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { commandListVariants } from './command.variants';
-
+import { commandListVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -21,5 +20,5 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 export class ZardCommandListComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(commandListVariants({}), this.class()));
+  protected readonly classes = computed(() => mergeClasses(commandListVariants(), this.class()));
 }

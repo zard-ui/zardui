@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandComponent } from './command.component';
-import { commandSeparatorVariants } from './command.variants';
-
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { commandSeparatorVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -23,7 +22,7 @@ export class ZardCommandDividerComponent {
 
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(commandSeparatorVariants({}), this.class()));
+  protected readonly classes = computed(() => mergeClasses(commandSeparatorVariants(), this.class()));
 
   protected readonly shouldShow = computed(() => {
     if (!this.commandComponent) {

@@ -15,11 +15,10 @@ import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angu
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandInputComponent } from './command-input.component';
-import { ZardCommandOptionComponent } from './command-option.component';
-import { commandVariants, type ZardCommandVariants } from './command.variants';
-import type { ZardIcon } from '../icon/icons';
-
+import { ZardCommandInputComponent } from '@/shared/components/command/command-input.component';
+import { ZardCommandOptionComponent } from '@/shared/components/command/command-option.component';
+import { commandVariants, type ZardCommandSizeVariants } from '@/shared/components/command/command.variants';
+import type { ZardIcon } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardCommandOption {
@@ -81,7 +80,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
   readonly commandInput = contentChild(ZardCommandInputComponent);
   readonly optionComponents = contentChildren(ZardCommandOptionComponent, { descendants: true });
 
-  readonly size = input<ZardCommandVariants['size']>('default');
+  readonly size = input<ZardCommandSizeVariants>('default');
   readonly class = input<ClassValue>('');
 
   readonly zCommandChange = output<ZardCommandOption>();

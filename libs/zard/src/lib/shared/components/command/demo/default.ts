@@ -1,14 +1,15 @@
 import { Component } from '@angular/core';
 
+import { ZardCommandImports } from '@/shared/components/command/command.imports';
+
 import type { ZardCommandOption } from '../command.component';
-import { ZardCommandModule } from '../command.module';
 
 @Component({
   selector: 'z-demo-command-default',
-  imports: [ZardCommandModule],
+  imports: [ZardCommandImports],
   standalone: true,
   template: `
-    <z-command class="md:min-w-[500px]" (zCommandSelected)="handleCommand($event)">
+    <z-command class="md:min-w-125" (zCommandSelected)="handleCommand($event)">
       <z-command-input placeholder="Search actions, files, and more..." />
       <z-command-list>
         <z-command-empty>No commands found.</z-command-empty>
