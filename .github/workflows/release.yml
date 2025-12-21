@@ -1,84 +1,104 @@
-name: Release and Publish
+name: release
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no actual publish)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    # Skip if commit is from the bot (avoid infinite loop)
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.author.name, 'github-actions') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+
+  test:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Test
+        run: npm test
+
   release:
     runs-on: ubuntu-latest
+    needs:
+      - build
+      - test
     permissions:
       contents: write
       id-token: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
         run: |
-          git config --global user.email "zardui.adm@gmail.com"
-          git config --global user.name "ZardUI Bot"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Install dependencies
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Extract version from tag
-        id: version_info
+      - name: Build Registry
+        run: npm run build:registry
+
+      - name: Commit Registry Changes
         run: |
-          TAG_NAME="${GITHUB_REF#refs/tags/}"
-          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+          git add -A
+          git diff --staged --quiet || git commit -m "🔧 chore: update registry [skip ci]"
 
-          # Extract version from tag vX.X.X
-          if [[ "$TAG_NAME" == v* ]]; then
-            VERSION="${TAG_NAME#v}"
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
-          else
-            echo "Invalid tag format. Expected vX.X.X" >&2
-            exit 1
-          fi
-
-      - name: Update package.json version
+      - name: Build Libraries
         run: |
-          # Update CLI package.json with tag version
-          node -e "const fs = require('fs'); const pkg = require('./packages/cli/package.json'); pkg.version = '${{ steps.version_info.outputs.version }}'; fs.writeFileSync('./packages/cli/package.json', JSON.stringify(pkg, null, 2) + '\n');"
+          npx nx run zard:build
+          npx nx run cli:build
 
-          # Update main package.json with tag version
-          node -e "const fs = require('fs'); const pkg = require('./package.json'); pkg.version = '${{ steps.version_info.outputs.version }}'; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');"
+      - name: Release (Dry Run)
+        if: ${{ inputs.dry_run == true }}
+        run: npm run release:dry-run
 
-      - name: Build CLI
-        run: npx nx build cli
-
-      - name: Verify build output
-        run: |
-          PACKAGE_VERSION=$(node -p "require('./packages/cli/dist/package.json').version")
-          echo "Built package version: $PACKAGE_VERSION"
-          echo "Tag version: ${{ steps.version_info.outputs.version }}"
-
-      - name: Publish CLI to npm
-        run: |
-          cd packages/cli/dist
-          npm publish --provenance --access public
+      - name: Release
+        if: ${{ inputs.dry_run != true }}
+        run: npm run release
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_SECRET }}
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: 🎉 Publish Summary
-        run: |
-          echo "## ✅ Package Published Successfully!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📦 Published to npm" >> $GITHUB_STEP_SUMMARY
-          echo "**[@ngzard/ui@${{ steps.version_info.outputs.version }}](https://www.npmjs.com/package/@ngzard/ui/v/${{ steps.version_info.outputs.version }})**" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🚀 Installation" >> $GITHUB_STEP_SUMMARY
-          echo '```bash' >> $GITHUB_STEP_SUMMARY
-          echo "npx @ngzard/ui@${{ steps.version_info.outputs.version }} init" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+      - name: Push changes
+        if: ${{ inputs.dry_run != true }}
+        run: git push --follow-tags

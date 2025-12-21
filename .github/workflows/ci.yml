@@ -1,0 +1,74 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+  pull_request: {}
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      pull-requests: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Node v22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Lint commit messages
+        uses: wagoid/commitlint-github-action@v5
+        with:
+          failOnWarnings: true
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Lint
+        run: npx nx run-many --target=lint --all
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+
+  test:
+    runs-on: ubuntu-latest
+    needs:
+      - build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Test
+        run: npm test
