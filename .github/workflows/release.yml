@@ -11,6 +11,16 @@ on:
         required: false
         default: false
         type: boolean
+      force_bump:
+        description: 'Force version bump type'
+        required: false
+        default: 'auto'
+        type: choice
+        options:
+          - auto
+          - patch
+          - minor
+          - major
 
 jobs:
   build:
@@ -75,30 +85,66 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build Registry
-        run: npm run build:registry
-
-      - name: Commit Registry Changes
-        run: |
-          git add -A
-          git diff --staged --quiet || git commit -m "🔧 chore: update registry [skip ci]"
-
-      - name: Build Libraries
-        run: |
-          npx nx run zard:build
-          npx nx run cli:build
-
       - name: Release (Dry Run)
         if: ${{ inputs.dry_run == true }}
         run: npm run release:dry-run
 
-      - name: Release
-        if: ${{ inputs.dry_run != true }}
-        run: npm run release
+      # Step 1: Version bump
+      - name: Version Bump (Auto)
+        if: ${{ inputs.dry_run != true && (inputs.force_bump == 'auto' || inputs.force_bump == '') }}
+        run: |
+          # Try conventional commits first
+          npx nx release version --yes 2>&1 || true
+
+          # Check if version changed
+          if git diff --quiet libs/zard/package.json packages/cli/package.json; then
+            echo "No version bump from conventional commits, forcing patch..."
+            npx nx release version patch --yes
+          fi
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Version Bump (Forced)
+        if: ${{ inputs.dry_run != true && inputs.force_bump != 'auto' && inputs.force_bump != '' }}
+        run: npx nx release version ${{ inputs.force_bump }} --yes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 2: Generate changelog
+      - name: Generate Changelog
+        if: ${{ inputs.dry_run != true }}
+        run: npx nx release changelog --yes
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 3: Build registry (after version bump so it has updated versions)
+      - name: Build Registry
+        if: ${{ inputs.dry_run != true }}
+        run: npm run build:registry
+
+      # Step 4: Commit all changes (version bump + changelog + registry)
+      - name: Commit All Changes
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          git add -A
+          git diff --staged --quiet || git commit -m "🔧 chore: update registry and prepare release [skip ci]"
+
+      # Step 5: Build libraries (after version bump so CLI copies updated package.json)
+      - name: Build Libraries
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          npx nx run zard:build
+          npx nx run cli:build
+
+      # Step 6: Publish
+      - name: Publish to npm
+        if: ${{ inputs.dry_run != true }}
+        run: npx nx release publish --yes
+        env:
+          NPM_CONFIG_PROVENANCE: true
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Step 7: Push changes and tags
       - name: Push changes
         if: ${{ inputs.dry_run != true }}
         run: git push --follow-tags

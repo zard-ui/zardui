@@ -54,7 +54,15 @@
     "publish": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["npx nx run cli:build", "cd packages/cli && npm publish"],
+        "commands": ["cd packages/cli/dist && npm publish --access public"],
+        "parallel": false
+      },
+      "dependsOn": ["build"]
+    },
+    "nx-release-publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["cd packages/cli/dist && npm publish --access public"],
         "parallel": false
       },
       "dependsOn": ["build"]
