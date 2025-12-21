@@ -1,5 +1,5 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, DestroyRef, inject, signal, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal, type OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
@@ -13,9 +13,9 @@ import { BlocksService, type BlockCategory } from '../../services/blocks.service
 
 @Component({
   selector: 'z-blocks',
-  standalone: true,
   imports: [BlockContainerComponent, RouterLink, CategoryTabsComponent],
   templateUrl: './blocks.page.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlocksPage implements OnInit {
   private readonly seoService = inject(SeoService);

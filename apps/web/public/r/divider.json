@@ -10,8 +10,5 @@
       "name": "divider.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const dividerVariants = cva('bg-border block', {\n  variants: {\n    zOrientation: {\n      horizontal: 'h-px w-full',\n      vertical: 'w-px h-full inline-block',\n    },\n    zSpacing: {\n      none: '',\n      sm: '',\n      default: '',\n      lg: '',\n    },\n  },\n  defaultVariants: {\n    zOrientation: 'horizontal',\n    zSpacing: 'default',\n  },\n  compoundVariants: [\n    {\n      zOrientation: 'horizontal',\n      zSpacing: 'sm',\n      class: 'my-2',\n    },\n    {\n      zOrientation: 'horizontal',\n      zSpacing: 'default',\n      class: 'my-4',\n    },\n    {\n      zOrientation: 'horizontal',\n      zSpacing: 'lg',\n      class: 'my-8',\n    },\n    {\n      zOrientation: 'vertical',\n      zSpacing: 'sm',\n      class: 'mx-2',\n    },\n    {\n      zOrientation: 'vertical',\n      zSpacing: 'default',\n      class: 'mx-4',\n    },\n    {\n      zOrientation: 'vertical',\n      zSpacing: 'lg',\n      class: 'mx-8',\n    },\n  ],\n});\n\nexport type ZardDividerVariants = VariantProps<typeof dividerVariants>;\n"
     }
-  ],
-  "registryDependencies": [
-    "core"
   ]
 }

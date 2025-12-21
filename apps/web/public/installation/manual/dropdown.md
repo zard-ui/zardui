@@ -560,7 +560,7 @@ import {
 
 import { filter, type Subscription } from 'rxjs';
 
-import { noopFun } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/merge-classes';
 
 @Injectable({
   providedIn: 'root',
@@ -577,7 +577,7 @@ export class ZardDropdownService {
   private renderer!: Renderer2;
   private readonly focusedIndex = signal<number>(-1);
   private outsideClickSubscription!: Subscription;
-  private unlisten: () => void = noopFun;
+  private unlisten: () => void = noopFn;
 
   readonly isOpen = signal(false);
 

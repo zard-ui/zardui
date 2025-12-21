@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
@@ -7,7 +7,6 @@ import type { FileTreeNode, BlockFile } from '../block-container/block-container
 
 @Component({
   selector: 'z-file-tree',
-  standalone: true,
   imports: [CommonModule, FileTreeComponent, ZardIconComponent],
   template: `
     @for (node of nodes(); track node.path) {
@@ -41,12 +40,13 @@ import type { FileTreeNode, BlockFile } from '../block-container/block-container
           [class]="selectedFilePath() === node.file.path ? 'bg-muted-foreground/15 text-sidebar-accent-foreground' : ''"
           class="flex w-full items-center gap-2 rounded px-2 py-1 text-left text-sm transition-colors"
         >
-          <z-icon zType="file" zSize="sm" class="flex-shrink-0" />
+          <z-icon zType="file" zSize="sm" class="shrink-0" />
           <span class="truncate">{{ node.name }}</span>
         </button>
       }
     }
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FileTreeComponent {
   readonly nodes = input.required<FileTreeNode[]>();

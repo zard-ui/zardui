@@ -27,7 +27,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { generateId, mergeClasses, noopFun } from '@/shared/utils/merge-classes';
+import { generateId, mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
@@ -47,8 +47,8 @@ export class ZardAlertDialogOptions<T> {
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
   zOkText?: string | null;
-  zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
-  zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
+  zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
+  zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
   zTitle?: string | TemplateRef<T>;
   zViewContainerRef?: ViewContainerRef;
   zWidth?: string;

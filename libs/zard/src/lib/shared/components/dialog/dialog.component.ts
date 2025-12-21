@@ -23,6 +23,8 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+
 import type { ZardDialogRef } from './dialog-ref';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
@@ -30,7 +32,6 @@ import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
 
-import { mergeClasses, noopFun } from '@/shared/utils/merge-classes';
 // Used by the NgModule provider definition
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -48,8 +49,8 @@ export class ZardDialogOptions<T, U> {
   zOkDisabled?: boolean;
   zOkIcon?: ZardIcon;
   zOkText?: string | null;
-  zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
-  zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
+  zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
+  zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
   zTitle?: string | TemplateRef<T>;
   zViewContainerRef?: ViewContainerRef;
   zWidth?: string;

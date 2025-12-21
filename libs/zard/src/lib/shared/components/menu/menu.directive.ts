@@ -13,6 +13,7 @@ import {
   type OnDestroy,
   type OnInit,
   PLATFORM_ID,
+  TemplateRef,
   untracked,
 } from '@angular/core';
 
@@ -50,7 +51,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   private closeTimeout: ReturnType<typeof setTimeout> | null = null;
   private readonly cleanupFunctions: Array<() => void> = [];
 
-  readonly zMenuTriggerFor = input.required();
+  readonly zMenuTriggerFor = input.required<TemplateRef<void>>();
   readonly zDisabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
   readonly zTrigger = input<ZardMenuTrigger>('click');
   readonly zHoverDelay = input<number>(100);
@@ -102,7 +103,9 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
     const element = this.elementRef.nativeElement;
 
     this.addEventListenerWithCleanup(element, 'mouseenter', () => {
-      if (this.zDisabled()) return;
+      if (this.zDisabled()) {
+        return;
+      }
 
       this.cancelScheduledClose();
       this.menuManager.registerHoverMenu(this);
@@ -129,7 +132,9 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
   private setupMenuContentListeners(): void {
     const menuContent = document.querySelector(ZardMenuDirective.MENU_CONTENT_SELECTOR);
-    if (!menuContent) return;
+    if (!menuContent) {
+      return;
+    }
 
     this.addEventListenerWithCleanup(menuContent, 'mouseenter', () => this.cancelScheduledClose());
     this.addEventListenerWithCleanup(menuContent, 'mouseleave', event =>
@@ -153,7 +158,9 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private shouldKeepMenuOpen(relatedTarget: Element | null): boolean {
-    if (!relatedTarget) return false;
+    if (!relatedTarget) {
+      return false;
+    }
 
     const isMovingToTrigger = this.elementRef.nativeElement.contains(relatedTarget);
     const isMovingToMenu = relatedTarget.closest(ZardMenuDirective.MENU_CONTENT_SELECTOR);

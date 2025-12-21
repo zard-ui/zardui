@@ -4,11 +4,12 @@ import { By } from '@angular/platform-browser';
 
 import { screen } from '@testing-library/angular';
 
+import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+
 import { ZardContextMenuDirective } from './context-menu.directive';
-import { ZardMenuContentDirective } from './menu-content.directive';
 
 @Component({
-  imports: [ZardContextMenuDirective, ZardMenuContentDirective],
+  imports: [ZardMenuImports],
   template: `
     <div z-context-menu [zContextMenuTriggerFor]="contextMenu" class="test-area" data-testid="context-menu-trigger">
       Right click here

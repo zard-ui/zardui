@@ -754,6 +754,8 @@ import {
   signal,
 } from '@angular/core';
 
+import { mergeClasses, noopFn, transform } from '@/shared/utils/merge-classes';
+
 import {
   selectItemIconVariants,
   selectItemVariants,
@@ -761,8 +763,6 @@ import {
   type ZardSelectSizeVariants,
 } from './select.variants';
 import { ZardIconComponent } from '../icon/icon.component';
-
-import { mergeClasses, noopFun, transform } from '@/shared/utils/merge-classes';
 
 // Interface to avoid circular dependency
 interface SelectHost {
@@ -795,7 +795,7 @@ interface SelectHost {
     '[attr.aria-selected]': 'isSelected()',
     '(click)': 'onClick()',
     '(mouseenter)': 'onMouseEnter()',
-    '(keydown.{tab}.prevent)': 'noopFun',
+    '(keydown.{tab}.prevent)': 'noopFn',
   },
 })
 export class ZardSelectItemComponent {
@@ -806,7 +806,7 @@ export class ZardSelectItemComponent {
   readonly class = input<string>('');
 
   private readonly select = signal<SelectHost | null>(null);
-  noopFun = noopFun;
+  noopFn = noopFn;
 
   readonly label = linkedSignal<string>(() => {
     const element = this.elementRef.nativeElement;

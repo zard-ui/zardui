@@ -16,6 +16,7 @@ import {
   type OnDestroy,
   type OnInit,
   PLATFORM_ID,
+  TemplateRef,
   untracked,
 } from '@angular/core';
 
@@ -53,7 +54,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   private closeTimeout: ReturnType<typeof setTimeout> | null = null;
   private readonly cleanupFunctions: Array<() => void> = [];
 
-  readonly zMenuTriggerFor = input.required();
+  readonly zMenuTriggerFor = input.required<TemplateRef<void>>();
   readonly zDisabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
   readonly zTrigger = input<ZardMenuTrigger>('click');
   readonly zHoverDelay = input<number>(100);
@@ -105,7 +106,9 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
     const element = this.elementRef.nativeElement;
 
     this.addEventListenerWithCleanup(element, 'mouseenter', () => {
-      if (this.zDisabled()) return;
+      if (this.zDisabled()) {
+        return;
+      }
 
       this.cancelScheduledClose();
       this.menuManager.registerHoverMenu(this);
@@ -132,7 +135,9 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
   private setupMenuContentListeners(): void {
     const menuContent = document.querySelector(ZardMenuDirective.MENU_CONTENT_SELECTOR);
-    if (!menuContent) return;
+    if (!menuContent) {
+      return;
+    }
 
     this.addEventListenerWithCleanup(menuContent, 'mouseenter', () => this.cancelScheduledClose());
     this.addEventListenerWithCleanup(menuContent, 'mouseleave', event =>
@@ -156,7 +161,9 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private shouldKeepMenuOpen(relatedTarget: Element | null): boolean {
-    if (!relatedTarget) return false;
+    if (!relatedTarget) {
+      return false;
+    }
 
     const isMovingToTrigger = this.elementRef.nativeElement.contains(relatedTarget);
     const isMovingToMenu = relatedTarget.closest(ZardMenuDirective.MENU_CONTENT_SELECTOR);
@@ -277,18 +284,10 @@ export type ZardMenuItemTypeVariants = NonNullable<VariantProps<typeof menuItemV
 
 ```angular-ts title="context-menu.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { CdkContextMenuTrigger } from '@angular/cdk/menu';
-import {
-  afterNextRender,
-  DestroyRef,
-  Directive,
-  ElementRef,
-  inject,
-  INJECTOR,
-  input,
-  runInInjectionContext,
-  TemplateRef,
-} from '@angular/core';
+import { DestroyRef, Directive, DOCUMENT, ElementRef, inject, input, TemplateRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { noopFn } from '@/shared/utils/merge-classes';
 
 @Directive({
   selector: '[z-context-menu]',
@@ -299,7 +298,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     '[attr.aria-haspopup]': "'menu'",
     '[attr.aria-expanded]': 'cdkTrigger.isOpen()',
     '[attr.data-state]': "cdkTrigger.isOpen() ? 'open': 'closed'",
-    '(contextmenu)': 'handleContextMenu()',
+    '(contextmenu)': 'noopFn()',
     '(keydown)': 'handleKeyDown($event)',
   },
   hostDirectives: [
@@ -312,12 +311,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class ZardContextMenuDirective {
   protected readonly cdkTrigger = inject(CdkContextMenuTrigger, { host: true });
   private readonly destroyRef = inject(DestroyRef);
+  private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject(ElementRef);
-  private readonly injector = inject(INJECTOR);
 
   readonly zContextMenuTriggerFor = input.required<TemplateRef<void>>();
-
-  private lastOpenMethod: 'mouse' | 'keyboard' | '' = '';
+  noopFn = noopFn;
 
   constructor() {
     this.cdkTrigger.menuPosition = [
@@ -331,14 +329,9 @@ export class ZardContextMenuDirective {
     this.cdkTrigger.opened.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.attachCloseListeners());
   }
 
-  protected handleContextMenu(): void {
-    this.lastOpenMethod = 'mouse';
-  }
-
   protected handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) {
       event.preventDefault();
-      this.lastOpenMethod = 'keyboard';
       this.open();
     }
   }
@@ -346,21 +339,6 @@ export class ZardContextMenuDirective {
   private open(coordinates?: { x: number; y: number }): void {
     const coords = coordinates || this.getDefaultCoordinates();
     this.cdkTrigger.open(coords);
-
-    if (this.lastOpenMethod === 'keyboard') {
-      this.focusMenuContent();
-    }
-  }
-
-  private focusMenuContent(): void {
-    runInInjectionContext(this.injector, () => {
-      afterNextRender(() => {
-        const menuContent = document.querySelector('.cdk-overlay-pane [z-menu-content]') as HTMLElement;
-        if (menuContent) {
-          menuContent.focus();
-        }
-      });
-    });
   }
 
   private getDefaultCoordinates(): { x: number; y: number } {
@@ -378,20 +356,24 @@ export class ZardContextMenuDirective {
       }
     };
 
-    window.addEventListener('scroll', closeMenu);
-    window.addEventListener('resize', closeMenu);
+    const window = this.document.defaultView;
+    if (window) {
+      window.addEventListener('scroll', closeMenu, { passive: true });
+      window.addEventListener('resize', closeMenu);
 
-    const cleanup = () => {
-      window.removeEventListener('scroll', closeMenu);
-      window.removeEventListener('resize', closeMenu);
-    };
+      const cleanup = () => {
+        window.removeEventListener('scroll', closeMenu);
+        window.removeEventListener('resize', closeMenu);
+      };
 
-    this.destroyRef.onDestroy(cleanup);
+      const unregisterFn = this.destroyRef.onDestroy(cleanup);
 
-    const menuClosed = this.cdkTrigger.closed.subscribe(() => {
-      cleanup();
-      menuClosed.unsubscribe();
-    });
+      const menuClosed = this.cdkTrigger.closed.subscribe(() => {
+        unregisterFn();
+        cleanup();
+        menuClosed.unsubscribe();
+      });
+    }
   }
 }
 
@@ -416,8 +398,9 @@ export * from '@/shared/components/menu/menu-label.component';
 
 
 ```angular-ts title="menu-content.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { CdkTrapFocus } from '@angular/cdk/a11y';
 import { CdkMenu } from '@angular/cdk/menu';
-import { computed, Directive, input } from '@angular/core';
+import { computed, Directive, inject, input, type OnInit } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -429,13 +412,20 @@ import { menuContentVariants } from './menu.variants';
   selector: '[z-menu-content]',
   host: {
     '[class]': 'classes()',
+    tabindex: '0',
   },
-  hostDirectives: [CdkMenu],
+  hostDirectives: [CdkMenu, CdkTrapFocus],
 })
-export class ZardMenuContentDirective {
+export class ZardMenuContentDirective implements OnInit {
+  private cdkTrapFocus = inject(CdkTrapFocus);
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(menuContentVariants(), this.class()));
+
+  ngOnInit(): void {
+    this.cdkTrapFocus.enabled = true;
+    this.cdkTrapFocus.autoCapture = true;
+  }
 }
 
 ```
@@ -535,6 +525,7 @@ export class ZardMenuItemDirective {
   onClick(event: Event) {
     if (this.disabledState()) {
       event.preventDefault();
+      event.stopPropagation();
     }
   }
 }

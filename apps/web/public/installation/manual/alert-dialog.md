@@ -30,7 +30,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { generateId, mergeClasses, noopFun } from '@/shared/utils/merge-classes';
+import { generateId, mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
@@ -50,8 +50,8 @@ export class ZardAlertDialogOptions<T> {
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
   zOkText?: string | null;
-  zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFun;
-  zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFun;
+  zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
+  zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
   zTitle?: string | TemplateRef<T>;
   zViewContainerRef?: ViewContainerRef;
   zWidth?: string;
@@ -188,7 +188,7 @@ import { filter, Subject, takeUntil } from 'rxjs';
 
 import type { OnClickCallback, ZardAlertDialogComponent, ZardAlertDialogOptions } from './alert-dialog.component';
 
-import { noopFun } from '@/shared/utils/merge-classes';
+import { noopFn } from '@/shared/utils/merge-classes';
 
 export class ZardAlertDialogRef<T = unknown> {
   private readonly destroy$ = new Subject<void>();
@@ -220,7 +220,7 @@ export class ZardAlertDialogRef<T = unknown> {
     }
     this.waitForTransitionEnd(element)
       .then(() => this.dispose())
-      .catch(noopFun);
+      .catch(noopFn);
   }
 
   private handleCancel(): void {

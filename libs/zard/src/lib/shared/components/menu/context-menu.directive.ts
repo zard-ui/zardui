@@ -1,16 +1,8 @@
 import { CdkContextMenuTrigger } from '@angular/cdk/menu';
-import {
-  afterNextRender,
-  DestroyRef,
-  Directive,
-  ElementRef,
-  inject,
-  INJECTOR,
-  input,
-  runInInjectionContext,
-  TemplateRef,
-} from '@angular/core';
+import { DestroyRef, Directive, DOCUMENT, ElementRef, inject, input, TemplateRef } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+
+import { noopFn } from '@/shared/utils/merge-classes';
 
 @Directive({
   selector: '[z-context-menu]',
@@ -21,7 +13,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     '[attr.aria-haspopup]': "'menu'",
     '[attr.aria-expanded]': 'cdkTrigger.isOpen()',
     '[attr.data-state]': "cdkTrigger.isOpen() ? 'open': 'closed'",
-    '(contextmenu)': 'handleContextMenu()',
+    '(contextmenu)': 'noopFn()',
     '(keydown)': 'handleKeyDown($event)',
   },
   hostDirectives: [
@@ -34,12 +26,11 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 export class ZardContextMenuDirective {
   protected readonly cdkTrigger = inject(CdkContextMenuTrigger, { host: true });
   private readonly destroyRef = inject(DestroyRef);
+  private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject(ElementRef);
-  private readonly injector = inject(INJECTOR);
 
   readonly zContextMenuTriggerFor = input.required<TemplateRef<void>>();
-
-  private lastOpenMethod: 'mouse' | 'keyboard' | '' = '';
+  noopFn = noopFn;
 
   constructor() {
     this.cdkTrigger.menuPosition = [
@@ -53,14 +44,9 @@ export class ZardContextMenuDirective {
     this.cdkTrigger.opened.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.attachCloseListeners());
   }
 
-  protected handleContextMenu(): void {
-    this.lastOpenMethod = 'mouse';
-  }
-
   protected handleKeyDown(event: KeyboardEvent): void {
     if (event.key === 'ContextMenu' || (event.shiftKey && event.key === 'F10')) {
       event.preventDefault();
-      this.lastOpenMethod = 'keyboard';
       this.open();
     }
   }
@@ -68,21 +54,6 @@ export class ZardContextMenuDirective {
   private open(coordinates?: { x: number; y: number }): void {
     const coords = coordinates || this.getDefaultCoordinates();
     this.cdkTrigger.open(coords);
-
-    if (this.lastOpenMethod === 'keyboard') {
-      this.focusMenuContent();
-    }
-  }
-
-  private focusMenuContent(): void {
-    runInInjectionContext(this.injector, () => {
-      afterNextRender(() => {
-        const menuContent = document.querySelector('.cdk-overlay-pane [z-menu-content]') as HTMLElement;
-        if (menuContent) {
-          menuContent.focus();
-        }
-      });
-    });
   }
 
   private getDefaultCoordinates(): { x: number; y: number } {
@@ -100,19 +71,23 @@ export class ZardContextMenuDirective {
       }
     };
 
-    window.addEventListener('scroll', closeMenu);
-    window.addEventListener('resize', closeMenu);
+    const window = this.document.defaultView;
+    if (window) {
+      window.addEventListener('scroll', closeMenu, { passive: true });
+      window.addEventListener('resize', closeMenu);
 
-    const cleanup = () => {
-      window.removeEventListener('scroll', closeMenu);
-      window.removeEventListener('resize', closeMenu);
-    };
+      const cleanup = () => {
+        window.removeEventListener('scroll', closeMenu);
+        window.removeEventListener('resize', closeMenu);
+      };
 
-    this.destroyRef.onDestroy(cleanup);
+      const unregisterFn = this.destroyRef.onDestroy(cleanup);
 
-    const menuClosed = this.cdkTrigger.closed.subscribe(() => {
-      cleanup();
-      menuClosed.unsubscribe();
-    });
+      const menuClosed = this.cdkTrigger.closed.subscribe(() => {
+        unregisterFn();
+        cleanup();
+        menuClosed.unsubscribe();
+      });
+    }
   }
 }

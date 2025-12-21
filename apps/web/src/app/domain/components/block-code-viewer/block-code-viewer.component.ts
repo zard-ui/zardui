@@ -1,4 +1,4 @@
-import { Component, input, signal, computed } from '@angular/core';
+import { Component, input, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
@@ -8,9 +8,9 @@ import { FileTreeComponent } from '../file-tree/file-tree.component';
 
 @Component({
   selector: 'z-block-code-viewer',
-  standalone: true,
   imports: [SimpleCodeHighlightComponent, FileTreeComponent, ZardIconComponent],
   templateUrl: './block-code-viewer.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockCodeViewerComponent {
   readonly files = input.required<BlockFile[]>();

@@ -16,7 +16,7 @@ export function generateId(prefix = ''): string {
   return prefix ? `${prefix}-${id}` : id;
 }
 
-export const noopFun = () => void 0;
+export const noopFn = () => void 0;
 
 export const isElementContentTruncated = (element: HTMLElement | undefined): boolean => {
   if (!element) {

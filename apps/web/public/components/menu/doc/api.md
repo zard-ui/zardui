@@ -6,8 +6,6 @@
 
 Label component for grouping menu items.
 
-### Properties
-
 | Property  | Description                     | Type         | Default |
 | --------- | ------------------------------- | ------------ | ------- |
 | `[class]` | Additional CSS classes          | `ClassValue` | `''`    |
@@ -16,8 +14,6 @@ Label component for grouping menu items.
 ### z-menu-shortcut <span class="api-type-label component">Component</span>
 
 Component for displaying keyboard shortcuts in menu items.
-
-### Properties
 
 | Property  | Description            | Type         | Default |
 | --------- | ---------------------- | ------------ | ------- |

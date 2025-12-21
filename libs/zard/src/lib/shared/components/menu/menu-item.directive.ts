@@ -90,6 +90,7 @@ export class ZardMenuItemDirective {
   onClick(event: Event) {
     if (this.disabledState()) {
       event.preventDefault();
+      event.stopPropagation();
     }
   }
 }
