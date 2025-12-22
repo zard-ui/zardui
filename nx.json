@@ -2,7 +2,7 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "defaultBase": "master",
   "release": {
-    "projects": ["libs/zard", "packages/cli"],
+    "projects": ["packages/cli"],
     "projectsRelationship": "fixed",
     "releaseTagPattern": "v{version}",
     "git": {
@@ -26,12 +26,7 @@
       "projectChangelogs": false
     },
     "version": {
-      "preVersionCommand": "npx tsx scripts/normalize-commits.cts",
-      "generatorOptions": {
-        "fallbackCurrentVersionResolver": "disk",
-        "currentVersionResolver": "git-tag",
-        "specifierSource": "conventional-commits"
-      }
+      "preVersionCommand": "npx tsx scripts/normalize-commits.cts"
     },
     "conventionalCommits": {
       "types": {

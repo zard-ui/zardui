@@ -60,12 +60,10 @@
       "dependsOn": ["build"]
     },
     "nx-release-publish": {
-      "executor": "nx:run-commands",
+      "executor": "@nx/js:release-publish",
       "options": {
-        "commands": ["cd packages/cli/dist && npm publish --access public"],
-        "parallel": false
-      },
-      "dependsOn": ["build"]
+        "packageRoot": "packages/cli/dist"
+      }
     }
   }
 }
