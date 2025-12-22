@@ -122,9 +122,13 @@ jobs:
           git commit -m "🔖 chore(release): publish v${VERSION} [skip ci]"
           git tag -a "v${VERSION}" -m "v${VERSION}"
 
+      - name: Rebuild CLI for Publish
+        if: ${{ inputs.dry_run != true }}
+        run: npx nx run cli:build
+
       - name: Publish to npm
         if: ${{ inputs.dry_run != true }}
-        run: npx nx release publish
+        run: npm run publish:cli
         env:
           NPM_CONFIG_PROVENANCE: true
 
