@@ -54,7 +54,7 @@
     "publish": {
       "executor": "nx:run-commands",
       "options": {
-        "commands": ["cd packages/cli/dist && npm publish --access public"],
+        "commands": ["cd packages/cli/dist && npm publish --access public --provenance"],
         "parallel": false
       },
       "dependsOn": ["build"]
