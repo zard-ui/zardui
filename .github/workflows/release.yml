@@ -78,6 +78,9 @@ jobs:
           cache: 'npm'
           registry-url: 'https://registry.npmjs.org'
 
+      - name: Update npm for OIDC support
+        run: npm install -g npm@latest
+
       - name: Install Dependencies
         run: npm ci
 
@@ -128,10 +131,7 @@ jobs:
 
       - name: Publish to npm
         if: ${{ inputs.dry_run != true }}
-        run: npm run publish:cli
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NPM_CONFIG_PROVENANCE: true
+        run: cd packages/cli/dist && npm publish --provenance --access public
 
       - name: Push changes
         if: ${{ inputs.dry_run != true }}
