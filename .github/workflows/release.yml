@@ -130,6 +130,7 @@ jobs:
         if: ${{ inputs.dry_run != true }}
         run: npm run publish:cli
         env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: true
 
       - name: Push changes
