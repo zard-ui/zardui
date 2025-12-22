@@ -98,12 +98,16 @@ jobs:
         if: ${{ inputs.dry_run == true }}
         run: npx nx release ${{ inputs.version || 'prerelease' }} --preid=beta --first-release --skip-publish --dry-run
         env:
+          CI: true
+          NX_INTERACTIVE: false
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Release
         if: ${{ inputs.dry_run != true }}
         run: npx nx release ${{ inputs.version || 'prerelease' }} --preid=beta --first-release
         env:
+          CI: true
+          NX_INTERACTIVE: false
           NPM_CONFIG_PROVENANCE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
