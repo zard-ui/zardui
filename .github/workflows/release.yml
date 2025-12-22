@@ -108,7 +108,9 @@ jobs:
 
       - name: Release Changelog
         if: ${{ inputs.dry_run != true }}
-        run: npx nx release changelog --first-release --git-commit=false --git-tag=false
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          npx nx release changelog $VERSION --first-release --git-commit=false --git-tag=false
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
