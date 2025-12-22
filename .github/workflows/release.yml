@@ -131,7 +131,14 @@ jobs:
 
       - name: Publish to npm
         if: ${{ inputs.dry_run != true }}
-        run: cd packages/cli/dist && npm publish --provenance --access public
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          if [[ "$VERSION" == *"-"* ]]; then
+            TAG="beta"
+          else
+            TAG="latest"
+          fi
+          cd packages/cli/dist && npm publish --provenance --access public --tag $TAG
 
       - name: Push changes
         if: ${{ inputs.dry_run != true }}

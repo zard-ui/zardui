@@ -5,7 +5,7 @@
   "type": "module",
   "main": "index.js",
   "bin": {
-    "zard-cli": "./index.js"
+    "zard-cli": "./dist/index.js"
   },
   "keywords": [
     "ngzard",
