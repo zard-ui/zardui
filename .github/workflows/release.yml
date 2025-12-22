@@ -11,26 +11,21 @@ on:
         required: false
         default: false
         type: boolean
-      force_bump:
-        description: 'Force version bump type'
+      version:
+        description: 'Version bump type'
         required: false
-        default: 'auto'
+        default: 'prerelease'
         type: choice
         options:
-          - auto
+          - prerelease
           - patch
           - minor
           - major
 
-env:
-  # Disable nx release interactive prompts
-  NX_NON_NATIVE_HASHER: true
-
 jobs:
   build:
     runs-on: ubuntu-latest
-    # Skip if commit is from the bot (avoid infinite loop)
-    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') && !contains(github.event.head_commit.author.name, 'github-actions') }}
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -46,8 +41,7 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-    needs:
-      - build
+    needs: build
     steps:
       - uses: actions/checkout@v4
         with:
@@ -63,9 +57,7 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
-    needs:
-      - build
-      - test
+    needs: test
     permissions:
       contents: write
       id-token: write
@@ -89,71 +81,32 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Release (Dry Run)
-        if: ${{ inputs.dry_run == true }}
-        run: npx nx release --dry-run --verbose
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Step 1: Version bump
-      - name: Version Bump (Auto)
-        if: ${{ inputs.dry_run != true && (inputs.force_bump == 'auto' || inputs.force_bump == '') }}
-        run: |
-          # Try conventional commits first, skip git operations for now
-          npx nx release version --git-commit=false --git-tag=false --verbose || true
-
-          # Check if version changed
-          if git diff --quiet libs/zard/package.json packages/cli/package.json 2>/dev/null; then
-            echo "No version bump from conventional commits, forcing patch..."
-            npx nx release version patch --git-commit=false --git-tag=false --verbose
-          fi
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Version Bump (Forced)
-        if: ${{ inputs.dry_run != true && inputs.force_bump != 'auto' && inputs.force_bump != '' }}
-        run: npx nx release version ${{ inputs.force_bump }} --git-commit=false --git-tag=false --verbose
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Step 2: Generate changelog
-      - name: Generate Changelog
-        if: ${{ inputs.dry_run != true }}
-        run: npx nx release changelog --git-commit=false --git-tag=false --verbose
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      # Step 3: Build registry (after version bump so it has updated versions)
       - name: Build Registry
-        if: ${{ inputs.dry_run != true }}
         run: npm run build:registry
 
-      # Step 4: Commit all changes (version bump + changelog + registry)
-      - name: Commit All Changes
-        if: ${{ inputs.dry_run != true }}
+      - name: Commit Registry Changes
         run: |
           git add -A
-          # Get new version from package.json
-          VERSION=$(node -p "require('./libs/zard/package.json').version")
-          git diff --staged --quiet || git commit -m "🔖 chore(release): publish v${VERSION} [skip ci]"
-          git tag -a "v${VERSION}" -m "v${VERSION}" || true
+          git diff --staged --quiet || git commit -m "🔧 chore: update registry [skip ci]"
 
-      # Step 5: Build libraries (after version bump so CLI copies updated package.json)
       - name: Build Libraries
-        if: ${{ inputs.dry_run != true }}
         run: |
           npx nx run zard:build
           npx nx run cli:build
 
-      # Step 6: Publish
-      - name: Publish to npm
+      - name: Release (Dry Run)
+        if: ${{ inputs.dry_run == true }}
+        run: npx nx release ${{ inputs.version || 'prerelease' }} --preid=beta --first-release --skip-publish --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release
         if: ${{ inputs.dry_run != true }}
-        run: npx nx release publish --verbose
+        run: npx nx release ${{ inputs.version || 'prerelease' }} --preid=beta --first-release
         env:
           NPM_CONFIG_PROVENANCE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # Step 7: Push changes and tags
       - name: Push changes
         if: ${{ inputs.dry_run != true }}
         run: git push --follow-tags

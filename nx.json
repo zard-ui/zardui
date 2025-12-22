@@ -7,9 +7,10 @@
     "releaseTagPattern": "v{version}",
     "git": {
       "commit": true,
-      "commitMessage": "🔖 chore(release): publish v{version}",
+      "commitMessage": "🔖 chore(release): publish v{version} [skip ci]",
       "tag": true,
-      "tagMessage": "v{version}"
+      "tagMessage": "v{version}",
+      "stageChanges": true
     },
     "changelog": {
       "automaticFromRef": true,
