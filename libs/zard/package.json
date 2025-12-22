@@ -1,6 +1,6 @@
 {
   "name": "ui",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "peerDependencies": {
     "@angular/core": "20.3.14",
     "class-variance-authority": "^0.7.1",
