@@ -151,3 +151,76 @@ jobs:
           gh release create "v${VERSION}" --title "v${VERSION}" --generate-notes --latest
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Discord
+        if: ${{ inputs.dry_run != true && success() }}
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+
+          # Determine if prerelease
+          if [[ "$VERSION" == *"-"* ]]; then
+            RELEASE_TYPE="🧪 Pre-release"
+            COLOR=16776960  # Yellow
+            NPM_TAG="beta"
+          else
+            RELEASE_TYPE="🚀 Stable Release"
+            COLOR=5763719   # Green
+            NPM_TAG="latest"
+          fi
+
+          # Get commit count since last tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -n "$PREV_TAG" ]; then
+            COMMIT_COUNT=$(git rev-list --count ${PREV_TAG}..HEAD)
+          else
+            COMMIT_COUNT="N/A"
+          fi
+
+          # Build Discord webhook payload
+          PAYLOAD=$(cat <<EOF
+          {
+            "embeds": [{
+              "title": "📦 ZardUI CLI v${VERSION}",
+              "description": "${RELEASE_TYPE} published successfully!",
+              "color": ${COLOR},
+              "fields": [
+                {
+                  "name": "📋 Version",
+                  "value": "\`${VERSION}\`",
+                  "inline": true
+                },
+                {
+                  "name": "🏷️ npm Tag",
+                  "value": "\`${NPM_TAG}\`",
+                  "inline": true
+                },
+                {
+                  "name": "📝 Commits",
+                  "value": "${COMMIT_COUNT}",
+                  "inline": true
+                },
+                {
+                  "name": "📥 Install",
+                  "value": "\`\`\`bash\nnpx zard-cli@${VERSION} init\n\`\`\`",
+                  "inline": false
+                },
+                {
+                  "name": "🔗 Links",
+                  "value": "[npm](https://www.npmjs.com/package/zard-cli/v/${VERSION}) • [GitHub Release](https://github.com/${{ github.repository }}/releases/tag/v${VERSION}) • [Changelog](https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md)",
+                  "inline": false
+                }
+              ],
+              "footer": {
+                "text": "Released by ${{ github.actor }} via GitHub Actions"
+              },
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            }]
+          }
+          EOF
+          )
+
+          curl -H "Content-Type: application/json" \
+               -d "$PAYLOAD" \
+               "${{ secrets.DISCORD_WEBHOOK_URL }}"
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
