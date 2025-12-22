@@ -26,11 +26,11 @@
   "homepage": "https://zardui.com/",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zard-ui/zardui.git",
+    "url": "git+https://github.com/Luizgomess/zardui-ci-tests",
     "directory": "packages/cli"
   },
   "bugs": {
-    "url": "https://github.com/zard-ui/zardui/issues"
+    "url": "https://github.com/Luizgomess/zardui-ci-tests/issues"
   },
   "engines": {
     "node": ">=20"
