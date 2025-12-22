@@ -73,15 +73,15 @@
     <z-accordion zType="multiple" [zDefaultValue]="['base']" class="space-y-1">
       @for (group of colorGroups; track group.key) {
         <z-accordion-item [zValue]="group.key" [zTitle]="group.label">
-          <div class="space-y-4 py-3">
-            @for (colorKey of group.colors; track colorKey) {
+          @for (colorKey of group.colors; track colorKey) {
+            <div class="py-3">
               <app-color-picker-field
                 [colorKey]="colorKey"
                 [value]="currentColors()[colorKey]"
                 (valueChange)="onColorChange(colorKey, $event)"
               />
-            }
-          </div>
+            </div>
+          }
         </z-accordion-item>
       }
     </z-accordion>

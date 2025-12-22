@@ -14,11 +14,18 @@ export type DarkModeOptions = EDarkModes.LIGHT | EDarkModes.DARK | EDarkModes.SY
 export class ZardDarkMode implements OnDestroy {
   private readonly document = inject(DOCUMENT);
 
-  private static readonly STORAGE_KEY = 'theme';
+  private static readonly STORAGE_KEY = 'darkMode';
   private handleThemeChange = (event: MediaQueryListEvent) => this.updateThemeMode(event.matches);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly themeSignal = signal<DarkModeOptions>(EDarkModes.SYSTEM);
   private darkModeQuery?: MediaQueryList;
+
+  constructor() {
+    if (this.isBrowser) {
+      this.darkModeQuery = this.getDarkModeQuery();
+      this.initializeTheme();
+    }
+  }
 
   readonly theme = this.themeSignal.asReadonly();
 
@@ -60,7 +67,6 @@ export class ZardDarkMode implements OnDestroy {
     // whenever we apply theme call listener removal
     this.handleSystemChanges(false);
 
-    this.darkModeQuery ??= this.getDarkModeQuery();
     this.updateThemeMode(this.isDarkMode());
     if (theme === EDarkModes.SYSTEM) {
       this.handleSystemChanges(true);
@@ -77,6 +83,22 @@ export class ZardDarkMode implements OnDestroy {
       return value;
     }
     return undefined;
+  }
+
+  private initializeTheme(): void {
+    const storedTheme = this.getStoredTheme();
+    if (storedTheme) {
+      this.themeSignal.set(storedTheme);
+    }
+
+    // Initialize theme based on current system preferences if no stored theme or if system mode
+    if (!storedTheme || storedTheme === EDarkModes.SYSTEM) {
+      this.updateThemeMode(this.isDarkMode());
+      // Start listening for system changes if we're using system mode (either explicitly or by default)
+      this.handleSystemChanges(true);
+    } else {
+      this.updateThemeMode(storedTheme === EDarkModes.DARK);
+    }
   }
 
   private getThemeMode(isDarkMode: boolean): EDarkModes.LIGHT | EDarkModes.DARK {
@@ -104,7 +126,7 @@ export class ZardDarkMode implements OnDestroy {
     }
 
     const isSystemDarkMode = this.darkModeQuery?.matches ?? false;
-    const stored = localStorage.getItem(ZardDarkMode.STORAGE_KEY);
+    const stored = this.themeSignal();
     return stored === EDarkModes.DARK || (stored === EDarkModes.SYSTEM && isSystemDarkMode);
   }
 

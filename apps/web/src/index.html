@@ -60,22 +60,19 @@
     </script>
 
     <script>
-      (function () {
-        const html = document.documentElement;
-
-        try {
-          const theme = localStorage.theme;
-          const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
-
-          const isSystem = theme === 'system' || !('theme' in localStorage);
-          const isDark = theme === 'dark' || (isSystem && prefersDark);
-          const resolvedTheme = isDark ? 'dark' : 'light';
-          html.classList.toggle('dark', isDark);
-          html.classList.toggle('dark-theme', isDark);
-          html.setAttribute('data-theme', theme ?? 'system');
-          html.style.colorScheme = resolvedTheme;
-        } catch (_) {}
-      })();
+      let hasBody = !!document && !!document.body;
+      let hasDocument = !!document && !!document.documentElement;
+      let systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (localStorage.darkMode === 'dark' && hasDocument) {
+        document.documentElement.classList.add('dark');
+      } else if (localStorage.darkMode === 'light' && hasDocument) {
+        document.documentElement.classList.remove('dark');
+      } else if (systemDarkMode && hasDocument) {
+        localStorage.setItem('darkMode', 'system');
+        document.documentElement.classList.add('dark');
+      } else if (hasDocument) {
+        document.documentElement.classList.remove('dark');
+      }
     </script>
 
     <base href="/" />
