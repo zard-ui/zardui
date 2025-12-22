@@ -1,3 +1,7 @@
+## 1.0.0-beta.6 (2025-12-22)
+
+This was a version bump only, there were no code changes.
+
 ## 1.0.0-beta.4 (2025-12-22)
 
 This was a version bump only, there were no code changes.
