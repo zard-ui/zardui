@@ -5,17 +5,9 @@
     "projects": ["packages/cli"],
     "projectsRelationship": "fixed",
     "releaseTagPattern": "v{version}",
-    "git": {
-      "commit": true,
-      "commitMessage": "🔖 chore(release): publish v{version} [skip ci]",
-      "tag": true,
-      "tagMessage": "v{version}",
-      "stageChanges": true
-    },
     "changelog": {
       "automaticFromRef": true,
       "workspaceChangelog": {
-        "createRelease": "github",
         "file": "CHANGELOG.md",
         "renderOptions": {
           "authors": true,

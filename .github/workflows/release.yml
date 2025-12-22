@@ -98,19 +98,42 @@ jobs:
         if: ${{ inputs.dry_run == true }}
         run: npx nx release ${{ inputs.version || 'prerelease' }} --preid=beta --first-release --skip-publish --dry-run
         env:
-          CI: true
-          NX_INTERACTIVE: false
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Release
+      - name: Release Version
         if: ${{ inputs.dry_run != true }}
-        run: npx nx release ${{ inputs.version || 'prerelease' }} --preid=beta --first-release
+        run: npx nx release version ${{ inputs.version || 'prerelease' }} --preid=beta --first-release --git-commit=false --git-tag=false
         env:
-          CI: true
-          NX_INTERACTIVE: false
-          NPM_CONFIG_PROVENANCE: true
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release Changelog
+        if: ${{ inputs.dry_run != true }}
+        run: npx nx release changelog --first-release --git-commit=false --git-tag=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and Tag Release
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          git add -A
+          git commit -m "🔖 chore(release): publish v${VERSION} [skip ci]"
+          git tag -a "v${VERSION}" -m "v${VERSION}"
+
+      - name: Publish to npm
+        if: ${{ inputs.dry_run != true }}
+        run: npx nx release publish
+        env:
+          NPM_CONFIG_PROVENANCE: true
 
       - name: Push changes
         if: ${{ inputs.dry_run != true }}
         run: git push --follow-tags
+
+      - name: Create GitHub Release
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          gh release create "v${VERSION}" --title "v${VERSION}" --generate-notes --latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
