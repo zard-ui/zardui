@@ -155,6 +155,11 @@ jobs:
       - name: Notify Discord
         if: ${{ inputs.dry_run != true && success() }}
         run: |
+          if [ -z "$DISCORD_WEBHOOK_URL" ]; then
+            echo "⚠️ DISCORD_WEBHOOK_URL not configured, skipping notification"
+            exit 0
+          fi
+
           VERSION=$(node -p "require('./packages/cli/package.json').version")
 
           # Determine if prerelease
