@@ -19,14 +19,6 @@ export class ZardDarkMode implements OnDestroy {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly themeSignal = signal<DarkModeOptions>(EDarkModes.SYSTEM);
   private darkModeQuery?: MediaQueryList;
-
-  constructor() {
-    if (this.isBrowser) {
-      this.darkModeQuery = this.getDarkModeQuery();
-      this.initializeTheme();
-    }
-  }
-
   readonly theme = this.themeSignal.asReadonly();
 
   readonly themeMode = computed(() => {
@@ -38,6 +30,13 @@ export class ZardDarkMode implements OnDestroy {
 
   ngOnDestroy(): void {
     this.handleSystemChanges(false);
+  }
+
+  init() {
+    if (this.isBrowser) {
+      this.darkModeQuery = this.getDarkModeQuery();
+      this.initializeTheme();
+    }
   }
 
   toggleTheme(targetMode?: DarkModeOptions): void {

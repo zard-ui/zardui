@@ -53,6 +53,7 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
     });
 
     darkModeService = TestBed.inject(ZardDarkMode);
+    darkModeService.init();
   });
 
   afterEach(() => {
@@ -105,7 +106,7 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
     expect(newService.themeMode()).toBe(EDarkModes.DARK);
   });
 
-  it('listens for system appearance changes from constructor when default is SYSTEM', () => {
+  it('listens for system appearance changes from init when default is SYSTEM', () => {
     TestBed.resetTestingModule();
     TestBed.configureTestingModule({
       providers: [ZardDarkMode],
@@ -115,6 +116,7 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
     mockMediaQueryList.addEventListener.mockClear();
 
     const newService = TestBed.inject(ZardDarkMode);
+    newService.init();
 
     expect(newService.themeMode()).toBe(EDarkModes.LIGHT);
     expect(mockMediaQueryList.addEventListener).toHaveBeenCalled();
