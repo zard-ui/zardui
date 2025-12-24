@@ -10,6 +10,7 @@
   --footer-height: calc(var(--spacing) * 14);
   --sidebar-width: 16rem;
   --font-geist-sans: 'Geist', sans-serif;
+  --font-geist-mono: 'Geist Mono', monospace;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);

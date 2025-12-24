@@ -54,6 +54,7 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
 
     darkModeService = TestBed.inject(ZardDarkMode);
     darkModeService.init();
+    TestBed.tick();
   });
 
   afterEach(() => {
@@ -76,6 +77,7 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
 
   it('stops listening for system changes when theme changed from SYSTEM', () => {
     darkModeService.toggleTheme(EDarkModes.SYSTEM);
+    TestBed.tick();
     mockMediaQueryList.addEventListener.mockClear();
 
     darkModeService.toggleTheme(EDarkModes.LIGHT);

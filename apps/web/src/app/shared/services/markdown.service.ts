@@ -49,7 +49,14 @@ export class MarkdownService {
             node.properties = {
               ...node.properties,
               style: [],
-              class: ['scroll-m-28', 'font-heading', 'text-xl', 'font-medium', 'tracking-tight', '[&:not(:first-child)]:mt-6'],
+              class: [
+                'scroll-m-28',
+                'font-heading',
+                'text-xl',
+                'font-medium',
+                'tracking-tight',
+                '[&:not(:first-child)]:mt-6',
+              ],
             };
           }
 
@@ -85,7 +92,16 @@ export class MarkdownService {
               // Only style inline code - block code is handled by rehypeEnhancedCode
               node.properties = {
                 ...node.properties,
-                class: ['relative', 'rounded', 'bg-muted', 'px-[0.3rem]', 'py-[0.2rem]', 'font-mono', 'text-sm', 'font-semibold'],
+                class: [
+                  'relative',
+                  'rounded',
+                  'bg-muted',
+                  'px-[0.3rem]',
+                  'py-[0.2rem]',
+                  'font-mono',
+                  'text-sm',
+                  'font-semibold',
+                ],
               };
             }
           }
