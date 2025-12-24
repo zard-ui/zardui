@@ -3,7 +3,7 @@ import { existsSync } from 'fs';
 import * as fsPromises from 'fs/promises';
 import * as path from 'path';
 
-const DARK_MODE_IMPORT = "import { ZardDarkMode } from '../../services/dark-mode';";
+const DARK_MODE_IMPORT = "import { ZardDarkMode } from '@/shared/services/dark-mode';";
 const DARK_MODE_INITIALIZER = 'provideAppInitializer(() => inject(ZardDarkMode).init())';
 
 export async function updateProvideZardWithDarkMode(

@@ -15,11 +15,9 @@ const THEME_SCRIPT_CONTENT = `
 
           const isSystem = theme === 'system' || !('theme' in localStorage);
           const isDark = theme === 'dark' || (isSystem && prefersDark);
-          const resolvedTheme = isDark ? 'dark' : 'light';
+          html.classList.add('scheme-light-dark');
           html.classList.toggle('dark', isDark);
-          html.classList.toggle('dark-theme', isDark);
           html.setAttribute('data-theme', theme ?? 'system');
-          html.style.colorScheme = resolvedTheme;
         } catch (_) {}
       })();
     </script>

@@ -113,6 +113,7 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
 
     const newService = TestBed.inject(ZardDarkMode);
     newService.init();
+    TestBed.tick();
 
     expect(newService.themeMode()).toBe(EDarkModes.DARK);
   });

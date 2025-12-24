@@ -1,6 +1,6 @@
 import { MediaMatcher } from '@angular/cdk/layout';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { DestroyRef, Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, PLATFORM_ID, computed, effect, inject, signal } from '@angular/core';
 
 export enum EDarkModes {
   LIGHT = 'light',
@@ -18,7 +18,7 @@ export class ZardDarkMode {
   private readonly query = inject(MediaMatcher).matchMedia('(prefers-color-scheme: dark)');
 
   private static readonly STORAGE_KEY = 'theme';
-  private handleThemeChange = (event: MediaQueryListEvent) => this.updateThemeMode(event.matches);
+  private handleThemeChange = (event: MediaQueryListEvent) => this.updateThemeMode(event.matches, EDarkModes.SYSTEM);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly themeSignal = signal<DarkModeOptions>(EDarkModes.SYSTEM);
 
@@ -32,6 +32,12 @@ export class ZardDarkMode {
 
   constructor() {
     if (this.isBrowser) {
+      effect(() => {
+        const theme = this.themeSignal();
+        const isDarkMode = this.isDarkModeActive(theme);
+        this.updateThemeMode(isDarkMode, theme);
+      });
+
       this.destroyRef.onDestroy(() => this.handleSystemChanges(false));
     }
   }
@@ -71,10 +77,7 @@ export class ZardDarkMode {
     }
 
     if (!storedTheme || storedTheme === EDarkModes.SYSTEM) {
-      this.updateThemeMode(this.isDarkModeActive(EDarkModes.SYSTEM));
       this.handleSystemChanges();
-    } else {
-      this.updateThemeMode(storedTheme === EDarkModes.DARK);
     }
   }
 
@@ -85,8 +88,6 @@ export class ZardDarkMode {
 
     localStorage.setItem(ZardDarkMode.STORAGE_KEY, theme);
     this.themeSignal.set(theme);
-
-    this.updateThemeMode(this.isDarkModeActive(theme));
 
     if (theme === EDarkModes.SYSTEM) {
       this.handleSystemChanges();
@@ -107,16 +108,10 @@ export class ZardDarkMode {
     return undefined;
   }
 
-  private getThemeMode(isDarkMode: boolean): EDarkModes.LIGHT | EDarkModes.DARK {
-    return isDarkMode ? EDarkModes.DARK : EDarkModes.LIGHT;
-  }
-
-  private updateThemeMode(isDarkMode: boolean): void {
-    const themeMode = this.getThemeMode(isDarkMode);
+  private updateThemeMode(isDarkMode: boolean, themeMode: EDarkModes): void {
     const html = this.document.documentElement;
     html.classList.toggle('dark', isDarkMode);
     html.setAttribute('data-theme', themeMode);
-    html.style.colorScheme = themeMode;
   }
 
   private isDarkModeActive(currentTheme: DarkModeOptions): boolean {
