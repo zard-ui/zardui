@@ -4,30 +4,7 @@
     <meta charset="utf-8" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="preload"
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
-      as="style"
-      onload="
-        this.onload = null;
-        this.rel = 'stylesheet';
-      "
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
-      media="print"
-      onload="this.media = 'all'"
-      crossorigin="anonymous"
-    />
-    <noscript>
-      <link
-        href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap"
-        rel="stylesheet"
-        crossorigin="anonymous"
-      />
-    </noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
 
     <link rel="icon" href="/site/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/site/apple-touch-icon.png" />
@@ -82,90 +59,23 @@
       }
     </script>
 
-    <style>
-      /* Critical CSS to prevent layout shifts */
-      html,
-      body {
-        font-family:
-          system-ui,
-          -apple-system,
-          BlinkMacSystemFont,
-          'Segoe UI',
-          Roboto,
-          Oxygen,
-          Ubuntu,
-          Cantarell,
-          sans-serif;
-        margin: 0;
-        padding: 0;
-        min-height: 100%;
-      }
-
-      /* Ensure dark mode is applied immediately */
-      .dark {
-        color-scheme: dark;
-      }
-
-      /* Hide content until fonts are loaded to prevent FOUTC */
-      .font-loading {
-        opacity: 0;
-        transition: opacity 0.3s ease-in-out;
-      }
-
-      .font-loaded {
-        opacity: 1;
-      }
-    </style>
-
     <script>
-      // Safe Font loading strategy - extended timeout for better reliability
-      document.documentElement.classList.add('font-loading');
+      (function () {
+        const html = document.documentElement;
 
-      // Extended timeout to handle slow connections and browser inactivity
-      const FONT_LOAD_TIMEOUT = 2000; // 2 seconds - safer than 1 second
-      let fontLoadTimeoutId;
+        try {
+          const theme = localStorage.theme;
+          const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false;
 
-      // Check if fonts are already loaded
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready
-          .then(function () {
-            // Clear timeout if fonts load successfully to prevent duplicate execution
-            if (fontLoadTimeoutId) {
-              clearTimeout(fontLoadTimeoutId);
-            }
-            document.documentElement.classList.remove('font-loading');
-            document.documentElement.classList.add('font-loaded');
-          })
-          .catch(function () {
-            // If font loading fails, let the timeout handle it
-          });
-      }
-
-      // Set timeout fallback only if document.fonts is available
-      if (document.fonts) {
-        fontLoadTimeoutId = setTimeout(function () {
-          document.documentElement.classList.remove('font-loading');
-          document.documentElement.classList.add('font-loaded');
-        }, FONT_LOAD_TIMEOUT);
-      } else {
-        // Fallback for browsers without document.fonts API
-        document.documentElement.classList.remove('font-loading');
-        document.documentElement.classList.add('font-loaded');
-      }
-
-      let hasBody = !!document && !!document.body;
-      let hasDocument = !!document && !!document.documentElement;
-      let systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      if (localStorage.darkMode === 'dark' && hasDocument) {
-        document.documentElement.classList.add('dark');
-      } else if (localStorage.darkMode === 'light' && hasDocument) {
-        document.documentElement.classList.remove('dark');
-      } else if (systemDarkMode && hasDocument) {
-        localStorage.setItem('darkMode', 'system');
-        document.documentElement.classList.add('dark');
-      } else if (hasDocument) {
-        document.documentElement.classList.remove('dark');
-      }
+          const isSystem = theme === 'system' || !('theme' in localStorage);
+          const isDark = theme === 'dark' || (isSystem && prefersDark);
+          const resolvedTheme = isDark ? 'dark' : 'light';
+          html.classList.toggle('dark', isDark);
+          html.classList.toggle('dark-theme', isDark);
+          html.setAttribute('data-theme', theme ?? 'system');
+          html.style.colorScheme = resolvedTheme;
+        } catch (_) {}
+      })();
     </script>
 
     <base href="/" />

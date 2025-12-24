@@ -2,6 +2,7 @@
 /docs
 /docs/components
 /blocks
+/themes
 /colors
 /docs/introduction
 /docs/components

@@ -1,5 +1,6 @@
+import { MediaMatcher } from '@angular/cdk/layout';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { Injectable, type OnDestroy, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 
 export enum EDarkModes {
   LIGHT = 'light',
@@ -11,30 +12,32 @@ export type DarkModeOptions = EDarkModes.LIGHT | EDarkModes.DARK | EDarkModes.SY
 @Injectable({
   providedIn: 'root',
 })
-export class ZardDarkMode implements OnDestroy {
+export class ZardDarkMode {
   private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly query = inject(MediaMatcher).matchMedia('(prefers-color-scheme: dark)');
 
   private static readonly STORAGE_KEY = 'theme';
   private handleThemeChange = (event: MediaQueryListEvent) => this.updateThemeMode(event.matches);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly themeSignal = signal<DarkModeOptions>(EDarkModes.SYSTEM);
-  private darkModeQuery?: MediaQueryList;
-  readonly theme = this.themeSignal.asReadonly();
 
   readonly themeMode = computed(() => {
-    if (this.themeSignal() === EDarkModes.SYSTEM) {
-      return this.isDarkMode() ? EDarkModes.DARK : EDarkModes.LIGHT;
+    const currentTheme = this.themeSignal();
+    if (currentTheme === EDarkModes.SYSTEM) {
+      return this.isDarkModeActive(currentTheme) ? EDarkModes.DARK : EDarkModes.LIGHT;
     }
-    return this.themeSignal();
+    return currentTheme;
   });
 
-  ngOnDestroy(): void {
-    this.handleSystemChanges(false);
+  constructor() {
+    if (this.isBrowser) {
+      this.destroyRef.onDestroy(() => this.handleSystemChanges(false));
+    }
   }
 
   init() {
     if (this.isBrowser) {
-      this.darkModeQuery = this.getDarkModeQuery();
       this.initializeTheme();
     }
   }
@@ -52,8 +55,27 @@ export class ZardDarkMode implements OnDestroy {
     }
   }
 
-  getCurrentTheme(): DarkModeOptions {
-    return this.themeSignal();
+  /**
+   * Returns a ReadonlySignal<"light" | "dark" | "system"> that cannot be mutated externally.
+   * Call currentTheme() to access the value or use it directly in templates where signals are supported.
+   * @example service.currentTheme() // returns "light", "dark", or "system"
+   */
+  get currentTheme() {
+    return this.themeSignal.asReadonly();
+  }
+
+  private initializeTheme(): void {
+    const storedTheme = this.getStoredTheme();
+    if (storedTheme) {
+      this.themeSignal.set(storedTheme);
+    }
+
+    if (!storedTheme || storedTheme === EDarkModes.SYSTEM) {
+      this.updateThemeMode(this.isDarkModeActive(EDarkModes.SYSTEM));
+      this.handleSystemChanges();
+    } else {
+      this.updateThemeMode(storedTheme === EDarkModes.DARK);
+    }
   }
 
   private applyTheme(theme: DarkModeOptions): void {
@@ -63,12 +85,13 @@ export class ZardDarkMode implements OnDestroy {
 
     localStorage.setItem(ZardDarkMode.STORAGE_KEY, theme);
     this.themeSignal.set(theme);
-    // whenever we apply theme call listener removal
-    this.handleSystemChanges(false);
 
-    this.updateThemeMode(this.isDarkMode());
+    this.updateThemeMode(this.isDarkModeActive(theme));
+
     if (theme === EDarkModes.SYSTEM) {
-      this.handleSystemChanges(true);
+      this.handleSystemChanges();
+    } else {
+      this.handleSystemChanges(false);
     }
   }
 
@@ -84,22 +107,6 @@ export class ZardDarkMode implements OnDestroy {
     return undefined;
   }
 
-  private initializeTheme(): void {
-    const storedTheme = this.getStoredTheme();
-    if (storedTheme) {
-      this.themeSignal.set(storedTheme);
-    }
-
-    // Initialize theme based on current system preferences if no stored theme or if system mode
-    if (!storedTheme || storedTheme === EDarkModes.SYSTEM) {
-      this.updateThemeMode(this.isDarkMode());
-      // Start listening for system changes if we're using system mode (either explicitly or by default)
-      this.handleSystemChanges(true);
-    } else {
-      this.updateThemeMode(storedTheme === EDarkModes.DARK);
-    }
-  }
-
   private getThemeMode(isDarkMode: boolean): EDarkModes.LIGHT | EDarkModes.DARK {
     return isDarkMode ? EDarkModes.DARK : EDarkModes.LIGHT;
   }
@@ -112,28 +119,19 @@ export class ZardDarkMode implements OnDestroy {
     html.style.colorScheme = themeMode;
   }
 
-  private getDarkModeQuery(): MediaQueryList | undefined {
-    if (!this.isBrowser) {
-      return;
-    }
-    return this.document.defaultView?.matchMedia('(prefers-color-scheme: dark)');
-  }
-
-  private isDarkMode(): boolean {
+  private isDarkModeActive(currentTheme: DarkModeOptions): boolean {
     if (!this.isBrowser) {
       return false;
     }
 
-    const isSystemDarkMode = this.darkModeQuery?.matches ?? false;
-    const stored = this.themeSignal();
-    return stored === EDarkModes.DARK || (stored === EDarkModes.SYSTEM && isSystemDarkMode);
+    return currentTheme === EDarkModes.DARK || (currentTheme === EDarkModes.SYSTEM && this.query.matches);
   }
 
-  private handleSystemChanges(addListener: boolean): void {
+  private handleSystemChanges(addListener = true): void {
     if (addListener) {
-      this.darkModeQuery?.addEventListener('change', this.handleThemeChange);
+      this.query.addEventListener('change', this.handleThemeChange);
     } else {
-      this.darkModeQuery?.removeEventListener('change', this.handleThemeChange);
+      this.query.removeEventListener('change', this.handleThemeChange);
     }
   }
 }

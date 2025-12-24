@@ -64,11 +64,12 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
 
   it('initializes dark mode query on service creation', () => {
     expect(mockMatchMedia).toHaveBeenCalledWith('(prefers-color-scheme: dark)');
-    expect(darkModeService['darkModeQuery']).toBe(mockMediaQueryList);
+    expect(darkModeService.themeMode()).toBe(EDarkModes.LIGHT);
   });
 
   it('starts listening for system changes when theme set to SYSTEM', () => {
     darkModeService.toggleTheme(EDarkModes.SYSTEM);
+    TestBed.tick();
 
     expect(mockMediaQueryList.addEventListener).toHaveBeenCalledWith('change', expect.any(Function));
   });
@@ -78,6 +79,7 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
     mockMediaQueryList.addEventListener.mockClear();
 
     darkModeService.toggleTheme(EDarkModes.LIGHT);
+    TestBed.tick();
 
     expect(mockMediaQueryList.removeEventListener).toHaveBeenCalledWith('change', expect.any(Function));
     expect(mockMediaQueryList.addEventListener).not.toHaveBeenCalled();
@@ -85,23 +87,30 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
 
   it('updates theme when system preference changes to dark mode', () => {
     darkModeService.toggleTheme(EDarkModes.SYSTEM);
+    TestBed.tick();
 
     const callback = mockMediaQueryList.addEventListener.mock.calls.find(call => call[0] === 'change')?.[1];
 
-    if (callback) {
-      mockMediaQueryList.matches = true;
-      callback({ matches: true });
+    expect(callback).toBeDefined();
 
-      expect(darkModeService.themeMode()).toBe(EDarkModes.DARK);
-    } else {
-      fail('No callback was registered for system changes');
-    }
+    mockMediaQueryList.matches = true;
+    callback({ matches: true });
+
+    expect(darkModeService.themeMode()).toBe(EDarkModes.DARK);
   });
 
   it('initializes with system dark theme when no stored theme exists', () => {
+    TestBed.resetTestingModule();
     mockMediaQueryList.matches = true;
 
+    mockMediaQueryList.addEventListener.mockClear();
+
+    TestBed.configureTestingModule({
+      providers: [ZardDarkMode],
+    });
+
     const newService = TestBed.inject(ZardDarkMode);
+    newService.init();
 
     expect(newService.themeMode()).toBe(EDarkModes.DARK);
   });
@@ -117,6 +126,7 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
 
     const newService = TestBed.inject(ZardDarkMode);
     newService.init();
+    TestBed.tick();
 
     expect(newService.themeMode()).toBe(EDarkModes.LIGHT);
     expect(mockMediaQueryList.addEventListener).toHaveBeenCalled();
@@ -138,9 +148,11 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
       mockMediaQueryList.matches = true;
 
       darkModeService.toggleTheme(EDarkModes.SYSTEM);
+      TestBed.tick();
       expect(darkModeService.themeMode()).toBe(EDarkModes.DARK);
 
       darkModeService.toggleTheme();
+      TestBed.tick();
       expect(darkModeService.themeMode()).toBe(EDarkModes.LIGHT);
       expect(mockMediaQueryList.removeEventListener).toHaveBeenCalled();
     });
@@ -149,9 +161,11 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
       mockMediaQueryList.matches = false;
 
       darkModeService.toggleTheme(EDarkModes.SYSTEM);
+      TestBed.tick();
       expect(darkModeService.themeMode()).toBe(EDarkModes.LIGHT);
 
       darkModeService.toggleTheme();
+      TestBed.tick();
       expect(darkModeService.themeMode()).toBe(EDarkModes.DARK);
       expect(mockMediaQueryList.removeEventListener).toHaveBeenCalled();
     });
@@ -166,6 +180,7 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
       mockMediaQueryList.matches = true;
 
       darkModeService.toggleTheme(EDarkModes.SYSTEM);
+      TestBed.tick();
       expect(darkModeService.themeMode()).toBe(EDarkModes.DARK);
       expect(mockMediaQueryList.addEventListener).toHaveBeenCalled();
     });

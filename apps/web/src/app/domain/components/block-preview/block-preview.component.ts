@@ -48,7 +48,7 @@ export class BlockPreviewComponent {
     console.error('Erro ao carregar imagem:', {
       src: img.src,
       block: this.block()?.id,
-      theme: this.darkModeService.getCurrentTheme(),
+      theme: this.darkModeService.currentTheme(),
       currentImage: this.currentImage(),
     });
   }

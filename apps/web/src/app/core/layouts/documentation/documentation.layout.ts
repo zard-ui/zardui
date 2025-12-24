@@ -34,7 +34,7 @@ export class DocumentationLayout {
   private readonly destroyRef = inject(DestroyRef);
   readonly isDevEnv = !environment.production;
 
-  private readonly themeSignal = signal<DarkModeOptions>(this.darkModeService.getCurrentTheme());
+  private readonly themeSignal = signal<DarkModeOptions>(this.darkModeService.currentTheme());
   readonly currentTheme = computed(() => this.themeSignal());
 
   constructor() {
@@ -44,7 +44,7 @@ export class DocumentationLayout {
       }
 
       const observer = new MutationObserver(() => {
-        const newTheme = this.darkModeService.getCurrentTheme();
+        const newTheme = this.darkModeService.currentTheme();
         if (newTheme !== this.themeSignal()) {
           this.themeSignal.set(newTheme);
         }
