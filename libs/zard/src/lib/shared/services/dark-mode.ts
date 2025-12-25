@@ -15,12 +15,26 @@ export type DarkModeOptions = EDarkModes.LIGHT | EDarkModes.DARK | EDarkModes.SY
 export class ZardDarkMode {
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
-  private readonly query = inject(MediaMatcher).matchMedia('(prefers-color-scheme: dark)');
 
   private static readonly STORAGE_KEY = 'theme';
   private handleThemeChange = (event: MediaQueryListEvent) => this.updateThemeMode(event.matches, EDarkModes.SYSTEM);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly themeSignal = signal<DarkModeOptions>(EDarkModes.SYSTEM);
+  private _query?: MediaQueryList;
+  private initialized = false;
+
+  constructor() {
+    if (this.isBrowser) {
+      this._query = inject(MediaMatcher).matchMedia('(prefers-color-scheme: dark)');
+      this.destroyRef.onDestroy(() => this.handleSystemChanges(false));
+
+      effect(() => {
+        const theme = this.themeSignal();
+        const isDarkMode = this.isDarkModeActive(theme);
+        this.updateThemeMode(isDarkMode, theme);
+      });
+    }
+  }
 
   readonly themeMode = computed(() => {
     const currentTheme = this.themeSignal();
@@ -30,20 +44,8 @@ export class ZardDarkMode {
     return currentTheme;
   });
 
-  constructor() {
-    if (this.isBrowser) {
-      effect(() => {
-        const theme = this.themeSignal();
-        const isDarkMode = this.isDarkModeActive(theme);
-        this.updateThemeMode(isDarkMode, theme);
-      });
-
-      this.destroyRef.onDestroy(() => this.handleSystemChanges(false));
-    }
-  }
-
   init() {
-    if (this.isBrowser) {
+    if (!this.initialized && this.isBrowser) {
       this.initializeTheme();
     }
   }
@@ -70,6 +72,13 @@ export class ZardDarkMode {
     return this.themeSignal.asReadonly();
   }
 
+  private get query(): MediaQueryList {
+    if (!this.isBrowser || !this._query) {
+      throw new Error('Cannot access media query on server');
+    }
+    return this._query;
+  }
+
   private initializeTheme(): void {
     const storedTheme = this.getStoredTheme();
     if (storedTheme) {
@@ -79,6 +88,7 @@ export class ZardDarkMode {
     if (!storedTheme || storedTheme === EDarkModes.SYSTEM) {
       this.handleSystemChanges();
     }
+    this.initialized = true;
   }
 
   private applyTheme(theme: DarkModeOptions): void {
@@ -86,7 +96,11 @@ export class ZardDarkMode {
       return;
     }
 
-    localStorage.setItem(ZardDarkMode.STORAGE_KEY, theme);
+    try {
+      localStorage.setItem(ZardDarkMode.STORAGE_KEY, theme);
+    } catch (error) {
+      console.warn('Failed to save theme to localStorage:', error);
+    }
     this.themeSignal.set(theme);
 
     if (theme === EDarkModes.SYSTEM) {
@@ -101,9 +115,13 @@ export class ZardDarkMode {
       return undefined;
     }
 
-    const value = localStorage.getItem(ZardDarkMode.STORAGE_KEY);
-    if (value === EDarkModes.LIGHT || value === EDarkModes.DARK || value === EDarkModes.SYSTEM) {
-      return value;
+    try {
+      const value = localStorage.getItem(ZardDarkMode.STORAGE_KEY);
+      if (value === EDarkModes.LIGHT || value === EDarkModes.DARK || value === EDarkModes.SYSTEM) {
+        return value;
+      }
+    } catch (error) {
+      console.warn('Failed to read theme from localStorage:', error);
     }
     return undefined;
   }
@@ -123,10 +141,14 @@ export class ZardDarkMode {
   }
 
   private handleSystemChanges(addListener = true): void {
-    if (addListener) {
-      this.query.addEventListener('change', this.handleThemeChange);
-    } else {
-      this.query.removeEventListener('change', this.handleThemeChange);
+    try {
+      if (addListener) {
+        this.query.addEventListener('change', this.handleThemeChange);
+      } else {
+        this.query.removeEventListener('change', this.handleThemeChange);
+      }
+    } catch (error) {
+      console.warn('Failed to manage media query event listener:', error);
     }
   }
 }

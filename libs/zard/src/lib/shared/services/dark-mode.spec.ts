@@ -1,3 +1,4 @@
+import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 
 import { ZardDarkMode, EDarkModes } from './dark-mode';
@@ -133,6 +134,27 @@ describe('ZardDarkMode - System Appearance Change Detection', () => {
 
     expect(newService.themeMode()).toBe(EDarkModes.LIGHT);
     expect(mockMediaQueryList.addEventListener).toHaveBeenCalled();
+  });
+
+  it('degrades gracefully in server-side rendering environments', () => {
+    TestBed.resetTestingModule();
+
+    // Clear mock call counts before configuring the server environment
+    mockMatchMedia.mockClear();
+
+    TestBed.configureTestingModule({
+      providers: [ZardDarkMode, { provide: PLATFORM_ID, useValue: {} }],
+    });
+
+    const service = TestBed.inject(ZardDarkMode);
+    service.init();
+
+    expect(mockMatchMedia).not.toHaveBeenCalled();
+
+    expect(() => service.toggleTheme()).not.toThrow();
+    expect(() => service.toggleTheme(EDarkModes.DARK)).not.toThrow();
+    expect(() => service.toggleTheme(EDarkModes.LIGHT)).not.toThrow();
+    expect(() => service.toggleTheme(EDarkModes.SYSTEM)).not.toThrow();
   });
 
   describe('toggleTheme', () => {
