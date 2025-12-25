@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
@@ -24,14 +23,7 @@ interface RoadmapPhase {
   selector: 'z-roadmap',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    CommonModule,
-    DocContentComponent,
-    DocHeadingComponent,
-    ZardCardComponent,
-    ZardBadgeComponent,
-    ZardProgressBarComponent,
-  ],
+  imports: [DocContentComponent, DocHeadingComponent, ZardCardComponent, ZardBadgeComponent, ZardProgressBarComponent],
   templateUrl: './roadmap.page.html',
 })
 export class RoadmapPage implements OnInit {

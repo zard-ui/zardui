@@ -215,7 +215,7 @@ app.use(
 );
 
 app.use((req, res, next) => {
-  if (req.path === '/sitemap.xml' || req.path === '/llms.txt') {
+  if (req.url === '/sitemap.xml' || req.url === '/llms.txt') {
     return next();
   }
   express.static(browserDistFolder, {
@@ -224,7 +224,7 @@ app.use((req, res, next) => {
   })(req, res, next);
 });
 
-app.get('**', (req, res, next) => {
+app.use((req, res, next) => {
   const { protocol, originalUrl, baseUrl, headers } = req;
 
   commonEngine

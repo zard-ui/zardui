@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 
 import { toast } from 'ngx-sonner';
@@ -11,7 +10,7 @@ import { ZARD_ICONS } from '../icons';
 
 @Component({
   selector: 'z-demo-icon-searchable',
-  imports: [CommonModule, ZardIconComponent, ZardInputDirective, ZardButtonComponent, ZardEmptyComponent],
+  imports: [ZardIconComponent, ZardInputDirective, ZardButtonComponent, ZardEmptyComponent],
   standalone: true,
   template: `
     <div class="flex w-full flex-col gap-4">
