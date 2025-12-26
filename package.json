@@ -38,6 +38,8 @@
     "@angular/router": "20.3.15",
     "@angular/ssr": "20.3.13",
     "@antfu/ni": "^26.2.0",
+    "@fontsource-variable/geist": "^5.2.8",
+    "@fontsource-variable/geist-mono": "^5.2.7",
     "@shikijs/rehype": "^3.20.0",
     "@tailwindcss/postcss": "^4.1.18",
     "chalk": "^5.6.2",

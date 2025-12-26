@@ -37,7 +37,6 @@ export class DarkmodePage implements OnInit {
   private readonly seoService = inject(SeoService);
 
   protected readonly darkModeService = inject(ZardDarkMode);
-  protected readonly currentTheme = this.darkModeService.theme;
   protected readonly EDarkModes = EDarkModes;
 
   readonly navigationConfig: NavigationConfig = {

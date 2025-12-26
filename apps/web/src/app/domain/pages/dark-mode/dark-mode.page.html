@@ -85,14 +85,14 @@
 
     <z-card class="p-6">
       <div class="mb-6 flex items-center justify-between">
+        @let theme = darkModeService.currentTheme();
         <div>
           <h3 class="text-lg font-semibold">Theme Control</h3>
           <p class="text-muted-foreground text-sm">
             Current theme:
-            <strong>{{ darkModeService.theme() }}</strong>
+            <strong>{{ theme }}</strong>
           </p>
         </div>
-        @let theme = currentTheme();
         <z-button-group>
           <button
             z-button

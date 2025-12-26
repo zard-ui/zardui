@@ -1,5 +1,6 @@
+import { MediaMatcher } from '@angular/cdk/layout';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { Injectable, type OnDestroy, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { DestroyRef, Injectable, PLATFORM_ID, computed, effect, inject, signal } from '@angular/core';
 
 export enum EDarkModes {
   LIGHT = 'light',
@@ -11,26 +12,42 @@ export type DarkModeOptions = EDarkModes.LIGHT | EDarkModes.DARK | EDarkModes.SY
 @Injectable({
   providedIn: 'root',
 })
-export class ZardDarkMode implements OnDestroy {
+export class ZardDarkMode {
   private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
 
   private static readonly STORAGE_KEY = 'theme';
-  private handleThemeChange = (event: MediaQueryListEvent) => this.updateThemeMode(event.matches);
+  private handleThemeChange = (event: MediaQueryListEvent) => this.updateThemeMode(event.matches, EDarkModes.SYSTEM);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly themeSignal = signal<DarkModeOptions>(EDarkModes.SYSTEM);
-  private darkModeQuery?: MediaQueryList;
+  private _query?: MediaQueryList;
+  private initialized = false;
 
-  readonly theme = this.themeSignal.asReadonly();
+  constructor() {
+    if (this.isBrowser) {
+      this._query = inject(MediaMatcher).matchMedia('(prefers-color-scheme: dark)');
+      this.destroyRef.onDestroy(() => this.handleSystemChanges(false));
+
+      effect(() => {
+        const theme = this.themeSignal();
+        const isDarkMode = this.isDarkModeActive(theme);
+        this.updateThemeMode(isDarkMode, theme);
+      });
+    }
+  }
 
   readonly themeMode = computed(() => {
-    if (this.themeSignal() === EDarkModes.SYSTEM) {
-      return this.isDarkMode() ? EDarkModes.DARK : EDarkModes.LIGHT;
+    const currentTheme = this.themeSignal();
+    if (currentTheme === EDarkModes.SYSTEM) {
+      return this.isDarkModeActive(currentTheme) ? EDarkModes.DARK : EDarkModes.LIGHT;
     }
-    return this.themeSignal();
+    return currentTheme;
   });
 
-  ngOnDestroy(): void {
-    this.handleSystemChanges(false);
+  init() {
+    if (!this.initialized && this.isBrowser) {
+      this.initializeTheme();
+    }
   }
 
   toggleTheme(targetMode?: DarkModeOptions): void {
@@ -46,8 +63,32 @@ export class ZardDarkMode implements OnDestroy {
     }
   }
 
-  getCurrentTheme(): DarkModeOptions {
-    return this.themeSignal();
+  /**
+   * Returns a ReadonlySignal<"light" | "dark" | "system"> that cannot be mutated externally.
+   * Call currentTheme() to access the value or use it directly in templates where signals are supported.
+   * @example service.currentTheme() // returns "light", "dark", or "system"
+   */
+  get currentTheme() {
+    return this.themeSignal.asReadonly();
+  }
+
+  private get query(): MediaQueryList {
+    if (!this.isBrowser || !this._query) {
+      throw new Error('Cannot access media query on server');
+    }
+    return this._query;
+  }
+
+  private initializeTheme(): void {
+    const storedTheme = this.getStoredTheme();
+    if (storedTheme) {
+      this.themeSignal.set(storedTheme);
+    }
+
+    if (!storedTheme || storedTheme === EDarkModes.SYSTEM) {
+      this.handleSystemChanges();
+    }
+    this.initialized = true;
   }
 
   private applyTheme(theme: DarkModeOptions): void {
@@ -55,15 +96,17 @@ export class ZardDarkMode implements OnDestroy {
       return;
     }
 
-    localStorage.setItem(ZardDarkMode.STORAGE_KEY, theme);
+    try {
+      localStorage.setItem(ZardDarkMode.STORAGE_KEY, theme);
+    } catch (error) {
+      console.warn('Failed to save theme to localStorage:', error);
+    }
     this.themeSignal.set(theme);
-    // whenever we apply theme call listener removal
-    this.handleSystemChanges(false);
 
-    this.darkModeQuery ??= this.getDarkModeQuery();
-    this.updateThemeMode(this.isDarkMode());
     if (theme === EDarkModes.SYSTEM) {
-      this.handleSystemChanges(true);
+      this.handleSystemChanges();
+    } else {
+      this.handleSystemChanges(false);
     }
   }
 
@@ -72,47 +115,40 @@ export class ZardDarkMode implements OnDestroy {
       return undefined;
     }
 
-    const value = localStorage.getItem(ZardDarkMode.STORAGE_KEY);
-    if (value === EDarkModes.LIGHT || value === EDarkModes.DARK || value === EDarkModes.SYSTEM) {
-      return value;
+    try {
+      const value = localStorage.getItem(ZardDarkMode.STORAGE_KEY);
+      if (value === EDarkModes.LIGHT || value === EDarkModes.DARK || value === EDarkModes.SYSTEM) {
+        return value;
+      }
+    } catch (error) {
+      console.warn('Failed to read theme from localStorage:', error);
     }
     return undefined;
   }
 
-  private getThemeMode(isDarkMode: boolean): EDarkModes.LIGHT | EDarkModes.DARK {
-    return isDarkMode ? EDarkModes.DARK : EDarkModes.LIGHT;
-  }
-
-  private updateThemeMode(isDarkMode: boolean): void {
-    const themeMode = this.getThemeMode(isDarkMode);
+  private updateThemeMode(isDarkMode: boolean, themeMode: EDarkModes): void {
     const html = this.document.documentElement;
     html.classList.toggle('dark', isDarkMode);
     html.setAttribute('data-theme', themeMode);
-    html.style.colorScheme = themeMode;
   }
 
-  private getDarkModeQuery(): MediaQueryList | undefined {
-    if (!this.isBrowser) {
-      return;
-    }
-    return this.document.defaultView?.matchMedia('(prefers-color-scheme: dark)');
-  }
-
-  private isDarkMode(): boolean {
+  private isDarkModeActive(currentTheme: DarkModeOptions): boolean {
     if (!this.isBrowser) {
       return false;
     }
 
-    const isSystemDarkMode = this.darkModeQuery?.matches ?? false;
-    const stored = localStorage.getItem(ZardDarkMode.STORAGE_KEY);
-    return stored === EDarkModes.DARK || (stored === EDarkModes.SYSTEM && isSystemDarkMode);
+    return currentTheme === EDarkModes.DARK || (currentTheme === EDarkModes.SYSTEM && this.query.matches);
   }
 
-  private handleSystemChanges(addListener: boolean): void {
-    if (addListener) {
-      this.darkModeQuery?.addEventListener('change', this.handleThemeChange);
-    } else {
-      this.darkModeQuery?.removeEventListener('change', this.handleThemeChange);
+  private handleSystemChanges(addListener = true): void {
+    try {
+      if (addListener) {
+        this.query.addEventListener('change', this.handleThemeChange);
+      } else {
+        this.query.removeEventListener('change', this.handleThemeChange);
+      }
+    } catch (error) {
+      console.warn('Failed to manage media query event listener:', error);
     }
   }
 }

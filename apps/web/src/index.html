@@ -2,9 +2,8 @@
 <html lang="en" class="layout-fixed">
   <head>
     <meta charset="utf-8" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap" rel="stylesheet" />
+    <base href="/" />
+    <title>Zard UI - The @shadcn/ui Alternative for Angular</title>
 
     <link rel="icon" href="/site/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/site/apple-touch-icon.png" />
@@ -69,17 +68,12 @@
 
           const isSystem = theme === 'system' || !('theme' in localStorage);
           const isDark = theme === 'dark' || (isSystem && prefersDark);
-          const resolvedTheme = isDark ? 'dark' : 'light';
+          html.classList.add('scheme-light-dark');
           html.classList.toggle('dark', isDark);
-          html.classList.toggle('dark-theme', isDark);
           html.setAttribute('data-theme', theme ?? 'system');
-          html.style.colorScheme = resolvedTheme;
         } catch (_) {}
       })();
     </script>
-
-    <base href="/" />
-    <title>Zard UI - The @shadcn/ui Alternative for Angular</title>
   </head>
 
   <body
