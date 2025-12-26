@@ -14,16 +14,18 @@ import {
 import type { ClassValue } from 'clsx';
 
 import {
+  ZardButtonComponent,
+  type ZardButtonSizeVariants,
+  type ZardButtonTypeVariants,
+} from '@/shared/components/button';
+import { ZardIconComponent } from '@/shared/components/icon';
+import {
   paginationContentVariants,
   paginationEllipsisVariants,
   paginationNextVariants,
   paginationPreviousVariants,
   paginationVariants,
-} from './pagination.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { type ZardButtonSizeVariants, type ZardButtonTypeVariants } from '../button/button.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-
+} from '@/shared/components/pagination/pagination.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({

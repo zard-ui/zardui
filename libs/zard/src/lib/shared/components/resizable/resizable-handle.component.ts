@@ -2,9 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
-import { ZardResizableComponent } from './resizable.component';
-import { resizableHandleIndicatorVariants, resizableHandleVariants } from './resizable.variants';
-
+import { ZardResizableComponent } from '@/shared/components/resizable/resizable.component';
+import {
+  resizableHandleIndicatorVariants,
+  resizableHandleVariants,
+} from '@/shared/components/resizable/resizable.variants';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({

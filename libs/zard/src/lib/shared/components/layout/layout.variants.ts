@@ -13,23 +13,20 @@ export const layoutVariants = cva('flex w-full min-h-0', {
     zDirection: 'auto',
   },
 });
-export type LayoutVariants = VariantProps<typeof layoutVariants>;
+export type LayoutVariants = NonNullable<VariantProps<typeof layoutVariants>['zDirection']>;
 
 // Header Variants
 export const headerVariants = cva('flex items-center px-4 bg-background border-b border-border shrink-0', {
   variants: {},
 });
-export type HeaderVariants = VariantProps<typeof headerVariants>;
 
 // Footer Variants
 export const footerVariants = cva('flex items-center px-6 bg-background border-t border-border shrink-0', {
   variants: {},
 });
-export type FooterVariants = VariantProps<typeof footerVariants>;
 
 // Content Variants
 export const contentVariants = cva('flex-1 flex flex-col overflow-auto bg-background p-6 min-h-dvh');
-export type ContentVariants = VariantProps<typeof contentVariants>;
 
 // Sidebar Variants
 export const sidebarVariants = cva(

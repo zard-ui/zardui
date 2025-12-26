@@ -1,17 +1,17 @@
 import { AfterViewInit, Component, inject, viewChild, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
-import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/command/command.component';
-import { ZardCommandModule } from '@zard/components/command/command.module';
-import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
+import { SIDEBAR_PATHS } from '@doc/shared/constants/routes.constant';
 
-import { SIDEBAR_PATHS } from '../../../shared/constants/routes.constant';
+import { ZardCommandImports } from '@zard/components/command';
+import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/command/command.component';
+import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
 
 @Component({
   standalone: true,
-  imports: [ZardCommandModule],
+  imports: [ZardCommandImports],
   template: `
-    <z-command #commandRef class="md:min-w-[500px]" (zCommandSelected)="handleCommand($event)">
+    <z-command #commandRef class="md:min-w-125" (zCommandSelected)="handleCommand($event)">
       <z-command-input placeholder="Search documentation..."></z-command-input>
       <z-command-list>
         <z-command-empty>No results found.</z-command-empty>

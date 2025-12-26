@@ -12,7 +12,7 @@ import {
   TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
-import { Params, RouterLink } from '@angular/router';
+import { type Params, RouterLink } from '@angular/router';
 
 import type { ClassValue } from 'clsx';
 
@@ -21,13 +21,12 @@ import {
   breadcrumbItemVariants,
   breadcrumbListVariants,
   breadcrumbVariants,
-  ZardBreadcrumbAlignVariants,
-  ZardBreadcrumbEllipsisColorVariants,
-  ZardBreadcrumbSizeVariants,
-  ZardBreadcrumbWrapVariants,
-} from './breadcrumb.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-
+  type ZardBreadcrumbAlignVariants,
+  type ZardBreadcrumbEllipsisColorVariants,
+  type ZardBreadcrumbSizeVariants,
+  type ZardBreadcrumbWrapVariants,
+} from '@/shared/components/breadcrumb/breadcrumb.variants';
+import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -238,30 +237,26 @@ export type ZardBreadcrumbEllipsisColorVariants = NonNullable<
 
 
 
-```angular-ts title="breadcrumb.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { NgModule } from '@angular/core';
-
+```angular-ts title="breadcrumb.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ZardBreadcrumbComponent,
   ZardBreadcrumbEllipsisComponent,
   ZardBreadcrumbItemComponent,
-} from './breadcrumb.component';
+} from '@/shared/components/breadcrumb/breadcrumb.component';
 
-const components = [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent];
-
-@NgModule({
-  imports: components,
-  exports: components,
-})
-export class ZardBreadcrumbModule {}
+export const ZardBreadcrumbImports = [
+  ZardBreadcrumbComponent,
+  ZardBreadcrumbItemComponent,
+  ZardBreadcrumbEllipsisComponent,
+] as const;
 
 ```
 
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './breadcrumb.component';
-export * from './breadcrumb.variants';
+export * from '@/shared/components/breadcrumb/breadcrumb.component';
+export * from '@/shared/components/breadcrumb/breadcrumb.variants';
 
 ```
 

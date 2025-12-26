@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
-import { ZardBreadcrumbModule } from '@/shared/components/breadcrumb/breadcrumb.module';
+import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 
 @Component({
   selector: 'z-demo-breadcrumb-ellipsis',
-  imports: [ZardBreadcrumbModule, ZardMenuImports],
+  imports: [ZardBreadcrumbImports, ZardMenuImports],
   standalone: true,
   template: `
     <z-breadcrumb>

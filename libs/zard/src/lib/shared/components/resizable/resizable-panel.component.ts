@@ -10,8 +10,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { resizablePanelVariants } from './resizable.variants';
-
+import { resizablePanelVariants } from '@/shared/components/resizable/resizable.variants';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({

@@ -3,18 +3,16 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import {
-  formFieldVariants,
   formControlVariants,
+  formFieldVariants,
   formLabelVariants,
   formMessageVariants,
-  type ZardFormMessageVariants,
-} from './form.variants';
-
+  type ZardFormMessageTypeVariants,
+} from '@/shared/components/form/form.variants';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-form-field, [z-form-field]',
-  standalone: true,
   template: '<ng-content />',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -32,13 +30,12 @@ export class ZardFormFieldComponent {
 @Component({
   selector: 'z-form-control, [z-form-control]',
   imports: [],
-  standalone: true,
   template: `
     <div class="relative">
       <ng-content />
     </div>
     @if (errorMessage() || helpText()) {
-      <div class="mt-1.5 min-h-[1.25rem]">
+      <div class="mt-1.5 min-h-5">
         @if (errorMessage()) {
           <p class="text-sm text-red-500">{{ errorMessage() }}</p>
         } @else if (helpText()) {
@@ -64,7 +61,6 @@ export class ZardFormControlComponent {
 
 @Component({
   selector: 'z-form-label, label[z-form-label]',
-  standalone: true,
   template: '<ng-content />',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -84,7 +80,6 @@ export class ZardFormLabelComponent {
 
 @Component({
   selector: 'z-form-message, [z-form-message]',
-  standalone: true,
   template: '<ng-content />',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -95,7 +90,7 @@ export class ZardFormLabelComponent {
 })
 export class ZardFormMessageComponent {
   readonly class = input<ClassValue>('');
-  readonly zType = input<ZardFormMessageVariants['zType']>('default');
+  readonly zType = input<ZardFormMessageTypeVariants>('default');
 
   protected readonly classes = computed(() => mergeClasses(formMessageVariants({ zType: this.zType() }), this.class()));
 }

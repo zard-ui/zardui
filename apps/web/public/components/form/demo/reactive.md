@@ -4,11 +4,11 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
-import { ZardFormModule } from '../form.module';
+import { ZardFormImports } from '../form.imports';
 
 @Component({
   selector: 'zard-demo-form-reactive',
-  imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardFormModule],
+  imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardFormImports],
   standalone: true,
   template: `
     <form [formGroup]="profileForm" (ngSubmit)="onSubmit()" class="max-w-sm space-y-6">

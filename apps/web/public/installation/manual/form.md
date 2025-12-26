@@ -6,18 +6,16 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import {
-  formFieldVariants,
   formControlVariants,
+  formFieldVariants,
   formLabelVariants,
   formMessageVariants,
-  type ZardFormMessageVariants,
-} from './form.variants';
-
+  type ZardFormMessageTypeVariants,
+} from '@/shared/components/form/form.variants';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-form-field, [z-form-field]',
-  standalone: true,
   template: '<ng-content />',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -35,13 +33,12 @@ export class ZardFormFieldComponent {
 @Component({
   selector: 'z-form-control, [z-form-control]',
   imports: [],
-  standalone: true,
   template: `
     <div class="relative">
       <ng-content />
     </div>
     @if (errorMessage() || helpText()) {
-      <div class="mt-1.5 min-h-[1.25rem]">
+      <div class="mt-1.5 min-h-5">
         @if (errorMessage()) {
           <p class="text-sm text-red-500">{{ errorMessage() }}</p>
         } @else if (helpText()) {
@@ -67,7 +64,6 @@ export class ZardFormControlComponent {
 
 @Component({
   selector: 'z-form-label, label[z-form-label]',
-  standalone: true,
   template: '<ng-content />',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -87,7 +83,6 @@ export class ZardFormLabelComponent {
 
 @Component({
   selector: 'z-form-message, [z-form-message]',
-  standalone: true,
   template: '<ng-content />',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -98,7 +93,7 @@ export class ZardFormLabelComponent {
 })
 export class ZardFormMessageComponent {
   readonly class = input<ClassValue>('');
-  readonly zType = input<ZardFormMessageVariants['zType']>('default');
+  readonly zType = input<ZardFormMessageTypeVariants>('default');
 
   protected readonly classes = computed(() => mergeClasses(formMessageVariants({ zType: this.zType() }), this.class()));
 }
@@ -139,46 +134,35 @@ export const formMessageVariants = cva('text-sm', {
   },
 });
 
-export type ZardFormFieldVariants = VariantProps<typeof formFieldVariants>;
-export type ZardFormLabelVariants = VariantProps<typeof formLabelVariants>;
-export type ZardFormControlVariants = VariantProps<typeof formControlVariants>;
-export type ZardFormMessageVariants = VariantProps<typeof formMessageVariants>;
+export type ZardFormMessageTypeVariants = NonNullable<VariantProps<typeof formMessageVariants>['zType']>;
 
 ```
 
 
 
-```angular-ts title="form.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { NgModule } from '@angular/core';
-
+```angular-ts title="form.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ZardFormControlComponent,
   ZardFormFieldComponent,
   ZardFormLabelComponent,
   ZardFormMessageComponent,
-} from './form.component';
+} from '@/shared/components/form/form.component';
 
-const FORM_COMPONENTS = [
+export const ZardFormImports = [
   ZardFormFieldComponent,
   ZardFormLabelComponent,
   ZardFormControlComponent,
   ZardFormMessageComponent,
-];
-
-@NgModule({
-  imports: [...FORM_COMPONENTS],
-  exports: [...FORM_COMPONENTS],
-})
-export class ZardFormModule {}
+] as const;
 
 ```
 
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './form.component';
-export * from './form.module';
-export * from './form.variants';
+export * from '@/shared/components/form/form.component';
+export * from '@/shared/components/form/form.imports';
+export * from '@/shared/components/form/form.variants';
 
 ```
 

@@ -1,12 +1,12 @@
 ```angular-ts showLineNumbers copyButton
-import { Component, inject, signal, type AfterViewInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, type AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.directive';
-import { ZardRadioComponent } from '../../radio/radio.component';
-import { ZardSheetModule } from '../sheet.module';
-import { Z_SHEET_DATA, ZardSheetService } from '../sheet.service';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardInputDirective } from '@/shared/components/input';
+import { ZardRadioComponent } from '@/shared/components/radio';
+import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
+import { Z_SHEET_DATA, ZardSheetService } from '@/shared/components/sheet/sheet.service';
 
 interface iSheetData {
   name: string;
@@ -16,7 +16,6 @@ interface iSheetData {
 @Component({
   selector: 'zard-demo-sheet-side',
   imports: [FormsModule, ReactiveFormsModule, ZardInputDirective],
-  standalone: true,
   template: `
     <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
       <div class="grid gap-3">
@@ -48,6 +47,7 @@ interface iSheetData {
       </div>
     </form>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   exportAs: 'zardDemoSheetSide',
 })
 export class ZardDemoSheetSideInputComponent implements AfterViewInit {
@@ -66,8 +66,7 @@ export class ZardDemoSheetSideInputComponent implements AfterViewInit {
 }
 
 @Component({
-  imports: [ZardRadioComponent, FormsModule, ZardButtonComponent, ZardSheetModule],
-  standalone: true,
+  imports: [ZardRadioComponent, FormsModule, ZardSheetImports, ZardButtonComponent],
   template: `
     <div class="flex flex-col justify-center space-y-6">
       <div class="flex space-x-4">
@@ -76,9 +75,10 @@ export class ZardDemoSheetSideInputComponent implements AfterViewInit {
         <span z-radio name="left" [(ngModel)]="placement" value="left">left</span>
         <span z-radio name="right" [(ngModel)]="placement" value="right">right</span>
       </div>
-      <button type="button" z-button zType="outline" (click)="openSheet()">Edit profile</button>
+      <button type="button" z-button zType="outline" class="m-auto" (click)="openSheet()">Edit profile</button>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSheetSideComponent {
   protected readonly placement = signal<'right' | 'left' | 'top' | 'bottom' | null | undefined>('right');

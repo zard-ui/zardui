@@ -279,12 +279,12 @@ export type ZardSheetVariants = VariantProps<typeof sheetVariants>;
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export { type OnClickCallback as SheetOnClickCallback } from './sheet.component';
-export { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
-export * from './sheet.service';
-export * from './sheet-ref';
-export * from './sheet.module';
-export * from './sheet.variants';
+export { type OnClickCallback as SheetOnClickCallback } from '@/shared/components/sheet/sheet.component';
+export { ZardSheetComponent, ZardSheetOptions } from '@/shared/components/sheet/sheet.component';
+export * from '@/shared/components/sheet/sheet.service';
+export * from '@/shared/components/sheet/sheet-ref';
+export * from '@/shared/components/sheet/sheet.imports';
+export * from '@/shared/components/sheet/sheet.variants';
 
 ```
 
@@ -408,21 +408,13 @@ export class ZardSheetRef<T = any, R = any, U = any> {
 
 
 
-```angular-ts title="sheet.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+```angular-ts title="sheet.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { OverlayModule } from '@angular/cdk/overlay';
 import { PortalModule } from '@angular/cdk/portal';
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
 
-import { ZardSheetComponent } from './sheet.component';
-import { ZardSheetService } from './sheet.service';
-import { ZardButtonComponent } from '../button/button.component';
+import { ZardSheetComponent } from '@/shared/components/sheet/sheet.component';
 
-@NgModule({
-  imports: [CommonModule, ZardButtonComponent, ZardSheetComponent, OverlayModule, PortalModule],
-  providers: [ZardSheetService],
-})
-export class ZardSheetModule {}
+export const ZardSheetImports = [ZardSheetComponent, OverlayModule, PortalModule] as const;
 
 ```
 

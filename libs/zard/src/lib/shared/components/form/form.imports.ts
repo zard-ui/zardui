@@ -1,21 +1,13 @@
-import { NgModule } from '@angular/core';
-
 import {
   ZardFormControlComponent,
   ZardFormFieldComponent,
   ZardFormLabelComponent,
   ZardFormMessageComponent,
-} from './form.component';
+} from '@/shared/components/form/form.component';
 
-const FORM_COMPONENTS = [
+export const ZardFormImports = [
   ZardFormFieldComponent,
   ZardFormLabelComponent,
   ZardFormControlComponent,
   ZardFormMessageComponent,
-];
-
-@NgModule({
-  imports: [...FORM_COMPONENTS],
-  exports: [...FORM_COMPONENTS],
-})
-export class ZardFormModule {}
+] as const;

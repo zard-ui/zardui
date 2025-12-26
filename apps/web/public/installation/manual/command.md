@@ -18,11 +18,10 @@ import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angu
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandInputComponent } from './command-input.component';
-import { ZardCommandOptionComponent } from './command-option.component';
-import { commandVariants, type ZardCommandVariants } from './command.variants';
-import type { ZardIcon } from '../icon/icons';
-
+import { ZardCommandInputComponent } from '@/shared/components/command/command-input.component';
+import { ZardCommandOptionComponent } from '@/shared/components/command/command-option.component';
+import { commandVariants, type ZardCommandSizeVariants } from '@/shared/components/command/command.variants';
+import type { ZardIcon } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardCommandOption {
@@ -84,7 +83,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
   readonly commandInput = contentChild(ZardCommandInputComponent);
   readonly optionComponents = contentChildren(ZardCommandOptionComponent, { descendants: true });
 
-  readonly size = input<ZardCommandVariants['size']>('default');
+  readonly size = input<ZardCommandSizeVariants>('default');
   readonly class = input<ClassValue>('');
 
   readonly zCommandChange = output<ZardCommandOption>();
@@ -285,7 +284,7 @@ export const commandVariants = cva(
         sm: 'min-h-64',
         default: 'min-h-80',
         lg: 'min-h-96',
-        xl: 'min-h-[30rem]',
+        xl: 'min-h-120',
       },
     },
     defaultVariants: {
@@ -302,7 +301,7 @@ export const commandInputVariants = cva(
   },
 );
 
-export const commandListVariants = cva('max-h-[300px] overflow-y-auto overflow-x-hidden p-1', {
+export const commandListVariants = cva('max-h-75 overflow-y-auto overflow-x-hidden p-1', {
   variants: {},
   defaultVariants: {},
 });
@@ -348,8 +347,8 @@ export const commandShortcutVariants = cva('ml-auto text-xs tracking-widest text
   defaultVariants: {},
 });
 
-export type ZardCommandVariants = VariantProps<typeof commandVariants>;
-export type ZardCommandItemVariants = VariantProps<typeof commandItemVariants>;
+export type ZardCommandSizeVariants = NonNullable<VariantProps<typeof commandVariants>['size']>;
+export type ZardCommandItemVariants = NonNullable<VariantProps<typeof commandItemVariants>['variant']>;
 
 ```
 
@@ -360,9 +359,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandComponent } from './command.component';
-import { commandSeparatorVariants } from './command.variants';
-
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { commandSeparatorVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -381,7 +379,7 @@ export class ZardCommandDividerComponent {
 
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(commandSeparatorVariants({}), this.class()));
+  protected readonly classes = computed(() => mergeClasses(commandSeparatorVariants(), this.class()));
 
   protected readonly shouldShow = computed(() => {
     if (!this.commandComponent) {
@@ -410,9 +408,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandComponent } from './command.component';
-import { commandEmptyVariants } from './command.variants';
-
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { commandEmptyVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -433,7 +430,7 @@ export class ZardCommandEmptyComponent {
 
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(commandEmptyVariants({}), this.class()));
+  protected readonly classes = computed(() => mergeClasses(commandEmptyVariants(), this.class()));
 
   protected readonly shouldShow = computed(() => {
     // Check traditional command component
@@ -468,10 +465,9 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandComponent } from './command.component';
-import { commandInputVariants } from './command.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { commandInputVariants } from '@/shared/components/command/command.variants';
+import { ZardIconComponent } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -523,7 +519,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
 
   readonly searchTerm = signal('');
 
-  readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
+  readonly classes = computed(() => mergeClasses(commandInputVariants(), this.class()));
 
   readonly disabled = signal(false);
 
@@ -605,13 +601,11 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { commandListVariants } from './command.variants';
-
+import { commandListVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-list',
-  standalone: true,
   template: `
     <div [class]="classes()" role="listbox" id="command-list">
       <ng-content />
@@ -624,7 +618,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 export class ZardCommandListComponent {
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(commandListVariants({}), this.class()));
+  protected readonly classes = computed(() => mergeClasses(commandListVariants(), this.class()));
 }
 
 ```
@@ -644,15 +638,13 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandOptionComponent } from './command-option.component';
-import { ZardCommandComponent } from './command.component';
-import { commandGroupHeadingVariants, commandGroupVariants } from './command.variants';
-
+import { ZardCommandOptionComponent } from '@/shared/components/command/command-option.component';
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { commandGroupHeadingVariants, commandGroupVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-option-group',
-  standalone: true,
   template: `
     @if (shouldShow()) {
       <div [class]="classes()" role="group">
@@ -718,11 +710,13 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandComponent } from './command.component';
-import { commandItemVariants, commandShortcutVariants, type ZardCommandItemVariants } from './command.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
-
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import {
+  commandItemVariants,
+  commandShortcutVariants,
+  type ZardCommandItemVariants,
+} from '@/shared/components/command/command.variants';
+import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -765,7 +759,7 @@ export class ZardCommandOptionComponent {
   readonly zIcon = input<ZardIcon>();
   readonly zShortcut = input<string>('');
   readonly zDisabled = input(false, { transform });
-  readonly variant = input<ZardCommandItemVariants['variant']>('default');
+  readonly variant = input<ZardCommandItemVariants>('default');
   readonly class = input<ClassValue>('');
 
   readonly isSelected = signal(false);
@@ -776,7 +770,7 @@ export class ZardCommandOptionComponent {
     return mergeClasses(baseClasses, selectedClasses, this.class());
   });
 
-  protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants({})));
+  protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants()));
 
   protected readonly shouldShow = computed(() => {
     if (!this.commandComponent) {
@@ -827,19 +821,16 @@ export class ZardCommandOptionComponent {
 
 
 
-```angular-ts title="command.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+```angular-ts title="command.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ZardCommandDividerComponent } from '@/shared/components/command/command-divider.component';
+import { ZardCommandEmptyComponent } from '@/shared/components/command/command-empty.component';
+import { ZardCommandInputComponent } from '@/shared/components/command/command-input.component';
+import { ZardCommandListComponent } from '@/shared/components/command/command-list.component';
+import { ZardCommandOptionGroupComponent } from '@/shared/components/command/command-option-group.component';
+import { ZardCommandOptionComponent } from '@/shared/components/command/command-option.component';
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
 
-import { ZardCommandDividerComponent } from './command-divider.component';
-import { ZardCommandEmptyComponent } from './command-empty.component';
-import { ZardCommandInputComponent } from './command-input.component';
-import { ZardCommandListComponent } from './command-list.component';
-import { ZardCommandOptionGroupComponent } from './command-option-group.component';
-import { ZardCommandOptionComponent } from './command-option.component';
-import { ZardCommandComponent } from './command.component';
-
-const COMMAND_COMPONENTS = [
+export const ZardCommandImports = [
   ZardCommandComponent,
   ZardCommandInputComponent,
   ZardCommandListComponent,
@@ -847,28 +838,22 @@ const COMMAND_COMPONENTS = [
   ZardCommandOptionComponent,
   ZardCommandOptionGroupComponent,
   ZardCommandDividerComponent,
-];
-
-@NgModule({
-  imports: [FormsModule, ...COMMAND_COMPONENTS],
-  exports: [...COMMAND_COMPONENTS],
-})
-export class ZardCommandModule {}
+] as const;
 
 ```
 
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './command.component';
-export * from './command-input.component';
-export * from './command-list.component';
-export * from './command-empty.component';
-export * from './command-option.component';
-export * from './command-option-group.component';
-export * from './command-divider.component';
-export * from './command.module';
-export * from './command.variants';
+export * from '@/shared/components/command/command.component';
+export * from '@/shared/components/command/command-input.component';
+export * from '@/shared/components/command/command-list.component';
+export * from '@/shared/components/command/command-empty.component';
+export * from '@/shared/components/command/command-option.component';
+export * from '@/shared/components/command/command-option-group.component';
+export * from '@/shared/components/command/command-divider.component';
+export * from '@/shared/components/command/command.imports';
+export * from '@/shared/components/command/command.variants';
 
 ```
 

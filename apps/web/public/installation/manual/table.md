@@ -6,21 +6,20 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 
 import {
-  tableVariants,
-  tableHeaderVariants,
+  type ZardTableSizeVariants,
+  type ZardTableTypeVariants,
   tableBodyVariants,
-  tableRowVariants,
-  tableHeadVariants,
-  tableCellVariants,
   tableCaptionVariants,
-  type ZardTableVariants,
-} from './table.variants';
-
+  tableCellVariants,
+  tableHeaderVariants,
+  tableHeadVariants,
+  tableRowVariants,
+  tableVariants,
+} from '@/shared/components/table/table.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'table[z-table]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -32,8 +31,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   exportAs: 'zTable',
 })
 export class ZardTableComponent {
-  readonly zType = input<ZardTableVariants['zType']>('default');
-  readonly zSize = input<ZardTableVariants['zSize']>('default');
+  readonly zType = input<ZardTableTypeVariants>('default');
+  readonly zSize = input<ZardTableSizeVariants>('default');
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() =>
@@ -49,7 +48,6 @@ export class ZardTableComponent {
 
 @Component({
   selector: 'thead[z-table-header]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -68,7 +66,6 @@ export class ZardTableHeaderComponent {
 
 @Component({
   selector: 'tbody[z-table-body]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -87,7 +84,6 @@ export class ZardTableBodyComponent {
 
 @Component({
   selector: 'tr[z-table-row]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -106,7 +102,6 @@ export class ZardTableRowComponent {
 
 @Component({
   selector: 'th[z-table-head]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -125,7 +120,6 @@ export class ZardTableHeadComponent {
 
 @Component({
   selector: 'td[z-table-cell]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -144,7 +138,6 @@ export class ZardTableCellComponent {
 
 @Component({
   selector: 'caption[z-table-caption]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -169,7 +162,7 @@ export class ZardTableCaptionComponent {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const tableVariants = cva(
-  'w-full caption-bottom text-sm [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:text-left [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pr-0 [&_th>[role=checkbox]]:translate-y-[2px] [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pr-0 [&_td>[role=checkbox]]:translate-y-[2px] [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground',
+  'w-full caption-bottom text-sm [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:text-left [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pr-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pr-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground',
   {
     variants: {
       zType: {
@@ -206,7 +199,7 @@ export const tableRowVariants = cva('border-b transition-colors hover:bg-muted/5
 });
 
 export const tableHeadVariants = cva(
-  'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+  'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>role=checkbox]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},
@@ -214,7 +207,7 @@ export const tableHeadVariants = cva(
 );
 
 export const tableCellVariants = cva(
-  'p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>[role=checkbox]]:translate-y-[2px]',
+  'p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>role=checkbox]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},
@@ -226,30 +219,23 @@ export const tableCaptionVariants = cva('mt-4 text-sm text-muted-foreground', {
   defaultVariants: {},
 });
 
-export type ZardTableVariants = VariantProps<typeof tableVariants>;
-export type ZardTableHeaderVariants = VariantProps<typeof tableHeaderVariants>;
-export type ZardTableBodyVariants = VariantProps<typeof tableBodyVariants>;
-export type ZardTableRowVariants = VariantProps<typeof tableRowVariants>;
-export type ZardTableHeadVariants = VariantProps<typeof tableHeadVariants>;
-export type ZardTableCellVariants = VariantProps<typeof tableCellVariants>;
-export type ZardTableCaptionVariants = VariantProps<typeof tableCaptionVariants>;
+export type ZardTableSizeVariants = NonNullable<VariantProps<typeof tableVariants>['zSize']>;
+export type ZardTableTypeVariants = NonNullable<VariantProps<typeof tableVariants>['zType']>;
 
 ```
 
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export * from './table.component';
-export * from './table.module';
-export * from './table.variants';
+export * from '@/shared/components/table/table.component';
+export * from '@/shared/components/table/table.imports';
+export * from '@/shared/components/table/table.variants';
 
 ```
 
 
 
-```angular-ts title="table.module.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { NgModule } from '@angular/core';
-
+```angular-ts title="table.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   ZardTableComponent,
   ZardTableHeaderComponent,
@@ -258,9 +244,9 @@ import {
   ZardTableHeadComponent,
   ZardTableCellComponent,
   ZardTableCaptionComponent,
-} from './table.component';
+} from '@/shared/components/table/table.component';
 
-const TABLE_COMPONENTS = [
+export const ZardTableImports = [
   ZardTableComponent,
   ZardTableHeaderComponent,
   ZardTableBodyComponent,
@@ -268,13 +254,7 @@ const TABLE_COMPONENTS = [
   ZardTableHeadComponent,
   ZardTableCellComponent,
   ZardTableCaptionComponent,
-];
-
-@NgModule({
-  imports: [...TABLE_COMPONENTS],
-  exports: [...TABLE_COMPONENTS],
-})
-export class ZardTableModule {}
+] as const;
 
 ```
 

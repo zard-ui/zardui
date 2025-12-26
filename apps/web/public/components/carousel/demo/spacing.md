@@ -1,13 +1,13 @@
 ```angular-ts showLineNumbers copyButton
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 
-import { mergeClasses } from '../../../utils/merge-classes';
-import { ZardCardComponent } from '../../card';
-import { ZardSegmentedComponent } from '../../segmented/segmented.component';
-import { ZardCarouselModule } from '../carousel.module';
+import { ZardCardComponent } from '@/shared/components/card';
+import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
+import { ZardSegmentedComponent } from '@/shared/components/segmented';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
-  imports: [ZardCarouselModule, ZardSegmentedComponent, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardSegmentedComponent, ZardCardComponent],
   template: `
     <div class="mx-auto w-3/4 max-w-4xl">
       <div class="mb-4 flex justify-center gap-2">

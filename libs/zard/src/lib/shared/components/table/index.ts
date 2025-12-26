@@ -1,3 +1,3 @@
-export * from './table.component';
-export * from './table.module';
-export * from './table.variants';
+export * from '@/shared/components/table/table.component';
+export * from '@/shared/components/table/table.imports';
+export * from '@/shared/components/table/table.variants';

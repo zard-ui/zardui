@@ -1,0 +1,30 @@
+# Dependencies
+
+node_modules/
+\*\*/node_modules/
+.pnp
+.pnp.js
+
+# Build outputs
+
+/build/
+/dist/
+/.next/
+/out/
+
+# Testing
+
+/coverage/
+
+# Environment variables
+
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Large data files
+
+_.csv
+_.xlsx

@@ -7,7 +7,7 @@ import { ZardCheckboxComponent } from '../../checkbox/checkbox.component';
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardSelectItemComponent } from '../../select/select-item.component';
 import { ZardSelectComponent } from '../../select/select.component';
-import { ZardFormModule } from '../form.module';
+import { ZardFormImports } from '../form.imports';
 
 interface FormData {
   firstName: string;
@@ -30,7 +30,7 @@ interface FormData {
     ZardCheckboxComponent,
     ZardSelectComponent,
     ZardSelectItemComponent,
-    ZardFormModule,
+    ZardFormImports,
   ],
   standalone: true,
   template: `

@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardBadgeComponent } from '../../badge/badge.component';
-import { ZardSelectModule } from '../select.module';
+import { ZardBadgeComponent } from '@/shared/components/badge';
+import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
   selector: 'z-demo-select-basic',
-  imports: [ZardBadgeComponent, ZardSelectModule],
+  imports: [ZardBadgeComponent, ZardSelectImports],
   template: `
     <div class="flex flex-col gap-4">
       <span>
@@ -14,7 +14,7 @@ import { ZardSelectModule } from '../select.module';
           <z-badge>{{ selectedValue }}</z-badge>
         }
       </span>
-      <z-select class="w-[300px]" zPlaceholder="Select a fruit" [(zValue)]="selectedValue">
+      <z-select class="w-75" zPlaceholder="Select a fruit" [(zValue)]="selectedValue">
         <z-select-item zValue="apple">Apple</z-select-item>
         <z-select-item zValue="banana">Banana</z-select-item>
         <z-select-item zValue="blueberry">Blueberry</z-select-item>

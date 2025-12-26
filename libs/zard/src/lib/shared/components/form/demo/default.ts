@@ -4,11 +4,11 @@ import { FormsModule } from '@angular/forms';
 import { generateId } from '../../../utils/merge-classes';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
-import { ZardFormModule } from '../form.module';
+import { ZardFormImports } from '../form.imports';
 
 @Component({
   selector: 'zard-demo-form-default',
-  imports: [FormsModule, ZardButtonComponent, ZardInputDirective, ZardFormModule],
+  imports: [FormsModule, ZardButtonComponent, ZardInputDirective, ZardFormImports],
   standalone: true,
   template: `
     <form class="max-w-sm space-y-6">

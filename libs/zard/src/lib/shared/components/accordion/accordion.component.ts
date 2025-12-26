@@ -10,9 +10,8 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { ZardAccordionItemComponent } from './accordion-item.component';
-import { accordionVariants } from './accordion.variants';
-
+import { ZardAccordionItemComponent } from '@/shared/components/accordion/accordion-item.component';
+import { accordionVariants } from '@/shared/components/accordion/accordion.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({

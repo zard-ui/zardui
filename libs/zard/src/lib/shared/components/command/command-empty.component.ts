@@ -2,9 +2,8 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncaps
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandComponent } from './command.component';
-import { commandEmptyVariants } from './command.variants';
-
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { commandEmptyVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -25,7 +24,7 @@ export class ZardCommandEmptyComponent {
 
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(commandEmptyVariants({}), this.class()));
+  protected readonly classes = computed(() => mergeClasses(commandEmptyVariants(), this.class()));
 
   protected readonly shouldShow = computed(() => {
     // Check traditional command component

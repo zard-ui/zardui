@@ -2,11 +2,11 @@
 import { Component } from '@angular/core';
 
 import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardBreadcrumbModule } from '../breadcrumb.module';
+import { ZardBreadcrumbImports } from '../breadcrumb.imports';
 
 @Component({
   selector: 'z-demo-breadcrumb-default',
-  imports: [ZardBreadcrumbModule, ZardIconComponent],
+  imports: [ZardBreadcrumbImports, ZardIconComponent],
   standalone: true,
   template: `
     <z-breadcrumb zWrap="wrap" zAlign="start">

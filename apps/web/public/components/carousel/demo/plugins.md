@@ -3,13 +3,13 @@ import { ChangeDetectionStrategy, Component, type OnInit, inject, signal } from 
 
 import { type EmblaCarouselType, type EmblaPluginType } from 'embla-carousel';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardCardComponent } from '../../card';
-import { ZardCarouselPluginsService } from '../carousel-plugins.service';
-import { ZardCarouselModule } from '../carousel.module';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardCardComponent } from '@/shared/components/card';
+import { ZardCarouselPluginsService } from '@/shared/components/carousel/carousel-plugins.service';
+import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
-  imports: [ZardCarouselModule, ZardButtonComponent, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardButtonComponent, ZardCardComponent],
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <div class="mb-4 flex gap-2">

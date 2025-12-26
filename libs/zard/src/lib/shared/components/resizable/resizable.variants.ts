@@ -12,7 +12,7 @@ export const resizableVariants = cva('flex h-full w-full data-[layout=vertical]:
   },
 });
 
-export const resizablePanelVariants = cva('relative overflow-hidden flex-shrink-0 h-full', {
+export const resizablePanelVariants = cva('relative overflow-hidden shrink-0 h-full', {
   variants: {
     zCollapsed: {
       true: 'hidden',
@@ -25,14 +25,14 @@ export const resizablePanelVariants = cva('relative overflow-hidden flex-shrink-
 });
 
 export const resizableHandleVariants = cva(
-  'group relative flex flex-shrink-0 items-center justify-center bg-border transition-colors hover:bg-border/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1',
+  'group relative flex shrink-0 items-center justify-center bg-border transition-colors hover:bg-border/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1',
   {
     variants: {
       zLayout: {
         horizontal:
-          'w-[1px] min-w-[1px] cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2',
+          'w-px min-w-px cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2',
         vertical:
-          'h-[1px] min-h-[1px] w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-4 after:-translate-y-1/2',
+          'h-px min-h-px w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-4 after:-translate-y-1/2',
       },
       zDisabled: {
         true: 'cursor-default pointer-events-none opacity-50',
@@ -61,6 +61,4 @@ export const resizableHandleIndicatorVariants = cva(
   },
 );
 
-export type ZardResizableVariants = VariantProps<typeof resizableVariants>;
-export type ZardResizablePanelVariants = VariantProps<typeof resizablePanelVariants>;
-export type ZardResizableHandleVariants = VariantProps<typeof resizableHandleVariants>;
+export type ZardResizableLayoutVariants = NonNullable<VariantProps<typeof resizableVariants>['zLayout']>;

@@ -1,3 +1,3 @@
-export * from './form.component';
-export * from './form.module';
-export * from './form.variants';
+export * from '@/shared/components/form/form.component';
+export * from '@/shared/components/form/form.imports';
+export * from '@/shared/components/form/form.variants';

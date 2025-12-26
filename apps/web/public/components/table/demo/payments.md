@@ -1,17 +1,10 @@
 ```angular-ts showLineNumbers copyButton
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardBadgeComponent } from '../../badge/badge.component';
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import {
-  ZardTableBodyComponent,
-  ZardTableCellComponent,
-  ZardTableComponent,
-  ZardTableHeadComponent,
-  ZardTableHeaderComponent,
-  ZardTableRowComponent,
-} from '../table.component';
+import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardIconComponent } from '@/shared/components/icon/icon.component';
+import { ZardTableImports } from '@/shared/components/table/table.imports';
 
 export interface Payment {
   id: string;
@@ -22,18 +15,7 @@ export interface Payment {
 
 @Component({
   selector: 'z-demo-table-payments',
-  imports: [
-    ZardTableComponent,
-    ZardTableHeaderComponent,
-    ZardTableBodyComponent,
-    ZardTableRowComponent,
-    ZardTableHeadComponent,
-    ZardTableCellComponent,
-    ZardBadgeComponent,
-    ZardButtonComponent,
-    ZardIconComponent,
-  ],
-  standalone: true,
+  imports: [ZardTableImports, ZardBadgeComponent, ZardButtonComponent, ZardIconComponent],
   template: `
     <div class="w-full">
       <div class="overflow-hidden rounded-md border">
@@ -81,6 +63,7 @@ export interface Payment {
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoTablePaymentsComponent {
   payments: Payment[] = [

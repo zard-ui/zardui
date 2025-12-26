@@ -15,10 +15,9 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { ZardCommandComponent } from './command.component';
-import { commandInputVariants } from './command.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-
+import { ZardCommandComponent } from '@/shared/components/command/command.component';
+import { commandInputVariants } from '@/shared/components/command/command.variants';
+import { ZardIconComponent } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -70,7 +69,7 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
 
   readonly searchTerm = signal('');
 
-  readonly classes = computed(() => mergeClasses(commandInputVariants({}), this.class()));
+  readonly classes = computed(() => mergeClasses(commandInputVariants(), this.class()));
 
   readonly disabled = signal(false);
 

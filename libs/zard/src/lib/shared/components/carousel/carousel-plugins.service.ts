@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import type { EmblaPluginType } from 'embla-carousel';
+
 /**
  * Service to create and manage Embla Carousel plugins
  */
@@ -64,7 +66,7 @@ export class ZardCarouselPluginsService {
       dragging?: string;
       draggable?: string;
     } = {},
-  ) {
+  ): Promise<EmblaPluginType> {
     try {
       const ClassNamesModule = await import('embla-carousel-class-names');
       const ClassNames = ClassNamesModule.default;

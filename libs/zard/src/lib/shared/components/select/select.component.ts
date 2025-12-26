@@ -30,17 +30,16 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
-
-import { ZardSelectItemComponent } from './select-item.component';
+import { ZardBadgeComponent } from '@/shared/components/badge';
+import { ZardIconComponent } from '@/shared/components/icon';
+import { ZardSelectItemComponent } from '@/shared/components/select/select-item.component';
 import {
   selectContentVariants,
   selectTriggerVariants,
   selectVariants,
   type ZardSelectSizeVariants,
-} from './select.variants';
-import { ZardBadgeComponent } from '../badge/badge.component';
-import { ZardIconComponent } from '../icon/icon.component';
+} from '@/shared/components/select/select.variants';
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;

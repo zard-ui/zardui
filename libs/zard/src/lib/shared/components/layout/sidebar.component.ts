@@ -12,22 +12,19 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
 import {
   sidebarGroupLabelVariants,
   sidebarGroupVariants,
   sidebarTriggerVariants,
   sidebarVariants,
-} from './layout.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
-
+} from '@/shared/components/layout/layout.variants';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-sidebar',
   imports: [ZardStringTemplateOutletDirective, ZardIconComponent],
-  standalone: true,
   template: `
     <aside [class]="classes()" [style.width.px]="currentWidth()" [attr.data-collapsed]="zCollapsed()">
       <div class="flex-1 overflow-auto">
@@ -109,7 +106,6 @@ export class SidebarComponent {
 
 @Component({
   selector: 'z-sidebar-group',
-  standalone: true,
   template: `
     <div [class]="classes()">
       <ng-content />
@@ -127,7 +123,6 @@ export class SidebarGroupComponent {
 
 @Component({
   selector: 'z-sidebar-group-label',
-  standalone: true,
   template: `
     <div [class]="classes()">
       <ng-content />
