@@ -1,18 +1,24 @@
-<z-content [navigationConfig]="navigationConfig" [activeAnchor]="activeAnchor" scrollSpy (scrollSpyChange)="activeAnchor = $event">
+<z-content
+  [navigationConfig]="navigationConfig"
+  [activeAnchor]="activeAnchor"
+  (scrollSpyChange)="activeAnchor = $event"
+  scrollSpy
+>
   <z-doc-heading
     title="About & Credits"
     description="Learn more about ZardUI, our team, and the amazing contributors who make this project possible."
     scrollSpyItem="overview"
     id="overview"
-  >
-  </z-doc-heading>
+  ></z-doc-heading>
 
   <div class="flex flex-col gap-6">
     <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
       ZardUI is an open-source Angular component library built with
-      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">TailwindCSS</code>, inspired by
-      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">shadcn/ui</code>. Our mission is to provide developers with beautiful, accessible, and highly
-      customizable components that accelerate development while maintaining design consistency.
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">TailwindCSS</code>
+      , inspired by
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">shadcn/ui</code>
+      . Our mission is to provide developers with beautiful, accessible, and highly customizable components that
+      accelerate development while maintaining design consistency.
     </p>
   </div>
 
@@ -20,26 +26,30 @@
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="founders" id="founders">
     <div class="flex flex-col gap-6">
       <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Founders</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">Meet the people behind ZardUI who started this journey to create exceptional developer experiences.</p>
+      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+        Meet the people behind ZardUI who started this journey to create exceptional developer experiences.
+      </p>
     </div>
 
     @if (founders$ | async; as founders) {
-    <z-founders [founders]="founders"></z-founders>
+      <z-founders [founders]="founders" />
     } @else {
-    <z-founders-loading></z-founders-loading>
+      <z-founders-loading />
     }
   </section>
 
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="mantainers" id="mantainers">
     <div class="flex flex-col gap-6">
       <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Maintainers</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">The dedicated team members who help maintain and improve ZardUI, ensuring quality and consistency.</p>
+      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+        The dedicated team members who help maintain and improve ZardUI, ensuring quality and consistency.
+      </p>
     </div>
 
     @if (maintainers$ | async; as maintainers) {
-    <z-maintainers [maintainers]="maintainers"></z-maintainers>
+      <z-maintainers [maintainers]="maintainers" />
     } @else {
-    <z-maintainers-loading></z-maintainers-loading>
+      <z-maintainers-loading />
     }
   </section>
 
@@ -47,13 +57,15 @@
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="contributors" id="contributors">
     <div class="flex flex-col gap-6">
       <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Contributors</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">A huge thank you to all the amazing developers who have contributed to making ZardUI better.</p>
+      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+        A huge thank you to all the amazing developers who have contributed to making ZardUI better.
+      </p>
     </div>
 
     @if (filteredContributors$ | async; as contributors) {
-    <z-contributors [contributors]="contributors"></z-contributors>
+      <z-contributors [contributors]="contributors"></z-contributors>
     } @else {
-    <z-contributors-loading></z-contributors-loading>
+      <z-contributors-loading />
     }
   </section>
 
@@ -61,12 +73,14 @@
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="credits" id="credits">
     <div class="flex flex-col gap-6">
       <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Credits & Acknowledgments</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">ZardUI wouldn't be possible without these amazing projects and communities.</p>
+      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+        ZardUI wouldn't be possible without these amazing projects and communities.
+      </p>
     </div>
 
     <div class="flex flex-col gap-4">
       @for (item of creditItems; track item.title) {
-      <z-credit-card [title]="item.title" [description]="item.description"></z-credit-card>
+        <z-credit-card [title]="item.title" [description]="item.description" />
       }
     </div>
   </section>

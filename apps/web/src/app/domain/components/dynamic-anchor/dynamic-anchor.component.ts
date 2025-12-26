@@ -1,7 +1,8 @@
 import { Location, TitleCasePipe, ViewportScroller } from '@angular/common';
-import { Component, inject, input, model } from '@angular/core';
+import { Component, DOCUMENT, inject, input } from '@angular/core';
 
-import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
+import { HeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
+import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 
 export interface NavigationItem {
   id: string;
@@ -20,10 +21,11 @@ export interface NavigationConfig {
   templateUrl: './dynamic-anchor.component.html',
 })
 export class DynamicAnchorComponent {
-  private location = inject(Location);
-  private viewportScroller = inject(ViewportScroller);
+  private readonly document = inject(DOCUMENT);
+  private readonly location = inject(Location);
+  private readonly viewportScroller = inject(ViewportScroller);
 
-  activeAnchor = model<string | undefined>();
+  activeAnchor = input<string | undefined>();
   navigation = input<NavigationConfig>({ items: [] });
   onAnchorClick = input<((anchorId: string) => void | Promise<void>) | null>(null);
 
@@ -34,19 +36,14 @@ export class DynamicAnchorComponent {
       return;
     }
 
-    const anchorElement = document.getElementById(anchor);
+    const anchorElement = this.document.getElementById(anchor);
 
     if (anchorElement) {
       const currentPath = this.location.path().split('#')[0];
       this.location.replaceState(`${currentPath}#${anchor}`);
 
-      const elementTop = anchorElement.offsetTop;
-      const windowHeight = window.innerHeight;
-      const elementHeight = anchorElement.offsetHeight;
-
-      const centerPosition = elementTop - windowHeight / 2 + elementHeight / 2 + 150;
-
-      this.viewportScroller.scrollToPosition([0, Math.max(0, centerPosition)]);
+      const yScrollPosition = anchorElement.offsetTop - HeaderOffset;
+      this.viewportScroller.scrollToPosition([0, Math.max(HeaderOffset, yScrollPosition)]);
     }
   }
 

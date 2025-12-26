@@ -32,8 +32,8 @@ import { DarkModeOptions, ZardDarkMode } from '@zard/services/dark-mode';
 export class DocumentationLayout {
   private readonly darkModeService = inject(ZardDarkMode);
   private readonly destroyRef = inject(DestroyRef);
-  readonly isDevEnv = !environment.production;
 
+  readonly isDevEnv = !environment.production;
   private readonly themeSignal = signal<DarkModeOptions>(this.darkModeService.currentTheme());
   readonly currentTheme = computed(() => this.themeSignal());
 

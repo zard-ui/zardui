@@ -205,6 +205,22 @@ export class MarkdownService {
               class: ['text-xl', 'font-semibold', 'mt-4', 'text-primary'],
             };
           }
+
+          if (node.tagName === 'blockquote') {
+            node.properties = {
+              ...node.properties,
+              style: [],
+              class: ['border-l-4', 'border-primary', 'pl-6', 'py-2', 'my-4', 'text-muted-foreground', 'italic'],
+            };
+          }
+
+          if (node.tagName === 'a') {
+            node.properties = {
+              ...node.properties,
+              style: [],
+              class: ['text-primary', 'hover:text-primary/80', 'transition-colors', 'font-medium'],
+            };
+          }
         });
       };
     };

@@ -1,12 +1,18 @@
 <div class="flex items-stretch text-[1.05rem] sm:text-[15px] xl:w-full">
   <section [class]="'flex min-w-0 flex-1 flex-col ' + (activeAnchor.length ? 'xl:ml-2' : 'xl:mx-auto xl:max-w-4xl')">
-    <div class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 py-6 text-neutral-800 md:px-0 lg:py-8 dark:text-neutral-300">
+    <div
+      class="mx-auto flex w-full max-w-2xl min-w-0 flex-1 flex-col gap-8 px-4 py-6 text-neutral-800 md:px-0 lg:py-8 dark:text-neutral-300"
+    >
       <ng-content></ng-content>
     </div>
   </section>
 
   @if (navigationConfig()) {
-    <z-dynamic-anchor [navigation]="navigationConfig()!" [activeAnchor]="activeAnchor() || ''" [onAnchorClick]="onAnchorClick()"></z-dynamic-anchor>
+    <z-dynamic-anchor
+      [navigation]="navigationConfig()!"
+      [activeAnchor]="activeAnchor()"
+      [onAnchorClick]="onAnchorClick()"
+    ></z-dynamic-anchor>
   } @else {
     <div class="hidden w-72 xl:block"></div>
   }

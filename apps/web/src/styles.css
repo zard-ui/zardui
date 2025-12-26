@@ -56,8 +56,8 @@
   --selection-foreground: oklch(1 0 0);
   --shiki-theme: var(--shiki--light);
   --shiki-theme: var(--shiki--light);
-  --shiki--light: var(--shiki-theme,);
-  --shiki--dark: var(--shiki-theme,);
+  --shiki--light: var(--shiki-theme);
+  --shiki--dark: var(--shiki-theme);
 }
 
 .dark {

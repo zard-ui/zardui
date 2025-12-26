@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -19,25 +19,26 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 @Component({
   selector: 'z-component',
   templateUrl: './component.page.html',
-  standalone: true,
   imports: [
+    AiAssistComponent,
     DocContentComponent,
-    StepsComponent,
-    ZardCodeBoxComponent,
+    MarkdownRendererComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
-    MarkdownRendererComponent,
-    AiAssistComponent,
+    StepsComponent,
+    ZardCodeBoxComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ComponentPage {
+export class ComponentPage implements OnInit {
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dynamicInstallationService = inject(DynamicInstallationService);
   private readonly router = inject(Router);
   private readonly seoService = inject(SeoService);
-  activeAnchor!: string;
-  componentData!: ComponentData;
+
+  activeAnchor = 'overview';
+  componentData = signal<ComponentData | undefined>(undefined);
   navigationConfig: NavigationConfig = {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
@@ -50,11 +51,8 @@ export class ComponentPage {
   activeTab = signal<'manual' | 'cli'>('cli');
   installGuide!: { manual: Step[]; cli: Step[] } | undefined;
 
-  constructor() {
-    this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.loadData();
-    });
-    this.loadData();
+  ngOnInit() {
+    this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.loadData());
   }
 
   private loadData() {
@@ -70,7 +68,7 @@ export class ComponentPage {
       return;
     }
 
-    this.componentData = component;
+    this.componentData.set(component);
 
     const examplesItem = this.navigationConfig.items.find(item => item.id === 'examples');
     if (examplesItem) {
@@ -86,7 +84,11 @@ export class ComponentPage {
   }
 
   setPageTitle() {
-    const { componentName, description } = this.componentData;
+    const componentData = this.componentData();
+    if (!componentData) {
+      return;
+    }
+    const { componentName, description } = componentData;
     const ogImage = `og-${componentName}.jpg`;
 
     if (componentName) {
