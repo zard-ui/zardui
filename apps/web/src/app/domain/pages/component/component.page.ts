@@ -51,6 +51,43 @@ export class ComponentPage implements OnInit {
   activeTab = signal<'manual' | 'cli'>('cli');
   installGuide!: { manual: Step[]; cli: Step[] } | undefined;
 
+  onInstallKeyDown(e: Event, tabList: HTMLElement): void {
+    const event = e as KeyboardEvent;
+    const tabs = Array.from(tabList.querySelectorAll('[role="tab"]')) as HTMLElement[];
+    const currentIndex = tabs.findIndex(tab => tab === event.target);
+
+    if (currentIndex === -1) return;
+
+    let newIndex = currentIndex;
+
+    switch (event.key) {
+      case 'ArrowLeft':
+        newIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
+        break;
+      case 'ArrowRight':
+        newIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
+        break;
+      case 'Home':
+        newIndex = 0;
+        break;
+      case 'End':
+        newIndex = tabs.length - 1;
+        break;
+      case 'Enter':
+      case ' ':
+        return;
+      default:
+        return;
+    }
+
+    if (newIndex !== currentIndex) {
+      tabs[newIndex].focus();
+      // Update active tab based on the focused tab's id
+      const activeTabValue = tabs[newIndex].id === 'cli-tab' ? 'cli' : 'manual';
+      this.activeTab.set(activeTabValue);
+    }
+  }
+
   ngOnInit() {
     this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.loadData());
   }

@@ -21,7 +21,13 @@
       <header class="mb-3">
         <h2 class="mb-5 text-2xl font-semibold">Installation</h2>
         <div class="overflow-hidden transition-all duration-200 ease-in-out">
-          <nav class="mb-4 flex gap-4" role="tablist" aria-label="Installation method">
+          <nav
+            class="mb-4 flex gap-4"
+            role="tablist"
+            aria-label="Installation method"
+            #tabList
+            (keydown.{arrowleft,arrowright,home,end,space,enter}.prevent)="onInstallKeyDown($event, tabList)"
+          >
             @if (installGuide?.cli) {
               <button
                 id="cli-tab"

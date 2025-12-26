@@ -1,7 +1,7 @@
-import { Location, TitleCasePipe, ViewportScroller } from '@angular/common';
-import { Component, DOCUMENT, inject, input } from '@angular/core';
+import { isPlatformBrowser, Location, TitleCasePipe, ViewportScroller } from '@angular/common';
+import { Component, DOCUMENT, inject, input, PLATFORM_ID } from '@angular/core';
 
-import { HeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
+import { getHeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 
 export interface NavigationItem {
@@ -24,6 +24,8 @@ export class DynamicAnchorComponent {
   private readonly document = inject(DOCUMENT);
   private readonly location = inject(Location);
   private readonly viewportScroller = inject(ViewportScroller);
+  private readonly platformId = inject(PLATFORM_ID);
+  private readonly isBrowser = isPlatformBrowser(this.platformId);
 
   activeAnchor = input<string | undefined>();
   navigation = input<NavigationConfig>({ items: [] });
@@ -42,8 +44,9 @@ export class DynamicAnchorComponent {
       const currentPath = this.location.path().split('#')[0];
       this.location.replaceState(`${currentPath}#${anchor}`);
 
-      const yScrollPosition = anchorElement.offsetTop - HeaderOffset;
-      this.viewportScroller.scrollToPosition([0, Math.max(HeaderOffset, yScrollPosition)]);
+      const headerOffset = getHeaderOffset(this.isBrowser);
+      const yScrollPosition = anchorElement.offsetTop - headerOffset;
+      this.viewportScroller.scrollToPosition([0, Math.max(0, yScrollPosition)]);
     }
   }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, type OnInit } from '@angular/core';
 
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -22,7 +22,6 @@ import { SeoService } from '@doc/shared/services/seo.service';
 @Component({
   selector: 'z-about',
   templateUrl: './about.page.html',
-  standalone: true,
   imports: [
     CommonModule,
     DocContentComponent,
@@ -37,11 +36,13 @@ import { SeoService } from '@doc/shared/services/seo.service';
     ContributorsLoadingComponent,
     CreditCardComponent,
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AboutPage implements OnInit {
   private readonly githubService = inject(GithubService);
   private readonly seoService = inject(SeoService);
-  activeAnchor?: string;
+
+  readonly activeAnchor = signal<string | undefined>(undefined);
 
   ngOnInit(): void {
     this.seoService.setDocsSeo(
@@ -70,11 +71,11 @@ export class AboutPage implements OnInit {
   private readonly maintainerMappings = {
     ribeiromatheuss: {
       name: 'Matheus Ribeiro',
-      role: 'Mantainer',
+      role: 'Maintainer',
     },
     mikij: {
       name: 'Mickey Lazarevic',
-      role: 'Mantainer',
+      role: 'Maintainer',
     },
   };
 
@@ -82,7 +83,7 @@ export class AboutPage implements OnInit {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
       { id: 'founders', label: 'Founders', type: 'custom' },
-      { id: 'mantainers', label: 'Mantainers', type: 'custom' },
+      { id: 'maintainers', label: 'Maintainers', type: 'custom' },
       { id: 'contributors', label: 'Contributors', type: 'custom' },
       { id: 'credits', label: 'Credits', type: 'custom' },
     ],

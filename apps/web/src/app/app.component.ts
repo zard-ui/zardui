@@ -5,7 +5,7 @@ import { Router, RouterModule, Scroll } from '@angular/router';
 
 import { filter } from 'rxjs';
 
-import { HeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
+import { getHeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
 
 const LOADING_TIMEOUT = 1000;
 
@@ -24,25 +24,41 @@ export class AppComponent {
   private readonly router = inject(Router);
   private readonly viewportScroller = inject(ViewportScroller);
 
+  private scrollTimeoutId: number | null = null;
+
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
+      this.destroyRef.onDestroy(() => {
+        if (this.scrollTimeoutId !== null) {
+          clearTimeout(this.scrollTimeoutId);
+          this.scrollTimeoutId = null;
+        }
+      });
+
       this.router.events
         .pipe(
           filter((e): e is Scroll => e instanceof Scroll),
           takeUntilDestroyed(this.destroyRef),
         )
         .subscribe(e => {
+          if (this.scrollTimeoutId !== null) {
+            clearTimeout(this.scrollTimeoutId);
+          }
+
           const timeout = this.router.url.includes('docs/components') ? LOADING_TIMEOUT : 0;
-          setTimeout(() => {
+          this.scrollTimeoutId = window.setTimeout(() => {
             if (e.anchor) {
               const anchorElement = this.document.getElementById(e.anchor);
               if (anchorElement) {
-                const yScrollPosition = anchorElement.offsetTop - HeaderOffset;
-                this.viewportScroller.scrollToPosition([0, Math.max(HeaderOffset, yScrollPosition)]);
+                const headerOffset = getHeaderOffset(true);
+                const yScrollPosition = anchorElement.offsetTop - headerOffset;
+                this.viewportScroller.scrollToPosition([0, Math.max(0, yScrollPosition)]);
               }
             } else {
               this.viewportScroller.scrollToPosition([0, 0]);
             }
+
+            this.scrollTimeoutId = null;
           }, timeout);
         });
     }

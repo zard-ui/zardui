@@ -1,7 +1,7 @@
 <z-content
   [navigationConfig]="navigationConfig"
-  [activeAnchor]="activeAnchor"
-  (scrollSpyChange)="activeAnchor = $event"
+  [activeAnchor]="activeAnchor()"
+  (scrollSpyChange)="activeAnchor.set($event)"
   scrollSpy
 >
   <z-doc-heading
@@ -9,7 +9,7 @@
     description="Learn more about ZardUI, our team, and the amazing contributors who make this project possible."
     scrollSpyItem="overview"
     id="overview"
-  ></z-doc-heading>
+  />
 
   <div class="flex flex-col gap-6">
     <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
@@ -31,14 +31,15 @@
       </p>
     </div>
 
-    @if (founders$ | async; as founders) {
+    @let founders = founders$ | async;
+    @if (founders) {
       <z-founders [founders]="founders" />
     } @else {
       <z-founders-loading />
     }
   </section>
 
-  <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="mantainers" id="mantainers">
+  <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="maintainers" id="maintainers">
     <div class="flex flex-col gap-6">
       <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Maintainers</h2>
       <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
@@ -46,7 +47,8 @@
       </p>
     </div>
 
-    @if (maintainers$ | async; as maintainers) {
+    @let maintainers = maintainers$ | async;
+    @if (maintainers) {
       <z-maintainers [maintainers]="maintainers" />
     } @else {
       <z-maintainers-loading />
@@ -62,8 +64,9 @@
       </p>
     </div>
 
-    @if (filteredContributors$ | async; as contributors) {
-      <z-contributors [contributors]="contributors"></z-contributors>
+    @let contributors = filteredContributors$ | async;
+    @if (contributors) {
+      <z-contributors [contributors]="contributors" />
     } @else {
       <z-contributors-loading />
     }
