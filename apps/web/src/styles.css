@@ -54,9 +54,6 @@
   --code-tab-button: oklch(0.925 0 0);
   --selection: oklch(0.145 0 0);
   --selection-foreground: oklch(1 0 0);
-  --shiki--light: github-light;
-  --shiki--dark: github-dark;
-  --shiki-theme: var(--shiki--light);
 }
 
 .dark {
@@ -100,7 +97,6 @@
   --code-tab-button: oklch(0.178 0 0);
   --selection: oklch(0.922 0 0);
   --selection-foreground: oklch(0.205 0 0);
-  --shiki-theme: var(--shiki--dark);
 }
 
 @theme inline {
@@ -262,13 +258,13 @@ code[data-line-numbers-max-digits='4'] > [data-line]::before {
   width: 2.25rem;
 }
 
-code[data-theme*=' '],
-code[data-theme*=' '] span {
+code,
+code span {
   color: var(--shiki-light);
 }
 
-[data-theme='dark'] code[data-theme*=' '],
-[data-theme='dark'] code[data-theme*=' '] span {
+.dark code,
+.dark code span {
   color: var(--shiki-dark);
 }
 
