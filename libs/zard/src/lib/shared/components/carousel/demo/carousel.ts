@@ -1,10 +1,10 @@
-import { ZardDemoCarouselApiComponent } from './api-demo';
-import { ZardDemoCarouselDefaultComponent } from './default';
-import { ZardDemoCarouselDotControlsComponent } from './dot-controls';
-import { ZardDemoCarouselOrientationComponent } from './orientation';
-import { ZardDemoCarouselPluginsComponent } from './plugins';
-import { ZardDemoCarouselSizeComponent } from './sizes';
-import { ZardDemoCarouselSpacingComponent } from './spacing';
+import { ZardDemoCarouselApiComponent } from '@/shared/components/carousel/demo/api-demo';
+import { ZardDemoCarouselDefaultComponent } from '@/shared/components/carousel/demo/default';
+import { ZardDemoCarouselDotControlsComponent } from '@/shared/components/carousel/demo/dot-controls';
+import { ZardDemoCarouselOrientationComponent } from '@/shared/components/carousel/demo/orientation';
+import { ZardDemoCarouselPluginsComponent } from '@/shared/components/carousel/demo/plugins';
+import { ZardDemoCarouselSizeComponent } from '@/shared/components/carousel/demo/sizes';
+import { ZardDemoCarouselSpacingComponent } from '@/shared/components/carousel/demo/spacing';
 
 export const CAROUSEL = {
   componentName: 'carousel',

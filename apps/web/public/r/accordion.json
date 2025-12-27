@@ -13,6 +13,10 @@
     {
       "name": "accordion.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const accordionVariants = cva('grid w-full', {\n  variants: {},\n  defaultVariants: {},\n});\n\nexport const accordionItemVariants = cva('border-b border-border flex flex-1 flex-col', {\n  variants: {},\n  defaultVariants: {},\n});\n\nexport const accordionTriggerVariants = cva(\n  'cursor-pointer group flex flex-1 items-start justify-between gap-4 rounded-md py-4 text-left text-sm font-medium transition-all outline-none hover:underline focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50 w-full',\n  {\n    variants: {},\n    defaultVariants: {},\n  },\n);\n\nexport const accordionContentVariants = cva('grid text-sm transition-all', {\n  variants: {\n    isOpen: {\n      true: 'grid-rows-[1fr]',\n      false: 'grid-rows-[0fr]',\n    },\n  },\n  defaultVariants: {\n    isOpen: false,\n  },\n});\n\nexport type ZardAccordionVariants = VariantProps<typeof accordionVariants>;\nexport type ZardAccordionItemVariants = VariantProps<typeof accordionItemVariants>;\nexport type ZardAccordionTriggerVariants = VariantProps<typeof accordionTriggerVariants>;\nexport type ZardAccordionContentVariants = VariantProps<typeof accordionContentVariants>;\n"
+    },
+    {
+      "name": "accordion.imports.ts",
+      "content": "import { ZardAccordionItemComponent } from '@/shared/components/accordion/accordion-item.component';\nimport { ZardAccordionComponent } from '@/shared/components/accordion/accordion.component';\n\nexport const ZardAccordionImports = [ZardAccordionComponent, ZardAccordionItemComponent] as const;\n"
     }
   ],
   "registryDependencies": [

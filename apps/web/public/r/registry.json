@@ -47,6 +47,7 @@
         "content.component.ts",
         "footer.component.ts",
         "header.component.ts",
+        "layout.imports.ts",
         "sidebar.component.ts"
       ]
     },
@@ -72,6 +73,7 @@
         "sheet.component.ts",
         "sheet.variants.ts",
         "sheet-ref.ts",
+        "sheet.imports.ts",
         "sheet.service.ts"
       ]
     },
@@ -114,7 +116,8 @@
       "files": [
         "accordion.component.ts",
         "accordion-item.component.ts",
-        "accordion.variants.ts"
+        "accordion.variants.ts",
+        "accordion.imports.ts"
       ]
     },
     {
@@ -226,7 +229,8 @@
       "files": [
         "select.component.ts",
         "select-item.component.ts",
-        "select.variants.ts"
+        "select.variants.ts",
+        "select.imports.ts"
       ]
     },
     {
@@ -274,6 +278,7 @@
       ],
       "files": [
         "breadcrumb.component.ts",
+        "breadcrumb.imports.ts",
         "breadcrumb.variants.ts"
       ]
     },
@@ -362,6 +367,7 @@
         "command-option.component.ts",
         "command-option-group.component.ts",
         "command-divider.component.ts",
+        "command.imports.ts",
         "command.variants.ts"
       ]
     },
@@ -385,6 +391,7 @@
       "type": "registry:component",
       "files": [
         "form.component.ts",
+        "form.imports.ts",
         "form.variants.ts"
       ]
     },
@@ -397,6 +404,7 @@
       ],
       "files": [
         "pagination.component.ts",
+        "pagination.imports.ts",
         "pagination.variants.ts"
       ]
     },
@@ -415,7 +423,8 @@
         "resizable.component.ts",
         "resizable-panel.component.ts",
         "resizable-handle.component.ts",
-        "resizable.variants.ts"
+        "resizable.variants.ts",
+        "resizable.imports.ts"
       ]
     },
     {
@@ -439,6 +448,7 @@
       "type": "registry:component",
       "files": [
         "table.component.ts",
+        "table.imports.ts",
         "table.variants.ts"
       ]
     },
@@ -518,7 +528,8 @@
         "carousel.variants.ts",
         "carousel-content.component.ts",
         "carousel-item.component.ts",
-        "carousel-plugins.service.ts"
+        "carousel-plugins.service.ts",
+        "carousel.imports.ts"
       ]
     }
   ]
