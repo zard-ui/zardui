@@ -158,7 +158,7 @@ export const checkboxVariants = cva(
 export const checkboxLabelVariants = cva('cursor-[unset] text-current empty:hidden', {
   variants: {
     zSize: {
-      default: 'text-base',
+      default: 'text-sm',
       lg: 'text-lg',
     },
   },

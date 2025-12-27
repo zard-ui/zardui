@@ -1,7 +1,12 @@
 /
+/examples/dashboard
+/examples/tasks
+/examples/playground
+/examples/authentication
 /docs
 /docs/components
 /blocks
+/themes
 /colors
 /docs/introduction
 /docs/components

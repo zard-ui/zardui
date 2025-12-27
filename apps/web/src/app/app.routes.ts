@@ -8,7 +8,43 @@ export const appRoutes: Route[] = [
   {
     path: '',
     component: ShellLayout,
-    children: [{ path: '', loadComponent: () => import('./domain/pages/home/home.page').then(c => c.HomePage) }],
+    children: [
+      {
+        path: '',
+        loadComponent: () => import('./domain/pages/home/home.page').then(c => c.HomePage),
+        children: [
+          {
+            path: '',
+            loadComponent: () =>
+              import('./domain/pages/home/sections/hero/components/hero-default-content.component').then(
+                c => c.HeroDefaultContentComponent,
+              ),
+          },
+          {
+            path: 'examples/dashboard',
+            loadComponent: () =>
+              import('./domain/pages/examples/dashboard/dashboard-example.page').then(c => c.DashboardExamplePage),
+          },
+          {
+            path: 'examples/tasks',
+            loadComponent: () =>
+              import('./domain/pages/examples/tasks/tasks-example.page').then(c => c.TasksExamplePage),
+          },
+          {
+            path: 'examples/playground',
+            loadComponent: () =>
+              import('./domain/pages/examples/playground/playground-example.page').then(c => c.PlaygroundExamplePage),
+          },
+          {
+            path: 'examples/authentication',
+            loadComponent: () =>
+              import('./domain/pages/examples/authentication/authentication-example.page').then(
+                c => c.AuthenticationExamplePage,
+              ),
+          },
+        ],
+      },
+    ],
   },
   {
     path: 'blocks',
