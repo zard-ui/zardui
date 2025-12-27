@@ -224,7 +224,7 @@ app.use((req, res, next) => {
   })(req, res, next);
 });
 
-app.get('**', (req, res, next) => {
+app.get('/*splat', (req, res, next) => {
   const { protocol, originalUrl, baseUrl, headers } = req;
 
   commonEngine

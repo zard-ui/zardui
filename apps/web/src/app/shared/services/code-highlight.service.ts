@@ -14,6 +14,10 @@ export class CodeHighlightService {
   private initialized = false;
 
   async initializeProcessor(showLineNumbers = false) {
+    if (this.initialized) {
+      return;
+    }
+
     this.processor = unified()
       .use(remarkParse, { fragment: true })
       .use(remarkRehype)

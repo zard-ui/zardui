@@ -54,10 +54,9 @@
   --code-tab-button: oklch(0.925 0 0);
   --selection: oklch(0.145 0 0);
   --selection-foreground: oklch(1 0 0);
+  --shiki--light: github-light;
+  --shiki--dark: github-dark;
   --shiki-theme: var(--shiki--light);
-  --shiki-theme: var(--shiki--light);
-  --shiki--light: var(--shiki-theme,);
-  --shiki--dark: var(--shiki-theme,);
 }
 
 .dark {
@@ -101,6 +100,7 @@
   --code-tab-button: oklch(0.178 0 0);
   --selection: oklch(0.922 0 0);
   --selection-foreground: oklch(0.205 0 0);
+  --shiki-theme: var(--shiki--dark);
 }
 
 @theme inline {

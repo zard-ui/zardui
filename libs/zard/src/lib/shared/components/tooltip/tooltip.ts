@@ -27,9 +27,12 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { filter, map, of, Subject, switchMap, tap, timer } from 'rxjs';
 
-import { TOOLTIP_POSITIONS_MAP } from './tooltip-positions';
-import { tooltipPositionVariants, tooltipVariants, type ZardTooltipPositionVariants } from './tooltip.variants';
-
+import { TOOLTIP_POSITIONS_MAP } from '@/shared/components/tooltip/tooltip-positions';
+import {
+  tooltipPositionVariants,
+  tooltipVariants,
+  type ZardTooltipPositionVariants,
+} from '@/shared/components/tooltip/tooltip.variants';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { generateId, mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -41,7 +44,7 @@ interface DelayConfig {
   delay: number;
 }
 
-function throttle(callback: () => void, wait: number) {
+const throttle = (callback: () => void, wait: number) => {
   let time = Date.now();
   return function () {
     if (time + wait - Date.now() < 0) {
@@ -49,7 +52,7 @@ function throttle(callback: () => void, wait: number) {
       time = Date.now();
     }
   };
-}
+};
 
 @Directive({
   selector: '[zTooltip]',

@@ -9,7 +9,9 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@zard/*": ["libs/zard/src/lib/*"]
-    }
+    },
+    "module": "preserve",
+    "moduleResolution": "bundler"
   },
   "files": [],
   "include": [],

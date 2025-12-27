@@ -47,7 +47,6 @@
         "content.component.ts",
         "footer.component.ts",
         "header.component.ts",
-        "layout.module.ts",
         "sidebar.component.ts"
       ]
     },
@@ -73,7 +72,6 @@
         "sheet.component.ts",
         "sheet.variants.ts",
         "sheet-ref.ts",
-        "sheet.module.ts",
         "sheet.service.ts"
       ]
     },
@@ -276,7 +274,6 @@
       ],
       "files": [
         "breadcrumb.component.ts",
-        "breadcrumb.module.ts",
         "breadcrumb.variants.ts"
       ]
     },
@@ -365,7 +362,6 @@
         "command-option.component.ts",
         "command-option-group.component.ts",
         "command-divider.component.ts",
-        "command.module.ts",
         "command.variants.ts"
       ]
     },
@@ -389,7 +385,6 @@
       "type": "registry:component",
       "files": [
         "form.component.ts",
-        "form.module.ts",
         "form.variants.ts"
       ]
     },
@@ -402,7 +397,6 @@
       ],
       "files": [
         "pagination.component.ts",
-        "pagination.module.ts",
         "pagination.variants.ts"
       ]
     },
@@ -445,7 +439,6 @@
       "type": "registry:component",
       "files": [
         "table.component.ts",
-        "table.module.ts",
         "table.variants.ts"
       ]
     },
@@ -525,8 +518,7 @@
         "carousel.variants.ts",
         "carousel-content.component.ts",
         "carousel-item.component.ts",
-        "carousel-plugins.service.ts",
-        "carousel.module.ts"
+        "carousel-plugins.service.ts"
       ]
     }
   ]

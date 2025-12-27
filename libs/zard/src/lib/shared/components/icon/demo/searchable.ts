@@ -1,5 +1,4 @@
-import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
 import { toast } from 'ngx-sonner';
 
@@ -11,8 +10,7 @@ import { ZARD_ICONS } from '../icons';
 
 @Component({
   selector: 'z-demo-icon-searchable',
-  imports: [CommonModule, ZardIconComponent, ZardInputDirective, ZardButtonComponent, ZardEmptyComponent],
-  standalone: true,
+  imports: [ZardIconComponent, ZardInputDirective, ZardButtonComponent, ZardEmptyComponent],
   template: `
     <div class="flex w-full flex-col gap-4">
       <div class="flex flex-col gap-2">
@@ -48,20 +46,19 @@ import { ZARD_ICONS } from '../icons';
 
       <div class="text-muted-foreground text-sm">{{ filteredIcons().length }} of {{ totalIcons }} icons</div>
 
-      <div
-        class="grid max-h-[600px] grid-cols-2 gap-4 overflow-y-auto pr-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4"
-      >
+      <div class="grid max-h-150 grid-cols-2 gap-4 overflow-y-auto pr-4 sm:grid-cols-3 md:grid-cols-3 lg:grid-cols-4">
         @for (iconName of filteredIcons(); track iconName) {
           <button
+            type="button"
             z-button
             zType="outline"
             (click)="copyIconCode(iconName)"
-            class="group flex h-auto min-h-[70px] w-full flex-col items-center justify-center gap-2 px-3 py-2"
+            class="group flex h-auto min-h-17.5 w-full flex-col items-center justify-center gap-2 px-3 py-2"
             [title]="'Click to copy: <z-icon zType=&quot;' + iconName + '&quot; />'"
           >
             <z-icon [zType]="iconName" class="shrink-0 transition-transform group-hover:scale-110" />
             <span
-              class="group-hover:text-foreground w-full text-center text-xs leading-relaxed break-words hyphens-auto transition-colors"
+              class="group-hover:text-foreground w-full text-center text-xs leading-relaxed wrap-break-word hyphens-auto transition-colors"
             >
               {{ iconName }}
             </span>
@@ -74,6 +71,7 @@ import { ZARD_ICONS } from '../icons';
       }
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoIconSearchableComponent {
   readonly searchQuery = signal('');

@@ -64,10 +64,11 @@ function createCopyButton(codeContent: string, hasTitle = false): any {
     properties: {
       class: [
         hasTitle ? '' : 'absolute',
-        'top-3',
         hasTitle ? '' : 'right-3',
         hasTitle ? '' : 'z-20',
         hasTitle && 'ml-auto',
+        'top-3',
+        'cursor-pointer',
         'flex',
         'h-6',
         'w-6',
@@ -112,6 +113,7 @@ function createExpandableOverlay(title: string): any {
     properties: {
       class: [
         'absolute',
+        'top-10',
         'inset-0',
         'z-10',
         'flex',
@@ -166,27 +168,16 @@ function createExpandableOverlay(title: string): any {
 function createCodeTitle(filename: string, icon: string | null, copyButton: boolean, codeContent: string): any {
   const titleChildren = [];
 
-  if (icon?.includes('/')) {
-    titleChildren.push({
-      type: 'element',
-      tagName: 'img',
-      properties: {
-        src: icon,
-        alt: '',
-        class: ['h-4', 'w-4', 'shrink-0', 'invert-0', 'dark:invert'],
-      },
-      children: [],
-    });
-  } else {
-    titleChildren.push({
-      type: 'element',
-      tagName: 'i',
-      properties: {
-        class: [icon, 'text-base', 'text-neutral-500', 'dark:text-neutral-600'],
-      },
-      children: [],
-    });
-  }
+  titleChildren.push({
+    type: 'element',
+    tagName: 'img',
+    properties: {
+      src: icon,
+      alt: '',
+      class: ['h-4', 'w-4', 'shrink-0', 'invert-0', 'dark:invert'],
+    },
+    children: [],
+  });
 
   // Add filename
   titleChildren.push({
@@ -381,8 +372,8 @@ export function rehypeEnhancedCode() {
 
         // Add copy button only if copyButton parameter is present
         if (hasCopyButton && !hasTitle) {
-          const hasTitle = !!(filename || (language && icon));
-          codeBlockContent.children.push(createCopyButton(codeContent, hasTitle));
+          const hasDisplayTitle = !!(filename || (language && icon));
+          codeBlockContent.children.push(createCopyButton(codeContent, hasDisplayTitle));
         }
 
         // If expandable, add overlay to the wrapper
@@ -485,16 +476,10 @@ export function rehypeCodeTabs() {
         }
 
         // Remove empty elements between tabs if we're creating a tab group
-        if (tabGroup.length > 1 && elementsToRemove.length > 0) {
+        if (tabGroup.length > 1 && elementsToRemove.length) {
           // Remove in reverse order to maintain correct indices
           for (let i = elementsToRemove.length - 1; i >= 0; i--) {
             parent.children.splice(elementsToRemove[i], 1);
-            // Adjust indices of elements after the removed ones
-            for (let j = i; j < elementsToRemove.length; j++) {
-              if (elementsToRemove[j] > elementsToRemove[i]) {
-                elementsToRemove[j]--;
-              }
-            }
           }
         }
 
@@ -586,15 +571,6 @@ function createTabsWrapper(codeBlocks: any[], tabLabels: string[], hasCopyButton
         src: icon,
         alt: '',
         class: ['h-4', 'w-4', 'shrink-0', 'invert-0', 'dark:invert'],
-      },
-      children: [],
-    });
-  } else if (icon) {
-    headerChildren.push({
-      type: 'element',
-      tagName: 'i',
-      properties: {
-        class: [icon, 'text-base', 'text-neutral-500', 'dark:text-neutral-600'],
       },
       children: [],
     });

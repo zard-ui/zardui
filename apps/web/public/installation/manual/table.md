@@ -199,7 +199,7 @@ export const tableRowVariants = cva('border-b transition-colors hover:bg-muted/5
 });
 
 export const tableHeadVariants = cva(
-  'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 [&>role=checkbox]:translate-y-0.5',
+  'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},
@@ -207,7 +207,7 @@ export const tableHeadVariants = cva(
 );
 
 export const tableCellVariants = cva(
-  'p-2 align-middle [&:has([role=checkbox])]:pr-0 [&>role=checkbox]:translate-y-0.5',
+  'p-2 align-middle [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},

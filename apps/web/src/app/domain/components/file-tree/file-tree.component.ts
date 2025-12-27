@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
@@ -7,7 +6,7 @@ import type { FileTreeNode, BlockFile } from '../block-container/block-container
 
 @Component({
   selector: 'z-file-tree',
-  imports: [CommonModule, FileTreeComponent, ZardIconComponent],
+  imports: [FileTreeComponent, ZardIconComponent],
   template: `
     @for (node of nodes(); track node.path) {
       @if (node.type === 'folder' && node.path) {

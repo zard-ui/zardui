@@ -80,7 +80,7 @@ function copyCodeToClipboard(button: HTMLButtonElement, code: string): void {
       // Reset after 2 seconds
       setTimeout(() => {
         button.innerHTML = originalHTML;
-        button.classList.remove('bg-green-500', 'border-green-200', 'text-green-600');
+        button.classList.remove('bg-green-50', 'border-green-200', 'text-green-600');
         button.classList.add('text-muted-foreground');
       }, 2000);
     })
@@ -102,7 +102,9 @@ window.copyTabCode = function (button: HTMLButtonElement) {
   if (!tabsWrapper) return;
 
   // Find the active tab button (the one that's currently selected)
-  const activeTabButton = tabsWrapper.querySelector('button[data-tab].bg-background') || tabsWrapper.querySelector('button[data-tab].text-foreground');
+  const activeTabButton =
+    tabsWrapper.querySelector('button[data-tab].bg-code-tab') ||
+    tabsWrapper.querySelector('button[data-tab].text-foreground');
 
   if (!activeTabButton) return;
 

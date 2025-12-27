@@ -1,8 +1,7 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
+import { StepComponent } from '@doc/domain/components/step/step.component';
 import { Step } from '@doc/shared/constants/install.constant';
-
-import { StepComponent } from '../step/step.component';
 
 @Component({
   selector: 'z-steps',
@@ -15,7 +14,7 @@ import { StepComponent } from '../step/step.component';
       </section>
     }
   `,
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [StepComponent],
 })
 export class StepsComponent {

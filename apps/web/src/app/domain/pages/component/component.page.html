@@ -1,105 +1,108 @@
-@if (componentData) {
+@let data = componentData();
+@if (data) {
   <z-content
     [navigationConfig]="navigationConfig"
     [activeAnchor]="activeAnchor"
-    scrollSpy
     (scrollSpyChange)="activeAnchor = $event"
+    scrollSpy
   >
     <div class="relative flex flex-col gap-5" scrollSpyItem="overview" id="overview">
-      <z-markdown-renderer
-        markdownUrl="components/{{ componentData.componentName }}/doc/overview.md"
-      ></z-markdown-renderer>
+      <z-markdown-renderer markdownUrl="components/{{ data.componentName }}/doc/overview.md"></z-markdown-renderer>
       <z-assist></z-assist>
       <z-code-box
-        [scrollSpyItem]="componentData.examples[0].name"
-        [attr.id]="componentData.examples[0].name"
-        path="{{ componentData.componentName }}/demo/{{ componentData.examples[0].name }}"
-        [dynamicComponent]="componentData.examples[0].component"
-        [onlyDemo]="componentData.examples[0].onlyDemo"
-        [column]="componentData.examples[0].column || false"
+        path="{{ data.componentName }}/demo/{{ data.examples[0].name }}"
+        [dynamicComponent]="data.examples[0].component"
+        [onlyDemo]="data.examples[0].onlyDemo"
+        [column]="data.examples[0].column || false"
       ></z-code-box>
     </div>
 
-    <div class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
-      <section class="flex flex-col gap-4" scrollSpyItem="installation" id="installation">
-        <header class="mb-3">
-          <h2 class="mb-5 text-2xl font-semibold">Installation</h2>
-          <div class="overflow-hidden transition-all duration-200 ease-in-out">
-            <nav class="mb-4 flex gap-4" role="tablist" aria-label="Installation method">
-              @if (installGuide?.cli) {
-                <button
-                  id="cli-tab"
-                  role="tab"
-                  [attr.aria-selected]="activeTab() === 'cli'"
-                  [attr.aria-controls]="'cli-panel'"
-                  [attr.tabindex]="activeTab() === 'cli' ? 0 : -1"
-                  class="cursor-pointer text-base"
-                  (click)="activeTab.set('cli')"
-                  [class.font-semibold]="activeTab() === 'cli'"
-                  [class.text-foreground]="activeTab() === 'cli'"
-                >
-                  CLI
-                </button>
-              }
-              @if (installGuide?.manual) {
-                <button
-                  id="manual-tab"
-                  role="tab"
-                  [attr.aria-selected]="activeTab() === 'manual'"
-                  [attr.aria-controls]="'manual-panel'"
-                  [attr.tabindex]="activeTab() === 'manual' ? 0 : -1"
-                  class="cursor-pointer text-base"
-                  (click)="activeTab.set('manual')"
-                  [class.font-semibold]="activeTab() === 'manual'"
-                  [class.text-foreground]="activeTab() === 'manual'"
-                >
-                  Manual
-                </button>
-              }
-            </nav>
-            <section
-              role="tabpanel"
-              id="cli-panel"
-              [attr.aria-labelledby]="'cli-tab'"
-              class="transition-all duration-200 ease-in-out"
-              [class.translate-x-0]="activeTab() === 'cli'"
-              [class.-translate-x-full]="activeTab() !== 'cli'"
-              [class.opacity-0]="activeTab() !== 'cli'"
-              [class.invisible]="activeTab() !== 'cli'"
-              [class.h-0]="activeTab() !== 'cli'"
-              [class.overflow-hidden]="activeTab() !== 'cli'"
-              [class.pointer-events-none]="activeTab() !== 'cli'"
-            >
-              <z-steps [steps]="installGuide?.cli"></z-steps>
-            </section>
-            <section
-              role="tabpanel"
-              id="manual-panel"
-              [attr.aria-labelledby]="'manual-tab'"
-              class="transition-all duration-200 ease-in-out"
-              [class.translate-x-0]="activeTab() === 'manual'"
-              [class.translate-x-full]="activeTab() !== 'manual'"
-              [class.opacity-0]="activeTab() !== 'manual'"
-              [class.invisible]="activeTab() !== 'manual'"
-              [class.h-0]="activeTab() !== 'manual'"
-              [class.overflow-hidden]="activeTab() !== 'manual'"
-              [class.pointer-events-none]="activeTab() !== 'manual'"
-            >
-              <z-steps [steps]="installGuide?.manual"></z-steps>
-            </section>
-          </div>
-        </header>
-      </section>
+    <section class="flex flex-col gap-4" scrollSpyItem="installation" id="installation">
+      <header class="mb-3">
+        <h2 class="mb-5 text-2xl font-semibold">Installation</h2>
+        <div class="overflow-hidden transition-all duration-200 ease-in-out">
+          <nav
+            class="mb-4 flex gap-4"
+            role="tablist"
+            aria-label="Installation method"
+            #tabList
+            (keydown.{arrowleft,arrowright,home,end,space,enter}.prevent)="onInstallKeyDown($event, tabList)"
+          >
+            @if (installGuide?.cli) {
+              <button
+                id="cli-tab"
+                role="tab"
+                [attr.aria-selected]="activeTab() === 'cli'"
+                [attr.aria-controls]="'cli-panel'"
+                [attr.tabindex]="activeTab() === 'cli' ? 0 : -1"
+                class="cursor-pointer text-base"
+                (click)="activeTab.set('cli')"
+                [class.font-semibold]="activeTab() === 'cli'"
+                [class.text-foreground]="activeTab() === 'cli'"
+              >
+                CLI
+              </button>
+            }
+            @if (installGuide?.manual) {
+              <button
+                id="manual-tab"
+                role="tab"
+                [attr.aria-selected]="activeTab() === 'manual'"
+                [attr.aria-controls]="'manual-panel'"
+                [attr.tabindex]="activeTab() === 'manual' ? 0 : -1"
+                class="cursor-pointer text-base"
+                (click)="activeTab.set('manual')"
+                [class.font-semibold]="activeTab() === 'manual'"
+                [class.text-foreground]="activeTab() === 'manual'"
+              >
+                Manual
+              </button>
+            }
+          </nav>
+          <section
+            role="tabpanel"
+            id="cli-panel"
+            [attr.aria-labelledby]="'cli-tab'"
+            class="transition-all duration-200 ease-in-out"
+            [class.translate-x-0]="activeTab() === 'cli'"
+            [class.-translate-x-full]="activeTab() !== 'cli'"
+            [class.opacity-0]="activeTab() !== 'cli'"
+            [class.invisible]="activeTab() !== 'cli'"
+            [class.h-0]="activeTab() !== 'cli'"
+            [class.overflow-hidden]="activeTab() !== 'cli'"
+            [class.pointer-events-none]="activeTab() !== 'cli'"
+          >
+            <z-steps [steps]="installGuide?.cli"></z-steps>
+          </section>
+          <section
+            role="tabpanel"
+            id="manual-panel"
+            [attr.aria-labelledby]="'manual-tab'"
+            class="transition-all duration-200 ease-in-out"
+            [class.translate-x-0]="activeTab() === 'manual'"
+            [class.translate-x-full]="activeTab() !== 'manual'"
+            [class.opacity-0]="activeTab() !== 'manual'"
+            [class.invisible]="activeTab() !== 'manual'"
+            [class.h-0]="activeTab() !== 'manual'"
+            [class.overflow-hidden]="activeTab() !== 'manual'"
+            [class.pointer-events-none]="activeTab() !== 'manual'"
+          >
+            <z-steps [steps]="installGuide?.manual"></z-steps>
+          </section>
+        </div>
+      </header>
+    </section>
 
+    <div class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
       <section class="flex flex-col gap-4">
         <h2 class="mb-5 text-2xl font-semibold">Examples</h2>
-        @for (item of componentData.examples; track $index) {
+        @for (item of data.examples; track $index) {
           <z-code-box
             [scrollSpyItem]="item.name"
             [attr.id]="item.name"
             [componentType]="item.name"
             [demoDescription]="item.description"
-            path="{{ componentData.componentName }}/demo/{{ item.name }}"
+            path="{{ data.componentName }}/demo/{{ item.name }}"
             [dynamicComponent]="item.component"
             [fullScreen]="item.fullScreen"
             [onlyDemo]="item.onlyDemo"
@@ -110,7 +113,7 @@
     </div>
 
     <footer scrollSpyItem="api" id="api">
-      <z-markdown-renderer markdownUrl="components/{{ componentData.componentName }}/doc/api.md"></z-markdown-renderer>
+      <z-markdown-renderer markdownUrl="components/{{ data.componentName }}/doc/api.md"></z-markdown-renderer>
     </footer>
   </z-content>
 }
