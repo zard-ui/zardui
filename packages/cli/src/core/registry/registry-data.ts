@@ -82,7 +82,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'layout.module.ts',
+        name: 'layout.imports.ts',
         content: '',
       },
       {
@@ -122,7 +122,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'sheet.module.ts',
+        name: 'sheet.imports.ts',
         content: '',
       },
       {
@@ -186,6 +186,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'accordion.variants.ts',
+        content: '',
+      },
+      {
+        name: 'accordion.imports.ts',
         content: '',
       },
     ],
@@ -372,6 +376,10 @@ export const registry: ComponentRegistry[] = [
         name: 'select.variants.ts',
         content: '',
       },
+      {
+        name: 'select.imports.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -440,7 +448,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'breadcrumb.module.ts',
+        name: 'breadcrumb.imports.ts',
         content: '',
       },
       {
@@ -591,7 +599,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'command.module.ts',
+        name: 'command.imports.ts',
         content: '',
       },
       {
@@ -622,7 +630,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'form.module.ts',
+        name: 'form.imports.ts',
         content: '',
       },
       {
@@ -640,7 +648,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'pagination.module.ts',
+        name: 'pagination.imports.ts',
         content: '',
       },
       {
@@ -681,6 +689,10 @@ export const registry: ComponentRegistry[] = [
         name: 'resizable.variants.ts',
         content: '',
       },
+      {
+        name: 'resizable.imports.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -717,7 +729,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'table.module.ts',
+        name: 'table.imports.ts',
         content: '',
       },
       {
@@ -857,7 +869,7 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'carousel.module.ts',
+        name: 'carousel.imports.ts',
         content: '',
       },
     ],
