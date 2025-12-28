@@ -1,8 +1,7 @@
+import { Config } from '@cli/utils/config';
+import { fetchComponent, RegistryItem } from '@cli/utils/registry';
 import { promises as fs } from 'node:fs';
 import * as path from 'node:path';
-
-import type { Config } from '../../utils/config.js';
-import { fetchComponent, type RegistryItem } from '../../utils/registry.js';
 
 export async function installComponent(
   componentName: string,
