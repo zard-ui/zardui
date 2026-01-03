@@ -43,3 +43,4 @@ export * from './lib/shared/components/toast';
 export * from './lib/shared/components/toggle';
 export * from './lib/shared/components/toggle-group';
 export * from './lib/shared/components/tooltip';
+export * from './lib/shared/components/scroll-to-top';
