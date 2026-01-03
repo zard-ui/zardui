@@ -12,8 +12,17 @@ import { ZardScrollToTopComponent } from '../scroll-to-top.component';
       <div class="bg-background h-150 overflow-y-auto rounded-lg border p-6">
         <div class="space-y-4">
           <h3 class="text-lg font-semibold">Scroll down to see the button</h3>
-          <p class="text-muted-foreground">The scroll-to-top button will appear after you scroll down 200px.</p>
-          <div class="h-300 space-y-4">
+          <div class="flex items-center justify-center gap-1">
+            <svg
+              class="text-muted-foreground h-5 w-5 animate-bounce"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </div>
+          <div class="h-200 space-y-4">
             @for (i of [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]; track i) {
               <div class="rounded-lg border p-4">
                 <p class="text-sm">Content block {{ i }}</p>

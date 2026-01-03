@@ -1,20 +1,25 @@
 # API Reference
 
+##
+
 ## ZardScrollToTopComponent
 
 A floating button component that scrolls to the top of the page.
-
+##
 ### Selector
 
-`z-scroll-to-top`
+| Selector           | Value             |
+| ------------------ | ----------------- |
+| Component selector | `z-scroll-to-top` |
 
 ### Inputs
 
-| Input     | Type                                 | Default     | Description                                      |
-| --------- | ------------------------------------ | ----------- | ------------------------------------------------ |
-| `variant` | `'default' \| 'outline' \| 'subtle'` | `'default'` | Visual style variant of the button               |
-| `size`    | `'sm' \| 'md' \| 'lg'`               | `'md'`      | Size of the button                               |
-| `class`   | `string`                             | `''`        | Additional CSS classes to apply to the component |
+| Input     | Type                                 | Default     | Description                                                        |
+| --------- | ------------------------------------ | ----------- | ------------------------------------------------------------------ |
+| `variant` | `'default' \| 'outline' \| 'subtle'` | `'default'` | Visual style variant of the button                                 |
+| `size`    | `'sm' \| 'md' \| 'lg'`               | `'md'`      | Size of the button                                                 |
+| `target`  | `'window' \| 'parent'`               | `'window'`  | Scroll target: window for page scroll, parent for container scroll |
+| `class`   | `string`                             | `''`        | Additional CSS classes to apply to the component                   |
 
 ### Methods
 
@@ -24,6 +29,6 @@ A floating button component that scrolls to the top of the page.
 
 ### Properties
 
-| Property  | Type                         | Description                                                |
-| --------- | ---------------------------- | ---------------------------------------------------------- |
-| `visible` | `Signal<boolean>` (readonly) | Indicates whether the button is visible (scrolled > 200px) |
+| Property  | Type              | Description                                                |
+| --------- | ----------------- | ---------------------------------------------------------- |
+| `visible` | `Signal<boolean>` | Indicates whether the button is visible (scrolled > 200px) |
