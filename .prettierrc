@@ -1,5 +1,6 @@
 {
   "singleQuote": true,
+  "endOfLine": "auto",
   "printWidth": 120,
   "arrowParens": "avoid",
   "htmlWhitespaceSensitivity": "ignore",
