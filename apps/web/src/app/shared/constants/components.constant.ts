@@ -32,6 +32,7 @@ import { POPOVER } from '@zard/components/popover/demo/popover';
 import { PROGRESS_BAR } from '@zard/components/progress-bar/demo/progress-bar';
 import { RADIO } from '@zard/components/radio/demo/radio';
 import { RESIZABLE } from '@zard/components/resizable/demo/resizable';
+import { SCROLL_TO_TOP } from '@zard/components/scroll-to-top/demo/scroll-to-top';
 import { SEGMENTED } from '@zard/components/segmented/demo/segmented';
 import { SELECT } from '@zard/components/select/demo/select';
 import { SHEET } from '@zard/components/sheet/demo/sheet';
@@ -97,6 +98,7 @@ export const COMPONENTS: ComponentData[] = [
   PROGRESS_BAR,
   RADIO,
   RESIZABLE,
+  SCROLL_TO_TOP,
   SEGMENTED,
   SELECT,
   SHEET,
