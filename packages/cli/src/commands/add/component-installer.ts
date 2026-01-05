@@ -1,5 +1,5 @@
 import { Config } from '@cli/utils/config';
-import { fetchComponent, RegistryItem } from '@cli/utils/registry';
+import { fetchComponent, RegistryItem } from '@cli/utils/registry.js';
 import { promises as fs } from 'node:fs';
 import * as path from 'node:path';
 
