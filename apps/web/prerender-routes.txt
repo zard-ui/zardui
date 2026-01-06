@@ -16,6 +16,7 @@
 /docs/blocks
 /docs/pre-processors
 /docs/figma
+/llms
 /docs/about
 /docs/components/accordion
 /docs/components/alert

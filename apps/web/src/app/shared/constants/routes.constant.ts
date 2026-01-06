@@ -53,7 +53,7 @@ export const DOCS_PATH = {
     { name: 'Blocks', path: '/docs/blocks', available: true },
     { name: 'Pre processors', path: '/docs/pre-processors', available: true },
     { name: 'Figma', path: '/docs/figma', available: true },
-    { name: 'llms.txt', path: '/llms.txt', available: true },
+    { name: 'llms.txt', path: '/llms', available: true },
 
     { name: 'About & Credits', path: '/docs/about', available: true },
   ],
