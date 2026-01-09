@@ -22,5 +22,3 @@ export interface CalendarDayConfig {
   maxDate: Date | null;
   disabled: boolean;
 }
-
-export { type ZardCalendarVariants } from './calendar.variants';

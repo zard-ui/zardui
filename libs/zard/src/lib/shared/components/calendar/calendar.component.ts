@@ -15,6 +15,8 @@ import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter, map } from 'rxjs';
 
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
 import type { CalendarMode, CalendarValue } from './calendar.types';
@@ -26,8 +28,6 @@ import {
   normalizeCalendarValue,
 } from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
 
@@ -101,24 +101,28 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     ),
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onChange: (value: CalendarValue) => void = () => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onTouched: () => void = () => {};
+  private onChange: (value: CalendarValue) => void = noopFn;
+  private onTouched: () => void = noopFn;
 
   // Internal state
-  private normalizedValue = computed(() => normalizeCalendarValue(this.value()));
+  private readonly normalizedValue = computed(() => normalizeCalendarValue(this.value()));
   private readonly currentDate = computed(() => {
     const val = this.normalizedValue();
     const mode = this.zMode();
 
-    if (!val) return new Date();
+    if (!val) {
+      return new Date();
+    }
 
     // For single mode, val is Date | null
-    if (mode === 'single') return val as Date;
+    if (mode === 'single') {
+      return val as Date;
+    }
 
     // For multiple/range mode, val is Date[]
-    if (Array.isArray(val) && val.length > 0) return val[0];
+    if (Array.isArray(val) && val.length > 0) {
+      return val[0];
+    }
 
     return new Date();
   });
@@ -154,7 +158,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       return;
     }
 
-    if (!monthIndex || monthIndex.trim() === '') {
+    if (!monthIndex?.trim()) {
       console.warn('Invalid month index received:', monthIndex);
       return;
     }
@@ -242,7 +246,9 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   }
 
   private selectDate(date: Date): void {
-    if (this.disabled()) return;
+    if (this.disabled()) {
+      return;
+    }
 
     const mode = this.zMode();
     const currentValue = this.normalizedValue();
@@ -346,11 +352,15 @@ export class ZardCalendarComponent implements ControlValueAccessor {
 
     // Search forward from start
     for (let i = clampedStart; i < days.length; i++) {
-      if (!days[i].isDisabled) return i;
+      if (!days[i].isDisabled) {
+        return i;
+      }
     }
     // Search backward from start
     for (let i = clampedStart - 1; i >= 0; i--) {
-      if (!days[i].isDisabled) return i;
+      if (!days[i].isDisabled) {
+        return i;
+      }
     }
 
     return clampedFallback;

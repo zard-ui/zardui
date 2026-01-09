@@ -18,6 +18,8 @@ import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter, map } from 'rxjs';
 
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+
 import { ZardCalendarGridComponent } from './calendar-grid.component';
 import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
 import type { CalendarMode, CalendarValue } from './calendar.types';
@@ -29,8 +31,6 @@ import {
   normalizeCalendarValue,
 } from './calendar.utils';
 import { calendarVariants } from './calendar.variants';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
 
@@ -104,24 +104,28 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     ),
   );
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onChange: (value: CalendarValue) => void = () => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onTouched: () => void = () => {};
+  private onChange: (value: CalendarValue) => void = noopFn;
+  private onTouched: () => void = noopFn;
 
   // Internal state
-  private normalizedValue = computed(() => normalizeCalendarValue(this.value()));
+  private readonly normalizedValue = computed(() => normalizeCalendarValue(this.value()));
   private readonly currentDate = computed(() => {
     const val = this.normalizedValue();
     const mode = this.zMode();
 
-    if (!val) return new Date();
+    if (!val) {
+      return new Date();
+    }
 
     // For single mode, val is Date | null
-    if (mode === 'single') return val as Date;
+    if (mode === 'single') {
+      return val as Date;
+    }
 
     // For multiple/range mode, val is Date[]
-    if (Array.isArray(val) && val.length > 0) return val[0];
+    if (Array.isArray(val) && val.length > 0) {
+      return val[0];
+    }
 
     return new Date();
   });
@@ -157,7 +161,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       return;
     }
 
-    if (!monthIndex || monthIndex.trim() === '') {
+    if (!monthIndex?.trim()) {
       console.warn('Invalid month index received:', monthIndex);
       return;
     }
@@ -245,7 +249,9 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   }
 
   private selectDate(date: Date): void {
-    if (this.disabled()) return;
+    if (this.disabled()) {
+      return;
+    }
 
     const mode = this.zMode();
     const currentValue = this.normalizedValue();
@@ -349,11 +355,15 @@ export class ZardCalendarComponent implements ControlValueAccessor {
 
     // Search forward from start
     for (let i = clampedStart; i < days.length; i++) {
-      if (!days[i].isDisabled) return i;
+      if (!days[i].isDisabled) {
+        return i;
+      }
     }
     // Search backward from start
     for (let i = clampedStart - 1; i >= 0; i--) {
-      if (!days[i].isDisabled) return i;
+      if (!days[i].isDisabled) {
+        return i;
+      }
     }
 
     return clampedFallback;
@@ -381,7 +391,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
 
 
 ```angular-ts title="calendar.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 export const calendarVariants = cva('bg-background p-3 w-fit rounded-lg border');
 
@@ -468,11 +478,6 @@ export const calendarDayButtonVariants = cva(
   },
 );
 
-export type ZardCalendarVariants = VariantProps<typeof calendarVariants>;
-export type ZardCalendarWeekdayVariants = VariantProps<typeof calendarWeekdayVariants>;
-export type ZardCalendarDayVariants = VariantProps<typeof calendarDayVariants>;
-export type ZardCalendarDayButtonVariants = VariantProps<typeof calendarDayButtonVariants>;
-
 ```
 
 
@@ -482,7 +487,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
+  type ElementRef,
   input,
   output,
   signal,
@@ -490,11 +495,11 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import type { CalendarDay } from './calendar.types';
 import { getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-calendar-grid',
@@ -961,8 +966,6 @@ export interface CalendarDayConfig {
   disabled: boolean;
 }
 
-export { type ZardCalendarVariants } from './calendar.variants';
-
 ```
 
 
@@ -985,8 +988,9 @@ export function isSameDay(date1: Date, date2: Date): boolean {
  * Checks if a date is disabled based on min/max constraints
  */
 export function isDateDisabled(date: Date, minDate: Date | null, maxDate: Date | null): boolean {
-  if (minDate && date < minDate) return true;
-  if (maxDate && date > maxDate) return true;
+  if ((minDate && date < minDate) || (maxDate && date > maxDate)) {
+    return true;
+  }
   return false;
 }
 
@@ -1077,7 +1081,9 @@ export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
  * Converts CalendarValue to array of Dates for easier processing
  */
 export function getSelectedDatesArray(value: CalendarValue, mode: CalendarMode): Date[] {
-  if (!value) return [];
+  if (!value) {
+    return [];
+  }
 
   if (mode === 'single') {
     return [value as Date];
@@ -1110,13 +1116,33 @@ export function getDayAriaLabel(day: CalendarDay): string {
 
   const labels = [dateStr];
 
-  if (day.isToday) labels.push('Today');
-  if (day.isSelected) labels.push('Selected');
-  if (day.isRangeStart) labels.push('Range start');
-  if (day.isRangeEnd) labels.push('Range end');
-  if (day.isInRange) labels.push('In range');
-  if (!day.isCurrentMonth) labels.push('Outside month');
-  if (day.isDisabled) labels.push('Disabled');
+  if (day.isToday) {
+    labels.push('Today');
+  }
+
+  if (day.isSelected) {
+    labels.push('Selected');
+  }
+
+  if (day.isRangeStart) {
+    labels.push('Range start');
+  }
+
+  if (day.isRangeEnd) {
+    labels.push('Range end');
+  }
+
+  if (day.isInRange) {
+    labels.push('In range');
+  }
+
+  if (!day.isCurrentMonth) {
+    labels.push('Outside month');
+  }
+
+  if (day.isDisabled) {
+    labels.push('Disabled');
+  }
 
   return labels.join(', ');
 }
@@ -1140,9 +1166,13 @@ export function makeSafeDate(year: number, month: number, day = 1): Date {
  * and attempts to parse any other type into a Date.
  */
 export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
-  if (!v) return null;
+  if (!v) {
+    return v;
+  }
 
-  if (v instanceof Date) return toValidDate(v);
+  if (v instanceof Date) {
+    return toValidDate(v);
+  }
 
   if (Array.isArray(v)) {
     return v.map(d => toValidDate(d));
@@ -1157,7 +1187,9 @@ export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
  * If the conversion fails, the current date is returned instead.
  */
 export function toValidDate(value: unknown): Date {
-  if (value instanceof Date) return value;
+  if (value instanceof Date) {
+    return value;
+  }
 
   if (typeof value === 'number' && value.toString().length === 8) {
     const s = value.toString();
@@ -1178,7 +1210,9 @@ export function toValidDate(value: unknown): Date {
 
   const date = new Date(value as string | number | Date);
 
-  if (isNaN(date.getTime())) return null as any;
+  if (isNaN(date.getTime())) {
+    return new Date();
+  }
 
   return makeSafeDate(date.getFullYear(), date.getMonth(), date.getDate());
 }

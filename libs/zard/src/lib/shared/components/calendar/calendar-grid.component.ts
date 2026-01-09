@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
+  type ElementRef,
   input,
   output,
   signal,
@@ -10,11 +10,11 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import type { CalendarDay } from './calendar.types';
 import { getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-calendar-grid',
