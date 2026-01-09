@@ -1,7 +1,8 @@
-import { ZardDemoFormComplexComponent } from './complex';
-import { ZardDemoFormDefaultComponent } from './default';
-import { ZardDemoFormReactiveComponent } from './reactive';
-import { ZardDemoFormValidationComponent } from './validation';
+import { ZardDemoFormComplexComponent } from '@/shared/components/form/demo/complex';
+import { ZardDemoFormDefaultComponent } from '@/shared/components/form/demo/default';
+import { ZardDemoFormReactiveComponent } from '@/shared/components/form/demo/reactive';
+import { ZardDemoFormSignalComponent } from '@/shared/components/form/demo/signal-form';
+import { ZardDemoFormValidationComponent } from '@/shared/components/form/demo/validation';
 
 export const FORM = {
   componentName: 'form',
@@ -15,6 +16,10 @@ export const FORM = {
     {
       name: 'reactive',
       component: ZardDemoFormReactiveComponent,
+    },
+    {
+      name: 'signal-form',
+      component: ZardDemoFormSignalComponent,
     },
     {
       name: 'validation',
