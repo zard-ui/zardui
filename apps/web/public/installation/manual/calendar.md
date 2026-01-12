@@ -16,7 +16,7 @@ import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-int
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { filter, map } from 'rxjs';
+import { map } from 'rxjs';
 
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
@@ -97,12 +97,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly disabled = model<boolean>(false);
 
   // Public outputs
-  readonly dateChange = outputFromObservable(
-    outputToObservable(this.value).pipe(
-      map(v => normalizeCalendarValue(v)),
-      filter(v => v !== null),
-    ),
-  );
+  readonly dateChange = outputFromObservable(outputToObservable(this.value).pipe(map(v => normalizeCalendarValue(v))));
 
   private onChange: (value: CalendarValue) => void = noopFn;
   private onTouched: () => void = noopFn;
@@ -185,7 +180,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       return;
     }
 
-    if (!year || year.trim() === '') {
+    if (!year?.trim()) {
       console.warn('Invalid year received:', year);
       return;
     }
@@ -1114,35 +1109,16 @@ export function getDayAriaLabel(day: CalendarDay): string {
     day: 'numeric',
   });
 
-  const labels = [dateStr];
-
-  if (day.isToday) {
-    labels.push('Today');
-  }
-
-  if (day.isSelected) {
-    labels.push('Selected');
-  }
-
-  if (day.isRangeStart) {
-    labels.push('Range start');
-  }
-
-  if (day.isRangeEnd) {
-    labels.push('Range end');
-  }
-
-  if (day.isInRange) {
-    labels.push('In range');
-  }
-
-  if (!day.isCurrentMonth) {
-    labels.push('Outside month');
-  }
-
-  if (day.isDisabled) {
-    labels.push('Disabled');
-  }
+  const labels = [
+    dateStr,
+    day.isToday && 'Today',
+    day.isSelected && 'Selected',
+    day.isRangeStart && 'Range start',
+    day.isRangeEnd && 'Range end',
+    day.isInRange && 'In range',
+    !day.isCurrentMonth && 'Outside month',
+    day.isDisabled && 'Disabled',
+  ].filter(Boolean);
 
   return labels.join(', ');
 }

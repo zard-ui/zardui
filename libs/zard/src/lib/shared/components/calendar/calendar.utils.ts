@@ -141,35 +141,16 @@ export function getDayAriaLabel(day: CalendarDay): string {
     day: 'numeric',
   });
 
-  const labels = [dateStr];
-
-  if (day.isToday) {
-    labels.push('Today');
-  }
-
-  if (day.isSelected) {
-    labels.push('Selected');
-  }
-
-  if (day.isRangeStart) {
-    labels.push('Range start');
-  }
-
-  if (day.isRangeEnd) {
-    labels.push('Range end');
-  }
-
-  if (day.isInRange) {
-    labels.push('In range');
-  }
-
-  if (!day.isCurrentMonth) {
-    labels.push('Outside month');
-  }
-
-  if (day.isDisabled) {
-    labels.push('Disabled');
-  }
+  const labels = [
+    dateStr,
+    day.isToday && 'Today',
+    day.isSelected && 'Selected',
+    day.isRangeStart && 'Range start',
+    day.isRangeEnd && 'Range end',
+    day.isInRange && 'In range',
+    !day.isCurrentMonth && 'Outside month',
+    day.isDisabled && 'Disabled',
+  ].filter(Boolean);
 
   return labels.join(', ');
 }

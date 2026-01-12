@@ -13,7 +13,7 @@ import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-int
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { filter, map } from 'rxjs';
+import { map } from 'rxjs';
 
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
@@ -94,12 +94,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly disabled = model<boolean>(false);
 
   // Public outputs
-  readonly dateChange = outputFromObservable(
-    outputToObservable(this.value).pipe(
-      map(v => normalizeCalendarValue(v)),
-      filter(v => v !== null),
-    ),
-  );
+  readonly dateChange = outputFromObservable(outputToObservable(this.value).pipe(map(v => normalizeCalendarValue(v))));
 
   private onChange: (value: CalendarValue) => void = noopFn;
   private onTouched: () => void = noopFn;
@@ -182,7 +177,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       return;
     }
 
-    if (!year || year.trim() === '') {
+    if (!year?.trim()) {
       console.warn('Invalid year received:', year);
       return;
     }
