@@ -183,7 +183,13 @@ export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
   }
 
   if (Array.isArray(v)) {
-    return v.map(d => toValidDate(d));
+    return v.reduce<Date[]>((acc, d) => {
+      const date = toValidDate(d);
+      if (date) {
+        acc.push(date);
+      }
+      return acc;
+    }, []);
   }
 
   return toValidDate(v);
@@ -192,11 +198,11 @@ export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
 /**
  * Converts any value into a valid Date.
  * If it is already a Date, it is returned as is.
- * If the conversion fails, the current date is returned instead.
+ * If the conversion fails, null should be returned.
  */
-export function toValidDate(value: unknown): Date {
+export function toValidDate(value: unknown): Date | null {
   if (value instanceof Date) {
-    return value;
+    return isNaN(value.getTime()) ? null : value;
   }
 
   if (typeof value === 'number' && value.toString().length === 8) {
@@ -219,7 +225,7 @@ export function toValidDate(value: unknown): Date {
   const date = new Date(value as string | number | Date);
 
   if (isNaN(date.getTime())) {
-    return new Date();
+    return null;
   }
 
   return makeSafeDate(date.getFullYear(), date.getMonth(), date.getDate());

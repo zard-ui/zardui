@@ -16,7 +16,7 @@ import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-int
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { map } from 'rxjs';
+import { filter, map } from 'rxjs';
 
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
@@ -97,7 +97,12 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly disabled = model<boolean>(false);
 
   // Public outputs
-  readonly dateChange = outputFromObservable(outputToObservable(this.value).pipe(map(v => normalizeCalendarValue(v))));
+  readonly dateChange = outputFromObservable(
+    outputToObservable(this.value).pipe(
+      map(v => normalizeCalendarValue(v)),
+      filter((v): v is NonNullable<CalendarValue> => v !== null),
+    ),
+  );
 
   private onChange: (value: CalendarValue) => void = noopFn;
   private onTouched: () => void = noopFn;
@@ -1151,7 +1156,13 @@ export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
   }
 
   if (Array.isArray(v)) {
-    return v.map(d => toValidDate(d));
+    return v.reduce<Date[]>((acc, d) => {
+      const date = toValidDate(d);
+      if (date) {
+        acc.push(date);
+      }
+      return acc;
+    }, []);
   }
 
   return toValidDate(v);
@@ -1160,11 +1171,11 @@ export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
 /**
  * Converts any value into a valid Date.
  * If it is already a Date, it is returned as is.
- * If the conversion fails, the current date is returned instead.
+ * If the conversion fails, null should be returned.
  */
-export function toValidDate(value: unknown): Date {
+export function toValidDate(value: unknown): Date | null {
   if (value instanceof Date) {
-    return value;
+    return isNaN(value.getTime()) ? null : value;
   }
 
   if (typeof value === 'number' && value.toString().length === 8) {
@@ -1187,7 +1198,7 @@ export function toValidDate(value: unknown): Date {
   const date = new Date(value as string | number | Date);
 
   if (isNaN(date.getTime())) {
-    return new Date();
+    return null;
   }
 
   return makeSafeDate(date.getFullYear(), date.getMonth(), date.getDate());
