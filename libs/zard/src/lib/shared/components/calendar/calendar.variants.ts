@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 export const calendarVariants = cva('bg-background p-3 w-fit rounded-lg border');
 
@@ -84,8 +84,3 @@ export const calendarDayButtonVariants = cva(
     },
   },
 );
-
-export type ZardCalendarVariants = VariantProps<typeof calendarVariants>;
-export type ZardCalendarWeekdayVariants = VariantProps<typeof calendarWeekdayVariants>;
-export type ZardCalendarDayVariants = VariantProps<typeof calendarDayVariants>;
-export type ZardCalendarDayButtonVariants = VariantProps<typeof calendarDayButtonVariants>;

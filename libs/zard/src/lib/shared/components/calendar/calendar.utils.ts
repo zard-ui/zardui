@@ -15,8 +15,9 @@ export function isSameDay(date1: Date, date2: Date): boolean {
  * Checks if a date is disabled based on min/max constraints
  */
 export function isDateDisabled(date: Date, minDate: Date | null, maxDate: Date | null): boolean {
-  if (minDate && date < minDate) return true;
-  if (maxDate && date > maxDate) return true;
+  if ((minDate && date < minDate) || (maxDate && date > maxDate)) {
+    return true;
+  }
   return false;
 }
 
@@ -107,7 +108,9 @@ export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
  * Converts CalendarValue to array of Dates for easier processing
  */
 export function getSelectedDatesArray(value: CalendarValue, mode: CalendarMode): Date[] {
-  if (!value) return [];
+  if (!value) {
+    return [];
+  }
 
   if (mode === 'single') {
     return [value as Date];
@@ -138,15 +141,16 @@ export function getDayAriaLabel(day: CalendarDay): string {
     day: 'numeric',
   });
 
-  const labels = [dateStr];
-
-  if (day.isToday) labels.push('Today');
-  if (day.isSelected) labels.push('Selected');
-  if (day.isRangeStart) labels.push('Range start');
-  if (day.isRangeEnd) labels.push('Range end');
-  if (day.isInRange) labels.push('In range');
-  if (!day.isCurrentMonth) labels.push('Outside month');
-  if (day.isDisabled) labels.push('Disabled');
+  const labels = [
+    dateStr,
+    day.isToday && 'Today',
+    day.isSelected && 'Selected',
+    day.isRangeStart && 'Range start',
+    day.isRangeEnd && 'Range end',
+    day.isInRange && 'In range',
+    !day.isCurrentMonth && 'Outside month',
+    day.isDisabled && 'Disabled',
+  ].filter(Boolean);
 
   return labels.join(', ');
 }
@@ -170,9 +174,13 @@ export function makeSafeDate(year: number, month: number, day = 1): Date {
  * and attempts to parse any other type into a Date.
  */
 export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
-  if (!v) return null;
+  if (!v) {
+    return v;
+  }
 
-  if (v instanceof Date) return toValidDate(v);
+  if (v instanceof Date) {
+    return toValidDate(v);
+  }
 
   if (Array.isArray(v)) {
     return v.map(d => toValidDate(d));
@@ -187,7 +195,9 @@ export function normalizeCalendarValue(v: CalendarValue): CalendarValue {
  * If the conversion fails, the current date is returned instead.
  */
 export function toValidDate(value: unknown): Date {
-  if (value instanceof Date) return value;
+  if (value instanceof Date) {
+    return value;
+  }
 
   if (typeof value === 'number' && value.toString().length === 8) {
     const s = value.toString();
@@ -208,7 +218,9 @@ export function toValidDate(value: unknown): Date {
 
   const date = new Date(value as string | number | Date);
 
-  if (isNaN(date.getTime())) return null as any;
+  if (isNaN(date.getTime())) {
+    return new Date();
+  }
 
   return makeSafeDate(date.getFullYear(), date.getMonth(), date.getDate());
 }
