@@ -8,11 +8,10 @@ import { ZardFormImports } from '../form.imports';
 @Component({
   selector: 'zard-demo-form-validation',
   imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardFormImports],
-  standalone: true,
   template: `
     <form [formGroup]="validationForm" (ngSubmit)="onSubmit()" class="max-w-sm space-y-6">
       <z-form-field>
-        <label z-form-label zRequired>Name</label>
+        <label for="name" z-form-label zRequired>Name</label>
         <z-form-control>
           <input
             z-input
@@ -32,7 +31,7 @@ import { ZardFormImports } from '../form.imports';
       </z-form-field>
 
       <z-form-field>
-        <label z-form-label zRequired>Email</label>
+        <label for="email" z-form-label zRequired>Email</label>
         <z-form-control>
           <input
             z-input
@@ -52,7 +51,7 @@ import { ZardFormImports } from '../form.imports';
       </z-form-field>
 
       <z-form-field>
-        <label z-form-label>Website</label>
+        <label for="website" z-form-label>Website</label>
         <z-form-control>
           <input
             z-input

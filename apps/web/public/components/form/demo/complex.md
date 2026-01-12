@@ -33,7 +33,6 @@ interface FormData {
     ZardSelectItemComponent,
     ZardFormImports,
   ],
-  standalone: true,
   template: `
     <form [formGroup]="form" (ngSubmit)="handleSubmit()" class="max-w-lg space-y-6">
       <!-- Name Fields Row -->
@@ -111,7 +110,7 @@ interface FormData {
         <z-form-control helpText="Get updates about new features and releases" class="flex flex-col">
           <div class="flex items-center space-x-2">
             <z-checkbox id="newsletter" formControlName="newsletter" />
-            <label z-form-label class="!mb-0" for="newsletter">Subscribe to newsletter</label>
+            <label z-form-label class="mb-0!" for="newsletter">Subscribe to newsletter</label>
           </div>
         </z-form-control>
       </z-form-field>
@@ -124,14 +123,14 @@ interface FormData {
         >
           <div class="flex items-center space-x-2">
             <z-checkbox id="terms" formControlName="terms" />
-            <label z-form-label class="!mb-0" zRequired for="terms">I agree to the terms and conditions</label>
+            <label z-form-label class="mb-0!" zRequired for="terms">I agree to the terms and conditions</label>
           </div>
         </z-form-control>
       </z-form-field>
 
       <!-- Action Buttons -->
       <div class="flex gap-2 pt-4">
-        <button z-button zType="default" type="submit" [disabled]="isSubmitting()">
+        <button z-button zType="default" type="submit" [zDisabled]="isSubmitting()">
           {{ isSubmitting() ? 'Submitting...' : 'Submit Form' }}
         </button>
         <button z-button zType="outline" type="button" (click)="resetForm()">Reset</button>

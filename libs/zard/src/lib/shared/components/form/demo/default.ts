@@ -9,7 +9,6 @@ import { ZardFormImports } from '../form.imports';
 @Component({
   selector: 'zard-demo-form-default',
   imports: [FormsModule, ZardButtonComponent, ZardInputDirective, ZardFormImports],
-  standalone: true,
   template: `
     <form class="max-w-sm space-y-6">
       <z-form-field>
