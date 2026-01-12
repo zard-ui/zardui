@@ -2,25 +2,29 @@
   "name": "@ngzard/ui",
   "version": "1.0.0-beta.31",
   "peerDependencies": {
-    "@angular/core": "20.3.14",
+    "@angular/cdk": "^21.0.0",
+    "@angular/common": "^21.0.0",
+    "@angular/core": "^21.0.0",
+    "@angular/forms": "^21.0.0",
+    "@angular/platform-browser": "^21.0.0",
+    "@angular/router": "^21.0.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
-    "tailwind-merge": "^3.3.1",
-    "@angular/forms": "20.3.14",
-    "@angular/common": "20.3.14",
-    "@angular/router": "20.3.14",
-    "rxjs": "^7.8.2",
-    "@angular/cdk": "20.2.14",
-    "ngx-sonner": "^3.1.0",
+    "embla-carousel": "^8.6.0",
+    "embla-carousel-angular": "^21.0.0",
     "embla-carousel-autoplay": "^8.6.0",
     "embla-carousel-class-names": "^8.6.0",
     "embla-carousel-wheel-gestures": "^8.1.0",
-    "embla-carousel": "^8.6.0",
-    "embla-carousel-angular": "^20.0.0",
-    "lucide-angular": "^0.555.0"
+    "lucide-angular": "^0.562.0",
+    "ngx-sonner": "^3.1.0",
+    "rxjs": "^7.8.2",
+    "tailwind-merge": "^3.4.0"
   },
   "sideEffects": false,
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@angular/aria": "^21.0.6"
   }
 }
