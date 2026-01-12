@@ -27,6 +27,7 @@
     "node": "22 || 20"
   },
   "dependencies": {
+    "@angular/aria": "^21.0.6",
     "@angular/cdk": "21.0.6",
     "@angular/common": "21.0.8",
     "@angular/compiler": "21.0.8",
