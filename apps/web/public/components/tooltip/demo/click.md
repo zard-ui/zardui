@@ -1,12 +1,13 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
+import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
+
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardTooltipModule } from '../tooltip';
 
 @Component({
   selector: 'z-demo-tooltip-click',
-  imports: [ZardButtonComponent, ZardTooltipModule],
+  imports: [ZardButtonComponent, ZardTooltipImports],
   template: `
     <button type="button" z-button zType="outline" zTooltip="Tooltip content" zTrigger="click">Click</button>
   `,

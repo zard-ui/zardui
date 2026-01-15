@@ -15,20 +15,21 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { switchVariants, type ZardSwitchVariants } from './switch.variants';
+import { ZardIdDirective } from '@/shared/core';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { mergeClasses, generateId } from '@/shared/utils/merge-classes';
+import { switchVariants, type ZardSwitchVariants } from './switch.variants';
 
 type OnTouchedType = () => any;
 type OnChangeType = (value: any) => void;
 
 @Component({
   selector: 'z-switch, [z-switch]',
-  standalone: true,
+  imports: [ZardIdDirective],
   template: `
-    <span class="flex items-center space-x-2" (mousedown)="onSwitchChange()">
+    <span class="flex items-center space-x-2" (mousedown)="onSwitchChange()" zardId="switch" #z="zardId">
       <button
-        [id]="zId() || uniqueId()"
+        [id]="zId() || z.id()"
         type="button"
         role="switch"
         [attr.data-state]="status()"
@@ -45,7 +46,7 @@ type OnChangeType = (value: any) => void;
 
       <label
         class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        [for]="zId() || uniqueId()"
+        [for]="zId() || z.id()"
       >
         <ng-content />
       </label>
@@ -79,7 +80,6 @@ export class ZardSwitchComponent implements ControlValueAccessor {
     mergeClasses(switchVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()),
   );
 
-  protected readonly uniqueId = signal<string>(generateId('switch'));
   protected readonly checked = signal<boolean>(true);
   protected readonly status = computed(() => (this.checked() ? 'checked' : 'unchecked'));
   protected readonly disabled = signal(false);
@@ -97,7 +97,9 @@ export class ZardSwitchComponent implements ControlValueAccessor {
   }
 
   onSwitchChange(): void {
-    if (this.disabled()) return;
+    if (this.disabled()) {
+      return;
+    }
 
     this.checked.update(checked => !checked);
     this.onTouched();

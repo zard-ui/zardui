@@ -1,7 +1,7 @@
 
 
 ```angular-ts title="tooltip.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
 import {
@@ -11,11 +11,11 @@ import {
   computed,
   DestroyRef,
   Directive,
+  effect,
   ElementRef,
   inject,
   Injector,
   input,
-  NgModule,
   numberAttribute,
   type OnDestroy,
   type OnInit,
@@ -24,7 +24,8 @@ import {
   Renderer2,
   runInInjectionContext,
   signal,
-  TemplateRef,
+  type TemplateRef,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
@@ -36,8 +37,9 @@ import {
   tooltipVariants,
   type ZardTooltipPositionVariants,
 } from '@/shared/components/tooltip/tooltip.variants';
+import { ZardIdDirective } from '@/shared/core';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { generateId, mergeClasses } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export type ZardTooltipTriggers = 'click' | 'hover';
 export type ZardTooltipType = string | TemplateRef<void> | null;
@@ -78,7 +80,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private componentRef?: ComponentRef<ZardTooltipComponent>;
   private listenersRefs: (() => void)[] = [];
   private overlayRef?: OverlayRef;
-  private readonly tooltipId = `${generateId('z-tooltip')}`;
+  private ariaEffectRef?: ReturnType<typeof effect>;
 
   readonly zPosition = input<ZardTooltipPositionVariants>('top');
   readonly zTrigger = input<ZardTooltipTriggers>('hover');
@@ -125,6 +127,12 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    // Clean up any pending effect
+    if (this.ariaEffectRef) {
+      this.ariaEffectRef.destroy();
+      this.ariaEffectRef = undefined;
+    }
+
     this.delaySubject?.complete();
     this.cleanupTriggerEvents();
     this.overlayRef?.dispose();
@@ -215,15 +223,30 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     this.componentRef?.onDestroy(() => {
       this.componentRef = undefined;
     });
-    this.componentRef?.instance.setProps(this.tooltipText(), this.zPosition(), this.tooltipId);
     this.componentRef?.instance.state.set('opened');
-    this.renderer.setAttribute(this.elementRef.nativeElement, 'aria-describedby', this.tooltipId);
+    this.componentRef?.instance.setProps(this.tooltipText(), this.zPosition());
+    runInInjectionContext(this.injector, () => {
+      this.ariaEffectRef = effect(() => {
+        const tooltipId = this.componentRef?.instance.uniqueId()?.id();
+        if (tooltipId) {
+          this.renderer.setAttribute(this.elementRef.nativeElement, 'aria-describedby', tooltipId);
+          this.ariaEffectRef?.destroy();
+          this.ariaEffectRef = undefined;
+        }
+      });
+    });
     this.zShow.emit();
   }
 
   private hide() {
     if (!this.componentRef) {
       return;
+    }
+
+    // Clean up any pending effect
+    if (this.ariaEffectRef) {
+      this.ariaEffectRef.destroy();
+      this.ariaEffectRef = undefined;
     }
 
     this.renderer.removeAttribute(this.elementRef.nativeElement, 'aria-describedby');
@@ -235,9 +258,9 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
 
 @Component({
   selector: 'z-tooltip',
-  imports: [ZardStringTemplateOutletDirective],
+  imports: [ZardStringTemplateOutletDirective, ZardIdDirective],
   template: `
-    <ng-container *zStringTemplateOutlet="tooltipText()">{{ tooltipText() }}</ng-container>
+    <ng-container *zStringTemplateOutlet="tooltipText()" zardId="tooltip" #z="zardId">{{ tooltipText() }}</ng-container>
 
     <span [class]="arrowClasses()">
       <svg
@@ -261,31 +284,24 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   },
 })
 export class ZardTooltipComponent {
-  protected readonly position = signal<ZardTooltipPositionVariants>('top');
-  protected readonly tooltipText = signal<ZardTooltipType>(null);
-  protected readonly classes = computed(() => mergeClasses(tooltipVariants()));
   protected readonly arrowClasses = computed(() =>
     mergeClasses(tooltipPositionVariants({ position: this.position() })),
   );
 
-  protected readonly tooltipId = signal('');
-
+  protected readonly classes = computed(() => mergeClasses(tooltipVariants()));
+  protected readonly position = signal<ZardTooltipPositionVariants>('top');
   readonly state = signal<'closed' | 'opened'>('closed');
+  readonly uniqueId = viewChild<ZardIdDirective>('z');
+  protected readonly tooltipText = signal<ZardTooltipType>(null);
+  protected readonly tooltipId = computed(() => this.uniqueId()?.id() ?? 'tooltip');
 
-  setProps(tooltipText: ZardTooltipType, position: ZardTooltipPositionVariants, tooltipId = '') {
+  setProps(tooltipText: ZardTooltipType, position: ZardTooltipPositionVariants) {
     if (tooltipText) {
       this.tooltipText.set(tooltipText);
     }
     this.position.set(position);
-    this.tooltipId.set(tooltipId);
   }
 }
-
-@NgModule({
-  imports: [OverlayModule, ZardTooltipComponent, ZardTooltipDirective],
-  exports: [ZardTooltipComponent, ZardTooltipDirective],
-})
-export class ZardTooltipModule {}
 
 ```
 
@@ -320,6 +336,7 @@ export type ZardTooltipPositionVariants = NonNullable<VariantProps<typeof toolti
 export * from './tooltip';
 export * from './tooltip.variants';
 export * from './tooltip-positions';
+export * from './tooltip.imports';
 
 ```
 
@@ -358,6 +375,17 @@ export const TOOLTIP_POSITIONS_MAP: { [key: string]: ConnectedPosition } = {
     offsetX: 8,
   },
 };
+
+```
+
+
+
+```angular-ts title="tooltip.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { OverlayModule } from '@angular/cdk/overlay';
+
+import { ZardTooltipComponent, ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';
+
+export const ZardTooltipImports = [ZardTooltipComponent, ZardTooltipDirective, OverlayModule] as const;
 
 ```
 

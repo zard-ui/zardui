@@ -8,7 +8,7 @@ import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
 import { LayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
-import { ZardTooltipModule } from '@/shared/components/tooltip';
+import { ZardTooltipImports } from '@/shared/components/tooltip';
 
 interface MenuItem {
   icon: ZardIcon;
@@ -24,7 +24,7 @@ interface MenuItem {
     ZardBreadcrumbImports,
     ZardMenuImports,
     ZardSkeletonComponent,
-    ZardTooltipModule,
+    ZardTooltipImports,
     ZardDividerComponent,
     ZardAvatarComponent,
     ZardIconComponent,

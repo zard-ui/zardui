@@ -2,18 +2,18 @@ import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewE
 
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import {
   alertDescriptionVariants,
   alertIconVariants,
   alertTitleVariants,
   alertVariants,
-  type ZardAlertVariants,
+  type ZardAlertTypeVariants,
 } from './alert.variants';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
-
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-alert, [z-alert]',
@@ -56,7 +56,7 @@ export class ZardAlertComponent {
   readonly zTitle = input<string | TemplateRef<void>>('');
   readonly zDescription = input<string | TemplateRef<void>>('');
   readonly zIcon = input<ZardIcon | TemplateRef<void>>();
-  readonly zType = input<ZardAlertVariants['zType']>('default');
+  readonly zType = input<ZardAlertTypeVariants>('default');
 
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
 
@@ -72,7 +72,9 @@ export class ZardAlertComponent {
       return customIcon;
     }
 
-    if (this.zType() === 'destructive') return 'circle-alert';
+    if (this.zType() === 'destructive') {
+      return 'circle-alert';
+    }
 
     return null;
   });

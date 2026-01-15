@@ -19,6 +19,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'directives/id.directive.ts',
+        content: '',
+      },
+      {
         name: 'provider/event-manager-plugins/zard-debounce-event-manager-plugin.ts',
         content: '',
       },
@@ -28,6 +32,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'provider/providezard.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],

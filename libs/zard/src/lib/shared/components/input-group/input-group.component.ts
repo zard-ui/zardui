@@ -7,10 +7,18 @@ import {
   effect,
   input,
   type TemplateRef,
+  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
+
+import { ZardIdDirective } from '@/shared/core';
+import {
+  isTemplateRef,
+  ZardStringTemplateOutletDirective,
+} from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
   inputGroupAddonVariants,
@@ -23,37 +31,33 @@ import { ZardInputDirective } from '../input/input.directive';
 import type { ZardInputSizeVariants } from '../input/input.variants';
 import { ZardLoaderComponent } from '../loader/loader.component';
 
-import {
-  isTemplateRef,
-  ZardStringTemplateOutletDirective,
-} from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { generateId, mergeClasses } from '@/shared/utils/merge-classes';
-
 @Component({
   selector: 'z-input-group',
-  imports: [ZardStringTemplateOutletDirective, ZardLoaderComponent],
+  imports: [ZardStringTemplateOutletDirective, ZardLoaderComponent, ZardIdDirective],
   template: `
-    @let addonBefore = zAddonBefore();
-    @if (addonBefore) {
-      <div [class]="addonBeforeClasses()" [id]="addonBeforeId" [attr.aria-disabled]="zDisabled() || zLoading()">
-        <ng-container *zStringTemplateOutlet="addonBefore">{{ addonBefore }}</ng-container>
-      </div>
-    }
-
-    <div [class]="inputWrapperClasses()">
-      <ng-content select="input[z-input], textarea[z-input]" />
-
-      @if (zLoading()) {
-        <z-loader zSize="sm" />
+    <ng-container zardId="input-group" #z="zardId">
+      @let addonBefore = zAddonBefore();
+      @if (addonBefore) {
+        <div [class]="addonBeforeClasses()" [id]="addonBeforeId()" [attr.aria-disabled]="zDisabled() || zLoading()">
+          <ng-container *zStringTemplateOutlet="addonBefore">{{ addonBefore }}</ng-container>
+        </div>
       }
-    </div>
 
-    @let addonAfter = zAddonAfter();
-    @if (addonAfter) {
-      <div [class]="addonAfterClasses()" [id]="addonAfterId" [attr.aria-disabled]="zDisabled() || zLoading()">
-        <ng-container *zStringTemplateOutlet="addonAfter">{{ addonAfter }}</ng-container>
+      <div [class]="inputWrapperClasses()">
+        <ng-content select="input[z-input], textarea[z-input]" />
+
+        @if (zLoading()) {
+          <z-loader zSize="sm" />
+        }
       </div>
-    }
+
+      @let addonAfter = zAddonAfter();
+      @if (addonAfter) {
+        <div [class]="addonAfterClasses()" [id]="addonAfterId()" [attr.aria-disabled]="zDisabled() || zLoading()">
+          <ng-container *zStringTemplateOutlet="addonAfter">{{ addonAfter }}</ng-container>
+        </div>
+      }
+    </ng-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -76,10 +80,10 @@ export class ZardInputGroupComponent {
   readonly zSize = input<ZardInputSizeVariants>('default');
 
   private readonly contentInput = contentChild<ZardInputDirective>(ZardInputDirective);
-  private readonly uniqueId = generateId('input-group');
+  private readonly uniqueId = viewChild<ZardIdDirective>('z');
 
-  protected readonly addonBeforeId = `${this.uniqueId}-addon-before`;
-  protected readonly addonAfterId = `${this.uniqueId}-addon-after`;
+  protected readonly addonBeforeId = computed(() => `${this.uniqueId()?.id() ?? 'input-group'}-addon-before`);
+  protected readonly addonAfterId = computed(() => `${this.uniqueId()?.id() ?? 'input-group'}-addon-after`);
   protected readonly isAddonBeforeTemplate = computed(() => isTemplateRef(this.zAddonBefore()));
   protected readonly classes = computed(() =>
     mergeClasses(

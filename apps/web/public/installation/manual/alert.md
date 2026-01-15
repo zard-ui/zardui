@@ -5,18 +5,18 @@ import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewE
 
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import {
   alertDescriptionVariants,
   alertIconVariants,
   alertTitleVariants,
   alertVariants,
-  type ZardAlertVariants,
+  type ZardAlertTypeVariants,
 } from './alert.variants';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
-
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-alert, [z-alert]',
@@ -59,7 +59,7 @@ export class ZardAlertComponent {
   readonly zTitle = input<string | TemplateRef<void>>('');
   readonly zDescription = input<string | TemplateRef<void>>('');
   readonly zIcon = input<ZardIcon | TemplateRef<void>>();
-  readonly zType = input<ZardAlertVariants['zType']>('default');
+  readonly zType = input<ZardAlertTypeVariants>('default');
 
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
 
@@ -75,7 +75,9 @@ export class ZardAlertComponent {
       return customIcon;
     }
 
-    if (this.zType() === 'destructive') return 'circle-alert';
+    if (this.zType() === 'destructive') {
+      return 'circle-alert';
+    }
 
     return null;
   });
@@ -100,7 +102,7 @@ export const alertVariants = cva('relative w-full rounded-lg border px-4 py-3 te
   },
 });
 
-export const alertIconVariants = cva('shrink-0 self-start !text-base');
+export const alertIconVariants = cva('shrink-0 self-start text-base!');
 
 export const alertTitleVariants = cva('font-medium tracking-tight leading-none');
 
@@ -116,10 +118,7 @@ export const alertDescriptionVariants = cva('text-sm leading-relaxed mt-1', {
   },
 });
 
-export type ZardAlertVariants = VariantProps<typeof alertVariants>;
-export type ZardAlertIconVariants = VariantProps<typeof alertIconVariants>;
-export type ZardAlertTitleVariants = VariantProps<typeof alertTitleVariants>;
-export type ZardAlertDescriptionVariants = VariantProps<typeof alertDescriptionVariants>;
+export type ZardAlertTypeVariants = NonNullable<VariantProps<typeof alertVariants>['zType']>;
 
 ```
 

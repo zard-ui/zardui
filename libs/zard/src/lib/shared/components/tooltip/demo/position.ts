@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 
+import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
+
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardTooltipModule } from '../tooltip';
 
 @Component({
   selector: 'z-demo-tooltip-position',
-  imports: [ZardButtonComponent, ZardTooltipModule],
+  imports: [ZardButtonComponent, ZardTooltipImports],
   standalone: true,
   template: `
     <div class="flex flex-col space-y-2">

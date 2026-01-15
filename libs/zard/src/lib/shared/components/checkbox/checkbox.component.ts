@@ -13,17 +13,18 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { ZardIdDirective } from '@/shared/core';
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+
 import { checkboxLabelVariants, checkboxVariants, type ZardCheckboxVariants } from './checkbox.variants';
 import { ZardIconComponent } from '../icon/icon.component';
-
-import { generateId, mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;
 
 @Component({
   selector: 'z-checkbox, [z-checkbox]',
-  imports: [ZardIconComponent],
+  imports: [ZardIconComponent, ZardIdDirective],
   template: `
     <span
       tabindex="0"
@@ -32,12 +33,14 @@ type OnChangeType = (value: boolean) => void;
       [attr.aria-disabled]="disabled()"
       (click)="onCheckboxChange()"
       (keydown.{enter,space}.prevent)="onCheckboxChange()"
+      zardId="checkbox"
+      #z="zardId"
     >
       <main class="relative flex">
         <input
           #input
           type="checkbox"
-          [id]="id"
+          [id]="z.id()"
           [class]="classes()"
           [checked]="checked"
           [disabled]="disabled()"
@@ -52,7 +55,7 @@ type OnChangeType = (value: boolean) => void;
           "
         />
       </main>
-      <label [class]="labelClasses()" [for]="id">
+      <label [class]="labelClasses()" [for]="z.id()">
         <ng-content />
       </label>
     </span>
@@ -89,7 +92,6 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
 
   protected readonly labelClasses = computed(() => mergeClasses(checkboxLabelVariants({ zSize: this.zSize() })));
   checked = false;
-  protected readonly id = generateId('checkbox');
 
   writeValue(val: boolean): void {
     this.checked = val;

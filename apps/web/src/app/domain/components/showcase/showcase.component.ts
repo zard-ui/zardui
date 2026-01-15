@@ -10,7 +10,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
-import { ZardTooltipModule } from '@zard/components/tooltip/tooltip';
+import { ZardTooltipImports } from '@zard/components/tooltip';
 
 import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/carousel.component';
 
@@ -23,18 +23,29 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
       <header class="mb-16 grid items-center justify-center text-center">
         <h2 class="mb-4 text-3xl font-bold tracking-tight sm:text-4xl xl:text-6xl">Beautiful Components</h2>
         <p class="text-muted-foreground max-w-2xl pr-4 text-lg leading-relaxed sm:text-xl md:pr-0">
-          Production-ready components that you can copy and paste into your apps. Accessible, customizable, and open source.
+          Production-ready components that you can copy and paste into your apps. Accessible, customizable, and open
+          source.
         </p>
       </header>
 
       <main class="mb-24 pr-4 md:pr-0">
         <div class="relative overflow-hidden">
-          <z-carousel class="showcase-carousel mx-auto max-w-4xl" [itemsPerView]="3.2" [infinite]="false" [showNavigation]="true" [showDots]="false">
+          <z-carousel
+            class="showcase-carousel mx-auto max-w-4xl"
+            [itemsPerView]="3.2"
+            [infinite]="false"
+            [showNavigation]="true"
+            [showDots]="false"
+          >
             @for (component of showcaseComponents(); track component.type; let i = $index) {
               <z-carousel-item class="md:pr-6">
                 <z-card
                   [zTitle]="component.title"
-                  [class]="'flex h-[340px] w-[94%] flex-col pb-6 md:w-72 ' + component.bgClass + (component.isCtaCard ? ' cursor-pointer' : '')"
+                  [class]="
+                    'flex h-[340px] w-[94%] flex-col pb-6 md:w-72 ' +
+                    component.bgClass +
+                    (component.isCtaCard ? ' cursor-pointer' : '')
+                  "
                   (click)="component.isCtaCard ? navigateToComponents() : null"
                 >
                   <div class="flex min-h-[200px] flex-1 items-center justify-center p-8">
@@ -59,10 +70,16 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
                           <z-progress-bar [progress]="65"></z-progress-bar>
                         }
                         @case ('avatar') {
-                          <z-avatar zSrc="https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff" zAlt="John Doe"></z-avatar>
+                          <z-avatar
+                            zSrc="https://ui-avatars.com/api/?name=John+Doe&background=6366f1&color=fff"
+                            zAlt="John Doe"
+                          ></z-avatar>
                         }
                         @case ('tooltip') {
-                          <button zTooltip="This is a helpful tooltip!" class="bg-primary text-primary-foreground rounded-lg px-4 py-2 transition-all duration-200 hover:scale-105">
+                          <button
+                            zTooltip="This is a helpful tooltip!"
+                            class="bg-primary text-primary-foreground rounded-lg px-4 py-2 transition-all duration-200 hover:scale-105"
+                          >
                             Hover me
                           </button>
                         }
@@ -74,7 +91,11 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
 
                             <div>
                               <h3 class="mb-2 text-xl font-semibold">View All</h3>
-                              <p class="text-primary-foreground/80 text-sm leading-relaxed">30+ components<br />ready to use</p>
+                              <p class="text-primary-foreground/80 text-sm leading-relaxed">
+                                30+ components
+                                <br />
+                                ready to use
+                              </p>
                             </div>
                           </div>
                         }
@@ -102,7 +123,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
     ZardSwitchComponent,
     ZardProgressBarComponent,
     ZardAvatarComponent,
-    ZardTooltipModule,
+    ZardTooltipImports,
     ZardIconComponent,
   ],
 })
@@ -170,7 +191,8 @@ export class ShowcaseComponent {
     {
       title: '',
       type: 'cta' as const,
-      bgClass: 'bg-gradient-to-br from-primary/90 to-primary text-primary-foreground border-0 hover:from-primary hover:to-primary/90 transition-all duration-300',
+      bgClass:
+        'bg-gradient-to-br from-primary/90 to-primary text-primary-foreground border-0 hover:from-primary hover:to-primary/90 transition-all duration-300',
       textClass: 'text-primary-foreground/80',
       description: '',
       isCtaCard: true,

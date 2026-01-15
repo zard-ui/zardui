@@ -11,7 +11,6 @@ import { ZardAccordionComponent } from './accordion.component';
 jest.mock('../../utils/merge-classes', () => ({
   mergeClasses: jest.fn().mockImplementation((variants, cls) => cls || 'default-classes'),
   transform: jest.fn(value => value),
-  generateId: jest.fn().mockReturnValue('accordion-test-id'),
   noopFn: jest.fn(),
 }));
 

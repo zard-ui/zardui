@@ -14,6 +14,8 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import {
   buttonVariants,
   type ZardButtonShapeVariants,
@@ -21,8 +23,6 @@ import {
   type ZardButtonTypeVariants,
 } from './button.variants';
 import { ZardIconComponent } from '../icon/icon.component';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-button, button[z-button], a[z-button]',
@@ -64,6 +64,10 @@ export class ZardButtonComponent implements OnDestroy {
 
   constructor() {
     afterNextRender(() => {
+      if (typeof window === 'undefined' || typeof MutationObserver === 'undefined') {
+        return;
+      }
+
       const check = () => {
         const el = this.elementRef.nativeElement;
         const hasIcon = el.querySelector('z-icon, [z-icon]') !== null;

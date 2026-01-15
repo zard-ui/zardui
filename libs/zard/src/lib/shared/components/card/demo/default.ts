@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardCardComponent } from '@/shared/components/card/card.component';
-import { generateId } from '@/shared/utils/merge-classes';
+import { ZardIdDirective } from '@/shared/core';
 
 @Component({
   selector: 'z-demo-card-default',
-  imports: [ZardCardComponent, ZardButtonComponent],
+  imports: [ZardCardComponent, ZardButtonComponent, ZardIdDirective],
   template: `
     <z-card
       class="w-full md:w-94"
@@ -16,15 +16,15 @@ import { generateId } from '@/shared/utils/merge-classes';
       (zActionClick)="onActionClick()"
     >
       <div class="space-y-4">
-        <div class="space-y-2">
+        <div class="space-y-2" zardId="email" #e="zardId">
           <label
-            [for]="idEmail"
+            [for]="e.id()"
             class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
           >
             Email
           </label>
           <input
-            [id]="idEmail"
+            [id]="e.id()"
             type="email"
             placeholder="m@example.com"
             class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
@@ -32,9 +32,9 @@ import { generateId } from '@/shared/utils/merge-classes';
           />
         </div>
         <div class="space-y-2">
-          <div class="flex items-center">
+          <div class="flex items-center" zardId="password" #p="zardId">
             <label
-              [for]="idPassword"
+              [for]="p.id()"
               class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
             >
               Password
@@ -42,7 +42,7 @@ import { generateId } from '@/shared/utils/merge-classes';
             <a href="#" class="ml-auto text-sm underline-offset-4 hover:underline">Forgot your password?</a>
           </div>
           <input
-            [id]="idPassword"
+            [id]="p.id()"
             type="password"
             class="border-input bg-background ring-offset-background placeholder:text-muted-foreground focus-visible:ring-ring flex h-10 w-full rounded-md border px-3 py-2 text-sm file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
             required
@@ -57,9 +57,6 @@ import { generateId } from '@/shared/utils/merge-classes';
   `,
 })
 export class ZardDemoCardDefaultComponent {
-  protected readonly idEmail = generateId('email');
-  protected readonly idPassword = generateId('password');
-
   protected onActionClick(): void {
     alert('Redirect to Sign Up');
   }
