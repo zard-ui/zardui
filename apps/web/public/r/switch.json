@@ -9,6 +9,10 @@
     {
       "name": "switch.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const switchVariants = cva(\n  'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:bg-input',\n  {\n    variants: {\n      zType: {\n        default: 'data-[state=checked]:bg-primary',\n        destructive: 'data-[state=checked]:bg-destructive',\n      },\n      zSize: {\n        default: 'h-6 w-11',\n        sm: 'h-5 w-9',\n        lg: 'h-7 w-13',\n      },\n    },\n    defaultVariants: {\n      zType: 'default',\n      zSize: 'default',\n    },\n  },\n);\n\nexport type ZardSwitchVariants = VariantProps<typeof switchVariants>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './switch.component';\nexport * from './switch.variants';\n"
     }
   ]
 }

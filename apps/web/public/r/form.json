@@ -13,6 +13,10 @@
     {
       "name": "form.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const formFieldVariants = cva('grid gap-2');\n\nexport const formLabelVariants = cva(\n  'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',\n  {\n    variants: {\n      zRequired: {\n        true: \"after:content-['*'] after:ml-0.5 after:text-red-500\",\n      },\n    },\n  },\n);\n\nexport const formControlVariants = cva('');\n\nexport const formMessageVariants = cva('text-sm', {\n  variants: {\n    zType: {\n      default: 'text-muted-foreground',\n      error: 'text-red-500',\n      success: 'text-green-500',\n      warning: 'text-yellow-500',\n    },\n  },\n  defaultVariants: {\n    zType: 'default',\n  },\n});\n\nexport type ZardFormMessageTypeVariants = NonNullable<VariantProps<typeof formMessageVariants>['zType']>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from '@/shared/components/form/form.component';\nexport * from '@/shared/components/form/form.imports';\nexport * from '@/shared/components/form/form.variants';\n"
     }
   ]
 }

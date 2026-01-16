@@ -21,6 +21,10 @@
     {
       "name": "alert-dialog.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const alertDialogVariants = cva(\n  'fixed z-50 w-full max-w-[calc(100%-2rem)] border bg-background shadow-lg rounded-lg sm:max-w-lg',\n);\n\nexport type ZardAlertDialogVariants = VariantProps<typeof alertDialogVariants>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export { ZardAlertDialogComponent, ZardAlertDialogOptions, ZardAlertDialogModule } from './alert-dialog.component';\nexport { type OnClickCallback as AlertDialogOnClickCallback } from './alert-dialog.component';\nexport * from './alert-dialog.service';\nexport * from './alert-dialog-ref';\nexport * from './alert-dialog.variants';\n"
     }
   ],
   "registryDependencies": [

@@ -25,6 +25,10 @@
     {
       "name": "carousel.imports.ts",
       "content": "import { ZardCarouselContentComponent } from '@/shared/components/carousel/carousel-content.component';\nimport { ZardCarouselItemComponent } from '@/shared/components/carousel/carousel-item.component';\nimport { ZardCarouselComponent } from '@/shared/components/carousel/carousel.component';\n\nexport const ZardCarouselImports = [\n  ZardCarouselComponent,\n  ZardCarouselContentComponent,\n  ZardCarouselItemComponent,\n] as const;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from '@/shared/components/carousel/carousel.component';\nexport * from '@/shared/components/carousel/carousel-content.component';\nexport * from '@/shared/components/carousel/carousel-item.component';\nexport * from '@/shared/components/carousel/carousel-plugins.service';\nexport * from '@/shared/components/carousel/carousel.variants';\nexport * from '@/shared/components/carousel/carousel.imports';\n"
     }
   ],
   "dependencies": [

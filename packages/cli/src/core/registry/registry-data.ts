@@ -97,6 +97,10 @@ export const registry: ComponentRegistry[] = [
         name: 'sidebar.component.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -109,6 +113,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'button.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -137,6 +145,10 @@ export const registry: ComponentRegistry[] = [
         name: 'sheet.service.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -149,6 +161,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'card.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -165,6 +181,10 @@ export const registry: ComponentRegistry[] = [
         name: 'empty.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -176,6 +196,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'badge.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -200,6 +224,10 @@ export const registry: ComponentRegistry[] = [
         name: 'accordion.imports.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -212,6 +240,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'alert.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -240,6 +272,10 @@ export const registry: ComponentRegistry[] = [
         name: 'alert-dialog.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -251,7 +287,15 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'avatar-group.component.ts',
+        content: '',
+      },
+      {
         name: 'avatar.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -266,6 +310,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'checkbox.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -288,6 +336,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'dialog.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -323,6 +375,10 @@ export const registry: ComponentRegistry[] = [
         name: 'dropdown.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -340,6 +396,10 @@ export const registry: ComponentRegistry[] = [
         name: 'icons.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -353,6 +413,10 @@ export const registry: ComponentRegistry[] = [
         name: 'input.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -364,6 +428,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'input-group.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -388,6 +456,10 @@ export const registry: ComponentRegistry[] = [
         name: 'select.imports.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -399,6 +471,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'switch.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -415,6 +491,10 @@ export const registry: ComponentRegistry[] = [
         name: 'tabs.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -426,6 +506,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'toggle.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -443,6 +527,14 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'tooltip.variants.ts',
+        content: '',
+      },
+      {
+        name: 'tooltip.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -463,6 +555,10 @@ export const registry: ComponentRegistry[] = [
         name: 'breadcrumb.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -474,6 +570,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'divider.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -489,6 +589,10 @@ export const registry: ComponentRegistry[] = [
         name: 'loader.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -500,6 +604,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'progress-bar.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -515,6 +623,10 @@ export const registry: ComponentRegistry[] = [
         name: 'radio.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -526,6 +638,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'slider.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -558,6 +674,10 @@ export const registry: ComponentRegistry[] = [
         name: 'calendar.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -570,6 +690,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'combobox.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -614,6 +738,10 @@ export const registry: ComponentRegistry[] = [
         name: 'command.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -626,6 +754,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'date-picker.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -643,6 +775,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'form.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -663,6 +799,10 @@ export const registry: ComponentRegistry[] = [
         name: 'pagination.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -674,6 +814,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'popover.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -701,6 +845,10 @@ export const registry: ComponentRegistry[] = [
         name: 'resizable.imports.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -714,6 +862,10 @@ export const registry: ComponentRegistry[] = [
         name: 'segmented.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -725,6 +877,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'skeleton.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -744,6 +900,10 @@ export const registry: ComponentRegistry[] = [
         name: 'table.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -756,6 +916,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'toast.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -772,6 +936,10 @@ export const registry: ComponentRegistry[] = [
         name: 'toggle-group.variants.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -783,6 +951,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'menu.variants.ts',
+        content: '',
+      },
+      {
+        name: 'context-menu.directive.ts',
         content: '',
       },
       {
@@ -813,6 +985,10 @@ export const registry: ComponentRegistry[] = [
         name: 'menu-shortcut.component.ts',
         content: '',
       },
+      {
+        name: 'index.ts',
+        content: '',
+      },
     ],
   },
   {
@@ -825,6 +1001,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'button-group.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -842,6 +1022,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'kbd.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],
@@ -878,6 +1062,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'carousel.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
         content: '',
       },
     ],

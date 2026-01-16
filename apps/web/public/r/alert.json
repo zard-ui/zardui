@@ -9,6 +9,10 @@
     {
       "name": "alert.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const alertVariants = cva('relative w-full rounded-lg border px-4 py-3 text-sm flex items-center gap-3', {\n  variants: {\n    zType: {\n      default: 'bg-card text-card-foreground',\n      destructive: 'text-destructive bg-card',\n    },\n  },\n  defaultVariants: {\n    zType: 'default',\n  },\n});\n\nexport const alertIconVariants = cva('shrink-0 self-start text-base!');\n\nexport const alertTitleVariants = cva('font-medium tracking-tight leading-none');\n\nexport const alertDescriptionVariants = cva('text-sm leading-relaxed mt-1', {\n  variants: {\n    zType: {\n      default: 'text-muted-foreground',\n      destructive: 'text-destructive/90',\n    },\n  },\n  defaultVariants: {\n    zType: 'default',\n  },\n});\n\nexport type ZardAlertTypeVariants = NonNullable<VariantProps<typeof alertVariants>['zType']>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './alert.component';\nexport * from './alert.variants';\n"
     }
   ],
   "registryDependencies": [

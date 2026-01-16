@@ -21,6 +21,10 @@
     {
       "name": "resizable.imports.ts",
       "content": "import { ZardResizableHandleComponent } from '@/shared/components/resizable/resizable-handle.component';\nimport { ZardResizablePanelComponent } from '@/shared/components/resizable/resizable-panel.component';\nimport { ZardResizableComponent } from '@/shared/components/resizable/resizable.component';\n\nexport const ZardResizableImports = [\n  ZardResizableComponent,\n  ZardResizableHandleComponent,\n  ZardResizablePanelComponent,\n] as const;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from '@/shared/components/resizable/resizable.component';\nexport * from '@/shared/components/resizable/resizable-panel.component';\nexport * from '@/shared/components/resizable/resizable-handle.component';\nexport * from '@/shared/components/resizable/resizable.imports';\nexport * from '@/shared/components/resizable/resizable.variants';\n"
     }
   ]
 }

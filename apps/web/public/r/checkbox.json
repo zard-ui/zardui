@@ -9,6 +9,10 @@
     {
       "name": "checkbox.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const checkboxVariants = cva(\n  'cursor-[unset] peer appearance-none border transition shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',\n  {\n    variants: {\n      zType: {\n        default: 'border-primary checked:bg-primary',\n        destructive: 'border-destructive checked:bg-destructive',\n      },\n      zSize: {\n        default: 'h-4 w-4',\n        lg: 'h-6 w-6',\n      },\n      zShape: {\n        default: 'rounded',\n        circle: 'rounded-full',\n        square: 'rounded-none',\n      },\n    },\n    defaultVariants: {\n      zType: 'default',\n      zSize: 'default',\n      zShape: 'default',\n    },\n  },\n);\n\nexport const checkboxLabelVariants = cva('cursor-[unset] text-current empty:hidden', {\n  variants: {\n    zSize: {\n      default: 'text-base',\n      lg: 'text-lg',\n    },\n  },\n  defaultVariants: {\n    zSize: 'default',\n  },\n});\n\nexport type ZardCheckboxVariants = VariantProps<typeof checkboxVariants>;\nexport type ZardCheckLabelVariants = VariantProps<typeof checkboxLabelVariants>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './checkbox.component';\nexport * from './checkbox.variants';\n"
     }
   ],
   "registryDependencies": [

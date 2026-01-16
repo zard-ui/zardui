@@ -9,6 +9,10 @@
     {
       "name": "segmented.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const segmentedVariants = cva(\n  'inline-flex items-center justify-center rounded-md bg-muted p-1 text-muted-foreground',\n  {\n    variants: {\n      zSize: {\n        sm: 'h-9 text-xs',\n        default: 'h-10 text-sm',\n        lg: 'h-12 text-base',\n      },\n    },\n    defaultVariants: {\n      zSize: 'default',\n    },\n  },\n);\n\nexport const segmentedItemVariants = cva(\n  'inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',\n  {\n    variants: {\n      zSize: {\n        sm: 'px-2 py-1 text-xs',\n        default: 'px-3 py-1.5 text-sm',\n        lg: 'px-4 py-2 text-base',\n      },\n      isActive: {\n        true: 'bg-background text-foreground shadow-sm',\n        false: 'hover:bg-muted/50',\n      },\n    },\n    defaultVariants: {\n      zSize: 'default',\n      isActive: false,\n    },\n  },\n);\n\nexport type ZardSegmentedVariants = VariantProps<typeof segmentedVariants>;\nexport type ZardSegmentedItemVariants = VariantProps<typeof segmentedItemVariants>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './segmented.component';\nexport * from './segmented.variants';\n"
     }
   ]
 }

@@ -9,6 +9,10 @@
     {
       "name": "card.variants.ts",
       "content": "import { cva } from 'class-variance-authority';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\nexport const cardVariants = cva('bg-card text-card-foreground flex flex-col gap-6 rounded-xl border py-6 shadow-sm');\n\nexport const cardHeaderVariants = cva(\n  mergeClasses(\n    '@container/card-header grid auto-rows-min grid-rows-[auto_auto] items-start gap-2 px-6',\n    'has-data-[slot=card-action]:grid-cols-[1fr_auto] [.border-b]:pb-6',\n  ),\n);\n\nexport const cardActionVariants = cva('col-start-2 row-span-2 row-start-1 self-start justify-self-end');\n\nexport const cardBodyVariants = cva('px-6');\n\nexport const cardFooterVariants = cva('flex flex-col gap-2 items-center px-6 [.border-t]:pt-6');\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './card.component';\nexport * from './card.variants';\n"
     }
   ],
   "registryDependencies": [

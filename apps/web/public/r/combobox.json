@@ -9,6 +9,10 @@
     {
       "name": "combobox.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const comboboxVariants = cva('', {\n  variants: {\n    zWidth: {\n      default: 'w-[200px]',\n      sm: 'w-[150px]',\n      md: 'w-[250px]',\n      lg: 'w-[350px]',\n      full: 'w-full',\n    },\n  },\n  defaultVariants: {\n    zWidth: 'default',\n  },\n});\n\nexport type ZardComboboxVariants = VariantProps<typeof comboboxVariants>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './combobox.component';\nexport * from './combobox.variants';\n"
     }
   ],
   "registryDependencies": [

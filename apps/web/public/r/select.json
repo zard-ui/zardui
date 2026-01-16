@@ -17,6 +17,10 @@
     {
       "name": "select.imports.ts",
       "content": "import { ZardSelectItemComponent } from '@/shared/components/select/select-item.component';\nimport { ZardSelectComponent } from '@/shared/components/select/select.component';\n\nexport const ZardSelectImports = [ZardSelectComponent, ZardSelectItemComponent] as const;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from '@/shared/components/select/select.component';\nexport * from '@/shared/components/select/select-item.component';\nexport * from '@/shared/components/select/select.imports';\nexport * from '@/shared/components/select/select.variants';\n"
     }
   ],
   "registryDependencies": [
