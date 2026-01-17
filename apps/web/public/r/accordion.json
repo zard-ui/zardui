@@ -17,6 +17,10 @@
     {
       "name": "accordion.imports.ts",
       "content": "import { ZardAccordionItemComponent } from '@/shared/components/accordion/accordion-item.component';\nimport { ZardAccordionComponent } from '@/shared/components/accordion/accordion.component';\n\nexport const ZardAccordionImports = [ZardAccordionComponent, ZardAccordionItemComponent] as const;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from '@/shared/components/accordion/accordion.component';\nexport * from '@/shared/components/accordion/accordion-item.component';\nexport * from '@/shared/components/accordion/accordion.variants';\nexport * from '@/shared/components/accordion/accordion.imports';\n"
     }
   ],
   "registryDependencies": [

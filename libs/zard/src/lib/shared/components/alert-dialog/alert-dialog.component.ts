@@ -27,7 +27,8 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { generateId, mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+import { ZardIdDirective } from '@/shared/core';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import type { ZardAlertDialogRef } from './alert-dialog-ref';
 import { ZardAlertDialogService } from './alert-dialog.service';
@@ -56,8 +57,7 @@ export class ZardAlertDialogOptions<T> {
 
 @Component({
   selector: 'z-alert-dialog',
-  imports: [OverlayModule, PortalModule, ZardButtonComponent, A11yModule],
-  standalone: true,
+  imports: [OverlayModule, PortalModule, ZardButtonComponent, A11yModule, ZardIdDirective],
   templateUrl: './alert-dialog.component.html',
   styles: `
     z-alert-dialog {
@@ -103,16 +103,21 @@ export class ZardAlertDialogOptions<T> {
   exportAs: 'zAlertDialog',
 })
 export class ZardAlertDialogComponent<T> extends BasePortalOutlet {
+  protected readonly alertDialogId = viewChild<ZardIdDirective>('z');
   private readonly host = inject(ElementRef<HTMLElement>);
   protected readonly config = inject(ZardAlertDialogOptions<T>);
 
   protected readonly classes = computed(() => mergeClasses(alertDialogVariants(), this.config.zCustomClasses));
 
-  private readonly alertDialogId = generateId('alert-dialog');
-  protected readonly titleId = computed(() => (this.config.zTitle ? `${this.alertDialogId}-title` : null));
-  protected readonly descriptionId = computed(() =>
-    this.config.zDescription ? `${this.alertDialogId}-description` : null,
-  );
+  protected readonly titleId = computed(() => {
+    const baseId = this.alertDialogId()?.id();
+    return this.config.zTitle && baseId ? `${baseId}-title` : null;
+  });
+
+  protected readonly descriptionId = computed(() => {
+    const baseId = this.alertDialogId()?.id();
+    return this.config.zDescription && baseId ? `${baseId}-description` : null;
+  });
 
   alertDialogRef?: ZardAlertDialogRef<T>;
 

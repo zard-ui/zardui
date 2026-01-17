@@ -13,6 +13,10 @@
     {
       "name": "breadcrumb.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const breadcrumbVariants = cva('w-full', {\n  variants: {\n    zSize: {\n      sm: 'text-xs',\n      md: 'text-sm',\n      lg: 'text-base',\n    },\n  },\n  defaultVariants: {\n    zSize: 'md',\n  },\n});\nexport type ZardBreadcrumbSizeVariants = NonNullable<VariantProps<typeof breadcrumbVariants>['zSize']>;\n\nexport const breadcrumbListVariants = cva(\n  'text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word sm:gap-2.5',\n  {\n    variants: {\n      zAlign: {\n        start: 'justify-start',\n        center: 'justify-center',\n        end: 'justify-end',\n      },\n      zWrap: {\n        wrap: 'flex-wrap',\n        nowrap: 'flex-nowrap',\n      },\n    },\n    defaultVariants: {\n      zAlign: 'start',\n      zWrap: 'wrap',\n    },\n  },\n);\nexport type ZardBreadcrumbAlignVariants = NonNullable<VariantProps<typeof breadcrumbListVariants>['zAlign']>;\nexport type ZardBreadcrumbWrapVariants = NonNullable<VariantProps<typeof breadcrumbListVariants>['zWrap']>;\n\nexport const breadcrumbItemVariants = cva(\n  'inline-flex items-center gap-1.5 transition-colors cursor-pointer hover:text-foreground last:text-foreground last:font-normal last:pointer-events-none',\n);\nexport type ZardBreadcrumbItemVariants = VariantProps<typeof breadcrumbItemVariants>;\n\nexport const breadcrumbEllipsisVariants = cva('flex', {\n  variants: {\n    zColor: {\n      muted: 'text-muted-foreground',\n      strong: 'text-foreground',\n    },\n  },\n  defaultVariants: {\n    zColor: 'muted',\n  },\n});\nexport type ZardBreadcrumbEllipsisColorVariants = NonNullable<\n  VariantProps<typeof breadcrumbEllipsisVariants>['zColor']\n>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from '@/shared/components/breadcrumb/breadcrumb.component';\nexport * from '@/shared/components/breadcrumb/breadcrumb.variants';\n"
     }
   ],
   "registryDependencies": [

@@ -1,11 +1,13 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { Component, ElementRef, viewChild } from '@angular/core';
-import { ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Component, type ElementRef, viewChild } from '@angular/core';
+import { type ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import { ZardTooltipDirective, ZardTooltipModule } from './tooltip';
+import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
+
+import { type ZardTooltipDirective } from './tooltip';
 
 @Component({
-  imports: [ZardTooltipModule],
+  imports: [ZardTooltipImports],
   standalone: true,
   template: `
     <div #hoverTooltip zTooltip="Test Hover" #hoverDir="zTooltip"></div>

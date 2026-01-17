@@ -9,9 +9,11 @@
       "type": "registry:component",
       "files": [
         "directives/string-template-outlet/string-template-outlet.directive.ts",
+        "directives/id.directive.ts",
         "provider/event-manager-plugins/zard-debounce-event-manager-plugin.ts",
         "provider/event-manager-plugins/zard-event-manager-plugin.ts",
-        "provider/providezard.ts"
+        "provider/providezard.ts",
+        "index.ts"
       ]
     },
     {
@@ -48,7 +50,8 @@
         "footer.component.ts",
         "header.component.ts",
         "layout.imports.ts",
-        "sidebar.component.ts"
+        "sidebar.component.ts",
+        "index.ts"
       ]
     },
     {
@@ -59,7 +62,8 @@
       ],
       "files": [
         "button.component.ts",
-        "button.variants.ts"
+        "button.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -74,7 +78,8 @@
         "sheet.variants.ts",
         "sheet-ref.ts",
         "sheet.imports.ts",
-        "sheet.service.ts"
+        "sheet.service.ts",
+        "index.ts"
       ]
     },
     {
@@ -85,7 +90,8 @@
       ],
       "files": [
         "card.component.ts",
-        "card.variants.ts"
+        "card.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -96,7 +102,8 @@
       ],
       "files": [
         "empty.component.ts",
-        "empty.variants.ts"
+        "empty.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -104,7 +111,8 @@
       "type": "registry:component",
       "files": [
         "badge.component.ts",
-        "badge.variants.ts"
+        "badge.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -117,7 +125,8 @@
         "accordion.component.ts",
         "accordion-item.component.ts",
         "accordion.variants.ts",
-        "accordion.imports.ts"
+        "accordion.imports.ts",
+        "index.ts"
       ]
     },
     {
@@ -128,7 +137,8 @@
       ],
       "files": [
         "alert.component.ts",
-        "alert.variants.ts"
+        "alert.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -142,7 +152,8 @@
         "alert-dialog.component.html",
         "alert-dialog.service.ts",
         "alert-dialog-ref.ts",
-        "alert-dialog.variants.ts"
+        "alert-dialog.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -153,7 +164,9 @@
       ],
       "files": [
         "avatar.component.ts",
-        "avatar.variants.ts"
+        "avatar-group.component.ts",
+        "avatar.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -164,7 +177,8 @@
       ],
       "files": [
         "checkbox.component.ts",
-        "checkbox.variants.ts"
+        "checkbox.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -178,7 +192,8 @@
         "dialog.component.ts",
         "dialog.service.ts",
         "dialog-ref.ts",
-        "dialog.variants.ts"
+        "dialog.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -191,7 +206,8 @@
         "dropdown-trigger.directive.ts",
         "dropdown.imports.ts",
         "dropdown.service.ts",
-        "dropdown.variants.ts"
+        "dropdown.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -200,7 +216,8 @@
       "files": [
         "icon.component.ts",
         "icon.variants.ts",
-        "icons.ts"
+        "icons.ts",
+        "index.ts"
       ]
     },
     {
@@ -208,7 +225,8 @@
       "type": "registry:component",
       "files": [
         "input.directive.ts",
-        "input.variants.ts"
+        "input.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -216,7 +234,8 @@
       "type": "registry:component",
       "files": [
         "input-group.component.ts",
-        "input-group.variants.ts"
+        "input-group.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -230,7 +249,8 @@
         "select.component.ts",
         "select-item.component.ts",
         "select.variants.ts",
-        "select.imports.ts"
+        "select.imports.ts",
+        "index.ts"
       ]
     },
     {
@@ -238,7 +258,8 @@
       "type": "registry:component",
       "files": [
         "switch.component.ts",
-        "switch.variants.ts"
+        "switch.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -250,7 +271,8 @@
       ],
       "files": [
         "tabs.component.ts",
-        "tabs.variants.ts"
+        "tabs.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -258,7 +280,8 @@
       "type": "registry:component",
       "files": [
         "toggle.component.ts",
-        "toggle.variants.ts"
+        "toggle.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -267,7 +290,9 @@
       "files": [
         "tooltip.ts",
         "tooltip-positions.ts",
-        "tooltip.variants.ts"
+        "tooltip.variants.ts",
+        "tooltip.imports.ts",
+        "index.ts"
       ]
     },
     {
@@ -279,7 +304,8 @@
       "files": [
         "breadcrumb.component.ts",
         "breadcrumb.imports.ts",
-        "breadcrumb.variants.ts"
+        "breadcrumb.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -287,7 +313,8 @@
       "type": "registry:component",
       "files": [
         "divider.component.ts",
-        "divider.variants.ts"
+        "divider.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -295,7 +322,8 @@
       "type": "registry:component",
       "files": [
         "loader.component.ts",
-        "loader.variants.ts"
+        "loader.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -303,7 +331,8 @@
       "type": "registry:component",
       "files": [
         "progress-bar.component.ts",
-        "progress-bar.variants.ts"
+        "progress-bar.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -311,7 +340,8 @@
       "type": "registry:component",
       "files": [
         "radio.component.ts",
-        "radio.variants.ts"
+        "radio.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -319,7 +349,8 @@
       "type": "registry:component",
       "files": [
         "slider.component.ts",
-        "slider.variants.ts"
+        "slider.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -334,7 +365,8 @@
         "calendar-navigation.component.ts",
         "calendar.types.ts",
         "calendar.utils.ts",
-        "calendar.variants.ts"
+        "calendar.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -350,7 +382,8 @@
       ],
       "files": [
         "combobox.component.ts",
-        "combobox.variants.ts"
+        "combobox.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -368,7 +401,8 @@
         "command-option-group.component.ts",
         "command-divider.component.ts",
         "command.imports.ts",
-        "command.variants.ts"
+        "command.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -383,7 +417,8 @@
       ],
       "files": [
         "date-picker.component.ts",
-        "date-picker.variants.ts"
+        "date-picker.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -392,7 +427,8 @@
       "files": [
         "form.component.ts",
         "form.imports.ts",
-        "form.variants.ts"
+        "form.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -405,7 +441,8 @@
       "files": [
         "pagination.component.ts",
         "pagination.imports.ts",
-        "pagination.variants.ts"
+        "pagination.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -413,7 +450,8 @@
       "type": "registry:component",
       "files": [
         "popover.component.ts",
-        "popover.variants.ts"
+        "popover.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -424,7 +462,8 @@
         "resizable-panel.component.ts",
         "resizable-handle.component.ts",
         "resizable.variants.ts",
-        "resizable.imports.ts"
+        "resizable.imports.ts",
+        "index.ts"
       ]
     },
     {
@@ -432,7 +471,8 @@
       "type": "registry:component",
       "files": [
         "segmented.component.ts",
-        "segmented.variants.ts"
+        "segmented.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -440,7 +480,8 @@
       "type": "registry:component",
       "files": [
         "skeleton.component.ts",
-        "skeleton.variants.ts"
+        "skeleton.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -449,7 +490,8 @@
       "files": [
         "table.component.ts",
         "table.imports.ts",
-        "table.variants.ts"
+        "table.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -460,7 +502,8 @@
       ],
       "files": [
         "toast.component.ts",
-        "toast.variants.ts"
+        "toast.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -472,7 +515,8 @@
       ],
       "files": [
         "toggle-group.component.ts",
-        "toggle-group.variants.ts"
+        "toggle-group.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -481,13 +525,15 @@
       "files": [
         "menu.directive.ts",
         "menu.variants.ts",
+        "context-menu.directive.ts",
         "menu-content.directive.ts",
         "menu-item.directive.ts",
         "menu-manager.service.ts",
         "menu.imports.ts",
         "menu-positions.ts",
         "menu-label.component.ts",
-        "menu-shortcut.component.ts"
+        "menu-shortcut.component.ts",
+        "index.ts"
       ]
     },
     {
@@ -498,7 +544,8 @@
       ],
       "files": [
         "button-group.component.ts",
-        "button-group.variants.ts"
+        "button-group.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -507,7 +554,8 @@
       "files": [
         "kbd.component.ts",
         "kbd-group.component.ts",
-        "kbd.variants.ts"
+        "kbd.variants.ts",
+        "index.ts"
       ]
     },
     {
@@ -529,7 +577,8 @@
         "carousel-content.component.ts",
         "carousel-item.component.ts",
         "carousel-plugins.service.ts",
-        "carousel.imports.ts"
+        "carousel.imports.ts",
+        "index.ts"
       ]
     }
   ]

@@ -9,6 +9,10 @@
     {
       "name": "date-picker.variants.ts",
       "content": "import { cva } from 'class-variance-authority';\n\nconst datePickerVariants = cva('', {\n  variants: {\n    zSize: {\n      sm: '',\n      default: '',\n      lg: '',\n    },\n    zType: {\n      default: '',\n      outline: '',\n      ghost: '',\n    },\n  },\n  defaultVariants: {\n    zSize: 'default',\n    zType: 'outline',\n  },\n});\n\nexport { datePickerVariants };\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './date-picker.component';\nexport * from './date-picker.variants';\n"
     }
   ],
   "registryDependencies": [

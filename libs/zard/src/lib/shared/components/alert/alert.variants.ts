@@ -12,7 +12,7 @@ export const alertVariants = cva('relative w-full rounded-lg border px-4 py-3 te
   },
 });
 
-export const alertIconVariants = cva('shrink-0 self-start !text-base');
+export const alertIconVariants = cva('shrink-0 self-start text-base!');
 
 export const alertTitleVariants = cva('font-medium tracking-tight leading-none');
 
@@ -28,7 +28,4 @@ export const alertDescriptionVariants = cva('text-sm leading-relaxed mt-1', {
   },
 });
 
-export type ZardAlertVariants = VariantProps<typeof alertVariants>;
-export type ZardAlertIconVariants = VariantProps<typeof alertIconVariants>;
-export type ZardAlertTitleVariants = VariantProps<typeof alertTitleVariants>;
-export type ZardAlertDescriptionVariants = VariantProps<typeof alertDescriptionVariants>;
+export type ZardAlertTypeVariants = NonNullable<VariantProps<typeof alertVariants>['zType']>;

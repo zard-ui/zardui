@@ -9,6 +9,10 @@
     {
       "name": "empty.variants.ts",
       "content": "import { cva } from 'class-variance-authority';\n\nexport const emptyVariants = cva(\n  'flex min-w-0 flex-1 flex-col items-center justify-center gap-6 rounded-lg border-dashed p-6 text-center text-balance md:p-12',\n  {\n    variants: {},\n  },\n);\n\nexport const emptyHeaderVariants = cva('flex max-w-sm flex-col items-center gap-2 text-center', {\n  variants: {},\n});\n\nexport const emptyImageVariants = cva(\n  'mb-2 flex shrink-0 items-center justify-center bg-transparent [&_svg]:pointer-events-none [&_svg]:shrink-0',\n  {\n    variants: {},\n  },\n);\n\nexport const emptyIconVariants = cva(\n  `bg-muted text-foreground mb-2 flex size-10 shrink-0 items-center justify-center rounded-lg [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-6`,\n  {\n    variants: {},\n  },\n);\n\nexport const emptyTitleVariants = cva('text-lg font-medium tracking-tight', {\n  variants: {},\n});\n\nexport const emptyDescriptionVariants = cva(\n  'text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4',\n  {\n    variants: {},\n  },\n);\n\nexport const emptyActionsVariants = cva(\n  'flex w-full max-w-sm min-w-0 items-center justify-center gap-2 text-sm text-balance',\n  {\n    variants: {},\n  },\n);\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './empty.component';\nexport * from './empty.variants';\n"
     }
   ],
   "registryDependencies": [

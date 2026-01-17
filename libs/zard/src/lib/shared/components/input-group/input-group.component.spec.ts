@@ -223,8 +223,8 @@ describe('ZardInputGroupComponent', () => {
     it('should generate unique IDs', () => {
       fixture.detectChanges();
 
-      const id1 = component['addonBeforeId'];
-      const id2 = component['addonAfterId'];
+      const id1 = component['addonBeforeId']();
+      const id2 = component['addonAfterId']();
 
       expect(id1).toMatch(/input-group-.*-addon-before/);
       expect(id2).toMatch(/input-group-.*-addon-after/);

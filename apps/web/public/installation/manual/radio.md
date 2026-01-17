@@ -16,22 +16,24 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { radioLabelVariants, radioVariants } from './radio.variants';
+import { ZardIdDirective } from '@/shared/core';
+import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
-import { generateId, mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { radioLabelVariants, radioVariants } from './radio.variants';
 
 type OnTouchedType = () => unknown;
 type OnChangeType = (value: unknown) => void;
 
 @Component({
   selector: 'z-radio, [z-radio]',
-  imports: [],
-  standalone: true,
+  imports: [ZardIdDirective],
   template: `
     <span
       class="relative flex items-center gap-2"
       [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'"
       (mousedown)="onRadioChange()"
+      zardId="radio"
+      #z="zardId"
     >
       <input
         #input
@@ -42,12 +44,12 @@ type OnChangeType = (value: unknown) => void;
         [disabled]="disabled()"
         (blur)="onRadioBlur()"
         [name]="name()"
-        [id]="zId()"
+        [id]="zId() || z.id()"
       />
       <span
         class="bg-primary pointer-events-none absolute left-1 size-2 rounded-full opacity-0 peer-checked:opacity-100"
       ></span>
-      <label [class]="labelClasses()" [for]="zId()">
+      <label [class]="labelClasses()" [for]="zId() || z.id()">
         <ng-content />
       </label>
     </span>
@@ -70,8 +72,9 @@ export class ZardRadioComponent implements ControlValueAccessor {
   readonly class = input<ClassValue>('');
   readonly disabled = input(false, { transform });
   readonly name = input<string>('radio');
-  readonly zId = input<string>(generateId('radio'));
   readonly value = input<unknown>(null);
+  readonly zId = input<string>('');
+
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
   private onChange: OnChangeType = () => {};
   /* eslint-disable-next-line @typescript-eslint/no-empty-function */
@@ -107,7 +110,9 @@ export class ZardRadioComponent implements ControlValueAccessor {
   }
 
   onRadioChange(): void {
-    if (this.disabled()) return;
+    if (this.disabled()) {
+      return;
+    }
 
     this.checked = true;
     this.onChange(this.value());

@@ -28,7 +28,7 @@ const configSchema = z.object({
       css: z.string().default('src/styles.css'),
       baseColor: z.string().default('slate'),
     })
-    .default({}),
+    .default({ css: 'src/styles.css', baseColor: 'slate' }),
   baseUrl: z.string().default('src/app'),
   aliases: z
     .object({
@@ -37,7 +37,12 @@ const configSchema = z.object({
       core: z.string().default('@/shared/core'),
       services: z.string().default('@/shared/services'),
     })
-    .default({}),
+    .default({
+      components: '@/shared/components',
+      utils: '@/shared/utils',
+      core: '@/shared/core',
+      services: '@/shared/services',
+    }),
 });
 
 export type Config = z.infer<typeof configSchema>;

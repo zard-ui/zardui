@@ -19,8 +19,8 @@ async function readJson(filePath: string): Promise<any> {
 const packageJsonSchema = z.object({
   name: z.string(),
   version: z.string().optional(),
-  dependencies: z.record(z.string()).optional(),
-  devDependencies: z.record(z.string()).optional(),
+  dependencies: z.record(z.string(), z.string()).optional(),
+  devDependencies: z.record(z.string(), z.string()).optional(),
 });
 
 export type ProjectInfo = {
@@ -46,7 +46,7 @@ export async function getProjectInfo(cwd: string): Promise<ProjectInfo> {
   const hasTailwind = !!deps['tailwindcss'];
   const hasNx = !!deps['nx'] || !!deps['@nx/workspace'];
 
-  const angularVersion = deps['@angular/core']?.replace(/[^0-9.]/g, '') || null;
+  const angularVersion = (deps['@angular/core'] as string)?.replace(/[^0-9.]/g, '') || null;
 
   return {
     framework: hasAngular ? 'angular' : 'unknown',

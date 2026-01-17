@@ -2,23 +2,24 @@
 import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { generateId } from '../../../utils/merge-classes';
+import { ZardIdDirective } from '@/shared/core';
+
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardFormImports } from '../form.imports';
 
 @Component({
   selector: 'zard-demo-form-default',
-  imports: [FormsModule, ZardButtonComponent, ZardInputDirective, ZardFormImports],
+  imports: [FormsModule, ZardButtonComponent, ZardInputDirective, ZardFormImports, ZardIdDirective],
   template: `
     <form class="max-w-sm space-y-6">
-      <z-form-field>
-        <label z-form-label zRequired [for]="idFullName">Full Name</label>
+      <z-form-field zardId="fullName" #f="zardId">
+        <label z-form-label zRequired [for]="f.id()">Full Name</label>
         <z-form-control>
           <input
             z-input
             type="text"
-            [id]="idFullName"
+            [id]="f.id()"
             placeholder="Enter your full name"
             [(ngModel)]="fullName"
             name="fullName"
@@ -27,20 +28,20 @@ import { ZardFormImports } from '../form.imports';
         <z-form-message>This is your display name.</z-form-message>
       </z-form-field>
 
-      <z-form-field>
-        <label z-form-label zRequired [for]="idEmail">Email</label>
+      <z-form-field zardId="email" #e="zardId">
+        <label z-form-label zRequired [for]="e.id()">Email</label>
         <z-form-control>
-          <input z-input type="email" [id]="idEmail" placeholder="Enter your email" [(ngModel)]="email" name="email" />
+          <input z-input type="email" [id]="e.id()" placeholder="Enter your email" [(ngModel)]="email" name="email" />
         </z-form-control>
         <z-form-message>We'll never share your email with anyone else.</z-form-message>
       </z-form-field>
 
-      <z-form-field>
-        <label z-form-label [for]="idBio">Bio</label>
+      <z-form-field zardId="bio" #b="zardId">
+        <label z-form-label [for]="b.id()">Bio</label>
         <z-form-control>
           <textarea
             z-input
-            [id]="idBio"
+            [id]="b.id()"
             placeholder="Tell us about yourself"
             rows="3"
             [(ngModel)]="bio"
@@ -57,10 +58,6 @@ import { ZardFormImports } from '../form.imports';
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardDemoFormDefaultComponent {
-  protected readonly idFullName = generateId('fullName');
-  protected readonly idEmail = generateId('email');
-  protected readonly idBio = generateId('bio');
-
   fullName = '';
   email = '';
   bio = '';

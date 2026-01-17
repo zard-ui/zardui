@@ -17,6 +17,10 @@
     {
       "name": "dialog.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const dialogVariants = cva(\n  'fixed left-[50%] top-[50%] z-50 grid w-full translate-x-[-50%] translate-y-[-50%] gap-4 border bg-background p-6 shadow-lg rounded-lg max-w-[calc(100%-2rem)] sm:max-w-[425px]',\n);\nexport type ZardDialogVariants = VariantProps<typeof dialogVariants>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export { ZardDialogComponent, ZardDialogOptions, ZardDialogModule } from './dialog.component';\nexport { type OnClickCallback as DialogOnClickCallback } from './dialog.component';\nexport * from './dialog.service';\nexport * from './dialog-ref';\nexport * from './dialog.variants';\n"
     }
   ],
   "registryDependencies": [

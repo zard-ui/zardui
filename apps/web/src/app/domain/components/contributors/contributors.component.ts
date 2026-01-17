@@ -1,7 +1,7 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
-import { ZardTooltipModule } from '@zard/components/tooltip/tooltip';
+import { ZardTooltipImports } from '@zard/components/tooltip';
 
 export interface Contributor {
   login: string;
@@ -12,13 +12,18 @@ export interface Contributor {
 
 @Component({
   selector: 'z-contributors',
-  standalone: true,
-  imports: [ZardAvatarComponent, ZardTooltipModule],
+  imports: [ZardAvatarComponent, ZardTooltipImports],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="flex flex-wrap gap-4">
       @for (contributor of contributors(); track contributor.login) {
         <div class="relative" [zTooltip]="contributor.login" zPosition="top" zTrigger="hover">
-          <a [href]="contributor.html_url" target="_blank" rel="noopener noreferrer" class="block transition-transform hover:scale-110">
+          <a
+            [href]="contributor.html_url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block transition-transform hover:scale-110"
+          >
             <z-avatar
               [zSrc]="contributor.avatar_url"
               [zAlt]="contributor.login + ' avatar'"

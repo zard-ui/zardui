@@ -9,6 +9,10 @@
     {
       "name": "tabs.variants.ts",
       "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nimport type { zAlign } from './tabs.component';\n\nexport const tabContainerVariants = cva('flex', {\n  variants: {\n    zPosition: {\n      top: 'flex-col',\n      bottom: 'flex-col',\n      left: 'flex-row',\n      right: 'flex-row',\n    },\n  },\n  defaultVariants: {\n    zPosition: 'top',\n  },\n});\n\nexport const tabNavVariants = cva('flex gap-4 overflow-auto scroll nav-tab-scroll', {\n  variants: {\n    zPosition: {\n      top: 'flex-row border-b mb-4',\n      bottom: 'flex-row border-t mt-4',\n      left: 'flex-col border-r mr-4 min-h-0',\n      right: 'flex-col border-l ml-4 min-h-0',\n    },\n    zAlignTabs: {\n      start: 'justify-start',\n      center: 'justify-center',\n      end: 'justify-end',\n    },\n  },\n  defaultVariants: {\n    zPosition: 'top',\n    zAlignTabs: 'start',\n  },\n});\n\nexport const tabButtonVariants = cva('hover:bg-transparent rounded-none flex-shrink-0', {\n  variants: {\n    zActivePosition: {\n      top: '',\n      bottom: '',\n      left: '',\n      right: '',\n    },\n    isActive: {\n      true: '',\n      false: '',\n    },\n  },\n  compoundVariants: [\n    {\n      zActivePosition: 'top',\n      isActive: true,\n      class: 'border-t-2 border-t-primary',\n    },\n    {\n      zActivePosition: 'bottom',\n      isActive: true,\n      class: 'border-b-2 border-b-primary',\n    },\n    {\n      zActivePosition: 'left',\n      isActive: true,\n      class: 'border-l-2 border-l-primary',\n    },\n    {\n      zActivePosition: 'right',\n      isActive: true,\n      class: 'border-r-2 border-r-primary',\n    },\n  ],\n  defaultVariants: {\n    zActivePosition: 'bottom',\n    isActive: false,\n  },\n});\n\nexport type ZardTabVariants = VariantProps<typeof tabContainerVariants> &\n  VariantProps<typeof tabNavVariants> &\n  VariantProps<typeof tabButtonVariants> & { zAlignTabs: zAlign };\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './tabs.component';\nexport * from './tabs.variants';\n"
     }
   ],
   "registryDependencies": [
