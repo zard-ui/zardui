@@ -1,3 +1,4 @@
+import { AccordionContent, AccordionPanel, AccordionTrigger } from '@angular/aria/accordion';
 import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
@@ -13,36 +14,31 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-accordion-item',
-  imports: [ZardIconComponent],
+  imports: [ZardIconComponent, AccordionPanel, AccordionTrigger, AccordionContent],
   template: `
     <button
       type="button"
-      [attr.aria-controls]="'content-' + zValue()"
-      [attr.aria-expanded]="isOpen()"
-      [id]="'accordion-' + zValue()"
+      ngAccordionTrigger
+      [panelId]="'accordion-' + zValue()"
       [class]="triggerClasses()"
+      [expanded]="isOpen()"
       (click)="toggle()"
     >
       {{ zTitle() }}
       <z-icon
-        zType="chevron-down"
+        [zType]="icon()"
         class="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
-        [class]="isOpen() ? 'rotate-180' : ''"
       />
     </button>
 
-    <div
-      role="region"
-      [attr.aria-labelledby]="'accordion-' + zValue()"
-      [attr.data-state]="isOpen() ? 'open' : 'closed'"
-      [id]="'content-' + zValue()"
-      [class]="contentClasses()"
-    >
-      <div class="overflow-hidden">
-        <div class="pt-0 pb-4">
-          <ng-content />
+    <div ngAccordionPanel [panelId]="'accordion-' + zValue()" [class]="contentClasses()">
+      <ng-template ngAccordionContent>
+        <div class="overflow-hidden">
+          <div class="pt-0 pb-4">
+            <ng-content />
+          </div>
         </div>
-      </div>
+      </ng-template>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,6 +60,7 @@ export class ZardAccordionItemComponent {
   protected readonly itemClasses = computed(() => mergeClasses(accordionItemVariants(), this.class()));
   protected readonly triggerClasses = computed(() => mergeClasses(accordionTriggerVariants()));
   protected readonly contentClasses = computed(() => mergeClasses(accordionContentVariants({ isOpen: this.isOpen() })));
+  protected readonly icon = computed(() => (this.isOpen() ? 'chevron-up' : 'chevron-down'));
 
   toggle(): void {
     if (this.accordion) {

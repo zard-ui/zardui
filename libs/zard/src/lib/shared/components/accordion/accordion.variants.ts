@@ -1,4 +1,4 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 export const accordionVariants = cva('grid w-full', {
   variants: {},
@@ -29,8 +29,3 @@ export const accordionContentVariants = cva('grid text-sm transition-all', {
     isOpen: false,
   },
 });
-
-export type ZardAccordionVariants = VariantProps<typeof accordionVariants>;
-export type ZardAccordionItemVariants = VariantProps<typeof accordionItemVariants>;
-export type ZardAccordionTriggerVariants = VariantProps<typeof accordionTriggerVariants>;
-export type ZardAccordionContentVariants = VariantProps<typeof accordionContentVariants>;

@@ -1,3 +1,4 @@
+import { AccordionGroup } from '@angular/aria/accordion';
 import {
   type AfterContentInit,
   ChangeDetectionStrategy,
@@ -16,6 +17,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-accordion',
+  imports: [AccordionGroup],
   template: `
     <ng-content />
   `,
@@ -24,6 +26,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   host: {
     '[class]': 'classes()',
   },
+  hostDirectives: [
+    {
+      directive: AccordionGroup,
+      inputs: ['multiExpandable: multiMode'],
+    },
+  ],
   exportAs: 'zAccordion',
 })
 export class ZardAccordionComponent implements AfterContentInit {
@@ -45,6 +53,7 @@ export class ZardAccordionComponent implements AfterContentInit {
   });
 
   protected readonly classes = computed(() => mergeClasses(accordionVariants(), this.class()));
+  protected readonly multiMode = computed(() => this.zType() === 'multiple');
 
   ngAfterContentInit(): void {
     for (const item of this.items()) {

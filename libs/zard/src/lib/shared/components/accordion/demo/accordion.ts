@@ -1,6 +1,7 @@
+import { ZardDemoAccordionMultipleComponent } from '@/shared/components/accordion/demo/multiple';
+import { ZardDemoAccordionMultipleLastNotCollapsibleComponent } from '@/shared/components/accordion/demo/multiple-last-not-collapsible';
+
 import { ZardDemoAccordionBasicComponent } from './basic';
-import { ZardDemoAccordionMultipleComponent } from './multiple';
-import { ZardDemoAccordionMultipleLastNotCollapsibleComponent } from './multiple-last-not-collapsible';
 
 export const ACCORDION = {
   componentName: 'accordion',

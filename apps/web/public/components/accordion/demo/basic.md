@@ -13,7 +13,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
         backstory involving Mormons in the U.S. Introduces Holmes’s deductive method.
       </z-accordion-item>
 
-      <z-accordion-item zValue="item-2" zTitle="The Sign of Four" zDescription="Sir Arthur Conan Doyle">
+      <z-accordion-item zValue="item-2" zTitle="The Sign of Four">
         The first case of Sherlock Holmes and Dr. Watson. They investigate a murder in London, which leads to a
         backstory involving Mormons in the U.S. Introduces Holmes’s deductive method.
       </z-accordion-item>
