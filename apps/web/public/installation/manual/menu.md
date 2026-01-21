@@ -9,6 +9,7 @@ import {
   booleanAttribute,
   computed,
   Directive,
+  DOCUMENT,
   effect,
   ElementRef,
   inject,
@@ -16,7 +17,7 @@ import {
   type OnDestroy,
   type OnInit,
   PLATFORM_ID,
-  TemplateRef,
+  type TemplateRef,
   untracked,
 } from '@angular/core';
 
@@ -47,6 +48,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   private static readonly MENU_CONTENT_SELECTOR = '.cdk-overlay-pane [z-menu-content]';
 
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
+  private readonly document = inject(DOCUMENT);
   private readonly elementRef = inject(ElementRef);
   private readonly menuManager = inject(ZardMenuManagerService);
   private readonly platformId = inject(PLATFORM_ID);
@@ -134,7 +136,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
   }
 
   private setupMenuContentListeners(): void {
-    const menuContent = document.querySelector(ZardMenuDirective.MENU_CONTENT_SELECTOR);
+    const menuContent = this.document.querySelector(ZardMenuDirective.MENU_CONTENT_SELECTOR);
     if (!menuContent) {
       return;
     }
@@ -200,7 +202,12 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
       return false; // Default to desktop behavior on server
     }
 
-    // Check for touch support
+    const window = this.document.defaultView;
+    if (!window) {
+      return false;
+    }
+
+    const { navigator } = window;
     const hasTouch = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
     // Check for mobile user agent
