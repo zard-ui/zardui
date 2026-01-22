@@ -39,18 +39,19 @@ type OnChangeType = (value: boolean) => void;
       <input
         #input
         type="checkbox"
+        name="checkbox"
         [id]="z.id()"
         [class]="classes()"
-        [checked]="checked"
+        [checked]="checked()"
         [disabled]="disabled()"
-        name="checkbox"
-        tabindex="-1"
+        (blur)="onCheckboxBlur()"
+        (click)="onCheckboxChange()"
       />
       <z-icon
         zType="check"
         [class]="
           'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-opacity ' +
-          (checked ? 'opacity-100' : 'opacity-0')
+          (checked() ? 'opacity-100' : 'opacity-0')
         "
       />
     </main>
@@ -68,12 +69,8 @@ type OnChangeType = (value: boolean) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    tabindex: '0',
     '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' flex items-center gap-2'",
     '[attr.aria-disabled]': 'disabled()',
-    '(blur)': 'onCheckboxBlur()',
-    '(click)': 'onCheckboxChange()',
-    '(keydown.{enter,space}.prevent)': 'onCheckboxChange()',
   },
   exportAs: 'zCheckbox',
 })
@@ -96,10 +93,10 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
   readonly disabledByForm = signal(false);
   protected readonly labelClasses = computed(() => mergeClasses(checkboxLabelVariants({ zSize: this.zSize() })));
   protected readonly disabled = computed(() => this.zDisabled() || this.disabledByForm());
-  checked = false;
+  readonly checked = signal(false);
 
   writeValue(val: boolean): void {
-    this.checked = val;
+    this.checked.set(val);
   }
 
   setDisabledState(isDisabled: boolean): void {
@@ -123,9 +120,9 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
       return;
     }
 
-    this.checked = !this.checked;
-    this.onChange(this.checked);
-    this.checkChange.emit(this.checked);
+    this.checked.update(v => !v);
+    this.onChange(this.checked());
+    this.checkChange.emit(this.checked());
   }
 }
 
@@ -137,7 +134,7 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const checkboxVariants = cva(
-  'cursor-[unset] peer appearance-none border transition shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50',
+  'cursor-[unset] peer appearance-none border transition shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       zType: {
@@ -162,7 +159,7 @@ export const checkboxVariants = cva(
   },
 );
 
-export const checkboxLabelVariants = cva('cursor-[unset] text-current empty:hidden', {
+export const checkboxLabelVariants = cva('cursor-[unset] text-current empty:hidden select-none', {
   variants: {
     zSize: {
       default: 'text-base',
