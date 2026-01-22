@@ -9,8 +9,8 @@ export const checkboxVariants = cva(
         destructive: 'border-destructive checked:bg-destructive',
       },
       zSize: {
-        default: 'h-4 w-4',
-        lg: 'h-6 w-6',
+        default: 'size-4',
+        lg: 'size-6',
       },
       zShape: {
         default: 'rounded',
@@ -38,5 +38,6 @@ export const checkboxLabelVariants = cva('cursor-[unset] text-current empty:hidd
   },
 });
 
-export type ZardCheckboxVariants = VariantProps<typeof checkboxVariants>;
-export type ZardCheckLabelVariants = VariantProps<typeof checkboxLabelVariants>;
+export type ZardCheckboxShapeVariants = NonNullable<VariantProps<typeof checkboxVariants>['zShape']>;
+export type ZardCheckboxSizeVariants = NonNullable<VariantProps<typeof checkboxVariants>['zSize']>;
+export type ZardCheckboxTypeVariants = NonNullable<VariantProps<typeof checkboxVariants>['zType']>;
