@@ -2,6 +2,7 @@
 
 ```angular-ts title="checkbox.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -10,6 +11,7 @@ import {
   inject,
   input,
   output,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -17,9 +19,15 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
-import { checkboxLabelVariants, checkboxVariants, type ZardCheckboxVariants } from './checkbox.variants';
+import {
+  checkboxLabelVariants,
+  checkboxVariants,
+  type ZardCheckboxShapeVariants,
+  type ZardCheckboxSizeVariants,
+  type ZardCheckboxTypeVariants,
+} from './checkbox.variants';
 import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
@@ -29,39 +37,28 @@ type OnChangeType = (value: boolean) => void;
   selector: 'z-checkbox, [z-checkbox]',
   imports: [ZardIconComponent, ZardIdDirective],
   template: `
-    <span
-      tabindex="0"
-      class="flex items-center gap-2"
-      [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'"
-      [attr.aria-disabled]="disabled()"
-      (click)="onCheckboxChange()"
-      (keydown.{enter,space}.prevent)="onCheckboxChange()"
-      zardId="checkbox"
-      #z="zardId"
-    >
-      <main class="relative flex">
-        <input
-          #input
-          type="checkbox"
-          [id]="z.id()"
-          [class]="classes()"
-          [checked]="checked"
-          [disabled]="disabled()"
-          (blur)="onCheckboxBlur()"
-          name="checkbox"
-        />
-        <z-icon
-          zType="check"
-          [class]="
-            'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-opacity ' +
-            (checked ? 'opacity-100' : 'opacity-0')
-          "
-        />
-      </main>
-      <label [class]="labelClasses()" [for]="z.id()">
-        <ng-content />
-      </label>
-    </span>
+    <main class="relative flex" zardId="checkbox" #z="zardId">
+      <input
+        #input
+        type="checkbox"
+        [id]="z.id()"
+        [class]="classes()"
+        [checked]="checked"
+        [disabled]="disabled()"
+        name="checkbox"
+        tabindex="-1"
+      />
+      <z-icon
+        zType="check"
+        [class]="
+          'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-opacity ' +
+          (checked ? 'opacity-100' : 'opacity-0')
+        "
+      />
+    </main>
+    <label [class]="labelClasses()" [for]="z.id()">
+      <ng-content />
+    </label>
   `,
   providers: [
     {
@@ -72,33 +69,46 @@ type OnChangeType = (value: boolean) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    tabindex: '0',
+    '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' flex items-center gap-2'",
+    '[attr.aria-disabled]': 'disabled()',
+    '(blur)': 'onCheckboxBlur()',
+    '(click)': 'onCheckboxChange()',
+    '(keydown.{enter,space}.prevent)': 'onCheckboxChange()',
+  },
   exportAs: 'zCheckbox',
 })
 export class ZardCheckboxComponent implements ControlValueAccessor {
-  private readonly cdr = inject(ChangeDetectorRef);
+  private cdr = inject(ChangeDetectorRef);
 
   readonly checkChange = output<boolean>();
-  readonly class = input<ClassValue>('');
-  readonly disabled = input(false, { transform });
-  readonly zType = input<ZardCheckboxVariants['zType']>('default');
-  readonly zSize = input<ZardCheckboxVariants['zSize']>('default');
-  readonly zShape = input<ZardCheckboxVariants['zShape']>('default');
 
-  /* eslint-disable-next-line @typescript-eslint/no-empty-function */
-  private onChange: OnChangeType = () => {};
-  /* eslint-disable-next-line @typescript-eslint/no-empty-function */
-  private onTouched: OnTouchedType = () => {};
+  readonly class = input<ClassValue>('');
+  readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zType = input<ZardCheckboxTypeVariants>('default');
+  readonly zSize = input<ZardCheckboxSizeVariants>('default');
+  readonly zShape = input<ZardCheckboxShapeVariants>('default');
+
+  private onChange: OnChangeType = noopFn;
+  private onTouched: OnTouchedType = noopFn;
 
   protected readonly classes = computed(() =>
     mergeClasses(checkboxVariants({ zType: this.zType(), zSize: this.zSize(), zShape: this.zShape() }), this.class()),
   );
 
+  readonly disabledByForm = signal(false);
   protected readonly labelClasses = computed(() => mergeClasses(checkboxLabelVariants({ zSize: this.zSize() })));
+  protected readonly disabled = computed(() => this.zDisabled() || this.disabledByForm());
   checked = false;
 
   writeValue(val: boolean): void {
     this.checked = val;
     this.cdr.markForCheck();
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabledByForm.set(isDisabled);
   }
 
   registerOnChange(fn: OnChangeType): void {
@@ -140,8 +150,8 @@ export const checkboxVariants = cva(
         destructive: 'border-destructive checked:bg-destructive',
       },
       zSize: {
-        default: 'h-4 w-4',
-        lg: 'h-6 w-6',
+        default: 'size-4',
+        lg: 'size-6',
       },
       zShape: {
         default: 'rounded',
@@ -169,8 +179,9 @@ export const checkboxLabelVariants = cva('cursor-[unset] text-current empty:hidd
   },
 });
 
-export type ZardCheckboxVariants = VariantProps<typeof checkboxVariants>;
-export type ZardCheckLabelVariants = VariantProps<typeof checkboxLabelVariants>;
+export type ZardCheckboxShapeVariants = NonNullable<VariantProps<typeof checkboxVariants>['zShape']>;
+export type ZardCheckboxSizeVariants = NonNullable<VariantProps<typeof checkboxVariants>['zSize']>;
+export type ZardCheckboxTypeVariants = NonNullable<VariantProps<typeof checkboxVariants>['zType']>;
 
 ```
 

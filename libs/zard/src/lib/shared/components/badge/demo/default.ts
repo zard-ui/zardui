@@ -16,7 +16,7 @@ import { ZardBadgeComponent } from '../badge.component';
         <z-badge zType="outline">Outline</z-badge>
       </div>
       <div class="flex w-full flex-wrap gap-2">
-        <z-badge zType="secondary" class="bg-blue-500 text-white dark:bg-blue-600">
+        <z-badge zType="secondary" zShape="pill" class="bg-blue-500 text-white dark:bg-blue-600">
           <z-icon zType="badge-check" />
           Verified
         </z-badge>

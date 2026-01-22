@@ -6,8 +6,9 @@
 
 To get a customized checkbox, just pass the following props to the directive.
 
-| Property | Description   | Type                          | Default   |
-| -------- | ------------- | ----------------------------- | --------- |
-| `zType`  | chekbox type  | `default \| destructive`      | `default` |
-| `zSize`  | chekbox size  | `default \| sm \| lg \| icon` | `default` |
-| `zShape` | chekbox shape | `default \| circle \| square` | `default` |
+| Property    | Description    | Type                          | Default   |
+| ----------- | -------------- | ----------------------------- | --------- |
+| `zType`     | chekbox type   | `default \| destructive`      | `default` |
+| `zSize`     | chekbox size   | `default \|  lg `             | `default` |
+| `zShape`    | chekbox shape  | `default \| circle \| square` | `default` |
+| `zDisabled` | disabled state | `boolean`                     | `false`   |
