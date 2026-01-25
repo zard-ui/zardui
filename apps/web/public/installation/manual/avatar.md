@@ -1,17 +1,28 @@
 
 
 ```angular-ts title="avatar.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
-
-import { avatarVariants, imageVariants, type ZardImageVariants, type ZardAvatarVariants } from './avatar.variants';
+import { NgOptimizedImage } from '@angular/common';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
+import type { SafeUrl } from '@angular/platform-browser';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { avatarVariants, imageVariants, type ZardAvatarVariants, type ZardImageVariants } from './avatar.variants';
 
 export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
 
 @Component({
   selector: 'z-avatar, [z-avatar]',
-  standalone: true,
+  imports: [NgOptimizedImage],
   template: `
     @if (zFallback() && (!zSrc() || !imageLoaded())) {
       <span class="absolute z-0 m-auto text-base">{{ zFallback() }}</span>
@@ -19,12 +30,14 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
 
     @if (zSrc() && !imageError()) {
       <img
-        [src]="zSrc()"
+        fill
+        sizes="100%"
         [alt]="zAlt()"
         [class]="imgClasses()"
-        [hidden]="!imageLoaded()"
-        (load)="onImageLoad()"
+        [ngSrc]="zSrc()"
+        [priority]="zPriority()"
         (error)="onImageError()"
+        (load)="onImageLoad()"
       />
     }
 
@@ -41,7 +54,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] z-20 h-5 w-5 text-green-500"
+            class="absolute -right-1.25 -bottom-1.25 z-20 h-5 w-5 text-green-500"
           >
             <circle cx="12" cy="12" r="10" fill="currentColor" />
           </svg>
@@ -57,7 +70,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] z-20 h-5 w-5 text-red-500"
+            class="absolute -right-1.25 -bottom-1.25 z-20 h-5 w-5 text-red-500"
           >
             <circle cx="12" cy="12" r="10" fill="currentColor" />
           </svg>
@@ -73,7 +86,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] z-20 h-5 w-5 text-red-500"
+            class="absolute -right-1.25 -bottom-1.25 z-20 h-5 w-5 text-red-500"
           >
             <circle cx="12" cy="12" r="10" />
             <path d="M8 12h8" fill="currentColor" />
@@ -90,7 +103,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-[5px] -bottom-[5px] z-20 h-5 w-5 rotate-y-180 text-yellow-400"
+            class="absolute -right-1.25 -bottom-1.25 z-20 h-5 w-5 rotate-y-180 text-yellow-400"
           >
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="currentColor" />
           </svg>
@@ -110,17 +123,26 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
   exportAs: 'zAvatar',
 })
 export class ZardAvatarComponent {
-  readonly zStatus = input<ZardAvatarStatus>();
-  readonly zShape = input<ZardImageVariants['zShape']>('circle');
-  readonly zSize = input<ZardAvatarVariants['zSize'] | number>('default');
-  readonly zSrc = input<string>();
+  readonly class = input<string>('');
   readonly zAlt = input<string>('');
   readonly zFallback = input<string>('');
-
-  readonly class = input<string>('');
+  readonly zPriority = input(false, { transform: booleanAttribute });
+  readonly zShape = input<ZardImageVariants['zShape']>('circle');
+  readonly zSize = input<ZardAvatarVariants['zSize'] | number>('default');
+  readonly zSrc = input<string | SafeUrl>('');
+  readonly zStatus = input<ZardAvatarStatus>();
 
   protected readonly imageError = signal(false);
   protected readonly imageLoaded = signal(false);
+
+  constructor() {
+    effect(() => {
+      // Reset image state when zSrc changes
+      this.zSrc();
+      this.imageError.set(false);
+      this.imageLoaded.set(false);
+    });
+  }
 
   protected readonly containerClasses = computed(() => {
     const size = this.zSize();
