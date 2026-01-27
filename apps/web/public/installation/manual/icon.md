@@ -6,15 +6,14 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 import type { ClassValue } from 'clsx';
 import { LucideAngularModule } from 'lucide-angular';
 
-import { iconVariants, type ZardIconVariants } from './icon.variants';
-import { ZARD_ICONS, type ZardIcon } from './icons';
-
 import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { iconVariants, type ZardIconSizeVariants } from './icon.variants';
+import { ZARD_ICONS, type ZardIcon } from './icons';
 
 @Component({
   selector: 'z-icon, [z-icon]',
   imports: [LucideAngularModule],
-  standalone: true,
   template: `
     <lucide-angular
       [img]="icon()"
@@ -25,11 +24,10 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: {},
 })
 export class ZardIconComponent {
   readonly zType = input.required<ZardIcon>();
-  readonly zSize = input<ZardIconVariants['zSize']>('default');
+  readonly zSize = input<ZardIconSizeVariants>('default');
   readonly zStrokeWidth = input<number>(2);
   readonly zAbsoluteStrokeWidth = input<boolean>(false);
   readonly class = input<ClassValue>('');
@@ -69,7 +67,7 @@ export const iconVariants = cva('flex items-center justify-center', {
   },
 });
 
-export type ZardIconVariants = VariantProps<typeof iconVariants>;
+export type ZardIconSizeVariants = NonNullable<VariantProps<typeof iconVariants>['zSize']>;
 
 ```
 

@@ -6,7 +6,6 @@ import { ZardEmptyComponent } from '../empty.component';
 @Component({
   selector: 'z-demo-empty-custom-image',
   imports: [ZardButtonComponent, ZardEmptyComponent],
-  standalone: true,
   template: `
     <z-empty
       zImage="images/avatar/imgs/avatar_image.jpg"
@@ -17,7 +16,7 @@ import { ZardEmptyComponent } from '../empty.component';
     />
 
     <ng-template #actionPrimary>
-      <button z-button>Leave Message</button>
+      <button type="button" z-button>Leave Message</button>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

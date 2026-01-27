@@ -1,6 +1,7 @@
 
 
 ```angular-ts title="empty.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { NgOptimizedImage } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -11,6 +12,9 @@ import {
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
+
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
   emptyActionsVariants,
@@ -24,13 +28,9 @@ import {
 import { ZardIconComponent } from '../icon/icon.component';
 import { type ZardIcon } from '../icon/icons';
 
-import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
 @Component({
   selector: 'z-empty',
-  imports: [ZardIconComponent, ZardStringTemplateOutletDirective],
-  standalone: true,
+  imports: [NgOptimizedImage, ZardIconComponent, ZardStringTemplateOutletDirective],
   template: `
     @let image = zImage();
     @let icon = zIcon();
@@ -42,7 +42,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
       @if (image) {
         <div [class]="imageClasses()">
           <ng-container *zStringTemplateOutlet="image">
-            <img [src]="image" alt="Empty" class="mx-auto" />
+            <img [ngSrc]="image" width="64" height="64" alt="Empty" class="mx-auto" />
           </ng-container>
         </div>
       } @else if (icon) {
