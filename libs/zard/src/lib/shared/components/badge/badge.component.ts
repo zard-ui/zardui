@@ -2,13 +2,12 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { badgeVariants, type ZardBadgeVariants } from './badge.variants';
-
 import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { badgeVariants, type ZardBadgeShapeVariants, type ZardBadgeTypeVariants } from './badge.variants';
 
 @Component({
   selector: 'z-badge',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -20,8 +19,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   exportAs: 'zBadge',
 })
 export class ZardBadgeComponent {
-  readonly zType = input<ZardBadgeVariants['zType']>('default');
-  readonly zShape = input<ZardBadgeVariants['zShape']>('default');
+  readonly zType = input<ZardBadgeTypeVariants>('default');
+  readonly zShape = input<ZardBadgeShapeVariants>('default');
 
   readonly class = input<ClassValue>('');
 

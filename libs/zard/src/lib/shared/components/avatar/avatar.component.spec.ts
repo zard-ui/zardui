@@ -1,13 +1,12 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { ZardAvatarComponent, ZardAvatarStatus } from './avatar.component';
-import { ZardAvatarVariants, ZardImageVariants } from './avatar.variants';
+import { ZardAvatarComponent, type ZardAvatarStatus } from './avatar.component';
+import { type ZardAvatarVariants, type ZardImageVariants } from './avatar.variants';
 
 @Component({
   imports: [ZardAvatarComponent],
-  standalone: true,
   template: `
     <z-avatar
       [zSize]="zSize"
@@ -142,6 +141,40 @@ describe('ZardAvatarComponent', () => {
       const fallbackElement = fixture.debugElement.query(By.css('span.text-base'));
       expect(fallbackElement).toBeTruthy();
       expect(fallbackElement.nativeElement.textContent.trim()).toBe('AB');
+    });
+
+    it('should handle image load event correctly', () => {
+      hostComponent.zSrc = 'valid-image.jpg';
+      fixture.detectChanges();
+
+      const imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(imgElement.src).toContain('valid-image.jpg');
+
+      imgElement.dispatchEvent(new Event('load'));
+      fixture.detectChanges();
+
+      expect(imgElement).toBeVisible();
+    });
+
+    it('should handle image error event and reset state when zSrc changes', () => {
+      hostComponent.zSrc = 'invalid-image.jpg';
+      fixture.detectChanges();
+
+      const imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(imgElement.src).toContain('invalid-image.jpg');
+
+      imgElement.dispatchEvent(new Event('error'));
+      fixture.detectChanges();
+
+      expect(imgElement).not.toBeVisible();
+
+      hostComponent.zSrc = 'fallback-image.jpg';
+      fixture.detectChanges();
+
+      const imgElementAfterChange = fixture.debugElement.query(By.css('img')).nativeElement;
+
+      expect(imgElementAfterChange.src).toContain('fallback-image.jpg');
+      expect(imgElementAfterChange).toBeVisible();
     });
   });
 
