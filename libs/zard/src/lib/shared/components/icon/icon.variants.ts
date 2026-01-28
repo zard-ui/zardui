@@ -14,4 +14,4 @@ export const iconVariants = cva('flex items-center justify-center', {
   },
 });
 
-export type ZardIconVariants = VariantProps<typeof iconVariants>;
+export type ZardIconSizeVariants = NonNullable<VariantProps<typeof iconVariants>['zSize']>;

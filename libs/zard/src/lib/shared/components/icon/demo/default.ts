@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardIconComponent } from '../icon.component';
 
 @Component({
   selector: 'z-demo-icon-default',
   imports: [ZardIconComponent],
-  standalone: true,
   template: `
     <div class="flex items-center gap-4">
       <z-icon zType="house" />
@@ -16,5 +15,6 @@ import { ZardIconComponent } from '../icon.component';
       <z-icon zType="mail" />
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoIconDefaultComponent {}
