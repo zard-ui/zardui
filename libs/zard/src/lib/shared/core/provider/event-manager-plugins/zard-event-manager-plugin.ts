@@ -63,8 +63,8 @@ export class ZardEventManagerPlugin extends EventManagerPlugin {
               event.preventDefault();
               break;
           }
-          handler(event);
         }
+        handler(event);
       },
       options,
     );

@@ -1,1 +1,4 @@
+if command -v bd >/dev/null 2>&1; then
+  bd sync
+fi
 npx lint-staged

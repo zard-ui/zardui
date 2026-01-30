@@ -3,10 +3,10 @@ import { cva, type VariantProps } from 'class-variance-authority';
 export const comboboxVariants = cva('', {
   variants: {
     zWidth: {
-      default: 'w-[200px]',
-      sm: 'w-[150px]',
-      md: 'w-[250px]',
-      lg: 'w-[350px]',
+      default: 'w-50',
+      sm: 'w-37.5',
+      md: 'w-62.5',
+      lg: 'w-87.5',
       full: 'w-full',
     },
   },
@@ -15,4 +15,4 @@ export const comboboxVariants = cva('', {
   },
 });
 
-export type ZardComboboxVariants = VariantProps<typeof comboboxVariants>;
+export type ZardComboboxWidthVariants = NonNullable<VariantProps<typeof comboboxVariants>['zWidth']>;
