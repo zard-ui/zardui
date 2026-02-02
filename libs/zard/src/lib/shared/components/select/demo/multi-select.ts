@@ -1,24 +1,17 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-import { ZardBadgeComponent } from '@/shared/components/badge';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
   selector: 'z-demo-multi-select-basic',
-  imports: [ZardBadgeComponent, ZardSelectImports],
+  imports: [ZardSelectImports],
   template: `
     <div class="flex h-100 w-75 flex-col gap-4">
-      Selected values:
-      <span class="flex flex-wrap gap-2">
-        @for (value of selectedValues(); track $index) {
-          <z-badge>{{ value }}</z-badge>
-        }
-      </span>
-
+      <p class="text-muted-foreground text-sm">Selected fruits: {{ selectedValues().join(', ') }}</p>
       <z-select
         zPlaceholder="Select multiple fruits"
         [zMultiple]="true"
-        [zMaxLabelCount]="4"
+        [zMaxLabelCount]="3"
         [(zValue)]="selectedValues"
       >
         <z-select-item zValue="apple">Apple</z-select-item>
