@@ -1,6 +1,6 @@
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
   afterNextRender,
@@ -48,7 +48,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
 
 @Component({
   selector: 'z-select, [z-select]',
-  imports: [CommonModule, OverlayModule, ZardBadgeComponent, ZardIconComponent],
+  imports: [OverlayModule, ZardBadgeComponent, ZardIconComponent],
   template: `
     <button
       type="button"
@@ -64,25 +64,20 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
       (focus)="onFocus()"
     >
       <span class="flex flex-1 flex-wrap items-center gap-2">
-        @let labels = selectedLabels();
-        @for (label of labels; track index; let index = $index) {
-          <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }" />
+        @for (label of selectedLabels(); track label) {
+          @if (zMultiple()) {
+            <z-badge zType="secondary">
+              <span class="truncate">{{ label }}</span>
+            </z-badge>
+          } @else {
+            <span class="truncate">{{ label }}</span>
+          }
         } @empty {
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
       </span>
       <z-icon zType="chevron-down" zSize="lg" class="opacity-50" />
     </button>
-
-    <ng-template #labelsTemplate let-label>
-      @if (zMultiple()) {
-        <z-badge zType="secondary">
-          <span class="truncate">{{ label }}</span>
-        </z-badge>
-      } @else {
-        <span class="truncate">{{ label }}</span>
-      }
-    </ng-template>
 
     <ng-template #dropdownTemplate>
       <div
