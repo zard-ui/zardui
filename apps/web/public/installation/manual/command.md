@@ -7,7 +7,6 @@ import {
   computed,
   contentChild,
   contentChildren,
-  effect,
   forwardRef,
   input,
   output,
@@ -48,6 +47,11 @@ export interface ZardCommandConfig {
   onSelect?: (option: ZardCommandOption) => void;
 }
 
+export abstract class ZardCommand {
+  abstract registerOption(option: ZardCommandOptionComponent): void;
+  abstract unregisterOption(option: ZardCommandOptionComponent): void;
+}
+
 @Component({
   selector: 'z-command',
   imports: [FormsModule],
@@ -79,9 +83,10 @@ export interface ZardCommandConfig {
   },
   exportAs: 'zCommand',
 })
-export class ZardCommandComponent implements ControlValueAccessor {
-  readonly commandInput = contentChild(ZardCommandInputComponent);
-  readonly optionComponents = contentChildren(ZardCommandOptionComponent, { descendants: true });
+export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
+  private readonly commandInput = contentChild(ZardCommandInputComponent);
+  private readonly optionComponentsAsChildren = contentChildren(ZardCommandOptionComponent, { descendants: true });
+  private readonly registeredOptionComponents = signal<ZardCommandOptionComponent[]>([]);
 
   readonly size = input<ZardCommandSizeVariants>('default');
   readonly class = input<ClassValue>('');
@@ -92,6 +97,18 @@ export class ZardCommandComponent implements ControlValueAccessor {
   // Internal signals for search functionality
   readonly searchTerm = signal('');
   readonly selectedIndex = signal(-1);
+
+  protected readonly optionComponents = computed(() =>
+    this.optionComponentsAsChildren().length ? this.optionComponentsAsChildren() : this.registeredOptionComponents(),
+  );
+
+  registerOption(option: ZardCommandOptionComponent) {
+    this.registeredOptionComponents.update(current => [...current, option]);
+  }
+
+  unregisterOption(option: ZardCommandOptionComponent) {
+    this.registeredOptionComponents.update(current => current.filter(o => o !== option));
+  }
 
   // Signal to trigger updates when optionComponents change
   private readonly optionsUpdateTrigger = signal(0);
@@ -145,9 +162,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
   };
 
   constructor() {
-    effect(() => {
-      this.triggerOptionsUpdate();
-    });
+    this.triggerOptionsUpdate();
   }
 
   /**
@@ -633,6 +648,7 @@ import {
   contentChildren,
   inject,
   input,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 
@@ -643,10 +659,15 @@ import { ZardCommandComponent } from '@/shared/components/command/command.compon
 import { commandGroupHeadingVariants, commandGroupVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+export abstract class ZardCommandOptionGroup {
+  abstract registerOption(option: ZardCommandOptionComponent): void;
+  abstract unregisterOption(option: ZardCommandOptionComponent): void;
+}
+
 @Component({
   selector: 'z-command-option-group',
   template: `
-    @if (shouldShow()) {
+    @if (isGroupVisible()) {
       <div [class]="classes()" role="group">
         @if (zLabel()) {
           <div [class]="headingClasses()" role="presentation">
@@ -663,26 +684,28 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   encapsulation: ViewEncapsulation.None,
   exportAs: 'zCommandOptionGroup',
 })
-export class ZardCommandOptionGroupComponent {
+export class ZardCommandOptionGroupComponent implements ZardCommandOptionGroup {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
-
-  readonly optionComponents = contentChildren(ZardCommandOptionComponent, { descendants: true });
+  private readonly optionComponentsAsChildren = contentChildren(ZardCommandOptionComponent, { descendants: true });
+  private readonly registeredOptionComponents = signal<ZardCommandOptionComponent[]>([]);
 
   readonly zLabel = input.required<string>();
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(commandGroupVariants({}), this.class()));
-
   protected readonly headingClasses = computed(() => mergeClasses(commandGroupHeadingVariants({})));
+  private readonly optionComponents = computed(() =>
+    this.optionComponentsAsChildren().length ? this.optionComponentsAsChildren() : this.registeredOptionComponents(),
+  );
 
-  protected readonly shouldShow = computed(() => {
+  protected readonly isGroupVisible = computed(() => {
     if (!this.commandComponent || !this.optionComponents().length) {
       return true;
     }
 
     const searchTerm = this.commandComponent.searchTerm();
     // If no search term, show all groups
-    if (searchTerm === '') {
+    if (!searchTerm) {
       return true;
     }
 
@@ -690,6 +713,14 @@ export class ZardCommandOptionGroupComponent {
     // Check if any option in this group is in the filtered list
     return this.optionComponents().some(option => filteredOptions.includes(option));
   });
+
+  registerOption(option: ZardCommandOptionComponent) {
+    this.registeredOptionComponents.update(current => [...current, option]);
+  }
+
+  unregisterOption(option: ZardCommandOptionComponent) {
+    this.registeredOptionComponents.update(current => current.filter(o => o !== option));
+  }
 }
 
 ```
@@ -701,6 +732,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   ElementRef,
   inject,
   input,
@@ -710,6 +742,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import type { ZardCommandOptionGroupComponent } from '@/shared/components/command/command-option-group.component';
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
 import {
   commandItemVariants,
@@ -723,7 +756,7 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
   selector: 'z-command-option',
   imports: [ZardIconComponent],
   template: `
-    @if (shouldShow()) {
+    @if (isOptionVisible()) {
       <div
         [class]="classes()"
         [attr.role]="'option'"
@@ -751,7 +784,7 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 })
 export class ZardCommandOptionComponent {
   private readonly elementRef = inject(ElementRef);
-  private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
+  private readonly parentCommandComponent = inject(ZardCommandComponent, { optional: true });
 
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
@@ -761,6 +794,8 @@ export class ZardCommandOptionComponent {
   readonly zDisabled = input(false, { transform });
   readonly variant = input<ZardCommandItemVariants>('default');
   readonly class = input<ClassValue>('');
+  readonly parentCommand = input<ZardCommandComponent | null>(null);
+  readonly commandGroup = input<ZardCommandOptionGroupComponent | null>(null);
 
   readonly isSelected = signal(false);
 
@@ -772,30 +807,48 @@ export class ZardCommandOptionComponent {
 
   protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants()));
 
-  protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent) {
+  private get commandComponent() {
+    let parent = this.parentCommand();
+    parent ||= this.parentCommandComponent;
+    return parent;
+  }
+
+  protected readonly isOptionVisible = computed(() => {
+    const parent = this.commandComponent;
+
+    if (!parent) {
       return true;
     }
-
-    const filteredOptions = this.commandComponent.filteredOptions();
-    const searchTerm = this.commandComponent.searchTerm();
-
-    // If no search term, show all options
-    if (searchTerm === '') {
-      return true;
-    }
-
-    // Check if this option is in the filtered list
-    return filteredOptions.includes(this);
+    /*
+      If no search term, show this option, otherwise check
+      if this option is included in the filtered list
+     */
+    return !parent.searchTerm() || parent.filteredOptions().includes(this);
   });
+
+  constructor() {
+    effect(onCleanup => {
+      const cmd = this.parentCommand();
+      const grp = this.commandGroup();
+
+      if (cmd) {
+        cmd.registerOption(this);
+        onCleanup(() => cmd.unregisterOption(this));
+      }
+
+      if (grp) {
+        grp.registerOption(this);
+        onCleanup(() => grp.unregisterOption(this));
+      }
+    });
+  }
 
   onClick() {
     if (this.zDisabled()) {
       return;
     }
-    if (this.commandComponent) {
-      this.commandComponent.selectOption(this);
-    }
+
+    this.commandComponent?.selectOption(this);
   }
 
   onMouseEnter() {
@@ -812,7 +865,6 @@ export class ZardCommandOptionComponent {
   focus() {
     const element = this.elementRef.nativeElement;
     element.focus();
-    // Scroll element into view if needed
     element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }

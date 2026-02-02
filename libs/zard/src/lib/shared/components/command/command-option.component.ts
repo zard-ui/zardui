@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  effect,
   ElementRef,
   inject,
   input,
@@ -11,6 +12,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import type { ZardCommandOptionGroupComponent } from '@/shared/components/command/command-option-group.component';
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
 import {
   commandItemVariants,
@@ -24,7 +26,7 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
   selector: 'z-command-option',
   imports: [ZardIconComponent],
   template: `
-    @if (shouldShow()) {
+    @if (isOptionVisible()) {
       <div
         [class]="classes()"
         [attr.role]="'option'"
@@ -52,7 +54,7 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 })
 export class ZardCommandOptionComponent {
   private readonly elementRef = inject(ElementRef);
-  private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
+  private readonly parentCommandComponent = inject(ZardCommandComponent, { optional: true });
 
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
@@ -62,6 +64,8 @@ export class ZardCommandOptionComponent {
   readonly zDisabled = input(false, { transform });
   readonly variant = input<ZardCommandItemVariants>('default');
   readonly class = input<ClassValue>('');
+  readonly parentCommand = input<ZardCommandComponent | null>(null);
+  readonly commandGroup = input<ZardCommandOptionGroupComponent | null>(null);
 
   readonly isSelected = signal(false);
 
@@ -73,30 +77,48 @@ export class ZardCommandOptionComponent {
 
   protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants()));
 
-  protected readonly shouldShow = computed(() => {
-    if (!this.commandComponent) {
+  private get commandComponent() {
+    let parent = this.parentCommand();
+    parent ||= this.parentCommandComponent;
+    return parent;
+  }
+
+  protected readonly isOptionVisible = computed(() => {
+    const parent = this.commandComponent;
+
+    if (!parent) {
       return true;
     }
-
-    const filteredOptions = this.commandComponent.filteredOptions();
-    const searchTerm = this.commandComponent.searchTerm();
-
-    // If no search term, show all options
-    if (searchTerm === '') {
-      return true;
-    }
-
-    // Check if this option is in the filtered list
-    return filteredOptions.includes(this);
+    /*
+      If no search term, show this option, otherwise check
+      if this option is included in the filtered list
+     */
+    return !parent.searchTerm() || parent.filteredOptions().includes(this);
   });
+
+  constructor() {
+    effect(onCleanup => {
+      const cmd = this.parentCommand();
+      const grp = this.commandGroup();
+
+      if (cmd) {
+        cmd.registerOption(this);
+        onCleanup(() => cmd.unregisterOption(this));
+      }
+
+      if (grp) {
+        grp.registerOption(this);
+        onCleanup(() => grp.unregisterOption(this));
+      }
+    });
+  }
 
   onClick() {
     if (this.zDisabled()) {
       return;
     }
-    if (this.commandComponent) {
-      this.commandComponent.selectOption(this);
-    }
+
+    this.commandComponent?.selectOption(this);
   }
 
   onMouseEnter() {
@@ -113,7 +135,6 @@ export class ZardCommandOptionComponent {
   focus() {
     const element = this.elementRef.nativeElement;
     element.focus();
-    // Scroll element into view if needed
     element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }
