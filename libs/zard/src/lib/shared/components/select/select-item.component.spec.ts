@@ -38,7 +38,7 @@ describe('ZardSelectItemComponent', () => {
   });
 
   describe('zValue input', () => {
-    it('updates attribute when value changes', async () => {
+    it('updates attribute when value changes', () => {
       fixture.componentRef.setInput('zValue', 'new-value');
       fixture.detectChanges();
 
@@ -48,7 +48,7 @@ describe('ZardSelectItemComponent', () => {
   });
 
   describe('zDisabled input', () => {
-    it('sets data-disabled when disabled', async () => {
+    it('sets data-disabled when disabled', () => {
       fixture.componentRef.setInput('zDisabled', true);
       fixture.detectChanges();
 
@@ -56,7 +56,7 @@ describe('ZardSelectItemComponent', () => {
       expect(hostElement).toHaveAttribute('data-disabled', '');
     });
 
-    it('removes data-disabled when enabled', async () => {
+    it('removes data-disabled when enabled', () => {
       fixture.componentRef.setInput('zDisabled', true);
       fixture.detectChanges();
       fixture.componentRef.setInput('zDisabled', false);
@@ -68,7 +68,7 @@ describe('ZardSelectItemComponent', () => {
   });
 
   describe('custom class input', () => {
-    it('applies custom class to host element', async () => {
+    it('applies custom class to host element', () => {
       fixture.componentRef.setInput('class', 'custom-class');
       fixture.detectChanges();
 
@@ -125,8 +125,8 @@ describe('ZardSelectItemComponent', () => {
   });
 
   describe('selected state attributes', () => {
-    it('sets data-selected when in selected values', async () => {
-      (component as any).select.set({
+    it('sets data-selected when in selected values', () => {
+      component.setSelectHost({
         selectedValue: () => ['test-value'],
         selectItem: jest.fn(),
         navigateTo: jest.fn(),
@@ -137,8 +137,8 @@ describe('ZardSelectItemComponent', () => {
       expect(hostElement).toHaveAttribute('data-selected', '');
     });
 
-    it('sets aria-selected true when selected', async () => {
-      (component as any).select.set({
+    it('sets aria-selected true when selected', () => {
+      component.setSelectHost({
         selectedValue: () => ['test-value'],
         selectItem: jest.fn(),
         navigateTo: jest.fn(),
@@ -149,8 +149,8 @@ describe('ZardSelectItemComponent', () => {
       expect(hostElement).toHaveAttribute('aria-selected', 'true');
     });
 
-    it('sets aria-selected false when not selected', async () => {
-      (component as any).select.set({
+    it('sets aria-selected false when not selected', () => {
+      component.setSelectHost({
         selectedValue: () => [],
         selectItem: jest.fn(),
         navigateTo: jest.fn(),
@@ -163,12 +163,14 @@ describe('ZardSelectItemComponent', () => {
   });
 
   describe('select host integration', () => {
+    const createMockSelectHost = () => ({
+      selectedValue: () => [] as string[],
+      selectItem: jest.fn(),
+      navigateTo: jest.fn(),
+    });
+
     it('stores select host reference when set', () => {
-      const mockSelectHost = {
-        selectedValue: () => [],
-        selectItem: jest.fn(),
-        navigateTo: jest.fn(),
-      };
+      const mockSelectHost = createMockSelectHost();
 
       component.setSelectHost(mockSelectHost);
 
@@ -176,11 +178,7 @@ describe('ZardSelectItemComponent', () => {
     });
 
     it('triggers selectItem on click when not disabled', async () => {
-      const mockSelectHost = {
-        selectedValue: () => [],
-        selectItem: jest.fn(),
-        navigateTo: jest.fn(),
-      };
+      const mockSelectHost = createMockSelectHost();
       component.setSelectHost(mockSelectHost);
       fixture.componentRef.setInput('zDisabled', false);
       fixture.detectChanges();
@@ -191,11 +189,7 @@ describe('ZardSelectItemComponent', () => {
     });
 
     it('skips selectItem when disabled', async () => {
-      const mockSelectHost = {
-        selectedValue: () => [],
-        selectItem: jest.fn(),
-        navigateTo: jest.fn(),
-      };
+      const mockSelectHost = createMockSelectHost();
       component.setSelectHost(mockSelectHost);
       fixture.componentRef.setInput('zDisabled', true);
       fixture.detectChanges();
@@ -206,11 +200,7 @@ describe('ZardSelectItemComponent', () => {
     });
 
     it('triggers navigateTo on hover when not disabled', async () => {
-      const mockSelectHost = {
-        selectedValue: () => [],
-        selectItem: jest.fn(),
-        navigateTo: jest.fn(),
-      };
+      const mockSelectHost = createMockSelectHost();
       component.setSelectHost(mockSelectHost);
       fixture.componentRef.setInput('zDisabled', false);
       fixture.detectChanges();
@@ -221,11 +211,7 @@ describe('ZardSelectItemComponent', () => {
     });
 
     it('skips navigateTo on hover when disabled', async () => {
-      const mockSelectHost = {
-        selectedValue: () => [],
-        selectItem: jest.fn(),
-        navigateTo: jest.fn(),
-      };
+      const mockSelectHost = createMockSelectHost();
       component.setSelectHost(mockSelectHost);
       fixture.componentRef.setInput('zDisabled', true);
       fixture.detectChanges();
@@ -238,26 +224,26 @@ describe('ZardSelectItemComponent', () => {
 
   describe('check icon visibility', () => {
     it('displays check icon when selected', async () => {
-      (component as any).select.set({
+      component.setSelectHost({
         selectedValue: () => ['test-value'],
         selectItem: jest.fn(),
         navigateTo: jest.fn(),
       });
       fixture.detectChanges();
 
-      const iconElement = fixture.debugElement.query(By.css('[aria-hidden="true"]'));
+      const iconElement = fixture.debugElement.query(By.css('[data-testid="check-icon"]'));
       expect(iconElement).toBeTruthy();
     });
 
     it('hides check icon when not selected', async () => {
-      (component as any).select.set({
+      component.setSelectHost({
         selectedValue: () => [],
         selectItem: jest.fn(),
         navigateTo: jest.fn(),
       });
       fixture.detectChanges();
 
-      const iconElement = fixture.debugElement.query(By.css('[aria-hidden="true"]'));
+      const iconElement = fixture.debugElement.query(By.css('[data-testid="check-icon"]'));
       expect(iconElement).toBeFalsy();
     });
   });
