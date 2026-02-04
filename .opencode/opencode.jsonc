@@ -1,0 +1,43 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "mcp": {
+    "beads": {
+      "type": "local",
+      "command": ["uvx", "--with", "packaging", "beads-mcp"],
+      "environment": {
+        "BEADS_AUTO_START_DAEMON": "true",
+      },
+      "enabled": true,
+    },
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ctx7sk-7c4fd594-fe4e-4a7f-acdf-3d31195f0230",
+      },
+      "enabled": true,
+    },
+    "angular-cli": {
+      "type": "local",
+      "command": ["npx", "-y", "@angular/cli", "mcp"],
+      "enabled": false,
+    },
+    "console-ninja": {
+      "type": "local",
+      "command": ["npx", "-y", "-c", "node ~/.console-ninja/mcp/"],
+      "enabled": false,
+    },
+    "eslint": {
+      "type": "local",
+      "command": ["npx", "@eslint/mcp@latest"],
+      "enabled": false,
+    },
+  },
+  "permission": {
+    "beads_*": "allow",
+    "context7_resolve-library-id": "allow",
+    "context7_query-docs": "allow",
+    "angular-cli_*": "allow",
+    "eslint_*": "allow",
+  },
+}
