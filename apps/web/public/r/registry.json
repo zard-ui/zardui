@@ -357,7 +357,8 @@
       "name": "calendar",
       "type": "registry:component",
       "registryDependencies": [
-        "icon"
+        "icon",
+        "select"
       ],
       "files": [
         "calendar.component.ts",

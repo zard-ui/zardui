@@ -1,5 +1,22 @@
 import type { CalendarDay, CalendarDayConfig, CalendarMode, CalendarValue } from './calendar.types';
 
+export const calendarMonths = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+] as const;
+
+export const calendarWeekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'] as const;
+
 /**
  * Checks if two dates represent the same day (ignoring time)
  */
