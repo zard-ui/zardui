@@ -1,17 +1,17 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
+import { calendarMonths } from '@/shared/components/calendar/calendar.utils';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import { calendarNavVariants } from './calendar.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
 
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
 @Component({
   selector: 'z-calendar-navigation',
   imports: [ZardButtonComponent, ZardIconComponent, ZardSelectComponent, ZardSelectItemComponent],
-  standalone: true,
   template: `
     <div [class]="navClasses()">
       <button
@@ -31,7 +31,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
       <div class="flex items-center space-x-2">
         <!-- Month Select -->
         <z-select [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
-          @for (month of months; track $index) {
+          @for (month of months; track month) {
             <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
           }
         </z-select>
@@ -75,8 +75,7 @@ export class ZardCalendarNavigationComponent {
   readonly yearChange = output<string>();
   readonly previousMonth = output<void>();
   readonly nextMonth = output<void>();
-
-  readonly months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  readonly months = calendarMonths;
 
   protected readonly navClasses = computed(() => mergeClasses(calendarNavVariants()));
 
@@ -92,35 +91,45 @@ export class ZardCalendarNavigationComponent {
 
   protected readonly currentMonthName = computed(() => {
     const selectedMonth = Number.parseInt(this.currentMonth());
-    if (!Number.isNaN(selectedMonth) && this.months[selectedMonth]) return this.months[selectedMonth];
+    if (!Number.isNaN(selectedMonth) && this.months[selectedMonth]) {
+      return this.months[selectedMonth];
+    }
     return this.months[new Date().getMonth()];
   });
 
-  protected isPreviousDisabled(): boolean {
-    if (this.disabled()) return true;
+  protected readonly isPreviousDisabled = computed(() => {
+    if (this.disabled()) {
+      return true;
+    }
 
     const minDate = this.minDate();
-    if (!minDate) return false;
+    if (!minDate) {
+      return false;
+    }
 
     const currentMonth = Number.parseInt(this.currentMonth());
     const currentYear = Number.parseInt(this.currentYear());
     const lastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0);
 
     return lastDayOfPreviousMonth.getTime() < minDate.getTime();
-  }
+  });
 
-  protected isNextDisabled(): boolean {
-    if (this.disabled()) return true;
+  protected readonly isNextDisabled = computed(() => {
+    if (this.disabled()) {
+      return true;
+    }
 
     const maxDate = this.maxDate();
-    if (!maxDate) return false;
+    if (!maxDate) {
+      return false;
+    }
 
     const currentMonth = Number.parseInt(this.currentMonth());
     const currentYear = Number.parseInt(this.currentYear());
     const nextMonth = new Date(currentYear, currentMonth + 1, 1);
 
     return nextMonth.getTime() > maxDate.getTime();
-  }
+  });
 
   protected onPreviousClick(): void {
     this.previousMonth.emit();
