@@ -1,3 +1,5 @@
+import { ZardDropdownHoverDemoComponent } from '@/shared/components/dropdown/demo/hover';
+
 import { ZardDropdownDemoComponent } from './default';
 
 export const DROPDOWN = {
@@ -8,6 +10,10 @@ export const DROPDOWN = {
     {
       name: 'default',
       component: ZardDropdownDemoComponent,
+    },
+    {
+      name: 'hover',
+      component: ZardDropdownHoverDemoComponent,
     },
   ],
 };
