@@ -66,7 +66,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
       (click)="toggle()"
       (focus)="onFocus()"
     >
-      <span class="flex flex-1 flex-wrap items-center gap-2">
+      <span class="flex flex-1 flex-wrap items-center gap-2 min-w-0">
         @for (label of selectedLabels(); track label) {
           @if (zMultiple()) {
             <z-badge zType="secondary">

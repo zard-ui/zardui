@@ -7,10 +7,10 @@ import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.impor
 import { ZardMenuImports } from '@/shared/components/menu';
 
 @Component({
-  selector: 'z-dropdown-demo',
+  selector: 'z-dropdown-hover-demo',
   imports: [ZardDropdownImports, ZardButtonComponent, ZardDividerComponent, ZardMenuImports],
   template: `
-    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
+    <button type="button" z-button zType="outline" zTrigger="hover" z-dropdown [zDropdownMenu]="menu">Open</button>
 
     <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-56">
       <z-menu-label>My Account</z-menu-label>
@@ -59,7 +59,7 @@ import { ZardMenuImports } from '@/shared/components/menu';
     </z-dropdown-menu-content>
   `,
 })
-export class ZardDropdownDemoComponent {
+export class ZardDropdownHoverDemoComponent {
   onProfile() {
     console.log('Profile clicked');
   }
