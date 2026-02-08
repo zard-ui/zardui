@@ -301,13 +301,14 @@ git commit -m "✨ feat(button): add new variant"
 | ✨    | `feat`     | New functionality        | **Minor** (0.x.0) |
 | 🐛    | `fix`      | Bug correction           | **Patch** (0.0.x) |
 | 🚀    | `perf`     | Performance improvements | **Patch** (0.0.x) |
-| ⏪️   | `revert`   | Revert previous commit   | **Patch** (0.0.x) |
+| ⏪️    | `revert`   | Revert previous commit   | **Patch** (0.0.x) |
 | 📦    | `refactor` | Code refactoring         | No release        |
+| 🔧    | `ci`       | CI/CD                    | No release        |
 | 🧪    | `test`     | Tests                    | No release        |
 | 📝    | `docs`     | Documentation            | No release        |
 | 💄    | `style`    | Code style               | No release        |
 | 🏗️    | `build`    | Build system             | No release        |
-| 🔧    | `chore`    | Maintenance              | No release        |
+| 🚧    | `chore`    | Maintenance              | No release        |
 
 **Breaking Changes**: Add `!` after the type for a **Major** version bump:
 

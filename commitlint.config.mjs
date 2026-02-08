@@ -37,7 +37,24 @@ export default {
     'type-enum': [
       2,
       'always',
-      ['feat', 'fix', 'docs', 'style', 'refactor', 'perf', 'test', 'build', 'ci', 'chore', 'revert', 'i18n', 'analytics', 'database', 'initial', 'release'],
+      [
+        'feat',
+        'fix',
+        'docs',
+        'style',
+        'refactor',
+        'perf',
+        'test',
+        'build',
+        'ci',
+        'chore',
+        'revert',
+        'i18n',
+        'analytics',
+        'database',
+        'initial',
+        'release',
+      ],
     ],
 
     // Subject should not be empty (description is required)
@@ -121,9 +138,9 @@ export default {
             emoji: '🔧',
           },
           chore: {
-            description: "🔧 Other changes that don't modify src or test files",
+            description: "🚧 Other changes that don't modify src or test files",
             title: 'Chores',
-            emoji: '🔧',
+            emoji: '🚧',
           },
           revert: {
             description: '⏪️ Reverts a previous commit',
@@ -154,7 +171,8 @@ export default {
         description: 'Does this change affect any open issues?',
       },
       issuesBody: {
-        description: 'If issues are closed, the commit requires a body. Please enter a longer description of the commit itself',
+        description:
+          'If issues are closed, the commit requires a body. Please enter a longer description of the commit itself',
       },
       issues: {
         description: 'Add issue references (e.g. "fix #123", "re #456")',

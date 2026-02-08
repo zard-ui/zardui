@@ -1,660 +1,123 @@
 ---
 name: angular-testing
-description: Write unit and integration tests for Angular v21+ applications using Vitest or Jasmine with TestBed, component harnesses, and modern testing patterns. Use for testing components with signals, OnPush change detection, services with inject(), and HTTP interactions. Triggers on test creation, testing signal-based components, mocking dependencies, or setting up test infrastructure.
+description: Write unit and integration tests for Angular v21+ applications using Jest with @testing-library/angular, focusing on user-centric testing, AAA pattern, and modern Angular patterns (Standalone components, Signals). Use for testing components, services, and HTTP interactions with Jest globals and Testing Library DOM matchers.
 ---
 
-# Angular Testing
+# Angular Testing with Jest
 
-Test Angular v21+ applications with Vitest (recommended) or Jasmine, focusing on signal-based components and modern patterns.
+Test Angular v21+ applications with Jest and @testing-library/angular, prioritizing user-centric testing over implementation details.
 
-## Vitest Setup (Angular v20+)
+## Core Principles
 
-Angular v20+ has native Vitest support through the `@angular/build` package.
+- **User-Centric Testing:** Simulate real user behavior using `@testing-library/angular`. Avoid testing implementation details or private state.
+- **Modern Angular:** Follow Angular v20+ standards (Standalone components, Signals, `@if/@for` control flow).
+- **Accessibility:** Use semantic queries (getByRole, getByLabelText) that promote accessible markup.
 
-### Installation
+## Framework & Syntax
 
-```bash
-npm install -D vitest jsdom
-```
+### Jest Globals
 
-### Configuration
+Always use Jest globals:
+- `describe`, `it`, `expect`, `jest` (e.g., `jest.fn()`, `jest.spyOn()`)
+- Never use `jasmine`, `spyOn`, or `done()`
 
-```json
-// angular.json - update test architect
-{
-  "projects": {
-    "your-app": {
-      "architect": {
-        "test": {
-          "builder": "@angular/build:unit-test",
-          "options": {
-            "tsConfig": "tsconfig.spec.json",
-            "buildTarget": "your-app:build"
-          }
-        }
-      }
-    }
-  }
-}
-```
+### Testing Library DOM Matchers
 
-```json
-// tsconfig.spec.json
-{
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "types": ["vitest/globals"]
-  },
-  "include": ["src/**/*.spec.ts"]
-}
-```
-
-### Running Tests
-
-```bash
-# Run tests
-ng test
-
-# Watch mode
-ng test --watch
-
-# Coverage
-ng test --code-coverage
-```
-
-### Vitest Test Example
+Use `@testing-library/jest-dom` matchers for better assertions:
 
 ```typescript
-import { describe, it, expect, beforeEach } from 'vitest';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Counter } from './counter.component';
+// Good - Use jest-dom matchers
+expect(button).toHaveClass('primary');
+expect(text).toBeVisible();
+expect(element).toHaveTextContent('Hello');
+expect(button).toBeDisabled();
 
-describe('Counter', () => {
-  let component: Counter;
-  let fixture: ComponentFixture<Counter>;
-  
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Counter],
-    }).compileComponents();
-    
-    fixture = TestBed.createComponent(Counter);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-  
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-  
-  it('should increment count', () => {
-    expect(component.count()).toBe(0);
-    
-    component.increment();
-    
-    expect(component.count()).toBe(1);
-  });
-});
+// Bad - Avoid direct DOM manipulation
+expect(element.classList.contains('name')).toBe(true);
+expect(element.style.display).toBe('none');
 ```
 
-### Vitest Mocking
+## Test Structure (AAA Pattern)
+
+### Strict AAA Guidelines
+
+Structure every test into **Arrange**, **Act**, and **Assert** blocks:
+
+1. **Leave exactly one empty line** between Arrange/Act/Assert blocks
+2. **Do NOT include** `// Arrange` or `// Act` or `// Assert` comments
+3. **Use meaningful test titles** with active voice
+
+### Test Naming
+
+- Use active voice, describe what the test does
+- Avoid "should" phrasing
 
 ```typescript
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+// Bad - Generic "should" title
+it('should handle submit', () => { });
 
-describe('UserCmpt', () => {
-  const mockUserService = {
-    getUser: vi.fn(),
-    updateUser: vi.fn(),
-    user: signal<User | null>(null),
-  };
-  
-  beforeEach(async () => {
-    vi.clearAllMocks();
-    mockUserService.getUser.mockReturnValue(of({ id: '1', name: 'Test' }));
-    
-    await TestBed.configureTestingModule({
-      imports: [UserCmpt],
-      providers: [
-        { provide: User, useValue: mockUserService },
-      ],
-    }).compileComponents();
-  });
-  
-  it('should call getUser on init', () => {
-    const fixture = TestBed.createComponent(UserCmpt);
-    fixture.detectChanges();
-    
-    expect(mockUserService.getUser).toHaveBeenCalledWith('1');
-  });
-});
+// Good - Descriptive and specific
+it('prevents submission when the email field is invalid', () => { });
+
+// Good - Clear behavior description
+it('updates the profile when the save button is clicked', () => { });
 ```
 
-### Vitest with HTTP Testing
+## Component Testing Strategy
 
-```typescript
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { provideHttpClient } from '@angular/common/http';
+### Isolation
 
-describe('User', () => {
-  let service: User;
-  let httpMock: HttpTestingController;
-  
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
-    });
-    
-    service = TestBed.inject(User);
-    httpMock = TestBed.inject(HttpTestingController);
-  });
-  
-  afterEach(() => {
-    httpMock.verify();
-  });
-  
-  it('should fetch user', () => {
-    const mockUser = { id: '1', name: 'Test User' };
-    
-    service.getUser('1').subscribe(user => {
-      expect(user).toEqual(mockUser);
-    });
-    
-    const req = httpMock.expectOne('/api/users/1');
-    expect(req.request.method).toBe('GET');
-    req.flush(mockUser);
-  });
-});
-```
+Each `it` block must be self-contained. Use `beforeEach` only for setup truly shared across all tests.
 
----
+### Query Selection
 
-## Basic Component Test
+Use Testing Library queries in order of preference:
+1. `screen.getByRole()` - Most accessible and semantic
+2. `screen.getByLabelText()` - For form elements
+3. `screen.getByText()` - For static text content
+4. `screen.getByTestId()` - Last resort only
 
-```typescript
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Counter } from './counter.component';
+### User Interactions
 
-describe('Counter', () => {
-  let component: Counter;
-  let fixture: ComponentFixture<Counter>;
-  
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Counter], // Standalone component
-    }).compileComponents();
-    
-    fixture = TestBed.createComponent(Counter);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-  
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-  
-  it('should increment count', () => {
-    expect(component.count()).toBe(0);
-    
-    component.increment();
-    
-    expect(component.count()).toBe(1);
-  });
-  
-  it('should display count in template', () => {
-    component.count.set(5);
-    fixture.detectChanges();
-    
-    const element = fixture.nativeElement.querySelector('.count');
-    expect(element.textContent).toContain('5');
-  });
-});
-```
+Use `userEvent` from `@testing-library/user-event` for realistic interactions instead of native DOM events.
 
-## Testing Signals
+### Public API Testing
 
-### Direct Signal Testing
+Test only public fields and methods. Test `protected` or `private` logic only through public triggers (user interactions, input changes, public method calls).
 
-```typescript
-import { signal, computed } from '@angular/core';
+### Business Logic Focus
 
-describe('Signal logic', () => {
-  it('should update computed when signal changes', () => {
-    const count = signal(0);
-    const doubled = computed(() => count() * 2);
-    
-    expect(doubled()).toBe(0);
-    
-    count.set(5);
-    expect(doubled()).toBe(10);
-    
-    count.update(c => c + 1);
-    expect(doubled()).toBe(12);
-  });
-});
-```
+Do not test Angular's built-in directives (like `@if`, `@for`). Test the component's unique inputs, outputs, and business logic.
 
-### Testing Component Signals
+## Mocking & Async
 
-```typescript
-@Component({
-  selector: 'app-todo-list',
-  template: `
-    <ul>
-      @for (todo of filteredTodos(); track todo.id) {
-        <li>{{ todo.text }}</li>
-      }
-    </ul>
-    <p>{{ remaining() }} remaining</p>
-  `,
-})
-export class TodoList {
-  todos = signal<Todo[]>([]);
-  filter = signal<'all' | 'active' | 'done'>('all');
-  
-  filteredTodos = computed(() => {
-    const todos = this.todos();
-    switch (this.filter()) {
-      case 'active': return todos.filter(t => !t.done);
-      case 'done': return todos.filter(t => t.done);
-      default: return todos;
-    }
-  });
-  
-  remaining = computed(() => this.todos().filter(t => !t.done).length);
-}
+### Effective Mocking
 
-describe('TodoList', () => {
-  let component: TodoList;
-  let fixture: ComponentFixture<TodoList>;
-  
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TodoList],
-    }).compileComponents();
-    
-    fixture = TestBed.createComponent(TodoList);
-    component = fixture.componentInstance;
-  });
-  
-  it('should filter active todos', () => {
-    component.todos.set([
-      { id: '1', text: 'Task 1', done: false },
-      { id: '2', text: 'Task 2', done: true },
-      { id: '3', text: 'Task 3', done: false },
-    ]);
-    
-    component.filter.set('active');
-    
-    expect(component.filteredTodos().length).toBe(2);
-    expect(component.remaining()).toBe(2);
-  });
-  
-  it('should render filtered todos', () => {
-    component.todos.set([
-      { id: '1', text: 'Active Task', done: false },
-      { id: '2', text: 'Done Task', done: true },
-    ]);
-    component.filter.set('active');
-    fixture.detectChanges();
-    
-    const items = fixture.nativeElement.querySelectorAll('li');
-    expect(items.length).toBe(1);
-    expect(items[0].textContent).toContain('Active Task');
-  });
-});
-```
+Use `jest.spyOn()` or `jest.fn()` to isolate dependencies. Avoid importing heavy modules; mock services and APIs at the boundary.
 
-## Testing OnPush Components
+### Async Handling
 
-OnPush components require explicit change detection:
+Use `async/await` for all promises returned by queries or events. Never leave a promise unhandled.
 
-```typescript
-@Component({
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<span>{{ data().name }}</span>`,
-})
-export class OnPush {
-  data = input.required<{ name: string }>();
-}
+### Signals
 
-describe('OnPush', () => {
-  it('should update when input signal changes', () => {
-    const fixture = TestBed.createComponent(OnPush);
-    
-    // Set input using setInput (for signal inputs)
-    fixture.componentRef.setInput('data', { name: 'Initial' });
-    fixture.detectChanges();
-    
-    expect(fixture.nativeElement.textContent).toContain('Initial');
-    
-    // Update input
-    fixture.componentRef.setInput('data', { name: 'Updated' });
-    fixture.detectChanges();
-    
-    expect(fixture.nativeElement.textContent).toContain('Updated');
-  });
-});
-```
+Update signal state via `component.mySignal.set()` and verify the UI updates automatically.
 
-## Testing Services
+### HTTP
 
-### Basic Service Test
+Use `HttpTestingController` and `provideHttpClientTesting()` for service tests.
 
-```typescript
-import { TestBed } from '@angular/core/testing';
+## Best Practices Summary
 
-@Injectable({ providedIn: 'root' })
-export class CounterSvc {
-  private _count = signal(0);
-  readonly count = this._count.asReadonly();
-  
-  increment() {
-    this._count.update(c => c + 1);
-  }
-  
-  reset() {
-    this._count.set(0);
-  }
-}
+1. **User-Centric:** Test what users see and interact with
+2. **AAA Pattern:** Arrange, Act, Assert with clear separation
+3. **Meaningful Names:** Active voice, specific behavior
+4. **Isolation:** Each test is self-contained
+5. **Accessibility:** Use semantic queries (getByRole, getByLabelText)
+6. **Public API Only:** Don't test private implementation
+7. **Async Handling:** Always await promises and user events
+8. **Mock at Boundaries:** Mock services, not internal logic
+9. **Business Logic Focus:** Don't test Angular's built-in directives
+10. **DOM Matchers:** Use jest-dom for readable assertions
 
-describe('CounterSvc', () => {
-  let service: CounterSvc;
-  
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(CounterSvc);
-  });
-  
-  it('should increment count', () => {
-    expect(service.count()).toBe(0);
-    
-    service.increment();
-    expect(service.count()).toBe(1);
-    
-    service.increment();
-    expect(service.count()).toBe(2);
-  });
-  
-  it('should reset count', () => {
-    service.increment();
-    service.increment();
-    
-    service.reset();
-    
-    expect(service.count()).toBe(0);
-  });
-});
-```
-
-### Service with Dependencies
-
-```typescript
-@Injectable({ providedIn: 'root' })
-export class User {
-  private http = inject(HttpClient);
-  
-  getUser(id: string) {
-    return this.http.get<User>(`/api/users/${id}`);
-  }
-}
-
-describe('User', () => {
-  let service: User;
-  let httpMock: HttpTestingController;
-  
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
-    });
-    
-    service = TestBed.inject(User);
-    httpMock = TestBed.inject(HttpTestingController);
-  });
-  
-  afterEach(() => {
-    httpMock.verify(); // Verify no outstanding requests
-  });
-  
-  it('should fetch user by id', () => {
-    const mockUser: User = { id: '1', name: 'Test User' };
-    
-    service.getUser('1').subscribe(user => {
-      expect(user).toEqual(mockUser);
-    });
-    
-    const req = httpMock.expectOne('/api/users/1');
-    expect(req.request.method).toBe('GET');
-    req.flush(mockUser);
-  });
-});
-```
-
-## Mocking Dependencies
-
-### Using Jasmine Spies
-
-```typescript
-describe('ComponentWithDependency', () => {
-  let userServiceSpy: jasmine.SpyObj<User>;
-  
-  beforeEach(async () => {
-    userServiceSpy = jasmine.createSpyObj('User', ['getUser', 'updateUser']);
-    userServiceSpy.getUser.and.returnValue(of({ id: '1', name: 'Test' }));
-    
-    await TestBed.configureTestingModule({
-      imports: [UserProfile],
-      providers: [
-        { provide: User, useValue: userServiceSpy },
-      ],
-    }).compileComponents();
-  });
-  
-  it('should call getUser on init', () => {
-    const fixture = TestBed.createComponent(UserProfile);
-    fixture.detectChanges();
-    
-    expect(userServiceSpy.getUser).toHaveBeenCalledWith('1');
-  });
-});
-```
-
-### Mock Signal-Based Service
-
-```typescript
-// Create mock with signal
-const mockAuth = {
-  user: signal<User | null>(null),
-  isAuthenticated: computed(() => mockAuth.user() !== null),
-  login: jasmine.createSpy('login'),
-  logout: jasmine.createSpy('logout'),
-};
-
-beforeEach(async () => {
-  await TestBed.configureTestingModule({
-    imports: [Protected],
-    providers: [
-      { provide: Auth, useValue: mockAuth },
-    ],
-  }).compileComponents();
-});
-
-it('should show content when authenticated', () => {
-  mockAuth.user.set({ id: '1', name: 'Test User' });
-  
-  const fixture = TestBed.createComponent(Protected);
-  fixture.detectChanges();
-  
-  expect(fixture.nativeElement.querySelector('.protected-content')).toBeTruthy();
-});
-```
-
-## Testing Inputs and Outputs
-
-```typescript
-@Component({
-  selector: 'app-item',
-  template: `
-    <div (click)="select()">{{ item().name }}</div>
-  `,
-})
-export class Item {
-  item = input.required<Item>();
-  selected = output<Item>();
-  
-  select() {
-    this.selected.emit(this.item());
-  }
-}
-
-describe('Item', () => {
-  it('should emit selected event on click', () => {
-    const fixture = TestBed.createComponent(Item);
-    const item: Item = { id: '1', name: 'Test Item' };
-    
-    fixture.componentRef.setInput('item', item);
-    fixture.detectChanges();
-    
-    // Subscribe to output
-    let emittedItem: Item | undefined;
-    fixture.componentInstance.selected.subscribe(i => emittedItem = i);
-    
-    // Trigger click
-    fixture.nativeElement.querySelector('div').click();
-    
-    expect(emittedItem).toEqual(item);
-  });
-});
-```
-
-## Testing Async Operations
-
-### Using fakeAsync
-
-```typescript
-import { fakeAsync, tick, flush } from '@angular/core/testing';
-
-it('should debounce search', fakeAsync(() => {
-  const fixture = TestBed.createComponent(Search);
-  fixture.detectChanges();
-  
-  // Type in search
-  fixture.componentInstance.query.set('test');
-  
-  // Advance time for debounce
-  tick(300);
-  fixture.detectChanges();
-  
-  expect(fixture.componentInstance.results().length).toBeGreaterThan(0);
-  
-  // Flush any remaining timers
-  flush();
-}));
-```
-
-### Using waitForAsync
-
-```typescript
-import { waitForAsync } from '@angular/core/testing';
-
-it('should load data', waitForAsync(() => {
-  const fixture = TestBed.createComponent(Data);
-  fixture.detectChanges();
-  
-  fixture.whenStable().then(() => {
-    fixture.detectChanges();
-    expect(fixture.componentInstance.data()).toBeDefined();
-  });
-}));
-```
-
-## Testing HTTP Resources
-
-```typescript
-@Component({
-  template: `
-    @if (userResource.isLoading()) {
-      <p>Loading...</p>
-    } @else if (userResource.hasValue()) {
-      <p>{{ userResource.value().name }}</p>
-    }
-  `,
-})
-export class UserCmpt {
-  userId = signal('1');
-  userResource = httpResource<UserData>(() => `/api/users/${this.userId()}`);
-}
-
-describe('UserCmpt', () => {
-  let httpMock: HttpTestingController;
-  
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [UserCmpt],
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-      ],
-    }).compileComponents();
-    
-    httpMock = TestBed.inject(HttpTestingController);
-  });
-  
-  it('should display user name after loading', () => {
-    const fixture = TestBed.createComponent(UserCmpt);
-    fixture.detectChanges();
-    
-    // Initially loading
-    expect(fixture.nativeElement.textContent).toContain('Loading');
-    
-    // Respond to request
-    const req = httpMock.expectOne('/api/users/1');
-    req.flush({ id: '1', name: 'John Doe' });
-    fixture.detectChanges();
-    
-    expect(fixture.nativeElement.textContent).toContain('John Doe');
-  });
-});
-```
-
-## Vitest vs Jasmine Comparison
-
-| Feature | Vitest | Jasmine/Karma |
-|---------|--------|---------------|
-| Speed | Faster (native ESM) | Slower |
-| Watch mode | Instant feedback | Slower rebuilds |
-| Mocking | `vi.fn()`, `vi.mock()` | `jasmine.createSpy()` |
-| Assertions | `expect()` (Chai-style) | `expect()` (Jasmine) |
-| UI | Built-in UI mode | Karma browser |
-| Config | `angular.json` | `karma.conf.js` |
-
-### Migration from Jasmine to Vitest
-
-```typescript
-// Jasmine
-const spy = jasmine.createSpy('callback');
-spy.and.returnValue('value');
-expect(spy).toHaveBeenCalledWith('arg');
-
-// Vitest
-const spy = vi.fn();
-spy.mockReturnValue('value');
-expect(spy).toHaveBeenCalledWith('arg');
-```
-
-```typescript
-// Jasmine
-spyOn(service, 'method').and.returnValue(of(data));
-
-// Vitest
-vi.spyOn(service, 'method').mockReturnValue(of(data));
-```
-
-For advanced testing patterns, see [references/testing-patterns.md](references/testing-patterns.md).
+For complete usage examples and patterns, see [references/testing-jest-patterns.md](references/testing-patterns.md).
