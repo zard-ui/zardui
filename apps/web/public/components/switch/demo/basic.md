@@ -1,14 +1,13 @@
 ```angular-ts showLineNumbers copyButton
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import { ZardSwitchComponent } from '../switch.component';
 
 @Component({
   selector: 'z-demo-switch-basic',
   imports: [ZardSwitchComponent],
-  standalone: true,
   template: `
-    <z-switch />
+    <z-switch [(zChecked)]="checked" />
     <z-switch zType="destructive">Destructive</z-switch>
   `,
   styles: `
@@ -20,6 +19,8 @@ import { ZardSwitchComponent } from '../switch.component';
     }
   `,
 })
-export class ZardDemoSwitchBasicComponent {}
+export class ZardDemoSwitchBasicComponent {
+  readonly checked = signal(false);
+}
 
 ```
