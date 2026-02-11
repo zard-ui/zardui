@@ -1,11 +1,11 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
   inject,
   input,
   ViewEncapsulation,
-  booleanAttribute,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
@@ -38,7 +38,7 @@ export class ZardDropdownMenuItemComponent {
   private readonly dropdownService = inject(ZardDropdownService);
 
   readonly variant = input<ZardDropdownItemVariants['variant']>('default');
-  readonly inset = input(false, {});
+  readonly inset = input(false, { transform: booleanAttribute });
   readonly disabled = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
