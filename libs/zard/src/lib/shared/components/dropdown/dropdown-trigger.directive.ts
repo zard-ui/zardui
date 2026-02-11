@@ -12,8 +12,8 @@ import { ZardDropdownService } from './dropdown.service';
     '[attr.aria-expanded]': 'dropdownService.isOpen()',
     '[attr.aria-disabled]': 'zDisabled()',
     '(click.prevent-with-stop)': 'onClick()',
-    '(mouseenter)': 'onHoverToggle()',
-    '(mouseleave)': 'onHoverToggle()',
+    '(mouseenter)': 'onHoverToggle($event)',
+    '(mouseleave)': 'onHoverToggle($event)',
     '(keydown.{enter,space}.prevent-with-stop)': 'toggleDropdown()',
     '(keydown.arrowdown.prevent)': 'openDropdown()',
   },
@@ -45,12 +45,16 @@ export class ZardDropdownDirective implements OnInit {
     this.toggleDropdown();
   }
 
-  protected onHoverToggle() {
-    if (this.zTrigger() !== 'hover') {
+  protected onHoverToggle(event: MouseEvent) {
+    if (this.zTrigger() !== 'hover' || this.zDisabled()) {
       return;
     }
 
-    this.toggleDropdown();
+    if (event.type === 'mouseenter') {
+      this.openDropdown();
+    } else if (event.type === 'mouseleave') {
+      this.closeDropdown();
+    }
   }
 
   protected toggleDropdown() {
@@ -73,5 +77,9 @@ export class ZardDropdownDirective implements OnInit {
     if (menuContent && !this.dropdownService.isOpen()) {
       this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
     }
+  }
+
+  protected closeDropdown() {
+    this.dropdownService.close();
   }
 }
