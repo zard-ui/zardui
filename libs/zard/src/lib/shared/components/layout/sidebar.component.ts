@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -6,8 +7,8 @@ import {
   input,
   output,
   signal,
-  type TemplateRef,
   ViewEncapsulation,
+  type TemplateRef,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
@@ -20,7 +21,7 @@ import {
   sidebarVariants,
 } from '@/shared/components/layout/layout.variants';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-sidebar',
@@ -57,9 +58,9 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 export class SidebarComponent {
   readonly zWidth = input<string | number>(200);
   readonly zCollapsedWidth = input<number>(64);
-  readonly zCollapsible = input(false, { transform });
-  readonly zCollapsed = input(false, { transform });
-  readonly zReverseArrow = input(false, { transform });
+  readonly zCollapsible = input(false, { transform: booleanAttribute });
+  readonly zCollapsed = input(false, { transform: booleanAttribute });
+  readonly zReverseArrow = input(false, { transform: booleanAttribute });
   readonly zTrigger = input<TemplateRef<void> | null>(null);
   readonly class = input<ClassValue>('');
 
