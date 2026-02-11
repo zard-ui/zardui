@@ -21,4 +21,5 @@ export const switchVariants = cva(
   },
 );
 
-export type ZardSwitchVariants = VariantProps<typeof switchVariants>;
+export type ZardSwitchSizeVariants = NonNullable<VariantProps<typeof switchVariants>['zSize']>;
+export type ZardSwitchTypeVariants = NonNullable<VariantProps<typeof switchVariants>['zType']>;

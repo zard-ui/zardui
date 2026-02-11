@@ -9,7 +9,6 @@ import {
   inject,
   input,
   type OnDestroy,
-  type OnInit,
   output,
   PLATFORM_ID,
   signal,
@@ -21,9 +20,9 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { dropdownContentVariants } from './dropdown.variants';
-
 import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+
+import { dropdownContentVariants } from './dropdown.variants';
 
 @Component({
   selector: 'z-dropdown-menu',
@@ -56,7 +55,7 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
   },
   exportAs: 'zDropdownMenu',
 })
-export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
+export class ZardDropdownMenuComponent implements OnDestroy {
   private elementRef = inject(ElementRef);
   private overlay = inject(Overlay);
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
@@ -77,12 +76,6 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   readonly focusedIndex = signal<number>(-1);
 
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
-
-  ngOnInit() {
-    setTimeout(() => {
-      this.createOverlay();
-    });
-  }
 
   ngOnDestroy() {
     this.destroyOverlay();

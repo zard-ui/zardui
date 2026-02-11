@@ -6,7 +6,6 @@ import { ZardSwitchComponent } from '../switch.component';
 @Component({
   selector: 'z-demo-switch-size',
   imports: [ZardSwitchComponent],
-  standalone: true,
   template: `
     <z-switch zSize="sm">Small</z-switch>
     <z-switch>Default</z-switch>

@@ -1,14 +1,13 @@
 import { Component } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardSwitchComponent } from '../switch.component';
 
 @Component({
   selector: 'z-demo-switch-disabled',
-  imports: [ZardSwitchComponent, FormsModule, ReactiveFormsModule],
-  standalone: true,
+  imports: [ZardSwitchComponent, ReactiveFormsModule],
   template: `
-    <z-switch [(ngModel)]="model" disabled>Disabled</z-switch>
+    <z-switch [(zChecked)]="model" [zDisabled]="true">Disabled</z-switch>
     <z-switch [formControl]="checkControl">Disabled in forms</z-switch>
   `,
 })

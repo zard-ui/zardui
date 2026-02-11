@@ -21,6 +21,7 @@
       "type": "registry:component",
       "basePath": "services",
       "files": [
+        "index.ts",
         "dark-mode.ts"
       ]
     },
@@ -33,6 +34,7 @@
         "clsx"
       ],
       "files": [
+        "index.ts",
         "merge-classes.ts",
         "number.ts"
       ]
