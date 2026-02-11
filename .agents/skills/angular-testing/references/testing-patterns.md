@@ -1,707 +1,492 @@
 # Angular Testing Patterns
 
 ## Table of Contents
-- [Vitest Advanced Patterns](#vitest-advanced-patterns)
-- [Component Harnesses](#component-harnesses)
-- [Testing Router](#testing-router)
-- [Testing Forms](#testing-forms)
-- [Testing Directives](#testing-directives)
-- [Testing Pipes](#testing-pipes)
-- [E2E Testing Setup](#e2e-testing-setup)
 
-## Vitest Advanced Patterns
+- [Jest Setup](#jest-setup)
+- [Test Structure (AAA Pattern)](#test-structure-aaa-pattern)
+- [Component Testing](#component-testing)
+- [Testing Signals](#testing-signals)
+- [Testing Services](#testing-services)
+- [Mocking Dependencies](#mocking-dependencies)
+- [Component Testing Strategy](#component-testing-strategy)
+- [Async Testing](#async-testing)
+- [OnPush Components](#onpush-components)
+- [HTTP Resource Testing](#http-resource-testing)
+- [Common Testing Patterns](#common-testing-patterns)
 
-### Snapshot Testing
+## Jest Setup
 
-```typescript
-import { describe, it, expect } from 'vitest';
+### Installation
 
-describe('UserCard', () => {
-  it('should match snapshot', () => {
-    const fixture = TestBed.createComponent(UserCard);
-    fixture.componentRef.setInput('user', { id: '1', name: 'John', email: 'john@example.com' });
-    fixture.detectChanges();
-    
-    expect(fixture.nativeElement.innerHTML).toMatchSnapshot();
-  });
-});
+```bash
+npm install -D jest @types/jest @testing-library/angular @testing-library/jest-dom @testing-library/user-event happy-dom
 ```
 
-### Parameterized Tests
+### Configuration
 
-```typescript
-import { describe, it, expect } from 'vitest';
-
-describe('Validator', () => {
-  it.each([
-    { input: '', expected: false },
-    { input: 'test', expected: false },
-    { input: 'test@example.com', expected: true },
-    { input: 'invalid@', expected: false },
-  ])('should validate email "$input" as $expected', ({ input, expected }) => {
-    expect(isValidEmail(input)).toBe(expected);
-  });
-});
-```
-
-### Testing with Fake Timers
-
-```typescript
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-
-describe('Debounced Search', () => {
-  beforeEach(() => {
-    vi.useFakeTimers();
-  });
-  
-  afterEach(() => {
-    vi.useRealTimers();
-  });
-  
-  it('should debounce search input', async () => {
-    const fixture = TestBed.createComponent(Search);
-    fixture.detectChanges();
-    
-    fixture.componentInstance.query.set('test');
-    
-    // Search not called yet
-    expect(fixture.componentInstance.results()).toEqual([]);
-    
-    // Advance timers
-    vi.advanceTimersByTime(300);
-    await fixture.whenStable();
-    fixture.detectChanges();
-    
-    expect(fixture.componentInstance.results().length).toBeGreaterThan(0);
-  });
-});
-```
-
-### Module Mocking
-
-```typescript
-import { describe, it, expect, vi } from 'vitest';
-
-// Mock entire module
-vi.mock('./analytics.service', () => ({
-  Analytics: class {
-    track = vi.fn();
-    identify = vi.fn();
+```json
+// jest.config.js
+export default {
+  testEnvironment: 'happy-dom',
+  setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
+  moduleNameMapper: {
+    '@/(.*)': '<rootDir>/libs/zard/src/lib/$1',
   },
-}));
+  transform: {
+    '^.+\\.(ts|html)$': ['jest-preset-angular', {
+      tsconfig: '<rootDir>/tsconfig.spec.json',
+    }],
+  },
+};
+```
 
-describe('with mocked analytics', () => {
-  it('should track events', () => {
-    const fixture = TestBed.createComponent(Dashboard);
-    const analytics = TestBed.inject(Analytics);
-    
-    fixture.detectChanges();
-    
-    expect(analytics.track).toHaveBeenCalledWith('dashboard_viewed');
+```javascript
+// jest.setup.js
+import '@testing-library/jest-dom';
+```
+
+```json
+// tsconfig.spec.json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "types": ["jest", "@testing-library/jest-dom"]
+  },
+  "include": ["src/**/*.spec.ts"]
+}
+```
+
+### Running Tests
+
+```bash
+# Run tests
+npx jest
+
+# Watch mode
+npx jest --watch
+
+# Coverage
+npx jest --coverage
+
+# Specific file
+npx jest my-component.spec.ts
+```
+
+## Test Structure (AAA Pattern)
+
+### Example Test Structure
+
+```typescript
+it('updates the profile when the save button is clicked', async () => {
+  const user = userEvent.setup();
+  const saveSpy = jest.fn();
+  await render(ProfileComponent, { componentProperties: { save: saveSpy } });
+
+  await user.type(screen.getByLabelText(/name/i), 'John Doe');
+  await user.click(screen.getByRole('button', { name: /save/i }));
+
+  expect(saveSpy).toHaveBeenCalledWith({ name: 'John Doe' });
+});
+```
+
+## Component Testing
+
+### Basic Component Test with Testing Library
+
+```typescript
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
+import { Counter } from './counter.component';
+
+describe('Counter', () => {
+  it('displays the initial count', async () => {
+    await render(Counter);
+
+    expect(screen.getByText('Count: 0')).toBeVisible();
+  });
+
+  it('increments the count when button is clicked', async () => {
+    const user = userEvent.setup();
+    await render(Counter);
+
+    await user.click(screen.getByRole('button', { name: /increment/i }));
+
+    expect(screen.getByText('Count: 1')).toBeVisible();
   });
 });
 ```
 
-### Testing Async/Await
+### Testing Component Inputs
 
 ```typescript
-import { describe, it, expect, vi } from 'vitest';
+it('displays the provided item name', async () => {
+  const item = { id: '1', name: 'Test Item' };
+  await render(ItemComponent, { componentInputs: { item } });
 
-describe('User', () => {
-  it('should load user data', async () => {
-    const mockUser = { id: '1', name: 'Test' };
-    const httpMock = TestBed.inject(HttpTestingController);
-    const service = TestBed.inject(User);
-    
-    const userPromise = service.loadUser('1');
-    
-    httpMock.expectOne('/api/users/1').flush(mockUser);
-    
+  expect(screen.getByText('Test Item')).toBeVisible();
+});
+```
+
+### Testing Component Outputs
+
+```typescript
+it('emits selected event when item is clicked', async () => {
+  const user = userEvent.setup();
+  const emittedSpy = jest.fn();
+
+  await render(ItemComponent, {
+    componentInputs: { item: { id: '1', name: 'Test' } },
+    componentOutputs: { selected: { emit: emittedSpy } as any },
+  });
+
+  await user.click(screen.getByRole('button'));
+
+  expect(emittedSpy).toHaveBeenCalledWith({ id: '1', name: 'Test' });
+});
+```
+
+## Testing Signals
+
+### Direct Signal Testing
+
+```typescript
+import { signal, computed } from '@angular/core';
+
+describe('Signal logic', () => {
+  it('should update computed when signal changes', () => {
+    const count = signal(0);
+    const doubled = computed(() => count() * 2);
+
+    expect(doubled()).toBe(0);
+
+    count.set(5);
+    expect(doubled()).toBe(10);
+
+    count.update(c => c + 1);
+    expect(doubled()).toBe(12);
+  });
+});
+```
+
+### Testing Component Signals
+
+```typescript
+describe('TodoList', () => {
+  it('filters active todos correctly', async () => {
+    const todos = [
+      { id: '1', text: 'Task 1', done: false },
+      { id: '2', text: 'Task 2', done: true },
+    ];
+
+    await render(TodoListComponent, {
+      componentInputs: { todos, filter: 'active' },
+    });
+
+    expect(screen.getByText('Task 1')).toBeVisible();
+    expect(screen.queryByText('Task 2')).not.toBeInTheDocument();
+  });
+});
+```
+
+## Testing Services
+
+### Basic Service Test
+
+```typescript
+import { CounterService } from './counter.service';
+
+describe('CounterService', () => {
+  let service: CounterService;
+
+  beforeEach(() => {
+    service = new CounterService();
+  });
+
+  it('increments the count', () => {
+    expect(service.count()).toBe(0);
+
+    service.increment();
+
+    expect(service.count()).toBe(1);
+  });
+
+  it('resets the count to zero', () => {
+    service.increment();
+    service.increment();
+
+    service.reset();
+
+    expect(service.count()).toBe(0);
+  });
+});
+```
+
+### Service with HTTP
+
+```typescript
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { UserService } from './user.service';
+
+describe('UserService', () => {
+  let service: UserService;
+  let httpMock: HttpTestingController;
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      imports: [HttpClientTestingModule],
+      providers: [UserService],
+    });
+
+    service = TestBed.inject(UserService);
+    httpMock = TestBed.inject(HttpTestingController);
+  });
+
+  afterEach(() => {
+    httpMock.verify();
+  });
+
+  it('fetches user by id', async () => {
+    const mockUser = { id: '1', name: 'Test User' };
+
+    const userPromise = service.getUser('1');
+
+    const req = httpMock.expectOne('/api/users/1');
+    expect(req.request.method).toBe('GET');
+    req.flush(mockUser);
+
     const user = await userPromise;
     expect(user).toEqual(mockUser);
   });
 });
 ```
 
-### Coverage Configuration
+## Mocking Dependencies
+
+### Mocking with Jest
 
 ```typescript
-// vite.config.ts
-export default defineConfig({
-  test: {
-    coverage: {
-      provider: 'v8',
-      reporter: ['text', 'html', 'lcov'],
-      exclude: [
-        'node_modules/',
-        'src/test-setup.ts',
-        '**/*.spec.ts',
-        '**/*.d.ts',
-      ],
-      thresholds: {
-        statements: 80,
-        branches: 80,
-        functions: 80,
-        lines: 80,
-      },
-    },
-  },
-});
-```
+describe('UserProfile', () => {
+  const mockUserService = {
+    getUser: jest.fn().mockReturnValue(of({ id: '1', name: 'Test' })),
+    updateUser: jest.fn(),
+    user: signal<User | null>(null),
+  };
 
-### Vitest UI Mode
+  it('displays user name after loading', async () => {
+    await render(UserProfileComponent, {
+      providers: [{ provide: UserService, useValue: mockUserService }],
+    });
 
-```bash
-# Run with UI
-npx vitest --ui
-
-# Open UI at specific port
-npx vitest --ui --port 51204
-```
-
-### Concurrent Tests
-
-```typescript
-import { describe, it, expect } from 'vitest';
-
-// Run tests in this describe block concurrently
-describe.concurrent('API calls', () => {
-  it('should fetch users', async () => {
-    // ...
+    expect(screen.getByText('Test')).toBeVisible();
   });
-  
-  it('should fetch products', async () => {
-    // ...
-  });
-  
-  it('should fetch orders', async () => {
-    // ...
+
+  it('calls update when save button is clicked', async () => {
+    const user = userEvent.setup();
+    mockUserService.updateUser.mockResolvedValue(undefined);
+
+    await render(UserProfileComponent, {
+      providers: [{ provide: UserService, useValue: mockUserService }],
+    });
+
+    await user.click(screen.getByRole('button', { name: /save/i }));
+
+    expect(mockUserService.updateUser).toHaveBeenCalled();
   });
 });
 ```
 
-### Test Fixtures
+### Mocking Signal-Based Services
 
 ```typescript
-import { describe, it, expect, beforeEach } from 'vitest';
+const mockAuthService = {
+  user: signal<User | null>(null),
+  isAuthenticated: computed(() => mockAuthService.user() !== null),
+  login: jest.fn(),
+  logout: jest.fn(),
+};
 
-// Shared test fixtures
-const createTestUser = (overrides = {}) => ({
-  id: '1',
-  name: 'Test User',
-  email: 'test@example.com',
-  ...overrides,
+it('shows content when authenticated', async () => {
+  mockAuthService.user.set({ id: '1', name: 'Test User' });
+
+  await render(ProtectedComponent, {
+    providers: [{ provide: AuthService, useValue: mockAuthService }],
+  });
+
+  expect(screen.getByTestId('protected-content')).toBeVisible();
 });
+```
 
-const createTestProduct = (overrides = {}) => ({
-  id: '1',
-  name: 'Test Product',
-  price: 99.99,
-  ...overrides,
-});
+## Component Testing Strategy
 
-describe('Order', () => {
-  it('should calculate total', () => {
-    const fixture = TestBed.createComponent(Order);
-    fixture.componentRef.setInput('user', createTestUser());
-    fixture.componentRef.setInput('products', [
-      createTestProduct({ price: 10 }),
-      createTestProduct({ id: '2', price: 20 }),
-    ]);
-    fixture.detectChanges();
-    
-    expect(fixture.componentInstance.total()).toBe(30);
+### Query Selection
+
+Use Testing Library queries in order of preference:
+
+```typescript
+// Best - Most accessible
+screen.getByRole('button');
+screen.getByLabelText('Username');
+screen.getByText('Submit');
+
+// Avoid unless necessary
+screen.getByTestId('submit-button');
+```
+
+### User Interactions
+
+Use `userEvent` for realistic interactions:
+
+```typescript
+const user = userEvent.setup();
+
+// Typing
+await user.type(screen.getByLabelText('Email'), 'test@example.com');
+
+// Clicking
+await user.click(screen.getByRole('button', { name: /submit/i }));
+
+// Selecting options
+await user.selectOptions(screen.getByRole('combobox'), 'option-value');
+```
+
+## Async Testing
+
+### Async Operations
+
+```typescript
+it('loads data after delay', async () => {
+  await render(DataComponent);
+
+  // Initial loading state
+  expect(screen.getByText(/loading/i)).toBeVisible();
+
+  // Wait for data to load
+  await waitFor(() => {
+    expect(screen.getByText('Data loaded')).toBeVisible();
   });
 });
 ```
 
-## Component Harnesses
-
-Use Angular CDK component harnesses for more maintainable tests:
-
-### Creating a Harness
+### fakeAsync for Time-Based Tests
 
 ```typescript
-import { ComponentHarness, HarnessPredicate } from '@angular/cdk/testing';
+import { fakeAsync, tick } from '@angular/core/testing';
 
-export class CounterHarn extends ComponentHarness {
-  static hostSelector = 'app-counter';
-  
-  // Locators
-  private getIncrementButton = this.locatorFor('button.increment');
-  private getDecrementButton = this.locatorFor('button.decrement');
-  private getCountDisplay = this.locatorFor('.count');
-  
-  // Actions
-  async increment(): Promise<void> {
-    const button = await this.getIncrementButton();
-    await button.click();
-  }
-  
-  async decrement(): Promise<void> {
-    const button = await this.getDecrementButton();
-    await button.click();
-  }
-  
-  // Queries
-  async getCount(): Promise<number> {
-    const display = await this.getCountDisplay();
-    const text = await display.text();
-    return parseInt(text, 10);
-  }
-  
-  // Filter factory
-  static with(options: { count?: number } = {}): HarnessPredicate<CounterHarn> {
-    return new HarnessPredicate(CounterHarn, options)
-      .addOption('count', options.count, async (harness, count) => {
-        return (await harness.getCount()) === count;
-      });
-  }
-}
+it('debounces search input', fakeAsync(async () => {
+  const user = userEvent.setup();
+  await render(SearchComponent);
+
+  await user.type(screen.getByRole('searchbox'), 'test');
+
+  tick(300); // Advance debounce timer
+
+  expect(screen.getByText('Results found')).toBeVisible();
+}));
 ```
 
-### Using Harnesses in Tests
+## OnPush Components
 
 ```typescript
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed';
+it('updates display when input changes', async () => {
+  await render(OnPushComponent, {
+    componentInputs: { data: { name: 'Initial' } },
+  });
 
-describe('Counter with Harness', () => {
-  let loader: HarnessLoader;
-  
+  expect(screen.getByText('Initial')).toBeVisible();
+
+  // Update input signal
+  await screen.findByText('Initial');
+  const component = screen.queryByRole('generic')?.parent?.parent?.parent?.componentInstance;
+  component?.data.set({ name: 'Updated' });
+
+  await waitFor(() => {
+    expect(screen.getByText('Updated')).toBeVisible();
+  });
+});
+```
+
+## HTTP Resource Testing
+
+```typescript
+describe('UserComponent', () => {
+  let httpMock: HttpTestingController;
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [Counter],
+      imports: [HttpClientTestingModule],
     }).compileComponents();
-    
-    const fixture = TestBed.createComponent(Counter);
-    loader = TestbedHarnessEnvironment.loader(fixture);
-  });
-  
-  it('should increment count', async () => {
-    const counter = await loader.getHarness(CounterHarn);
-    
-    expect(await counter.getCount()).toBe(0);
-    
-    await counter.increment();
-    expect(await counter.getCount()).toBe(1);
-    
-    await counter.increment();
-    expect(await counter.getCount()).toBe(2);
-  });
-  
-  it('should find counter with specific count', async () => {
-    const counter = await loader.getHarness(CounterHarn);
-    await counter.increment();
-    await counter.increment();
-    
-    // Find counter with count of 2
-    const counterWith2 = await loader.getHarness(CounterHarn.with({ count: 2 }));
-    expect(counterWith2).toBeTruthy();
-  });
-});
-```
 
-## Testing Router
-
-### RouterTestingHarness
-
-```typescript
-import { RouterTestingHarness } from '@angular/router/testing';
-import { provideRouter } from '@angular/router';
-
-describe('Router Navigation', () => {
-  let harness: RouterTestingHarness;
-  
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      providers: [
-        provideRouter([
-          { path: '', component: Home },
-          { path: 'users/:id', component: UserCmpt },
-        ]),
-      ],
-    }).compileComponents();
-    
-    harness = await RouterTestingHarness.create();
+    httpMock = TestBed.inject(HttpTestingController);
   });
-  
-  it('should navigate to user page', async () => {
-    const component = await harness.navigateByUrl('/users/123', UserCmpt);
-    
-    expect(component.id()).toBe('123');
-  });
-  
-  it('should display user name', async () => {
-    await harness.navigateByUrl('/users/123');
-    
-    expect(harness.routeNativeElement?.textContent).toContain('User 123');
-  });
-});
-```
 
-### Testing Guards
+  it('displays user after loading', async () => {
+    await render(UserComponent);
 
-```typescript
-describe('AuthGuard', () => {
-  let authService: jasmine.SpyObj<Auth>;
-  
-  beforeEach(() => {
-    authService = jasmine.createSpyObj('Auth', ['isAuthenticated']);
-    
-    TestBed.configureTestingModule({
-      providers: [
-        { provide: Auth, useValue: authService },
-        provideRouter([
-          { path: 'login', component: Login },
-          { 
-            path: 'dashboard', 
-            component: Dashboard,
-            canActivate: [authGuard],
-          },
-        ]),
-      ],
+    expect(screen.getByText('Loading...')).toBeVisible();
+
+    const req = httpMock.expectOne('/api/users/1');
+    req.flush({ id: '1', name: 'John Doe' });
+
+    await waitFor(() => {
+      expect(screen.getByText('John Doe')).toBeVisible();
+      expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
     });
   });
-  
-  it('should allow access when authenticated', async () => {
-    authService.isAuthenticated.and.returnValue(true);
-    
-    const harness = await RouterTestingHarness.create();
-    await harness.navigateByUrl('/dashboard');
-    
-    expect(harness.routeNativeElement?.textContent).toContain('Dashboard');
-  });
-  
-  it('should redirect to login when not authenticated', async () => {
-    authService.isAuthenticated.and.returnValue(false);
-    
-    const harness = await RouterTestingHarness.create();
-    await harness.navigateByUrl('/dashboard');
-    
-    expect(TestBed.inject(Router).url).toBe('/login');
-  });
 });
 ```
 
-## Testing Forms
+## Common Testing Patterns
 
-### Testing Signal Forms
+### Testing Form Validation
 
 ```typescript
-import { form, FormField, required, email } from '@angular/forms/signals';
+it('shows error when email is invalid', async () => {
+  const user = userEvent.setup();
+  await render(SignUpComponent);
 
-@Component({
-  imports: [FormField],
-  template: `
-    <form (submit)="onSubmit($event)">
-      <input [formField]="loginForm.email" />
-      <input [formField]="loginForm.password" type="password" />
-      <button type="submit" [disabled]="loginForm().invalid()">Submit</button>
-    </form>
-  `,
-})
-export class Login {
-  model = signal({ email: '', password: '' });
-  loginForm = form(this.model, (schemaPath) => {
-    required(schemaPath.email);
-    email(schemaPath.email);
-    required(schemaPath.password);
-  });
-  
-  submitted = signal(false);
-  
-  onSubmit(event: Event) {
-    event.preventDefault();
-    if (this.loginForm().valid()) {
-      this.submitted.set(true);
-    }
-  }
-}
+  await user.type(screen.getByLabelText('Email'), 'invalid-email');
+  await user.click(screen.getByRole('button', { name: /submit/i }));
 
-describe('Login', () => {
-  let fixture: ComponentFixture<Login>;
-  let component: Login;
-  
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [Login],
-    }).compileComponents();
-    
-    fixture = TestBed.createComponent(Login);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
-  
-  it('should be invalid when empty', () => {
-    expect(component.loginForm().invalid()).toBeTrue();
-  });
-  
-  it('should be valid with correct data', () => {
-    component.model.set({
-      email: 'test@example.com',
-      password: 'password123',
-    });
-    
-    expect(component.loginForm().valid()).toBeTrue();
-  });
-  
-  it('should show email error for invalid email', () => {
-    component.loginForm.email().value.set('invalid');
-    fixture.detectChanges();
-    
-    expect(component.loginForm.email().invalid()).toBeTrue();
-    expect(component.loginForm.email().errors().some(e => e.kind === 'email')).toBeTrue();
-  });
-  
-  it('should disable submit button when invalid', () => {
-    const button = fixture.nativeElement.querySelector('button');
-    expect(button.disabled).toBeTrue();
-  });
+  expect(screen.getByText(/invalid email/i)).toBeVisible();
+  expect(screen.queryByRole('button', { name: /submit/i })).toBeDisabled();
 });
 ```
 
-### Testing Reactive Forms
+### Testing Conditional Rendering
 
 ```typescript
-describe('ReactiveForm', () => {
-  it('should validate form', () => {
-    const fixture = TestBed.createComponent(ProfileForm);
-    const component = fixture.componentInstance;
-    
-    expect(component.form.valid).toBeFalse();
-    
-    component.form.patchValue({
-      name: 'John',
-      email: 'john@example.com',
-    });
-    
-    expect(component.form.valid).toBeTrue();
+it('shows delete button when user is admin', async () => {
+  await render(ItemComponent, {
+    componentInputs: { user: { role: 'admin' } },
   });
-  
-  it('should show validation errors', () => {
-    const fixture = TestBed.createComponent(ProfileForm);
-    fixture.detectChanges();
-    
-    const emailControl = fixture.componentInstance.form.controls.email;
-    emailControl.setValue('invalid');
-    emailControl.markAsTouched();
-    fixture.detectChanges();
-    
-    const errorElement = fixture.nativeElement.querySelector('.error');
-    expect(errorElement.textContent).toContain('Invalid email');
+
+  expect(screen.getByRole('button', { name: /delete/i })).toBeVisible();
+});
+
+it('hides delete button when user is not admin', async () => {
+  await render(ItemComponent, {
+    componentInputs: { user: { role: 'user' } },
   });
+
+  expect(screen.queryByRole('button', { name: /delete/i })).not.toBeInTheDocument();
 });
 ```
 
-## Testing Directives
-
-### Attribute Directive
+### Testing Lists
 
 ```typescript
-@Directive({
-  selector: '[appHighlight]',
-  host: {
-    '[style.backgroundColor]': 'color()',
-  },
-})
-export class Highlight {
-  color = input('yellow', { alias: 'appHighlight' });
-}
+it('renders all items in the list', async () => {
+  const items = [
+    { id: '1', name: 'Item 1' },
+    { id: '2', name: 'Item 2' },
+    { id: '3', name: 'Item 3' },
+  ];
 
-describe('Highlight', () => {
-  @Component({
-    imports: [Highlight],
-    template: `<p appHighlight="lightblue">Test</p>`,
-  })
-  class Test {}
-  
-  it('should apply background color', () => {
-    const fixture = TestBed.createComponent(Test);
-    fixture.detectChanges();
-    
-    const p = fixture.nativeElement.querySelector('p');
-    expect(p.style.backgroundColor).toBe('lightblue');
-  });
-});
-```
+  await render(ListComponent, { componentInputs: { items } });
 
-### Structural Directive
-
-```typescript
-@Directive({
-  selector: '[appIf]',
-})
-export class If {
-  private templateRef = inject(TemplateRef);
-  private viewContainer = inject(ViewContainerRef);
-  
-  condition = input.required<boolean>({ alias: 'appIf' });
-  
-  constructor() {
-    effect(() => {
-      if (this.condition()) {
-        this.viewContainer.createEmbeddedView(this.templateRef);
-      } else {
-        this.viewContainer.clear();
-      }
-    });
-  }
-}
-
-describe('If', () => {
-  @Component({
-    imports: [If],
-    template: `<p *appIf="show()">Visible</p>`,
-  })
-  class TestCmpt {
-    show = signal(false);
-  }
-  
-  it('should show content when condition is true', () => {
-    const fixture = TestBed.createComponent(Test);
-    fixture.detectChanges();
-    
-    expect(fixture.nativeElement.querySelector('p')).toBeNull();
-    
-    fixture.componentInstance.show.set(true);
-    fixture.detectChanges();
-    
-    expect(fixture.nativeElement.querySelector('p')).toBeTruthy();
-  });
-});
-```
-
-## Testing Pipes
-
-```typescript
-@Pipe({ name: 'truncate' })
-export class Truncate implements PipeTransform {
-  transform(value: string, length: number = 50): string {
-    if (value.length <= length) return value;
-    return value.substring(0, length) + '...';
-  }
-}
-
-describe('Truncate', () => {
-  let pipe: Truncate;
-  
-  beforeEach(() => {
-    pipe = new Truncate();
-  });
-  
-  it('should not truncate short strings', () => {
-    expect(pipe.transform('Hello', 10)).toBe('Hello');
-  });
-  
-  it('should truncate long strings', () => {
-    expect(pipe.transform('Hello World', 5)).toBe('Hello...');
-  });
-  
-  it('should use default length', () => {
-    const longString = 'a'.repeat(60);
-    const result = pipe.transform(longString);
-    expect(result.length).toBe(53); // 50 + '...'
-  });
-});
-```
-
-## E2E Testing Setup
-
-### Playwright Configuration
-
-```typescript
-// playwright.config.ts
-import { defineConfig } from '@playwright/test';
-
-export default defineConfig({
-  testDir: './e2e',
-  fullyParallel: true,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : undefined,
-  reporter: 'html',
-  use: {
-    baseURL: 'http://localhost:4200',
-    trace: 'on-first-retry',
-  },
-  webServer: {
-    command: 'npm run start',
-    url: 'http://localhost:4200',
-    reuseExistingServer: !process.env.CI,
-  },
-});
-```
-
-### E2E Test Example
-
-```typescript
-// e2e/login.spec.ts
-import { test, expect } from '@playwright/test';
-
-test.describe('Login', () => {
-  test('should login successfully', async ({ page }) => {
-    await page.goto('/login');
-    
-    await page.fill('input[name="email"]', 'test@example.com');
-    await page.fill('input[name="password"]', 'password123');
-    await page.click('button[type="submit"]');
-    
-    await expect(page).toHaveURL('/dashboard');
-    await expect(page.locator('h1')).toContainText('Welcome');
-  });
-  
-  test('should show error for invalid credentials', async ({ page }) => {
-    await page.goto('/login');
-    
-    await page.fill('input[name="email"]', 'wrong@example.com');
-    await page.fill('input[name="password"]', 'wrongpassword');
-    await page.click('button[type="submit"]');
-    
-    await expect(page.locator('.error')).toBeVisible();
-    await expect(page.locator('.error')).toContainText('Invalid credentials');
-  });
-});
-```
-
-## Test Utilities
-
-### Custom Test Helpers
-
-```typescript
-// test-utils.ts
-export function setSignalInput<T>(
-  fixture: ComponentFixture<any>,
-  inputName: string,
-  value: T
-): void {
-  fixture.componentRef.setInput(inputName, value);
-  fixture.detectChanges();
-}
-
-export async function waitForSignal<T>(
-  signal: () => T,
-  predicate: (value: T) => boolean,
-  timeout = 5000
-): Promise<T> {
-  const start = Date.now();
-  while (Date.now() - start < timeout) {
-    const value = signal();
-    if (predicate(value)) return value;
-    await new Promise(resolve => setTimeout(resolve, 10));
-  }
-  throw new Error('Timeout waiting for signal');
-}
-
-// Usage
-it('should load data', async () => {
-  const fixture = TestBed.createComponent(Data);
-  fixture.detectChanges();
-  
-  await waitForSignal(
-    () => fixture.componentInstance.data(),
-    data => data !== undefined
-  );
-  
-  expect(fixture.componentInstance.data()).toBeDefined();
+  expect(screen.getByText('Item 1')).toBeVisible();
+  expect(screen.getByText('Item 2')).toBeVisible();
+  expect(screen.getByText('Item 3')).toBeVisible();
 });
 ```
