@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -11,7 +12,7 @@ import {
 import type { ClassValue } from 'clsx';
 
 import { resizablePanelVariants } from '@/shared/components/resizable/resizable.variants';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-resizable-panel',
@@ -33,8 +34,8 @@ export class ZardResizablePanelComponent {
   readonly zDefaultSize = input<number | string | undefined>(undefined);
   readonly zMin = input<number | string>(0);
   readonly zMax = input<number | string>(100);
-  readonly zCollapsible = input(false, { transform });
-  readonly zResizable = input(true, { transform });
+  readonly zCollapsible = input(false, { transform: booleanAttribute });
+  readonly zResizable = input(true, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
   protected readonly isCollapsed = computed(() => {
