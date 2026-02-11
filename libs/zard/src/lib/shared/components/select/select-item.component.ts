@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -16,7 +17,7 @@ import {
   type ZardSelectItemModeVariants,
   type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
-import { mergeClasses, noopFn, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 // Interface to avoid circular dependency
 interface SelectHost {
@@ -56,7 +57,7 @@ export class ZardSelectItemComponent {
   readonly elementRef = inject(ElementRef<HTMLElement>);
 
   readonly zValue = input.required<string>();
-  readonly zDisabled = input(false, { transform });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly class = input<string>('');
 
   private readonly select = signal<SelectHost | null>(null);
