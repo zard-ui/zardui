@@ -2,6 +2,7 @@ import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from 
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -20,7 +21,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { dropdownContentVariants } from './dropdown.variants';
 
@@ -68,7 +69,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   private portal?: TemplatePortal;
 
   readonly class = input<ClassValue>('');
-  readonly disabled = input(false, { transform });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly openChange = output<boolean>();
 
