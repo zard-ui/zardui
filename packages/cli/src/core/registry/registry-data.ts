@@ -45,6 +45,10 @@ export const registry: ComponentRegistry[] = [
     basePath: 'services',
     files: [
       {
+        name: 'index.ts',
+        content: '',
+      },
+      {
         name: 'dark-mode.ts',
         content: '',
       },
@@ -55,6 +59,10 @@ export const registry: ComponentRegistry[] = [
     basePath: 'utils',
     dependencies: ['tailwind-merge', 'clsx'],
     files: [
+      {
+        name: 'index.ts',
+        content: '',
+      },
       {
         name: 'merge-classes.ts',
         content: '',
