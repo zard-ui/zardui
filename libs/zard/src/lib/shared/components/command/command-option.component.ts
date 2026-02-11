@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -20,7 +21,7 @@ import {
   type ZardCommandItemVariants,
 } from '@/shared/components/command/command.variants';
 import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-option',
@@ -61,7 +62,7 @@ export class ZardCommandOptionComponent {
   readonly zCommand = input<string>('');
   readonly zIcon = input<ZardIcon>();
   readonly zShortcut = input<string>('');
-  readonly zDisabled = input(false, { transform });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly variant = input<ZardCommandItemVariants>('default');
   readonly class = input<ClassValue>('');
   readonly parentCommand = input<ZardCommandComponent | null>(null);
