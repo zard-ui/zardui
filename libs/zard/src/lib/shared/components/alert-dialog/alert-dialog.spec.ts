@@ -171,7 +171,7 @@ describe(ZardAlertDialogComponent.name, () => {
       await setup({ zOkDestructive: true });
 
       const button = screen.getByTestId('z-alert-ok-button');
-      expect(button).toHaveClass('bg-destructive');
+      expect(button).toHaveClass('bg-destructive/10');
     });
 
     it('applies default button styling when zOkDestructive is false', async () => {
