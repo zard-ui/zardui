@@ -25,9 +25,9 @@ export type ZardMenuTrigger = 'click' | 'hover';
 
 @Directive({
   selector: '[z-menu]',
-  standalone: true,
   host: {
     role: 'button',
+    '[attr.tabindex]': "'0'",
     '[attr.aria-haspopup]': "'menu'",
     '[attr.aria-expanded]': 'cdkTrigger.isOpen()',
     '[attr.data-state]': "cdkTrigger.isOpen() ? 'open': 'closed'",
@@ -46,7 +46,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
 
   protected readonly cdkTrigger = inject(CdkMenuTrigger, { host: true });
   private readonly document = inject(DOCUMENT);
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly menuManager = inject(ZardMenuManagerService);
   private readonly platformId = inject(PLATFORM_ID);
 
@@ -109,6 +109,7 @@ export class ZardMenuDirective implements OnInit, OnDestroy {
         return;
       }
 
+      element.focus({ preventScroll: true });
       this.cancelScheduledClose();
       this.menuManager.registerHoverMenu(this);
       this.cdkTrigger.open();
