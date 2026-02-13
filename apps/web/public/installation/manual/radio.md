@@ -2,6 +2,7 @@
 
 ```angular-ts title="radio.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -17,7 +18,7 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { radioLabelVariants, radioVariants } from './radio.variants';
 
@@ -70,7 +71,7 @@ export class ZardRadioComponent implements ControlValueAccessor {
 
   readonly radioChange = output<boolean>();
   readonly class = input<ClassValue>('');
-  readonly disabled = input(false, { transform });
+  readonly disabled = input(false, { transform: booleanAttribute });
   readonly name = input<string>('radio');
   readonly value = input<unknown>(null);
   readonly zId = input<string>('');

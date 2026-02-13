@@ -1,6 +1,7 @@
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -19,7 +20,7 @@ import type { ClassValue } from 'clsx';
 
 import { ZardResizablePanelComponent } from '@/shared/components/resizable/resizable-panel.component';
 import { resizableVariants, type ZardResizableLayoutVariants } from '@/shared/components/resizable/resizable.variants';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardResizeEvent {
   sizes: number[];
@@ -48,7 +49,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private listenersCleanup!: () => void | undefined;
 
   readonly zLayout = input<ZardResizableLayoutVariants>('horizontal');
-  readonly zLazy = input(false, { transform });
+  readonly zLazy = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
   readonly zResizeStart = output<ZardResizeEvent>();

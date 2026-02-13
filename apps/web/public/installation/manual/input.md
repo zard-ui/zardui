@@ -1,12 +1,23 @@
 
 
 ```angular-ts title="input.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { computed, Directive, effect, ElementRef, forwardRef, inject, input, linkedSignal, model } from '@angular/core';
+import {
+  booleanAttribute,
+  computed,
+  Directive,
+  effect,
+  ElementRef,
+  forwardRef,
+  inject,
+  input,
+  linkedSignal,
+  model,
+} from '@angular/core';
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses, noopFn, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import {
   inputVariants,
@@ -40,7 +51,7 @@ export class ZardInputDirective implements ControlValueAccessor {
   private onChangeFn: OnChangeType = noopFn;
 
   readonly class = input<ClassValue>('');
-  readonly zBorderless = input(false, { transform });
+  readonly zBorderless = input(false, { transform: booleanAttribute });
   readonly zSize = input<ZardInputSizeVariants>('default');
   readonly zStatus = input<ZardInputStatusVariants>();
   readonly value = model<string>('');

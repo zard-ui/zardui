@@ -5,6 +5,7 @@ import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from 
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -23,7 +24,7 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { dropdownContentVariants } from './dropdown.variants';
 
@@ -71,7 +72,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   private portal?: TemplatePortal;
 
   readonly class = input<ClassValue>('');
-  readonly disabled = input(false, { transform });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly openChange = output<boolean>();
 
@@ -327,14 +328,22 @@ export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>
 
 
 ```angular-ts title="dropdown-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import { ZardDropdownService } from './dropdown.service';
 import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
-
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
@@ -359,8 +368,8 @@ export class ZardDropdownMenuItemComponent {
   private readonly dropdownService = inject(ZardDropdownService);
 
   readonly variant = input<ZardDropdownItemVariants['variant']>('default');
-  readonly inset = input(false, { transform });
-  readonly disabled = input(false, { transform });
+  readonly inset = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
   onClick() {

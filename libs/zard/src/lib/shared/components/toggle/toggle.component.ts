@@ -1,21 +1,22 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
-  forwardRef,
-  ViewEncapsulation,
-  signal,
   computed,
+  forwardRef,
   input,
-  output,
   linkedSignal,
+  output,
+  signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { toggleVariants, type ZardToggleVariants } from './toggle.variants';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { toggleVariants, type ZardToggleVariants } from './toggle.variants';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;
@@ -52,7 +53,7 @@ type OnChangeType = (value: boolean) => void;
 export class ZardToggleComponent implements ControlValueAccessor {
   readonly zValue = input<boolean | undefined>();
   readonly zDefault = input<boolean>(false);
-  readonly zDisabled = input(false, { alias: 'disabled', transform });
+  readonly zDisabled = input(false, { alias: 'disabled', transform: booleanAttribute });
   readonly zType = input<ZardToggleVariants['zType']>('default');
   readonly zSize = input<ZardToggleVariants['zSize']>('md');
   readonly zAriaLabel = input<string>('', { alias: 'aria-label' });

@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -7,7 +15,7 @@ import {
   resizableHandleIndicatorVariants,
   resizableHandleVariants,
 } from '@/shared/components/resizable/resizable.variants';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-resizable-handle, [z-resizable-handle]',
@@ -34,8 +42,8 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 export class ZardResizableHandleComponent {
   private readonly resizable = inject(ZardResizableComponent, { optional: true });
 
-  readonly zWithHandle = input(false, { transform });
-  readonly zDisabled = input(false, { transform });
+  readonly zWithHandle = input(false, { transform: booleanAttribute });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zHandleIndex = input<number>(0);
   readonly class = input<ClassValue>('');
 

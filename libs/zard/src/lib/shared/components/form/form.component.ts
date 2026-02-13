@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -9,7 +16,7 @@ import {
   formMessageVariants,
   type ZardFormMessageTypeVariants,
 } from '@/shared/components/form/form.variants';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-form-field, [z-form-field]',
@@ -71,7 +78,7 @@ export class ZardFormControlComponent {
 })
 export class ZardFormLabelComponent {
   readonly class = input<ClassValue>('');
-  readonly zRequired = input(false, { transform });
+  readonly zRequired = input(false, { transform: booleanAttribute });
 
   protected readonly classes = computed(() =>
     mergeClasses(formLabelVariants({ zRequired: this.zRequired() }), this.class()),

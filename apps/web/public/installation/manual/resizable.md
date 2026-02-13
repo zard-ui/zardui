@@ -1,9 +1,10 @@
 
 
 ```angular-ts title="resizable.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -22,7 +23,7 @@ import type { ClassValue } from 'clsx';
 
 import { ZardResizablePanelComponent } from '@/shared/components/resizable/resizable-panel.component';
 import { resizableVariants, type ZardResizableLayoutVariants } from '@/shared/components/resizable/resizable.variants';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardResizeEvent {
   sizes: number[];
@@ -51,7 +52,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private listenersCleanup!: () => void | undefined;
 
   readonly zLayout = input<ZardResizableLayoutVariants>('horizontal');
-  readonly zLazy = input(false, { transform });
+  readonly zLazy = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
   readonly zResizeStart = output<ZardResizeEvent>();
@@ -400,7 +401,15 @@ export * from '@/shared/components/resizable/resizable.variants';
 
 
 ```angular-ts title="resizable-handle.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -409,7 +418,7 @@ import {
   resizableHandleIndicatorVariants,
   resizableHandleVariants,
 } from '@/shared/components/resizable/resizable.variants';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-resizable-handle, [z-resizable-handle]',
@@ -436,8 +445,8 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 export class ZardResizableHandleComponent {
   private readonly resizable = inject(ZardResizableComponent, { optional: true });
 
-  readonly zWithHandle = input(false, { transform });
-  readonly zDisabled = input(false, { transform });
+  readonly zWithHandle = input(false, { transform: booleanAttribute });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zHandleIndex = input<number>(0);
   readonly class = input<ClassValue>('');
 
@@ -641,6 +650,7 @@ export class ZardResizableHandleComponent {
 
 ```angular-ts title="resizable-panel.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -653,7 +663,7 @@ import {
 import type { ClassValue } from 'clsx';
 
 import { resizablePanelVariants } from '@/shared/components/resizable/resizable.variants';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-resizable-panel',
@@ -675,8 +685,8 @@ export class ZardResizablePanelComponent {
   readonly zDefaultSize = input<number | string | undefined>(undefined);
   readonly zMin = input<number | string>(0);
   readonly zMax = input<number | string>(100);
-  readonly zCollapsible = input(false, { transform });
-  readonly zResizable = input(true, { transform });
+  readonly zCollapsible = input(false, { transform: booleanAttribute });
+  readonly zResizable = input(true, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
   protected readonly isCollapsed = computed(() => {
