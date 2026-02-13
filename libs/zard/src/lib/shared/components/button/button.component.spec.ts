@@ -1,312 +1,322 @@
-import { Component } from '@angular/core';
-import { TestBed, ComponentFixtureAutoDetect } from '@angular/core/testing';
+import { render, screen, waitFor } from '@testing-library/angular';
+import '@testing-library/jest-dom';
 
 import { ZardButtonComponent } from './button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 
-describe('ButtonComponent', () => {
-  it('should create', () => {
-    @Component({
-      imports: [ZardButtonComponent],
-      standalone: true,
-      template: `
-        <button type="button" z-button>Test</button>
-      `,
-    })
-    class TestComponent {}
-
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
-
-    const buttonEl = fixture.nativeElement.querySelector('button');
-    expect(buttonEl).toBeTruthy();
-  });
-
-  it('should apply disabled classes when zDisabled is true', () => {
-    @Component({
-      imports: [ZardButtonComponent],
-      standalone: true,
-      template: `
-        <button type="button" z-button [zDisabled]="true">Button</button>
-      `,
-    })
-    class TestComponent {}
-
-    const fixture = TestBed.createComponent(TestComponent);
-    fixture.detectChanges();
-
-    const buttonEl = fixture.nativeElement.querySelector('button');
-    expect(buttonEl.classList.contains('pointer-events-none')).toBe(true);
-    expect(buttonEl.classList.contains('opacity-50')).toBe(true);
-  });
-
-  describe('iconOnly detection', () => {
-    it('should set data-icon-only attribute when button has only an icon', async () => {
-      @Component({
-        imports: [ZardButtonComponent, ZardIconComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button><z-icon zType="sun" /></button>
-        `,
-      })
-      class TestComponent {}
-
-      TestBed.configureTestingModule({
-        imports: [TestComponent],
-        providers: [{ provide: ComponentFixtureAutoDetect, useValue: true }],
+describe('ZardButtonComponent', () => {
+  describe('basic rendering', () => {
+    it('creates successfully', async () => {
+      await render('<button z-button>Test</button>', {
+        imports: [ZardButtonComponent],
       });
 
-      const fixture = TestBed.createComponent(TestComponent);
-      await fixture.whenStable();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.hasAttribute('data-icon-only')).toBe(true);
-    });
-
-    it('should not set data-icon-only when button has text and icon', async () => {
-      @Component({
-        imports: [ZardButtonComponent, ZardIconComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button>
-            Button
-            <z-icon zType="sun" />
-          </button>
-        `,
-      })
-      class TestComponent {}
-
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-      await fixture.whenStable();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.hasAttribute('data-icon-only')).toBe(false);
-    });
-
-    it('should not set data-icon-only when button has only text', async () => {
-      @Component({
-        imports: [ZardButtonComponent, ZardIconComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button>Button</button>
-        `,
-      })
-      class TestComponent {}
-
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-      await fixture.whenStable();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.hasAttribute('data-icon-only')).toBe(false);
-    });
-
-    it('should not set data-icon-only when button has icon before text', async () => {
-      @Component({
-        imports: [ZardButtonComponent, ZardIconComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button>
-            <z-icon zType="sun" />
-            Button
-          </button>
-        `,
-      })
-      class TestComponent {}
-
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-      await fixture.whenStable();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.hasAttribute('data-icon-only')).toBe(false);
+      expect(screen.getByRole('button')).toBeVisible();
     });
   });
 
-  describe('size variants', () => {
-    it('should apply default size classes', () => {
-      @Component({
+  describe('disabled state', () => {
+    it('applies disabled classes when zDisabled is true', async () => {
+      await render('<button z-button [zDisabled]="true">Button</button>', {
         imports: [ZardButtonComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button>Button</button>
-        `,
-      })
-      class TestComponent {}
+      });
 
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.classList.contains('h-9')).toBe(true);
-      expect(buttonEl.classList.contains('px-4')).toBe(true);
-      expect(buttonEl.classList.contains('py-2')).toBe(true);
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('pointer-events-none');
+      expect(button).toHaveClass('opacity-50');
     });
 
-    it('should apply sm size classes', () => {
-      @Component({
+    it('does not apply disabled classes when zDisabled is false', async () => {
+      await render('<button z-button [zDisabled]="false">Button</button>', {
         imports: [ZardButtonComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button zSize="sm">Button</button>
-        `,
-      })
-      class TestComponent {}
+      });
 
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.classList.contains('h-8')).toBe(true);
-      expect(buttonEl.classList.contains('px-3')).toBe(true);
-    });
-
-    it('should apply lg size classes', () => {
-      @Component({
-        imports: [ZardButtonComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button zSize="lg">Button</button>
-        `,
-      })
-      class TestComponent {}
-
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.classList.contains('h-10')).toBe(true);
-      expect(buttonEl.classList.contains('px-6')).toBe(true);
-    });
-  });
-
-  describe('type variants', () => {
-    it('should apply default type classes', () => {
-      @Component({
-        imports: [ZardButtonComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button>Button</button>
-        `,
-      })
-      class TestComponent {}
-
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.classList.contains('bg-primary')).toBe(true);
-      expect(buttonEl.classList.contains('text-primary-foreground')).toBe(true);
-    });
-
-    it('should apply destructive type classes', () => {
-      @Component({
-        imports: [ZardButtonComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button zType="destructive">Button</button>
-        `,
-      })
-      class TestComponent {}
-
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.classList.contains('bg-destructive')).toBe(true);
-      expect(buttonEl.classList.contains('text-white')).toBe(true);
-    });
-
-    it('should apply outline type classes', () => {
-      @Component({
-        imports: [ZardButtonComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button zType="outline">Button</button>
-        `,
-      })
-      class TestComponent {}
-
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.classList.contains('border')).toBe(true);
-      expect(buttonEl.classList.contains('bg-background')).toBe(true);
+      const button = screen.getByRole('button');
+      expect(button).not.toHaveClass('pointer-events-none');
+      expect(button).not.toHaveClass('opacity-50');
     });
   });
 
   describe('loading state', () => {
-    it('should render loading icon when zLoading is true', () => {
-      @Component({
+    it('renders loading icon when zLoading is true', async () => {
+      const { container } = await render('<button z-button [zLoading]="true">Button</button>', {
         imports: [ZardButtonComponent, ZardIconComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button [zLoading]="true">Button</button>
-        `,
-      })
-      class TestComponent {}
+      });
 
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-
-      const loadingIcon = fixture.nativeElement.querySelector('z-icon');
-      expect(loadingIcon).toBeTruthy();
-      expect(loadingIcon.classList.contains('animate-spin')).toBe(true);
+      const loadingIcon = container.querySelector('z-icon');
+      expect(loadingIcon).toBeInTheDocument();
+      expect(loadingIcon).toHaveClass('animate-spin');
     });
 
-    it('should not render loading icon when zLoading is false', () => {
-      @Component({
-        imports: [ZardButtonComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button [zLoading]="false">Button</button>
-        `,
-      })
-      class TestComponent {}
+    it('does not render loading icon when zLoading is false', async () => {
+      const { container } = await render('<button z-button [zLoading]="false">Button</button>', {
+        imports: [ZardButtonComponent, ZardIconComponent],
+      });
 
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
+      const loadingIcon = container.querySelector('z-icon');
+      expect(loadingIcon).not.toBeInTheDocument();
+    });
 
-      const loadingIcon = fixture.nativeElement.querySelector('z-icon');
-      expect(loadingIcon).toBeFalsy();
+    it('applies loading classes when zLoading is true', async () => {
+      await render('<button z-button [zLoading]="true">Button</button>', {
+        imports: [ZardButtonComponent, ZardIconComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('opacity-50');
+      expect(button).toHaveClass('pointer-events-none');
     });
   });
 
   describe('full width', () => {
-    it('should apply w-full class when zFull is true', () => {
-      @Component({
+    it('applies w-full class when zFull is true', async () => {
+      await render('<button z-button [zFull]="true">Button</button>', {
         imports: [ZardButtonComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button [zFull]="true">Button</button>
-        `,
-      })
-      class TestComponent {}
+      });
 
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
-
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.classList.contains('w-full')).toBe(true);
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('w-full');
     });
 
-    it('should not apply w-full class when zFull is false', () => {
-      @Component({
+    it('does not apply w-full class when zFull is false', async () => {
+      await render('<button z-button [zFull]="false">Button</button>', {
         imports: [ZardButtonComponent],
-        standalone: true,
-        template: `
-          <button type="button" z-button [zFull]="false">Button</button>
-        `,
-      })
-      class TestComponent {}
+      });
 
-      const fixture = TestBed.createComponent(TestComponent);
-      fixture.detectChanges();
+      const button = screen.getByRole('button');
+      expect(button).not.toHaveClass('w-full');
+    });
+  });
 
-      const buttonEl = fixture.nativeElement.querySelector('button');
-      expect(buttonEl.classList.contains('w-full')).toBe(false);
+  describe('size variants', () => {
+    it('applies default size classes', async () => {
+      await render('<button z-button>Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('h-8');
+      expect(button).toHaveClass('gap-1.5');
+      expect(button).toHaveClass('px-2.5');
+    });
+
+    it('applies xs size classes', async () => {
+      await render('<button z-button zSize="xs">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('h-6');
+      expect(button).toHaveClass('gap-1');
+      expect(button).toHaveClass('px-2');
+    });
+
+    it('applies sm size classes', async () => {
+      await render('<button z-button zSize="sm">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('h-7');
+      expect(button).toHaveClass('gap-1');
+      expect(button).toHaveClass('px-2.5');
+    });
+
+    it('applies lg size classes', async () => {
+      await render('<button z-button zSize="lg">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('h-9');
+      expect(button).toHaveClass('gap-1.5');
+      expect(button).toHaveClass('px-2.5');
+    });
+
+    it('applies icon size classes', async () => {
+      await render('<button z-button zSize="icon">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('size-8');
+    });
+
+    it('applies icon-xs size classes', async () => {
+      await render('<button z-button zSize="icon-xs">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('size-6');
+    });
+
+    it('applies icon-sm size classes', async () => {
+      await render('<button z-button zSize="icon-sm">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('size-7');
+    });
+
+    it('applies icon-lg size classes', async () => {
+      await render('<button z-button zSize="icon-lg">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('size-9');
+    });
+  });
+
+  describe('type variants', () => {
+    it('applies default type classes', async () => {
+      await render('<button z-button>Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('bg-primary');
+      expect(button).toHaveClass('text-primary-foreground');
+    });
+
+    it('applies destructive type classes', async () => {
+      await render('<button z-button zType="destructive">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('bg-destructive/10');
+      expect(button).toHaveClass('text-destructive');
+    });
+
+    it('applies outline type classes', async () => {
+      await render('<button z-button zType="outline">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('border-border');
+      expect(button).toHaveClass('bg-background');
+    });
+
+    it('applies secondary type classes', async () => {
+      await render('<button z-button zType="secondary">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('bg-secondary');
+      expect(button).toHaveClass('text-secondary-foreground');
+    });
+
+    it('applies ghost type classes', async () => {
+      await render('<button z-button zType="ghost">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button.className).toContain('hover:bg-muted');
+      expect(button.className).toContain('hover:text-foreground');
+    });
+
+    it('applies link type classes', async () => {
+      await render('<button z-button zType="link">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button.className).toContain('text-primary');
+      expect(button.className).toContain('underline-offset-4');
+      expect(button.className).toContain('hover:underline');
+    });
+  });
+
+  describe('shape variants', () => {
+    it('applies default shape classes', async () => {
+      await render('<button z-button>Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('rounded-md');
+    });
+
+    it('applies circle shape classes', async () => {
+      await render('<button z-button zShape="circle">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('rounded-full');
+    });
+
+    it('applies square shape classes', async () => {
+      await render('<button z-button zShape="square">Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      expect(button).toHaveClass('rounded-none');
+    });
+  });
+
+  describe('iconOnly detection', () => {
+    it('sets data-icon-only attribute when button has only an icon', async () => {
+      await render('<button z-button><z-icon zType="sun"></z-icon></button>', {
+        imports: [ZardButtonComponent, ZardIconComponent],
+      });
+
+      const button = screen.getByRole('button');
+      await waitFor(() => {
+        expect(button).toHaveAttribute('data-icon-only');
+      });
+    });
+
+    it('does not set data-icon-only when button has text and icon', async () => {
+      await render(
+        `<button z-button>
+          Button
+          <z-icon zType="sun"></z-icon>
+        </button>`,
+        {
+          imports: [ZardButtonComponent, ZardIconComponent],
+        },
+      );
+
+      const button = screen.getByRole('button');
+      await waitFor(() => {
+        expect(button).not.toHaveAttribute('data-icon-only');
+      });
+    });
+
+    it('does not set data-icon-only when button has only text', async () => {
+      await render('<button z-button>Button</button>', {
+        imports: [ZardButtonComponent],
+      });
+
+      const button = screen.getByRole('button');
+      await waitFor(() => {
+        expect(button).not.toHaveAttribute('data-icon-only');
+      });
+    });
+
+    it('does not set data-icon-only when button has icon before text', async () => {
+      await render(
+        `<button z-button>
+          <z-icon zType="sun"></z-icon>
+          Button
+        </button>`,
+        {
+          imports: [ZardButtonComponent, ZardIconComponent],
+        },
+      );
+
+      const button = screen.getByRole('button');
+      await waitFor(() => {
+        expect(button).not.toHaveAttribute('data-icon-only');
+      });
     });
   });
 });

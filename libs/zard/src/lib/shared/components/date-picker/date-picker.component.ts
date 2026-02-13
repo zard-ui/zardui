@@ -16,24 +16,35 @@ import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { ZardButtonComponent } from '../button/button.component';
-import type { ZardButtonSizeVariants, ZardButtonTypeVariants } from '../button/button.variants';
-import { ZardCalendarComponent } from '../calendar/calendar.component';
-import { ZardIconComponent } from '../icon/icon.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover/popover.component';
+import { ZardButtonComponent, type ZardButtonTypeVariants } from '@/shared/components/button';
+import { ZardCalendarComponent } from '@/shared/components/calendar';
+import type { ZardDatePickerSizeVariants } from '@/shared/components/date-picker/date-picker.variants';
+import { ZardIconComponent } from '@/shared/components/icon';
+import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/popover';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
-const HEIGHT_BY_SIZE: Record<NonNullable<ZardButtonSizeVariants>, string> = {
+/**
+ * Height overrides for date-picker sizes.
+ *
+ * These heights intentionally differ from button size variants to accommodate
+ * the date-picker UI:
+ * - default: h-9 (vs button h-8)
+ * - lg: h-11 (vs button h-9)
+ *
+ * The `mergeClasses` utility (tailwind-merge) resolves class conflicts,
+ * allowing these values to override the base button heights defined in
+ * `ZardDatePickerSizeVariants`.
+ */
+const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
+  xs: 'h-7',
   sm: 'h-8',
-  default: 'h-10',
-  lg: 'h-12',
+  default: 'h-9',
+  lg: 'h-11',
 };
 
 @Component({
   selector: 'z-date-picker, [z-date-picker]',
   imports: [ZardButtonComponent, ZardCalendarComponent, ZardPopoverComponent, ZardPopoverDirective, ZardIconComponent],
-  standalone: true,
   template: `
     <button
       z-button
@@ -95,7 +106,7 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
 
   readonly class = input<ClassValue>('');
   readonly zType = input<ZardButtonTypeVariants>('outline');
-  readonly zSize = input<ZardButtonSizeVariants>('default');
+  readonly zSize = input<ZardDatePickerSizeVariants>('default');
   readonly value = model<Date | null>(null);
   readonly placeholder = input<string>('Pick a date');
   readonly zFormat = input<string>('MMMM d, yyyy');
@@ -105,10 +116,8 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
 
   readonly dateChange = output<Date | null>();
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onChange: (value: Date | null) => void = () => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onTouched: () => void = () => {};
+  private onChange: (value: Date | null) => void = noopFn;
+  private onTouched: () => void = noopFn;
 
   protected readonly buttonClasses = computed(() => {
     const hasValue = !!this.value();
