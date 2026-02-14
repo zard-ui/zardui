@@ -205,7 +205,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
     }
 
     if (trigger === 'click') {
-      this.listeners.push(this.renderer.listen(this.nativeElement, 'click.stop', () => this.toggle()));
+      this.listeners.push(this.renderer.listen(this.nativeElement, 'click', () => this.toggle()));
     } else if (trigger === 'hover') {
       this.listeners.push(this.renderer.listen(this.nativeElement, 'mouseenter', () => this.show()));
 
