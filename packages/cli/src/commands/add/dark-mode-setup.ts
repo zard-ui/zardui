@@ -1,14 +1,18 @@
+import { type Config } from '@cli/utils/config.js';
 import { logger } from '@cli/utils/logger.js';
 import { existsSync } from 'fs';
 import * as fsPromises from 'fs/promises';
 import * as path from 'path';
 
-const DARK_MODE_IMPORT = "import { ZardDarkMode } from '@/shared/services/dark-mode';";
+function getDarkModeImport(servicesAlias?: string): string {
+  return `import { ZardDarkMode } from '${servicesAlias ?? '@/shared/services'}/dark-mode';`;
+}
+
 const DARK_MODE_INITIALIZER = 'provideAppInitializer(() => inject(ZardDarkMode).init())';
 
 export async function updateProvideZardWithDarkMode(
   cwd: string,
-  resolvedConfig: { resolvedPaths: { core: string; services: string } },
+  resolvedConfig: { resolvedPaths: { core: string; services: string }; aliases?: Config['aliases'] },
 ): Promise<void> {
   const provideZardPath = path.join(resolvedConfig.resolvedPaths.core, 'provider/providezard.ts');
 
@@ -48,7 +52,8 @@ export async function updateProvideZardWithDarkMode(
 
   if (lastImportMatch) {
     const insertionIndex = lastImportMatch.index + lastImportMatch[0].length;
-    content = content.slice(0, insertionIndex) + DARK_MODE_IMPORT + '\n' + content.slice(insertionIndex);
+    const darkModeImport = getDarkModeImport(resolvedConfig.aliases?.services);
+    content = content.slice(0, insertionIndex) + darkModeImport + '\n' + content.slice(insertionIndex);
   }
 
   content = content.replace(/return makeEnvironmentProviders\(\[(.*?)\]\);/s, (match, providers) => {
