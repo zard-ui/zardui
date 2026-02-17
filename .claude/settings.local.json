@@ -1,4 +1,6 @@
 {
+  "enableAllProjectMcpServers": true,
+  "enabledMcpjsonServers": ["playwright", "ESLint"],
   "includeCoAuthoredBy": false,
   "permissions": {
     "allow": [
@@ -91,10 +93,5 @@
       "Bash(npm dist-tag:*)"
     ],
     "defaultMode": "acceptEdits"
-  },
-  "enableAllProjectMcpServers": true,
-  "enabledMcpjsonServers": [
-    "playwright",
-    "ESLint"
-  ]
+  }
 }

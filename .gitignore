@@ -52,3 +52,7 @@ Thumbs.db
 memory-bank
 .amazonq
 .kilocode
+.opencode
+.cocoindex_code
+opencode.jsonc
+opencode.json
