@@ -11,8 +11,18 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
   standalone: true,
   template: `
     <div [class]="classes()" role="separator">
-      <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0.5 0C0.5 0 0.5 16 0.5 16" stroke="currentColor" stroke-linecap="round" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="5" y1="12" x2="19" y2="12" />
       </svg>
     </div>
   `,
@@ -23,5 +33,6 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
 })
 export class ZardInputOtpSeparatorComponent {
   readonly class = input<ClassValue>('');
+
   readonly classes = computed(() => mergeClasses(inputOtpSeparatorVariants(), this.class()));
 }
