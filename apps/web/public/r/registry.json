@@ -241,6 +241,18 @@
       ]
     },
     {
+      "name": "input-otp",
+      "type": "registry:component",
+      "files": [
+        "input-otp-group.component.ts",
+        "input-otp-separator.component.ts",
+        "input-otp-slot.component.ts",
+        "input-otp.component.ts",
+        "input-otp.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "select",
       "type": "registry:component",
       "registryDependencies": [

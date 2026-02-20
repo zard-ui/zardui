@@ -445,6 +445,36 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'input-otp',
+    files: [
+      {
+        name: 'input-otp-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp-separator.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp-slot.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp.component.ts',
+        content: '',
+      },
+
+      {
+        name: 'input-otp.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'select',
     registryDependencies: ['badge', 'icon'],
     files: [
