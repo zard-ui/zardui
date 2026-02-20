@@ -39,6 +39,7 @@
 /docs/components/icon
 /docs/components/input
 /docs/components/input-group
+/docs/components/input-otp
 /docs/components/layout
 /docs/components/dialog
 /docs/components/pagination

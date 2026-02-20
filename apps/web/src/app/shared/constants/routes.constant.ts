@@ -84,6 +84,7 @@ export const COMPONENTS_PATH = {
     { name: 'Icon', path: '/docs/components/icon', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Input Group', path: '/docs/components/input-group', available: true },
+    { name: 'Input OTP', path: '/docs/components/input-otp', available: true },
     { name: 'Layout', path: '/docs/components/layout', available: true },
     { name: 'Dialog', path: '/docs/components/dialog', available: true },
     { name: 'Pagination', path: '/docs/components/pagination', available: true },
