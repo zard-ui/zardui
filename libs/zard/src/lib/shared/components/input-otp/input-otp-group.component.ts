@@ -8,7 +8,6 @@ import { inputOtpGroupVariants } from './input-otp.variants';
 
 @Component({
   selector: 'z-input-otp-group, [z-input-otp-group]',
-  standalone: true,
   template: `
     <div [class]="classes()">
       <ng-content />

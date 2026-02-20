@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardInputOtpGroupComponent } from './input-otp-group.component';
@@ -16,7 +16,6 @@ import { ZardInputOtpComponent } from './input-otp.component';
     ZardInputOtpSeparatorComponent,
     ReactiveFormsModule,
   ],
-  standalone: true,
   template: `
     <z-input-otp [formControl]="control" [zMaxLength]="6">
       <z-input-otp-group>

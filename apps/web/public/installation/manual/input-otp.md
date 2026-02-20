@@ -2,6 +2,7 @@
 
 ```angular-ts title="input-otp.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
+  type AfterContentInit,
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
@@ -29,7 +30,6 @@ type OnChangeType = (value: string) => void;
 
 @Component({
   selector: 'z-input-otp, [z-input-otp]',
-  standalone: true,
   template: `
     <div [class]="classes()" [attr.data-input-otp-container]="''">
       @if (!hasSlots()) {
@@ -42,7 +42,7 @@ type OnChangeType = (value: string) => void;
             [attr.inputmode]="inputMode()"
             [attr.autocomplete]="'one-time-code'"
             [disabled]="disabled()"
-            [readonly]="readonly()"
+            [readonly]="zReadonly()"
             [class]="slotClasses(i - 1)"
             (input)="onInput($event, i - 1)"
             (focus)="onInputFocus($event, i - 1)"
@@ -51,9 +51,8 @@ type OnChangeType = (value: string) => void;
             (keydown)="onKeyDown($event)"
           />
         }
-      } @else {
-        <ng-content />
       }
+      <ng-content />
     </div>
   `,
   providers: [
@@ -68,39 +67,49 @@ type OnChangeType = (value: string) => void;
     '[attr.data-disabled]': 'disabled() ? "" : null',
   },
 })
-export class ZardInputOtpComponent implements ControlValueAccessor {
+export class ZardInputOtpComponent implements ControlValueAccessor, AfterContentInit {
   readonly inputs = viewChildren<ElementRef<HTMLInputElement>>('otpInput');
 
-  readonly zMaxLength = input<number>(6);
-  readonly pattern = input<string>('[0-9]');
-  readonly class = input<ClassValue>('');
-  readonly readonly = input<boolean>(false);
-  readonly integerOnly = input<boolean>(true);
+  readonly zMaxLength = input<number | undefined>(undefined);
+  readonly zPattern = input<string>('[0-9]');
+  readonly zClass = input<ClassValue>('');
+  readonly zReadonly = input<boolean>(false);
+  readonly zIntegerOnly = input<boolean>(true);
 
-  valueChange = output<string>();
-  complete = output<string>();
+  zValueChange = output<string>();
+  zComplete = output<string>();
 
-  readonly slots = contentChildren(ZardInputOtpSlotComponent);
+  readonly slots = contentChildren(ZardInputOtpSlotComponent, { descendants: true });
 
   tokens: string[] = [];
   readonly disabled = signal<boolean>(false);
   readonly focusedIndex = signal<number>(-1);
-  readonly classes = computed(() => mergeClasses(inputOtpVariants(), this.class()));
+  readonly classes = computed(() => mergeClasses(inputOtpVariants(), this.zClass()));
+  readonly inputMode = computed(() => (this.zIntegerOnly() ? 'numeric' : 'text'));
 
-  readonly inputMode = computed(() => (this.integerOnly() ? 'numeric' : 'text'));
-  readonly hasSlots = computed(() => this.slots().length > 0);
+  readonly hasSlots = signal(false);
+  readonly effectiveMaxLength = computed(() => this.zMaxLength() ?? (this.hasSlots() ? this.slots().length : 6));
 
-  private onTouched: OnTouchedType = () => {};
-  private onChange: OnChangeType = () => {};
-  private cd: ChangeDetectorRef;
+  private onTouched: OnTouchedType = () => {
+    /* empty */
+  };
 
-  constructor() {
-    this.cd = inject(ChangeDetectorRef);
+  private onChange: OnChangeType = () => {
+    /* empty */
+  };
+
+  private cd = inject(ChangeDetectorRef);
+
+  ngAfterContentInit(): void {
+    if (this.slots().length > 0) {
+      this.hasSlots.set(true);
+    }
+    this.cd.markForCheck();
   }
 
   slotClasses(index: number): string {
     const baseClasses = [
-      'relative flex h-10 w-10 items-center justify-center',
+      'relative flex h-9 w-9 items-center justify-center',
       'border-y border-r border-input text-sm transition-all text-center',
       'bg-background',
       'focus:z-10 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
@@ -112,7 +121,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
       baseClasses.push('rounded-l-md border-l');
     }
 
-    if (index === this.zMaxLength() - 1) {
+    if (index === this.effectiveMaxLength() - 1) {
       baseClasses.push('rounded-r-md');
     }
 
@@ -120,13 +129,13 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
   }
 
   getRange(): number[] {
-    return Array.from({ length: this.zMaxLength() }, (_, index) => index + 1);
+    return Array.from({ length: this.effectiveMaxLength() }, (_, index) => index + 1);
   }
 
   writeValue(value: string): void {
     if (value) {
       const tokens: string[] = Array.isArray(value) ? value : String(value).split('');
-      this.tokens = tokens.slice(0, this.zMaxLength());
+      this.tokens = tokens.slice(0, this.effectiveMaxLength());
     } else {
       this.tokens = [];
     }
@@ -156,8 +165,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
       return;
     }
 
-    const pattern = this.pattern();
-    const regex = new RegExp(pattern);
+    const regex = new RegExp(this.zPattern());
 
     if (value && !regex.test(value)) {
       input.value = this.tokens[index] || '';
@@ -178,10 +186,10 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
   updateModel(): void {
     const newValue = this.tokens.join('');
     this.onChange(newValue);
-    this.valueChange.emit(newValue);
+    this.zValueChange.emit(newValue);
 
     if (newValue.length === this.zMaxLength()) {
-      this.complete.emit(newValue);
+      this.zComplete.emit(newValue);
     }
 
     this.cd.markForCheck();
@@ -199,7 +207,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
   }
 
   onPaste(event: ClipboardEvent): void {
-    if (this.disabled() || this.readonly()) {
+    if (this.disabled() || this.zReadonly()) {
       return;
     }
 
@@ -212,11 +220,9 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
   }
 
   handlePaste(paste: string): void {
-    let pastedCode = paste.substring(0, this.zMaxLength());
-
-    const pattern = this.pattern();
-    const regex = new RegExp(pattern);
-    pastedCode = pastedCode
+    const regex = new RegExp(this.zPattern());
+    const pastedCode = paste
+      .substring(0, this.effectiveMaxLength())
       .split('')
       .filter(char => regex.test(char))
       .join('');
@@ -224,7 +230,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
     this.tokens = pastedCode.split('');
     this.updateModel();
 
-    const nextIndex = Math.min(this.tokens.length, this.zMaxLength() - 1);
+    const nextIndex = Math.min(this.tokens.length, this.effectiveMaxLength() - 1);
     const inputsArray = this.inputs();
     if (inputsArray[nextIndex]) {
       setTimeout(() => {
@@ -265,9 +271,8 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
 
       default: {
         const hasSelection = input.selectionStart !== input.selectionEnd;
-        const isAtMaxLength = this.tokens.join('').length >= this.zMaxLength();
-        const pattern = this.pattern();
-        const regex = new RegExp(pattern);
+        const isAtMaxLength = this.tokens.join('').length >= this.effectiveMaxLength();
+        const regex = new RegExp(this.zPattern());
         const isValidKey = regex.test(event.key);
 
         if (!isValidKey || (isAtMaxLength && event.key !== 'Delete' && !hasSelection)) {
@@ -281,7 +286,6 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
   moveToNext(event: Event): void {
     const input = event.target as HTMLInputElement;
     const nextInput = this.findNextInput(input);
-
     if (nextInput) {
       nextInput.focus();
       nextInput.select();
@@ -291,7 +295,6 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
   moveToPrev(event: Event): void {
     const input = event.target as HTMLInputElement;
     const prevInput = this.findPrevInput(input);
-
     if (prevInput) {
       prevInput.focus();
       prevInput.select();
@@ -301,23 +304,45 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
   findNextInput(element: HTMLElement): HTMLInputElement | null {
     const nextElement = element.nextElementSibling;
     if (!nextElement) {
-      return null;
+      const parent = element.parentElement;
+      if (!parent) {
+        return null;
+      }
+      return this.findNextInput(parent);
     }
 
-    return nextElement.nodeName === 'INPUT'
-      ? (nextElement as HTMLInputElement)
-      : this.findNextInput(nextElement as HTMLElement);
+    if (nextElement.nodeName === 'INPUT') {
+      return nextElement as HTMLInputElement;
+    }
+
+    const inputInside = nextElement.querySelector('input');
+    if (inputInside) {
+      return inputInside;
+    }
+
+    return this.findNextInput(nextElement as HTMLElement);
   }
 
   findPrevInput(element: HTMLElement): HTMLInputElement | null {
     const prevElement = element.previousElementSibling;
     if (!prevElement) {
-      return null;
+      const parent = element.parentElement;
+      if (!parent) {
+        return null;
+      }
+      return this.findPrevInput(parent);
     }
 
-    return prevElement.nodeName === 'INPUT'
-      ? (prevElement as HTMLInputElement)
-      : this.findPrevInput(prevElement as HTMLElement);
+    if (prevElement.nodeName === 'INPUT') {
+      return prevElement as HTMLInputElement;
+    }
+
+    const inputs = prevElement.querySelectorAll('input');
+    if (inputs.length) {
+      return inputs[inputs.length - 1] as HTMLInputElement;
+    }
+
+    return this.findPrevInput(prevElement as HTMLElement);
   }
 }
 
@@ -328,89 +353,68 @@ export class ZardInputOtpComponent implements ControlValueAccessor {
 ```angular-ts title="input-otp.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const inputOtpVariants = cva('flex items-center has-[:disabled]:opacity-50', {
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
+export const inputOtpVariants = cva(mergeClasses('flex items-center has-[:disabled]:opacity-50'), {
   variants: {
-    variant: {
-      default: 'gap-2',
-      compact: 'gap-1',
-      spacious: 'gap-4',
-    },
-    size: {
-      sm: 'text-xs',
-      default: 'text-sm',
-      lg: 'text-base',
+    zSize: {
+      sm: 'gap-1 text-xs',
+      default: 'gap-2 text-sm',
+      lg: 'gap-3 text-base',
     },
   },
   defaultVariants: {
-    variant: 'default',
-    size: 'default',
+    zSize: 'default',
   },
 });
 
+export const inputOtpGroupVariants = cva(
+  mergeClasses(
+    'flex items-center',
+    '[&>z-input-otp-slot:first-child_input]:rounded-l-md [&>z-input-otp-slot:first-child_input]:border-l',
+    '[&>z-input-otp-slot:last-child_input]:rounded-r-md',
+  ),
+);
+
 export const inputOtpSlotVariants = cva(
-  [
+  mergeClasses(
     'relative flex items-center justify-center',
-    'border-y border-r border-input transition-all text-center',
-    'bg-background',
-    'focus:z-10 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
+    'border-y border-r border-input bg-transparent text-center',
+    'shadow-xs transition-[color,box-shadow] outline-none',
+    'focus:z-10 focus:border-ring focus:ring-ring/50 focus:ring-[3px]',
     'disabled:cursor-not-allowed disabled:opacity-50',
     'placeholder:text-muted-foreground',
-    'first:rounded-l-md first:border-l last:rounded-r-md',
-  ].join(' '),
+    'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
+    'data-[active]:border-ring data-[active]:ring-ring/50 data-[active]:ring-[3px] data-[active]:z-10',
+  ),
   {
     variants: {
-      variant: {
-        default: 'border-input',
-        outline: 'border-2 border-primary/20 focus:border-primary',
-        ghost: 'border-transparent bg-muted/50 focus:bg-background focus:border-input',
-        compact: 'border-transparent bg-muted/50 focus:bg-background focus:border-input',
-        spacious: 'border-transparent bg-muted/50 focus:bg-background focus:border-input',
-      },
-      size: {
+      zSize: {
         sm: 'h-8 w-8 text-xs',
-        default: 'h-10 w-10 text-sm',
-        lg: 'h-12 w-12 text-base',
-      },
-      status: {
-        error: 'border-destructive focus:ring-destructive',
-        warning: 'border-yellow-500 focus:ring-yellow-500',
-        success: 'border-green-500 focus:ring-green-500',
+        default: 'h-9 w-9 text-sm',
+        lg: 'h-10 w-10 text-base',
       },
     },
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      zSize: 'default',
     },
   },
 );
 
-export const inputOtpGroupVariants = cva('flex items-center', {
-  variants: {
-    variant: {
-      default: 'gap-0',
-      separated: 'gap-1',
-      spaced: 'gap-2',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-  },
-});
-
 export const inputOtpSeparatorVariants = cva('flex items-center justify-center text-muted-foreground', {
   variants: {
-    size: {
-      sm: 'w-3 h-3',
-      default: 'w-4 h-4',
-      lg: 'w-5 h-5',
+    zSize: {
+      sm: '[&_svg]:size-3',
+      default: '[&_svg]:size-4',
+      lg: '[&_svg]:size-5',
     },
   },
   defaultVariants: {
-    size: 'default',
+    zSize: 'default',
   },
 });
 
-export type ZardInputOtpVariants = VariantProps<typeof inputOtpVariants>;
+export type ZardInputOtpSizeVariants = NonNullable<VariantProps<typeof inputOtpVariants>['zSize']>;
 export type ZardInputOtpSlotVariants = VariantProps<typeof inputOtpSlotVariants>;
 export type ZardInputOtpGroupVariants = VariantProps<typeof inputOtpGroupVariants>;
 export type ZardInputOtpSeparatorVariants = VariantProps<typeof inputOtpSeparatorVariants>;
@@ -425,7 +429,6 @@ export * from './input-otp-separator.component';
 export * from './input-otp-slot.component';
 export * from './input-otp.component';
 export * from './input-otp.variants';
-
 
 ```
 
@@ -442,7 +445,6 @@ import { inputOtpGroupVariants } from './input-otp.variants';
 
 @Component({
   selector: 'z-input-otp-group, [z-input-otp-group]',
-  standalone: true,
   template: `
     <div [class]="classes()">
       <ng-content />
@@ -474,11 +476,20 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
 
 @Component({
   selector: 'z-input-otp-separator, [z-input-otp-separator]',
-  standalone: true,
   template: `
     <div [class]="classes()" role="separator">
-      <svg width="8" height="16" viewBox="0 0 8 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0.5 0C0.5 0 0.5 16 0.5 16" stroke="currentColor" stroke-linecap="round" />
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <line x1="5" y1="12" x2="19" y2="12" />
       </svg>
     </div>
   `,
@@ -502,7 +513,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
+  type ElementRef,
   inject,
   input,
   signal,
@@ -518,7 +529,6 @@ import { inputOtpSlotVariants } from './input-otp.variants';
 
 @Component({
   selector: 'z-input-otp-slot, [z-input-otp-slot]',
-  standalone: true,
   template: `
     <input
       #slotInput
@@ -528,7 +538,7 @@ import { inputOtpSlotVariants } from './input-otp.variants';
       [attr.inputmode]="inputOtp?.inputMode() || 'numeric'"
       [attr.autocomplete]="'one-time-code'"
       [disabled]="inputOtp?.disabled()"
-      [readonly]="inputOtp?.readonly()"
+      [readonly]="inputOtp?.zReadonly()"
       [class]="classes()"
       [attr.data-active]="isActive() ? '' : null"
       (input)="onInput($event)"
@@ -571,7 +581,7 @@ export class ZardInputOtpSlotComponent {
 
   inputOtp = inject(ZardInputOtpComponent, { optional: true });
 
-  readonly index = input.required<number>();
+  readonly zIndex = input.required<number>();
   readonly class = input<ClassValue>('');
 
   readonly char = signal<string>('');
@@ -599,19 +609,19 @@ export class ZardInputOtpSlotComponent {
     const input = event.target as HTMLInputElement;
     const { value } = input;
 
-    if (this.index() === 0 && value.length > 1) {
+    if (this.zIndex() === 0 && value.length > 1) {
       this.inputOtp?.handlePaste(value);
       event.stopPropagation();
       return;
     }
 
-    this.inputOtp?.onInput(event, this.index());
+    this.inputOtp?.onInput(event, this.zIndex());
   }
 
   onFocus(event: Event): void {
     const input = event.target as HTMLInputElement;
     input.select();
-    this.inputOtp?.onInputFocus(event, this.index());
+    this.inputOtp?.onInputFocus(event, this.zIndex());
   }
 
   onBlur(): void {
@@ -619,7 +629,7 @@ export class ZardInputOtpSlotComponent {
   }
 
   onPaste(event: ClipboardEvent): void {
-    if (this.inputOtp?.disabled() || this.inputOtp?.readonly()) {
+    if (this.inputOtp?.disabled() || this.inputOtp?.zReadonly()) {
       return;
     }
 

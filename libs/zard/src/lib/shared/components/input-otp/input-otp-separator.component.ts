@@ -8,7 +8,6 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
 
 @Component({
   selector: 'z-input-otp-separator, [z-input-otp-separator]',
-  standalone: true,
   template: `
     <div [class]="classes()" role="separator">
       <svg

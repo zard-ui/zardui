@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  ElementRef,
+  type ElementRef,
   inject,
   input,
   signal,
@@ -18,7 +18,6 @@ import { inputOtpSlotVariants } from './input-otp.variants';
 
 @Component({
   selector: 'z-input-otp-slot, [z-input-otp-slot]',
-  standalone: true,
   template: `
     <input
       #slotInput

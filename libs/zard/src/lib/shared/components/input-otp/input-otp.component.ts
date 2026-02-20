@@ -27,7 +27,6 @@ type OnChangeType = (value: string) => void;
 
 @Component({
   selector: 'z-input-otp, [z-input-otp]',
-  standalone: true,
   template: `
     <div [class]="classes()" [attr.data-input-otp-container]="''">
       @if (!hasSlots()) {
