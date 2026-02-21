@@ -180,23 +180,33 @@ export const DefaultExample = {
 
 ## 🧪 Testing
 
-### Configuration
+### Unit Tests
 
 - **Jest** with `@happy-dom/jest-environment`
 - **Angular Testing Utilities** (TestBed, ComponentFixture)
 - **Co-located tests** next to components
 
+### E2E Tests
+
+- **Playwright** with `@nx/playwright` integration
+- **Tests location**: `apps/web-e2e/src/components/`
+- **Test target**: Component demos at `http://localhost:4222/docs/components/:name`
+- **Accessibility**: `@axe-core/playwright` for WCAG 2.1 AA compliance checks
+
 ### Commands
 
 ```bash
-# Run all tests
-npm test
+# Unit tests
+npm test                                      # Run all unit tests
+npm run test:watch                            # Unit tests in watch mode
 
-# Watch mode
-npm run test:watch
+# E2E tests
+npm run e2e                                   # Run E2E tests (auto-starts dev server)
+npm run e2e:ui                                # Run E2E with Playwright UI (interactive)
+npx nx e2e web-e2e -- --grep "Button"         # Run specific E2E test
 ```
 
-### Test Example
+### Unit Test Example
 
 ```typescript
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -221,6 +231,40 @@ describe('ZardButtonComponent', () => {
   });
 });
 ```
+
+### E2E Test Example
+
+```typescript
+import { test, expect } from '@playwright/test';
+import { ComponentDemoPage } from '../utils/component-page';
+import { checkA11y } from '../utils/axe-helper';
+
+test.describe('MyComponent', () => {
+  let demoPage: ComponentDemoPage;
+
+  test.beforeEach(async ({ page }) => {
+    demoPage = new ComponentDemoPage(page, 'my-component');
+    await demoPage.goto();
+  });
+
+  test('renders default demo', async () => {
+    await expect(demoPage.firstDemoCard).toBeVisible();
+  });
+
+  test('passes a11y checks', async ({ page }) => {
+    await checkA11y(page, '#overview');
+  });
+});
+```
+
+### E2E Governance Rules
+
+Since E2E tests run against component demo pages, follow these rules to prevent false failures:
+
+1. **Test behavior, not content** — assert on interactions and ARIA state, not demo text or element counts
+2. **First demo is the test fixture** — the first example per component is the primary E2E target; keep it stable
+3. **Same-PR updates** — if your change modifies a component or its first demo, update the E2E test in the same PR
+4. **Stable selectors** — use component selectors (`z-button`), directives (`[z-input]`), and ARIA attributes (`[role="dialog"]`) over text or CSS classes
 
 ## 🌿 Branch Strategy
 
@@ -270,7 +314,9 @@ bugfix/#<issue-number>-<descriptive-name>
 
 ### PR Checklist
 
-- [ ] **Tests passing** - `npm test`
+- [ ] **Unit tests passing** - `npm test`
+- [ ] **E2E tests passing** - `npm run e2e` (if component or first demo changed)
+- [ ] **E2E test updated/added** if component behavior changed
 - [ ] **Code follows project patterns**
 - [ ] **Documentation updated** (if necessary)
 - [ ] **Demos working correctly**
@@ -377,8 +423,10 @@ npm run build:dev          # 🛠️ Development build
 ### Testing
 
 ```bash
-npm test                   # 🧪 All tests
-npm run test:watch        # 👁️ Tests in watch mode
+npm test                   # 🧪 All unit tests
+npm run test:watch        # 👁️ Unit tests in watch mode
+npm run e2e               # 🎭 E2E tests (auto-starts dev server)
+npm run e2e:ui            # 🖥️ E2E with Playwright UI
 ```
 
 ## 🤝 Community and Support
