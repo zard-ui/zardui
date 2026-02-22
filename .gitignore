@@ -72,3 +72,9 @@ pnpm-lock.yaml
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+.cocoindex_code/target_sqlite.db
+.cocoindex_code/cocoindex.db/mdb/data.mdb
+.cocoindex_code/cocoindex.db/mdb/lock.mdb
+.nvmrc
+opencode.jsonc
+opencode.json
