@@ -59,7 +59,6 @@ memory-bank
 
 docs
 issues
-playwright-report
 
 CLAUDE.md
 AGENTS.md
@@ -67,3 +66,9 @@ AGENTS.md
 
 bun.lock
 pnpm-lock.yaml
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
