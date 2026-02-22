@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 import { fakeAsync, flush, type ComponentFixture, TestBed } from '@angular/core/testing';
+import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardEventManagerPlugin } from '@/shared/core';
 

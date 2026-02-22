@@ -83,7 +83,9 @@ export class ZardToggleComponent implements ControlValueAccessor {
   }
 
   toggle() {
-    if (this.disabled()) return;
+    if (this.disabled()) {
+      return;
+    }
 
     const next = !this.value();
 

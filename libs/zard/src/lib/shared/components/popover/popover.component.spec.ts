@@ -1,11 +1,11 @@
 import { OverlayModule } from '@angular/cdk/overlay';
-import { Component, DebugElement, TemplateRef, viewChild } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, type DebugElement, type TemplateRef, viewChild } from '@angular/core';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
-import { ZardPopoverComponent, ZardPopoverDirective } from './popover.component';
-
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
+
+import { ZardPopoverComponent, ZardPopoverDirective } from './popover.component';
 
 @Component({
   imports: [ZardPopoverDirective, ZardPopoverComponent],

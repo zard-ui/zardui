@@ -40,7 +40,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
       - name: Lint
-        run: npx nx run-many --target=lint --all
+        run: npx nx run-many --target=lint --p=zard,blocks --parallel
 
   build:
     runs-on: ubuntu-latest

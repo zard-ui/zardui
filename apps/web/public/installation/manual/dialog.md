@@ -342,7 +342,7 @@ import {
   Injector,
   PLATFORM_ID,
   TemplateRef,
-  ViewContainerRef,
+  type ViewContainerRef,
 } from '@angular/core';
 
 import { ZardDialogRef } from './dialog-ref';

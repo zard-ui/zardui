@@ -2,9 +2,9 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import { type ClassValue } from 'clsx';
 
-import { kbdGroupVariants } from './kbd.variants';
-
 import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { kbdGroupVariants } from './kbd.variants';
 
 @Component({
   selector: 'z-kbd-group, [z-kbd-group]',

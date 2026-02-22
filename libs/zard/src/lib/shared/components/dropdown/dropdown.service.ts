@@ -6,7 +6,7 @@ import {
   inject,
   Injectable,
   PLATFORM_ID,
-  Renderer2,
+  type Renderer2,
   RendererFactory2,
   signal,
   type TemplateRef,

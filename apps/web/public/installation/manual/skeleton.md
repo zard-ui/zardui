@@ -5,9 +5,9 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { skeletonVariants } from './skeleton.variants';
-
 import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { skeletonVariants } from './skeleton.variants';
 
 @Component({
   selector: 'z-skeleton',

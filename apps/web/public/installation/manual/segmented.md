@@ -18,9 +18,9 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
-import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
-
 import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { segmentedItemVariants, segmentedVariants, type ZardSegmentedVariants } from './segmented.variants';
 
 export interface SegmentedOption {
   value: string;
@@ -140,12 +140,16 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
   }
 
   protected selectOption(value: string) {
-    if (this.zDisabled()) return;
+    if (this.zDisabled()) {
+      return;
+    }
 
     const option = this.zOptions().find(opt => opt.value === value);
     const item = this.items().find(item => item.value() === value);
 
-    if (option?.disabled || item?.disabled()) return;
+    if (option?.disabled || item?.disabled()) {
+      return;
+    }
 
     this.selectedValue.set(value);
     this.onChange(value);

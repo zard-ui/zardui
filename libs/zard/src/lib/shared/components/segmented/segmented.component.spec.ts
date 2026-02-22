@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { SegmentedOption, ZardSegmentedComponent, ZardSegmentedItemComponent } from './segmented.component';
+import { type SegmentedOption, ZardSegmentedComponent, ZardSegmentedItemComponent } from './segmented.component';
 
 @Component({
   imports: [ZardSegmentedComponent],

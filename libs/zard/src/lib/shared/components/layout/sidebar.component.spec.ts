@@ -1,10 +1,10 @@
-import { Component, TemplateRef, ViewChild } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, type TemplateRef, ViewChild } from '@angular/core';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
-import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from './sidebar.component';
-
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
+
+import { SidebarComponent, SidebarGroupComponent, SidebarGroupLabelComponent } from './sidebar.component';
 
 describe('SidebarComponent', () => {
   let component: SidebarComponent;

@@ -1,9 +1,9 @@
 <div class="flex min-h-screen flex-col lg:flex-row">
-  <div class="flex flex-1 items-center justify-center bg-background p-4 sm:p-8">
+  <div class="bg-background flex flex-1 items-center justify-center p-4 sm:p-8">
     <div class="w-full max-w-md space-y-6 sm:space-y-8">
       <div class="text-center">
         <h1 class="text-2xl font-bold sm:text-3xl">Welcome back</h1>
-        <p class="mt-2 text-sm text-muted-foreground sm:text-base">Sign in to your account to continue</p>
+        <p class="text-muted-foreground mt-2 text-sm sm:text-base">Sign in to your account to continue</p>
       </div>
 
       <z-card class="p-4 sm:p-6 lg:p-8">
@@ -27,18 +27,18 @@
 
           <div class="flex items-center gap-2">
             <z-checkbox id="remember" formControlName="rememberMe"></z-checkbox>
-            <label for="remember" class="text-sm cursor-pointer select-none">Remember me for 30 days</label>
+            <label for="remember" class="cursor-pointer text-sm select-none">Remember me for 30 days</label>
           </div>
 
           <button type="submit" z-button zFull [zLoading]="isLoading()" [disabled]="isLoading()">Sign in</button>
         </form>
       </z-card>
 
-      <p class="text-center text-sm text-muted-foreground">
+      <p class="text-muted-foreground text-center text-sm">
         Don't have an account?
         <a z-button zType="link" href="#" class="px-0">Sign up</a>
       </p>
     </div>
   </div>
-  <aside class="hidden flex-1 items-center justify-center bg-muted p-8 lg:flex"></aside>
+  <aside class="bg-muted hidden flex-1 items-center justify-center p-8 lg:flex"></aside>
 </div>
