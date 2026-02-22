@@ -23,12 +23,16 @@ export class SeoService {
   private readonly titleService = inject(Title);
   private readonly jsonLdService = inject(JsonLdService);
   private readonly baseUrl = 'https://zardui.com';
-  private readonly defaultImage = 'https://zardui.com/site/og-image.png';
+
+  private buildOgImageUrl(title: string, description: string): string {
+    const params = new URLSearchParams({ title, description });
+    return `${this.baseUrl}/og?${params.toString()}`;
+  }
 
   setMetaTags(config: SeoConfig): void {
     const fullTitle = `${config.title} - zard/ui`;
     const url = config.url ? `${this.baseUrl}${config.url}` : this.baseUrl;
-    const image = config.image ? (config.image.startsWith('http') ? config.image : `${this.baseUrl}/og/${config.image}`) : this.defaultImage;
+    const image = this.buildOgImageUrl(config.title, config.description);
     const keywords = config.keywords || this.generateDefaultKeywords(config.title);
     const type = config.type || 'website';
 
@@ -80,7 +84,8 @@ export class SeoService {
   setHomeSeo(): void {
     this.setMetaTags({
       title: 'Zard UI - The @shadcn/ui Alternative for Angular',
-      description: 'Finally, a real @shadcn/ui alternative for Angular. Free and open-source UI components built with Angular, TypeScript, and Tailwind CSS.',
+      description:
+        'Finally, a real @shadcn/ui alternative for Angular. Free and open-source UI components built with Angular, TypeScript, and Tailwind CSS.',
       keywords: [
         'Angular UI',
         'UI Components',
@@ -103,7 +108,6 @@ export class SeoService {
         'TypeScript components',
       ],
       url: '/',
-      image: 'https://zardui.com/images/zard-og-image.png',
     });
     this.jsonLdService.setHomeJsonLd();
   }
@@ -141,7 +145,14 @@ export class SeoService {
   }
 
   private generateDocsKeywords(title: string): string[] {
-    return [`Zard UI ${title}`, `zard-ui ${title.toLowerCase()}`, `Angular Zard/ui ${title}`, `Zard UI docs ${title}`, `shadcn/ui angular ${title}`, `zard ${title}`];
+    return [
+      `Zard UI ${title}`,
+      `zard-ui ${title.toLowerCase()}`,
+      `Angular Zard/ui ${title}`,
+      `Zard UI docs ${title}`,
+      `shadcn/ui angular ${title}`,
+      `zard ${title}`,
+    ];
   }
 
   private formatComponentName(componentName: string): string {
