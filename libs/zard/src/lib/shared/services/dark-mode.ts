@@ -21,7 +21,7 @@ export class ZardDarkMode {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly themeSignal = signal<DarkModeOptions>(EDarkModes.SYSTEM);
   private _query?: MediaQueryList;
-  private initialized = false;
+  private readonly initialized = signal(false);
 
   constructor() {
     if (this.isBrowser) {
@@ -29,8 +29,10 @@ export class ZardDarkMode {
       this.destroyRef.onDestroy(() => this.handleSystemChanges(false));
 
       effect(() => {
+        if (!this.initialized()) {
+          return;
+        }
         const theme = this.themeSignal();
-        if (!this.initialized) return;
         const isDarkMode = this.isDarkModeActive(theme);
         this.updateThemeMode(isDarkMode, theme);
       });
@@ -46,7 +48,7 @@ export class ZardDarkMode {
   });
 
   init() {
-    if (!this.initialized && this.isBrowser) {
+    if (!this.initialized() && this.isBrowser) {
       this.initializeTheme();
     }
   }
@@ -89,7 +91,7 @@ export class ZardDarkMode {
     if (!storedTheme || storedTheme === EDarkModes.SYSTEM) {
       this.handleSystemChanges();
     }
-    this.initialized = true;
+    this.initialized.set(true);
 
     const theme = this.themeSignal();
     this.updateThemeMode(this.isDarkModeActive(theme), theme);

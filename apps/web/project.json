@@ -41,7 +41,7 @@
         "production": {
           "optimization": {
             "styles": {
-              "inlineCritical": true
+              "inlineCritical": false
             }
           },
           "budgets": [
