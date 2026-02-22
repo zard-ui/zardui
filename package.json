@@ -24,11 +24,11 @@
     "serve:ssr": "node dist/apps/web/server/server.mjs"
   },
   "engines": {
-    "node": "22 || 20"
+    "node": ">=20.19.0"
   },
   "dependencies": {
     "@angular/aria": "^21.1.0",
-    "@angular/cdk": "21.1.0",
+    "@angular/cdk": "21.1.5",
     "@angular/common": "21.1.0",
     "@angular/compiler": "21.1.0",
     "@angular/core": "21.1.0",

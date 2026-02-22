@@ -64,3 +64,6 @@ playwright-report
 CLAUDE.md
 AGENTS.md
 .mcp.json
+
+bun.lock
+pnpm-lock.yaml
