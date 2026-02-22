@@ -127,7 +127,7 @@ jobs:
         run: |
           VERSION=$(node -p "require('./packages/cli/package.json').version")
           git add -A
-          git commit -m "🔖 chore(release): publish v${VERSION} 🔥"
+          git commit -m "🔖 chore(release): publish v${VERSION} [skip ci] 🔥"
           git tag -a "v${VERSION}" -m "v${VERSION}"
 
       - name: Rebuild CLI for Publish
