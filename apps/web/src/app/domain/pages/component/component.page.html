@@ -1,3 +1,9 @@
+@let entry = loadingEntry();
+@if (loading() && entry) {
+  <z-content [navigationConfig]="navigationConfig">
+    <z-component-loading [name]="entry.componentName" [description]="entry.description" />
+  </z-content>
+}
 @let data = componentData();
 @if (data) {
   <z-content
@@ -7,7 +13,14 @@
     scrollSpy
   >
     <div class="relative flex flex-col gap-5" scrollSpyItem="overview" id="overview">
-      <z-markdown-renderer markdownUrl="components/{{ data.componentName }}/doc/overview.md"></z-markdown-renderer>
+      <div>
+        <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight first-letter:uppercase sm:text-3xl xl:text-4xl">
+          {{ data.componentName }}
+        </h1>
+        <p class="text-muted-foreground text-base leading-7 [&:not(:first-child)]:mt-6">
+          {{ data.description }}
+        </p>
+      </div>
       <z-assist></z-assist>
       <z-code-box
         path="{{ data.componentName }}/demo/{{ data.examples[0].name }}"
