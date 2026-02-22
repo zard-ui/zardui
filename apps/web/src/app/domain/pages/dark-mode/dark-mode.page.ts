@@ -17,6 +17,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
 @Component({
   selector: 'z-darkmode',
+  host: { ngSkipHydration: '' },
   imports: [
     DocContentComponent,
     DocHeadingComponent,
