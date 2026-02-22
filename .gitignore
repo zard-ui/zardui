@@ -53,6 +53,14 @@ memory-bank
 .amazonq
 .kilocode
 .opencode
-.cocoindex_code
-opencode.jsonc
-opencode.json
+.nx
+.claude
+.beads
+
+docs
+issues
+playwright-report
+
+CLAUDE.md
+AGENTS.md
+.mcp.json
