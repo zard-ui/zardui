@@ -106,27 +106,35 @@
       </header>
     </section>
 
-    <div class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
-      <section class="flex flex-col gap-4">
-        <h2 class="mb-5 text-2xl font-semibold">Examples</h2>
-        @for (item of data.examples; track $index) {
-          <z-code-box
-            [scrollSpyItem]="item.name"
-            [attr.id]="item.name"
-            [componentType]="item.name"
-            [demoDescription]="item.description"
-            path="{{ data.componentName }}/demo/{{ item.name }}"
-            [dynamicComponent]="item.component"
-            [fullScreen]="item.fullScreen"
-            [onlyDemo]="item.onlyDemo"
-            [column]="item.column"
-          ></z-code-box>
-        }
-      </section>
-    </div>
+    @defer (on viewport; hydrate on viewport) {
+      <div class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
+        <section class="flex flex-col gap-4">
+          <h2 class="mb-5 text-2xl font-semibold">Examples</h2>
+          @for (item of data.examples; track $index) {
+            <z-code-box
+              [scrollSpyItem]="item.name"
+              [attr.id]="item.name"
+              [componentType]="item.name"
+              [demoDescription]="item.description"
+              path="{{ data.componentName }}/demo/{{ item.name }}"
+              [dynamicComponent]="item.component"
+              [fullScreen]="item.fullScreen"
+              [onlyDemo]="item.onlyDemo"
+              [column]="item.column"
+            ></z-code-box>
+          }
+        </section>
+      </div>
+    } @placeholder {
+      <div class="h-96"></div>
+    }
 
-    <footer scrollSpyItem="api" id="api">
-      <z-markdown-renderer markdownUrl="components/{{ data.componentName }}/doc/api.md"></z-markdown-renderer>
-    </footer>
+    @defer (on viewport; hydrate on viewport) {
+      <footer scrollSpyItem="api" id="api">
+        <z-markdown-renderer markdownUrl="components/{{ data.componentName }}/doc/api.md"></z-markdown-renderer>
+      </footer>
+    } @placeholder {
+      <div class="h-48"></div>
+    }
   </z-content>
 }

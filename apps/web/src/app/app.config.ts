@@ -11,6 +11,7 @@ import {
   provideClientHydration,
   withEventReplay,
   withHttpTransferCacheOptions,
+  withIncrementalHydration,
 } from '@angular/platform-browser';
 import { provideRouter, withInMemoryScrolling } from '@angular/router';
 
@@ -21,7 +22,7 @@ import { appRoutes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({})),
+    provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({}), withIncrementalHydration()),
     importProvidersFrom(BrowserModule),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
