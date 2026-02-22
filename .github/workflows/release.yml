@@ -70,12 +70,12 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.RELEASE_TOKEN }}
 
       - name: Configure Git
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "Charizard"
+          git config user.email "chari@zardui.com"
 
       - uses: actions/setup-node@v4
         with:
@@ -127,7 +127,7 @@ jobs:
         run: |
           VERSION=$(node -p "require('./packages/cli/package.json').version")
           git add -A
-          git commit -m "🔖 chore(release): publish v${VERSION} [skip ci]"
+          git commit -m "🔖 chore(release): publish v${VERSION} 🔥"
           git tag -a "v${VERSION}" -m "v${VERSION}"
 
       - name: Rebuild CLI for Publish
