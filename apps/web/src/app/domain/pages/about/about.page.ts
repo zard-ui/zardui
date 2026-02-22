@@ -68,6 +68,10 @@ export class AboutPage implements OnInit {
       name: 'Mickey Lazarevic',
       role: 'Maintainer',
     },
+    neopavan: {
+      name: 'Pavan Mollagavelli',
+      role: 'Maintainer',
+    },
   };
 
   readonly contributors = this.githubService.contributors;
@@ -94,7 +98,7 @@ export class AboutPage implements OnInit {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
       { id: 'founders', label: 'Founders', type: 'custom' },
-      { id: 'maintainers', label: 'Maintainers', type: 'custom' },
+      { id: 'maintainers', label: 'Mantainers', type: 'custom' },
       { id: 'contributors', label: 'Contributors', type: 'custom' },
       { id: 'credits', label: 'Credits', type: 'custom' },
     ],
