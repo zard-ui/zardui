@@ -12,15 +12,11 @@ export class ThemeGeneratorService {
   private readonly _theme = signal<ThemeDefinition>(THEME_PRESETS[0].theme);
   private readonly _activePreset = signal<string | null>('Neutral');
   private readonly _previewDarkMode = signal<boolean>(false);
-  private readonly _initialized = signal<boolean>(false);
 
   constructor() {
     effect(() => {
       const appThemeMode = this.darkModeService.themeMode();
-      if (!this._initialized()) {
-        this._previewDarkMode.set(appThemeMode === EDarkModes.DARK);
-        this._initialized.set(true);
-      }
+      this._previewDarkMode.set(appThemeMode === EDarkModes.DARK);
     });
   }
 
