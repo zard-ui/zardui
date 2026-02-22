@@ -1,10 +1,10 @@
-// markdown-renderer.component.ts
 import { HttpClient } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, signal } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
-import { lastValueFrom, merge } from 'rxjs';
+import { EMPTY, from, of } from 'rxjs';
+import { catchError, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/operators';
 
 import { MarkdownService } from '@doc/shared/services/markdown.service';
 
@@ -31,7 +31,9 @@ import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
   imports: [ZardLoaderComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MarkdownRendererComponent implements OnInit {
+export class MarkdownRendererComponent {
+  private static readonly cache = new Map<string, string>();
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly http = inject(HttpClient);
   private readonly markdownService = inject(MarkdownService);
@@ -46,64 +48,53 @@ export class MarkdownRendererComponent implements OnInit {
   readonly error = signal<string | null>(null);
 
   constructor() {
-    merge(toObservable(this.markdownUrl), toObservable(this.theme))
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(async () => {
-        const url = this.markdownUrl();
-        if (url) {
-          await this.loadAndProcessMarkdown();
-        }
+    toObservable(this.markdownUrl)
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter(url => !!url),
+        distinctUntilChanged(),
+        tap(() => {
+          this.loading.set(true);
+          this.error.set(null);
+        }),
+        switchMap(url => {
+          const cached = MarkdownRendererComponent.cache.get(url);
+          if (cached) return of(cached);
+          return this.http
+            .get(url, { responseType: 'text' })
+            .pipe(tap(text => MarkdownRendererComponent.cache.set(url, text)));
+        }),
+        switchMap(text => from(this.markdownService.processMarkdown(text))),
+        catchError(err => {
+          this.error.set(`Error loading markdown: ${err.message || err}`);
+          this.loading.set(false);
+          return EMPTY;
+        }),
+      )
+      .subscribe(html => {
+        this.processedHtml.set(this.sanitizer.bypassSecurityTrustHtml(html));
+        this.loading.set(false);
       });
 
     toObservable(this.markdownText)
-      .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(async () => await this.processMarkdownText());
-  }
-
-  ngOnInit() {
-    this.processMarkdownText();
-  }
-
-  private async loadAndProcessMarkdown(): Promise<void> {
-    this.loading.set(true);
-    this.error.set(null);
-
-    try {
-      const markdownText = await this.loadFromUrl(this.markdownUrl());
-      const html = await this.markdownService.processMarkdown(markdownText);
-      this.processedHtml.set(this.sanitizer.bypassSecurityTrustHtml(html));
-    } catch (err: any) {
-      this.error.set(`Error loading markdown: ${err.message || err}`);
-      console.error('Error processing markdown:', err);
-    } finally {
-      this.loading.set(false);
-    }
-  }
-
-  private async loadFromUrl(url: string): Promise<string> {
-    try {
-      const response = await lastValueFrom(this.http.get(url, { responseType: 'text' }));
-      return response || '';
-    } catch (error: any) {
-      throw new Error(`Could not load file: ${url} - ${error.message || error}`);
-    }
-  }
-
-  private async processMarkdownText(): Promise<void> {
-    const markdownText = this.markdownText();
-    if (markdownText) {
-      this.loading.set(true);
-      this.error.set(null);
-
-      try {
-        const html = await this.markdownService.processMarkdown(markdownText);
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        filter((text): text is string => !!text),
+        distinctUntilChanged(),
+        tap(() => {
+          this.loading.set(true);
+          this.error.set(null);
+        }),
+        switchMap(text => from(this.markdownService.processMarkdown(text))),
+        catchError(err => {
+          this.error.set(`Error processing markdown: ${err.message || err}`);
+          this.loading.set(false);
+          return EMPTY;
+        }),
+      )
+      .subscribe(html => {
         this.processedHtml.set(this.sanitizer.bypassSecurityTrustHtml(html));
-      } catch (error: any) {
-        this.error.set(`Error processing markdown: ${error.message || error}`);
-        console.error('Error processing markdown:', error);
-      } finally {
         this.loading.set(false);
-      }
-    }
+      });
   }
 }
