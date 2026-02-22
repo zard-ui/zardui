@@ -52,6 +52,20 @@ Thumbs.db
 memory-bank
 .amazonq
 .kilocode
+.opencode
+.nx
+.claude
+.beads
+
+docs
+issues
+
+CLAUDE.md
+AGENTS.md
+.mcp.json
+
+bun.lock
+pnpm-lock.yaml
 
 # Playwright
 /test-results/

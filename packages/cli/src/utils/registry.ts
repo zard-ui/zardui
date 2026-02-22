@@ -112,6 +112,16 @@ export function transformContent(content: string, config: Config): string {
     `import { ClassValue } from 'clsx'`,
   );
 
+  // Transform default @/shared/* to match aliases
+  for (const [key, value] of Object.entries(aliases)) {
+    if (!value) {
+      continue;
+    }
+
+    const regex = new RegExp(`(['"])@\\/shared\\/${key}\\/([\\w\\-\\/.]+)\\1`, 'g');
+    transformed = transformed.replace(regex, `$1${value}/$2$1`);
+  }
+
   return transformed;
 }
 

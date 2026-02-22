@@ -1,1 +1,0 @@
-{"mcpServers":{"playwright":{"command":"npx","args":["@playwright/mcp@latest"],"alwaysAllow":["browser_click","browser_close","browser_navigate","browser_type","browser_wait_for","browser_snapshot"]},"ESLint":{"type":"stdio","command":"npx","args":["@eslint/mcp@latest"]}}}
