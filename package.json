@@ -64,7 +64,7 @@
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.3",
     "gsap": "^3.14.2",
-    "lucide-angular": "^0.562.0",
+    "lucide-angular": "^0.575.0",
     "ngx-sonner": "^3.1.0",
     "ora": "^9.0.0",
     "postcss": "^8.5.6",
