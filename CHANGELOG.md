@@ -1,3 +1,15 @@
+## 1.0.0-beta.47 (2026-02-22)
+
+### 🐛 Bug Fixes
+
+- **ci:** add [skip ci] to release commit to prevent release loop ([22a5f78](https://github.com/zard-ui/zardui/commit/22a5f78))
+- **dark-mode:** add ngSkipHydration to dark mode page component ([#445](https://github.com/zard-ui/zardui/pull/445))
+
+### ❤️ Thank You
+
+- luiz gomes
+- Mickey Lazarevic @mikij
+
 ## 1.0.0-beta.46 (2026-02-22)
 
 This was a version bump only, there were no code changes.
