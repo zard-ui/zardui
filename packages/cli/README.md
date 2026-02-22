@@ -1,188 +1,60 @@
-# @ngzard/ui
+# Zard
 
-Beautiful Angular components built with TailwindCSS v4. Add modern, accessible components to your Angular apps with a single command.
+Modern Angular component library inspired by shadcn/ui, built with TailwindCSS and designed for developers who value <b>beautiful</b>, <b>accessible</b>, and <b>completely free</b> open source components.
 
-## 🚀 Quick Start
+<a alt="Zard Ui logo" href="https://www.zardui.com/" target="_blank" rel="noreferrer">
+  <img align="center" width=100% src="https://www.zardui.com/images/github_banner.png"/>
+</a>
 
-```bash
-# Init the CLI
-npx @ngzard/ui@latest init
-```
+<p align="center">Made with ❤️ from 🇧🇷</p>
+<p align="center">
+<img src="https://img.shields.io/github/stars/zard-ui/zardui" alt="zard ui repository stars"/>
+</p>
 
-## ✨ Features
+## Stack
 
-- 🎨 **Beautiful Components** - Modern, accessible UI components
-- ⚡ **TailwindCSS v4** - Latest CSS framework with native cascade layers  
-- 🔧 **TypeScript First** - Built for modern Angular with full type safety
-- 🎯 **Angular Focused** - Designed specifically for the Angular ecosystem
-- 📱 **Responsive** - Mobile-first components that work everywhere
-- 🌙 **Dark Mode** - Built-in dark mode support
-- 🧩 **Modular** - Add only the components you need
+![Angular](https://img.shields.io/badge/angular-%23DD0031.svg?style=for-the-badge&logo=angular&logoColor=white)
+![TailwindCSS](https://img.shields.io/badge/tailwindcss-%2338B2AC.svg?style=for-the-badge&logo=tailwind-css&logoColor=white)
+![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white)
 
-## Installation
+## Documentation
 
-Use the `ngzard` to add components to your Angular project:
-
-```bash
-# Initialize your project
-npx @ngzard/ui@latest init
-
-# Add components to your project
-npx @ngzard/ui@latest add button
-npx @ngzard/ui@latest add button card dialog
-
-# Add all components
-npx @ngzard/ui@latest add --all
-```
-
-## Commands
-
-### `init`
-
-Initialize your project and install dependencies for ZardUI components.
-
-```bash
-npx @ngzard/ui@latest init
-```
-
-This will:
-- Install required dependencies (Tailwind CSS v4, class-variance-authority, etc.)
-- Create `.postcssrc.json` for Tailwind CSS PostCSS plugin
-- Set up `src/styles.css` with Tailwind configuration and design tokens
-- Configure TypeScript path mappings in `tsconfig.json`
-- Create utility functions in `src/app/shared/utils/`
-
-**Options:**
-- `-y, --yes` - Skip confirmation prompts
-- `-c, --cwd <path>` - Specify working directory
-
-### `add`
-
-Add components to your project.
-
-```bash
-npx @ngzard/ui@latest add [components...]
-```
-
-**Examples:**
-```bash
-# Add a single component
-npx @ngzard/ui@latest add button
-
-# Add multiple components  
-npx @ngzard/ui@latest add button card badge
-
-# Add all components
-npx @ngzard/ui@latest add --all
-
-# Interactive selection
-npx @ngzard/ui@latest add
-```
-
-**Options:**
-- `-y, --yes` - Skip confirmation prompts
-- `-o, --overwrite` - Overwrite existing files
-- `-c, --cwd <path>` - Specify working directory
-- `-a, --all` - Add all available components
-- `-p, --path <path>` - Custom path for components
-
-## Available Components
-
-- `accordion` - Collapsible content panels
-- `alert` - Alert messages with variants
-- `avatar` - User profile pictures with fallbacks
-- `badge` - Small status indicators
-- `breadcrumb` - Navigation breadcrumbs
-- `button` - Interactive buttons with variants
-- `card` - Content containers
-- `checkbox` - Form checkboxes
-- `dialog` - Modal dialogs
-- `divider` - Visual separators
-- `dropdown` - Dropdown menus
-- `input` - Form inputs
-- `loader` - Loading indicators
-- `progress-bar` - Progress indicators
-- `radio` - Radio button inputs
-- `select` - Select dropdowns
-- `slider` - Range sliders
-- `switch` - Toggle switches
-- `tabs` - Tabbed interfaces
-- `toggle` - Toggle buttons
-- `tooltip` - Hover tooltips
-
-## Configuration
-
-The CLI stores configuration in `components.json`:
-
-```json
-{
-  "style": "css",
-  "tailwind": {
-    "css": "src/styles.css",
-    "baseColor": "slate"
-  },
-  "baseUrl": "src/app",
-  "aliases": {
-    "components": "@/shared/components",
-    "utils": "@/shared/utils",
-    "core": "@/shared/core",
-    "services": "@/shared/services"
-  }
-}
-```
-
-## Requirements
-
-- Angular 19+
-- Node.js 20 or 22
-- TypeScript project
-
-## Path Mappings
-
-The CLI automatically configures TypeScript path mappings in your `tsconfig.json`:
-
-```json
-{
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@/*": ["src/app/*"]
-    }
-  }
-}
-```
-
-This allows you to import components and utilities using clean paths:
-
-```typescript
-import { ZardButtonComponent } from '@/shared/components/button';
-import { mergeClasses } from '@/shared/utils/merge-classes';
-```
-
-## Tailwind CSS v4 Support
-
-ZardUI CLI is built specifically for Tailwind CSS v4, using the new inline configuration approach:
-
-- No `tailwind.config.js` needed
-- Configuration via `.postcssrc.json`
-- Design tokens defined in CSS with `@theme`
-- Plugin configuration with `@plugin`
-
-## Troubleshooting
-
-### "Configuration not found"
-Run `npx @ngzard/ui@latest init` first to initialize your project.
-
-### "Not an Angular project"
-Make sure you're in the root directory of an Angular project with a `package.json` that includes `@angular/core`.
-
-### Rate limiting from GitHub
-The CLI fetches components from GitHub. If you encounter rate limiting, wait a few minutes before retrying.
+Visit https://www.zardui.com/docs to view the documentation
 
 ## Contributing
 
-This CLI is part of the [ZardUI](https://github.com/zard-ui/zardui) project. Please refer to the main repository for contribution guidelines.
+We follow a **simple GitHub Flow** with automated releases. Please read our [contributing guide](/CONTRIBUTING.md) to get started.
+
+### Quick Start for Contributors
+
+1. Fork the repository
+2. Create your feature branch: `git checkout -b feat/#123-your-feature`
+3. Develop with as many commits as you want
+4. Open a PR to `master`
+5. After review + merge = automatic release!
+
+### Development Commands
+
+```bash
+npm start          # Start dev server (port 4222)
+npm test           # Run all tests
+npm run build      # Build production
+npm run release    # Automated release
+```
 
 ## License
 
-MIT © ZardUI
+Licensed under the [MIT license](/LICENSE.md).
+
+## Get In Touch
+
+<p>Click on one of the icons and Help us on this journey and be part of our community.</p>
+
+<a href="https://chat.whatsapp.com/Dctdh6Huhvm24OX6js5XKT" target="_blank">
+  <img src="https://img.shields.io/badge/WhatsApp-25D366?style=for-the-badge&logo=whatsapp&logoColor=white" alt="whatsapp" />
+</a>
+<img src="https://dcbadge.limes.pink/api/server/https://discord.com/invite/yP8Uj9rAX9" alt="discord" />
+
+<span>Follow us in</span> <a href="https://x.com/zard_ui" target="_blank">
+  <img src="https://img.shields.io/badge/X-%23000000.svg?logo=X&logoColor=white" alt="X" />
+</a>

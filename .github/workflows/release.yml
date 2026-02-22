@@ -1,84 +1,237 @@
-name: Release and Publish
+name: deploy
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - master
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no actual publish)'
+        required: false
+        default: false
+        type: boolean
+      version:
+        description: 'Version bump type'
+        required: false
+        default: 'prerelease'
+        type: choice
+        options:
+          - prerelease
+          - patch
+          - minor
+          - major
+      first_release:
+        description: 'First release (ignore existing tags)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
+  build:
+    runs-on: ubuntu-latest
+    if: ${{ !contains(github.event.head_commit.message, '[skip ci]') }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Build
+        run: npm run build
+
+  test:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+      - name: Install Dependencies
+        run: npm ci
+      - name: Test
+        run: npm test
+
   release:
     runs-on: ubuntu-latest
+    needs: test
     permissions:
       contents: write
       id-token: write
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'npm'
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure Git
         run: |
-          git config --global user.email "zardui.adm@gmail.com"
-          git config --global user.name "ZardUI Bot"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Install dependencies
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Update npm for OIDC support
+        run: npm install -g npm@latest
+
+      - name: Install Dependencies
         run: npm ci
 
-      - name: Extract version from tag
-        id: version_info
-        run: |
-          TAG_NAME="${GITHUB_REF#refs/tags/}"
-          echo "tag_name=$TAG_NAME" >> $GITHUB_OUTPUT
+      - name: Build Registry
+        run: npm run build:registry
 
-          # Extract version from tag vX.X.X
-          if [[ "$TAG_NAME" == v* ]]; then
-            VERSION="${TAG_NAME#v}"
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Commit Registry Changes
+        run: |
+          git add -A
+          git diff --staged --quiet || git commit -m "🔧 chore: update registry [skip ci]"
+
+      - name: Build Libraries
+        run: |
+          npx nx run zard:build
+          npx nx run cli:build
+
+      - name: Release (Dry Run)
+        if: ${{ inputs.dry_run == true }}
+        run: npx nx release ${{ inputs.version || 'prerelease' }} --preid=beta ${{ inputs.first_release == true && '--first-release' || '' }} --skip-publish --dry-run
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release Version
+        if: ${{ inputs.dry_run != true }}
+        run: npx nx release version ${{ inputs.version || 'prerelease' }} --preid=beta ${{ inputs.first_release == true && '--first-release' || '' }} --git-commit=false --git-tag=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Release Changelog
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          npx nx release changelog $VERSION ${{ inputs.first_release == true && '--first-release' || '' }} --git-commit=false --git-tag=false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Commit and Tag Release
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          git add -A
+          git commit -m "🔖 chore(release): publish v${VERSION} [skip ci]"
+          git tag -a "v${VERSION}" -m "v${VERSION}"
+
+      - name: Rebuild CLI for Publish
+        if: ${{ inputs.dry_run != true }}
+        run: npx nx run cli:build
+
+      - name: Publish to npm
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          if [[ "$VERSION" == *"-"* ]]; then
+            TAG="beta"
           else
-            echo "Invalid tag format. Expected vX.X.X" >&2
-            exit 1
+            TAG="latest"
+          fi
+          cd packages/cli/dist && npm publish --provenance --access public --tag $TAG
+
+      - name: Push changes
+        if: ${{ inputs.dry_run != true }}
+        run: git push --follow-tags
+
+      - name: Create GitHub Release
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
+          gh release create "v${VERSION}" --title "v${VERSION}" --generate-notes --latest
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Discord
+        if: ${{ inputs.dry_run != true && success() }}
+        run: |
+          if [ -z "$DEPLOY_WEBHOOK_URL" ]; then
+            echo "⚠️ DEPLOY_WEBHOOK_URL not configured, skipping notification"
+            exit 0
           fi
 
-      - name: Update package.json version
-        run: |
-          # Update CLI package.json with tag version
-          node -e "const fs = require('fs'); const pkg = require('./packages/cli/package.json'); pkg.version = '${{ steps.version_info.outputs.version }}'; fs.writeFileSync('./packages/cli/package.json', JSON.stringify(pkg, null, 2) + '\n');"
+          VERSION=$(node -p "require('./packages/cli/package.json').version")
 
-          # Update main package.json with tag version
-          node -e "const fs = require('fs'); const pkg = require('./package.json'); pkg.version = '${{ steps.version_info.outputs.version }}'; fs.writeFileSync('./package.json', JSON.stringify(pkg, null, 2) + '\n');"
+          # Determine if prerelease
+          if [[ "$VERSION" == *"-"* ]]; then
+            RELEASE_TYPE="🧪 Pre-release"
+            COLOR=16776960  # Yellow
+            NPM_TAG="beta"
+          else
+            RELEASE_TYPE="🚀 Stable Release"
+            COLOR=5763719   # Green
+            NPM_TAG="latest"
+          fi
 
-      - name: Build CLI
-        run: npx nx build cli
+          # Get commit count since last tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -n "$PREV_TAG" ]; then
+            COMMIT_COUNT=$(git rev-list --count ${PREV_TAG}..HEAD)
+          else
+            COMMIT_COUNT="N/A"
+          fi
 
-      - name: Verify build output
-        run: |
-          PACKAGE_VERSION=$(node -p "require('./packages/cli/dist/package.json').version")
-          echo "Built package version: $PACKAGE_VERSION"
-          echo "Tag version: ${{ steps.version_info.outputs.version }}"
+          # Build Discord webhook payload
+          PAYLOAD=$(cat <<EOF
+          {
+            "embeds": [{
+              "title": "📦 ZardUI CLI v${VERSION}",
+              "description": "${RELEASE_TYPE} published successfully!",
+              "color": ${COLOR},
+              "fields": [
+                {
+                  "name": "📋 Version",
+                  "value": "\`${VERSION}\`",
+                  "inline": true
+                },
+                {
+                  "name": "🏷️ npm Tag",
+                  "value": "\`${NPM_TAG}\`",
+                  "inline": true
+                },
+                {
+                  "name": "📝 Commits",
+                  "value": "${COMMIT_COUNT}",
+                  "inline": true
+                },
+                {
+                  "name": "📥 Install",
+                  "value": "\`\`\`bash\nnpx zard-cli@${VERSION} init\n\`\`\`",
+                  "inline": false
+                },
+                {
+                  "name": "🔗 Links",
+                  "value": "[npm](https://www.npmjs.com/package/zard-cli/v/${VERSION}) • [GitHub Release](https://github.com/${{ github.repository }}/releases/tag/v${VERSION}) • [Changelog](https://github.com/${{ github.repository }}/blob/master/CHANGELOG.md)",
+                  "inline": false
+                }
+              ],
+              "footer": {
+                "text": "Released by ${{ github.actor }} via GitHub Actions"
+              },
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            }]
+          }
+          EOF
+          )
 
-      - name: Publish CLI to npm
-        run: |
-          cd packages/cli/dist
-          npm publish --provenance --access public
+          curl -s -o /dev/null -w "%{http_code}" \
+               -H "Content-Type: application/json" \
+               -d "$PAYLOAD" \
+               "$DEPLOY_WEBHOOK_URL" | grep -q "204" && echo "✅ Discord notification sent!" || echo "❌ Failed to send Discord notification"
         env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_SECRET }}
-
-      - name: 🎉 Publish Summary
-        run: |
-          echo "## ✅ Package Published Successfully!" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 📦 Published to npm" >> $GITHUB_STEP_SUMMARY
-          echo "**[@ngzard/ui@${{ steps.version_info.outputs.version }}](https://www.npmjs.com/package/@ngzard/ui/v/${{ steps.version_info.outputs.version }})**" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### 🚀 Installation" >> $GITHUB_STEP_SUMMARY
-          echo '```bash' >> $GITHUB_STEP_SUMMARY
-          echo "npx @ngzard/ui@${{ steps.version_info.outputs.version }} init" >> $GITHUB_STEP_SUMMARY
-          echo '```' >> $GITHUB_STEP_SUMMARY
+          DEPLOY_WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}

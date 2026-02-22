@@ -1,6 +1,6 @@
 {
-  "name": "@ngzard/ui",
-  "version": "1.0.0-beta.31",
+  "name": "ui",
+  "version": "1.0.0-beta.42",
   "peerDependencies": {
     "@angular/cdk": "^21.0.0",
     "@angular/common": "^21.0.0",
