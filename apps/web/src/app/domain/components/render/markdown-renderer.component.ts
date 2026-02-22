@@ -34,6 +34,10 @@ import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
 export class MarkdownRendererComponent {
   private static readonly cache = new Map<string, string>();
 
+  static clearCache(): void {
+    MarkdownRendererComponent.cache.clear();
+  }
+
   private readonly destroyRef = inject(DestroyRef);
   private readonly http = inject(HttpClient);
   private readonly markdownService = inject(MarkdownService);
