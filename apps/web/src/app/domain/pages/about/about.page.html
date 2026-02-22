@@ -31,9 +31,8 @@
       </p>
     </div>
 
-    @let founders = founders$ | async;
-    @if (founders) {
-      <z-founders [founders]="founders" />
+    @if (founders().length) {
+      <z-founders [founders]="founders()" />
     } @else {
       <z-founders-loading />
     }
@@ -47,9 +46,8 @@
       </p>
     </div>
 
-    @let maintainers = maintainers$ | async;
-    @if (maintainers) {
-      <z-maintainers [maintainers]="maintainers" />
+    @if (maintainers().length) {
+      <z-maintainers [maintainers]="maintainers()" />
     } @else {
       <z-maintainers-loading />
     }
@@ -64,9 +62,8 @@
       </p>
     </div>
 
-    @let contributors = filteredContributors$ | async;
-    @if (contributors) {
-      <z-contributors [contributors]="contributors" />
+    @if (filteredContributors().length) {
+      <z-contributors [contributors]="filteredContributors()" />
     } @else {
       <z-contributors-loading />
     }

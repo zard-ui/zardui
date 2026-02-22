@@ -1,9 +1,7 @@
-import { AsyncPipe } from '@angular/common';
 import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { GalleryHorizontal } from 'lucide-angular';
-import type { Observable } from 'rxjs';
 
 import { LayoutService } from '@doc/shared/services/layout.service';
 
@@ -25,7 +23,6 @@ import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
   templateUrl: './header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    AsyncPipe,
     DocResearcherComponent,
     ZardBadgeComponent,
     MobileMenuComponent,
@@ -48,7 +45,7 @@ export class HeaderComponent {
   private readonly githubService = inject(GithubService);
   private readonly darkModeService = inject(ZardDarkMode);
   private readonly layoutService = inject(LayoutService);
-  readonly $repoStars: Observable<number> = this.githubService.getStarsCount();
+  readonly repoStars = this.githubService.starsCount;
 
   toggleTheme(): void {
     this.darkModeService.toggleTheme();
