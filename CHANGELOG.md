@@ -1,3 +1,63 @@
+## 1.0.0-beta.44 (2026-02-22)
+
+### ✨ Features
+
+- adding preset, dark mode service improvements, prevent SSR flickering ([#384](https://github.com/zard-ui/zardui/pull/384))
+- **context-menu:** adding context menu directive ([#381](https://github.com/zard-ui/zardui/pull/381))
+- **theme-generator:** customize zard/ui theme ([#380](https://github.com/zard-ui/zardui/pull/380))
+
+### 🐛 Bug Fixes
+
+- light or dark colors for code  properly follow dark mode servi… ([#390](https://github.com/zard-ui/zardui/pull/390))
+- CLI component installer execution fix ([#393](https://github.com/zard-ui/zardui/pull/393))
+- route should not overlap with file name ([#396](https://github.com/zard-ui/zardui/pull/396))
+- input component - forms support fix ([#397](https://github.com/zard-ui/zardui/pull/397))
+- generateId replaced by ZardIdDirective to support SSR hydration ([#403](https://github.com/zard-ui/zardui/pull/403))
+- adjusting production errors ([c5ef1c0](https://github.com/zard-ui/zardui/commit/c5ef1c0))
+- dynamic og image generator ([60929c5](https://github.com/zard-ui/zardui/commit/60929c5))
+- **checkbox:** adding disabled state for reactive forms usage ([#407](https://github.com/zard-ui/zardui/pull/407))
+- **cli:** support custom component aliases for added component imports and dark mode setup ([#431](https://github.com/zard-ui/zardui/pull/431))
+- **menu:** focus trigger element on hover ([#426](https://github.com/zard-ui/zardui/pull/426))
+- **select:** fixes overflow of long text item element in select component ([#417](https://github.com/zard-ui/zardui/pull/417))
+
+### 📦 Code Refactoring
+
+- imports instead of modules #382 ([#383](https://github.com/zard-ui/zardui/pull/383), [#382](https://github.com/zard-ui/zardui/issues/382))
+- use Angular `booleanAttribute` instead of custom boolean transform. ([#427](https://github.com/zard-ui/zardui/pull/427))
+- **button:** latest shadcn/ui button styling ([#428](https://github.com/zard-ui/zardui/pull/428))
+- **calendar:** minor code refactoring ([#398](https://github.com/zard-ui/zardui/pull/398))
+- **calendar:** revert functionality ([#400](https://github.com/zard-ui/zardui/pull/400))
+- **calendar:** code simplifications ([#415](https://github.com/zard-ui/zardui/pull/415))
+- **card:** synced with latest shadcn card implementation ([#375](https://github.com/zard-ui/zardui/pull/375))
+- **carousel:** template simplification ([#414](https://github.com/zard-ui/zardui/pull/414))
+- **combobox:** template simplification, test added ([#412](https://github.com/zard-ui/zardui/pull/412))
+- **empty:** use NgOptimizedImage for improved image performance ([#408](https://github.com/zard-ui/zardui/pull/408))
+- **select:** template simplification ([#413](https://github.com/zard-ui/zardui/pull/413))
+- **switch:** modernize component to use model input and Angula… ([#422](https://github.com/zard-ui/zardui/pull/422))
+
+### 🏗️ Build System
+
+- Reducing the number of warnings during installations and builds ([0f0e606](https://github.com/zard-ui/zardui/commit/0f0e606))
+- updatin package-lock ([55421d4](https://github.com/zard-ui/zardui/commit/55421d4))
+- changing ci flow to just run in prs ([b3a1a05](https://github.com/zard-ui/zardui/commit/b3a1a05))
+- bumping versions to 1.0.0-beta.43 ([e1cc7d5](https://github.com/zard-ui/zardui/commit/e1cc7d5))
+- **ci:** remove --first-release hardcoded and unify CI workflows ([8be3b2f](https://github.com/zard-ui/zardui/commit/8be3b2f))
+
+### 🧪 Tests
+
+- **dropdown:** adding unit tests ([#416](https://github.com/zard-ui/zardui/pull/416))
+- **e2e:** setup Playwright E2E tests for core components ([#435](https://github.com/zard-ui/zardui/pull/435))
+
+### ❤️ Thank You
+
+- Lucas Fernandes
+- luiz gomes
+- Luiz gomes @Luizgomess
+- Michael Iskandarani @Noskilo
+- Mickey Lazarevic @mikij
+- Pavan Mollagavelli @neopavan
+- Turach
+
 ## 1.0.0-beta.27 (2025-12-15)
 
 ### ✨ Features
