@@ -30,6 +30,7 @@ export class ZardDarkMode {
 
       effect(() => {
         const theme = this.themeSignal();
+        if (!this.initialized) return;
         const isDarkMode = this.isDarkModeActive(theme);
         this.updateThemeMode(isDarkMode, theme);
       });

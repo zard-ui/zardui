@@ -11,6 +11,10 @@ export const appRoutes: Route[] = [
     children: [{ path: '', loadComponent: () => import('./domain/pages/home/home.page').then(c => c.HomePage) }],
   },
   {
+    path: 'blocks/preview/:id',
+    loadComponent: () => import('./domain/pages/blocks/block-preview/block-preview.page').then(c => c.BlockPreviewPage),
+  },
+  {
     path: 'blocks',
     component: ShellLayout,
     children: [

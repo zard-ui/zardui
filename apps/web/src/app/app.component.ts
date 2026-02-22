@@ -3,6 +3,8 @@ import { ChangeDetectionStrategy, Component, DestroyRef, DOCUMENT, inject, PLATF
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Router, RouterModule, Scroll } from '@angular/router';
 
+import { inject as injectAnalytics } from '@vercel/analytics';
+import { injectSpeedInsights } from '@vercel/speed-insights';
 import { filter } from 'rxjs';
 
 import { getHeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
@@ -28,6 +30,9 @@ export class AppComponent {
 
   constructor() {
     if (isPlatformBrowser(this.platformId)) {
+      injectAnalytics();
+      injectSpeedInsights();
+
       this.destroyRef.onDestroy(() => {
         if (this.scrollTimeoutId !== null) {
           clearTimeout(this.scrollTimeoutId);

@@ -1,50 +1,5 @@
 import { ComponentType } from '@angular/cdk/overlay';
 
-import { ACCORDION } from '@zard/components/accordion/demo/accordion';
-import { ALERT } from '@zard/components/alert/demo/alert';
-import { ALERT_DIALOG } from '@zard/components/alert-dialog/demo/alert-dialog';
-import { AVATAR } from '@zard/components/avatar/demo/avatar';
-import { BADGE } from '@zard/components/badge/demo/badge';
-import { BREADCRUMB } from '@zard/components/breadcrumb/demo/breadcrumb';
-import { BUTTON } from '@zard/components/button/demo/button';
-import { BUTTON_GROUP } from '@zard/components/button-group/demo/button-group';
-import { CALENDAR } from '@zard/components/calendar/demo/calendar';
-import { CARD } from '@zard/components/card/demo/card';
-import { CAROUSEL } from '@zard/components/carousel/demo/carousel';
-import { CHECKBOX } from '@zard/components/checkbox/demo/checkbox';
-import { COMBOBOX } from '@zard/components/combobox/demo/combobox';
-import { COMMAND } from '@zard/components/command/demo/command';
-import { DATE_PICKER } from '@zard/components/date-picker/demo/date-picker';
-import { DIALOG } from '@zard/components/dialog/demo/dialog';
-import { DIVIDER } from '@zard/components/divider/demo/divider';
-import { DROPDOWN } from '@zard/components/dropdown/demo/dropdown';
-import { EMPTY } from '@zard/components/empty/demo/empty';
-import { FORM } from '@zard/components/form/demo/form';
-import { ICON } from '@zard/components/icon/demo/icon';
-import { INPUT } from '@zard/components/input/demo/input';
-import { INPUT_GROUP } from '@zard/components/input-group/demo/input-group';
-import { KBD } from '@zard/components/kbd/demo/kbd';
-import { LAYOUT } from '@zard/components/layout/demo/layout';
-import { LOADER } from '@zard/components/loader/demo/loader';
-import { MENU } from '@zard/components/menu/demo/menu';
-import { PAGINATION } from '@zard/components/pagination/demo/pagination';
-import { POPOVER } from '@zard/components/popover/demo/popover';
-import { PROGRESS_BAR } from '@zard/components/progress-bar/demo/progress-bar';
-import { RADIO } from '@zard/components/radio/demo/radio';
-import { RESIZABLE } from '@zard/components/resizable/demo/resizable';
-import { SEGMENTED } from '@zard/components/segmented/demo/segmented';
-import { SELECT } from '@zard/components/select/demo/select';
-import { SHEET } from '@zard/components/sheet/demo/sheet';
-import { SKELETON } from '@zard/components/skeleton/demo/skeleton';
-import { SLIDER } from '@zard/components/slider/demo/slider';
-import { SWITCH } from '@zard/components/switch/demo/switch';
-import { TABLE } from '@zard/components/table/demo/table';
-import { TABS } from '@zard/components/tabs/demo/tabs';
-import { TOAST } from '@zard/components/toast/demo/toast';
-import { TOGGLE } from '@zard/components/toggle/demo/toggle';
-import { TOGGLE_GROUP } from '@zard/components/toggle-group/demo/toggle-group';
-import { TOOLTIP } from '@zard/components/tooltip/demo/tooltip';
-
 export interface ComponentData {
   componentName: string;
   description: string;
@@ -64,49 +19,234 @@ export interface ExampleData {
   flexAlign?: 'start' | 'center' | 'end';
 }
 
-export const COMPONENTS: ComponentData[] = [
-  ALERT,
-  ALERT_DIALOG,
-  ACCORDION,
-  AVATAR,
-  BADGE,
-  BUTTON,
-  BUTTON_GROUP,
-  BREADCRUMB,
-  CALENDAR,
-  CARD,
-  CAROUSEL,
-  CHECKBOX,
-  COMBOBOX,
-  COMMAND,
-  DATE_PICKER,
-  DIALOG,
-  DIVIDER,
-  DROPDOWN,
-  EMPTY,
-  FORM,
-  ICON,
-  INPUT,
-  INPUT_GROUP,
-  KBD,
-  LAYOUT,
-  LOADER,
-  MENU,
-  PAGINATION,
-  POPOVER,
-  PROGRESS_BAR,
-  RADIO,
-  RESIZABLE,
-  SEGMENTED,
-  SELECT,
-  SHEET,
-  SLIDER,
-  SKELETON,
-  SWITCH,
-  TABLE,
-  TABS,
-  TOAST,
-  TOGGLE,
-  TOGGLE_GROUP,
-  TOOLTIP,
+export interface ComponentRegistryEntry {
+  componentName: string;
+  description: string;
+  fullWidth?: boolean;
+  loadData: () => Promise<ComponentData>;
+}
+
+export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
+  {
+    componentName: 'alert',
+    description: 'Displays a callout for user attention.',
+    loadData: () => import('@zard/components/alert/demo/alert').then(m => m.ALERT),
+  },
+  {
+    componentName: 'alert-dialog',
+    description: 'A modal dialog that interrupts the user with important content and expects a response.',
+    loadData: () => import('@zard/components/alert-dialog/demo/alert-dialog').then(m => m.ALERT_DIALOG),
+  },
+  {
+    componentName: 'accordion',
+    description: 'A vertically stacked set of interactive headings that each reveal a section of content.',
+    loadData: () => import('@zard/components/accordion/demo/accordion').then(m => m.ACCORDION),
+  },
+  {
+    componentName: 'avatar',
+    description: 'An image element with a fallback for representing the user.',
+    loadData: () => import('@zard/components/avatar/demo/avatar').then(m => m.AVATAR),
+  },
+  {
+    componentName: 'badge',
+    description: 'Displays a badge or a component that looks like a badge.',
+    loadData: () => import('@zard/components/badge/demo/badge').then(m => m.BADGE),
+  },
+  {
+    componentName: 'button',
+    description: 'Displays a button or a component that looks like a button.',
+    loadData: () => import('@zard/components/button/demo/button').then(m => m.BUTTON),
+  },
+  {
+    componentName: 'button-group',
+    description: 'Groups buttons together.',
+    loadData: () => import('@zard/components/button-group/demo/button-group').then(m => m.BUTTON_GROUP),
+  },
+  {
+    componentName: 'breadcrumb',
+    description: 'Displays the path to the current resource using a hierarchy of links.',
+    loadData: () => import('@zard/components/breadcrumb/demo/breadcrumb').then(m => m.BREADCRUMB),
+  },
+  {
+    componentName: 'calendar',
+    description: 'A date field component that allows users to enter and edit date.',
+    loadData: () => import('@zard/components/calendar/demo/calendar').then(m => m.CALENDAR),
+  },
+  {
+    componentName: 'card',
+    description: 'Displays a card with header, content, and footer.',
+    loadData: () => import('@zard/components/card/demo/card').then(m => m.CARD),
+  },
+  {
+    componentName: 'carousel',
+    description: 'A carousel with motion and swipe built using Embla.',
+    loadData: () => import('@zard/components/carousel/demo/carousel').then(m => m.CAROUSEL),
+  },
+  {
+    componentName: 'checkbox',
+    description: 'A control that allows the user to toggle between checked and not checked.',
+    loadData: () => import('@zard/components/checkbox/demo/checkbox').then(m => m.CHECKBOX),
+  },
+  {
+    componentName: 'combobox',
+    description: 'Autocomplete input and command palette with a list of suggestions.',
+    loadData: () => import('@zard/components/combobox/demo/combobox').then(m => m.COMBOBOX),
+  },
+  {
+    componentName: 'command',
+    description: 'Fast, composable, unstyled command menu.',
+    loadData: () => import('@zard/components/command/demo/command').then(m => m.COMMAND),
+  },
+  {
+    componentName: 'date-picker',
+    description: 'A date picker component with range and presets.',
+    loadData: () => import('@zard/components/date-picker/demo/date-picker').then(m => m.DATE_PICKER),
+  },
+  {
+    componentName: 'dialog',
+    description:
+      'A window overlaid on either the primary window or another dialog window, rendering the content underneath inert.',
+    loadData: () => import('@zard/components/dialog/demo/dialog').then(m => m.DIALOG),
+  },
+  {
+    componentName: 'divider',
+    description: 'Visually or semantically separates content.',
+    loadData: () => import('@zard/components/divider/demo/divider').then(m => m.DIVIDER),
+  },
+  {
+    componentName: 'dropdown',
+    description: 'Displays a menu to the user — such as a set of actions or functions — triggered by a button.',
+    loadData: () => import('@zard/components/dropdown/demo/dropdown').then(m => m.DROPDOWN),
+  },
+  {
+    componentName: 'empty',
+    description: 'Empty state placeholder when there is no data.',
+    loadData: () => import('@zard/components/empty/demo/empty').then(m => m.EMPTY),
+  },
+  {
+    componentName: 'form',
+    description: 'Building forms with Angular reactive forms and Zard UI components.',
+    loadData: () => import('@zard/components/form/demo/form').then(m => m.FORM),
+  },
+  {
+    componentName: 'icon',
+    description: 'A set of icons from Lucide.',
+    loadData: () => import('@zard/components/icon/demo/icon').then(m => m.ICON),
+  },
+  {
+    componentName: 'input',
+    description: 'Displays a form input field or a component that looks like an input field.',
+    loadData: () => import('@zard/components/input/demo/input').then(m => m.INPUT),
+  },
+  {
+    componentName: 'input-group',
+    description: 'Groups input elements together with addons.',
+    loadData: () => import('@zard/components/input-group/demo/input-group').then(m => m.INPUT_GROUP),
+  },
+  {
+    componentName: 'kbd',
+    description: 'Displays a keyboard key or shortcut.',
+    loadData: () => import('@zard/components/kbd/demo/kbd').then(m => m.KBD),
+  },
+  {
+    componentName: 'layout',
+    description: 'Layout components for building page structures.',
+    loadData: () => import('@zard/components/layout/demo/layout').then(m => m.LAYOUT),
+  },
+  {
+    componentName: 'loader',
+    description: 'Displays a loading spinner.',
+    loadData: () => import('@zard/components/loader/demo/loader').then(m => m.LOADER),
+  },
+  {
+    componentName: 'menu',
+    description: 'Displays a menu with a list of actions.',
+    loadData: () => import('@zard/components/menu/demo/menu').then(m => m.MENU),
+  },
+  {
+    componentName: 'pagination',
+    description: 'Pagination with page navigation, next and previous links.',
+    loadData: () => import('@zard/components/pagination/demo/pagination').then(m => m.PAGINATION),
+  },
+  {
+    componentName: 'popover',
+    description: 'Displays rich content in a portal, triggered by a button.',
+    loadData: () => import('@zard/components/popover/demo/popover').then(m => m.POPOVER),
+  },
+  {
+    componentName: 'progress-bar',
+    description: 'Displays an indicator showing the completion progress of a task.',
+    loadData: () => import('@zard/components/progress-bar/demo/progress-bar').then(m => m.PROGRESS_BAR),
+  },
+  {
+    componentName: 'radio',
+    description: 'A set of checkable buttons where no more than one can be checked at a time.',
+    loadData: () => import('@zard/components/radio/demo/radio').then(m => m.RADIO),
+  },
+  {
+    componentName: 'resizable',
+    description: 'Accessible resizable panel groups and layouts with keyboard support.',
+    loadData: () => import('@zard/components/resizable/demo/resizable').then(m => m.RESIZABLE),
+  },
+  {
+    componentName: 'segmented',
+    description: 'A set of two or more buttons that functions as a single control.',
+    loadData: () => import('@zard/components/segmented/demo/segmented').then(m => m.SEGMENTED),
+  },
+  {
+    componentName: 'select',
+    description: 'Displays a list of options for the user to pick from — triggered by a button.',
+    loadData: () => import('@zard/components/select/demo/select').then(m => m.SELECT),
+  },
+  {
+    componentName: 'sheet',
+    description: 'Extends the Dialog component to display content that complements the main content of the screen.',
+    loadData: () => import('@zard/components/sheet/demo/sheet').then(m => m.SHEET),
+  },
+  {
+    componentName: 'slider',
+    description: 'An input where the user selects a value from within a given range.',
+    loadData: () => import('@zard/components/slider/demo/slider').then(m => m.SLIDER),
+  },
+  {
+    componentName: 'skeleton',
+    description: 'Use to show a placeholder while content is loading.',
+    loadData: () => import('@zard/components/skeleton/demo/skeleton').then(m => m.SKELETON),
+  },
+  {
+    componentName: 'switch',
+    description: 'A control that allows the user to toggle between checked and not checked.',
+    loadData: () => import('@zard/components/switch/demo/switch').then(m => m.SWITCH),
+  },
+  {
+    componentName: 'table',
+    description: 'A responsive table component.',
+    loadData: () => import('@zard/components/table/demo/table').then(m => m.TABLE),
+  },
+  {
+    componentName: 'tabs',
+    description: 'A set of layered sections of content — known as tab panels — that are displayed one at a time.',
+    loadData: () => import('@zard/components/tabs/demo/tabs').then(m => m.TABS),
+  },
+  {
+    componentName: 'toast',
+    description: 'A succinct message that is displayed temporarily.',
+    loadData: () => import('@zard/components/toast/demo/toast').then(m => m.TOAST),
+  },
+  {
+    componentName: 'toggle',
+    description: 'A two-state button that can be either on or off.',
+    loadData: () => import('@zard/components/toggle/demo/toggle').then(m => m.TOGGLE),
+  },
+  {
+    componentName: 'toggle-group',
+    description: 'A set of two-state buttons that can be toggled on or off.',
+    loadData: () => import('@zard/components/toggle-group/demo/toggle-group').then(m => m.TOGGLE_GROUP),
+  },
+  {
+    componentName: 'tooltip',
+    description:
+      'A popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.',
+    loadData: () => import('@zard/components/tooltip/demo/tooltip').then(m => m.TOOLTIP),
+  },
 ];

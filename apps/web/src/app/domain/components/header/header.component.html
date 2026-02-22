@@ -29,9 +29,8 @@
           <a z-button class="flex" zType="ghost" zSize="sm" [href]="githubData.url" target="_blank">
             <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />
 
-            @let repoStars = $repoStars | async;
-            @if (repoStars) {
-              <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars }}</span>
+            @if (repoStars()) {
+              <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars() }}</span>
             }
           </a>
         }
