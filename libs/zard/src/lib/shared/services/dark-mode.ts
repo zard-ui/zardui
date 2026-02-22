@@ -90,6 +90,9 @@ export class ZardDarkMode {
       this.handleSystemChanges();
     }
     this.initialized = true;
+
+    const theme = this.themeSignal();
+    this.updateThemeMode(this.isDarkModeActive(theme), theme);
   }
 
   private applyTheme(theme: DarkModeOptions): void {

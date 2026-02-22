@@ -8,6 +8,7 @@ import {
   inject,
   input,
   PLATFORM_ID,
+  signal,
   viewChild,
 } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -30,6 +31,7 @@ export class BlockPreviewComponent {
   private readonly darkModeService = inject(ZardDarkMode);
 
   protected readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  protected readonly iframeLoaded = signal(false);
 
   protected readonly iframeUrl = computed(() => {
     return this.sanitizer.bypassSecurityTrustResourceUrl(`/blocks/preview/${this.block().id}`);
@@ -70,5 +72,6 @@ export class BlockPreviewComponent {
     const html = iframeEl.contentDocument.documentElement;
     html.classList.toggle('dark', isDark);
     html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    this.iframeLoaded.set(true);
   }
 }

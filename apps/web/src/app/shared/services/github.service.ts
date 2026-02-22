@@ -28,6 +28,13 @@ export class GithubService {
     defaultValue: [],
   });
 
-  readonly starsCount = computed(() => this.repoResource.value().stargazers_count);
-  readonly contributors = this.contributorsResource.value;
+  readonly starsCount = computed(() => {
+    if (this.repoResource.error()) return 0;
+    return this.repoResource.value().stargazers_count;
+  });
+
+  readonly contributors = computed(() => {
+    if (this.contributorsResource.error()) return [];
+    return this.contributorsResource.value();
+  });
 }

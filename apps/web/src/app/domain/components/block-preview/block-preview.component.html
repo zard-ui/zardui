@@ -9,7 +9,8 @@
           #previewIframe
           [src]="iframeUrl()"
           [style.width]="viewportWidth()"
-          class="bg-background z-10 min-h-svh border-0 transition-[width] duration-300 ease-in-out"
+          class="z-10 min-h-svh border-0 opacity-0 transition-[width] duration-300 ease-in-out"
+          [class.opacity-100]="iframeLoaded()"
           (load)="onIframeLoad()"
         ></iframe>
       }
