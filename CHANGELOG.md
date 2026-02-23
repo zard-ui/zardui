@@ -1,3 +1,13 @@
+## 1.0.0-beta.50 (2026-02-23)
+
+### ✨ Features
+
+- **tree:** add tree component ([#449](https://github.com/zard-ui/zardui/pull/449))
+
+### ❤️ Thank You
+
+- Pavan Mollagavelli @neopavan
+
 ## 1.0.0-beta.49 (2026-02-23)
 
 ### 🐛 Bug Fixes
