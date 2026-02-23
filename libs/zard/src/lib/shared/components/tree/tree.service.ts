@@ -11,6 +11,14 @@ export class ZardTreeService<T = any> {
 
   private readonly dataSignal = signal<TreeNode<T>[]>([]);
 
+  // Click notification from tree-node → tree component (to emit zNodeClick output)
+  private _clickId = 0;
+  readonly clickedNode = signal<{ node: TreeNode<T>; _id: number } | null>(null);
+
+  notifyNodeClick(node: TreeNode<T>) {
+    this.clickedNode.set({ node, _id: ++this._clickId });
+  }
+
   readonly flattenedNodes = computed(() => {
     const result: FlatTreeNode<T>[] = [];
     let index = 0;

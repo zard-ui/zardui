@@ -46,18 +46,19 @@ import {
           <z-icon zType="chevron-right" class="size-4" />
         </button>
       } @else {
-        <span class="inline-flex h-6 w-6 shrink-0"></span>
+        <span class="inline-flex h-4 w-4 shrink-0"></span>
       }
 
       <!-- Checkbox -->
       @if (checkable()) {
-        <z-checkbox
-          class="mr-1"
-          [ngModel]="checkState() === 'checked'"
-          [zDisabled]="node().disabled ?? false"
-          [attr.aria-checked]="checkState() === 'indeterminate' ? 'mixed' : checkState() === 'checked'"
-          (checkChange)="onCheckChange()"
-        />
+        <span class="mr-0.5 ml-1.5">
+          <z-checkbox
+            [ngModel]="checkState() === 'checked'"
+            [zDisabled]="node().disabled ?? false"
+            [attr.aria-checked]="checkState() === 'indeterminate' ? 'mixed' : checkState() === 'checked'"
+            (checkChange)="onCheckChange()"
+          />
+        </span>
       }
 
       <!-- Content -->
@@ -68,13 +69,13 @@ import {
         role="treeitem"
         [attr.aria-selected]="isSelected()"
         (click)="onContentClick()"
-        (keydown.enter)="onContentClick()"
+        (keydown.enter)="onEnterKey($event)"
       >
         @if (nodeTemplate(); as tmpl) {
           <ng-container [ngTemplateOutlet]="tmpl" [ngTemplateOutletContext]="{ $implicit: node(), level: level() }" />
         } @else {
           @if (node().icon) {
-            <z-icon [zType]="$any(node().icon)" class="mr-1.5 size-4 shrink-0" />
+            <z-icon [zType]="$any(node().icon)" class="size-4 shrink-0" />
           }
           <span class="truncate">{{ node().label }}</span>
         }
@@ -156,9 +157,15 @@ export class ZardTreeNodeComponent<T = any> {
     if (this.node().disabled) {
       return;
     }
+    this.treeService.notifyNodeClick(this.node());
     if (this.selectable()) {
       this.treeService.select(this.node().key, 'single');
     }
+  }
+
+  onEnterKey(event: Event) {
+    event.stopPropagation();
+    this.onContentClick();
   }
 
   onCheckChange() {

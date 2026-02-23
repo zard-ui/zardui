@@ -115,6 +115,14 @@ export class ZardTreeComponent<T = any> {
       }
     });
 
+    // Emit node click from tree-node interactions
+    effect(() => {
+      const clicked = this.treeService.clickedNode();
+      if (clicked) {
+        this.zNodeClick.emit(clicked.node);
+      }
+    });
+
     // Emit selection changes
     effect(() => {
       const keys = this.treeService.selectedKeys();
