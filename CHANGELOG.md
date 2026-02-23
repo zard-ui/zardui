@@ -1,3 +1,13 @@
+## 1.0.0-beta.49 (2026-02-23)
+
+### 🐛 Bug Fixes
+
+- **dark-mode:** defer media query initialization to afterNextRenderer for SSR ([#446](https://github.com/zard-ui/zardui/pull/446))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
 ## 1.0.0-beta.48 (2026-02-23)
 
 This was a version bump only, there were no code changes.
