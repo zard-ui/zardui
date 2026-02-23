@@ -323,7 +323,7 @@ export class HeroDiagramComponent implements OnInit, OnDestroy {
     // === PHASE 1: Animate the input nodes/lines ===
     this.timeline.addLabel('inputStart', 0);
     this.prepareInputs().forEach((lineIndex, fileIndex) => {
-      this.timeline!.add(
+      this.timeline?.add(
         isMobile
           ? this.animateSingleInputMobile(this.inputLines[lineIndex])
           : this.animateSingleInputDesktop(this.inputLines[lineIndex]),
@@ -336,20 +336,20 @@ export class HeroDiagramComponent implements OnInit, OnDestroy {
     this.timeline.addLabel('logoStart', '>'); // Start AFTER inputs finish
 
     // Illuminate the logo and colored indicators sequentially
-    this.timeline.set(this.illuminateLogo, { value: true }, 'logoStart');
-    this.timeline.set(this.blueIndicator, { value: true }, 'logoStart+=0.1');
-    this.timeline.set(this.pinkIndicator, { value: true }, 'logoStart+=0.2');
+    this.timeline.call(() => this.illuminateLogo.set(true), [], 'logoStart');
+    this.timeline.call(() => this.blueIndicator.set(true), [], 'logoStart+=0.1');
+    this.timeline.call(() => this.pinkIndicator.set(true), [], 'logoStart+=0.2');
 
     // Add logo highlight pulse
-    this.timeline.set(this.logoHighlight, { value: true }, 'logoStart+=0.3');
-    this.timeline.set(this.logoHighlight, { value: false }, 'logoStart+=1.1'); // 0.3 + 0.8
+    this.timeline.call(() => this.logoHighlight.set(true), [], 'logoStart+=0.3');
+    this.timeline.call(() => this.logoHighlight.set(false), [], 'logoStart+=1.1'); // 0.3 + 0.8
     this.timeline.set({}, {}, '+=0.2'); // Small pause after highlight
 
     // === PHASE 3: Animate the output nodes/lines ===
     // Start AFTER logo highlight finishes
     this.timeline.addLabel('outputStart', '>');
     this.outputLines.forEach((outputLine, index) => {
-      this.timeline!.add(
+      this.timeline?.add(
         isMobile ? this.animateSingleOutputMobile(outputLine) : this.animateSingleOutputDesktop(outputLine, index),
         'outputStart+=' + (isMobile ? 0.3 : 0.1) * index,
       );
@@ -358,8 +358,8 @@ export class HeroDiagramComponent implements OnInit, OnDestroy {
     // Desktop only reset
     if (!isMobile) {
       // Disable the colored indicators
-      this.timeline.set(this.blueIndicator, { value: false }, '>-1');
-      this.timeline.set(this.pinkIndicator, { value: false }, '<');
+      this.timeline.call(() => this.blueIndicator.set(false), [], '>-1');
+      this.timeline.call(() => this.pinkIndicator.set(false), [], '<');
 
       // Pause briefly at the end of the animation
       this.timeline.set({}, {}, '+=0.2');
