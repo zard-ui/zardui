@@ -46,7 +46,7 @@ import {
           <z-icon zType="chevron-right" class="size-4" />
         </button>
       } @else {
-        <span class="inline-flex h-4 w-4 shrink-0"></span>
+        <span class="inline-flex size-4 shrink-0"></span>
       }
 
       <!-- Checkbox -->
@@ -69,7 +69,7 @@ import {
         role="treeitem"
         [attr.aria-selected]="isSelected()"
         (click)="onContentClick()"
-        (keydown.enter)="onEnterKey($event)"
+        (keydown.enter.stop)="onContentClick()"
       >
         @if (nodeTemplate(); as tmpl) {
           <ng-container [ngTemplateOutlet]="tmpl" [ngTemplateOutletContext]="{ $implicit: node(), level: level() }" />
@@ -161,11 +161,6 @@ export class ZardTreeNodeComponent<T = any> {
     if (this.selectable()) {
       this.treeService.select(this.node().key, 'single');
     }
-  }
-
-  onEnterKey(event: Event) {
-    event.stopPropagation();
-    this.onContentClick();
   }
 
   onCheckChange() {
