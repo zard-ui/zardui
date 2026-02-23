@@ -1,23 +1,32 @@
-<div class="bg-code flex min-h-svh rounded-lg">
+<div class="bg-code flex min-h-svh rounded-lg border">
   <div class="flex w-64 flex-col overflow-auto border-r">
     <div class="border-border border-b px-4 py-3">
       <h4 class="text-code-foreground text-sm font-semibold">Files</h4>
     </div>
 
-    <div class="flex-1 space-y-0.5 overflow-auto p-3">
-      <z-file-tree
-        [nodes]="fileTree()"
-        [openFolders]="openFolders()"
-        [selectedFilePath]="selectedFile()?.path ?? null"
-        (folderToggled)="toggleFolder($event)"
-        (fileSelected)="handleFileSelected($event)"
-      />
+    <div class="flex-1 overflow-auto p-3">
+      <z-tree
+        [zData]="fileTree()"
+        zSelectable
+        zExpandAll
+        (zNodeClick)="handleNodeClick($event)"
+        class="min-w-max text-sm"
+      >
+        <ng-template #nodeTemplate let-node>
+          @if (node.leaf) {
+            <img [src]="getFileIcon(node.label)" alt="" class="h-4 w-4 shrink-0 dark:invert" />
+          } @else {
+            <z-icon zType="folder" class="size-4 shrink-0" />
+          }
+          <span class="whitespace-nowrap">{{ node.label }}</span>
+        </ng-template>
+      </z-tree>
     </div>
   </div>
 
   <div class="bg-code flex flex-1 flex-col overflow-hidden rounded-tr-lg rounded-br-lg">
     @if (selectedFile()) {
-      <div class="border-border flex items-center justify-between gap-3 border-b px-4 py-1">
+      <div class="border-border flex items-center justify-between gap-3 border-b px-4 py-1.5">
         <div class="flex items-center gap-3">
           <img [src]="getFileIcon(selectedFile()!.name)" alt="file icon" class="h-4 w-4 dark:invert" />
           <span class="text-code-foreground text-sm">{{ selectedFile()!.path }}</span>
@@ -29,7 +38,12 @@
       </div>
 
       <div class="flex-1 overflow-auto p-2.5 text-sm">
-        <z-simple-code-highlight [code]="selectedFile()!.content" [language]="selectedFile()!.language" [showCopyButton]="false" [showLineNumbers]="true" />
+        <z-simple-code-highlight
+          [code]="selectedFile()!.content"
+          [language]="selectedFile()!.language"
+          [showCopyButton]="false"
+          [showLineNumbers]="true"
+        />
       </div>
     } @else {
       <div class="flex h-full items-center justify-center">
