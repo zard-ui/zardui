@@ -41,7 +41,7 @@ export class ZardDemoTreeSelectionComponent {
         {
           key: 'laptops',
           label: 'Laptops',
-          icon: 'laptop',
+          icon: 'tablet',
           children: [
             { key: 'macbook', label: 'MacBook Pro', leaf: true },
             { key: 'thinkpad', label: 'ThinkPad', leaf: true },
@@ -52,7 +52,7 @@ export class ZardDemoTreeSelectionComponent {
     {
       key: 'clothing',
       label: 'Clothing',
-      icon: 'shirt',
+      icon: 'tag',
       children: [
         { key: 'mens', label: "Men's", leaf: true },
         { key: 'womens', label: "Women's", leaf: true },
@@ -64,8 +64,8 @@ export class ZardDemoTreeSelectionComponent {
     this.selectedLabel = nodes.map(n => n.label).join(', ') || 'None';
   }
 
-  onNodeClick(node: TreeNode) {
-    console.log('Clicked:', node.label);
+  onNodeClick(_node: TreeNode) {
+    // Handle node click
   }
 }
 

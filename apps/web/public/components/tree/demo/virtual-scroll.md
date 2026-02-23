@@ -13,7 +13,7 @@ import type { TreeNode } from '@/shared/components/tree/tree.types';
       zVirtualScroll
       [zVirtualItemSize]="32"
       zExpandAll
-      class="h-[400px] w-full max-w-sm rounded-md border"
+      class="h-[400px] w-full max-w-md rounded-md border"
     />
     <p class="text-muted-foreground mt-4 text-sm">{{ nodeCount }} total nodes with virtual scrolling</p>
   `,
@@ -28,14 +28,17 @@ export class ZardDemoTreeVirtualScrollComponent {
     this.nodeCount = this.countNodes(this.largeTree);
   }
 
-  private generateTree(breadth: number, depth: number, prefix = 'node'): TreeNode[] {
-    if (depth === 0) return [];
+  private generateTree(breadth: number, depth: number, prefix = '', level = 0): TreeNode[] {
+    if (depth === 0) {
+      return [];
+    }
     return Array.from({ length: breadth }, (_, i) => {
-      const key = `${prefix}-${i}`;
-      const children = depth > 1 ? this.generateTree(Math.min(breadth, 5), depth - 1, key) : [];
+      const key = prefix ? `${prefix}-${i}` : `${i}`;
+      const children = depth > 1 ? this.generateTree(Math.min(breadth, 5), depth - 1, key, level + 1) : [];
       return {
         key,
-        label: `Item ${key}`,
+        label: children.length > 0 ? `Folder ${key}` : `File ${key}`,
+        icon: children.length > 0 ? 'folder' : ('file' as string | undefined),
         leaf: children.length === 0,
         children: children.length > 0 ? children : undefined,
       };
