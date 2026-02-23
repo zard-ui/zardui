@@ -8,7 +8,7 @@ import {
   Injector,
   PLATFORM_ID,
   TemplateRef,
-  ViewContainerRef,
+  type ViewContainerRef,
 } from '@angular/core';
 
 import { ZardAlertDialogRef } from './alert-dialog-ref';
@@ -88,7 +88,9 @@ export class ZardAlertDialogService {
   }
 
   private createOverlay(): OverlayRef | undefined {
-    if (!isPlatformBrowser(this.platformId)) return undefined;
+    if (!isPlatformBrowser(this.platformId)) {
+      return undefined;
+    }
 
     const overlayConfig = new OverlayConfig({
       hasBackdrop: true,

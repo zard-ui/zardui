@@ -9,6 +9,8 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import {
   containerProgressBarVariants,
   progressBarVariants,
@@ -16,8 +18,6 @@ import {
   type ZardProgressBarSizeVariants,
   type ZardProgressBarTypeVariants,
 } from './progress-bar.variants';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-progress-bar',

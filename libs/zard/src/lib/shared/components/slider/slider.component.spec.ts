@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+
+import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 import {
   ZardSliderComponent,
@@ -8,8 +10,6 @@ import {
   ZSliderThumbComponent,
   ZSliderTrackComponent,
 } from './slider.component';
-
-import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 @Component({
   selector: 'test-slider-host',

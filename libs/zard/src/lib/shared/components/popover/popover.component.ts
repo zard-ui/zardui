@@ -21,11 +21,11 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
-import { filter, Subscription } from 'rxjs';
-
-import { popoverVariants } from './popover.variants';
+import { filter, type Subscription } from 'rxjs';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { popoverVariants } from './popover.variants';
 
 export type ZardPopoverTrigger = 'click' | 'hover' | null;
 export type ZardPopoverPlacement = 'top' | 'bottom' | 'left' | 'right';
