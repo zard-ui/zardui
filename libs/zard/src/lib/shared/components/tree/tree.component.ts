@@ -219,7 +219,7 @@ export class ZardTreeComponent<T = any> {
   private activateFocusedNode() {
     const current = this.getFocusedNode();
     if (current && !current.node.disabled) {
-      this.zNodeClick.emit(current.node);
+      this.treeService.notifyNodeClick(current.node);
       if (this.zSelectable()) {
         this.treeService.select(current.node.key, 'single');
       }
