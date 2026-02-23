@@ -115,6 +115,14 @@ export class ZardTreeComponent<T = any> {
       }
     });
 
+    // Emit node click from tree-node interactions
+    effect(() => {
+      const clicked = this.treeService.clickedNode();
+      if (clicked) {
+        this.zNodeClick.emit(clicked.node);
+      }
+    });
+
     // Emit selection changes
     effect(() => {
       const keys = this.treeService.selectedKeys();
@@ -211,7 +219,7 @@ export class ZardTreeComponent<T = any> {
   private activateFocusedNode() {
     const current = this.getFocusedNode();
     if (current && !current.node.disabled) {
-      this.zNodeClick.emit(current.node);
+      this.treeService.notifyNodeClick(current.node);
       if (this.zSelectable()) {
         this.treeService.select(current.node.key, 'single');
       }
