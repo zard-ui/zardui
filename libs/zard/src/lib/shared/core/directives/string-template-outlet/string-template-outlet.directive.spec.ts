@@ -1,7 +1,10 @@
-import { Component, TemplateRef, viewChild } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, type TemplateRef, viewChild } from '@angular/core';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ZardStringTemplateOutletContext, ZardStringTemplateOutletDirective } from './string-template-outlet.directive';
+import {
+  type ZardStringTemplateOutletContext,
+  ZardStringTemplateOutletDirective,
+} from './string-template-outlet.directive';
 
 describe('string template outlet', () => {
   let fixture: ComponentFixture<StringTemplateOutletTestComponent>;

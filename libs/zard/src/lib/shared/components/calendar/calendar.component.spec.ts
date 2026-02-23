@@ -1,10 +1,10 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
+import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
+
 import { ZardCalendarComponent, type CalendarDay } from './calendar.component';
 import { isSameDay, isDateDisabled, getDayAriaLabel, generateCalendarDays } from './calendar.utils';
-
-import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 describe('ZardCalendarComponent', () => {
   let component: ZardCalendarComponent;

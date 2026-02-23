@@ -1,10 +1,10 @@
 import { TestBed, type ComponentFixture } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
+import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
+
 import { ZardCarouselContentComponent } from './carousel-content.component';
 import { ZardCarouselComponent } from './carousel.component';
-
-import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 describe('ZardCarouselContentComponent', () => {
   let component: ZardCarouselContentComponent;

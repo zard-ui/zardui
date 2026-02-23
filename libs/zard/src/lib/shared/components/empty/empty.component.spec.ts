@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { type ComponentFixture } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { render, screen } from '@testing-library/angular';
@@ -9,16 +8,14 @@ import { emptyDescriptionVariants, emptyIconVariants, emptyTitleVariants, emptyV
 
 describe('ZardEmptyComponent', () => {
   it('should render with default empty classes', async () => {
-    const fixture: ComponentFixture<ZardEmptyComponent> = (await render(ZardEmptyComponent)).fixture;
+    const { fixture } = await render(ZardEmptyComponent);
 
     const emptyElement = fixture.debugElement.nativeElement;
     expect(emptyElement).toHaveClass(emptyVariants());
   });
 
   it('should apply custom classes', async () => {
-    const fixture: ComponentFixture<ZardEmptyComponent> = (
-      await render(ZardEmptyComponent, { inputs: { class: 'custom-class' } })
-    ).fixture;
+    const { fixture } = await render(ZardEmptyComponent, { inputs: { class: 'custom-class' } });
 
     const emptyElement = fixture.debugElement.nativeElement;
     expect(emptyElement).toHaveClass('custom-class');

@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
+
+import { ZardDebounceEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-debounce-event-manager-plugin';
+import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 import { ZardCommandDividerComponent } from './command-divider.component';
 import { ZardCommandEmptyComponent } from './command-empty.component';
@@ -9,9 +12,6 @@ import { ZardCommandListComponent } from './command-list.component';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
 import { ZardCommandOptionComponent } from './command-option.component';
 import { ZardCommandComponent } from './command.component';
-
-import { ZardDebounceEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-debounce-event-manager-plugin';
-import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 const SEARCH_DEBOUNCE_MS = 150;
 
