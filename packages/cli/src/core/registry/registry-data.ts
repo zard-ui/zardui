@@ -1078,4 +1078,46 @@ export const registry: ComponentRegistry[] = [
       },
     ],
   },
+  {
+    name: 'tree',
+    registryDependencies: ['icon', 'checkbox'],
+    files: [
+      {
+        name: 'tree.component.ts',
+        content: '',
+      },
+      {
+        name: 'tree-node.component.ts',
+        content: '',
+      },
+      {
+        name: 'tree-node-toggle.directive.ts',
+        content: '',
+      },
+      {
+        name: 'tree-node-content.component.ts',
+        content: '',
+      },
+      {
+        name: 'tree.service.ts',
+        content: '',
+      },
+      {
+        name: 'tree.types.ts',
+        content: '',
+      },
+      {
+        name: 'tree.variants.ts',
+        content: '',
+      },
+      {
+        name: 'tree.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
 ];
