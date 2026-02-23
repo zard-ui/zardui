@@ -2,7 +2,7 @@
   "$schema": "https://zardui.com/schema/registry.json",
   "name": "@ngzard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.48",
+  "version": "1.0.0-beta.49",
   "items": [
     {
       "name": "core",
@@ -581,6 +581,25 @@
         "carousel-item.component.ts",
         "carousel-plugins.service.ts",
         "carousel.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "tree",
+      "type": "registry:component",
+      "registryDependencies": [
+        "icon",
+        "checkbox"
+      ],
+      "files": [
+        "tree.component.ts",
+        "tree-node.component.ts",
+        "tree-node-toggle.directive.ts",
+        "tree-node-content.component.ts",
+        "tree.service.ts",
+        "tree.types.ts",
+        "tree.variants.ts",
+        "tree.imports.ts",
         "index.ts"
       ]
     }
