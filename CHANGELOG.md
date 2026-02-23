@@ -1,3 +1,13 @@
+## 1.0.0-beta.52 (2026-02-23)
+
+### 🐛 Bug Fixes
+
+- **tree:** emit zNodeClick on mouse click and refine node spacing ([#452](https://github.com/zard-ui/zardui/pull/452))
+
+### ❤️ Thank You
+
+- Pavan Mollagavelli @neopavan
+
 ## 1.0.0-beta.51 (2026-02-23)
 
 ### 🐛 Bug Fixes
