@@ -1,3 +1,13 @@
+## 1.0.0-beta.53 (2026-02-23)
+
+### 🐛 Bug Fixes
+
+- **blocks:** replace broken file tree with z-tree component ([#450](https://github.com/zard-ui/zardui/pull/450), [#454](https://github.com/zard-ui/zardui/pull/454))
+
+### ❤️ Thank You
+
+- Pavan Mollagavelli @neopavan
+
 ## 1.0.0-beta.52 (2026-02-23)
 
 ### 🐛 Bug Fixes
