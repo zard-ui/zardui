@@ -118,6 +118,14 @@ export class ZardTreeComponent<T = any> {
       }
     });
 
+    // Emit node click from tree-node interactions
+    effect(() => {
+      const clicked = this.treeService.clickedNode();
+      if (clicked) {
+        this.zNodeClick.emit(clicked.node);
+      }
+    });
+
     // Emit selection changes
     effect(() => {
       const keys = this.treeService.selectedKeys();
@@ -214,7 +222,7 @@ export class ZardTreeComponent<T = any> {
   private activateFocusedNode() {
     const current = this.getFocusedNode();
     if (current && !current.node.disabled) {
-      this.zNodeClick.emit(current.node);
+      this.treeService.notifyNodeClick(current.node);
       if (this.zSelectable()) {
         this.treeService.select(current.node.key, 'single');
       }
@@ -259,7 +267,7 @@ export const treeNodeVariants = cva('flex flex-col', {
 });
 
 export const treeNodeToggleVariants = cva(
-  'inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm transition-transform duration-200 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+  'inline-flex h-4 w-4 shrink-0 items-center justify-center rounded-sm transition-transform duration-200 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
   {
     variants: {
       isExpanded: {
@@ -450,18 +458,19 @@ import {
           <z-icon zType="chevron-right" class="size-4" />
         </button>
       } @else {
-        <span class="inline-flex h-6 w-6 shrink-0"></span>
+        <span class="inline-flex h-4 w-4 shrink-0"></span>
       }
 
       <!-- Checkbox -->
       @if (checkable()) {
-        <z-checkbox
-          class="mr-1"
-          [ngModel]="checkState() === 'checked'"
-          [zDisabled]="node().disabled ?? false"
-          [attr.aria-checked]="checkState() === 'indeterminate' ? 'mixed' : checkState() === 'checked'"
-          (checkChange)="onCheckChange()"
-        />
+        <span class="mr-0.5 ml-1.5">
+          <z-checkbox
+            [ngModel]="checkState() === 'checked'"
+            [zDisabled]="node().disabled ?? false"
+            [attr.aria-checked]="checkState() === 'indeterminate' ? 'mixed' : checkState() === 'checked'"
+            (checkChange)="onCheckChange()"
+          />
+        </span>
       }
 
       <!-- Content -->
@@ -472,13 +481,13 @@ import {
         role="treeitem"
         [attr.aria-selected]="isSelected()"
         (click)="onContentClick()"
-        (keydown.enter)="onContentClick()"
+        (keydown.enter)="onEnterKey($event)"
       >
         @if (nodeTemplate(); as tmpl) {
           <ng-container [ngTemplateOutlet]="tmpl" [ngTemplateOutletContext]="{ $implicit: node(), level: level() }" />
         } @else {
           @if (node().icon) {
-            <z-icon [zType]="$any(node().icon)" class="mr-1.5 size-4 shrink-0" />
+            <z-icon [zType]="$any(node().icon)" class="size-4 shrink-0" />
           }
           <span class="truncate">{{ node().label }}</span>
         }
@@ -560,9 +569,15 @@ export class ZardTreeNodeComponent<T = any> {
     if (this.node().disabled) {
       return;
     }
+    this.treeService.notifyNodeClick(this.node());
     if (this.selectable()) {
       this.treeService.select(this.node().key, 'single');
     }
+  }
+
+  onEnterKey(event: Event) {
+    event.stopPropagation();
+    this.onContentClick();
   }
 
   onCheckChange() {
@@ -607,6 +622,14 @@ export class ZardTreeService<T = any> {
   readonly indeterminateKeys = signal<Set<string>>(new Set());
 
   private readonly dataSignal = signal<TreeNode<T>[]>([]);
+
+  // Click notification from tree-node → tree component (to emit zNodeClick output)
+  private _clickId = 0;
+  readonly clickedNode = signal<{ node: TreeNode<T>; _id: number } | null>(null);
+
+  notifyNodeClick(node: TreeNode<T>) {
+    this.clickedNode.set({ node, _id: ++this._clickId });
+  }
 
   readonly flattenedNodes = computed(() => {
     const result: FlatTreeNode<T>[] = [];
