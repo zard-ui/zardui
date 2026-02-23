@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal, untracked } from '@angular/core';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
@@ -22,9 +22,9 @@ export class BlockCodeViewerComponent {
   protected readonly fileTree = computed(() => this.buildFileTree(this.files()));
 
   constructor() {
-    setTimeout(() => {
+    effect(() => {
       const currentFiles = this.files();
-      if (currentFiles.length > 0) {
+      if (currentFiles.length > 0 && !untracked(() => this.selectedFile())) {
         this.selectedFile.set(currentFiles[0]);
       }
     });
@@ -124,8 +124,9 @@ export class BlockCodeViewerComponent {
   }
 
   protected copyToClipboard(): void {
-    if (this.selectedFile()) {
-      navigator.clipboard.writeText(this.selectedFile()!.content);
+    const file = this.selectedFile();
+    if (file) {
+      navigator.clipboard.writeText(file.content).catch(() => undefined);
     }
   }
 }
