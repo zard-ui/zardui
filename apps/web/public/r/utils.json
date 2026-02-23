@@ -3,8 +3,12 @@
   "type": "registry:component",
   "files": [
     {
+      "name": "index.ts",
+      "content": "export * from './merge-classes';\nexport * from './number';\n"
+    },
+    {
       "name": "merge-classes.ts",
-      "content": "import { type ClassValue, clsx } from 'clsx';\nimport { twMerge } from 'tailwind-merge';\n\nexport type { ClassValue };\n\nexport function mergeClasses(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n\nexport function transform(value: boolean | string): boolean {\n  return typeof value === 'string' ? value === '' : value;\n}\n\nexport const noopFn = () => void 0;\n\nexport const isElementContentTruncated = (element: HTMLElement | undefined): boolean => {\n  if (!element) {\n    return false;\n  }\n  const range = document.createRange();\n  range.selectNodeContents(element);\n  const rangeWidth = range.getBoundingClientRect().width;\n  const elementWidth = element.getBoundingClientRect().width;\n\n  return rangeWidth > elementWidth;\n};\n"
+      "content": "import { type ClassValue, clsx } from 'clsx';\nimport { twMerge } from 'tailwind-merge';\n\nexport type { ClassValue };\n\nexport function mergeClasses(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs));\n}\n\nexport const noopFn = () => void 0;\n\nexport const isElementContentTruncated = (element: HTMLElement | undefined): boolean => {\n  if (!element) {\n    return false;\n  }\n  const range = document.createRange();\n  range.selectNodeContents(element);\n  const rangeWidth = range.getBoundingClientRect().width;\n  const elementWidth = element.getBoundingClientRect().width;\n\n  return rangeWidth > elementWidth;\n};\n"
     },
     {
       "name": "number.ts",

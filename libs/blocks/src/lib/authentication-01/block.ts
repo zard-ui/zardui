@@ -25,7 +25,7 @@ import { ZardCardComponent } from '@zard/components/card/card.component';
 import { Component, signal } from '@angular/core';
 
 @Component({
-  selector: 'z-authentication-01',
+  selector: 'lib-authentication-01',
   standalone: true,
   imports: [
     ReactiveFormsModule,

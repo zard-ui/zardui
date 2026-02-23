@@ -1,6 +1,6 @@
 import { MediaMatcher } from '@angular/cdk/layout';
 import { isPlatformBrowser, DOCUMENT } from '@angular/common';
-import { DestroyRef, Injectable, PLATFORM_ID, computed, effect, inject, signal } from '@angular/core';
+import { afterNextRender, DestroyRef, Injectable, PLATFORM_ID, computed, inject, signal, effect } from '@angular/core';
 
 export enum EDarkModes {
   LIGHT = 'light',
@@ -15,37 +15,49 @@ export type DarkModeOptions = EDarkModes.LIGHT | EDarkModes.DARK | EDarkModes.SY
 export class ZardDarkMode {
   private readonly document = inject(DOCUMENT);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly mediaMatcher = inject(MediaMatcher);
 
   private static readonly STORAGE_KEY = 'theme';
-  private handleThemeChange = (event: MediaQueryListEvent) => this.updateThemeMode(event.matches, EDarkModes.SYSTEM);
+  private handleThemeChange = (event: MediaQueryListEvent) => this.systemDark.set(event.matches);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly themeSignal = signal<DarkModeOptions>(EDarkModes.SYSTEM);
   private _query?: MediaQueryList;
-  private initialized = false;
+  private readonly initialized = signal(false);
+  private readonly systemDark = signal(false);
+  readonly themeMode = computed<EDarkModes.LIGHT | EDarkModes.DARK>(() => {
+    const activeTheme = this.themeSignal();
+    if (activeTheme === EDarkModes.SYSTEM) {
+      return this.systemDark() ? EDarkModes.DARK : EDarkModes.LIGHT;
+    }
+    return activeTheme;
+  });
 
   constructor() {
     if (this.isBrowser) {
-      this._query = inject(MediaMatcher).matchMedia('(prefers-color-scheme: dark)');
-      this.destroyRef.onDestroy(() => this.handleSystemChanges(false));
-
       effect(() => {
+        if (!this.initialized()) {
+          return;
+        }
         const theme = this.themeSignal();
         const isDarkMode = this.isDarkModeActive(theme);
         this.updateThemeMode(isDarkMode, theme);
       });
+
+      afterNextRender({
+        write: () => {
+          // Only initialize if init() wasn't already called synchronously (e.g., in tests)
+          if (!this.initialized()) {
+            this.ensureQueryInitialized();
+            this.initializeTheme();
+          }
+        },
+      });
     }
   }
 
-  readonly themeMode = computed(() => {
-    const currentTheme = this.themeSignal();
-    if (currentTheme === EDarkModes.SYSTEM) {
-      return this.isDarkModeActive(currentTheme) ? EDarkModes.DARK : EDarkModes.LIGHT;
-    }
-    return currentTheme;
-  });
-
   init() {
-    if (!this.initialized && this.isBrowser) {
+    if (!this.initialized() && this.isBrowser) {
+      this.ensureQueryInitialized();
       this.initializeTheme();
     }
   }
@@ -72,9 +84,17 @@ export class ZardDarkMode {
     return this.themeSignal.asReadonly();
   }
 
+  private ensureQueryInitialized(): void {
+    if (!this._query) {
+      this._query = this.mediaMatcher.matchMedia('(prefers-color-scheme: dark)');
+      this.systemDark.set(this._query.matches);
+      this.destroyRef.onDestroy(() => this.handleSystemChanges(false));
+    }
+  }
+
   private get query(): MediaQueryList {
     if (!this.isBrowser || !this._query) {
-      throw new Error('Cannot access media query on server');
+      throw new Error('MediaQueryList not available: either running on server or not initialized');
     }
     return this._query;
   }
@@ -88,7 +108,10 @@ export class ZardDarkMode {
     if (!storedTheme || storedTheme === EDarkModes.SYSTEM) {
       this.handleSystemChanges();
     }
-    this.initialized = true;
+    this.initialized.set(true);
+
+    const theme = this.themeSignal();
+    this.updateThemeMode(this.isDarkModeActive(theme), theme);
   }
 
   private applyTheme(theme: DarkModeOptions): void {
@@ -104,6 +127,11 @@ export class ZardDarkMode {
     this.themeSignal.set(theme);
 
     if (theme === EDarkModes.SYSTEM) {
+      if (this.query) {
+        this.systemDark.set(this.query.matches);
+      } else {
+        this.ensureQueryInitialized();
+      }
       this.handleSystemChanges();
     } else {
       this.handleSystemChanges(false);
@@ -137,10 +165,14 @@ export class ZardDarkMode {
       return false;
     }
 
-    return currentTheme === EDarkModes.DARK || (currentTheme === EDarkModes.SYSTEM && this.query.matches);
+    return currentTheme === EDarkModes.DARK || (currentTheme === EDarkModes.SYSTEM && this.systemDark());
   }
 
   private handleSystemChanges(addListener = true): void {
+    if (!this._query) {
+      return;
+    }
+
     try {
       if (addListener) {
         this.query.addEventListener('change', this.handleThemeChange);

@@ -1,8 +1,8 @@
 import { isPlatformBrowser } from '@angular/common';
-import { Component, inject, PLATFORM_ID, TemplateRef, ViewChild } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, inject, PLATFORM_ID, type TemplateRef, ViewChild } from '@angular/core';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ZardSheetRef } from './sheet-ref';
+import { type ZardSheetRef } from './sheet-ref';
 import { ZardSheetService } from './sheet.service';
 import { ZardButtonComponent } from '../button/button.component';
 

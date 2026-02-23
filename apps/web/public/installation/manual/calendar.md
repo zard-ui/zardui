@@ -18,26 +18,22 @@ import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter, map } from 'rxjs';
 
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
-
-import { ZardCalendarGridComponent } from './calendar-grid.component';
-import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
-import type { CalendarMode, CalendarValue } from './calendar.types';
+import { ZardCalendarGridComponent } from '@/shared/components/calendar/calendar-grid.component';
+import { ZardCalendarNavigationComponent } from '@/shared/components/calendar/calendar-navigation.component';
+import type { CalendarMode, CalendarValue } from '@/shared/components/calendar/calendar.types';
 import {
   generateCalendarDays,
   getSelectedDatesArray,
   isSameDay,
   makeSafeDate,
   normalizeCalendarValue,
-} from './calendar.utils';
-import { calendarVariants } from './calendar.variants';
-
-export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
+} from '@/shared/components/calendar/calendar.utils';
+import { calendarVariants } from '@/shared/components/calendar/calendar.variants';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-calendar, [z-calendar]',
   imports: [ZardCalendarNavigationComponent, ZardCalendarGridComponent],
-  standalone: true,
   template: `
     <div [class]="classes()">
       <z-calendar-navigation
@@ -58,8 +54,7 @@ export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types'
         (dateSelect)="onDateSelect($event)"
         (previousMonth)="onGridPreviousMonth($event)"
         (nextMonth)="onGridNextMonth($event)"
-        (previousYear)="navigateYear(-1)"
-        (nextYear)="navigateYear(1)"
+        (navigateYear)="onNavigateYear($event)"
       />
     </div>
   `,
@@ -227,9 +222,13 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     this.gridRef().setFocusedDayIndex(-1);
   }
 
-  protected navigateYear(direction: number): void {
+  protected onNavigateYear(direction: number): void {
     const current = this.currentDate();
-    const newDate = makeSafeDate(current.getFullYear() + direction, current.getMonth(), 1);
+    const month = Number.parseInt(this.currentMonthValue());
+    const year = Number.parseInt(this.currentYearValue());
+    const baseYear = Number.isNaN(year) ? current.getFullYear() : year;
+    const baseMonth = Number.isNaN(month) ? current.getMonth() : month;
+    const newDate = makeSafeDate(baseYear + direction, baseMonth, 1);
     this.currentYearValue.set(newDate.getFullYear().toString());
     setTimeout(() => this.gridRef().resetFocus(), 0);
   }
@@ -498,7 +497,7 @@ import {
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import type { CalendarDay } from './calendar.types';
-import { getDayAriaLabel, getDayId } from './calendar.utils';
+import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
 
 @Component({
@@ -507,7 +506,7 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants
     <div #gridContainer>
       <!-- Weekdays Header -->
       <div class="grid w-fit grid-cols-7 text-center" role="row">
-        @for (weekday of weekdays; track $index) {
+        @for (weekday of weekdays; track weekday) {
           <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
           </div>
@@ -557,10 +556,9 @@ export class ZardCalendarGridComponent {
   readonly dateSelect = output<{ date: Date; index: number }>();
   readonly previousMonth = output<{ position: string; dayOfWeek: number }>();
   readonly nextMonth = output<{ position: string; dayOfWeek: number }>();
-  readonly previousYear = output<void>();
-  readonly nextYear = output<void>();
+  readonly navigateYear = output<number>();
 
-  readonly weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+  readonly weekdays = calendarWeekdays;
 
   private readonly focusedDayIndex = signal<number>(-1);
 
@@ -681,14 +679,14 @@ export class ZardCalendarGridComponent {
         break;
       case 'PageUp':
         if (event.ctrlKey) {
-          this.previousYear.emit();
+          this.navigateYear.emit(-1);
         } else {
           this.previousMonth.emit({ position: 'default', dayOfWeek: -1 });
         }
         break;
       case 'PageDown':
         if (event.ctrlKey) {
-          this.nextYear.emit();
+          this.navigateYear.emit(1);
         } else {
           this.nextMonth.emit({ position: 'default', dayOfWeek: -1 });
         }
@@ -789,18 +787,18 @@ export class ZardCalendarGridComponent {
 ```angular-ts title="calendar-navigation.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
+import { calendarMonths } from '@/shared/components/calendar/calendar.utils';
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import { calendarNavVariants } from './calendar.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
 
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
 @Component({
   selector: 'z-calendar-navigation',
   imports: [ZardButtonComponent, ZardIconComponent, ZardSelectComponent, ZardSelectItemComponent],
-  standalone: true,
   template: `
     <div [class]="navClasses()">
       <button
@@ -820,7 +818,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
       <div class="flex items-center space-x-2">
         <!-- Month Select -->
         <z-select [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
-          @for (month of months; track $index) {
+          @for (month of months; track month) {
             <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
           }
         </z-select>
@@ -864,8 +862,7 @@ export class ZardCalendarNavigationComponent {
   readonly yearChange = output<string>();
   readonly previousMonth = output<void>();
   readonly nextMonth = output<void>();
-
-  readonly months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  readonly months = calendarMonths;
 
   protected readonly navClasses = computed(() => mergeClasses(calendarNavVariants()));
 
@@ -881,35 +878,45 @@ export class ZardCalendarNavigationComponent {
 
   protected readonly currentMonthName = computed(() => {
     const selectedMonth = Number.parseInt(this.currentMonth());
-    if (!Number.isNaN(selectedMonth) && this.months[selectedMonth]) return this.months[selectedMonth];
+    if (!Number.isNaN(selectedMonth) && this.months[selectedMonth]) {
+      return this.months[selectedMonth];
+    }
     return this.months[new Date().getMonth()];
   });
 
-  protected isPreviousDisabled(): boolean {
-    if (this.disabled()) return true;
+  protected readonly isPreviousDisabled = computed(() => {
+    if (this.disabled()) {
+      return true;
+    }
 
     const minDate = this.minDate();
-    if (!minDate) return false;
+    if (!minDate) {
+      return false;
+    }
 
     const currentMonth = Number.parseInt(this.currentMonth());
     const currentYear = Number.parseInt(this.currentYear());
     const lastDayOfPreviousMonth = new Date(currentYear, currentMonth, 0);
 
     return lastDayOfPreviousMonth.getTime() < minDate.getTime();
-  }
+  });
 
-  protected isNextDisabled(): boolean {
-    if (this.disabled()) return true;
+  protected readonly isNextDisabled = computed(() => {
+    if (this.disabled()) {
+      return true;
+    }
 
     const maxDate = this.maxDate();
-    if (!maxDate) return false;
+    if (!maxDate) {
+      return false;
+    }
 
     const currentMonth = Number.parseInt(this.currentMonth());
     const currentYear = Number.parseInt(this.currentYear());
     const nextMonth = new Date(currentYear, currentMonth + 1, 1);
 
     return nextMonth.getTime() > maxDate.getTime();
-  }
+  });
 
   protected onPreviousClick(): void {
     this.previousMonth.emit();
@@ -972,6 +979,23 @@ export interface CalendarDayConfig {
 
 ```angular-ts title="calendar.utils.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import type { CalendarDay, CalendarDayConfig, CalendarMode, CalendarValue } from './calendar.types';
+
+export const calendarMonths = [
+  'Jan',
+  'Feb',
+  'Mar',
+  'Apr',
+  'May',
+  'Jun',
+  'Jul',
+  'Aug',
+  'Sep',
+  'Oct',
+  'Nov',
+  'Dec',
+] as const;
+
+export const calendarWeekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'] as const;
 
 /**
  * Checks if two dates represent the same day (ignoring time)
@@ -1211,6 +1235,10 @@ export function toValidDate(value: unknown): Date | null {
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export * from './calendar.component';
 export * from './calendar.variants';
+export * from './calendar.types';
+export * from './calendar.utils';
+export * from './calendar-grid.component';
+export * from './calendar-navigation.component';
 
 ```
 

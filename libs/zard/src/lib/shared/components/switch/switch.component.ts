@@ -1,10 +1,11 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
   forwardRef,
   input,
-  output,
+  model,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
@@ -13,26 +14,27 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
-import { mergeClasses } from '@/shared/utils/merge-classes';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
-import { switchVariants, type ZardSwitchVariants } from './switch.variants';
+import { switchVariants, type ZardSwitchSizeVariants, type ZardSwitchTypeVariants } from './switch.variants';
 
-type OnTouchedType = () => any;
-type OnChangeType = (value: any) => void;
+type OnTouchedType = () => void;
+type OnChangeType = (value: boolean) => void;
 
 @Component({
-  selector: 'z-switch, [z-switch]',
+  selector: 'z-switch',
   imports: [ZardIdDirective],
   template: `
-    <span class="flex items-center space-x-2" (mousedown)="onSwitchChange()" zardId="switch" #z="zardId">
+    <span class="flex items-center space-x-2" zardId="switch" #z="zardId">
       <button
         [id]="zId() || z.id()"
         type="button"
         role="switch"
         [attr.data-state]="status()"
-        [attr.aria-checked]="checked()"
-        [disabled]="disabled()"
+        [attr.aria-checked]="zChecked()"
         [class]="classes()"
+        [disabled]="zDisabled() || formDisabled()"
+        (click)="onSwitchChange()"
       >
         <span
           [attr.data-size]="zSize()"
@@ -45,7 +47,7 @@ type OnChangeType = (value: any) => void;
         class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
         [for]="zId() || z.id()"
       >
-        <ng-content />
+        <ng-content><span class="sr-only">toggle switch</span></ng-content>
       </label>
     </span>
   `,
@@ -61,28 +63,25 @@ type OnChangeType = (value: any) => void;
   exportAs: 'zSwitch',
 })
 export class ZardSwitchComponent implements ControlValueAccessor {
-  readonly checkChange = output<boolean>();
   readonly class = input<ClassValue>('');
-
-  readonly zType = input<ZardSwitchVariants['zType']>('default');
-  readonly zSize = input<ZardSwitchVariants['zSize']>('default');
+  readonly zChecked = model<boolean>(true);
   readonly zId = input<string>('');
+  readonly zSize = input<ZardSwitchSizeVariants>('default');
+  readonly zType = input<ZardSwitchTypeVariants>('default');
+  readonly zDisabled = input(false, { transform: booleanAttribute });
 
-  /* eslint-disable-next-line @typescript-eslint/no-empty-function */
-  private onChange: OnChangeType = () => {};
-  /* eslint-disable-next-line @typescript-eslint/no-empty-function */
-  private onTouched: OnTouchedType = () => {};
+  private onChange: OnChangeType = noopFn;
+  private onTouched: OnTouchedType = noopFn;
 
+  protected readonly status = computed(() => (this.zChecked() ? 'checked' : 'unchecked'));
   protected readonly classes = computed(() =>
     mergeClasses(switchVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()),
   );
 
-  protected readonly checked = signal<boolean>(true);
-  protected readonly status = computed(() => (this.checked() ? 'checked' : 'unchecked'));
-  protected readonly disabled = signal(false);
+  protected readonly formDisabled = signal(false);
 
   writeValue(val: boolean): void {
-    this.checked.set(val);
+    this.zChecked.set(val);
   }
 
   registerOnChange(fn: OnChangeType): void {
@@ -94,17 +93,16 @@ export class ZardSwitchComponent implements ControlValueAccessor {
   }
 
   onSwitchChange(): void {
-    if (this.disabled()) {
+    if (this.zDisabled() || this.formDisabled()) {
       return;
     }
 
-    this.checked.update(checked => !checked);
+    this.zChecked.update(checked => !checked);
     this.onTouched();
-    this.onChange(this.checked());
-    this.checkChange.emit(this.checked());
+    this.onChange(this.zChecked());
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.disabled.set(isDisabled);
+    this.formDisabled.set(isDisabled);
   }
 }

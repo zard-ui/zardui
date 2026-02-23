@@ -2,19 +2,15 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "defaultBase": "master",
   "release": {
-    "projects": ["libs/zard", "packages/cli"],
+    "projects": [
+      "packages/cli",
+      "libs/zard"
+    ],
     "projectsRelationship": "fixed",
     "releaseTagPattern": "v{version}",
-    "git": {
-      "commit": true,
-      "commitMessage": "🔖 chore(release): publish v{version}",
-      "tag": true,
-      "tagMessage": "v{version}"
-    },
     "changelog": {
       "automaticFromRef": true,
       "workspaceChangelog": {
-        "createRelease": "github",
         "file": "CHANGELOG.md",
         "renderOptions": {
           "authors": true,
@@ -25,12 +21,7 @@
       "projectChangelogs": false
     },
     "version": {
-      "preVersionCommand": "npx tsx scripts/normalize-commits.cts",
-      "generatorOptions": {
-        "fallbackCurrentVersionResolver": "disk",
-        "currentVersionResolver": "git-tag",
-        "specifierSource": "conventional-commits"
-      }
+      "preVersionCommand": "npx tsx scripts/normalize-commits.cts"
     },
     "conventionalCommits": {
       "types": {
@@ -115,7 +106,10 @@
     }
   },
   "namedInputs": {
-    "default": ["{projectRoot}/**/*", "sharedGlobals"],
+    "default": [
+      "{projectRoot}/**/*",
+      "sharedGlobals"
+    ],
     "production": [
       "default",
       "!{projectRoot}/.eslintrc.json",
@@ -131,16 +125,30 @@
   "targetDefaults": {
     "@angular-devkit/build-angular:application": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     },
     "@nx/eslint:lint": {
       "cache": true,
-      "inputs": ["default", "{workspaceRoot}/.eslintrc.json", "{workspaceRoot}/.eslintignore", "{workspaceRoot}/eslint.config.mjs"]
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.mjs"
+      ]
     },
     "@nx/jest:jest": {
       "cache": true,
-      "inputs": ["default", "^production", "{workspaceRoot}/jest.preset.cjs"],
+      "inputs": [
+        "default",
+        "^production",
+        "{workspaceRoot}/jest.preset.cjs"
+      ],
       "options": {
         "passWithNoTests": true
       },
@@ -153,8 +161,13 @@
     },
     "@nx/angular:package": {
       "cache": true,
-      "dependsOn": ["^build"],
-      "inputs": ["production", "^production"]
+      "dependsOn": [
+        "^build"
+      ],
+      "inputs": [
+        "production",
+        "^production"
+      ]
     }
   },
   "generators": {

@@ -10,7 +10,6 @@ import { ZardEmptyComponent } from '../empty.component';
 @Component({
   selector: 'z-demo-empty-advanced-customization',
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, ZardIconComponent, ZardEmptyComponent],
-  standalone: true,
   template: `
     <z-empty
       [zImage]="customImage"
@@ -36,7 +35,7 @@ import { ZardEmptyComponent } from '../empty.component';
     </ng-template>
 
     <ng-template #actionInvite>
-      <button z-button zSize="sm">
+      <button type="button" z-button zSize="sm">
         <i z-icon zType="plus"></i>
         Invite Members
       </button>

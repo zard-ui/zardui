@@ -4,7 +4,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { AiAssistComponent } from '@doc/domain/components/ai-assist/ai-assist.component';
 
-import { ComponentData, COMPONENTS } from '../../../shared/constants/components.constant';
+import { ComponentLoadingComponent } from './component-loading.component';
+import {
+  ComponentData,
+  ComponentRegistryEntry,
+  COMPONENTS_REGISTRY,
+} from '../../../shared/constants/components.constant';
 import { Step } from '../../../shared/constants/install.constant';
 import { DynamicInstallationService } from '../../../shared/services/dynamic-installation.service';
 import { SeoService } from '../../../shared/services/seo.service';
@@ -21,6 +26,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   templateUrl: './component.page.html',
   imports: [
     AiAssistComponent,
+    ComponentLoadingComponent,
     DocContentComponent,
     MarkdownRendererComponent,
     ScrollSpyDirective,
@@ -39,6 +45,8 @@ export class ComponentPage implements OnInit {
 
   activeAnchor = 'overview';
   componentData = signal<ComponentData | undefined>(undefined);
+  loading = signal(false);
+  loadingEntry = signal<ComponentRegistryEntry | undefined>(undefined);
   navigationConfig: NavigationConfig = {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
@@ -92,32 +100,41 @@ export class ComponentPage implements OnInit {
     this.activatedRoute.params.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => this.loadData());
   }
 
-  private loadData() {
+  private async loadData() {
     const componentName = this.activatedRoute.snapshot.paramMap.get('componentName');
     if (!componentName) {
       this.router.navigateByUrl('/');
       return;
     }
 
-    const component = COMPONENTS.find(x => x.componentName === componentName);
-    if (!component) {
+    const entry = COMPONENTS_REGISTRY.find(x => x.componentName === componentName);
+    if (!entry) {
       this.router.navigateByUrl('/');
       return;
     }
 
-    this.componentData.set(component);
-
-    const examplesItem = this.navigationConfig.items.find(item => item.id === 'examples');
-    if (examplesItem) {
-      examplesItem.children = component.examples.map(example => ({
-        id: example.name,
-        label: example.name,
-        type: 'custom' as const,
-      }));
-    }
-    this.setPageTitle();
+    this.loading.set(true);
+    this.loadingEntry.set(entry);
+    this.componentData.set(undefined);
 
     this.installGuide = this.dynamicInstallationService.generateInstallationSteps(componentName);
+
+    try {
+      const component = await entry.loadData();
+      this.componentData.set(component);
+
+      const examplesItem = this.navigationConfig.items.find(item => item.id === 'examples');
+      if (examplesItem) {
+        examplesItem.children = component.examples.map(example => ({
+          id: example.name,
+          label: example.name,
+          type: 'custom' as const,
+        }));
+      }
+      this.setPageTitle();
+    } finally {
+      this.loading.set(false);
+    }
   }
 
   setPageTitle() {

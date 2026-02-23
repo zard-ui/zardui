@@ -1,9 +1,9 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
-import { ZardDatePickerComponent } from './date-picker.component';
-
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
+
+import { ZardDatePickerComponent } from './date-picker.component';
 
 describe('ZardDatePickerComponent', () => {
   let component: ZardDatePickerComponent;

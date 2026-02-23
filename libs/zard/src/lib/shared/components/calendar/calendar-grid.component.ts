@@ -13,7 +13,7 @@ import {
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import type { CalendarDay } from './calendar.types';
-import { getDayAriaLabel, getDayId } from './calendar.utils';
+import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
 import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
 
 @Component({
@@ -22,7 +22,7 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants
     <div #gridContainer>
       <!-- Weekdays Header -->
       <div class="grid w-fit grid-cols-7 text-center" role="row">
-        @for (weekday of weekdays; track $index) {
+        @for (weekday of weekdays; track weekday) {
           <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
           </div>
@@ -72,10 +72,9 @@ export class ZardCalendarGridComponent {
   readonly dateSelect = output<{ date: Date; index: number }>();
   readonly previousMonth = output<{ position: string; dayOfWeek: number }>();
   readonly nextMonth = output<{ position: string; dayOfWeek: number }>();
-  readonly previousYear = output<void>();
-  readonly nextYear = output<void>();
+  readonly navigateYear = output<number>();
 
-  readonly weekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
+  readonly weekdays = calendarWeekdays;
 
   private readonly focusedDayIndex = signal<number>(-1);
 
@@ -196,14 +195,14 @@ export class ZardCalendarGridComponent {
         break;
       case 'PageUp':
         if (event.ctrlKey) {
-          this.previousYear.emit();
+          this.navigateYear.emit(-1);
         } else {
           this.previousMonth.emit({ position: 'default', dayOfWeek: -1 });
         }
         break;
       case 'PageDown':
         if (event.ctrlKey) {
-          this.nextYear.emit();
+          this.navigateYear.emit(1);
         } else {
           this.nextMonth.emit({ position: 'default', dayOfWeek: -1 });
         }

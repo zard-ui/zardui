@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormBuilder, type FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
-import { ZardCheckboxComponent } from './checkbox.component';
-
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
+
+import { ZardCheckboxComponent } from './checkbox.component';
 
 @Component({
   imports: [ZardCheckboxComponent, FormsModule],
@@ -22,7 +22,7 @@ import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plu
     <span z-checkbox zShape="circle">Circle Shape</span>
     <span z-checkbox zShape="square">Square Shape</span>
 
-    <span z-checkbox disabled>Disabled</span>
+    <span z-checkbox zDisabled="true">Disabled</span>
   `,
 })
 class TestHostComponent {}
@@ -40,14 +40,11 @@ class TestHostWithNgModelComponent {
 
 @Component({
   imports: [ZardCheckboxComponent, ReactiveFormsModule],
-  standalone: true,
   template: `
     <form [formGroup]="form">
       <span z-checkbox formControlName="termsCheckbox">Agree to Terms</span>
       <span z-checkbox formControlName="newsletterCheckbox">Subscribe to Newsletter</span>
-      <span z-checkbox formControlName="privacyCheckbox" [disabled]="form.get('privacyCheckbox')?.disabled">
-        Accept Privacy Policy
-      </span>
+      <span z-checkbox formControlName="privacyCheckbox">Accept Privacy Policy</span>
     </form>
   `,
 })
@@ -105,8 +102,8 @@ describe('ZardCheckboxComponent', () => {
         'shadow',
         'hover:shadow-md',
         'focus-visible:outline-none',
-        'focus-visible:ring-1',
-        'focus-visible:ring-ring',
+        'focus-visible:ring-4',
+        'focus-visible:ring-ring/50',
       ];
 
       checkboxElements.forEach(checkbox => {
@@ -152,12 +149,12 @@ describe('ZardCheckboxComponent', () => {
         {
           index: 3,
           size: 'default',
-          expectedClasses: ['h-4', 'w-4'],
+          expectedClasses: ['size-4'],
         },
         {
           index: 4,
           size: 'lg',
-          expectedClasses: ['h-6', 'w-6'],
+          expectedClasses: ['size-6'],
         },
       ];
 
@@ -204,8 +201,7 @@ describe('ZardCheckboxComponent', () => {
       const disabledCheckbox = checkboxElements[8];
 
       expect(disabledCheckbox.disabled).toBeTruthy();
-      expect(disabledCheckbox.classList).toContain('disabled:cursor-not-allowed');
-      expect(disabledCheckbox.classList).toContain('disabled:opacity-50');
+      expect(disabledCheckbox).toHaveClass('disabled:cursor-not-allowed disabled:opacity-50');
     });
   });
 
@@ -216,7 +212,7 @@ describe('ZardCheckboxComponent', () => {
       testHostWithNgModelComponent.checked = true;
       fixtureWithNgModel.detectChanges();
       await fixtureWithNgModel.whenStable();
-      expect(componentInstance.checked).toBe(true);
+      expect(componentInstance.checked()).toBe(true);
     });
 
     it('should update ngModel when checkbox is clicked', async () => {

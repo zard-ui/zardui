@@ -4,13 +4,14 @@
 
 | Property      | Description                                       | Type                                        | Default   |
 | ------------- | ------------------------------------------------- | ------------------------------------------- | --------- |
-| `[zSize]`     | Avatar size variant                               | `sm \| default \| md \| lg \| xl \| number` | `default` |
-| `[zShape]`    | Avatar shape                                      | `circle \| rounded \| square`               | `circle`  |
-| `[zStatus]`   | Status indicator badge                            | `online \| offline \| doNotDisturb \| away` |           |
-| `[zSrc]`      | Image source URL                                  | `string`                                    |           |
+| `[class]`     | Additional CSS classes                            | `string`                                    | `''`      |
 | `[zAlt]`      | Image alt text for accessibility                  | `string`                                    | `''`      |
 | `[zFallback]` | Fallback text displayed while loading or on error | `string`                                    | `''`      |
-| `[class]`     | Additional CSS classes                            | `string`                                    | `''`      |
+| `[zPriority]` | Should image load with high priority              | `boolean`                                   | `false`   |
+| `[zShape]`    | Avatar shape                                      | `circle \| rounded \| square`               | `circle`  |
+| `[zSize]`     | Avatar size variant                               | `sm \| default \| md \| lg \| xl \| number` | `default` |
+| `[zSrc]`      | Image source URL                                  | `string \| SafeUrl`                         | `''`      |
+| `[zStatus]`   | Status indicator badge                            | `online \| offline \| doNotDisturb \| away` |           |
 
 [z-avatar-group] Component
 

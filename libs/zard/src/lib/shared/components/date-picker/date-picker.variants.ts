@@ -1,8 +1,9 @@
-import { cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-const datePickerVariants = cva('', {
+export const datePickerVariants = cva('', {
   variants: {
     zSize: {
+      xs: '',
       sm: '',
       default: '',
       lg: '',
@@ -19,4 +20,4 @@ const datePickerVariants = cva('', {
   },
 });
 
-export { datePickerVariants };
+export type ZardDatePickerSizeVariants = NonNullable<VariantProps<typeof datePickerVariants>['zSize']>;

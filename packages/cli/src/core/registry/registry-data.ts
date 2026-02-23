@@ -45,6 +45,10 @@ export const registry: ComponentRegistry[] = [
     basePath: 'services',
     files: [
       {
+        name: 'index.ts',
+        content: '',
+      },
+      {
         name: 'dark-mode.ts',
         content: '',
       },
@@ -55,6 +59,10 @@ export const registry: ComponentRegistry[] = [
     basePath: 'utils',
     dependencies: ['tailwind-merge', 'clsx'],
     files: [
+      {
+        name: 'index.ts',
+        content: '',
+      },
       {
         name: 'merge-classes.ts',
         content: '',
@@ -648,7 +656,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'calendar',
-    registryDependencies: ['icon'],
+    registryDependencies: ['icon', 'select'],
     files: [
       {
         name: 'calendar.component.ts',
@@ -1062,6 +1070,48 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'carousel.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'tree',
+    registryDependencies: ['icon', 'checkbox'],
+    files: [
+      {
+        name: 'tree.component.ts',
+        content: '',
+      },
+      {
+        name: 'tree-node.component.ts',
+        content: '',
+      },
+      {
+        name: 'tree-node-toggle.directive.ts',
+        content: '',
+      },
+      {
+        name: 'tree-node-content.component.ts',
+        content: '',
+      },
+      {
+        name: 'tree.service.ts',
+        content: '',
+      },
+      {
+        name: 'tree.types.ts',
+        content: '',
+      },
+      {
+        name: 'tree.variants.ts',
+        content: '',
+      },
+      {
+        name: 'tree.imports.ts',
         content: '',
       },
       {

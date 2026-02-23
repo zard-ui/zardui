@@ -1,20 +1,25 @@
-import { CommonModule } from '@angular/common';
-import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
-import { screen } from '@testing-library/angular';
+import { render, screen } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 import { type EmblaCarouselType } from 'embla-carousel';
-
-import { ZardCarouselComponent } from './carousel.component';
 
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
+import { ZardCarouselComponent } from './carousel.component';
+
+const SHARED_PROVIDERS = [
+  {
+    provide: EVENT_MANAGER_PLUGINS,
+    useClass: ZardEventManagerPlugin,
+    multi: true,
+  },
+];
+
 describe('ZardCarouselComponent', () => {
-  let component: ZardCarouselComponent;
-  let fixture: ComponentFixture<ZardCarouselComponent>;
   let mockEmblaApi: jest.Mocked<EmblaCarouselType>;
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // Create comprehensive mock of Embla API
     mockEmblaApi = {
       scrollNext: jest.fn(),
@@ -30,32 +35,22 @@ describe('ZardCarouselComponent', () => {
       slidesInView: jest.fn().mockReturnValue([0]),
       slideNodes: jest.fn().mockReturnValue([]),
     } as unknown as jest.Mocked<EmblaCarouselType>;
+  });
 
-    await TestBed.configureTestingModule({
-      imports: [ZardCarouselComponent, CommonModule],
-      providers: [
-        {
-          provide: EVENT_MANAGER_PLUGINS,
-          useClass: ZardEventManagerPlugin,
-          multi: true,
-        },
-      ],
-    }).compileComponents();
+  it('creates successfully', async () => {
+    await render(ZardCarouselComponent, {
+      providers: SHARED_PROVIDERS,
+    });
+    expect(screen.getByRole('region')).toBeInTheDocument();
+  });
 
-    fixture = TestBed.createComponent(ZardCarouselComponent);
-    component = fixture.componentInstance;
-
-    // Initialize carousel with mock
+  it('handles slide navigation', async () => {
+    const { fixture } = await render(ZardCarouselComponent, {
+      providers: SHARED_PROVIDERS,
+    });
+    const component = fixture.componentInstance;
     component.onEmblaChange('init', mockEmblaApi);
-    fixture.detectChanges();
-  });
 
-  it('should create component', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should handle slide navigation', () => {
-    // Simulate next slide
     mockEmblaApi.selectedScrollSnap.mockReturnValue(1);
     mockEmblaApi.canScrollPrev.mockReturnValue(true);
     component.onEmblaChange('select', mockEmblaApi);
@@ -65,24 +60,35 @@ describe('ZardCarouselComponent', () => {
     expect(component['canScrollPrev']()).toBeTruthy();
   });
 
-  it('should emit selected event on user interaction', () => {
+  it('emits selected event on user interaction', async () => {
+    const { fixture } = await render(ZardCarouselComponent, {
+      providers: SHARED_PROVIDERS,
+    });
+    const component = fixture.componentInstance;
     const emitSpy = jest.spyOn(component.zSelected, 'emit');
+    const slideNextSpy = jest.spyOn(component, 'slideNext');
+    component.onEmblaChange('init', mockEmblaApi);
 
-    // Simulate user click and slide change
-    const btnNext = screen.getByLabelText('Next slide');
-    btnNext.click();
+    await userEvent.click(screen.getByLabelText('Next slide'));
     mockEmblaApi.selectedScrollSnap.mockReturnValue(1);
     component.onEmblaChange('select', mockEmblaApi);
     fixture.detectChanges();
 
+    expect(slideNextSpy).toHaveBeenCalled();
     expect(emitSpy).toHaveBeenCalled();
   });
 
-  it('should handle button interaction', () => {
+  it('handles button interaction', async () => {
+    const { fixture } = await render(ZardCarouselComponent, {
+      providers: SHARED_PROVIDERS,
+    });
+    const component = fixture.componentInstance;
     const emitSpy = jest.spyOn(component.zSelected, 'emit');
+    const slideNextSpy = jest.spyOn(component, 'slideNext');
+    const slidePrevSpy = jest.spyOn(component, 'slidePrevious');
+    component.onEmblaChange('init', mockEmblaApi);
 
-    // Simulate drag end and slide change
-    screen.getByLabelText('Next slide').click();
+    await userEvent.click(screen.getByLabelText('Next slide'));
     mockEmblaApi.selectedScrollSnap.mockReturnValue(1);
     mockEmblaApi.scrollProgress.mockReturnValue(1);
     mockEmblaApi.canScrollPrev.mockReturnValue(true);
@@ -92,8 +98,9 @@ describe('ZardCarouselComponent', () => {
     expect(emitSpy).toHaveBeenCalled();
     expect(component['selectedIndex']()).toBe(1);
     expect(mockEmblaApi.canScrollPrev()).toBeTruthy();
+    expect(slideNextSpy).toHaveBeenCalled();
 
-    screen.getByLabelText('Previous slide').click();
+    await userEvent.click(screen.getByLabelText('Previous slide'));
     mockEmblaApi.selectedScrollSnap.mockReturnValue(0);
     mockEmblaApi.scrollProgress.mockReturnValue(0);
     mockEmblaApi.canScrollPrev.mockReturnValue(false);
@@ -103,15 +110,22 @@ describe('ZardCarouselComponent', () => {
     expect(emitSpy).toHaveBeenCalled();
     expect(component['selectedIndex']()).toBe(0);
     expect(mockEmblaApi.canScrollPrev()).toBeFalsy();
+    expect(slidePrevSpy).toHaveBeenCalled();
   });
 
-  it('should handle dot interaction', () => {
+  it('handles dot interaction', async () => {
+    const { fixture } = await render(ZardCarouselComponent, {
+      componentInputs: { zControls: 'dot' },
+      providers: SHARED_PROVIDERS,
+    });
+    const component = fixture.componentInstance;
     const emitSpy = jest.spyOn(component.zSelected, 'emit');
-    fixture.componentRef.setInput('zControls', 'dot');
+
+    // Manually set scroll snaps to ensure dots are rendered
+    component['scrollSnaps'].set([0, 1, 2]);
     fixture.detectChanges();
 
-    // Simulate drag end and slide change
-    screen.getAllByRole('button')[0].click();
+    await userEvent.click(screen.getByLabelText('Go to slide 2'));
     mockEmblaApi.selectedScrollSnap.mockReturnValue(1);
     mockEmblaApi.scrollProgress.mockReturnValue(1);
     mockEmblaApi.canScrollPrev.mockReturnValue(true);
@@ -123,18 +137,20 @@ describe('ZardCarouselComponent', () => {
     expect(mockEmblaApi.canScrollPrev()).toBeTruthy();
   });
 
-  it('should handle drag interaction correctly', () => {
+  it('handles drag interaction correctly', async () => {
+    const { fixture } = await render(ZardCarouselComponent, {
+      providers: SHARED_PROVIDERS,
+    });
+    const component = fixture.componentInstance;
     const emitSpy = jest.spyOn(component.zSelected, 'emit');
+    component.onEmblaChange('init', mockEmblaApi);
 
-    // Simulate drag sequence
     component.onEmblaChange('pointerDown', mockEmblaApi);
 
-    // During drag
     mockEmblaApi.selectedScrollSnap.mockReturnValue(0);
     mockEmblaApi.scrollProgress.mockReturnValue(0.5);
     component.onEmblaChange('scroll', mockEmblaApi);
 
-    // Drag ends on next slide
     mockEmblaApi.selectedScrollSnap.mockReturnValue(1);
     mockEmblaApi.scrollProgress.mockReturnValue(1);
     mockEmblaApi.canScrollPrev.mockReturnValue(true);
@@ -148,8 +164,13 @@ describe('ZardCarouselComponent', () => {
     expect(component['selectedIndex']()).toBe(1);
   });
 
-  it('should handle edge cases', () => {
-    // Test reaching last slide
+  it('handles edge cases when reaching last slide', async () => {
+    const { fixture } = await render(ZardCarouselComponent, {
+      providers: SHARED_PROVIDERS,
+    });
+    const component = fixture.componentInstance;
+    component.onEmblaChange('init', mockEmblaApi);
+
     mockEmblaApi.selectedScrollSnap.mockReturnValue(2);
     mockEmblaApi.canScrollNext.mockReturnValue(false);
     mockEmblaApi.canScrollPrev.mockReturnValue(true);
@@ -161,36 +182,51 @@ describe('ZardCarouselComponent', () => {
     expect(component['canScrollPrev']()).toBeTruthy();
   });
 
-  it('should handle keyboard navigation', () => {
+  it('handles keyboard navigation with ArrowRight and ArrowLeft keys', async () => {
+    const { fixture } = await render(ZardCarouselComponent, {
+      providers: SHARED_PROVIDERS,
+    });
+    const component = fixture.componentInstance;
     const emitSpy = jest.spyOn(component.zSelected, 'emit');
-    const rootElement = fixture.debugElement.nativeElement;
-    const emblaRef = component['emblaRef']();
 
-    if (emblaRef) {
-      emblaRef.scrollNext = jest.fn();
-      emblaRef.scrollPrev = jest.fn();
-    }
+    const slideNextSpy = jest.spyOn(component, 'slideNext');
+    const slidePrevSpy = jest.spyOn(component, 'slidePrevious');
+    component.onEmblaChange('init', mockEmblaApi);
 
-    // Test right arrow key
-    rootElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+    // Test ArrowRight key (host listener)
+    const hostElement = fixture.debugElement.nativeElement as HTMLElement;
+
+    hostElement.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowRight',
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
     mockEmblaApi.selectedScrollSnap.mockReturnValue(1);
     mockEmblaApi.canScrollPrev.mockReturnValue(true);
     component.onEmblaChange('select', mockEmblaApi);
     fixture.detectChanges();
 
-    expect(component['emblaRef']()?.scrollNext).toHaveBeenCalled();
+    expect(slideNextSpy).toHaveBeenCalled();
     expect(component['selectedIndex']()).toBe(1);
     expect(emitSpy).toHaveBeenCalled();
 
-    // Test left arrow key
-    rootElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+    // Test ArrowLeft key (host listener)
+    hostElement.dispatchEvent(
+      new KeyboardEvent('keydown', {
+        key: 'ArrowLeft',
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
     mockEmblaApi.selectedScrollSnap.mockReturnValue(0);
     mockEmblaApi.canScrollPrev.mockReturnValue(false);
     component.onEmblaChange('select', mockEmblaApi);
     fixture.detectChanges();
 
-    expect(component['emblaRef']()?.scrollPrev).toHaveBeenCalled();
+    expect(slidePrevSpy).toHaveBeenCalled();
     expect(component['selectedIndex']()).toBe(0);
-    expect(emitSpy).toHaveBeenCalled();
+    expect(emitSpy).toHaveBeenCalledTimes(2);
   });
 });

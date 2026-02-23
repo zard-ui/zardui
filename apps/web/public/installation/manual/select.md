@@ -3,10 +3,11 @@
 ```angular-ts title="select.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   type AfterContentInit,
   afterNextRender,
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -42,7 +43,7 @@ import {
   selectVariants,
   type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -51,7 +52,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
 
 @Component({
   selector: 'z-select, [z-select]',
-  imports: [CommonModule, OverlayModule, ZardBadgeComponent, ZardIconComponent],
+  imports: [OverlayModule, ZardBadgeComponent, ZardIconComponent],
   template: `
     <button
       type="button"
@@ -66,26 +67,21 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
       (click)="toggle()"
       (focus)="onFocus()"
     >
-      <span class="flex flex-1 flex-wrap items-center gap-2">
-        @let labels = selectedLabels();
-        @for (label of labels; track index; let index = $index) {
-          <ng-container *ngTemplateOutlet="labelsTemplate; context: { $implicit: label }" />
+      <span class="flex min-w-0 flex-1 flex-wrap items-center gap-2">
+        @for (label of selectedLabels(); track label) {
+          @if (zMultiple()) {
+            <z-badge zType="secondary">
+              <span class="truncate">{{ label }}</span>
+            </z-badge>
+          } @else {
+            <span class="truncate">{{ label }}</span>
+          }
         } @empty {
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
       </span>
       <z-icon zType="chevron-down" zSize="lg" class="opacity-50" />
     </button>
-
-    <ng-template #labelsTemplate let-label>
-      @if (zMultiple()) {
-        <z-badge zType="secondary">
-          <span class="truncate">{{ label }}</span>
-        </z-badge>
-      } @else {
-        <span class="truncate">{{ label }}</span>
-      }
-    </ng-template>
 
     <ng-template #dropdownTemplate>
       <div
@@ -134,7 +130,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   private portal?: TemplatePortal;
 
   readonly class = input<ClassValue>('');
-  readonly zDisabled = input(false, { transform });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zLabel = input<string>('');
   readonly zMaxLabelCount = input<number>(1);
   readonly zMultiple = input<boolean>(false);
@@ -743,6 +739,7 @@ export * from '@/shared/components/select/select.variants';
 
 ```angular-ts title="select-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -760,7 +757,7 @@ import {
   type ZardSelectItemModeVariants,
   type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
-import { mergeClasses, noopFn, transform } from '@/shared/utils/merge-classes';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 // Interface to avoid circular dependency
 interface SelectHost {
@@ -775,7 +772,7 @@ interface SelectHost {
   template: `
     @if (isSelected()) {
       <span [class]="iconClasses()">
-        <z-icon zType="check" [zStrokeWidth]="strokeWidth()" aria-hidden="true" />
+        <z-icon zType="check" [zStrokeWidth]="strokeWidth()" aria-hidden="true" data-testid="check-icon" />
       </span>
     }
     <span class="truncate">
@@ -800,7 +797,7 @@ export class ZardSelectItemComponent {
   readonly elementRef = inject(ElementRef<HTMLElement>);
 
   readonly zValue = input.required<string>();
-  readonly zDisabled = input(false, { transform });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly class = input<string>('');
 
   private readonly select = signal<SelectHost | null>(null);

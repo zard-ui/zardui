@@ -12,11 +12,11 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
 import { ZardIconComponent } from '../icon/icon.component';
 import type { ZardIcon } from '../icon/icons';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardToggleGroupItem {
   value: string;
@@ -97,9 +97,15 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
     const input = this.value();
     const defaultVal = this.defaultValue();
 
-    if (internal !== undefined) return internal;
-    if (input !== undefined) return input;
-    if (defaultVal !== undefined) return defaultVal;
+    if (internal !== undefined) {
+      return internal;
+    }
+    if (input !== undefined) {
+      return input;
+    }
+    if (defaultVal !== undefined) {
+      return defaultVal;
+    }
 
     return this.zMode() === 'single' ? '' : [];
   });
@@ -151,7 +157,9 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
   private onChangeFn: OnChangeType = () => {};
 
   toggleItem(item: ZardToggleGroupItem) {
-    if (this.disabled() || item.disabled) return;
+    if (this.disabled() || item.disabled) {
+      return;
+    }
 
     const currentValue = this.currentValue();
     let newValue: string | string[];

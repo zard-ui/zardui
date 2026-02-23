@@ -1,11 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardIconComponent } from '../icon.component';
 
 @Component({
   selector: 'z-demo-icon-stroke-width',
   imports: [ZardIconComponent],
-  standalone: true,
   template: `
     <div class="flex items-center gap-6">
       <div class="flex flex-col items-center gap-2">
@@ -29,5 +28,6 @@ import { ZardIconComponent } from '../icon.component';
       </div>
     </div>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoIconStrokeWidthComponent {}

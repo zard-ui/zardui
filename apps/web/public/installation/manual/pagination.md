@@ -10,7 +10,7 @@ import {
   input,
   model,
   output,
-  TemplateRef,
+  type TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
 

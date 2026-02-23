@@ -4,7 +4,6 @@ import {
   computed,
   contentChild,
   contentChildren,
-  effect,
   forwardRef,
   input,
   output,
@@ -45,6 +44,11 @@ export interface ZardCommandConfig {
   onSelect?: (option: ZardCommandOption) => void;
 }
 
+export abstract class ZardCommand {
+  abstract registerOption(option: ZardCommandOptionComponent): void;
+  abstract unregisterOption(option: ZardCommandOptionComponent): void;
+}
+
 @Component({
   selector: 'z-command',
   imports: [FormsModule],
@@ -76,9 +80,10 @@ export interface ZardCommandConfig {
   },
   exportAs: 'zCommand',
 })
-export class ZardCommandComponent implements ControlValueAccessor {
-  readonly commandInput = contentChild(ZardCommandInputComponent);
-  readonly optionComponents = contentChildren(ZardCommandOptionComponent, { descendants: true });
+export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
+  private readonly commandInput = contentChild(ZardCommandInputComponent);
+  private readonly optionComponentsAsChildren = contentChildren(ZardCommandOptionComponent, { descendants: true });
+  private readonly registeredOptionComponents = signal<ZardCommandOptionComponent[]>([]);
 
   readonly size = input<ZardCommandSizeVariants>('default');
   readonly class = input<ClassValue>('');
@@ -89,6 +94,18 @@ export class ZardCommandComponent implements ControlValueAccessor {
   // Internal signals for search functionality
   readonly searchTerm = signal('');
   readonly selectedIndex = signal(-1);
+
+  protected readonly optionComponents = computed(() =>
+    this.optionComponentsAsChildren().length ? this.optionComponentsAsChildren() : this.registeredOptionComponents(),
+  );
+
+  registerOption(option: ZardCommandOptionComponent) {
+    this.registeredOptionComponents.update(current => [...current, option]);
+  }
+
+  unregisterOption(option: ZardCommandOptionComponent) {
+    this.registeredOptionComponents.update(current => current.filter(o => o !== option));
+  }
 
   // Signal to trigger updates when optionComponents change
   private readonly optionsUpdateTrigger = signal(0);
@@ -142,9 +159,7 @@ export class ZardCommandComponent implements ControlValueAccessor {
   };
 
   constructor() {
-    effect(() => {
-      this.triggerOptionsUpdate();
-    });
+    this.triggerOptionsUpdate();
   }
 
   /**

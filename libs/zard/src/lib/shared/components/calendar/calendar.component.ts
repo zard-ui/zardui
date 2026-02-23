@@ -15,26 +15,22 @@ import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 import type { ClassValue } from 'clsx';
 import { filter, map } from 'rxjs';
 
-import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
-
-import { ZardCalendarGridComponent } from './calendar-grid.component';
-import { ZardCalendarNavigationComponent } from './calendar-navigation.component';
-import type { CalendarMode, CalendarValue } from './calendar.types';
+import { ZardCalendarGridComponent } from '@/shared/components/calendar/calendar-grid.component';
+import { ZardCalendarNavigationComponent } from '@/shared/components/calendar/calendar-navigation.component';
+import type { CalendarMode, CalendarValue } from '@/shared/components/calendar/calendar.types';
 import {
   generateCalendarDays,
   getSelectedDatesArray,
   isSameDay,
   makeSafeDate,
   normalizeCalendarValue,
-} from './calendar.utils';
-import { calendarVariants } from './calendar.variants';
-
-export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types';
+} from '@/shared/components/calendar/calendar.utils';
+import { calendarVariants } from '@/shared/components/calendar/calendar.variants';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-calendar, [z-calendar]',
   imports: [ZardCalendarNavigationComponent, ZardCalendarGridComponent],
-  standalone: true,
   template: `
     <div [class]="classes()">
       <z-calendar-navigation
@@ -55,8 +51,7 @@ export type { CalendarDay, CalendarMode, CalendarValue } from './calendar.types'
         (dateSelect)="onDateSelect($event)"
         (previousMonth)="onGridPreviousMonth($event)"
         (nextMonth)="onGridNextMonth($event)"
-        (previousYear)="navigateYear(-1)"
-        (nextYear)="navigateYear(1)"
+        (navigateYear)="onNavigateYear($event)"
       />
     </div>
   `,
@@ -224,9 +219,13 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     this.gridRef().setFocusedDayIndex(-1);
   }
 
-  protected navigateYear(direction: number): void {
+  protected onNavigateYear(direction: number): void {
     const current = this.currentDate();
-    const newDate = makeSafeDate(current.getFullYear() + direction, current.getMonth(), 1);
+    const month = Number.parseInt(this.currentMonthValue());
+    const year = Number.parseInt(this.currentYearValue());
+    const baseYear = Number.isNaN(year) ? current.getFullYear() : year;
+    const baseMonth = Number.isNaN(month) ? current.getMonth() : month;
+    const newDate = makeSafeDate(baseYear + direction, baseMonth, 1);
     this.currentYearValue.set(newDate.getFullYear().toString());
     setTimeout(() => this.gridRef().resetFocus(), 0);
   }

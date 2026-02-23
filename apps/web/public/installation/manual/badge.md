@@ -5,13 +5,12 @@ import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation 
 
 import type { ClassValue } from 'clsx';
 
-import { badgeVariants, type ZardBadgeVariants } from './badge.variants';
-
 import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { badgeVariants, type ZardBadgeShapeVariants, type ZardBadgeTypeVariants } from './badge.variants';
 
 @Component({
   selector: 'z-badge',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -23,8 +22,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   exportAs: 'zBadge',
 })
 export class ZardBadgeComponent {
-  readonly zType = input<ZardBadgeVariants['zType']>('default');
-  readonly zShape = input<ZardBadgeVariants['zShape']>('default');
+  readonly zType = input<ZardBadgeTypeVariants>('default');
+  readonly zShape = input<ZardBadgeShapeVariants>('default');
 
   readonly class = input<ClassValue>('');
 
@@ -41,14 +40,14 @@ export class ZardBadgeComponent {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const badgeVariants = cva(
-  'inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden',
+  'inline-flex items-center justify-center border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden',
   {
     variants: {
       zType: {
-        default: 'border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90',
-        secondary: 'border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90',
+        default: 'border-transparent bg-primary text-primary-foreground [a&]:hover:bg-primary/90 h-5',
+        secondary: 'border-transparent bg-secondary text-secondary-foreground [a&]:hover:bg-secondary/90 h-5',
         destructive:
-          'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60',
+          'border-transparent bg-destructive text-white [a&]:hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 h-5',
         outline: 'text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground',
       },
       zShape: {
@@ -63,7 +62,9 @@ export const badgeVariants = cva(
     },
   },
 );
-export type ZardBadgeVariants = VariantProps<typeof badgeVariants>;
+
+export type ZardBadgeTypeVariants = NonNullable<VariantProps<typeof badgeVariants>['zType']>;
+export type ZardBadgeShapeVariants = NonNullable<VariantProps<typeof badgeVariants>['zShape']>;
 
 ```
 

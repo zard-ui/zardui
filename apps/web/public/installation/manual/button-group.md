@@ -13,6 +13,8 @@ import {
 
 import { type ClassValue } from 'clsx';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import {
   buttonGroupDividerVariants,
   buttonGroupTextVariants,
@@ -21,8 +23,6 @@ import {
 } from './button-group.variants';
 import { ZardDividerComponent } from '../divider/divider.component';
 import { type ZardDividerVariants } from '../divider/divider.variants';
-
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-button-group',

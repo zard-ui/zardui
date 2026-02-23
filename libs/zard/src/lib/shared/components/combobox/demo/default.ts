@@ -9,7 +9,6 @@ import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.comp
   template: `
     <z-combobox
       [options]="frameworks"
-      class="w-[200px]"
       placeholder="Select framework..."
       searchPlaceholder="Search framework..."
       emptyText="No framework found."

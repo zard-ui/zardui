@@ -26,19 +26,26 @@ import { ScrollOnActiveDirective } from './scroll-on-active.directive';
               <ul class="flex w-full min-w-0 flex-col gap-1">
                 @for (path of doc.data; track $index) {
                   <li class="group/menu-item relative">
-                    <a
-                      [routerLink]="path.path"
-                      class="ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground 3xl:fixed:w-full 3xl:fixed:max-w-48 relative flex h-[30px] w-fit items-center gap-2 overflow-hidden rounded-md border border-transparent px-2 text-left text-[0.8rem] font-medium outline-hidden transition-[width,height,padding] after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50"
-                      routerLinkActive="bg-accent text-accent-foreground border-accent overflow-visible hover:bg-accent"
-                      [routerLinkActiveOptions]="{ exact: true }"
-                      scrollOnActive
-                    >
-                      <span class="absolute inset-0 flex w-(--sidebar-width) bg-transparent"></span>
-                      {{ path.name }}
-                      @if (!path.available) {
+                    @if (path.available) {
+                      <a
+                        [routerLink]="path.path"
+                        class="ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground 3xl:fixed:w-full 3xl:fixed:max-w-48 relative flex h-[30px] w-fit items-center gap-2 overflow-hidden rounded-md border border-transparent px-2 text-left text-[0.8rem] font-medium outline-hidden transition-[width,height,padding] after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50"
+                        routerLinkActive="bg-accent text-accent-foreground border-accent overflow-visible hover:bg-accent"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                        scrollOnActive
+                      >
+                        <span class="absolute inset-0 flex w-(--sidebar-width) bg-transparent"></span>
+                        {{ path.name }}
+                      </a>
+                    } @else {
+                      <span
+                        class="ring-sidebar-ring 3xl:fixed:w-full 3xl:fixed:max-w-48 relative flex h-[30px] w-fit cursor-not-allowed items-center gap-2 overflow-hidden rounded-md border border-transparent px-2 text-left text-[0.8rem] font-medium outline-hidden transition-[width,height,padding] after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md disabled:pointer-events-none disabled:opacity-50"
+                      >
+                        <span class="absolute inset-0 flex w-(--sidebar-width) bg-transparent"></span>
+                        {{ path.name }}
                         <z-badge zType="secondary" class="px-1 py-0">soon</z-badge>
-                      }
-                    </a>
+                      </span>
+                    }
                   </li>
                 }
               </ul>

@@ -31,9 +31,8 @@
       </p>
     </div>
 
-    @let founders = founders$ | async;
-    @if (founders) {
-      <z-founders [founders]="founders" />
+    @if (founders().length) {
+      <z-founders [founders]="founders()" />
     } @else {
       <z-founders-loading />
     }
@@ -41,15 +40,14 @@
 
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="maintainers" id="maintainers">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Maintainers</h2>
+      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Mantainers</h2>
       <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
         The dedicated team members who help maintain and improve ZardUI, ensuring quality and consistency.
       </p>
     </div>
 
-    @let maintainers = maintainers$ | async;
-    @if (maintainers) {
-      <z-maintainers [maintainers]="maintainers" />
+    @if (maintainers().length) {
+      <z-maintainers [maintainers]="maintainers()" />
     } @else {
       <z-maintainers-loading />
     }
@@ -64,9 +62,8 @@
       </p>
     </div>
 
-    @let contributors = filteredContributors$ | async;
-    @if (contributors) {
-      <z-contributors [contributors]="contributors" />
+    @if (filteredContributors().length) {
+      <z-contributors [contributors]="filteredContributors()" />
     } @else {
       <z-contributors-loading />
     }

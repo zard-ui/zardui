@@ -12,7 +12,11 @@ import { environment } from '@doc/env/environment';
     <main class="flex flex-col">
       <router-outlet></router-outlet>
     </main>
-    <z-footer></z-footer>
+    @defer (on viewport; hydrate on viewport) {
+      <z-footer></z-footer>
+    } @placeholder {
+      <div class="mt-24 h-64"></div>
+    }
   `,
   standalone: true,
   imports: [RouterModule, HeaderComponent, FooterComponent],

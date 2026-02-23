@@ -1,9 +1,5 @@
-import { isPlatformBrowser } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
-
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { httpResource } from '@angular/common/http';
+import { computed, Injectable } from '@angular/core';
 
 export interface RepoData {
   stargazers_count: number;
@@ -22,25 +18,23 @@ export interface Contributor {
   providedIn: 'root',
 })
 export class GithubService {
-  private readonly platformId = inject(PLATFORM_ID);
-  private readonly isBrowser = isPlatformBrowser(this.platformId);
-  private readonly http = inject(HttpClient);
   private readonly repoUrl = 'https://api.github.com/repos/zard-ui/zardui';
-  private readonly contributorsEnpoint = '/contributors';
 
-  getStarsCount(): Observable<number> {
-    // Durante SSR/prerender, retorna um valor placeholder
-    if (!this.isBrowser) {
-      return of(0);
-    }
-    return this.http.get<RepoData>(this.repoUrl).pipe(map(repo => repo.stargazers_count));
-  }
+  private readonly repoResource = httpResource<RepoData>(() => this.repoUrl, {
+    defaultValue: { stargazers_count: 0, forks_count: 0, watchers_count: 0 },
+  });
 
-  getContributors(): Observable<Contributor[]> {
-    // Durante SSR/prerender, retorna um array vazio
-    if (!this.isBrowser) {
-      return of([]);
-    }
-    return this.http.get<Contributor[]>(`${this.repoUrl}${this.contributorsEnpoint}`);
-  }
+  private readonly contributorsResource = httpResource<Contributor[]>(() => `${this.repoUrl}/contributors`, {
+    defaultValue: [],
+  });
+
+  readonly starsCount = computed(() => {
+    if (this.repoResource.error()) return 0;
+    return this.repoResource.value().stargazers_count;
+  });
+
+  readonly contributors = computed(() => {
+    if (this.contributorsResource.error()) return [];
+    return this.contributorsResource.value();
+  });
 }

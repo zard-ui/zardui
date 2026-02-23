@@ -5,6 +5,7 @@ import { Overlay, OverlayModule, OverlayPositionBuilder, type OverlayRef } from 
 import { TemplatePortal } from '@angular/cdk/portal';
 import { isPlatformBrowser } from '@angular/common';
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -12,7 +13,6 @@ import {
   inject,
   input,
   type OnDestroy,
-  type OnInit,
   output,
   PLATFORM_ID,
   signal,
@@ -24,9 +24,9 @@ import {
 
 import type { ClassValue } from 'clsx';
 
-import { dropdownContentVariants } from './dropdown.variants';
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
+import { dropdownContentVariants } from './dropdown.variants';
 
 @Component({
   selector: 'z-dropdown-menu',
@@ -59,7 +59,7 @@ import { mergeClasses, transform } from '@/shared/utils/merge-classes';
   },
   exportAs: 'zDropdownMenu',
 })
-export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
+export class ZardDropdownMenuComponent implements OnDestroy {
   private elementRef = inject(ElementRef);
   private overlay = inject(Overlay);
   private overlayPositionBuilder = inject(OverlayPositionBuilder);
@@ -72,7 +72,7 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   private portal?: TemplatePortal;
 
   readonly class = input<ClassValue>('');
-  readonly disabled = input(false, { transform });
+  readonly disabled = input(false, { transform: booleanAttribute });
 
   readonly openChange = output<boolean>();
 
@@ -80,12 +80,6 @@ export class ZardDropdownMenuComponent implements OnInit, OnDestroy {
   readonly focusedIndex = signal<number>(-1);
 
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
-
-  ngOnInit() {
-    setTimeout(() => {
-      this.createOverlay();
-    });
-  }
 
   ngOnDestroy() {
     this.destroyOverlay();
@@ -334,14 +328,22 @@ export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>
 
 
 ```angular-ts title="dropdown-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, inject, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
 import { ZardDropdownService } from './dropdown.service';
 import { dropdownItemVariants, type ZardDropdownItemVariants } from './dropdown.variants';
-
-import { mergeClasses, transform } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-dropdown-menu-item, [z-dropdown-menu-item]',
@@ -366,8 +368,8 @@ export class ZardDropdownMenuItemComponent {
   private readonly dropdownService = inject(ZardDropdownService);
 
   readonly variant = input<ZardDropdownItemVariants['variant']>('default');
-  readonly inset = input(false, { transform });
-  readonly disabled = input(false, { transform });
+  readonly inset = input(false, { transform: booleanAttribute });
+  readonly disabled = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
   onClick() {
@@ -455,8 +457,8 @@ import { ZardDropdownService } from './dropdown.service';
     '[attr.aria-expanded]': 'dropdownService.isOpen()',
     '[attr.aria-disabled]': 'zDisabled()',
     '(click.prevent-with-stop)': 'onClick()',
-    '(mouseenter)': 'onHoverToggle()',
-    '(mouseleave)': 'onHoverToggle()',
+    '(mouseenter)': 'onHoverToggle($event)',
+    '(mouseleave)': 'onHoverToggle($event)',
     '(keydown.{enter,space}.prevent-with-stop)': 'toggleDropdown()',
     '(keydown.arrowdown.prevent)': 'openDropdown()',
   },
@@ -488,12 +490,16 @@ export class ZardDropdownDirective implements OnInit {
     this.toggleDropdown();
   }
 
-  protected onHoverToggle() {
-    if (this.zTrigger() !== 'hover') {
+  protected onHoverToggle(event: MouseEvent) {
+    if (this.zTrigger() !== 'hover' || this.zDisabled()) {
       return;
     }
 
-    this.toggleDropdown();
+    if (event.type === 'mouseenter') {
+      this.openDropdown();
+    } else if (event.type === 'mouseleave') {
+      this.closeDropdown();
+    }
   }
 
   protected toggleDropdown() {
@@ -516,6 +522,10 @@ export class ZardDropdownDirective implements OnInit {
     if (menuContent && !this.dropdownService.isOpen()) {
       this.dropdownService.toggle(this.elementRef, menuContent.contentTemplate(), this.viewContainerRef);
     }
+  }
+
+  protected closeDropdown() {
+    this.dropdownService.close();
   }
 }
 
@@ -551,7 +561,7 @@ import {
   inject,
   Injectable,
   PLATFORM_ID,
-  Renderer2,
+  type Renderer2,
   RendererFactory2,
   signal,
   type TemplateRef,

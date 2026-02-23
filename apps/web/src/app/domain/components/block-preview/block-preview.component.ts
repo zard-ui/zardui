@@ -1,8 +1,18 @@
-import { NgComponentOutlet } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  ElementRef,
+  inject,
+  input,
+  PLATFORM_ID,
+  signal,
+  viewChild,
+} from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
-import { ZardResizablePanelComponent } from '@zard/components/resizable/resizable-panel.component';
-import { ZardResizableComponent } from '@zard/components/resizable/resizable.component';
 import { EDarkModes, ZardDarkMode } from '@zard/services/dark-mode';
 
 import type { Block } from '../block-container/block-container.component';
@@ -10,25 +20,24 @@ import type { Block } from '../block-container/block-container.component';
 @Component({
   selector: 'z-block-preview',
   standalone: true,
-  imports: [NgComponentOutlet, ZardResizableComponent, ZardResizablePanelComponent],
   templateUrl: './block-preview.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockPreviewComponent {
-  readonly component = input.required<any>();
+  readonly block = input.required<Block>();
   readonly viewportSize = input<'desktop' | 'tablet' | 'mobile'>('desktop');
-  readonly block = input<Block>();
 
+  private readonly sanitizer = inject(DomSanitizer);
   private readonly darkModeService = inject(ZardDarkMode);
 
-  protected readonly currentImage = computed(() => {
-    const blockData = this.block();
-    if (!blockData?.image) return undefined;
+  protected readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  protected readonly iframeLoaded = signal(false);
 
-    const theme = this.darkModeService.themeMode();
-    return theme === EDarkModes.DARK ? blockData.image.dark : blockData.image.light;
+  protected readonly iframeUrl = computed(() => {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(`/blocks/preview/${this.block().id}`);
   });
 
-  protected getViewportWidth(): string {
+  protected readonly viewportWidth = computed(() => {
     switch (this.viewportSize()) {
       case 'mobile':
         return '375px';
@@ -37,19 +46,32 @@ export class BlockPreviewComponent {
       default:
         return '100%';
     }
+  });
+
+  protected readonly iframe = viewChild<ElementRef<HTMLIFrameElement>>('previewIframe');
+
+  constructor() {
+    if (this.isBrowser) {
+      effect(() => {
+        const isDark = this.darkModeService.themeMode() === EDarkModes.DARK;
+        const iframeEl = this.iframe()?.nativeElement;
+        if (iframeEl?.contentDocument) {
+          const html = iframeEl.contentDocument.documentElement;
+          html.classList.toggle('dark', isDark);
+          html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        }
+      });
+    }
   }
 
-  protected shouldShowImage(): boolean {
-    return false;
-  }
+  protected onIframeLoad(): void {
+    const iframeEl = this.iframe()?.nativeElement;
+    if (!iframeEl?.contentDocument) return;
 
-  protected onImageError(event: Event): void {
-    const img = event.target as HTMLImageElement;
-    console.error('Erro ao carregar imagem:', {
-      src: img.src,
-      block: this.block()?.id,
-      theme: this.darkModeService.currentTheme(),
-      currentImage: this.currentImage(),
-    });
+    const isDark = this.darkModeService.themeMode() === EDarkModes.DARK;
+    const html = iframeEl.contentDocument.documentElement;
+    html.classList.toggle('dark', isDark);
+    html.setAttribute('data-theme', isDark ? 'dark' : 'light');
+    this.iframeLoaded.set(true);
   }
 }

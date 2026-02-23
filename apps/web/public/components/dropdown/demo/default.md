@@ -48,7 +48,7 @@ import { ZardMenuImports } from '@/shared/components/menu';
 
       <z-dropdown-menu-item (click)="onGitHub()">GitHub</z-dropdown-menu-item>
       <z-dropdown-menu-item (click)="onSupport()">Support</z-dropdown-menu-item>
-      <z-dropdown-menu-item disabled="true">API</z-dropdown-menu-item>
+      <z-dropdown-menu-item [disabled]="true">API</z-dropdown-menu-item>
 
       <z-divider zSpacing="sm" class="-mx-1" />
 
