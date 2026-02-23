@@ -1,3 +1,13 @@
+## 1.0.0-beta.51 (2026-02-23)
+
+### 🐛 Bug Fixes
+
+- **animation:** animation classes should be applied properly now ([#453](https://github.com/zard-ui/zardui/pull/453))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
 ## 1.0.0-beta.50 (2026-02-23)
 
 ### ✨ Features
