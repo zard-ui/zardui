@@ -17,5 +17,31 @@
   ],
   "registryDependencies": [
     "icon"
+  ],
+  "docs": {
+    "overview": "# Checkbox\n\nA control that allows the user to toggle between checked and not checked.\n",
+    "api": "# API\n\n## [z-checkbox] <span class=\"api-type-label directive\">Directive</span>\n\n> z-checkbox is a Directive that brings you a customizable checkbox with minimal configuration\n\nTo get a customized checkbox, just pass the following props to the directive.\n\n| Property    | Description             | Type                          | Default   |\n| ----------- | ----------------------- | ----------------------------- | --------- |\n| `zType`     | checkbox type           | `default \\| destructive`      | `default` |\n| `zSize`     | checkbox size           | `default \\| lg `              | `default` |\n| `zShape`    | checkbox shape          | `default \\| circle \\| square` | `default` |\n| `zDisabled` | checkbox disabled state | `boolean`                     | `false`   |\n"
+  },
+  "demos": [
+    {
+      "name": "default.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\n\nimport { ZardCheckboxComponent } from '../checkbox.component';\n\n@Component({\n  selector: 'z-demo-checkbox-default',\n  imports: [ZardCheckboxComponent, FormsModule],\n  template: `\n    <span z-checkbox></span>\n    <span z-checkbox [(ngModel)]=\"checked\">Default Checked</span>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoCheckboxDefaultComponent {\n  checked = true;\n}\n"
+    },
+    {
+      "name": "destructive.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\n\nimport { ZardCheckboxComponent } from '../checkbox.component';\n\n@Component({\n  selector: 'z-demo-checkbox-destructive',\n  imports: [ZardCheckboxComponent, FormsModule],\n  template: `\n    <span z-checkbox zType=\"destructive\"></span>\n    <span z-checkbox zType=\"destructive\" [(ngModel)]=\"checked\">Destructive Checked</span>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoCheckboxDestructiveComponent {\n  checked = true;\n}\n"
+    },
+    {
+      "name": "disabled.ts",
+      "content": "import { ChangeDetectionStrategy, Component, type OnInit } from '@angular/core';\nimport { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';\n\nimport { ZardCheckboxComponent } from '../checkbox.component';\n\n@Component({\n  selector: 'z-demo-checkbox-disabled',\n  imports: [ZardCheckboxComponent, FormsModule, ReactiveFormsModule],\n  template: `\n    <div class=\"flex flex-col gap-8\">\n      <form [formGroup]=\"form\">\n        <span z-checkbox formControlName=\"acceptTerms\">Accept Terms</span>\n        <span z-checkbox formControlName=\"newsletter\">Subscribe</span>\n      </form>\n\n      <div>\n        <span z-checkbox [zDisabled]=\"true\">Disabled</span>\n        <span z-checkbox [zDisabled]=\"true\" [(ngModel)]=\"checked\">Disabled</span>\n      </div>\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoCheckboxDisabledComponent implements OnInit {\n  checked = true;\n  form = new FormGroup({\n    acceptTerms: new FormControl(false),\n    newsletter: new FormControl(false),\n  });\n\n  ngOnInit() {\n    this.form.disable();\n  }\n}\n"
+    },
+    {
+      "name": "shape.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\n\nimport { ZardCheckboxComponent } from '../checkbox.component';\n\n@Component({\n  selector: 'z-demo-checkbox-shape',\n  imports: [ZardCheckboxComponent, FormsModule],\n  template: `\n    <span z-checkbox zShape=\"circle\" [(ngModel)]=\"checked1\">Circle</span>\n    <span z-checkbox zShape=\"square\" [(ngModel)]=\"checked2\">Square</span>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoCheckboxShapeComponent {\n  checked1 = true;\n  checked2 = true;\n}\n"
+    },
+    {
+      "name": "size.ts",
+      "content": "import { Component } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\n\nimport { ZardCheckboxComponent } from '../checkbox.component';\n\n@Component({\n  selector: 'z-demo-checkbox-size',\n  imports: [ZardCheckboxComponent, FormsModule],\n  standalone: true,\n  template: `\n    <span z-checkbox>Default</span>\n    <span z-checkbox zSize=\"lg\" [(ngModel)]=\"checked\">Large</span>\n  `,\n})\nexport class ZardDemoCheckboxSizeComponent {\n  checked = true;\n}\n"
+    }
   ]
 }

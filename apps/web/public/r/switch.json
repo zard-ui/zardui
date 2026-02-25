@@ -14,5 +14,27 @@
       "name": "index.ts",
       "content": "export * from './switch.component';\nexport * from './switch.variants';\n"
     }
+  ],
+  "docs": {
+    "overview": "# Switch\n\nA control that allows the user to toggle between checked and unchecked.\n",
+    "api": "# API\n\n## [z-switch] <span class=\"api-type-label component\">Component</span>\n\n> z-switch is a component that brings you a customizable switch with minimal configuration\n\nTo get a customized switch, just pass the following props to the component.\n\n| Property       | Description                    | Type                     | Default   |\n| -------------- | ------------------------------ | ------------------------ | --------- |\n| `[class]`      | Additional CSS classes         | `ClassValue`             | `''`      |\n| `[(zChecked)]` | switch state (two-way binding) | `boolean`                | `true`    |\n| `[zDisabled]`  | switch disabled state          | `boolean`                | `false`   |\n| `[zId]`        | switch id                      | `string`                 |           |\n| `[zType]`      | switch type                    | `default \\| destructive` | `default` |\n| `[zSize]`      | switch size                    | `default \\| sm \\| lg`    | `default` |\n\n**Note:** Component uses fallback content (also called default content), Angular 18+ feature.\n"
+  },
+  "demos": [
+    {
+      "name": "default.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSwitchComponent } from '../switch.component';\n\n@Component({\n  selector: 'zard-demo-switch',\n  imports: [ZardSwitchComponent],\n  template: `\n    <z-switch />\n  `,\n})\nexport class ZardDemoSwitchDefaultComponent {}\n"
+    },
+    {
+      "name": "destructive.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSwitchComponent } from '../switch.component';\n\n@Component({\n  selector: 'z-demo-switch-destructive',\n  imports: [ZardSwitchComponent],\n  template: `\n    <z-switch zType=\"destructive\" />\n  `,\n})\nexport class ZardDemoSwitchDestructiveComponent {}\n"
+    },
+    {
+      "name": "disabled.ts",
+      "content": "import { Component } from '@angular/core';\nimport { FormControl, ReactiveFormsModule } from '@angular/forms';\n\nimport { ZardSwitchComponent } from '../switch.component';\n\n@Component({\n  selector: 'z-demo-switch-disabled',\n  imports: [ZardSwitchComponent, ReactiveFormsModule],\n  template: `\n    <z-switch [(zChecked)]=\"model\" [zDisabled]=\"true\">Disabled</z-switch>\n    <z-switch [formControl]=\"checkControl\">Disabled in forms</z-switch>\n  `,\n})\nexport class ZardDemoSwitchDisabledComponent {\n  model = false;\n  checkControl = new FormControl({ value: true, disabled: true });\n}\n"
+    },
+    {
+      "name": "size.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSwitchComponent } from '../switch.component';\n\n@Component({\n  selector: 'z-demo-switch-size',\n  imports: [ZardSwitchComponent],\n  template: `\n    <z-switch zSize=\"sm\">Small</z-switch>\n    <z-switch>Default</z-switch>\n    <z-switch zSize=\"lg\">Large</z-switch>\n  `,\n})\nexport class ZardDemoSwitchSizeComponent {}\n"
+    }
   ]
 }

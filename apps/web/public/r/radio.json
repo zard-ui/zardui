@@ -14,5 +14,19 @@
       "name": "index.ts",
       "content": "export * from './radio.component';\nexport * from './radio.variants';\n"
     }
+  ],
+  "docs": {
+    "overview": "# Radio\n\nA radio button component for selecting a single option from a list.\n",
+    "api": "# Radio API\n\n## Inputs\n\n| Name       | Type         | Default        | Description                        |\n| ---------- | ------------ | -------------- | ---------------------------------- |\n| `class`    | `ClassValue` | `''`           | Additional CSS classes             |\n| `disabled` | `boolean`    | `false`        | Whether the radio is disabled      |\n| `name`     | `string`     | `'radio'`      | Name attribute for the radio group |\n| `zId`      | `string`     | auto-generated | ID attribute for the radio         |\n| `value`    | `unknown`    | `null`         | Value of the radio button          |\n\n## Outputs\n\n| Name          | Type                    | Description                        |\n| ------------- | ----------------------- | ---------------------------------- |\n| `radioChange` | `EventEmitter<boolean>` | Emits when radio selection changes |\n"
+  },
+  "demos": [
+    {
+      "name": "default.ts",
+      "content": "import { Component } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\n\nimport { ZardRadioComponent } from '../radio.component';\n\n@Component({\n  selector: 'z-demo-radio-default',\n  imports: [ZardRadioComponent, FormsModule],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-col gap-3\">\n      <span z-radio name=\"option\" [(ngModel)]=\"selected\" value=\"default\">Default</span>\n      <span z-radio name=\"option\" [(ngModel)]=\"selected\" value=\"comfortable\">Comfortable</span>\n      <span z-radio name=\"option\" [(ngModel)]=\"selected\" value=\"compact\">Compact</span>\n    </div>\n  `,\n})\nexport class ZardDemoRadioDefaultComponent {\n  selected = 'default';\n}\n"
+    },
+    {
+      "name": "disabled.ts",
+      "content": "import { Component } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\n\nimport { ZardRadioComponent } from '../radio.component';\n\n@Component({\n  selector: 'z-demo-radio-disabled',\n  imports: [ZardRadioComponent, FormsModule],\n  standalone: true,\n  template: `\n    <span z-radio name=\"radio\" [(ngModel)]=\"val\" value=\"a\" [disabled]=\"true\">Disabled</span>\n    <span z-radio name=\"radio\" [(ngModel)]=\"val\" value=\"b\" [disabled]=\"true\">Disabled</span>\n  `,\n})\nexport class ZardDemoRadioDisabledComponent {\n  val = 'a';\n}\n"
+    }
   ]
 }

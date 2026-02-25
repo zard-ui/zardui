@@ -14,5 +14,23 @@
       "name": "index.ts",
       "content": "export * from './loader.component';\nexport * from './loader.variants';\n"
     }
+  ],
+  "docs": {
+    "overview": "# Loader\n\nThe Loader is a visual component that displays a loading animation to indicate that an action or process is in progress.\n",
+    "api": "# API\n\n## [z-loader] <span class=\"api-type-label component\">Component</span>\n\n> `z-loader` is a component that provides a loading animation.\n\nTo customize the loader, pass the following props to the component.\n\n| Property  | Description | Type                  | Default   |\n| --------- | ----------- | --------------------- | --------- |\n| `[zSize]` | Loader size | `default \\| sm \\| lg` | `default` |\n"
+  },
+  "demos": [
+    {
+      "name": "basic.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardLoaderComponent } from '../loader.component';\n\n@Component({\n  selector: 'z-demo-loader-basic',\n  imports: [ZardLoaderComponent],\n  standalone: true,\n  template: `\n    <z-loader />\n  `,\n  styles: `\n    :host {\n      display: flex;\n      flex-wrap: wrap;\n      gap: 24px;\n    }\n  `,\n})\nexport class ZardDemoLoaderBasicComponent {}\n"
+    },
+    {
+      "name": "default.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardLoaderComponent } from '../loader.component';\n\n@Component({\n  selector: 'z-demo-loader-default',\n  imports: [ZardLoaderComponent],\n  standalone: true,\n  template: `\n    <z-loader />\n  `,\n})\nexport class ZardDemoLoaderDefaultComponent {}\n"
+    },
+    {
+      "name": "size.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardLoaderComponent } from '../loader.component';\n\n@Component({\n  selector: 'z-demo-loader-size',\n  imports: [ZardLoaderComponent],\n  standalone: true,\n  template: `\n    <z-loader zSize=\"sm\" />\n    <z-loader zSize=\"default\" />\n    <z-loader zSize=\"lg\" />\n  `,\n})\nexport class ZardDemoLoaderSizeComponent {}\n"
+    }
   ]
 }

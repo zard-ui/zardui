@@ -1,0 +1,52 @@
+{
+  "name": "mcp",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/mcp/src",
+  "projectType": "library",
+  "tags": ["type:mcp"],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/packages/mcp/dist"],
+      "options": {
+        "commands": [
+          "rm -rf packages/mcp/dist",
+          "npx tsc -p packages/mcp/tsconfig.json",
+          "echo '#!/usr/bin/env node' | cat - packages/mcp/dist/index.js > packages/mcp/dist/index.tmp.js && mv packages/mcp/dist/index.tmp.js packages/mcp/dist/index.js",
+          "chmod +x packages/mcp/dist/index.js",
+          "cp packages/mcp/package.json packages/mcp/dist/"
+        ],
+        "parallel": false
+      }
+    },
+    "build:dev": {
+      "executor": "nx:run-commands",
+      "outputs": ["{workspaceRoot}/packages/mcp/dist"],
+      "options": {
+        "commands": [
+          "rm -rf packages/mcp/dist",
+          "npx tsc -p packages/mcp/tsconfig.json",
+          "echo '#!/usr/bin/env node' | cat - packages/mcp/dist/index.js > packages/mcp/dist/index.tmp.js && mv packages/mcp/dist/index.tmp.js packages/mcp/dist/index.js",
+          "chmod +x packages/mcp/dist/index.js",
+          "cp packages/mcp/package.dev.json packages/mcp/dist/package.json",
+          "cd packages/mcp/dist && npm link"
+        ],
+        "parallel": false
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["cd packages/mcp/dist && npm publish --access public"],
+        "parallel": false
+      },
+      "dependsOn": ["build"]
+    },
+    "nx-release-publish": {
+      "executor": "@nx/js:release-publish",
+      "options": {
+        "packageRoot": "packages/mcp/dist"
+      }
+    }
+  }
+}

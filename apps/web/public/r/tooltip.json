@@ -22,5 +22,27 @@
       "name": "index.ts",
       "content": "export * from './tooltip';\nexport * from './tooltip.variants';\nexport * from './tooltip-positions';\nexport * from './tooltip.imports';\n"
     }
+  ],
+  "docs": {
+    "overview": "# Tooltip\n\nA popup that displays information related to an element when the element receives keyboard focus or the mouse hovers over it.\n",
+    "api": "# API\n\n## [z-tooltip] <span class=\"api-type-label directive\">Directive</span>\n\n| Property     | Description                                             | Type                             | Default |\n| ------------ | ------------------------------------------------------- | -------------------------------- | ------- |\n| `zTooltip`   | The text content of tooltip                             | `string`                         | -       |\n| `zPosition`  | The position of the tooltip                             | `top \\| bottom \\| left \\| right` | `top`   |\n| `zTrigger`   | The tooltip trigger mode.                               | `hover \\| click`                 | `hover` |\n| `zShowDelay` | Delay showing the tooltip after trigger in milliseconds | `number`                         | 150     |\n| `zHideDelay` | Delay hiding the tooltip after trigger in milliseconds  | `number`                         | 100     |\n| `(zShow)`    | Emitted when the tooltip is shown                       | `output<void>`                   | -       |\n| `(zHide)`    | Emitted when the tooltip is hidden                      | `output<void>`                   | -       |\n"
+  },
+  "demos": [
+    {
+      "name": "click.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';\n\nimport { ZardButtonComponent } from '../../button/button.component';\n\n@Component({\n  selector: 'z-demo-tooltip-click',\n  imports: [ZardButtonComponent, ZardTooltipImports],\n  template: `\n    <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" zTrigger=\"click\">Click</button>\n  `,\n})\nexport class ZardDemoTooltipClickComponent {}\n"
+    },
+    {
+      "name": "events.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';\n\nimport { ZardButtonComponent } from '../../button/button.component';\n\n@Component({\n  selector: 'z-demo-tooltip-events',\n  imports: [ZardButtonComponent, ZardTooltipImports],\n  template: `\n    <div class=\"flex w-25 flex-col gap-4\">\n      <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" (zShow)=\"onShow()\" (zHide)=\"onHide()\">\n        Events\n      </button>\n\n      <span class=\"text-sm\">Event: {{ event }}</span>\n    </div>\n  `,\n})\nexport class ZardDemoTooltipEventsComponent {\n  protected event = 'none';\n\n  protected onShow() {\n    this.event = '(zShow)';\n  }\n\n  protected onHide() {\n    this.event = '(zHide)';\n  }\n}\n"
+    },
+    {
+      "name": "hover.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';\n\nimport { ZardButtonComponent } from '../../button/button.component';\n\n@Component({\n  selector: 'z-demo-tooltip-hover',\n  imports: [ZardButtonComponent, ZardTooltipImports],\n  template: `\n    <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\">Hover</button>\n  `,\n})\nexport class ZardDemoTooltipHoverComponent {}\n"
+    },
+    {
+      "name": "position.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';\n\nimport { ZardButtonComponent } from '../../button/button.component';\n\n@Component({\n  selector: 'z-demo-tooltip-position',\n  imports: [ZardButtonComponent, ZardTooltipImports],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-col space-y-2\">\n      <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" zPosition=\"top\">Top</button>\n\n      <div class=\"flex space-x-2\">\n        <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" zPosition=\"left\">Left</button>\n        <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" zPosition=\"right\">Right</button>\n      </div>\n\n      <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" zPosition=\"bottom\">Bottom</button>\n    </div>\n  `,\n})\nexport class ZardDemoTooltipPositionComponent {}\n"
+    }
   ]
 }
