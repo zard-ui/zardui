@@ -116,7 +116,7 @@ function buildComponentJson(component: ComponentRegistry): RegistryItem | null {
 function buildRegistryIndex(items: RegistryItem[]): RegistryIndex {
   return {
     $schema: 'https://zardui.com/schema/registry.json',
-    name: '@ngzard',
+    name: '@zard',
     homepage: 'https://zardui.com',
     version: getCliVersion(),
     items: items.map(item => ({

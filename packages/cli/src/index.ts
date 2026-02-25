@@ -7,13 +7,13 @@ import { Command } from 'commander';
 
 async function main() {
   const program = new Command()
-    .name('ngzard')
+    .name('zard-cli')
     .description('add beautiful Angular components to your apps')
     .version(APP_VERSION, '-v, --version', 'display the version number')
     .option('--debug', 'enable debug logging')
     .hook('preAction', (_thisCommand, actionCommand) => {
       const opts = actionCommand.optsWithGlobals?.() ?? actionCommand.opts?.();
-      if (opts?.debug || process.env['NGZARD_DEBUG']) {
+      if (opts?.debug || process.env['ZARD_DEBUG']) {
         enableDebug();
       }
     });

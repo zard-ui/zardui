@@ -89,7 +89,7 @@ async function loadConfiguration(cwd: string) {
   const config = await getConfig(cwd);
 
   if (!config) {
-    throw new CliError('Configuration not found. Please run `ngzard init` first.', 'CONFIG_NOT_FOUND');
+    throw new CliError('Configuration not found. Please run `zard-cli init` first.', 'CONFIG_NOT_FOUND');
   }
 
   return config;

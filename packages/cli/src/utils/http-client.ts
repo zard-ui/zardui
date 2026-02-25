@@ -20,7 +20,7 @@ export async function fetchJson<T>(url: string, options?: FetchOptions): Promise
   const { timeout = DEFAULT_TIMEOUT, retries = DEFAULT_RETRIES, backoffBase = DEFAULT_BACKOFF_BASE } = options ?? {};
 
   const headers: Record<string, string> = {
-    'User-Agent': 'ngzard-cli',
+    'User-Agent': 'zard-cli',
     Accept: 'application/json',
     ...options?.headers,
   };

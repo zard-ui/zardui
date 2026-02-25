@@ -153,6 +153,6 @@ function displaySuccessMessage(config: Config): void {
         : `${config.packageManager}x`;
 
   logger.info('You can now add components using:');
-  logger.info(chalk.bold(`  ${runCommand} @ngzard/ui add [component]`));
+  logger.info(chalk.bold(`  ${runCommand} zard-cli add [component]`));
   logger.break();
 }

@@ -153,19 +153,19 @@ bun add ${packages}
 
 function generateCliAddComponentMarkdown(componentName: string): string {
   return `\`\`\`bash tab="npm" copyButton
-npx @ngzard/ui@latest add ${componentName}
+npx zard-cli@latest add ${componentName}
 \`\`\`
 
 \`\`\`bash tab="pnpm"
-pnpm dlx @ngzard/ui@latest add ${componentName}
+pnpm dlx zard-cli@latest add ${componentName}
 \`\`\`
 
 \`\`\`bash tab="yarn"
-yarn dlx @ngzard/ui@latest add ${componentName}
+yarn dlx zard-cli@latest add ${componentName}
 \`\`\`
 
 \`\`\`bash tab="bun"
-bunx @ngzard/ui@latest add ${componentName}
+bunx zard-cli@latest add ${componentName}
 \`\`\``;
 }
 

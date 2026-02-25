@@ -65,7 +65,7 @@ server.listen(PORT, () => {
   console.log(`📁 Serving from: ${REGISTRY_PATH}`);
   console.log('');
   console.log('Usage with CLI:');
-  console.log(`  ZARD_REGISTRY_URL=http://localhost:${PORT}/r npx ngzard add button`);
+  console.log(`  ZARD_REGISTRY_URL=http://localhost:${PORT}/r npx zard-cli add button`);
   console.log('');
   console.log('Or use the dev command:');
   console.log('  npm run dev:cli:test -- add button');

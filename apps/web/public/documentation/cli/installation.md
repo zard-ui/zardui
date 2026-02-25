@@ -7,19 +7,19 @@ Get ZardUI up and running in your Angular project with these simple steps.
 Run the init command to set up ZardUI in your Angular project. This will configure Tailwind CSS, install dependencies, and create necessary utility files.
 
 ```bash tab="npm" copyButton
-npx @ngzard/ui init
+npx zard-cli init
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx @ngzard/ui init
+pnpm dlx zard-cli init
 ```
 
 ```bash tab="yarn" copyButton
-yarn @ngzard/ui init
+yarn zard-cli init
 ```
 
 ```bash tab="bun" copyButton
-bunx @ngzard/ui init
+bunx zard-cli init
 ```
 
 The init command will guide you through an interactive setup:
@@ -41,7 +41,7 @@ Initializing ZardUI...
 ZardUI has been initialized successfully!
 
 You can now add components using:
-  npx @ngzard/ui add [component]
+  npx zard-cli add [component]
 ```
 
 ### Step 2: Add components
@@ -49,19 +49,19 @@ You can now add components using:
 Start adding components to your project. You can add individual components, multiple components at once, or all available components.
 
 ```bash tab="npm" copyButton
-npx @ngzard/ui add button card dialog
+npx zard-cli add button card dialog
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx @ngzard/ui add button card dialog
+pnpm dlx zard-cli add button card dialog
 ```
 
 ```bash tab="yarn" copyButton
-yarn @ngzard/ui add button card dialog
+yarn zard-cli add button card dialog
 ```
 
 ```bash tab="bun" copyButton
-bunx @ngzard/ui add button card dialog
+bunx zard-cli add button card dialog
 ```
 
 Expected output:

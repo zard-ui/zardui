@@ -53,7 +53,7 @@ describe('fetchJson', () => {
     expect(mockFetch).toHaveBeenCalledWith('https://example.com/api', {
       signal: expect.anything(),
       headers: expect.objectContaining({
-        'User-Agent': 'ngzard-cli',
+        'User-Agent': 'zard-cli',
         Accept: 'application/json',
       }),
     });
