@@ -4,6 +4,7 @@ import { installDependencies } from '@cli/commands/init/dependencies.js';
 import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { Config, resolveConfigPaths } from '@cli/utils/config.js';
+import { CliError } from '@cli/utils/errors.js';
 import { getProjectInfo, ProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager } from '@cli/utils/package-manager.js';
@@ -63,16 +64,13 @@ export const init = new Command()
 
 function validateWorkingDirectory(cwd: string): void {
   if (!existsSync(cwd)) {
-    logger.error(`The path ${cwd} does not exist. Please try again.`);
-    process.exit(1);
+    throw new CliError(`The path ${cwd} does not exist. Please try again.`, 'INVALID_CWD');
   }
 }
 
 function validateAngularProject(projectInfo: ProjectInfo): void {
   if (projectInfo.framework !== 'angular') {
-    logger.error('This project does not appear to be an Angular project.');
-    logger.error('Please run this command in an Angular project.');
-    process.exit(1);
+    throw new CliError('This project does not appear to be an Angular project.', 'NOT_ANGULAR');
   }
 }
 

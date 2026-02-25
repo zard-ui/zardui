@@ -1,6 +1,7 @@
 import { DEFAULT_REGISTRY_URL as BUILD_REGISTRY_URL } from '@cli/config/registry-config.js';
 import type { Config } from '@cli/utils/config.js';
-import { execa } from 'execa';
+import { ConfigError } from '@cli/utils/errors.js';
+import { fetchJson } from '@cli/utils/http-client.js';
 
 export const DEFAULT_REGISTRY_URL =
   process.env['ZARD_REGISTRY_URL'] ||
@@ -39,36 +40,40 @@ export function getRegistryUrl(config?: Config): string {
   return config?.registryUrl || DEFAULT_REGISTRY_URL;
 }
 
-async function fetchJson<T>(url: string): Promise<T> {
+export function validateRegistryUrl(url: string): void {
   try {
-    const { stdout } = await execa('curl', [
-      '-s',
-      '-H',
-      'Accept: application/json',
-      '-H',
-      'User-Agent: ngzard-cli',
-      '--max-time',
-      '30',
-      url,
-    ]);
+    const parsed = new URL(url);
+    const isHttps = parsed.protocol === 'https:';
+    const isLocalhost = parsed.hostname === 'localhost' || parsed.hostname === '127.0.0.1';
 
-    if (!stdout || stdout.includes('<!DOCTYPE') || stdout.includes('<html')) {
-      throw new Error(`Invalid response from registry: ${url}`);
+    if (!isHttps && !isLocalhost) {
+      throw new ConfigError('Registry URL must use HTTPS (or localhost for development)');
     }
-
-    return JSON.parse(stdout) as T;
   } catch (error) {
-    if (error instanceof SyntaxError) {
-      throw new Error(`Invalid JSON response from registry: ${url}`);
-    }
-    throw new Error(`Failed to fetch from registry: ${url} - ${error}`);
+    if (error instanceof ConfigError) throw error;
+    throw new ConfigError(`Invalid registry URL: ${url}`);
   }
 }
 
+const CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+let registryIndexCache: { data: RegistryIndex; timestamp: number } | null = null;
+
 export async function fetchRegistryIndex(registryUrl?: string): Promise<RegistryIndex> {
   const baseUrl = registryUrl || DEFAULT_REGISTRY_URL;
+
+  if (registryIndexCache && Date.now() - registryIndexCache.timestamp < CACHE_TTL) {
+    return registryIndexCache.data;
+  }
+
   const url = `${baseUrl}/registry.json`;
-  return fetchJson<RegistryIndex>(url);
+  const data = await fetchJson<RegistryIndex>(url);
+
+  registryIndexCache = { data, timestamp: Date.now() };
+  return data;
+}
+
+export function invalidateRegistryCache(): void {
+  registryIndexCache = null;
 }
 
 export async function fetchComponentFromRegistry(componentName: string, registryUrl?: string): Promise<RegistryItem> {
@@ -131,6 +136,10 @@ export async function fetchComponent(
   registryUrl?: string,
 ): Promise<RegistryItem> {
   const item = await fetchComponentFromRegistry(componentName, registryUrl);
+
+  if (!item.files || !Array.isArray(item.files)) {
+    throw new ConfigError(`Component "${componentName}" has no files in the registry`);
+  }
 
   const transformedFiles = item.files.map(file => ({
     name: file.name,

@@ -29,6 +29,7 @@ export type ProjectInfo = {
   hasTailwind: boolean;
   hasNx: boolean;
   angularVersion: string | null;
+  angularVersionRaw: string | null;
 };
 
 export async function getProjectInfo(cwd: string): Promise<ProjectInfo> {
@@ -46,7 +47,8 @@ export async function getProjectInfo(cwd: string): Promise<ProjectInfo> {
   const hasTailwind = !!deps['tailwindcss'];
   const hasNx = !!deps['nx'] || !!deps['@nx/workspace'];
 
-  const angularVersion = (deps['@angular/core'] as string)?.replace(/[^0-9.]/g, '') || null;
+  const angularVersionRaw = (deps['@angular/core'] as string) || null;
+  const angularVersion = angularVersionRaw?.replace(/[^0-9.]/g, '') || null;
 
   return {
     framework: hasAngular ? 'angular' : 'unknown',
@@ -54,5 +56,6 @@ export async function getProjectInfo(cwd: string): Promise<ProjectInfo> {
     hasTailwind,
     hasNx,
     angularVersion,
+    angularVersionRaw,
   };
 }

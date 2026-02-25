@@ -3,7 +3,7 @@ import * as path from 'path';
 
 import { Config } from '../../utils/config.js';
 import { logger } from '../../utils/logger.js';
-import { fetchRegistryIndex, type RegistryIndex } from '../../utils/registry.js';
+import { fetchRegistryIndex, invalidateRegistryCache, type RegistryIndex } from '../../utils/registry.js';
 
 function isComponentInstalled(dir: string): boolean {
   if (!existsSync(dir)) return false;
@@ -56,13 +56,11 @@ export interface ResolvedDependencies {
   dependenciesToInstall: Set<string>;
 }
 
-let registryIndexCache: RegistryIndex | null = null;
-
-export async function getRegistryIndex(): Promise<RegistryIndex> {
-  if (!registryIndexCache) {
-    registryIndexCache = await fetchRegistryIndex();
+export async function getRegistryIndex(forceRefresh = false): Promise<RegistryIndex> {
+  if (forceRefresh) {
+    invalidateRegistryCache();
   }
-  return registryIndexCache;
+  return fetchRegistryIndex();
 }
 
 export async function getComponentMeta(name: string): Promise<ComponentMeta | undefined> {
