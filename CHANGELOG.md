@@ -1,3 +1,13 @@
+## 1.0.0-beta.54 (2026-02-25)
+
+### 📦 Code Refactoring
+
+- **cli:** modularize CLI architecture and add pre-release Angular warning ([40b343b](https://github.com/zard-ui/zardui/commit/40b343b))
+
+### ❤️ Thank You
+
+- luiz gomes
+
 ## 1.0.0-beta.53 (2026-02-23)
 
 ### 🐛 Bug Fixes

@@ -1,6 +1,6 @@
 {
   "name": "ui",
-  "version": "1.0.0-beta.53",
+  "version": "1.0.0-beta.54",
   "peerDependencies": {
     "@angular/cdk": "^21.0.0",
     "@angular/common": "^21.0.0",
