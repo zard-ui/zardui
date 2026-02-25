@@ -1,3 +1,13 @@
+## 1.0.0-beta.55 (2026-02-25)
+
+### 🐛 Bug Fixes
+
+- **cli:** correct bin path for published package ([93eedd0](https://github.com/zard-ui/zardui/commit/93eedd0))
+
+### ❤️ Thank You
+
+- luiz gomes
+
 ## 1.0.0-beta.54 (2026-02-25)
 
 ### 📦 Code Refactoring
