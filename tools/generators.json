@@ -4,6 +4,11 @@
       "factory": "./generators/component",
       "schema": "./generators/component/schema.json",
       "description": "Generate a new Zard UI component"
+    },
+    "block": {
+      "factory": "./generators/block",
+      "schema": "./generators/block/schema.json",
+      "description": "Generate a new Zard UI block"
     }
   }
 }
