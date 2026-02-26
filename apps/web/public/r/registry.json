@@ -1,8 +1,8 @@
 {
   "$schema": "https://zardui.com/schema/registry.json",
-  "name": "@ngzard",
+  "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.53",
+  "version": "1.0.0-beta.56",
   "items": [
     {
       "name": "core",

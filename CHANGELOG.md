@@ -1,3 +1,41 @@
+## 1.0.0-beta.57 (2026-02-26)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.56 (2026-02-25)
+
+### ✨ Features
+
+- **cli:** traverse parent dirs for package.json and warn on deprecated name ([9fbd1a7](https://github.com/zard-ui/zardui/commit/9fbd1a7))
+
+### 📦 Code Refactoring
+
+- migrate all @ngzard/ui references to zard-cli ([63d8a5c](https://github.com/zard-ui/zardui/commit/63d8a5c))
+
+### ❤️ Thank You
+
+- luiz gomes
+
+## 1.0.0-beta.55 (2026-02-25)
+
+### 🐛 Bug Fixes
+
+- **cli:** correct bin path for published package ([93eedd0](https://github.com/zard-ui/zardui/commit/93eedd0))
+
+### ❤️ Thank You
+
+- luiz gomes
+
+## 1.0.0-beta.54 (2026-02-25)
+
+### 📦 Code Refactoring
+
+- **cli:** modularize CLI architecture and add pre-release Angular warning ([40b343b](https://github.com/zard-ui/zardui/commit/40b343b))
+
+### ❤️ Thank You
+
+- luiz gomes
+
 ## 1.0.0-beta.53 (2026-02-23)
 
 ### 🐛 Bug Fixes

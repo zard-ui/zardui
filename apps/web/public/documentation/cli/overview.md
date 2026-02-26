@@ -3,19 +3,19 @@
 The ZardUI CLI is your gateway to beautiful Angular components. With just one command, you can add professionally designed, fully accessible components to your project.
 
 ```bash tab="npm" copyButton
-npx @ngzard/ui init
+npx zard-cli init
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx @ngzard/ui init
+pnpm dlx zard-cli init
 ```
 
 ```bash tab="yarn" copyButton
-yarn @ngzard/ui init
+yarn zard-cli init
 ```
 
 ```bash tab="bun" copyButton
-bunx @ngzard/ui init
+bunx zard-cli init
 ```
 
 This command will guide you through an interactive setup:
@@ -37,7 +37,7 @@ Initializing ZardUI...
 ZardUI has been initialized successfully!
 
 You can now add components using:
-  npx @ngzard/ui add [component]
+  npx zard-cli add [component]
 ```
 
 **One-Command Setup**

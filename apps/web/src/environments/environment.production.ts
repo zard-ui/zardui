@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
   appVersion: 'beta',
-  package: '@ngzard/ui',
+  package: 'zard-cli',
   features: {
     copyPage: false,
     copyMD: false,

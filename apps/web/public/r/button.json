@@ -17,5 +17,39 @@
   ],
   "registryDependencies": [
     "icon"
+  ],
+  "docs": {
+    "overview": "# Button\n\nDisplays a button or a component that looks like a button.\n",
+    "api": "# API Reference\n\n[z-button] Directive\n\n| Property    | Description           | Type                                                                 | Default   |\n| ----------- | --------------------- | -------------------------------------------------------------------- | --------- |\n| `zDisabled` | button disabled state | `boolean`                                                            | `false`   |\n| `zFull`     | button width 100%     | `boolean`                                                            | `false`   |\n| `zLoading`  | button loading state  | `boolean`                                                            | `false`   |\n| `zShape`    | button shape          | `default \\| circle \\| square`                                        | `default` |\n| `zSize`     | button size           | `default \\| xs \\| sm \\| lg \\| icon \\| icon-xs \\| icon-sm \\| icon-lg` | `default` |\n| `zType`     | button type           | `default \\| destructive \\| outline \\| secondary \\| ghost \\| link`    | `default` |\n"
+  },
+  "demos": [
+    {
+      "name": "default.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardButtonComponent } from '../button.component';\n\n@Component({\n  selector: 'z-demo-button-default',\n  imports: [ZardButtonComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <button z-button zType=\"outline\">Button</button>\n    <button z-button zType=\"outline\"><i z-icon zType=\"arrow-up\"></i></button>\n    <button z-button zType=\"outline\">\n      Button\n      <i z-icon zType=\"popcorn\"></i>\n    </button>\n  `,\n})\nexport class ZardDemoButtonDefaultComponent {}\n"
+    },
+    {
+      "name": "full.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '../button.component';\n\n@Component({\n  selector: 'z-demo-button-full',\n  imports: [ZardButtonComponent],\n  standalone: true,\n  template: `\n    <button z-button zFull>Default</button>\n  `,\n})\nexport class ZardDemoButtonFullComponent {}\n"
+    },
+    {
+      "name": "link.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '../button.component';\n\n@Component({\n  selector: 'z-demo-button-link',\n  imports: [ZardButtonComponent],\n  standalone: true,\n  template: `\n    <button z-button zType=\"link\">Link</button>\n  `,\n})\nexport class ZardDemoButtonLinkComponent {}\n"
+    },
+    {
+      "name": "loading.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '../button.component';\n\n@Component({\n  selector: 'z-demo-button-loading',\n  imports: [ZardButtonComponent],\n  standalone: true,\n  template: `\n    <button z-button zLoading>Default</button>\n  `,\n})\nexport class ZardDemoButtonLoadingComponent {}\n"
+    },
+    {
+      "name": "shape.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '../button.component';\n\n@Component({\n  selector: 'z-demo-button-shape',\n  imports: [ZardButtonComponent],\n  standalone: true,\n  template: `\n    <button z-button>Default</button>\n    <button z-button zShape=\"circle\">Circle</button>\n    <button z-button zShape=\"square\">Square</button>\n  `,\n})\nexport class ZardDemoButtonShapeComponent {}\n"
+    },
+    {
+      "name": "size.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardButtonComponent } from '../button.component';\n\n@Component({\n  selector: 'z-demo-button-size',\n  imports: [ZardButtonComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-col items-center\">\n      <div class=\"mb-4 flex gap-2\">\n        <button z-button zSize=\"sm\">Small</button>\n        <button z-button zSize=\"sm\"><z-icon zType=\"arrow-up\" /></button>\n      </div>\n\n      <div class=\"mb-4 flex gap-2\">\n        <button z-button>Default</button>\n        <button z-button><z-icon zType=\"arrow-up\" /></button>\n      </div>\n\n      <div class=\"mb-4 flex gap-2\">\n        <button z-button zSize=\"lg\">Large</button>\n        <button z-button zSize=\"lg\"><z-icon zType=\"arrow-up\" /></button>\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoButtonSizeComponent {}\n"
+    },
+    {
+      "name": "type.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '../button.component';\n\n@Component({\n  selector: 'z-demo-button-type',\n  imports: [ZardButtonComponent],\n  standalone: true,\n  template: `\n    <button z-button zSize=\"sm\">Default</button>\n    <button z-button zSize=\"sm\" zType=\"outline\">Outline</button>\n    <button z-button zSize=\"sm\" zType=\"destructive\">Destructive</button>\n    <button z-button zSize=\"sm\" zType=\"secondary\">Secondary</button>\n    <button z-button zSize=\"sm\" zType=\"ghost\">Ghost</button>\n    <button z-button zSize=\"sm\" zType=\"link\">Link</button>\n  `,\n  host: {\n    class: 'flex flex-col items-center gap-4 md:flex-row md:gap-8',\n  },\n})\nexport class ZardDemoButtonTypeComponent {}\n"
+    }
   ]
 }

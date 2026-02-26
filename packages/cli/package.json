@@ -1,11 +1,11 @@
 {
   "name": "zard-cli",
-  "version": "1.0.0-beta.53",
+  "version": "1.0.0-beta.57",
   "description": "An alternative to shadcn/ui for angular",
   "type": "module",
   "main": "index.js",
   "bin": {
-    "zard-cli": "./dist/index.js"
+    "zard-cli": "./index.js"
   },
   "keywords": [
     "ngzard",

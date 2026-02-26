@@ -21,5 +21,23 @@
   ],
   "registryDependencies": [
     "icon"
+  ],
+  "docs": {
+    "overview": "# Breadcrumb\n\nDisplays the path to the current resource using a hierarchy of links.\n",
+    "api": "# API Reference\n\n[z-breadcrumb] Component\n\n| Property       | Description                         | Type                     | Default   |\n| -------------- | ----------------------------------- | ------------------------ | --------- |\n| `[class]`      | Custom css classes                  | `string`                 | `''`      |\n| `[zSize]`      | Breadcrumb size                     | `sm \\| md \\| lg`         | `'md'`    |\n| `[zAlign]`     | Horizontal alignment                | `start \\| center \\| end` | `'start'` |\n| `[zWrap]`      | Wrapping behavior                   | `wrap \\| nowrap`         | `'wrap'`  |\n| `[zSeparator]` | Separator between breadcrumb items. | `string \\| TemplateRef`  | `''`      |\n\n[z-breadcrumb-item] Component\n\n| Property     | Description        | Type     | Default |\n| ------------ | ------------------ | -------- | ------- |\n| `[class]`    | Custom css classes | `string` | `''`    |\n| `routerLink` | Check for note     |          |         |\n\n**Note:** All [RouterLink](https://angular.dev/api/router/RouterLink) inputs are supported through host directives.\n\n[z-breadcrumb-ellipsis] Component\n\n| Property   | Description        | Type              | Default   |\n| ---------- | ------------------ | ----------------- | --------- |\n| `[class]`  | Custom css classes | `string`          | `''`      |\n| `[zColor]` | Ellipsis color     | `muted \\| strong` | `'muted'` |\n"
+  },
+  "demos": [
+    {
+      "name": "default.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardBreadcrumbImports } from '../breadcrumb.imports';\n\n@Component({\n  selector: 'z-demo-breadcrumb-default',\n  imports: [ZardBreadcrumbImports, ZardIconComponent],\n  standalone: true,\n  template: `\n    <z-breadcrumb zWrap=\"wrap\" zAlign=\"start\">\n      <z-breadcrumb-item [routerLink]=\"['/']\">\n        <z-icon zType=\"house\" />\n        Home\n      </z-breadcrumb-item>\n      <z-breadcrumb-item [routerLink]=\"['/docs/components']\">Components</z-breadcrumb-item>\n      <z-breadcrumb-item>Breadcrumb</z-breadcrumb-item>\n    </z-breadcrumb>\n  `,\n})\nexport class ZardDemoBreadcrumbDefaultComponent {}\n"
+    },
+    {
+      "name": "ellipsis.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';\nimport { ZardMenuImports } from '@/shared/components/menu/menu.imports';\n\n@Component({\n  selector: 'z-demo-breadcrumb-ellipsis',\n  imports: [ZardBreadcrumbImports, ZardMenuImports],\n  standalone: true,\n  template: `\n    <z-breadcrumb>\n      <z-breadcrumb-item [routerLink]=\"['/']\">Home</z-breadcrumb-item>\n      <z-breadcrumb-item>\n        <z-breadcrumb-ellipsis z-menu [zMenuTriggerFor]=\"ellipsisMenu\" />\n\n        <ng-template #ellipsisMenu>\n          <div z-menu-content class=\"w-48\">\n            <button type=\"button\" z-menu-item>Getting Started</button>\n            <button type=\"button\" z-menu-item>Installation</button>\n          </div>\n        </ng-template>\n      </z-breadcrumb-item>\n      <z-breadcrumb-item>Components</z-breadcrumb-item>\n      <z-breadcrumb-item>Breadcrumb</z-breadcrumb-item>\n    </z-breadcrumb>\n  `,\n})\nexport class ZardDemoBreadcrumbEllipsisComponent {}\n"
+    },
+    {
+      "name": "separator.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardBreadcrumbImports } from '../breadcrumb.imports';\n\n@Component({\n  selector: 'z-demo-breadcrumb-separator',\n  imports: [ZardBreadcrumbImports, ZardIconComponent],\n  standalone: true,\n  template: `\n    <z-breadcrumb [zSeparator]=\"customSeparator\">\n      <z-breadcrumb-item>Home</z-breadcrumb-item>\n      <z-breadcrumb-item>Components</z-breadcrumb-item>\n      <z-breadcrumb-item>Breadcrumb</z-breadcrumb-item>\n    </z-breadcrumb>\n\n    <ng-template #customSeparator>\n      <z-icon zType=\"arrow-right\" />\n    </ng-template>\n  `,\n})\nexport class ZardDemoBreadcrumbSeparatorComponent {}\n"
+    }
   ]
 }

@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui@latest add layout
+npx zard-cli@latest add layout
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui@latest add layout
+pnpm dlx zard-cli@latest add layout
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui@latest add layout
+yarn dlx zard-cli@latest add layout
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui@latest add layout
+bunx zard-cli@latest add layout
 ```

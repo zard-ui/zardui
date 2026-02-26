@@ -1,0 +1,190 @@
+name: release-mcp
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no actual publish)'
+        required: false
+        default: false
+        type: boolean
+      version:
+        description: 'Version bump type'
+        required: false
+        default: 'prerelease'
+        type: choice
+        options:
+          - prerelease
+          - patch
+          - minor
+          - major
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "Charizard"
+          git config user.email "chari@zardui.com"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'npm'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Update npm for OIDC support
+        run: npm install -g npm@latest
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Build MCP
+        run: npx nx run mcp:build
+
+      - name: Get current version
+        id: current
+        run: |
+          VERSION=$(node -p "require('./packages/mcp/package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Current version: $VERSION"
+
+      - name: Bump version
+        if: ${{ inputs.dry_run != true }}
+        id: bump
+        run: |
+          BUMP_TYPE="${{ inputs.version }}"
+          cd packages/mcp
+
+          if [ "$BUMP_TYPE" = "prerelease" ]; then
+            npm version prerelease --preid=alpha --no-git-tag-version
+          else
+            npm version "$BUMP_TYPE" --no-git-tag-version
+          fi
+
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "🔖 New version: $VERSION"
+
+      - name: Dry Run Summary
+        if: ${{ inputs.dry_run == true }}
+        run: |
+          echo "🧪 Dry run mode — no changes made"
+          echo "Current version: ${{ steps.current.outputs.version }}"
+          echo "Bump type: ${{ inputs.version }}"
+
+      - name: Rebuild MCP with new version
+        if: ${{ inputs.dry_run != true }}
+        run: npx nx run mcp:build
+
+      - name: Commit and Tag Release
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          VERSION=${{ steps.bump.outputs.version }}
+          git add packages/mcp/package.json
+          git commit -m "🔖 chore(release): publish mcp v${VERSION} [skip ci]"
+          git tag -a "mcp-v${VERSION}" -m "mcp-v${VERSION}"
+
+      - name: Publish to npm
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          VERSION=${{ steps.bump.outputs.version }}
+          if [[ "$VERSION" == *"-"* ]]; then
+            TAG="alpha"
+          else
+            TAG="latest"
+          fi
+          echo "📤 Publishing zard-mcp@${VERSION} with tag ${TAG}"
+          cd packages/mcp/dist && npm publish --provenance --access public --tag $TAG
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Push changes
+        if: ${{ inputs.dry_run != true }}
+        run: git push --follow-tags
+
+      - name: Create GitHub Release
+        if: ${{ inputs.dry_run != true }}
+        run: |
+          VERSION=${{ steps.bump.outputs.version }}
+          if [[ "$VERSION" == *"-"* ]]; then
+            PRERELEASE="--prerelease"
+          else
+            PRERELEASE=""
+          fi
+          gh release create "mcp-v${VERSION}" --title "MCP v${VERSION}" --generate-notes $PRERELEASE
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify Discord
+        if: ${{ inputs.dry_run != true && success() }}
+        run: |
+          if [ -z "$DEPLOY_WEBHOOK_URL" ]; then
+            echo "⚠️ DEPLOY_WEBHOOK_URL not configured, skipping notification"
+            exit 0
+          fi
+
+          VERSION=${{ steps.bump.outputs.version }}
+
+          if [[ "$VERSION" == *"-"* ]]; then
+            RELEASE_TYPE="🧪 Pre-release"
+            COLOR=16776960
+            NPM_TAG="alpha"
+          else
+            RELEASE_TYPE="🚀 Stable Release"
+            COLOR=5763719
+            NPM_TAG="latest"
+          fi
+
+          PAYLOAD=$(cat <<EOF
+          {
+            "embeds": [{
+              "title": "🤖 ZardUI MCP v${VERSION}",
+              "description": "${RELEASE_TYPE} published successfully!",
+              "color": ${COLOR},
+              "fields": [
+                {
+                  "name": "📋 Version",
+                  "value": "\`${VERSION}\`",
+                  "inline": true
+                },
+                {
+                  "name": "🏷️ npm Tag",
+                  "value": "\`${NPM_TAG}\`",
+                  "inline": true
+                },
+                {
+                  "name": "📥 Install",
+                  "value": "\`\`\`json\n{ \"command\": \"npx\", \"args\": [\"-y\", \"zard-mcp@${VERSION}\"] }\n\`\`\`",
+                  "inline": false
+                },
+                {
+                  "name": "🔗 Links",
+                  "value": "[npm](https://www.npmjs.com/package/zard-mcp/v/${VERSION}) • [GitHub Release](https://github.com/${{ github.repository }}/releases/tag/mcp-v${VERSION})",
+                  "inline": false
+                }
+              ],
+              "footer": {
+                "text": "Released by ${{ github.actor }} via GitHub Actions"
+              },
+              "timestamp": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            }]
+          }
+          EOF
+          )
+
+          curl -s -o /dev/null -w "%{http_code}" \
+               -H "Content-Type: application/json" \
+               -d "$PAYLOAD" \
+               "$DEPLOY_WEBHOOK_URL" | grep -q "204" && echo "✅ Discord notification sent!" || echo "❌ Failed to send Discord notification"
+        env:
+          DEPLOY_WEBHOOK_URL: ${{ secrets.DEPLOY_WEBHOOK_URL }}
