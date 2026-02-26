@@ -1,9 +1,9 @@
 {
   "name": "zard-mcp",
-  "version": "1.0.0-beta.55",
+  "version": "1.0.0-alpha.2",
   "description": "MCP Server for Zard UI - AI-powered tools for Angular component discovery and installation",
   "type": "module",
-  "main": "dist/index.js",
+  "main": "./index.js",
   "bin": {
     "zard-mcp": "./index.js"
   },
@@ -31,8 +31,8 @@
     "url": "https://github.com/zard-ui/zardui/issues"
   },
   "files": [
-    "dist/**/*.js",
-    "dist/**/*.d.ts"
+    "**/*.js",
+    "**/*.d.ts"
   ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.27.1",

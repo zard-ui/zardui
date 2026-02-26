@@ -4,7 +4,6 @@
   "release": {
     "projects": [
       "packages/cli",
-      "packages/mcp",
       "libs/zard"
     ],
     "projectsRelationship": "fixed",
