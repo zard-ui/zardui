@@ -1,0 +1,9 @@
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'lib-<%= name %>',
+  standalone: true,
+  imports: [],
+  templateUrl: './<%= name %>.component.html',
+})
+export class <%= className %>Component {}

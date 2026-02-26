@@ -1,0 +1,16 @@
+import type { Block } from '@doc/domain/components/block-container/block-container.component';
+
+import { <%= className %>Component } from './<%= name %>.component';
+
+export const <%= camelName %>Block: Block = {
+  id: '<%= name %>',
+  title: '<%= title %>',
+  description: '<%= description %>',
+  component: <%= className %>Component,
+  category: '<%= category %>',
+  image: {
+    light: '/blocks/<%= name %>/light.png',
+    dark: '/blocks/<%= name %>/dark.png',
+  },
+  files: [],
+};

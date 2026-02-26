@@ -27,7 +27,9 @@
     "release": "npx nx release",
     "release:dry-run": "npx nx release --dry-run",
     "serve:ssr": "node dist/apps/web/server/server.mjs",
-    "generate:component": "nx generate @zardui/generators:component"
+    "generate:component": "nx generate @zardui/generators:component",
+    "generate:block": "nx generate @zardui/generators:block",
+    "sync:blocks": "npx tsx scripts/sync-blocks.ts"
   },
   "engines": {
     "node": ">=20.19.0"
