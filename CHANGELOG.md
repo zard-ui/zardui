@@ -1,3 +1,13 @@
+## 1.0.0-beta.61 (2026-02-26)
+
+### ✨ Features
+
+- **generators:** add block scaffold generator and sync script ([#459](https://github.com/zard-ui/zardui/pull/459))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.60 (2026-02-26)
 
 ### ✨ Features
