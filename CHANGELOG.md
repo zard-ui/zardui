@@ -1,3 +1,13 @@
+## 1.0.0-beta.59 (2026-02-26)
+
+### ✨ Features
+
+- **generators:** add Nx component scaffold generator ([#457](https://github.com/zard-ui/zardui/pull/457))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.58 (2026-02-26)
 
 This was a version bump only, there were no code changes.
