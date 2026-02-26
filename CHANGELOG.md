@@ -1,3 +1,13 @@
+## 1.0.0-beta.60 (2026-02-26)
+
+### ✨ Features
+
+- **about:** redesign founders and maintainers cards ([#458](https://github.com/zard-ui/zardui/pull/458))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.59 (2026-02-26)
 
 ### ✨ Features
