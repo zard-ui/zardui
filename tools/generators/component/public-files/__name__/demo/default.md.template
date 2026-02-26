@@ -1,0 +1,16 @@
+```angular-ts showLineNumbers copyButton
+import { Component } from '@angular/core';
+
+import { Zard<%= className %>Component } from '../<%= name %>.component';
+
+@Component({
+  selector: 'z-demo-<%= name %>-default',
+  standalone: true,
+  imports: [Zard<%= className %>Component],
+  template: `
+    <<%= selector %>><%= className %></<%= selector %>>
+  `,
+})
+export class ZardDemo<%= className %>DefaultComponent {}
+
+```

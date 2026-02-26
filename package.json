@@ -26,7 +26,8 @@
     "publish:cli": "npx nx run cli:publish",
     "release": "npx nx release",
     "release:dry-run": "npx nx release --dry-run",
-    "serve:ssr": "node dist/apps/web/server/server.mjs"
+    "serve:ssr": "node dist/apps/web/server/server.mjs",
+    "generate:component": "nx generate @zardui/generators:component"
   },
   "engines": {
     "node": ">=20.19.0"

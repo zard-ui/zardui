@@ -1,0 +1,9 @@
+{
+  "generators": {
+    "component": {
+      "factory": "./generators/component",
+      "schema": "./generators/component/schema.json",
+      "description": "Generate a new Zard UI component"
+    }
+  }
+}

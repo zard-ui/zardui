@@ -1,0 +1,6 @@
+{
+  "name": "@zardui/generators",
+  "version": "1.0.0",
+  "private": true,
+  "generators": "./generators.json"
+}
