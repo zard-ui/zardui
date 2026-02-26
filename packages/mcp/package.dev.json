@@ -1,0 +1,11 @@
+{
+  "name": "zard-mcp-dev",
+  "version": "0.0.0-dev",
+  "description": "Development version of zard-mcp",
+  "type": "module",
+  "main": "index.js",
+  "bin": {
+    "zard-mcp-dev": "./index.js"
+  },
+  "private": true
+}

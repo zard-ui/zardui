@@ -14,5 +14,15 @@
       "name": "index.ts",
       "content": "export * from './badge.component';\nexport * from './badge.variants';\n"
     }
+  ],
+  "docs": {
+    "overview": "# Badge\n\nDisplays a badge or a component that looks like a badge.\n",
+    "api": "# API Reference\n\n[z-badge] Component\n\n| Property | Description | Type                                             | Default   |\n| -------- | ----------- | ------------------------------------------------ | --------- |\n| `zType`  | Badge type  | `default \\| secondary \\| destructive \\| outline` | `default` |\n| `zShape` | Badge shape | `default \\| square \\| pill`                      | `default` |\n"
+  },
+  "demos": [
+    {
+      "name": "default.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardBadgeComponent } from '../badge.component';\n\n@Component({\n  selector: 'z-demo-badge-default',\n  imports: [ZardBadgeComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-col items-center gap-2\">\n      <div class=\"flex w-full flex-wrap gap-2\">\n        <z-badge>Badge</z-badge>\n        <z-badge zType=\"secondary\">Secondary</z-badge>\n        <z-badge zType=\"destructive\">Destructive</z-badge>\n        <z-badge zType=\"outline\">Outline</z-badge>\n      </div>\n      <div class=\"flex w-full flex-wrap gap-2\">\n        <z-badge zType=\"secondary\" zShape=\"pill\" class=\"bg-blue-500 text-white dark:bg-blue-600\">\n          <z-icon zType=\"badge-check\" />\n          Verified\n        </z-badge>\n        <z-badge zShape=\"pill\" class=\"h-5 min-w-5 px-1 font-mono tabular-nums\">8</z-badge>\n        <z-badge zShape=\"pill\" zType=\"destructive\" class=\"h-5 min-w-5 px-1 font-mono tabular-nums\">99</z-badge>\n        <z-badge zShape=\"pill\" zType=\"outline\" class=\"h-5 min-w-5 px-1 font-mono tabular-nums\">20+</z-badge>\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoBadgeDefaultComponent {}\n"
+    }
   ]
 }

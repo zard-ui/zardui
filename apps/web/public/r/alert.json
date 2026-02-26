@@ -17,5 +17,15 @@
   ],
   "registryDependencies": [
     "icon"
+  ],
+  "docs": {
+    "overview": "# Alert\n\nDisplays a callout for user attention.\n",
+    "api": "# API Reference\n\n[z-alert] Component\n\n| Property         | Description       | Type                          | Default   |\n| ---------------- | ----------------- | ----------------------------- | --------- |\n| `[zTitle]`       | Alert title       | `string \\| TemplateRef<void>` | `-`       |\n| `[zDescription]` | Alert description | `string \\| TemplateRef<void>` | `-`       |\n| `[zIcon]`        | Alert icon        | `string \\| TemplateRef<void>` | `-`       |\n| `[zType]`        | Alert variant     | `default \\| destructive`      | `default` |\n"
+  },
+  "demos": [
+    {
+      "name": "basic.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardAlertComponent } from '../alert.component';\n\n@Component({\n  selector: 'z-demo-alert-basic',\n  imports: [ZardAlertComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <div class=\"grid w-full max-w-xl items-start gap-4\">\n      <z-alert\n        zIcon=\"circle-check\"\n        zTitle=\"Success! Your changes have been saved\"\n        zDescription=\"This is an alert with icon, title and description.\"\n      />\n\n      <z-alert [zIcon]=\"customIcon\" zTitle=\"This Alert has a title and an icon. No description.\" />\n\n      <ng-template #customIcon>\n        <z-icon zType=\"popcorn\" />\n      </ng-template>\n\n      <z-alert zType=\"destructive\" zTitle=\"Unable to process your payment.\" [zDescription]=\"customDescription\" />\n\n      <ng-template #customDescription>\n        <p>Please verify your billing information and try again.</p>\n        <ul class=\"list-disc pl-5\">\n          <li>Check your card details</li>\n          <li>Ensure sufficient funds</li>\n          <li>Verify billing address</li>\n        </ul>\n      </ng-template>\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoAlertBasicComponent {}\n"
+    }
   ]
 }

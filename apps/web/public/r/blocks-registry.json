@@ -1,0 +1,10 @@
+{
+  "blocks": [
+    {
+      "id": "authentication-01",
+      "title": "Authentication page",
+      "description": "A modern authentication page with email/password.",
+      "category": "Authentication"
+    }
+  ]
+}
