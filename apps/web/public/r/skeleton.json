@@ -22,7 +22,7 @@
   "demos": [
     {
       "name": "card.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '../skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-card',\n  imports: [ZardSkeletonComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-col space-y-3\">\n      <z-skeleton class=\"rounded-xll h-[125px] w-[250px]\" />\n      <div class=\"space-y-2\">\n        <z-skeleton class=\"h-4 w-[250px]\" />\n        <z-skeleton class=\"h-4 w-[200px]\" />\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoSkeletonCardComponent {}\n"
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '../skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-card',\n  imports: [ZardSkeletonComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-col space-y-3\">\n      <z-skeleton class=\"h-[125px] w-[250px] rounded-xl\" />\n      <div class=\"space-y-2\">\n        <z-skeleton class=\"h-4 w-[250px]\" />\n        <z-skeleton class=\"h-4 w-[200px]\" />\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoSkeletonCardComponent {}\n"
     },
     {
       "name": "default.ts",
