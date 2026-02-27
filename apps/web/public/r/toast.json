@@ -8,7 +8,7 @@
     },
     {
       "name": "toast.variants.ts",
-      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const toastVariants = cva(\n  'group toast group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',\n  {\n    variants: {\n      variant: {\n        default: 'group-[.toaster]:bg-background group-[.toaster]:text-foreground',\n        destructive:\n          'group-[.toaster]:bg-destructive group-[.toaster]:text-destructive-foreground destructive group-[.toaster]:border-destructive',\n      },\n    },\n    defaultVariants: {\n      variant: 'default',\n    },\n  },\n);\n\nexport type ZardToastVariants = VariantProps<typeof toastVariants>;\n"
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const toastVariants = cva(\n  'group group-[.toaster]:bg-background group-[.toaster]:text-foreground group-[.toaster]:border-border group-[.toaster]:shadow-lg',\n  {\n    variants: {\n      variant: {\n        default: 'group-[.toaster]:bg-background group-[.toaster]:text-foreground',\n        destructive:\n          'group-[.toaster]:bg-destructive group-[.toaster]:text-foreground group-[.toaster]:border-destructive',\n      },\n    },\n    defaultVariants: {\n      variant: 'default',\n    },\n  },\n);\n\nexport type ZardToastVariants = VariantProps<typeof toastVariants>;\n"
     },
     {
       "name": "index.ts",

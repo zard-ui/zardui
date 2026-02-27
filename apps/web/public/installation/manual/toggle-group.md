@@ -49,7 +49,7 @@ type OnChangeType = (value: string | string[]) => void;
           (click)="toggleItem(item)"
         >
           @if (item.icon) {
-            <span z-icon [zType]="item.icon" class="h-4 w-4 shrink-0"></span>
+            <span z-icon [zType]="item.icon" class="size-4 shrink-0"></span>
           }
           @if (item.label) {
             <span>{{ item.label }}</span>

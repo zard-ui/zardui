@@ -47,7 +47,7 @@ type OnChangeType = (value: boolean) => void;
       <z-icon
         zType="check"
         [class]="
-          'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-opacity ' +
+          'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-1/2 items-center justify-center transition-opacity ' +
           (checked() ? 'opacity-100' : 'opacity-0')
         "
       />

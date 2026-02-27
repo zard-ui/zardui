@@ -9,13 +9,14 @@ import { ZardPopoverComponent, ZardPopoverDirective } from './popover.component'
 
 @Component({
   imports: [ZardPopoverDirective, ZardPopoverComponent],
-  standalone: true,
   template: `
-    <button zPopover [zContent]="popoverContent" [zTrigger]="trigger" [zPlacement]="placement">Trigger</button>
+    <button type="button" zPopover [zContent]="popoverContent" [zTrigger]="trigger" [zPlacement]="placement">
+      Trigger
+    </button>
 
     <ng-template #popoverContent>
       <z-popover>
-        <div class="test-content">Test content</div>
+        <div id="test-content">Test content</div>
       </z-popover>
     </ng-template>
   `,
@@ -58,7 +59,7 @@ describe('ZardPopoverComponent', () => {
     fixture.detectChanges();
 
     const overlayContainer = document.querySelector('.cdk-overlay-container');
-    const popoverContent = overlayContainer?.querySelector('.test-content');
+    const popoverContent = overlayContainer?.querySelector('#test-content');
 
     expect(popoverContent).toBeTruthy();
     expect(popoverContent?.textContent).toContain('Test content');
@@ -68,13 +69,14 @@ describe('ZardPopoverComponent', () => {
     buttonElement.nativeElement.click();
     fixture.detectChanges();
 
-    let popoverContent = document.querySelector('.test-content');
+    const overlayContainer = document.querySelector('.cdk-overlay-container');
+    let popoverContent = overlayContainer?.querySelector('#test-content');
     expect(popoverContent).toBeTruthy();
 
     buttonElement.nativeElement.click();
     fixture.detectChanges();
 
-    popoverContent = document.querySelector('.test-content');
+    popoverContent = overlayContainer?.querySelector('#test-content');
     expect(popoverContent).toBeFalsy();
   });
 
@@ -100,7 +102,8 @@ describe('ZardPopoverComponent', () => {
     buttonElement.nativeElement.click();
     fixture.detectChanges();
 
-    const popoverContent = document.querySelector('.test-content');
+    const overlayContainer = document.querySelector('.cdk-overlay-container');
+    const popoverContent = overlayContainer?.querySelector('#test-content');
     expect(popoverContent).toBeFalsy();
   });
 
@@ -108,14 +111,15 @@ describe('ZardPopoverComponent', () => {
     buttonElement.nativeElement.click();
     fixture.detectChanges();
 
-    let popoverContent = document.querySelector('.test-content');
+    const overlayContainer = document.querySelector('.cdk-overlay-container');
+    let popoverContent = overlayContainer?.querySelector('#test-content');
     expect(popoverContent).toBeTruthy();
 
     setTimeout(() => {
       document.body.click();
       fixture.detectChanges();
 
-      popoverContent = document.querySelector('.test-content');
+      popoverContent = overlayContainer?.querySelector('#test-content');
       expect(popoverContent).toBeFalsy();
       done();
     }, 100);
@@ -155,7 +159,8 @@ describe('ZardPopoverComponent', () => {
     buttonElement.nativeElement.click();
     fixture.detectChanges();
 
-    let popoverContent = document.querySelector('.test-content');
+    const overlayContainer = document.querySelector('.cdk-overlay-container');
+    let popoverContent = overlayContainer?.querySelector('#test-content');
     expect(popoverContent).toBeTruthy();
 
     // Simulate scroll event
@@ -163,12 +168,12 @@ describe('ZardPopoverComponent', () => {
     window.dispatchEvent(scrollEvent);
     fixture.detectChanges();
 
-    // Wait for the scroll strategy to close the popover
+    // Wait for the scroll strategy
     await fixture.whenStable();
     fixture.detectChanges();
 
-    // The popover should be closed due to the close scroll strategy
-    popoverContent = document.querySelector('.test-content');
+    // The popover should remain visible (reposition scroll strategy)
+    popoverContent = overlayContainer?.querySelector('#test-content');
     expect(popoverContent).toBeTruthy();
   });
 
@@ -275,13 +280,12 @@ describe('ZardPopoverComponent standalone', () => {
 
 @Component({
   imports: [ZardPopoverDirective, ZardPopoverComponent],
-  standalone: true,
   template: `
-    <button zPopover [zContent]="popoverContent" zTrigger="hover">Hover me</button>
+    <button type="button" zPopover [zContent]="popoverContent" zTrigger="hover">Hover me</button>
 
     <ng-template #popoverContent>
       <z-popover>
-        <div class="hover-content">Hover content</div>
+        <div>Hover content</div>
       </z-popover>
     </ng-template>
   `,

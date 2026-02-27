@@ -399,7 +399,7 @@ export const calendarMonthVariants = cva('flex flex-col w-fit gap-4');
 export const calendarNavVariants = cva('flex items-center justify-between gap-2 w-fit mb-4');
 
 export const calendarNavButtonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground h-7 w-7 bg-transparent p-0 opacity-50 hover:opacity-100',
+  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground size-7 bg-transparent p-0 opacity-50 hover:opacity-100',
 );
 
 export const calendarWeekdaysVariants = cva('flex');
@@ -408,12 +408,10 @@ export const calendarWeekdayVariants = cva('text-muted-foreground font-normal te
 
 export const calendarWeekVariants = cva('flex w-full mt-2');
 
-export const calendarDayVariants = cva(
-  'p-0 relative focus-within:relative focus-within:z-20 flex mt-1 h-8 w-8 text-sm',
-);
+export const calendarDayVariants = cva('p-0 relative focus-within:relative focus-within:z-20 flex mt-1 size-8 text-sm');
 
 export const calendarDayButtonVariants = cva(
-  'p-0 font-normal flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground w-full h-full text-sm',
+  'p-0 font-normal flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground size-full text-sm',
   {
     variants: {
       selected: {
@@ -809,7 +807,7 @@ import { ZardSelectComponent } from '../select/select.component';
         (click)="onPreviousClick()"
         [disabled]="isPreviousDisabled()"
         aria-label="Previous month"
-        class="h-7 w-7 p-0"
+        class="size-7 p-0"
       >
         <z-icon zType="chevron-left" />
       </button>
@@ -839,7 +837,7 @@ import { ZardSelectComponent } from '../select/select.component';
         (click)="onNextClick()"
         [disabled]="isNextDisabled()"
         aria-label="Next month"
-        class="h-7 w-7 p-0"
+        class="size-7 p-0"
       >
         <z-icon zType="chevron-right" />
       </button>

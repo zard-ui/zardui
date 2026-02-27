@@ -61,7 +61,7 @@ export class ZardTabComponent {
       <ng-container [ngTemplateOutlet]="navigationBlock" />
     }
 
-    <div class="tab-content flex-1">
+    <div class="flex-1">
       @for (tab of tabs(); track $index; let index = $index) {
         <div
           role="tabpanel"
@@ -88,7 +88,7 @@ export class ZardTabComponent {
           @if (horizontal) {
             <button
               type="button"
-              [class]="'scroll-btn scroll-left cursor-pointer pr-4 ' + (zTabsPosition() === 'top' ? 'mb-4' : 'mt-4')"
+              [class]="'cursor-pointer pr-4 ' + (zTabsPosition() === 'top' ? 'mb-4' : 'mt-4')"
               (click)="scrollNav('left')"
             >
               <z-icon zType="chevron-left" />
@@ -96,7 +96,7 @@ export class ZardTabComponent {
           } @else {
             <button
               type="button"
-              [class]="'scroll-btn scroll-up cursor-pointer pb-4 ' + (zTabsPosition() === 'left' ? 'mr-4' : 'ml-4')"
+              [class]="'cursor-pointer pb-4 ' + (zTabsPosition() === 'left' ? 'mr-4' : 'ml-4')"
               (click)="scrollNav('up')"
             >
               <z-icon zType="chevron-up" />
@@ -132,7 +132,7 @@ export class ZardTabComponent {
           @if (horizontal) {
             <button
               type="button"
-              [class]="'scroll-btn scroll-right cursor-pointer pl-4 ' + (zTabsPosition() === 'top' ? 'mb-4' : 'mt-4')"
+              [class]="'cursor-pointer pl-4 ' + (zTabsPosition() === 'top' ? 'mb-4' : 'mt-4')"
               (click)="scrollNav('right')"
             >
               <z-icon zType="chevron-right" />
@@ -140,7 +140,7 @@ export class ZardTabComponent {
           } @else {
             <button
               type="button"
-              [class]="'scroll-btn scroll-down cursor-pointer pt-4 ' + (zTabsPosition() === 'left' ? 'mr-4' : 'ml-4')"
+              [class]="'cursor-pointer pt-4 ' + (zTabsPosition() === 'left' ? 'mr-4' : 'ml-4')"
               (click)="scrollNav('down')"
             >
               <z-icon zType="chevron-down" />

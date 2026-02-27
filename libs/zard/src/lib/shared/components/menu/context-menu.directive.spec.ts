@@ -11,9 +11,7 @@ import { ZardContextMenuDirective } from './context-menu.directive';
 @Component({
   imports: [ZardMenuImports],
   template: `
-    <div z-context-menu [zContextMenuTriggerFor]="contextMenu" class="test-area" data-testid="context-menu-trigger">
-      Right click here
-    </div>
+    <div z-context-menu [zContextMenuTriggerFor]="contextMenu" data-testid="context-menu-trigger">Right click here</div>
 
     <ng-template #contextMenu>
       <div z-menu-content class="w-48" data-testid="context-menu-content">

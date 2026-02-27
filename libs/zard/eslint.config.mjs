@@ -1,5 +1,34 @@
 import nx from '@nx/eslint-plugin';
 import baseConfig from '../../eslint.config.mjs';
+import eslintPluginBetterTailwindcss from 'eslint-plugin-better-tailwindcss';
+import { fileURLToPath } from 'url';
+import { dirname, resolve } from 'path';
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
+const tailwindEntryPoint = resolve(__dirname, '../../apps/web/src/styles.css');
+
+const betterTailwindBase = {
+  plugins: {
+    'better-tailwindcss': eslintPluginBetterTailwindcss,
+  },
+  settings: {
+    'better-tailwindcss': {
+      entryPoint: tailwindEntryPoint,
+    },
+  },
+  rules: {
+    ...eslintPluginBetterTailwindcss.configs.recommended.rules,
+    // Disable rules that conflict with prettier
+    'better-tailwindcss/enforce-consistent-line-wrapping': 'off',
+    'better-tailwindcss/enforce-consistent-class-order': 'off',
+    'better-tailwindcss/no-unknown-classes': [
+      'error',
+      {
+        ignore: ['animate-spinner'],
+      },
+    ],
+  },
+};
 
 export default [
   ...baseConfig,
@@ -93,7 +122,13 @@ export default [
   },
   {
     files: ['**/*.html'],
+    languageOptions: {
+      parser: (await import('@angular-eslint/template-parser')).default,
+    },
+    ...betterTailwindBase,
     rules: {
+      ...betterTailwindBase.rules,
+      'better-tailwindcss/no-unnecessary-whitespace': 'off',
       '@angular-eslint/template/no-negated-async': 'error',
       '@angular-eslint/template/banana-in-box': 'error',
       '@angular-eslint/template/button-has-type': 'warn',
@@ -113,5 +148,9 @@ export default [
       '@angular-eslint/template/table-scope': 'error',
       '@angular-eslint/template/valid-aria': 'error',
     },
+  },
+  {
+    files: ['**/*.ts'],
+    ...betterTailwindBase,
   },
 ];
