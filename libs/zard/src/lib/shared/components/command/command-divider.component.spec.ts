@@ -26,7 +26,6 @@ const SEARCH_DEBOUNCE_MS = 150;
     ZardCommandOptionGroupComponent,
     ZardCommandDividerComponent,
   ],
-  standalone: true,
   template: `
     <z-command>
       <z-command-input placeholder="Search..." />
@@ -36,7 +35,7 @@ const SEARCH_DEBOUNCE_MS = 150;
           <z-command-option zLabel="Option 1" zValue="opt1" />
         </z-command-option-group>
 
-        <z-command-divider class="test-divider" />
+        <z-command-divider class="text-gray-400" />
 
         <z-command-option-group zLabel="Group 2">
           <z-command-option zLabel="Option 2" zValue="opt2" />
@@ -50,9 +49,8 @@ class TestHostComponent {}
 @Component({
   selector: 'standalone-test',
   imports: [ZardCommandDividerComponent],
-  standalone: true,
   template: `
-    <z-command-divider class="standalone-divider" />
+    <z-command-divider />
   `,
 })
 class StandaloneTestComponent {}
@@ -153,7 +151,7 @@ describe('ZardCommandDividerComponent', () => {
 
   it('should support custom CSS classes', () => {
     const dividerElement = fixture.nativeElement.querySelector('z-command-divider div');
-    expect(dividerElement.className).toContain('test-divider');
+    expect(dividerElement.className).toContain('text-gray-400');
   });
 
   it('should respond to search term changes reactively', async () => {

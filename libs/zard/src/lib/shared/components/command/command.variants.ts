@@ -52,7 +52,7 @@ export const commandItemVariants = cva(
       variant: {
         default: '',
         destructive:
-          'aria-selected:bg-destructive aria-selected:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground',
+          'aria-selected:bg-destructive aria-selected:text-foreground hover:bg-destructive hover:text-foreground',
       },
     },
     defaultVariants: {

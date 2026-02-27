@@ -26,7 +26,7 @@
   "demos": [
     {
       "name": "colors.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../icon.component';\n\n@Component({\n  selector: 'z-demo-icon-colors',\n  imports: [ZardIconComponent],\n  template: `\n    <div class=\"flex items-center gap-4\">\n      <z-icon zType=\"heart\" class=\"text-destructive\" />\n      <z-icon zType=\"circle-check\" class=\"text-green-500\" />\n      <z-icon zType=\"triangle-alert\" class=\"text-warning\" />\n      <z-icon zType=\"info\" class=\"text-blue-500\" />\n      <z-icon zType=\"star\" class=\"text-yellow-500\" />\n      <z-icon zType=\"zap\" class=\"text-purple-500\" />\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoIconColorsComponent {}\n"
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../icon.component';\n\n@Component({\n  selector: 'z-demo-icon-colors',\n  imports: [ZardIconComponent],\n  template: `\n    <div class=\"flex items-center gap-4\">\n      <z-icon zType=\"heart\" class=\"text-destructive\" />\n      <z-icon zType=\"circle-check\" class=\"text-green-500\" />\n      <z-icon zType=\"triangle-alert\" class=\"text-orange-500\" />\n      <z-icon zType=\"info\" class=\"text-blue-500\" />\n      <z-icon zType=\"star\" class=\"text-yellow-500\" />\n      <z-icon zType=\"zap\" class=\"text-purple-500\" />\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoIconColorsComponent {}\n"
     },
     {
       "name": "default.ts",

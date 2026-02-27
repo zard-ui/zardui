@@ -13,7 +13,7 @@ export const checkboxVariants = cva(
         lg: 'size-6',
       },
       zShape: {
-        default: 'rounded-sm',
+        default: 'rounded-[4px]',
         circle: 'rounded-full',
         square: 'rounded-none',
       },
