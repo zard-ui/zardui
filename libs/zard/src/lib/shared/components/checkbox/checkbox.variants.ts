@@ -1,7 +1,7 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const checkboxVariants = cva(
-  'cursor-[unset] peer appearance-none border transition shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
+  'cursor-[unset] peer appearance-none border transition shadow-sm hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       zType: {
@@ -13,7 +13,7 @@ export const checkboxVariants = cva(
         lg: 'size-6',
       },
       zShape: {
-        default: 'rounded',
+        default: 'rounded-sm',
         circle: 'rounded-full',
         square: 'rounded-none',
       },

@@ -24,7 +24,7 @@ export const avatarVariants = cva(
   },
 );
 
-export const imageVariants = cva('relative object-cover object-center w-full h-full z-10', {
+export const imageVariants = cva('relative object-cover object-center size-full z-10', {
   variants: {
     zShape: {
       circle: 'rounded-full',

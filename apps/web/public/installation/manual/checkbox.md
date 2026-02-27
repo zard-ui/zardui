@@ -50,7 +50,7 @@ type OnChangeType = (value: boolean) => void;
       <z-icon
         zType="check"
         [class]="
-          'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-opacity ' +
+          'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-1/2 items-center justify-center transition-opacity ' +
           (checked() ? 'opacity-100' : 'opacity-0')
         "
       />
@@ -134,7 +134,7 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const checkboxVariants = cva(
-  'cursor-[unset] peer appearance-none border transition shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
+  'cursor-[unset] peer appearance-none border transition shadow-sm hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       zType: {
@@ -146,7 +146,7 @@ export const checkboxVariants = cva(
         lg: 'size-6',
       },
       zShape: {
-        default: 'rounded',
+        default: 'rounded-sm',
         circle: 'rounded-full',
         square: 'rounded-none',
       },

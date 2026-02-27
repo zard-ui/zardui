@@ -33,7 +33,7 @@ export const sheetVariants = cva(
       {
         zSide: ['left', 'right'],
         zSize: 'lg',
-        class: 'w-full sm:max-w-lg h-full',
+        class: 'size-full sm:max-w-lg',
       },
       {
         zSide: ['top', 'bottom'],

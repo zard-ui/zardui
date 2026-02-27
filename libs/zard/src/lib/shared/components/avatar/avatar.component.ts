@@ -51,7 +51,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-1.25 -bottom-1.25 z-20 h-5 w-5 text-green-500"
+            class="absolute -right-1.25 -bottom-1.25 z-20 size-5 text-green-500"
           >
             <circle cx="12" cy="12" r="10" fill="currentColor" />
           </svg>
@@ -67,7 +67,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-1.25 -bottom-1.25 z-20 h-5 w-5 text-red-500"
+            class="absolute -right-1.25 -bottom-1.25 z-20 size-5 text-red-500"
           >
             <circle cx="12" cy="12" r="10" fill="currentColor" />
           </svg>
@@ -83,7 +83,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-1.25 -bottom-1.25 z-20 h-5 w-5 text-red-500"
+            class="absolute -right-1.25 -bottom-1.25 z-20 size-5 text-red-500"
           >
             <circle cx="12" cy="12" r="10" />
             <path d="M8 12h8" fill="currentColor" />
@@ -100,7 +100,7 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
             stroke-width="2"
             stroke-linecap="round"
             stroke-linejoin="round"
-            class="absolute -right-1.25 -bottom-1.25 z-20 h-5 w-5 rotate-y-180 text-yellow-400"
+            class="absolute -right-1.25 -bottom-1.25 z-20 size-5 rotate-y-180 text-yellow-400"
           >
             <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="currentColor" />
           </svg>

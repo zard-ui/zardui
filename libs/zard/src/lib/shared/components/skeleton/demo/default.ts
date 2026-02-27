@@ -8,7 +8,7 @@ import { ZardSkeletonComponent } from '../skeleton.component';
   standalone: true,
   template: `
     <div class="flex items-center space-x-4">
-      <z-skeleton class="h-12 w-12 rounded-full" />
+      <z-skeleton class="size-12 rounded-full" />
       <div class="space-y-2">
         <z-skeleton class="h-4 w-[250px]" />
         <z-skeleton class="h-4 w-[200px]" />

@@ -26,7 +26,7 @@
     },
     {
       "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '../skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-default',\n  imports: [ZardSkeletonComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex items-center space-x-4\">\n      <z-skeleton class=\"h-12 w-12 rounded-full\" />\n      <div class=\"space-y-2\">\n        <z-skeleton class=\"h-4 w-[250px]\" />\n        <z-skeleton class=\"h-4 w-[200px]\" />\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoSkeletonDefaultComponent {}\n"
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '../skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-default',\n  imports: [ZardSkeletonComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex items-center space-x-4\">\n      <z-skeleton class=\"size-12 rounded-full\" />\n      <div class=\"space-y-2\">\n        <z-skeleton class=\"h-4 w-[250px]\" />\n        <z-skeleton class=\"h-4 w-[200px]\" />\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoSkeletonDefaultComponent {}\n"
     }
   ]
 }

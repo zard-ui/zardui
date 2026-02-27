@@ -106,7 +106,7 @@ export const alertIconVariants = cva('shrink-0 self-start text-base!');
 
 export const alertTitleVariants = cva('font-medium tracking-tight leading-none');
 
-export const alertDescriptionVariants = cva('text-sm leading-relaxed mt-1', {
+export const alertDescriptionVariants = cva('text-sm/relaxed mt-1', {
   variants: {
     zType: {
       default: 'text-muted-foreground',

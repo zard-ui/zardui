@@ -22,7 +22,7 @@ import { ZardSelectComponent } from '../select/select.component';
         (click)="onPreviousClick()"
         [disabled]="isPreviousDisabled()"
         aria-label="Previous month"
-        class="h-7 w-7 p-0"
+        class="size-7 p-0"
       >
         <z-icon zType="chevron-left" />
       </button>
@@ -52,7 +52,7 @@ import { ZardSelectComponent } from '../select/select.component';
         (click)="onNextClick()"
         [disabled]="isNextDisabled()"
         aria-label="Next month"
-        class="h-7 w-7 p-0"
+        class="size-7 p-0"
       >
         <z-icon zType="chevron-right" />
       </button>

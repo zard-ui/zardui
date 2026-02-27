@@ -8,7 +8,7 @@ import { ZardSkeletonComponent } from './skeleton.component';
   imports: [ZardSkeletonComponent],
   standalone: true,
   template: `
-    <z-skeleton class="h-4 w-4 rounded" />
+    <z-skeleton class="size-4 rounded-sm" />
   `,
 })
 class TestSkeletonHostComponent {}

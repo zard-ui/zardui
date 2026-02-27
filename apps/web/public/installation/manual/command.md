@@ -292,7 +292,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const commandVariants = cva(
-  'flex h-full w-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground',
+  'flex size-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground',
   {
     variants: {
       size: {
