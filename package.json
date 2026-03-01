@@ -49,7 +49,7 @@
     "@antfu/ni": "^28.2.0",
     "@fontsource-variable/geist": "^5.2.8",
     "@fontsource-variable/geist-mono": "^5.2.7",
-    "@shikijs/rehype": "^3.23.0",
+    "@shikijs/rehype": "^4.0.0",
     "@tailwindcss/postcss": "^4.2.1",
     "@vercel/analytics": "^1.6.1",
     "@vercel/og": "^0.9.0",
