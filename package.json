@@ -102,7 +102,7 @@
     "@axe-core/playwright": "^4.11.1",
     "@commitlint/cli": "^20.4.2",
     "@commitlint/config-conventional": "^20.4.2",
-    "@eslint/js": "^9.39.3",
+    "@eslint/js": "^10.0.1",
     "@happy-dom/jest-environment": "^20.7.0",
     "@nx/angular": "22.5.2",
     "@nx/eslint": "22.5.2",
