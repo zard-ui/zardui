@@ -96,7 +96,7 @@
     "@angular-devkit/build-angular": "21.1.5",
     "@angular-devkit/core": "21.1.5",
     "@angular-devkit/schematics": "21.1.5",
-    "@angular/cli": "21.1.5",
+    "@angular/cli": "21.2.0",
     "@angular/compiler-cli": "21.2.0",
     "@angular/language-service": "21.2.0",
     "@axe-core/playwright": "^4.11.1",
