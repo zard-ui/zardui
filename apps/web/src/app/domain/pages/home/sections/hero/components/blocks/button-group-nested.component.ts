@@ -17,10 +17,10 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
         <button z-button zType="outline" zSize="sm">3</button>
       </z-button-group>
       <z-button-group>
-        <button z-button zType="outline" zSize="sm" class="size-8!" aria-label="Previous">
+        <button z-button zType="outline" zSize="sm" class="size-7!" aria-label="Previous">
           <z-icon zType="arrow-left" />
         </button>
-        <button z-button zType="outline" zSize="sm" class="size-8!" aria-label="Next">
+        <button z-button zType="outline" zSize="sm" class="size-7!" aria-label="Next">
           <z-icon zType="arrow-right" />
         </button>
       </z-button-group>

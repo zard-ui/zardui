@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import {
@@ -8,6 +8,7 @@ import {
   BlockFieldSliderComponent,
   BlockInputGroupStackComponent,
 } from './blocks';
+import { ThemeGeneratorService } from '../../../../themes/services/theme-generator.service';
 
 @Component({
   selector: 'z-hero-examples-grid',
@@ -34,11 +35,13 @@ import {
         </section>
 
         <!-- Desktop Content (from router) -->
-        <section class="theme-container hidden md:block">
+        <section class="theme-container hidden md:block" [style]="themeService.scopedStyles()">
           <router-outlet />
         </section>
       </div>
     </div>
   `,
 })
-export class HeroExamplesGridComponent {}
+export class HeroExamplesGridComponent {
+  protected readonly themeService = inject(ThemeGeneratorService);
+}

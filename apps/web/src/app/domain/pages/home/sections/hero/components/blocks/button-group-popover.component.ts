@@ -28,7 +28,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
         z-button
         zType="outline"
         zSize="sm"
-        class="size-8! rounded-r-md!"
+        class="size-7! rounded-r-md!"
         aria-label="Open Popover"
         zPopover
         [zContent]="popoverContent"

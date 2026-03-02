@@ -22,6 +22,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
         <z-avatar-group
           class="*:data-[slot=avatar]:ring-background *:data-[slot=avatar]:size-12 *:data-[slot=avatar]:grayscale"
         >
+          <z-avatar zSrc="https://github.com/neopavan.png" zAlt="@neopavan" />
           <z-avatar zSrc="https://github.com/mikij.png" zAlt="@mikij" />
           <z-avatar zSrc="https://github.com/ribeiromatheuss.png" zAlt="@ribeiromatheuss" />
           <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" />

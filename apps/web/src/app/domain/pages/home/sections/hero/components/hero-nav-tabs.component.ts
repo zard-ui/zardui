@@ -1,8 +1,12 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, DestroyRef, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardDropdownImports } from '@zard/components/dropdown';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
+
+import { THEME_PRESETS } from '../../../../themes/data/theme-presets';
+import { ThemeGeneratorService } from '../../../../themes/services/theme-generator.service';
 
 interface NavTab {
   label: string;
@@ -13,7 +17,7 @@ interface NavTab {
   selector: 'z-hero-nav-tabs',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterModule, ZardButtonComponent, ZardIconComponent],
+  imports: [RouterModule, ZardButtonComponent, ZardIconComponent, ...ZardDropdownImports],
   template: `
     <div class="container-wrapper hidden scroll-mt-24 md:flex">
       <div class="container flex items-center justify-between gap-4 py-4">
@@ -39,13 +43,42 @@ interface NavTab {
         </div>
         <div class="mr-4 hidden items-center gap-2 md:flex">
           <label class="sr-only" for="theme-selector">Theme</label>
-          <button z-button zType="secondary" zSize="sm" id="theme-selector" class="gap-2">
+          <button
+            z-button
+            zType="secondary"
+            zSize="sm"
+            id="theme-selector"
+            class="gap-2"
+            z-dropdown
+            [zDropdownMenu]="themeMenu"
+          >
             <span class="font-medium">Theme:</span>
-            <span>Neutral</span>
+            <span>{{ themeService.activePreset() ?? 'Neutral' }}</span>
             <z-icon zType="chevron-down" class="opacity-50" />
           </button>
-          <button z-button zType="secondary" zSize="sm" class="hidden size-8! sm:flex" aria-label="Copy Code">
-            <z-icon zType="copy" />
+          <z-dropdown-menu-content #themeMenu="zDropdownMenuContent" zAlign="end" class="w-48">
+            @for (preset of presets; track preset.name) {
+              <z-dropdown-menu-item (click)="themeService.applyPreset(preset.name)">
+                <span
+                  class="border-muted mr-1 flex size-4 shrink-0 items-center justify-center rounded-full border"
+                  [style.background-color]="preset.previewColors.primary"
+                ></span>
+                <span class="flex-1">{{ preset.name }}</span>
+                @if (themeService.activePreset() === preset.name) {
+                  <z-icon zType="check" class="size-4" />
+                }
+              </z-dropdown-menu-item>
+            }
+          </z-dropdown-menu-content>
+          <button
+            z-button
+            zType="secondary"
+            zSize="sm"
+            class="hidden size-8! sm:flex"
+            [attr.aria-label]="copyError() ? 'Copy failed' : copied() ? 'Copied!' : 'Copy theme CSS'"
+            (click)="copyThemeCss()"
+          >
+            <z-icon [zType]="copyError() ? 'x' : copied() ? 'check' : 'copy'" />
           </button>
         </div>
       </div>
@@ -62,6 +95,14 @@ interface NavTab {
   `,
 })
 export class HeroNavTabsComponent {
+  protected readonly themeService = inject(ThemeGeneratorService);
+  protected readonly copied = signal(false);
+  protected readonly copyError = signal(false);
+  private readonly destroyRef = inject(DestroyRef);
+  private copyTimeoutId: ReturnType<typeof setTimeout> | null = null;
+
+  readonly presets = THEME_PRESETS;
+
   readonly tabs = signal<NavTab[]>([
     { label: 'Examples', path: '/' },
     { label: 'Dashboard', path: '/examples/dashboard' },
@@ -69,4 +110,34 @@ export class HeroNavTabsComponent {
     { label: 'Playground', path: '/examples/playground' },
     { label: 'Authentication', path: '/examples/authentication' },
   ]);
+
+  constructor() {
+    this.destroyRef.onDestroy(() => {
+      if (this.copyTimeoutId) {
+        clearTimeout(this.copyTimeoutId);
+      }
+    });
+  }
+
+  protected copyThemeCss(): void {
+    this.themeService
+      .copyToClipboard()
+      .then(success => this.setFeedbackState(success))
+      .catch(() => this.setFeedbackState(false));
+  }
+
+  private setFeedbackState(isSuccess: boolean): void {
+    if (this.copyTimeoutId) {
+      clearTimeout(this.copyTimeoutId);
+    }
+    this.copied.set(false);
+    this.copyError.set(false);
+    if (isSuccess) {
+      this.copied.set(true);
+      this.copyTimeoutId = setTimeout(() => this.copied.set(false), 2000);
+    } else {
+      this.copyError.set(true);
+      this.copyTimeoutId = setTimeout(() => this.copyError.set(false), 2000);
+    }
+  }
 }

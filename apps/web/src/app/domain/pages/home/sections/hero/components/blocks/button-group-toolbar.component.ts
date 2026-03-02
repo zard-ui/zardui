@@ -13,7 +13,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
   template: `
     <z-button-group>
       <z-button-group class="hidden sm:flex">
-        <button z-button zType="outline" zSize="sm" class="size-8!" aria-label="Go Back">
+        <button z-button zType="outline" zSize="sm" class="size-7!" aria-label="Go Back">
           <z-icon zType="arrow-left" />
         </button>
       </z-button-group>
@@ -27,7 +27,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
           z-button
           zType="outline"
           zSize="sm"
-          class="size-8! rounded-r-md!"
+          class="size-7! rounded-r-md!"
           aria-label="More Options"
           z-dropdown
           [zDropdownMenu]="moreOptionsMenu"
