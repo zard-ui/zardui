@@ -26,7 +26,7 @@ interface NavTab {
             <div class="scrollbar-hide size-full overflow-x-auto">
               <div class="inline-flex min-w-full">
                 <div class="flex items-center">
-                  @for (tab of tabs(); track tab.path) {
+                  @for (tab of tabs; track tab.path) {
                     <a
                       class="text-muted-foreground hover:text-primary flex h-7 items-center justify-center px-4 text-center text-base font-medium transition-colors"
                       [routerLink]="tab.path"
@@ -103,13 +103,13 @@ export class HeroNavTabsComponent {
 
   readonly presets = THEME_PRESETS;
 
-  readonly tabs = signal<NavTab[]>([
+  readonly tabs: NavTab[] = [
     { label: 'Examples', path: '/' },
     { label: 'Dashboard', path: '/examples/dashboard' },
     { label: 'Tasks', path: '/examples/tasks' },
     { label: 'Playground', path: '/examples/playground' },
     { label: 'Authentication', path: '/examples/authentication' },
-  ]);
+  ];
 
   constructor() {
     this.destroyRef.onDestroy(() => {

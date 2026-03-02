@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
@@ -70,7 +70,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
             <input
               z-input
               id="number-of-gpus"
-              class="dark:bg-input/30 h-8! w-14! font-mono dark:*:bg-transparent!"
+              class="dark:bg-input/30 h-7! w-14! font-mono dark:*:bg-transparent!"
               size="3"
               maxlength="3"
               [value]="gpuCount().toString()"
@@ -81,8 +81,9 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
               type="button"
               zType="outline"
               zSize="sm"
-              class="size-8!"
+              class="size-7!"
               aria-label="Decrement"
+              [disabled]="isAtMin()"
               (click)="decrementGpu()"
             >
               <z-icon zType="minus" />
@@ -92,8 +93,9 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
               type="button"
               zType="outline"
               zSize="sm"
-              class="size-8!"
+              class="size-7!"
               aria-label="Increment"
+              [disabled]="isAtMax()"
               (click)="incrementGpu()"
             >
               <z-icon zType="plus" />
@@ -117,12 +119,16 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 export class BlockAppearanceSettingsComponent {
   readonly computeEnv = signal('kubernetes');
   readonly gpuCount = signal(8);
+  private static readonly MIN_GPU_COUNT = 0;
+  private static readonly MAX_GPU_COUNT = 999;
+  readonly isAtMin = computed(() => this.gpuCount() <= BlockAppearanceSettingsComponent.MIN_GPU_COUNT);
+  readonly isAtMax = computed(() => this.gpuCount() >= BlockAppearanceSettingsComponent.MAX_GPU_COUNT);
 
   incrementGpu(): void {
-    this.gpuCount.update(value => value + 1);
+    this.gpuCount.update(value => Math.min(BlockAppearanceSettingsComponent.MAX_GPU_COUNT, value + 1));
   }
 
   decrementGpu(): void {
-    this.gpuCount.update(value => Math.max(0, value - 1));
+    this.gpuCount.update(value => Math.max(BlockAppearanceSettingsComponent.MIN_GPU_COUNT, value - 1));
   }
 }

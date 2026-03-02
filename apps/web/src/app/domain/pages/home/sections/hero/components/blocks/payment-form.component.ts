@@ -21,7 +21,7 @@ import { ZardSelectComponent } from '@zard/components/select/select.component';
   ],
   template: `
     <div class="w-full max-w-md rounded-lg border p-6">
-      <form>
+      <form (submit)="$event.preventDefault()">
         <!-- FieldGroup -->
         <div class="flex flex-col gap-6">
           <!-- FieldSet: Payment Method -->
@@ -54,7 +54,7 @@ import { ZardSelectComponent } from '@zard/components/select/select.component';
               <div class="grid grid-cols-2 gap-4">
                 <div class="flex flex-col gap-2">
                   <label class="text-sm font-medium" for="checkout-exp-month">Month</label>
-                  <z-select zPlaceholder="MM" class="w-full">
+                  <z-select id="checkout-exp-month" zPlaceholder="MM" class="w-full">
                     @for (month of months; track month) {
                       <z-select-item [zValue]="month">{{ month }}</z-select-item>
                     }
@@ -62,7 +62,7 @@ import { ZardSelectComponent } from '@zard/components/select/select.component';
                 </div>
                 <div class="flex flex-col gap-2">
                   <label class="text-sm font-medium" for="checkout-exp-year">Year</label>
-                  <z-select zPlaceholder="YYYY" class="w-full">
+                  <z-select id="checkout-exp-year" zPlaceholder="YYYY" class="w-full">
                     @for (year of years; track year) {
                       <z-select-item [zValue]="year">{{ year }}</z-select-item>
                     }
@@ -114,5 +114,5 @@ import { ZardSelectComponent } from '@zard/components/select/select.component';
 })
 export class BlockPaymentFormComponent {
   readonly months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-  readonly years = ['2024', '2025', '2026', '2027', '2028', '2029'];
+  readonly years = Array.from({ length: 6 }, (_, i) => String(new Date().getFullYear() + i));
 }

@@ -28,6 +28,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
       <ng-template #addonBefore>
         <button
           z-button
+          type="button"
           zType="secondary"
           zSize="sm"
           zShape="circle"
@@ -51,6 +52,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
       <ng-template #addonAfter>
         <button
           z-button
+          type="button"
           zType="ghost"
           zSize="sm"
           zShape="circle"

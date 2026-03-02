@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import {
@@ -18,15 +18,21 @@ import { ZardSliderComponent } from '@zard/components/slider/slider.component';
       <z-form-field>
         <label z-form-label>Price Range</label>
         <p class="text-muted-foreground text-sm leading-normal font-normal">
-          Set your budget range (\${{ sliderValue }} - $800).
+          Set your budget range (\${{ sliderValue() }} - $800).
         </p>
         <z-form-control>
-          <z-slider [zMin]="0" [zMax]="800" [(ngModel)]="sliderValue" class="flex-1" />
+          <z-slider
+            [zMin]="0"
+            [zMax]="800"
+            [ngModel]="sliderValue()"
+            (ngModelChange)="sliderValue.set($event)"
+            class="flex-1"
+          />
         </z-form-control>
       </z-form-field>
     </div>
   `,
 })
 export class BlockFieldSliderComponent {
-  sliderValue = 50;
+  readonly sliderValue = signal(50);
 }

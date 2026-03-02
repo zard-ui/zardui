@@ -112,7 +112,7 @@ const SAMPLE_DATA = {
             </z-dropdown-menu-content>
 
             <!-- Selected Mentions -->
-            <div class="no-scrollbar -m-1.5 flex gap-1 overflow-y-auto p-1.5">
+            <div class="no-scrollbar -m-1.5 flex gap-1 overflow-x-auto p-1.5">
               @for (mention of mentions(); track mention) {
                 @if (getMentionItem(mention); as item) {
                   <button
@@ -235,34 +235,34 @@ const SAMPLE_DATA = {
   `,
 })
 export class BlockNotionPromptFormComponent {
-  readonly mentions = signal<string[]>([]);
-  readonly selectedModel = signal<ModelItem>(SAMPLE_DATA.models[0]);
-  readonly models = SAMPLE_DATA.models;
-  readonly mentionable = SAMPLE_DATA.mentionable;
+  protected readonly mentions = signal<string[]>([]);
+  protected readonly selectedModel = signal<ModelItem>(SAMPLE_DATA.models[0]);
+  protected readonly models = SAMPLE_DATA.models;
+  protected readonly mentionable = SAMPLE_DATA.mentionable;
 
-  readonly hasMentions = computed(() => this.mentions().length > 0);
+  protected readonly hasMentions = computed(() => this.mentions().length > 0);
 
-  readonly availablePages = computed(() =>
+  protected readonly availablePages = computed(() =>
     this.mentionable.filter(item => item.type === 'page' && !this.mentions().includes(item.title)),
   );
 
-  readonly availableUsers = computed(() =>
+  protected readonly availableUsers = computed(() =>
     this.mentionable.filter(item => item.type === 'user' && !this.mentions().includes(item.title)),
   );
 
-  getMentionItem(title: string): MentionableItem | undefined {
+  protected getMentionItem(title: string): MentionableItem | undefined {
     return this.mentionable.find(item => item.title === title);
   }
 
-  addMention(title: string): void {
+  protected addMention(title: string): void {
     this.mentions.update(prev => [...prev, title]);
   }
 
-  removeMention(title: string): void {
+  protected removeMention(title: string): void {
     this.mentions.update(prev => prev.filter(m => m !== title));
   }
 
-  selectModel(model: ModelItem): void {
+  protected selectModel(model: ModelItem): void {
     this.selectedModel.set(model);
   }
 }

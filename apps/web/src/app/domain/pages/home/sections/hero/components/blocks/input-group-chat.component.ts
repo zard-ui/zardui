@@ -30,6 +30,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
         <z-input-group [zAddonAfter]="voiceButton">
           <input
             z-input
+            [attr.aria-label]="voiceEnabled() ? 'Voice recording active' : 'Message'"
             [placeholder]="voiceEnabled() ? 'Record and send audio...' : 'Send a message...'"
             [disabled]="voiceEnabled()"
           />
@@ -60,6 +61,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
               stroke-linecap="round"
               stroke-linejoin="round"
               class="lucide lucide-audio-lines-icon lucide-audio-lines"
+              aria-hidden="true"
             >
               <path d="M2 10v3" />
               <path d="M6 6v11" />

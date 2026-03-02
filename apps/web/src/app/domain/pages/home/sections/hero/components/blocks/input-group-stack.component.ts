@@ -25,22 +25,27 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
     <div class="grid w-full max-w-sm gap-6">
       <!-- Search with results -->
       <z-input-group [zAddonBefore]="searchIcon" zAddonAfter="12 results">
-        <input z-input placeholder="Search..." />
+        <input z-input aria-label="Search" placeholder="Search..." />
       </z-input-group>
 
       <!-- URL with info tooltip -->
       <z-input-group zAddonBefore="https://" [zAddonAfter]="infoButton">
-        <input z-input placeholder="example.com" class="pl-1!" />
+        <input z-input aria-label="Website URL" placeholder="example.com" class="pl-1!" />
       </z-input-group>
 
       <!-- Textarea with actions -->
       <z-input-group [zAddonAfter]="textareaActions" zAddonAlign="block">
-        <textarea z-input placeholder="Ask, Search or Chat..." class="min-h-0 resize-none"></textarea>
+        <textarea
+          z-input
+          aria-label="Prompt"
+          placeholder="Ask, Search or Chat..."
+          class="min-h-0 resize-none"
+        ></textarea>
       </z-input-group>
 
       <!-- Username with check -->
       <z-input-group [zAddonAfter]="checkIcon">
-        <input z-input placeholder="@zard_ui" />
+        <input z-input aria-label="Username" placeholder="@zard_ui" />
       </z-input-group>
     </div>
 
@@ -77,7 +82,6 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
         <z-divider zOrientation="vertical" class="mx-2 h-4!" />
         <button z-button zType="default" zShape="circle" class="size-6!" aria-label="Send">
           <z-icon zType="arrow-up" />
-          <span class="sr-only">Send</span>
         </button>
       </div>
     </ng-template>

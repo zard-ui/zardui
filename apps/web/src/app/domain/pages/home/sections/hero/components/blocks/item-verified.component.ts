@@ -8,9 +8,9 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardIconComponent],
   template: `
-    <a
-      href="#"
-      class="border-border hover:bg-accent/50 focus-visible:border-ring focus-visible:ring-ring/50 flex flex-wrap items-center gap-2.5 rounded-md border px-4 py-3 text-sm transition-colors duration-100 outline-none focus-visible:ring-[3px]"
+    <button
+      type="button"
+      class="border-border hover:bg-accent/50 focus-visible:border-ring focus-visible:ring-ring/50 flex w-full flex-wrap items-center gap-2.5 rounded-md border px-4 py-3 text-sm transition-colors duration-100 outline-none focus-visible:ring-[3px]"
     >
       <div class="flex shrink-0 items-center justify-center gap-2 bg-transparent">
         <z-icon zType="badge-check" class="size-5" />
@@ -23,7 +23,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
       <div class="flex items-center gap-2">
         <z-icon zType="chevron-right" class="size-4" />
       </div>
-    </a>
+    </button>
   `,
 })
 export class BlockItemVerifiedComponent {}

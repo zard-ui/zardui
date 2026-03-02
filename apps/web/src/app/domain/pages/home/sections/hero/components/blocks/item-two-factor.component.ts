@@ -20,7 +20,7 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
         </p>
       </div>
       <div class="flex items-center gap-2">
-        <button z-button zSize="sm">Enable</button>
+        <button z-button zSize="sm" type="button">Enable</button>
       </div>
     </div>
   `,

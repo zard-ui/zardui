@@ -43,7 +43,13 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
           </div>
           <div class="bg-border h-px"></div>
           <div class="p-4 text-sm">
-            <textarea z-input placeholder="Describe your task in natural language." class="mb-4 resize-none"></textarea>
+            <textarea
+              z-input
+              aria-label="Task description"
+              placeholder="Describe your task in natural language."
+              class="mb-4 resize-none"
+              rows="3"
+            ></textarea>
             <p class="mb-2 font-medium">Start a new task with Copilot</p>
             <p class="text-muted-foreground">
               Describe your task in natural language. Copilot will work in the background and open a pull request for
