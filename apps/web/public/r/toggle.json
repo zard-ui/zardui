@@ -14,5 +14,43 @@
       "name": "index.ts",
       "content": "export * from './toggle.component';\nexport * from './toggle.variants';\n"
     }
+  ],
+  "docs": {
+    "overview": "# Toggle\n\nA two-state button that can be either on or off.\n",
+    "api": "# API\n\n## [z-toggle] <span class=\"api-type-label component\">Component</span>\n\n> A two-state button that can be either on or off.\n\n### Properties\n\n| Property       | Description                                                          | Type                     | Default     |\n| -------------- | -------------------------------------------------------------------- | ------------------------ | ----------- |\n| `[class]`      | Custom CSS classes                                                   | `string`                 | `''`        |\n| `[zSize]`      | Toggle size                                                          | `'sm' \\| 'md' \\| 'lg'`   | `'md'`      |\n| `[zType]`      | Visual style                                                         | `'default' \\| 'outline'` | `'default'` |\n| `[zValue]`     | Toggle value                                                         | `boolean`                | `undefined` |\n| `[zDefault]`   | Default value when uncontrolled (used as initial state only)         | `boolean`                | `false`     |\n| `[disabled]`   | Disables the toggle (also integrates with Angular Forms)             | `boolean`                | `false`     |\n| `[aria-label]` | Accessible label for screen readers (required when using icons only) | `string`                 | `''`        |\n\n### Events\n\n| Event             | Description                           | Payload   |\n| ----------------- | ------------------------------------- | --------- |\n| `(zToggleClick)`  | Emitted when the toggle is clicked    | `void`    |\n| `(zToggleHover)`  | Emitted when the toggle is hovered    | `void`    |\n| `(zToggleChange)` | Emitted when the toggle value changes | `boolean` |\n"
+  },
+  "demos": [
+    {
+      "name": "default.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-default',\n  imports: [ZardToggleComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <z-toggle aria-label=\"Default toggle\">\n      <z-icon zType=\"bold\" />\n    </z-toggle>\n  `,\n})\nexport class ZardDemoToggleDefaultComponent {}\n"
+    },
+    {
+      "name": "disabled.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-disabled',\n  imports: [ZardToggleComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <z-toggle aria-label=\"Toggle disabled\" disabled>\n      <z-icon zType=\"bold\" />\n    </z-toggle>\n  `,\n})\nexport class ZardDemoToggleDisabledComponent {}\n"
+    },
+    {
+      "name": "large.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-large',\n  imports: [ZardToggleComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <z-toggle aria-label=\"Toggle large\" zSize=\"lg\">\n      <z-icon zType=\"bold\" />\n    </z-toggle>\n  `,\n})\nexport class ZardDemoToggleLargeComponent {}\n"
+    },
+    {
+      "name": "outline.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-outline',\n  imports: [ZardToggleComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <z-toggle aria-label=\"Toggle outline\" zType=\"outline\">\n      <z-icon zType=\"bold\" />\n    </z-toggle>\n  `,\n})\nexport class ZardDemoToggleOutlineComponent {}\n"
+    },
+    {
+      "name": "small.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-small',\n  imports: [ZardToggleComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <z-toggle aria-label=\"Toggle small\" zSize=\"sm\">\n      <z-icon zType=\"bold\" />\n    </z-toggle>\n  `,\n})\nexport class ZardDemoToggleSmallComponent {}\n"
+    },
+    {
+      "name": "with-default.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-with-default',\n  imports: [ZardToggleComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <z-toggle aria-label=\"With default\" [zDefault]=\"true\">\n      <z-icon zType=\"bold\" />\n    </z-toggle>\n  `,\n})\nexport class ZardDemoToggleWithDefaultComponent {}\n"
+    },
+    {
+      "name": "with-forms.ts",
+      "content": "import { Component } from '@angular/core';\nimport { FormsModule } from '@angular/forms';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-with-forms',\n  imports: [ZardToggleComponent, FormsModule, ZardIconComponent],\n  standalone: true,\n  template: `\n    <z-toggle aria-label=\"Turn on the light\" [(ngModel)]=\"lightOn\">\n      @if (lightOn) {\n        <z-icon zType=\"lightbulb\" />\n      } @else {\n        <z-icon zType=\"lightbulb-off\" />\n      }\n    </z-toggle>\n  `,\n})\nexport class ZardDemoToggleWithFormsComponent {\n  protected lightOn = false;\n}\n"
+    },
+    {
+      "name": "with-text.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardIconComponent } from '../../icon/icon.component';\nimport { ZardToggleComponent } from '../toggle.component';\n\n@Component({\n  selector: 'z-demo-toggle-with-text',\n  imports: [ZardToggleComponent, ZardIconComponent],\n  standalone: true,\n  template: `\n    <z-toggle>\n      <z-icon zType=\"italic\" />\n      Italic\n    </z-toggle>\n  `,\n})\nexport class ZardDemoToggleWithTextComponent {}\n"
+    }
   ]
 }

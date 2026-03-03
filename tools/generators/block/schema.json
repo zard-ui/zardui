@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "cli": "nx",
+  "id": "block",
+  "title": "Generate a new Zard UI block",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "Block name in kebab-case (e.g., 'sidebar-01')",
+      "x-prompt": "What is the block name?"
+    },
+    "description": {
+      "type": "string",
+      "description": "Short description of the block",
+      "x-prompt": "What does this block do?"
+    },
+    "category": {
+      "type": "string",
+      "description": "Block category (e.g., 'sidebar', 'login', 'signup')",
+      "default": "featured",
+      "x-prompt": "What category does this block belong to?"
+    }
+  },
+  "required": ["name", "description"]
+}

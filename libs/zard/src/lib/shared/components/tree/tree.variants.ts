@@ -18,7 +18,7 @@ export const treeNodeVariants = cva('flex flex-col', {
 });
 
 export const treeNodeToggleVariants = cva(
-  'inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-sm transition-transform duration-200 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
+  'inline-flex size-4 shrink-0 items-center justify-center rounded-sm transition-transform duration-200 hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
   {
     variants: {
       isExpanded: {

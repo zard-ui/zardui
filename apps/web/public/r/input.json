@@ -14,5 +14,31 @@
       "name": "index.ts",
       "content": "export * from './input.directive';\nexport * from './input.variants';\n"
     }
+  ],
+  "docs": {
+    "overview": "# Input\n\nDisplays a form input field or a component that looks like an input field.\n",
+    "api": "# API\n\n## [z-input] <span class=\"api-type-label directive\">Directive</span>\n\n> z-input is a Directive, it accepts all props which are supported by <a href=\"https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input\" target=\"_blank\">native input</a>.\n\nTo get a customized input, just pass the following props to the directive.\n\n| Property        | Description          | Type                          | Default   |\n| --------------- | -------------------- | ----------------------------- | --------- |\n| `[zSize]`       | input size           | `default \\| sm \\| lg`         | `default` |\n| `[zStatus]`     | input status         | `error \\| warning \\| success` | `null`    |\n| `[zBorderless]` | input without border | `boolean`                     | `false`   |\n"
+  },
+  "demos": [
+    {
+      "name": "borderless.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardInputDirective } from '../input.directive';\n\n@Component({\n  selector: 'z-demo-input-borderless',\n  imports: [ZardInputDirective],\n  template: `\n    <input z-input zBorderless placeholder=\"Borderless\" />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoInputBorderlessComponent {}\n"
+    },
+    {
+      "name": "default.ts",
+      "content": "import { ChangeDetectionStrategy, Component, inject, type AfterViewInit } from '@angular/core';\nimport { FormBuilder, ReactiveFormsModule } from '@angular/forms';\n\nimport { ZardInputDirective } from '../input.directive';\n\n@Component({\n  selector: 'z-demo-input-default',\n  imports: [ZardInputDirective, ReactiveFormsModule],\n  template: `\n    <form [formGroup]=\"form\" class=\"flex flex-col gap-3\">\n      <input z-input placeholder=\"Name\" formControlName=\"name\" />\n      <input z-input placeholder=\"Disabled\" formControlName=\"novalue\" />\n    </form>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoInputDefaultComponent implements AfterViewInit {\n  private fb = inject(FormBuilder);\n\n  readonly form = this.fb.group({\n    name: [''],\n    novalue: [''],\n  });\n\n  ngAfterViewInit(): void {\n    this.form.get('novalue')?.disable();\n    this.form.patchValue({ name: 'John Doe' });\n  }\n}\n"
+    },
+    {
+      "name": "size.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardInputDirective } from '../input.directive';\n\n@Component({\n  selector: 'z-demo-input-size',\n  imports: [ZardInputDirective],\n  template: `\n    <input z-input zSize=\"sm\" placeholder=\"small size\" />\n    <input z-input zSize=\"default\" placeholder=\"default size\" />\n    <input z-input zSize=\"lg\" placeholder=\"large size\" />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoInputSizeComponent {}\n"
+    },
+    {
+      "name": "status.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardInputDirective } from '../input.directive';\n\n@Component({\n  selector: 'z-demo-input-status',\n  imports: [ZardInputDirective],\n  template: `\n    <input z-input zStatus=\"error\" placeholder=\"Error\" />\n    <input z-input zStatus=\"warning\" placeholder=\"Warning\" />\n    <input z-input zStatus=\"success\" placeholder=\"Success\" />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoInputStatusComponent {}\n"
+    },
+    {
+      "name": "text-area.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardInputDirective } from '../input.directive';\n\n@Component({\n  selector: 'z-demo-input-text-area',\n  imports: [ZardInputDirective],\n  template: `\n    <div class=\"flex w-75 flex-col gap-3\">\n      <textarea z-input rows=\"8\" cols=\"12\" placeholder=\"Default\"></textarea>\n      <textarea zBorderless z-input rows=\"8\" cols=\"12\" placeholder=\"Borderless\"></textarea>\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoInputTextAreaComponent {}\n"
+    }
   ]
 }

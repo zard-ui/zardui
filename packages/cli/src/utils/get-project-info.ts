@@ -29,12 +29,28 @@ export type ProjectInfo = {
   hasTailwind: boolean;
   hasNx: boolean;
   angularVersion: string | null;
+  angularVersionRaw: string | null;
 };
 
-export async function getProjectInfo(cwd: string): Promise<ProjectInfo> {
-  const packageJsonPath = path.join(cwd, 'package.json');
+async function findPackageJson(startDir: string): Promise<string | null> {
+  let dir = path.resolve(startDir);
+  const root = path.parse(dir).root;
 
-  if (!(await pathExists(packageJsonPath))) {
+  while (dir !== root) {
+    const candidate = path.join(dir, 'package.json');
+    if (await pathExists(candidate)) {
+      return candidate;
+    }
+    dir = path.dirname(dir);
+  }
+
+  return null;
+}
+
+export async function getProjectInfo(cwd: string): Promise<ProjectInfo> {
+  const packageJsonPath = await findPackageJson(cwd);
+
+  if (!packageJsonPath) {
     throw new Error('No package.json found. Please run this command in your project root.');
   }
 
@@ -46,7 +62,8 @@ export async function getProjectInfo(cwd: string): Promise<ProjectInfo> {
   const hasTailwind = !!deps['tailwindcss'];
   const hasNx = !!deps['nx'] || !!deps['@nx/workspace'];
 
-  const angularVersion = (deps['@angular/core'] as string)?.replace(/[^0-9.]/g, '') || null;
+  const angularVersionRaw = (deps['@angular/core'] as string) || null;
+  const angularVersion = angularVersionRaw?.replace(/[^0-9.]/g, '') || null;
 
   return {
     framework: hasAngular ? 'angular' : 'unknown',
@@ -54,5 +71,6 @@ export async function getProjectInfo(cwd: string): Promise<ProjectInfo> {
     hasTailwind,
     hasNx,
     angularVersion,
+    angularVersionRaw,
   };
 }

@@ -101,6 +101,7 @@ jobs:
         run: |
           npx nx run zard:build
           npx nx run cli:build
+          npx nx run mcp:build
 
       - name: Release (Dry Run)
         if: ${{ inputs.dry_run == true }}

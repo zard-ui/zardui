@@ -1,6 +1,16 @@
 import chalk from 'chalk';
 import ora from 'ora';
 
+let debugEnabled = false;
+
+export function enableDebug(): void {
+  debugEnabled = true;
+}
+
+export function isDebugEnabled(): boolean {
+  return debugEnabled;
+}
+
 export const logger = {
   error(...args: unknown[]) {
     console.log(chalk.red(...args));
@@ -13,6 +23,11 @@ export const logger = {
   },
   success(...args: unknown[]) {
     console.log(chalk.green(...args));
+  },
+  debug(...args: unknown[]) {
+    if (debugEnabled) {
+      console.log(chalk.gray('[debug]', ...args));
+    }
   },
   break() {
     console.log('');

@@ -1,3 +1,105 @@
+## 1.0.0-beta.61 (2026-02-26)
+
+### ✨ Features
+
+- **generators:** add block scaffold generator and sync script ([#459](https://github.com/zard-ui/zardui/pull/459))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
+## 1.0.0-beta.60 (2026-02-26)
+
+### ✨ Features
+
+- **about:** redesign founders and maintainers cards ([#458](https://github.com/zard-ui/zardui/pull/458))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
+## 1.0.0-beta.59 (2026-02-26)
+
+### ✨ Features
+
+- **generators:** add Nx component scaffold generator ([#457](https://github.com/zard-ui/zardui/pull/457))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
+## 1.0.0-beta.58 (2026-02-26)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.57 (2026-02-26)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.56 (2026-02-25)
+
+### ✨ Features
+
+- **cli:** traverse parent dirs for package.json and warn on deprecated name ([9fbd1a7](https://github.com/zard-ui/zardui/commit/9fbd1a7))
+
+### 📦 Code Refactoring
+
+- migrate all @ngzard/ui references to zard-cli ([63d8a5c](https://github.com/zard-ui/zardui/commit/63d8a5c))
+
+### ❤️ Thank You
+
+- luiz gomes
+
+## 1.0.0-beta.55 (2026-02-25)
+
+### 🐛 Bug Fixes
+
+- **cli:** correct bin path for published package ([93eedd0](https://github.com/zard-ui/zardui/commit/93eedd0))
+
+### ❤️ Thank You
+
+- luiz gomes
+
+## 1.0.0-beta.54 (2026-02-25)
+
+### 📦 Code Refactoring
+
+- **cli:** modularize CLI architecture and add pre-release Angular warning ([40b343b](https://github.com/zard-ui/zardui/commit/40b343b))
+
+### ❤️ Thank You
+
+- luiz gomes
+
+## 1.0.0-beta.53 (2026-02-23)
+
+### 🐛 Bug Fixes
+
+- **blocks:** replace broken file tree with z-tree component ([#450](https://github.com/zard-ui/zardui/pull/450), [#454](https://github.com/zard-ui/zardui/pull/454))
+
+### ❤️ Thank You
+
+- Pavan Mollagavelli @neopavan
+
+## 1.0.0-beta.52 (2026-02-23)
+
+### 🐛 Bug Fixes
+
+- **tree:** emit zNodeClick on mouse click and refine node spacing ([#452](https://github.com/zard-ui/zardui/pull/452))
+
+### ❤️ Thank You
+
+- Pavan Mollagavelli @neopavan
+
+## 1.0.0-beta.51 (2026-02-23)
+
+### 🐛 Bug Fixes
+
+- **animation:** animation classes should be applied properly now ([#453](https://github.com/zard-ui/zardui/pull/453))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
 ## 1.0.0-beta.50 (2026-02-23)
 
 ### ✨ Features

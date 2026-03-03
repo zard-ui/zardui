@@ -13,7 +13,10 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "paths": {
+      "@zardui/generators": ["tools/generators/component/index.ts"]
+    }
   },
   "exclude": ["node_modules", "tmp"]
 }

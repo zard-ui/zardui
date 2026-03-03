@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add dark-mode
+npx zard-cli add dark-mode
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx @ngzard/ui add dark-mode
+pnpm dlx zard-cli add dark-mode
 ```
 
 ```bash tab="yarn" copyButton
-yarn @ngzard/ui add dark-mode
+yarn zard-cli add dark-mode
 ```
 
 ```bash tab="bun" copyButton
-bunx @ngzard/ui add dark-mode
+bunx zard-cli add dark-mode
 ```

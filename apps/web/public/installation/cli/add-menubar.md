@@ -1,15 +1,15 @@
 ```bash tab="npm" copyButton
-npx @ngzard/ui add menubar
+npx zard-cli add menubar
 ```
 
 ```bash tab="pnpm"
-pnpm dlx @ngzard/ui add menubar
+pnpm dlx zard-cli add menubar
 ```
 
 ```bash tab="yarn"
-yarn dlx @ngzard/ui add menubar
+yarn dlx zard-cli add menubar
 ```
 
 ```bash tab="bun"
-bunx @ngzard/ui add menubar
+bunx zard-cli add menubar
 ```

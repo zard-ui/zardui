@@ -14,5 +14,27 @@
       "name": "index.ts",
       "content": "export * from './progress-bar.component';\nexport * from './progress-bar.variants';\n"
     }
+  ],
+  "docs": {
+    "overview": "# Progress Bar\n\nDisplays an indicator showing the completion progress of a task, typically displayed as a progress bar.\n",
+    "api": "# Zard Progress Bar API\n\n## `<z-progress-bar>` <span class=\"api-type-label component\">Component</span>\n\nThe `z-progress-bar` component is a flexible and customizable progress bar that allows full styling control using class-variance-authority (CVA). It provides several configuration options for size, shape, type, and more.\n\n### **Usage**\n\n### **Properties**\n\n| Property           | Description                          | Type                                     | Default     |\n| ------------------ | ------------------------------------ | ---------------------------------------- | ----------- |\n| `[progress]`       | Progress percentage (0-100).         | `number`                                 | `0`         |\n| `[zType]`          | Defines the color variant.           | `'default' \\| 'destructive' \\| 'accent'` | `'default'` |\n| `[zSize]`          | Sets the height of the bar.          | `'default' \\| 'sm' \\| 'lg'`              | `'default'` |\n| `[zShape]`         | Defines the border radius style.     | `'default' \\| 'square'`                  | `'default'` |\n| `[zFull]`          | Makes the container take full width. | `boolean`                                | `false`     |\n| `[class]`          | Custom classes for the container.    | `string`                                 | `''`        |\n| `[barClass]`       | Custom classes for the progress bar. | `string`                                 | `''`        |\n| `[zIndeterminate]` | Define loading infinity state.       | `boolean`                                | `false`     |\n"
+  },
+  "demos": [
+    {
+      "name": "basic.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardProgressBarComponent } from '../progress-bar.component';\n\n@Component({\n  selector: 'z-demo-progress-bar-basic',\n  imports: [ZardProgressBarComponent],\n  template: `\n    <z-progress-bar [progress]=\"50\" />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressBarBasicComponent {}\n"
+    },
+    {
+      "name": "indeterminate.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardProgressBarComponent } from '../progress-bar.component';\n\n@Component({\n  selector: 'z-demo-progress-bar-indeterminate',\n  imports: [ZardProgressBarComponent],\n  template: `\n    <z-progress-bar [progress]=\"50\" zShape=\"square\" [zIndeterminate]=\"true\" />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressBarIndeterminateComponent {}\n"
+    },
+    {
+      "name": "shape.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardProgressBarComponent } from '../progress-bar.component';\n\n@Component({\n  selector: 'z-demo-progress-bar-shape',\n  imports: [ZardProgressBarComponent],\n  template: `\n    <z-progress-bar [progress]=\"50\" zShape=\"default\" zType=\"destructive\" />\n    <z-progress-bar [progress]=\"50\" zType=\"accent\" />\n    <z-progress-bar [progress]=\"50\" zShape=\"square\" />\n  `,\n  styles: `\n    :host {\n      display: flex;\n      flex-direction: column;\n      gap: 24px;\n    }\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressBarShapeComponent {}\n"
+    },
+    {
+      "name": "size.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardProgressBarComponent } from '../progress-bar.component';\n\n@Component({\n  selector: 'z-demo-progress-bar-size',\n  imports: [ZardProgressBarComponent],\n  template: `\n    <z-progress-bar [progress]=\"50\" zSize=\"default\" />\n    <z-progress-bar [progress]=\"50\" zSize=\"sm\" />\n    <z-progress-bar [progress]=\"50\" zSize=\"lg\" />\n  `,\n  styles: `\n    :host {\n      display: flex;\n      flex-direction: column;\n      gap: 24px;\n    }\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressBarSizeComponent {}\n"
+    }
   ]
 }

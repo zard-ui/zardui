@@ -28,14 +28,6 @@ export interface Block {
   };
 }
 
-export interface FileTreeNode {
-  name: string;
-  type: 'file' | 'folder';
-  path?: string;
-  children?: FileTreeNode[];
-  file?: BlockFile;
-}
-
 export interface ViewportOption {
   value: string;
   ariaLabel: string;
@@ -45,7 +37,13 @@ export interface ViewportOption {
 @Component({
   selector: 'z-block-container',
   standalone: true,
-  imports: [ZardSegmentedComponent, ZardDividerComponent, ZardToggleGroupComponent, BlockPreviewComponent, BlockCodeViewerComponent],
+  imports: [
+    ZardSegmentedComponent,
+    ZardDividerComponent,
+    ZardToggleGroupComponent,
+    BlockPreviewComponent,
+    BlockCodeViewerComponent,
+  ],
   templateUrl: './block-container.component.html',
 })
 export class BlockContainerComponent {

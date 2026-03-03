@@ -53,6 +53,7 @@
 /docs/components/toggle
 /docs/components/toggle-group
 /docs/components/tooltip
+/docs/components/tree
 /docs/components/menu
 /docs/components/resizable
 /docs/components/sheet

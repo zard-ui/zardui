@@ -21,5 +21,19 @@
   ],
   "registryDependencies": [
     "icon"
+  ],
+  "docs": {
+    "overview": "# Avatar\n\nAn image element with a fallback for representing the user.\n",
+    "api": "# API Reference\n\n[z-avatar] Component\n\n| Property      | Description                                       | Type                                        | Default   |\n| ------------- | ------------------------------------------------- | ------------------------------------------- | --------- |\n| `[class]`     | Additional CSS classes                            | `string`                                    | `''`      |\n| `[zAlt]`      | Image alt text for accessibility                  | `string`                                    | `''`      |\n| `[zFallback]` | Fallback text displayed while loading or on error | `string`                                    | `''`      |\n| `[zPriority]` | Should image load with high priority              | `boolean`                                   | `false`   |\n| `[zShape]`    | Avatar shape                                      | `circle \\| rounded \\| square`               | `circle`  |\n| `[zSize]`     | Avatar size variant                               | `sm \\| default \\| md \\| lg \\| xl \\| number` | `default` |\n| `[zSrc]`      | Image source URL                                  | `string \\| SafeUrl`                         | `''`      |\n| `[zStatus]`   | Status indicator badge                            | `online \\| offline \\| doNotDisturb \\| away` |           |\n\n[z-avatar-group] Component\n\n| Property         | Description                 | Type                     | Default      |\n| ---------------- | --------------------------- | ------------------------ | ------------ |\n| `[zOrientation]` | Layout direction of avatars | `horizontal \\| vertical` | `horizontal` |\n| `[class]`        | Additional CSS classes      | `string`                 | `''`         |\n"
+  },
+  "demos": [
+    {
+      "name": "basic.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardAvatarGroupComponent } from '../avatar-group.component';\nimport { ZardAvatarComponent } from '../avatar.component';\n\n@Component({\n  selector: 'z-demo-avatar-basic',\n  imports: [ZardAvatarComponent, ZardAvatarGroupComponent],\n  standalone: true,\n  template: `\n    <z-avatar zSrc=\"/images/avatar/imgs/avatar_image.jpg\" zFallback=\"ZA\" [zSize]=\"32\" />\n    <z-avatar zSrc=\"error-image.png\" zFallback=\"ZA\" zSize=\"sm\" />\n\n    <z-avatar-group>\n      <z-avatar zSrc=\"/images/avatar/imgs/avatar_image.jpg\" zFallback=\"JD\" zSize=\"sm\" />\n      <z-avatar zSrc=\"https://github.com/srizzon.png\" zFallback=\"SA\" zSize=\"sm\" />\n      <z-avatar zSrc=\"https://github.com/Luizgomess.png\" zFallback=\"LU\" zSize=\"sm\" />\n    </z-avatar-group>\n  `,\n})\nexport class ZardDemoAvatarBasicComponent {}\n"
+    },
+    {
+      "name": "status.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardAvatarComponent } from '../avatar.component';\n\n@Component({\n  selector: 'z-demo-avatar-status',\n  imports: [ZardAvatarComponent],\n  standalone: true,\n  template: `\n    <z-avatar zSrc=\"/images/avatar/imgs/avatar_image.jpg\" zAlt=\"Image\" />\n    <z-avatar zStatus=\"online\" zSrc=\"/images/avatar/imgs/avatar_image.jpg\" zAlt=\"Image\" />\n    <z-avatar zStatus=\"offline\" zSrc=\"/images/avatar/imgs/avatar_image.jpg\" zAlt=\"Image\" />\n    <z-avatar zStatus=\"doNotDisturb\" zSrc=\"/images/avatar/imgs/avatar_image.jpg\" zAlt=\"Image\" />\n    <z-avatar zStatus=\"away\" zSrc=\"/images/avatar/imgs/avatar_image.jpg\" zAlt=\"Image\" />\n  `,\n})\nexport class ZardDemoAvatarStatusComponent {}\n"
+    }
   ]
 }

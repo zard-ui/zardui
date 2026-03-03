@@ -18,5 +18,23 @@
       "name": "index.ts",
       "content": "export * from './kbd.component';\nexport * from './kbd-group.component';\nexport * from './kbd.variants';\n"
     }
+  ],
+  "docs": {
+    "overview": "# Kbd\n\nDisplay keyboard keys and shortcuts in a visually consistent way. Useful for documentation, tooltips, command palettes, and UI hints showing keyboard shortcuts.\n",
+    "api": "# API Reference\n\n## z-kbd\n\nUse `z-kbd` component to display a keyboard key.\n\n| Input   | Type         | Default | Description            |\n| ------- | ------------ | ------- | ---------------------- |\n| `class` | `ClassValue` | `''`    | Additional CSS classes |\n\n## z-kbd-group\n\nUse `z-kbd-group` component to group `z-kbd` components together.\n\n| Input   | Type         | Default | Description            |\n| ------- | ------------ | ------- | ---------------------- |\n| `class` | `ClassValue` | `''`    | Additional CSS classes |\n"
+  },
+  "demos": [
+    {
+      "name": "default.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '../../button/button.component';\nimport { ZardKbdComponent } from '../kbd.component';\n\n@Component({\n  selector: 'z-demo-kbd-default',\n  imports: [ZardKbdComponent, ZardButtonComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-col items-center justify-center gap-4\">\n      <div class=\"flex items-center gap-2\">\n        <z-kbd>Esc</z-kbd>\n        <z-kbd>⌘</z-kbd>\n        <z-kbd>Ctrl</z-kbd>\n      </div>\n\n      <button type=\"submit\" z-button zType=\"outline\">\n        Submit\n        <z-kbd class=\"ml-2\">Enter</z-kbd>\n      </button>\n    </div>\n  `,\n})\nexport class ZardDemoKbdDefaultComponent {}\n"
+    },
+    {
+      "name": "group.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardKbdGroupComponent } from '../kbd-group.component';\nimport { ZardKbdComponent } from '../kbd.component';\n\n@Component({\n  selector: 'z-demo-kbd-group',\n  imports: [ZardKbdGroupComponent, ZardKbdComponent],\n  standalone: true,\n  template: `\n    <z-kbd-group>\n      Use\n      <z-kbd>Ctrl + K</z-kbd>\n      or\n      <z-kbd>Ctrl + O</z-kbd>\n      to open menu\n    </z-kbd-group>\n  `,\n})\nexport class ZardDemoKbdGroupComponent {}\n"
+    },
+    {
+      "name": "tooltip.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '../../button/button.component';\nimport { ZardTooltipDirective } from '../../tooltip/tooltip';\nimport { ZardKbdGroupComponent } from '../kbd-group.component';\nimport { ZardKbdComponent } from '../kbd.component';\n\n@Component({\n  selector: 'z-demo-kbd-tooltip',\n  imports: [ZardButtonComponent, ZardTooltipDirective, ZardKbdGroupComponent, ZardKbdComponent],\n  standalone: true,\n  template: `\n    <button type=\"button\" z-button [zTooltip]=\"shortcutTip\">Save</button>\n\n    <ng-template #shortcutTip>\n      Press\n      <z-kbd-group>\n        <z-kbd class=\"bg-blue-400 text-white\">Ctrl</z-kbd>\n        <span>+</span>\n        <z-kbd class=\"bg-blue-400 text-white\">S</z-kbd>\n      </z-kbd-group>\n      to save\n    </ng-template>\n  `,\n})\nexport class ZardDemoKbdTooltipComponent {}\n"
+    }
   ]
 }

@@ -1,4 +1,4 @@
-import { logger } from '@cli/utils/logger.js';
+import { ConfigError } from '@cli/utils/errors.js';
 import { access, readFile } from 'node:fs/promises';
 import * as path from 'node:path';
 import { z } from 'zod';
@@ -73,10 +73,17 @@ export async function getConfig(cwd: string): Promise<Config | null> {
 
   try {
     const configJson = await readJson(configPath);
-    return configSchema.parse(configJson);
+    const config = configSchema.parse(configJson);
+
+    if (config.registryUrl) {
+      const { validateRegistryUrl } = await import('@cli/utils/registry.js');
+      validateRegistryUrl(config.registryUrl);
+    }
+
+    return config;
   } catch (error) {
-    logger.error('Invalid configuration file');
-    throw error;
+    if (error instanceof ConfigError) throw error;
+    throw new ConfigError('Invalid configuration file: components.json');
   }
 }
 

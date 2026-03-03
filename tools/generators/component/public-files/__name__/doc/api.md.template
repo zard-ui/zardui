@@ -1,0 +1,9 @@
+# API Reference
+
+[<%= selector %>] Component
+
+<%= selector %> is a component that <%= descriptionLower %>
+
+| Property  | Description        | Type     | Default |
+| --------- | ------------------ | -------- | ------- |
+| `[class]` | Custom CSS classes | `string` | `''`    |

@@ -1,0 +1,13 @@
+import { ZardDemo<%= className %>DefaultComponent } from './default';
+
+export const <%= constantName %> = {
+  componentName: '<%= name %>',
+  componentType: '<%= name %>',
+  description: '<%= description %>',
+  examples: [
+    {
+      name: 'default',
+      component: ZardDemo<%= className %>DefaultComponent,
+    },
+  ],
+};

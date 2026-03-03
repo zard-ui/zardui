@@ -14,5 +14,19 @@
       "name": "index.ts",
       "content": "export * from './divider.component';\nexport * from './divider.variants';\n"
     }
+  ],
+  "docs": {
+    "overview": "# Divider\n\nThe Divider component is used to visually separate content with a horizontal or vertical line.\n",
+    "api": "# API\n\n## [z-divider] <span class=\"api-type-label component\">Component</span>\n\n> `z-divider` is used to visually separate content with a horizontal or vertical line.\n\n| Property       | Description                   | Type                         | Default      |\n| -------------- | ----------------------------- | ---------------------------- | ------------ |\n| `zOrientation` | Defines the divider direction | `\"horizontal\" \\| \"vertical\"` | `horizontal` |\n"
+  },
+  "demos": [
+    {
+      "name": "default.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardDividerComponent } from '../divider.component';\n\n@Component({\n  selector: 'z-demo-divider-default',\n  imports: [ZardDividerComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-col\">\n      <p>Before divider</p>\n      <z-divider />\n      <p>After divider</p>\n    </div>\n  `,\n})\nexport class ZardDemoDividerDefaultComponent {}\n"
+    },
+    {
+      "name": "vertical.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardDividerComponent } from '../divider.component';\n\n@Component({\n  selector: 'z-demo-divider-vertical',\n  imports: [ZardDividerComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex h-20\">\n      <p>Left</p>\n      <z-divider zOrientation=\"vertical\" />\n      <p>Right</p>\n    </div>\n  `,\n})\nexport class ZardDemoDividerVerticalComponent {}\n"
+    }
   ]
 }

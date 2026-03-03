@@ -1,7 +1,7 @@
 import { APP_VERSION } from '@cli/constants/app.constants.js';
-import { fileURLToPath } from 'url';
 import { access, readFile } from 'node:fs/promises';
 import * as path from 'path';
+import { fileURLToPath } from 'url';
 
 async function pathExists(filePath: string): Promise<boolean> {
   try {
@@ -33,7 +33,7 @@ export async function getPackageInfo(): Promise<PackageJson> {
       path.resolve(__dirname, '../../../package.json'),
       path.resolve(__dirname, '../../package.json'),
       path.resolve(__dirname, '../../../../package.json'),
-      path.resolve(__dirname, '../node_modules/@ngzard/ui/package.json'),
+      path.resolve(__dirname, '../node_modules/zard-cli/package.json'),
     ];
 
     for (const packageJsonPath of possiblePaths) {
@@ -48,13 +48,13 @@ export async function getPackageInfo(): Promise<PackageJson> {
 
     // Fallback to hardcoded info if package.json is not found
     return {
-      name: '@ngzard/ui',
+      name: 'zard-cli',
       version: APP_VERSION,
     };
   } catch (error) {
     // Ultimate fallback
     return {
-      name: '@ngzard/ui',
+      name: 'zard-cli',
       version: APP_VERSION,
     };
   }

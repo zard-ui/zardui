@@ -1,0 +1,4 @@
+import { cva, type VariantProps } from 'class-variance-authority';
+
+export const <%= variantName %>Variants = cva('');
+export type Zard<%= className %>Variants = VariantProps<typeof <%= variantName %>Variants>;

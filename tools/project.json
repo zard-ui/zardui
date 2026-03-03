@@ -1,0 +1,6 @@
+{
+  "name": "@zardui/generators",
+  "root": "tools",
+  "sourceRoot": "tools",
+  "projectType": "library"
+}

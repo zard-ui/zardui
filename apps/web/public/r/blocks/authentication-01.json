@@ -1,0 +1,20 @@
+{
+  "id": "authentication-01",
+  "title": "Authentication page",
+  "description": "A modern authentication page with email/password.",
+  "category": "Authentication",
+  "files": [
+    {
+      "name": "authentication-01.component.html",
+      "path": "src/components/authentication-01/authentication-01.component.html",
+      "content": "<div class=\"flex min-h-screen flex-col lg:flex-row\">\n  <div class=\"bg-background flex flex-1 items-center justify-center p-4 sm:p-8\">\n    <div class=\"w-full max-w-md space-y-6 sm:space-y-8\">\n      <div class=\"text-center\">\n        <h1 class=\"text-2xl font-bold sm:text-3xl\">Welcome back</h1>\n        <p class=\"text-muted-foreground mt-2 text-sm sm:text-base\">Sign in to your account to continue</p>\n      </div>\n\n      <z-card class=\"p-4 sm:p-6 lg:p-8\">\n        <form [formGroup]=\"loginForm\" class=\"space-y-4 sm:space-y-6\">\n          <z-form-field>\n            <z-form-label [zRequired]=\"true\">Email</z-form-label>\n            <z-form-control>\n              <input z-input type=\"email\" formControlName=\"email\" placeholder=\"name@zard.com\" class=\"w-full\" />\n            </z-form-control>\n          </z-form-field>\n\n          <z-form-field>\n            <div class=\"flex items-center justify-between\">\n              <z-form-label [zRequired]=\"true\">Password</z-form-label>\n              <a z-button zType=\"link\" class=\"p-0\">Forgot password?</a>\n            </div>\n            <z-form-control>\n              <input z-input type=\"password\" formControlName=\"password\" placeholder=\"••••••••\" class=\"w-full\" />\n            </z-form-control>\n          </z-form-field>\n\n          <div class=\"flex items-center gap-2\">\n            <z-checkbox id=\"remember\" formControlName=\"rememberMe\"></z-checkbox>\n            <label for=\"remember\" class=\"cursor-pointer text-sm select-none\">Remember me for 30 days</label>\n          </div>\n\n          <button type=\"submit\" z-button zFull [zLoading]=\"isLoading()\" [disabled]=\"isLoading()\">Sign in</button>\n        </form>\n      </z-card>\n\n      <p class=\"text-muted-foreground text-center text-sm\">\n        Don't have an account?\n        <a z-button zType=\"link\" href=\"#\" class=\"px-0\">Sign up</a>\n      </p>\n    </div>\n  </div>\n  <aside class=\"bg-muted hidden flex-1 items-center justify-center p-8 lg:flex\"></aside>\n</div>\n",
+      "language": "html"
+    },
+    {
+      "name": "authentication-01.component.ts",
+      "path": "src/components/authentication-01/authentication-01.component.ts",
+      "content": "import { Component, signal } from '@angular/core';\nimport { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';\n\nimport { ZardButtonComponent } from '@zard/components/button/button.component';\nimport { ZardCardComponent } from '@zard/components/card/card.component';\nimport { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';\nimport {\n  ZardFormFieldComponent,\n  ZardFormLabelComponent,\n  ZardFormControlComponent,\n} from '@zard/components/form/form.component';\nimport { ZardInputDirective } from '@zard/components/input/input.directive';\n\n@Component({\n  selector: 'lib-authentication-01',\n  standalone: true,\n  imports: [\n    ReactiveFormsModule,\n    ZardButtonComponent,\n    ZardCardComponent,\n    ZardCheckboxComponent,\n    ZardInputDirective,\n    ZardFormFieldComponent,\n    ZardFormLabelComponent,\n    ZardFormControlComponent,\n  ],\n  templateUrl: './authentication-01.component.html',\n})\nexport class Authentication01Component {\n  protected readonly isLoading = signal(false);\n\n  protected readonly loginForm = new FormGroup({\n    email: new FormControl('', [Validators.required, Validators.email]),\n    password: new FormControl('', [Validators.required, Validators.minLength(6)]),\n    rememberMe: new FormControl(false),\n  });\n}\n",
+      "language": "typescript"
+    }
+  ]
+}

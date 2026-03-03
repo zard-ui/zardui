@@ -1,7 +1,7 @@
 {
-  "name": "@ngzard/ui-dev",
+  "name": "zard-cli-dev",
   "version": "0.0.0-dev",
-  "description": "Development version of @ngzard/ui CLI",
+  "description": "Development version of zard-cli",
   "type": "module",
   "main": "index.js",
   "bin": {

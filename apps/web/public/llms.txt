@@ -88,8 +88,8 @@
 ### Using CLI (Recommended)
 
 ```bash
-npx @ngzard/ui init
-npx @ngzard/ui add button
+npx zard-cli init
+npx zard-cli add button
 ```
 
 ### Manual Installation

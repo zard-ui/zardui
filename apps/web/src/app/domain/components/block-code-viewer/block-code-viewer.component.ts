@@ -1,84 +1,65 @@
-import { Component, input, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, input, signal, untracked } from '@angular/core';
 
+import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { ZardTreeComponent } from '@zard/components/tree/tree.component';
+import type { TreeNode } from '@zard/components/tree/tree.types';
 
 import { SimpleCodeHighlightComponent } from '../../../shared/components/simple-code-highlight/simple-code-highlight.component';
-import type { BlockFile, FileTreeNode } from '../block-container/block-container.component';
-import { FileTreeComponent } from '../file-tree/file-tree.component';
+import type { BlockFile } from '../block-container/block-container.component';
 
 @Component({
   selector: 'z-block-code-viewer',
-  imports: [SimpleCodeHighlightComponent, FileTreeComponent, ZardIconComponent],
+  imports: [SimpleCodeHighlightComponent, ZardTreeComponent, ZardIconComponent, ZardButtonComponent],
   templateUrl: './block-code-viewer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BlockCodeViewerComponent {
   readonly files = input.required<BlockFile[]>();
 
-  readonly ClipboardIcon = Clipboard;
   protected readonly selectedFile = signal<BlockFile | null>(null);
-  protected readonly openFolders = signal<Set<string>>(new Set());
 
-  protected readonly fileTree = computed(() => {
-    const files = this.files();
-    return this.buildFileTree(files);
-  });
+  protected readonly fileTree = computed(() => this.buildFileTree(this.files()));
 
   constructor() {
-    setTimeout(() => {
+    effect(() => {
       const currentFiles = this.files();
-      if (currentFiles && currentFiles.length > 0) {
+      if (currentFiles.length > 0 && !untracked(() => this.selectedFile())) {
         this.selectedFile.set(currentFiles[0]);
-
-        const tree = this.buildFileTree(currentFiles);
-        const allFolderPaths = this.getAllFolderPaths(tree);
-        this.openFolders.set(new Set(allFolderPaths));
       }
     });
   }
 
-  private getAllFolderPaths(nodes: FileTreeNode[]): string[] {
-    const paths: string[] = [];
-    nodes.forEach(node => {
-      if (node.type === 'folder' && node.path) {
-        paths.push(node.path);
-        if (node.children && node.children.length > 0) {
-          paths.push(...this.getAllFolderPaths(node.children));
-        }
-      }
-    });
-    return paths;
-  }
-
-  private buildFileTree(files: BlockFile[]): FileTreeNode[] {
-    const root: FileTreeNode = {
-      name: 'root',
-      type: 'folder',
-      path: '',
+  private buildFileTree(files: BlockFile[]): TreeNode<BlockFile>[] {
+    const root: TreeNode<BlockFile> = {
+      key: '',
+      label: 'root',
       children: [],
     };
 
-    files.forEach(file => {
+    for (const file of files) {
       const parts = file.path.split('/');
       let currentNode = root;
 
-      parts.forEach((part, index) => {
-        const isFile = index === parts.length - 1;
-        const currentPath = parts.slice(0, index + 1).join('/');
+      for (let i = 0; i < parts.length; i++) {
+        const part = parts[i];
+        const isFile = i === parts.length - 1;
+        const currentPath = parts.slice(0, i + 1).join('/');
 
         if (!currentNode.children) {
           currentNode.children = [];
         }
 
-        let childNode = currentNode.children.find(child => child.name === part);
+        let childNode = currentNode.children.find(child => child.key === currentPath);
 
         if (!childNode) {
           childNode = {
-            name: part,
-            type: isFile ? 'file' : 'folder',
-            path: currentPath,
+            key: currentPath,
+            label: part,
+            icon: isFile ? 'file' : 'folder',
+            leaf: isFile,
+            data: isFile ? file : undefined,
             children: isFile ? undefined : [],
-            file: isFile ? file : undefined,
           };
           currentNode.children.push(childNode);
         }
@@ -86,24 +67,31 @@ export class BlockCodeViewerComponent {
         if (!isFile) {
           currentNode = childNode;
         }
-      });
-    });
-
-    const sortChildren = (node: FileTreeNode) => {
-      if (node.children && node.children.length > 0) {
-        node.children.sort((a, b) => {
-          if (a.type !== b.type) {
-            return a.type === 'folder' ? -1 : 1;
-          }
-          return a.name.localeCompare(b.name);
-        });
-        node.children.forEach(child => sortChildren(child));
       }
-    };
+    }
 
-    sortChildren(root);
+    this.sortChildren(root);
+    return root.children ?? [];
+  }
 
-    return root.children || [];
+  private sortChildren(node: TreeNode<BlockFile>): void {
+    if (node.children?.length) {
+      node.children.sort((a, b) => {
+        if (a.leaf !== b.leaf) {
+          return a.leaf ? 1 : -1;
+        }
+        return a.label.localeCompare(b.label);
+      });
+      for (const child of node.children) {
+        this.sortChildren(child);
+      }
+    }
+  }
+
+  protected handleNodeClick(node: TreeNode<BlockFile>): void {
+    if (node.leaf && node.data) {
+      this.selectedFile.set(node.data);
+    }
   }
 
   protected getFileIcon(fileName: string): string {
@@ -136,22 +124,9 @@ export class BlockCodeViewerComponent {
   }
 
   protected copyToClipboard(): void {
-    if (this.selectedFile()) {
-      navigator.clipboard.writeText(this.selectedFile()!.content);
+    const file = this.selectedFile();
+    if (file) {
+      navigator.clipboard.writeText(file.content).catch(() => undefined);
     }
-  }
-
-  protected toggleFolder(folderPath: string): void {
-    const folders = new Set(this.openFolders());
-    if (folders.has(folderPath)) {
-      folders.delete(folderPath);
-    } else {
-      folders.add(folderPath);
-    }
-    this.openFolders.set(folders);
-  }
-
-  protected handleFileSelected(file: BlockFile): void {
-    this.selectedFile.set(file);
   }
 }

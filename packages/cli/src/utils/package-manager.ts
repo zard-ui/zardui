@@ -1,23 +1,28 @@
 import { detect } from '@antfu/ni';
-
 import { getConfig } from '@cli/utils/config.js';
 
-export async function detectPackageManager(): Promise<'npm' | 'yarn' | 'pnpm' | 'bun'> {
+type PackageManager = 'npm' | 'yarn' | 'pnpm' | 'bun';
+
+let cachedPackageManager: PackageManager | null = null;
+
+export async function detectPackageManager(): Promise<PackageManager> {
+  if (cachedPackageManager) return cachedPackageManager;
+
   const userAgent = process.env.npm_config_user_agent || '';
 
-  if (userAgent.includes('bun')) return 'bun';
-  if (userAgent.includes('pnpm')) return 'pnpm';
-  if (userAgent.includes('yarn')) return 'yarn';
-  if (userAgent.includes('npm')) return 'npm';
+  if (userAgent.includes('bun')) return (cachedPackageManager = 'bun');
+  if (userAgent.includes('pnpm')) return (cachedPackageManager = 'pnpm');
+  if (userAgent.includes('yarn')) return (cachedPackageManager = 'yarn');
+  if (userAgent.includes('npm')) return (cachedPackageManager = 'npm');
 
   const agent = await detect({ programmatic: true });
 
-  if (agent === 'yarn@berry') return 'yarn';
+  if (agent === 'yarn@berry') return (cachedPackageManager = 'yarn');
   if (agent && ['npm', 'yarn', 'pnpm', 'bun'].includes(agent)) {
-    return agent as 'npm' | 'yarn' | 'pnpm' | 'bun';
+    return (cachedPackageManager = agent as PackageManager);
   }
 
-  return 'npm';
+  return (cachedPackageManager = 'npm');
 }
 
 export async function getPackageManager(cwd: string = process.cwd()): Promise<'npm' | 'yarn' | 'pnpm' | 'bun'> {
@@ -39,7 +44,13 @@ export async function getInstallCommand(packageManager: string, isDev = false): 
   }
 }
 
-export async function installPackages(packages: string[], cwd: string, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun', isDev = false, legacyPeerDeps = false): Promise<void> {
+export async function installPackages(
+  packages: string[],
+  cwd: string,
+  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
+  isDev = false,
+  legacyPeerDeps = false,
+): Promise<void> {
   const { execa } = await import('execa');
   const installCmd = await getInstallCommand(packageManager, isDev);
 

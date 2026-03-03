@@ -5,7 +5,7 @@ Initialize your project and install dependencies for ZardUI components.
 **Usage:**
 
 ```bash
-npx @ngzard/ui init
+npx zard-cli init
 ```
 
 **Options:**
@@ -38,7 +38,7 @@ After answering the prompts, the CLI will:
 ZardUI has been initialized successfully!
 
 You can now add components using:
-  npx @ngzard/ui add [component]
+  npx zard-cli add [component]
 ```
 
 ### add
@@ -48,19 +48,19 @@ Add components to your project with automatic dependency management.
 **Usage:**
 
 ```bash tab="npm" copyButton
-npx @ngzard/ui add [components...]
+npx zard-cli add [components...]
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx @ngzard/ui add [components...]
+pnpm dlx zard-cli add [components...]
 ```
 
 ```bash tab="yarn" copyButton
-yarn @ngzard/ui add [components...]
+yarn zard-cli add [components...]
 ```
 
 ```bash tab="bun" copyButton
-bunx @ngzard/ui add [components...]
+bunx zard-cli add [components...]
 ```
 
 **Options:**
@@ -74,71 +74,71 @@ bunx @ngzard/ui add [components...]
 **Examples:**
 
 ```bash tab="npm" copyButton
-npx @ngzard/ui add button
+npx zard-cli add button
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx @ngzard/ui add button
+pnpm dlx zard-cli add button
 ```
 
 ```bash tab="yarn" copyButton
-yarn @ngzard/ui add button
+yarn zard-cli add button
 ```
 
 ```bash tab="bun" copyButton
-bunx @ngzard/ui add button
+bunx zard-cli add button
 ```
 
 Add multiple components:
 
 ```bash tab="npm" copyButton
-npx @ngzard/ui add button card dialog
+npx zard-cli add button card dialog
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx @ngzard/ui add button card dialog
+pnpm dlx zard-cli add button card dialog
 ```
 
 ```bash tab="yarn" copyButton
-yarn @ngzard/ui add button card dialog
+yarn zard-cli add button card dialog
 ```
 
 ```bash tab="bun" copyButton
-bunx @ngzard/ui add button card dialog
+bunx zard-cli add button card dialog
 ```
 
 Add all available components:
 
 ```bash tab="npm" copyButton
-npx @ngzard/ui add --all
+npx zard-cli add --all
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx @ngzard/ui add --all
+pnpm dlx zard-cli add --all
 ```
 
 ```bash tab="yarn" copyButton
-yarn @ngzard/ui add --all
+yarn zard-cli add --all
 ```
 
 ```bash tab="bun" copyButton
-bunx @ngzard/ui add --all
+bunx zard-cli add --all
 ```
 
 Interactive component selection:
 
 ```bash tab="npm" copyButton
-npx @ngzard/ui add
+npx zard-cli add
 ```
 
 ```bash tab="pnpm" copyButton
-pnpm dlx @ngzard/ui add
+pnpm dlx zard-cli add
 ```
 
 ```bash tab="yarn" copyButton
-yarn @ngzard/ui add
+yarn zard-cli add
 ```
 
 ```bash tab="bun" copyButton
-bunx @ngzard/ui add
+bunx zard-cli add
 ```

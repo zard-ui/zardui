@@ -45,7 +45,7 @@ export class December2025Component implements ChangelogEntryComponent {
       description:
         'Adding dark-mode support to your project is now as simple as running a single CLI command. It automatically configures everything you need.',
       icon: 'moon',
-      code: 'npx @ngzard/ui@latest add dark-mode',
+      code: 'npx zard-cli@latest add dark-mode',
     },
   ];
 }
