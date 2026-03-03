@@ -443,7 +443,7 @@ export class ZardDropdownMenuContentComponent {
 
 
 ```angular-ts title="dropdown-trigger.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { Directive, ElementRef, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
+import { computed, Directive, ElementRef, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';
@@ -454,7 +454,7 @@ import { ZardDropdownService } from './dropdown.service';
     '[attr.tabindex]': '0',
     '[attr.role]': '"button"',
     '[attr.aria-haspopup]': '"menu"',
-    '[attr.aria-expanded]': 'dropdownService.isOpen()',
+    '[attr.aria-expanded]': 'isThisDropdownOpen()',
     '[attr.aria-disabled]': 'zDisabled()',
     '(click.prevent-with-stop)': 'onClick()',
     '(mouseenter)': 'onHoverToggle($event)',
@@ -468,6 +468,10 @@ export class ZardDropdownDirective implements OnInit {
   private readonly elementRef = inject(ElementRef);
   private readonly viewContainerRef = inject(ViewContainerRef);
   protected readonly dropdownService = inject(ZardDropdownService);
+
+  protected readonly isThisDropdownOpen = computed(
+    () => this.dropdownService.isOpen() && this.dropdownService.getTriggerElement() === this.elementRef,
+  );
 
   readonly zDropdownMenu = input<ZardDropdownMenuContentComponent>();
   readonly zTrigger = input<'click' | 'hover'>('click');
@@ -634,6 +638,10 @@ export class ZardDropdownService {
     this.isOpen.set(true);
   }
 
+  getTriggerElement(): ElementRef | undefined {
+    return this.triggerElement;
+  }
+
   close() {
     if (this.overlayRef?.hasAttached()) {
       this.overlayRef.detach();
@@ -642,6 +650,13 @@ export class ZardDropdownService {
     this.unlisten();
     this.destroyOverlay();
     this.isOpen.set(false);
+    this.triggerElement = undefined;
+  }
+
+  closeAndReturnTrigger(): ElementRef | undefined {
+    const trigger = this.triggerElement;
+    this.close();
+    return trigger;
   }
 
   private createOverlay(triggerElement: ElementRef) {
@@ -711,10 +726,11 @@ export class ZardDropdownService {
           case ' ':
             this.selectFocusedItem(items);
             break;
-          case 'Escape':
-            this.close();
-            this.triggerElement?.nativeElement.focus();
+          case 'Escape': {
+            const triggerToFocus = this.closeAndReturnTrigger();
+            triggerToFocus?.nativeElement.focus();
             break;
+          }
           case 'Home':
             this.focusItemAtIndex(items, 0);
             break;
