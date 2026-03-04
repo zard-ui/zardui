@@ -71,6 +71,7 @@ const SAMPLE_DATA = {
         <ng-template #addonBefore>
           <div class="flex items-center gap-1">
             <button
+              type="button"
               z-button
               zType="outline"
               zSize="sm"
@@ -116,6 +117,7 @@ const SAMPLE_DATA = {
               @for (mention of mentions(); track mention) {
                 @if (getMentionItem(mention); as item) {
                   <button
+                    type="button"
                     z-button
                     zType="secondary"
                     zSize="sm"
@@ -141,12 +143,21 @@ const SAMPLE_DATA = {
         <ng-template #addonAfter>
           <div class="flex w-full items-center gap-1">
             <!-- Attach File -->
-            <button z-button zType="ghost" zSize="sm" zShape="circle" zTooltip="Attach file" aria-label="Attach file">
+            <button
+              type="button"
+              z-button
+              zType="ghost"
+              zSize="sm"
+              zShape="circle"
+              zTooltip="Attach file"
+              aria-label="Attach file"
+            >
               <z-icon zType="paperclip" />
             </button>
 
             <!-- Model Selector -->
             <button
+              type="button"
               z-button
               zType="ghost"
               zSize="sm"
@@ -181,7 +192,15 @@ const SAMPLE_DATA = {
             </z-dropdown-menu-content>
 
             <!-- Sources Selector -->
-            <button z-button zType="ghost" zSize="sm" zShape="circle" z-dropdown [zDropdownMenu]="sourcesMenu">
+            <button
+              type="button"
+              z-button
+              zType="ghost"
+              zSize="sm"
+              zShape="circle"
+              z-dropdown
+              [zDropdownMenu]="sourcesMenu"
+            >
               <z-icon zType="globe" />
               All Sources
             </button>
@@ -225,7 +244,7 @@ const SAMPLE_DATA = {
             </z-dropdown-menu-content>
 
             <!-- Send Button -->
-            <button z-button zSize="sm" zShape="circle" class="ml-auto" aria-label="Send">
+            <button type="button" z-button zSize="sm" zShape="circle" class="ml-auto" aria-label="Send">
               <z-icon zType="arrow-up" />
             </button>
           </div>

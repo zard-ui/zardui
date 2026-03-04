@@ -24,7 +24,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
     FormsModule,
   ],
   template: `
-    <fieldset class="flex flex-1 flex-col gap-6">
+    <div class="flex flex-1 flex-col gap-6">
       <div class="flex w-full flex-1 flex-col gap-7">
         <fieldset class="flex flex-col gap-6">
           <legend class="mb-3 text-base font-medium">Compute Environment</legend>
@@ -113,7 +113,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
           <z-switch zId="tinting" />
         </div>
       </div>
-    </fieldset>
+    </div>
   `,
 })
 export class BlockAppearanceSettingsComponent {

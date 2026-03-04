@@ -67,9 +67,9 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
   `,
 })
 export class BlockInputGroupSecureComponent {
-  readonly isFavorite = signal(false);
+  protected readonly isFavorite = signal(false);
 
-  toggleFavorite(): void {
+  protected toggleFavorite(): void {
     this.isFavorite.update(v => !v);
   }
 }

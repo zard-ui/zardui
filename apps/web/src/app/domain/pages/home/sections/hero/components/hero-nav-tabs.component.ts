@@ -44,6 +44,7 @@ interface NavTab {
         <div class="mr-4 hidden items-center gap-2 md:flex">
           <label class="sr-only" for="theme-selector">Theme</label>
           <button
+            type="button"
             z-button
             zType="secondary"
             zSize="sm"
@@ -71,6 +72,7 @@ interface NavTab {
             }
           </z-dropdown-menu-content>
           <button
+            type="button"
             z-button
             zType="secondary"
             zSize="sm"

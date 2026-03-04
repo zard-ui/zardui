@@ -55,6 +55,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
 
     <ng-template #infoButton>
       <button
+        type="button"
         z-button
         zType="ghost"
         zSize="sm"
@@ -69,10 +70,10 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
 
     <ng-template #textareaActions>
       <div class="flex w-full items-center">
-        <button z-button zType="outline" zShape="circle" class="size-6!" aria-label="Add">
+        <button type="button" z-button zType="outline" zShape="circle" class="size-6!" aria-label="Add">
           <z-icon zType="plus" />
         </button>
-        <button z-button zType="ghost" zSize="sm" z-dropdown [zDropdownMenu]="menu">Auto</button>
+        <button type="button" z-button zType="ghost" zSize="sm" z-dropdown [zDropdownMenu]="menu">Auto</button>
         <z-dropdown-menu-content #menu="zDropdownMenuContent" class="[--radius:0.95rem]">
           <z-dropdown-menu-item>Auto</z-dropdown-menu-item>
           <z-dropdown-menu-item>Agent</z-dropdown-menu-item>
@@ -80,14 +81,14 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
         </z-dropdown-menu-content>
         <span class="text-muted-foreground ml-auto text-sm">52% used</span>
         <z-divider zOrientation="vertical" class="mx-2 h-4!" />
-        <button z-button zType="default" zShape="circle" class="size-6!" aria-label="Send">
+        <button type="button" z-button zType="default" zShape="circle" class="size-6!" aria-label="Send">
           <z-icon zType="arrow-up" />
         </button>
       </div>
     </ng-template>
 
     <ng-template #checkIcon>
-      <div class="bg-primary flex size-4 items-center justify-center rounded-full">
+      <div class="bg-primary flex size-4 items-center justify-center rounded-full" role="img" aria-label="Verified">
         <z-icon zType="check" class="text-primary-foreground size-3" />
       </div>
     </ng-template>

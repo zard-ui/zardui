@@ -22,7 +22,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
   template: `
     <z-button-group class="w-full [--radius:9999rem]">
       <z-button-group>
-        <button z-button zType="outline" zShape="circle" aria-label="Add">
+        <button type="button" z-button zType="outline" zShape="circle" aria-label="Add">
           <z-icon zType="plus" />
         </button>
       </z-button-group>
@@ -37,6 +37,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
         </z-input-group>
         <ng-template #voiceButton>
           <button
+            type="button"
             z-button
             zTooltip="Voice Mode"
             zType="ghost"
