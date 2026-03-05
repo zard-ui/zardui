@@ -5,6 +5,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
+import { ZardIdDirective } from '@zard/core';
 
 @Component({
   selector: 'z-block-input-group-secure',
@@ -17,12 +18,13 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
     ZardIconComponent,
     ZardPopoverComponent,
     ZardPopoverDirective,
+    ZardIdDirective,
   ],
   template: `
-    <div class="grid w-full max-w-sm gap-6">
-      <label for="input-secure-19" class="sr-only">Input Secure</label>
+    <div class="grid w-full max-w-sm gap-6" zardId="input-secure" #z="zardId">
+      <label [attr.for]="z.id()" class="sr-only">Input Secure</label>
       <z-input-group [zAddonBefore]="addonBefore" [zAddonAfter]="addonAfter" class="[--radius:9999px]">
-        <input z-input id="input-secure-19" class="rounded-none pl-0.5!" />
+        <input z-input [id]="z.id()" class="rounded-none pl-0.5!" />
       </z-input-group>
 
       <ng-template #addonBefore>
@@ -57,7 +59,8 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
           zSize="sm"
           zShape="circle"
           class="size-6!"
-          aria-label="Favorite"
+          [attr.aria-label]="isFavorite() ? 'Remove favorite' : 'Add favorite'"
+          [attr.aria-pressed]="isFavorite()"
           (click)="toggleFavorite()"
         >
           <z-icon zType="star" [class]="isFavorite() ? 'fill-primary stroke-primary' : ''" />

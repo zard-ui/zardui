@@ -9,6 +9,7 @@ import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTooltipDirective } from '@zard/components/tooltip';
+import { ZardIdDirective } from '@zard/core';
 
 interface MentionableItem {
   type: 'page' | 'user';
@@ -53,15 +54,16 @@ const SAMPLE_DATA = {
     ZardInputGroupComponent,
     ZardSwitchComponent,
     ZardTooltipDirective,
+    ZardIdDirective,
   ],
   template: `
-    <form class="[--radius:1.2rem]">
+    <form class="[--radius:1.2rem]" zardId="notion-prompt" #z="zardId">
       <div class="flex flex-col gap-2">
-        <label class="sr-only" for="notion-prompt">Prompt</label>
+        <label class="sr-only" [attr.for]="z.id()">Prompt</label>
         <z-input-group [zAddonBefore]="addonBefore" [zAddonAfter]="addonAfter" zAddonAlign="block">
           <textarea
             z-input
-            id="notion-prompt"
+            [id]="z.id()"
             placeholder="Ask, search, or make anything..."
             class="field-sizing-content min-h-16 resize-none"
           ></textarea>
@@ -206,19 +208,19 @@ const SAMPLE_DATA = {
             </button>
             <z-dropdown-menu-content #sourcesMenu="zDropdownMenuContent" class="w-64 [--radius:1rem]">
               <div class="flex items-center justify-between px-2 py-1.5">
-                <label for="web-search" class="flex items-center gap-2">
+                <label [attr.for]="z.id() + '-web-search'" class="flex items-center gap-2">
                   <z-icon zType="globe" class="size-4" />
                   <span class="text-sm">Web Search</span>
                 </label>
-                <z-switch zId="web-search" />
+                <z-switch [zId]="z.id() + '-web-search'" />
               </div>
               <div class="bg-border my-1 h-px"></div>
               <div class="flex items-center justify-between px-2 py-1.5">
-                <label for="apps" class="flex items-center gap-2">
+                <label [attr.for]="z.id() + '-apps'" class="flex items-center gap-2">
                   <z-icon zType="layers" class="size-4" />
                   <span class="text-sm">Apps and Integrations</span>
                 </label>
-                <z-switch zId="apps" />
+                <z-switch [zId]="z.id() + '-apps'" />
               </div>
               <z-dropdown-menu-item>
                 <z-icon zType="circle-dashed" class="size-4" />

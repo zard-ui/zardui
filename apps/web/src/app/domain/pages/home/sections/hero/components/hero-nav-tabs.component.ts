@@ -102,6 +102,7 @@ export class HeroNavTabsComponent {
   protected readonly copyError = signal(false);
   private readonly destroyRef = inject(DestroyRef);
   private copyTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private destroyed = false;
 
   readonly presets = THEME_PRESETS;
 
@@ -115,6 +116,7 @@ export class HeroNavTabsComponent {
 
   constructor() {
     this.destroyRef.onDestroy(() => {
+      this.destroyed = true;
       if (this.copyTimeoutId) {
         clearTimeout(this.copyTimeoutId);
       }
@@ -129,6 +131,8 @@ export class HeroNavTabsComponent {
   }
 
   private setFeedbackState(isSuccess: boolean): void {
+    if (this.destroyed) return;
+
     if (this.copyTimeoutId) {
       clearTimeout(this.copyTimeoutId);
     }
