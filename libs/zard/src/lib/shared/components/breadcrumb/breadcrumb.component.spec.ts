@@ -1,4 +1,4 @@
-import { Component, type TemplateRef, ViewChild } from '@angular/core';
+import { Component, type TemplateRef, viewChild } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
@@ -127,7 +127,6 @@ describe('BreadcrumbComponent - Custom Separator', () => {
   @Component({
     selector: 'test-separator-component',
     imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
-    standalone: true,
     template: `
       <z-breadcrumb [zSeparator]="separator">
         <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
@@ -136,12 +135,12 @@ describe('BreadcrumbComponent - Custom Separator', () => {
       </z-breadcrumb>
 
       <ng-template #customTemplate>
-        <span class="custom-separator">→</span>
+        <span data-testid="custom-separator">→</span>
       </ng-template>
     `,
   })
   class TestSeparatorComponent {
-    @ViewChild('customTemplate', { static: true }) customTemplate!: TemplateRef<void>;
+    readonly customTemplate = viewChild.required<TemplateRef<void>>('customTemplate');
     separator: string | TemplateRef<void> = '';
   }
 
@@ -156,6 +155,7 @@ describe('BreadcrumbComponent - Custom Separator', () => {
 
     fixture = TestBed.createComponent(TestSeparatorComponent);
     component = fixture.componentInstance;
+    fixture.detectChanges(); // initialize required view query
   });
 
   it('should render string separator when zSeparator is a string', () => {
@@ -168,11 +168,11 @@ describe('BreadcrumbComponent - Custom Separator', () => {
   });
 
   it('should render template separator when zSeparator is a TemplateRef', () => {
-    component.separator = component.customTemplate;
+    component.separator = component.customTemplate();
     fixture.detectChanges();
 
     const separators = fixture.debugElement.queryAll(
-      By.css('li[aria-hidden="true"][role="presentation"] .custom-separator'),
+      By.css('li[aria-hidden="true"][role="presentation"] [data-testid="custom-separator"]'),
     );
     expect(separators.length).toBe(2); // 3 items = 2 separators
     expect(separators[0].nativeElement.textContent.trim()).toBe('→');

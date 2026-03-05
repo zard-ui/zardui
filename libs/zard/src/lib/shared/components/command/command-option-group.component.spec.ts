@@ -7,9 +7,8 @@ import { ZardCommandOptionGroupComponent } from './command-option-group.componen
 @Component({
   selector: 'test-host-component',
   imports: [ZardCommandOptionGroupComponent],
-  standalone: true,
   template: `
-    <z-command-option-group zLabel="Test Group" class="custom-class">
+    <z-command-option-group zLabel="Test Group" class="text-lg">
       <div>Content</div>
     </z-command-option-group>
   `,
@@ -47,6 +46,6 @@ describe('ZardCommandOptionGroupComponent', () => {
 
   it('should apply custom classes', () => {
     const element = fixture.nativeElement.querySelector('[role="group"]');
-    expect(element.className).toContain('custom-class');
+    expect(element.className).toContain('text-lg');
   });
 });

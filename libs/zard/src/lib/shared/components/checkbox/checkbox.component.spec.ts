@@ -9,7 +9,6 @@ import { ZardCheckboxComponent } from './checkbox.component';
 
 @Component({
   imports: [ZardCheckboxComponent, FormsModule],
-  standalone: true,
   template: `
     <span z-checkbox>Default</span>
     <span z-checkbox zType="default">Default Type</span>
@@ -29,7 +28,6 @@ class TestHostComponent {}
 
 @Component({
   imports: [ZardCheckboxComponent, FormsModule],
-  standalone: true,
   template: `
     <span z-checkbox [(ngModel)]="checked">Checked</span>
   `,
@@ -99,7 +97,7 @@ describe('ZardCheckboxComponent', () => {
         'appearance-none',
         'border',
         'transition',
-        'shadow',
+        'shadow-sm',
         'hover:shadow-md',
         'focus-visible:outline-none',
         'focus-visible:ring-4',
@@ -173,7 +171,7 @@ describe('ZardCheckboxComponent', () => {
         {
           index: 5,
           shape: 'default',
-          expectedClasses: ['rounded'],
+          expectedClasses: ['rounded-[4px]'],
         },
         {
           index: 6,

@@ -22,19 +22,19 @@
   "demos": [
     {
       "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-default',\n  imports: [ZardSliderComponent],\n  standalone: true,\n  template: `\n    <div class=\"preview flex min-h-[350px] w-full items-center justify-center p-10\">\n      <z-slider class=\"w-[60%]\" zDefault=\"50\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderDefaultComponent {}\n"
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-default',\n  imports: [ZardSliderComponent],\n  template: `\n    <div class=\"flex min-h-87.5 w-full items-center justify-center p-10\">\n      <z-slider class=\"w-[60%]\" zDefault=\"50\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderDefaultComponent {}\n"
     },
     {
       "name": "disabled.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-disabled',\n  imports: [ZardSliderComponent],\n  standalone: true,\n  template: `\n    <div class=\"preview flex min-h-[350px] w-full items-center justify-center p-10\">\n      <z-slider class=\"w-[60%]\" zDefault=\"50\" zDisabled=\"true\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderDisabledComponent {}\n"
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-disabled',\n  imports: [ZardSliderComponent],\n  template: `\n    <div class=\"flex min-h-87.5 w-full items-center justify-center p-10\">\n      <z-slider class=\"w-[60%]\" zDefault=\"50\" zDisabled=\"true\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderDisabledComponent {}\n"
     },
     {
       "name": "min-max.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-min-max',\n  imports: [ZardSliderComponent],\n  standalone: true,\n  template: `\n    <div class=\"preview flex min-h-[350px] w-full items-center justify-center p-10\">\n      <z-slider class=\"w-[60%]\" zStep=\"10\" zMin=\"30\" zMax=\"120\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderMinMaxComponent {}\n"
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-min-max',\n  imports: [ZardSliderComponent],\n  template: `\n    <div class=\"flex min-h-87.5 w-full items-center justify-center p-10\">\n      <z-slider class=\"w-[60%]\" zStep=\"10\" zMin=\"30\" zMax=\"120\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderMinMaxComponent {}\n"
     },
     {
       "name": "vertical.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-vertical',\n  imports: [ZardSliderComponent],\n  standalone: true,\n  template: `\n    <div class=\"preview flex h-[350px] w-full items-center justify-center p-10\">\n      <z-slider class=\"w-[60%]\" zDefault=\"100\" zMin=\"30\" zMax=\"120\" zOrientation=\"vertical\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderVerticalComponent {}\n"
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-vertical',\n  imports: [ZardSliderComponent],\n  template: `\n    <div class=\"flex h-87.5 w-full items-center justify-center p-10\">\n      <z-slider class=\"w-[60%]\" zDefault=\"100\" zMin=\"30\" zMax=\"120\" zOrientation=\"vertical\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderVerticalComponent {}\n"
     }
   ]
 }

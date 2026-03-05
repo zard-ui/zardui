@@ -8,7 +8,7 @@ import { ZardSkeletonComponent } from './skeleton.component';
   imports: [ZardSkeletonComponent],
   standalone: true,
   template: `
-    <z-skeleton class="h-4 w-4 rounded" />
+    <z-skeleton class="size-4 rounded-sm" />
   `,
 })
 class TestSkeletonHostComponent {}
@@ -44,8 +44,7 @@ describe('ZardSkeleton Integration', () => {
   it('should apply projected classes to internal div', () => {
     const internalDiv = fixture.nativeElement.querySelector('z-skeleton > div');
     expect(internalDiv).not.toBeNull();
-    expect(internalDiv.className).toContain('h-4');
-    expect(internalDiv.className).toContain('w-4');
-    expect(internalDiv.className).toContain('rounded');
+    expect(internalDiv.className).toContain('size-4');
+    expect(internalDiv.className).toContain('rounded-sm');
   });
 });

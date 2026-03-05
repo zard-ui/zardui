@@ -24,16 +24,25 @@ import {
 
 import type { ClassValue } from 'clsx';
 
+import { ZardIdDirective } from '@/shared/core/directives/id.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { dropdownContentVariants } from './dropdown.variants';
 
 @Component({
   selector: 'z-dropdown-menu',
-  imports: [OverlayModule],
+  imports: [OverlayModule, ZardIdDirective],
   template: `
     <!-- Dropdown Trigger -->
-    <div class="trigger-container" (click)="toggle()" (keydown.{enter,space}.prevent)="toggle()" tabindex="0">
+    <div
+      #triggerContainer
+      zardId="dropdown-trigger"
+      #zId="zardId"
+      [id]="zId.id()"
+      (click)="toggle()"
+      (keydown.{enter,space}.prevent)="toggle()"
+      tabindex="0"
+    >
       <ng-content select="[dropdown-trigger]" />
     </div>
 
@@ -67,6 +76,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   private platformId = inject(PLATFORM_ID);
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<unknown>>('dropdownTemplate');
+  readonly triggerContainer = viewChild.required<ElementRef<HTMLElement>>('triggerContainer');
 
   private overlayRef?: OverlayRef;
   private portal?: TemplatePortal;
@@ -282,10 +292,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
   }
 
   private focusTrigger() {
-    const trigger = this.elementRef.nativeElement.querySelector('.trigger-container');
-    if (trigger) {
-      trigger.focus();
-    }
+    this.triggerContainer().nativeElement.focus();
   }
 }
 
@@ -297,7 +304,7 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const dropdownContentVariants = cva(
-  'bg-popover text-popover-foreground z-50 min-w-50 overflow-y-auto rounded-md border py-1 px-1 shadow-md',
+  'bg-popover text-popover-foreground z-50 min-w-50 overflow-y-auto rounded-md border p-1 shadow-md',
 );
 
 export const dropdownItemVariants = cva(

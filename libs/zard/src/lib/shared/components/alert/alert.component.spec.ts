@@ -7,9 +7,8 @@ import { ZardAlertComponent } from './alert.component';
 @Component({
   selector: 'test-host-component',
   imports: [ZardAlertComponent],
-  standalone: true,
   template: `
-    <z-alert zTitle="Test Title" zDescription="Test Description" zIcon="info" class="custom-class" />
+    <z-alert zTitle="Test Title" zDescription="Test Description" zIcon="info" class="w-1/2" />
   `,
 })
 class TestHostComponent {}
@@ -39,7 +38,7 @@ describe('ZardAlertComponent', () => {
 
   it('should apply custom classes', () => {
     const alert = fixture.debugElement.query(By.directive(ZardAlertComponent)).nativeElement;
-    expect(alert.classList).toContain('custom-class');
+    expect(alert.classList).toContain('w-1/2');
     expect(alert.getAttribute('data-slot')).toBe('alert');
     expect(alert.getAttribute('role')).toBe('alert');
   });

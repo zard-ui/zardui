@@ -86,7 +86,7 @@ describe('ZardCardComponent', () => {
       template: `
         <z-card [zTitle]="titleTemplate">
           <ng-template #titleTemplate>
-            <span class="custom-title">Custom Title Template</span>
+            <span>Custom Title Template</span>
           </ng-template>
         </z-card>
       `,
@@ -104,7 +104,7 @@ describe('ZardCardComponent', () => {
       template: `
         <z-card zTitle="Title" [zDescription]="descriptionTemplate">
           <ng-template #descriptionTemplate>
-            <span class="custom-description">Custom Description Template</span>
+            <span>Custom Description Template</span>
           </ng-template>
         </z-card>
       `,

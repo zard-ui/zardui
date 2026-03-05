@@ -322,7 +322,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 ```angular-ts title="resizable.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const resizableVariants = cva('flex h-full w-full data-[layout=vertical]:flex-col overflow-hidden', {
+export const resizableVariants = cva('flex size-full data-[layout=vertical]:flex-col overflow-hidden', {
   variants: {
     zLayout: {
       horizontal: '',

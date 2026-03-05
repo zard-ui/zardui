@@ -32,7 +32,7 @@ import { treeVariants } from './tree.variants';
   imports: [ZardTreeNodeComponent, CdkVirtualScrollViewport, CdkFixedSizeVirtualScroll, CdkVirtualForOf],
   template: `
     @if (zVirtualScroll()) {
-      <cdk-virtual-scroll-viewport [itemSize]="zVirtualItemSize()" class="h-full w-full">
+      <cdk-virtual-scroll-viewport [itemSize]="zVirtualItemSize()" class="size-full">
         <z-tree-node
           *cdkVirtualFor="let flatNode of flattenedNodes(); trackBy: trackByKey"
           [node]="flatNode.node"
