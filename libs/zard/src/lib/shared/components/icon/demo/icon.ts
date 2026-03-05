@@ -8,7 +8,7 @@ export const ICON = {
   componentName: 'icon',
   componentType: 'icon',
   description:
-    "A versatile icon component that encapsulates lucide-angular's icons with a consistent API and styling, providing an abstraction layer that facilitates future icon library swapping.",
+    'A versatile icon component using ng-icons with a consistent API and styling. Supports Lucide icons out of the box with the ability to swap icon families.',
   examples: [
     {
       name: 'default',

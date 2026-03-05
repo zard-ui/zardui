@@ -1,3 +1,3 @@
 # Icon
 
-A versatile icon component that encapsulates lucide-angular's icons with a consistent API and styling, providing an abstraction layer that facilitates future icon library swapping.
+A versatile icon component that encapsulates icons from ng-icons with a consistent API and styling. Uses `@ng-icons/core` and `@ng-icons/lucide` for the Lucide icon family, providing an abstraction layer that facilitates future icon library swapping.

@@ -1,8 +1,6 @@
 import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { GalleryHorizontal } from 'lucide-angular';
-
 import { LayoutService } from '@doc/shared/services/layout.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
@@ -41,7 +39,6 @@ export class HeaderComponent {
   readonly headerPaths = HEADER_PATHS;
   readonly githubData = SOCIAL_MEDIAS.find(media => media.name === 'GitHub');
   readonly appVersion = environment.appVersion;
-  readonly GalleryHorizontalIcon = GalleryHorizontal;
   private readonly githubService = inject(GithubService);
   private readonly darkModeService = inject(ZardDarkMode);
   private readonly layoutService = inject(LayoutService);

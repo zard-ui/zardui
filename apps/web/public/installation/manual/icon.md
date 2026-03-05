@@ -1,10 +1,18 @@
 
 
 ```angular-ts title="icon.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DOCUMENT,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
+import { NgIcon } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
-import { LucideAngularModule } from 'lucide-angular';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -13,19 +21,19 @@ import { ZARD_ICONS, type ZardIcon } from './icons';
 
 @Component({
   selector: 'z-icon, [z-icon]',
-  imports: [LucideAngularModule],
+  imports: [NgIcon],
   template: `
-    <lucide-angular
-      [img]="icon()"
-      [strokeWidth]="zStrokeWidth()"
-      [absoluteStrokeWidth]="zAbsoluteStrokeWidth()"
-      [class]="classes()"
-    />
+    <ng-icon [svg]="icon()" [size]="size()" [strokeWidth]="zStrokeWidth()" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'classes()',
+  },
 })
 export class ZardIconComponent {
+  private readonly document = inject(DOCUMENT);
+
   readonly zType = input.required<ZardIcon>();
   readonly zSize = input<ZardIconSizeVariants>('default');
   readonly zStrokeWidth = input<number>(2);
@@ -36,14 +44,37 @@ export class ZardIconComponent {
     mergeClasses(iconVariants({ zSize: this.zSize() }), this.class(), this.zStrokeWidth() === 0 ? 'stroke-none' : ''),
   );
 
-  protected readonly icon = computed(() => {
-    const type = this.zType();
-    if (typeof type === 'string') {
-      return ZARD_ICONS[type];
+  protected readonly icon = computed(() => ZARD_ICONS[this.zType()]);
+
+  protected readonly size = computed(() => this.extractSizeFromClass());
+
+  private extractSizeFromClass() {
+    const classes = this.classes().split(' ');
+
+    for (const cls of classes) {
+      if (cls.startsWith('size-')) {
+        return this.tailwindSizeToPx(cls.split('-')[1]);
+      }
     }
 
-    return type;
-  });
+    return '14';
+  }
+
+  private tailwindSizeToPx(size: string | number): string {
+    const sizeNum = typeof size === 'number' ? size : parseFloat(size);
+    const unit = this.getBaseFontSize() / 4;
+    const px = sizeNum * unit;
+
+    return `${px}`;
+  }
+
+  private getBaseFontSize(): number {
+    if (!this.document.defaultView) {
+      return 16;
+    }
+    const rootSize = this.document.defaultView.getComputedStyle(this.document.documentElement).fontSize;
+    return parseFloat(rootSize) || 16;
+  }
 }
 
 ```
@@ -75,200 +106,207 @@ export type ZardIconSizeVariants = NonNullable<VariantProps<typeof iconVariants>
 
 ```angular-ts title="icons.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
-  Activity,
-  Archive,
-  ArrowLeft,
-  ArrowRight,
-  ArrowUp,
-  ArrowUpRight,
-  BadgeCheck,
-  Ban,
-  Bell,
-  Bold,
-  BookOpen,
-  BookOpenText,
-  Calendar,
-  CalendarPlus,
-  Check,
-  ChevronDown,
-  ChevronLeft,
-  ChevronRight,
-  ChevronsUpDown,
-  ChevronUp,
-  Circle,
-  CircleAlert,
-  CircleCheck,
-  CircleDollarSign,
-  CircleSmall,
-  CircleX,
-  Clipboard,
-  Clock,
-  Code,
-  CodeXml,
-  Copy,
-  CreditCard,
-  DollarSign,
-  Ellipsis,
-  Eye,
-  File,
-  FileText,
-  Folder,
-  FolderCode,
-  FolderOpen,
-  FolderPlus,
-  Heart,
-  House,
-  Inbox,
-  Info,
-  Italic,
-  Layers,
-  Layers2,
-  LayoutDashboard,
-  Lightbulb,
-  LightbulbOff,
-  ListFilterPlus,
-  LoaderCircle,
-  LogOut,
-  type LucideIconData,
-  Mail,
-  Minus,
-  Monitor,
-  Moon,
-  MoveRight,
-  Palette,
-  PanelLeft,
-  Plus,
-  Popcorn,
-  Puzzle,
-  Save,
-  Search,
-  Settings,
-  Shield,
-  Smartphone,
-  Sparkles,
-  Square,
-  SquareLibrary,
-  Star,
-  Sun,
-  SunMoon,
-  Tablet,
-  Tag,
-  Terminal,
-  TextAlignCenter,
-  TextAlignEnd,
-  TextAlignStart,
-  Trash2,
-  TriangleAlert,
-  Underline,
-  User,
-  UserPlus,
-  Users,
-  X,
-  Zap,
-} from 'lucide-angular';
+  lucideActivity,
+  lucideArchive,
+  lucideArrowLeft,
+  lucideArrowRight,
+  lucideArrowUp,
+  lucideArrowUpRight,
+  lucideBadgeCheck,
+  lucideBan,
+  lucideBell,
+  lucideBold,
+  lucideBookOpen,
+  lucideBookOpenText,
+  lucideCalendar,
+  lucideCalendarPlus,
+  lucideCheck,
+  lucideChevronDown,
+  lucideChevronLeft,
+  lucideChevronRight,
+  lucideChevronsUpDown,
+  lucideChevronUp,
+  lucideCircle,
+  lucideCircleAlert,
+  lucideCircleCheck,
+  lucideCircleDollarSign,
+  lucideCircleSmall,
+  lucideCircleX,
+  lucideClipboard,
+  lucideClock,
+  lucideCode,
+  lucideCodeXml,
+  lucideCopy,
+  lucideCreditCard,
+  lucideDollarSign,
+  lucideEllipsis,
+  lucideExternalLink,
+  lucideEye,
+  lucideFile,
+  lucideFileText,
+  lucideFolder,
+  lucideFolderCode,
+  lucideFolderOpen,
+  lucideFolderPlus,
+  lucideGalleryHorizontal,
+  lucideGithub,
+  lucideHeart,
+  lucideHouse,
+  lucideInbox,
+  lucideInfo,
+  lucideItalic,
+  lucideLayers,
+  lucideLayers2,
+  lucideLayoutDashboard,
+  lucideLightbulb,
+  lucideLightbulbOff,
+  lucideListFilterPlus,
+  lucideLoaderCircle,
+  lucideLogOut,
+  lucideMail,
+  lucideMinus,
+  lucideMonitor,
+  lucideMoon,
+  lucideMoveRight,
+  lucidePalette,
+  lucidePanelLeft,
+  lucidePlus,
+  lucidePopcorn,
+  lucidePuzzle,
+  lucideSave,
+  lucideSearch,
+  lucideSettings,
+  lucideShield,
+  lucideSmartphone,
+  lucideSparkles,
+  lucideSquare,
+  lucideSquareLibrary,
+  lucideStar,
+  lucideSun,
+  lucideSunMoon,
+  lucideTablet,
+  lucideTag,
+  lucideTerminal,
+  lucideTextAlignCenter,
+  lucideTextAlignEnd,
+  lucideTextAlignStart,
+  lucideTrash2,
+  lucideTriangleAlert,
+  lucideUnderline,
+  lucideUser,
+  lucideUserPlus,
+  lucideUsers,
+  lucideX,
+  lucideZap,
+} from '@ng-icons/lucide';
 
-const DarkMode: LucideIconData = [
-  ['path', { d: 'M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0' }],
-  ['path', { d: 'M12 3l0 18' }],
-  ['path', { d: 'M12 9l4.65 -4.65' }],
-  ['path', { d: 'M12 14.3l7.37 -7.37' }],
-  ['path', { d: 'M12 19.6l8.85 -8.85' }],
-];
+const DarkMode = `
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0"/>
+  <path d="M12 3l0 18"/>
+  <path d="M12 9l4.65 -4.65"/>
+  <path d="M12 14.3l7.37 -7.37"/>
+  <path d="M12 19.6l8.85 -8.85"/>
+</svg>
+`;
 
 export const ZARD_ICONS = {
-  house: House,
-  settings: Settings,
-  user: User,
-  search: Search,
-  bell: Bell,
-  mail: Mail,
-  calendar: Calendar,
-  'log-out': LogOut,
-  'panel-left': PanelLeft,
-  bold: Bold,
-  inbox: Inbox,
-  italic: Italic,
-  underline: Underline,
-  'text-align-center': TextAlignCenter,
-  'text-align-end': TextAlignEnd,
-  'text-align-start': TextAlignStart,
-  check: Check,
-  x: X,
-  info: Info,
-  'triangle-alert': TriangleAlert,
-  circle: Circle,
-  'circle-alert': CircleAlert,
-  'circle-check': CircleCheck,
-  'circle-x': CircleX,
-  'circle-dollar-sign': CircleDollarSign,
-  'circle-small': CircleSmall,
-  ban: Ban,
-  'chevron-down': ChevronDown,
-  'chevron-up': ChevronUp,
-  'chevron-left': ChevronLeft,
-  'chevron-right': ChevronRight,
-  'chevrons-up-down': ChevronsUpDown,
-  'move-right': MoveRight,
-  'arrow-right': ArrowRight,
-  'arrow-up': ArrowUp,
-  'arrow-up-right': ArrowUpRight,
-  folder: Folder,
-  'folder-open': FolderOpen,
-  'folder-plus': FolderPlus,
-  file: File,
-  'file-text': FileText,
-  'layout-dashboard': LayoutDashboard,
-  'loader-circle': LoaderCircle,
-  save: Save,
-  copy: Copy,
-  eye: Eye,
-  ellipsis: Ellipsis,
-  terminal: Terminal,
-  clipboard: Clipboard,
-  moon: Moon,
-  sun: Sun,
-  lightbulb: Lightbulb,
-  'lightbulb-off': LightbulbOff,
-  palette: Palette,
-  sparkles: Sparkles,
-  heart: Heart,
-  star: Star,
-  zap: Zap,
-  popcorn: Popcorn,
-  shield: Shield,
-  puzzle: Puzzle,
-  layers: Layers,
-  'layers-2': Layers2,
-  'square-library': SquareLibrary,
-  code: Code,
-  'code-xml': CodeXml,
-  'book-open': BookOpen,
-  'book-open-text': BookOpenText,
-  users: Users,
-  monitor: Monitor,
-  smartphone: Smartphone,
-  tablet: Tablet,
-  'badge-check': BadgeCheck,
-  'folder-code': FolderCode,
-  plus: Plus,
-  minus: Minus,
-  'arrow-left': ArrowLeft,
-  archive: Archive,
-  clock: Clock,
-  'calendar-plus': CalendarPlus,
-  'list-filter-plus': ListFilterPlus,
-  trash: Trash2,
-  tag: Tag,
-  'sun-moon': SunMoon,
+  house: lucideHouse,
+  settings: lucideSettings,
+  user: lucideUser,
+  search: lucideSearch,
+  bell: lucideBell,
+  mail: lucideMail,
+  calendar: lucideCalendar,
+  'log-out': lucideLogOut,
+  'panel-left': lucidePanelLeft,
+  bold: lucideBold,
+  inbox: lucideInbox,
+  italic: lucideItalic,
+  underline: lucideUnderline,
+  'text-align-center': lucideTextAlignCenter,
+  'text-align-end': lucideTextAlignEnd,
+  'text-align-start': lucideTextAlignStart,
+  check: lucideCheck,
+  x: lucideX,
+  info: lucideInfo,
+  'triangle-alert': lucideTriangleAlert,
+  circle: lucideCircle,
+  'circle-alert': lucideCircleAlert,
+  'circle-check': lucideCircleCheck,
+  'circle-x': lucideCircleX,
+  'circle-dollar-sign': lucideCircleDollarSign,
+  'circle-small': lucideCircleSmall,
+  ban: lucideBan,
+  'chevron-down': lucideChevronDown,
+  'chevron-up': lucideChevronUp,
+  'chevron-left': lucideChevronLeft,
+  'chevron-right': lucideChevronRight,
+  'chevrons-up-down': lucideChevronsUpDown,
+  'move-right': lucideMoveRight,
+  'arrow-right': lucideArrowRight,
+  'arrow-up': lucideArrowUp,
+  'arrow-up-right': lucideArrowUpRight,
+  folder: lucideFolder,
+  'folder-open': lucideFolderOpen,
+  'folder-plus': lucideFolderPlus,
+  file: lucideFile,
+  'file-text': lucideFileText,
+  'layout-dashboard': lucideLayoutDashboard,
+  'loader-circle': lucideLoaderCircle,
+  save: lucideSave,
+  copy: lucideCopy,
+  eye: lucideEye,
+  ellipsis: lucideEllipsis,
+  terminal: lucideTerminal,
+  clipboard: lucideClipboard,
+  moon: lucideMoon,
+  sun: lucideSun,
+  lightbulb: lucideLightbulb,
+  'lightbulb-off': lucideLightbulbOff,
+  palette: lucidePalette,
+  sparkles: lucideSparkles,
+  heart: lucideHeart,
+  star: lucideStar,
+  zap: lucideZap,
+  popcorn: lucidePopcorn,
+  shield: lucideShield,
+  puzzle: lucidePuzzle,
+  layers: lucideLayers,
+  'layers-2': lucideLayers2,
+  'square-library': lucideSquareLibrary,
+  code: lucideCode,
+  'code-xml': lucideCodeXml,
+  'book-open': lucideBookOpen,
+  'book-open-text': lucideBookOpenText,
+  users: lucideUsers,
+  monitor: lucideMonitor,
+  smartphone: lucideSmartphone,
+  tablet: lucideTablet,
+  'badge-check': lucideBadgeCheck,
+  'folder-code': lucideFolderCode,
+  'gallery-horizontal': lucideGalleryHorizontal,
+  plus: lucidePlus,
+  minus: lucideMinus,
+  'arrow-left': lucideArrowLeft,
+  archive: lucideArchive,
+  clock: lucideClock,
+  'calendar-plus': lucideCalendarPlus,
+  'list-filter-plus': lucideListFilterPlus,
+  trash: lucideTrash2,
+  tag: lucideTag,
+  'sun-moon': lucideSunMoon,
   'dark-mode': DarkMode,
-  square: Square,
-  'dollar-sign': DollarSign,
-  'user-plus': UserPlus,
-  'credit-card': CreditCard,
-  activity: Activity,
-} as const satisfies Record<string, LucideIconData>;
+  square: lucideSquare,
+  'dollar-sign': lucideDollarSign,
+  'user-plus': lucideUserPlus,
+  'credit-card': lucideCreditCard,
+  activity: lucideActivity,
+  github: lucideGithub,
+  'external-link': lucideExternalLink,
+} as const;
 
-export declare type ZardIcon = keyof typeof ZARD_ICONS | LucideIconData;
+export declare type ZardIcon = keyof typeof ZARD_ICONS;
 
 ```
 

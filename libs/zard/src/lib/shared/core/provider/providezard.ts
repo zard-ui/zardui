@@ -1,6 +1,10 @@
 import { makeEnvironmentProviders, type EnvironmentProviders } from '@angular/core';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
+import { provideIcons } from '@ng-icons/core';
+
+import { ZARD_ICONS } from '@/shared/components/icon/icons';
+
 import { ZardDebounceEventManagerPlugin } from './event-manager-plugins/zard-debounce-event-manager-plugin';
 import { ZardEventManagerPlugin } from './event-manager-plugins/zard-event-manager-plugin';
 
@@ -18,5 +22,5 @@ export function provideZard(): EnvironmentProviders {
     },
   ];
 
-  return makeEnvironmentProviders([...eventManagerPlugins]);
+  return makeEnvironmentProviders([...eventManagerPlugins, provideIcons(ZARD_ICONS)]);
 }

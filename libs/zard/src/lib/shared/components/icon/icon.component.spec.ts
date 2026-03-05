@@ -33,23 +33,23 @@ describe('ZardIconComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should render icon with default size', () => {
-    const iconElement = fixture.nativeElement.querySelector('z-icon lucide-angular svg');
-    expect(iconElement).toBeTruthy();
-    expect(iconElement.classList.contains('size-3.5')).toBe(true);
+  it('renders icon with default size class on host element', () => {
+    const zIconElement = fixture.nativeElement.querySelector('z-icon');
+    expect(zIconElement).toBeTruthy();
+    expect(zIconElement.classList.contains('size-3.5')).toBe(true);
   });
 
-  it('should apply custom size classes', () => {
+  it('applies custom size class on host element when size changes', () => {
     component.size = 'lg';
     fixture.detectChanges();
 
-    const iconElement = fixture.nativeElement.querySelector('z-icon lucide-angular svg');
-    expect(iconElement.classList.contains('size-4')).toBe(true);
+    const zIconElement = fixture.nativeElement.querySelector('z-icon');
+    expect(zIconElement.classList.contains('size-4')).toBe(true);
   });
 
-  it('should render lucide-angular component', () => {
-    const lucideIcon = fixture.nativeElement.querySelector('lucide-angular');
-    expect(lucideIcon).toBeTruthy();
+  it('should render ng-icon component', () => {
+    const ngIcon = fixture.nativeElement.querySelector('ng-icon');
+    expect(ngIcon).toBeTruthy();
   });
 
   it('should change icon type', () => {

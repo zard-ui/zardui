@@ -1,7 +1,15 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DOCUMENT,
+  inject,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
+import { NgIcon } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
-import { LucideAngularModule } from 'lucide-angular';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -10,19 +18,19 @@ import { ZARD_ICONS, type ZardIcon } from './icons';
 
 @Component({
   selector: 'z-icon, [z-icon]',
-  imports: [LucideAngularModule],
+  imports: [NgIcon],
   template: `
-    <lucide-angular
-      [img]="icon()"
-      [strokeWidth]="zStrokeWidth()"
-      [absoluteStrokeWidth]="zAbsoluteStrokeWidth()"
-      [class]="classes()"
-    />
+    <ng-icon [svg]="icon()" [size]="size()" [strokeWidth]="zStrokeWidth()" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'classes()',
+  },
 })
 export class ZardIconComponent {
+  private readonly document = inject(DOCUMENT);
+
   readonly zType = input.required<ZardIcon>();
   readonly zSize = input<ZardIconSizeVariants>('default');
   readonly zStrokeWidth = input<number>(2);
@@ -33,12 +41,35 @@ export class ZardIconComponent {
     mergeClasses(iconVariants({ zSize: this.zSize() }), this.class(), this.zStrokeWidth() === 0 ? 'stroke-none' : ''),
   );
 
-  protected readonly icon = computed(() => {
-    const type = this.zType();
-    if (typeof type === 'string') {
-      return ZARD_ICONS[type];
+  protected readonly icon = computed(() => ZARD_ICONS[this.zType()]);
+
+  protected readonly size = computed(() => this.extractSizeFromClass());
+
+  private extractSizeFromClass() {
+    const classes = this.classes().split(' ');
+
+    for (const cls of classes) {
+      if (cls.startsWith('size-')) {
+        return this.tailwindSizeToPx(cls.split('-')[1]);
+      }
     }
 
-    return type;
-  });
+    return '14';
+  }
+
+  private tailwindSizeToPx(size: string | number): string {
+    const sizeNum = typeof size === 'number' ? size : parseFloat(size);
+    const unit = this.getBaseFontSize() / 4;
+    const px = sizeNum * unit;
+
+    return `${px}`;
+  }
+
+  private getBaseFontSize(): number {
+    if (!this.document.defaultView) {
+      return 16;
+    }
+    const rootSize = this.document.defaultView.getComputedStyle(this.document.documentElement).fontSize;
+    return parseFloat(rootSize) || 16;
+  }
 }

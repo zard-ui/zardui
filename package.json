@@ -35,7 +35,7 @@
     "node": ">=20.19.0"
   },
   "dependencies": {
-    "@angular/aria": "^21.2.0",
+    "@angular/aria": "21.2.0",
     "@angular/cdk": "21.2.0",
     "@angular/common": "21.2.0",
     "@angular/compiler": "21.2.0",
@@ -49,6 +49,8 @@
     "@antfu/ni": "^28.2.0",
     "@fontsource-variable/geist": "^5.2.8",
     "@fontsource-variable/geist-mono": "^5.2.7",
+    "@ng-icons/core": "^33.1.0",
+    "@ng-icons/lucide": "^33.1.0",
     "@shikijs/rehype": "^3.23.0",
     "@tailwindcss/postcss": "^4.2.1",
     "@vercel/analytics": "^1.6.1",
@@ -70,7 +72,6 @@
     "fast-glob": "^3.3.3",
     "fs-extra": "^11.3.3",
     "gsap": "^3.14.2",
-    "lucide-angular": "^0.575.0",
     "ngx-sonner": "^3.1.0",
     "ora": "^9.3.0",
     "postcss": "^8.5.6",
