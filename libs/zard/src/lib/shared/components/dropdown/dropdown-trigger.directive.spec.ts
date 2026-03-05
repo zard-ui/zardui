@@ -1,3 +1,4 @@
+import { OverlayModule } from '@angular/cdk/overlay';
 import { Component, viewChild, ElementRef, TemplateRef, ViewContainerRef } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
@@ -268,5 +269,102 @@ describe('ZardDropdownDirective', () => {
       fixture.detectChanges();
       expect(directiveInstance.zDisabled()).toBe(true);
     });
+  });
+});
+
+@Component({
+  imports: [ZardDropdownDirective, ZardDropdownMenuContentComponent],
+  template: `
+    <button
+      type="button"
+      z-dropdown
+      [zDropdownMenu]="menuContent1"
+      aria-label="First menu"
+      data-testid="dropdown-trigger-1"
+    >
+      Menu 1
+    </button>
+
+    <z-dropdown-menu-content #menuContent1>
+      <div>Menu Item 1</div>
+    </z-dropdown-menu-content>
+
+    <button
+      type="button"
+      z-dropdown
+      [zDropdownMenu]="menuContent2"
+      aria-label="Second menu"
+      data-testid="dropdown-trigger-2"
+    >
+      Menu 2
+    </button>
+
+    <z-dropdown-menu-content #menuContent2>
+      <div>Menu Item 2</div>
+    </z-dropdown-menu-content>
+  `,
+})
+class MultipleDropdownsTestComponent {
+  readonly menuContent1 = viewChild.required<ZardDropdownMenuContentComponent>('menuContent1');
+  readonly menuContent2 = viewChild.required<ZardDropdownMenuContentComponent>('menuContent2');
+}
+
+describe('ZardDropdownDirective - Multiple dropdowns', () => {
+  let fixture: ComponentFixture<MultipleDropdownsTestComponent>;
+  let dropdownService: ZardDropdownService;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [MultipleDropdownsTestComponent, OverlayModule],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+        ZardDropdownService,
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(MultipleDropdownsTestComponent);
+    dropdownService = TestBed.inject(ZardDropdownService);
+    fixture.detectChanges();
+  });
+
+  it('only sets aria-expanded true on the trigger that opened the dropdown', () => {
+    const trigger1 = fixture.nativeElement.querySelector('[data-testid="dropdown-trigger-1"]');
+    const trigger2 = fixture.nativeElement.querySelector('[data-testid="dropdown-trigger-2"]');
+
+    expect(trigger1).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger2).toHaveAttribute('aria-expanded', 'false');
+
+    trigger1.click();
+    fixture.detectChanges();
+
+    expect(trigger1).toHaveAttribute('aria-expanded', 'true');
+    expect(trigger2).toHaveAttribute('aria-expanded', 'false');
+
+    trigger2.click();
+    fixture.detectChanges();
+
+    expect(trigger1).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger2).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  it('resets aria-expanded on all triggers when dropdown closes', () => {
+    const trigger1 = fixture.nativeElement.querySelector('[data-testid="dropdown-trigger-1"]');
+    const trigger2 = fixture.nativeElement.querySelector('[data-testid="dropdown-trigger-2"]');
+
+    trigger1.click();
+    fixture.detectChanges();
+
+    expect(trigger1).toHaveAttribute('aria-expanded', 'true');
+    expect(trigger2).toHaveAttribute('aria-expanded', 'false');
+
+    dropdownService.close();
+    fixture.detectChanges();
+
+    expect(trigger1).toHaveAttribute('aria-expanded', 'false');
+    expect(trigger2).toHaveAttribute('aria-expanded', 'false');
   });
 });

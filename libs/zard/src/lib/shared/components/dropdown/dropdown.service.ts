@@ -79,6 +79,10 @@ export class ZardDropdownService {
     this.isOpen.set(true);
   }
 
+  getTriggerElement(): ElementRef | undefined {
+    return this.triggerElement;
+  }
+
   close() {
     if (this.overlayRef?.hasAttached()) {
       this.overlayRef.detach();
@@ -87,6 +91,13 @@ export class ZardDropdownService {
     this.unlisten();
     this.destroyOverlay();
     this.isOpen.set(false);
+    this.triggerElement = undefined;
+  }
+
+  closeAndReturnTrigger(): ElementRef | undefined {
+    const trigger = this.triggerElement;
+    this.close();
+    return trigger;
   }
 
   private createOverlay(triggerElement: ElementRef) {
@@ -156,10 +167,11 @@ export class ZardDropdownService {
           case ' ':
             this.selectFocusedItem(items);
             break;
-          case 'Escape':
-            this.close();
-            this.triggerElement?.nativeElement.focus();
+          case 'Escape': {
+            const triggerToFocus = this.closeAndReturnTrigger();
+            triggerToFocus?.nativeElement.focus();
             break;
+          }
           case 'Home':
             this.focusItemAtIndex(items, 0);
             break;
