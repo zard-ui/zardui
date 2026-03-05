@@ -29,7 +29,7 @@ import { ZARD_ICONS } from '../icons';
             class="text-muted-foreground pointer-events-none absolute top-1/2 right-3 -translate-y-1/2"
           />
         </div>
-        <div class="text-muted-foreground text-xs leading-relaxed">
+        <div class="text-muted-foreground text-xs/relaxed">
           <strong>Note:</strong>
           These are only the icons currently used in our documentation.
           <br />
@@ -59,7 +59,7 @@ import { ZARD_ICONS } from '../icons';
           >
             <z-icon [zType]="iconName" class="shrink-0 transition-transform group-hover:scale-110" />
             <span
-              class="group-hover:text-foreground w-full text-center text-xs leading-relaxed wrap-break-word hyphens-auto transition-colors"
+              class="group-hover:text-foreground w-full text-center text-xs/relaxed wrap-break-word hyphens-auto transition-colors"
             >
               {{ iconName }}
             </span>

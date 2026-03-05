@@ -114,7 +114,9 @@ export default [
   },
   {
     files: ['**/*.html'],
-    // Override or add rules here
+    languageOptions: {
+      parser: (await import('@angular-eslint/template-parser')).default,
+    },
     rules: {
       '@stylistic/spaced-comment': 'off',
       'prettier/prettier': ['error', { parser: 'angular' }],

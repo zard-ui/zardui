@@ -241,8 +241,7 @@ describe('ZardSwitchComponent', () => {
       const switchButton = screen.getByRole('switch');
       const thumb = switchButton.querySelector('span');
       expect(thumb).toHaveAttribute('data-size', 'lg');
-      expect(thumb).toHaveClass('data-[size=lg]:h-6');
-      expect(thumb).toHaveClass('data-[size=lg]:w-6');
+      expect(thumb).toHaveClass('data-[size=lg]:size-6');
     });
   });
 
@@ -535,8 +534,7 @@ describe('ZardSwitchComponent', () => {
       expect(thumb).toHaveClass('bg-background');
       expect(thumb).toHaveClass('pointer-events-none');
       expect(thumb).toHaveClass('block');
-      expect(thumb).toHaveClass('h-5');
-      expect(thumb).toHaveClass('w-5');
+      expect(thumb).toHaveClass('size-5');
       expect(thumb).toHaveClass('rounded-full');
       expect(thumb).toHaveClass('shadow-lg');
       expect(thumb).toHaveClass('ring-0');

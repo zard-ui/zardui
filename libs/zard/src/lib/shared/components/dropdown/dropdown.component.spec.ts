@@ -108,19 +108,19 @@ describe('ZardDropdownMenuComponent', () => {
     });
 
     it('renders trigger container', () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       expect(trigger).toBeTruthy();
     });
 
     it('renders dropdown trigger content', () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       expect(trigger.textContent).toContain('Trigger');
     });
   });
 
   describe('Toggle functionality', () => {
     it('opens dropdown on trigger click', () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
 
       trigger.click();
       fixture.detectChanges();
@@ -130,7 +130,7 @@ describe('ZardDropdownMenuComponent', () => {
     });
 
     it('closes dropdown when clicking trigger again', () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
 
       trigger.click();
       fixture.detectChanges();
@@ -160,7 +160,7 @@ describe('ZardDropdownMenuComponent', () => {
       component.disabled = true;
       fixture.detectChanges();
 
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       trigger.click();
       fixture.detectChanges();
 
@@ -171,7 +171,7 @@ describe('ZardDropdownMenuComponent', () => {
       component.disabled = true;
       fixture.detectChanges();
 
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
       fixture.detectChanges();
 
@@ -183,7 +183,7 @@ describe('ZardDropdownMenuComponent', () => {
       fixture.detectChanges();
 
       const toggleSpy = jest.spyOn(dropdownEl.componentInstance, 'toggle');
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       trigger.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true }));
       fixture.detectChanges();
 
@@ -195,7 +195,7 @@ describe('ZardDropdownMenuComponent', () => {
       fixture.detectChanges();
 
       const toggleSpy = jest.spyOn(dropdownEl.componentInstance, 'toggle');
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       trigger.dispatchEvent(new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true }));
       fixture.detectChanges();
 
@@ -205,7 +205,7 @@ describe('ZardDropdownMenuComponent', () => {
 
   describe('Document click to close', () => {
     it('closes dropdown when clicking outside', () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
 
       trigger.click();
       fixture.detectChanges();
@@ -227,7 +227,7 @@ describe('ZardDropdownMenuComponent', () => {
       const dropdownMenu = dropdownEl.componentInstance;
       expect(dropdownMenu.class()).toBe('custom-dropdown');
 
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       trigger.click();
       await fixture.whenStable();
       fixture.detectChanges();
@@ -240,7 +240,7 @@ describe('ZardDropdownMenuComponent', () => {
 
   describe('Keyboard navigation within dropdown', () => {
     it('has role="menu" on dropdown content', async () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
 
       trigger.click();
       await fixture.whenStable();
@@ -252,7 +252,7 @@ describe('ZardDropdownMenuComponent', () => {
     });
 
     it('moves focus to next item with ArrowDown', async () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       trigger.click();
       await new Promise(resolve => setTimeout(resolve, 10));
       fixture.detectChanges();
@@ -268,7 +268,7 @@ describe('ZardDropdownMenuComponent', () => {
     });
 
     it('moves focus to previous item with ArrowUp', async () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       trigger.click();
       await new Promise(resolve => setTimeout(resolve, 10));
       fixture.detectChanges();
@@ -285,7 +285,7 @@ describe('ZardDropdownMenuComponent', () => {
     });
 
     it('closes dropdown with Escape key', async () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       trigger.click();
       await fixture.whenStable();
       fixture.detectChanges();
@@ -302,7 +302,7 @@ describe('ZardDropdownMenuComponent', () => {
     });
 
     it('focuses first item with Home key', async () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       trigger.click();
       await new Promise(resolve => setTimeout(resolve, 10));
       fixture.detectChanges();
@@ -320,7 +320,7 @@ describe('ZardDropdownMenuComponent', () => {
     });
 
     it('focuses last item with End key', async () => {
-      const trigger = fixture.nativeElement.querySelector('.trigger-container');
+      const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
       trigger.click();
       await new Promise(resolve => setTimeout(resolve, 10));
       fixture.detectChanges();
@@ -364,7 +364,7 @@ describe('ZardDropdownMenuComponent with openChange output', () => {
   });
 
   it('emits true when dropdown opens', () => {
-    const trigger = fixture.nativeElement.querySelector('.trigger-container');
+    const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
 
     trigger.click();
     fixture.detectChanges();
@@ -374,7 +374,7 @@ describe('ZardDropdownMenuComponent with openChange output', () => {
   });
 
   it('emits false when dropdown closes', () => {
-    const trigger = fixture.nativeElement.querySelector('.trigger-container');
+    const trigger = fixture.nativeElement.querySelector('[zardId="dropdown-trigger"]');
 
     trigger.click();
     fixture.detectChanges();

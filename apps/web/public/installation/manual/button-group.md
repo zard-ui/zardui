@@ -113,7 +113,7 @@ export class ZardButtonGroupTextDirective {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const buttonGroupVariants = cva(
-  'flex w-fit items-stretch [&>*]:focus-visible:z-10 [&>*]:focus-visible:relative has-[>z-button-group]:gap-2',
+  'flex w-fit items-stretch *:focus-visible:z-10 *:focus-visible:relative has-[>z-button-group]:gap-2',
   {
     variants: {
       zOrientation: {
