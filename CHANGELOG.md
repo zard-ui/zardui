@@ -1,3 +1,13 @@
+## 1.0.0-beta.62 (2026-03-05)
+
+### 🐛 Bug Fixes
+
+- **dropdown:** set aria-expanded only on active trigger ([#476](https://github.com/zard-ui/zardui/pull/476))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
 ## 1.0.0-beta.61 (2026-02-26)
 
 ### ✨ Features
