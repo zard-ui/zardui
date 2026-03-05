@@ -1,0 +1,158 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Version Support"
+    description="Our commitment to keeping Zard UI compatible with the latest Angular versions."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      Zard UI is built with modern Angular features like signal inputs, standalone components, and the new control flow
+      syntax. We continuously update the library to leverage the latest capabilities while maintaining backward
+      compatibility with recent Angular versions.
+    </p>
+  </div>
+
+  <!-- Support Policy -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="support-policy" id="support-policy">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Support Policy
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Zard UI supports the
+        <strong class="text-foreground font-semibold">two latest major Angular versions</strong>
+        . When a new major Angular version is released, we update Zard UI to support it and drop the oldest version from
+        our support matrix.
+      </p>
+    </div>
+    <z-card class="border-border/50 bg-muted/30 p-6">
+      <div class="flex flex-col gap-3">
+        <div class="flex items-center gap-2">
+          <z-icon zType="info" class="text-muted-foreground" zSize="sm" />
+          <span class="text-sm font-medium">Why two versions?</span>
+        </div>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          Supporting the two latest major versions gives teams enough time to plan and execute their Angular upgrades
+          without losing access to Zard UI updates and new components. This approach balances stability with our ability
+          to adopt new Angular features quickly.
+        </p>
+      </div>
+    </z-card>
+  </section>
+
+  <!-- Current Status -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="current-status" id="current-status">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Current Support Status
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The following table shows the current support status for each Angular version.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      @for (entry of versions; track entry.version) {
+        <div
+          class="flex flex-col gap-3 rounded-lg border p-5 sm:flex-row sm:items-center sm:gap-6"
+          [class]="
+            entry.status === 'active'
+              ? 'border-green-500/20 bg-green-500/5 dark:border-green-400/15 dark:bg-green-400/5'
+              : 'opacity-60'
+          "
+        >
+          <div class="flex items-center gap-4 sm:min-w-[180px]">
+            <z-icon zType="code-xml" class="text-foreground" zSize="lg" />
+            <span class="text-lg font-semibold tracking-tight">{{ entry.version }}</span>
+          </div>
+          <div class="flex flex-1 items-center gap-3">
+            @if (entry.status === 'active') {
+              <z-badge class="border-0 bg-green-500/15 text-green-700 dark:bg-green-400/15 dark:text-green-400">
+                ✅ {{ entry.label }}
+              </z-badge>
+            } @else {
+              <z-badge variant="secondary" class="opacity-75">❌ {{ entry.label }}</z-badge>
+            }
+            <span class="text-muted-foreground text-sm">{{ entry.description }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Upgrade Process -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="upgrade-process" id="upgrade-process">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Upgrade Process
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        When a new Angular major version is released, here's what happens with Zard UI support.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      @for (item of upgradeSteps; track item.step) {
+        <div class="flex gap-4">
+          <div
+            class="bg-primary text-primary-foreground flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
+          >
+            {{ item.step }}
+          </div>
+          <div class="flex flex-col gap-1 pt-0.5">
+            <span class="text-sm font-semibold">{{ item.title }}</span>
+            <span class="text-muted-foreground text-sm leading-relaxed">{{ item.description }}</span>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Questions & Support -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="questions" id="questions">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Questions & Support
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        If you have questions about version compatibility or need help upgrading, reach out through these channels.
+      </p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+      <a
+        href="https://github.com/zard-ui/zardui/issues"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:bg-muted/50 flex flex-col gap-2 rounded-lg border p-5 transition-colors"
+      >
+        <div class="flex items-center gap-2">
+          <z-icon zType="code" zSize="sm" />
+          <span class="text-sm font-semibold">GitHub Issues</span>
+        </div>
+        <span class="text-muted-foreground text-sm">
+          Report bugs, request features, or ask questions about version support.
+        </span>
+      </a>
+      <a
+        href="https://discord.com/invite/yP8Uj9rAX9"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:bg-muted/50 flex flex-col gap-2 rounded-lg border p-5 transition-colors"
+      >
+        <div class="flex items-center gap-2">
+          <z-icon zType="users" zSize="sm" />
+          <span class="text-sm font-semibold">Discord</span>
+        </div>
+        <span class="text-muted-foreground text-sm">Join our community for real-time discussions and support.</span>
+      </a>
+    </div>
+  </section>
+</z-content>

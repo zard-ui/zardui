@@ -55,6 +55,7 @@ export const DOCS_PATH = {
     { name: 'Figma', path: '/docs/figma', available: true },
     { name: 'llms.txt', path: '/llms', available: true },
 
+    { name: 'Version Support', path: '/docs/version-support', available: true },
     { name: 'About & Credits', path: '/docs/about', available: true },
   ],
 };
