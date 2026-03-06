@@ -8,9 +8,9 @@ import {
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCircleAlert } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
+import { zardCircleAlertIcon } from '@/shared/components/icon/icons';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -29,7 +29,7 @@ import {
     @if (shouldShowIcon()) {
       <span [class]="iconClasses()" data-slot="alert-icon">
         <ng-container *zStringTemplateOutlet="zIcon()">
-          <ng-icon name="lucideCircleAlert" />
+          <ng-icon name="circle-alert" />
         </ng-container>
       </span>
     }
@@ -50,7 +50,7 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ lucideCircleAlert })],
+  viewProviders: [provideIcons({ circleAlert: zardCircleAlertIcon })],
   host: {
     role: 'alert',
     '[class]': 'classes()',

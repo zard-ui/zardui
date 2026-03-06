@@ -3,7 +3,8 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideInfo } from '@ng-icons/lucide';
+
+import { zardInfoIcon } from '@/shared/components/icon/icons';
 
 import { ZardAlertComponent } from './alert.component';
 
@@ -11,10 +12,10 @@ import { ZardAlertComponent } from './alert.component';
   selector: 'test-host-component',
   imports: [ZardAlertComponent, NgIcon],
   template: `
-    <ng-template #iconTemplate><ng-icon name="lucideInfo" /></ng-template>
+    <ng-template #iconTemplate><ng-icon name="info" /></ng-template>
     <z-alert zTitle="Test Title" zDescription="Test Description" [zIcon]="iconTemplate" class="w-1/2" />
   `,
-  viewProviders: [provideIcons({ lucideInfo })],
+  viewProviders: [provideIcons({ info: zardInfoIcon })],
 })
 class TestHostComponent {}
 
