@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { provideIcons } from '@ng-icons/core';
+import { lucideCircleAlert } from '@ng-icons/lucide';
+
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 
 @Component({
   selector: 'cli-update-section',
-  standalone: true,
   imports: [ZardAlertComponent, RouterLink],
   template: `
     <section class="flex flex-col gap-6">
@@ -15,7 +17,6 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
       </div>
 
       <z-alert
-        zIcon="circle-alert"
         zTitle="Coming Soon"
         zDescription="The ZardUI team is actively working on an intelligent update system that will automatically update your components without compromising the custom rules and modifications you've implemented. This is an extremely complex solution that requires careful design to ensure your customizations remain intact. We appreciate your patience as we develop this feature to provide the best possible experience."
         zType="default"
@@ -28,7 +29,9 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
             <span class="text-primary mt-0.5">🔄</span>
             <div>
               <span class="font-medium">Smart detection of component changes</span>
-              <p class="text-muted-foreground text-sm">Automatically identify which components have updates available</p>
+              <p class="text-muted-foreground text-sm">
+                Automatically identify which components have updates available
+              </p>
             </div>
           </li>
           <li class="flex items-start gap-3">
@@ -65,17 +68,26 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
       <div class="bg-muted/50 rounded-lg border p-6">
         <h3 class="mb-3 text-lg font-semibold">What to Expect</h3>
         <p class="text-muted-foreground mb-4 text-sm leading-relaxed">
-          When the update command becomes available, it will intelligently analyze your components, detect differences from the latest versions, and offer safe update options that
-          respect your modifications. The system will provide clear visual diffs and allow you to review changes before applying them.
+          When the update command becomes available, it will intelligently analyze your components, detect differences
+          from the latest versions, and offer safe update options that respect your modifications. The system will
+          provide clear visual diffs and allow you to review changes before applying them.
         </p>
         <div class="flex flex-wrap items-center gap-3">
           <span class="text-sm font-medium">Stay updated:</span>
           <a routerLink="/docs/changelog" class="text-primary text-sm hover:underline">Changelog</a>
           <span class="text-muted-foreground">•</span>
-          <a href="https://github.com/zard-ui/zardui" target="_blank" rel="noopener noreferrer" class="text-primary text-sm hover:underline"> GitHub Repository </a>
+          <a
+            href="https://github.com/zard-ui/zardui"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="text-primary text-sm hover:underline"
+          >
+            GitHub Repository
+          </a>
         </div>
       </div>
     </section>
   `,
+  viewProviders: [provideIcons({ lucideCircleAlert })],
 })
 export class CliUpdateSection {}

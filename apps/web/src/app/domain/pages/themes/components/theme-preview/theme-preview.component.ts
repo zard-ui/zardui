@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTerminal } from '@ng-icons/lucide';
+
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
@@ -21,9 +24,9 @@ import { ThemeGeneratorService } from '../../services/theme-generator.service';
 
 @Component({
   selector: 'app-theme-preview',
-  standalone: true,
   imports: [
     FormsModule,
+    NgIcon,
     ZardAlertComponent,
     ZardAvatarComponent,
     ZardBadgeComponent,
@@ -45,6 +48,7 @@ import { ThemeGeneratorService } from '../../services/theme-generator.service';
   encapsulation: ViewEncapsulation.None,
   host: { class: 'block h-full' },
   templateUrl: './theme-preview.component.html',
+  viewProviders: [provideIcons({ lucideTerminal })],
 })
 export class ThemePreviewComponent {
   private readonly themeService = inject(ThemeGeneratorService);
