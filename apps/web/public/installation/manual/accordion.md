@@ -149,7 +149,7 @@ import {
   accordionItemVariants,
   accordionTriggerVariants,
 } from '@/shared/components/accordion/accordion.variants';
-import { zardChevronDownIcon } from '@/shared/components/icon/icons';
+import { zardChevronDownIcon } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({

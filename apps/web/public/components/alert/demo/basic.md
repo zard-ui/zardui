@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardCircleCheckIcon, zardPopcornIcon } from '@/shared/components/icon/icons';
+import { zardCircleCheckIcon, zardPopcornIcon } from '@/shared/core/icons-registry';
 
 import { ZardAlertComponent } from '../alert.component';
 

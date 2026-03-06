@@ -32,7 +32,7 @@ import type { ZardSheetRef } from './sheet-ref';
 import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
+import type { ZardIcon } from '../../core/icons-registry';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardSheetOptions<T, U> {

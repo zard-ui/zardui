@@ -35,6 +35,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'icons-registry.ts',
+        content: '',
+      },
+      {
         name: 'index.ts',
         content: '',
       },

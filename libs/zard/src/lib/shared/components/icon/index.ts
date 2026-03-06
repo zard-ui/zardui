@@ -1,3 +1,3 @@
 export * from './icon.component';
-export * from './icons';
+export * from '../../core/icons-registry';
 export * from './icon.variants';

@@ -33,7 +33,7 @@ import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
+import type { ZardIcon } from '../../core/icons-registry';
 
 // Used by the NgModule provider definition
 

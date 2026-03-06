@@ -14,7 +14,7 @@ import type { ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { iconVariants, type ZardIconSizeVariants } from './icon.variants';
-import { ZARD_ICONS, type ZardIcon } from './icons';
+import { ZARD_ICONS, type ZardIcon } from '../../core/icons-registry';
 
 @Component({
   selector: 'z-icon, [z-icon]',

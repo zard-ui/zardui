@@ -1,9 +1,9 @@
 import { Component, input, signal } from '@angular/core';
 
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardIcon } from '@zard/components/icon/icons';
 import { ZardSegmentedComponent } from '@zard/components/segmented/segmented.component';
 import { ZardToggleGroupComponent } from '@zard/components/toggle-group/toggle-group.component';
+import { ZardIcon } from '@zard/core/icons-registry';
 
 import { BlockCodeViewerComponent } from '../block-code-viewer/block-code-viewer.component';
 import { BlockPreviewComponent } from '../block-preview/block-preview.component';

@@ -7,7 +7,7 @@ import { ZardButtonComponent } from '../../button/button.component';
 import { ZardEmptyComponent } from '../../empty/empty.component';
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardIconComponent } from '../icon.component';
-import { ZARD_ICONS } from '../icons';
+import { ZARD_ICONS } from '../../../core/icons-registry';
 
 @Component({
   selector: 'z-demo-icon-searchable',

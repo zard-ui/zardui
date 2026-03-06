@@ -2,11 +2,11 @@ import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/c
 
 import { toast } from 'ngx-sonner';
 
+import { ZARD_ICONS } from '../../../core/icons-registry';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardEmptyComponent } from '../../empty/empty.component';
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardIconComponent } from '../icon.component';
-import { ZARD_ICONS } from '../icons';
 
 @Component({
   selector: 'z-demo-icon-searchable',

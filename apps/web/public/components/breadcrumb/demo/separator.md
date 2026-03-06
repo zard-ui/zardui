@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardArrowRightIcon } from '../../icon/icons';
+import { zardArrowRightIcon } from '../../../core/icons-registry';
 import { ZardBreadcrumbImports } from '../breadcrumb.imports';
 
 @Component({

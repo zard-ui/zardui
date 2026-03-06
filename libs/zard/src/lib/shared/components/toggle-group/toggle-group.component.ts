@@ -15,8 +15,8 @@ import type { ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
+import type { ZardIcon } from '../../core/icons-registry';
 import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 export interface ZardToggleGroupItem {
   value: string;
