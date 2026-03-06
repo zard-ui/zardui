@@ -1,13 +1,14 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardIconComponent } from '../../icon/icon.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
+import { zardArrowRightIcon } from '../../icon/icons';
 import { ZardBreadcrumbImports } from '../breadcrumb.imports';
 
 @Component({
   selector: 'z-demo-breadcrumb-separator',
-  imports: [ZardBreadcrumbImports, ZardIconComponent],
-  standalone: true,
+  imports: [ZardBreadcrumbImports, NgIcon],
   template: `
     <z-breadcrumb [zSeparator]="customSeparator">
       <z-breadcrumb-item>Home</z-breadcrumb-item>
@@ -16,9 +17,10 @@ import { ZardBreadcrumbImports } from '../breadcrumb.imports';
     </z-breadcrumb>
 
     <ng-template #customSeparator>
-      <z-icon zType="arrow-right" />
+      <ng-icon name="arrow-right" />
     </ng-template>
   `,
+  viewProviders: [provideIcons({ arrowRight: zardArrowRightIcon })],
 })
 export class ZardDemoBreadcrumbSeparatorComponent {}
 
