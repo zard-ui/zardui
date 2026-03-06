@@ -214,7 +214,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'accordion',
-    registryDependencies: ['icon'],
     files: [
       {
         name: 'accordion.component.ts',
@@ -240,7 +239,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'alert',
-    registryDependencies: ['icon'],
     files: [
       {
         name: 'alert.component.ts',
