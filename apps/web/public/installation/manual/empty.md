@@ -25,8 +25,8 @@ import {
   emptyTitleVariants,
   emptyVariants,
 } from './empty.variants';
-import { ZardIconComponent } from '../icon/icon.component';
 import { type ZardIcon } from '../../core/icons-registry';
+import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-empty',

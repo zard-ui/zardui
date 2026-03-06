@@ -31,9 +31,9 @@ import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 import type { ZardDialogRef } from './dialog-ref';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
+import type { ZardIcon } from '../../core/icons-registry';
 import { ZardButtonComponent } from '../button/button.component';
 import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../../core/icons-registry';
 
 // Used by the NgModule provider definition
 

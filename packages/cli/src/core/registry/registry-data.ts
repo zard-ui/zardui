@@ -117,7 +117,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'button',
-    registryDependencies: ['icon'],
     files: [
       {
         name: 'button.component.ts',
