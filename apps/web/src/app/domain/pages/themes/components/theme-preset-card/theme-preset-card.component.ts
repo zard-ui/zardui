@@ -32,7 +32,7 @@ import { oklchToHex } from '../../utils/oklch-converter';
     </div>
     <span class="text-foreground flex-1 truncate text-xs font-medium">{{ preset().name }}</span>
     @if (isActive()) {
-      <ng-icon name="check" class="text-primary size-3.5 shrink-0" />
+      <ng-icon name="check" class="text-primary size-3.5! shrink-0" />
     }
   `,
   viewProviders: [provideIcons({ check: zardCheckIcon })],

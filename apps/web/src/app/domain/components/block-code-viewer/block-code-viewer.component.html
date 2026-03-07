@@ -16,7 +16,7 @@
           @if (node.leaf) {
             <img [src]="getFileIcon(node.label)" alt="" class="h-4 w-4 shrink-0 dark:invert" />
           } @else {
-            <ng-icon name="folder" class="size-4 shrink-0" />
+            <ng-icon name="folder" class="size-4! shrink-0" />
           }
           <span class="whitespace-nowrap">{{ node.label }}</span>
         </ng-template>

@@ -32,7 +32,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
   imports: [NgIcon],
   template: `
-    <ng-icon name="ellipsis" class="size-4" />
+    <ng-icon name="ellipsis" class="size-4!" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

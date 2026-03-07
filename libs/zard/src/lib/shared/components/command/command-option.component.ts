@@ -49,7 +49,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
-          <ng-icon [name]="zIcon()!" class="mr-2 flex size-4 shrink-0 items-center justify-center" />
+          <ng-icon [name]="zIcon()!" class="mr-2 flex size-4! shrink-0 items-center justify-center" />
         }
         <span class="flex-1">{{ zLabel() }}</span>
         @if (zShortcut()) {

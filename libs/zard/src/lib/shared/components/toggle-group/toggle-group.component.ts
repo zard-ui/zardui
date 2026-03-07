@@ -45,7 +45,7 @@ type OnChangeType = (value: string | string[]) => void;
           (click)="toggleItem(item)"
         >
           @if (item.icon) {
-            <ng-icon [name]="item.icon" class="size-4 shrink-0" />
+            <ng-icon [name]="item.icon" class="size-4! shrink-0" />
           }
           @if (item.label) {
             <span>{{ item.label }}</span>
