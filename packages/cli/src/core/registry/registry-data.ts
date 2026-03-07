@@ -655,7 +655,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'calendar',
-    registryDependencies: ['icon', 'select'],
+    registryDependencies: ['select'],
     files: [
       {
         name: 'calendar.component.ts',

@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardInfoIcon } from '@/shared/components/icon/icons';
+import { zardInfoIcon } from '@/shared/core';
 
 import { ZardAlertComponent } from './alert.component';
 

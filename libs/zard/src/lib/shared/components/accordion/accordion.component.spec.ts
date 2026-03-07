@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { render } from '@testing-library/angular';
 
-import { zardChevronDownIcon } from '@/shared/components/icon/icons';
+import { zardChevronDownIcon } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardAccordionItemComponent } from './accordion-item.component';
