@@ -1,14 +1,20 @@
 import { Component } from '@angular/core';
 
-import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-group.component';
+import { provideIcons } from '@ng-icons/core';
+
+import {
+  ZardToggleGroupComponent,
+  type ZardToggleGroupItem,
+} from '@/shared/components/toggle-group/toggle-group.component';
+import { zardBoldIcon, zardItalicIcon, zardUnderlineIcon } from '@/shared/core';
 
 @Component({
   selector: 'demo-toggle-group-outline',
   imports: [ZardToggleGroupComponent],
-  standalone: true,
   template: `
     <z-toggle-group zMode="multiple" zType="outline" [items]="items" (valueChange)="onToggleChange($event)" />
   `,
+  viewProviders: [provideIcons({ bold: zardBoldIcon, italic: zardItalicIcon, underline: zardUnderlineIcon })],
 })
 export default class ToggleGroupOutlineComponent {
   items: ZardToggleGroupItem[] = [

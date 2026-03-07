@@ -1,15 +1,27 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-group.component';
+import { provideIcons } from '@ng-icons/core';
+
+import {
+  ZardToggleGroupComponent,
+  type ZardToggleGroupItem,
+} from '@/shared/components/toggle-group/toggle-group.component';
+import { zardTextAlignStartIcon, zardTextAlignCenterIcon, zardTextAlignEndIcon } from '@/shared/core';
 
 @Component({
   selector: 'demo-toggle-group-single',
   imports: [ZardToggleGroupComponent],
-  standalone: true,
   template: `
     <z-toggle-group zMode="single" [items]="items" defaultValue="center" (valueChange)="onToggleChange($event)" />
   `,
+  viewProviders: [
+    provideIcons({
+      textAlignStart: zardTextAlignStartIcon,
+      textAlignCenter: zardTextAlignCenterIcon,
+      textAlignEnd: zardTextAlignEndIcon,
+    }),
+  ],
 })
 export default class ToggleGroupSingleComponent {
   items: ZardToggleGroupItem[] = [

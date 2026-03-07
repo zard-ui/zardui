@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
 
-import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-group.component';
+import { provideIcons } from '@ng-icons/core';
+
+import {
+  ZardToggleGroupComponent,
+  type ZardToggleGroupItem,
+} from '@/shared/components/toggle-group/toggle-group.component';
+import { zardBoldIcon, zardItalicIcon, zardUnderlineIcon } from '@/shared/core';
 
 @Component({
   selector: 'demo-toggle-group-sizes',
   imports: [ZardToggleGroupComponent],
-  standalone: true,
   template: `
     <div class="space-y-4">
       <div>
@@ -24,6 +29,7 @@ import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-gr
       </div>
     </div>
   `,
+  viewProviders: [provideIcons({ bold: zardBoldIcon, italic: zardItalicIcon, underline: zardUnderlineIcon })],
 })
 export default class ToggleGroupSizesComponent {
   items: ZardToggleGroupItem[] = [

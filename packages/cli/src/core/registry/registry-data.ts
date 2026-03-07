@@ -933,7 +933,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'toggle-group',
-    registryDependencies: ['toggle', 'icon'],
+    registryDependencies: ['toggle'],
     files: [
       {
         name: 'toggle-group.component.ts',
