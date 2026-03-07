@@ -753,7 +753,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'date-picker',
-    registryDependencies: ['button', 'calendar', 'popover', 'input', 'icon'],
+    registryDependencies: ['button', 'calendar', 'popover', 'input'],
     files: [
       {
         name: 'date-picker.component.ts',
