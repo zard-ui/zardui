@@ -1,14 +1,16 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
+import { zardChevronRightIcon } from '@/shared/core/icons-registry';
+
 import { ZardDividerComponent } from '@/shared/components/divider';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 
 @Component({
   selector: 'z-demo-context-menu',
-  imports: [ZardMenuImports, ZardDividerComponent, ZardIconComponent],
-  standalone: true,
+  imports: [ZardMenuImports, ZardDividerComponent, NgIcon],
   template: `
     <div
       z-context-menu
@@ -41,7 +43,7 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
           class="justify-between"
         >
           <div class="flex items-center">More Tools</div>
-          <z-icon zType="chevron-right" />
+          <ng-icon name="chevron-right" />
         </button>
         <z-divider zSpacing="sm" />
         <z-menu-label>People</z-menu-label>
@@ -63,6 +65,7 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ chevronRight: zardChevronRightIcon })],
 })
 export class ZardDemoContextMenu {
   log(item: string) {

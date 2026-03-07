@@ -1,10 +1,19 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
+import {
+  zardArrowUpIcon,
+  zardCheckIcon,
+  zardInfoIcon,
+  zardPlusIcon,
+  zardSearchIcon,
+} from '@/shared/core/icons-registry';
+
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardDropdownImports } from '@/shared/components/dropdown';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardInputDirective } from '@/shared/components/input/input.directive';
 import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';
 import { ZardTooltipDirective } from '@/shared/components/tooltip';
@@ -14,7 +23,7 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip';
   imports: [
     ZardButtonComponent,
     ZardDropdownImports,
-    ZardIconComponent,
+    NgIcon,
     ZardInputDirective,
     ZardInputGroupComponent,
     ZardDividerComponent,
@@ -39,21 +48,21 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip';
       </z-input-group>
     </div>
 
-    <ng-template #search><z-icon zType="search" /></ng-template>
+    <ng-template #search><ng-icon name="search" /></ng-template>
 
     <ng-template #check>
       <div class="bg-primary rounded-full p-0.5">
-        <z-icon zType="check" class="stroke-primary-foreground" zSize="sm" />
+        <ng-icon name="check" class="stroke-primary-foreground" />
       </div>
     </ng-template>
 
-    <ng-template #info><z-icon zType="info" zTooltip="Element with tooltip" /></ng-template>
+    <ng-template #info><ng-icon name="info" zTooltip="Element with tooltip" /></ng-template>
 
     <ng-template #areaAfter>
       <div class="flex w-full items-center justify-between">
         <div class="flex items-center gap-1">
           <button type="button" z-button zType="outline" zShape="circle" class="data-icon-only:size-6!">
-            <z-icon zType="plus" />
+            <ng-icon name="plus" />
           </button>
           <button type="button" z-button zType="ghost" class="h-6" z-dropdown [zDropdownMenu]="menu">Auto</button>
           <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-10">
@@ -66,12 +75,21 @@ import { ZardTooltipDirective } from '@/shared/components/tooltip';
           <span>52% used</span>
           <z-divider zOrientation="vertical" class="h-4" />
           <button type="button" z-button zType="outline" zShape="circle" class="data-icon-only:size-6!">
-            <z-icon zType="arrow-up" />
+            <ng-icon name="arrow-up" />
           </button>
         </div>
       </div>
     </ng-template>
   `,
+  viewProviders: [
+    provideIcons({
+      search: zardSearchIcon,
+      check: zardCheckIcon,
+      info: zardInfoIcon,
+      plus: zardPlusIcon,
+      arrowUp: zardArrowUpIcon,
+    }),
+  ],
 })
 export class ZardDemoInputGroupDefaultComponent {}
 

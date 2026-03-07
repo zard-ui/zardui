@@ -1,19 +1,32 @@
 import { Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
 import { ZardDividerComponent } from '@/shared/components/divider';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+import {
+  zardArchiveIcon,
+  zardArrowLeftIcon,
+  zardCalendarPlusIcon,
+  zardCheckIcon,
+  zardChevronRightIcon,
+  zardClockIcon,
+  zardEllipsisIcon,
+  zardListFilterPlusIcon,
+  zardTagIcon,
+  zardTrashIcon,
+} from '@/shared/core/icons-registry';
 
 @Component({
   selector: 'z-demo-button-group-default',
-  imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardIconComponent, ZardMenuImports, ZardDividerComponent],
+  imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon, ZardMenuImports, ZardDividerComponent],
   template: `
     <z-button-group>
       <z-button-group class="hidden sm:flex">
         <button type="button" z-button zType="outline" aria-label="Go Back">
-          <i z-icon zType="arrow-left"></i>
+          <ng-icon name="arrow-left" />
         </button>
       </z-button-group>
 
@@ -25,31 +38,31 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
       <z-button-group>
         <button type="button" z-button zType="outline">Snooze</button>
         <button type="button" z-button zType="outline" z-menu [zMenuTriggerFor]="menu">
-          <i z-icon zType="ellipsis"></i>
+          <ng-icon name="ellipsis" />
 
           <ng-template #menu>
             <div z-menu-content class="w-48">
               <button type="button" z-menu-item>
-                <i z-icon zType="check"></i>
+                <ng-icon name="check" />
                 Mark as Read
               </button>
               <button type="button" z-menu-item>
-                <i z-icon zType="archive"></i>
+                <ng-icon name="archive" />
                 Archive
               </button>
 
               <z-divider zSpacing="sm" />
 
               <button type="button" z-menu-item>
-                <i z-icon zType="clock"></i>
+                <ng-icon name="clock" />
                 Snooze
               </button>
               <button type="button" z-menu-item>
-                <i z-icon zType="calendar-plus"></i>
+                <ng-icon name="calendar-plus" />
                 Add to Calendar
               </button>
               <button type="button" z-menu-item>
-                <i z-icon zType="list-filter-plus"></i>
+                <ng-icon name="list-filter-plus" />
                 Add to List
               </button>
               <button
@@ -61,10 +74,10 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
                 class="justify-between"
               >
                 <div class="flex items-center">
-                  <i z-icon zType="tag" class="mr-1"></i>
+                  <ng-icon name="tag" class="mr-1" />
                   Label as
                 </div>
-                <i z-icon zType="chevron-right"></i>
+                <ng-icon name="chevron-right" />
 
                 <ng-template #subMenu>
                   <div z-menu-content class="w-48">
@@ -78,7 +91,7 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
               <z-divider zSpacing="sm" />
 
               <button type="button" z-menu-item class="text-red-500">
-                <i z-icon zType="trash"></i>
+                <ng-icon name="trash" />
                 Trash
               </button>
             </div>
@@ -87,5 +100,19 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
       </z-button-group>
     </z-button-group>
   `,
+  viewProviders: [
+    provideIcons({
+      arrowLeft: zardArrowLeftIcon,
+      ellipsis: zardEllipsisIcon,
+      check: zardCheckIcon,
+      archive: zardArchiveIcon,
+      clock: zardClockIcon,
+      calendarPlus: zardCalendarPlusIcon,
+      listFilterPlus: zardListFilterPlusIcon,
+      tag: zardTagIcon,
+      chevronRight: zardChevronRightIcon,
+      trash: zardTrashIcon,
+    }),
+  ],
 })
 export class ZardDemoButtonGroupDefaultComponent {}

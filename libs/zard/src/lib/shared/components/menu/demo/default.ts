@@ -1,14 +1,22 @@
 import { Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDividerComponent } from '@/shared/components/divider';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+import {
+  zardBookOpenIcon,
+  zardChevronDownIcon,
+  zardChevronRightIcon,
+  zardFileTextIcon,
+  zardInfoIcon,
+  zardUsersIcon,
+} from '@/shared/core/icons-registry';
 
 @Component({
   selector: 'zard-demo-menu-default',
-  imports: [ZardMenuImports, ZardButtonComponent, ZardDividerComponent, ZardIconComponent],
-  standalone: true,
+  imports: [ZardMenuImports, ZardButtonComponent, ZardDividerComponent, NgIcon],
   template: `
     <nav class="flex items-center justify-between p-4">
       <div class="flex items-center space-x-6">
@@ -16,7 +24,7 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
           <div class="relative">
             <button type="button" z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="productsMenu">
               Products
-              <z-icon zType="chevron-down" class="ml-1" />
+              <ng-icon name="chevron-down" class="ml-1" />
             </button>
 
             <ng-template #productsMenu>
@@ -32,7 +40,7 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
           <div class="relative">
             <button type="button" z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="solutionsMenu">
               Solutions
-              <z-icon zType="chevron-down" class="ml-1" />
+              <ng-icon name="chevron-down" class="ml-1" />
             </button>
 
             <ng-template #solutionsMenu>
@@ -79,18 +87,18 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
           <div class="relative">
             <button type="button" z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="resourcesMenu">
               Resources
-              <z-icon zType="chevron-down" />
+              <ng-icon name="chevron-down" />
             </button>
 
             <ng-template #resourcesMenu>
               <div z-menu-content class="w-56">
                 <button type="button" z-menu-item (click)="log('Blog')">
-                  <z-icon zType="book-open" class="mr-2" />
+                  <ng-icon name="book-open" class="mr-2" />
                   Blog
                 </button>
 
                 <button type="button" z-menu-item (click)="log('Documentation')">
-                  <z-icon zType="file-text" class="mr-2" />
+                  <ng-icon name="file-text" class="mr-2" />
                   Documentation
                 </button>
 
@@ -103,16 +111,16 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
                   class="justify-between"
                 >
                   <div class="flex items-center">
-                    <z-icon zType="info" class="mr-2" />
+                    <ng-icon name="info" class="mr-2" />
                     Help & Support
                   </div>
-                  <z-icon zType="chevron-right" />
+                  <ng-icon name="chevron-right" />
                 </button>
 
                 <z-divider zSpacing="sm" />
 
                 <button type="button" z-menu-item (click)="log('Community')">
-                  <z-icon zType="users" class="mr-2" />
+                  <ng-icon name="users" class="mr-2" />
                   Community
                 </button>
               </div>
@@ -135,6 +143,16 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
       </div>
     </nav>
   `,
+  viewProviders: [
+    provideIcons({
+      chevronDown: zardChevronDownIcon,
+      chevronRight: zardChevronRightIcon,
+      bookOpen: zardBookOpenIcon,
+      fileText: zardFileTextIcon,
+      info: zardInfoIcon,
+      users: zardUsersIcon,
+    }),
+  ],
 })
 export class ZardDemoMenuDefaultComponent {
   log(item: string) {
