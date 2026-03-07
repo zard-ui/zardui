@@ -790,7 +790,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'pagination',
-    registryDependencies: ['button', 'icon'],
+    registryDependencies: ['button'],
     files: [
       {
         name: 'pagination.component.ts',
