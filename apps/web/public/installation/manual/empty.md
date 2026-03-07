@@ -11,9 +11,11 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { zardArrowUpRightIcon, zardInboxIcon } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
@@ -25,12 +27,10 @@ import {
   emptyTitleVariants,
   emptyVariants,
 } from './empty.variants';
-import { type ZardIcon } from '../../core/icons-registry';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'z-empty',
-  imports: [NgOptimizedImage, ZardIconComponent, ZardStringTemplateOutletDirective],
+  imports: [NgOptimizedImage, NgIcon, ZardStringTemplateOutletDirective],
   template: `
     @let image = zImage();
     @let icon = zIcon();
@@ -47,7 +47,7 @@ import { ZardIconComponent } from '../icon/icon.component';
         </div>
       } @else if (icon) {
         <div [class]="iconClasses()" data-testid="icon">
-          <z-icon [zType]="icon" zSize="xl" />
+          <ng-icon [svg]="icon" class="size-5!" />
         </div>
       }
 
@@ -76,6 +76,7 @@ import { ZardIconComponent } from '../icon/icon.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ arrowUpRight: zardArrowUpRightIcon, inbox: zardInboxIcon })],
   host: {
     '[class]': 'classes()',
   },
@@ -83,7 +84,7 @@ import { ZardIconComponent } from '../icon/icon.component';
 })
 export class ZardEmptyComponent {
   readonly zActions = input<TemplateRef<void>[]>([]);
-  readonly zIcon = input<ZardIcon>();
+  readonly zIcon = input<string>();
   readonly zImage = input<string | TemplateRef<void>>();
   readonly zTitle = input<string | TemplateRef<void>>();
   readonly zDescription = input<string | TemplateRef<void>>();
