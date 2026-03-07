@@ -2,6 +2,9 @@ import { Component } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
+import { zardSearchIcon, zardTerminalIcon } from '@/shared/core/icons-registry';
 import { ZardDebounceEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-debounce-event-manager-plugin';
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
@@ -25,8 +28,8 @@ const SEARCH_DEBOUNCE_MS = 150;
     ZardCommandOptionComponent,
     ZardCommandOptionGroupComponent,
     ZardCommandDividerComponent,
+    NgIcon,
   ],
-  standalone: true,
   template: `
     <z-command size="default" (zCommandSelected)="onSelect($event)" (zCommandChange)="onChange($event)">
       <z-command-input placeholder="Test placeholder" />
@@ -42,6 +45,7 @@ const SEARCH_DEBOUNCE_MS = 150;
       </z-command-list>
     </z-command>
   `,
+  viewProviders: [provideIcons({ search: zardSearchIcon, terminal: zardTerminalIcon })],
 })
 class TestHostComponent {
   selectedOption: any = null;
@@ -220,7 +224,7 @@ describe('ZardCommandComponent', () => {
 
   it('should render option with icon and shortcut', () => {
     const optionElement = fixture.nativeElement.querySelector('z-command-option');
-    const iconElement = optionElement.querySelector('div[z-icon]');
+    const iconElement = optionElement.querySelector('ng-icon');
     expect(iconElement).toBeTruthy();
     expect(optionElement.textContent).toContain('⌘T');
   });

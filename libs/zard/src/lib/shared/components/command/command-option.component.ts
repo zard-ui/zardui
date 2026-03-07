@@ -11,6 +11,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import type { ZardCommandOptionGroupComponent } from '@/shared/components/command/command-option-group.component';
@@ -20,12 +21,20 @@ import {
   commandShortcutVariants,
   type ZardCommandItemVariants,
 } from '@/shared/components/command/command.variants';
-import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
+import {
+  zardFolderIcon,
+  zardFolderOpenIcon,
+  zardLayoutDashboardIcon,
+  zardMoonIcon,
+  zardSaveIcon,
+  zardTerminalIcon,
+} from '@/shared/core/icons-registry';
+import type { ZardIconName } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-option',
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   template: `
     @if (isOptionVisible()) {
       <div
@@ -40,7 +49,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
-          <div z-icon [zType]="zIcon()!" class="mr-2 flex shrink-0 items-center justify-center"></div>
+          <ng-icon [name]="zIcon()!" class="mr-2 flex size-4 shrink-0 items-center justify-center" />
         }
         <span class="flex-1">{{ zLabel() }}</span>
         @if (zShortcut()) {
@@ -51,6 +60,16 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [
+    provideIcons({
+      folder: zardFolderIcon,
+      folderOpen: zardFolderOpenIcon,
+      save: zardSaveIcon,
+      layoutDashboard: zardLayoutDashboardIcon,
+      terminal: zardTerminalIcon,
+      moon: zardMoonIcon,
+    }),
+  ],
   exportAs: 'zCommandOption',
 })
 export class ZardCommandOptionComponent {
@@ -60,7 +79,7 @@ export class ZardCommandOptionComponent {
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
   readonly zCommand = input<string>('');
-  readonly zIcon = input<ZardIcon>();
+  readonly zIcon = input<ZardIconName>();
   readonly zShortcut = input<string>('');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly variant = input<ZardCommandItemVariants>('default');
