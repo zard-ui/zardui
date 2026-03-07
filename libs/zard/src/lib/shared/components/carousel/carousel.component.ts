@@ -11,6 +11,7 @@ import {
   type Signal,
 } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 import type { EmblaCarouselType, EmblaEventType, EmblaOptionsType, EmblaPluginType } from 'embla-carousel';
 import { EmblaCarouselDirective } from 'embla-carousel-angular';
@@ -23,12 +24,12 @@ import {
   type ZardCarouselControlsVariants,
   type ZardCarouselOrientationVariants,
 } from '@/shared/components/carousel/carousel.variants';
-import { ZardIconComponent } from '@/shared/components/icon';
+import { zardChevronLeftIcon, zardChevronRightIcon, zardCircleSmallIcon } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-carousel',
-  imports: [EmblaCarouselDirective, ZardButtonComponent, ZardIconComponent],
+  imports: [EmblaCarouselDirective, ZardButtonComponent, NgIcon],
   template: `
     <div class="relative">
       <div
@@ -52,22 +53,22 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
             z-button
             zType="outline"
             [class]="prevBtnClasses()"
-            [disabled]="!canScrollPrev()"
+            [zDisabled]="!canScrollPrev()"
             (click)="slidePrevious()"
             aria-label="Previous slide"
           >
-            <z-icon zType="chevron-left" class="size-4" />
+            <ng-icon name="chevron-left" class="size-4!" />
           </button>
           <button
             type="button"
             z-button
             zType="outline"
             [class]="nextBtnClasses()"
-            [disabled]="!canScrollNext()"
+            [zDisabled]="!canScrollNext()"
             (click)="slideNext()"
             aria-label="Next slide"
           >
-            <z-icon zType="chevron-right" class="size-4" />
+            <ng-icon name="chevron-right" class="size-4!" />
           </button>
         } @else if (controls === 'dot') {
           <div class="mt-2 flex justify-center gap-1">
@@ -82,10 +83,10 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
                 [attr.aria-current]="$index === selectedIndex() ? 'true' : null"
                 [aria-label]="'Go to slide ' + ($index + 1)"
               >
-                <z-icon
-                  zType="circle-small"
-                  [zStrokeWidth]="0"
-                  [class]="$index === selectedIndex() ? 'fill-primary' : 'fill-border'"
+                <ng-icon
+                  name="circle-small"
+                  [strokeWidth]="0"
+                  [class]="$index === selectedIndex() ? '[&_svg]:fill-primary' : '[&_svg]:fill-border'"
                 />
               </button>
             }
@@ -96,6 +97,13 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [
+    provideIcons({
+      chevronLeft: zardChevronLeftIcon,
+      chevronRight: zardChevronRightIcon,
+      circleSmall: zardCircleSmallIcon,
+    }),
+  ],
   host: {
     '(keydown.arrowleft.prevent)': 'slidePrevious()',
     '(keydown.arrowright.prevent)': 'slideNext()',

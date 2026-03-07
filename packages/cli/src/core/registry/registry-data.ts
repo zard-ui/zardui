@@ -1045,7 +1045,7 @@ export const registry: ComponentRegistry[] = [
       'embla-carousel-class-names',
       'embla-carousel-wheel-gestures',
     ],
-    registryDependencies: ['button', 'icon'],
+    registryDependencies: ['button'],
     files: [
       {
         name: 'carousel.component.ts',

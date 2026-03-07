@@ -60,7 +60,7 @@ describe('ZardAlertComponent', () => {
 
     expect(iconElement).toBeTruthy();
     expect(iconComponent).toBeTruthy();
-    expect(iconComponent?.getAttribute('name')).toBe('lucideInfo');
+    expect(iconComponent?.getAttribute('name')).toBe('info');
   });
 
   it('renders only description when title is omitted', () => {
