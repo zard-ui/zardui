@@ -16,6 +16,20 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 import { iconVariants, type ZardIconSizeVariants } from './icon.variants';
 import { ZARD_ICONS, type ZardIcon } from '../../core/icons-registry';
 
+/**
+ * @deprecated Use `NgIcon` from `@ng-icons/core` directly with `provideIcons`.
+ * @example
+ * ```ts
+ * import { NgIcon, provideIcons } from '@ng-icons/core';
+ * import { zardChevronDownIcon } from '@/shared/core';
+ *
+ * @Component({
+ *   imports: [NgIcon],
+ *   template: `<ng-icon name="chevronDown" />`,
+ *   viewProviders: [provideIcons({ chevronDown: zardChevronDownIcon })]
+ * })
+ * ```
+ */
 @Component({
   selector: 'z-icon, [z-icon]',
   imports: [NgIcon],

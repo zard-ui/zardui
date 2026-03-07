@@ -197,6 +197,19 @@ export const zardActivityIcon = lucideActivity;
 export const zardGithubIcon = lucideGithub;
 export const zardExternalLinkIcon = lucideExternalLink;
 
+/**
+ * @deprecated Use `provideIcons` from `@ng-icons/core` to register icons directly.
+ * Individual icon exports like `zardBoldIcon` should be used with `provideIcons`.
+ * @example
+ * ```ts
+ * import { provideIcons } from '@ng-icons/core';
+ * import { zardBoldIcon } from './icons-registry';
+ *
+ * @Component({
+ *   viewProviders: [provideIcons({ bold: zardBoldIcon })]
+ * })
+ * ```
+ */
 export const ZARD_ICONS = {
   house: zardHouseIcon,
   settings: zardSettingsIcon,
