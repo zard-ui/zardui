@@ -1,20 +1,21 @@
 import { Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardIcon } from '@zard/core/icons-registry';
+import { ZardIconName, zardBookOpenTextIcon, zardSunIcon } from '@zard/core/icons-registry';
 
 interface AIFeatureCard {
   title: string;
   description: string;
-  icon: ZardIcon;
+  icon: ZardIconName;
 }
 
 @Component({
   selector: 'ai-ready-section',
   standalone: true,
-  imports: [ZardBadgeComponent, ZardCardComponent, ZardIconComponent],
+  imports: [ZardBadgeComponent, ZardCardComponent, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -33,7 +34,7 @@ interface AIFeatureCard {
           <z-card [zTitle]="title">
             <ng-template #title>
               <div class="flex items-center gap-2">
-                <z-icon [zType]="card.icon" class="text-lg font-normal" />
+                <ng-icon [name]="card.icon" class="text-lg font-normal" />
                 <h3 class="text-base">{{ card.title }}</h3>
               </div>
             </ng-template>
@@ -43,6 +44,7 @@ interface AIFeatureCard {
       </div>
     </section>
   `,
+  viewProviders: [provideIcons({ sun: zardSunIcon, bookOpenText: zardBookOpenTextIcon })],
 })
 export class AIReadySection {
   readonly cards: AIFeatureCard[] = [

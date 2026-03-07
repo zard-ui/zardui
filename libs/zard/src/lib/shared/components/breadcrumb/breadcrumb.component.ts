@@ -24,7 +24,7 @@ import {
   type ZardBreadcrumbSizeVariants,
   type ZardBreadcrumbWrapVariants,
 } from '@/shared/components/breadcrumb/breadcrumb.variants';
-import { zardChevronRightIcon, zardEllipsisIcon } from '@/shared/components/icon';
+import { zardChevronRightIcon, zardEllipsisIcon } from '@/shared/core';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 

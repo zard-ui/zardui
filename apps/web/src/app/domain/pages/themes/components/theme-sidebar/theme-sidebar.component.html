@@ -13,9 +13,9 @@
       title="Toggle preview mode"
     >
       @if (previewDarkMode()) {
-        <z-icon zType="moon" class="size-4" />
+        <ng-icon name="moon" class="size-4" />
       } @else {
-        <z-icon zType="sun" class="size-4" />
+        <ng-icon name="sun" class="size-4" />
       }
     </button>
   </div>
@@ -27,7 +27,7 @@
   <div class="space-y-3">
     <div class="flex items-center gap-2">
       <div class="bg-primary/10 rounded-md p-1.5">
-        <z-icon zType="moon" class="text-primary size-3.5" />
+        <ng-icon name="moon" class="text-primary size-3.5" />
       </div>
       <label class="text-foreground text-sm font-medium">Presets</label>
     </div>
@@ -46,7 +46,7 @@
     <div class="flex items-center justify-between">
       <div class="flex items-center gap-2">
         <div class="bg-primary/10 rounded-md p-1.5">
-          <z-icon zType="square" class="text-primary size-3.5" />
+          <ng-icon name="square" class="text-primary size-3.5" />
         </div>
         <label class="text-foreground text-sm font-medium">Radius</label>
       </div>
@@ -66,7 +66,7 @@
   <div class="mt-8">
     <div class="mb-3 flex items-center gap-2">
       <div class="bg-primary/10 rounded-md p-1.5">
-        <z-icon zType="palette" class="text-primary size-3.5" />
+        <ng-icon name="palette" class="text-primary size-3.5" />
       </div>
       <label class="text-foreground text-sm font-medium">Colors</label>
     </div>
@@ -91,10 +91,10 @@
 <div class="bg-background/50 border-t p-4 backdrop-blur-sm">
   <button z-button zFull (click)="copyToClipboard()" class="h-10 gap-2 font-medium">
     @if (copySuccess()) {
-      <z-icon zType="check" class="size-4" />
+      <ng-icon name="check" class="size-4" />
       Copied to clipboard!
     } @else {
-      <z-icon zType="copy" class="size-4" />
+      <ng-icon name="copy" class="size-4" />
       Copy CSS Variables
     }
   </button>

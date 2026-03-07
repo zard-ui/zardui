@@ -387,27 +387,6 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'icon',
-    files: [
-      {
-        name: 'icon.component.ts',
-        content: '',
-      },
-      {
-        name: 'icon.variants.ts',
-        content: '',
-      },
-      {
-        name: 'icons.ts',
-        content: '',
-      },
-      {
-        name: 'index.ts',
-        content: '',
-      },
-    ],
-  },
-  {
     name: 'input',
     files: [
       {

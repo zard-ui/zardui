@@ -1,16 +1,18 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTooltipImports } from '@zard/components/tooltip';
+import { zardArrowRightIcon } from '@zard/core/icons-registry';
 
 import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/carousel.component';
 
@@ -86,7 +88,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
                         @case ('cta') {
                           <div class="text-center">
                             <div class="flex items-center justify-center rounded-2xl bg-white/10 p-2 backdrop-blur-sm">
-                              <z-icon zType="arrow-right" class="text-xl" />
+                              <ng-icon name="arrow-right" class="text-xl" />
                             </div>
 
                             <div>
@@ -124,8 +126,9 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
     ZardProgressBarComponent,
     ZardAvatarComponent,
     ZardTooltipImports,
-    ZardIconComponent,
+    NgIcon,
   ],
+  viewProviders: [provideIcons({ arrowRight: zardArrowRightIcon })],
 })
 export class ShowcaseComponent {
   private readonly router = inject(Router);

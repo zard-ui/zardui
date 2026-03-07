@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, PLATFORM_I
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 import { filter, map, startWith } from 'rxjs/operators';
 
@@ -11,26 +12,34 @@ import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '@doc/shared/constants/rout
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
+import {
+  zardArrowLeftIcon,
+  zardArrowRightIcon,
+  zardChevronDownIcon,
+  zardChevronUpIcon,
+  zardCopyIcon,
+} from '@zard/core/icons-registry';
 
 import type { AiAssistOption } from './ai-assist.types';
 
 @Component({
   selector: 'z-assist',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    RouterLink,
-    ZardPopoverComponent,
-    ZardPopoverDirective,
-    ZardDividerComponent,
-    ZardButtonComponent,
-    ZardIconComponent,
-  ],
+  imports: [RouterLink, ZardPopoverComponent, ZardPopoverDirective, ZardDividerComponent, ZardButtonComponent, NgIcon],
   templateUrl: './ai-assist.component.html',
   host: {
     '[class]': 'hostClasses()',
   },
+  viewProviders: [
+    provideIcons({
+      copy: zardCopyIcon,
+      chevronDown: zardChevronDownIcon,
+      chevronUp: zardChevronUpIcon,
+      arrowLeft: zardArrowLeftIcon,
+      arrowRight: zardArrowRightIcon,
+    }),
+  ],
 })
 export class AiAssistComponent {
   private readonly router = inject(Router);

@@ -1,14 +1,22 @@
 import { Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardIcon } from '@zard/core/icons-registry';
+import {
+  ZardIconName,
+  zardBanIcon,
+  zardCircleCheckIcon,
+  zardCircleDollarSignIcon,
+  zardXIcon,
+  zardZapIcon,
+} from '@zard/core/icons-registry';
 
 interface OpenSourceFeature {
   title: string;
   description: string;
-  icon: ZardIcon;
+  icon: ZardIconName;
 }
 
 interface StandAgainstItem {
@@ -19,7 +27,7 @@ interface StandAgainstItem {
 @Component({
   selector: 'open-source-section',
   standalone: true,
-  imports: [ZardBadgeComponent, ZardCardComponent, ZardIconComponent],
+  imports: [ZardBadgeComponent, ZardCardComponent, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -39,7 +47,7 @@ interface StandAgainstItem {
               <div
                 class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
               >
-                <z-icon [zType]="feature.icon" class="text-lg font-normal" />
+                <ng-icon [name]="feature.icon" class="text-lg font-normal" />
               </div>
               <h3 class="mt-4 text-base font-semibold">{{ feature.title }}</h3>
             </ng-template>
@@ -51,13 +59,13 @@ interface StandAgainstItem {
       <!-- What We Stand Against -->
       <div class="bg-destructive/5 rounded-lg p-6">
         <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold">
-          <z-icon zType="ban" class="text-destructive" />
+          <ng-icon name="ban" class="text-destructive" />
           What We Stand Against
         </h3>
         <div class="grid gap-3 md:grid-cols-3">
           @for (item of standAgainstItems; track $index) {
             <div class="flex items-start gap-3">
-              <z-icon zType="x" class="text-destructive" />
+              <ng-icon name="x" class="text-destructive" />
               <div>
                 <p class="text-sm font-medium">{{ item.title }}</p>
                 <p class="text-muted-foreground text-xs">{{ item.description }}</p>
@@ -68,6 +76,15 @@ interface StandAgainstItem {
       </div>
     </section>
   `,
+  viewProviders: [
+    provideIcons({
+      circleCheck: zardCircleCheckIcon,
+      circleDollarSign: zardCircleDollarSignIcon,
+      zap: zardZapIcon,
+      ban: zardBanIcon,
+      x: zardXIcon,
+    }),
+  ],
 })
 export class OpenSourceSection {
   readonly features: OpenSourceFeature[] = [

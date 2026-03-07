@@ -1,19 +1,20 @@
 import { Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardIcon } from '@zard/core/icons-registry';
+import { ZardIconName, zardLayers2Icon, zardSparklesIcon, zardUsersIcon, zardZapIcon } from '@zard/core/icons-registry';
 
 interface FeatureCard {
   title: string;
   description: string;
-  icon: ZardIcon;
+  icon: ZardIconName;
 }
 
 @Component({
   selector: 'why-zardui-section',
   standalone: true,
-  imports: [ZardCardComponent, ZardIconComponent],
+  imports: [ZardCardComponent, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -28,7 +29,7 @@ interface FeatureCard {
           <z-card [zTitle]="title">
             <ng-template #title>
               <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg text-lg">
-                <z-icon [zType]="card.icon" class="text-primary" />
+                <ng-icon [name]="card.icon" class="text-primary" />
               </div>
             </ng-template>
             <h3 class="mt-4 text-lg font-semibold">{{ card.title }}</h3>
@@ -38,6 +39,14 @@ interface FeatureCard {
       </div>
     </section>
   `,
+  viewProviders: [
+    provideIcons({
+      sparkles: zardSparklesIcon,
+      users: zardUsersIcon,
+      zap: zardZapIcon,
+      layers2: zardLayers2Icon,
+    }),
+  ],
 })
 export class WhyZardUISection {
   readonly cards: FeatureCard[] = [

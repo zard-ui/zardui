@@ -9,7 +9,7 @@
     >
       @if (featureCopyPage) {
         <span class="flex items-center gap-2">
-          <z-icon zType="copy" class="h-4 w-4" />
+          <ng-icon name="copy" class="h-4 w-4" />
           Copy Page
         </span>
       } @else {
@@ -27,7 +27,7 @@
       [zContent]="popoverContent"
       zPlacement="bottom"
     >
-      <z-icon zType="chevron-down" class="h-[18px] w-[18px]" />
+      <ng-icon name="chevron-down" class="h-[18px] w-[18px]" />
     </button>
 
     <ng-template #popoverContent>
@@ -87,13 +87,13 @@
       [zContent]="popoverContent"
       zPlacement="top"
     >
-      <z-icon zType="chevron-up" class="h-4 w-4" />
+      <ng-icon name="chevron-up" class="h-4 w-4" />
     </button>
   </div>
 
   @if (prevUrl()) {
     <a z-button zType="secondary" class="ml-auto size-8 shadow-none md:size-7 lg:ml-0" [routerLink]="prevUrl()">
-      <z-icon zType="arrow-left" class="h-4 w-4" />
+      <ng-icon name="arrow-left" class="h-4 w-4" />
       <span class="sr-only">Previous</span>
     </a>
   }
@@ -101,7 +101,7 @@
   @if (nextUrl()) {
     <a z-button zType="secondary" class="size-8 shadow-none md:size-7" [routerLink]="nextUrl()">
       <span class="sr-only">Next</span>
-      <z-icon zType="arrow-right" class="h-4 w-4" />
+      <ng-icon name="arrow-right" class="h-4 w-4" />
     </a>
   }
 </div>

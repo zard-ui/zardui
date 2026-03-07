@@ -1,18 +1,21 @@
 import { ChangeDetectionStrategy, Component, computed, effect, input, signal, untracked } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardTreeComponent } from '@zard/components/tree/tree.component';
 import type { TreeNode } from '@zard/components/tree/tree.types';
+import { zardClipboardIcon, zardFolderIcon } from '@zard/core/icons-registry';
 
 import { SimpleCodeHighlightComponent } from '../../../shared/components/simple-code-highlight/simple-code-highlight.component';
 import type { BlockFile } from '../block-container/block-container.component';
 
 @Component({
   selector: 'z-block-code-viewer',
-  imports: [SimpleCodeHighlightComponent, ZardTreeComponent, ZardIconComponent, ZardButtonComponent],
+  imports: [SimpleCodeHighlightComponent, ZardTreeComponent, NgIcon, ZardButtonComponent],
   templateUrl: './block-code-viewer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ clipboard: zardClipboardIcon, folder: zardFolderIcon })],
 })
 export class BlockCodeViewerComponent {
   readonly files = input.required<BlockFile[]>();

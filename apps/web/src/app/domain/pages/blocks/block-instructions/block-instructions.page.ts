@@ -1,6 +1,8 @@
 import { Component, computed, inject, type OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import type { Block } from '@doc/domain/components/block-container/block-container.component';
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
@@ -11,7 +13,12 @@ import { BlocksService, type BlockCategory as ServiceBlockCategory } from '@doc/
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import {
+  zardArrowRightIcon,
+  zardExternalLinkIcon,
+  zardFolderOpenIcon,
+  zardGithubIcon,
+} from '@zard/core/icons-registry';
 
 interface BlockPreview {
   id: string;
@@ -28,13 +35,21 @@ interface BlockPreview {
   imports: [
     RouterLink,
     ZardButtonComponent,
-    ZardIconComponent,
+    NgIcon,
     DocContentComponent,
     DocHeadingComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
   ],
   templateUrl: './block-instructions.page.html',
+  viewProviders: [
+    provideIcons({
+      github: zardGithubIcon,
+      arrowRight: zardArrowRightIcon,
+      folderOpen: zardFolderOpenIcon,
+      externalLink: zardExternalLinkIcon,
+    }),
+  ],
 })
 export class BlocksInstructionPage implements OnInit {
   private readonly seoService = inject(SeoService);

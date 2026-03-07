@@ -1,12 +1,14 @@
 import { Component, inject, viewChild, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { LayoutService } from '@doc/shared/services/layout.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { zardDarkModeIcon, zardGalleryHorizontalIcon } from '@zard/core/icons-registry';
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
 import { environment } from '../../../../environments/environment';
@@ -27,11 +29,12 @@ import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
     RouterModule,
     ZardButtonComponent,
     ZardDividerComponent,
-    ZardIconComponent,
+    NgIcon,
   ],
   host: {
     '(window:keydown)': 'handleKeyboardShortcut($event)',
   },
+  viewProviders: [provideIcons({ galleryHorizontal: zardGalleryHorizontalIcon, darkMode: zardDarkModeIcon })],
 })
 export class HeaderComponent {
   readonly docResearcher = viewChild.required(DocResearcherComponent);

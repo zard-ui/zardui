@@ -1,11 +1,20 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardIcon } from '@zard/core/icons-registry';
+import {
+  ZardIconName,
+  zardCodeIcon,
+  zardHeartIcon,
+  zardLayersIcon,
+  zardPaletteIcon,
+  zardShieldIcon,
+  zardZapIcon,
+} from '@zard/core/icons-registry';
 
 export interface BenefitFeature {
-  icon: ZardIcon;
+  icon: ZardIconName;
   title: string;
   description: string;
   highlight?: string;
@@ -15,7 +24,7 @@ export interface BenefitFeature {
   selector: 'z-benefits',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardBadgeComponent, ZardIconComponent],
+  imports: [ZardBadgeComponent, NgIcon],
   template: `
     <section class="relative overflow-hidden py-24">
       <!-- Background with gradient -->
@@ -60,7 +69,7 @@ export interface BenefitFeature {
                   <div
                     class="bg-primary/10 text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
                   >
-                    <z-icon [zType]="feature.icon" class="text-xl" />
+                    <ng-icon [name]="feature.icon" class="text-xl" />
                   </div>
 
                   <!-- Content -->
@@ -118,6 +127,16 @@ export interface BenefitFeature {
       }
     </style>
   `,
+  viewProviders: [
+    provideIcons({
+      zap: zardZapIcon,
+      palette: zardPaletteIcon,
+      code: zardCodeIcon,
+      layers: zardLayersIcon,
+      shield: zardShieldIcon,
+      heart: zardHeartIcon,
+    }),
+  ],
 })
 export class BenefitsComponent {
   readonly features = signal<BenefitFeature[]>([

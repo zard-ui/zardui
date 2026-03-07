@@ -1,17 +1,18 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, input, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { toast } from 'ngx-sonner';
 
 import { Color } from '@doc/shared/constants/colors.constant';
 import { ColorsService, ColorFormat } from '@doc/shared/services/colors.service';
 
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { zardCheckIcon, zardClipboardIcon } from '@zard/core/icons-registry';
 
 @Component({
   selector: 'button[z-color-card]',
   standalone: true,
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './color-card.component.html',
   host: {
@@ -22,6 +23,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
     '[style.--text]': 'color().foreground',
     '(click)': 'copyToClipboard()',
   },
+  viewProviders: [provideIcons({ check: zardCheckIcon, clipboard: zardClipboardIcon })],
 })
 export class ColorCardComponent {
   private readonly clipboard = inject(Clipboard);
