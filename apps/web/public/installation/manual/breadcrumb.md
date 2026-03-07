@@ -27,7 +27,7 @@ import {
   type ZardBreadcrumbSizeVariants,
   type ZardBreadcrumbWrapVariants,
 } from '@/shared/components/breadcrumb/breadcrumb.variants';
-import { zardChevronRightIcon, zardEllipsisIcon } from '@/shared/components/icon';
+import { zardChevronRightIcon, zardEllipsisIcon } from '@/shared/core';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -35,7 +35,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
   imports: [NgIcon],
   template: `
-    <ng-icon name="ellipsis" class="size-4" />
+    <ng-icon name="ellipsis" class="size-4!" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,

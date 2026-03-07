@@ -66,7 +66,7 @@ const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
       [attr.aria-haspopup]="true"
       aria-label="Choose date"
     >
-      <ng-icon name="calendar" class="size-4" />
+      <ng-icon name="calendar" class="size-4!" />
       <span [class]="textClasses()">
         {{ displayText() }}
       </span>

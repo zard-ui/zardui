@@ -3,11 +3,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardCopyIcon, zardEyeIcon } from '@/shared/core/icons-registry';
-
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardTableImports } from '@/shared/components/table/table.imports';
+import { zardCopyIcon, zardEyeIcon } from '@/shared/core/icons-registry';
 
 export interface Payment {
   id: string;

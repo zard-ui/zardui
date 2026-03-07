@@ -491,7 +491,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   imports: [NgIcon],
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
-      <ng-icon name="search" class="mr-2 size-4 shrink-0 opacity-50" />
+      <ng-icon name="search" class="mr-2 size-4! shrink-0 opacity-50" />
       <input
         #searchInput
         [class]="classes()"
@@ -781,7 +781,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
-          <ng-icon [name]="zIcon()!" class="mr-2 flex size-4 shrink-0 items-center justify-center" />
+          <ng-icon [name]="zIcon()!" class="mr-2 flex size-4! shrink-0 items-center justify-center" />
         }
         <span class="flex-1">{{ zLabel() }}</span>
         @if (zShortcut()) {

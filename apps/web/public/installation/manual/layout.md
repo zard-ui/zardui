@@ -279,7 +279,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
           [attr.aria-label]="zCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
           [attr.aria-expanded]="!zCollapsed()"
         >
-          <ng-icon [name]="chevronIcon()" class="pointer-events-none size-4 shrink-0" />
+          <ng-icon [name]="chevronIcon()" class="pointer-events-none size-4! shrink-0" />
         </div>
       }
 

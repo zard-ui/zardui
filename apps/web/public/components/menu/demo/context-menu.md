@@ -3,10 +3,9 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardChevronRightIcon } from '@/shared/core/icons-registry';
-
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+import { zardChevronRightIcon } from '@/shared/core/icons-registry';
 
 @Component({
   selector: 'z-demo-context-menu',

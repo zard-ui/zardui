@@ -29,10 +29,10 @@ import { ZardButtonGroupComponent } from '../button-group.component';
       <button z-button zType="outline" zSize="lg"><ng-icon name="plus" /></button>
     </z-button-group>
   `,
+  viewProviders: [provideIcons({ plus: zardPlusIcon })],
   host: {
     class: 'flex flex-col items-start gap-4',
   },
-  viewProviders: [provideIcons({ plus: zardPlusIcon })],
 })
 export class ZardDemoButtonGroupSizeComponent {}
 

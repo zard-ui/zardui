@@ -72,7 +72,7 @@ export class ZardDialogOptions<T, U> {
         class="absolute top-1 right-1"
         (click)="onCloseClick()"
       >
-        <ng-icon name="x" class="size-4" />
+        <ng-icon name="x" class="size-4!" />
       </button>
     }
 
@@ -101,7 +101,7 @@ export class ZardDialogOptions<T, U> {
         @if (config.zCancelText !== null) {
           <button type="button" data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
             @if (config.zCancelIcon) {
-              <ng-icon [svg]="config.zCancelIcon" class="size-4" />
+              <ng-icon [svg]="config.zCancelIcon" class="size-4!" />
             }
 
             {{ config.zCancelText ?? 'Cancel' }}
@@ -118,7 +118,7 @@ export class ZardDialogOptions<T, U> {
             (click)="onOkClick()"
           >
             @if (config.zOkIcon) {
-              <ng-icon [svg]="config.zOkIcon" class="size-4" />
+              <ng-icon [svg]="config.zOkIcon" class="size-4!" />
             }
 
             {{ config.zOkText ?? 'OK' }}

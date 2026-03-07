@@ -3,6 +3,12 @@ import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDividerComponent } from '@/shared/components/divider';
+import { ZardDropdownImports } from '@/shared/components/dropdown';
+import { ZardInputDirective } from '@/shared/components/input/input.directive';
+import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';
+import { ZardTooltipDirective } from '@/shared/components/tooltip';
 import {
   zardArrowUpIcon,
   zardCheckIcon,
@@ -10,13 +16,6 @@ import {
   zardPlusIcon,
   zardSearchIcon,
 } from '@/shared/core/icons-registry';
-
-import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardDividerComponent } from '@/shared/components/divider';
-import { ZardDropdownImports } from '@/shared/components/dropdown';
-import { ZardInputDirective } from '@/shared/components/input/input.directive';
-import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';
-import { ZardTooltipDirective } from '@/shared/components/tooltip';
 
 @Component({
   selector: 'z-demo-input-group-default',

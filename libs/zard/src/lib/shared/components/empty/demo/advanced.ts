@@ -11,7 +11,6 @@ import { ZardEmptyComponent } from '../empty.component';
 @Component({
   selector: 'z-demo-empty-advanced-customization',
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, NgIcon, ZardEmptyComponent],
-  viewProviders: [provideIcons({ plus: zardPlusIcon })],
   template: `
     <z-empty
       [zImage]="customImage"
@@ -44,5 +43,6 @@ import { ZardEmptyComponent } from '../empty.component';
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ plus: zardPlusIcon })],
 })
 export class ZardDemoEmptyAdvancedComponent {}

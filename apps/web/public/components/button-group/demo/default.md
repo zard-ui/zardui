@@ -3,6 +3,10 @@ import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
+import { ZardDividerComponent } from '@/shared/components/divider';
+import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 import {
   zardArchiveIcon,
   zardArrowLeftIcon,
@@ -15,11 +19,6 @@ import {
   zardTagIcon,
   zardTrashIcon,
 } from '@/shared/core/icons-registry';
-
-import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
-import { ZardDividerComponent } from '@/shared/components/divider';
-import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 
 @Component({
   selector: 'z-demo-button-group-default',
