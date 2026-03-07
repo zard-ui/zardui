@@ -1,9 +1,11 @@
 import { Component, input, signal } from '@angular/core';
 
+import { provideIcons } from '@ng-icons/core';
+
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardIcon } from '@zard/components/icon/icons';
 import { ZardSegmentedComponent } from '@zard/components/segmented/segmented.component';
 import { ZardToggleGroupComponent } from '@zard/components/toggle-group/toggle-group.component';
+import { ZardIconName, zardMonitorIcon, zardSmartphoneIcon, zardTabletIcon } from '@zard/core';
 
 import { BlockCodeViewerComponent } from '../block-code-viewer/block-code-viewer.component';
 import { BlockPreviewComponent } from '../block-preview/block-preview.component';
@@ -31,12 +33,11 @@ export interface Block {
 export interface ViewportOption {
   value: string;
   ariaLabel: string;
-  icon: ZardIcon;
+  icon: ZardIconName;
 }
 
 @Component({
   selector: 'z-block-container',
-  standalone: true,
   imports: [
     ZardSegmentedComponent,
     ZardDividerComponent,
@@ -45,6 +46,7 @@ export interface ViewportOption {
     BlockCodeViewerComponent,
   ],
   templateUrl: './block-container.component.html',
+  viewProviders: [provideIcons({ monitor: zardMonitorIcon, tablet: zardTabletIcon, smartphone: zardSmartphoneIcon })],
 })
 export class BlockContainerComponent {
   readonly block = input.required<Block>();

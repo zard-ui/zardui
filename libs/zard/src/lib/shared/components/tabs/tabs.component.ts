@@ -21,18 +21,24 @@ import {
 } from '@angular/core';
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import clsx from 'clsx';
 import { debounceTime, fromEvent, merge, map, distinctUntilChanged } from 'rxjs';
 import { twMerge } from 'tailwind-merge';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardIconComponent } from '@/shared/components/icon';
 import {
   tabButtonVariants,
   tabContainerVariants,
   tabNavVariants,
   type ZardTabVariants,
 } from '@/shared/components/tabs/tabs.variants';
+import {
+  zardChevronDownIcon,
+  zardChevronLeftIcon,
+  zardChevronRightIcon,
+  zardChevronUpIcon,
+} from '@/shared/core/icons-registry';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
@@ -55,7 +61,7 @@ export class ZardTabComponent {
 
 @Component({
   selector: 'z-tab-group',
-  imports: [NgTemplateOutlet, ZardButtonComponent, ZardIconComponent],
+  imports: [NgTemplateOutlet, ZardButtonComponent, NgIcon],
   template: `
     @if (navBeforeContent()) {
       <ng-container [ngTemplateOutlet]="navigationBlock" />
@@ -91,7 +97,7 @@ export class ZardTabComponent {
               [class]="'cursor-pointer pr-4 ' + (zTabsPosition() === 'top' ? 'mb-4' : 'mt-4')"
               (click)="scrollNav('left')"
             >
-              <z-icon zType="chevron-left" />
+              <ng-icon name="chevron-left" />
             </button>
           } @else {
             <button
@@ -99,7 +105,7 @@ export class ZardTabComponent {
               [class]="'cursor-pointer pb-4 ' + (zTabsPosition() === 'left' ? 'mr-4' : 'ml-4')"
               (click)="scrollNav('up')"
             >
-              <z-icon zType="chevron-up" />
+              <ng-icon name="chevron-up" />
             </button>
           }
         }
@@ -135,7 +141,7 @@ export class ZardTabComponent {
               [class]="'cursor-pointer pl-4 ' + (zTabsPosition() === 'top' ? 'mb-4' : 'mt-4')"
               (click)="scrollNav('right')"
             >
-              <z-icon zType="chevron-right" />
+              <ng-icon name="chevron-right" />
             </button>
           } @else {
             <button
@@ -143,7 +149,7 @@ export class ZardTabComponent {
               [class]="'cursor-pointer pt-4 ' + (zTabsPosition() === 'left' ? 'mr-4' : 'ml-4')"
               (click)="scrollNav('down')"
             >
-              <z-icon zType="chevron-down" />
+              <ng-icon name="chevron-down" />
             </button>
           }
         }
@@ -169,6 +175,14 @@ export class ZardTabComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [
+    provideIcons({
+      chevronLeft: zardChevronLeftIcon,
+      chevronUp: zardChevronUpIcon,
+      chevronRight: zardChevronRightIcon,
+      chevronDown: zardChevronDownIcon,
+    }),
+  ],
   host: { '[class]': 'containerClasses()' },
 })
 export class ZardTabGroupComponent implements AfterViewInit {

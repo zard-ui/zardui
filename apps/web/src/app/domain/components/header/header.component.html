@@ -6,7 +6,7 @@
         <z-badge zType="secondary">{{ appVersion }}</z-badge>
       </a>
       <div class="flex lg:hidden">
-        <z-mobile-nav></z-mobile-nav>
+        <z-mobile-nav />
       </div>
       <nav class="hidden flex-1 items-center gap-0.5 lg:flex">
         @for (path of headerPaths; track $index) {
@@ -21,10 +21,10 @@
 
       <aside class="ml-auto flex items-center gap-2 md:flex-1 md:justify-end">
         <div class="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
-          <z-doc-researcher #docResearcher></z-doc-researcher>
+          <z-doc-researcher #docResearcher />
         </div>
 
-        <z-divider zOrientation="vertical" zSpacing="none" class="ml-2 hidden h-4! lg:block"></z-divider>
+        <z-divider zOrientation="vertical" zSpacing="none" class="ml-2 hidden h-4! lg:block" />
         @if (githubData) {
           <a z-button class="flex" zType="ghost" zSize="sm" [href]="githubData.url" target="_blank">
             <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />
@@ -34,14 +34,14 @@
             }
           </a>
         }
-        <z-divider zOrientation="vertical" zSpacing="none" class="3xl:block hidden h-4!"></z-divider>
+        <z-divider zOrientation="vertical" zSpacing="none" class="3xl:block hidden h-4!" />
         <button class="3xl:flex hidden" z-button zType="ghost" zSize="sm" (click)="toggleLayout()">
-          <z-icon [zType]="GalleryHorizontalIcon" zSize="lg" />
+          <ng-icon name="gallery-horizontal" zSize="lg" />
           <span class="sr-only">Toggle layout</span>
         </button>
-        <z-divider zOrientation="vertical" zSpacing="none" class="h-4!"></z-divider>
+        <z-divider zOrientation="vertical" zSpacing="none" class="h-4!" />
         <button z-button zType="ghost" zSize="sm" (click)="toggleTheme()">
-          <z-icon zType="dark-mode" class="size-4.5" />
+          <ng-icon name="dark-mode" class="size-4.5!" />
           <span class="sr-only">Toggle theme</span>
         </button>
       </aside>

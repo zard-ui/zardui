@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
+import { zardCheckIcon } from '@zard/core/icons-registry';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -10,7 +12,7 @@ import { oklchToHex } from '../../utils/oklch-converter';
 @Component({
   selector: 'app-theme-preset-card',
   standalone: true,
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
@@ -30,9 +32,10 @@ import { oklchToHex } from '../../utils/oklch-converter';
     </div>
     <span class="text-foreground flex-1 truncate text-xs font-medium">{{ preset().name }}</span>
     @if (isActive()) {
-      <z-icon zType="check" class="text-primary size-3.5 shrink-0" />
+      <ng-icon name="check" class="text-primary size-3.5! shrink-0" />
     }
   `,
+  viewProviders: [provideIcons({ check: zardCheckIcon })],
 })
 export class ThemePresetCardComponent {
   readonly preset = input.required<ThemePreset>();

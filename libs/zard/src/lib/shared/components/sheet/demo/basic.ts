@@ -5,6 +5,7 @@ import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardInputDirective } from '@/shared/components/input';
 import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
 import { Z_SHEET_DATA, ZardSheetService } from '@/shared/components/sheet/sheet.service';
+import { zardSaveIcon } from '@/shared/core';
 
 interface iSheetData {
   name: string;
@@ -83,6 +84,7 @@ export class ZardDemoSheetBasicComponent {
         username: '@ribeiromatheus.dev',
       },
       zOkText: 'Save changes',
+      zOkIcon: zardSaveIcon,
       zOnOk: instance => {
         console.log('Form submitted:', instance.form.value);
       },

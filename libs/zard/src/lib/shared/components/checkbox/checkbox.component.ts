@@ -11,9 +11,10 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
-import { ZardIdDirective } from '@/shared/core';
+import { ZardIdDirective, zardCheckIcon } from '@/shared/core';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import {
@@ -23,14 +24,13 @@ import {
   type ZardCheckboxSizeVariants,
   type ZardCheckboxTypeVariants,
 } from './checkbox.variants';
-import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;
 
 @Component({
   selector: 'z-checkbox, [z-checkbox]',
-  imports: [ZardIconComponent, ZardIdDirective],
+  imports: [NgIcon, ZardIdDirective],
   template: `
     <main class="relative flex" zardId="checkbox" #z="zardId">
       <input
@@ -44,12 +44,10 @@ type OnChangeType = (value: boolean) => void;
         (blur)="onCheckboxBlur()"
         (click)="onCheckboxChange()"
       />
-      <z-icon
-        zType="check"
-        [class]="
-          'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-1/2 items-center justify-center transition-opacity ' +
-          (checked() ? 'opacity-100' : 'opacity-0')
-        "
+      <ng-icon
+        name="check"
+        class="text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-1/2 items-center justify-center transition-opacity"
+        [class]="checked() ? 'opacity-100' : 'opacity-0'"
       />
     </main>
     <label [class]="labelClasses()" [for]="z.id()">
@@ -65,6 +63,7 @@ type OnChangeType = (value: boolean) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ check: zardCheckIcon })],
   host: {
     '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' flex items-center gap-2'",
     '[attr.aria-disabled]': 'disabled()',

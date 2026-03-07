@@ -1,12 +1,14 @@
 import { Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
+import { zardArrowLeftIcon, zardArrowRightIcon } from '../../../core/icons-registry';
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardButtonGroupComponent } from '../button-group.component';
 
 @Component({
   selector: 'z-demo-button-group-nested',
-  imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardIconComponent],
+  imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon],
   template: `
     <z-button-group>
       <z-button-group>
@@ -19,10 +21,11 @@ import { ZardButtonGroupComponent } from '../button-group.component';
       </z-button-group>
 
       <z-button-group>
-        <button z-button zSize="sm" zType="outline"><i z-icon zType="arrow-left"></i></button>
-        <button z-button zSize="sm" zType="outline"><i z-icon zType="arrow-right"></i></button>
+        <button z-button zSize="sm" zType="outline"><ng-icon name="arrow-left" /></button>
+        <button z-button zSize="sm" zType="outline"><ng-icon name="arrow-right" /></button>
       </z-button-group>
     </z-button-group>
   `,
+  viewProviders: [provideIcons({ arrowLeft: zardArrowLeftIcon, arrowRight: zardArrowRightIcon })],
 })
 export class ZardDemoButtonGroupNestedComponent {}

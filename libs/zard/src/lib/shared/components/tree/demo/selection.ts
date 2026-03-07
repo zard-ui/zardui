@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { provideIcons } from '@ng-icons/core';
+
 import { ZardTreeImports } from '@/shared/components/tree/tree.imports';
 import type { TreeNode } from '@/shared/components/tree/tree.types';
+import { zardMonitorIcon, zardSmartphoneIcon, zardTabletIcon, zardTagIcon } from '@/shared/core';
 
 @Component({
   selector: 'z-demo-tree-selection',
@@ -17,6 +20,14 @@ import type { TreeNode } from '@/shared/components/tree/tree.types';
     <p class="text-muted-foreground mt-4 text-sm">Selected: {{ selectedLabel }}</p>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      monitor: zardMonitorIcon,
+      smartphone: zardSmartphoneIcon,
+      tablet: zardTabletIcon,
+      tag: zardTagIcon,
+    }),
+  ],
 })
 export class ZardDemoTreeSelectionComponent {
   selectedLabel = 'None';

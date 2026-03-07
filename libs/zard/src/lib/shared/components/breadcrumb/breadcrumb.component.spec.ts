@@ -12,7 +12,6 @@ import {
 @Component({
   selector: 'test-host-component',
   imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent],
-  standalone: true,
   template: `
     <z-breadcrumb>
       <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
@@ -95,11 +94,11 @@ describe('BreadcrumbComponents Integration', () => {
     expect(currentPage.nativeElement.textContent.trim()).toBe('Breadcrumb');
   });
 
-  it('breadcrumb-ellipsis should contain z-icon component', () => {
+  it('breadcrumb-ellipsis should contain ng-icon component', () => {
     const breadcrumbPageDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent));
-    const iconElement = breadcrumbPageDebug.query(By.css('z-icon'));
+    const iconElement = breadcrumbPageDebug.query(By.css('ng-icon'));
     expect(iconElement).toBeTruthy();
-    expect(iconElement.componentInstance.zType()).toBe('ellipsis');
+    expect(iconElement.nativeElement.getAttribute('name')).toBe('ellipsis');
   });
 
   it('should support routerLink on breadcrumb items', () => {
@@ -117,9 +116,9 @@ describe('BreadcrumbComponents Integration', () => {
   });
 
   it('should render default chevron separator when zSeparator is not provided', () => {
-    const separator = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"] z-icon'));
+    const separator = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"] ng-icon'));
     expect(separator).toBeTruthy();
-    expect(separator.componentInstance.zType()).toBe('chevron-right');
+    expect(separator.nativeElement.getAttribute('name')).toBe('chevron-right');
   });
 });
 
@@ -182,9 +181,9 @@ describe('BreadcrumbComponent - Custom Separator', () => {
     component.separator = '';
     fixture.detectChanges();
 
-    const chevrons = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] z-icon'));
-    expect(chevrons.length).toBe(2); // 3 items = 2 separators
-    expect(chevrons[0].componentInstance.zType()).toBe('chevron-right');
+    const chevrons = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] ng-icon'));
+    expect(chevrons.length).toBe(2);
+    expect(chevrons[0].nativeElement.getAttribute('name')).toBe('chevron-right');
   });
 
   it('should update separator dynamically when input changes', () => {

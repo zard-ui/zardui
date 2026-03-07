@@ -1,7 +1,7 @@
 import { Component, computed, inject, type OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { ArrowRight, ExternalLink, FolderOpen, Github, LucideAngularModule } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
 
 import type { Block } from '@doc/domain/components/block-container/block-container.component';
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
@@ -13,6 +13,12 @@ import { BlocksService, type BlockCategory as ServiceBlockCategory } from '@doc/
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
+import {
+  zardArrowRightIcon,
+  zardExternalLinkIcon,
+  zardFolderOpenIcon,
+  zardGithubIcon,
+} from '@zard/core/icons-registry';
 
 interface BlockPreview {
   id: string;
@@ -26,18 +32,29 @@ interface BlockPreview {
 @Component({
   selector: 'z-block-instructions',
   standalone: true,
-  imports: [RouterLink, ZardButtonComponent, DocContentComponent, DocHeadingComponent, ScrollSpyDirective, ScrollSpyItemDirective, LucideAngularModule],
+  imports: [
+    RouterLink,
+    ZardButtonComponent,
+    NgIcon,
+    DocContentComponent,
+    DocHeadingComponent,
+    ScrollSpyDirective,
+    ScrollSpyItemDirective,
+  ],
   templateUrl: './block-instructions.page.html',
+  viewProviders: [
+    provideIcons({
+      github: zardGithubIcon,
+      arrowRight: zardArrowRightIcon,
+      folderOpen: zardFolderOpenIcon,
+      externalLink: zardExternalLinkIcon,
+    }),
+  ],
 })
 export class BlocksInstructionPage implements OnInit {
   private readonly seoService = inject(SeoService);
   private readonly blocksService = inject(BlocksService);
   activeAnchor?: string;
-
-  readonly GithubIcon = Github;
-  readonly ArrowRightIcon = ArrowRight;
-  readonly ExternalLinkIcon = ExternalLink;
-  readonly FolderOpenIcon = FolderOpen;
 
   readonly navigationConfig: NavigationConfig = {
     items: [
@@ -54,6 +71,7 @@ export class BlocksInstructionPage implements OnInit {
     const uniqueBlocks = new Set(allBlocks.map(block => block.id));
     return uniqueBlocks.size;
   });
+
   readonly categoriesCount = 5;
 
   readonly featuredBlocks = computed(() => this.transformBlocks(this.blocksService.getBlocksByCategory('featured')));

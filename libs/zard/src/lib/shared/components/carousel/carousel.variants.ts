@@ -41,7 +41,7 @@ export const carouselItemVariants = cva('min-w-0 shrink-0 grow-0 basis-full', {
   },
 });
 
-export const carouselPreviousButtonVariants = cva('absolute size-8 rounded-full', {
+export const carouselPreviousButtonVariants = cva('absolute size-8 rounded-full px-0', {
   variants: {
     zOrientation: {
       horizontal: 'top-1/2 -left-12.5 -translate-y-1/2',
@@ -53,7 +53,7 @@ export const carouselPreviousButtonVariants = cva('absolute size-8 rounded-full'
   },
 });
 
-export const carouselNextButtonVariants = cva('absolute size-8 rounded-full', {
+export const carouselNextButtonVariants = cva('absolute size-8 rounded-full px-0', {
   variants: {
     zOrientation: {
       horizontal: 'top-1/2 -right-12 -translate-y-1/2',

@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { zardMoonIcon, zardSunIcon, zardSunMoonIcon } from '@zard/core/icons-registry';
 import { EDarkModes, ZardDarkMode } from '@zard/services/dark-mode';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
@@ -25,11 +27,12 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     MarkdownRendererComponent,
     ZardButtonComponent,
     ZardCardComponent,
-    ZardIconComponent,
+    NgIcon,
     ZardButtonGroupComponent,
   ],
   templateUrl: './dark-mode.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ sunMoon: zardSunMoonIcon, sun: zardSunIcon, moon: zardMoonIcon })],
 })
 export class DarkmodePage implements OnInit {
   activeAnchor?: string;
@@ -53,7 +56,7 @@ export class DarkmodePage implements OnInit {
     this.seoService.setDocsSeo(
       'Dark Mode',
       'Complete dark mode system with theme switching and persistence.',
-      '/docs/dark-mode',
+      '/docs/darkmode',
       'og-darkmode.jpg',
     );
   }

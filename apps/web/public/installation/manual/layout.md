@@ -247,9 +247,9 @@ import {
   type TemplateRef,
 } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
-import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
 import {
   sidebarGroupLabelVariants,
   sidebarGroupVariants,
@@ -257,11 +257,12 @@ import {
   sidebarVariants,
 } from '@/shared/components/layout/layout.variants';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
+import { zardChevronLeftIcon, zardChevronRightIcon } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-sidebar',
-  imports: [ZardStringTemplateOutletDirective, ZardIconComponent],
+  imports: [ZardStringTemplateOutletDirective, NgIcon],
   template: `
     <aside [class]="classes()" [style.width.px]="currentWidth()" [attr.data-collapsed]="zCollapsed()">
       <div class="flex-1 overflow-auto">
@@ -278,7 +279,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
           [attr.aria-label]="zCollapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
           [attr.aria-expanded]="!zCollapsed()"
         >
-          <z-icon [zType]="chevronIcon()" />
+          <ng-icon [name]="chevronIcon()" class="pointer-events-none size-4! shrink-0" />
         </div>
       }
 
@@ -289,6 +290,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ chevronLeft: zardChevronLeftIcon, chevronRight: zardChevronRightIcon })],
   exportAs: 'zSidebar',
 })
 export class SidebarComponent {
@@ -320,7 +322,7 @@ export class SidebarComponent {
     return typeof width === 'number' ? width : parseInt(width, 10);
   });
 
-  protected readonly chevronIcon = computed((): ZardIcon => {
+  protected readonly chevronIcon = computed((): string => {
     const collapsed = this.zCollapsed();
     const reverse = this.zReverseArrow();
 

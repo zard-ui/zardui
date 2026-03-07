@@ -21,7 +21,7 @@
       <span class="text-muted-foreground text-xs font-medium">Live Preview</span>
     </div>
     <div class="bg-muted text-muted-foreground flex items-center gap-2 rounded-md px-3 py-1 text-xs">
-      <z-icon zType="clock" class="size-3" />
+      <ng-icon name="clock" class="size-3!" />
       Real-time updates
     </div>
   </div>
@@ -71,8 +71,8 @@
               <z-card zTitle="Form Controls" zDescription="Input elements">
                 <div class="space-y-4">
                   <div class="space-y-1.5">
-                    <label class="text-sm font-medium">Email</label>
-                    <input z-input placeholder="you@example.com" />
+                    <label for="email" class="text-sm font-medium">Email</label>
+                    <input id="email" z-input placeholder="you@example.com" />
                   </div>
                   <div class="flex items-center gap-4">
                     <z-checkbox>Remember me</z-checkbox>
@@ -129,12 +129,14 @@
                 </div>
               </z-card>
 
+              <ng-template #terminalIcon><ng-icon name="lucideCircleAlert" /></ng-template>
+
               <z-card zTitle="Alerts" zDescription="Notification messages" class="md:col-span-2 lg:col-span-3">
                 <div class="grid gap-3 md:grid-cols-2">
                   <z-alert
                     zTitle="Information"
                     zDescription="Your session will expire in 5 minutes."
-                    zIcon="terminal"
+                    [zIcon]="terminalIcon"
                   />
                   <z-alert
                     zType="destructive"
@@ -179,7 +181,7 @@
                     <p class="text-foreground text-2xl font-bold">$45,231</p>
                   </div>
                   <div class="bg-primary/10 rounded-full p-3">
-                    <z-icon zType="dollar-sign" class="text-primary size-5" />
+                    <ng-icon name="dollar-sign-alt" class="text-primary size-5!" />
                   </div>
                 </div>
                 <p class="text-muted-foreground mt-2 text-xs">
@@ -195,7 +197,7 @@
                     <p class="text-foreground text-2xl font-bold">+2,350</p>
                   </div>
                   <div class="bg-primary/10 rounded-full p-3">
-                    <z-icon zType="user-plus" class="text-primary size-5" />
+                    <ng-icon name="user-plus-alt" class="text-primary size-5!" />
                   </div>
                 </div>
                 <p class="text-muted-foreground mt-2 text-xs">
@@ -211,7 +213,7 @@
                     <p class="text-foreground text-2xl font-bold">+12,234</p>
                   </div>
                   <div class="bg-primary/10 rounded-full p-3">
-                    <z-icon zType="credit-card" class="text-primary size-5" />
+                    <ng-icon name="credit-card" class="text-primary size-5!" />
                   </div>
                 </div>
                 <p class="text-muted-foreground mt-2 text-xs">
@@ -227,7 +229,7 @@
                     <p class="text-foreground text-2xl font-bold">+573</p>
                   </div>
                   <div class="bg-primary/10 rounded-full p-3">
-                    <z-icon zType="activity" class="text-primary size-5" />
+                    <ng-icon name="activity-alt" class="text-primary size-5!" />
                   </div>
                 </div>
                 <p class="text-muted-foreground mt-2 text-xs">
@@ -293,7 +295,7 @@
                 </div>
                 <z-divider zSpacing="lg" />
                 <button z-button zType="outline" zFull zSize="sm">
-                  <z-icon zType="plus" class="mr-2 size-4" />
+                  <ng-icon name="plus" class="mr-2 size-4!" />
                   Invite Member
                 </button>
               </z-card>

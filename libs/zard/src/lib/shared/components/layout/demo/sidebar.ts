@@ -1,17 +1,31 @@
 import { Component, signal } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDividerComponent } from '@/shared/components/divider';
-import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
 import { LayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 import { ZardTooltipImports } from '@/shared/components/tooltip';
+import {
+  zardCalendarIcon,
+  zardChevronRightIcon,
+  zardChevronsUpDownIcon,
+  zardFolderIcon,
+  zardHouseIcon,
+  zardInboxIcon,
+  zardLogOutIcon,
+  zardPanelLeftIcon,
+  zardSearchIcon,
+  zardSettingsIcon,
+  zardUserIcon,
+} from '@/shared/core/icons-registry';
 
 interface MenuItem {
-  icon: ZardIcon;
+  icon: string;
   label: string;
   submenu?: { label: string }[];
 }
@@ -27,7 +41,7 @@ interface MenuItem {
     ZardTooltipImports,
     ZardDividerComponent,
     ZardAvatarComponent,
-    ZardIconComponent,
+    NgIcon,
   ],
   template: `
     <!-- border and rounded-md are just for the demo purpose -->
@@ -54,7 +68,7 @@ interface MenuItem {
                 [zTooltip]="sidebarCollapsed() ? item.label : ''"
                 zPosition="right"
               >
-                <z-icon [zType]="item.icon" [class]="sidebarCollapsed() ? '' : 'mr-2'" />
+                <ng-icon [name]="item.icon" [class]="sidebarCollapsed() ? '' : 'mr-2'" />
                 @if (!sidebarCollapsed()) {
                   <span>{{ item.label }}</span>
                 }
@@ -79,10 +93,10 @@ interface MenuItem {
                   [zTooltip]="sidebarCollapsed() ? item.label : null"
                   zPosition="right"
                 >
-                  <z-icon [zType]="item.icon" [class]="sidebarCollapsed() ? '' : 'mr-2'" />
+                  <ng-icon [name]="item.icon" [class]="sidebarCollapsed() ? '' : 'mr-2'" />
                   @if (!sidebarCollapsed()) {
                     <span class="flex-1 text-left">{{ item.label }}</span>
-                    <z-icon zType="chevron-right" />
+                    <ng-icon name="chevron-right" />
                   }
                 </button>
 
@@ -102,7 +116,7 @@ interface MenuItem {
                   [zTooltip]="sidebarCollapsed() ? item.label : ''"
                   zPosition="right"
                 >
-                  <z-icon [zType]="item.icon" [class]="sidebarCollapsed() ? '' : 'mr-2'" />
+                  <ng-icon [name]="item.icon" [class]="sidebarCollapsed() ? '' : 'mr-2'" />
                   @if (!sidebarCollapsed()) {
                     <span>{{ item.label }}</span>
                   }
@@ -129,23 +143,23 @@ interface MenuItem {
                   <div class="text-xs">test&#64;zardui.com</div>
                 </div>
 
-                <z-icon zType="chevrons-up-down" class="ml-auto" />
+                <ng-icon name="chevrons-up-down" class="ml-auto" />
               }
             </div>
 
             <ng-template #userMenu>
               <div z-menu-content class="w-48">
                 <button type="button" z-menu-item>
-                  <z-icon zType="user" class="mr-2" />
+                  <ng-icon name="user" class="mr-2" />
                   Profile
                 </button>
                 <button type="button" z-menu-item>
-                  <z-icon zType="settings" class="mr-2" />
+                  <ng-icon name="settings" class="mr-2" />
                   Settings
                 </button>
                 <z-divider zSpacing="sm" />
                 <button type="button" z-menu-item>
-                  <z-icon zType="log-out" class="mr-2" />
+                  <ng-icon name="log-out" class="mr-2" />
                   Logout
                 </button>
               </div>
@@ -158,7 +172,7 @@ interface MenuItem {
       <z-content class="min-h-50">
         <div class="flex items-center">
           <button type="button" z-button zType="ghost" zSize="sm" class="-ml-2" (click)="toggleSidebar()">
-            <z-icon zType="panel-left" />
+            <ng-icon name="panel-left" />
           </button>
 
           <z-divider zOrientation="vertical" class="ml-2 h-4" />
@@ -178,6 +192,21 @@ interface MenuItem {
       </z-content>
     </z-layout>
   `,
+  viewProviders: [
+    provideIcons({
+      house: zardHouseIcon,
+      inbox: zardInboxIcon,
+      folder: zardFolderIcon,
+      chevronRight: zardChevronRightIcon,
+      chevronsUpDown: zardChevronsUpDownIcon,
+      user: zardUserIcon,
+      settings: zardSettingsIcon,
+      logOut: zardLogOutIcon,
+      panelLeft: zardPanelLeftIcon,
+      calendar: zardCalendarIcon,
+      search: zardSearchIcon,
+    }),
+  ],
 })
 export class LayoutDemoSidebarComponent {
   readonly sidebarCollapsed = signal(false);

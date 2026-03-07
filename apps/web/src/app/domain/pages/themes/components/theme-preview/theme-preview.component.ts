@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideActivity, lucideCreditCard, lucideDollarSign, lucideTerminal, lucideUserPlus } from '@ng-icons/lucide';
+
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
@@ -9,21 +12,30 @@ import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
 import { ZardSkeletonComponent } from '@zard/components/skeleton/skeleton.component';
 import { ZardSliderComponent } from '@zard/components/slider/slider.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTabComponent, ZardTabGroupComponent } from '@zard/components/tabs/tabs.component';
+import {
+  zardActivityIcon,
+  zardArrowLeftIcon,
+  zardArrowRightIcon,
+  zardClockIcon,
+  zardCopyIcon,
+  zardDollarSignIcon,
+  zardPlusIcon,
+  zardUserPlusIcon,
+} from '@zard/core/icons-registry';
 
 import { ThemeGeneratorService } from '../../services/theme-generator.service';
 
 @Component({
   selector: 'app-theme-preview',
-  standalone: true,
   imports: [
     FormsModule,
+    NgIcon,
     ZardAlertComponent,
     ZardAvatarComponent,
     ZardBadgeComponent,
@@ -32,7 +44,6 @@ import { ThemeGeneratorService } from '../../services/theme-generator.service';
     ZardCheckboxComponent,
     ZardDividerComponent,
     ZardEmptyComponent,
-    ZardIconComponent,
     ZardInputDirective,
     ZardProgressBarComponent,
     ZardSkeletonComponent,
@@ -45,6 +56,23 @@ import { ThemeGeneratorService } from '../../services/theme-generator.service';
   encapsulation: ViewEncapsulation.None,
   host: { class: 'block h-full' },
   templateUrl: './theme-preview.component.html',
+  viewProviders: [
+    provideIcons({
+      lucideTerminal,
+      activity: lucideActivity,
+      creditCard: lucideCreditCard,
+      dollarSign: lucideDollarSign,
+      userPlus: lucideUserPlus,
+      clock: zardClockIcon,
+      dollarSignAlt: zardDollarSignIcon,
+      userPlusAlt: zardUserPlusIcon,
+      activityAlt: zardActivityIcon,
+      plus: zardPlusIcon,
+      arrowLeft: zardArrowLeftIcon,
+      arrowRight: zardArrowRightIcon,
+      copy: zardCopyIcon,
+    }),
+  ],
 })
 export class ThemePreviewComponent {
   private readonly themeService = inject(ThemeGeneratorService);

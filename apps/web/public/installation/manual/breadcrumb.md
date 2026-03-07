@@ -14,6 +14,7 @@ import {
 } from '@angular/core';
 import { type Params, RouterLink } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import {
@@ -26,18 +27,19 @@ import {
   type ZardBreadcrumbSizeVariants,
   type ZardBreadcrumbWrapVariants,
 } from '@/shared/components/breadcrumb/breadcrumb.variants';
-import { ZardIconComponent } from '@/shared/components/icon';
+import { zardChevronRightIcon, zardEllipsisIcon } from '@/shared/core';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   template: `
-    <z-icon zType="ellipsis" />
+    <ng-icon name="ellipsis" class="size-4!" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ ellipsis: zardEllipsisIcon })],
   host: {
     '[class]': 'classes()',
     'aria-hidden': 'true',
@@ -56,7 +58,7 @@ export class ZardBreadcrumbEllipsisComponent {
 
 @Component({
   selector: 'z-breadcrumb-item, [z-breadcrumb-item]',
-  imports: [ZardStringTemplateOutletDirective, ZardIconComponent, RouterLink],
+  imports: [ZardStringTemplateOutletDirective, NgIcon, RouterLink],
   template: `
     <ng-template #itemContent><ng-content /></ng-template>
 
@@ -82,13 +84,16 @@ export class ZardBreadcrumbEllipsisComponent {
         } @else if (separator()) {
           {{ separator() }}
         } @else {
-          <z-icon zType="chevron-right" />
+          <span class="flex items-center">
+            <ng-icon name="chevron-right" />
+          </span>
         }
       </li>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ chevronRight: zardChevronRightIcon })],
   host: {
     class: 'inline-flex items-center gap-1.5',
   },

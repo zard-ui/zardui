@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 
+import { provideIcons } from '@ng-icons/core';
+
+import { zardBoldIcon, zardItalicIcon, zardUnderlineIcon } from '../../../core/icons-registry';
 import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-group.component';
 
 @Component({
   selector: 'demo-toggle-group-with-text',
   imports: [ZardToggleGroupComponent],
-  standalone: true,
   template: `
     <z-toggle-group
       zMode="multiple"
@@ -14,6 +16,7 @@ import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-gr
       (valueChange)="onToggleChange($event)"
     />
   `,
+  viewProviders: [provideIcons({ bold: zardBoldIcon, italic: zardItalicIcon, underline: zardUnderlineIcon })],
 })
 export default class ToggleGroupWithTextComponent {
   items: ZardToggleGroupItem[] = [

@@ -1,14 +1,16 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
+import { zardPlusIcon } from '../../../core/icons-registry';
 import { ZardAvatarGroupComponent } from '../../avatar/avatar-group.component';
 import { ZardAvatarComponent } from '../../avatar/avatar.component';
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
   selector: 'z-demo-empty-advanced-customization',
-  imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, ZardIconComponent, ZardEmptyComponent],
+  imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, NgIcon, ZardEmptyComponent],
   template: `
     <z-empty
       [zImage]="customImage"
@@ -35,11 +37,12 @@ import { ZardEmptyComponent } from '../empty.component';
 
     <ng-template #actionInvite>
       <button type="button" z-button zSize="sm">
-        <i z-icon zType="plus"></i>
+        <ng-icon name="plus" />
         Invite Members
       </button>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ plus: zardPlusIcon })],
 })
 export class ZardDemoEmptyAdvancedComponent {}

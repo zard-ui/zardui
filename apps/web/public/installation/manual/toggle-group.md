@@ -13,18 +13,18 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { NgIcon } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
+import type { ZardIconName } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 export interface ZardToggleGroupItem {
   value: string;
   label?: string;
-  icon?: ZardIcon;
+  icon?: ZardIconName;
   disabled?: boolean;
   ariaLabel?: string;
 }
@@ -34,8 +34,7 @@ type OnChangeType = (value: string | string[]) => void;
 
 @Component({
   selector: 'z-toggle-group',
-  imports: [ZardIconComponent],
-  standalone: true,
+  imports: [NgIcon],
   template: `
     <div [class]="classes()" role="group" [attr.data-orientation]="'horizontal'">
       @for (item of items(); track item.value; let i = $index) {
@@ -49,7 +48,7 @@ type OnChangeType = (value: string | string[]) => void;
           (click)="toggleItem(item)"
         >
           @if (item.icon) {
-            <span z-icon [zType]="item.icon" class="size-4 shrink-0"></span>
+            <ng-icon [name]="item.icon" class="size-4! shrink-0" />
           }
           @if (item.label) {
             <span>{{ item.label }}</span>
@@ -121,7 +120,6 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
 
     const positionClasses = [];
 
-    // Add rounded corners for first and last items
     if (index === 0) {
       positionClasses.push('first:rounded-l-md');
     }
@@ -129,18 +127,14 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
       positionClasses.push('last:rounded-r-md');
     }
 
-    // Handle borders for outline variant
     if (this.zType() === 'outline') {
       if (index === 0) {
-        // First item gets full border
         positionClasses.push('border-l');
       } else {
-        // Other items don't get left border (connects to previous)
         positionClasses.push('border-l-0');
       }
     }
 
-    // Focus z-index
     positionClasses.push('focus:z-10', 'focus-visible:z-10');
 
     return mergeClasses(baseClasses, ...positionClasses);

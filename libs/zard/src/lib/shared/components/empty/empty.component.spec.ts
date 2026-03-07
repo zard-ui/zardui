@@ -38,9 +38,9 @@ describe('ZardEmptyComponent', () => {
     expect(iconElement).toBeVisible();
     expect(iconElement).toHaveClass(emptyIconVariants());
 
-    const zIcon = iconElement.querySelector('z-icon');
-    expect(zIcon).toBeVisible();
-    expect(zIcon).toHaveAttribute('zsize', 'xl');
+    const ngIcon = iconElement.querySelector('ng-icon');
+    expect(ngIcon).toBeVisible();
+    expect(ngIcon).toHaveClass('size-5!');
   });
 
   it('should render title when provided', async () => {

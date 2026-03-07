@@ -1,11 +1,20 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardAccordionItemComponent } from '@zard/components/accordion/accordion-item.component';
 import { ZardAccordionComponent } from '@zard/components/accordion/accordion.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardSliderComponent } from '@zard/components/slider/slider.component';
+import {
+  zardCheckIcon,
+  zardCopyIcon,
+  zardMoonIcon,
+  zardPaletteIcon,
+  zardSquareIcon,
+  zardSunIcon,
+} from '@zard/core/icons-registry';
 
 import { THEME_PRESETS } from '../../data/theme-presets';
 import { COLOR_GROUPS, type ThemeColorKey } from '../../models/theme.model';
@@ -15,13 +24,12 @@ import { ThemePresetCardComponent } from '../theme-preset-card/theme-preset-card
 
 @Component({
   selector: 'app-theme-sidebar',
-  standalone: true,
   imports: [
     FormsModule,
     ZardAccordionComponent,
     ZardAccordionItemComponent,
     ZardButtonComponent,
-    ZardIconComponent,
+    NgIcon,
     ZardSliderComponent,
     ColorPickerFieldComponent,
     ThemePresetCardComponent,
@@ -30,6 +38,16 @@ import { ThemePresetCardComponent } from '../theme-preset-card/theme-preset-card
   encapsulation: ViewEncapsulation.None,
   host: { class: 'flex h-full flex-col' },
   templateUrl: './theme-sidebar.component.html',
+  viewProviders: [
+    provideIcons({
+      moon: zardMoonIcon,
+      sun: zardSunIcon,
+      square: zardSquareIcon,
+      palette: zardPaletteIcon,
+      check: zardCheckIcon,
+      copy: zardCopyIcon,
+    }),
+  ],
 })
 export class ThemeSidebarComponent {
   private readonly themeService = inject(ThemeGeneratorService);

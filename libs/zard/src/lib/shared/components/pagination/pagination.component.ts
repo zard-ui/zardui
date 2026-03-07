@@ -11,6 +11,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import {
@@ -18,7 +19,6 @@ import {
   type ZardButtonSizeVariants,
   type ZardButtonTypeVariants,
 } from '@/shared/components/button';
-import { ZardIconComponent } from '@/shared/components/icon';
 import {
   paginationContentVariants,
   paginationEllipsisVariants,
@@ -26,6 +26,7 @@ import {
   paginationPreviousVariants,
   paginationVariants,
 } from '@/shared/components/pagination/pagination.variants';
+import { zardChevronLeftIcon, zardChevronRightIcon, zardEllipsisIcon } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -94,7 +95,7 @@ export class ZardPaginationButtonComponent {
 
 @Component({
   selector: 'z-pagination-previous',
-  imports: [ZardPaginationButtonComponent, ZardIconComponent],
+  imports: [ZardPaginationButtonComponent, NgIcon],
   template: `
     <button
       type="button"
@@ -105,12 +106,13 @@ export class ZardPaginationButtonComponent {
       [zDisabled]="zDisabled()"
     >
       <span class="sr-only">To previous page</span>
-      <z-icon zType="chevron-left" aria-hidden="true" />
+      <ng-icon name="chevron-left" aria-hidden="true" />
       <span class="hidden sm:block" aria-hidden="true">Previous</span>
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ chevronLeft: zardChevronLeftIcon })],
   exportAs: 'zPaginationPrevious',
 })
 export class ZardPaginationPreviousComponent {
@@ -123,7 +125,7 @@ export class ZardPaginationPreviousComponent {
 
 @Component({
   selector: 'z-pagination-next',
-  imports: [ZardPaginationButtonComponent, ZardIconComponent],
+  imports: [ZardPaginationButtonComponent, NgIcon],
   template: `
     <button
       type="button"
@@ -135,11 +137,12 @@ export class ZardPaginationPreviousComponent {
     >
       <span class="sr-only">To next page</span>
       <span class="hidden sm:block" aria-hidden="true">Next</span>
-      <z-icon zType="chevron-right" aria-hidden="true" />
+      <ng-icon name="chevron-right" aria-hidden="true" />
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ chevronRight: zardChevronRightIcon })],
   exportAs: 'zPaginationNext',
 })
 export class ZardPaginationNextComponent {
@@ -152,12 +155,13 @@ export class ZardPaginationNextComponent {
 
 @Component({
   selector: 'z-pagination-ellipsis',
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   template: `
-    <z-icon zType="ellipsis" aria-hidden="true" />
+    <ng-icon name="ellipsis" aria-hidden="true" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ ellipsis: zardEllipsisIcon })],
   host: {
     '[class]': 'classes()',
     'aria-hidden': 'true',

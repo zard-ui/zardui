@@ -102,7 +102,7 @@
             [aria-pressed]="theme === EDarkModes.SYSTEM"
             (click)="darkModeService.toggleTheme(EDarkModes.SYSTEM)"
           >
-            <z-icon zType="sun-moon" />
+            <ng-icon name="sun-moon" />
             <span class="sr-only">Use system theme</span>
           </button>
           <button
@@ -113,7 +113,7 @@
             [aria-pressed]="theme === EDarkModes.LIGHT"
             (click)="darkModeService.toggleTheme(EDarkModes.LIGHT)"
           >
-            <z-icon zType="sun" />
+            <ng-icon name="sun" />
             <span class="sr-only">Light theme</span>
           </button>
           <button
@@ -124,7 +124,7 @@
             [aria-pressed]="theme === EDarkModes.DARK"
             (click)="darkModeService.toggleTheme(EDarkModes.DARK)"
           >
-            <z-icon zType="moon" />
+            <ng-icon name="moon" />
             <span class="sr-only">Dark theme</span>
           </button>
         </z-button-group>

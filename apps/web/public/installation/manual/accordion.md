@@ -140,6 +140,7 @@ export type ZardAccordionContentVariants = VariantProps<typeof accordionContentV
 ```angular-ts title="accordion-item.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import type { ZardAccordionComponent } from '@/shared/components/accordion/accordion.component';
@@ -148,12 +149,12 @@ import {
   accordionItemVariants,
   accordionTriggerVariants,
 } from '@/shared/components/accordion/accordion.variants';
-import { ZardIconComponent } from '@/shared/components/icon';
+import { zardChevronDownIcon } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-accordion-item',
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   template: `
     <button
       type="button"
@@ -164,8 +165,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
       (click)="toggle()"
     >
       {{ zTitle() }}
-      <z-icon
-        zType="chevron-down"
+      <ng-icon
+        name="chevron-down"
         class="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
         [class]="isOpen() ? 'rotate-180' : ''"
       />
@@ -187,6 +188,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ chevronDown: zardChevronDownIcon })],
   host: {
     '[class]': 'itemClasses()',
     '[attr.data-state]': "isOpen() ? 'open' : 'closed'",

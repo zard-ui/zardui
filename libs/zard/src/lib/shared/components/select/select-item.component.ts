@@ -10,13 +10,15 @@ import {
   signal,
 } from '@angular/core';
 
-import { ZardIconComponent } from '@/shared/components/icon';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import {
   selectItemIconVariants,
   selectItemVariants,
   type ZardSelectItemModeVariants,
   type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
+import { zardCheckIcon } from '@/shared/core/icons-registry';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 // Interface to avoid circular dependency
@@ -28,11 +30,11 @@ interface SelectHost {
 
 @Component({
   selector: 'z-select-item, [z-select-item]',
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   template: `
     @if (isSelected()) {
       <span [class]="iconClasses()">
-        <z-icon zType="check" [zStrokeWidth]="strokeWidth()" aria-hidden="true" data-testid="check-icon" />
+        <ng-icon name="check" [strokeWidth]="strokeWidth()" aria-hidden="true" data-testid="check-icon" />
       </span>
     }
     <span class="truncate">
@@ -40,6 +42,7 @@ interface SelectHost {
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ check: zardCheckIcon })],
   host: {
     role: 'option',
     tabindex: '-1',
