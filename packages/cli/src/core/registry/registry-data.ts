@@ -287,7 +287,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'avatar',
-    registryDependencies: ['icon'],
     files: [
       {
         name: 'avatar.component.ts',
@@ -444,7 +443,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'select',
-    registryDependencies: ['badge', 'icon'],
+    registryDependencies: ['badge'],
     files: [
       {
         name: 'select.component.ts',
@@ -1076,7 +1075,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'tree',
-    registryDependencies: ['icon', 'checkbox'],
+    registryDependencies: ['checkbox'],
     files: [
       {
         name: 'tree.component.ts',

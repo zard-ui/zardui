@@ -3,10 +3,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
+import { zardPlusIcon } from '../../../core/icons-registry';
 import { ZardAvatarGroupComponent } from '../../avatar/avatar-group.component';
 import { ZardAvatarComponent } from '../../avatar/avatar.component';
 import { ZardButtonComponent } from '../../button/button.component';
-import { zardPlusIcon } from '../../../core/icons-registry';
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({

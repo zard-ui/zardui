@@ -40,7 +40,7 @@ describe('ZardEmptyComponent', () => {
 
     const ngIcon = iconElement.querySelector('ng-icon');
     expect(ngIcon).toBeVisible();
-    expect(ngIcon).toHaveAttribute('size', 'size-5');
+    expect(ngIcon).toHaveClass('size-5!');
   });
 
   it('should render title when provided', async () => {
