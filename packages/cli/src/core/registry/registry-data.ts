@@ -79,7 +79,6 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'layout',
-    registryDependencies: ['icon'],
     files: [
       {
         name: 'layout.component.ts',

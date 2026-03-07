@@ -113,9 +113,9 @@ describe('SidebarComponent', () => {
     fixture.componentRef.setInput('zCollapsible', true);
     fixture.detectChanges();
 
-    const iconElement = fixture.debugElement.query(By.css('z-icon'));
+    const iconElement = fixture.debugElement.query(By.css('ng-icon'));
     expect(iconElement).toBeTruthy();
-    expect(iconElement.componentInstance.zType()).toBe('chevron-left');
+    expect(iconElement.componentInstance.name()).toBe('chevron-left');
   });
 
   it('should display correct chevron icon when collapsed', () => {
@@ -123,9 +123,9 @@ describe('SidebarComponent', () => {
     fixture.componentRef.setInput('zCollapsed', true);
     fixture.detectChanges();
 
-    const iconElement = fixture.debugElement.query(By.css('z-icon'));
+    const iconElement = fixture.debugElement.query(By.css('ng-icon'));
     expect(iconElement).toBeTruthy();
-    expect(iconElement.componentInstance.zType()).toBe('chevron-right');
+    expect(iconElement.componentInstance.name()).toBe('chevron-right');
   });
 
   it('should reverse chevron icon when zReverseArrow is true', () => {
@@ -133,9 +133,9 @@ describe('SidebarComponent', () => {
     fixture.componentRef.setInput('zReverseArrow', true);
     fixture.detectChanges();
 
-    const iconElement = fixture.debugElement.query(By.css('z-icon'));
+    const iconElement = fixture.debugElement.query(By.css('ng-icon'));
     expect(iconElement).toBeTruthy();
-    expect(iconElement.componentInstance.zType()).toBe('chevron-right');
+    expect(iconElement.componentInstance.name()).toBe('chevron-right');
   });
 
   it('should emit zCollapsedChange when toggle is clicked', () => {
