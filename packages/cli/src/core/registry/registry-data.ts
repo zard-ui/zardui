@@ -328,7 +328,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'dialog',
-    registryDependencies: ['button', 'icon'],
+    registryDependencies: ['button'],
     files: [
       {
         name: 'dialog.component.ts',
