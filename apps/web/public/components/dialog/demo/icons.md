@@ -1,10 +1,10 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
+import { zardCheckIcon, zardXIcon } from '../../../core/icons-registry';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardDialogModule } from '../dialog.component';
 import { ZardDialogService } from '../dialog.service';
-import { zardCheckIcon, zardXIcon } from '../../../core/icons-registry';
 
 @Component({
   imports: [ZardButtonComponent, ZardDialogModule],

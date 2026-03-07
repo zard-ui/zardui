@@ -8,7 +8,6 @@ import type { ZardCommandOption } from '../command.component';
 @Component({
   selector: 'z-demo-command-default',
   imports: [ZardCommandImports],
-  standalone: true,
   template: `
     <z-command class="md:min-w-125" (zCommandSelected)="handleCommand($event)">
       <z-command-input placeholder="Search actions, files, and more..." />
