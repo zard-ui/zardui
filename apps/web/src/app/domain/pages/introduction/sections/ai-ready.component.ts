@@ -43,7 +43,7 @@ interface AIFeatureCard {
       </div>
     </section>
   `,
-  viewProviders: [provideIcons({ sun: ZardIconRegistry.sun, bookOpenText: ZardIconRegistry['book-open'] })],
+  viewProviders: [provideIcons({ sun: ZardIconRegistry.sun, bookOpenText: ZardIconRegistry['book-open-text'] })],
 })
 export class AIReadySection {
   readonly cards: AIFeatureCard[] = [

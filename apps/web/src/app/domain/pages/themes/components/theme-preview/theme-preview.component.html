@@ -71,8 +71,8 @@
               <z-card zTitle="Form Controls" zDescription="Input elements">
                 <div class="space-y-4">
                   <div class="space-y-1.5" zardId="email" #z="zardId">
-                    <label for="z.id()" class="text-sm font-medium">Email</label>
-                    <input id="z.id()" z-input placeholder="you@example.com" />
+                    <label [for]="z.id()" class="text-sm font-medium">Email</label>
+                    <input [id]="z.id()" z-input placeholder="you@example.com" />
                   </div>
                   <div class="flex items-center gap-4">
                     <z-checkbox>Remember me</z-checkbox>

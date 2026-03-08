@@ -7,6 +7,7 @@ import { ZardDialogModule } from '../dialog.component';
 import { ZardDialogService } from '../dialog.service';
 
 @Component({
+  selector: 'zard-demo-dialog-with-icons',
   imports: [ZardButtonComponent, ZardDialogModule],
   template: `
     <button type="button" z-button zType="outline" (click)="openDialog()">Open Dialog with Icons</button>
