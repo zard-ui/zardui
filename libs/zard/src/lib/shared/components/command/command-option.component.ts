@@ -21,14 +21,7 @@ import {
   commandShortcutVariants,
   type ZardCommandItemVariants,
 } from '@/shared/components/command/command.variants';
-import {
-  zardFolderIcon,
-  zardFolderOpenIcon,
-  zardLayoutDashboardIcon,
-  zardMoonIcon,
-  zardSaveIcon,
-  zardTerminalIcon,
-} from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 import type { ZardIconName } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -62,12 +55,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   encapsulation: ViewEncapsulation.None,
   viewProviders: [
     provideIcons({
-      folder: zardFolderIcon,
-      folderOpen: zardFolderOpenIcon,
-      save: zardSaveIcon,
-      layoutDashboard: zardLayoutDashboardIcon,
-      terminal: zardTerminalIcon,
-      moon: zardMoonIcon,
+      folder: ZardIconRegistry.folder,
+      folderOpen: ZardIconRegistry['folder-open'],
+      save: ZardIconRegistry.save,
+      layoutDashboard: ZardIconRegistry['layout-dashboard'],
+      terminal: ZardIconRegistry.terminal,
+      moon: ZardIconRegistry.moon,
     }),
   ],
   exportAs: 'zCommandOption',

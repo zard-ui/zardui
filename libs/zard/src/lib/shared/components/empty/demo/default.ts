@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardArrowUpRightIcon, zardFolderCodeIcon } from '../../../core/icons-registry';
+import { ZardIconRegistry } from '../../../core/icons-registry';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardEmptyComponent } from '../empty.component';
 
@@ -11,7 +11,7 @@ import { ZardEmptyComponent } from '../empty.component';
   imports: [ZardButtonComponent, ZardEmptyComponent, NgIcon],
   template: `
     <z-empty
-      [zIcon]="folderCode"
+      zIcon="folder-code"
       zTitle="No Projects Yet"
       zDescription="You haven't created any projects yet. Get started by creating your first project."
       [zActions]="[actionPrimary, actionSecondary]"
@@ -31,8 +31,11 @@ import { ZardEmptyComponent } from '../empty.component';
     </z-empty>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ arrowUpRight: zardArrowUpRightIcon })],
+  viewProviders: [
+    provideIcons({
+      arrowUpRight: ZardIconRegistry['arrow-up-right'],
+      folderCode: ZardIconRegistry['folder-code'],
+    }),
+  ],
 })
-export class ZardDemoEmptyDefaultComponent {
-  folderCode = zardFolderCodeIcon;
-}
+export class ZardDemoEmptyDefaultComponent {}

@@ -17,7 +17,7 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
-import { ZardIdDirective, zardCheckIcon } from '@/shared/core';
+import { ZardIconRegistry, ZardIdDirective } from '@/shared/core';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import {
@@ -66,7 +66,7 @@ type OnChangeType = (value: boolean) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ check: zardCheckIcon })],
+  viewProviders: [provideIcons({ check: ZardIconRegistry.check })],
   host: {
     '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' flex items-center gap-2'",
     '[attr.aria-disabled]': 'disabled()',

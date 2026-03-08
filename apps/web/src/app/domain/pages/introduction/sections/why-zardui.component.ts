@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconName, zardLayers2Icon, zardSparklesIcon, zardUsersIcon, zardZapIcon } from '@zard/core/icons-registry';
+import { ZardIconName, ZardIconRegistry } from '@zard/core/icons-registry';
 
 interface FeatureCard {
   title: string;
@@ -13,7 +13,6 @@ interface FeatureCard {
 
 @Component({
   selector: 'why-zardui-section',
-  standalone: true,
   imports: [ZardCardComponent, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
@@ -41,10 +40,10 @@ interface FeatureCard {
   `,
   viewProviders: [
     provideIcons({
-      sparkles: zardSparklesIcon,
-      users: zardUsersIcon,
-      zap: zardZapIcon,
-      layers2: zardLayers2Icon,
+      sparkles: ZardIconRegistry.sparkles,
+      users: ZardIconRegistry.users,
+      zap: ZardIconRegistry.zap,
+      layers2: ZardIconRegistry['layers-2'],
     }),
   ],
 })

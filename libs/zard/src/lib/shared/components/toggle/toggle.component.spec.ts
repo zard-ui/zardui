@@ -3,8 +3,9 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
+import { zardBoldIcon } from '@/shared/core';
+
 import { ZardToggleComponent } from './toggle.component';
-import { zardBoldIcon } from '../../core/icons-registry';
 
 @Component({
   imports: [ZardToggleComponent, NgIcon],

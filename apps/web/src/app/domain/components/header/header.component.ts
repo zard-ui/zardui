@@ -8,7 +8,7 @@ import { LayoutService } from '@doc/shared/services/layout.service';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { zardDarkModeIcon, zardGalleryHorizontalIcon } from '@zard/core/icons-registry';
+import { ZardIconRegistry } from '@zard/core/icons-registry';
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
 import { environment } from '../../../../environments/environment';
@@ -34,7 +34,12 @@ import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
   host: {
     '(window:keydown)': 'handleKeyboardShortcut($event)',
   },
-  viewProviders: [provideIcons({ galleryHorizontal: zardGalleryHorizontalIcon, darkMode: zardDarkModeIcon })],
+  viewProviders: [
+    provideIcons({
+      galleryHorizontal: ZardIconRegistry['gallery-horizontal'],
+      darkMode: ZardIconRegistry['dark-mode'],
+    }),
+  ],
 })
 export class HeaderComponent {
   readonly docResearcher = viewChild.required(DocResearcherComponent);

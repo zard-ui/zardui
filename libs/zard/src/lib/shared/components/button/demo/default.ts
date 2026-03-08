@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardArrowUpIcon, zardPopcornIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 import { ZardButtonComponent } from '../button.component';
 
@@ -10,13 +10,13 @@ import { ZardButtonComponent } from '../button.component';
   selector: 'z-demo-button-default',
   imports: [ZardButtonComponent, NgIcon],
   template: `
-    <button z-button zType="outline">Button</button>
-    <button z-button zType="outline"><ng-icon name="arrow-up" /></button>
-    <button z-button zType="outline">
+    <button type="button" z-button zType="outline">Button</button>
+    <button type="button" z-button zType="outline"><ng-icon name="arrow-up" /></button>
+    <button type="button" z-button zType="outline">
       Button
       <ng-icon name="popcorn" />
     </button>
   `,
-  viewProviders: [provideIcons({ arrowUp: zardArrowUpIcon, popcorn: zardPopcornIcon })],
+  viewProviders: [provideIcons({ arrowUp: ZardIconRegistry['arrow-up'], popcorn: ZardIconRegistry.popcorn })],
 })
 export class ZardDemoButtonDefaultComponent {}

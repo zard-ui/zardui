@@ -7,7 +7,7 @@ import {
   ZardToggleGroupComponent,
   type ZardToggleGroupItem,
 } from '@/shared/components/toggle-group/toggle-group.component';
-import { zardTextAlignStartIcon, zardTextAlignCenterIcon, zardTextAlignEndIcon } from '@/shared/core';
+import { ZardIconRegistry } from '@/shared/core';
 
 @Component({
   selector: 'demo-toggle-group-single',
@@ -17,9 +17,9 @@ import { zardTextAlignStartIcon, zardTextAlignCenterIcon, zardTextAlignEndIcon }
   `,
   viewProviders: [
     provideIcons({
-      textAlignStart: zardTextAlignStartIcon,
-      textAlignCenter: zardTextAlignCenterIcon,
-      textAlignEnd: zardTextAlignEndIcon,
+      textAlignStart: ZardIconRegistry['text-align-start'],
+      textAlignCenter: ZardIconRegistry['text-align-center'],
+      textAlignEnd: ZardIconRegistry['text-align-end'],
     }),
   ],
 })

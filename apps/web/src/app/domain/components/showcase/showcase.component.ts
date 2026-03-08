@@ -12,13 +12,12 @@ import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTooltipImports } from '@zard/components/tooltip';
-import { zardArrowRightIcon } from '@zard/core/icons-registry';
+import { ZardIconRegistry } from '@zard/core';
 
 import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/carousel.component';
 
 @Component({
   selector: 'z-showcase',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section class="py-24 pl-4">
@@ -88,7 +87,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
                         @case ('cta') {
                           <div class="text-center">
                             <div class="flex items-center justify-center rounded-2xl bg-white/10 p-2 backdrop-blur-sm">
-                              <ng-icon name="arrow-right" class="text-xl" />
+                              <ng-icon name="arrow-right" class="size-4!" />
                             </div>
 
                             <div>
@@ -128,7 +127,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
     ZardTooltipImports,
     NgIcon,
   ],
-  viewProviders: [provideIcons({ arrowRight: zardArrowRightIcon })],
+  viewProviders: [provideIcons({ arrowRight: ZardIconRegistry['arrow-right'] })],
 })
 export class ShowcaseComponent {
   private readonly router = inject(Router);

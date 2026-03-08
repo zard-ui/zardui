@@ -256,8 +256,8 @@ import {
   sidebarTriggerVariants,
   sidebarVariants,
 } from '@/shared/components/layout/layout.variants';
+import { ZardIconRegistry } from '@/shared/core';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { zardChevronLeftIcon, zardChevronRightIcon } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -290,7 +290,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronLeft: zardChevronLeftIcon, chevronRight: zardChevronRightIcon })],
+  viewProviders: [
+    provideIcons({ chevronLeft: ZardIconRegistry['chevron-left'], chevronRight: ZardIconRegistry['chevron-right'] }),
+  ],
   exportAs: 'zSidebar',
 })
 export class SidebarComponent {

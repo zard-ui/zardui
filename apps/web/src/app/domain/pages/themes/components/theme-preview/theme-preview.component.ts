@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject, ViewEncapsulation } from '@
 import { FormsModule } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideActivity, lucideCreditCard, lucideDollarSign, lucideTerminal, lucideUserPlus } from '@ng-icons/lucide';
 
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
@@ -18,16 +17,8 @@ import { ZardSkeletonComponent } from '@zard/components/skeleton/skeleton.compon
 import { ZardSliderComponent } from '@zard/components/slider/slider.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTabComponent, ZardTabGroupComponent } from '@zard/components/tabs/tabs.component';
-import {
-  zardActivityIcon,
-  zardArrowLeftIcon,
-  zardArrowRightIcon,
-  zardClockIcon,
-  zardCopyIcon,
-  zardDollarSignIcon,
-  zardPlusIcon,
-  zardUserPlusIcon,
-} from '@zard/core/icons-registry';
+import { ZardIdDirective } from '@zard/core';
+import { ZardIconRegistry } from '@zard/core/icons-registry';
 
 import { ThemeGeneratorService } from '../../services/theme-generator.service';
 
@@ -44,6 +35,7 @@ import { ThemeGeneratorService } from '../../services/theme-generator.service';
     ZardCheckboxComponent,
     ZardDividerComponent,
     ZardEmptyComponent,
+    ZardIdDirective,
     ZardInputDirective,
     ZardProgressBarComponent,
     ZardSkeletonComponent,
@@ -58,19 +50,16 @@ import { ThemeGeneratorService } from '../../services/theme-generator.service';
   templateUrl: './theme-preview.component.html',
   viewProviders: [
     provideIcons({
-      lucideTerminal,
-      activity: lucideActivity,
-      creditCard: lucideCreditCard,
-      dollarSign: lucideDollarSign,
-      userPlus: lucideUserPlus,
-      clock: zardClockIcon,
-      dollarSignAlt: zardDollarSignIcon,
-      userPlusAlt: zardUserPlusIcon,
-      activityAlt: zardActivityIcon,
-      plus: zardPlusIcon,
-      arrowLeft: zardArrowLeftIcon,
-      arrowRight: zardArrowRightIcon,
-      copy: zardCopyIcon,
+      terminal: ZardIconRegistry.terminal,
+      activity: ZardIconRegistry.activity,
+      creditCard: ZardIconRegistry['credit-card'],
+      dollarSign: ZardIconRegistry['dollar-sign'],
+      userPlus: ZardIconRegistry['user-plus'],
+      clock: ZardIconRegistry.clock,
+      plus: ZardIconRegistry.plus,
+      arrowLeft: ZardIconRegistry['arrow-left'],
+      arrowRight: ZardIconRegistry['arrow-right'],
+      copy: ZardIconRegistry.copy,
     }),
   ],
 })

@@ -11,8 +11,8 @@ import {
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
+import { ZardIconRegistry } from '@/shared/core';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { zardArrowUpRightIcon, zardInboxIcon } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
@@ -44,7 +44,7 @@ import {
         </div>
       } @else if (icon) {
         <div [class]="iconClasses()" data-testid="icon">
-          <ng-icon [svg]="icon" class="size-5!" />
+          <ng-icon [name]="icon" class="size-5!" />
         </div>
       }
 
@@ -73,7 +73,7 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ arrowUpRight: zardArrowUpRightIcon, inbox: zardInboxIcon })],
+  viewProviders: [provideIcons({ arrowUpRight: ZardIconRegistry['arrow-up-right'], inbox: ZardIconRegistry.inbox })],
   host: {
     '[class]': 'classes()',
   },

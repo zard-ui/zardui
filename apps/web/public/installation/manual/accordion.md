@@ -149,7 +149,7 @@ import {
   accordionItemVariants,
   accordionTriggerVariants,
 } from '@/shared/components/accordion/accordion.variants';
-import { zardChevronDownIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -188,7 +188,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronDown: zardChevronDownIcon })],
+  viewProviders: [provideIcons({ chevronDown: ZardIconRegistry['chevron-down'] })],
   host: {
     '[class]': 'itemClasses()',
     '[attr.data-state]': "isOpen() ? 'open' : 'closed'",

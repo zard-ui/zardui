@@ -1,9 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { provideIcons } from '@ng-icons/core';
-import { lucideCircleAlert } from '@ng-icons/lucide';
-
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 
 @Component({
@@ -88,6 +85,5 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
       </div>
     </section>
   `,
-  viewProviders: [provideIcons({ lucideCircleAlert })],
 })
 export class CliUpdateSection {}

@@ -9,13 +9,7 @@ import { ZardDropdownImports } from '@/shared/components/dropdown';
 import { ZardInputDirective } from '@/shared/components/input/input.directive';
 import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';
 import { ZardTooltipDirective } from '@/shared/components/tooltip';
-import {
-  zardArrowUpIcon,
-  zardCheckIcon,
-  zardInfoIcon,
-  zardPlusIcon,
-  zardSearchIcon,
-} from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 
 @Component({
   selector: 'z-demo-input-group-default',
@@ -82,11 +76,11 @@ import {
   `,
   viewProviders: [
     provideIcons({
-      search: zardSearchIcon,
-      check: zardCheckIcon,
-      info: zardInfoIcon,
-      plus: zardPlusIcon,
-      arrowUp: zardArrowUpIcon,
+      search: ZardIconRegistry.search,
+      check: ZardIconRegistry.check,
+      info: ZardIconRegistry.info,
+      plus: ZardIconRegistry.plus,
+      arrowUp: ZardIconRegistry['arrow-up'],
     }),
   ],
 })

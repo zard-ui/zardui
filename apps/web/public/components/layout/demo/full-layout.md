@@ -7,13 +7,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { LayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
-import {
-  zardBellIcon,
-  zardHouseIcon,
-  zardLayersIcon,
-  zardSearchIcon,
-  zardUsersIcon,
-} from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 @Component({
   selector: 'z-demo-layout-full',
@@ -77,11 +71,11 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
-      search: zardSearchIcon,
-      bell: zardBellIcon,
-      house: zardHouseIcon,
-      layers: zardLayersIcon,
-      users: zardUsersIcon,
+      search: ZardIconRegistry.search,
+      bell: ZardIconRegistry.bell,
+      house: ZardIconRegistry.house,
+      layers: ZardIconRegistry.layers,
+      users: ZardIconRegistry.users,
     }),
   ],
 })

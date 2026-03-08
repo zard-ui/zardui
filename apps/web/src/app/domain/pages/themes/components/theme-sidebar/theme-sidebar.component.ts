@@ -7,14 +7,7 @@ import { ZardAccordionItemComponent } from '@zard/components/accordion/accordion
 import { ZardAccordionComponent } from '@zard/components/accordion/accordion.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardSliderComponent } from '@zard/components/slider/slider.component';
-import {
-  zardCheckIcon,
-  zardCopyIcon,
-  zardMoonIcon,
-  zardPaletteIcon,
-  zardSquareIcon,
-  zardSunIcon,
-} from '@zard/core/icons-registry';
+import { ZardIconRegistry } from '@zard/core/icons-registry';
 
 import { THEME_PRESETS } from '../../data/theme-presets';
 import { COLOR_GROUPS, type ThemeColorKey } from '../../models/theme.model';
@@ -40,12 +33,12 @@ import { ThemePresetCardComponent } from '../theme-preset-card/theme-preset-card
   templateUrl: './theme-sidebar.component.html',
   viewProviders: [
     provideIcons({
-      moon: zardMoonIcon,
-      sun: zardSunIcon,
-      square: zardSquareIcon,
-      palette: zardPaletteIcon,
-      check: zardCheckIcon,
-      copy: zardCopyIcon,
+      moon: ZardIconRegistry.moon,
+      sun: ZardIconRegistry.sun,
+      square: ZardIconRegistry.square,
+      palette: ZardIconRegistry.palette,
+      check: ZardIconRegistry.check,
+      copy: ZardIconRegistry.copy,
     }),
   ],
 })

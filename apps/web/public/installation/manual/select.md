@@ -43,7 +43,7 @@ import {
   selectVariants,
   type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
-import { zardChevronDownIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => void;
@@ -107,7 +107,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ chevronDown: zardChevronDownIcon })],
+  viewProviders: [provideIcons({ chevronDown: ZardIconRegistry['chevron-down'] })],
   host: {
     '[attr.data-active]': 'isFocus() ? "" : null',
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
@@ -760,7 +760,7 @@ import {
   type ZardSelectItemModeVariants,
   type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
-import { zardCheckIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 // Interface to avoid circular dependency
@@ -784,7 +784,7 @@ interface SelectHost {
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ check: zardCheckIcon })],
+  viewProviders: [provideIcons({ check: ZardIconRegistry.check })],
   host: {
     role: 'option',
     tabindex: '-1',

@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardBadgeCheckIcon } from '../../../core/icons-registry';
+import { ZardIconRegistry } from '../../../core/icons-registry';
 import { ZardBadgeComponent } from '../badge.component';
 
 @Component({
@@ -27,6 +27,6 @@ import { ZardBadgeComponent } from '../badge.component';
       </div>
     </div>
   `,
-  viewProviders: [provideIcons({ badgeCheck: zardBadgeCheckIcon })],
+  viewProviders: [provideIcons({ badgeCheck: ZardIconRegistry['badge-check'] })],
 })
 export class ZardDemoBadgeDefaultComponent {}

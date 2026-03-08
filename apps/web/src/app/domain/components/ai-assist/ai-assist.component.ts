@@ -13,13 +13,7 @@ import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '@doc/shared/constants/rout
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
-import {
-  zardArrowLeftIcon,
-  zardArrowRightIcon,
-  zardChevronDownIcon,
-  zardChevronUpIcon,
-  zardCopyIcon,
-} from '@zard/core/icons-registry';
+import { ZardIconRegistry } from '@zard/core/icons-registry';
 
 import type { AiAssistOption } from './ai-assist.types';
 
@@ -33,11 +27,11 @@ import type { AiAssistOption } from './ai-assist.types';
   },
   viewProviders: [
     provideIcons({
-      copy: zardCopyIcon,
-      chevronDown: zardChevronDownIcon,
-      chevronUp: zardChevronUpIcon,
-      arrowLeft: zardArrowLeftIcon,
-      arrowRight: zardArrowRightIcon,
+      copy: ZardIconRegistry.copy,
+      chevronDown: ZardIconRegistry['chevron-down'],
+      chevronUp: ZardIconRegistry['chevron-up'],
+      arrowLeft: ZardIconRegistry['arrow-left'],
+      arrowRight: ZardIconRegistry['arrow-right'],
     }),
   ],
 })

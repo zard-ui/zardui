@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardBoldIcon } from '../../../core/icons-registry';
+import { ZardIconRegistry } from '../../../core/icons-registry';
 import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
@@ -13,6 +13,6 @@ import { ZardToggleComponent } from '../toggle.component';
       <ng-icon name="bold" />
     </z-toggle>
   `,
-  viewProviders: [provideIcons({ bold: zardBoldIcon })],
+  viewProviders: [provideIcons({ bold: ZardIconRegistry.bold })],
 })
 export class ZardDemoToggleSmallComponent {}

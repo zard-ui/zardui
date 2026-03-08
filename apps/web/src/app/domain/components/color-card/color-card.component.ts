@@ -7,7 +7,7 @@ import { toast } from 'ngx-sonner';
 import { Color } from '@doc/shared/constants/colors.constant';
 import { ColorsService, ColorFormat } from '@doc/shared/services/colors.service';
 
-import { zardCheckIcon, zardClipboardIcon } from '@zard/core/icons-registry';
+import { ZardIconRegistry } from '@zard/core';
 
 @Component({
   selector: 'button[z-color-card]',
@@ -23,7 +23,7 @@ import { zardCheckIcon, zardClipboardIcon } from '@zard/core/icons-registry';
     '[style.--text]': 'color().foreground',
     '(click)': 'copyToClipboard()',
   },
-  viewProviders: [provideIcons({ check: zardCheckIcon, clipboard: zardClipboardIcon })],
+  viewProviders: [provideIcons({ check: ZardIconRegistry.check, clipboard: ZardIconRegistry.clipboard })],
 })
 export class ColorCardComponent {
   private readonly clipboard = inject(Clipboard);

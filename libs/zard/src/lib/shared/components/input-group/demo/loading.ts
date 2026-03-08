@@ -2,7 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardSearchIcon } from '../../../core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
+
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardInputGroupComponent } from '../input-group.component';
 
@@ -19,6 +20,6 @@ import { ZardInputGroupComponent } from '../input-group.component';
     <ng-template #search><ng-icon name="search" /></ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ search: zardSearchIcon })],
+  viewProviders: [provideIcons({ search: ZardIconRegistry.search })],
 })
 export class ZardDemoInputGroupLoadingComponent {}

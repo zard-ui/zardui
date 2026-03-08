@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { zardCheckIcon, zardXIcon } from '../../../core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
+
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardDialogModule } from '../dialog.component';
 import { ZardDialogService } from '../dialog.service';
@@ -12,7 +13,7 @@ import { ZardDialogService } from '../dialog.service';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoDialogIconsComponent {
+export class ZardDemoDialogWithIconsComponent {
   private dialogService = inject(ZardDialogService);
 
   openDialog() {
@@ -20,9 +21,9 @@ export class ZardDemoDialogIconsComponent {
       zTitle: 'Confirm Action',
       zDescription: 'Are you sure you want to proceed? This action cannot be undone.',
       zOkText: 'Confirm',
-      zOkIcon: zardCheckIcon,
+      zOkIcon: ZardIconRegistry.check,
       zCancelText: 'Cancel',
-      zCancelIcon: zardXIcon,
+      zCancelIcon: ZardIconRegistry.x,
       zOnOk: () => {
         console.log('Action confirmed');
       },

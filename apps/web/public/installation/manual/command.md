@@ -483,7 +483,7 @@ import type { ClassValue } from 'clsx';
 
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
 import { commandInputVariants } from '@/shared/components/command/command.variants';
-import { zardSearchIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -522,7 +522,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ search: zardSearchIcon })],
+  viewProviders: [provideIcons({ search: ZardIconRegistry.search })],
   exportAs: 'zCommandInput',
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {
@@ -753,14 +753,7 @@ import {
   commandShortcutVariants,
   type ZardCommandItemVariants,
 } from '@/shared/components/command/command.variants';
-import {
-  zardFolderIcon,
-  zardFolderOpenIcon,
-  zardLayoutDashboardIcon,
-  zardMoonIcon,
-  zardSaveIcon,
-  zardTerminalIcon,
-} from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 import type { ZardIconName } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -794,12 +787,12 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   encapsulation: ViewEncapsulation.None,
   viewProviders: [
     provideIcons({
-      folder: zardFolderIcon,
-      folderOpen: zardFolderOpenIcon,
-      save: zardSaveIcon,
-      layoutDashboard: zardLayoutDashboardIcon,
-      terminal: zardTerminalIcon,
-      moon: zardMoonIcon,
+      folder: ZardIconRegistry.folder,
+      folderOpen: ZardIconRegistry['folder-open'],
+      save: ZardIconRegistry.save,
+      layoutDashboard: ZardIconRegistry['layout-dashboard'],
+      terminal: ZardIconRegistry.terminal,
+      moon: ZardIconRegistry.moon,
     }),
   ],
   exportAs: 'zCommandOption',

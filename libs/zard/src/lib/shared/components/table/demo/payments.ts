@@ -5,7 +5,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardTableImports } from '@/shared/components/table/table.imports';
-import { zardCopyIcon, zardEyeIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 export interface Payment {
   id: string;
@@ -65,7 +65,7 @@ export interface Payment {
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ copy: zardCopyIcon, eye: zardEyeIcon })],
+  viewProviders: [provideIcons({ copy: ZardIconRegistry.copy, eye: ZardIconRegistry.eye })],
 })
 export class ZardDemoTablePaymentsComponent {
   payments: Payment[] = [

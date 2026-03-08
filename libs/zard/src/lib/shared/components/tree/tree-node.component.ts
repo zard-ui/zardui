@@ -14,7 +14,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
-import { zardChevronRightIcon, zardFileIcon, zardFolderIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardTreeService } from './tree.service';
@@ -76,7 +76,7 @@ import {
           <ng-container [ngTemplateOutlet]="tmpl" [ngTemplateOutletContext]="{ $implicit: node(), level: level() }" />
         } @else {
           @if (node().icon) {
-            <ng-icon [name]="$any(node().icon)" class="size-4! shrink-0" />
+            <ng-icon [name]="node().icon" class="size-4! shrink-0" />
           }
           <span class="truncate">{{ node().label }}</span>
         }
@@ -110,7 +110,13 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronRight: zardChevronRightIcon, folder: zardFolderIcon, file: zardFileIcon })],
+  viewProviders: [
+    provideIcons({
+      chevronRight: ZardIconRegistry['chevron-right'],
+      folder: ZardIconRegistry.folder,
+      file: ZardIconRegistry.file,
+    }),
+  ],
   host: {
     '[class]': 'hostClasses()',
     '[attr.data-key]': 'node().key',

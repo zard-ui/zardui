@@ -4,7 +4,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconName, zardBookOpenTextIcon, zardSunIcon } from '@zard/core/icons-registry';
+import { ZardIconName, ZardIconRegistry } from '@zard/core/icons-registry';
 
 interface AIFeatureCard {
   title: string;
@@ -14,7 +14,6 @@ interface AIFeatureCard {
 
 @Component({
   selector: 'ai-ready-section',
-  standalone: true,
   imports: [ZardBadgeComponent, ZardCardComponent, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
@@ -44,7 +43,7 @@ interface AIFeatureCard {
       </div>
     </section>
   `,
-  viewProviders: [provideIcons({ sun: zardSunIcon, bookOpenText: zardBookOpenTextIcon })],
+  viewProviders: [provideIcons({ sun: ZardIconRegistry.sun, bookOpenText: ZardIconRegistry['book-open'] })],
 })
 export class AIReadySection {
   readonly cards: AIFeatureCard[] = [

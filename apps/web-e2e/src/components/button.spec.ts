@@ -30,7 +30,7 @@ test.describe('Button component', () => {
 
   test('button with icon renders icon element', async () => {
     const firstCard = demoPage.firstDemoCard;
-    const icons = firstCard.locator('button[z-button] [z-icon]');
+    const icons = firstCard.locator('button[z-button] ng-icon');
     const count = await icons.count();
     expect(count).toBeGreaterThan(0);
   });

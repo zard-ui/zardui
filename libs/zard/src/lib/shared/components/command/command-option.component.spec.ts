@@ -4,7 +4,7 @@ import { By } from '@angular/platform-browser';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardSearchIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 import { ZardCommandOptionComponent } from './command-option.component';
 
@@ -21,7 +21,7 @@ import { ZardCommandOptionComponent } from './command-option.component';
       variant="default"
     />
   `,
-  viewProviders: [provideIcons({ search: zardSearchIcon })],
+  viewProviders: [provideIcons({ search: ZardIconRegistry.search })],
 })
 class TestHostComponent {
   disabled = false;

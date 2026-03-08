@@ -18,7 +18,7 @@ import {
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
-import { zardLoaderCircleIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
@@ -39,7 +39,7 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ loaderCircle: zardLoaderCircleIcon })],
+  viewProviders: [provideIcons({ loaderCircle: ZardIconRegistry['loader-circle'] })],
   host: {
     '[class]': 'classes()',
     '[attr.data-icon-only]': 'iconOnly() || null',

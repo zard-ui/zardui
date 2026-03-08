@@ -21,7 +21,7 @@ import { ZardButtonComponent, type ZardButtonTypeVariants } from '@/shared/compo
 import { ZardCalendarComponent } from '@/shared/components/calendar';
 import type { ZardDatePickerSizeVariants } from '@/shared/components/date-picker/date-picker.variants';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/popover';
-import { zardCalendarIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 /**
@@ -93,7 +93,7 @@ const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ calendar: zardCalendarIcon })],
+  viewProviders: [provideIcons({ calendar: ZardIconRegistry.calendar })],
   host: {
     '[class]': 'class()',
   },

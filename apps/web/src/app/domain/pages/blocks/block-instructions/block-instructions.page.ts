@@ -13,12 +13,7 @@ import { BlocksService, type BlockCategory as ServiceBlockCategory } from '@doc/
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import {
-  zardArrowRightIcon,
-  zardExternalLinkIcon,
-  zardFolderOpenIcon,
-  zardGithubIcon,
-} from '@zard/core/icons-registry';
+import { ZardIconRegistry } from '@zard/core/icons-registry';
 
 interface BlockPreview {
   id: string;
@@ -44,10 +39,10 @@ interface BlockPreview {
   templateUrl: './block-instructions.page.html',
   viewProviders: [
     provideIcons({
-      github: zardGithubIcon,
-      arrowRight: zardArrowRightIcon,
-      folderOpen: zardFolderOpenIcon,
-      externalLink: zardExternalLinkIcon,
+      github: ZardIconRegistry.github,
+      arrowRight: ZardIconRegistry['arrow-right'],
+      folderOpen: ZardIconRegistry['folder-open'],
+      externalLink: ZardIconRegistry['external-link'],
     }),
   ],
 })

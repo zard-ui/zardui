@@ -5,7 +5,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardTreeComponent } from '@zard/components/tree/tree.component';
 import type { TreeNode } from '@zard/components/tree/tree.types';
-import { zardClipboardIcon, zardFolderIcon } from '@zard/core/icons-registry';
+import { ZardIconRegistry } from '@zard/core/icons-registry';
 
 import { SimpleCodeHighlightComponent } from '../../../shared/components/simple-code-highlight/simple-code-highlight.component';
 import type { BlockFile } from '../block-container/block-container.component';
@@ -15,7 +15,7 @@ import type { BlockFile } from '../block-container/block-container.component';
   imports: [SimpleCodeHighlightComponent, ZardTreeComponent, NgIcon, ZardButtonComponent],
   templateUrl: './block-code-viewer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ clipboard: zardClipboardIcon, folder: zardFolderIcon })],
+  viewProviders: [provideIcons({ clipboard: ZardIconRegistry.clipboard, folder: ZardIconRegistry.folder })],
 })
 export class BlockCodeViewerComponent {
   readonly files = input.required<BlockFile[]>();

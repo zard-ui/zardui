@@ -28,12 +28,12 @@ import {
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import type { ZardSheetRef } from './sheet-ref';
 import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
-import { zardXIcon } from '../../core/icons-registry';
-import { ZardButtonComponent } from '../button/button.component';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardSheetOptions<T, U> {
@@ -50,7 +50,7 @@ export class ZardSheetOptions<T, U> {
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
   zOkIcon?: string;
-  zOkText?: string | undefined;
+  zOkText?: string | null;
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
   zSide?: ZardSheetVariants['zSide'] = 'left';
@@ -142,7 +142,7 @@ export class ZardSheetOptions<T, U> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ x: zardXIcon })],
+  viewProviders: [provideIcons({ x: ZardIconRegistry.x })],
   host: {
     'data-slot': 'sheet',
     '[class]': 'classes()',

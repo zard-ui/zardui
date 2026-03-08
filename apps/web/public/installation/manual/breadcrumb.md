@@ -27,7 +27,7 @@ import {
   type ZardBreadcrumbSizeVariants,
   type ZardBreadcrumbWrapVariants,
 } from '@/shared/components/breadcrumb/breadcrumb.variants';
-import { zardChevronRightIcon, zardEllipsisIcon } from '@/shared/core';
+import { ZardIconRegistry } from '@/shared/core';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -39,7 +39,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ ellipsis: zardEllipsisIcon })],
+  viewProviders: [provideIcons({ ellipsis: ZardIconRegistry.ellipsis })],
   host: {
     '[class]': 'classes()',
     'aria-hidden': 'true',
@@ -93,7 +93,7 @@ export class ZardBreadcrumbEllipsisComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronRight: zardChevronRightIcon })],
+  viewProviders: [provideIcons({ chevronRight: ZardIconRegistry['chevron-right'] })],
   host: {
     class: 'inline-flex items-center gap-1.5',
   },

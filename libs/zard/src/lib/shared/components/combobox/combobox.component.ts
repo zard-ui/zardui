@@ -34,8 +34,7 @@ import {
 } from '@/shared/components/command';
 import { ZardEmptyComponent } from '@/shared/components/empty';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/popover';
-import { zardCheckIcon, zardChevronsUpDownIcon } from '@/shared/core/icons-registry';
-import { type ZardIconName } from '@/shared/core/icons-registry';
+import { ZardIconRegistry, type ZardIconName } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardComboboxOption {
@@ -176,7 +175,9 @@ export interface ZardComboboxGroup {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronsUpDown: zardChevronsUpDownIcon, check: zardCheckIcon })],
+  viewProviders: [
+    provideIcons({ chevronsUpDown: ZardIconRegistry['chevrons-up-down'], check: ZardIconRegistry.check }),
+  ],
   host: {
     '[class]': 'classes()',
     '(document:keydown.escape)': 'onDocumentKeyDown($event)',

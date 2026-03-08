@@ -5,7 +5,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
-import { zardChevronRightIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 
 @Component({
   selector: 'z-demo-context-menu',
@@ -64,7 +64,7 @@ import { zardChevronRightIcon } from '@/shared/core/icons-registry';
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ chevronRight: zardChevronRightIcon })],
+  viewProviders: [provideIcons({ chevronRight: ZardIconRegistry['chevron-right'] })],
 })
 export class ZardDemoContextMenu {
   log(item: string) {

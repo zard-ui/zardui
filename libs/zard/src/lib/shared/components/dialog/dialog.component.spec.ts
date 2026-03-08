@@ -2,9 +2,10 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { ZardIconRegistry } from '@/shared/core';
+
 import { ZardDialogModule, ZardDialogOptions } from './dialog.component';
 import { ZardDialogService } from './dialog.service';
-import { zardCheckIcon, zardXIcon } from '../../core/icons-registry';
 import { ZardButtonComponent } from '../button/button.component';
 
 @Component({
@@ -40,9 +41,9 @@ class DialogWithIconsTestHostComponent {
       zDescription: 'Are you sure?',
       zContent: 'This action cannot be undone.',
       zOkText: 'Confirm',
-      zOkIcon: zardCheckIcon,
+      zOkIcon: ZardIconRegistry.check,
       zCancelText: 'Go Back',
-      zCancelIcon: zardXIcon,
+      zCancelIcon: ZardIconRegistry.x,
     });
   }
 }
@@ -276,18 +277,6 @@ describe('ZardDialogOptions', () => {
     const options = new ZardDialogOptions();
     options.zCustomClasses = 'my-custom-class';
     expect(options.zCustomClasses).toBe('my-custom-class');
-  });
-
-  it('accepts ok icon as SVG string', () => {
-    const options = new ZardDialogOptions();
-    options.zOkIcon = zardCheckIcon;
-    expect(options.zOkIcon).toBe(zardCheckIcon);
-  });
-
-  it('accepts cancel icon as SVG string', () => {
-    const options = new ZardDialogOptions();
-    options.zCancelIcon = zardXIcon;
-    expect(options.zCancelIcon).toBe(zardXIcon);
   });
 
   it('accepts ok disabled option', () => {

@@ -3,7 +3,8 @@ import { FormsModule } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardLightbulbIcon, zardLightbulbOffIcon } from '../../../core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
+
 import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
@@ -18,7 +19,9 @@ import { ZardToggleComponent } from '../toggle.component';
       }
     </z-toggle>
   `,
-  viewProviders: [provideIcons({ lightbulb: zardLightbulbIcon, lightbulbOff: zardLightbulbOffIcon })],
+  viewProviders: [
+    provideIcons({ lightbulb: ZardIconRegistry.lightbulb, lightbulbOff: ZardIconRegistry['lightbulb-off'] }),
+  ],
 })
 export class ZardDemoToggleWithFormsComponent {
   protected lightOn = false;

@@ -4,14 +4,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import {
-  ZardIconName,
-  zardBanIcon,
-  zardCircleCheckIcon,
-  zardCircleDollarSignIcon,
-  zardXIcon,
-  zardZapIcon,
-} from '@zard/core/icons-registry';
+import { ZardIconName, ZardIconRegistry } from '@zard/core/icons-registry';
 
 interface OpenSourceFeature {
   title: string;
@@ -78,11 +71,11 @@ interface StandAgainstItem {
   `,
   viewProviders: [
     provideIcons({
-      circleCheck: zardCircleCheckIcon,
-      circleDollarSign: zardCircleDollarSignIcon,
-      zap: zardZapIcon,
-      ban: zardBanIcon,
-      x: zardXIcon,
+      circleCheck: ZardIconRegistry['circle-check'],
+      circleDollarSign: ZardIconRegistry['circle-dollar-sign'],
+      zap: ZardIconRegistry.zap,
+      ban: ZardIconRegistry.ban,
+      x: ZardIconRegistry.x,
     }),
   ],
 })

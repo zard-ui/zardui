@@ -70,9 +70,9 @@
 
               <z-card zTitle="Form Controls" zDescription="Input elements">
                 <div class="space-y-4">
-                  <div class="space-y-1.5">
-                    <label for="email" class="text-sm font-medium">Email</label>
-                    <input id="email" z-input placeholder="you@example.com" />
+                  <div class="space-y-1.5" zardId="email" #z="zardId">
+                    <label for="z.id()" class="text-sm font-medium">Email</label>
+                    <input id="z.id()" z-input placeholder="you@example.com" />
                   </div>
                   <div class="flex items-center gap-4">
                     <z-checkbox>Remember me</z-checkbox>
@@ -129,14 +129,12 @@
                 </div>
               </z-card>
 
-              <ng-template #terminalIcon><ng-icon name="lucideCircleAlert" /></ng-template>
-
               <z-card zTitle="Alerts" zDescription="Notification messages" class="md:col-span-2 lg:col-span-3">
                 <div class="grid gap-3 md:grid-cols-2">
                   <z-alert
                     zTitle="Information"
                     zDescription="Your session will expire in 5 minutes."
-                    [zIcon]="terminalIcon"
+                    zIcon="terminal"
                   />
                   <z-alert
                     zType="destructive"
@@ -181,7 +179,7 @@
                     <p class="text-foreground text-2xl font-bold">$45,231</p>
                   </div>
                   <div class="bg-primary/10 rounded-full p-3">
-                    <ng-icon name="dollar-sign-alt" class="text-primary size-5!" />
+                    <ng-icon name="dollar-sign" class="text-primary size-5!" />
                   </div>
                 </div>
                 <p class="text-muted-foreground mt-2 text-xs">
@@ -197,7 +195,7 @@
                     <p class="text-foreground text-2xl font-bold">+2,350</p>
                   </div>
                   <div class="bg-primary/10 rounded-full p-3">
-                    <ng-icon name="user-plus-alt" class="text-primary size-5!" />
+                    <ng-icon name="user-plus" class="text-primary size-5!" />
                   </div>
                 </div>
                 <p class="text-muted-foreground mt-2 text-xs">
@@ -229,7 +227,7 @@
                     <p class="text-foreground text-2xl font-bold">+573</p>
                   </div>
                   <div class="bg-primary/10 rounded-full p-3">
-                    <ng-icon name="activity-alt" class="text-primary size-5!" />
+                    <ng-icon name="activity" class="text-primary size-5!" />
                   </div>
                 </div>
                 <p class="text-muted-foreground mt-2 text-xs">

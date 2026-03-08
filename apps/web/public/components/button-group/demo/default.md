@@ -7,18 +7,7 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
-import {
-  zardArchiveIcon,
-  zardArrowLeftIcon,
-  zardCalendarPlusIcon,
-  zardCheckIcon,
-  zardChevronRightIcon,
-  zardClockIcon,
-  zardEllipsisIcon,
-  zardListFilterPlusIcon,
-  zardTagIcon,
-  zardTrashIcon,
-} from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 @Component({
   selector: 'z-demo-button-group-default',
@@ -103,16 +92,16 @@ import {
   `,
   viewProviders: [
     provideIcons({
-      arrowLeft: zardArrowLeftIcon,
-      ellipsis: zardEllipsisIcon,
-      check: zardCheckIcon,
-      archive: zardArchiveIcon,
-      clock: zardClockIcon,
-      calendarPlus: zardCalendarPlusIcon,
-      listFilterPlus: zardListFilterPlusIcon,
-      tag: zardTagIcon,
-      chevronRight: zardChevronRightIcon,
-      trash: zardTrashIcon,
+      arrowLeft: ZardIconRegistry['arrow-left'],
+      ellipsis: ZardIconRegistry.ellipsis,
+      check: ZardIconRegistry.check,
+      archive: ZardIconRegistry.archive,
+      clock: ZardIconRegistry.clock,
+      calendarPlus: ZardIconRegistry['calendar-plus'],
+      listFilterPlus: ZardIconRegistry['list-filter-plus'],
+      tag: ZardIconRegistry.tag,
+      chevronRight: ZardIconRegistry['chevron-right'],
+      trash: ZardIconRegistry.trash,
     }),
   ],
 })

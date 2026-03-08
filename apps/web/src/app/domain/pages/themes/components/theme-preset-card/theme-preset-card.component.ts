@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncaps
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardCheckIcon } from '@zard/core/icons-registry';
+import { ZardIconRegistry } from '@zard/core';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -35,7 +35,7 @@ import { oklchToHex } from '../../utils/oklch-converter';
       <ng-icon name="check" class="text-primary size-3.5! shrink-0" />
     }
   `,
-  viewProviders: [provideIcons({ check: zardCheckIcon })],
+  viewProviders: [provideIcons({ check: ZardIconRegistry.check })],
 })
 export class ThemePresetCardComponent {
   readonly preset = input.required<ThemePreset>();

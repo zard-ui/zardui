@@ -29,7 +29,7 @@ import {
   paginationPreviousVariants,
   paginationVariants,
 } from '@/shared/components/pagination/pagination.variants';
-import { zardChevronLeftIcon, zardChevronRightIcon, zardEllipsisIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -115,7 +115,7 @@ export class ZardPaginationButtonComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronLeft: zardChevronLeftIcon })],
+  viewProviders: [provideIcons({ chevronLeft: ZardIconRegistry['chevron-left'] })],
   exportAs: 'zPaginationPrevious',
 })
 export class ZardPaginationPreviousComponent {
@@ -145,7 +145,7 @@ export class ZardPaginationPreviousComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronRight: zardChevronRightIcon })],
+  viewProviders: [provideIcons({ chevronRight: ZardIconRegistry['chevron-right'] })],
   exportAs: 'zPaginationNext',
 })
 export class ZardPaginationNextComponent {
@@ -164,7 +164,7 @@ export class ZardPaginationNextComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ ellipsis: zardEllipsisIcon })],
+  viewProviders: [provideIcons({ ellipsis: ZardIconRegistry.ellipsis })],
   host: {
     '[class]': 'classes()',
     'aria-hidden': 'true',

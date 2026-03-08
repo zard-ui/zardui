@@ -11,19 +11,7 @@ import { LayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 import { ZardTooltipImports } from '@/shared/components/tooltip';
-import {
-  zardCalendarIcon,
-  zardChevronRightIcon,
-  zardChevronsUpDownIcon,
-  zardFolderIcon,
-  zardHouseIcon,
-  zardInboxIcon,
-  zardLogOutIcon,
-  zardPanelLeftIcon,
-  zardSearchIcon,
-  zardSettingsIcon,
-  zardUserIcon,
-} from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 
 interface MenuItem {
   icon: string;
@@ -195,17 +183,17 @@ interface MenuItem {
   `,
   viewProviders: [
     provideIcons({
-      house: zardHouseIcon,
-      inbox: zardInboxIcon,
-      folder: zardFolderIcon,
-      chevronRight: zardChevronRightIcon,
-      chevronsUpDown: zardChevronsUpDownIcon,
-      user: zardUserIcon,
-      settings: zardSettingsIcon,
-      logOut: zardLogOutIcon,
-      panelLeft: zardPanelLeftIcon,
-      calendar: zardCalendarIcon,
-      search: zardSearchIcon,
+      house: ZardIconRegistry.house,
+      inbox: ZardIconRegistry.inbox,
+      folder: ZardIconRegistry.folder,
+      chevronRight: ZardIconRegistry['chevron-right'],
+      chevronsUpDown: ZardIconRegistry['chevrons-up-down'],
+      user: ZardIconRegistry.user,
+      settings: ZardIconRegistry.settings,
+      logOut: ZardIconRegistry['log-out'],
+      panelLeft: ZardIconRegistry['panel-left'],
+      calendar: ZardIconRegistry.calendar,
+      search: ZardIconRegistry.search,
     }),
   ],
 })

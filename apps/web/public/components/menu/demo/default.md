@@ -6,14 +6,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
-import {
-  zardBookOpenIcon,
-  zardChevronDownIcon,
-  zardChevronRightIcon,
-  zardFileTextIcon,
-  zardInfoIcon,
-  zardUsersIcon,
-} from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 @Component({
   selector: 'zard-demo-menu-default',
@@ -146,12 +139,12 @@ import {
   `,
   viewProviders: [
     provideIcons({
-      chevronDown: zardChevronDownIcon,
-      chevronRight: zardChevronRightIcon,
-      bookOpen: zardBookOpenIcon,
-      fileText: zardFileTextIcon,
-      info: zardInfoIcon,
-      users: zardUsersIcon,
+      chevronDown: ZardIconRegistry['chevron-down'],
+      chevronRight: ZardIconRegistry['chevron-right'],
+      bookOpen: ZardIconRegistry['book-open'],
+      fileText: ZardIconRegistry['file-text'],
+      info: ZardIconRegistry.info,
+      users: ZardIconRegistry.users,
     }),
   ],
 })

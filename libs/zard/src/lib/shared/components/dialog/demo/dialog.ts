@@ -1,5 +1,5 @@
 import { ZardDemoDialogBasicComponent } from './basic';
-import { ZardDemoDialogIconsComponent } from './icons';
+import { ZardDemoDialogWithIconsComponent } from './icons';
 
 export const DIALOG = {
   componentName: 'dialog',
@@ -12,7 +12,7 @@ export const DIALOG = {
     },
     {
       name: 'with-icons',
-      component: ZardDemoDialogIconsComponent,
+      component: ZardDemoDialogWithIconsComponent,
     },
   ],
 };

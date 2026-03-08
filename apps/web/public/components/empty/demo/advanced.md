@@ -3,10 +3,10 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardPlusIcon } from '../../../core/icons-registry';
-import { ZardAvatarGroupComponent } from '../../avatar/avatar-group.component';
-import { ZardAvatarComponent } from '../../avatar/avatar.component';
-import { ZardButtonComponent } from '../../button/button.component';
+import { ZardAvatarComponent, ZardAvatarGroupComponent } from '@/shared/components/avatar';
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardIconRegistry } from '@/shared/core';
+
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
@@ -44,7 +44,7 @@ import { ZardEmptyComponent } from '../empty.component';
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ plus: zardPlusIcon })],
+  viewProviders: [provideIcons({ plus: ZardIconRegistry.plus })],
 })
 export class ZardDemoEmptyAdvancedComponent {}
 

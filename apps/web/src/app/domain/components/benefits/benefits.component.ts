@@ -3,15 +3,7 @@ import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import {
-  ZardIconName,
-  zardCodeIcon,
-  zardHeartIcon,
-  zardLayersIcon,
-  zardPaletteIcon,
-  zardShieldIcon,
-  zardZapIcon,
-} from '@zard/core/icons-registry';
+import { ZardIconName, ZardIconRegistry } from '@zard/core/icons-registry';
 
 export interface BenefitFeature {
   icon: ZardIconName;
@@ -69,7 +61,7 @@ export interface BenefitFeature {
                   <div
                     class="bg-primary/10 text-primary mb-4 flex h-12 w-12 items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110"
                   >
-                    <ng-icon [name]="feature.icon" class="text-xl" />
+                    <ng-icon [name]="feature.icon" class="size-4!" />
                   </div>
 
                   <!-- Content -->
@@ -129,12 +121,12 @@ export interface BenefitFeature {
   `,
   viewProviders: [
     provideIcons({
-      zap: zardZapIcon,
-      palette: zardPaletteIcon,
-      code: zardCodeIcon,
-      layers: zardLayersIcon,
-      shield: zardShieldIcon,
-      heart: zardHeartIcon,
+      zap: ZardIconRegistry.zap,
+      palette: ZardIconRegistry.palette,
+      code: ZardIconRegistry.code,
+      layers: ZardIconRegistry.layers,
+      shield: ZardIconRegistry.shield,
+      heart: ZardIconRegistry.heart,
     }),
   ],
 })

@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardMinusIcon, zardPlusIcon } from '../../../core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
+
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardButtonGroupComponent } from '../button-group.component';
 
@@ -11,10 +12,10 @@ import { ZardButtonGroupComponent } from '../button-group.component';
   imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon],
   template: `
     <z-button-group zOrientation="vertical">
-      <button z-button zType="outline"><ng-icon name="plus" /></button>
-      <button z-button zType="outline"><ng-icon name="minus" /></button>
+      <button type="button" z-button zType="outline"><ng-icon name="plus" /></button>
+      <button type="button" z-button zType="outline"><ng-icon name="minus" /></button>
     </z-button-group>
   `,
-  viewProviders: [provideIcons({ plus: zardPlusIcon, minus: zardMinusIcon })],
+  viewProviders: [provideIcons({ plus: ZardIconRegistry.plus, minus: ZardIconRegistry.minus })],
 })
 export class ZardDemoButtonGroupOrientationComponent {}

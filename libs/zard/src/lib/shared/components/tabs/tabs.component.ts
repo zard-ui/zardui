@@ -33,12 +33,7 @@ import {
   tabNavVariants,
   type ZardTabVariants,
 } from '@/shared/components/tabs/tabs.variants';
-import {
-  zardChevronDownIcon,
-  zardChevronLeftIcon,
-  zardChevronRightIcon,
-  zardChevronUpIcon,
-} from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
@@ -177,10 +172,10 @@ export class ZardTabComponent {
   encapsulation: ViewEncapsulation.None,
   viewProviders: [
     provideIcons({
-      chevronLeft: zardChevronLeftIcon,
-      chevronUp: zardChevronUpIcon,
-      chevronRight: zardChevronRightIcon,
-      chevronDown: zardChevronDownIcon,
+      chevronLeft: ZardIconRegistry['chevron-left'],
+      chevronUp: ZardIconRegistry['chevron-up'],
+      chevronRight: ZardIconRegistry['chevron-right'],
+      chevronDown: ZardIconRegistry['chevron-down'],
     }),
   ],
   host: { '[class]': 'containerClasses()' },

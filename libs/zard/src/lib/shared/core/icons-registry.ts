@@ -103,191 +103,100 @@ const DarkModeSvg = `
 </svg>
 `;
 
-export const zardHouseIcon = lucideHouse;
-export const zardSettingsIcon = lucideSettings;
-export const zardUserIcon = lucideUser;
-export const zardSearchIcon = lucideSearch;
-export const zardBellIcon = lucideBell;
-export const zardMailIcon = lucideMail;
-export const zardCalendarIcon = lucideCalendar;
-export const zardLogOutIcon = lucideLogOut;
-export const zardPanelLeftIcon = lucidePanelLeft;
-export const zardBoldIcon = lucideBold;
-export const zardInboxIcon = lucideInbox;
-export const zardItalicIcon = lucideItalic;
-export const zardUnderlineIcon = lucideUnderline;
-export const zardTextAlignCenterIcon = lucideTextAlignCenter;
-export const zardTextAlignEndIcon = lucideTextAlignEnd;
-export const zardTextAlignStartIcon = lucideTextAlignStart;
-export const zardCheckIcon = lucideCheck;
-export const zardXIcon = lucideX;
-export const zardInfoIcon = lucideInfo;
-export const zardTriangleAlertIcon = lucideTriangleAlert;
-export const zardCircleIcon = lucideCircle;
-export const zardCircleAlertIcon = lucideCircleAlert;
-export const zardCircleCheckIcon = lucideCircleCheck;
-export const zardCircleXIcon = lucideCircleX;
-export const zardCircleDollarSignIcon = lucideCircleDollarSign;
-export const zardCircleSmallIcon = lucideCircleSmall;
-export const zardBanIcon = lucideBan;
-export const zardChevronDownIcon = lucideChevronDown;
-export const zardChevronUpIcon = lucideChevronUp;
-export const zardChevronLeftIcon = lucideChevronLeft;
-export const zardChevronRightIcon = lucideChevronRight;
-export const zardChevronsUpDownIcon = lucideChevronsUpDown;
-export const zardMoveRightIcon = lucideMoveRight;
-export const zardArrowRightIcon = lucideArrowRight;
-export const zardArrowUpIcon = lucideArrowUp;
-export const zardArrowUpRightIcon = lucideArrowUpRight;
-export const zardFolderIcon = lucideFolder;
-export const zardFolderOpenIcon = lucideFolderOpen;
-export const zardFolderPlusIcon = lucideFolderPlus;
-export const zardFileIcon = lucideFile;
-export const zardFileTextIcon = lucideFileText;
-export const zardLayoutDashboardIcon = lucideLayoutDashboard;
-export const zardLoaderCircleIcon = lucideLoaderCircle;
-export const zardSaveIcon = lucideSave;
-export const zardCopyIcon = lucideCopy;
-export const zardEyeIcon = lucideEye;
-export const zardEllipsisIcon = lucideEllipsis;
-export const zardTerminalIcon = lucideTerminal;
-export const zardClipboardIcon = lucideClipboard;
-export const zardMoonIcon = lucideMoon;
-export const zardSunIcon = lucideSun;
-export const zardLightbulbIcon = lucideLightbulb;
-export const zardLightbulbOffIcon = lucideLightbulbOff;
-export const zardPaletteIcon = lucidePalette;
-export const zardSparklesIcon = lucideSparkles;
-export const zardHeartIcon = lucideHeart;
-export const zardStarIcon = lucideStar;
-export const zardZapIcon = lucideZap;
-export const zardPopcornIcon = lucidePopcorn;
-export const zardShieldIcon = lucideShield;
-export const zardPuzzleIcon = lucidePuzzle;
-export const zardLayersIcon = lucideLayers;
-export const zardLayers2Icon = lucideLayers2;
-export const zardSquareLibraryIcon = lucideSquareLibrary;
-export const zardCodeIcon = lucideCode;
-export const zardCodeXmlIcon = lucideCodeXml;
-export const zardBookOpenIcon = lucideBookOpen;
-export const zardBookOpenTextIcon = lucideBookOpenText;
-export const zardUsersIcon = lucideUsers;
-export const zardMonitorIcon = lucideMonitor;
-export const zardSmartphoneIcon = lucideSmartphone;
-export const zardTabletIcon = lucideTablet;
-export const zardBadgeCheckIcon = lucideBadgeCheck;
-export const zardFolderCodeIcon = lucideFolderCode;
-export const zardGalleryHorizontalIcon = lucideGalleryHorizontal;
-export const zardPlusIcon = lucidePlus;
-export const zardMinusIcon = lucideMinus;
-export const zardArrowLeftIcon = lucideArrowLeft;
-export const zardArchiveIcon = lucideArchive;
-export const zardClockIcon = lucideClock;
-export const zardCalendarPlusIcon = lucideCalendarPlus;
-export const zardListFilterPlusIcon = lucideListFilterPlus;
-export const zardTrashIcon = lucideTrash2;
-export const zardTagIcon = lucideTag;
-export const zardSunMoonIcon = lucideSunMoon;
-export const zardDarkModeIcon = DarkModeSvg;
-export const zardSquareIcon = lucideSquare;
-export const zardDollarSignIcon = lucideDollarSign;
-export const zardUserPlusIcon = lucideUserPlus;
-export const zardCreditCardIcon = lucideCreditCard;
-export const zardActivityIcon = lucideActivity;
-export const zardGithubIcon = lucideGithub;
-export const zardExternalLinkIcon = lucideExternalLink;
+export const ZardIconRegistry = {
+  activity: lucideActivity,
+  archive: lucideArchive,
+  'arrow-left': lucideArrowLeft,
+  'arrow-right': lucideArrowRight,
+  'arrow-up': lucideArrowUp,
+  'arrow-up-right': lucideArrowUpRight,
+  ban: lucideBan,
+  'badge-check': lucideBadgeCheck,
+  bell: lucideBell,
+  bold: lucideBold,
+  'book-open': lucideBookOpen,
+  'book-open-text': lucideBookOpenText,
+  calendar: lucideCalendar,
+  'calendar-plus': lucideCalendarPlus,
+  check: lucideCheck,
+  'chevron-down': lucideChevronDown,
+  'chevron-left': lucideChevronLeft,
+  'chevron-right': lucideChevronRight,
+  'chevrons-up-down': lucideChevronsUpDown,
+  'chevron-up': lucideChevronUp,
+  circle: lucideCircle,
+  'circle-alert': lucideCircleAlert,
+  'circle-check': lucideCircleCheck,
+  'circle-dollar-sign': lucideCircleDollarSign,
+  'circle-small': lucideCircleSmall,
+  'circle-x': lucideCircleX,
+  clipboard: lucideClipboard,
+  clock: lucideClock,
+  code: lucideCode,
+  'code-xml': lucideCodeXml,
+  copy: lucideCopy,
+  'credit-card': lucideCreditCard,
+  'dark-mode': DarkModeSvg,
+  'dollar-sign': lucideDollarSign,
+  ellipsis: lucideEllipsis,
+  'external-link': lucideExternalLink,
+  eye: lucideEye,
+  file: lucideFile,
+  'file-text': lucideFileText,
+  folder: lucideFolder,
+  'folder-code': lucideFolderCode,
+  'folder-open': lucideFolderOpen,
+  'folder-plus': lucideFolderPlus,
+  'gallery-horizontal': lucideGalleryHorizontal,
+  github: lucideGithub,
+  heart: lucideHeart,
+  house: lucideHouse,
+  inbox: lucideInbox,
+  info: lucideInfo,
+  italic: lucideItalic,
+  layers: lucideLayers,
+  'layers-2': lucideLayers2,
+  'layout-dashboard': lucideLayoutDashboard,
+  lightbulb: lucideLightbulb,
+  'lightbulb-off': lucideLightbulbOff,
+  'list-filter-plus': lucideListFilterPlus,
+  'loader-circle': lucideLoaderCircle,
+  'log-out': lucideLogOut,
+  mail: lucideMail,
+  minus: lucideMinus,
+  monitor: lucideMonitor,
+  moon: lucideMoon,
+  'move-right': lucideMoveRight,
+  palette: lucidePalette,
+  'panel-left': lucidePanelLeft,
+  plus: lucidePlus,
+  popcorn: lucidePopcorn,
+  puzzle: lucidePuzzle,
+  save: lucideSave,
+  search: lucideSearch,
+  settings: lucideSettings,
+  shield: lucideShield,
+  smartphone: lucideSmartphone,
+  sparkles: lucideSparkles,
+  square: lucideSquare,
+  'square-library': lucideSquareLibrary,
+  star: lucideStar,
+  sun: lucideSun,
+  'sun-moon': lucideSunMoon,
+  tablet: lucideTablet,
+  tag: lucideTag,
+  terminal: lucideTerminal,
+  'text-align-center': lucideTextAlignCenter,
+  'text-align-end': lucideTextAlignEnd,
+  'text-align-start': lucideTextAlignStart,
+  trash: lucideTrash2,
+  'triangle-alert': lucideTriangleAlert,
+  underline: lucideUnderline,
+  user: lucideUser,
+  'user-plus': lucideUserPlus,
+  users: lucideUsers,
+  x: lucideX,
+  zap: lucideZap,
+} as const;
 
-export type ZardIconName =
-  | 'activity'
-  | 'archive'
-  | 'arrow-left'
-  | 'arrow-right'
-  | 'arrow-up'
-  | 'arrow-up-right'
-  | 'ban'
-  | 'badge-check'
-  | 'bell'
-  | 'bold'
-  | 'book-open'
-  | 'book-open-text'
-  | 'calendar'
-  | 'calendar-plus'
-  | 'check'
-  | 'chevron-down'
-  | 'chevron-left'
-  | 'chevron-right'
-  | 'chevrons-up-down'
-  | 'chevron-up'
-  | 'circle'
-  | 'circle-alert'
-  | 'circle-check'
-  | 'circle-dollar-sign'
-  | 'circle-small'
-  | 'circle-x'
-  | 'clipboard'
-  | 'clock'
-  | 'code'
-  | 'code-xml'
-  | 'copy'
-  | 'credit-card'
-  | 'dark-mode'
-  | 'dollar-sign'
-  | 'ellipsis'
-  | 'external-link'
-  | 'eye'
-  | 'file'
-  | 'file-text'
-  | 'folder'
-  | 'folder-code'
-  | 'folder-open'
-  | 'folder-plus'
-  | 'gallery-horizontal'
-  | 'github'
-  | 'heart'
-  | 'house'
-  | 'inbox'
-  | 'info'
-  | 'italic'
-  | 'layers'
-  | 'layers-2'
-  | 'layout-dashboard'
-  | 'lightbulb'
-  | 'lightbulb-off'
-  | 'list-filter-plus'
-  | 'loader-circle'
-  | 'log-out'
-  | 'mail'
-  | 'minus'
-  | 'monitor'
-  | 'moon'
-  | 'move-right'
-  | 'palette'
-  | 'panel-left'
-  | 'plus'
-  | 'popcorn'
-  | 'puzzle'
-  | 'save'
-  | 'search'
-  | 'settings'
-  | 'shield'
-  | 'smartphone'
-  | 'sparkles'
-  | 'square'
-  | 'square-library'
-  | 'star'
-  | 'sun'
-  | 'sun-moon'
-  | 'tablet'
-  | 'tag'
-  | 'terminal'
-  | 'text-align-center'
-  | 'text-align-end'
-  | 'text-align-start'
-  | 'trash'
-  | 'triangle-alert'
-  | 'underline'
-  | 'user'
-  | 'user-plus'
-  | 'users'
-  | 'x'
-  | 'zap';
+export type ZardIconName = keyof typeof ZardIconRegistry;

@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardCircleCheckIcon, zardPopcornIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 import { ZardAlertComponent } from '../alert.component';
 
@@ -38,6 +38,6 @@ import { ZardAlertComponent } from '../alert.component';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ circleCheck: zardCircleCheckIcon, popcorn: zardPopcornIcon })],
+  viewProviders: [provideIcons({ circleCheck: ZardIconRegistry['circle-check'], popcorn: ZardIconRegistry.popcorn })],
 })
 export class ZardDemoAlertBasicComponent {}

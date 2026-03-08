@@ -28,12 +28,12 @@ import {
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
+import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import type { ZardDialogRef } from './dialog-ref';
 import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
-import { zardXIcon } from '../../core/icons-registry';
 import { ZardButtonComponent } from '../button/button.component';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
@@ -114,7 +114,7 @@ export class ZardDialogOptions<T, U> {
             data-testid="z-ok-button"
             z-button
             [zType]="config.zOkDestructive ? 'destructive' : 'default'"
-            [disabled]="config.zOkDisabled"
+            [zDisabled]="config.zOkDisabled"
             (click)="onOkClick()"
           >
             @if (config.zOkIcon) {
@@ -152,7 +152,7 @@ export class ZardDialogOptions<T, U> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ x: zardXIcon })],
+  viewProviders: [provideIcons({ x: ZardIconRegistry.x })],
   host: {
     '[class]': 'classes()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',

@@ -3,7 +3,8 @@ import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
-import { zardHouseIcon } from '../../../core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
+
 import { ZardBreadcrumbImports } from '../breadcrumb.imports';
 
 @Component({
@@ -19,7 +20,7 @@ import { ZardBreadcrumbImports } from '../breadcrumb.imports';
       <z-breadcrumb-item>Breadcrumb</z-breadcrumb-item>
     </z-breadcrumb>
   `,
-  viewProviders: [provideIcons({ house: zardHouseIcon })],
+  viewProviders: [provideIcons({ house: ZardIconRegistry.house })],
 })
 export class ZardDemoBreadcrumbDefaultComponent {}
 

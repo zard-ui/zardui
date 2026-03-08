@@ -4,7 +4,7 @@ import { provideIcons } from '@ng-icons/core';
 
 import { ZardTreeImports } from '@/shared/components/tree/tree.imports';
 import type { TreeNode } from '@/shared/components/tree/tree.types';
-import { zardMonitorIcon, zardSmartphoneIcon, zardTabletIcon, zardTagIcon } from '@/shared/core';
+import { ZardIconRegistry } from '@/shared/core';
 
 @Component({
   selector: 'z-demo-tree-selection',
@@ -22,10 +22,10 @@ import { zardMonitorIcon, zardSmartphoneIcon, zardTabletIcon, zardTagIcon } from
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
-      monitor: zardMonitorIcon,
-      smartphone: zardSmartphoneIcon,
-      tablet: zardTabletIcon,
-      tag: zardTagIcon,
+      monitor: ZardIconRegistry.monitor,
+      smartphone: ZardIconRegistry.smartphone,
+      tablet: ZardIconRegistry.tablet,
+      tag: ZardIconRegistry.tag,
     }),
   ],
 })

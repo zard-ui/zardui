@@ -24,7 +24,7 @@ import {
   type ZardCarouselControlsVariants,
   type ZardCarouselOrientationVariants,
 } from '@/shared/components/carousel/carousel.variants';
-import { zardChevronLeftIcon, zardChevronRightIcon, zardCircleSmallIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -99,9 +99,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   encapsulation: ViewEncapsulation.None,
   viewProviders: [
     provideIcons({
-      chevronLeft: zardChevronLeftIcon,
-      chevronRight: zardChevronRightIcon,
-      circleSmall: zardCircleSmallIcon,
+      chevronLeft: ZardIconRegistry['chevron-left'],
+      chevronRight: ZardIconRegistry['chevron-right'],
+      circleSmall: ZardIconRegistry['circle-small'],
     }),
   ],
   host: {

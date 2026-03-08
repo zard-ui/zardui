@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncaps
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
 import { calendarMonths } from '@/shared/components/calendar/calendar.utils';
-import { zardChevronLeftIcon, zardChevronRightIcon } from '@/shared/core/icons-registry';
+import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { calendarNavVariants } from './calendar.variants';
@@ -62,7 +62,9 @@ import { ZardSelectComponent } from '../select/select.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronLeft: zardChevronLeftIcon, chevronRight: zardChevronRightIcon })],
+  viewProviders: [
+    provideIcons({ chevronLeft: ZardIconRegistry['chevron-left'], chevronRight: ZardIconRegistry['chevron-right'] }),
+  ],
   exportAs: 'zCalendarNavigation',
 })
 export class ZardCalendarNavigationComponent {
