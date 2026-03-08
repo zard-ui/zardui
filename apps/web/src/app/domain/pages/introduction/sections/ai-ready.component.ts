@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 
@@ -43,6 +43,7 @@ interface AIFeatureCard {
       </div>
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ sun: ZardIconRegistry.sun, bookOpenText: ZardIconRegistry['book-open-text'] })],
 })
 export class AIReadySection {
