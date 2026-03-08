@@ -105,7 +105,7 @@
     "@eslint/js": "^9.39.3",
     "@happy-dom/jest-environment": "^20.7.0",
     "@nx/angular": "22.5.2",
-    "@nx/eslint": "22.5.2",
+    "@nx/eslint": "22.5.4",
     "@nx/eslint-plugin": "22.5.2",
     "@nx/jest": "22.5.2",
     "@nx/js": "22.5.2",
