@@ -113,6 +113,11 @@ export const appRoutes: Route[] = [
         loadChildren: async () => (await import('./domain/pages/component/component.routes')).COMPONENTS_ROUTES,
       },
       {
+        path: 'version-support',
+        loadComponent: () =>
+          import('./domain/pages/version-support/version-support.page').then(c => c.VersionSupportPage),
+      },
+      {
         path: 'about',
         loadComponent: async () => import('./domain/pages/about/about.page').then(c => c.AboutPage),
       },
