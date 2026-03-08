@@ -128,7 +128,6 @@ export default [
     ...betterTailwindBase,
     rules: {
       ...betterTailwindBase.rules,
-      'better-tailwindcss/no-unnecessary-whitespace': 'off',
       '@angular-eslint/template/no-negated-async': 'error',
       '@angular-eslint/template/banana-in-box': 'error',
       '@angular-eslint/template/button-has-type': 'warn',
