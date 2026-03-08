@@ -63,9 +63,16 @@ export class VersionSupportPage implements OnInit {
     },
     {
       version: 'Angular 19',
-      status: 'ended',
-      label: 'Ended',
-      description: 'No longer supported. We recommend upgrading to Angular 20 or later for the best experience.',
+      status: 'active',
+      label: 'Active',
+      description: 'Supported. Backward compatibility is maintained for this version.',
+    },
+    {
+      version: 'Angular 18',
+      status: 'active',
+      label: 'Active',
+      description:
+        'Minimum supported Angular version. We recommend upgrading to Angular 19 or later for the best experience.',
     },
   ];
 
