@@ -37,4 +37,9 @@ export class GithubService {
     if (this.contributorsResource.error()) return [];
     return this.contributorsResource.value();
   });
+
+  async init() {
+    this.repoResource.value();
+    this.contributorsResource.value();
+  }
 }

@@ -1,9 +1,12 @@
-import { APP_BASE_HREF } from '@angular/common';
-import { CommonEngine, isMainModule } from '@angular/ssr/node';
+import {
+  AngularNodeAppEngine,
+  createNodeRequestHandler,
+  isMainModule,
+  writeResponseToNodeResponse,
+} from '@angular/ssr/node';
 
 import express from 'express';
-import { dirname, join, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { join } from 'node:path';
 import xmlbuilder from 'xmlbuilder';
 
 import {
@@ -13,14 +16,11 @@ import {
   DOCS_PATH,
   COMPONENTS_PATH,
 } from './app/shared/constants/routes.constant';
-import bootstrap from './main.server';
 
-const serverDistFolder = dirname(fileURLToPath(import.meta.url));
-const browserDistFolder = resolve(serverDistFolder, '../browser');
-const indexHtml = join(serverDistFolder, 'index.server.html');
+const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
-const commonEngine = new CommonEngine();
+const angularApp = new AngularNodeAppEngine();
 
 function getAvailableRoutes(): Array<{ path: string; priority: number; changefreq: string }> {
   const routes: Array<{ path: string; priority: number; changefreq: string }> = [];
@@ -169,13 +169,13 @@ function categorizeComponents(): Record<string, Array<{ name: string; path: stri
   return categories;
 }
 
-app.get('/llms.txt', (req, res) => {
+app.get('/llms.txt', (_req, res) => {
   const content = generateLlmsTxt();
   res.header('Content-Type', 'text/plain; charset=utf-8');
   res.send(content);
 });
 
-app.get('/sitemap.xml', (req, res) => {
+app.get('/sitemap.xml', (_req, res) => {
   const urlWebsite = `https://zardui.com`;
 
   const root = xmlbuilder.create('urlset', { version: '1.0', encoding: 'UTF-8' });
@@ -214,36 +214,33 @@ app.use(
   }),
 );
 
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   if (req.path === '/sitemap.xml' || req.path === '/llms.txt') {
     return next();
   }
   express.static(browserDistFolder, {
     maxAge: '1y',
-    index: 'index.html',
-  })(req, res, next);
+    index: false,
+    redirect: false,
+  });
 });
 
-app.get('/*splat', (req, res, next) => {
-  const { protocol, originalUrl, baseUrl, headers } = req;
-
-  commonEngine
-    .render({
-      bootstrap,
-      documentFilePath: indexHtml,
-      url: `${protocol}://${headers.host}${originalUrl}`,
-      publicPath: browserDistFolder,
-      providers: [{ provide: APP_BASE_HREF, useValue: baseUrl }],
-    })
-    .then(html => res.send(html))
-    .catch(err => next(err));
+app.use((req, res, next) => {
+  angularApp
+    .handle(req)
+    .then(response => (response ? writeResponseToNodeResponse(response, res) : next()))
+    .catch(next);
 });
 
-export default app;
-
-if (isMainModule(import.meta.url)) {
+if (isMainModule(import.meta.url) || process.env['pm_id']) {
   const port = process.env['PORT'] || 4000;
-  app.listen(port, () => {
+  app.listen(port, error => {
+    if (error) {
+      throw error;
+    }
+
     console.log(`Node Express server listening on http://localhost:${port}`);
   });
 }
+
+export const reqHandler = createNodeRequestHandler(app);

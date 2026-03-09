@@ -2,14 +2,14 @@
   <nav class="container-wrapper 3xl:fixed:px-0 px-6">
     <menu class="3xl:fixed:container flex h-(--header-height) items-center gap-2">
       <a class="hidden items-center gap-3 lg:flex" routerLink="/">
-        <img src="images/zard.svg" alt="logo" class="h-6 dark:invert" />
+        <img src="/images/zard.svg" alt="logo" class="h-6 dark:invert" />
         <z-badge zType="secondary">{{ appVersion }}</z-badge>
       </a>
       <div class="flex lg:hidden">
         <z-mobile-nav></z-mobile-nav>
       </div>
       <nav class="hidden flex-1 items-center gap-0.5 lg:flex">
-        @for (path of headerPaths; track $index) {
+        @for (path of headerPaths; track path.path) {
           <a z-button zType="ghost" zSize="sm" [routerLink]="path.path">
             {{ path.name }}
             @if (!path.available) {
@@ -28,10 +28,7 @@
         @if (githubData) {
           <a z-button class="flex" zType="ghost" zSize="sm" [href]="githubData.url" target="_blank">
             <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />
-
-            @if (repoStars()) {
-              <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars() }}</span>
-            }
+            <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars() || '' }}</span>
           </a>
         }
         <z-divider zOrientation="vertical" zSpacing="none" class="3xl:block hidden h-4!"></z-divider>

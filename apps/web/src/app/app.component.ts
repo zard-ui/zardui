@@ -7,15 +7,19 @@ import { inject as injectAnalytics } from '@vercel/analytics';
 import { injectSpeedInsights } from '@vercel/speed-insights';
 import { filter } from 'rxjs';
 
+import { FooterComponent } from '@doc/domain/components/footer/footer.component';
+import { HeaderComponent } from '@doc/domain/components/header/header.component';
 import { getHeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
 
 const LOADING_TIMEOUT = 1000;
 
 @Component({
-  imports: [RouterModule],
+  imports: [RouterModule, HeaderComponent, FooterComponent],
   selector: 'z-root',
   template: `
+    <z-header></z-header>
     <router-outlet></router-outlet>
+    <z-footer></z-footer>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

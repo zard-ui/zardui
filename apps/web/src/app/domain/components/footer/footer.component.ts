@@ -21,7 +21,7 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
               <div class="space-y-3">
                 <div class="flex items-center space-x-2">
                   <div
-                    class="from-primary to-primary/80 flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br p-1"
+                    class="from-primary to-primary/80 flex h-8 w-8 items-center justify-center rounded-lg bg-linear-to-br p-1"
                   >
                     <img
                       src="/images/zard.svg"
@@ -31,7 +31,7 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
                     />
                   </div>
                   <h3
-                    class="from-foreground to-foreground/80 bg-gradient-to-r bg-clip-text text-xl font-bold text-transparent"
+                    class="from-foreground to-foreground/80 bg-linear-to-r bg-clip-text text-xl font-bold text-transparent"
                   >
                     ZardUI
                   </h3>
@@ -51,7 +51,7 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
                     target="_blank"
                     rel="noopener noreferrer"
                     [title]="social.name"
-                    class="hover:border-primary/30 hover:bg-primary/5 !p-2 transition-all duration-300 hover:scale-105"
+                    class="hover:border-primary/30 hover:bg-primary/5 p-2!transition-all duration-300 hover:scale-105"
                   >
                     <img
                       [src]="social.icon"
@@ -71,7 +71,7 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
             <h4 class="text-foreground relative font-semibold">
               Resources
               <div
-                class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-gradient-to-r"
+                class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-linear-to-r"
               ></div>
             </h4>
             <ul class="space-y-3">
@@ -97,7 +97,7 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
             <h4 class="text-foreground relative font-semibold">
               Documentation
               <div
-                class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-gradient-to-r"
+                class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-linear-to-r"
               ></div>
             </h4>
             <ul class="space-y-3">
@@ -121,7 +121,7 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
             <h4 class="text-foreground relative font-semibold">
               Components
               <div
-                class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-gradient-to-r"
+                class="from-primary to-primary/50 absolute -bottom-1 left-0 h-0.5 w-8 rounded-full bg-linear-to-r"
               ></div>
             </h4>
             <ul class="space-y-3">
@@ -146,7 +146,7 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
                   zType="link"
                   zSize="sm"
                   routerLink="/components"
-                  class="text-primary hover:text-primary/80 group flex !h-auto items-center space-x-2 !p-0 text-sm transition-all duration-200"
+                  class="text-primary hover:text-primary/80 group flex h-auto! items-center space-x-2 p-0! text-sm transition-all duration-200"
                 >
                   <span class="transition-transform duration-200 group-hover:translate-x-1">See all components →</span>
                 </a>
@@ -176,7 +176,7 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
                   [href]="githubUrl"
                   target="_blank"
                   rel="noopener noreferrer"
-                  class="text-foreground hover:text-primary decoration-primary/30 hover:decoration-primary !h-auto !p-0 font-medium underline underline-offset-4 transition-all duration-200"
+                  class="text-foreground hover:text-primary decoration-primary/30 hover:decoration-primary h-auto! p-0! font-medium underline underline-offset-4 transition-all duration-200"
                 >
                   GitHub
                 </a>
@@ -185,7 +185,7 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
 
             <div class="mb-10 flex items-center space-x-2 text-sm lg:mb-0">
               <div class="bg-background/80 border-border/50 text-muted-foreground rounded-full border px-3 py-1.5">
-                <span>© {{ currentYear }} ZardUI</span>
+                <span>© 2025 ZardUI</span>
               </div>
             </div>
           </div>
@@ -195,15 +195,10 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
   `,
 })
 export class FooterComponent {
-  readonly currentYear = new Date().getFullYear();
   readonly githubUrl = SOCIAL_MEDIAS.find(media => media.name === 'GitHub')?.url;
-
   readonly socialMedias = signal(SOCIAL_MEDIAS);
-
   readonly documentationLinks = signal(SIDEBAR_PATHS[0].data.filter(doc => doc.available));
-
   readonly popularComponents = signal(SIDEBAR_PATHS[1].data.filter(component => component.available).slice(0, 8));
-
   readonly resourceLinks = signal([
     { name: 'GitHub Repository', url: 'https://github.com/zard-ui/zardui' },
     { name: 'NPM Package', url: 'https://www.npmjs.com/package/zard-cli' },
