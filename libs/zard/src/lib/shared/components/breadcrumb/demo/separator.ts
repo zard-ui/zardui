@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowRight } from '@ng-icons/lucide';
 
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
-import { ZardIconRegistry } from '@/shared/core';
 
 @Component({
   selector: 'z-demo-breadcrumb-separator',
@@ -16,9 +16,9 @@ import { ZardIconRegistry } from '@/shared/core';
     </z-breadcrumb>
 
     <ng-template #customSeparator>
-      <ng-icon name="arrow-right" />
+      <ng-icon name="lucideArrowRight" />
     </ng-template>
   `,
-  viewProviders: [provideIcons({ arrowRight: ZardIconRegistry['arrow-right'] })],
+  viewProviders: [provideIcons({ lucideArrowRight })],
 })
 export class ZardDemoBreadcrumbSeparatorComponent {}

@@ -2,7 +2,7 @@ import { Overlay } from '@angular/cdk/overlay';
 import { Component } from '@angular/core';
 import { fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import { ZardIconRegistry } from '@/shared/core';
+import { lucideCheck } from '@ng-icons/lucide';
 
 import { ZardDialogRef } from './dialog-ref';
 import { ZardDialogOptions } from './dialog.component';
@@ -65,7 +65,7 @@ describe('ZardDialogService', () => {
       const config = new ZardDialogOptions();
       config.zTitle = 'Confirm Action';
       config.zContent = 'Are you sure?';
-      config.zOkIcon = ZardIconRegistry.check;
+      config.zOkIcon = lucideCheck;
 
       const dialogRef = service.create(config);
       tick();
@@ -99,7 +99,7 @@ describe('ZardDialogService', () => {
     it('creates dialog with both ok and cancel icons', fakeAsync(() => {
       const config = new ZardDialogOptions();
       config.zContent = 'Test';
-      config.zOkIcon = ZardIconRegistry.check;
+      config.zOkIcon = lucideCheck;
       config.zCancelIcon = '<svg>cancel</svg>';
 
       const dialogRef = service.create(config);

@@ -1,16 +1,21 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
-import { ZardIconRegistry } from '@/shared/core';
+import { lucideSave, lucideX } from '@ng-icons/lucide';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardDialogModule } from '../dialog.component';
+import { ZardDemoDialogBasicInputComponent } from '@/shared/components/dialog/demo/basic';
+import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
+
 import { ZardDialogService } from '../dialog.service';
 
+interface iDialogData {
+  name: string;
+  username: string;
+}
+
 @Component({
-  selector: 'zard-demo-dialog-with-icons',
-  imports: [ZardButtonComponent, ZardDialogModule],
+  imports: [ZardDialogImports],
   template: `
-    <button type="button" z-button zType="outline" (click)="openDialog()">Open Dialog with Icons</button>
+    <button type="button" z-button zType="outline" (click)="openDialog()">Edit profile</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -19,14 +24,19 @@ export class ZardDemoDialogWithIconsComponent {
 
   openDialog() {
     this.dialogService.create({
-      zTitle: 'Confirm Action',
-      zDescription: 'Are you sure you want to proceed? This action cannot be undone.',
-      zOkText: 'Confirm',
-      zOkIcon: ZardIconRegistry.check,
-      zCancelText: 'Cancel',
-      zCancelIcon: ZardIconRegistry.x,
-      zOnOk: () => {
-        console.log('Action confirmed');
+      zTitle: 'Edit Profile',
+      zDescription: `Make changes to your profile here. Click save when you're done.`,
+      zContent: ZardDemoDialogBasicInputComponent,
+      zData: {
+        name: 'Samuel Rizzon',
+        username: '@samuelrizzondev',
+        region: 'america',
+      } as iDialogData,
+      zCancelIcon: lucideX,
+      zOkIcon: lucideSave,
+      zOkText: 'Save changes',
+      zOnOk: instance => {
+        console.log('Form submitted:', instance.form.value);
       },
       zWidth: '425px',
     });

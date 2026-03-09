@@ -1,11 +1,18 @@
 import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideBookOpen,
+  lucideChevronDown,
+  lucideChevronRight,
+  lucideFileText,
+  lucideInfo,
+  lucideUsers,
+} from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 @Component({
   selector: 'zard-demo-menu-default',
@@ -17,7 +24,7 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
           <div class="relative">
             <button type="button" z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="productsMenu">
               Products
-              <ng-icon name="chevron-down" class="ml-1" />
+              <ng-icon name="lucideChevronDown" class="ml-1" />
             </button>
 
             <ng-template #productsMenu>
@@ -33,7 +40,7 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
           <div class="relative">
             <button type="button" z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="solutionsMenu">
               Solutions
-              <ng-icon name="chevron-down" class="ml-1" />
+              <ng-icon name="lucideChevronDown" class="ml-1" />
             </button>
 
             <ng-template #solutionsMenu>
@@ -80,18 +87,18 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
           <div class="relative">
             <button type="button" z-button zType="ghost" z-menu zTrigger="hover" [zMenuTriggerFor]="resourcesMenu">
               Resources
-              <ng-icon name="chevron-down" />
+              <ng-icon name="lucideChevronDown" />
             </button>
 
             <ng-template #resourcesMenu>
               <div z-menu-content class="w-56">
                 <button type="button" z-menu-item (click)="log('Blog')">
-                  <ng-icon name="book-open" class="mr-2" />
+                  <ng-icon name="lucideBookOpen" class="mr-2" />
                   Blog
                 </button>
 
                 <button type="button" z-menu-item (click)="log('Documentation')">
-                  <ng-icon name="file-text" class="mr-2" />
+                  <ng-icon name="lucideFileText" class="mr-2" />
                   Documentation
                 </button>
 
@@ -104,16 +111,16 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
                   class="justify-between"
                 >
                   <div class="flex items-center">
-                    <ng-icon name="info" class="mr-2" />
+                    <ng-icon name="lucideInfo" class="mr-2" />
                     Help & Support
                   </div>
-                  <ng-icon name="chevron-right" />
+                  <ng-icon name="lucideChevronRight" />
                 </button>
 
                 <z-divider zSpacing="sm" />
 
                 <button type="button" z-menu-item (click)="log('Community')">
-                  <ng-icon name="users" class="mr-2" />
+                  <ng-icon name="lucideUsers" class="mr-2" />
                   Community
                 </button>
               </div>
@@ -138,12 +145,12 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
   `,
   viewProviders: [
     provideIcons({
-      chevronDown: ZardIconRegistry['chevron-down'],
-      chevronRight: ZardIconRegistry['chevron-right'],
-      bookOpen: ZardIconRegistry['book-open'],
-      fileText: ZardIconRegistry['file-text'],
-      info: ZardIconRegistry.info,
-      users: ZardIconRegistry.users,
+      lucideChevronDown,
+      lucideChevronRight,
+      lucideBookOpen,
+      lucideFileText,
+      lucideInfo,
+      lucideUsers,
     }),
   ],
 })

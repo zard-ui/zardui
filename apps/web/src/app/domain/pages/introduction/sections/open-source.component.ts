@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBan, lucideCircleCheck, lucideCircleDollarSign, lucideX, lucideZap } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconName, ZardIconRegistry } from '@zard/core/icons-registry';
 
 interface OpenSourceFeature {
   title: string;
   description: string;
-  icon: ZardIconName;
+  icon: IconName;
 }
 
 interface StandAgainstItem {
@@ -19,7 +19,6 @@ interface StandAgainstItem {
 
 @Component({
   selector: 'open-source-section',
-  standalone: true,
   imports: [ZardBadgeComponent, ZardCardComponent, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
@@ -52,13 +51,15 @@ interface StandAgainstItem {
       <!-- What We Stand Against -->
       <div class="bg-destructive/5 rounded-lg p-6">
         <h3 class="mb-4 flex items-center gap-2 text-lg font-semibold">
-          <ng-icon name="ban" class="text-destructive" />
+          <ng-icon name="lucideBan" class="text-destructive" />
           What We Stand Against
         </h3>
         <div class="grid gap-3 md:grid-cols-3">
           @for (item of standAgainstItems; track $index) {
             <div class="flex items-start gap-3">
-              <ng-icon name="x" class="text-destructive" />
+              <span>
+                <ng-icon name="lucideX" class="text-destructive" />
+              </span>
               <div>
                 <p class="text-sm font-medium">{{ item.title }}</p>
                 <p class="text-muted-foreground text-xs">{{ item.description }}</p>
@@ -71,11 +72,11 @@ interface StandAgainstItem {
   `,
   viewProviders: [
     provideIcons({
-      circleCheck: ZardIconRegistry['circle-check'],
-      circleDollarSign: ZardIconRegistry['circle-dollar-sign'],
-      zap: ZardIconRegistry.zap,
-      ban: ZardIconRegistry.ban,
-      x: ZardIconRegistry.x,
+      lucideCircleCheck,
+      lucideCircleDollarSign,
+      lucideZap,
+      lucideBan,
+      lucideX,
     }),
   ],
 })
@@ -85,18 +86,18 @@ export class OpenSourceSection {
       title: 'Community Owned',
       description:
         "Governed by developers, not corporations. Every decision is made transparently with the community's best interests at heart.",
-      icon: 'circle-check',
+      icon: 'lucideCircleCheck',
     },
     {
       title: 'Forever Free',
       description: 'Every component, every feature, always free. No premium tiers, no hidden costs, no "pro" versions.',
-      icon: 'circle-dollar-sign',
+      icon: 'lucideCircleDollarSign',
     },
     {
       title: 'Built in Public',
       description:
         'All development happens in the open. Watch us build, contribute your ideas, and shape the future together.',
-      icon: 'zap',
+      icon: 'lucideZap',
     },
   ];
 

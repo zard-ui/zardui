@@ -15,12 +15,12 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import type { IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import { ZardCommandInputComponent } from '@/shared/components/command/command-input.component';
 import { ZardCommandOptionComponent } from '@/shared/components/command/command-option.component';
 import { commandVariants, type ZardCommandSizeVariants } from '@/shared/components/command/command.variants';
-import type { ZardIconName } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardCommandOption {
@@ -29,7 +29,7 @@ export interface ZardCommandOption {
   disabled?: boolean;
   command?: string;
   shortcut?: string;
-  icon?: ZardIconName;
+  icon?: IconName;
   action?: () => void;
   key?: string;
 }
@@ -479,11 +479,11 @@ import {
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
 import { commandInputVariants } from '@/shared/components/command/command.variants';
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -491,7 +491,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   imports: [NgIcon],
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
-      <ng-icon name="search" class="mr-2 size-4! shrink-0 opacity-50" />
+      <ng-icon name="lucideSearch" class="mr-2 size-4! shrink-0 opacity-50" />
       <input
         #searchInput
         [class]="classes()"
@@ -522,7 +522,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ search: ZardIconRegistry.search })],
+  viewProviders: [provideIcons({ lucideSearch })],
   exportAs: 'zCommandInput',
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {
@@ -743,7 +743,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgIcon, type IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import type { ZardCommandOptionGroupComponent } from '@/shared/components/command/command-option-group.component';
@@ -753,8 +753,6 @@ import {
   commandShortcutVariants,
   type ZardCommandItemVariants,
 } from '@/shared/components/command/command.variants';
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
-import type { ZardIconName } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -785,16 +783,6 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [
-    provideIcons({
-      folder: ZardIconRegistry.folder,
-      folderOpen: ZardIconRegistry['folder-open'],
-      save: ZardIconRegistry.save,
-      layoutDashboard: ZardIconRegistry['layout-dashboard'],
-      terminal: ZardIconRegistry.terminal,
-      moon: ZardIconRegistry.moon,
-    }),
-  ],
   exportAs: 'zCommandOption',
 })
 export class ZardCommandOptionComponent {
@@ -804,7 +792,7 @@ export class ZardCommandOptionComponent {
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
   readonly zCommand = input<string>('');
-  readonly zIcon = input<ZardIconName>();
+  readonly zIcon = input<IconName>();
   readonly zShortcut = input<string>('');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly variant = input<ZardCommandItemVariants>('default');

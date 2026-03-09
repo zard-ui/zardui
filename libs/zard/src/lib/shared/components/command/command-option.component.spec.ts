@@ -3,8 +3,7 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
+import { lucideSearch } from '@ng-icons/lucide';
 
 import { ZardCommandOptionComponent } from './command-option.component';
 
@@ -21,7 +20,7 @@ import { ZardCommandOptionComponent } from './command-option.component';
       variant="default"
     />
   `,
-  viewProviders: [provideIcons({ search: ZardIconRegistry.search })],
+  viewProviders: [provideIcons({ lucideSearch })],
 })
 class TestHostComponent {
   disabled = false;

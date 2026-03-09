@@ -12,6 +12,7 @@ import {
 import { type Params, RouterLink } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronRight, lucideEllipsis } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import {
@@ -24,7 +25,6 @@ import {
   type ZardBreadcrumbSizeVariants,
   type ZardBreadcrumbWrapVariants,
 } from '@/shared/components/breadcrumb/breadcrumb.variants';
-import { ZardIconRegistry } from '@/shared/core';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -32,11 +32,11 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   selector: 'z-breadcrumb-ellipsis, [z-breadcrumb-ellipsis]',
   imports: [NgIcon],
   template: `
-    <ng-icon name="ellipsis" class="size-4!" />
+    <ng-icon name="lucideEllipsis" class="size-4!" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ ellipsis: ZardIconRegistry.ellipsis })],
+  viewProviders: [provideIcons({ lucideEllipsis })],
   host: {
     '[class]': 'classes()',
     'aria-hidden': 'true',
@@ -82,7 +82,7 @@ export class ZardBreadcrumbEllipsisComponent {
           {{ separator() }}
         } @else {
           <span class="flex items-center">
-            <ng-icon name="chevron-right" />
+            <ng-icon name="lucideChevronRight" />
           </span>
         }
       </li>
@@ -90,7 +90,7 @@ export class ZardBreadcrumbEllipsisComponent {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronRight: ZardIconRegistry['chevron-right'] })],
+  viewProviders: [provideIcons({ lucideChevronRight })],
   host: {
     class: 'inline-flex items-center gap-1.5',
   },

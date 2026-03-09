@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { ZardIconRegistry } from '@/shared/core';
+import { lucideArrowLeft, lucideArrowRight } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardButtonGroupComponent } from '../button-group.component';
@@ -22,13 +21,11 @@ import { ZardButtonGroupComponent } from '../button-group.component';
       </z-button-group>
 
       <z-button-group>
-        <button type="button" z-button zSize="sm" zType="outline"><ng-icon name="arrow-left" /></button>
-        <button type="button" z-button zSize="sm" zType="outline"><ng-icon name="arrow-right" /></button>
+        <button type="button" z-button zSize="sm" zType="outline"><ng-icon name="lucideArrowLeft" /></button>
+        <button type="button" z-button zSize="sm" zType="outline"><ng-icon name="lucideArrowRight" /></button>
       </z-button-group>
     </z-button-group>
   `,
-  viewProviders: [
-    provideIcons({ arrowLeft: ZardIconRegistry['arrow-left'], arrowRight: ZardIconRegistry['arrow-right'] }),
-  ],
+  viewProviders: [provideIcons({ lucideArrowLeft, lucideArrowRight })],
 })
 export class ZardDemoButtonGroupNestedComponent {}

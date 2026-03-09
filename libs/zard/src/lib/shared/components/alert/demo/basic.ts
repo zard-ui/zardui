@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
+import { lucideCircleCheck, lucidePopcorn } from '@ng-icons/lucide';
 
 import { ZardAlertComponent } from '../alert.component';
 
@@ -20,7 +19,7 @@ import { ZardAlertComponent } from '../alert.component';
       <z-alert [zIcon]="customIcon" zTitle="This Alert has a title and an icon. No description." />
 
       <ng-template #customIcon>
-        <ng-icon name="popcorn" />
+        <ng-icon name="lucidePopcorn" />
       </ng-template>
 
       <z-alert zType="destructive" zTitle="Unable to process your payment." [zDescription]="customDescription" />
@@ -34,10 +33,10 @@ import { ZardAlertComponent } from '../alert.component';
         </ul>
       </ng-template>
 
-      <ng-template #successIcon><ng-icon name="circle-check" /></ng-template>
+      <ng-template #successIcon><ng-icon name="lucideCircleCheck" /></ng-template>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ circleCheck: ZardIconRegistry['circle-check'], popcorn: ZardIconRegistry.popcorn })],
+  viewProviders: [provideIcons({ lucideCircleCheck, lucidePopcorn })],
 })
 export class ZardDemoAlertBasicComponent {}

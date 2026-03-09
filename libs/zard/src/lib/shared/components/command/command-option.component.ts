@@ -11,7 +11,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgIcon, type IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import type { ZardCommandOptionGroupComponent } from '@/shared/components/command/command-option-group.component';
@@ -21,8 +21,6 @@ import {
   commandShortcutVariants,
   type ZardCommandItemVariants,
 } from '@/shared/components/command/command.variants';
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
-import type { ZardIconName } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -53,16 +51,6 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [
-    provideIcons({
-      folder: ZardIconRegistry.folder,
-      folderOpen: ZardIconRegistry['folder-open'],
-      save: ZardIconRegistry.save,
-      layoutDashboard: ZardIconRegistry['layout-dashboard'],
-      terminal: ZardIconRegistry.terminal,
-      moon: ZardIconRegistry.moon,
-    }),
-  ],
   exportAs: 'zCommandOption',
 })
 export class ZardCommandOptionComponent {
@@ -72,7 +60,7 @@ export class ZardCommandOptionComponent {
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
   readonly zCommand = input<string>('');
-  readonly zIcon = input<ZardIconName>();
+  readonly zIcon = input<IconName>();
   readonly zShortcut = input<string>('');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly variant = input<ZardCommandItemVariants>('default');

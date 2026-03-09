@@ -15,7 +15,6 @@ import {
   type EmbeddedViewRef,
   type EventEmitter,
   inject,
-  NgModule,
   output,
   type TemplateRef,
   type Type,
@@ -24,12 +23,11 @@ import {
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
 
-import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import type { ZardDialogRef } from './dialog-ref';
-import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
 import { ZardButtonComponent } from '../button/button.component';
 
@@ -69,7 +67,7 @@ export class ZardDialogOptions<T, U> {
         class="absolute top-1 right-1"
         (click)="onCloseClick()"
       >
-        <ng-icon name="x" class="size-4!" />
+        <ng-icon name="lucideX" class="size-4!" />
       </button>
     }
 
@@ -149,7 +147,7 @@ export class ZardDialogOptions<T, U> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ x: ZardIconRegistry.x })],
+  viewProviders: [provideIcons({ lucideX })],
   host: {
     '[class]': 'classes()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
@@ -203,9 +201,3 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
     this.cancelTriggered.emit();
   }
 }
-
-@NgModule({
-  imports: [ZardButtonComponent, ZardDialogComponent, OverlayModule, PortalModule],
-  providers: [ZardDialogService],
-})
-export class ZardDialogModule {}

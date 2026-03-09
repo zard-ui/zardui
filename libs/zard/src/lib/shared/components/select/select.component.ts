@@ -29,6 +29,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
@@ -40,7 +41,6 @@ import {
   selectVariants,
   type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
-import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 type OnTouchedType = () => void;
@@ -78,7 +78,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
       </span>
-      <ng-icon name="chevron-down" class="size-4! opacity-50" />
+      <ng-icon name="lucideChevronDown" class="size-4! opacity-50" />
     </button>
 
     <ng-template #dropdownTemplate>
@@ -104,7 +104,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ chevronDown: ZardIconRegistry['chevron-down'] })],
+  viewProviders: [provideIcons({ lucideChevronDown })],
   host: {
     '[attr.data-active]': 'isFocus() ? "" : null',
     '[attr.data-disabled]': 'zDisabled() ? "" : null',

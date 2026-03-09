@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideMoon, lucideSun, lucideSunMoon } from '@ng-icons/lucide';
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconRegistry } from '@zard/core/icons-registry';
 import { EDarkModes, ZardDarkMode } from '@zard/services/dark-mode';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
@@ -32,9 +32,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   ],
   templateUrl: './dark-mode.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [
-    provideIcons({ sunMoon: ZardIconRegistry['sun-moon'], sun: ZardIconRegistry.sun, moon: ZardIconRegistry.moon }),
-  ],
+  viewProviders: [provideIcons({ lucideSunMoon, lucideSun, lucideMoon })],
 })
 export class DarkmodePage implements OnInit {
   activeAnchor?: string;

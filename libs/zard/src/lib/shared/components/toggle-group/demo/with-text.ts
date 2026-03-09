@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
-
-import { ZardIconRegistry } from '@/shared/core';
+import { lucideBold, lucideItalic, lucideUnderline } from '@ng-icons/lucide';
 
 import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-group.component';
 
@@ -19,9 +18,9 @@ import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-gr
   `,
   viewProviders: [
     provideIcons({
-      bold: ZardIconRegistry.bold,
-      italic: ZardIconRegistry.italic,
-      underline: ZardIconRegistry.underline,
+      lucideBold,
+      lucideItalic,
+      lucideUnderline,
     }),
   ],
 })
@@ -29,19 +28,19 @@ export default class ToggleGroupWithTextComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'bold',
-      icon: 'bold',
+      icon: 'lucideBold',
       label: 'Bold',
       ariaLabel: 'Toggle bold',
     },
     {
       value: 'italic',
-      icon: 'italic',
+      icon: 'lucideItalic',
       label: 'Italic',
       ariaLabel: 'Toggle italic',
     },
     {
       value: 'underline',
-      icon: 'underline',
+      icon: 'lucideUnderline',
       label: 'Underline',
       ariaLabel: 'Toggle underline',
     },

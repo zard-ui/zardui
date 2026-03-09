@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
 import { provideIcons } from '@ng-icons/core';
+import { lucideTextAlignCenter, lucideTextAlignEnd, lucideTextAlignStart } from '@ng-icons/lucide';
 
 import {
   ZardToggleGroupComponent,
   type ZardToggleGroupItem,
 } from '@/shared/components/toggle-group/toggle-group.component';
-import { ZardIconRegistry } from '@/shared/core';
 
 @Component({
   selector: 'demo-toggle-group-single',
@@ -16,9 +16,9 @@ import { ZardIconRegistry } from '@/shared/core';
   `,
   viewProviders: [
     provideIcons({
-      textAlignStart: ZardIconRegistry['text-align-start'],
-      textAlignCenter: ZardIconRegistry['text-align-center'],
-      textAlignEnd: ZardIconRegistry['text-align-end'],
+      lucideTextAlignStart,
+      lucideTextAlignCenter,
+      lucideTextAlignEnd,
     }),
   ],
 })
@@ -26,17 +26,17 @@ export default class ToggleGroupSingleComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'left',
-      icon: 'text-align-start',
+      icon: 'lucideTextAlignStart',
       ariaLabel: 'Text align start',
     },
     {
       value: 'center',
-      icon: 'text-align-center',
+      icon: 'lucideTextAlignCenter',
       ariaLabel: 'Text align center',
     },
     {
       value: 'right',
-      icon: 'text-align-end',
+      icon: 'lucideTextAlignEnd',
       ariaLabel: 'Text align end',
     },
   ];

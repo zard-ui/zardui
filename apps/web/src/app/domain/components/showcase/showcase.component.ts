@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { Router, RouterModule } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowRight } from '@ng-icons/lucide';
 
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
@@ -12,7 +13,6 @@ import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTooltipImports } from '@zard/components/tooltip';
-import { ZardIconRegistry } from '@zard/core';
 
 import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/carousel.component';
 
@@ -87,7 +87,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
                         @case ('cta') {
                           <div class="text-center">
                             <div class="flex items-center justify-center rounded-2xl bg-white/10 p-2 backdrop-blur-sm">
-                              <ng-icon name="arrow-right" class="size-4!" />
+                              <ng-icon name="lucideArrowRight" class="size-4!" />
                             </div>
 
                             <div>
@@ -127,7 +127,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
     ZardTooltipImports,
     NgIcon,
   ],
-  viewProviders: [provideIcons({ arrowRight: ZardIconRegistry['arrow-right'] })],
+  viewProviders: [provideIcons({ lucideArrowRight })],
 })
 export class ShowcaseComponent {
   private readonly router = inject(Router);

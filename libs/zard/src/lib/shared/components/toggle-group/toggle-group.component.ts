@@ -10,10 +10,9 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import { NgIcon } from '@ng-icons/core';
+import { NgIcon, type IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
-import type { ZardIconName } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
@@ -21,7 +20,7 @@ import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.var
 export interface ZardToggleGroupItem {
   value: string;
   label?: string;
-  icon?: ZardIconName;
+  icon?: IconName;
   disabled?: boolean;
   ariaLabel?: string;
 }

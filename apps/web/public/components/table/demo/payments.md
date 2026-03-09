@@ -2,11 +2,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCopy, lucideEye } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardTableImports } from '@/shared/components/table/table.imports';
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 export interface Payment {
   id: string;
@@ -47,10 +47,10 @@ export interface Payment {
                 <td z-table-cell>
                   <div class="flex items-center gap-2">
                     <z-button zType="ghost" (click)="copyPaymentId(payment.id)" title="Copy payment ID">
-                      <ng-icon name="copy" />
+                      <ng-icon name="lucideCopy" />
                     </z-button>
                     <z-button zType="ghost" (click)="viewDetails(payment)" title="View details">
-                      <ng-icon name="eye" />
+                      <ng-icon name="lucideEye" />
                     </z-button>
                   </div>
                 </td>
@@ -66,7 +66,7 @@ export interface Payment {
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ copy: ZardIconRegistry.copy, eye: ZardIconRegistry.eye })],
+  viewProviders: [provideIcons({ lucideCopy, lucideEye })],
 })
 export class ZardDemoTablePaymentsComponent {
   payments: Payment[] = [

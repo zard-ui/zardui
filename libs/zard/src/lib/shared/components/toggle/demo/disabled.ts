@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { ZardIconRegistry } from '@/shared/core';
+import { lucideBold } from '@ng-icons/lucide';
 
 import { ZardToggleComponent } from '../toggle.component';
 
@@ -11,9 +10,9 @@ import { ZardToggleComponent } from '../toggle.component';
   imports: [ZardToggleComponent, NgIcon],
   template: `
     <z-toggle aria-label="Toggle disabled" disabled>
-      <ng-icon name="bold" />
+      <ng-icon name="lucideBold" />
     </z-toggle>
   `,
-  viewProviders: [provideIcons({ bold: ZardIconRegistry.bold })],
+  viewProviders: [provideIcons({ lucideBold })],
 })
 export class ZardDemoToggleDisabledComponent {}

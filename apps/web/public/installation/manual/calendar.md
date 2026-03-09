@@ -786,9 +786,9 @@ export class ZardCalendarGridComponent {
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 
 import { calendarMonths } from '@/shared/components/calendar/calendar.utils';
-import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { calendarNavVariants } from './calendar.variants';
@@ -811,7 +811,7 @@ import { ZardSelectComponent } from '../select/select.component';
         aria-label="Previous month"
         class="size-7 p-0"
       >
-        <ng-icon name="chevron-left" class="size-3.5!" />
+        <ng-icon name="lucideChevronLeft" class="size-3.5!" />
       </button>
 
       <!-- Month and Year Selectors -->
@@ -841,15 +841,13 @@ import { ZardSelectComponent } from '../select/select.component';
         aria-label="Next month"
         class="size-7 p-0"
       >
-        <ng-icon name="chevron-right" class="size-3.5!" />
+        <ng-icon name="lucideChevronRight" class="size-3.5!" />
       </button>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [
-    provideIcons({ chevronLeft: ZardIconRegistry['chevron-left'], chevronRight: ZardIconRegistry['chevron-right'] }),
-  ],
+  viewProviders: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
   exportAs: 'zCalendarNavigation',
 })
 export class ZardCalendarNavigationComponent {

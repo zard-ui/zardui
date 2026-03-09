@@ -3,8 +3,8 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch, lucideTerminal } from '@ng-icons/lucide';
 
-import { zardSearchIcon, zardTerminalIcon } from '@/shared/core/icons-registry';
 import { ZardDebounceEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-debounce-event-manager-plugin';
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
@@ -45,7 +45,7 @@ const SEARCH_DEBOUNCE_MS = 150;
       </z-command-list>
     </z-command>
   `,
-  viewProviders: [provideIcons({ search: zardSearchIcon, terminal: zardTerminalIcon })],
+  viewProviders: [provideIcons({ lucideSearch, lucideTerminal })],
 })
 class TestHostComponent {
   selectedOption: any = null;

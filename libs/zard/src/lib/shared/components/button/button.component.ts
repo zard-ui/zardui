@@ -13,9 +13,9 @@ import {
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideLoaderCircle } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
@@ -30,13 +30,13 @@ import {
   imports: [NgIcon],
   template: `
     @if (zLoading()) {
-      <ng-icon name="loader-circle" class="animate-spin duration-2000" />
+      <ng-icon name="lucideLoaderCircle" class="animate-spin duration-2000" />
     }
     <ng-content />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ loaderCircle: ZardIconRegistry['loader-circle'] })],
+  viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
     '[class]': 'classes()',
     '[attr.data-icon-only]': 'iconOnly() || null',

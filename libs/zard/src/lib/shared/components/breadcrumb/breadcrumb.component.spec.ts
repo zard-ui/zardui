@@ -98,7 +98,7 @@ describe('BreadcrumbComponents Integration', () => {
     const breadcrumbPageDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent));
     const iconElement = breadcrumbPageDebug.query(By.css('ng-icon'));
     expect(iconElement).toBeTruthy();
-    expect(iconElement.nativeElement.getAttribute('name')).toBe('ellipsis');
+    expect(iconElement.nativeElement.getAttribute('name')).toBe('lucideEllipsis');
   });
 
   it('should support routerLink on breadcrumb items', () => {
@@ -118,7 +118,7 @@ describe('BreadcrumbComponents Integration', () => {
   it('should render default chevron separator when zSeparator is not provided', () => {
     const separator = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"] ng-icon'));
     expect(separator).toBeTruthy();
-    expect(separator.nativeElement.getAttribute('name')).toBe('chevron-right');
+    expect(separator.nativeElement.getAttribute('name')).toBe('lucideChevronRight');
   });
 });
 
@@ -183,7 +183,7 @@ describe('BreadcrumbComponent - Custom Separator', () => {
 
     const chevrons = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] ng-icon'));
     expect(chevrons.length).toBe(2);
-    expect(chevrons[0].nativeElement.getAttribute('name')).toBe('chevron-right');
+    expect(chevrons[0].nativeElement.getAttribute('name')).toBe('lucideChevronRight');
   });
 
   it('should update separator dynamically when input changes', () => {

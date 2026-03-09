@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideLayers2, lucideSparkles, lucideUsers, lucideZap } from '@ng-icons/lucide';
 
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconName, ZardIconRegistry } from '@zard/core/icons-registry';
 
 interface FeatureCard {
   title: string;
   description: string;
-  icon: ZardIconName;
+  icon: IconName;
 }
 
 @Component({
@@ -40,10 +40,10 @@ interface FeatureCard {
   `,
   viewProviders: [
     provideIcons({
-      sparkles: ZardIconRegistry.sparkles,
-      users: ZardIconRegistry.users,
-      zap: ZardIconRegistry.zap,
-      layers2: ZardIconRegistry['layers-2'],
+      lucideSparkles,
+      lucideUsers,
+      lucideZap,
+      lucideLayers2,
     }),
   ],
 })
@@ -53,23 +53,23 @@ export class WhyZardUISection {
       title: 'Beautiful & Practical',
       description:
         'Meticulously crafted components that look stunning out of the box while remaining highly functional and accessible.',
-      icon: 'sparkles',
+      icon: 'lucideSparkles',
     },
     {
       title: 'Community First',
       description: 'Built by Angular developers who understand your needs. Real-world solutions to real problems.',
-      icon: 'users',
+      icon: 'lucideUsers',
     },
     {
       title: 'Modern Angular',
       description:
         'Leveraging the latest Angular features including standalone components, signals, and best practices.',
-      icon: 'zap',
+      icon: 'lucideZap',
     },
     {
       title: 'Infinitely Customizable',
       description: 'Built with TailwindCSS for seamless customization. Make every component truly yours.',
-      icon: 'layers-2',
+      icon: 'lucideLayers2',
     },
   ];
 }

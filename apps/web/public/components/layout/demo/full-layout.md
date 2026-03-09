@@ -3,11 +3,11 @@ import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBell, lucideHouse, lucideLayers, lucideSearch, lucideUsers } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { LayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 @Component({
   selector: 'z-demo-layout-full',
@@ -22,10 +22,10 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
           </div>
           <div class="flex items-center gap-2">
             <button type="button" z-button zType="ghost" zSize="sm">
-              <ng-icon name="search" />
+              <ng-icon name="lucideSearch" />
             </button>
             <button type="button" z-button zType="ghost" zSize="sm">
-              <ng-icon name="bell" />
+              <ng-icon name="lucideBell" />
             </button>
           </div>
         </div>
@@ -37,15 +37,15 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
             <z-sidebar-group>
               <z-sidebar-group-label>Menu</z-sidebar-group-label>
               <button type="button" z-button zType="secondary" class="justify-start">
-                <ng-icon name="house" class="mr-2" />
+                <ng-icon name="lucideHouse" class="mr-2" />
                 Dashboard
               </button>
               <button type="button" z-button zType="ghost" class="justify-start">
-                <ng-icon name="layers" class="mr-2" />
+                <ng-icon name="lucideLayers" class="mr-2" />
                 Projects
               </button>
               <button type="button" z-button zType="ghost" class="justify-start">
-                <ng-icon name="users" class="mr-2" />
+                <ng-icon name="lucideUsers" class="mr-2" />
                 Team
               </button>
             </z-sidebar-group>
@@ -71,11 +71,11 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
-      search: ZardIconRegistry.search,
-      bell: ZardIconRegistry.bell,
-      house: ZardIconRegistry.house,
-      layers: ZardIconRegistry.layers,
-      users: ZardIconRegistry.users,
+      lucideSearch,
+      lucideBell,
+      lucideHouse,
+      lucideLayers,
+      lucideUsers,
     }),
   ],
 })

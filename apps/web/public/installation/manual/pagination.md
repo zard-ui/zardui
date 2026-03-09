@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideChevronRight, lucideEllipsis } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import {
@@ -29,7 +30,6 @@ import {
   paginationPreviousVariants,
   paginationVariants,
 } from '@/shared/components/pagination/pagination.variants';
-import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -109,13 +109,13 @@ export class ZardPaginationButtonComponent {
       [zDisabled]="zDisabled()"
     >
       <span class="sr-only">To previous page</span>
-      <ng-icon name="chevron-left" aria-hidden="true" />
+      <ng-icon name="lucideChevronLeft" aria-hidden="true" />
       <span class="hidden sm:block" aria-hidden="true">Previous</span>
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronLeft: ZardIconRegistry['chevron-left'] })],
+  viewProviders: [provideIcons({ lucideChevronLeft })],
   exportAs: 'zPaginationPrevious',
 })
 export class ZardPaginationPreviousComponent {
@@ -140,12 +140,12 @@ export class ZardPaginationPreviousComponent {
     >
       <span class="sr-only">To next page</span>
       <span class="hidden sm:block" aria-hidden="true">Next</span>
-      <ng-icon name="chevron-right" aria-hidden="true" />
+      <ng-icon name="lucideChevronRight" aria-hidden="true" />
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronRight: ZardIconRegistry['chevron-right'] })],
+  viewProviders: [provideIcons({ lucideChevronRight })],
   exportAs: 'zPaginationNext',
 })
 export class ZardPaginationNextComponent {
@@ -160,11 +160,11 @@ export class ZardPaginationNextComponent {
   selector: 'z-pagination-ellipsis',
   imports: [NgIcon],
   template: `
-    <ng-icon name="ellipsis" aria-hidden="true" />
+    <ng-icon name="lucideEllipsis" aria-hidden="true" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ ellipsis: ZardIconRegistry.ellipsis })],
+  viewProviders: [provideIcons({ lucideEllipsis })],
   host: {
     '[class]': 'classes()',
     'aria-hidden': 'true',

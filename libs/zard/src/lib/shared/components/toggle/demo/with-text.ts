@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { ZardIconRegistry } from '@/shared/core';
+import { lucideItalic } from '@ng-icons/lucide';
 
 import { ZardToggleComponent } from '../toggle.component';
 
@@ -11,10 +10,10 @@ import { ZardToggleComponent } from '../toggle.component';
   imports: [ZardToggleComponent, NgIcon],
   template: `
     <z-toggle>
-      <ng-icon name="italic" />
+      <ng-icon name="lucideItalic" />
       Italic
     </z-toggle>
   `,
-  viewProviders: [provideIcons({ italic: ZardIconRegistry.italic })],
+  viewProviders: [provideIcons({ lucideItalic })],
 })
 export class ZardDemoToggleWithTextComponent {}

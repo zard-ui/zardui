@@ -13,7 +13,6 @@
         "provider/event-manager-plugins/zard-debounce-event-manager-plugin.ts",
         "provider/event-manager-plugins/zard-event-manager-plugin.ts",
         "provider/providezard.ts",
-        "icons-registry.ts",
         "index.ts"
       ]
     },

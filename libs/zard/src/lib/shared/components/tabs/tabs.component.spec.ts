@@ -2,14 +2,9 @@ import { Component, type Type } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown, lucideChevronLeft, lucideChevronRight, lucideChevronUp } from '@ng-icons/lucide';
 import { render } from '@testing-library/angular';
 
-import {
-  zardChevronDownIcon,
-  zardChevronLeftIcon,
-  zardChevronRightIcon,
-  zardChevronUpIcon,
-} from '@/shared/core/icons-registry';
 import { noopFn } from '@/shared/utils';
 
 import { ZardTabComponent, ZardTabGroupComponent } from './tabs.component';
@@ -26,10 +21,10 @@ const getHostComponent = (position: 'top' | 'bottom' | 'left' | 'right' = 'top')
     `,
     viewProviders: [
       provideIcons({
-        chevronLeft: zardChevronLeftIcon,
-        chevronUp: zardChevronUpIcon,
-        chevronRight: zardChevronRightIcon,
-        chevronDown: zardChevronDownIcon,
+        lucideChevronLeft,
+        lucideChevronUp,
+        lucideChevronRight,
+        lucideChevronDown,
       }),
     ],
   })

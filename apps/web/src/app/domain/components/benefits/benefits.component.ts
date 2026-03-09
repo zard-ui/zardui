@@ -1,12 +1,12 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCode, lucideHeart, lucideLayers, lucidePalette, lucideShield, lucideZap } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardIconName, ZardIconRegistry } from '@zard/core/icons-registry';
 
 export interface BenefitFeature {
-  icon: ZardIconName;
+  icon: IconName;
   title: string;
   description: string;
   highlight?: string;
@@ -121,46 +121,46 @@ export interface BenefitFeature {
   `,
   viewProviders: [
     provideIcons({
-      zap: ZardIconRegistry.zap,
-      palette: ZardIconRegistry.palette,
-      code: ZardIconRegistry.code,
-      layers: ZardIconRegistry.layers,
-      shield: ZardIconRegistry.shield,
-      heart: ZardIconRegistry.heart,
+      lucideZap,
+      lucidePalette,
+      lucideCode,
+      lucideLayers,
+      lucideShield,
+      lucideHeart,
     }),
   ],
 })
 export class BenefitsComponent {
   readonly features = signal<BenefitFeature[]>([
     {
-      icon: 'zap',
+      icon: 'lucideZap',
       title: 'Lightning Fast',
       description: 'Built with performance in mind. Optimized bundle size and runtime performance for production apps.',
       highlight: 'Fast',
     },
     {
-      icon: 'palette',
+      icon: 'lucidePalette',
       title: 'Beautiful Design',
       description: 'Carefully crafted components that follow modern design principles and accessibility standards.',
     },
     {
-      icon: 'code',
+      icon: 'lucideCode',
       title: 'Developer Experience',
       description: 'TypeScript-first, excellent IDE support, and comprehensive documentation for smooth development.',
       highlight: 'DX',
     },
     {
-      icon: 'layers',
+      icon: 'lucideLayers',
       title: 'Modular Architecture',
       description: 'Import only what you need. Tree-shakable components that keep your bundle size minimal.',
     },
     {
-      icon: 'shield',
+      icon: 'lucideShield',
       title: 'Type Safe',
       description: 'Full TypeScript support with strict typing, ensuring reliability and better code completion.',
     },
     {
-      icon: 'heart',
+      icon: 'lucideHeart',
       title: 'Community Driven',
       description: 'Open source with active community contributions, regular updates and responsive support.',
     },

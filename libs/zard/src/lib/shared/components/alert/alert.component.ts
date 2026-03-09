@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, computed, input, TemplateRef, ViewEncapsulation } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCircleAlert } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
-import { ZardIconRegistry, type ZardIconName } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
@@ -43,7 +43,7 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ circleAlert: ZardIconRegistry['circle-alert'] })],
+  viewProviders: [provideIcons({ lucideCircleAlert })],
   host: {
     role: 'alert',
     '[class]': 'classes()',
@@ -55,7 +55,7 @@ export class ZardAlertComponent {
   readonly class = input<ClassValue>('');
   readonly zTitle = input<string | TemplateRef<void>>('');
   readonly zDescription = input<string | TemplateRef<void>>('');
-  readonly zIcon = input<TemplateRef<void> | ZardIconName>();
+  readonly zIcon = input<TemplateRef<void> | string>();
   readonly zType = input<ZardAlertTypeVariants>('default');
 
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
@@ -68,14 +68,14 @@ export class ZardAlertComponent {
 
   protected readonly shouldShowIcon = computed(() => this.zIcon() !== undefined || this.zType() === 'destructive');
 
-  protected readonly iconName = computed((): ZardIconName | undefined => {
+  protected readonly iconName = computed((): string | undefined => {
     const customIcon = this.zIcon();
     if (customIcon && !(customIcon instanceof TemplateRef)) {
       return customIcon;
     }
 
     if (this.zType() === 'destructive') {
-      return 'circle-alert';
+      return 'lucideCircleAlert';
     }
 
     return undefined;

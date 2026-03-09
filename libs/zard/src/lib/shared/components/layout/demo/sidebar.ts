@@ -1,6 +1,19 @@
 import { Component, signal } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgIcon, provideIcons, type IconName } from '@ng-icons/core';
+import {
+  lucideCalendar,
+  lucideChevronRight,
+  lucideChevronsUpDown,
+  lucideFolder,
+  lucideHouse,
+  lucideInbox,
+  lucideLogOut,
+  lucidePanelLeft,
+  lucideSearch,
+  lucideSettings,
+  lucideUser,
+} from '@ng-icons/lucide';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
@@ -10,10 +23,9 @@ import { LayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 import { ZardTooltipImports } from '@/shared/components/tooltip';
-import { ZardIconRegistry } from '@/shared/core';
 
 interface MenuItem {
-  icon: string;
+  icon: IconName;
   label: string;
   submenu?: { label: string }[];
 }
@@ -84,7 +96,7 @@ interface MenuItem {
                   <ng-icon [name]="item.icon" [class]="sidebarCollapsed() ? '' : 'mr-2'" />
                   @if (!sidebarCollapsed()) {
                     <span class="flex-1 text-left">{{ item.label }}</span>
-                    <ng-icon name="chevron-right" />
+                    <ng-icon name="lucideChevronRight" />
                   }
                 </button>
 
@@ -131,23 +143,23 @@ interface MenuItem {
                   <div class="text-xs">test&#64;zardui.com</div>
                 </div>
 
-                <ng-icon name="chevrons-up-down" class="ml-auto" />
+                <ng-icon name="lucideChevronsUpDown" class="ml-auto" />
               }
             </div>
 
             <ng-template #userMenu>
               <div z-menu-content class="w-48">
                 <button type="button" z-menu-item>
-                  <ng-icon name="user" class="mr-2" />
+                  <ng-icon name="lucideUser" class="mr-2" />
                   Profile
                 </button>
                 <button type="button" z-menu-item>
-                  <ng-icon name="settings" class="mr-2" />
+                  <ng-icon name="lucideSettings" class="mr-2" />
                   Settings
                 </button>
                 <z-divider zSpacing="sm" />
                 <button type="button" z-menu-item>
-                  <ng-icon name="log-out" class="mr-2" />
+                  <ng-icon name="lucideLogOut" class="mr-2" />
                   Logout
                 </button>
               </div>
@@ -160,7 +172,7 @@ interface MenuItem {
       <z-content class="min-h-50">
         <div class="flex items-center">
           <button type="button" z-button zType="ghost" zSize="sm" class="-ml-2" (click)="toggleSidebar()">
-            <ng-icon name="panel-left" />
+            <ng-icon name="lucidePanelLeft" />
           </button>
 
           <z-divider zOrientation="vertical" class="ml-2 h-4" />
@@ -182,17 +194,17 @@ interface MenuItem {
   `,
   viewProviders: [
     provideIcons({
-      house: ZardIconRegistry.house,
-      inbox: ZardIconRegistry.inbox,
-      folder: ZardIconRegistry.folder,
-      chevronRight: ZardIconRegistry['chevron-right'],
-      chevronsUpDown: ZardIconRegistry['chevrons-up-down'],
-      user: ZardIconRegistry.user,
-      settings: ZardIconRegistry.settings,
-      logOut: ZardIconRegistry['log-out'],
-      panelLeft: ZardIconRegistry['panel-left'],
-      calendar: ZardIconRegistry.calendar,
-      search: ZardIconRegistry.search,
+      lucideHouse,
+      lucideInbox,
+      lucideFolder,
+      lucideChevronRight,
+      lucideChevronsUpDown,
+      lucideUser,
+      lucideSettings,
+      lucideLogOut,
+      lucidePanelLeft,
+      lucideCalendar,
+      lucideSearch,
     }),
   ],
 })
@@ -200,18 +212,18 @@ export class LayoutDemoSidebarComponent {
   readonly sidebarCollapsed = signal(false);
 
   mainMenuItems: MenuItem[] = [
-    { icon: 'house', label: 'Home' },
-    { icon: 'inbox', label: 'Inbox' },
+    { icon: 'lucideHouse', label: 'Home' },
+    { icon: 'lucideInbox', label: 'Inbox' },
   ];
 
   workspaceMenuItems: MenuItem[] = [
     {
-      icon: 'folder',
+      icon: 'lucideFolder',
       label: 'Projects',
       submenu: [{ label: 'Design System' }, { label: 'Mobile App' }, { label: 'Website' }],
     },
-    { icon: 'calendar', label: 'Calendar' },
-    { icon: 'search', label: 'Search' },
+    { icon: 'lucideCalendar', label: 'Calendar' },
+    { icon: 'lucideSearch', label: 'Search' },
   ];
 
   toggleSidebar() {

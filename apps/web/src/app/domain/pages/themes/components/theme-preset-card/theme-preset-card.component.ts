@@ -1,8 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { ZardIconRegistry } from '@zard/core';
+import { lucideCheck } from '@ng-icons/lucide';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -17,7 +16,7 @@ import { oklchToHex } from '../../utils/oklch-converter';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
-    '(click)': 'select.emit(preset().name)',
+    '(click)': 'selection.emit(preset().name)',
   },
   template: `
     <div class="flex items-center gap-1.5">
@@ -32,15 +31,15 @@ import { oklchToHex } from '../../utils/oklch-converter';
     </div>
     <span class="text-foreground flex-1 truncate text-xs font-medium">{{ preset().name }}</span>
     @if (isActive()) {
-      <ng-icon name="check" class="text-primary size-3.5! shrink-0" />
+      <ng-icon name="lucideCheck" class="text-primary size-3.5! shrink-0" />
     }
   `,
-  viewProviders: [provideIcons({ check: ZardIconRegistry.check })],
+  viewProviders: [provideIcons({ lucideCheck })],
 })
 export class ThemePresetCardComponent {
   readonly preset = input.required<ThemePreset>();
   readonly isActive = input<boolean>(false);
-  readonly select = output<string>();
+  readonly selection = output<string>();
 
   readonly primaryHex = computed(() => oklchToHex(this.preset().previewColors.primary));
   readonly secondaryHex = computed(() => oklchToHex(this.preset().previewColors.secondary));

@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import type { ZardAccordionComponent } from '@/shared/components/accordion/accordion.component';
@@ -9,7 +10,6 @@ import {
   accordionItemVariants,
   accordionTriggerVariants,
 } from '@/shared/components/accordion/accordion.variants';
-import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -26,7 +26,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
     >
       {{ zTitle() }}
       <ng-icon
-        name="chevron-down"
+        name="lucideChevronDown"
         class="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
         [class]="isOpen() ? 'rotate-180' : ''"
       />
@@ -48,7 +48,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ chevronDown: ZardIconRegistry['chevron-down'] })],
+  viewProviders: [provideIcons({ lucideChevronDown })],
   host: {
     '[class]': 'itemClasses()',
     '[attr.data-state]': "isOpen() ? 'open' : 'closed'",

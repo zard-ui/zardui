@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { ZardIconRegistry } from '@/shared/core';
+import { lucideLightbulb, lucideLightbulbOff } from '@ng-icons/lucide';
 
 import { ZardToggleComponent } from '../toggle.component';
 
@@ -13,15 +12,13 @@ import { ZardToggleComponent } from '../toggle.component';
   template: `
     <z-toggle aria-label="Turn on the light" [(ngModel)]="lightOn">
       @if (lightOn) {
-        <ng-icon name="lightbulb" />
+        <ng-icon name="lucideLightbulb" />
       } @else {
-        <ng-icon name="lightbulb-off" />
+        <ng-icon name="lucideLightbulbOff" />
       }
     </z-toggle>
   `,
-  viewProviders: [
-    provideIcons({ lightbulb: ZardIconRegistry.lightbulb, lightbulbOff: ZardIconRegistry['lightbulb-off'] }),
-  ],
+  viewProviders: [provideIcons({ lucideLightbulb, lucideLightbulbOff })],
 })
 export class ZardDemoToggleWithFormsComponent {
   protected lightOn = false;

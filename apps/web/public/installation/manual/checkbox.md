@@ -15,9 +15,10 @@ import {
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
-import { ZardIconRegistry, ZardIdDirective } from '@/shared/core';
+import { ZardIdDirective } from '@/shared/core';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import {
@@ -48,7 +49,7 @@ type OnChangeType = (value: boolean) => void;
         (click)="onCheckboxChange()"
       />
       <ng-icon
-        name="check"
+        name="lucideCheck"
         class="text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-1/2 items-center justify-center transition-opacity"
         [class]="checked() ? 'opacity-100' : 'opacity-0'"
       />
@@ -66,7 +67,7 @@ type OnChangeType = (value: boolean) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ check: ZardIconRegistry.check })],
+  viewProviders: [provideIcons({ lucideCheck })],
   host: {
     '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' flex items-center gap-2'",
     '[attr.aria-disabled]': 'disabled()',

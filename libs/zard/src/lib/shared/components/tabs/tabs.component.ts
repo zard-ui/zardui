@@ -22,6 +22,7 @@ import {
 import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown, lucideChevronLeft, lucideChevronRight, lucideChevronUp } from '@ng-icons/lucide';
 import clsx from 'clsx';
 import { debounceTime, fromEvent, merge, map, distinctUntilChanged } from 'rxjs';
 import { twMerge } from 'tailwind-merge';
@@ -33,7 +34,6 @@ import {
   tabNavVariants,
   type ZardTabVariants,
 } from '@/shared/components/tabs/tabs.variants';
-import { ZardIconRegistry } from '@/shared/core';
 
 export type zPosition = 'top' | 'bottom' | 'left' | 'right';
 export type zAlign = 'center' | 'start' | 'end';
@@ -92,7 +92,7 @@ export class ZardTabComponent {
               [class]="'cursor-pointer pr-4 ' + (zTabsPosition() === 'top' ? 'mb-4' : 'mt-4')"
               (click)="scrollNav('left')"
             >
-              <ng-icon name="chevron-left" />
+              <ng-icon name="lucideChevronLeft" />
             </button>
           } @else {
             <button
@@ -100,7 +100,7 @@ export class ZardTabComponent {
               [class]="'cursor-pointer pb-4 ' + (zTabsPosition() === 'left' ? 'mr-4' : 'ml-4')"
               (click)="scrollNav('up')"
             >
-              <ng-icon name="chevron-up" />
+              <ng-icon name="lucideChevronUp" />
             </button>
           }
         }
@@ -136,7 +136,7 @@ export class ZardTabComponent {
               [class]="'cursor-pointer pl-4 ' + (zTabsPosition() === 'top' ? 'mb-4' : 'mt-4')"
               (click)="scrollNav('right')"
             >
-              <ng-icon name="chevron-right" />
+              <ng-icon name="lucideChevronRight" />
             </button>
           } @else {
             <button
@@ -144,7 +144,7 @@ export class ZardTabComponent {
               [class]="'cursor-pointer pt-4 ' + (zTabsPosition() === 'left' ? 'mr-4' : 'ml-4')"
               (click)="scrollNav('down')"
             >
-              <ng-icon name="chevron-down" />
+              <ng-icon name="lucideChevronDown" />
             </button>
           }
         }
@@ -172,10 +172,10 @@ export class ZardTabComponent {
   encapsulation: ViewEncapsulation.None,
   viewProviders: [
     provideIcons({
-      chevronLeft: ZardIconRegistry['chevron-left'],
-      chevronUp: ZardIconRegistry['chevron-up'],
-      chevronRight: ZardIconRegistry['chevron-right'],
-      chevronDown: ZardIconRegistry['chevron-down'],
+      lucideChevronLeft,
+      lucideChevronUp,
+      lucideChevronRight,
+      lucideChevronDown,
     }),
   ],
   host: { '[class]': 'containerClasses()' },

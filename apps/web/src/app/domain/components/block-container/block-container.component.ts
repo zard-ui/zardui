@@ -1,11 +1,11 @@
 import { Component, input, signal } from '@angular/core';
 
-import { provideIcons } from '@ng-icons/core';
+import { IconName, provideIcons } from '@ng-icons/core';
+import { lucideMonitor, lucideSmartphone, lucideTablet } from '@ng-icons/lucide';
 
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardSegmentedComponent } from '@zard/components/segmented/segmented.component';
 import { ZardToggleGroupComponent } from '@zard/components/toggle-group/toggle-group.component';
-import { ZardIconName, ZardIconRegistry } from '@zard/core';
 
 import { BlockCodeViewerComponent } from '../block-code-viewer/block-code-viewer.component';
 import { BlockPreviewComponent } from '../block-preview/block-preview.component';
@@ -33,7 +33,7 @@ export interface Block {
 export interface ViewportOption {
   value: string;
   ariaLabel: string;
-  icon: ZardIconName;
+  icon: IconName;
 }
 
 @Component({
@@ -48,9 +48,9 @@ export interface ViewportOption {
   templateUrl: './block-container.component.html',
   viewProviders: [
     provideIcons({
-      monitor: ZardIconRegistry.monitor,
-      tablet: ZardIconRegistry.tablet,
-      smartphone: ZardIconRegistry.smartphone,
+      lucideMonitor,
+      lucideTablet,
+      lucideSmartphone,
     }),
   ],
 })
@@ -66,9 +66,9 @@ export class BlockContainerComponent {
   ];
 
   protected readonly viewportOptions: ViewportOption[] = [
-    { value: 'desktop', ariaLabel: 'Desktop view', icon: 'monitor' },
-    { value: 'tablet', ariaLabel: 'Tablet view', icon: 'tablet' },
-    { value: 'mobile', ariaLabel: 'Mobile view', icon: 'smartphone' },
+    { value: 'desktop', ariaLabel: 'Desktop view', icon: 'lucideMonitor' },
+    { value: 'tablet', ariaLabel: 'Tablet view', icon: 'lucideTablet' },
+    { value: 'mobile', ariaLabel: 'Mobile view', icon: 'lucideSmartphone' },
   ];
 
   protected onTabChange(value: string): void {

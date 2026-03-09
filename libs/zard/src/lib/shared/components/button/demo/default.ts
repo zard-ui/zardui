@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
+import { lucideArrowUp, lucidePopcorn } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '../button.component';
 
@@ -11,12 +10,12 @@ import { ZardButtonComponent } from '../button.component';
   imports: [ZardButtonComponent, NgIcon],
   template: `
     <button type="button" z-button zType="outline">Button</button>
-    <button type="button" z-button zType="outline"><ng-icon name="arrow-up" /></button>
+    <button type="button" z-button zType="outline"><ng-icon name="lucideArrowUp" /></button>
     <button type="button" z-button zType="outline">
       Button
-      <ng-icon name="popcorn" />
+      <ng-icon name="lucidePopcorn" />
     </button>
   `,
-  viewProviders: [provideIcons({ arrowUp: ZardIconRegistry['arrow-up'], popcorn: ZardIconRegistry.popcorn })],
+  viewProviders: [provideIcons({ lucideArrowUp, lucidePopcorn })],
 })
 export class ZardDemoButtonDefaultComponent {}

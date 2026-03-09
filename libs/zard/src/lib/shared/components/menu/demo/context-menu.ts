@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronRight } from '@ng-icons/lucide';
 
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
-import { ZardIconRegistry } from '@/shared/core';
 
 @Component({
   selector: 'z-demo-context-menu',
@@ -41,7 +41,7 @@ import { ZardIconRegistry } from '@/shared/core';
           class="justify-between"
         >
           <div class="flex items-center">More Tools</div>
-          <ng-icon name="chevron-right" />
+          <ng-icon name="lucideChevronRight" />
         </button>
         <z-divider zSpacing="sm" />
         <z-menu-label>People</z-menu-label>
@@ -63,7 +63,7 @@ import { ZardIconRegistry } from '@/shared/core';
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ chevronRight: ZardIconRegistry['chevron-right'] })],
+  viewProviders: [provideIcons({ lucideChevronRight })],
 })
 export class ZardDemoContextMenu {
   log(item: string) {

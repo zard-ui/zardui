@@ -14,11 +14,11 @@ import {
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
 import { commandInputVariants } from '@/shared/components/command/command.variants';
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -26,7 +26,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   imports: [NgIcon],
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
-      <ng-icon name="search" class="mr-2 size-4! shrink-0 opacity-50" />
+      <ng-icon name="lucideSearch" class="mr-2 size-4! shrink-0 opacity-50" />
       <input
         #searchInput
         [class]="classes()"
@@ -57,7 +57,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ search: ZardIconRegistry.search })],
+  viewProviders: [provideIcons({ lucideSearch })],
   exportAs: 'zCommandInput',
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {

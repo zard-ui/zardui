@@ -11,10 +11,10 @@ import {
 import { FormsModule } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronRight } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
-import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardTreeService } from './tree.service';
@@ -44,7 +44,7 @@ import {
           [attr.tabindex]="-1"
           (click)="onToggle($event)"
         >
-          <ng-icon name="chevron-right" class="size-4!" />
+          <ng-icon name="lucideChevronRight" class="size-4!" />
         </button>
       } @else {
         <span class="inline-flex size-4 shrink-0"></span>
@@ -112,9 +112,7 @@ import {
   encapsulation: ViewEncapsulation.None,
   viewProviders: [
     provideIcons({
-      chevronRight: ZardIconRegistry['chevron-right'],
-      folder: ZardIconRegistry.folder,
-      file: ZardIconRegistry.file,
+      lucideChevronRight,
     }),
   ],
   host: {

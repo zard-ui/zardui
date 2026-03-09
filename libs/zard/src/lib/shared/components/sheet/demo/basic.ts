@@ -1,11 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, type AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { lucideSave } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardInputDirective } from '@/shared/components/input';
 import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
 import { Z_SHEET_DATA, ZardSheetService } from '@/shared/components/sheet/sheet.service';
-import { ZardIconRegistry } from '@/shared/core';
 
 interface iSheetData {
   name: string;
@@ -84,7 +85,7 @@ export class ZardDemoSheetBasicComponent {
         username: '@ribeiromatheus.dev',
       },
       zOkText: 'Save changes',
-      zOkIcon: ZardIconRegistry.save,
+      zOkIcon: lucideSave,
       zOnOk: instance => {
         console.log('Form submitted:', instance.form.value);
       },

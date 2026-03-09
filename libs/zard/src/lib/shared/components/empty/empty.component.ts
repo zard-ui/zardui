@@ -8,10 +8,9 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { NgIcon } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
-import { ZardIconRegistry } from '@/shared/core';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -73,7 +72,6 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ arrowUpRight: ZardIconRegistry['arrow-up-right'], inbox: ZardIconRegistry.inbox })],
   host: {
     '[class]': 'classes()',
   },

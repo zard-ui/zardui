@@ -12,12 +12,12 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import type { IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import { ZardCommandInputComponent } from '@/shared/components/command/command-input.component';
 import { ZardCommandOptionComponent } from '@/shared/components/command/command-option.component';
 import { commandVariants, type ZardCommandSizeVariants } from '@/shared/components/command/command.variants';
-import type { ZardIconName } from '@/shared/core/icons-registry';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardCommandOption {
@@ -26,7 +26,7 @@ export interface ZardCommandOption {
   disabled?: boolean;
   command?: string;
   shortcut?: string;
-  icon?: ZardIconName;
+  icon?: IconName;
   action?: () => void;
   key?: string;
 }

@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus } from '@ng-icons/lucide';
 
 import { ZardAvatarComponent, ZardAvatarGroupComponent } from '@/shared/components/avatar';
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardIconRegistry } from '@/shared/core';
 
 import { ZardEmptyComponent } from '../empty.component';
 
@@ -37,12 +37,12 @@ import { ZardEmptyComponent } from '../empty.component';
 
     <ng-template #actionInvite>
       <button type="button" z-button zSize="sm">
-        <ng-icon name="plus" />
+        <ng-icon name="lucidePlus" />
         Invite Members
       </button>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ plus: ZardIconRegistry.plus })],
+  viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoEmptyAdvancedComponent {}

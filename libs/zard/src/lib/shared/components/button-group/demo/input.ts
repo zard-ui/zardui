@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
 import { ZardInputDirective } from '@/shared/components/input';
-import { ZardIconRegistry } from '@/shared/core';
 
 @Component({
   selector: 'z-demo-button-group-input',
@@ -13,9 +13,9 @@ import { ZardIconRegistry } from '@/shared/core';
   template: `
     <z-button-group>
       <input z-input placeholder="Search..." />
-      <button type="button" z-button zType="outline"><ng-icon name="search" /></button>
+      <button type="button" z-button zType="outline"><ng-icon name="lucideSearch" /></button>
     </z-button-group>
   `,
-  viewProviders: [provideIcons({ search: ZardIconRegistry.search })],
+  viewProviders: [provideIcons({ lucideSearch })],
 })
 export class ZardDemoButtonGroupInputComponent {}

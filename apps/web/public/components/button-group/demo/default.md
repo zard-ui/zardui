@@ -2,12 +2,23 @@
 import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideArchive,
+  lucideArrowLeft,
+  lucideCalendarPlus,
+  lucideCheck,
+  lucideChevronRight,
+  lucideClock,
+  lucideEllipsis,
+  lucideListFilterPlus,
+  lucideTag,
+  lucideTrash,
+} from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
 import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
-import { ZardIconRegistry } from '@/shared/core/icons-registry';
 
 @Component({
   selector: 'z-demo-button-group-default',
@@ -16,7 +27,7 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
     <z-button-group>
       <z-button-group class="hidden sm:flex">
         <button type="button" z-button zType="outline" aria-label="Go Back">
-          <ng-icon name="arrow-left" />
+          <ng-icon name="lucideArrowLeft" />
         </button>
       </z-button-group>
 
@@ -28,31 +39,31 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
       <z-button-group>
         <button type="button" z-button zType="outline">Snooze</button>
         <button type="button" z-button zType="outline" z-menu [zMenuTriggerFor]="menu">
-          <ng-icon name="ellipsis" />
+          <ng-icon name="lucideEllipsis" />
 
           <ng-template #menu>
             <div z-menu-content class="w-48">
               <button type="button" z-menu-item>
-                <ng-icon name="check" />
+                <ng-icon name="lucideCheck" />
                 Mark as Read
               </button>
               <button type="button" z-menu-item>
-                <ng-icon name="archive" />
+                <ng-icon name="lucideArchive" />
                 Archive
               </button>
 
               <z-divider zSpacing="sm" />
 
               <button type="button" z-menu-item>
-                <ng-icon name="clock" />
+                <ng-icon name="lucideClock" />
                 Snooze
               </button>
               <button type="button" z-menu-item>
-                <ng-icon name="calendar-plus" />
+                <ng-icon name="lucideCalendarPlus" />
                 Add to Calendar
               </button>
               <button type="button" z-menu-item>
-                <ng-icon name="list-filter-plus" />
+                <ng-icon name="lucideListFilterPlus" />
                 Add to List
               </button>
               <button
@@ -67,7 +78,7 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
                   <ng-icon name="tag" class="mr-1" />
                   Label as
                 </div>
-                <ng-icon name="chevron-right" />
+                <ng-icon name="lucideChevronRight" />
 
                 <ng-template #subMenu>
                   <div z-menu-content class="w-48">
@@ -81,7 +92,7 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
               <z-divider zSpacing="sm" />
 
               <button type="button" z-menu-item class="text-red-500">
-                <ng-icon name="trash" />
+                <ng-icon name="lucideTrash" />
                 Trash
               </button>
             </div>
@@ -92,16 +103,16 @@ import { ZardIconRegistry } from '@/shared/core/icons-registry';
   `,
   viewProviders: [
     provideIcons({
-      arrowLeft: ZardIconRegistry['arrow-left'],
-      ellipsis: ZardIconRegistry.ellipsis,
-      check: ZardIconRegistry.check,
-      archive: ZardIconRegistry.archive,
-      clock: ZardIconRegistry.clock,
-      calendarPlus: ZardIconRegistry['calendar-plus'],
-      listFilterPlus: ZardIconRegistry['list-filter-plus'],
-      tag: ZardIconRegistry.tag,
-      chevronRight: ZardIconRegistry['chevron-right'],
-      trash: ZardIconRegistry.trash,
+      lucideArrowLeft,
+      lucideEllipsis,
+      lucideCheck,
+      lucideArchive,
+      lucideClock,
+      lucideCalendarPlus,
+      lucideListFilterPlus,
+      lucideTag,
+      lucideChevronRight,
+      lucideTrash,
     }),
   ],
 })

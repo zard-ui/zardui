@@ -24,9 +24,9 @@ import {
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import type { ZardSheetRef } from './sheet-ref';
@@ -71,7 +71,7 @@ export class ZardSheetOptions<T, U> {
         class="absolute top-1 right-1 cursor-pointer"
         (click)="onCloseClick()"
       >
-        <ng-icon name="x" />
+        <ng-icon name="lucideX" />
       </button>
     }
 
@@ -139,7 +139,7 @@ export class ZardSheetOptions<T, U> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ x: ZardIconRegistry.x })],
+  viewProviders: [provideIcons({ lucideX })],
   host: {
     'data-slot': 'sheet',
     '[class]': 'classes()',

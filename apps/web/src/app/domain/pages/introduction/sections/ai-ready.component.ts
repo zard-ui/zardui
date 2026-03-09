@@ -1,15 +1,15 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
+import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBookOpenText, lucideSun } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconName, ZardIconRegistry } from '@zard/core/icons-registry';
 
 interface AIFeatureCard {
   title: string;
   description: string;
-  icon: ZardIconName;
+  icon: IconName;
 }
 
 @Component({
@@ -44,7 +44,7 @@ interface AIFeatureCard {
     </section>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ sun: ZardIconRegistry.sun, bookOpenText: ZardIconRegistry['book-open-text'] })],
+  viewProviders: [provideIcons({ lucideSun, lucideBookOpenText })],
 })
 export class AIReadySection {
   readonly cards: AIFeatureCard[] = [
@@ -52,13 +52,13 @@ export class AIReadySection {
       title: 'Predictable Patterns',
       description:
         'Consistent naming conventions, standardized props, and logical component hierarchies that AI can easily understand and generate code for.',
-      icon: 'sun',
+      icon: 'lucideSun',
     },
     {
       title: 'Rich Documentation',
       description:
         'Comprehensive examples, clear API references, and usage patterns that provide AI tools with the context they need to generate accurate code.',
-      icon: 'book-open-text',
+      icon: 'lucideBookOpenText',
     },
   ];
 }

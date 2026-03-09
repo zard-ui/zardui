@@ -1,12 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCode, lucideCodeXml, lucideInfo, lucideUsers } from '@ng-icons/lucide';
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconRegistry } from '@zard/core';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
@@ -36,10 +36,10 @@ interface VersionEntry {
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [
     provideIcons({
-      info: ZardIconRegistry.info,
-      codeXml: ZardIconRegistry['code-xml'],
-      code: ZardIconRegistry.code,
-      users: ZardIconRegistry.users,
+      lucideInfo,
+      lucideCodeXml,
+      lucideCode,
+      lucideUsers,
     }),
   ],
 })

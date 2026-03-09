@@ -248,6 +248,7 @@ import {
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import {
@@ -256,7 +257,6 @@ import {
   sidebarTriggerVariants,
   sidebarVariants,
 } from '@/shared/components/layout/layout.variants';
-import { ZardIconRegistry } from '@/shared/core';
 import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -290,9 +290,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [
-    provideIcons({ chevronLeft: ZardIconRegistry['chevron-left'], chevronRight: ZardIconRegistry['chevron-right'] }),
-  ],
+  viewProviders: [provideIcons({ lucideChevronRight, lucideChevronLeft })],
   exportAs: 'zSidebar',
 })
 export class SidebarComponent {
@@ -327,11 +325,12 @@ export class SidebarComponent {
   protected readonly chevronIcon = computed((): string => {
     const collapsed = this.zCollapsed();
     const reverse = this.zReverseArrow();
+    const icons = ['lucideChevronLeft', 'lucideChevronRight'];
 
     if (reverse) {
-      return collapsed ? 'chevron-left' : 'chevron-right';
+      return collapsed ? icons[0] : icons[1];
     }
-    return collapsed ? 'chevron-right' : 'chevron-left';
+    return collapsed ? icons[1] : icons[0];
   });
 
   protected readonly classes = computed(() => mergeClasses(sidebarVariants(), this.class()));

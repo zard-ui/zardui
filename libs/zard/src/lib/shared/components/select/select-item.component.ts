@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck } from '@ng-icons/lucide';
 
 import {
   selectItemIconVariants,
@@ -18,7 +19,6 @@ import {
   type ZardSelectItemModeVariants,
   type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
-import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 // Interface to avoid circular dependency
@@ -34,7 +34,7 @@ interface SelectHost {
   template: `
     @if (isSelected()) {
       <span [class]="iconClasses()">
-        <ng-icon name="check" [strokeWidth]="strokeWidth()" aria-hidden="true" data-testid="check-icon" />
+        <ng-icon name="lucideCheck" [strokeWidth]="strokeWidth()" aria-hidden="true" data-testid="check-icon" />
       </span>
     }
     <span class="truncate">
@@ -42,7 +42,7 @@ interface SelectHost {
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ check: ZardIconRegistry.check })],
+  viewProviders: [provideIcons({ lucideCheck })],
   host: {
     role: 'option',
     tabindex: '-1',

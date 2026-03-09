@@ -15,6 +15,7 @@ import {
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideChevronRight, lucideCircleSmall } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 import type { EmblaCarouselType, EmblaEventType, EmblaOptionsType, EmblaPluginType } from 'embla-carousel';
 import { EmblaCarouselDirective } from 'embla-carousel-angular';
@@ -27,7 +28,6 @@ import {
   type ZardCarouselControlsVariants,
   type ZardCarouselOrientationVariants,
 } from '@/shared/components/carousel/carousel.variants';
-import { ZardIconRegistry } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
@@ -60,7 +60,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
             (click)="slidePrevious()"
             aria-label="Previous slide"
           >
-            <ng-icon name="chevron-left" class="size-4!" />
+            <ng-icon name="lucideChevronLeft" class="size-4!" />
           </button>
           <button
             type="button"
@@ -71,7 +71,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
             (click)="slideNext()"
             aria-label="Next slide"
           >
-            <ng-icon name="chevron-right" class="size-4!" />
+            <ng-icon name="lucideChevronRight" class="size-4!" />
           </button>
         } @else if (controls === 'dot') {
           <div class="mt-2 flex justify-center gap-1">
@@ -87,7 +87,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
                 [aria-label]="'Go to slide ' + ($index + 1)"
               >
                 <ng-icon
-                  name="circle-small"
+                  name="lucideCircleSmall"
                   [strokeWidth]="0"
                   [class]="$index === selectedIndex() ? '[&_svg]:fill-primary' : '[&_svg]:fill-border'"
                 />
@@ -102,9 +102,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   encapsulation: ViewEncapsulation.None,
   viewProviders: [
     provideIcons({
-      chevronLeft: ZardIconRegistry['chevron-left'],
-      chevronRight: ZardIconRegistry['chevron-right'],
-      circleSmall: ZardIconRegistry['circle-small'],
+      lucideChevronLeft,
+      lucideChevronRight,
+      lucideCircleSmall,
     }),
   ],
   host: {

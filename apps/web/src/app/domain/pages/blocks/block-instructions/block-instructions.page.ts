@@ -2,6 +2,7 @@ import { Component, computed, inject, type OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowRight, lucideExternalLink, lucideFolderOpen, lucideGithub } from '@ng-icons/lucide';
 
 import type { Block } from '@doc/domain/components/block-container/block-container.component';
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
@@ -13,7 +14,6 @@ import { BlocksService, type BlockCategory as ServiceBlockCategory } from '@doc/
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardIconRegistry } from '@zard/core/icons-registry';
 
 interface BlockPreview {
   id: string;
@@ -26,7 +26,6 @@ interface BlockPreview {
 
 @Component({
   selector: 'z-block-instructions',
-  standalone: true,
   imports: [
     RouterLink,
     ZardButtonComponent,
@@ -39,10 +38,10 @@ interface BlockPreview {
   templateUrl: './block-instructions.page.html',
   viewProviders: [
     provideIcons({
-      github: ZardIconRegistry.github,
-      arrowRight: ZardIconRegistry['arrow-right'],
-      folderOpen: ZardIconRegistry['folder-open'],
-      externalLink: ZardIconRegistry['external-link'],
+      lucideGithub,
+      lucideArrowRight,
+      lucideFolderOpen,
+      lucideExternalLink,
     }),
   ],
 })
