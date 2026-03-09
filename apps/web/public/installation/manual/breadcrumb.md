@@ -135,7 +135,9 @@ export class ZardBreadcrumbItemComponent {
   protected readonly isEllipsis = computed<boolean>(() => this.content() !== undefined);
 
   protected readonly classes = computed(() => mergeClasses(breadcrumbItemVariants(), this.class()));
-  protected readonly separatorClasses = computed(() => 'text-muted-foreground [&_svg]:size-3.5');
+  protected readonly separatorClasses = computed(
+    () => 'text-muted-foreground [&_svg]:size-3.5 [&_ng-icon]:flex! [&_ng-icon]:items-center!',
+  );
 
   protected isTemplate(value: string | TemplateRef<void>): value is TemplateRef<void> {
     return value instanceof TemplateRef;

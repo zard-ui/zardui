@@ -4,6 +4,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowLeft, lucideArrowRight, lucideChevronDown, lucideChevronUp, lucideCopy } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 import { filter, map, startWith } from 'rxjs/operators';
 
@@ -13,7 +14,6 @@ import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '@doc/shared/constants/rout
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
-import { ZardIconRegistry } from '@zard/core/icons-registry';
 
 import type { AiAssistOption } from './ai-assist.types';
 
@@ -27,11 +27,11 @@ import type { AiAssistOption } from './ai-assist.types';
   },
   viewProviders: [
     provideIcons({
-      copy: ZardIconRegistry.copy,
-      chevronDown: ZardIconRegistry['chevron-down'],
-      chevronUp: ZardIconRegistry['chevron-up'],
-      arrowLeft: ZardIconRegistry['arrow-left'],
-      arrowRight: ZardIconRegistry['arrow-right'],
+      lucideCopy,
+      lucideChevronDown,
+      lucideChevronUp,
+      lucideArrowLeft,
+      lucideArrowRight,
     }),
   ],
 })

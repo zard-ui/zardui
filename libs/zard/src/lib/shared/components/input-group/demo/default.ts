@@ -43,8 +43,10 @@ import { ZardIconRegistry } from '@/shared/core';
     <ng-template #search><ng-icon name="search" /></ng-template>
 
     <ng-template #check>
-      <div class="bg-primary rounded-full p-0.5">
-        <ng-icon name="check" class="stroke-primary-foreground" />
+      <div class="bg-primary size-4 rounded-full p-0.5">
+        <span class="flex items-center justify-center">
+          <ng-icon name="check" class="text-primary-foreground size-3!" />
+        </span>
       </div>
     </ng-template>
 
@@ -53,7 +55,7 @@ import { ZardIconRegistry } from '@/shared/core';
     <ng-template #areaAfter>
       <div class="flex w-full items-center justify-between">
         <div class="flex items-center gap-1">
-          <button type="button" z-button zType="outline" zShape="circle" class="data-icon-only:size-6!">
+          <button type="button" z-button zType="outline" zShape="circle" zSize="icon-sm">
             <ng-icon name="plus" />
           </button>
           <button type="button" z-button zType="ghost" class="h-6" z-dropdown [zDropdownMenu]="menu">Auto</button>
@@ -66,7 +68,7 @@ import { ZardIconRegistry } from '@/shared/core';
         <div class="flex h-auto items-center gap-0">
           <span>52% used</span>
           <z-divider zOrientation="vertical" class="h-4" />
-          <button type="button" z-button zType="outline" zShape="circle" class="data-icon-only:size-6!">
+          <button type="button" z-button zType="outline" zShape="circle" zSize="icon-sm">
             <ng-icon name="arrow-up" />
           </button>
         </div>
