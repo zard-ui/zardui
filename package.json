@@ -107,7 +107,7 @@
     "@nx/angular": "22.5.2",
     "@nx/eslint": "22.5.2",
     "@nx/eslint-plugin": "22.5.2",
-    "@nx/jest": "22.5.2",
+    "@nx/jest": "22.5.4",
     "@nx/js": "22.5.2",
     "@nx/playwright": "22.5.2",
     "@nx/web": "22.5.2",
