@@ -133,7 +133,7 @@
     "autoprefixer": "^10.4.27",
     "commitlint-config-gitmoji": "^2.3.1",
     "concurrently": "^9.2.1",
-    "conventional-changelog-writer": "^8.2.0",
+    "conventional-changelog-writer": "^8.4.0",
     "eslint": "^9.39.3",
     "eslint-config-prettier": "^10.1.8",
     "eslint-import-resolver-typescript": "^4.4.4",
