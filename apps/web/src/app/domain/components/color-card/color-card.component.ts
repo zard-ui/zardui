@@ -1,7 +1,8 @@
 import { Clipboard } from '@angular/cdk/clipboard';
-import { Component, input, inject, computed, ChangeDetectionStrategy, HostListener } from '@angular/core';
+import { Component, input, inject, computed, ChangeDetectionStrategy } from '@angular/core';
 
-import { LucideAngularModule, Check, Clipboard as ClipboardIcon } from 'lucide-angular';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck, lucideClipboard } from '@ng-icons/lucide';
 import { toast } from 'ngx-sonner';
 
 import { Color } from '@doc/shared/constants/colors.constant';
@@ -10,7 +11,7 @@ import { ColorsService, ColorFormat } from '@doc/shared/services/colors.service'
 @Component({
   selector: 'button[z-color-card]',
   standalone: true,
-  imports: [LucideAngularModule],
+  imports: [NgIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './color-card.component.html',
   host: {
@@ -19,7 +20,9 @@ import { ColorsService, ColorFormat } from '@doc/shared/services/colors.service'
     '[attr.data-last-copied]': 'isCopied()',
     '[style.--bg]': 'color().oklch',
     '[style.--text]': 'color().foreground',
+    '(click)': 'copyToClipboard()',
   },
+  viewProviders: [provideIcons({ lucideCheck, lucideClipboard })],
 })
 export class ColorCardComponent {
   private readonly clipboard = inject(Clipboard);
@@ -28,12 +31,12 @@ export class ColorCardComponent {
   readonly color = input.required<Color>();
   readonly format = input.required<ColorFormat>();
 
-  readonly Check = Check;
-  readonly ClipboardIcon = ClipboardIcon;
-
   readonly isCopied = computed(() => this.colorsService.lastCopied() === this.formattedValue());
 
-  readonly hostClasses = computed(() => 'group relative flex flex-1 flex-col gap-2 cursor-pointer aspect-[3/1] sm:aspect-[2/3] sm:h-auto sm:w-auto text-(--text) w-full');
+  readonly hostClasses = computed(
+    () =>
+      'group relative flex flex-1 flex-col gap-2 cursor-pointer aspect-[3/1] sm:aspect-[2/3] sm:h-auto sm:w-auto text-(--text) w-full',
+  );
 
   readonly formattedValue = computed(() => {
     const color = this.color();
@@ -57,7 +60,6 @@ export class ColorCardComponent {
     }
   });
 
-  @HostListener('click')
   copyToClipboard(): void {
     const value = this.formattedValue();
     const success = this.clipboard.copy(value);

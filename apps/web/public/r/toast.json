@@ -37,7 +37,7 @@
     },
     {
       "name": "loading.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { toast } from 'ngx-sonner';\n\nimport { ZardButtonComponent } from '../../button/button.component';\n\n@Component({\n  selector: 'z-demo-toast-loading',\n  imports: [ZardButtonComponent],\n  standalone: true,\n  template: `\n    <button z-button zType=\"outline\" (click)=\"showToast()\">Show Loading Toast</button>\n  `,\n})\nexport class ZardDemoToastLoadingComponent {\n  showToast() {\n    const promise = () => new Promise(resolve => setTimeout(() => resolve({ name: 'Sonner' }), 2000));\n\n    toast.promise(promise, {\n      loading: 'Loading...',\n      success: (data: any) => `${data.name} has been created`,\n      error: 'Error',\n    });\n  }\n}\n"
+      "content": "import { Component } from '@angular/core';\n\nimport { toast } from 'ngx-sonner';\n\nimport { ZardButtonComponent } from '../../button/button.component';\n\n@Component({\n  selector: 'z-demo-toast-loading',\n  imports: [ZardButtonComponent],\n  standalone: true,\n  template: `\n    <button type=\"button\" z-button zType=\"outline\" (click)=\"showToast()\">Show Loading Toast</button>\n  `,\n})\nexport class ZardDemoToastLoadingComponent {\n  showToast() {\n    const promise = () => new Promise(resolve => setTimeout(() => resolve({ name: 'Sonner' }), 2000));\n\n    toast.promise(promise, {\n      loading: 'Loading...',\n      success: (data: any) => `${data.name} has been created`,\n      error: 'Error',\n    });\n  }\n}\n"
     },
     {
       "name": "position.ts",

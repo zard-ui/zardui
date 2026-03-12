@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { provideIcons } from '@ng-icons/core';
+import { lucideMonitor, lucideSmartphone, lucideTablet, lucideTag } from '@ng-icons/lucide';
+
 import { ZardTreeImports } from '@/shared/components/tree/tree.imports';
 import type { TreeNode } from '@/shared/components/tree/tree.types';
 
@@ -17,20 +20,28 @@ import type { TreeNode } from '@/shared/components/tree/tree.types';
     <p class="text-muted-foreground mt-4 text-sm">Selected: {{ selectedLabel }}</p>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideMonitor,
+      lucideSmartphone,
+      lucideTablet,
+      lucideTag,
+    }),
+  ],
 })
 export class ZardDemoTreeSelectionComponent {
   selectedLabel = 'None';
 
-  readonly categories: TreeNode[] = [
+  readonly categories: TreeNode<unknown>[] = [
     {
       key: 'electronics',
       label: 'Electronics',
-      icon: 'monitor',
+      icon: 'lucideMonitor',
       children: [
         {
           key: 'phones',
           label: 'Phones',
-          icon: 'smartphone',
+          icon: 'lucideSmartphone',
           children: [
             { key: 'iphone', label: 'iPhone', leaf: true },
             { key: 'samsung', label: 'Samsung Galaxy', leaf: true },
@@ -40,7 +51,7 @@ export class ZardDemoTreeSelectionComponent {
         {
           key: 'laptops',
           label: 'Laptops',
-          icon: 'tablet',
+          icon: 'lucideTablet',
           children: [
             { key: 'macbook', label: 'MacBook Pro', leaf: true },
             { key: 'thinkpad', label: 'ThinkPad', leaf: true },
@@ -51,7 +62,7 @@ export class ZardDemoTreeSelectionComponent {
     {
       key: 'clothing',
       label: 'Clothing',
-      icon: 'tag',
+      icon: 'lucideTag',
       children: [
         { key: 'mens', label: "Men's", leaf: true },
         { key: 'womens', label: "Women's", leaf: true },
@@ -59,11 +70,11 @@ export class ZardDemoTreeSelectionComponent {
     },
   ];
 
-  onSelect(nodes: TreeNode[]) {
+  onSelect(nodes: TreeNode<unknown>[]) {
     this.selectedLabel = nodes.map(n => n.label).join(', ') || 'None';
   }
 
-  onNodeClick(_node: TreeNode) {
+  onNodeClick(_node: TreeNode<unknown>) {
     // Handle node click
   }
 }

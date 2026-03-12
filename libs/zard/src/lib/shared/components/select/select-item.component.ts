@@ -10,7 +10,9 @@ import {
   signal,
 } from '@angular/core';
 
-import { ZardIconComponent } from '@/shared/components/icon';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck } from '@ng-icons/lucide';
+
 import {
   selectItemIconVariants,
   selectItemVariants,
@@ -28,11 +30,11 @@ interface SelectHost {
 
 @Component({
   selector: 'z-select-item, [z-select-item]',
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   template: `
     @if (isSelected()) {
       <span [class]="iconClasses()">
-        <z-icon zType="check" [zStrokeWidth]="strokeWidth()" aria-hidden="true" data-testid="check-icon" />
+        <ng-icon name="lucideCheck" [strokeWidth]="strokeWidth()" aria-hidden="true" data-testid="check-icon" />
       </span>
     }
     <span class="truncate">
@@ -40,6 +42,7 @@ interface SelectHost {
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCheck })],
   host: {
     role: 'option',
     tabindex: '-1',

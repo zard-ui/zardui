@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCode, lucideCodeXml, lucideInfo, lucideUsers } from '@ng-icons/lucide';
+
 import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
@@ -28,10 +30,18 @@ interface VersionEntry {
     ScrollSpyItemDirective,
     ZardBadgeComponent,
     ZardCardComponent,
-    ZardIconComponent,
+    NgIcon,
   ],
   templateUrl: './version-support.page.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideInfo,
+      lucideCodeXml,
+      lucideCode,
+      lucideUsers,
+    }),
+  ],
 })
 export class VersionSupportPage implements OnInit {
   activeAnchor?: string;

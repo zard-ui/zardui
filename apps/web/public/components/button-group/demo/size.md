@@ -1,32 +1,35 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
-import { ZardButtonGroupComponent } from '../button-group.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
 
 @Component({
   selector: 'z-demo-button-group-size',
-  imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardIconComponent],
+  imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon],
   template: `
     <z-button-group>
-      <button z-button zType="outline" zSize="sm">Small</button>
-      <button z-button zType="outline" zSize="sm">Group</button>
-      <button z-button zType="outline" zSize="sm"><i z-icon zType="plus"></i></button>
+      <button type="button" z-button zType="outline" zSize="sm">Small</button>
+      <button type="button" z-button zType="outline" zSize="sm">Group</button>
+      <button type="button" z-button zType="outline" zSize="sm"><ng-icon name="lucidePlus" /></button>
     </z-button-group>
 
     <z-button-group>
-      <button z-button zType="outline">Default</button>
-      <button z-button zType="outline">Group</button>
-      <button z-button zType="outline"><i z-icon zType="plus"></i></button>
+      <button type="button" z-button zType="outline">Default</button>
+      <button type="button" z-button zType="outline">Group</button>
+      <button type="button" z-button zType="outline"><ng-icon name="lucidePlus" /></button>
     </z-button-group>
 
     <z-button-group>
-      <button z-button zType="outline" zSize="lg">Large</button>
-      <button z-button zType="outline" zSize="lg">Group</button>
-      <button z-button zType="outline" zSize="lg"><i z-icon zType="plus"></i></button>
+      <button type="button" z-button zType="outline" zSize="lg">Large</button>
+      <button type="button" z-button zType="outline" zSize="lg">Group</button>
+      <button type="button" z-button zType="outline" zSize="lg"><ng-icon name="lucidePlus" /></button>
     </z-button-group>
   `,
+  viewProviders: [provideIcons({ lucidePlus })],
   host: {
     class: 'flex flex-col items-start gap-4',
   },

@@ -18,7 +18,6 @@ import {
   type EmbeddedViewRef,
   type EventEmitter,
   inject,
-  NgModule,
   output,
   type TemplateRef,
   type Type,
@@ -26,20 +25,18 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import type { ZardDialogRef } from './dialog-ref';
-import { ZardDialogService } from './dialog.service';
 import { dialogVariants } from './dialog.variants';
 import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
-
-// Used by the NgModule provider definition
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardDialogOptions<T, U> {
-  zCancelIcon?: ZardIcon;
+  zCancelIcon?: string;
   zCancelText?: string | null;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
@@ -50,7 +47,7 @@ export class ZardDialogOptions<T, U> {
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
-  zOkIcon?: ZardIcon;
+  zOkIcon?: string;
   zOkText?: string | null;
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
@@ -61,7 +58,7 @@ export class ZardDialogOptions<T, U> {
 
 @Component({
   selector: 'z-dialog',
-  imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
+  imports: [OverlayModule, PortalModule, ZardButtonComponent, NgIcon],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
       <button
@@ -73,7 +70,7 @@ export class ZardDialogOptions<T, U> {
         class="absolute top-1 right-1"
         (click)="onCloseClick()"
       >
-        <z-icon zType="x" />
+        <ng-icon name="lucideX" class="size-4!" />
       </button>
     }
 
@@ -102,7 +99,7 @@ export class ZardDialogOptions<T, U> {
         @if (config.zCancelText !== null) {
           <button type="button" data-testid="z-cancel-button" z-button zType="outline" (click)="onCloseClick()">
             @if (config.zCancelIcon) {
-              <z-icon [zType]="config.zCancelIcon" />
+              <ng-icon [svg]="config.zCancelIcon" class="size-4!" />
             }
 
             {{ config.zCancelText ?? 'Cancel' }}
@@ -115,11 +112,11 @@ export class ZardDialogOptions<T, U> {
             data-testid="z-ok-button"
             z-button
             [zType]="config.zOkDestructive ? 'destructive' : 'default'"
-            [disabled]="config.zOkDisabled"
+            [zDisabled]="config.zOkDisabled"
             (click)="onOkClick()"
           >
             @if (config.zOkIcon) {
-              <z-icon [zType]="config.zOkIcon" />
+              <ng-icon [svg]="config.zOkIcon" class="size-4!" />
             }
 
             {{ config.zOkText ?? 'OK' }}
@@ -153,6 +150,7 @@ export class ZardDialogOptions<T, U> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideX })],
   host: {
     '[class]': 'classes()',
     '[style.width]': 'config.zWidth ? config.zWidth : null',
@@ -206,12 +204,6 @@ export class ZardDialogComponent<T, U> extends BasePortalOutlet {
     this.cancelTriggered.emit();
   }
 }
-
-@NgModule({
-  imports: [ZardButtonComponent, ZardDialogComponent, OverlayModule, PortalModule],
-  providers: [ZardDialogService],
-})
-export class ZardDialogModule {}
 
 ```
 
@@ -326,6 +318,19 @@ export class ZardDialogRef<T = any, R = any, U = any> {
     }
   }
 }
+
+```
+
+
+
+```angular-ts title="dialog.imports.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { OverlayModule } from '@angular/cdk/overlay';
+import { PortalModule } from '@angular/cdk/portal';
+
+import { ZardButtonComponent } from '@/shared/components/button';
+import { ZardDialogComponent } from '@/shared/components/dialog/dialog.component';
+
+export const ZardDialogImports = [ZardButtonComponent, ZardDialogComponent, OverlayModule, PortalModule] as const;
 
 ```
 
@@ -462,11 +467,12 @@ export class ZardDialogService {
 
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export { ZardDialogComponent, ZardDialogOptions, ZardDialogModule } from './dialog.component';
+export { ZardDialogComponent, ZardDialogOptions } from './dialog.component';
 export { type OnClickCallback as DialogOnClickCallback } from './dialog.component';
 export * from './dialog.service';
 export * from './dialog-ref';
 export * from './dialog.variants';
+export * from './dialog.imports';
 
 ```
 

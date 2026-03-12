@@ -28,11 +28,12 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
 import { ZardBadgeComponent } from '@/shared/components/badge';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardSelectItemComponent } from '@/shared/components/select/select-item.component';
 import {
   selectContentVariants,
@@ -49,7 +50,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
 
 @Component({
   selector: 'z-select, [z-select]',
-  imports: [OverlayModule, ZardBadgeComponent, ZardIconComponent],
+  imports: [OverlayModule, ZardBadgeComponent, NgIcon],
   template: `
     <button
       type="button"
@@ -77,7 +78,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
       </span>
-      <z-icon zType="chevron-down" zSize="lg" class="opacity-50" />
+      <ng-icon name="lucideChevronDown" class="size-4! opacity-50" />
     </button>
 
     <ng-template #dropdownTemplate>
@@ -103,6 +104,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronDown })],
   host: {
     '[attr.data-active]': 'isFocus() ? "" : null',
     '[attr.data-disabled]': 'zDisabled() ? "" : null',

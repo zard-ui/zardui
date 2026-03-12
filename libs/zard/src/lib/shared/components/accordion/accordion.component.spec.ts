@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
 import { render } from '@testing-library/angular';
 
+import { zardChevronDownIcon } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardAccordionItemComponent } from './accordion-item.component';
@@ -20,7 +22,7 @@ const getHostComponent = (
   isCollapsible = true,
 ) => {
   @Component({
-    imports: [ZardAccordionComponent, ZardAccordionItemComponent],
+    imports: [ZardAccordionComponent, ZardAccordionItemComponent, NgIcon],
     template: `
       <z-accordion [zType]="type" [zCollapsible]="collapsible" [zDefaultValue]="defaultValue">
         <z-accordion-item zValue="item-1">Text 1</z-accordion-item>
@@ -28,6 +30,7 @@ const getHostComponent = (
         <z-accordion-item zValue="item-3">Text 3</z-accordion-item>
       </z-accordion>
     `,
+    viewProviders: [provideIcons({ chevronDown: zardChevronDownIcon })],
   })
   class TestHostComponent {
     type: 'single' | 'multiple' = mode;

@@ -28,11 +28,22 @@ test.describe('Button component', () => {
     await expect(button).toBeEnabled();
   });
 
-  test('button with icon renders icon element', async () => {
+  test('button with icon is visible and interactive', async () => {
     const firstCard = demoPage.firstDemoCard;
-    const icons = firstCard.locator('button[z-button] [z-icon]');
-    const count = await icons.count();
-    expect(count).toBeGreaterThan(0);
+    const buttons = firstCard.locator('button[z-button]');
+    const count = await buttons.count();
+    expect(count).toBeGreaterThanOrEqual(3);
+
+    const iconOnlyButton = buttons.nth(1);
+    await expect(iconOnlyButton).toBeVisible();
+    await expect(iconOnlyButton).toBeEnabled();
+    await iconOnlyButton.click();
+    await expect(iconOnlyButton).toBeEnabled();
+
+    const buttonWithIcon = buttons.nth(2);
+    await expect(buttonWithIcon).toBeVisible();
+    await expect(buttonWithIcon).toContainText('Button');
+    await expect(buttonWithIcon).toBeEnabled();
   });
 
   test('passes accessibility checks', async ({ page }) => {
