@@ -1,3 +1,13 @@
+## 1.0.0-beta.67 (2026-03-21)
+
+### 🐛 Bug Fixes
+
+- update github links on roadmap page ([#493](https://github.com/zard-ui/zardui/pull/493))
+
+### ❤️ Thank You
+
+- Florian Veltmann
+
 ## 1.0.0-beta.66 (2026-03-11)
 
 This was a version bump only, there were no code changes.
