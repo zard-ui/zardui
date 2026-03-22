@@ -1,3 +1,19 @@
+## 1.0.0-beta.68 (2026-03-22)
+
+### ✨ Features
+
+- **ui:** migrate icon component from lucide-angular to ng-icons ([#482](https://github.com/zard-ui/zardui/pull/482))
+
+### 🐛 Bug Fixes
+
+- remove icon component export ([02bac8d](https://github.com/zard-ui/zardui/commit/02bac8d))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+- Luiz Gomes
+- Mickey Lazarevic
+
 ## 1.0.0-beta.67 (2026-03-21)
 
 ### 🐛 Bug Fixes
