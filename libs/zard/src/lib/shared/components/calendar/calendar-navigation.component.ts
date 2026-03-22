@@ -1,17 +1,19 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
+
 import { calendarMonths } from '@/shared/components/calendar/calendar.utils';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { calendarNavVariants } from './calendar.variants';
 import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
 
 @Component({
   selector: 'z-calendar-navigation',
-  imports: [ZardButtonComponent, ZardIconComponent, ZardSelectComponent, ZardSelectItemComponent],
+  imports: [ZardButtonComponent, NgIcon, ZardSelectComponent, ZardSelectItemComponent],
   template: `
     <div [class]="navClasses()">
       <button
@@ -24,7 +26,7 @@ import { ZardSelectComponent } from '../select/select.component';
         aria-label="Previous month"
         class="size-7 p-0"
       >
-        <z-icon zType="chevron-left" />
+        <ng-icon name="lucideChevronLeft" class="size-3.5!" />
       </button>
 
       <!-- Month and Year Selectors -->
@@ -54,12 +56,13 @@ import { ZardSelectComponent } from '../select/select.component';
         aria-label="Next month"
         class="size-7 p-0"
       >
-        <z-icon zType="chevron-right" />
+        <ng-icon name="lucideChevronRight" class="size-3.5!" />
       </button>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
   exportAs: 'zCalendarNavigation',
 })
 export class ZardCalendarNavigationComponent {

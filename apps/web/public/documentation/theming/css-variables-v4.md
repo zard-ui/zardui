@@ -1,4 +1,5 @@
 ```css title="src/styles.css" expandable="true" copyButton
+@layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
 @plugin 'tailwindcss-animate';
 

@@ -1,3 +1,4 @@
+@layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource-variable/geist';

@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch } from '@ng-icons/lucide';
+
 import { ZardCommandOptionComponent } from './command-option.component';
 
 @Component({
   selector: 'test-host-component',
-  imports: [ZardCommandOptionComponent],
-  standalone: true,
+  imports: [ZardCommandOptionComponent, NgIcon],
   template: `
     <z-command-option
       zLabel="Test Option"
@@ -18,6 +20,7 @@ import { ZardCommandOptionComponent } from './command-option.component';
       variant="default"
     />
   `,
+  viewProviders: [provideIcons({ lucideSearch })],
 })
 class TestHostComponent {
   disabled = false;
