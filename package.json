@@ -111,7 +111,7 @@
     "@nx/jest": "22.5.2",
     "@nx/js": "22.5.2",
     "@nx/playwright": "22.5.2",
-    "@nx/web": "22.5.2",
+    "@nx/web": "22.6.1",
     "@nx/workspace": "22.5.2",
     "@playwright/test": "^1.58.2",
     "@schematics/angular": "21.1.5",
