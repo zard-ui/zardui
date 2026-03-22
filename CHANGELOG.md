@@ -1,3 +1,45 @@
+## 1.0.0-beta.67 (2026-03-21)
+
+### ⚠ BREAKING CHANGES
+
+- **icons:** `ZardIconComponent` has been removed. All components now use `NgIcon` from `@ng-icons/core` with icons from `@ng-icons/lucide`. Replace `lucide-angular` with `@ng-icons/core` and `@ng-icons/lucide` in your dependencies.
+
+### 📦 Code Refactoring
+
+- **icons:** complete migration from `ZardIconComponent` to `@ng-icons/lucide` across all components ([6b8d449](https://github.com/zard-ui/zardui/commit/6b8d4492))
+- **icons:** migrate icon system to use `@ng-icons/lucide` directly ([d1d699b](https://github.com/zard-ui/zardui/commit/d1d699ba))
+- **icons:** standardize ZardIconRegistry imports and fix icon references ([2118efe](https://github.com/zard-ui/zardui/commit/2118efec))
+- **icons:** move icon registry to core directory ([6018765](https://github.com/zard-ui/zardui/commit/60187650))
+
+### ✨ Features
+
+- **docs:** remove deprecated Icon component from documentation ([f799a68](https://github.com/zard-ui/zardui/commit/f799a681))
+- **docs:** update setup dependencies from `lucide-angular` to `@ng-icons/core` and `@ng-icons/lucide`
+
+### Migration Guide
+
+To migrate from `ZardIconComponent` to `NgIcon`:
+
+```typescript
+// Before
+import { ZardIconComponent } from '@zard/icon';
+
+@Component({
+  imports: [ZardIconComponent],
+  template: `<z-icon zType="chevron-right" />`
+})
+
+// After
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronRight } from '@ng-icons/lucide';
+
+@Component({
+  imports: [NgIcon],
+  template: `<ng-icon name="lucideChevronRight" />`,
+  viewProviders: [provideIcons({ lucideChevronRight })]
+})
+```
+
 ## 1.0.0-beta.66 (2026-03-11)
 
 This was a version bump only, there were no code changes.
