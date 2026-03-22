@@ -83,3 +83,4 @@ opencode.json
 /.cocoindex_code/
 /node-compile-cache/
 .github/hooks/context-mode.json
+tsconfig.tsbuildinfo

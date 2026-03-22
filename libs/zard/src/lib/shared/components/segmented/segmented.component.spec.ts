@@ -38,7 +38,7 @@ class TestHostComponent {
     <z-segmented>
       <z-segmented-item value="item1" label="Item 1" />
       <z-segmented-item value="item2" label="Item 2" />
-      <z-segmented-item value="item3" label="Item 3" [disabled]="true" />
+      <z-segmented-item value="item3" label="Item 3" [zDisabled]="true" />
     </z-segmented>
   `,
 })
@@ -237,13 +237,20 @@ describe('ZardSegmentedItemComponent', () => {
 
     expect(component.value()).toBe('test-value');
     expect(component.label()).toBe('Test Label');
-    expect(component.disabled()).toBe(false);
+    expect(component.zDisabled()).toBe(false);
   });
 
   it('should handle disabled state', () => {
-    fixture.componentRef.setInput('disabled', true);
+    fixture.componentRef.setInput('value', 'test-value');
+    fixture.componentRef.setInput('label', 'Test Label');
+    fixture.componentRef.setInput('zDisabled', true);
     fixture.detectChanges();
 
-    expect(component.disabled()).toBe(true);
+    expect(component.zDisabled()).toBe(true);
+
+    fixture.componentRef.setInput('zDisabled', false);
+    fixture.detectChanges();
+
+    expect(component.zDisabled()).toBe(false);
   });
 });

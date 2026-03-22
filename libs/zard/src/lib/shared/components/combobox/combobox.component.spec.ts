@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
@@ -51,6 +52,17 @@ class TestHostComponent {
   readonly searchable = signal(true);
   readonly placeholder = signal('Select...');
   readonly ariaLabel = signal('');
+}
+
+@Component({
+  imports: [ZardComboboxComponent, ReactiveFormsModule],
+  template: `
+    <z-combobox [formControl]="control" [options]="options" placeholder="Select..." />
+  `,
+})
+class TestFormControlHostComponent {
+  control = new FormControl<string | null>(null);
+  options: ZardComboboxOption[] = testOptions;
 }
 
 describe('ZardComboboxComponent', () => {
@@ -171,14 +183,6 @@ describe('ZardComboboxComponent', () => {
     expect(button).toHaveTextContent('Apple');
   });
 
-  it('disables interaction when disabled is true', () => {
-    hostComponent.disabled.set(true);
-    hostFixture.detectChanges();
-
-    const button = hostFixture.nativeElement.querySelector('button[z-button]');
-    expect(button).toBeDisabled();
-  });
-
   it('hides search input when searchable is false', () => {
     hostComponent.searchable.set(false);
     hostFixture.detectChanges();
@@ -285,24 +289,94 @@ describe('ZardComboboxComponent', () => {
     });
   });
 
-  describe('setDisabledState', () => {
-    it('disables component via setDisabledState', () => {
-      comboboxComponent.setDisabledState(true);
+  describe('disabled state', () => {
+    it('disables component when zDisabled is true', () => {
+      hostComponent.disabled.set(true);
       hostFixture.detectChanges();
 
       const button = hostFixture.nativeElement.querySelector('button[z-button]');
       expect(button).toBeDisabled();
+      expect(button).toHaveAttribute('aria-expanded', 'false');
+
+      // Clicking disabled button should not open popover
+      button.click();
+      hostFixture.detectChanges();
+      expect(button).toHaveAttribute('aria-expanded', 'false');
     });
 
-    it('enables component via setDisabledState after being disabled', () => {
-      comboboxComponent.setDisabledState(true);
+    it('enables component when zDisabled is set to false after being disabled', () => {
+      hostComponent.disabled.set(true);
       hostFixture.detectChanges();
 
-      comboboxComponent.setDisabledState(false);
+      hostComponent.disabled.set(false);
       hostFixture.detectChanges();
 
       const button = hostFixture.nativeElement.querySelector('button[z-button]');
       expect(button).not.toBeDisabled();
+      expect(button).toHaveAttribute('aria-expanded', 'false');
+
+      // Clicking enabled button should open popover
+      button.click();
+      hostFixture.detectChanges();
+      expect(button).toHaveAttribute('aria-expanded', 'true');
+    });
+  });
+
+  describe('form-driven disabled state', () => {
+    let formControlHost: TestFormControlHostComponent;
+    let formControlFixture: ComponentFixture<TestFormControlHostComponent>;
+    let formComboboxComponent: ZardComboboxComponent;
+
+    beforeEach(async () => {
+      TestBed.resetTestingModule();
+      await TestBed.configureTestingModule({
+        imports: [TestFormControlHostComponent],
+        providers: [
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
+      }).compileComponents();
+
+      formControlFixture = TestBed.createComponent(TestFormControlHostComponent);
+      formControlHost = formControlFixture.componentInstance;
+      formControlFixture.detectChanges();
+      await formControlFixture.whenStable();
+
+      formComboboxComponent = formControlFixture.debugElement.children[0].componentInstance as ZardComboboxComponent;
+      formControlFixture.detectChanges();
+      await formControlFixture.whenStable();
+    });
+
+    it('disables component when FormControl is disabled', () => {
+      formControlHost.control.disable();
+      formControlFixture.detectChanges();
+
+      const button = formControlFixture.nativeElement.querySelector('button[z-button]');
+      expect(button).toBeDisabled();
+      expect(button).toHaveAttribute('aria-expanded', 'false');
+
+      button.click();
+      formControlFixture.detectChanges();
+      expect(button).toHaveAttribute('aria-expanded', 'false');
+    });
+
+    it('enables component when FormControl is enabled after being disabled', () => {
+      formControlHost.control.disable();
+      formControlFixture.detectChanges();
+
+      formControlHost.control.enable();
+      formControlFixture.detectChanges();
+
+      const button = formControlFixture.nativeElement.querySelector('button[z-button]');
+      expect(button).not.toBeDisabled();
+      expect(button).toHaveAttribute('aria-expanded', 'false');
+
+      button.click();
+      formControlFixture.detectChanges();
+      expect(button).toHaveAttribute('aria-expanded', 'true');
     });
   });
 });

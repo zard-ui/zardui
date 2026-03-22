@@ -38,7 +38,7 @@ export interface SegmentedOption {
 export class ZardSegmentedItemComponent {
   readonly value = input.required<string>();
   readonly label = input.required<string>();
-  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
 }
 
 @Component({
@@ -64,7 +64,7 @@ export class ZardSegmentedItemComponent {
             type="button"
             role="tab"
             [class]="getItemClasses(item.value())"
-            [disabled]="item.disabled() || disabledState()"
+            [disabled]="item.zDisabled() || disabledState()"
             [attr.aria-selected]="isSelected(item.value())"
             [attr.aria-controls]="item.value() + '-panel'"
             [attr.id]="item.value() + '-tab'"
@@ -147,7 +147,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
     const option = this.zOptions().find(opt => opt.value === value);
     const item = this.items().find(item => item.value() === value);
 
-    if (option?.disabled || item?.disabled()) {
+    if (option?.disabled || item?.zDisabled()) {
       return;
     }
 
