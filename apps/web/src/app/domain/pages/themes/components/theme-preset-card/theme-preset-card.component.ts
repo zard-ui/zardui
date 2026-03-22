@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
 
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck } from '@ng-icons/lucide';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -10,12 +11,12 @@ import { oklchToHex } from '../../utils/oklch-converter';
 @Component({
   selector: 'app-theme-preset-card',
   standalone: true,
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
-    '(click)': 'select.emit(preset().name)',
+    '(click)': 'selection.emit(preset().name)',
   },
   template: `
     <div class="flex items-center gap-1.5">
@@ -30,14 +31,15 @@ import { oklchToHex } from '../../utils/oklch-converter';
     </div>
     <span class="text-foreground flex-1 truncate text-xs font-medium">{{ preset().name }}</span>
     @if (isActive()) {
-      <z-icon zType="check" class="text-primary size-3.5 shrink-0" />
+      <ng-icon name="lucideCheck" class="text-primary size-3.5! shrink-0" />
     }
   `,
+  viewProviders: [provideIcons({ lucideCheck })],
 })
 export class ThemePresetCardComponent {
   readonly preset = input.required<ThemePreset>();
   readonly isActive = input<boolean>(false);
-  readonly select = output<string>();
+  readonly selection = output<string>();
 
   readonly primaryHex = computed(() => oklchToHex(this.preset().previewColors.primary));
   readonly secondaryHex = computed(() => oklchToHex(this.preset().previewColors.secondary));

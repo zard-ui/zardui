@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { provideIcons } from '@ng-icons/core';
+import { lucideFile, lucideFolder } from '@ng-icons/lucide';
+
 import { ZardTreeImports } from '@/shared/components/tree/tree.imports';
 import type { TreeNode } from '@/shared/components/tree/tree.types';
 
@@ -17,9 +20,10 @@ import type { TreeNode } from '@/shared/components/tree/tree.types';
     <p class="text-muted-foreground mt-4 text-sm">{{ nodeCount }} total nodes with virtual scrolling</p>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ folder: lucideFolder, file: lucideFile })],
 })
 export class ZardDemoTreeVirtualScrollComponent {
-  readonly largeTree: TreeNode[];
+  readonly largeTree: TreeNode<unknown>[];
   readonly nodeCount: number;
 
   constructor() {
@@ -27,7 +31,7 @@ export class ZardDemoTreeVirtualScrollComponent {
     this.nodeCount = this.countNodes(this.largeTree);
   }
 
-  private generateTree(breadth: number, depth: number, prefix = '', level = 0): TreeNode[] {
+  private generateTree(breadth: number, depth: number, prefix = '', level = 0): TreeNode<unknown>[] {
     if (depth === 0) {
       return [];
     }
@@ -37,14 +41,14 @@ export class ZardDemoTreeVirtualScrollComponent {
       return {
         key,
         label: children.length > 0 ? `Folder ${key}` : `File ${key}`,
-        icon: children.length > 0 ? 'folder' : ('file' as string | undefined),
+        icon: children.length > 0 ? 'lucideFolder' : 'lucideFile',
         leaf: children.length === 0,
         children: children.length > 0 ? children : undefined,
       };
     });
   }
 
-  private countNodes(nodes: TreeNode[]): number {
+  private countNodes(nodes: TreeNode<unknown>[]): number {
     let count = 0;
     for (const node of nodes) {
       count++;

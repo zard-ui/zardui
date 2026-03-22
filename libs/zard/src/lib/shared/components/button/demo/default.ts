@@ -1,19 +1,21 @@
 import { Component } from '@angular/core';
 
-import { ZardIconComponent } from '../../icon/icon.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUp, lucidePopcorn } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '../button.component';
 
 @Component({
   selector: 'z-demo-button-default',
-  imports: [ZardButtonComponent, ZardIconComponent],
-  standalone: true,
+  imports: [ZardButtonComponent, NgIcon],
   template: `
-    <button z-button zType="outline">Button</button>
-    <button z-button zType="outline"><i z-icon zType="arrow-up"></i></button>
-    <button z-button zType="outline">
+    <button type="button" z-button zType="outline">Button</button>
+    <button type="button" z-button zType="outline"><ng-icon name="lucideArrowUp" /></button>
+    <button type="button" z-button zType="outline">
       Button
-      <i z-icon zType="popcorn"></i>
+      <ng-icon name="lucidePopcorn" />
     </button>
   `,
+  viewProviders: [provideIcons({ lucideArrowUp, lucidePopcorn })],
 })
 export class ZardDemoButtonDefaultComponent {}

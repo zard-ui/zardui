@@ -1,16 +1,28 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { zardChevronRightIcon } from '@zard/core/icons-registry';
 
 @Component({
   selector: 'z-features',
   standalone: true,
+  imports: [
+    RouterModule,
+    ZardCardComponent,
+    ZardButtonComponent,
+    ZardCardComponent,
+    ZardBadgeComponent,
+    ZardCheckboxComponent,
+    ZardInputDirective,
+    NgIcon,
+  ],
   template: `
     <section class="mx-auto min-h-screen max-w-4xl">
       <header>
@@ -32,13 +44,16 @@ import { ZardInputDirective } from '@zard/components/input/input.directive';
         </z-card>
       </main>
       <footer class="mt-8 flex justify-center">
-        <a z-button zType="ghost" routerLink="/components/button" class="group"
-          >View all
-          <z-icon zType="chevron-right" class="shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1" />
+        <a z-button zType="ghost" routerLink="/components/button" class="group">
+          View all
+          <ng-icon
+            name="chevron-right"
+            class="shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1"
+          />
         </a>
       </footer>
     </section>
   `,
-  imports: [RouterModule, ZardCardComponent, ZardButtonComponent, ZardCardComponent, ZardBadgeComponent, ZardCheckboxComponent, ZardInputDirective, ZardIconComponent],
+  viewProviders: [provideIcons({ chevronRight: zardChevronRightIcon })],
 })
 export class FeaturesComponent {}

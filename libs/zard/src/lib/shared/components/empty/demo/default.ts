@@ -1,15 +1,17 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowUpRight, lucideFolderCode } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardIconComponent } from '../../icon/icon.component';
 import { ZardEmptyComponent } from '../empty.component';
 
 @Component({
   selector: 'z-demo-empty-default',
-  imports: [ZardButtonComponent, ZardEmptyComponent, ZardIconComponent],
+  imports: [ZardButtonComponent, ZardEmptyComponent, NgIcon],
   template: `
     <z-empty
-      zIcon="folder-code"
+      zIcon="lucideFolderCode"
       zTitle="No Projects Yet"
       zDescription="You haven't created any projects yet. Get started by creating your first project."
       [zActions]="[actionPrimary, actionSecondary]"
@@ -24,10 +26,16 @@ import { ZardEmptyComponent } from '../empty.component';
 
       <button type="button" z-button zType="link" zSize="sm" class="text-muted-foreground">
         Learn More
-        <z-icon zType="arrow-up-right" />
+        <ng-icon name="lucideArrowUpRight" class="size-3!" />
       </button>
     </z-empty>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideArrowUpRight,
+      lucideFolderCode,
+    }),
+  ],
 })
 export class ZardDemoEmptyDefaultComponent {}

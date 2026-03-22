@@ -18,6 +18,8 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { NgIcon, provideIcons, type IconName } from '@ng-icons/core';
+import { lucideCheck, lucideChevronsUpDown } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardButtonComponent, type ZardButtonTypeVariants } from '@/shared/components/button';
@@ -32,7 +34,6 @@ import {
   type ZardCommandOption,
 } from '@/shared/components/command';
 import { ZardEmptyComponent } from '@/shared/components/empty';
-import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/popover';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -40,7 +41,7 @@ export interface ZardComboboxOption {
   value: string;
   label: string;
   disabled?: boolean;
-  icon?: ZardIcon;
+  icon?: IconName;
 }
 
 export interface ZardComboboxGroup {
@@ -53,6 +54,7 @@ export interface ZardComboboxGroup {
   imports: [
     FormsModule,
     NgTemplateOutlet,
+    NgIcon,
     ZardButtonComponent,
     ZardCommandComponent,
     ZardCommandInputComponent,
@@ -63,7 +65,6 @@ export interface ZardComboboxGroup {
     ZardPopoverDirective,
     ZardPopoverComponent,
     ZardEmptyComponent,
-    ZardIconComponent,
   ],
   template: `
     <button
@@ -88,7 +89,7 @@ export interface ZardComboboxGroup {
       <span class="flex-1 truncate text-left">
         {{ displayValue() ?? placeholder() }}
       </span>
-      <z-icon zType="chevrons-up-down" class="ml-2 shrink-0 opacity-50" />
+      <ng-icon name="lucideChevronsUpDown" class="ml-2 shrink-0 opacity-50" />
     </button>
 
     <ng-template #popoverContent>
@@ -160,7 +161,7 @@ export interface ZardComboboxGroup {
       >
         {{ option.label }}
         @if (option.value === currentValue()) {
-          <z-icon zType="check" class="ml-auto" />
+          <ng-icon name="lucideCheck" class="ml-auto" />
         }
       </z-command-option>
     </ng-template>
@@ -174,6 +175,7 @@ export interface ZardComboboxGroup {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideChevronsUpDown, lucideCheck })],
   host: {
     '[class]': 'classes()',
     '(document:keydown.escape)': 'onDocumentKeyDown($event)',
