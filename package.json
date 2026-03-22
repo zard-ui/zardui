@@ -99,7 +99,7 @@
     "@angular-devkit/schematics": "21.1.5",
     "@angular/cli": "21.1.5",
     "@angular/compiler-cli": "21.2.0",
-    "@angular/language-service": "21.2.0",
+    "@angular/language-service": "21.2.5",
     "@axe-core/playwright": "^4.11.1",
     "@commitlint/cli": "^20.4.2",
     "@commitlint/config-conventional": "^20.4.2",
