@@ -36,7 +36,7 @@ const testGroups: ZardComboboxGroup[] = [
       [options]="options()"
       [groups]="groups()"
       [value]="value()"
-      [disabled]="disabled()"
+      [zDisabled]="disabled()"
       [searchable]="searchable()"
       [placeholder]="placeholder()"
       [ariaLabel]="ariaLabel()"
@@ -258,7 +258,7 @@ describe('ZardComboboxComponent', () => {
       hostComponent.disabled.set(true);
       hostFixture.detectChanges();
 
-      expect(comboboxComponent.disabled()).toBe(true);
+      expect(comboboxComponent.zDisabled()).toBe(true);
     });
 
     it('reads searchable state correctly', () => {
@@ -282,6 +282,27 @@ describe('ZardComboboxComponent', () => {
 
     it('has empty options when groups are set', () => {
       expect(comboboxComponent.options()).toEqual([]);
+    });
+  });
+
+  describe('setDisabledState', () => {
+    it('disables component via setDisabledState', () => {
+      comboboxComponent.setDisabledState(true);
+      hostFixture.detectChanges();
+
+      const button = hostFixture.nativeElement.querySelector('button[z-button]');
+      expect(button).toBeDisabled();
+    });
+
+    it('enables component via setDisabledState after being disabled', () => {
+      comboboxComponent.setDisabledState(true);
+      hostFixture.detectChanges();
+
+      comboboxComponent.setDisabledState(false);
+      hostFixture.detectChanges();
+
+      const button = hostFixture.nativeElement.querySelector('button[z-button]');
+      expect(button).not.toBeDisabled();
     });
   });
 });

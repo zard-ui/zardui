@@ -15,6 +15,7 @@ import {
   inject,
   Injector,
   input,
+  linkedSignal,
   model,
   type OnDestroy,
   output,
@@ -57,7 +58,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
       role="combobox"
       aria-controls="dropdown"
       [class]="triggerClasses()"
-      [disabled]="zDisabled()"
+      [disabled]="disabledState()"
       [attr.aria-expanded]="isOpen()"
       [attr.aria-haspopup]="'listbox'"
       [attr.data-placeholder]="!zValue() ? '' : null"
@@ -143,6 +144,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   readonly focusedIndex = signal<number>(-1);
   protected readonly isFocus = signal(false);
   protected readonly isCompact = signal(false);
+  protected readonly disabledState = linkedSignal(() => this.zDisabled());
 
   protected onFocus(): void {
     if (this.isCompact()) {
@@ -250,7 +252,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   toggle() {
-    if (this.zDisabled()) {
+    if (this.disabledState()) {
       return;
     }
 
@@ -628,7 +630,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.onTouched = fn;
   }
 
-  setDisabledState(): void {
-    // The disabled state is handled by the disabled input
+  setDisabledState(isDisabled: boolean): void {
+    this.disabledState.set(isDisabled);
   }
 }

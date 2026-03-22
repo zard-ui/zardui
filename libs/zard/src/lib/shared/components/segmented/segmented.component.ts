@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -6,6 +7,7 @@ import {
   effect,
   forwardRef,
   input,
+  linkedSignal,
   type OnInit,
   output,
   signal,
@@ -24,23 +26,23 @@ export interface SegmentedOption {
   label: string;
   disabled?: boolean;
 }
+
 @Component({
   selector: 'z-segmented-item',
-  standalone: true,
   template: `
     <ng-content />
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardSegmentedItemComponent {
   readonly value = input.required<string>();
   readonly label = input.required<string>();
-  readonly disabled = input(false);
+  readonly disabled = input(false, { transform: booleanAttribute });
 }
 
 @Component({
   selector: 'z-segmented',
-  standalone: true,
   template: `
     <div [class]="classes()" role="tablist" [attr.aria-label]="zAriaLabel()">
       @for (option of zOptions(); track option.value) {
@@ -48,7 +50,7 @@ export class ZardSegmentedItemComponent {
           type="button"
           role="tab"
           [class]="getItemClasses(option.value)"
-          [disabled]="option.disabled || zDisabled()"
+          [disabled]="option.disabled || disabledState()"
           [attr.aria-selected]="isSelected(option.value)"
           [attr.aria-controls]="option.value + '-panel'"
           [attr.id]="option.value + '-tab'"
@@ -62,7 +64,7 @@ export class ZardSegmentedItemComponent {
             type="button"
             role="tab"
             [class]="getItemClasses(item.value())"
-            [disabled]="item.disabled() || zDisabled()"
+            [disabled]="item.disabled() || disabledState()"
             [attr.aria-selected]="isSelected(item.value())"
             [attr.aria-controls]="item.value() + '-panel'"
             [attr.id]="item.value() + '-tab'"
@@ -95,13 +97,14 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
   readonly zSize = input<ZardSegmentedVariants['zSize']>('default');
   readonly zOptions = input<SegmentedOption[]>([]);
   readonly zDefaultValue = input<string>('');
-  readonly zDisabled = input(false);
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zAriaLabel = input<string>('Segmented control');
 
   readonly zChange = output<string>();
 
-  protected readonly selectedValue = signal<string>('');
+  protected readonly disabledState = linkedSignal(() => this.zDisabled());
   protected readonly items = signal<readonly ZardSegmentedItemComponent[]>([]);
+  protected readonly selectedValue = signal<string>('');
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   private onChange: (value: string) => void = () => {};
@@ -137,7 +140,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
   }
 
   protected selectOption(value: string) {
-    if (this.zDisabled()) {
+    if (this.disabledState()) {
       return;
     }
 
@@ -167,7 +170,7 @@ export class ZardSegmentedComponent implements ControlValueAccessor, OnInit {
     this.onTouched = fn;
   }
 
-  setDisabledState(_isDisabled: boolean): void {
-    // Handled by zDisabled input
+  setDisabledState(isDisabled: boolean): void {
+    this.disabledState.set(isDisabled);
   }
 }
