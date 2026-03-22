@@ -10,11 +10,13 @@ import {
   computed,
   contentChildren,
   DestroyRef,
+  effect,
   ElementRef,
   forwardRef,
   inject,
   Injector,
   input,
+  linkedSignal,
   model,
   type OnDestroy,
   output,
@@ -57,7 +59,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
       role="combobox"
       aria-controls="dropdown"
       [class]="triggerClasses()"
-      [disabled]="zDisabled()"
+      [disabled]="disabledState()"
       [attr.aria-expanded]="isOpen()"
       [attr.aria-haspopup]="'listbox'"
       [attr.data-placeholder]="!zValue() ? '' : null"
@@ -107,7 +109,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
   viewProviders: [provideIcons({ lucideChevronDown })],
   host: {
     '[attr.data-active]': 'isFocus() ? "" : null',
-    '[attr.data-disabled]': 'zDisabled() ? "" : null',
+    '[attr.data-disabled]': 'disabledState() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '[class]': 'classes()',
     '(keydown.{enter,space,arrowdown,arrowup,escape}.prevent)': 'onTriggerKeydown($event)',
@@ -143,6 +145,15 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   readonly focusedIndex = signal<number>(-1);
   protected readonly isFocus = signal(false);
   protected readonly isCompact = signal(false);
+  protected readonly disabledState = linkedSignal(() => this.zDisabled());
+
+  constructor() {
+    effect(() => {
+      if (this.disabledState() && this.isOpen()) {
+        this.close(false);
+      }
+    });
+  }
 
   protected onFocus(): void {
     if (this.isCompact()) {
@@ -203,6 +214,10 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   onTriggerKeydown(event: Event) {
+    if (this.disabledState()) {
+      return;
+    }
+
     const { key } = event as KeyboardEvent;
     switch (key) {
       case 'Enter':
@@ -250,7 +265,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   toggle() {
-    if (this.zDisabled()) {
+    if (this.disabledState()) {
       return;
     }
 
@@ -262,6 +277,10 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   selectItem(value: string, label: string) {
+    if (this.disabledState()) {
+      return;
+    }
+
     if (value === undefined || value === null || value === '') {
       console.warn('Attempted to select item with invalid value:', { value, label });
       return;
@@ -335,7 +354,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   private open() {
-    if (this.isOpen()) {
+    if (this.isOpen() || this.disabledState()) {
       return;
     }
 
@@ -369,13 +388,15 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.focusSelectedItem();
   }
 
-  private close() {
+  private close(shouldTouch = true) {
     if (this.overlayRef?.hasAttached()) {
       this.overlayRef.detach();
     }
     this.isOpen.set(false);
     this.focusedIndex.set(-1);
-    this.onTouched();
+    if (shouldTouch) {
+      this.onTouched();
+    }
     this.updateFocusWhenNormalMode();
   }
 
@@ -628,7 +649,10 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.onTouched = fn;
   }
 
-  setDisabledState(): void {
-    // The disabled state is handled by the disabled input
+  setDisabledState(isDisabled: boolean): void {
+    this.disabledState.set(isDisabled);
+    if (isDisabled && this.isOpen()) {
+      this.close(false);
+    }
   }
 }
