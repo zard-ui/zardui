@@ -340,6 +340,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'dialog.imports.ts',
+        content: '',
+      },
+      {
         name: 'index.ts',
         content: '',
       },
