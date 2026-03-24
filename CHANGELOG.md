@@ -1,3 +1,13 @@
+## 1.0.0-beta.70 (2026-03-24)
+
+### 🐛 Bug Fixes
+
+- **cli:** use cross-platform shebang injection ([63e51a4](https://github.com/zard-ui/zardui/commit/63e51a4))
+
+### ❤️ Thank You
+
+- Luiz Gomes
+
 ## 1.0.0-beta.69 (2026-03-24)
 
 ### 🐛 Bug Fixes
