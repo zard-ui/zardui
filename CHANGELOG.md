@@ -1,3 +1,13 @@
+## 1.0.0-beta.69 (2026-03-24)
+
+### 🐛 Bug Fixes
+
+- **cli:** ensure tailwindcss-animate is installed ([2b1a237](https://github.com/zard-ui/zardui/commit/2b1a237))
+
+### ❤️ Thank You
+
+- Luiz Gomes
+
 ## 1.0.0-beta.68 (2026-03-22)
 
 ### ✨ Features
