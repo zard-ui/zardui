@@ -271,6 +271,25 @@ describe('ZardSelectComponent', () => {
 
       expect(onTouchedSpy).toHaveBeenCalled();
     }));
+
+    it('should disable component when FormControl is disabled', () => {
+      hostComponent.control.disable();
+      hostFixture.detectChanges();
+
+      const button = hostFixture.nativeElement.querySelector('button');
+      expect(button.disabled).toBe(true);
+    });
+
+    it('should enable component when FormControl is enabled after being disabled', () => {
+      hostComponent.control.disable();
+      hostFixture.detectChanges();
+
+      hostComponent.control.enable();
+      hostFixture.detectChanges();
+
+      const button = hostFixture.nativeElement.querySelector('button');
+      expect(button.disabled).toBe(false);
+    });
   });
 
   describe('signal reactivity', () => {

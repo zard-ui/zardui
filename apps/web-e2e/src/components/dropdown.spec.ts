@@ -81,6 +81,7 @@ test.describe('Dropdown component', () => {
   });
 
   test('trigger aria-expanded is isolated between dropdowns', async ({ page }) => {
+    await demoPage.examplesSection.scrollIntoViewIfNeeded();
     const firstTrigger = demoPage.firstDemoCard.locator('[z-dropdown]');
     const secondTrigger = demoPage.getDemoByName('hover').locator('[z-dropdown]');
 

@@ -10,6 +10,7 @@ import {
   forwardRef,
   inject,
   input,
+  linkedSignal,
   output,
   ViewEncapsulation,
 } from '@angular/core';
@@ -31,7 +32,7 @@ type OnChangeType = (value: unknown) => void;
   template: `
     <span
       class="relative flex items-center gap-2"
-      [class]="disabled() ? 'cursor-not-allowed' : 'cursor-pointer'"
+      [class]="disabledState() ? 'cursor-not-allowed' : 'cursor-pointer'"
       (mousedown)="onRadioChange()"
       zardId="radio"
       #z="zardId"
@@ -42,7 +43,7 @@ type OnChangeType = (value: unknown) => void;
         [value]="value()"
         [class]="classes()"
         [checked]="checked"
-        [disabled]="disabled()"
+        [disabled]="disabledState()"
         (blur)="onRadioBlur()"
         [name]="name()"
         [id]="zId() || z.id()"
@@ -71,7 +72,7 @@ export class ZardRadioComponent implements ControlValueAccessor {
 
   readonly radioChange = output<boolean>();
   readonly class = input<ClassValue>('');
-  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly name = input<string>('radio');
   readonly value = input<unknown>(null);
   readonly zId = input<string>('');
@@ -82,6 +83,7 @@ export class ZardRadioComponent implements ControlValueAccessor {
   private onTouched: OnTouchedType = () => {};
 
   protected readonly classes = computed(() => mergeClasses(radioVariants(), this.class()));
+  protected readonly disabledState = linkedSignal(() => this.zDisabled());
   protected readonly labelClasses = computed(() => mergeClasses(radioLabelVariants()));
 
   checked = false;
@@ -99,26 +101,22 @@ export class ZardRadioComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  setDisabledState(_isDisabled: boolean): void {
-    // This is called by Angular forms when the disabled state changes
-    // The input disabled() signal handles the state
-    this.cdr.markForCheck();
+  setDisabledState(isDisabled: boolean): void {
+    this.disabledState.set(isDisabled);
   }
 
   onRadioBlur(): void {
     this.onTouched();
-    this.cdr.markForCheck();
   }
 
   onRadioChange(): void {
-    if (this.disabled()) {
+    if (this.disabledState()) {
       return;
     }
 
     this.checked = true;
     this.onChange(this.value());
     this.radioChange.emit(this.checked);
-    this.cdr.markForCheck();
   }
 }
 

@@ -9,7 +9,7 @@ import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.comp
   standalone: true,
   template: `
     <div class="flex gap-4">
-      <z-combobox [options]="frameworks" placeholder="Disabled combobox" [disabled]="true" />
+      <z-combobox [options]="frameworks" placeholder="Disabled combobox" [zDisabled]="true" />
 
       <z-combobox
         [options]="frameworksWithDisabled"

@@ -10,6 +10,7 @@ import {
   inject,
   Injector,
   input,
+  linkedSignal,
   output,
   runInInjectionContext,
   signal,
@@ -75,7 +76,7 @@ export interface ZardComboboxGroup {
       [zContent]="popoverContent"
       [zType]="buttonVariant()"
       [class]="buttonClasses()"
-      [zDisabled]="disabled()"
+      [zDisabled]="disabledState()"
       [attr.aria-expanded]="open()"
       [attr.aria-haspopup]="'listbox'"
       [attr.aria-controls]="'combobox-listbox'"
@@ -194,7 +195,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   readonly placeholder = input<string>('Select...');
   readonly searchPlaceholder = input<string>('Search...');
   readonly emptyText = input<string>('No results found.');
-  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly searchable = input(true, { transform: booleanAttribute });
   readonly value = input<string | null>(null);
   readonly options = input<ZardComboboxOption[]>([]);
@@ -210,8 +211,9 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   readonly commandRef = viewChild('commandRef', { read: ZardCommandComponent });
   readonly commandInputRef = viewChild('commandInputRef', { read: ZardCommandInputComponent });
 
-  protected readonly open = signal(false);
+  protected readonly disabledState = linkedSignal(() => this.zDisabled());
   protected readonly internalValue = signal<string | null>(null);
+  protected readonly open = signal(false);
 
   protected readonly classes = computed(() =>
     mergeClasses(
@@ -330,7 +332,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   }
 
   onKeyDown(e: Event) {
-    if (this.disabled()) {
+    if (this.disabledState()) {
       return;
     }
 
@@ -410,5 +412,9 @@ export class ZardComboboxComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabledState.set(isDisabled);
   }
 }

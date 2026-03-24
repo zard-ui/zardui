@@ -122,7 +122,7 @@ describe('ZardToggleGroupComponent', () => {
 
   it('should handle disabled state', () => {
     fixture.componentRef.setInput('items', mockToggleItems);
-    fixture.componentRef.setInput('disabled', true);
+    fixture.componentRef.setInput('zDisabled', true);
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
@@ -133,7 +133,7 @@ describe('ZardToggleGroupComponent', () => {
 
   it('should not toggle when disabled', () => {
     fixture.componentRef.setInput('items', mockToggleItems);
-    fixture.componentRef.setInput('disabled', true);
+    fixture.componentRef.setInput('zDisabled', true);
     fixture.detectChanges();
 
     jest.spyOn(component.valueChange, 'emit');
