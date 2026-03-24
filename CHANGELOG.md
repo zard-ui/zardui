@@ -1,3 +1,13 @@
+## 1.0.0-beta.72 (2026-03-24)
+
+### 🐛 Bug Fixes
+
+- **ui:** rename disabled input to zDisabled and implement setDisabledState ([#494](https://github.com/zard-ui/zardui/pull/494))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
 ## 1.0.0-beta.71 (2026-03-24)
 
 This was a version bump only, there were no code changes.
