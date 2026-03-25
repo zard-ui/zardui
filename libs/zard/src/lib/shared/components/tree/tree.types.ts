@@ -1,8 +1,10 @@
-export interface TreeNode<T = any> {
+import type { IconName } from '@ng-icons/core';
+
+export interface TreeNode<T> {
   key: string;
   label: string;
   data?: T;
-  icon?: string;
+  icon?: IconName;
   children?: TreeNode<T>[];
   expanded?: boolean;
   selected?: boolean;
@@ -18,7 +20,7 @@ export interface TreeNodeTemplateContext<T = unknown> {
 
 export type TreeCheckState = 'checked' | 'unchecked' | 'indeterminate';
 
-export interface FlatTreeNode<T = any> {
+export interface FlatTreeNode<T> {
   node: TreeNode<T>;
   level: number;
   expandable: boolean;

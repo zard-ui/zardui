@@ -15,9 +15,11 @@ export async function installDependencies(cwd: string, config: Config, projectIn
   const info = projectInfo || (await getProjectInfo(cwd));
 
   const cdkVersion = getCdkVersion(info.angularVersion);
-  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', 'lucide-angular'];
+  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', '@ng-icons/core', '@ng-icons/lucide'];
 
-  const devDeps = info.hasTailwind ? [] : ['tailwindcss', '@tailwindcss/postcss', 'postcss', 'tailwindcss-animate'];
+  const devDeps = info.hasTailwind
+    ? ['tailwindcss-animate']
+    : ['tailwindcss', '@tailwindcss/postcss', 'postcss', 'tailwindcss-animate'];
 
   if (info.hasTailwind) {
     logger.info('Tailwind CSS is already installed. Skipping Tailwind dependencies installation.');

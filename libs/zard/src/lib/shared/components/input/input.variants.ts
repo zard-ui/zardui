@@ -21,7 +21,7 @@ export const inputVariants = cva('w-full', {
       success: 'border-green-500 focus-visible:ring-green-500',
     },
     zBorderless: {
-      true: 'flex-1 bg-transparent border-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 px-0 py-0',
+      true: 'flex-1 bg-transparent border-0 outline-none focus-visible:ring-0 focus-visible:ring-offset-0 p-0',
     },
   },
   defaultVariants: {

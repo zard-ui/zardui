@@ -1,17 +1,20 @@
 import { Component } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+
+import { zardBoldIcon } from '@/shared/core';
+
 import { ZardToggleComponent } from './toggle.component';
-import { ZardIconComponent } from '../icon/icon.component';
 
 @Component({
-  imports: [ZardToggleComponent, ZardIconComponent],
-  standalone: true,
+  imports: [ZardToggleComponent, NgIcon],
   template: `
     <z-toggle aria-label="Test component" [zValue]="zValue" [zDefault]="zDefault" [disabled]="disabled">
-      <div z-icon zType="bold"></div>
+      <ng-icon name="bold" />
     </z-toggle>
   `,
+  viewProviders: [provideIcons({ bold: zardBoldIcon })],
 })
 class TestZardToggleComponent {
   zDefault = false;

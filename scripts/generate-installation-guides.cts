@@ -120,7 +120,8 @@ function generateCliInstallDepsMarkdown(dependencies: ComponentDependency[]): st
     'clsx',
     'tailwind-merge',
     'tailwindcss-animate',
-    'lucide-angular',
+    '@ng-icons/core',
+    '@ng-icons/lucide',
     'embla-carousel-angular',
     'embla-carousel-autoplay',
     'embla-carousel-class-names',
@@ -180,7 +181,8 @@ function generateManualInstallDepsMarkdown(dependencies: ComponentDependency[]):
     'clsx',
     'tailwind-merge',
     'tailwindcss-animate',
-    'lucide-angular',
+    '@ng-icons/core',
+    '@ng-icons/lucide',
   ];
 
   // Filter out basic dependencies - only create file for additional external dependencies

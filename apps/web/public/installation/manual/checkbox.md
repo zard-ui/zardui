@@ -14,6 +14,8 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardIdDirective } from '@/shared/core';
@@ -26,14 +28,13 @@ import {
   type ZardCheckboxSizeVariants,
   type ZardCheckboxTypeVariants,
 } from './checkbox.variants';
-import { ZardIconComponent } from '../icon/icon.component';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;
 
 @Component({
   selector: 'z-checkbox, [z-checkbox]',
-  imports: [ZardIconComponent, ZardIdDirective],
+  imports: [NgIcon, ZardIdDirective],
   template: `
     <main class="relative flex" zardId="checkbox" #z="zardId">
       <input
@@ -47,12 +48,10 @@ type OnChangeType = (value: boolean) => void;
         (blur)="onCheckboxBlur()"
         (click)="onCheckboxChange()"
       />
-      <z-icon
-        zType="check"
-        [class]="
-          'text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center transition-opacity ' +
-          (checked() ? 'opacity-100' : 'opacity-0')
-        "
+      <ng-icon
+        name="lucideCheck"
+        class="text-primary-foreground pointer-events-none absolute top-1/2 left-1/2 flex -translate-1/2 items-center justify-center transition-opacity"
+        [class]="checked() ? 'opacity-100' : 'opacity-0'"
       />
     </main>
     <label [class]="labelClasses()" [for]="z.id()">
@@ -68,6 +67,7 @@ type OnChangeType = (value: boolean) => void;
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideCheck })],
   host: {
     '[class]': "(disabled() ? 'cursor-not-allowed' : 'cursor-pointer') + ' flex items-center gap-2'",
     '[attr.aria-disabled]': 'disabled()',
@@ -134,7 +134,7 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const checkboxVariants = cva(
-  'cursor-[unset] peer appearance-none border transition shadow hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
+  'cursor-[unset] peer appearance-none border transition shadow-sm hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/50 disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
       zType: {
@@ -146,7 +146,7 @@ export const checkboxVariants = cva(
         lg: 'size-6',
       },
       zShape: {
-        default: 'rounded',
+        default: 'rounded-[4px]',
         circle: 'rounded-full',
         square: 'rounded-none',
       },

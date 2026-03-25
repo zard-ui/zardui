@@ -1,6 +1,8 @@
 import { AccordionContent, AccordionPanel, AccordionTrigger } from '@angular/aria/accordion';
 import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import type { ZardAccordionComponent } from '@/shared/components/accordion/accordion.component';
@@ -9,12 +11,11 @@ import {
   accordionItemVariants,
   accordionTriggerVariants,
 } from '@/shared/components/accordion/accordion.variants';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-accordion-item',
-  imports: [ZardIconComponent, AccordionPanel, AccordionTrigger, AccordionContent],
+  imports: [NgIcon, AccordionPanel, AccordionTrigger, AccordionContent],
   template: `
     <button
       type="button"
@@ -25,8 +26,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
       (click)="toggle()"
     >
       {{ zTitle() }}
-      <z-icon
-        [zType]="icon()"
+      <ng-icon
+        name="lucideChevronDown"
         class="text-muted-foreground pointer-events-none size-4 shrink-0 translate-y-0.5 transition-transform duration-200"
       />
     </button>
@@ -43,6 +44,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideChevronDown })],
   host: {
     '[class]': 'itemClasses()',
     '[attr.data-state]': "isOpen() ? 'open' : 'closed'",

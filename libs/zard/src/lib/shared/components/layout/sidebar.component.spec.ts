@@ -1,4 +1,4 @@
-import { Component, type TemplateRef, ViewChild } from '@angular/core';
+import { Component, type TemplateRef, viewChild } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By, EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
@@ -113,9 +113,9 @@ describe('SidebarComponent', () => {
     fixture.componentRef.setInput('zCollapsible', true);
     fixture.detectChanges();
 
-    const iconElement = fixture.debugElement.query(By.css('z-icon'));
+    const iconElement = fixture.debugElement.query(By.css('ng-icon'));
     expect(iconElement).toBeTruthy();
-    expect(iconElement.componentInstance.zType()).toBe('chevron-left');
+    expect(iconElement.componentInstance.name()).toBe('lucideChevronLeft');
   });
 
   it('should display correct chevron icon when collapsed', () => {
@@ -123,9 +123,9 @@ describe('SidebarComponent', () => {
     fixture.componentRef.setInput('zCollapsed', true);
     fixture.detectChanges();
 
-    const iconElement = fixture.debugElement.query(By.css('z-icon'));
+    const iconElement = fixture.debugElement.query(By.css('ng-icon'));
     expect(iconElement).toBeTruthy();
-    expect(iconElement.componentInstance.zType()).toBe('chevron-right');
+    expect(iconElement.componentInstance.name()).toBe('lucideChevronRight');
   });
 
   it('should reverse chevron icon when zReverseArrow is true', () => {
@@ -133,9 +133,9 @@ describe('SidebarComponent', () => {
     fixture.componentRef.setInput('zReverseArrow', true);
     fixture.detectChanges();
 
-    const iconElement = fixture.debugElement.query(By.css('z-icon'));
+    const iconElement = fixture.debugElement.query(By.css('ng-icon'));
     expect(iconElement).toBeTruthy();
-    expect(iconElement.componentInstance.zType()).toBe('chevron-right');
+    expect(iconElement.componentInstance.name()).toBe('lucideChevronRight');
   });
 
   it('should emit zCollapsedChange when toggle is clicked', () => {
@@ -192,19 +192,19 @@ describe('SidebarComponent', () => {
       template: `
         <z-sidebar [zCollapsible]="true" [zTrigger]="customTrigger">
           <ng-template #customTrigger>
-            <button class="custom-trigger">Custom Trigger</button>
+            <button type="button" id="custom-trigger">Custom Trigger</button>
           </ng-template>
         </z-sidebar>
       `,
     })
     class TestHostComponent {
-      @ViewChild('customTrigger', { static: true }) customTrigger!: TemplateRef<void>;
+      readonly customTrigger = viewChild.required<TemplateRef<void>>('customTrigger');
     }
 
     const hostFixture = TestBed.createComponent(TestHostComponent);
     hostFixture.detectChanges();
 
-    const customTriggerElement = hostFixture.debugElement.query(By.css('.custom-trigger'));
+    const customTriggerElement = hostFixture.debugElement.query(By.css('#custom-trigger'));
     expect(customTriggerElement).toBeTruthy();
     expect(customTriggerElement.nativeElement.textContent).toContain('Custom Trigger');
   });

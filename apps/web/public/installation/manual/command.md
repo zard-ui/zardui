@@ -15,12 +15,12 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import type { IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import { ZardCommandInputComponent } from '@/shared/components/command/command-input.component';
 import { ZardCommandOptionComponent } from '@/shared/components/command/command-option.component';
 import { commandVariants, type ZardCommandSizeVariants } from '@/shared/components/command/command.variants';
-import type { ZardIcon } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardCommandOption {
@@ -29,9 +29,9 @@ export interface ZardCommandOption {
   disabled?: boolean;
   command?: string;
   shortcut?: string;
-  icon?: ZardIcon;
+  icon?: IconName;
   action?: () => void;
-  key?: string; // Keyboard shortcut key (e.g., 'n' for Ctrl+N)
+  key?: string;
 }
 
 export interface ZardCommandGroup {
@@ -292,7 +292,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const commandVariants = cva(
-  'flex h-full w-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground',
+  'flex size-full flex-col overflow-hidden shadow-md border rounded-md bg-popover text-popover-foreground',
   {
     variants: {
       size: {
@@ -343,7 +343,7 @@ export const commandItemVariants = cva(
       variant: {
         default: '',
         destructive:
-          'aria-selected:bg-destructive aria-selected:text-destructive-foreground hover:bg-destructive hover:text-destructive-foreground',
+          'aria-selected:bg-destructive aria-selected:text-foreground hover:bg-destructive hover:text-foreground',
       },
     },
     defaultVariants: {
@@ -478,19 +478,20 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideSearch } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
 import { commandInputVariants } from '@/shared/components/command/command.variants';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-input',
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   template: `
     <div class="flex items-center border-b px-3" cmdk-input-wrapper="">
-      <z-icon zType="search" class="mr-2 shrink-0 opacity-50" />
+      <ng-icon name="lucideSearch" class="mr-2 size-4! shrink-0 opacity-50" />
       <input
         #searchInput
         [class]="classes()"
@@ -521,6 +522,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideSearch })],
   exportAs: 'zCommandInput',
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {
@@ -741,6 +743,7 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+import { NgIcon, type IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import type { ZardCommandOptionGroupComponent } from '@/shared/components/command/command-option-group.component';
@@ -750,12 +753,11 @@ import {
   commandShortcutVariants,
   type ZardCommandItemVariants,
 } from '@/shared/components/command/command.variants';
-import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-command-option',
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   template: `
     @if (isOptionVisible()) {
       <div
@@ -770,7 +772,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
-          <div z-icon [zType]="zIcon()!" class="mr-2 flex shrink-0 items-center justify-center"></div>
+          <ng-icon [name]="zIcon()!" class="mr-2 flex size-4! shrink-0 items-center justify-center" />
         }
         <span class="flex-1">{{ zLabel() }}</span>
         @if (zShortcut()) {
@@ -790,7 +792,7 @@ export class ZardCommandOptionComponent {
   readonly zValue = input.required<unknown>();
   readonly zLabel = input.required<string>();
   readonly zCommand = input<string>('');
-  readonly zIcon = input<ZardIcon>();
+  readonly zIcon = input<IconName>();
   readonly zShortcut = input<string>('');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly variant = input<ZardCommandItemVariants>('default');

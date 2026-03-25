@@ -21,7 +21,6 @@ export * from './lib/shared/components/divider';
 export * from './lib/shared/components/dropdown';
 export * from './lib/shared/components/empty';
 export * from './lib/shared/components/form';
-export * from './lib/shared/components/icon';
 export * from './lib/shared/components/input';
 export * from './lib/shared/components/input-group';
 export * from './lib/shared/components/kbd';

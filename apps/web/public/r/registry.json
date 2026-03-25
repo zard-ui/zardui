@@ -2,7 +2,7 @@
   "$schema": "https://zardui.com/schema/registry.json",
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.60",
+  "version": "1.0.0-beta.71",
   "items": [
     {
       "name": "core",
@@ -42,9 +42,6 @@
     {
       "name": "layout",
       "type": "registry:component",
-      "registryDependencies": [
-        "icon"
-      ],
       "files": [
         "layout.component.ts",
         "layout.variants.ts",
@@ -59,9 +56,6 @@
     {
       "name": "button",
       "type": "registry:component",
-      "registryDependencies": [
-        "icon"
-      ],
       "files": [
         "button.component.ts",
         "button.variants.ts",
@@ -72,8 +66,7 @@
       "name": "sheet",
       "type": "registry:component",
       "registryDependencies": [
-        "button",
-        "icon"
+        "button"
       ],
       "files": [
         "sheet.component.ts",
@@ -99,9 +92,6 @@
     {
       "name": "empty",
       "type": "registry:component",
-      "registryDependencies": [
-        "icon"
-      ],
       "files": [
         "empty.component.ts",
         "empty.variants.ts",
@@ -120,9 +110,6 @@
     {
       "name": "accordion",
       "type": "registry:component",
-      "registryDependencies": [
-        "icon"
-      ],
       "files": [
         "accordion.component.ts",
         "accordion-item.component.ts",
@@ -134,9 +121,6 @@
     {
       "name": "alert",
       "type": "registry:component",
-      "registryDependencies": [
-        "icon"
-      ],
       "files": [
         "alert.component.ts",
         "alert.variants.ts",
@@ -161,9 +145,6 @@
     {
       "name": "avatar",
       "type": "registry:component",
-      "registryDependencies": [
-        "icon"
-      ],
       "files": [
         "avatar.component.ts",
         "avatar-group.component.ts",
@@ -174,9 +155,6 @@
     {
       "name": "checkbox",
       "type": "registry:component",
-      "registryDependencies": [
-        "icon"
-      ],
       "files": [
         "checkbox.component.ts",
         "checkbox.variants.ts",
@@ -187,14 +165,14 @@
       "name": "dialog",
       "type": "registry:component",
       "registryDependencies": [
-        "button",
-        "icon"
+        "button"
       ],
       "files": [
         "dialog.component.ts",
         "dialog.service.ts",
         "dialog-ref.ts",
         "dialog.variants.ts",
+        "dialog.imports.ts",
         "index.ts"
       ]
     },
@@ -209,16 +187,6 @@
         "dropdown.imports.ts",
         "dropdown.service.ts",
         "dropdown.variants.ts",
-        "index.ts"
-      ]
-    },
-    {
-      "name": "icon",
-      "type": "registry:component",
-      "files": [
-        "icon.component.ts",
-        "icon.variants.ts",
-        "icons.ts",
         "index.ts"
       ]
     },
@@ -244,8 +212,7 @@
       "name": "select",
       "type": "registry:component",
       "registryDependencies": [
-        "badge",
-        "icon"
+        "badge"
       ],
       "files": [
         "select.component.ts",
@@ -268,8 +235,7 @@
       "name": "tabs",
       "type": "registry:component",
       "registryDependencies": [
-        "button",
-        "icon"
+        "button"
       ],
       "files": [
         "tabs.component.ts",
@@ -300,9 +266,6 @@
     {
       "name": "breadcrumb",
       "type": "registry:component",
-      "registryDependencies": [
-        "icon"
-      ],
       "files": [
         "breadcrumb.component.ts",
         "breadcrumb.imports.ts",
@@ -359,7 +322,6 @@
       "name": "calendar",
       "type": "registry:component",
       "registryDependencies": [
-        "icon",
         "select"
       ],
       "files": [
@@ -380,8 +342,7 @@
         "command",
         "popover",
         "empty",
-        "input",
-        "icon"
+        "input"
       ],
       "files": [
         "combobox.component.ts",
@@ -392,9 +353,6 @@
     {
       "name": "command",
       "type": "registry:component",
-      "registryDependencies": [
-        "icon"
-      ],
       "files": [
         "command.component.ts",
         "command-input.component.ts",
@@ -415,8 +373,7 @@
         "button",
         "calendar",
         "popover",
-        "input",
-        "icon"
+        "input"
       ],
       "files": [
         "date-picker.component.ts",
@@ -438,8 +395,7 @@
       "name": "pagination",
       "type": "registry:component",
       "registryDependencies": [
-        "button",
-        "icon"
+        "button"
       ],
       "files": [
         "pagination.component.ts",
@@ -513,8 +469,7 @@
       "name": "toggle-group",
       "type": "registry:component",
       "registryDependencies": [
-        "toggle",
-        "icon"
+        "toggle"
       ],
       "files": [
         "toggle-group.component.ts",
@@ -571,8 +526,7 @@
         "embla-carousel-wheel-gestures"
       ],
       "registryDependencies": [
-        "button",
-        "icon"
+        "button"
       ],
       "files": [
         "carousel.component.ts",
@@ -588,7 +542,6 @@
       "name": "tree",
       "type": "registry:component",
       "registryDependencies": [
-        "icon",
         "checkbox"
       ],
       "files": [

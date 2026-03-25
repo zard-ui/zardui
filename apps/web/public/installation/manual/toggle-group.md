@@ -2,29 +2,30 @@
 
 ```angular-ts title="toggle-group.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
   forwardRef,
   input,
+  linkedSignal,
   output,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { NgIcon, type IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 export interface ZardToggleGroupItem {
   value: string;
   label?: string;
-  icon?: ZardIcon;
+  icon?: IconName;
   disabled?: boolean;
   ariaLabel?: string;
 }
@@ -34,8 +35,7 @@ type OnChangeType = (value: string | string[]) => void;
 
 @Component({
   selector: 'z-toggle-group',
-  imports: [ZardIconComponent],
-  standalone: true,
+  imports: [NgIcon],
   template: `
     <div [class]="classes()" role="group" [attr.data-orientation]="'horizontal'">
       @for (item of items(); track item.value; let i = $index) {
@@ -45,11 +45,11 @@ type OnChangeType = (value: string | string[]) => void;
           [attr.data-state]="isItemPressed(item.value) ? 'on' : 'off'"
           [attr.aria-label]="item.ariaLabel"
           [class]="getItemClasses(i, items().length)"
-          [disabled]="disabled() || item.disabled"
+          [disabled]="disabledState() || item.disabled"
           (click)="toggleItem(item)"
         >
           @if (item.icon) {
-            <span z-icon [zType]="item.icon" class="h-4 w-4 shrink-0"></span>
+            <ng-icon [name]="item.icon" class="size-4! shrink-0" />
           }
           @if (item.label) {
             <span>{{ item.label }}</span>
@@ -77,12 +77,13 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
   readonly zSize = input<'sm' | 'md' | 'lg'>('md');
   readonly value = input<string | string[]>();
   readonly defaultValue = input<string | string[]>();
-  readonly disabled = input<boolean>(false);
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
   readonly items = input<ZardToggleGroupItem[]>([]);
 
   readonly valueChange = output<string | string[]>();
 
+  protected readonly disabledState = linkedSignal(() => this.zDisabled());
   private readonly internalValue = signal<string | string[] | undefined>(undefined);
 
   protected readonly classes = computed(() =>
@@ -121,7 +122,6 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
 
     const positionClasses = [];
 
-    // Add rounded corners for first and last items
     if (index === 0) {
       positionClasses.push('first:rounded-l-md');
     }
@@ -129,18 +129,14 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
       positionClasses.push('last:rounded-r-md');
     }
 
-    // Handle borders for outline variant
     if (this.zType() === 'outline') {
       if (index === 0) {
-        // First item gets full border
         positionClasses.push('border-l');
       } else {
-        // Other items don't get left border (connects to previous)
         positionClasses.push('border-l-0');
       }
     }
 
-    // Focus z-index
     positionClasses.push('focus:z-10', 'focus-visible:z-10');
 
     return mergeClasses(baseClasses, ...positionClasses);
@@ -160,7 +156,7 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
   private onChangeFn: OnChangeType = () => {};
 
   toggleItem(item: ZardToggleGroupItem) {
-    if (this.disabled() || item.disabled) {
+    if (this.disabledState() || item.disabled) {
       return;
     }
 
@@ -198,9 +194,8 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  setDisabledState(): void {
-    // Note: disabled state is handled through the disabled input
-    // This method is required by ControlValueAccessor interface
+  setDisabledState(isDisabled: boolean): void {
+    this.disabledState.set(isDisabled);
   }
 }
 

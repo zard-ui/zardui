@@ -7,7 +7,6 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
 @Component({
   selector: 'z-demo-breadcrumb-ellipsis',
   imports: [ZardBreadcrumbImports, ZardMenuImports],
-  standalone: true,
   template: `
     <z-breadcrumb>
       <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>

@@ -1,3 +1,89 @@
+## 1.0.0-beta.72 (2026-03-24)
+
+### 🐛 Bug Fixes
+
+- **ui:** rename disabled input to zDisabled and implement setDisabledState ([#494](https://github.com/zard-ui/zardui/pull/494))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
+## 1.0.0-beta.71 (2026-03-24)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.70 (2026-03-24)
+
+### 🐛 Bug Fixes
+
+- **cli:** use cross-platform shebang injection ([63e51a4](https://github.com/zard-ui/zardui/commit/63e51a4))
+
+### ❤️ Thank You
+
+- Luiz Gomes
+
+## 1.0.0-beta.69 (2026-03-24)
+
+### 🐛 Bug Fixes
+
+- **cli:** ensure tailwindcss-animate is installed ([2b1a237](https://github.com/zard-ui/zardui/commit/2b1a237))
+
+### ❤️ Thank You
+
+- Luiz Gomes
+
+## 1.0.0-beta.68 (2026-03-22)
+
+### ✨ Features
+
+- **ui:** migrate icon component from lucide-angular to ng-icons ([#482](https://github.com/zard-ui/zardui/pull/482))
+
+### 🐛 Bug Fixes
+
+- remove icon component export ([02bac8d](https://github.com/zard-ui/zardui/commit/02bac8d))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+- Luiz Gomes
+- Mickey Lazarevic
+
+## 1.0.0-beta.67 (2026-03-21)
+
+### 🐛 Bug Fixes
+
+- update github links on roadmap page ([#493](https://github.com/zard-ui/zardui/pull/493))
+
+### ❤️ Thank You
+
+- Florian Veltmann
+
+## 1.0.0-beta.66 (2026-03-11)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.65 (2026-03-09)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.64 (2026-03-08)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.63 (2026-03-05)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.62 (2026-03-05)
+
+### 🐛 Bug Fixes
+
+- **dropdown:** set aria-expanded only on active trigger ([#476](https://github.com/zard-ui/zardui/pull/476))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
 ## 1.0.0-beta.61 (2026-02-26)
 
 ### ✨ Features

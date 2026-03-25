@@ -1,9 +1,11 @@
 ```angular-ts showLineNumbers copyButton
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCopy, lucideEye } from '@ng-icons/lucide';
+
 import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardIconComponent } from '@/shared/components/icon/icon.component';
 import { ZardTableImports } from '@/shared/components/table/table.imports';
 
 export interface Payment {
@@ -15,7 +17,7 @@ export interface Payment {
 
 @Component({
   selector: 'z-demo-table-payments',
-  imports: [ZardTableImports, ZardBadgeComponent, ZardButtonComponent, ZardIconComponent],
+  imports: [ZardTableImports, ZardBadgeComponent, ZardButtonComponent, NgIcon],
   template: `
     <div class="w-full">
       <div class="overflow-hidden rounded-md border">
@@ -45,10 +47,10 @@ export interface Payment {
                 <td z-table-cell>
                   <div class="flex items-center gap-2">
                     <z-button zType="ghost" (click)="copyPaymentId(payment.id)" title="Copy payment ID">
-                      <div z-icon zType="copy"></div>
+                      <ng-icon name="lucideCopy" />
                     </z-button>
                     <z-button zType="ghost" (click)="viewDetails(payment)" title="View details">
-                      <div z-icon zType="eye"></div>
+                      <ng-icon name="lucideEye" />
                     </z-button>
                   </div>
                 </td>
@@ -64,6 +66,7 @@ export interface Payment {
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCopy, lucideEye })],
 })
 export class ZardDemoTablePaymentsComponent {
   payments: Payment[] = [

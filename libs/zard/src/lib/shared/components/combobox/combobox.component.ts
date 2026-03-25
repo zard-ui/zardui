@@ -10,6 +10,7 @@ import {
   inject,
   Injector,
   input,
+  linkedSignal,
   output,
   runInInjectionContext,
   signal,
@@ -18,6 +19,8 @@ import {
 } from '@angular/core';
 import { type ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { NgIcon, provideIcons, type IconName } from '@ng-icons/core';
+import { lucideCheck, lucideChevronsUpDown } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardButtonComponent, type ZardButtonTypeVariants } from '@/shared/components/button';
@@ -32,7 +35,6 @@ import {
   type ZardCommandOption,
 } from '@/shared/components/command';
 import { ZardEmptyComponent } from '@/shared/components/empty';
-import { ZardIconComponent, type ZardIcon } from '@/shared/components/icon';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/popover';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -40,7 +42,7 @@ export interface ZardComboboxOption {
   value: string;
   label: string;
   disabled?: boolean;
-  icon?: ZardIcon;
+  icon?: IconName;
 }
 
 export interface ZardComboboxGroup {
@@ -53,6 +55,7 @@ export interface ZardComboboxGroup {
   imports: [
     FormsModule,
     NgTemplateOutlet,
+    NgIcon,
     ZardButtonComponent,
     ZardCommandComponent,
     ZardCommandInputComponent,
@@ -63,7 +66,6 @@ export interface ZardComboboxGroup {
     ZardPopoverDirective,
     ZardPopoverComponent,
     ZardEmptyComponent,
-    ZardIconComponent,
   ],
   template: `
     <button
@@ -74,7 +76,7 @@ export interface ZardComboboxGroup {
       [zContent]="popoverContent"
       [zType]="buttonVariant()"
       [class]="buttonClasses()"
-      [zDisabled]="disabled()"
+      [zDisabled]="disabledState()"
       [attr.aria-expanded]="open()"
       [attr.aria-haspopup]="'listbox'"
       [attr.aria-controls]="'combobox-listbox'"
@@ -88,7 +90,7 @@ export interface ZardComboboxGroup {
       <span class="flex-1 truncate text-left">
         {{ displayValue() ?? placeholder() }}
       </span>
-      <z-icon zType="chevrons-up-down" class="ml-2 shrink-0 opacity-50" />
+      <ng-icon name="lucideChevronsUpDown" class="ml-2 shrink-0 opacity-50" />
     </button>
 
     <ng-template #popoverContent>
@@ -160,7 +162,7 @@ export interface ZardComboboxGroup {
       >
         {{ option.label }}
         @if (option.value === currentValue()) {
-          <z-icon zType="check" class="ml-auto" />
+          <ng-icon name="lucideCheck" class="ml-auto" />
         }
       </z-command-option>
     </ng-template>
@@ -174,6 +176,7 @@ export interface ZardComboboxGroup {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideChevronsUpDown, lucideCheck })],
   host: {
     '[class]': 'classes()',
     '(document:keydown.escape)': 'onDocumentKeyDown($event)',
@@ -192,7 +195,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   readonly placeholder = input<string>('Select...');
   readonly searchPlaceholder = input<string>('Search...');
   readonly emptyText = input<string>('No results found.');
-  readonly disabled = input(false, { transform: booleanAttribute });
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly searchable = input(true, { transform: booleanAttribute });
   readonly value = input<string | null>(null);
   readonly options = input<ZardComboboxOption[]>([]);
@@ -208,8 +211,9 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   readonly commandRef = viewChild('commandRef', { read: ZardCommandComponent });
   readonly commandInputRef = viewChild('commandInputRef', { read: ZardCommandInputComponent });
 
-  protected readonly open = signal(false);
+  protected readonly disabledState = linkedSignal(() => this.zDisabled());
   protected readonly internalValue = signal<string | null>(null);
+  protected readonly open = signal(false);
 
   protected readonly classes = computed(() =>
     mergeClasses(
@@ -328,7 +332,7 @@ export class ZardComboboxComponent implements ControlValueAccessor {
   }
 
   onKeyDown(e: Event) {
-    if (this.disabled()) {
+    if (this.disabledState()) {
       return;
     }
 
@@ -408,5 +412,9 @@ export class ZardComboboxComponent implements ControlValueAccessor {
 
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
+  }
+
+  setDisabledState(isDisabled: boolean): void {
+    this.disabledState.set(isDisabled);
   }
 }

@@ -2,11 +2,11 @@
 import { ChangeDetectionStrategy, Component, inject, type AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ZardButtonComponent } from '../../button/button.component';
+import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
+
 import { ZardInputDirective } from '../../input/input.directive';
 import { ZardSelectItemComponent } from '../../select/select-item.component';
 import { ZardSelectComponent } from '../../select/select.component';
-import { ZardDialogModule } from '../dialog.component';
 import { Z_MODAL_DATA, ZardDialogService } from '../dialog.service';
 
 interface iDialogData {
@@ -76,7 +76,7 @@ export class ZardDemoDialogBasicInputComponent implements AfterViewInit {
 }
 
 @Component({
-  imports: [ZardButtonComponent, ZardDialogModule],
+  imports: [ZardDialogImports],
   template: `
     <button type="button" z-button zType="outline" (click)="openDialog()">Edit profile</button>
   `,

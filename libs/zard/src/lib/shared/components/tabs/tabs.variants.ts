@@ -16,7 +16,7 @@ export const tabContainerVariants = cva('flex', {
   },
 });
 
-export const tabNavVariants = cva('flex gap-4 overflow-auto scroll nav-tab-scroll', {
+export const tabNavVariants = cva('flex gap-4 overflow-auto', {
   variants: {
     zPosition: {
       top: 'flex-row border-b mb-4',
@@ -36,7 +36,7 @@ export const tabNavVariants = cva('flex gap-4 overflow-auto scroll nav-tab-scrol
   },
 });
 
-export const tabButtonVariants = cva('hover:bg-transparent rounded-none flex-shrink-0', {
+export const tabButtonVariants = cva('hover:bg-transparent rounded-none shrink-0', {
   variants: {
     zActivePosition: {
       top: '',

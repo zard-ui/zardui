@@ -10,6 +10,7 @@ import { May2025Component } from './2025/may-2025.component';
 import { November2025Component } from './2025/november-2025.component';
 import { October2025Component } from './2025/october-2025.component';
 import { September2025Component } from './2025/september-2025.component';
+import { March2026Component } from './2026/march-2026.component';
 import { type ChangelogEntryComponent, type ChangelogEntryConfig } from './changelog-entry.interface';
 
 /**
@@ -22,6 +23,7 @@ import { type ChangelogEntryComponent, type ChangelogEntryConfig } from './chang
  * - examples: ChangelogExample[] (components to showcase with demos)
  */
 const CHANGELOG_COMPONENTS: Record<string, Type<ChangelogEntryComponent>> = {
+  '03-2026': March2026Component,
   '12-2025': December2025Component,
   '11-2025': November2025Component,
   '10-2025': October2025Component,

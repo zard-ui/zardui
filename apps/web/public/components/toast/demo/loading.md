@@ -10,7 +10,7 @@ import { ZardButtonComponent } from '../../button/button.component';
   imports: [ZardButtonComponent],
   standalone: true,
   template: `
-    <button z-button zType="outline" (click)="showToast()">Show Loading Toast</button>
+    <button type="button" z-button zType="outline" (click)="showToast()">Show Loading Toast</button>
   `,
 })
 export class ZardDemoToastLoadingComponent {

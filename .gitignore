@@ -72,9 +72,15 @@ pnpm-lock.yaml
 /playwright-report/
 /blob-report/
 /playwright/.cache/
-.cocoindex_code/target_sqlite.db
-.cocoindex_code/cocoindex.db/mdb/data.mdb
-.cocoindex_code/cocoindex.db/mdb/lock.mdb
 .nvmrc
 opencode.jsonc
 opencode.json
+
+# Dolt database files (added by bd init)
+.dolt/
+*.db
+# CocoIndex Code (ccc)
+/.cocoindex_code/
+/node-compile-cache/
+.github/hooks/context-mode.json
+tsconfig.tsbuildinfo
