@@ -117,6 +117,5 @@ export class ZardInputDirective implements ControlValueAccessor {
   writeValue(value?: string): void {
     const newValue = value ?? '';
     this.value.set(newValue);
-    this.elementRef.nativeElement.value = newValue;
   }
 }
