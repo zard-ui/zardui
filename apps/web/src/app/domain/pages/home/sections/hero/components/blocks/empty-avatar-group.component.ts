@@ -10,7 +10,6 @@ import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
 
 @Component({
   selector: 'z-block-empty-avatar-group',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardEmptyComponent, ZardAvatarComponent, ZardButtonComponent, NgIcon, ZardAvatarGroupComponent],
   viewProviders: [provideIcons({ lucidePlus })],
@@ -25,11 +24,11 @@ import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
         <z-avatar-group
           class="*:data-[slot=avatar]:ring-background *:data-[slot=avatar]:size-12 *:data-[slot=avatar]:grayscale"
         >
-          <z-avatar zSrc="https://github.com/neopavan.png" zAlt="@neopavan" />
-          <z-avatar zSrc="https://github.com/mikij.png" zAlt="@mikij" />
-          <z-avatar zSrc="https://github.com/ribeiromatheuss.png" zAlt="@ribeiromatheuss" />
-          <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" />
-          <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess" />
+          <z-avatar zSrc="https://github.com/neopavan.png" zAlt="@neopavan" zSize="md" />
+          <z-avatar zSrc="https://github.com/mikij.png" zAlt="@mikij" zSize="md" />
+          <z-avatar zSrc="https://github.com/ribeiromatheuss.png" zAlt="@ribeiromatheuss" zSize="md" />
+          <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zSize="md" />
+          <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess" zSize="md" />
         </z-avatar-group>
       </ng-template>
 
