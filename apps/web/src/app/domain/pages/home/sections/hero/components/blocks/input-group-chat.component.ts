@@ -11,7 +11,6 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
 
 @Component({
   selector: 'z-block-input-group-chat',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ZardButtonComponent,

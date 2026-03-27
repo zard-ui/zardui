@@ -8,7 +8,6 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 
 @Component({
   selector: 'z-hero-header',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [RouterModule, ZardButtonComponent, NgIcon],
   viewProviders: [provideIcons({ lucideArrowRight })],

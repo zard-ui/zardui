@@ -35,9 +35,8 @@ import { ZardIdDirective } from '@zard/core';
           z-button
           type="button"
           zType="secondary"
-          zSize="sm"
+          zSize="icon-sm"
           zShape="circle"
-          class="size-6!"
           aria-label="Info"
           zPopover
           [zContent]="popoverContent"
@@ -59,9 +58,8 @@ import { ZardIdDirective } from '@zard/core';
           z-button
           type="button"
           zType="ghost"
-          zSize="sm"
+          zSize="icon-sm"
           zShape="circle"
-          class="size-6!"
           [attr.aria-label]="isFavorite() ? 'Remove favorite' : 'Add favorite'"
           [attr.aria-pressed]="isFavorite()"
           (click)="toggleFavorite()"

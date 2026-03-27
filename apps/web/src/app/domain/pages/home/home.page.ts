@@ -8,7 +8,6 @@ import { NewHeroComponent } from './sections/hero/hero.component';
 
 @Component({
   selector: 'z-home',
-  standalone: true,
   imports: [RouterModule, NewHeroComponent],
   template: `
     <z-new-hero></z-new-hero>

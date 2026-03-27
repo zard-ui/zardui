@@ -12,7 +12,6 @@ import { ThemeGeneratorService } from '../../../../themes/services/theme-generat
 
 @Component({
   selector: 'z-hero-examples-grid',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     RouterOutlet,

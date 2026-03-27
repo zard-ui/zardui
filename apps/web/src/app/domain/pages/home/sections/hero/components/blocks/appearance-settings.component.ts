@@ -73,7 +73,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
             <input
               z-input
               id="number-of-gpus"
-              class="dark:bg-input/30 h-7! w-14! font-mono dark:*:bg-transparent!"
+              class="dark:bg-input/30 h-7! w-14! text-center font-mono dark:*:bg-transparent!"
               size="3"
               maxlength="3"
               [value]="gpuCount().toString()"
@@ -83,8 +83,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
               z-button
               type="button"
               zType="outline"
-              zSize="sm"
-              class="size-7!"
+              zSize="icon-sm"
               aria-label="Decrement"
               [disabled]="isAtMin()"
               (click)="decrementGpu()"
@@ -95,8 +94,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
               z-button
               type="button"
               zType="outline"
-              zSize="sm"
-              class="size-7!"
+              zSize="icon-sm"
               aria-label="Increment"
               [disabled]="isAtMax()"
               (click)="incrementGpu()"

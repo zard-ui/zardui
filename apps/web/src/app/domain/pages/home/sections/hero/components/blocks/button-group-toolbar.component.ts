@@ -42,7 +42,7 @@ import { ZardDropdownImports } from '@zard/components/dropdown';
   template: `
     <z-button-group>
       <z-button-group class="hidden sm:flex">
-        <button z-button zType="outline" zSize="sm" class="size-7!" aria-label="Go Back">
+        <button z-button zType="outline" zSize="icon-sm" aria-label="Go Back">
           <ng-icon name="lucideArrowLeft" />
         </button>
       </z-button-group>
@@ -55,8 +55,8 @@ import { ZardDropdownImports } from '@zard/components/dropdown';
         <button
           z-button
           zType="outline"
-          zSize="sm"
-          class="size-7! rounded-r-md!"
+          zSize="icon-sm"
+          class="rounded-r-md!"
           aria-label="More Options"
           z-dropdown
           [zDropdownMenu]="moreOptionsMenu"

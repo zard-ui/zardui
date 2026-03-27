@@ -12,7 +12,6 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
 
 @Component({
   selector: 'z-block-input-group-stack',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ZardButtonComponent,
@@ -20,7 +19,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
     ZardInputDirective,
     NgIcon,
     ZardDividerComponent,
-    ...ZardDropdownImports,
+    ZardDropdownImports,
     ZardTooltipDirective,
   ],
   viewProviders: [provideIcons({ lucideSearch, lucideInfo, lucidePlus, lucideArrowUp, lucideCheck })],
@@ -61,10 +60,9 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
         type="button"
         z-button
         zType="ghost"
-        zSize="sm"
+        zSize="icon-sm"
         zShape="circle"
         zTooltip="This is content in a tooltip."
-        class="size-6!"
         aria-label="Info"
       >
         <ng-icon name="lucideInfo" />
@@ -73,7 +71,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
 
     <ng-template #textareaActions>
       <div class="flex w-full items-center">
-        <button type="button" z-button zType="outline" zShape="circle" class="size-6!" aria-label="Add">
+        <button type="button" z-button zType="outline" zShape="circle" zSize="icon-sm" aria-label="Add">
           <ng-icon name="lucidePlus" />
         </button>
         <button type="button" z-button zType="ghost" zSize="sm" z-dropdown [zDropdownMenu]="menu">Auto</button>
@@ -84,7 +82,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
         </z-dropdown-menu-content>
         <span class="text-muted-foreground ml-auto text-sm">52% used</span>
         <z-divider zOrientation="vertical" class="mx-2 h-4!" />
-        <button type="button" z-button zType="default" zShape="circle" class="size-6!" aria-label="Send">
+        <button type="button" z-button zType="default" zShape="circle" zSize="icon-sm" aria-label="Send">
           <ng-icon name="lucideArrowUp" />
         </button>
       </div>

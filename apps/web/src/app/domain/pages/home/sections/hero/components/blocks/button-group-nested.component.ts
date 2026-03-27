@@ -8,7 +8,6 @@ import { ZardButtonGroupComponent } from '@zard/components/button-group/button-g
 
 @Component({
   selector: 'z-block-button-group-nested',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardButtonComponent, ZardButtonGroupComponent, NgIcon],
   viewProviders: [provideIcons({ lucideArrowLeft, lucideArrowRight })],
@@ -20,10 +19,10 @@ import { ZardButtonGroupComponent } from '@zard/components/button-group/button-g
         <button z-button zType="outline" zSize="sm">3</button>
       </z-button-group>
       <z-button-group>
-        <button z-button zType="outline" zSize="sm" class="size-7!" aria-label="Previous">
+        <button z-button zType="outline" zSize="icon-sm" aria-label="Previous">
           <ng-icon name="lucideArrowLeft" />
         </button>
-        <button z-button zType="outline" zSize="sm" class="size-7!" aria-label="Next">
+        <button z-button zType="outline" zSize="icon-sm" aria-label="Next">
           <ng-icon name="lucideArrowRight" />
         </button>
       </z-button-group>

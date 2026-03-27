@@ -50,7 +50,6 @@ interface NavTab {
             type="button"
             z-button
             zType="secondary"
-            zSize="sm"
             id="theme-selector"
             class="gap-2"
             z-dropdown
@@ -78,8 +77,8 @@ interface NavTab {
             type="button"
             z-button
             zType="secondary"
-            zSize="sm"
-            class="hidden size-8! sm:flex"
+            zSize="icon"
+            class="hidden sm:flex"
             [attr.aria-label]="copyError() ? 'Copy failed' : copied() ? 'Copied!' : 'Copy theme CSS'"
             (click)="copyThemeCss()"
           >

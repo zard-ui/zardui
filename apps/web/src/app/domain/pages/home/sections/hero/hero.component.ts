@@ -6,7 +6,6 @@ import { HeroNavTabsComponent } from './components/hero-nav-tabs.component';
 
 @Component({
   selector: 'z-new-hero',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [HeroHeaderComponent, HeroNavTabsComponent, HeroExamplesGridComponent],
   template: `

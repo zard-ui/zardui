@@ -10,7 +10,6 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
 
 @Component({
   selector: 'z-block-button-group-popover',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ZardButtonComponent,
@@ -24,14 +23,14 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
   template: `
     <z-button-group>
       <button z-button zType="outline" zSize="sm">
-        <ng-icon name="lucideBot" />
-        Copilot
+        <ng-icon name="lucideBot" class="size-4!" />
+        <span>Copilot</span>
       </button>
       <button
         z-button
         zType="outline"
-        zSize="sm"
-        class="size-7! rounded-r-md!"
+        zSize="icon-sm"
+        class="rounded-r-md!"
         aria-label="Open Popover"
         zPopover
         [zContent]="popoverContent"
