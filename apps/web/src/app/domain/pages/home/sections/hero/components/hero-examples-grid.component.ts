@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject, viewChild, effect, ElementRef, untracked } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 
 import {
@@ -34,7 +34,7 @@ import { ThemeGeneratorService } from '../../../../themes/services/theme-generat
         </section>
 
         <!-- Desktop Content (from router) -->
-        <section class="theme-container hidden md:block" [style]="themeService.scopedStyles()">
+        <section #sec class="theme-container hidden md:block">
           <router-outlet />
         </section>
       </div>
@@ -43,4 +43,18 @@ import { ThemeGeneratorService } from '../../../../themes/services/theme-generat
 })
 export class HeroExamplesGridComponent {
   protected readonly themeService = inject(ThemeGeneratorService);
+  private readonly sectionRef = viewChild<ElementRef>('sec');
+
+  constructor() {
+    let onInit = true;
+    effect(() => {
+      const style = this.themeService.scopedStyles();
+      const section = untracked(this.sectionRef);
+
+      if (!onInit && section) {
+        section.nativeElement.style = style;
+      }
+      onInit = false;
+    });
+  }
 }

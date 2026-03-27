@@ -17,9 +17,8 @@ interface NavTab {
 
 @Component({
   selector: 'z-hero-nav-tabs',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterModule, ZardButtonComponent, NgIcon, ...ZardDropdownImports],
+  imports: [RouterModule, ZardButtonComponent, NgIcon, ZardDropdownImports],
   viewProviders: [provideIcons({ lucideChevronDown, lucideCheck, lucideX, lucideCopy })],
   template: `
     <div class="container-wrapper hidden scroll-mt-24 md:flex">
