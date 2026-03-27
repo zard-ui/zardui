@@ -1,10 +1,25 @@
 import { Component, ChangeDetectionStrategy, signal, computed } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideArrowUp,
+  lucideAtSign,
+  lucideBookOpen,
+  lucideCheck,
+  lucideChevronRight,
+  lucideCircleDashed,
+  lucideGlobe,
+  lucideLayers,
+  lucidePaperclip,
+  lucidePlus,
+  lucideSearch,
+  lucideX,
+} from '@ng-icons/lucide';
+
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDropdownImports } from '@zard/components/dropdown';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
@@ -49,12 +64,28 @@ const SAMPLE_DATA = {
     ZardBadgeComponent,
     ZardButtonComponent,
     ...ZardDropdownImports,
-    ZardIconComponent,
+    NgIcon,
     ZardInputDirective,
     ZardInputGroupComponent,
     ZardSwitchComponent,
     ZardTooltipDirective,
     ZardIdDirective,
+  ],
+  viewProviders: [
+    provideIcons({
+      lucideAtSign,
+      lucideSearch,
+      lucideX,
+      lucidePaperclip,
+      lucideGlobe,
+      lucideCheck,
+      lucideChevronRight,
+      lucideLayers,
+      lucideCircleDashed,
+      lucideBookOpen,
+      lucidePlus,
+      lucideArrowUp,
+    }),
   ],
   template: `
     <form class="[--radius:1.2rem]" zardId="notion-prompt" #z="zardId">
@@ -83,7 +114,7 @@ const SAMPLE_DATA = {
               [zDropdownMenu]="mentionMenu"
               [class]="hasMentions() ? 'size-8!' : ''"
             >
-              <z-icon zType="at-sign" />
+              <ng-icon name="lucideAtSign" />
               @if (!hasMentions()) {
                 Add context
               }
@@ -91,7 +122,7 @@ const SAMPLE_DATA = {
             <z-dropdown-menu-content #mentionMenu="zDropdownMenuContent" class="w-64 p-0 [--radius:1.2rem]">
               <div class="p-2">
                 <div class="bg-muted/50 mb-2 flex items-center gap-2 rounded-md px-2 py-1.5">
-                  <z-icon zType="search" class="text-muted-foreground size-4" />
+                  <ng-icon name="lucideSearch" class="text-muted-foreground size-4" />
                   <span class="text-muted-foreground text-sm">Search pages...</span>
                 </div>
               </div>
@@ -133,7 +164,7 @@ const SAMPLE_DATA = {
                       <z-avatar [zSrc]="item.image" class="size-4" />
                     }
                     {{ item.title }}
-                    <z-icon zType="x" />
+                    <ng-icon name="lucideX" />
                   </button>
                 }
               }
@@ -154,7 +185,7 @@ const SAMPLE_DATA = {
               zTooltip="Attach file"
               aria-label="Attach file"
             >
-              <z-icon zType="paperclip" />
+              <ng-icon name="lucidePaperclip" />
             </button>
 
             <!-- Model Selector -->
@@ -187,7 +218,7 @@ const SAMPLE_DATA = {
                     </z-badge>
                   }
                   @if (selectedModel().name === model.name) {
-                    <z-icon zType="check" class="size-4" />
+                    <ng-icon name="lucideCheck" class="size-4" />
                   }
                 </z-dropdown-menu-item>
               }
@@ -203,13 +234,13 @@ const SAMPLE_DATA = {
               z-dropdown
               [zDropdownMenu]="sourcesMenu"
             >
-              <z-icon zType="globe" />
+              <ng-icon name="lucideGlobe" />
               All Sources
             </button>
             <z-dropdown-menu-content #sourcesMenu="zDropdownMenuContent" class="w-64 [--radius:1rem]">
               <div class="flex items-center justify-between px-2 py-1.5">
                 <label [attr.for]="z.id() + '-web-search'" class="flex items-center gap-2">
-                  <z-icon zType="globe" class="size-4" />
+                  <ng-icon name="lucideGlobe" class="size-4" />
                   <span class="text-sm">Web Search</span>
                 </label>
                 <z-switch [zId]="z.id() + '-web-search'" />
@@ -217,27 +248,27 @@ const SAMPLE_DATA = {
               <div class="bg-border my-1 h-px"></div>
               <div class="flex items-center justify-between px-2 py-1.5">
                 <label [attr.for]="z.id() + '-apps'" class="flex items-center gap-2">
-                  <z-icon zType="layers" class="size-4" />
+                  <ng-icon name="lucideLayers" class="size-4" />
                   <span class="text-sm">Apps and Integrations</span>
                 </label>
                 <z-switch [zId]="z.id() + '-apps'" />
               </div>
               <z-dropdown-menu-item>
-                <z-icon zType="circle-dashed" class="size-4" />
+                <ng-icon name="lucideCircleDashed" class="size-4" />
                 All Sources I can access
               </z-dropdown-menu-item>
               <z-dropdown-menu-item>
                 <z-avatar zSrc="https://github.com/shadcn.png" class="size-4" />
                 <span class="flex-1">shadcn</span>
-                <z-icon zType="chevron-right" class="size-4" />
+                <ng-icon name="lucideChevronRight" class="size-4" />
               </z-dropdown-menu-item>
               <z-dropdown-menu-item>
-                <z-icon zType="book-open" class="size-4" />
+                <ng-icon name="lucideBookOpen" class="size-4" />
                 Help Center
               </z-dropdown-menu-item>
               <div class="bg-border my-1 h-px"></div>
               <z-dropdown-menu-item>
-                <z-icon zType="plus" class="size-4" />
+                <ng-icon name="lucidePlus" class="size-4" />
                 Connect Apps
               </z-dropdown-menu-item>
               <z-dropdown-menu-label class="text-muted-foreground text-xs">
@@ -247,7 +278,7 @@ const SAMPLE_DATA = {
 
             <!-- Send Button -->
             <button type="button" z-button zSize="sm" zShape="circle" class="ml-auto" aria-label="Send">
-              <z-icon zType="arrow-up" />
+              <ng-icon name="lucideArrowUp" />
             </button>
           </div>
         </ng-template>

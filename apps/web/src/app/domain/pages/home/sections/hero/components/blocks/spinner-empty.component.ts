@@ -1,14 +1,17 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideLoaderCircle } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 @Component({
   selector: 'z-block-spinner-empty',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardButtonComponent, ZardEmptyComponent, ZardIconComponent],
+  imports: [ZardButtonComponent, ZardEmptyComponent, NgIcon],
+  viewProviders: [provideIcons({ lucideLoaderCircle })],
   template: `
     <z-empty
       zTitle="Processing your request"
@@ -21,7 +24,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
     <ng-template #spinnerTemplate>
       <div class="bg-muted text-foreground mb-2 flex size-10 shrink-0 items-center justify-center rounded-lg">
-        <z-icon zType="loader-circle" class="size-4 animate-spin" />
+        <ng-icon name="lucideLoaderCircle" class="size-4 animate-spin" />
       </div>
     </ng-template>
   `,

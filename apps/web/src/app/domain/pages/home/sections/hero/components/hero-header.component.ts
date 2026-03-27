@@ -1,14 +1,17 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowRight } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 @Component({
   selector: 'z-hero-header',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterModule, ZardButtonComponent, ZardIconComponent],
+  imports: [RouterModule, ZardButtonComponent, NgIcon],
+  viewProviders: [provideIcons({ lucideArrowRight })],
   template: `
     <section class="border-grid">
       <div class="container-wrapper">
@@ -19,7 +22,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
           >
             <span class="flex size-2 rounded-full bg-[#F80258]" title="New"></span>
             ng add &#64;ngzard/ui
-            <z-icon zType="arrow-right" class="size-3" />
+            <ng-icon name="lucideArrowRight" class="size-3" />
           </a>
           <h1
             class="text-primary leading-tighter max-w-4xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tight"

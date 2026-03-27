@@ -1,8 +1,10 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
 import { ZardTooltipDirective } from '@zard/components/tooltip';
@@ -16,14 +18,15 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
     ZardButtonGroupComponent,
     ZardInputGroupComponent,
     ZardInputDirective,
-    ZardIconComponent,
+    NgIcon,
     ZardTooltipDirective,
   ],
+  viewProviders: [provideIcons({ lucidePlus })],
   template: `
     <z-button-group class="w-full [--radius:9999rem]">
       <z-button-group>
         <button type="button" z-button zType="outline" zShape="circle" aria-label="Add">
-          <z-icon zType="plus" />
+          <ng-icon name="lucidePlus" />
         </button>
       </z-button-group>
       <z-button-group class="flex-1">

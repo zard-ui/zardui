@@ -1,13 +1,16 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideLayoutDashboard } from '@ng-icons/lucide';
+
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 @Component({
   selector: 'z-dashboard-example-page',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardEmptyComponent, ZardIconComponent],
+  imports: [ZardEmptyComponent, NgIcon],
+  viewProviders: [provideIcons({ lucideLayoutDashboard })],
   template: `
     <z-empty
       zTitle="Dashboard Example"
@@ -16,7 +19,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
     >
       <ng-template #zImage>
         <div class="bg-muted text-foreground mb-2 flex size-12 items-center justify-center rounded-lg">
-          <z-icon zType="layout-dashboard" class="size-6" />
+          <ng-icon name="lucideLayoutDashboard" class="size-6" />
         </div>
       </ng-template>
     </z-empty>

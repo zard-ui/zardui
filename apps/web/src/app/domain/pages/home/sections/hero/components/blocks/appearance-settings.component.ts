@@ -1,10 +1,12 @@
 import { Component, ChangeDetectionStrategy, computed, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideMinus, lucidePlus } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardRadioComponent } from '@zard/components/radio/radio.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
@@ -20,9 +22,10 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
     ZardDividerComponent,
     ZardSwitchComponent,
     ZardRadioComponent,
-    ZardIconComponent,
+    NgIcon,
     FormsModule,
   ],
+  viewProviders: [provideIcons({ lucideMinus, lucidePlus })],
   template: `
     <div class="flex flex-1 flex-col gap-6">
       <div class="flex w-full flex-1 flex-col gap-7">
@@ -86,7 +89,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
               [disabled]="isAtMin()"
               (click)="decrementGpu()"
             >
-              <z-icon zType="minus" />
+              <ng-icon name="lucideMinus" />
             </button>
             <button
               z-button
@@ -98,7 +101,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
               [disabled]="isAtMax()"
               (click)="incrementGpu()"
             >
-              <z-icon zType="plus" />
+              <ng-icon name="lucidePlus" />
             </button>
           </z-button-group>
         </div>

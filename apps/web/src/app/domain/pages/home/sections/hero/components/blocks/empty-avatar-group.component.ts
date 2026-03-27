@@ -1,16 +1,19 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucidePlus } from '@ng-icons/lucide';
+
 import { ZardAvatarGroupComponent } from '@zard/components/avatar';
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 @Component({
   selector: 'z-block-empty-avatar-group',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardEmptyComponent, ZardAvatarComponent, ZardButtonComponent, ZardIconComponent, ZardAvatarGroupComponent],
+  imports: [ZardEmptyComponent, ZardAvatarComponent, ZardButtonComponent, NgIcon, ZardAvatarGroupComponent],
+  viewProviders: [provideIcons({ lucidePlus })],
   template: `
     <z-empty
       [zImage]="avatarGroup"
@@ -31,7 +34,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
       </ng-template>
 
       <button z-button zSize="sm">
-        <z-icon zType="plus" />
+        <ng-icon name="lucidePlus" />
         Invite Members
       </button>
     </z-empty>

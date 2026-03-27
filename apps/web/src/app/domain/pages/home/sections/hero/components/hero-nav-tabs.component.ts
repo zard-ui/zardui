@@ -1,9 +1,11 @@
 import { Component, ChangeDetectionStrategy, DestroyRef, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck, lucideChevronDown, lucideCopy, lucideX } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDropdownImports } from '@zard/components/dropdown';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 import { THEME_PRESETS } from '../../../../themes/data/theme-presets';
 import { ThemeGeneratorService } from '../../../../themes/services/theme-generator.service';
@@ -17,7 +19,8 @@ interface NavTab {
   selector: 'z-hero-nav-tabs',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterModule, ZardButtonComponent, ZardIconComponent, ...ZardDropdownImports],
+  imports: [RouterModule, ZardButtonComponent, NgIcon, ...ZardDropdownImports],
+  viewProviders: [provideIcons({ lucideChevronDown, lucideCheck, lucideX, lucideCopy })],
   template: `
     <div class="container-wrapper hidden scroll-mt-24 md:flex">
       <div class="container flex items-center justify-between gap-4 py-4">
@@ -55,7 +58,7 @@ interface NavTab {
           >
             <span class="font-medium">Theme:</span>
             <span>{{ themeService.activePreset() ?? 'Neutral' }}</span>
-            <z-icon zType="chevron-down" class="opacity-50" />
+            <ng-icon name="lucideChevronDown" class="opacity-50" />
           </button>
           <z-dropdown-menu-content #themeMenu="zDropdownMenuContent" zAlign="end" class="w-48">
             @for (preset of presets; track preset.name) {
@@ -66,7 +69,7 @@ interface NavTab {
                 ></span>
                 <span class="flex-1">{{ preset.name }}</span>
                 @if (themeService.activePreset() === preset.name) {
-                  <z-icon zType="check" class="size-4" />
+                  <ng-icon name="lucideCheck" class="size-4" />
                 }
               </z-dropdown-menu-item>
             }
@@ -80,7 +83,7 @@ interface NavTab {
             [attr.aria-label]="copyError() ? 'Copy failed' : copied() ? 'Copied!' : 'Copy theme CSS'"
             (click)="copyThemeCss()"
           >
-            <z-icon [zType]="copyError() ? 'x' : copied() ? 'check' : 'copy'" />
+            <ng-icon [name]="copyError() ? 'lucideX' : copied() ? 'lucideCheck' : 'lucideCopy'" />
           </button>
         </div>
       </div>

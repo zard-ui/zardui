@@ -1,8 +1,10 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBot, lucideChevronDown } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
 
@@ -13,15 +15,16 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
   imports: [
     ZardButtonComponent,
     ZardButtonGroupComponent,
-    ZardIconComponent,
+    NgIcon,
     ZardInputDirective,
     ZardPopoverComponent,
     ZardPopoverDirective,
   ],
+  viewProviders: [provideIcons({ lucideBot, lucideChevronDown })],
   template: `
     <z-button-group>
       <button z-button zType="outline" zSize="sm">
-        <z-icon zType="bot" />
+        <ng-icon name="lucideBot" />
         Copilot
       </button>
       <button
@@ -34,7 +37,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
         [zContent]="popoverContent"
         zAlign="end"
       >
-        <z-icon zType="chevron-down" />
+        <ng-icon name="lucideChevronDown" />
       </button>
       <ng-template #popoverContent>
         <z-popover class="w-72 rounded-xl p-0 text-sm">

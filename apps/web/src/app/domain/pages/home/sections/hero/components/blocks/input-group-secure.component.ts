@@ -1,7 +1,9 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideInfo, lucideStar } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
@@ -15,11 +17,12 @@ import { ZardIdDirective } from '@zard/core';
     ZardButtonComponent,
     ZardInputGroupComponent,
     ZardInputDirective,
-    ZardIconComponent,
+    NgIcon,
     ZardPopoverComponent,
     ZardPopoverDirective,
     ZardIdDirective,
   ],
+  viewProviders: [provideIcons({ lucideInfo, lucideStar })],
   template: `
     <div class="grid w-full max-w-sm gap-6" zardId="input-secure" #z="zardId">
       <label [attr.for]="z.id()" class="sr-only">Input Secure</label>
@@ -39,7 +42,7 @@ import { ZardIdDirective } from '@zard/core';
           zPopover
           [zContent]="popoverContent"
         >
-          <z-icon zType="info" />
+          <ng-icon name="lucideInfo" />
         </button>
         <span class="text-muted-foreground pl-1!">https://</span>
       </ng-template>
@@ -63,7 +66,7 @@ import { ZardIdDirective } from '@zard/core';
           [attr.aria-pressed]="isFavorite()"
           (click)="toggleFavorite()"
         >
-          <z-icon zType="star" [class]="isFavorite() ? 'fill-primary stroke-primary' : ''" />
+          <ng-icon name="lucideStar" [class]="isFavorite() ? 'fill-primary stroke-primary' : ''" />
         </button>
       </ng-template>
     </div>

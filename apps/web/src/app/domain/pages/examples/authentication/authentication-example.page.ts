@@ -1,13 +1,16 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideShield } from '@ng-icons/lucide';
+
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 
 @Component({
   selector: 'z-authentication-example-page',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardEmptyComponent, ZardIconComponent],
+  imports: [ZardEmptyComponent, NgIcon],
+  viewProviders: [provideIcons({ lucideShield })],
   template: `
     <z-empty
       zTitle="Authentication Example"
@@ -16,7 +19,7 @@ import { ZardIconComponent } from '@zard/components/icon/icon.component';
     >
       <ng-template #zImage>
         <div class="bg-muted text-foreground mb-2 flex size-12 items-center justify-center rounded-lg">
-          <z-icon zType="shield" class="size-6" />
+          <ng-icon name="lucideShield" class="size-6" />
         </div>
       </ng-template>
     </z-empty>
