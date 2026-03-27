@@ -84,3 +84,5 @@ opencode.json
 /node-compile-cache/
 .github/hooks/context-mode.json
 tsconfig.tsbuildinfo
+/jest_dx/
+nx-native-file-cache-*

@@ -8,11 +8,10 @@ import { ZardButtonComponent } from '../../button/button.component';
 @Component({
   selector: 'z-demo-toast-advanced',
   imports: [ZardButtonComponent],
-  standalone: true,
   template: `
     <div class="flex flex-wrap gap-2">
-      <button z-button zType="outline" (click)="showWithAction()">With Action</button>
-      <button z-button zType="outline" (click)="showCustomDuration()">Custom Duration</button>
+      <button type="button" z-button zType="outline" (click)="showWithAction()">With Action</button>
+      <button type="button" z-button zType="outline" (click)="showCustomDuration()">Custom Duration</button>
     </div>
   `,
 })
