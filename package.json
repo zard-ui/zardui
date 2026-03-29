@@ -112,7 +112,7 @@
     "@nx/js": "22.6.1",
     "@nx/playwright": "22.6.1",
     "@nx/web": "22.6.1",
-    "@nx/workspace": "22.6.1",
+    "@nx/workspace": "22.6.3",
     "@playwright/test": "^1.58.2",
     "@schematics/angular": "21.2.3",
     "@stylistic/eslint-plugin": "^5.10.0",
