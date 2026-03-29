@@ -2,7 +2,7 @@
   "$schema": "https://zardui.com/schema/registry.json",
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.72",
+  "version": "1.0.0-beta.73",
   "items": [
     {
       "name": "core",
@@ -20,24 +20,14 @@
       "name": "dark-mode",
       "type": "registry:component",
       "basePath": "services",
-      "files": [
-        "index.ts",
-        "dark-mode.ts"
-      ]
+      "files": ["index.ts", "dark-mode.ts"]
     },
     {
       "name": "utils",
       "type": "registry:component",
       "basePath": "utils",
-      "dependencies": [
-        "tailwind-merge",
-        "clsx"
-      ],
-      "files": [
-        "index.ts",
-        "merge-classes.ts",
-        "number.ts"
-      ]
+      "dependencies": ["tailwind-merge", "clsx"],
+      "files": ["index.ts", "merge-classes.ts", "number.ts"]
     },
     {
       "name": "layout",
@@ -56,18 +46,12 @@
     {
       "name": "button",
       "type": "registry:component",
-      "files": [
-        "button.component.ts",
-        "button.variants.ts",
-        "index.ts"
-      ]
+      "files": ["button.component.ts", "button.variants.ts", "index.ts"]
     },
     {
       "name": "sheet",
       "type": "registry:component",
-      "registryDependencies": [
-        "button"
-      ],
+      "registryDependencies": ["button"],
       "files": [
         "sheet.component.ts",
         "sheet.variants.ts",
@@ -80,32 +64,18 @@
     {
       "name": "card",
       "type": "registry:component",
-      "registryDependencies": [
-        "button"
-      ],
-      "files": [
-        "card.component.ts",
-        "card.variants.ts",
-        "index.ts"
-      ]
+      "registryDependencies": ["button"],
+      "files": ["card.component.ts", "card.variants.ts", "index.ts"]
     },
     {
       "name": "empty",
       "type": "registry:component",
-      "files": [
-        "empty.component.ts",
-        "empty.variants.ts",
-        "index.ts"
-      ]
+      "files": ["empty.component.ts", "empty.variants.ts", "index.ts"]
     },
     {
       "name": "badge",
       "type": "registry:component",
-      "files": [
-        "badge.component.ts",
-        "badge.variants.ts",
-        "index.ts"
-      ]
+      "files": ["badge.component.ts", "badge.variants.ts", "index.ts"]
     },
     {
       "name": "accordion",
@@ -121,18 +91,12 @@
     {
       "name": "alert",
       "type": "registry:component",
-      "files": [
-        "alert.component.ts",
-        "alert.variants.ts",
-        "index.ts"
-      ]
+      "files": ["alert.component.ts", "alert.variants.ts", "index.ts"]
     },
     {
       "name": "alert-dialog",
       "type": "registry:component",
-      "registryDependencies": [
-        "button"
-      ],
+      "registryDependencies": ["button"],
       "files": [
         "alert-dialog.component.ts",
         "alert-dialog.component.html",
@@ -145,28 +109,17 @@
     {
       "name": "avatar",
       "type": "registry:component",
-      "files": [
-        "avatar.component.ts",
-        "avatar-group.component.ts",
-        "avatar.variants.ts",
-        "index.ts"
-      ]
+      "files": ["avatar.component.ts", "avatar-group.component.ts", "avatar.variants.ts", "index.ts"]
     },
     {
       "name": "checkbox",
       "type": "registry:component",
-      "files": [
-        "checkbox.component.ts",
-        "checkbox.variants.ts",
-        "index.ts"
-      ]
+      "files": ["checkbox.component.ts", "checkbox.variants.ts", "index.ts"]
     },
     {
       "name": "dialog",
       "type": "registry:component",
-      "registryDependencies": [
-        "button"
-      ],
+      "registryDependencies": ["button"],
       "files": [
         "dialog.component.ts",
         "dialog.service.ts",
@@ -193,27 +146,17 @@
     {
       "name": "input",
       "type": "registry:component",
-      "files": [
-        "input.directive.ts",
-        "input.variants.ts",
-        "index.ts"
-      ]
+      "files": ["input.directive.ts", "input.variants.ts", "index.ts"]
     },
     {
       "name": "input-group",
       "type": "registry:component",
-      "files": [
-        "input-group.component.ts",
-        "input-group.variants.ts",
-        "index.ts"
-      ]
+      "files": ["input-group.component.ts", "input-group.variants.ts", "index.ts"]
     },
     {
       "name": "select",
       "type": "registry:component",
-      "registryDependencies": [
-        "badge"
-      ],
+      "registryDependencies": ["badge"],
       "files": [
         "select.component.ts",
         "select-item.component.ts",
@@ -225,105 +168,58 @@
     {
       "name": "switch",
       "type": "registry:component",
-      "files": [
-        "switch.component.ts",
-        "switch.variants.ts",
-        "index.ts"
-      ]
+      "files": ["switch.component.ts", "switch.variants.ts", "index.ts"]
     },
     {
       "name": "tabs",
       "type": "registry:component",
-      "registryDependencies": [
-        "button"
-      ],
-      "files": [
-        "tabs.component.ts",
-        "tabs.variants.ts",
-        "index.ts"
-      ]
+      "registryDependencies": ["button"],
+      "files": ["tabs.component.ts", "tabs.variants.ts", "index.ts"]
     },
     {
       "name": "toggle",
       "type": "registry:component",
-      "files": [
-        "toggle.component.ts",
-        "toggle.variants.ts",
-        "index.ts"
-      ]
+      "files": ["toggle.component.ts", "toggle.variants.ts", "index.ts"]
     },
     {
       "name": "tooltip",
       "type": "registry:component",
-      "files": [
-        "tooltip.ts",
-        "tooltip-positions.ts",
-        "tooltip.variants.ts",
-        "tooltip.imports.ts",
-        "index.ts"
-      ]
+      "files": ["tooltip.ts", "tooltip-positions.ts", "tooltip.variants.ts", "tooltip.imports.ts", "index.ts"]
     },
     {
       "name": "breadcrumb",
       "type": "registry:component",
-      "files": [
-        "breadcrumb.component.ts",
-        "breadcrumb.imports.ts",
-        "breadcrumb.variants.ts",
-        "index.ts"
-      ]
+      "files": ["breadcrumb.component.ts", "breadcrumb.imports.ts", "breadcrumb.variants.ts", "index.ts"]
     },
     {
       "name": "divider",
       "type": "registry:component",
-      "files": [
-        "divider.component.ts",
-        "divider.variants.ts",
-        "index.ts"
-      ]
+      "files": ["divider.component.ts", "divider.variants.ts", "index.ts"]
     },
     {
       "name": "loader",
       "type": "registry:component",
-      "files": [
-        "loader.component.ts",
-        "loader.variants.ts",
-        "index.ts"
-      ]
+      "files": ["loader.component.ts", "loader.variants.ts", "index.ts"]
     },
     {
       "name": "progress-bar",
       "type": "registry:component",
-      "files": [
-        "progress-bar.component.ts",
-        "progress-bar.variants.ts",
-        "index.ts"
-      ]
+      "files": ["progress-bar.component.ts", "progress-bar.variants.ts", "index.ts"]
     },
     {
       "name": "radio",
       "type": "registry:component",
-      "files": [
-        "radio.component.ts",
-        "radio.variants.ts",
-        "index.ts"
-      ]
+      "files": ["radio.component.ts", "radio.variants.ts", "index.ts"]
     },
     {
       "name": "slider",
       "type": "registry:component",
-      "files": [
-        "slider.component.ts",
-        "slider.variants.ts",
-        "index.ts"
-      ]
+      "files": ["slider.component.ts", "slider.variants.ts", "index.ts"]
     },
     {
       "name": "calendar",
       "type": "registry:component",
-      "registryDependencies": [
-        "select"
-      ],
+      "registryDependencies": ["select"],
       "files": [
         "calendar.component.ts",
         "calendar-grid.component.ts",
@@ -337,18 +233,8 @@
     {
       "name": "combobox",
       "type": "registry:component",
-      "registryDependencies": [
-        "button",
-        "command",
-        "popover",
-        "empty",
-        "input"
-      ],
-      "files": [
-        "combobox.component.ts",
-        "combobox.variants.ts",
-        "index.ts"
-      ]
+      "registryDependencies": ["button", "command", "popover", "empty", "input"],
+      "files": ["combobox.component.ts", "combobox.variants.ts", "index.ts"]
     },
     {
       "name": "command",
@@ -369,49 +255,24 @@
     {
       "name": "date-picker",
       "type": "registry:component",
-      "registryDependencies": [
-        "button",
-        "calendar",
-        "popover",
-        "input"
-      ],
-      "files": [
-        "date-picker.component.ts",
-        "date-picker.variants.ts",
-        "index.ts"
-      ]
+      "registryDependencies": ["button", "calendar", "popover", "input"],
+      "files": ["date-picker.component.ts", "date-picker.variants.ts", "index.ts"]
     },
     {
       "name": "form",
       "type": "registry:component",
-      "files": [
-        "form.component.ts",
-        "form.imports.ts",
-        "form.variants.ts",
-        "index.ts"
-      ]
+      "files": ["form.component.ts", "form.imports.ts", "form.variants.ts", "index.ts"]
     },
     {
       "name": "pagination",
       "type": "registry:component",
-      "registryDependencies": [
-        "button"
-      ],
-      "files": [
-        "pagination.component.ts",
-        "pagination.imports.ts",
-        "pagination.variants.ts",
-        "index.ts"
-      ]
+      "registryDependencies": ["button"],
+      "files": ["pagination.component.ts", "pagination.imports.ts", "pagination.variants.ts", "index.ts"]
     },
     {
       "name": "popover",
       "type": "registry:component",
-      "files": [
-        "popover.component.ts",
-        "popover.variants.ts",
-        "index.ts"
-      ]
+      "files": ["popover.component.ts", "popover.variants.ts", "index.ts"]
     },
     {
       "name": "resizable",
@@ -428,54 +289,29 @@
     {
       "name": "segmented",
       "type": "registry:component",
-      "files": [
-        "segmented.component.ts",
-        "segmented.variants.ts",
-        "index.ts"
-      ]
+      "files": ["segmented.component.ts", "segmented.variants.ts", "index.ts"]
     },
     {
       "name": "skeleton",
       "type": "registry:component",
-      "files": [
-        "skeleton.component.ts",
-        "skeleton.variants.ts",
-        "index.ts"
-      ]
+      "files": ["skeleton.component.ts", "skeleton.variants.ts", "index.ts"]
     },
     {
       "name": "table",
       "type": "registry:component",
-      "files": [
-        "table.component.ts",
-        "table.imports.ts",
-        "table.variants.ts",
-        "index.ts"
-      ]
+      "files": ["table.component.ts", "table.imports.ts", "table.variants.ts", "index.ts"]
     },
     {
       "name": "toast",
       "type": "registry:component",
-      "dependencies": [
-        "ngx-sonner"
-      ],
-      "files": [
-        "toast.component.ts",
-        "toast.variants.ts",
-        "index.ts"
-      ]
+      "dependencies": ["ngx-sonner"],
+      "files": ["toast.component.ts", "toast.variants.ts", "index.ts"]
     },
     {
       "name": "toggle-group",
       "type": "registry:component",
-      "registryDependencies": [
-        "toggle"
-      ],
-      "files": [
-        "toggle-group.component.ts",
-        "toggle-group.variants.ts",
-        "index.ts"
-      ]
+      "registryDependencies": ["toggle"],
+      "files": ["toggle-group.component.ts", "toggle-group.variants.ts", "index.ts"]
     },
     {
       "name": "menu",
@@ -497,24 +333,13 @@
     {
       "name": "button-group",
       "type": "registry:component",
-      "registryDependencies": [
-        "divider"
-      ],
-      "files": [
-        "button-group.component.ts",
-        "button-group.variants.ts",
-        "index.ts"
-      ]
+      "registryDependencies": ["divider"],
+      "files": ["button-group.component.ts", "button-group.variants.ts", "index.ts"]
     },
     {
       "name": "kbd",
       "type": "registry:component",
-      "files": [
-        "kbd.component.ts",
-        "kbd-group.component.ts",
-        "kbd.variants.ts",
-        "index.ts"
-      ]
+      "files": ["kbd.component.ts", "kbd-group.component.ts", "kbd.variants.ts", "index.ts"]
     },
     {
       "name": "carousel",
@@ -525,9 +350,7 @@
         "embla-carousel-class-names",
         "embla-carousel-wheel-gestures"
       ],
-      "registryDependencies": [
-        "button"
-      ],
+      "registryDependencies": ["button"],
       "files": [
         "carousel.component.ts",
         "carousel.variants.ts",
@@ -541,9 +364,7 @@
     {
       "name": "tree",
       "type": "registry:component",
-      "registryDependencies": [
-        "checkbox"
-      ],
+      "registryDependencies": ["checkbox"],
       "files": [
         "tree.component.ts",
         "tree-node.component.ts",

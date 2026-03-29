@@ -1,3 +1,23 @@
+## 1.0.0-beta.74 (2026-03-27)
+
+### 📦 Code Refactoring
+
+- **toast:** improve type safety and component configuration ([#505](https://github.com/zard-ui/zardui/pull/505))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
+## 1.0.0-beta.73 (2026-03-27)
+
+### 🐛 Bug Fixes
+
+- **dialog:** remove hardcoded max-width for dialog variants ([#503](https://github.com/zard-ui/zardui/pull/503))
+
+### ❤️ Thank You
+
+- viniciuscigma
+
 ## 1.0.0-beta.72 (2026-03-24)
 
 ### 🐛 Bug Fixes

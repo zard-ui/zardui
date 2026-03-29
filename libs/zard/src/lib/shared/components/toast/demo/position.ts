@@ -7,7 +7,6 @@ import { ZardButtonComponent } from '../../button/button.component';
 @Component({
   selector: 'zard-demo-toast-position',
   imports: [ZardButtonComponent],
-  standalone: true,
   template: `
     <div class="flex flex-wrap gap-2">
       <z-button zType="outline" (click)="showToast('top-left')">Top Left</z-button>
