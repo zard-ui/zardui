@@ -37,13 +37,14 @@ import { ZardIdDirective } from '@zard/core';
           zType="secondary"
           zSize="icon-sm"
           zShape="circle"
+          class="size-6!"
           aria-label="Info"
           zPopover
           [zContent]="popoverContent"
         >
-          <ng-icon name="lucideInfo" />
+          <ng-icon name="lucideInfo" size="0.8rem" />
         </button>
-        <span class="text-muted-foreground pl-1!">https://</span>
+        <span class="text-muted-foreground">https://</span>
       </ng-template>
 
       <ng-template #popoverContent>
@@ -60,11 +61,12 @@ import { ZardIdDirective } from '@zard/core';
           zType="ghost"
           zSize="icon-sm"
           zShape="circle"
+          class="size-6!"
           [attr.aria-label]="isFavorite() ? 'Remove favorite' : 'Add favorite'"
           [attr.aria-pressed]="isFavorite()"
           (click)="toggleFavorite()"
         >
-          <ng-icon name="lucideStar" [class]="isFavorite() ? 'fill-primary stroke-primary' : ''" />
+          <ng-icon name="lucideStar" size="1rem" [class]="isFavorite() ? 'text-primary [&_path]:fill-primary' : ''" />
         </button>
       </ng-template>
     </div>

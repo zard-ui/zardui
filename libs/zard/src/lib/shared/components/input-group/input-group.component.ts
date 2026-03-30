@@ -92,6 +92,8 @@ export class ZardInputGroupComponent {
         zSize: this.zSize(),
         zDisabled: this.zDisabled() || this.zLoading(),
       }),
+      !this.zAddonBefore() ? 'pl-2.5' : '',
+      !this.zAddonAfter() ? 'pr-2.5' : '',
       this.class(),
     ),
   );
