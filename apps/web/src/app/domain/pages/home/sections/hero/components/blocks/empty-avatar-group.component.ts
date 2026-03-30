@@ -21,14 +21,12 @@ import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
       class="flex-none border"
     >
       <ng-template #avatarGroup>
-        <z-avatar-group
-          class="*:data-[slot=avatar]:ring-background *:data-[slot=avatar]:size-12 *:data-[slot=avatar]:grayscale"
-        >
-          <z-avatar zSrc="https://github.com/neopavan.png" zAlt="@neopavan" zSize="md" />
-          <z-avatar zSrc="https://github.com/mikij.png" zAlt="@mikij" zSize="md" />
-          <z-avatar zSrc="https://github.com/ribeiromatheuss.png" zAlt="@ribeiromatheuss" zSize="md" />
-          <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zSize="md" />
-          <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess" zSize="md" />
+        <z-avatar-group class="*:data-[slot=avatar]:ring-background *:data-[slot=avatar]:grayscale">
+          <z-avatar zSrc="https://github.com/neopavan.png" zAlt="@neopavan" zSize="sm" />
+          <z-avatar zSrc="https://github.com/mikij.png" zAlt="@mikij" zSize="sm" />
+          <z-avatar zSrc="https://github.com/ribeiromatheuss.png" zAlt="@ribeiromatheuss" zSize="sm" />
+          <z-avatar zSrc="https://github.com/srizzon.png" zAlt="@srizzon" zSize="sm" />
+          <z-avatar zSrc="https://github.com/Luizgomess.png" zAlt="@Luizgomess" zSize="sm" />
         </z-avatar-group>
       </ng-template>
 

@@ -157,7 +157,6 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 
     setTimeout(() => {
       this.focusDropdown();
-      this.focusFirstItem(this.getDropdownItems());
     }, 0);
   }
 
@@ -233,12 +232,17 @@ export class ZardDropdownMenuComponent implements OnDestroy {
     }
 
     const currentIndex = this.focusedIndex();
-    let nextIndex = currentIndex + direction;
+    let nextIndex: number;
 
-    if (nextIndex < 0) {
-      nextIndex = items.length - 1;
-    } else if (nextIndex >= items.length) {
-      nextIndex = 0;
+    if (currentIndex === -1) {
+      nextIndex = direction > 0 ? 0 : items.length - 1;
+    } else {
+      nextIndex = currentIndex + direction;
+      if (nextIndex < 0) {
+        nextIndex = items.length - 1;
+      } else if (nextIndex >= items.length) {
+        nextIndex = 0;
+      }
     }
 
     this.focusedIndex.set(nextIndex);

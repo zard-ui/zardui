@@ -111,7 +111,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
             <label class="text-sm font-medium" for="tinting">Wallpaper Tinting</label>
             <p class="text-muted-foreground text-sm leading-normal font-normal">Allow the wallpaper to be tinted.</p>
           </div>
-          <z-switch zId="tinting" />
+          <z-switch zSize="sm" zId="tinting" />
         </div>
       </div>
     </div>

@@ -4,25 +4,23 @@ import { RouterModule } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowRight } from '@ng-icons/lucide';
 
+import { ZardBadgeComponent } from '@zard/components/badge';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 
 @Component({
   selector: 'z-hero-header',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterModule, ZardButtonComponent, NgIcon],
+  imports: [RouterModule, ZardButtonComponent, ZardBadgeComponent, NgIcon],
   viewProviders: [provideIcons({ lucideArrowRight })],
   template: `
     <section class="border-grid">
       <div class="container-wrapper">
         <div class="container flex flex-col items-center gap-2 py-8 text-center md:py-16 lg:py-20 xl:gap-4">
-          <a
-            routerLink="/docs/changelog"
-            class="text-secondary-foreground hover:bg-secondary/90 inline-flex w-fit shrink-0 items-center justify-center gap-1.5 overflow-hidden rounded-full border border-transparent bg-transparent px-2.5 py-1 text-xs font-medium whitespace-nowrap transition-colors"
-          >
+          <z-badge routerLink="/docs/changelog" zType="secondary">
             <span class="flex size-2 rounded-full bg-[#F80258]" title="New"></span>
-            ng add &#64;ngzard/ui
+            npx zard-cli init
             <ng-icon name="lucideArrowRight" class="size-3" />
-          </a>
+          </z-badge>
           <h1
             class="text-primary leading-tighter max-w-4xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tight"
           >

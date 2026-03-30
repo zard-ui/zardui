@@ -26,7 +26,7 @@ import { ZardIdDirective } from '@zard/core';
   template: `
     <div class="grid w-full max-w-sm gap-6" zardId="input-secure" #z="zardId">
       <label [attr.for]="z.id()" class="sr-only">Input Secure</label>
-      <z-input-group [zAddonBefore]="addonBefore" [zAddonAfter]="addonAfter" class="[--radius:9999px]">
+      <z-input-group [zAddonBefore]="addonBefore" zSize="sm" [zAddonAfter]="addonAfter" class="[--radius:9999px]">
         <input z-input [id]="z.id()" class="rounded-none pl-0.5!" />
       </z-input-group>
 

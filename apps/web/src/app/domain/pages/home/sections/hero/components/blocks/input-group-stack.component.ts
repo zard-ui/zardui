@@ -26,17 +26,17 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
   template: `
     <div class="grid w-full max-w-sm gap-6">
       <!-- Search with results -->
-      <z-input-group [zAddonBefore]="searchIcon" zAddonAfter="12 results">
+      <z-input-group [zAddonBefore]="searchIcon" zSize="sm" zAddonAfter="12 results">
         <input z-input aria-label="Search" placeholder="Search..." />
       </z-input-group>
 
       <!-- URL with info tooltip -->
-      <z-input-group zAddonBefore="https://" [zAddonAfter]="infoButton">
+      <z-input-group zAddonBefore="https://" zSize="sm" [zAddonAfter]="infoButton">
         <input z-input aria-label="Website URL" placeholder="example.com" class="pl-1!" />
       </z-input-group>
 
       <!-- Textarea with actions -->
-      <z-input-group [zAddonAfter]="textareaActions" zAddonAlign="block">
+      <z-input-group [zAddonAfter]="textareaActions" zSize="sm" zAddonAlign="block">
         <textarea
           z-input
           aria-label="Prompt"
@@ -46,7 +46,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
       </z-input-group>
 
       <!-- Username with check -->
-      <z-input-group [zAddonAfter]="checkIcon">
+      <z-input-group [zAddonAfter]="checkIcon" zSize="sm">
         <input z-input aria-label="Username" placeholder="@zard_ui" />
       </z-input-group>
     </div>

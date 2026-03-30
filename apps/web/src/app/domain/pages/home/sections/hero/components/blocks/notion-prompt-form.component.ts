@@ -12,16 +12,18 @@ import {
   lucideLayers,
   lucidePaperclip,
   lucidePlus,
-  lucideSearch,
   lucideX,
 } from '@ng-icons/lucide';
 
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardCommandImports, type ZardCommandOption } from '@zard/components/command';
 import { ZardDropdownImports } from '@zard/components/dropdown';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
+import { ZardMenuImports } from '@zard/components/menu';
+import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTooltipDirective } from '@zard/components/tooltip';
 import { ZardIdDirective } from '@zard/core';
@@ -48,6 +50,8 @@ const SAMPLE_DATA = {
     { type: 'page' as const, title: 'Goals & Objectives', image: '🎯' },
     { type: 'page' as const, title: 'Budget Planning', image: '💰' },
     { type: 'page' as const, title: 'Team Directory', image: '👥' },
+    { type: 'page' as const, title: 'Technical Specs', image: '📋' },
+    { type: 'page' as const, title: 'Analytics Report', image: '📄' },
     { type: 'user' as const, title: 'shadcn', image: 'https://github.com/shadcn.png', workspace: 'Workspace' },
     { type: 'user' as const, title: 'maxleiter', image: 'https://github.com/maxleiter.png', workspace: 'Workspace' },
     { type: 'user' as const, title: 'evilrabbit', image: 'https://github.com/evilrabbit.png', workspace: 'Workspace' },
@@ -63,10 +67,14 @@ const SAMPLE_DATA = {
     ZardAvatarComponent,
     ZardBadgeComponent,
     ZardButtonComponent,
+    ...ZardCommandImports,
     ...ZardDropdownImports,
+    ...ZardMenuImports,
     NgIcon,
     ZardInputDirective,
     ZardInputGroupComponent,
+    ZardPopoverComponent,
+    ZardPopoverDirective,
     ZardSwitchComponent,
     ZardTooltipDirective,
     ZardIdDirective,
@@ -74,7 +82,6 @@ const SAMPLE_DATA = {
   viewProviders: [
     provideIcons({
       lucideAtSign,
-      lucideSearch,
       lucideX,
       lucidePaperclip,
       lucideGlobe,
@@ -88,7 +95,7 @@ const SAMPLE_DATA = {
     }),
   ],
   template: `
-    <form class="[--radius:1.2rem]" zardId="notion-prompt" #z="zardId">
+    <form zardId="notion-prompt" #z="zardId">
       <div class="flex flex-col gap-2">
         <label class="sr-only" [attr.for]="z.id()">Prompt</label>
         <z-input-group [zAddonBefore]="addonBefore" [zAddonAfter]="addonAfter" zAddonAlign="block">
@@ -107,11 +114,8 @@ const SAMPLE_DATA = {
               type="button"
               z-button
               zType="outline"
-              zSize="sm"
-              zShape="circle"
-              zTooltip="Mention a person, page, or date"
-              z-dropdown
-              [zDropdownMenu]="mentionMenu"
+              zPopover
+              [zContent]="mentionPopover"
               [class]="hasMentions() ? 'size-8!' : ''"
             >
               <ng-icon name="lucideAtSign" />
@@ -119,31 +123,30 @@ const SAMPLE_DATA = {
                 Add context
               }
             </button>
-            <z-dropdown-menu-content #mentionMenu="zDropdownMenuContent" class="w-64 p-0 [--radius:1.2rem]">
-              <div class="p-2">
-                <div class="bg-muted/50 mb-2 flex items-center gap-2 rounded-md px-2 py-1.5">
-                  <ng-icon name="lucideSearch" class="text-muted-foreground size-4" />
-                  <span class="text-muted-foreground text-sm">Search pages...</span>
-                </div>
-              </div>
-              <z-dropdown-menu-label class="text-muted-foreground px-3 text-xs">Pages</z-dropdown-menu-label>
-              @for (item of availablePages(); track item.title) {
-                <z-dropdown-menu-item (click)="addMention(item.title)">
-                  <span class="flex size-4 items-center justify-center">{{ item.image }}</span>
-                  {{ item.title }}
-                </z-dropdown-menu-item>
-              }
-              @if (availableUsers().length > 0) {
-                <div class="bg-border my-1 h-px"></div>
-                <z-dropdown-menu-label class="text-muted-foreground px-3 text-xs">Users</z-dropdown-menu-label>
-                @for (item of availableUsers(); track item.title) {
-                  <z-dropdown-menu-item (click)="addMention(item.title)">
-                    <z-avatar [zSrc]="item.image" class="size-4" />
-                    {{ item.title }}
-                  </z-dropdown-menu-item>
-                }
-              }
-            </z-dropdown-menu-content>
+            <ng-template #mentionPopover>
+              <z-popover class="w-64 p-0 [--radius:0.75rem]">
+                <z-command class="min-h-auto" (zCommandSelected)="onMentionSelected($event)">
+                  <z-command-input placeholder="Search pages..." />
+                  <z-command-list class="max-h-64">
+                    <z-command-empty>No results found.</z-command-empty>
+                    @if (availablePages().length > 0) {
+                      <z-command-option-group zLabel="Pages">
+                        @for (item of availablePages(); track item.title) {
+                          <z-command-option [zValue]="item.title" [zLabel]="item.image + ' ' + item.title" />
+                        }
+                      </z-command-option-group>
+                    }
+                    @if (availableUsers().length > 0) {
+                      <z-command-option-group zLabel="Users">
+                        @for (item of availableUsers(); track item.title) {
+                          <z-command-option [zValue]="item.title" [zLabel]="item.title" />
+                        }
+                      </z-command-option-group>
+                    }
+                  </z-command-list>
+                </z-command>
+              </z-popover>
+            </ng-template>
 
             <!-- Selected Mentions -->
             <div class="no-scrollbar -m-1.5 flex gap-1 overflow-x-auto p-1.5">
@@ -231,50 +234,81 @@ const SAMPLE_DATA = {
               zType="ghost"
               zSize="sm"
               zShape="circle"
-              z-dropdown
-              [zDropdownMenu]="sourcesMenu"
+              z-menu
+              [zMenuTriggerFor]="sourcesMenu"
             >
               <ng-icon name="lucideGlobe" />
               All Sources
             </button>
-            <z-dropdown-menu-content #sourcesMenu="zDropdownMenuContent" class="w-64 [--radius:1rem]">
-              <div class="flex items-center justify-between px-2 py-1.5">
-                <label [attr.for]="z.id() + '-web-search'" class="flex items-center gap-2">
-                  <ng-icon name="lucideGlobe" class="size-4" />
-                  <span class="text-sm">Web Search</span>
-                </label>
-                <z-switch [zId]="z.id() + '-web-search'" />
+            <ng-template #sourcesMenu>
+              <div z-menu-content class="w-64 [--radius:1rem]">
+                <div class="flex items-center justify-between px-2 py-1.5">
+                  <label [attr.for]="z.id() + '-web-search'" class="flex items-center gap-2">
+                    <ng-icon name="lucideGlobe" class="size-4" />
+                    <span class="text-sm">Web Search</span>
+                  </label>
+                  <z-switch [zId]="z.id() + '-web-search'" />
+                </div>
+                <div class="bg-border my-1 h-px"></div>
+                <div class="flex items-center justify-between px-2 py-1.5">
+                  <label [attr.for]="z.id() + '-apps'" class="flex items-center gap-2">
+                    <ng-icon name="lucideLayers" class="size-4" />
+                    <span class="text-sm">Apps and Integrations</span>
+                  </label>
+                  <z-switch [zId]="z.id() + '-apps'" />
+                </div>
+                <button type="button" z-menu-item>
+                  <ng-icon name="lucideCircleDashed" class="size-4" />
+                  All Sources I can access
+                </button>
+                <button
+                  type="button"
+                  z-menu-item
+                  z-menu
+                  [zMenuTriggerFor]="usersSubmenu"
+                  zPlacement="rightTop"
+                  zTrigger="hover"
+                  class="justify-between"
+                >
+                  <div class="flex items-center gap-2">
+                    <z-avatar zSrc="https://github.com/shadcn.png" class="size-4" />
+                    shadcn
+                  </div>
+                  <ng-icon name="lucideChevronRight" class="size-4" />
+                </button>
+                <button type="button" z-menu-item>
+                  <ng-icon name="lucideBookOpen" class="size-4" />
+                  Help Center
+                </button>
+                <div class="bg-border my-1 h-px"></div>
+                <button type="button" z-menu-item>
+                  <ng-icon name="lucidePlus" class="size-4" />
+                  Connect Apps
+                </button>
+                <div class="text-muted-foreground px-2 py-1.5 text-xs">
+                  We'll only search in the sources selected here.
+                </div>
               </div>
-              <div class="bg-border my-1 h-px"></div>
-              <div class="flex items-center justify-between px-2 py-1.5">
-                <label [attr.for]="z.id() + '-apps'" class="flex items-center gap-2">
-                  <ng-icon name="lucideLayers" class="size-4" />
-                  <span class="text-sm">Apps and Integrations</span>
-                </label>
-                <z-switch [zId]="z.id() + '-apps'" />
+            </ng-template>
+            <ng-template #usersSubmenu>
+              <div z-menu-content class="w-56">
+                <button type="button" z-menu-item>
+                  <z-avatar zSrc="https://github.com/shadcn.png" class="size-4" />
+                  <span class="flex-1">shadcn</span>
+                  <span class="text-muted-foreground text-xs">Workspace</span>
+                </button>
+                <button type="button" z-menu-item>
+                  <z-avatar zSrc="https://github.com/maxleiter.png" class="size-4" />
+                  <span class="flex-1">maxleiter</span>
+                  <span class="text-muted-foreground text-xs">Workspace</span>
+                </button>
+                <button type="button" z-menu-item>
+                  <z-avatar zSrc="https://github.com/evilrabbit.png" class="size-4" />
+                  <span class="flex-1">evilrabbit</span>
+                  <span class="text-muted-foreground text-xs">Workspace</span>
+                </button>
               </div>
-              <z-dropdown-menu-item>
-                <ng-icon name="lucideCircleDashed" class="size-4" />
-                All Sources I can access
-              </z-dropdown-menu-item>
-              <z-dropdown-menu-item>
-                <z-avatar zSrc="https://github.com/shadcn.png" class="size-4" />
-                <span class="flex-1">shadcn</span>
-                <ng-icon name="lucideChevronRight" class="size-4" />
-              </z-dropdown-menu-item>
-              <z-dropdown-menu-item>
-                <ng-icon name="lucideBookOpen" class="size-4" />
-                Help Center
-              </z-dropdown-menu-item>
-              <div class="bg-border my-1 h-px"></div>
-              <z-dropdown-menu-item>
-                <ng-icon name="lucidePlus" class="size-4" />
-                Connect Apps
-              </z-dropdown-menu-item>
-              <z-dropdown-menu-label class="text-muted-foreground text-xs">
-                We'll only search in the sources selected here.
-              </z-dropdown-menu-label>
-            </z-dropdown-menu-content>
+            </ng-template>
 
             <!-- Send Button -->
             <button type="button" z-button zSize="sm" zShape="circle" class="ml-auto" aria-label="Send">
@@ -312,6 +346,10 @@ export class BlockNotionPromptFormComponent {
 
   protected removeMention(title: string): void {
     this.mentions.update(prev => prev.filter(m => m !== title));
+  }
+
+  protected onMentionSelected(option: ZardCommandOption): void {
+    this.addMention(option.value as string);
   }
 
   protected selectModel(model: ModelItem): void {

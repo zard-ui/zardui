@@ -24,12 +24,12 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
   template: `
     <z-button-group class="w-full [--radius:9999rem]">
       <z-button-group>
-        <button type="button" z-button zType="outline" zShape="circle" aria-label="Add">
+        <button type="button" z-button zSize="sm" zType="outline" zShape="circle" aria-label="Add">
           <ng-icon name="lucidePlus" />
         </button>
       </z-button-group>
       <z-button-group class="flex-1">
-        <z-input-group [zAddonAfter]="voiceButton">
+        <z-input-group zSize="sm" [zAddonAfter]="voiceButton">
           <input
             z-input
             [attr.aria-label]="voiceEnabled() ? 'Voice recording active' : 'Message'"

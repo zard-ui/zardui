@@ -9,12 +9,12 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
   imports: [ZardButtonComponent],
   template: `
     <div
-      class="border-border focus-visible:border-ring focus-visible:ring-ring/50 flex flex-wrap items-center gap-4 rounded-md border p-4 text-sm transition-colors duration-100 outline-none focus-visible:ring-[3px]"
+      class="group/item focus-visible:border-ring focus-visible:ring-ring/50 [a]:hover:bg-muted border-border flex w-full flex-wrap items-center gap-2.5 rounded-lg border px-3 py-2.5 text-sm transition-colors duration-100 outline-none focus-visible:ring-[3px] [a]:transition-colors"
     >
       <div class="flex flex-1 flex-col gap-1">
         <div class="flex w-fit items-center gap-2 text-sm leading-snug font-medium">Two-factor authentication</div>
         <p
-          class="text-muted-foreground line-clamp-2 text-sm leading-normal font-normal text-pretty xl:hidden 2xl:block"
+          class="text-muted-foreground [&>a:hover]:text-primary line-clamp-2 text-left text-sm leading-normal font-normal text-pretty group-data-[size=xs]/item:text-xs xl:hidden 2xl:block [&>a]:underline [&>a]:underline-offset-4"
         >
           Verify via email or phone number.
         </p>
