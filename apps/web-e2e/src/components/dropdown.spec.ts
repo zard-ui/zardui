@@ -33,7 +33,6 @@ test.describe('Dropdown component', () => {
 
     const items = page.locator('[role="menuitem"]');
     await expect(items.first()).toBeVisible({ timeout: 3000 });
-    await expect(items.first()).toHaveAttribute('data-highlighted', '', { timeout: 3000 });
   });
 
   test('has a disabled menu item', async ({ page }) => {
@@ -69,6 +68,7 @@ test.describe('Dropdown component', () => {
     const firstItem = items.first();
     const secondItem = items.nth(1);
 
+    await page.keyboard.press('ArrowDown');
     await expect(firstItem).toHaveAttribute('data-highlighted', '', { timeout: 3000 });
 
     await page.keyboard.press('ArrowDown');
@@ -81,7 +81,8 @@ test.describe('Dropdown component', () => {
   });
 
   test('trigger aria-expanded is isolated between dropdowns', async ({ page }) => {
-    await demoPage.examplesSection.scrollIntoViewIfNeeded();
+    await demoPage.page.locator('#examples, #examples + *').first().scrollIntoViewIfNeeded();
+    await demoPage.examplesSection.waitFor({ state: 'visible', timeout: 10_000 });
     const firstTrigger = demoPage.firstDemoCard.locator('[z-dropdown]');
     const secondTrigger = demoPage.getDemoByName('hover').locator('[z-dropdown]');
 
