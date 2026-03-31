@@ -15,7 +15,7 @@ import { lucideBadgeCheck, lucideChevronRight } from '@ng-icons/lucide';
       class="border-border hover:bg-accent/50 focus-visible:border-ring focus-visible:ring-ring/50 flex w-full flex-wrap items-center gap-2.5 rounded-md border px-4 py-3 text-sm transition-colors duration-100 outline-none focus-visible:ring-[3px]"
     >
       <div class="flex shrink-0 items-center justify-center gap-2 bg-transparent">
-        <ng-icon name="lucideBadgeCheck" class="size-5" />
+        <ng-icon name="lucideBadgeCheck" size="1.25rem" />
       </div>
       <div class="flex flex-1 flex-col gap-1">
         <div class="flex w-fit items-center gap-2 text-sm leading-snug font-medium">
@@ -23,7 +23,7 @@ import { lucideBadgeCheck, lucideChevronRight } from '@ng-icons/lucide';
         </div>
       </div>
       <div class="flex items-center gap-2">
-        <ng-icon name="lucideChevronRight" class="size-4" />
+        <ng-icon name="lucideChevronRight" size="1rem" />
       </div>
     </button>
   `,

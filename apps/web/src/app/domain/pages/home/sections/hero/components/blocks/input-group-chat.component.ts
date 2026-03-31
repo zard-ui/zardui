@@ -24,7 +24,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
   template: `
     <z-button-group class="w-full [--radius:9999rem]">
       <z-button-group>
-        <button type="button" z-button zSize="sm" zType="outline" zShape="circle" aria-label="Add">
+        <button type="button" z-button zSize="icon-sm" zType="outline" zShape="circle" class="size-8!" aria-label="Add">
           <ng-icon name="lucidePlus" />
         </button>
       </z-button-group>

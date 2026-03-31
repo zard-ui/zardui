@@ -99,12 +99,12 @@ export const inputGroupAddonVariants = cva(
       {
         zType: 'textarea',
         zPosition: 'before',
-        class: 'w-full justify-start px-2.5 pt-2',
+        class: 'w-full justify-start px-3 pt-2',
       },
       {
         zType: 'textarea',
         zPosition: 'after',
-        class: 'w-full justify-start px-2.5 pb-2',
+        class: 'w-full justify-start px-3 pb-2',
       },
     ],
   },

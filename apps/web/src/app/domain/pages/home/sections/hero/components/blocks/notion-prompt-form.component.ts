@@ -183,7 +183,7 @@ const SAMPLE_DATA = {
               type="button"
               z-button
               zType="ghost"
-              zSize="sm"
+              zSize="icon-sm"
               zShape="circle"
               zTooltip="Attach file"
               aria-label="Attach file"
@@ -311,7 +311,7 @@ const SAMPLE_DATA = {
             </ng-template>
 
             <!-- Send Button -->
-            <button type="button" z-button zSize="sm" zShape="circle" class="ml-auto" aria-label="Send">
+            <button type="button" z-button zSize="icon-sm" zShape="circle" class="ml-auto" aria-label="Send">
               <ng-icon name="lucideArrowUp" />
             </button>
           </div>
