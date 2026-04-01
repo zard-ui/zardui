@@ -4,29 +4,29 @@
   "files": [
     {
       "name": "skeleton.component.ts",
-      "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\r\n\r\nimport type { ClassValue } from 'clsx';\r\n\r\nimport { mergeClasses } from '@/shared/utils/merge-classes';\r\n\r\nimport { skeletonVariants } from './skeleton.variants';\r\n\r\n@Component({\r\n  selector: 'z-skeleton',\r\n  template: `\r\n    <div data-slot=\"skeleton\" [class]=\"classes()\"></div>\r\n  `,\r\n  changeDetection: ChangeDetectionStrategy.OnPush,\r\n  encapsulation: ViewEncapsulation.None,\r\n  host: {\r\n    class: 'block',\r\n  },\r\n  exportAs: 'zSkeleton',\r\n})\r\nexport class ZardSkeletonComponent {\r\n  readonly class = input<ClassValue>('');\r\n\r\n  protected readonly classes = computed(() => mergeClasses(skeletonVariants(), this.class()));\r\n}\r\n"
+      "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\nimport { skeletonVariants } from './skeleton.variants';\n\n@Component({\n  selector: 'z-skeleton',\n  template: `\n    <div data-slot=\"skeleton\" [class]=\"classes()\"></div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    class: 'block',\n  },\n  exportAs: 'zSkeleton',\n})\nexport class ZardSkeletonComponent {\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() => mergeClasses(skeletonVariants(), this.class()));\n}\n"
     },
     {
       "name": "skeleton.variants.ts",
-      "content": "import { cva, type VariantProps } from 'class-variance-authority';\r\n\r\nexport const skeletonVariants = cva('bg-accent animate-pulse rounded-md');\r\nexport type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;\r\n"
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const skeletonVariants = cva('bg-accent animate-pulse rounded-md');\nexport type ZardSkeletonVariants = VariantProps<typeof skeletonVariants>;\n"
     },
     {
       "name": "index.ts",
-      "content": "export * from './skeleton.component';\r\nexport * from './skeleton.variants';\r\n"
+      "content": "export * from './skeleton.component';\nexport * from './skeleton.variants';\n"
     }
   ],
   "docs": {
-    "overview": "# Skeleton\r\n\r\nUse to show a placeholder while content is loading.\r\n",
-    "api": "# API\r\n\r\n## [z-skeleton] <span class=\"api-type-label component\">Component</span>\r\n\r\n> `z-skeleton` renders a customizable placeholder during data loading to improve perceived performance and prevent layout shifts.\r\n\r\n| Property  | Description        | Type     | Default |\r\n| --------- | ------------------ | -------- | ------- |\r\n| `[class]` | Custom CSS classes | `string` | `''`    |\r\n"
+    "overview": "# Skeleton\n\nUse to show a placeholder while content is loading.\n",
+    "api": "# API\n\n## [z-skeleton] <span class=\"api-type-label component\">Component</span>\n\n> `z-skeleton` renders a customizable placeholder during data loading to improve perceived performance and prevent layout shifts.\n\n| Property  | Description        | Type     | Default |\n| --------- | ------------------ | -------- | ------- |\n| `[class]` | Custom CSS classes | `string` | `''`    |\n"
   },
   "demos": [
     {
       "name": "card.ts",
-      "content": "import { Component } from '@angular/core';\r\n\r\nimport { ZardSkeletonComponent } from '../skeleton.component';\r\n\r\n@Component({\r\n  selector: 'z-demo-skeleton-card',\r\n  imports: [ZardSkeletonComponent],\r\n  standalone: true,\r\n  template: `\r\n    <div class=\"flex flex-col space-y-3\">\r\n      <z-skeleton class=\"h-[125px] w-[250px] rounded-xl\" />\r\n      <div class=\"space-y-2\">\r\n        <z-skeleton class=\"h-4 w-[250px]\" />\r\n        <z-skeleton class=\"h-4 w-[200px]\" />\r\n      </div>\r\n    </div>\r\n  `,\r\n})\r\nexport class ZardDemoSkeletonCardComponent {}\r\n"
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '../skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-card',\n  imports: [ZardSkeletonComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex flex-col space-y-3\">\n      <z-skeleton class=\"h-[125px] w-[250px] rounded-xl\" />\n      <div class=\"space-y-2\">\n        <z-skeleton class=\"h-4 w-[250px]\" />\n        <z-skeleton class=\"h-4 w-[200px]\" />\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoSkeletonCardComponent {}\n"
     },
     {
       "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\r\n\r\nimport { ZardSkeletonComponent } from '../skeleton.component';\r\n\r\n@Component({\r\n  selector: 'z-demo-skeleton-default',\r\n  imports: [ZardSkeletonComponent],\r\n  standalone: true,\r\n  template: `\r\n    <div class=\"flex items-center space-x-4\">\r\n      <z-skeleton class=\"size-12 rounded-full\" />\r\n      <div class=\"space-y-2\">\r\n        <z-skeleton class=\"h-4 w-[250px]\" />\r\n        <z-skeleton class=\"h-4 w-[200px]\" />\r\n      </div>\r\n    </div>\r\n  `,\r\n})\r\nexport class ZardDemoSkeletonDefaultComponent {}\r\n"
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '../skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-default',\n  imports: [ZardSkeletonComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex items-center space-x-4\">\n      <z-skeleton class=\"size-12 rounded-full\" />\n      <div class=\"space-y-2\">\n        <z-skeleton class=\"h-4 w-[250px]\" />\n        <z-skeleton class=\"h-4 w-[200px]\" />\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoSkeletonDefaultComponent {}\n"
     }
   ]
 }
