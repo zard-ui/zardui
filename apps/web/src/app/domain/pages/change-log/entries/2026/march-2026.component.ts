@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 
 import {
   type ChangelogEntryComponent,
@@ -9,7 +9,8 @@ import {
 
 @Component({
   selector: 'z-changelog-march-2026',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   template: ``,
 })
 export class March2026Component implements ChangelogEntryComponent {

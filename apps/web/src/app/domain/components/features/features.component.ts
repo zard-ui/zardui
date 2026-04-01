@@ -1,23 +1,23 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronRight } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
-import { zardChevronRightIcon } from '@zard/core/icons-registry';
 
 @Component({
   selector: 'z-features',
-  standalone: true,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   imports: [
     RouterModule,
     ZardCardComponent,
     ZardButtonComponent,
-    ZardCardComponent,
     ZardBadgeComponent,
     ZardCheckboxComponent,
     ZardInputDirective,
@@ -47,13 +47,13 @@ import { zardChevronRightIcon } from '@zard/core/icons-registry';
         <a z-button zType="ghost" routerLink="/components/button" class="group">
           View all
           <ng-icon
-            name="chevron-right"
+            name="lucideChevronRight"
             class="shrink-0 transition-all duration-300 ease-out group-hover:translate-x-1"
           />
         </a>
       </footer>
     </section>
   `,
-  viewProviders: [provideIcons({ chevronRight: zardChevronRightIcon })],
+  viewProviders: [provideIcons({ lucideChevronRight })],
 })
 export class FeaturesComponent {}

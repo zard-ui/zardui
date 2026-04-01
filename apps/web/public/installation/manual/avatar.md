@@ -16,7 +16,12 @@ import type { SafeUrl } from '@angular/platform-browser';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { avatarVariants, imageVariants, type ZardAvatarVariants, type ZardImageVariants } from './avatar.variants';
+import {
+  avatarVariants,
+  imageVariants,
+  type ZardAvatarShapeVariants,
+  type ZardAvatarSizeVariants,
+} from './avatar.variants';
 
 export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
 
@@ -30,8 +35,8 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
 
     @if (zSrc() && !imageError()) {
       <img
-        fill
-        sizes="100%"
+        [width]="40"
+        [height]="40"
         [alt]="zAlt()"
         [class]="imgClasses()"
         [ngSrc]="zSrc()"
@@ -127,8 +132,8 @@ export class ZardAvatarComponent {
   readonly zAlt = input<string>('');
   readonly zFallback = input<string>('');
   readonly zPriority = input(false, { transform: booleanAttribute });
-  readonly zShape = input<ZardImageVariants['zShape']>('circle');
-  readonly zSize = input<ZardAvatarVariants['zSize'] | number>('default');
+  readonly zShape = input<ZardAvatarShapeVariants>('circle');
+  readonly zSize = input<ZardAvatarSizeVariants>('default');
   readonly zSrc = input<string | SafeUrl>('');
   readonly zStatus = input<ZardAvatarStatus>();
 
@@ -144,19 +149,16 @@ export class ZardAvatarComponent {
     });
   }
 
-  protected readonly containerClasses = computed(() => {
-    const size = this.zSize();
-    const zSize = typeof size === 'number' ? undefined : (size as ZardAvatarVariants['zSize']);
-
-    return mergeClasses(avatarVariants({ zShape: this.zShape(), zSize }), this.class());
-  });
+  protected readonly containerClasses = computed(() =>
+    mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize() }), this.class()),
+  );
 
   protected readonly customSize = computed(() => {
     const size = this.zSize();
     return typeof size === 'number' ? `${size}px` : null;
   });
 
-  protected readonly imgClasses = computed(() => mergeClasses(imageVariants({ zShape: this.zShape() })));
+  protected readonly imgClasses = computed(() => imageVariants({ zShape: this.zShape(), zSize: this.zSize() }));
 
   protected onImageLoad(): void {
     this.imageLoaded.set(true);
@@ -202,6 +204,13 @@ export const avatarVariants = cva(
 
 export const imageVariants = cva('relative object-cover object-center size-full z-10', {
   variants: {
+    zSize: {
+      sm: 'size-8',
+      default: 'size-10',
+      md: 'size-12',
+      lg: 'size-14',
+      xl: 'size-16',
+    },
     zShape: {
       circle: 'rounded-full',
       rounded: 'rounded-md',
@@ -210,6 +219,7 @@ export const imageVariants = cva('relative object-cover object-center size-full 
   },
   defaultVariants: {
     zShape: 'circle',
+    zSize: 'default',
   },
 });
 
@@ -225,9 +235,9 @@ export const avatarGroupVariants = cva('flex items-center [&_img]:ring-2 [&_img]
   },
 });
 
-export type ZardAvatarVariants = VariantProps<typeof avatarVariants>;
-export type ZardImageVariants = VariantProps<typeof imageVariants>;
-export type ZardAvatarGroupVariants = VariantProps<typeof avatarGroupVariants>;
+export type ZardAvatarSizeVariants = NonNullable<VariantProps<typeof avatarVariants>['zSize']>;
+export type ZardAvatarShapeVariants = NonNullable<VariantProps<typeof avatarVariants>['zShape']>;
+export type ZardAvatarGroupOrientationVariants = NonNullable<VariantProps<typeof avatarGroupVariants>['zOrientation']>;
 
 ```
 
@@ -240,7 +250,7 @@ import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { avatarGroupVariants, type ZardAvatarGroupVariants } from './avatar.variants';
+import { avatarGroupVariants, type ZardAvatarGroupOrientationVariants } from './avatar.variants';
 
 @Component({
   selector: 'z-avatar-group',
@@ -255,7 +265,7 @@ import { avatarGroupVariants, type ZardAvatarGroupVariants } from './avatar.vari
   exportAs: 'zAvatarGroup',
 })
 export class ZardAvatarGroupComponent {
-  readonly zOrientation = input<ZardAvatarGroupVariants['zOrientation']>('horizontal');
+  readonly zOrientation = input<ZardAvatarGroupOrientationVariants>('horizontal');
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() =>

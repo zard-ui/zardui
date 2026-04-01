@@ -559,7 +559,7 @@ import { menuLabelVariants } from '@/shared/components/menu/menu.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
-  selector: 'z-menu-label, [z-menu-label]',
+  selector: 'z-menu-label, [z-menu-label], z-dropdown-menu-label, [z-dropdown-menu-label]',
   template: `
     <ng-content />
   `,

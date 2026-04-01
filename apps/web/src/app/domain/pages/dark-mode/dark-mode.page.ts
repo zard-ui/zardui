@@ -56,7 +56,7 @@ export class DarkmodePage implements OnInit {
     this.seoService.setDocsSeo(
       'Dark Mode',
       'Complete dark mode system with theme switching and persistence.',
-      '/docs/darkmode',
+      '/docs/dark-mode',
       'og-darkmode.jpg',
     );
   }
