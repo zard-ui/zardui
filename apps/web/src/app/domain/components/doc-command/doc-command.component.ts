@@ -1,6 +1,9 @@
 import { AfterViewInit, Component, inject, viewChild, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { provideIcons } from '@ng-icons/core';
+import { lucideFileText, lucideLayers } from '@ng-icons/lucide';
+
 import { SIDEBAR_PATHS } from '@doc/shared/constants/routes.constant';
 
 import { ZardCommandImports } from '@zard/components/command';
@@ -8,7 +11,6 @@ import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/c
 import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
 
 @Component({
-  standalone: true,
   imports: [ZardCommandImports],
   template: `
     <z-command #commandRef class="md:min-w-125" (zCommandSelected)="handleCommand($event)">
@@ -21,7 +23,7 @@ import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
             <z-command-option
               [zLabel]="item.name"
               [zValue]="'navigate:' + item.path"
-              zIcon="file-text"
+              zIcon="lucideFileText"
             ></z-command-option>
           }
         </z-command-option-group>
@@ -30,12 +32,17 @@ import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
 
         <z-command-option-group zLabel="Components">
           @for (item of componentItems; track item.path) {
-            <z-command-option [zLabel]="item.name" [zValue]="'navigate:' + item.path" zIcon="layers"></z-command-option>
+            <z-command-option
+              [zLabel]="item.name"
+              [zValue]="'navigate:' + item.path"
+              zIcon="lucideLayers"
+            ></z-command-option>
           }
         </z-command-option-group>
       </z-command-list>
     </z-command>
   `,
+  viewProviders: [provideIcons({ lucideFileText, lucideLayers })],
 })
 export class CommandDocComponent implements AfterViewInit, OnDestroy {
   readonly commandComponent = viewChild.required<ZardCommandComponent>('commandRef');

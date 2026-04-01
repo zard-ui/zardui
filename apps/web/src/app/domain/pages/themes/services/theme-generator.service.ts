@@ -80,7 +80,9 @@ export class ThemeGeneratorService {
     const lightVars = this.formatCssVariables(theme.light, theme.radius);
     const darkVars = this.formatCssVariables(theme.dark);
 
-    return `@import 'tailwindcss';
+    return `
+@layer ng-icon, theme, base, components, utilities;
+@import 'tailwindcss';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
@@ -150,7 +152,7 @@ ${darkVars}
     appearance: textfield; /* Added for general compatibility */
   }
 }
-  
+
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -164,7 +166,7 @@ ${darkVars}
 ::-webkit-scrollbar-track {
   border-radius: 5px;
   background: var(--muted);
-}  
+}
 `;
   }
 

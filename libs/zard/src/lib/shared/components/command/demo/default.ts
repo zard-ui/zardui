@@ -1,5 +1,15 @@
 import { Component } from '@angular/core';
 
+import { provideIcons } from '@ng-icons/core';
+import {
+  lucideFolder,
+  lucideFolderOpen,
+  lucideLayoutDashboard,
+  lucideMoon,
+  lucideSave,
+  lucideTerminal,
+} from '@ng-icons/lucide';
+
 import { ZardCommandImports } from '@/shared/components/command/command.imports';
 
 import type { ZardCommandOption } from '../command.component';
@@ -7,7 +17,6 @@ import type { ZardCommandOption } from '../command.component';
 @Component({
   selector: 'z-demo-command-default',
   imports: [ZardCommandImports],
-  standalone: true,
   template: `
     <z-command class="md:min-w-125" (zCommandSelected)="handleCommand($event)">
       <z-command-input placeholder="Search actions, files, and more..." />
@@ -15,27 +24,37 @@ import type { ZardCommandOption } from '../command.component';
         <z-command-empty>No commands found.</z-command-empty>
 
         <z-command-option-group zLabel="Quick Actions">
-          <z-command-option zLabel="Create new project" zValue="new-project" zIcon="folder" zShortcut="⌘N" />
-          <z-command-option zLabel="Open file" zValue="open-file" zIcon="folder-open" zShortcut="⌘O" />
-          <z-command-option zLabel="Save all" zValue="save-all" zIcon="save" zShortcut="⌘S" />
+          <z-command-option zLabel="Create new project" zValue="new-project" zIcon="lucideFolder" zShortcut="⌘N" />
+          <z-command-option zLabel="Open file" zValue="open-file" zIcon="lucideFolderOpen" zShortcut="⌘O" />
+          <z-command-option zLabel="Save all" zValue="save-all" zIcon="lucideSave" zShortcut="⌘S" />
         </z-command-option-group>
 
         <z-command-divider />
 
         <z-command-option-group zLabel="Navigation">
-          <z-command-option zLabel="Go to Dashboard" zValue="dashboard" zIcon="layout-dashboard" zShortcut="⌘1" />
-          <z-command-option zLabel="Go to Projects" zValue="projects" zIcon="folder" zShortcut="⌘2" />
+          <z-command-option zLabel="Go to Dashboard" zValue="dashboard" zIcon="lucideLayoutDashboard" zShortcut="⌘1" />
+          <z-command-option zLabel="Go to Projects" zValue="projects" zIcon="lucideFolder" zShortcut="⌘2" />
         </z-command-option-group>
 
         <z-command-divider />
 
         <z-command-option-group zLabel="Tools">
-          <z-command-option zLabel="Open terminal" zValue="terminal" zIcon="terminal" zShortcut="⌘T" />
-          <z-command-option zLabel="Toggle theme" zValue="theme" zIcon="moon" zShortcut="⌘D" />
+          <z-command-option zLabel="Open terminal" zValue="terminal" zIcon="lucideTerminal" zShortcut="⌘T" />
+          <z-command-option zLabel="Toggle theme" zValue="theme" zIcon="lucideMoon" zShortcut="⌘D" />
         </z-command-option-group>
       </z-command-list>
     </z-command>
   `,
+  viewProviders: [
+    provideIcons({
+      lucideFolder,
+      lucideFolderOpen,
+      lucideSave,
+      lucideLayoutDashboard,
+      lucideTerminal,
+      lucideMoon,
+    }),
+  ],
   host: {
     '(window:keydown)': 'handleKeydown($event)',
   },

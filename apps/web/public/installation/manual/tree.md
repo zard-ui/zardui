@@ -79,7 +79,7 @@ import { treeVariants } from './tree.variants';
   },
   exportAs: 'zTree',
 })
-export class ZardTreeComponent<T = any> {
+export class ZardTreeComponent<T> {
   readonly treeService = inject(ZardTreeService<T>);
   private readonly elementRef = inject(ElementRef);
 
@@ -422,10 +422,11 @@ import {
 } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronRight } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardTreeService } from './tree.service';
@@ -439,7 +440,7 @@ import {
 
 @Component({
   selector: 'z-tree-node',
-  imports: [NgTemplateOutlet, FormsModule, ZardIconComponent, ZardCheckboxComponent],
+  imports: [NgTemplateOutlet, FormsModule, NgIcon, ZardCheckboxComponent],
   template: `
     <div
       class="flex items-center"
@@ -455,7 +456,7 @@ import {
           [attr.tabindex]="-1"
           (click)="onToggle($event)"
         >
-          <z-icon zType="chevron-right" class="size-4" />
+          <ng-icon name="lucideChevronRight" class="size-4!" />
         </button>
       } @else {
         <span class="inline-flex size-4 shrink-0"></span>
@@ -487,7 +488,7 @@ import {
           <ng-container [ngTemplateOutlet]="tmpl" [ngTemplateOutletContext]="{ $implicit: node(), level: level() }" />
         } @else {
           @if (node().icon) {
-            <z-icon [zType]="$any(node().icon)" class="size-4 shrink-0" />
+            <ng-icon [name]="node().icon" class="size-4! shrink-0" />
           }
           <span class="truncate">{{ node().label }}</span>
         }
@@ -521,13 +522,18 @@ import {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [
+    provideIcons({
+      lucideChevronRight,
+    }),
+  ],
   host: {
     '[class]': 'hostClasses()',
     '[attr.data-key]': 'node().key',
   },
   exportAs: 'zTreeNode',
 })
-export class ZardTreeNodeComponent<T = any> {
+export class ZardTreeNodeComponent<T> {
   readonly treeService = inject(ZardTreeService);
 
   readonly node = input.required<TreeNode<T>>();
@@ -887,11 +893,13 @@ export class ZardTreeService<T = any> {
 
 
 ```angular-ts title="tree.types.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-export interface TreeNode<T = any> {
+import type { IconName } from '@ng-icons/core';
+
+export interface TreeNode<T> {
   key: string;
   label: string;
   data?: T;
-  icon?: string;
+  icon?: IconName;
   children?: TreeNode<T>[];
   expanded?: boolean;
   selected?: boolean;
@@ -907,7 +915,7 @@ export interface TreeNodeTemplateContext<T = unknown> {
 
 export type TreeCheckState = 'checked' | 'unchecked' | 'indeterminate';
 
-export interface FlatTreeNode<T = any> {
+export interface FlatTreeNode<T> {
   node: TreeNode<T>;
   level: number;
   expandable: boolean;

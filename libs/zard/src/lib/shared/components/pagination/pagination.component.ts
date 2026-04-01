@@ -11,6 +11,8 @@ import {
   ViewEncapsulation,
 } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronLeft, lucideChevronRight, lucideEllipsis } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import {
@@ -18,7 +20,6 @@ import {
   type ZardButtonSizeVariants,
   type ZardButtonTypeVariants,
 } from '@/shared/components/button';
-import { ZardIconComponent } from '@/shared/components/icon';
 import {
   paginationContentVariants,
   paginationEllipsisVariants,
@@ -94,7 +95,7 @@ export class ZardPaginationButtonComponent {
 
 @Component({
   selector: 'z-pagination-previous',
-  imports: [ZardPaginationButtonComponent, ZardIconComponent],
+  imports: [ZardPaginationButtonComponent, NgIcon],
   template: `
     <button
       type="button"
@@ -105,12 +106,13 @@ export class ZardPaginationButtonComponent {
       [zDisabled]="zDisabled()"
     >
       <span class="sr-only">To previous page</span>
-      <z-icon zType="chevron-left" aria-hidden="true" />
+      <ng-icon name="lucideChevronLeft" aria-hidden="true" />
       <span class="hidden sm:block" aria-hidden="true">Previous</span>
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideChevronLeft })],
   exportAs: 'zPaginationPrevious',
 })
 export class ZardPaginationPreviousComponent {
@@ -123,7 +125,7 @@ export class ZardPaginationPreviousComponent {
 
 @Component({
   selector: 'z-pagination-next',
-  imports: [ZardPaginationButtonComponent, ZardIconComponent],
+  imports: [ZardPaginationButtonComponent, NgIcon],
   template: `
     <button
       type="button"
@@ -135,11 +137,12 @@ export class ZardPaginationPreviousComponent {
     >
       <span class="sr-only">To next page</span>
       <span class="hidden sm:block" aria-hidden="true">Next</span>
-      <z-icon zType="chevron-right" aria-hidden="true" />
+      <ng-icon name="lucideChevronRight" aria-hidden="true" />
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideChevronRight })],
   exportAs: 'zPaginationNext',
 })
 export class ZardPaginationNextComponent {
@@ -152,12 +155,13 @@ export class ZardPaginationNextComponent {
 
 @Component({
   selector: 'z-pagination-ellipsis',
-  imports: [ZardIconComponent],
+  imports: [NgIcon],
   template: `
-    <z-icon zType="ellipsis" aria-hidden="true" />
+    <ng-icon name="lucideEllipsis" aria-hidden="true" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideEllipsis })],
   host: {
     '[class]': 'classes()',
     'aria-hidden': 'true',

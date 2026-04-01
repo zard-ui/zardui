@@ -14,12 +14,13 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCalendar } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardButtonComponent, type ZardButtonTypeVariants } from '@/shared/components/button';
 import { ZardCalendarComponent } from '@/shared/components/calendar';
 import type { ZardDatePickerSizeVariants } from '@/shared/components/date-picker/date-picker.variants';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/popover';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
@@ -44,7 +45,7 @@ const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
 
 @Component({
   selector: 'z-date-picker, [z-date-picker]',
-  imports: [ZardButtonComponent, ZardCalendarComponent, ZardPopoverComponent, ZardPopoverDirective, ZardIconComponent],
+  imports: [NgIcon, ZardButtonComponent, ZardCalendarComponent, ZardPopoverComponent, ZardPopoverDirective],
   template: `
     <button
       z-button
@@ -62,7 +63,7 @@ const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
       [attr.aria-haspopup]="true"
       aria-label="Choose date"
     >
-      <z-icon zType="calendar" />
+      <ng-icon name="lucideCalendar" class="size-4!" />
       <span [class]="textClasses()">
         {{ displayText() }}
       </span>
@@ -92,6 +93,7 @@ const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideCalendar })],
   host: {
     '[class]': 'class()',
   },

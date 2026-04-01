@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
+import { provideIcons } from '@ng-icons/core';
+import { lucideInbox } from '@ng-icons/lucide';
 import { render, screen } from '@testing-library/angular';
 
 import { ZardEmptyComponent } from './empty.component';
@@ -31,16 +33,19 @@ describe('ZardEmptyComponent', () => {
     expect(imageElement).toHaveClass('mx-auto');
   });
 
-  it('should render an ZardIcon when provided', async () => {
-    await render(ZardEmptyComponent, { inputs: { zIcon: 'inbox' } });
+  it('renders an icon when a name string is provided', async () => {
+    await render(ZardEmptyComponent, {
+      inputs: { zIcon: 'lucideInbox' },
+      providers: [provideIcons({ lucideInbox })],
+    });
 
     const iconElement = screen.getByTestId('icon');
     expect(iconElement).toBeVisible();
     expect(iconElement).toHaveClass(emptyIconVariants());
 
-    const zIcon = iconElement.querySelector('z-icon');
-    expect(zIcon).toBeVisible();
-    expect(zIcon).toHaveAttribute('zsize', 'xl');
+    const ngIcon = iconElement.querySelector('ng-icon');
+    expect(ngIcon).toBeVisible();
+    expect(ngIcon).toHaveClass('size-5!');
   });
 
   it('should render title when provided', async () => {
@@ -61,8 +66,11 @@ describe('ZardEmptyComponent', () => {
     expect(descriptionElement).toHaveClass(emptyDescriptionVariants());
   });
 
-  it('should render image over icon when both are provided', async () => {
-    await render(ZardEmptyComponent, { inputs: { zIcon: 'inbox', zImage: 'url' } });
+  it('renders image over icon when both are provided', async () => {
+    await render(ZardEmptyComponent, {
+      inputs: { zIcon: 'lucideInbox', zImage: 'url' },
+      providers: [provideIcons({ lucideInbox })],
+    });
 
     const imageElement = screen.getByAltText('Empty');
     const iconElement = screen.queryByTestId('icon');
@@ -144,7 +152,7 @@ describe('ZardEmptyComponent', () => {
         <z-empty [zActions]="[action]" />
 
         <ng-template #action>
-          <button z-button>Action</button>
+          <button z-button type="button">Action</button>
         </ng-template>
       `,
     })

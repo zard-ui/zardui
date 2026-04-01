@@ -2,13 +2,12 @@ import { isPlatformBrowser } from '@angular/common';
 import { Component, inject, PLATFORM_ID } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ZardDialogModule } from './dialog.component';
+import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
+
 import { ZardDialogService } from './dialog.service';
-import { ZardButtonComponent } from '../button/button.component';
 
 @Component({
-  imports: [ZardButtonComponent, ZardDialogModule],
-  standalone: true,
+  imports: [ZardDialogImports],
   template: `
     <button type="button" z-button zType="outline" (click)="openDialog()">Open dialog</button>
   `,

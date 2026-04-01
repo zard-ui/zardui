@@ -1,10 +1,19 @@
 import { DOCUMENT, isPlatformBrowser } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input, PLATFORM_ID } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  input,
+  PLATFORM_ID,
+  ViewEncapsulation,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideArrowLeft, lucideArrowRight, lucideChevronDown, lucideChevronUp, lucideCopy } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
-import { LucideAngularModule, Copy, ChevronDown, ArrowLeft, ArrowRight, ChevronUp } from 'lucide-angular';
 import { filter, map, startWith } from 'rxjs/operators';
 
 import { environment } from '@doc/env/environment';
@@ -18,27 +27,34 @@ import type { AiAssistOption } from './ai-assist.types';
 
 @Component({
   selector: 'z-assist',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, ZardPopoverComponent, ZardPopoverDirective, ZardDividerComponent, ZardButtonComponent, LucideAngularModule],
+  encapsulation: ViewEncapsulation.None,
+  imports: [RouterLink, ZardPopoverComponent, ZardPopoverDirective, ZardDividerComponent, ZardButtonComponent, NgIcon],
   templateUrl: './ai-assist.component.html',
   host: {
     '[class]': 'hostClasses()',
   },
+  viewProviders: [
+    provideIcons({
+      lucideCopy,
+      lucideChevronDown,
+      lucideChevronUp,
+      lucideArrowLeft,
+      lucideArrowRight,
+    }),
+  ],
 })
 export class AiAssistComponent {
   private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
-  private readonly appRoutes = [...SECTIONS.data, ...DOCS_PATH.data, ...COMPONENTS_PATH.data].filter(route => route.available).filter(route => route.path !== '/llms.txt');
+  private readonly appRoutes = [...SECTIONS.data, ...DOCS_PATH.data, ...COMPONENTS_PATH.data]
+    .filter(route => route.available)
+    .filter(route => route.path !== '/llms.txt');
+
   private readonly baseUrl = 'https://zardui.com';
 
-  readonly CopyIcon = Copy;
-  readonly ChevronDownIcon = ChevronDown;
-  readonly ChevronUpIcon = ChevronUp;
-  readonly ArrowLeftIcon = ArrowLeft;
-  readonly ArrowRightIcon = ArrowRight;
   readonly class = input<ClassValue>('');
 
   protected readonly featureCopyPage = environment.features.copyPage;

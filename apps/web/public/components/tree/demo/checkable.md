@@ -16,7 +16,7 @@ import type { TreeNode } from '@/shared/components/tree/tree.types';
 export class ZardDemoTreeCheckableComponent {
   checkedLabels = 'None';
 
-  readonly permissions: TreeNode[] = [
+  readonly permissions: TreeNode<unknown>[] = [
     {
       key: 'admin',
       label: 'Administration',
@@ -51,7 +51,7 @@ export class ZardDemoTreeCheckableComponent {
     },
   ];
 
-  onCheckChange(nodes: TreeNode[]) {
+  onCheckChange(nodes: TreeNode<unknown>[]) {
     const labels = nodes.filter(n => n.leaf).map(n => n.label);
     this.checkedLabels = labels.length ? labels.join(', ') : 'None';
   }

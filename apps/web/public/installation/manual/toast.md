@@ -13,7 +13,6 @@ import { toastVariants, type ZardToastVariants } from './toast.variants';
 @Component({
   selector: 'z-toast, z-toaster',
   imports: [NgxSonnerToaster],
-  standalone: true,
   template: `
     <ngx-sonner-toaster
       [theme]="theme()"
@@ -34,7 +33,7 @@ import { toastVariants, type ZardToastVariants } from './toast.variants';
 })
 export class ZardToastComponent {
   readonly class = input<ClassValue>('');
-  readonly variant = input<ZardToastVariants['variant']>('default');
+  readonly variant = input<ZardToastVariants>('default');
   readonly theme = input<'light' | 'dark' | 'system'>('system');
   readonly position = input<'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right'>(
     'bottom-right',
@@ -76,7 +75,7 @@ export const toastVariants = cva(
   },
 );
 
-export type ZardToastVariants = VariantProps<typeof toastVariants>;
+export type ZardToastVariants = NonNullable<VariantProps<typeof toastVariants>['variant']>;
 
 ```
 

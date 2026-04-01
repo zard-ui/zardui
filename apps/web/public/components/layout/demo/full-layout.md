@@ -2,14 +2,16 @@
 import { NgOptimizedImage } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBell, lucideHouse, lucideLayers, lucideSearch, lucideUsers } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { LayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 
 @Component({
   selector: 'z-demo-layout-full',
-  imports: [LayoutImports, ZardButtonComponent, ZardSkeletonComponent, ZardIconComponent, NgOptimizedImage],
+  imports: [LayoutImports, ZardButtonComponent, ZardSkeletonComponent, NgOptimizedImage, NgIcon],
   template: `
     <z-layout class="min-h-150 overflow-hidden rounded-md border">
       <z-header>
@@ -20,10 +22,10 @@ import { ZardSkeletonComponent } from '@/shared/components/skeleton';
           </div>
           <div class="flex items-center gap-2">
             <button type="button" z-button zType="ghost" zSize="sm">
-              <z-icon zType="search" />
+              <ng-icon name="lucideSearch" />
             </button>
             <button type="button" z-button zType="ghost" zSize="sm">
-              <z-icon zType="bell" />
+              <ng-icon name="lucideBell" />
             </button>
           </div>
         </div>
@@ -35,15 +37,15 @@ import { ZardSkeletonComponent } from '@/shared/components/skeleton';
             <z-sidebar-group>
               <z-sidebar-group-label>Menu</z-sidebar-group-label>
               <button type="button" z-button zType="secondary" class="justify-start">
-                <z-icon zType="house" class="mr-2" />
+                <ng-icon name="lucideHouse" class="mr-2" />
                 Dashboard
               </button>
               <button type="button" z-button zType="ghost" class="justify-start">
-                <z-icon zType="layers" class="mr-2" />
+                <ng-icon name="lucideLayers" class="mr-2" />
                 Projects
               </button>
               <button type="button" z-button zType="ghost" class="justify-start">
-                <z-icon zType="users" class="mr-2" />
+                <ng-icon name="lucideUsers" class="mr-2" />
                 Team
               </button>
             </z-sidebar-group>
@@ -67,6 +69,15 @@ import { ZardSkeletonComponent } from '@/shared/components/skeleton';
     </z-layout>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideSearch,
+      lucideBell,
+      lucideHouse,
+      lucideLayers,
+      lucideUsers,
+    }),
+  ],
 })
 export class LayoutDemoFullComponent {
   year = new Date().getFullYear();

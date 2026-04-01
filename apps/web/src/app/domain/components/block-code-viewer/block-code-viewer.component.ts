@@ -1,7 +1,18 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, signal, untracked } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  signal,
+  untracked,
+  ViewEncapsulation,
+} from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideClipboard, lucideFile, lucideFolder } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
 import { ZardTreeComponent } from '@zard/components/tree/tree.component';
 import type { TreeNode } from '@zard/components/tree/tree.types';
 
@@ -10,9 +21,11 @@ import type { BlockFile } from '../block-container/block-container.component';
 
 @Component({
   selector: 'z-block-code-viewer',
-  imports: [SimpleCodeHighlightComponent, ZardTreeComponent, ZardIconComponent, ZardButtonComponent],
+  imports: [SimpleCodeHighlightComponent, ZardTreeComponent, NgIcon, ZardButtonComponent],
   templateUrl: './block-code-viewer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideClipboard, lucideFile, lucideFolder })],
 })
 export class BlockCodeViewerComponent {
   readonly files = input.required<BlockFile[]>();
@@ -56,7 +69,7 @@ export class BlockCodeViewerComponent {
           childNode = {
             key: currentPath,
             label: part,
-            icon: isFile ? 'file' : 'folder',
+            icon: isFile ? 'lucideFile' : 'lucideFolder',
             leaf: isFile,
             data: isFile ? file : undefined,
             children: isFile ? undefined : [],

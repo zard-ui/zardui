@@ -1,18 +1,20 @@
 ```angular-ts showLineNumbers copyButton
 import { Component } from '@angular/core';
 
-import { ZardIconComponent } from '../../icon/icon.component';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBold } from '@ng-icons/lucide';
+
 import { ZardToggleComponent } from '../toggle.component';
 
 @Component({
   selector: 'z-demo-toggle-default',
-  imports: [ZardToggleComponent, ZardIconComponent],
-  standalone: true,
+  imports: [ZardToggleComponent, NgIcon],
   template: `
     <z-toggle aria-label="Default toggle">
-      <z-icon zType="bold" />
+      <ng-icon name="lucideBold" />
     </z-toggle>
   `,
+  viewProviders: [provideIcons({ lucideBold })],
 })
 export class ZardDemoToggleDefaultComponent {}
 

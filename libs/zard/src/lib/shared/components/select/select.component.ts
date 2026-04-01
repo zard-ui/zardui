@@ -10,11 +10,13 @@ import {
   computed,
   contentChildren,
   DestroyRef,
+  effect,
   ElementRef,
   forwardRef,
   inject,
   Injector,
   input,
+  linkedSignal,
   model,
   type OnDestroy,
   output,
@@ -28,11 +30,12 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideChevronDown } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 import { filter } from 'rxjs';
 
 import { ZardBadgeComponent } from '@/shared/components/badge';
-import { ZardIconComponent } from '@/shared/components/icon';
 import { ZardSelectItemComponent } from '@/shared/components/select/select-item.component';
 import {
   selectContentVariants,
@@ -49,14 +52,14 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
 
 @Component({
   selector: 'z-select, [z-select]',
-  imports: [OverlayModule, ZardBadgeComponent, ZardIconComponent],
+  imports: [OverlayModule, ZardBadgeComponent, NgIcon],
   template: `
     <button
       type="button"
       role="combobox"
       aria-controls="dropdown"
       [class]="triggerClasses()"
-      [disabled]="zDisabled()"
+      [disabled]="disabledState()"
       [attr.aria-expanded]="isOpen()"
       [attr.aria-haspopup]="'listbox'"
       [attr.data-placeholder]="!zValue() ? '' : null"
@@ -77,7 +80,7 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
       </span>
-      <z-icon zType="chevron-down" zSize="lg" class="opacity-50" />
+      <ng-icon name="lucideChevronDown" class="size-4! opacity-50" />
     </button>
 
     <ng-template #dropdownTemplate>
@@ -103,9 +106,10 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideChevronDown })],
   host: {
     '[attr.data-active]': 'isFocus() ? "" : null',
-    '[attr.data-disabled]': 'zDisabled() ? "" : null',
+    '[attr.data-disabled]': 'disabledState() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '[class]': 'classes()',
     '(keydown.{enter,space,arrowdown,arrowup,escape}.prevent)': 'onTriggerKeydown($event)',
@@ -141,6 +145,15 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   readonly focusedIndex = signal<number>(-1);
   protected readonly isFocus = signal(false);
   protected readonly isCompact = signal(false);
+  protected readonly disabledState = linkedSignal(() => this.zDisabled());
+
+  constructor() {
+    effect(() => {
+      if (this.disabledState() && this.isOpen()) {
+        this.close(false);
+      }
+    });
+  }
 
   protected onFocus(): void {
     if (this.isCompact()) {
@@ -201,6 +214,10 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   onTriggerKeydown(event: Event) {
+    if (this.disabledState()) {
+      return;
+    }
+
     const { key } = event as KeyboardEvent;
     switch (key) {
       case 'Enter':
@@ -248,7 +265,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   toggle() {
-    if (this.zDisabled()) {
+    if (this.disabledState()) {
       return;
     }
 
@@ -260,6 +277,10 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   selectItem(value: string, label: string) {
+    if (this.disabledState()) {
+      return;
+    }
+
     if (value === undefined || value === null || value === '') {
       console.warn('Attempted to select item with invalid value:', { value, label });
       return;
@@ -333,7 +354,7 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
   }
 
   private open() {
-    if (this.isOpen()) {
+    if (this.isOpen() || this.disabledState()) {
       return;
     }
 
@@ -367,13 +388,15 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.focusSelectedItem();
   }
 
-  private close() {
+  private close(shouldTouch = true) {
     if (this.overlayRef?.hasAttached()) {
       this.overlayRef.detach();
     }
     this.isOpen.set(false);
     this.focusedIndex.set(-1);
-    this.onTouched();
+    if (shouldTouch) {
+      this.onTouched();
+    }
     this.updateFocusWhenNormalMode();
   }
 
@@ -626,7 +649,10 @@ export class ZardSelectComponent implements ControlValueAccessor, AfterContentIn
     this.onTouched = fn;
   }
 
-  setDisabledState(): void {
-    // The disabled state is handled by the disabled input
+  setDisabledState(isDisabled: boolean): void {
+    this.disabledState.set(isDisabled);
+    if (isDisabled && this.isOpen()) {
+      this.close(false);
+    }
   }
 }

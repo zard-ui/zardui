@@ -1,7 +1,10 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { ZardToggleGroupComponent, type ZardToggleGroupItem } from './toggle-group.component';
+import {
+  ZardToggleGroupComponent,
+  type ZardToggleGroupItem,
+} from '@/shared/components/toggle-group/toggle-group.component';
 
 describe('ZardToggleGroupComponent', () => {
   let component: ZardToggleGroupComponent;
@@ -119,7 +122,7 @@ describe('ZardToggleGroupComponent', () => {
 
   it('should handle disabled state', () => {
     fixture.componentRef.setInput('items', mockToggleItems);
-    fixture.componentRef.setInput('disabled', true);
+    fixture.componentRef.setInput('zDisabled', true);
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
@@ -130,7 +133,7 @@ describe('ZardToggleGroupComponent', () => {
 
   it('should not toggle when disabled', () => {
     fixture.componentRef.setInput('items', mockToggleItems);
-    fixture.componentRef.setInput('disabled', true);
+    fixture.componentRef.setInput('zDisabled', true);
     fixture.detectChanges();
 
     jest.spyOn(component.valueChange, 'emit');
@@ -160,8 +163,8 @@ describe('ZardToggleGroupComponent', () => {
     fixture.detectChanges();
 
     const buttons = fixture.nativeElement.querySelectorAll('button');
-    const icon1 = buttons[0].querySelector('span[z-icon]');
-    const icon2 = buttons[1].querySelector('span[z-icon]');
+    const icon1 = buttons[0].querySelector('ng-icon');
+    const icon2 = buttons[1].querySelector('ng-icon');
 
     expect(icon1).toBeTruthy();
     expect(icon2).toBeTruthy();
@@ -176,7 +179,7 @@ describe('ZardToggleGroupComponent', () => {
     fixture.detectChanges();
 
     const button = fixture.nativeElement.querySelector('button');
-    const icon = button.querySelector('span[z-icon]');
+    const icon = button.querySelector('ng-icon');
     const textSpan = button.querySelector('span:last-child');
 
     expect(icon).toBeTruthy();

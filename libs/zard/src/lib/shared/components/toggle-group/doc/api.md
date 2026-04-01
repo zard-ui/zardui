@@ -4,12 +4,13 @@
 
 ### Inputs
 
-| Name       | Type                   | Default | Description                         |
-| ---------- | ---------------------- | ------- | ----------------------------------- |
-| `zValue`   | `ToggleGroupValue[]`   | `[]`    | Array of toggle items to display    |
-| `zDefault` | `ToggleGroupValue[]`   | `[]`    | Default value when using with forms |
-| `zSize`    | `'sm' \| 'md' \| 'lg'` | `'md'`  | Size variant of the toggle group    |
-| `class`    | `ClassValue`           | `''`    | Additional CSS classes              |
+| Name        | Type                   | Default | Description                          |
+| ----------- | ---------------------- | ------- | ------------------------------------ |
+| `class`     | `ClassValue`           | `''`    | Additional CSS classes               |
+| `zDefault`  | `ToggleGroupValue[]`   | `[]`    | Default value when using with forms  |
+| `zDisabled` | `boolean`              | `false` | Whether the entire group is disabled |
+| `zSize`     | `'sm' \| 'md' \| 'lg'` | `'md'`  | Size variant of the toggle group     |
+| `zValue`    | `ToggleGroupValue[]`   | `[]`    | Array of toggle items to display     |
 
 ### Outputs
 

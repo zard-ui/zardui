@@ -26,17 +26,18 @@ import {
   type ViewContainerRef,
 } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideX } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
 import type { ZardSheetRef } from './sheet-ref';
 import { sheetVariants, type ZardSheetVariants } from './sheet.variants';
-import { ZardButtonComponent } from '../button/button.component';
-import { ZardIconComponent } from '../icon/icon.component';
-import type { ZardIcon } from '../icon/icons';
 
 export type OnClickCallback<T> = (instance: T) => false | void | object;
 export class ZardSheetOptions<T, U> {
-  zCancelIcon?: ZardIcon;
+  zCancelIcon?: string;
   zCancelText?: string | null;
   zClosable?: boolean;
   zContent?: string | TemplateRef<T> | Type<T>;
@@ -48,7 +49,7 @@ export class ZardSheetOptions<T, U> {
   zMaskClosable?: boolean;
   zOkDestructive?: boolean;
   zOkDisabled?: boolean;
-  zOkIcon?: ZardIcon;
+  zOkIcon?: string;
   zOkText?: string | null;
   zOnCancel?: EventEmitter<T> | OnClickCallback<T> = noopFn;
   zOnOk?: EventEmitter<T> | OnClickCallback<T> = noopFn;
@@ -61,7 +62,7 @@ export class ZardSheetOptions<T, U> {
 
 @Component({
   selector: 'z-sheet',
-  imports: [OverlayModule, PortalModule, ZardButtonComponent, ZardIconComponent],
+  imports: [OverlayModule, PortalModule, ZardButtonComponent, NgIcon],
   template: `
     @if (config.zClosable || config.zClosable === undefined) {
       <button
@@ -73,7 +74,7 @@ export class ZardSheetOptions<T, U> {
         class="absolute top-1 right-1 cursor-pointer"
         (click)="onCloseClick()"
       >
-        <z-icon zType="x" />
+        <ng-icon name="lucideX" />
       </button>
     }
 
@@ -114,7 +115,7 @@ export class ZardSheetOptions<T, U> {
             (click)="onOkClick()"
           >
             @if (config.zOkIcon) {
-              <z-icon [zType]="config.zOkIcon" />
+              <ng-icon [svg]="config.zOkIcon" />
             }
 
             {{ config.zOkText ?? 'OK' }}
@@ -131,7 +132,7 @@ export class ZardSheetOptions<T, U> {
             (click)="onCloseClick()"
           >
             @if (config.zCancelIcon) {
-              <z-icon [zType]="config.zCancelIcon" />
+              <ng-icon [svg]="config.zCancelIcon" />
             }
 
             {{ config.zCancelText ?? 'Cancel' }}
@@ -141,6 +142,7 @@ export class ZardSheetOptions<T, U> {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideX })],
   host: {
     'data-slot': 'sheet',
     '[class]': 'classes()',

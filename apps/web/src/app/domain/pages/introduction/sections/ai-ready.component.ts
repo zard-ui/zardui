@@ -1,20 +1,20 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+
+import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBookOpenText, lucideSun } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardIconComponent } from '@zard/components/icon/icon.component';
-import { ZardIcon } from '@zard/components/icon/icons';
 
 interface AIFeatureCard {
   title: string;
   description: string;
-  icon: ZardIcon;
+  icon: IconName;
 }
 
 @Component({
   selector: 'ai-ready-section',
-  standalone: true,
-  imports: [ZardBadgeComponent, ZardCardComponent, ZardIconComponent],
+  imports: [ZardBadgeComponent, ZardCardComponent, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -23,8 +23,8 @@ interface AIFeatureCard {
           <z-badge zType="secondary">Future Ready</z-badge>
         </div>
         <p class="text-muted-foreground text-base leading-7">
-          ZardUI components are designed with AI development in mind. Clear patterns, consistent APIs, and comprehensive documentation make it easy for AI tools to understand and
-          work with our components.
+          ZardUI components are designed with AI development in mind. Clear patterns, consistent APIs, and comprehensive
+          documentation make it easy for AI tools to understand and work with our components.
         </p>
       </div>
 
@@ -33,7 +33,7 @@ interface AIFeatureCard {
           <z-card [zTitle]="title">
             <ng-template #title>
               <div class="flex items-center gap-2">
-                <z-icon [zType]="card.icon" class="text-lg font-normal" />
+                <ng-icon [name]="card.icon" class="text-lg font-normal" />
                 <h3 class="text-base">{{ card.title }}</h3>
               </div>
             </ng-template>
@@ -43,18 +43,22 @@ interface AIFeatureCard {
       </div>
     </section>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideSun, lucideBookOpenText })],
 })
 export class AIReadySection {
   readonly cards: AIFeatureCard[] = [
     {
       title: 'Predictable Patterns',
-      description: 'Consistent naming conventions, standardized props, and logical component hierarchies that AI can easily understand and generate code for.',
-      icon: 'sun',
+      description:
+        'Consistent naming conventions, standardized props, and logical component hierarchies that AI can easily understand and generate code for.',
+      icon: 'lucideSun',
     },
     {
       title: 'Rich Documentation',
-      description: 'Comprehensive examples, clear API references, and usage patterns that provide AI tools with the context they need to generate accurate code.',
-      icon: 'book-open-text',
+      description:
+        'Comprehensive examples, clear API references, and usage patterns that provide AI tools with the context they need to generate accurate code.',
+      icon: 'lucideBookOpenText',
     },
   ];
 }

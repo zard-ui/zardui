@@ -1,6 +1,8 @@
 import { ChangeDetectionStrategy, Component, inject, type AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+import { lucideSave } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardInputDirective } from '@/shared/components/input';
 import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
@@ -83,6 +85,7 @@ export class ZardDemoSheetBasicComponent {
         username: '@ribeiromatheus.dev',
       },
       zOkText: 'Save changes',
+      zOkIcon: lucideSave,
       zOnOk: instance => {
         console.log('Form submitted:', instance.form.value);
       },

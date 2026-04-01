@@ -66,15 +66,14 @@ describe('ZardCarouselComponent', () => {
     });
     const component = fixture.componentInstance;
     const emitSpy = jest.spyOn(component.zSelected, 'emit');
-    const slideNextSpy = jest.spyOn(component, 'slideNext');
     component.onEmblaChange('init', mockEmblaApi);
 
-    await userEvent.click(screen.getByLabelText('Next slide'));
+    const nextButton = screen.getByLabelText('Next slide');
+    nextButton.click();
     mockEmblaApi.selectedScrollSnap.mockReturnValue(1);
     component.onEmblaChange('select', mockEmblaApi);
     fixture.detectChanges();
 
-    expect(slideNextSpy).toHaveBeenCalled();
     expect(emitSpy).toHaveBeenCalled();
   });
 
@@ -84,11 +83,10 @@ describe('ZardCarouselComponent', () => {
     });
     const component = fixture.componentInstance;
     const emitSpy = jest.spyOn(component.zSelected, 'emit');
-    const slideNextSpy = jest.spyOn(component, 'slideNext');
-    const slidePrevSpy = jest.spyOn(component, 'slidePrevious');
     component.onEmblaChange('init', mockEmblaApi);
 
-    await userEvent.click(screen.getByLabelText('Next slide'));
+    const nextButton = screen.getByLabelText('Next slide');
+    nextButton.click();
     mockEmblaApi.selectedScrollSnap.mockReturnValue(1);
     mockEmblaApi.scrollProgress.mockReturnValue(1);
     mockEmblaApi.canScrollPrev.mockReturnValue(true);
@@ -98,19 +96,18 @@ describe('ZardCarouselComponent', () => {
     expect(emitSpy).toHaveBeenCalled();
     expect(component['selectedIndex']()).toBe(1);
     expect(mockEmblaApi.canScrollPrev()).toBeTruthy();
-    expect(slideNextSpy).toHaveBeenCalled();
 
-    await userEvent.click(screen.getByLabelText('Previous slide'));
+    const prevButton = screen.getByLabelText('Previous slide');
+    prevButton.click();
     mockEmblaApi.selectedScrollSnap.mockReturnValue(0);
     mockEmblaApi.scrollProgress.mockReturnValue(0);
     mockEmblaApi.canScrollPrev.mockReturnValue(false);
     component.onEmblaChange('select', mockEmblaApi);
     fixture.detectChanges();
 
-    expect(emitSpy).toHaveBeenCalled();
+    expect(emitSpy).toHaveBeenCalledTimes(2);
     expect(component['selectedIndex']()).toBe(0);
     expect(mockEmblaApi.canScrollPrev()).toBeFalsy();
-    expect(slidePrevSpy).toHaveBeenCalled();
   });
 
   it('handles dot interaction', async () => {

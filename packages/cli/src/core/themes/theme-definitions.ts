@@ -1,6 +1,7 @@
 export const availableThemes: string[] = ['neutral', 'stone', 'zinc', 'gray', 'slate'];
 
 const tailwindConfiguration = `
+@layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
 @plugin "tailwindcss-animate";
 

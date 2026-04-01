@@ -9,7 +9,7 @@
 | `[zFallback]` | Fallback text displayed while loading or on error | `string`                                    | `''`      |
 | `[zPriority]` | Should image load with high priority              | `boolean`                                   | `false`   |
 | `[zShape]`    | Avatar shape                                      | `circle \| rounded \| square`               | `circle`  |
-| `[zSize]`     | Avatar size variant                               | `sm \| default \| md \| lg \| xl \| number` | `default` |
+| `[zSize]`     | Avatar size variant                               | `sm \| default \| md \| lg \| xl \`         | `default` |
 | `[zSrc]`      | Image source URL                                  | `string \| SafeUrl`                         | `''`      |
 | `[zStatus]`   | Status indicator badge                            | `online \| offline \| doNotDisturb \| away` |           |
 

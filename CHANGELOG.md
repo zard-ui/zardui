@@ -1,3 +1,103 @@
+## 1.0.0-beta.75 (2026-04-01)
+
+### ✨ Features
+
+- **web:** enhance landing page hero interactions ([#475](https://github.com/zard-ui/zardui/pull/475))
+
+### ❤️ Thank You
+
+- Charizard
+- Florian Veltmann
+- luiz gomes
+- Luiz gomes @Luizgomess
+- Mickey Lazarevic @mikij
+- Pavan Mollagavelli @neopavan
+- viniciuscigma
+
+## 1.0.0-beta.74 (2026-03-27)
+
+### 📦 Code Refactoring
+
+- **toast:** improve type safety and component configuration ([#505](https://github.com/zard-ui/zardui/pull/505))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
+## 1.0.0-beta.73 (2026-03-27)
+
+### 🐛 Bug Fixes
+
+- **dialog:** remove hardcoded max-width for dialog variants ([#503](https://github.com/zard-ui/zardui/pull/503))
+
+### ❤️ Thank You
+
+- viniciuscigma
+
+## 1.0.0-beta.72 (2026-03-24)
+
+### 🐛 Bug Fixes
+
+- **ui:** rename disabled input to zDisabled and implement setDisabledState ([#494](https://github.com/zard-ui/zardui/pull/494))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
+## 1.0.0-beta.71 (2026-03-24)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.70 (2026-03-24)
+
+### 🐛 Bug Fixes
+
+- **cli:** use cross-platform shebang injection ([63e51a4](https://github.com/zard-ui/zardui/commit/63e51a4))
+
+### ❤️ Thank You
+
+- Luiz Gomes
+
+## 1.0.0-beta.69 (2026-03-24)
+
+### 🐛 Bug Fixes
+
+- **cli:** ensure tailwindcss-animate is installed ([2b1a237](https://github.com/zard-ui/zardui/commit/2b1a237))
+
+### ❤️ Thank You
+
+- Luiz Gomes
+
+## 1.0.0-beta.68 (2026-03-22)
+
+### ✨ Features
+
+- **ui:** migrate icon component from lucide-angular to ng-icons ([#482](https://github.com/zard-ui/zardui/pull/482))
+
+### 🐛 Bug Fixes
+
+- remove icon component export ([02bac8d](https://github.com/zard-ui/zardui/commit/02bac8d))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+- Luiz Gomes
+- Mickey Lazarevic
+
+## 1.0.0-beta.67 (2026-03-21)
+
+### 🐛 Bug Fixes
+
+- update github links on roadmap page ([#493](https://github.com/zard-ui/zardui/pull/493))
+
+### ❤️ Thank You
+
+- Florian Veltmann
+
+## 1.0.0-beta.66 (2026-03-11)
+
+This was a version bump only, there were no code changes.
+
 ## 1.0.0-beta.65 (2026-03-09)
 
 This was a version bump only, there were no code changes.

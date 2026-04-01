@@ -153,7 +153,7 @@ function categorizeComponents(): Record<string, Array<{ name: string; path: stri
         categories['Overlays & Dialogs'].push(component);
       } else if (['Alert', 'Toast', 'Progress Bar', 'Loader', 'Skeleton', 'Badge', 'Empty'].includes(item.name)) {
         categories['Feedback & Status'].push(component);
-      } else if (['Avatar', 'Card', 'Table', 'Icon'].includes(item.name)) {
+      } else if (['Avatar', 'Card', 'Table'].includes(item.name)) {
         categories['Display & Media'].push(component);
       } else {
         categories['Misc'].push(component);

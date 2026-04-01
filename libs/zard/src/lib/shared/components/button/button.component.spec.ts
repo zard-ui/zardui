@@ -1,8 +1,9 @@
-import { render, screen, waitFor } from '@testing-library/angular';
 import '@testing-library/jest-dom';
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideLoaderCircle, lucideSun } from '@ng-icons/lucide';
+import { render, screen, waitFor } from '@testing-library/angular';
 
 import { ZardButtonComponent } from './button.component';
-import { ZardIconComponent } from '../icon/icon.component';
 
 describe('ZardButtonComponent', () => {
   describe('basic rendering', () => {
@@ -40,26 +41,29 @@ describe('ZardButtonComponent', () => {
   describe('loading state', () => {
     it('renders loading icon when zLoading is true', async () => {
       const { container } = await render('<button z-button [zLoading]="true">Button</button>', {
-        imports: [ZardButtonComponent, ZardIconComponent],
+        imports: [ZardButtonComponent, NgIcon],
+        providers: [provideIcons({ lucideLoaderCircle })],
       });
 
-      const loadingIcon = container.querySelector('z-icon');
+      const loadingIcon = container.querySelector('ng-icon');
       expect(loadingIcon).toBeInTheDocument();
       expect(loadingIcon).toHaveClass('animate-spin');
     });
 
     it('does not render loading icon when zLoading is false', async () => {
       const { container } = await render('<button z-button [zLoading]="false">Button</button>', {
-        imports: [ZardButtonComponent, ZardIconComponent],
+        imports: [ZardButtonComponent, NgIcon],
+        providers: [provideIcons({ lucideLoaderCircle })],
       });
 
-      const loadingIcon = container.querySelector('z-icon');
+      const loadingIcon = container.querySelector('ng-icon');
       expect(loadingIcon).not.toBeInTheDocument();
     });
 
     it('applies loading classes when zLoading is true', async () => {
       await render('<button z-button [zLoading]="true">Button</button>', {
-        imports: [ZardButtonComponent, ZardIconComponent],
+        imports: [ZardButtonComponent, NgIcon],
+        providers: [provideIcons({ lucideLoaderCircle })],
       });
 
       const button = screen.getByRole('button');
@@ -264,8 +268,9 @@ describe('ZardButtonComponent', () => {
 
   describe('iconOnly detection', () => {
     it('sets data-icon-only attribute when button has only an icon', async () => {
-      await render('<button z-button><z-icon zType="sun"></z-icon></button>', {
-        imports: [ZardButtonComponent, ZardIconComponent],
+      await render('<button z-button><ng-icon name="sun"></ng-icon></button>', {
+        imports: [ZardButtonComponent, NgIcon],
+        providers: [provideIcons({ lucideSun })],
       });
 
       const button = screen.getByRole('button');
@@ -278,10 +283,11 @@ describe('ZardButtonComponent', () => {
       await render(
         `<button z-button>
           Button
-          <z-icon zType="sun"></z-icon>
+          <ng-icon name="sun"></ng-icon>
         </button>`,
         {
-          imports: [ZardButtonComponent, ZardIconComponent],
+          imports: [ZardButtonComponent, NgIcon],
+          providers: [provideIcons({ lucideSun })],
         },
       );
 
@@ -305,11 +311,12 @@ describe('ZardButtonComponent', () => {
     it('does not set data-icon-only when button has icon before text', async () => {
       await render(
         `<button z-button>
-          <z-icon zType="sun"></z-icon>
+          <ng-icon name="sun"></ng-icon>
           Button
         </button>`,
         {
-          imports: [ZardButtonComponent, ZardIconComponent],
+          imports: [ZardButtonComponent, NgIcon],
+          providers: [provideIcons({ lucideSun })],
         },
       );
 

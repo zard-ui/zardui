@@ -2,13 +2,13 @@
 
 ## Inputs
 
-| Name       | Type         | Default        | Description                        |
-| ---------- | ------------ | -------------- | ---------------------------------- |
-| `class`    | `ClassValue` | `''`           | Additional CSS classes             |
-| `disabled` | `boolean`    | `false`        | Whether the radio is disabled      |
-| `name`     | `string`     | `'radio'`      | Name attribute for the radio group |
-| `zId`      | `string`     | auto-generated | ID attribute for the radio         |
-| `value`    | `unknown`    | `null`         | Value of the radio button          |
+| Name        | Type         | Default        | Description                        |
+| ----------- | ------------ | -------------- | ---------------------------------- |
+| `class`     | `ClassValue` | `''`           | Additional CSS classes             |
+| `zDisabled` | `boolean`    | `false`        | Whether the radio is disabled      |
+| `name`      | `string`     | `'radio'`      | Name attribute for the radio group |
+| `zId`       | `string`     | auto-generated | ID attribute for the radio         |
+| `value`     | `unknown`    | `null`         | Value of the radio button          |
 
 ## Outputs
 

@@ -16,7 +16,7 @@
           @if (node.leaf) {
             <img [src]="getFileIcon(node.label)" alt="" class="h-4 w-4 shrink-0 dark:invert" />
           } @else {
-            <z-icon zType="folder" class="size-4 shrink-0" />
+            <ng-icon name="lucideFolder" class="size-4! shrink-0" />
           }
           <span class="whitespace-nowrap">{{ node.label }}</span>
         </ng-template>
@@ -32,7 +32,7 @@
           <span class="text-code-foreground text-sm">{{ selectedFile()!.path }}</span>
         </div>
         <button (click)="copyToClipboard()" z-button zType="ghost" title="Copy code">
-          <z-icon zType="clipboard" class="text-sm" />
+          <ng-icon name="lucideClipboard" class="text-sm" />
           <span class="sr-only">Copy to clipboard</span>
         </button>
       </div>

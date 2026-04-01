@@ -76,7 +76,7 @@ import { treeVariants } from './tree.variants';
   },
   exportAs: 'zTree',
 })
-export class ZardTreeComponent<T = any> {
+export class ZardTreeComponent<T> {
   readonly treeService = inject(ZardTreeService<T>);
   private readonly elementRef = inject(ElementRef);
 

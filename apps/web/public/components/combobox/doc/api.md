@@ -8,7 +8,7 @@
 | `placeholder`       | `string`                                           | `'Select...'`         | Placeholder text when no value is selected  |
 | `searchPlaceholder` | `string`                                           | `'Search...'`         | Placeholder for the search input            |
 | `emptyText`         | `string`                                           | `'No results found.'` | Text shown when no options match the search |
-| `disabled`          | `boolean`                                          | `false`               | Whether the combobox is disabled            |
+| `zDisabled`         | `boolean`                                          | `false`               | Whether the combobox is disabled            |
 | `searchable`        | `boolean`                                          | `true`                | Whether to show the search input            |
 | `value`             | `string \| null`                                   | `null`                | The selected value                          |
 | `options`           | `ZardComboboxOption[]`                             | `[]`                  | Array of options (for flat list)            |
