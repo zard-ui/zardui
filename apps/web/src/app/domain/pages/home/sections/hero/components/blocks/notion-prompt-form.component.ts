@@ -52,9 +52,16 @@ const SAMPLE_DATA = {
     { type: 'page' as const, title: 'Team Directory', image: '👥' },
     { type: 'page' as const, title: 'Technical Specs', image: '📋' },
     { type: 'page' as const, title: 'Analytics Report', image: '📄' },
-    { type: 'user' as const, title: 'shadcn', image: 'https://github.com/shadcn.png', workspace: 'Workspace' },
-    { type: 'user' as const, title: 'maxleiter', image: 'https://github.com/maxleiter.png', workspace: 'Workspace' },
-    { type: 'user' as const, title: 'evilrabbit', image: 'https://github.com/evilrabbit.png', workspace: 'Workspace' },
+    { type: 'user' as const, title: 'Luizgomess', image: 'https://github.com/Luizgomess.png', workspace: 'Workspace' },
+    { type: 'user' as const, title: 'srizzon', image: 'https://github.com/srizzon.png', workspace: 'Workspace' },
+    {
+      type: 'user' as const,
+      title: 'ribeiromatheuss',
+      image: 'https://github.com/ribeiromatheuss.png',
+      workspace: 'Workspace',
+    },
+    { type: 'user' as const, title: 'mikij', image: 'https://github.com/mikij.png', workspace: 'Workspace' },
+    { type: 'user' as const, title: 'neopavan', image: 'https://github.com/neopavan.png', workspace: 'Workspace' },
   ],
   models: [{ name: 'Auto' }, { name: 'Agent Mode', badge: 'Beta' }, { name: 'Plan Mode' }],
 };
@@ -98,7 +105,7 @@ const SAMPLE_DATA = {
     <form zardId="notion-prompt" #z="zardId">
       <div class="flex flex-col gap-2">
         <label class="sr-only" [attr.for]="z.id()">Prompt</label>
-        <z-input-group [zAddonBefore]="addonBefore" [zAddonAfter]="addonAfter" zAddonAlign="block">
+        <z-input-group [zAddonBefore]="addonBefore" [zAddonAfter]="addonAfter" zAddonAlign="block" class="rounded-2xl!">
           <textarea
             z-input
             [id]="z.id()"
@@ -109,7 +116,7 @@ const SAMPLE_DATA = {
 
         <!-- Addon Before: Mentions -->
         <ng-template #addonBefore>
-          <div class="flex items-center gap-1">
+          <div class="mt-1 flex items-center gap-1">
             <button
               type="button"
               z-button
@@ -139,7 +146,13 @@ const SAMPLE_DATA = {
                     @if (availableUsers().length > 0) {
                       <z-command-option-group zLabel="Users">
                         @for (item of availableUsers(); track item.title) {
-                          <z-command-option [zValue]="item.title" [zLabel]="item.title" />
+                          <div
+                            class="hover:bg-accent hover:text-accent-foreground relative flex cursor-default items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none select-none"
+                            (click)="addMention(item.title)"
+                          >
+                            <z-avatar [zSrc]="item.image" class="size-5" />
+                            <span>{{ item.title }}</span>
+                          </div>
                         }
                       </z-command-option-group>
                     }
@@ -241,7 +254,7 @@ const SAMPLE_DATA = {
               All Sources
             </button>
             <ng-template #sourcesMenu>
-              <div z-menu-content class="w-64 [--radius:1rem]">
+              <div z-menu-content class="w-64 [--radius:1rem] [&_[z-menu-item]]:gap-2">
                 <div class="flex items-center justify-between px-2 py-1.5">
                   <label [attr.for]="z.id() + '-web-search'" class="flex items-center gap-2">
                     <ng-icon name="lucideGlobe" class="size-4" />
@@ -271,8 +284,8 @@ const SAMPLE_DATA = {
                   class="justify-between"
                 >
                   <div class="flex items-center gap-2">
-                    <z-avatar zSrc="https://github.com/shadcn.png" class="size-4" />
-                    shadcn
+                    <z-avatar zSrc="https://github.com/Luizgomess.png" class="size-4" />
+                    Luizgomess
                   </div>
                   <ng-icon name="lucideChevronRight" class="size-4" />
                 </button>
@@ -292,19 +305,29 @@ const SAMPLE_DATA = {
             </ng-template>
             <ng-template #usersSubmenu>
               <div z-menu-content class="w-56">
-                <button type="button" z-menu-item>
-                  <z-avatar zSrc="https://github.com/shadcn.png" class="size-4" />
-                  <span class="flex-1">shadcn</span>
+                <button type="button" z-menu-item class="gap-2">
+                  <z-avatar zSrc="https://github.com/Luizgomess.png" class="size-4" />
+                  <span class="flex-1">Luizgomess</span>
                   <span class="text-muted-foreground text-xs">Workspace</span>
                 </button>
-                <button type="button" z-menu-item>
-                  <z-avatar zSrc="https://github.com/maxleiter.png" class="size-4" />
-                  <span class="flex-1">maxleiter</span>
+                <button type="button" z-menu-item class="gap-2">
+                  <z-avatar zSrc="https://github.com/srizzon.png" class="size-4" />
+                  <span class="flex-1">srizzon</span>
                   <span class="text-muted-foreground text-xs">Workspace</span>
                 </button>
-                <button type="button" z-menu-item>
-                  <z-avatar zSrc="https://github.com/evilrabbit.png" class="size-4" />
-                  <span class="flex-1">evilrabbit</span>
+                <button type="button" z-menu-item class="gap-2">
+                  <z-avatar zSrc="https://github.com/ribeiromatheuss.png" class="size-4" />
+                  <span class="flex-1">ribeiromatheuss</span>
+                  <span class="text-muted-foreground text-xs">Workspace</span>
+                </button>
+                <button type="button" z-menu-item class="gap-2">
+                  <z-avatar zSrc="https://github.com/mikij.png" class="size-4" />
+                  <span class="flex-1">mikij</span>
+                  <span class="text-muted-foreground text-xs">Workspace</span>
+                </button>
+                <button type="button" z-menu-item class="gap-2">
+                  <z-avatar zSrc="https://github.com/neopavan.png" class="size-4" />
+                  <span class="flex-1">neopavan</span>
                   <span class="text-muted-foreground text-xs">Workspace</span>
                 </button>
               </div>

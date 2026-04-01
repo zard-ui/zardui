@@ -10,9 +10,9 @@ import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.compon
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardCardComponent, ZardCheckboxComponent, FormsModule],
   template: `
-    <z-card zTitle="How did you hear about us?">
+    <z-card zTitle="How did you hear about us?" class="gap-2">
       <p class="text-muted-foreground -mt-3 mb-4 line-clamp-1 text-sm leading-normal font-normal">
-        Select all that apply.
+        Select the option that best describes how you heard about us
       </p>
       <div class="flex flex-row flex-wrap gap-2">
         @for (option of options; track option) {

@@ -35,8 +35,8 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
             zoneless ready. No hassle, just results.
           </p>
           <div class="flex w-full items-center justify-center gap-2 pt-2">
-            <a z-button zSize="sm" routerLink="/docs/installation">Getting started</a>
-            <a z-button zType="ghost" zSize="sm" routerLink="/docs/components">View Components</a>
+            <a z-button routerLink="/docs/installation">Getting started</a>
+            <a z-button zType="ghost" routerLink="/docs/components">View Components</a>
           </div>
         </div>
       </div>

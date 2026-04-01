@@ -14,7 +14,7 @@ import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   template: `
     <z-empty
-      zTitle="Processing your request"
+      [zTitle]="title"
       zDescription="Please wait while we process your request. Do not refresh the page."
       [zImage]="spinnerTemplate"
       class="w-full border md:p-6"
@@ -23,9 +23,12 @@ import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
     </z-empty>
 
     <ng-template #spinnerTemplate>
-      <div class="bg-muted text-foreground mb-2 flex size-10 shrink-0 items-center justify-center rounded-lg">
+      <div class="bg-muted text-foreground mb-2 flex size-8 shrink-0 items-center justify-center rounded-lg">
         <ng-icon name="lucideLoaderCircle" class="size-4 animate-spin" />
       </div>
+    </ng-template>
+    <ng-template #title>
+      <h1 class="text-sm font-medium tracking-tight">Processing your request</h1>
     </ng-template>
   `,
 })
