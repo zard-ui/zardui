@@ -1,3 +1,19 @@
+## 1.0.0-beta.75 (2026-04-01)
+
+### ✨ Features
+
+- **web:** enhance landing page hero interactions ([#475](https://github.com/zard-ui/zardui/pull/475))
+
+### ❤️ Thank You
+
+- Charizard
+- Florian Veltmann
+- luiz gomes
+- Luiz gomes @Luizgomess
+- Mickey Lazarevic @mikij
+- Pavan Mollagavelli @neopavan
+- viniciuscigma
+
 ## 1.0.0-beta.74 (2026-03-27)
 
 ### 📦 Code Refactoring
