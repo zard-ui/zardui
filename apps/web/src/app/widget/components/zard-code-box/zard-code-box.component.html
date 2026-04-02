@@ -66,7 +66,9 @@
       [class.invisible]="activeTab() !== 'code'"
       [attr.aria-hidden]="activeTab() !== 'code'"
     >
-      @if (markdownUrl()) {
+      @if (codeData(); as code) {
+        <z-code-block [data]="code" />
+      } @else if (markdownUrl()) {
         <z-markdown-renderer [markdownUrl]="markdownUrl()"></z-markdown-renderer>
       }
     </section>

@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { MarkdownRendererComponent } from '../../../components/render/markdown-renderer.component';
+import { JSON_TAILWIND_BASECOLOR_EXAMPLE } from '@generated/documentation/json/tailwind-basecolor-example';
+import { JSON_TAILWIND_CSS_EXAMPLE } from '@generated/documentation/json/tailwind-css-example';
+import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import type { CodeBlockData } from '@highlight/types';
 
 @Component({
   selector: 'z-json-tailwind-section',
   standalone: true,
-  imports: [MarkdownRendererComponent, RouterLink],
+  imports: [CodeBlockComponent, RouterLink],
   template: `
     <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="tailwind" id="tailwind">
       <div class="flex flex-col gap-4 sm:gap-6">
@@ -38,7 +41,7 @@ import { MarkdownRendererComponent } from '../../../components/render/markdown-r
           <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
             Path to the CSS file that imports Tailwind CSS into your project.
           </p>
-          <z-markdown-renderer markdownUrl="documentation/json/tailwind-css-example.md"></z-markdown-renderer>
+          <z-code-block [data]="tailwindCssExample" />
         </div>
 
         <div id="tailwind-basecolor" class="flex scroll-mt-20 flex-col gap-4">
@@ -53,10 +56,13 @@ import { MarkdownRendererComponent } from '../../../components/render/markdown-r
             </p>
             <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">Currently supported base colors:</p>
           </div>
-          <z-markdown-renderer markdownUrl="documentation/json/tailwind-basecolor-example.md"></z-markdown-renderer>
+          <z-code-block [data]="tailwindBasecolorExample" />
         </div>
       </div>
     </section>
   `,
 })
-export class JsonTailwindSectionComponent {}
+export class JsonTailwindSectionComponent {
+  readonly tailwindCssExample: CodeBlockData = JSON_TAILWIND_CSS_EXAMPLE;
+  readonly tailwindBasecolorExample: CodeBlockData = JSON_TAILWIND_BASECOLOR_EXAMPLE;
+}

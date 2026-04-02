@@ -1,3 +1,9 @@
+import { LAYOUT_DEMO_BASIC } from '@generated/components/layout/demo/basic';
+import { LAYOUT_DEMO_FULL_LAYOUT } from '@generated/components/layout/demo/full-layout';
+import { LAYOUT_DEMO_SIDEBAR } from '@generated/components/layout/demo/sidebar';
+import { LAYOUT_CLI_ADD } from '@generated/installation/cli/add-layout';
+import { LAYOUT_MANUAL_CODE } from '@generated/installation/manual/layout';
+
 import { LayoutDemoBasicComponent } from './basic';
 import { LayoutDemoFullComponent } from './full-layout';
 import { LayoutDemoSidebarComponent } from './sidebar';
@@ -8,20 +14,27 @@ export const LAYOUT = {
   description:
     'A set of layout components for creating common page structures with header, footer, sidebar, and content areas.',
   fullWidth: true,
+  installData: {
+    cliAdd: LAYOUT_CLI_ADD,
+    manualCode: LAYOUT_MANUAL_CODE,
+  },
   examples: [
     {
       name: 'basic',
       component: LayoutDemoBasicComponent,
+      codeData: LAYOUT_DEMO_BASIC,
     },
     {
       name: 'sidebar',
       component: LayoutDemoSidebarComponent,
       fullScreen: true,
+      codeData: LAYOUT_DEMO_SIDEBAR,
     },
     {
       name: 'full-layout',
       component: LayoutDemoFullComponent,
       fullScreen: true,
+      codeData: LAYOUT_DEMO_FULL_LAYOUT,
     },
   ],
 };

@@ -1,32 +1,38 @@
 import { Injectable } from '@angular/core';
 
+import type { CodeBlockData, CodeTabData } from '@highlight/types';
+
 import { Step } from '../constants/install.constant';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DynamicInstallationService {
-  generateInstallationSteps(componentName: string): { cli: Step[]; manual: Step[] } {
+  generateInstallationSteps(
+    componentName: string,
+    cliAddData?: CodeTabData,
+    manualCodeData?: CodeBlockData[],
+    manualDepsData?: CodeTabData,
+  ): { cli: Step[]; manual: Step[] } {
     return {
-      cli: this.generateCliSteps(componentName),
-      manual: this.generateManualSteps(componentName),
+      cli: this.generateCliSteps(componentName, cliAddData),
+      manual: this.generateManualSteps(componentName, manualCodeData, manualDepsData),
     };
   }
 
-  private generateCliSteps(componentName: string): Step[] {
+  private generateCliSteps(componentName: string, cliAddData?: CodeTabData): Step[] {
     const steps: Step[] = [];
 
-    steps.push({
+    const step: Step = {
       title: 'Run the CLI',
       subtitle: 'Use the CLI to add the component to your project.',
-      file: {
-        path: `/installation/cli/add-${componentName}.md`,
-        lineNumber: false,
-      },
-    });
+    };
+    if (cliAddData) {
+      step.codeTabData = cliAddData;
+    }
+    steps.push(step);
 
-    const hasExtraSteps = this.checkIfComponentHasRegisterStep(componentName);
-    if (hasExtraSteps) {
+    if (this.checkIfComponentHasRegisterStep(componentName)) {
       steps.push({
         title: `Register ${componentName} to your project`,
         file: {
@@ -39,34 +45,33 @@ export class DynamicInstallationService {
     return steps;
   }
 
-  private generateManualSteps(componentName: string): Step[] {
+  private generateManualSteps(
+    componentName: string,
+    manualCodeData?: CodeBlockData[],
+    manualDepsData?: CodeTabData,
+  ): Step[] {
     const steps: Step[] = [];
 
-    const hasDependencies = this.checkIfComponentHasDependencies(componentName);
-    if (hasDependencies) {
+    if (this.checkIfComponentHasDependencies(componentName) && manualDepsData) {
       steps.push({
         title: 'Install dependencies',
         subtitle: 'Install the required dependencies for this component.',
-        file: {
-          path: `/installation/manual/install-deps-${componentName}.md`,
-          lineNumber: false,
-        },
+        codeTabData: manualDepsData,
       });
     }
 
-    steps.push({
+    const manualStep: Step = {
       title: 'Add the component files',
-      subtitle: `Create the component directory structure and add the following files to your project.`,
+      subtitle: 'Create the component directory structure and add the following files to your project.',
       path: `components/${componentName}`,
-      file: {
-        path: `/installation/manual/${componentName}.md`,
-        lineNumber: true,
-      },
       expandable: true,
-    });
+    };
+    if (manualCodeData) {
+      manualStep.codeBlockData = manualCodeData;
+    }
+    steps.push(manualStep);
 
-    const hasExtraSteps = this.checkIfComponentHasRegisterStep(componentName);
-    if (hasExtraSteps) {
+    if (this.checkIfComponentHasRegisterStep(componentName)) {
       steps.push({
         title: `Register ${componentName}  to your project`,
         file: {

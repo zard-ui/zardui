@@ -44,7 +44,7 @@
       </p>
     </div>
 
-    <z-markdown-renderer markdownUrl="/documentation/dark-mode/service-installation.md"></z-markdown-renderer>
+    <z-code-tabs [data]="serviceInstallationTabs" />
 
     <div class="flex flex-col gap-6">
       <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
@@ -68,8 +68,17 @@
 
     <div class="flex flex-col gap-6">
       <div>
-        <h1 class="mb-6 text-base font-semibold sm:text-lg">Header Component</h1>
-        <z-markdown-renderer markdownUrl="/documentation/dark-mode/header-usage.md"></z-markdown-renderer>
+        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">
+          Usage in Header Component
+          <span class="text-muted-foreground font-normal">(or any component you want to use to trigger the theme)</span>
+        </h3>
+        <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+          The header uses the service to implement the theme toggle button, allowing users to switch between light and
+          dark mode.
+        </p>
+        <z-code-block [data]="headerComponentBlock" />
+        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Button Template</h3>
+        <z-code-block [data]="headerTemplateBlock" />
       </div>
     </div>
   </section>

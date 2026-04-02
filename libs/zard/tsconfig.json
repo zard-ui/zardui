@@ -10,7 +10,9 @@
     "verbatimModuleSyntax": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/lib/*"]
+      "@/*": ["src/lib/*"],
+      "@generated/*": ["../../apps/web/src/generated/*"],
+      "@highlight/*": ["../../packages/highlight/src/*"]
     },
     "module": "preserve",
     "moduleResolution": "bundler"

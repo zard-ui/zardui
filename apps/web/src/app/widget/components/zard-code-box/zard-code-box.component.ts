@@ -2,6 +2,9 @@ import { ComponentType } from '@angular/cdk/overlay';
 import { NgComponentOutlet } from '@angular/common';
 import { Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
+import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import type { CodeBlockData } from '@highlight/types';
+
 import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 
@@ -9,7 +12,7 @@ import { ZardCardComponent } from '@zard/components/card/card.component';
 
 @Component({
   selector: 'z-code-box',
-  imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent, HyphenToSpacePipe],
+  imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent, HyphenToSpacePipe, CodeBlockComponent],
   templateUrl: './zard-code-box.component.html',
   encapsulation: ViewEncapsulation.None,
   styles: [
@@ -47,8 +50,14 @@ export class ZardCodeBoxComponent {
   readonly fullScreen = input<boolean | undefined>(false);
   readonly flexAlign = input<'start' | 'center' | 'end' | undefined>('center');
   readonly column = input<boolean | undefined>(false);
-  readonly path = input<string>();
   readonly dynamicComponent = input<ComponentType<unknown>>();
+
+  // New: pre-highlighted code data
+  readonly codeData = input<CodeBlockData>();
+
+  // Legacy: markdown path (will be removed after full migration)
+  readonly path = input<string>();
+
   activeTab = signal<'preview' | 'code'>('preview');
 
   readonly markdownUrl = computed(() => {

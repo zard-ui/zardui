@@ -67,6 +67,9 @@ AGENTS.md
 bun.lock
 pnpm-lock.yaml
 
+# Generated highlight files
+apps/web/src/generated/
+
 # Playwright
 /test-results/
 /playwright-report/

@@ -1,5 +1,0 @@
-```json
-{
-  "baseUrl": "src/app"
-}
-```

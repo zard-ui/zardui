@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 
-import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
+import { JSON_APP_CONFIG_EXAMPLE } from '@generated/documentation/json/app-config-example';
+import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import type { CodeBlockData } from '@highlight/types';
 
 @Component({
   selector: 'z-json-app-config-section',
   standalone: true,
-  imports: [MarkdownRendererComponent],
+  imports: [CodeBlockComponent],
   template: `
     <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="app-config" id="app-config">
       <div class="flex flex-col gap-4 sm:gap-6">
@@ -22,9 +24,11 @@ import { MarkdownRendererComponent } from '@doc/domain/components/render/markdow
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">provideZard()</code>
           when needed.
         </p>
-        <z-markdown-renderer markdownUrl="documentation/json/app-config-example.md"></z-markdown-renderer>
+        <z-code-block [data]="appConfigExample" />
       </div>
     </section>
   `,
 })
-export class JsonAppConfigSectionComponent {}
+export class JsonAppConfigSectionComponent {
+  readonly appConfigExample: CodeBlockData = JSON_APP_CONFIG_EXAMPLE;
+}

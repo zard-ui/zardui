@@ -1,5 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject, type OnInit } from '@angular/core';
 
+import { BLOCK_0 as HEADER_BLOCK_0, BLOCK_1 as HEADER_BLOCK_1 } from '@generated/pages/dark-mode/header-usage';
+import { TABS_0 } from '@generated/pages/dark-mode/service-installation';
+import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
+import type { CodeBlockData, CodeTabData } from '@highlight/types';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideMoon, lucideSun, lucideSunMoon } from '@ng-icons/lucide';
 
@@ -13,7 +18,6 @@ import { EDarkModes, ZardDarkMode } from '@zard/services/dark-mode';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '../../components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 
@@ -24,7 +28,8 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     DocHeadingComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
-    MarkdownRendererComponent,
+    CodeBlockComponent,
+    CodeTabsComponent,
     ZardButtonComponent,
     ZardCardComponent,
     NgIcon,
@@ -36,6 +41,10 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 })
 export class DarkmodePage implements OnInit {
   activeAnchor?: string;
+
+  readonly serviceInstallationTabs: CodeTabData = TABS_0;
+  readonly headerComponentBlock: CodeBlockData = HEADER_BLOCK_0;
+  readonly headerTemplateBlock: CodeBlockData = HEADER_BLOCK_1;
 
   private readonly seoService = inject(SeoService);
 

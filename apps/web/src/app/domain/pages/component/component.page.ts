@@ -57,7 +57,7 @@ export class ComponentPage implements OnInit {
   };
 
   activeTab = signal<'manual' | 'cli'>('cli');
-  installGuide!: { manual: Step[]; cli: Step[] } | undefined;
+  installGuide = signal<{ manual: Step[]; cli: Step[] } | undefined>(undefined);
 
   onInstallKeyDown(e: Event, tabList: HTMLElement): void {
     const event = e as KeyboardEvent;
@@ -117,10 +117,15 @@ export class ComponentPage implements OnInit {
     this.loadingEntry.set(entry);
     this.componentData.set(undefined);
 
-    this.installGuide = this.dynamicInstallationService.generateInstallationSteps(componentName);
-
     try {
       const component = await entry.loadData();
+      const installGuide = this.dynamicInstallationService.generateInstallationSteps(
+        componentName,
+        component.installData?.cliAdd,
+        component.installData?.manualCode,
+        component.installData?.manualDeps,
+      );
+      this.installGuide.set(installGuide);
       this.componentData.set(component);
 
       const examplesItem = this.navigationConfig.items.find(item => item.id === 'examples');

@@ -264,6 +264,42 @@ code[data-line-numbers-max-digits='4'] > [data-line]::before {
   width: 2.25rem;
 }
 
+/* Shiki code block styling for z-code-block / z-code-tabs */
+pre.shiki {
+  padding: 16px;
+  font-size: 14px;
+  line-height: 20px;
+  overflow: auto;
+  scrollbar-width: none;
+  background-color: var(--color-code) !important;
+}
+
+pre.shiki::-webkit-scrollbar {
+  display: none;
+}
+
+pre.shiki code {
+  display: grid;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+/* Line numbers for shiki output (span.line) via z-code-block */
+.line-numbers code {
+  counter-reset: line;
+}
+
+.line-numbers code > .line::before {
+  counter-increment: line;
+  content: counter(line);
+  display: inline-block;
+  width: 1.25rem;
+  margin-right: 2rem;
+  text-align: right;
+  color: gray;
+  font-size: var(--text-xs);
+}
+
 code,
 code span {
   color: var(--shiki-light);

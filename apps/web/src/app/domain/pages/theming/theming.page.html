@@ -22,7 +22,11 @@
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
         CSS Variables
       </h2>
-      <z-markdown-renderer markdownUrl="/documentation/theming/css-variables-intro.md" />
+      <z-code-block [data]="cssVarsIntroBlock" />
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        ZardUI uses CSS variables for theming by default. This provides better performance and easier customization
+        compared to utility classes.
+      </p>
     </div>
 
     <div class="">
@@ -32,13 +36,13 @@
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/styles.css</code>
         file:
       </p>
-      <z-markdown-renderer markdownUrl="/documentation/theming/css-variables-v4.md" />
+      <z-code-block [data]="cssVarsV4Block" />
       <p class="text-muted-foreground my-4 text-xs sm:text-sm">
         Update your
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/app/app.config.ts</code>
         file in case CLI did not modify it:
       </p>
-      <z-markdown-renderer markdownUrl="/documentation/theming/app.config.md" />
+      <z-code-block [data]="appConfig" />
     </div>
   </section>
 
@@ -47,7 +51,10 @@
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
         Utility classes
       </h2>
-      <z-markdown-renderer markdownUrl="/documentation/theming/utility-classes-intro.md" />
+      <z-code-block [data]="utilityClassesIntroBlock" />
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        You can also use utility classes for theming if you prefer more explicit control over colors.
+      </p>
     </div>
   </section>
 
@@ -97,7 +104,7 @@
 
     <div class="rounded-lg border p-4 sm:p-6">
       <h3 class="mb-4 text-base font-semibold sm:text-lg">Given the following OKLCH variables:</h3>
-      <z-markdown-renderer markdownUrl="/documentation/theming/convention-example.md"></z-markdown-renderer>
+      <z-code-block [data]="conventionExample" />
       <p class="text-muted-foreground mt-4 text-xs sm:text-sm">
         The
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs">primary</code>
@@ -127,7 +134,7 @@
         Here's the list of variables available for customization:
       </p>
     </div>
-    <z-markdown-renderer markdownUrl="/documentation/theming/variables-list.md"></z-markdown-renderer>
+    <z-code-block [data]="variablesList" />
   </section>
 
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="adding-new-colors" id="adding-new-colors">
@@ -141,7 +148,9 @@
         directive.
       </p>
     </div>
-    <z-markdown-renderer markdownUrl="/documentation/theming/adding-colors-example.md"></z-markdown-renderer>
+    @for (block of addingColorsExample; track $index) {
+      <z-code-block [data]="block" />
+    }
   </section>
 
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="base-colors" id="base-colors">
@@ -156,27 +165,27 @@
 
     <div>
       <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Neutral</h1>
-      <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-neutral.md"></z-markdown-renderer>
+      <z-code-block [data]="baseColorsNeutral" />
     </div>
 
     <div>
       <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Stone</h1>
-      <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-stone.md"></z-markdown-renderer>
+      <z-code-block [data]="baseColorsStone" />
     </div>
 
     <div>
       <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Zinc</h1>
-      <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-zinc.md"></z-markdown-renderer>
+      <z-code-block [data]="baseColorsZinc" />
     </div>
 
     <div>
       <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Gray</h1>
-      <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-gray.md"></z-markdown-renderer>
+      <z-code-block [data]="baseColorsGray" />
     </div>
 
     <div>
       <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Slate</h1>
-      <z-markdown-renderer markdownUrl="/documentation/theming/base-colors-slate.md"></z-markdown-renderer>
+      <z-code-block [data]="baseColorsSlate" />
     </div>
   </section>
 
@@ -185,7 +194,23 @@
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
         Other color formats
       </h2>
-      <z-markdown-renderer markdownUrl="/documentation/theming/other-color-formats.md"></z-markdown-renderer>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        While ZardUI primarily uses OKLCH for better color accuracy and perceptual uniformity, you can also use other
+        color formats with TailwindCSS v4:
+      </p>
+      <z-code-block [data]="otherColorFormatsBlock" />
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        See the
+        <a
+          href="https://tailwindcss.com/docs/colors"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="underline underline-offset-4"
+        >
+          TailwindCSS documentation
+        </a>
+        for more information on using different color formats.
+      </p>
     </div>
   </section>
 </z-content>

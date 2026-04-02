@@ -10,7 +10,9 @@
     "composite": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/lib/*"]
+      "@/*": ["src/lib/*"],
+      "@generated/*": ["../../apps/web/src/generated/*"],
+      "@highlight/*": ["../../packages/highlight/src/*"]
     }
   },
   "exclude": ["src/**/*.spec.ts", "src/test-setup.ts", "jest.config.ts", "src/**/*.test.ts"],

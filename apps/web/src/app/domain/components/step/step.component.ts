@@ -1,6 +1,10 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
+import type { CodeBlockData } from '@highlight/types';
+
 import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
 import { Step } from '@doc/shared/constants/install.constant';
 
@@ -34,7 +38,18 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
                 </a>
               }
             </p>
-            @if (stepProps()?.file?.path) {
+
+            @if (stepProps()?.codeTabData) {
+              <z-code-tabs [data]="stepProps()!.codeTabData!" />
+            } @else if (stepProps()?.codeBlockData) {
+              @if (isCodeBlockArray(stepProps()!.codeBlockData!)) {
+                @for (block of asCodeBlockArray(stepProps()!.codeBlockData!); track $index) {
+                  <z-code-block [data]="block" />
+                }
+              } @else {
+                <z-code-block [data]="asCodeBlock(stepProps()!.codeBlockData!)" />
+              }
+            } @else if (stepProps()?.file?.path) {
               <z-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></z-markdown-renderer>
             }
           </section>
@@ -43,9 +58,21 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardButtonComponent, MarkdownRendererComponent, RouterLink],
+  imports: [ZardButtonComponent, MarkdownRendererComponent, RouterLink, CodeBlockComponent, CodeTabsComponent],
 })
 export class StepComponent {
   readonly stepProps = input<Step>();
   readonly position = input<number>();
+
+  isCodeBlockArray(data: unknown): boolean {
+    return Array.isArray(data);
+  }
+
+  asCodeBlockArray(data: unknown): CodeBlockData[] {
+    return data as CodeBlockData[];
+  }
+
+  asCodeBlock(data: unknown): CodeBlockData {
+    return data as CodeBlockData;
+  }
 }

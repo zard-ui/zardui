@@ -1,11 +1,16 @@
 import { Component } from '@angular/core';
 
-import { MarkdownRendererComponent } from '../../../components/render/markdown-renderer.component';
+import { JSON_ALIASES_COMPONENTS_EXAMPLE } from '@generated/documentation/json/aliases-components-example';
+import { JSON_ALIASES_CORE_EXAMPLE } from '@generated/documentation/json/aliases-core-example';
+import { JSON_ALIASES_SERVICES_EXAMPLE } from '@generated/documentation/json/aliases-services-example';
+import { JSON_ALIASES_UTILS_EXAMPLE } from '@generated/documentation/json/aliases-utils-example';
+import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import type { CodeBlockData } from '@highlight/types';
 
 @Component({
   selector: 'z-json-aliases-section',
   standalone: true,
-  imports: [MarkdownRendererComponent],
+  imports: [CodeBlockComponent],
   template: `
     <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="aliases" id="aliases">
       <div class="flex flex-col gap-4 sm:gap-6">
@@ -36,7 +41,7 @@ import { MarkdownRendererComponent } from '../../../components/render/markdown-r
         <div id="aliases-components" class="flex scroll-mt-20 flex-col gap-4">
           <h3 class="text-lg font-medium sm:text-xl lg:text-2xl">aliases.components</h3>
           <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">Import alias for your UI components.</p>
-          <z-markdown-renderer markdownUrl="documentation/json/aliases-components-example.md"></z-markdown-renderer>
+          <z-code-block [data]="aliasesComponentsExample" />
         </div>
 
         <div id="aliases-utils" class="flex scroll-mt-20 flex-col gap-4">
@@ -46,7 +51,7 @@ import { MarkdownRendererComponent } from '../../../components/render/markdown-r
             <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">mergeClasses</code>
             .
           </p>
-          <z-markdown-renderer markdownUrl="documentation/json/aliases-utils-example.md"></z-markdown-renderer>
+          <z-code-block [data]="aliasesUtilsExample" />
         </div>
 
         <div id="aliases-core" class="flex scroll-mt-20 flex-col gap-4">
@@ -56,7 +61,7 @@ import { MarkdownRendererComponent } from '../../../components/render/markdown-r
             <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">provideZard()</code>
             ).
           </p>
-          <z-markdown-renderer markdownUrl="documentation/json/aliases-core-example.md"></z-markdown-renderer>
+          <z-code-block [data]="aliasesCoreExample" />
         </div>
 
         <div id="aliases-services" class="flex scroll-mt-20 flex-col gap-4">
@@ -64,10 +69,15 @@ import { MarkdownRendererComponent } from '../../../components/render/markdown-r
           <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
             Import alias for your Angular services.
           </p>
-          <z-markdown-renderer markdownUrl="documentation/json/aliases-services-example.md"></z-markdown-renderer>
+          <z-code-block [data]="aliasesServicesExample" />
         </div>
       </div>
     </section>
   `,
 })
-export class JsonAliasesSectionComponent {}
+export class JsonAliasesSectionComponent {
+  readonly aliasesComponentsExample: CodeBlockData = JSON_ALIASES_COMPONENTS_EXAMPLE;
+  readonly aliasesCoreExample: CodeBlockData = JSON_ALIASES_CORE_EXAMPLE;
+  readonly aliasesServicesExample: CodeBlockData = JSON_ALIASES_SERVICES_EXAMPLE;
+  readonly aliasesUtilsExample: CodeBlockData = JSON_ALIASES_UTILS_EXAMPLE;
+}

@@ -1,3 +1,5 @@
+import type { CodeBlockData, CodeTabData } from '@highlight/types';
+
 export interface Step {
   title: string;
   subtitle?: string;
@@ -11,6 +13,8 @@ export interface Step {
     path: string;
     lineNumber: boolean;
   };
+  codeBlockData?: CodeBlockData | CodeBlockData[];
+  codeTabData?: CodeTabData;
   expandable?: boolean;
 }
 

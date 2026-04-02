@@ -1,9 +1,18 @@
 import { ComponentType } from '@angular/cdk/overlay';
 
+import type { CodeBlockData, CodeTabData } from '@highlight/types';
+
+export interface ComponentInstallData {
+  cliAdd?: CodeTabData;
+  manualCode?: CodeBlockData[];
+  manualDeps?: CodeTabData;
+}
+
 export interface ComponentData {
   componentName: string;
   description: string;
   examples: ExampleData[];
+  installData?: ComponentInstallData;
   fullWidth?: boolean;
 }
 
@@ -13,6 +22,7 @@ export interface ExampleData {
   type?: string;
   column?: boolean;
   component: ComponentType<unknown>;
+  codeData?: CodeBlockData;
   onlyDemo?: boolean;
   fullScreen?: boolean;
   fullWidth?: boolean;
