@@ -11,7 +11,7 @@
 :root {
   --header-height: calc(var(--spacing) * 14);
   --footer-height: calc(var(--spacing) * 14);
-  --sidebar-width: 16rem;
+  --sidebar-width: calc(var(--spacing) * 72);
   --font-geist-sans: 'Geist Variable', sans-serif;
   --font-geist-mono: 'Geist Mono Variable', monospace;
   --radius: 0.625rem;

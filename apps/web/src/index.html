@@ -80,7 +80,9 @@
     class="text-foreground group/body bg-background overscroll-none antialiased [--header-height:calc(var(--spacing)*14)] xl:[--footer-height:calc(var(--spacing)*24)]"
   >
     <div data-slot="layout" class="bg-background relative z-10 flex min-h-svh flex-col">
-      <z-root></z-root>
+      <main class="flex min-h-0 flex-1 flex-col">
+        <z-root></z-root>
+      </main>
     </div>
   </body>
 </html>

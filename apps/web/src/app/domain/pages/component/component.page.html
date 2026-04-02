@@ -6,15 +6,13 @@
     (scrollSpyChange)="activeAnchor = $event"
     scrollSpy
   >
-    <div class="relative flex flex-col gap-5" scrollSpyItem="overview" id="overview">
-      <div>
-        <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight first-letter:uppercase sm:text-3xl xl:text-4xl">
-          {{ data.componentName }}
-        </h1>
-        <p class="text-muted-foreground text-base leading-7 [&:not(:first-child)]:mt-6">
-          {{ data.description }}
-        </p>
-      </div>
+    <div class="relative flex flex-col gap-2" scrollSpyItem="overview" id="overview">
+      <h1 class="scroll-m-24 text-3xl font-semibold tracking-tight first-letter:uppercase sm:text-3xl">
+        {{ data.componentName }}
+      </h1>
+      <p class="text-muted-foreground text-[1.05rem] sm:text-base sm:text-balance md:max-w-[80%]">
+        {{ data.description }}
+      </p>
       <z-assist></z-assist>
       <z-code-box
         [codeData]="data.examples[0].codeData"
