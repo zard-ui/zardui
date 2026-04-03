@@ -1,4 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  signal,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronDown } from '@ng-icons/lucide';
@@ -21,6 +29,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
       [attr.aria-controls]="'content-' + zValue()"
       [attr.aria-expanded]="isOpen()"
       [id]="'accordion-' + zValue()"
+      [disabled]="zDisabled()"
       [class]="triggerClasses()"
       (click)="toggle()"
     >
@@ -32,19 +41,21 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
       />
     </button>
 
-    <div
-      role="region"
-      [attr.aria-labelledby]="'accordion-' + zValue()"
-      [attr.data-state]="isOpen() ? 'open' : 'closed'"
-      [id]="'content-' + zValue()"
-      [class]="contentClasses()"
-    >
-      <div class="overflow-hidden">
-        <div class="pt-0 pb-4">
-          <ng-content />
+    @if (!zDisabled()) {
+      <div
+        role="region"
+        [attr.aria-labelledby]="'accordion-' + zValue()"
+        [attr.data-state]="isOpen() ? 'open' : 'closed'"
+        [id]="'content-' + zValue()"
+        [class]="contentClasses()"
+      >
+        <div class="overflow-hidden">
+          <div class="pt-0 pb-4">
+            <ng-content />
+          </div>
         </div>
       </div>
-    </div>
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -52,6 +63,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   host: {
     '[class]': 'itemClasses()',
     '[attr.data-state]': "isOpen() ? 'open' : 'closed'",
+    '[attr.data-disabled]': 'zDisabled()',
+    '[attr.aria-disabled]': 'zDisabled()',
+    '[attr.disabled]': 'zDisabled()',
   },
   exportAs: 'zAccordionItem',
 })
@@ -59,6 +73,7 @@ export class ZardAccordionItemComponent {
   readonly zTitle = input<string>('');
   readonly zValue = input<string>('');
   readonly class = input<ClassValue>('');
+  readonly zDisabled = input(false, { transform: booleanAttribute });
 
   accordion!: ZardAccordionComponent;
   readonly isOpen = signal(false);

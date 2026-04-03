@@ -8,18 +8,27 @@
   >
     <div class="relative flex flex-col gap-2" scrollSpyItem="overview" id="overview">
       <h1 class="scroll-m-24 text-3xl font-semibold tracking-tight first-letter:uppercase sm:text-3xl">
-        {{ data.componentName }}
+        {{ data.componentName | hyphenToSpace }}
       </h1>
       <p class="text-muted-foreground text-[1.05rem] sm:text-base sm:text-balance md:max-w-[80%]">
         {{ data.description }}
       </p>
       <z-assist></z-assist>
-      <z-code-box
-        [codeData]="data.examples[0].codeData"
-        [dynamicComponent]="data.examples[0].component"
-        [onlyDemo]="data.examples[0].onlyDemo"
-        [column]="data.examples[0].column || false"
-      ></z-code-box>
+      @if (data.preview) {
+        <z-code-box
+          [codeData]="data.preview.codeData"
+          [dynamicComponent]="data.preview.component"
+          [onlyDemo]="data.preview.onlyDemo"
+          [column]="data.preview.column || false"
+        ></z-code-box>
+      } @else {
+        <z-code-box
+          [codeData]="data.examples[0].codeData"
+          [dynamicComponent]="data.examples[0].component"
+          [onlyDemo]="data.examples[0].onlyDemo"
+          [column]="data.examples[0].column || false"
+        ></z-code-box>
+      }
     </div>
 
     <section class="flex flex-col gap-4" scrollSpyItem="installation" id="installation">
@@ -100,7 +109,7 @@
 
     <div class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
       <section class="flex flex-col gap-4">
-        <h2 class="mb-5 text-2xl font-semibold">Examples</h2>
+        <h2 class="font-heading mt-10 scroll-m-28 text-xl font-medium tracking-tight first:mt-0 lg:mt-12">Examples</h2>
         @for (item of data.examples; track $index) {
           <z-code-box
             [scrollSpyItem]="item.name"

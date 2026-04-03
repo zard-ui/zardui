@@ -1,14 +1,13 @@
 <section class="mb-10">
   @if (componentType()) {
-    <h3 class="mb-6 scroll-m-28 text-xl font-semibold tracking-tight first-letter:uppercase">
+    <h3 class="font-heading mt-4 scroll-m-28 text-lg font-medium tracking-tight first-letter:uppercase">
       {{ componentType()! | hyphenToSpace }}
     </h3>
   }
-  @let description = demoDescription();
-  @if (description) {
-    <div class="mb-4 leading-relaxed">
-      <z-markdown-renderer [markdownText]="description" />
-    </div>
+  @if (demoDescription()) {
+    <p class="my-4 leading-relaxed first-letter:uppercase">
+      {{ demoDescription()! }}
+    </p>
   }
 
   @if (fullScreen()) {

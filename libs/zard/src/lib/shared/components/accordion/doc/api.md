@@ -20,3 +20,4 @@ z-accordion-item represents a single section in the accordion.
 | `[class]`  | Custom CSS classes                 | `string` | `''`    |
 | `[zTitle]` | The title for item header          | `string` | `''`    |
 | `[zValue]` | Unique value of the accordion item | `string` | `''`    |
+| `zDisabled` | accordion disabled state | `boolean` | `false`   |

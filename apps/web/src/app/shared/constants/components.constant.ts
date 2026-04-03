@@ -11,6 +11,7 @@ export interface ComponentInstallData {
 export interface ComponentData {
   componentName: string;
   description: string;
+  preview?: ExampleData;
   examples: ExampleData[];
   installData?: ComponentInstallData;
   fullWidth?: boolean;

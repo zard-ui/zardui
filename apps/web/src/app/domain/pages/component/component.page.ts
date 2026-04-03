@@ -6,6 +6,7 @@ import { AiAssistComponent } from '@doc/domain/components/ai-assist/ai-assist.co
 
 import { ComponentData, COMPONENTS_REGISTRY } from '../../../shared/constants/components.constant';
 import { Step } from '../../../shared/constants/install.constant';
+import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
 import { DynamicInstallationService } from '../../../shared/services/dynamic-installation.service';
 import { SeoService } from '../../../shared/services/seo.service';
 import { ZardCodeBoxComponent } from '../../../widget/components/zard-code-box/zard-code-box.component';
@@ -27,6 +28,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     ScrollSpyItemDirective,
     StepsComponent,
     ZardCodeBoxComponent,
+    HyphenToSpacePipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

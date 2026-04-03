@@ -6,22 +6,23 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-multiple',
   imports: [ZardAccordionImports],
   template: `
-    <z-accordion zType="multiple">
-      <z-accordion-item zValue="item-1" zTitle="A Study in Scarlet">
-        The first case of Sherlock Holmes and Dr. Watson. They investigate a murder in London, which leads to a
-        backstory involving Mormons in the U.S. Introduces Holmes’s deductive method.
+    <div z-accordion zType="multiple" class="max-w-sm">
+      <z-accordion-item zValue="notifications" zTitle="Notification Settings">
+        Manage how you receive notifications. You can enable email alerts for updates or push notifications for mobile
+        devices.
       </z-accordion-item>
 
-      <z-accordion-item zValue="item-2" zTitle="The Sign of Four" zDescription="Sir Arthur Conan Doyle">
-        The first case of Sherlock Holmes and Dr. Watson. They investigate a murder in London, which leads to a
-        backstory involving Mormons in the U.S. Introduces Holmes’s deductive method.
+      <z-accordion-item zValue="privacy" zTitle="Privacy & Security">
+        Control your privacy settings and security preferences. Enable two-factor authentication, manage connected
+        devices, review active sessions, and configure data sharing preferences. You can also download your data or
+        delete your account.
       </z-accordion-item>
 
-      <z-accordion-item zValue="item-3" zTitle="The Hound of the Baskervilles">
-        Holmes and Watson investigate the legend of a demonic hound haunting the Baskerville family. Set in the eerie
-        Dartmoor moorlands, the story involves betrayal and greed.
+      <z-accordion-item zValue="billing" zTitle="Billing & Subscription">
+        View your current plan, payment history, and upcoming invoices. Update your payment method, change your
+        subscription tier, or cancel your subscription.
       </z-accordion-item>
-    </z-accordion>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
