@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { AiAssistComponent } from '@doc/domain/components/ai-assist/ai-assist.component';
+import { ApiReferenceComponent } from '@doc/domain/components/api-reference/api-reference.component';
 
 import { ComponentData, COMPONENTS_REGISTRY } from '../../../shared/constants/components.constant';
 import { Step } from '../../../shared/constants/install.constant';
@@ -12,7 +13,6 @@ import { SeoService } from '../../../shared/services/seo.service';
 import { ZardCodeBoxComponent } from '../../../widget/components/zard-code-box/zard-code-box.component';
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
 import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { MarkdownRendererComponent } from '../../components/render/markdown-renderer.component';
 import { StepsComponent } from '../../components/steps/steps.component';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
@@ -22,8 +22,8 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   templateUrl: './component.page.html',
   imports: [
     AiAssistComponent,
+    ApiReferenceComponent,
     DocContentComponent,
-    MarkdownRendererComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
     StepsComponent,

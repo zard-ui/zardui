@@ -16,7 +16,10 @@ import { ZardDemoCarouselPluginsComponent } from '@/shared/components/carousel/d
 import { ZardDemoCarouselSizeComponent } from '@/shared/components/carousel/demo/sizes';
 import { ZardDemoCarouselSpacingComponent } from '@/shared/components/carousel/demo/spacing';
 
+import { CAROUSEL_API } from '../doc/api';
+
 export const CAROUSEL = {
+  api: CAROUSEL_API,
   componentName: 'carousel',
   componentType: 'carousel',
   description:

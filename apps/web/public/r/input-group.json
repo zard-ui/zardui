@@ -15,10 +15,6 @@
       "content": "export * from './input-group.component';\r\nexport * from './input-group.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# Input Group API Reference\r\n\r\n## Components\r\n\r\n### z-input-group\r\n\r\n| Input          | Type                          | Default     | Description                                  |\r\n| -------------- | ----------------------------- | ----------- | -------------------------------------------- |\r\n| `class`        | `ClassValue`                  | `''`        | Custom CSS classes                           |\r\n| `zAddonAlign`  | `'inline' \\| 'block'`         | `inline`    | Addon alignment                              |\r\n| `zAddonAfter`  | `string \\| TemplateRef<void>` | `''`        | Addon after input                            |\r\n| `zAddonBefore` | `string \\| TemplateRef<void>` | `''`        | Addon before input                           |\r\n| `zDisabled`    | `boolean`                     | `false`     | Disable the entire input group               |\r\n| `zLoading`     | `boolean`                     | `false`     | Loading state with spinner                   |\r\n| `zSize`        | `'sm' \\| 'default' \\| 'lg'`   | `'default'` | Size of the input group and all its elements |\r\n"
-  },
   "demos": [
     {
       "name": "borderless.ts",

@@ -7,8 +7,10 @@ import { DATE_PICKER_MANUAL_CODE } from '@generated/installation/manual/date-pic
 import { ZardDemoDatePickerDefaultComponent } from './default';
 import { ZardDatePickerFormatsComponent } from './formats';
 import { ZardDemoDatePickerSizesComponent } from './sizes';
+import { DATE_PICKER_API } from '../doc/api';
 
 export const DATE_PICKER = {
+  api: DATE_PICKER_API,
   componentName: 'date-picker',
   componentType: 'date-picker',
   description: 'A date picker component with range and presets.',

@@ -9,8 +9,10 @@ import { ZardDemoComboboxDefaultComponent } from './default';
 import { ZardDemoComboboxDisabledComponent } from './disabled';
 import { ZardDemoComboboxFormComponent } from './form';
 import { ZardDemoComboboxGroupedComponent } from './grouped';
+import { COMBOBOX_API } from '../doc/api';
 
 export const COMBOBOX = {
+  api: COMBOBOX_API,
   componentName: 'combobox',
   componentType: 'combobox',
   description: 'Autocomplete input and command palette with a list of suggestions.',

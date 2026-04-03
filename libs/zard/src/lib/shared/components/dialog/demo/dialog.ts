@@ -5,11 +5,13 @@ import { DIALOG_MANUAL_CODE } from '@generated/installation/manual/dialog';
 
 import { ZardDemoDialogBasicComponent } from './basic';
 import { ZardDemoDialogWithIconsComponent } from './icons';
+import { DIALOG_API } from '../doc/api';
 
 export const DIALOG = {
   componentName: 'dialog',
   componentType: 'dialog',
   description: 'Visually or semantically separates content.',
+  api: DIALOG_API,
   installData: {
     cliAdd: DIALOG_CLI_ADD,
     manualCode: DIALOG_MANUAL_CODE,

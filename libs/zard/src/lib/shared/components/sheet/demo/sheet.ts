@@ -7,10 +7,12 @@ import { SHEET_MANUAL_CODE } from '@generated/installation/manual/sheet';
 import { ZardDemoSheetBasicComponent } from './basic';
 import { ZardDemoSheetDimensionsComponent } from './dimensions';
 import { ZardDemoSheetSideComponent } from './side';
+import { SHEET_API } from '../doc/api';
 
 export const SHEET = {
   componentName: 'sheet',
   componentType: 'sheet',
+  api: SHEET_API,
   description: 'Extends the Dialog component to display content that complements the main content of the screen.',
   installData: {
     cliAdd: SHEET_CLI_ADD,

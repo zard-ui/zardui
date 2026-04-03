@@ -353,6 +353,7 @@ table.api-table--pipe tbody td:first-child code {
   @apply border-purple-500/20! bg-purple-500/10! text-purple-600! dark:text-purple-400!;
 }
 
+
 .embla {
   overflow: hidden;
 }

@@ -11,8 +11,10 @@ import { ZardDemoCheckboxDestructiveComponent } from './destructive';
 import { ZardDemoCheckboxDisabledComponent } from './disabled';
 import { ZardDemoCheckboxShapeComponent } from './shape';
 import { ZardDemoCheckboxSizeComponent } from './size';
+import { CHECKBOX_API } from '../doc/api';
 
 export const CHECKBOX = {
+  api: CHECKBOX_API,
   componentName: 'checkbox',
   componentType: 'checkbox',
   description: 'A control that allows the user to toggle between checked and not checked.',

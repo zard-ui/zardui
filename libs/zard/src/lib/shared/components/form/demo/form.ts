@@ -12,10 +12,13 @@ import { ZardDemoFormReactiveComponent } from '@/shared/components/form/demo/rea
 import { ZardDemoFormSignalComponent } from '@/shared/components/form/demo/signal-form';
 import { ZardDemoFormValidationComponent } from '@/shared/components/form/demo/validation';
 
+import { FORM_API } from '../doc/api';
+
 export const FORM = {
   componentName: 'form',
   componentType: 'form',
   description: 'Building forms with proper structure, validation, and accessibility using composable form components.',
+  api: FORM_API,
   installData: {
     cliAdd: FORM_CLI_ADD,
     manualCode: FORM_MANUAL_CODE,

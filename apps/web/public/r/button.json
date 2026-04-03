@@ -15,10 +15,6 @@
       "content": "export * from './button.component';\r\nexport * from './button.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API Reference\r\n\r\n[z-button] Directive\r\n\r\n| Property    | Description           | Type                                                                 | Default   |\r\n| ----------- | --------------------- | -------------------------------------------------------------------- | --------- |\r\n| `zDisabled` | button disabled state | `boolean`                                                            | `false`   |\r\n| `zFull`     | button width 100%     | `boolean`                                                            | `false`   |\r\n| `zLoading`  | button loading state  | `boolean`                                                            | `false`   |\r\n| `zShape`    | button shape          | `default \\| circle \\| square`                                        | `default` |\r\n| `zSize`     | button size           | `default \\| xs \\| sm \\| lg \\| icon \\| icon-xs \\| icon-sm \\| icon-lg` | `default` |\r\n| `zType`     | button type           | `default \\| destructive \\| outline \\| secondary \\| ghost \\| link`    | `default` |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

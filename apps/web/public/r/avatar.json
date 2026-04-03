@@ -19,10 +19,6 @@
       "content": "export * from './avatar.component';\r\nexport * from './avatar-group.component';\r\nexport * from './avatar.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API Reference\r\n\r\n[z-avatar] Component\r\n\r\n| Property      | Description                                       | Type                                        | Default   |\r\n| ------------- | ------------------------------------------------- | ------------------------------------------- | --------- |\r\n| `[class]`     | Additional CSS classes                            | `string`                                    | `''`      |\r\n| `[zAlt]`      | Image alt text for accessibility                  | `string`                                    | `''`      |\r\n| `[zFallback]` | Fallback text displayed while loading or on error | `string`                                    | `''`      |\r\n| `[zPriority]` | Should image load with high priority              | `boolean`                                   | `false`   |\r\n| `[zShape]`    | Avatar shape                                      | `circle \\| rounded \\| square`               | `circle`  |\r\n| `[zSize]`     | Avatar size variant                               | `sm \\| default \\| md \\| lg \\| xl \\`         | `default` |\r\n| `[zSrc]`      | Image source URL                                  | `string \\| SafeUrl`                         | `''`      |\r\n| `[zStatus]`   | Status indicator badge                            | `online \\| offline \\| doNotDisturb \\| away` |           |\r\n\r\n[z-avatar-group] Component\r\n\r\n| Property         | Description                 | Type                     | Default      |\r\n| ---------------- | --------------------------- | ------------------------ | ------------ |\r\n| `[zOrientation]` | Layout direction of avatars | `horizontal \\| vertical` | `horizontal` |\r\n| `[class]`        | Additional CSS classes      | `string`                 | `''`         |\r\n"
-  },
   "demos": [
     {
       "name": "basic.ts",

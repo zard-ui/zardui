@@ -9,10 +9,12 @@ import { ZardDemoSliderDefaultComponent } from './default';
 import { ZardDemoSliderDisabledComponent } from './disabled';
 import { ZardDemoSliderMinMaxComponent } from './min-max';
 import { ZardDemoSliderVerticalComponent } from './vertical';
+import { SLIDER_API } from '../doc/api';
 
 export const SLIDER = {
   componentName: 'slider',
   componentType: 'slider',
+  api: SLIDER_API,
   description: 'An input where the user selects a value from within a given range.',
   fullWidth: true,
   installData: {

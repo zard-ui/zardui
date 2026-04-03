@@ -15,10 +15,6 @@
       "content": "export * from './alert.component';\r\nexport * from './alert.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API Reference\r\n\r\n[z-alert] Component\r\n\r\n| Property         | Description       | Type                          | Default   |\r\n| ---------------- | ----------------- | ----------------------------- | --------- |\r\n| `[zTitle]`       | Alert title       | `string \\| TemplateRef<void>` | `-`       |\r\n| `[zDescription]` | Alert description | `string \\| TemplateRef<void>` | `-`       |\r\n| `[zIcon]`        | Alert icon        | `TemplateRef<void> \\| string` | `-`       |\r\n| `[zType]`        | Alert variant     | `default \\| destructive`      | `default` |\r\n\r\n**zIcon:** if not specified, default icon will be `lucideCircleAlert`\r\n"
-  },
   "demos": [
     {
       "name": "basic.ts",

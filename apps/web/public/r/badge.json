@@ -15,10 +15,6 @@
       "content": "export * from './badge.component';\r\nexport * from './badge.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API Reference\r\n\r\n[z-badge] Component\r\n\r\n| Property | Description | Type                                             | Default   |\r\n| -------- | ----------- | ------------------------------------------------ | --------- |\r\n| `zType`  | Badge type  | `default \\| secondary \\| destructive \\| outline` | `default` |\r\n| `zShape` | Badge shape | `default \\| square \\| pill`                      | `default` |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

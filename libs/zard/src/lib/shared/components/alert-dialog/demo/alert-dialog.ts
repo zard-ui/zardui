@@ -3,8 +3,10 @@ import { ALERT_DIALOG_CLI_ADD } from '@generated/installation/cli/add-alert-dial
 import { ALERT_DIALOG_MANUAL_CODE } from '@generated/installation/manual/alert-dialog';
 
 import { ZardDemoAlertDialogDefaultComponent } from './default';
+import { ALERT_DIALOG_API } from '../doc/api';
 
 export const ALERT_DIALOG = {
+  api: ALERT_DIALOG_API,
   componentName: 'alert-dialog',
   componentType: 'alert-dialog',
   description: 'A modal dialog that interrupts the user with important content and expects a response.',

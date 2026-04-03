@@ -7,11 +7,13 @@ import { KBD_MANUAL_CODE } from '@generated/installation/manual/kbd';
 import { ZardDemoKbdDefaultComponent } from './default';
 import { ZardDemoKbdGroupComponent } from './group';
 import { ZardDemoKbdTooltipComponent } from './tooltip';
+import { KBD_API } from '../doc/api';
 
 export const KBD = {
   componentName: 'kbd',
   componentType: 'kbd',
   description: 'Display content as a keyboard key useful for documentation purposes.',
+  api: KBD_API,
   fullWidth: true,
   installData: {
     cliAdd: KBD_CLI_ADD,

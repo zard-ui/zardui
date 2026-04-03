@@ -7,8 +7,10 @@ import { BREADCRUMB_MANUAL_CODE } from '@generated/installation/manual/breadcrum
 import { ZardDemoBreadcrumbDefaultComponent } from './default';
 import { ZardDemoBreadcrumbEllipsisComponent } from './ellipsis';
 import { ZardDemoBreadcrumbSeparatorComponent } from './separator';
+import { BREADCRUMB_API } from '../doc/api';
 
 export const BREADCRUMB = {
+  api: BREADCRUMB_API,
   componentName: 'breadcrumb',
   componentType: 'breadcrumb',
   description: 'Displays the path to the current resource using a hierarchy of links.',

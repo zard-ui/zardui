@@ -5,8 +5,10 @@ import { AVATAR_MANUAL_CODE } from '@generated/installation/manual/avatar';
 
 import { ZardDemoAvatarBasicComponent } from './basic';
 import { ZardDemoAvatarStatusComponent } from './status';
+import { AVATAR_API } from '../doc/api';
 
 export const AVATAR = {
+  api: AVATAR_API,
   componentName: 'avatar',
   componentType: 'avatar',
   description: 'An image element with a fallback for representing the user.',

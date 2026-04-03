@@ -26,10 +26,6 @@
   "registryDependencies": [
     "badge"
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API\r\n\r\n### z-select\r\n\r\n> A customizable select component that allows single value selection.\r\n\r\n| Input              | Description                               | Type                 | Default                 |\r\n| ------------------ | ----------------------------------------- | -------------------- | ----------------------- |\r\n| `[class]`          | Custom CSS classes                        | `string`             | `''`                    |\r\n| `[zDisabled]`      | Disables the select                       | `boolean`            | `false`                 |\r\n| `[zLabel]`         | Optional label for the select             | `string`             | `''`                    |\r\n| `[zMaxLabelCount]` | Limits visible labels in multiselect mode | `number`             | `1`                     |\r\n| `[zMultiple]`      | Multiselect mode                          | `boolean`            | `false`                 |\r\n| `[zPlaceholder]`   | Placeholder text                          | `string`             | `'Select an option...'` |\r\n| `[(zValue)]`       | Selected value                            | `string \\| string[]` | `'' \\| []`              |\r\n\r\n| Output               | Description                             | Payload              |\r\n| -------------------- | --------------------------------------- | -------------------- |\r\n| `(zSelectionChange)` | Emitted when the selected value changes | `string \\| string[]` |\r\n\r\n### z-select-item\r\n\r\n> Represents an individual item inside a `z-select` component.\r\n\r\n| Input         | Description                         | Type      | Default |\r\n| ------------- | ----------------------------------- | --------- | ------- |\r\n| `[class]`     | Custom CSS classes                  | `string`  | `''`    |\r\n| `[zValue]`    | The value associated with this item | `string`  | `''`    |\r\n| `[zDisabled]` | Disables selection for this item    | `boolean` | `false` |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

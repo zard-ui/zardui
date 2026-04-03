@@ -15,10 +15,6 @@
       "content": "export * from './divider.component';\r\nexport * from './divider.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API\r\n\r\n## [z-divider] <span class=\"api-type-label component\">Component</span>\r\n\r\n> `z-divider` is used to visually separate content with a horizontal or vertical line.\r\n\r\n| Property       | Description                   | Type                         | Default      |\r\n| -------------- | ----------------------------- | ---------------------------- | ------------ |\r\n| `zOrientation` | Defines the divider direction | `\"horizontal\" \\| \"vertical\"` | `horizontal` |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

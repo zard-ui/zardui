@@ -5,10 +5,12 @@ import { SKELETON_MANUAL_CODE } from '@generated/installation/manual/skeleton';
 
 import { ZardDemoSkeletonCardComponent } from './card';
 import { ZardDemoSkeletonDefaultComponent } from './default';
+import { SKELETON_API } from '../doc/api';
 
 export const SKELETON = {
   componentName: 'skeleton',
   componentType: 'skeleton',
+  api: SKELETON_API,
   description: 'Use to show a placeholder while content is loading.',
   fullWidth: true,
   installData: {

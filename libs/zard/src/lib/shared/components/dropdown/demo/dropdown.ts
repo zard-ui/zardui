@@ -6,11 +6,13 @@ import { DROPDOWN_MANUAL_CODE } from '@generated/installation/manual/dropdown';
 import { ZardDropdownHoverDemoComponent } from '@/shared/components/dropdown/demo/hover';
 
 import { ZardDropdownDemoComponent } from './default';
+import { DROPDOWN_API } from '../doc/api';
 
 export const DROPDOWN = {
   componentName: 'dropdown',
   componentType: 'dropdown',
   description: 'Displays a menu to the user — such as a set of actions or functions — triggered by a button.',
+  api: DROPDOWN_API,
   installData: {
     cliAdd: DROPDOWN_CLI_ADD,
     manualCode: DROPDOWN_MANUAL_CODE,

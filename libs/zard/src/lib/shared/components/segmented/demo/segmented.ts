@@ -7,10 +7,12 @@ import { SEGMENTED_MANUAL_CODE } from '@generated/installation/manual/segmented'
 import { ZardDemoSegmentedDefaultComponent } from './default';
 import { ZardDemoSegmentedDisabledComponent } from './disabled';
 import { ZardDemoSegmentedSizesComponent } from './sizes';
+import { SEGMENTED_API } from '../doc/api';
 
 export const SEGMENTED = {
   componentName: 'segmented',
   componentType: 'segmented',
+  api: SEGMENTED_API,
   description:
     'A set of two or more segments, each of which functions as a mutually exclusive button. Based on shadcn/ui Tabs component pattern, providing a clean way to create toggle controls with single selection.',
   installData: {

@@ -9,10 +9,12 @@ import { ZardDemoTreeBasicComponent } from './basic';
 import { ZardDemoTreeCheckableComponent } from './checkable';
 import { ZardDemoTreeSelectionComponent } from './selection';
 import { ZardDemoTreeVirtualScrollComponent } from './virtual-scroll';
+import { TREE_API } from '../doc/api';
 
 export const TREE = {
   componentName: 'tree',
   componentType: 'tree',
+  api: TREE_API,
   description:
     'A hierarchical tree view for displaying nested data structures with expand/collapse, selection, and checkboxes.',
   installData: {

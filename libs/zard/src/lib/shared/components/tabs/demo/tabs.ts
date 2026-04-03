@@ -9,10 +9,12 @@ import { ZardDemoTabsAlignComponent } from './align';
 import { ZardDemoTabsArrowComponent } from './arrow';
 import { ZardDemoTabsDefaultComponent } from './default';
 import { ZardDemoTabsPositionComponent } from './position';
+import { TABS_API } from '../doc/api';
 
 export const TABS = {
   componentName: 'tabs',
   componentType: 'tabs',
+  api: TABS_API,
   description: 'A set of layered sections of content—known as tab panels—that are displayed one at a time.',
   installData: {
     cliAdd: TABS_CLI_ADD,

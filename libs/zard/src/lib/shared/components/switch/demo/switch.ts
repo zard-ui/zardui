@@ -9,10 +9,12 @@ import { ZardDemoSwitchDefaultComponent } from './default';
 import { ZardDemoSwitchDestructiveComponent } from './destructive';
 import { ZardDemoSwitchDisabledComponent } from './disabled';
 import { ZardDemoSwitchSizeComponent } from './size';
+import { SWITCH_API } from '../doc/api';
 
 export const SWITCH = {
   componentName: 'switch',
   componentType: 'switch',
+  api: SWITCH_API,
   description: 'A control that allows the user to toggle between checked and unchecked.',
   installData: {
     cliAdd: SWITCH_CLI_ADD,

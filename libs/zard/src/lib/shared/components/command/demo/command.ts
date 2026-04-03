@@ -3,8 +3,10 @@ import { COMMAND_CLI_ADD } from '@generated/installation/cli/add-command';
 import { COMMAND_MANUAL_CODE } from '@generated/installation/manual/command';
 
 import { ZardDemoCommandDefaultComponent } from './default';
+import { COMMAND_API } from '../doc/api';
 
 export const COMMAND = {
+  api: COMMAND_API,
   componentName: 'command',
   componentType: 'command',
   description: 'Fast, composable, unstyled command menu for Angular.',

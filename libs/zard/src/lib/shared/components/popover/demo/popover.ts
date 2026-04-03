@@ -9,11 +9,13 @@ import { ZardDemoPopoverDefaultComponent } from './default';
 import { ZardDemoPopoverHoverComponent } from './hover';
 import { ZardDemoPopoverInteractiveComponent } from './interactive';
 import { ZardDemoPopoverPlacementComponent } from './placement';
+import { POPOVER_API } from '../doc/api';
 
 export const POPOVER = {
   componentName: 'popover',
   componentType: 'popover',
   description: 'Displays rich content in a portal, triggered by a button.',
+  api: POPOVER_API,
   installData: {
     cliAdd: POPOVER_CLI_ADD,
     manualCode: POPOVER_MANUAL_CODE,

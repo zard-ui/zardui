@@ -7,11 +7,13 @@ import { EMPTY_MANUAL_CODE } from '@generated/installation/manual/empty';
 import { ZardDemoEmptyAdvancedComponent } from './advanced';
 import { ZardDemoEmptyCustomImageComponent } from './custom-image';
 import { ZardDemoEmptyDefaultComponent } from './default';
+import { EMPTY_API } from '../doc/api';
 
 export const EMPTY = {
   componentName: 'empty',
   componentPath: 'empty',
   description: 'Use the Empty component to display a empty state.',
+  api: EMPTY_API,
   installData: {
     cliAdd: EMPTY_CLI_ADD,
     manualCode: EMPTY_MANUAL_CODE,

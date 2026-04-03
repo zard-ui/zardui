@@ -19,10 +19,6 @@
       "content": "export * from '@/shared/components/breadcrumb/breadcrumb.component';\r\nexport * from '@/shared/components/breadcrumb/breadcrumb.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API Reference\r\n\r\n[z-breadcrumb] Component\r\n\r\n| Property       | Description                         | Type                     | Default   |\r\n| -------------- | ----------------------------------- | ------------------------ | --------- |\r\n| `[class]`      | Custom css classes                  | `string`                 | `''`      |\r\n| `[zSize]`      | Breadcrumb size                     | `sm \\| md \\| lg`         | `'md'`    |\r\n| `[zAlign]`     | Horizontal alignment                | `start \\| center \\| end` | `'start'` |\r\n| `[zWrap]`      | Wrapping behavior                   | `wrap \\| nowrap`         | `'wrap'`  |\r\n| `[zSeparator]` | Separator between breadcrumb items. | `string \\| TemplateRef`  | `''`      |\r\n\r\n[z-breadcrumb-item] Component\r\n\r\n| Property     | Description        | Type     | Default |\r\n| ------------ | ------------------ | -------- | ------- |\r\n| `[class]`    | Custom css classes | `string` | `''`    |\r\n| `routerLink` | Check for note     |          |         |\r\n\r\n**Note:** All [RouterLink](https://angular.dev/api/router/RouterLink) inputs are supported through host directives.\r\n\r\n[z-breadcrumb-ellipsis] Component\r\n\r\n| Property   | Description        | Type              | Default   |\r\n| ---------- | ------------------ | ----------------- | --------- |\r\n| `[class]`  | Custom css classes | `string`          | `''`      |\r\n| `[zColor]` | Ellipsis color     | `muted \\| strong` | `'muted'` |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

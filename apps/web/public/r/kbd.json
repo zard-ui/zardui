@@ -19,10 +19,6 @@
       "content": "export * from './kbd.component';\r\nexport * from './kbd-group.component';\r\nexport * from './kbd.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API Reference\r\n\r\n## z-kbd\r\n\r\nUse `z-kbd` component to display a keyboard key.\r\n\r\n| Input   | Type         | Default | Description            |\r\n| ------- | ------------ | ------- | ---------------------- |\r\n| `class` | `ClassValue` | `''`    | Additional CSS classes |\r\n\r\n## z-kbd-group\r\n\r\nUse `z-kbd-group` component to group `z-kbd` components together.\r\n\r\n| Input   | Type         | Default | Description            |\r\n| ------- | ------------ | ------- | ---------------------- |\r\n| `class` | `ClassValue` | `''`    | Additional CSS classes |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

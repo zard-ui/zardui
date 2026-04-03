@@ -15,10 +15,6 @@
       "content": "export * from './radio.component';\r\nexport * from './radio.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# Radio API\r\n\r\n## Inputs\r\n\r\n| Name        | Type         | Default        | Description                        |\r\n| ----------- | ------------ | -------------- | ---------------------------------- |\r\n| `class`     | `ClassValue` | `''`           | Additional CSS classes             |\r\n| `zDisabled` | `boolean`    | `false`        | Whether the radio is disabled      |\r\n| `name`      | `string`     | `'radio'`      | Name attribute for the radio group |\r\n| `zId`       | `string`     | auto-generated | ID attribute for the radio         |\r\n| `value`     | `unknown`    | `null`         | Value of the radio button          |\r\n\r\n## Outputs\r\n\r\n| Name          | Type                    | Description                        |\r\n| ------------- | ----------------------- | ---------------------------------- |\r\n| `radioChange` | `EventEmitter<boolean>` | Emits when radio selection changes |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

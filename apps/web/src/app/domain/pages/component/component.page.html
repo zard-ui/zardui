@@ -127,7 +127,10 @@
     </div>
 
     <footer scrollSpyItem="api" id="api">
-      <z-markdown-renderer markdownUrl="components/{{ data.componentName }}/doc/api.md"></z-markdown-renderer>
+      @if (data.api) {
+        <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">API Reference</h1>
+        <z-api-reference [sections]="data.api" />
+      }
     </footer>
   </z-content>
 }

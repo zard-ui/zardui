@@ -3,8 +3,10 @@ import { ALERT_CLI_ADD } from '@generated/installation/cli/add-alert';
 import { ALERT_MANUAL_CODE } from '@generated/installation/manual/alert';
 
 import { ZardDemoAlertBasicComponent } from './basic';
+import { ALERT_API } from '../doc/api';
 
 export const ALERT = {
+  api: ALERT_API,
   componentName: 'alert',
   componentType: 'alert',
   description: 'Displays a callout for user attention.',

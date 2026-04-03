@@ -17,10 +17,12 @@ import { ZardDemoToggleSmallComponent } from './small';
 import { ZardDemoToggleWithDefaultComponent } from './with-default';
 import { ZardDemoToggleWithFormsComponent } from './with-forms';
 import { ZardDemoToggleWithTextComponent } from './with-text';
+import { TOGGLE_API } from '../doc/api';
 
 export const TOGGLE = {
   componentName: 'toggle',
   componentType: 'toggle',
+  api: TOGGLE_API,
   description: 'A two-state button that can be either on or off.',
   installData: {
     cliAdd: TOGGLE_CLI_ADD,

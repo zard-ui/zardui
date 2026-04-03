@@ -15,10 +15,6 @@
       "content": "export * from './toggle.component';\r\nexport * from './toggle.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API\r\n\r\n## [z-toggle] <span class=\"api-type-label component\">Component</span>\r\n\r\n> A two-state button that can be either on or off.\r\n\r\n### Properties\r\n\r\n| Property       | Description                                                          | Type                     | Default     |\r\n| -------------- | -------------------------------------------------------------------- | ------------------------ | ----------- |\r\n| `[class]`      | Custom CSS classes                                                   | `string`                 | `''`        |\r\n| `[zSize]`      | Toggle size                                                          | `'sm' \\| 'md' \\| 'lg'`   | `'md'`      |\r\n| `[zType]`      | Visual style                                                         | `'default' \\| 'outline'` | `'default'` |\r\n| `[zValue]`     | Toggle value                                                         | `boolean`                | `undefined` |\r\n| `[zDefault]`   | Default value when uncontrolled (used as initial state only)         | `boolean`                | `false`     |\r\n| `[disabled]`   | Disables the toggle (also integrates with Angular Forms)             | `boolean`                | `false`     |\r\n| `[aria-label]` | Accessible label for screen readers (required when using icons only) | `string`                 | `''`        |\r\n\r\n### Events\r\n\r\n| Event             | Description                           | Payload   |\r\n| ----------------- | ------------------------------------- | --------- |\r\n| `(zToggleClick)`  | Emitted when the toggle is clicked    | `void`    |\r\n| `(zToggleHover)`  | Emitted when the toggle is hovered    | `void`    |\r\n| `(zToggleChange)` | Emitted when the toggle value changes | `boolean` |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

@@ -3,8 +3,10 @@ import { CARD_CLI_ADD } from '@generated/installation/cli/add-card';
 import { CARD_MANUAL_CODE } from '@generated/installation/manual/card';
 
 import { ZardDemoCardDefaultComponent } from './default';
+import { CARD_API } from '../doc/api';
 
 export const CARD = {
+  api: CARD_API,
   componentName: 'card',
   componentType: 'card',
   description: 'Displays a card with header, content, and footer.',

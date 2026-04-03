@@ -14,10 +14,12 @@ import { ZardDemoToastDestructiveComponent } from './destructive';
 import { ZardDemoToastLoadingComponent } from './loading';
 import { ZardDemoToastPositionComponent } from './position';
 import { ZardDemoToastSuccessComponent } from './success';
+import { TOAST_API } from '../doc/api';
 
 export const TOAST = {
   componentName: 'toast',
   componentType: 'toast',
+  api: TOAST_API,
   description: 'A succinct message that is displayed temporarily.',
   installData: {
     cliAdd: TOAST_CLI_ADD,

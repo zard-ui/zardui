@@ -11,9 +11,11 @@ import ToggleGroupOutlineComponent from './outline';
 import ToggleGroupSingleComponent from './single';
 import ToggleGroupSizesComponent from './sizes';
 import ToggleGroupWithTextComponent from './with-text';
+import { TOGGLE_GROUP_API } from '../doc/api';
 
 export const TOGGLE_GROUP = {
   componentName: 'toggle-group',
+  api: TOGGLE_GROUP_API,
   description:
     'A set of two-state buttons that can be pressed or released. Multiple buttons can be selected at the same time.',
   installData: {

@@ -18,10 +18,6 @@
   "registryDependencies": [
     "button"
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API\r\n\r\n## [z-card] <span class=\"api-type-label component\">Component</span>\r\n\r\n> z-card is a component that provides a structured container for displaying content with body section and optional header and footer sections.\r\n\r\n| Property          | Description               | Type                                       | Default |\r\n| ----------------- | ------------------------- | ------------------------------------------ | ------- |\r\n| `[class]`         | Custom css classes        | `ClassValue`                               | `''`    |\r\n| `[zAction]`       | Card action button¹       | `string`                                   | `''`    |\r\n| `[zDescription]`  | Card description content¹ | `string \\| TemplateRef<void> \\| undefined` | -       |\r\n| `[zFooterBorder]` | Card footer with border   | `boolean`                                  | `false` |\r\n| `[zHeaderBorder]` | Card header with border¹  | `boolean`                                  | `false` |\r\n| `[zTitle]`        | Card title content        | `string \\| TemplateRef<void> \\| undefined` | -       |\r\n| `(zActionClick)`  | Emits action button click | `void`                                     | -       |\r\n\r\n¹ `zTitle` is required to have header.\r\n\r\n🚨Note: optional card footer content is defined with selector **card-footer**\\\r\n(eg. `<div card-footer> </div>`)\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

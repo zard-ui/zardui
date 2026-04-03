@@ -15,10 +15,6 @@
       "content": "export * from './popover.component';\r\nexport * from './popover.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API\r\n\r\n## [zPopover] <span class=\"api-type-label directive\">Directive</span>\r\n\r\nThe directive that creates a popover when applied to a trigger element.\r\n\r\n| Property            | Description                                      | Type                                     | Default    |\r\n| ------------------- | ------------------------------------------------ | ---------------------------------------- | ---------- |\r\n| `zTrigger`          | How the popover is triggered                     | `'click' \\| 'hover' \\| null`             | `'click'`  |\r\n| `zContent`          | **Required**. Template to display in the popover | `TemplateRef<unknown>`                   | -          |\r\n| `zPlacement`        | Position relative to trigger                     | `'top' \\| 'bottom' \\| 'left' \\| 'right'` | `'bottom'` |\r\n| `zOrigin`           | Custom anchor element                            | `ElementRef`                             | -          |\r\n| `zVisible`          | Control visibility programmatically              | `boolean`                                | `false`    |\r\n| `zOverlayClickable` | Close on outside click                           | `boolean`                                | `true`     |\r\n\r\n### Outputs\r\n\r\n| Property         | Description                   | Type                    |\r\n| ---------------- | ----------------------------- | ----------------------- |\r\n| `zVisibleChange` | Emits when visibility changes | `EventEmitter<boolean>` |\r\n\r\n## z-popover <span class=\"api-type-label component\">Component</span>\r\n\r\nThe wrapper component for popover content styling.\r\n\r\n| Property | Description            | Type     | Default |\r\n| -------- | ---------------------- | -------- | ------- |\r\n| `class`  | Additional CSS classes | `string` | `''`    |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

@@ -7,12 +7,14 @@ import { RESIZABLE_MANUAL_CODE } from '@generated/installation/manual/resizable'
 import { ZardDemoResizableDefaultComponent } from './default';
 import { ZardDemoResizableVerticalComponent } from './vertical';
 import { ZardDemoResizableWithMinMaxComponent } from './with-min-max';
+import { RESIZABLE_API } from '../doc/api';
 
 export const RESIZABLE = {
   componentName: 'resizable',
   componentType: 'resizable',
   description: 'A resizable layout component that allows users to resize panels by dragging dividers between them.',
   fullWidth: true,
+  api: RESIZABLE_API,
   installData: {
     cliAdd: RESIZABLE_CLI_ADD,
     manualCode: RESIZABLE_MANUAL_CODE,

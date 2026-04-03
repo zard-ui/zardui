@@ -15,10 +15,6 @@
       "content": "export * from './switch.component';\r\nexport * from './switch.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API\r\n\r\n## [z-switch] <span class=\"api-type-label component\">Component</span>\r\n\r\n> z-switch is a component that brings you a customizable switch with minimal configuration\r\n\r\nTo get a customized switch, just pass the following props to the component.\r\n\r\n| Property       | Description                    | Type                     | Default   |\r\n| -------------- | ------------------------------ | ------------------------ | --------- |\r\n| `[class]`      | Additional CSS classes         | `ClassValue`             | `''`      |\r\n| `[(zChecked)]` | switch state (two-way binding) | `boolean`                | `true`    |\r\n| `[zDisabled]`  | switch disabled state          | `boolean`                | `false`   |\r\n| `[zId]`        | switch id                      | `string`                 |           |\r\n| `[zType]`      | switch type                    | `default \\| destructive` | `default` |\r\n| `[zSize]`      | switch size                    | `default \\| sm \\| lg`    | `default` |\r\n\r\n**Note:** Component uses fallback content (also called default content), Angular 18+ feature.\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

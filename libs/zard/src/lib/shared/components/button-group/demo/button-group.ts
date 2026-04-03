@@ -15,8 +15,10 @@ import { ZardDemoButtonGroupNestedComponent } from './nested';
 import { ZardDemoButtonGroupOrientationComponent } from './orientation';
 import { ZardDemoButtonGroupSelectComponent } from './select';
 import { ZardDemoButtonGroupSizeComponent } from './size';
+import { BUTTON_GROUP_API } from '../doc/api';
 
 export const BUTTON_GROUP = {
+  api: BUTTON_GROUP_API,
   componentName: 'button-group',
   componentType: 'button-group',
   description: 'A container that groups related buttons together with consistent styling.',

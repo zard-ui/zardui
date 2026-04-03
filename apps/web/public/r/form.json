@@ -19,10 +19,6 @@
       "content": "export * from '@/shared/components/form/form.component';\r\nexport * from '@/shared/components/form/form.imports';\r\nexport * from '@/shared/components/form/form.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# Form API Reference\r\n\r\n## ZardFormFieldComponent\r\n\r\nContainer component that provides proper spacing and structure for form elements.\r\n\r\n### Props\r\n\r\n| Name    | Type         | Default | Description            |\r\n| ------- | ------------ | ------- | ---------------------- |\r\n| `class` | `ClassValue` | `''`    | Additional CSS classes |\r\n\r\n---\r\n\r\n## ZardFormLabelComponent\r\n\r\nAccessible label component with optional required indicator.\r\n\r\n### Props\r\n\r\n| Name        | Type         | Default | Description                   |\r\n| ----------- | ------------ | ------- | ----------------------------- |\r\n| `class`     | `ClassValue` | `''`    | Additional CSS classes        |\r\n| `zRequired` | `boolean`    | `false` | Shows required indicator (\\*) |\r\n\r\n---\r\n\r\n## ZardFormControlComponent\r\n\r\nWrapper component for form controls that provides proper positioning and styling context.\r\n\r\n### Props\r\n\r\n| Name    | Type         | Default | Description            |\r\n| ------- | ------------ | ------- | ---------------------- |\r\n| `class` | `ClassValue` | `''`    | Additional CSS classes |\r\n\r\n---\r\n\r\n## ZardFormMessageComponent\r\n\r\nComponent for displaying helper text, validation messages, and other form-related information.\r\n\r\n### Props\r\n\r\n| Name    | Type                                             | Default     | Description                  |\r\n| ------- | ------------------------------------------------ | ----------- | ---------------------------- |\r\n| `class` | `ClassValue`                                     | `''`        | Additional CSS classes       |\r\n| `zType` | `'default' \\| 'error' \\| 'success' \\| 'warning'` | `'default'` | Message type affecting color |\r\n"
-  },
   "demos": [
     {
       "name": "complex.ts",

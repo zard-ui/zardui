@@ -15,10 +15,6 @@
       "content": "export * from './slider.component';\r\nexport * from './slider.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API\r\n\r\n## [z-slider] <span class=\"api-type-label component\">Component</span>\r\n\r\n> `z-slider` is a flexible and accessible component that allows users to select a numeric value from within a configurable range using pointer or keyboard interaction.\r\n\r\n| Property         | Description                           | Type                     | Default        |\r\n| ---------------- | ------------------------------------- | ------------------------ | -------------- |\r\n| `[class]`        | Custom CSS classes                    | `string`                 | `''`           |\r\n| `[zMin]`         | Minimum selectable value              | `number`                 | `0`            |\r\n| `[zMax]`         | Maximum selectable value              | `number`                 | `100`          |\r\n| `[zDefault]`     | Default value when `zValue` is absent | `number`                 | `0`            |\r\n| `[zValue]`       | Controlled value input                | `number \\| null`         | `null`         |\r\n| `[zStep]`        | Step increment for the value          | `number`                 | `1`            |\r\n| `[zDisabled]`    | Disables slider interaction           | `boolean`                | `false`        |\r\n| `[zOrientation]` | Slider orientation                    | `horizontal \\| vertical` | `'horizontal'` |\r\n\r\n### Events\r\n\r\n| Event                 | Description                           | Type     |\r\n| --------------------- | ------------------------------------- | -------- |\r\n| `(zSlideIndexChange)` | Emitted when the slider value changes | `number` |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

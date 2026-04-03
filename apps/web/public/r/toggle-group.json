@@ -18,10 +18,6 @@
   "registryDependencies": [
     "toggle"
   ],
-  "docs": {
-    "overview": "",
-    "api": "# Toggle Group API\r\n\r\n## Component Props\r\n\r\n### Inputs\r\n\r\n| Name        | Type                   | Default | Description                          |\r\n| ----------- | ---------------------- | ------- | ------------------------------------ |\r\n| `class`     | `ClassValue`           | `''`    | Additional CSS classes               |\r\n| `zDefault`  | `ToggleGroupValue[]`   | `[]`    | Default value when using with forms  |\r\n| `zDisabled` | `boolean`              | `false` | Whether the entire group is disabled |\r\n| `zSize`     | `'sm' \\| 'md' \\| 'lg'` | `'md'`  | Size variant of the toggle group     |\r\n| `zValue`    | `ToggleGroupValue[]`   | `[]`    | Array of toggle items to display     |\r\n\r\n### Outputs\r\n\r\n| Name       | Type                               | Description                                               |\r\n| ---------- | ---------------------------------- | --------------------------------------------------------- |\r\n| `onClick`  | `EventEmitter<ToggleGroupValue[]>` | Emitted when any toggle is clicked, returns current state |\r\n| `onHover`  | `EventEmitter<void>`               | Emitted when mouse hovers over any toggle                 |\r\n| `onChange` | `EventEmitter<ToggleGroupValue[]>` | Emitted when toggle state changes, returns updated array  |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

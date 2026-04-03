@@ -11,8 +11,10 @@ import { ZardDemoCalendarExpandYearSelectionRangeComponent } from './expand-year
 import { ZardDemoCalendarMultipleComponent } from './multiple';
 import { ZardDemoCalendarRangeComponent } from './range';
 import { ZardDemoCalendarWithConstraintsComponent } from './with-constraints';
+import { CALENDAR_API } from '../doc/api';
 
 export const CALENDAR = {
+  api: CALENDAR_API,
   componentName: 'calendar',
   componentType: 'calendar',
   description:

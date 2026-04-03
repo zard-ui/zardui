@@ -3,8 +3,10 @@ import { BADGE_CLI_ADD } from '@generated/installation/cli/add-badge';
 import { BADGE_MANUAL_CODE } from '@generated/installation/manual/badge';
 
 import { ZardDemoBadgeDefaultComponent } from './default';
+import { BADGE_API } from '../doc/api';
 
 export const BADGE = {
+  api: BADGE_API,
   componentName: 'badge',
   componentType: 'badge',
   description: 'Displays a badge or a component that looks like a badge.',

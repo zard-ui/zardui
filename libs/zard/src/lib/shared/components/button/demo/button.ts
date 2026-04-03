@@ -13,8 +13,10 @@ import { ZardDemoButtonLoadingComponent } from './loading';
 import { ZardDemoButtonShapeComponent } from './shape';
 import { ZardDemoButtonSizeComponent } from './size';
 import { ZardDemoButtonTypeComponent } from './type';
+import { BUTTON_API } from '../doc/api';
 
 export const BUTTON = {
+  api: BUTTON_API,
   componentName: 'button',
   componentType: 'button',
   description: 'Displays a button or a component that looks like a button.',

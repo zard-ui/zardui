@@ -5,10 +5,12 @@ import { TABLE_MANUAL_CODE } from '@generated/installation/manual/table';
 
 import { ZardDemoTablePaymentsComponent } from './payments';
 import { ZardDemoTableSimpleComponent } from './simple';
+import { TABLE_API } from '../doc/api';
 
 export const TABLE = {
   componentName: 'table',
   componentType: 'table',
+  api: TABLE_API,
   description: 'Displays data in a structured table format with styling variants and semantic HTML structure.',
   installData: {
     cliAdd: TABLE_CLI_ADD,

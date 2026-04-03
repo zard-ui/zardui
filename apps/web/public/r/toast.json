@@ -18,10 +18,6 @@
   "dependencies": [
     "ngx-sonner"
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API\r\n\r\n## [z-toaster] <span class=\"api-type-label component\">Component</span>\r\n\r\n> `z-toaster` is a component that displays toast notifications. It uses `ngx-sonner` under the hood.\r\n\r\nTo customize the toaster, pass the following props to the component.\r\n\r\n| Property          | Description                     | Type                                                                                  | Default        |\r\n| ----------------- | ------------------------------- | ------------------------------------------------------------------------------------- | -------------- |\r\n| `[variant]`       | Toast variant styling           | `default \\| destructive`                                                              | `default`      |\r\n| `[theme]`         | Theme for the toasts            | `light \\| dark \\| system`                                                             | `system`       |\r\n| `[position]`      | Position of the toast container | `top-left \\| top-center \\| top-right \\| bottom-left \\| bottom-center \\| bottom-right` | `bottom-right` |\r\n| `[richColors]`    | Enable rich colors              | `boolean`                                                                             | `false`        |\r\n| `[expand]`        | Expand toasts by default        | `boolean`                                                                             | `false`        |\r\n| `[duration]`      | Auto-dismiss duration (ms)      | `number`                                                                              | `4000`         |\r\n| `[visibleToasts]` | Maximum visible toasts          | `number`                                                                              | `3`            |\r\n| `[closeButton]`   | Show close button               | `boolean`                                                                             | `false`        |\r\n"
-  },
   "demos": [
     {
       "name": "advanced.ts",

@@ -15,10 +15,6 @@
       "content": "export * from './skeleton.component';\r\nexport * from './skeleton.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API\r\n\r\n## [z-skeleton] <span class=\"api-type-label component\">Component</span>\r\n\r\n> `z-skeleton` renders a customizable placeholder during data loading to improve perceived performance and prevent layout shifts.\r\n\r\n| Property  | Description        | Type     | Default |\r\n| --------- | ------------------ | -------- | ------- |\r\n| `[class]` | Custom CSS classes | `string` | `''`    |\r\n"
-  },
   "demos": [
     {
       "name": "card.ts",

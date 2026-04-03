@@ -15,10 +15,6 @@
       "content": "export * from './segmented.component';\r\nexport * from './segmented.variants';\r\n"
     }
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API\r\n\r\n### Inputs\r\n\r\n| Name            | Type                        | Default               | Description                            |\r\n| --------------- | --------------------------- | --------------------- | -------------------------------------- |\r\n| `class`         | `ClassValue`                | `''`                  | Additional CSS classes to apply        |\r\n| `zSize`         | `'sm' \\| 'default' \\| 'lg'` | `'default'`           | Size of the segmented control          |\r\n| `zOptions`      | `SegmentedOption[]`         | `[]`                  | Array of options to display            |\r\n| `zDefaultValue` | `string`                    | `''`                  | Default selected value                 |\r\n| `zDisabled`     | `boolean`                   | `false`               | Whether the entire control is disabled |\r\n| `zAriaLabel`    | `string`                    | `'Segmented control'` | ARIA label for accessibility           |\r\n\r\n### Outputs\r\n\r\n| Name      | Type     | Description                    |\r\n| --------- | -------- | ------------------------------ |\r\n| `zChange` | `string` | Emitted when selection changes |\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

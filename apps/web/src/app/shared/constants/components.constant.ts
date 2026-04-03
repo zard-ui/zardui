@@ -2,6 +2,8 @@ import { ComponentType } from '@angular/cdk/overlay';
 
 import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
+import type { ApiSection } from '@doc/domain/components/api-reference/api-reference.types';
+
 export interface ComponentInstallData {
   cliAdd?: CodeTabData;
   manualCode?: CodeBlockData[];
@@ -15,6 +17,7 @@ export interface ComponentData {
   examples: ExampleData[];
   installData?: ComponentInstallData;
   fullWidth?: boolean;
+  api?: ApiSection[];
 }
 
 export interface ExampleData {

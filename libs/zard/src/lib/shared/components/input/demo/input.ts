@@ -11,11 +11,13 @@ import { ZardDemoInputDefaultComponent } from './default';
 import { ZardDemoInputSizeComponent } from './size';
 import { ZardDemoInputStatusComponent } from './status';
 import { ZardDemoInputTextAreaComponent } from './text-area';
+import { INPUT_API } from '../doc/api';
 
 export const INPUT = {
   componentName: 'input',
   componentType: 'input',
   description: 'Displays a form input field or a component that looks like an input field.',
+  api: INPUT_API,
   installData: {
     cliAdd: INPUT_CLI_ADD,
     manualCode: INPUT_MANUAL_CODE,

@@ -11,11 +11,13 @@ import { ZardDemoInputGroupDefaultComponent } from './default';
 import { ZardDemoInputGroupLoadingComponent } from './loading';
 import { ZardDemoInputGroupSizeComponent } from './size';
 import { ZardDemoInputGroupTextComponent } from './text';
+import { INPUT_GROUP_API } from '../doc/api';
 
 export const INPUT_GROUP = {
   componentName: 'input-group',
   componentType: 'input-group',
   description: 'Display additional information or actions to an input or textarea.',
+  api: INPUT_GROUP_API,
   installData: {
     cliAdd: INPUT_GROUP_CLI_ADD,
     manualCode: INPUT_GROUP_MANUAL_CODE,

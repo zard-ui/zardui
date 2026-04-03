@@ -5,10 +5,12 @@ import { SELECT_MANUAL_CODE } from '@generated/installation/manual/select';
 
 import { ZardDemoSelectBasicComponent } from './default';
 import { ZardDemoMultiSelectBasicComponent } from './multi-select';
+import { SELECT_API } from '../doc/api';
 
 export const SELECT = {
   componentName: 'select',
   componentType: 'select',
+  api: SELECT_API,
   description: 'Displays a list of options for the user to pick from—triggered by a button.',
   installData: {
     cliAdd: SELECT_CLI_ADD,

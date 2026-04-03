@@ -5,12 +5,14 @@ import { LOADER_MANUAL_CODE } from '@generated/installation/manual/loader';
 
 import { ZardDemoLoaderDefaultComponent } from './default';
 import { ZardDemoLoaderSizeComponent } from './size';
+import { LOADER_API } from '../doc/api';
 
 export const LOADER = {
   componentName: 'loader',
   componentType: 'loader',
   description:
     'The Loader is a visual component that displays a loading animation to indicate that an action or process is in progress.',
+  api: LOADER_API,
   installData: {
     cliAdd: LOADER_CLI_ADD,
     manualCode: LOADER_MANUAL_CODE,

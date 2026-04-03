@@ -18,10 +18,6 @@
   "registryDependencies": [
     "divider"
   ],
-  "docs": {
-    "overview": "",
-    "api": "# API Reference\r\n\r\n[z-button-group] Component\r\n\r\n| Property       | Description | Type                     | Default      |\r\n| -------------- | ----------- | ------------------------ | ------------ |\r\n| `zOrientation` | Orientation | `horizontal \\| vertical` | `horizontal` |\r\n\r\n[z-button-group-divider] Component\r\n\r\n| Property       | Description                                                                  | Type                     | Default |\r\n| -------------- | ---------------------------------------------------------------------------- | ------------------------ | ------- |\r\n| `zOrientation` | Override for divider orientation, by default it uses the parents orientation | `horizontal \\| vertical` | `null`  |\r\n\r\n[z-button-group-text] Directive\r\n\r\nThe `ZardButtonGroupTextDirective` applies styles text elements, so that they conform with the rest of the group, for example a label.\r\n\r\n```ts\r\n@Component({\r\n  selector: 'z-example',\r\n  imports: [ZardButtonGroupComponent, ZardButtonComponent, ZardButtonGroupTextDirective, ZardIconComponent, ZardInputDirective],\r\n  template: `\r\n    <z-button-group>\r\n      <label z-button-group-text for=\"search\">Search</label>\r\n      <input z-input id=\"search\" />\r\n      <button z-button zType=\"outline\"><i z-icon zType=\"search\"></i></button>\r\n    </z-button-group>\r\n  `,\r\n})\r\nexport class ExampleComponent {}\r\n```\r\n"
-  },
   "demos": [
     {
       "name": "default.ts",

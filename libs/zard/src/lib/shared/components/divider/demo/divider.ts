@@ -5,11 +5,13 @@ import { DIVIDER_MANUAL_CODE } from '@generated/installation/manual/divider';
 
 import { ZardDemoDividerDefaultComponent } from './default';
 import { ZardDemoDividerVerticalComponent } from './vertical';
+import { DIVIDER_API } from '../doc/api';
 
 export const DIVIDER = {
   componentName: 'divider',
   componentType: 'divider',
   description: 'The Divider component is used to visually separate content with a horizontal or vertical line.',
+  api: DIVIDER_API,
   installData: {
     cliAdd: DIVIDER_CLI_ADD,
     manualCode: DIVIDER_MANUAL_CODE,

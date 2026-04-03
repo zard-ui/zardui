@@ -12,8 +12,10 @@ import { ZardDemoAccordionCardComponent } from './cards';
 import { ZardDemoAccordionDisabledComponent } from './disabled';
 import { ZardDemoAccordionMultipleComponent } from './multiple';
 import { ZardDemoAccordionPreviewComponent } from './preview';
+import { ACCORDION_API } from '../doc/api';
 
 export const ACCORDION = {
+  api: ACCORDION_API,
   componentName: 'accordion',
   componentType: 'accordion',
   description: 'A vertically stacked set of interactive headings that each reveal a section of content.',

@@ -7,12 +7,14 @@ import { LAYOUT_MANUAL_CODE } from '@generated/installation/manual/layout';
 import { LayoutDemoBasicComponent } from './basic';
 import { LayoutDemoFullComponent } from './full-layout';
 import { LayoutDemoSidebarComponent } from './sidebar';
+import { LAYOUT_API } from '../doc/api';
 
 export const LAYOUT = {
   componentName: 'layout',
   componentType: 'layout',
   description:
     'A set of layout components for creating common page structures with header, footer, sidebar, and content areas.',
+  api: LAYOUT_API,
   fullWidth: true,
   installData: {
     cliAdd: LAYOUT_CLI_ADD,
