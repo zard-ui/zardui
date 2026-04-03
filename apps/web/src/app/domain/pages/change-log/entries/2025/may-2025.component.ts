@@ -1,5 +1,11 @@
 import { Component } from '@angular/core';
 
+import { CHECKBOX_DEMO_DEFAULT } from '@generated/components/checkbox/demo/default';
+import { RADIO_DEMO_DEFAULT } from '@generated/components/radio/demo/default';
+import { SELECT_DEMO_DEFAULT } from '@generated/components/select/demo/default';
+import { SLIDER_DEMO_DEFAULT } from '@generated/components/slider/demo/default';
+import { SWITCH_DEMO_DEFAULT } from '@generated/components/switch/demo/default';
+
 import { ZardDemoCheckboxDefaultComponent } from '@zard/components/checkbox/demo/default';
 import { ZardDemoRadioDefaultComponent } from '@zard/components/radio/demo/default';
 import { ZardDemoSelectBasicComponent } from '@zard/components/select/demo/default';
@@ -36,30 +42,35 @@ export class May2025Component implements ChangelogEntryComponent {
         'Advanced dropdown select with search functionality, multi-select support, and custom item rendering.',
       component: ZardDemoSelectBasicComponent,
       componentName: 'select',
+      codeData: SELECT_DEMO_DEFAULT,
     },
     {
       name: 'default',
       description: 'Checkbox input component with indeterminate state support and full accessibility features.',
       component: ZardDemoCheckboxDefaultComponent,
       componentName: 'checkbox',
+      codeData: CHECKBOX_DEMO_DEFAULT,
     },
     {
       name: 'default',
       description: 'Radio button group for mutually exclusive options with customizable layouts and orientation.',
       component: ZardDemoRadioDefaultComponent,
       componentName: 'radio',
+      codeData: RADIO_DEMO_DEFAULT,
     },
     {
       name: 'default',
       description: 'Toggle switch component for boolean settings with smooth animation transitions.',
       component: ZardDemoSwitchDefaultComponent,
       componentName: 'switch',
+      codeData: SWITCH_DEMO_DEFAULT,
     },
     {
       name: 'default',
       description: 'Range slider for numeric value selection with min/max bounds, step support, and value display.',
       component: ZardDemoSliderDefaultComponent,
       componentName: 'slider',
+      codeData: SLIDER_DEMO_DEFAULT,
     },
   ];
 }

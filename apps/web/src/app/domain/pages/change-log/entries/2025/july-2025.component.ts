@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 
+import { ACCORDION_DEMO_BASIC } from '@generated/components/accordion/demo/basic';
+import { TABS_DEMO_DEFAULT } from '@generated/components/tabs/demo/default';
+import { TOOLTIP_DEMO_HOVER } from '@generated/components/tooltip/demo/hover';
+
 import { ZardDemoAccordionBasicComponent } from '@zard/components/accordion/demo/basic';
 import { ZardDemoTabsDefaultComponent } from '@zard/components/tabs/demo/default';
 import { ZardDemoTooltipHoverComponent } from '@zard/components/tooltip/demo/hover';
@@ -34,6 +38,7 @@ export class July2025Component implements ChangelogEntryComponent {
         'Tabbed interface component for organizing content into separate views with smooth transitions and keyboard navigation.',
       component: ZardDemoTabsDefaultComponent,
       componentName: 'tabs',
+      codeData: TABS_DEMO_DEFAULT,
     },
     {
       name: 'basic',
@@ -41,6 +46,7 @@ export class July2025Component implements ChangelogEntryComponent {
         'Collapsible content panels for organizing information in a compact space with expand/collapse animations.',
       component: ZardDemoAccordionBasicComponent,
       componentName: 'accordion',
+      codeData: ACCORDION_DEMO_BASIC,
     },
     {
       name: 'hover',
@@ -48,6 +54,7 @@ export class July2025Component implements ChangelogEntryComponent {
         'Contextual information overlay displayed on hover with customizable positioning and delay settings.',
       component: ZardDemoTooltipHoverComponent,
       componentName: 'tooltip',
+      codeData: TOOLTIP_DEMO_HOVER,
     },
   ];
 }

@@ -1,5 +1,7 @@
 import { Type } from '@angular/core';
 
+import type { CodeBlockData } from '@highlight/types';
+
 export interface ChangelogEntryMeta {
   month: string; // 'November 2025'
   year: number;
@@ -13,6 +15,7 @@ export interface ChangelogExample {
   description?: string;
   component: Type<unknown>;
   componentName: string; // Nome do componente para instalação (ex: 'carousel')
+  codeData?: CodeBlockData;
 }
 
 export interface ChangelogHighlight {

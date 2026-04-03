@@ -45,7 +45,12 @@ const LANGUAGE_ICONS: Record<string, string> = {
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (data(); as d) {
-      <div class="group relative my-6 overflow-hidden rounded-lg border">
+      <div
+        class="group relative overflow-hidden"
+        [class.my-6]="!embedded()"
+        [class.rounded-lg]="!embedded()"
+        [class.border]="!embedded()"
+      >
         @if (d.title) {
           <div class="bg-muted/50 text-muted-foreground flex items-center gap-2 border-b px-4 py-2 text-sm">
             @if (icon()) {
@@ -86,6 +91,7 @@ export class CodeBlockComponent {
   private readonly sanitizer = inject(DomSanitizer);
 
   readonly data = input.required<CodeBlockData>();
+  readonly embedded = input(false);
 
   readonly icon = computed(() => {
     const d = this.data();

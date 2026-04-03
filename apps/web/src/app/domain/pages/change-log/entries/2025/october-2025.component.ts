@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+import { EMPTY_DEMO_DEFAULT } from '@generated/components/empty/demo/default';
+import { SHEET_DEMO_BASIC } from '@generated/components/sheet/demo/basic';
+
 import { ZardDemoEmptyDefaultComponent } from '@zard/components/empty/demo/default';
 import { ZardDemoSheetBasicComponent } from '@zard/components/sheet/demo/basic';
 
@@ -33,12 +36,14 @@ export class October2025Component implements ChangelogEntryComponent {
         'A versatile sheet component for side panels and overlays with customizable positioning and smooth transitions.',
       component: ZardDemoSheetBasicComponent,
       componentName: 'sheet',
+      codeData: SHEET_DEMO_BASIC,
     },
     {
       name: 'default',
       description: 'Clean empty state component for "no data" scenarios with customizable messages and icons.',
       component: ZardDemoEmptyDefaultComponent,
       componentName: 'empty',
+      codeData: EMPTY_DEMO_DEFAULT,
     },
   ];
 }

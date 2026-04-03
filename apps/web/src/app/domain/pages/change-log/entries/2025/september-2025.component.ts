@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 
+import { LOADER_DEMO_DEFAULT } from '@generated/components/loader/demo/default';
+import { PROGRESS_BAR_DEMO_BASIC } from '@generated/components/progress-bar/demo/basic';
+import { SKELETON_DEMO_DEFAULT } from '@generated/components/skeleton/demo/default';
+
 import { ZardDemoLoaderDefaultComponent } from '@zard/components/loader/demo/default';
 import { ZardDemoProgressBarBasicComponent } from '@zard/components/progress-bar/demo/basic';
 import { ZardDemoSkeletonDefaultComponent } from '@zard/components/skeleton/demo/default';
@@ -34,6 +38,7 @@ export class September2025Component implements ChangelogEntryComponent {
         'Visual progress indicator with customizable variants for tracking task completion and loading states.',
       component: ZardDemoProgressBarBasicComponent,
       componentName: 'progress-bar',
+      codeData: PROGRESS_BAR_DEMO_BASIC,
     },
     {
       name: 'default',
@@ -41,12 +46,14 @@ export class September2025Component implements ChangelogEntryComponent {
         'Loading placeholder component for better perceived performance during content loading with pulse animation.',
       component: ZardDemoSkeletonDefaultComponent,
       componentName: 'skeleton',
+      codeData: SKELETON_DEMO_DEFAULT,
     },
     {
       name: 'default',
       description: 'Animated loading spinner with multiple size variants for indicating async operations in progress.',
       component: ZardDemoLoaderDefaultComponent,
       componentName: 'loader',
+      codeData: LOADER_DEMO_DEFAULT,
     },
   ];
 }

@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 
+import { FORM_DEMO_DEFAULT } from '@generated/components/form/demo/default';
+import { INPUT_DEMO_DEFAULT } from '@generated/components/input/demo/default';
+
 import { ZardDemoFormDefaultComponent } from '@zard/components/form/demo/default';
 import { ZardDemoInputDefaultComponent } from '@zard/components/input/demo/default';
 
@@ -33,12 +36,14 @@ export class April2025Component implements ChangelogEntryComponent {
         'Text input field component with multiple variants, sizes, and built-in validation state indicators.',
       component: ZardDemoInputDefaultComponent,
       componentName: 'input',
+      codeData: INPUT_DEMO_DEFAULT,
     },
     {
       name: 'default',
       description: 'Complete form component with field management, validation, error handling, and submission control.',
       component: ZardDemoFormDefaultComponent,
       componentName: 'form',
+      codeData: FORM_DEMO_DEFAULT,
     },
   ];
 }

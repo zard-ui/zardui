@@ -3,44 +3,17 @@ import { NgComponentOutlet } from '@angular/common';
 import { Component, computed, input, signal, ViewEncapsulation } from '@angular/core';
 
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import { CopyButtonComponent } from '@highlight/components/copy-button/copy-button.component';
 import type { CodeBlockData } from '@highlight/types';
 
 import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 
-import { ZardCardComponent } from '@zard/components/card/card.component';
-
 @Component({
   selector: 'z-code-box',
-  imports: [NgComponentOutlet, ZardCardComponent, MarkdownRendererComponent, HyphenToSpacePipe, CodeBlockComponent],
+  imports: [NgComponentOutlet, MarkdownRendererComponent, HyphenToSpacePipe, CodeBlockComponent, CopyButtonComponent],
   templateUrl: './zard-code-box.component.html',
   encapsulation: ViewEncapsulation.None,
-  styles: [
-    `
-      z-card.demo-card > div > * {
-        min-width: 20rem;
-        gap: 1rem;
-        align-items: center;
-        justify-content: center;
-      }
-
-      z-card.demo-card.demo-flex > div > * {
-        display: flex;
-      }
-
-      z-card.demo-card.demo-grid > div > * {
-        display: grid;
-      }
-
-      z-card.demo-card.demo-full-width > div > * {
-        width: 100%;
-      }
-
-      z-card.demo-card.demo-full-width > div {
-        width: 100%;
-      }
-    `,
-  ],
 })
 export class ZardCodeBoxComponent {
   readonly componentType = input<string>();
@@ -51,38 +24,13 @@ export class ZardCodeBoxComponent {
   readonly flexAlign = input<'start' | 'center' | 'end' | undefined>('center');
   readonly column = input<boolean | undefined>(false);
   readonly dynamicComponent = input<ComponentType<unknown>>();
-
-  // New: pre-highlighted code data
   readonly codeData = input<CodeBlockData>();
 
-  // Legacy: markdown path (will be removed after full migration)
-  readonly path = input<string>();
+  readonly codeCollapsed = signal(true);
 
-  activeTab = signal<'preview' | 'code'>('preview');
-
-  readonly markdownUrl = computed(() => {
-    const pathValue = this.path();
-    if (!pathValue) return '';
-    return `components/${pathValue}.md`;
-  });
-
-  readonly cardClasses = computed(() => {
-    const classes = ['demo-card'];
-
-    if (this.column()) {
-      classes.push('demo-grid');
-    } else {
-      classes.push('demo-flex');
-    }
-
-    if (this.fullWidth()) {
-      classes.push('demo-full-width');
-    }
-
-    if (this.flexAlign()) {
-      classes.push(`items-${this.flexAlign()}`);
-    }
-
-    return classes.join(' ');
+  readonly codeBlockData = computed(() => {
+    const data = this.codeData();
+    if (!data) return undefined;
+    return { ...data, expandable: false, copyButton: false };
   });
 }

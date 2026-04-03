@@ -16,7 +16,6 @@
       <z-assist></z-assist>
       <z-code-box
         [codeData]="data.examples[0].codeData"
-        [path]="!data.examples[0].codeData ? data.componentName + '/demo/' + data.examples[0].name : undefined"
         [dynamicComponent]="data.examples[0].component"
         [onlyDemo]="data.examples[0].onlyDemo"
         [column]="data.examples[0].column || false"
@@ -109,7 +108,6 @@
             [componentType]="item.name"
             [demoDescription]="item.description"
             [codeData]="item.codeData"
-            [path]="!item.codeData ? data.componentName + '/demo/' + item.name : undefined"
             [dynamicComponent]="item.component"
             [fullScreen]="item.fullScreen"
             [onlyDemo]="item.onlyDemo"
