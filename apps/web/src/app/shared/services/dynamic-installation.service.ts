@@ -13,14 +13,15 @@ export class DynamicInstallationService {
     cliAddData?: CodeTabData,
     manualCodeData?: CodeBlockData[],
     manualDepsData?: CodeTabData,
+    registerData?: CodeBlockData,
   ): { cli: Step[]; manual: Step[] } {
     return {
-      cli: this.generateCliSteps(componentName, cliAddData),
-      manual: this.generateManualSteps(componentName, manualCodeData, manualDepsData),
+      cli: this.generateCliSteps(componentName, cliAddData, registerData),
+      manual: this.generateManualSteps(componentName, manualCodeData, manualDepsData, registerData),
     };
   }
 
-  private generateCliSteps(componentName: string, cliAddData?: CodeTabData): Step[] {
+  private generateCliSteps(componentName: string, cliAddData?: CodeTabData, registerData?: CodeBlockData): Step[] {
     const steps: Step[] = [];
 
     const step: Step = {
@@ -32,13 +33,10 @@ export class DynamicInstallationService {
     }
     steps.push(step);
 
-    if (this.checkIfComponentHasRegisterStep(componentName)) {
+    if (registerData) {
       steps.push({
         title: `Register ${componentName} to your project`,
-        file: {
-          path: `/installation/cli/register-${componentName}.md`,
-          lineNumber: true,
-        },
+        codeBlockData: registerData,
       });
     }
 
@@ -49,10 +47,11 @@ export class DynamicInstallationService {
     componentName: string,
     manualCodeData?: CodeBlockData[],
     manualDepsData?: CodeTabData,
+    registerData?: CodeBlockData,
   ): Step[] {
     const steps: Step[] = [];
 
-    if (this.checkIfComponentHasDependencies(componentName) && manualDepsData) {
+    if (manualDepsData) {
       steps.push({
         title: 'Install dependencies',
         subtitle: 'Install the required dependencies for this component.',
@@ -60,37 +59,25 @@ export class DynamicInstallationService {
       });
     }
 
-    const manualStep: Step = {
-      title: 'Add the component files',
-      subtitle: 'Create the component directory structure and add the following files to your project.',
-      path: `components/${componentName}`,
-      expandable: true,
-    };
     if (manualCodeData) {
-      manualStep.codeBlockData = manualCodeData;
-    }
-    steps.push(manualStep);
+      const files = manualCodeData.filter(block => block.title !== 'index.ts');
 
-    if (this.checkIfComponentHasRegisterStep(componentName)) {
+      for (const block of files) {
+        steps.push({
+          title: `Add ${block.title ?? 'file'}`,
+          subtitle: `Create the following file in your project.`,
+          codeBlockData: block,
+        });
+      }
+    }
+
+    if (registerData) {
       steps.push({
-        title: `Register ${componentName}  to your project`,
-        file: {
-          path: `/installation/cli/register-${componentName}.md`,
-          lineNumber: true,
-        },
+        title: `Register ${componentName} to your project`,
+        codeBlockData: registerData,
       });
     }
 
     return steps;
-  }
-
-  private checkIfComponentHasDependencies(componentName: string): boolean {
-    const componentsWithDeps = ['toast', 'carousel'];
-    return componentsWithDeps.includes(componentName);
-  }
-
-  private checkIfComponentHasRegisterStep(componentName: string): boolean {
-    const componentsWithDeps = ['toast'];
-    return componentsWithDeps.includes(componentName);
   }
 }

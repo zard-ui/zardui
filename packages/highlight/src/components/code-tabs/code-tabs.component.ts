@@ -12,20 +12,35 @@ import { CopyButtonComponent } from '../copy-button/copy-button.component';
   encapsulation: ViewEncapsulation.None,
   template: `
     @if (data(); as d) {
-      <div class="group relative my-6 overflow-hidden rounded-lg border">
-        <div class="bg-muted/50 text-muted-foreground flex items-center gap-2 border-b px-4 py-2 text-sm">
-          @if (icon()) {
-            <img [src]="icon()" alt="" class="h-4 w-4 shrink-0 invert-0 dark:invert" />
-          }
-          <div class="flex">
+      <div class="bg-code relative my-6 overflow-hidden rounded-lg">
+        <div class="border-border/50 flex items-center gap-2 border-b px-3 py-1">
+          <div class="bg-foreground flex size-4 items-center justify-center rounded-[1px] opacity-70">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              class="text-code size-3"
+            >
+              <path d="M5 7l5 5l-5 5"></path>
+              <path d="M12 19l7 0"></path>
+            </svg>
+          </div>
+          <div class="text-muted-foreground inline-flex w-fit items-center justify-center" role="tablist">
             @for (tab of d.tabs; track tab.label; let i = $index) {
               <button
                 type="button"
-                class="cursor-pointer rounded-md px-2 py-1 text-[13px] font-medium transition-colors"
-                [class.bg-code-tab]="activeTab() === i"
-                [class.text-foreground]="activeTab() === i"
+                role="tab"
+                [attr.aria-selected]="activeTab() === i"
+                class="text-foreground/60 hover:text-foreground relative inline-flex h-7 cursor-pointer items-center justify-center rounded-md px-2 py-1 pt-0.5 text-sm font-medium whitespace-nowrap"
                 [class.border]="activeTab() === i"
-                [class.text-muted-foreground]="activeTab() !== i"
+                [class.bg-background]="activeTab() === i"
+                [class.text-foreground]="activeTab() === i"
                 (click)="activeTab.set(i)"
               >
                 {{ tab.label }}
@@ -34,13 +49,16 @@ import { CopyButtonComponent } from '../copy-button/copy-button.component';
           </div>
           <z-copy-button
             [code]="activeCode()"
-            [inHeader]="true"
-            class="text-muted-foreground hover:bg-muted focus-visible:ring-ring ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-md bg-transparent transition-all duration-200 ease-in-out focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            class="hover:text-accent-foreground ml-auto flex size-7 cursor-pointer items-center justify-center rounded-md opacity-70 transition-all hover:opacity-100"
           />
         </div>
-
         @for (tab of d.tabs; track tab.label; let i = $index) {
-          <div [class.hidden]="activeTab() !== i" [innerHTML]="safeTabHtml()[i]"></div>
+          <div
+            role="tabpanel"
+            class="no-scrollbar overflow-x-auto"
+            [class.hidden]="activeTab() !== i"
+            [innerHTML]="safeTabHtml()[i]"
+          ></div>
         }
       </div>
     }
@@ -51,18 +69,6 @@ export class CodeTabsComponent {
 
   readonly data = input.required<CodeTabData>();
   readonly activeTab = signal(0);
-
-  readonly icon = computed(() => {
-    const lang = this.data().tabs[0]?.language;
-    if (!lang) return null;
-    const icons: Record<string, string> = {
-      bash: '/icons/terminal.svg',
-      shell: '/icons/terminal.svg',
-      typescript: '/icons/typescript.svg',
-      javascript: '/icons/typescript.svg',
-    };
-    return icons[lang] ?? null;
-  });
 
   readonly activeCode = computed(() => {
     return this.data().tabs[this.activeTab()]?.code ?? '';

@@ -7,6 +7,7 @@ export interface CodeBlockData {
   copyButton: boolean;
   expandable: boolean;
   expandableTitle?: string;
+  highlightLines?: number[];
 }
 
 export interface CodeTabData {

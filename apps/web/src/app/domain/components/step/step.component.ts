@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import { CodeDisplayComponent } from '@highlight/components/code-display/code-display.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
 import type { CodeBlockData } from '@highlight/types';
 
@@ -44,10 +44,10 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
             } @else if (stepProps()?.codeBlockData) {
               @if (isCodeBlockArray(stepProps()!.codeBlockData!)) {
                 @for (block of asCodeBlockArray(stepProps()!.codeBlockData!); track $index) {
-                  <z-code-block [data]="block" />
+                  <z-code-display [data]="block" />
                 }
               } @else {
-                <z-code-block [data]="asCodeBlock(stepProps()!.codeBlockData!)" />
+                <z-code-display [data]="asCodeBlock(stepProps()!.codeBlockData!)" />
               }
             } @else if (stepProps()?.file?.path) {
               <z-markdown-renderer [markdownUrl]="stepProps()!.file!.path"></z-markdown-renderer>
@@ -58,7 +58,7 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardButtonComponent, MarkdownRendererComponent, RouterLink, CodeBlockComponent, CodeTabsComponent],
+  imports: [ZardButtonComponent, MarkdownRendererComponent, RouterLink, CodeDisplayComponent, CodeTabsComponent],
 })
 export class StepComponent {
   readonly stepProps = input<Step>();

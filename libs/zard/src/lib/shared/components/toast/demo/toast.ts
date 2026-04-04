@@ -7,6 +7,7 @@ import { TOAST_DEMO_SUCCESS } from '@generated/components/toast/demo/success';
 import { TOAST_CLI_ADD } from '@generated/installation/cli/add-toast';
 import { TOAST_MANUAL_INSTALL_DEPS } from '@generated/installation/manual/install-deps-toast';
 import { TOAST_MANUAL_CODE } from '@generated/installation/manual/toast';
+import { TOAST_REGISTER } from '@generated/installation/register/register-toast';
 
 import { ZardDemoToastAdvancedComponent } from './advanced';
 import { ZardDemoToastDefaultComponent } from './default';
@@ -25,6 +26,7 @@ export const TOAST = {
     cliAdd: TOAST_CLI_ADD,
     manualCode: TOAST_MANUAL_CODE,
     manualDeps: TOAST_MANUAL_INSTALL_DEPS,
+    register: TOAST_REGISTER,
   },
   examples: [
     {

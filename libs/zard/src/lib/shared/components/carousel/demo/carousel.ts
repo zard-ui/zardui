@@ -7,6 +7,7 @@ import { CAROUSEL_DEMO_SIZES } from '@generated/components/carousel/demo/sizes';
 import { CAROUSEL_DEMO_SPACING } from '@generated/components/carousel/demo/spacing';
 import { CAROUSEL_CLI_ADD } from '@generated/installation/cli/add-carousel';
 import { CAROUSEL_MANUAL_CODE } from '@generated/installation/manual/carousel';
+import { CAROUSEL_MANUAL_INSTALL_DEPS } from '@generated/installation/manual/install-deps-carousel';
 
 import { ZardDemoCarouselApiComponent } from '@/shared/components/carousel/demo/api-demo';
 import { ZardDemoCarouselDefaultComponent } from '@/shared/components/carousel/demo/default';
@@ -27,6 +28,7 @@ export const CAROUSEL = {
   installData: {
     cliAdd: CAROUSEL_CLI_ADD,
     manualCode: CAROUSEL_MANUAL_CODE,
+    manualDeps: CAROUSEL_MANUAL_INSTALL_DEPS,
   },
   examples: [
     {

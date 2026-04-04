@@ -33,10 +33,10 @@
 
     <section class="flex flex-col gap-4" scrollSpyItem="installation" id="installation">
       <header class="mb-3">
-        <h2 class="mb-5 text-2xl font-semibold">Installation</h2>
+        <h2 class="font-heading mb-6 scroll-m-28 text-xl font-medium tracking-tight">Installation</h2>
         <div class="overflow-hidden transition-all duration-200 ease-in-out">
           <nav
-            class="mb-4 flex gap-4"
+            class="text-muted-foreground mb-3 flex gap-6"
             role="tablist"
             aria-label="Installation method"
             #tabList
@@ -49,12 +49,13 @@
                 [attr.aria-selected]="activeTab() === 'cli'"
                 [attr.aria-controls]="'cli-panel'"
                 [attr.tabindex]="activeTab() === 'cli' ? 0 : -1"
-                class="cursor-pointer text-base"
+                class="cursor-pointer px-0 py-1 pb-2 text-base font-medium"
                 (click)="activeTab.set('cli')"
-                [class.font-semibold]="activeTab() === 'cli'"
                 [class.text-foreground]="activeTab() === 'cli'"
+                [class.border-b-2]="activeTab() === 'cli'"
+                [class.border-primary]="activeTab() === 'cli'"
               >
-                CLI
+                Command
               </button>
             }
             @if (installGuide()?.manual) {
@@ -64,9 +65,10 @@
                 [attr.aria-selected]="activeTab() === 'manual'"
                 [attr.aria-controls]="'manual-panel'"
                 [attr.tabindex]="activeTab() === 'manual' ? 0 : -1"
-                class="cursor-pointer text-base"
+                class="cursor-pointer px-0 py-1 pb-2 text-base font-medium"
                 (click)="activeTab.set('manual')"
-                [class.font-semibold]="activeTab() === 'manual'"
+                [class.border-b-2]="activeTab() === 'manual'"
+                [class.border-primary]="activeTab() === 'manual'"
                 [class.text-foreground]="activeTab() === 'manual'"
               >
                 Manual
@@ -86,7 +88,13 @@
             [class.overflow-hidden]="activeTab() !== 'cli'"
             [class.pointer-events-none]="activeTab() !== 'cli'"
           >
-            <z-steps [steps]="installGuide()?.cli"></z-steps>
+            @if (installGuide()?.cli; as cliSteps) {
+              @if (cliSteps.length === 1 && cliSteps[0].codeTabData) {
+                <z-code-tabs [data]="cliSteps[0].codeTabData!" />
+              } @else {
+                <z-steps [steps]="cliSteps"></z-steps>
+              }
+            }
           </section>
           <section
             role="tabpanel"
@@ -128,7 +136,7 @@
 
     <footer scrollSpyItem="api" id="api">
       @if (data.api) {
-        <h1 class="scroll-m-20 text-4xl font-semibold tracking-tight sm:text-3xl xl:text-4xl">API Reference</h1>
+        <h1 class="font-heading mb-4 scroll-m-28 text-xl font-medium tracking-tight">API Reference</h1>
         <z-api-reference [sections]="data.api" />
       }
     </footer>

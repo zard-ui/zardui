@@ -267,7 +267,7 @@ code[data-line-numbers-max-digits='4'] > [data-line]::before {
 pre.shiki {
   padding: 16px;
   font-size: 14px;
-  line-height: 20px;
+  line-height: 1.5;
   overflow: auto;
   scrollbar-width: none;
   background-color: var(--color-code) !important;
@@ -280,7 +280,7 @@ pre.shiki::-webkit-scrollbar {
 pre.shiki code {
   display: grid;
   font-size: 14px;
-  line-height: 20px;
+  line-height: 1.5;
 }
 
 /* Line numbers for shiki output (span.line) via z-code-block */
@@ -296,6 +296,25 @@ pre.shiki code {
   margin-right: 1.5rem;
   text-align: right;
   color: var(--color-code-number);
+}
+
+/* Highlighted lines in shiki code blocks */
+pre.shiki code > .line.highlighted {
+  background-color: var(--color-code-highlight);
+  border-left: 2px solid var(--color-muted-foreground);
+  margin-inline: -16px;
+  padding-inline: 14px 16px;
+}
+
+@supports (color: color-mix(in lab, red, red)) {
+  pre.shiki code > .line.highlighted {
+    border-left-color: color-mix(in oklab, var(--color-muted-foreground) 50%, transparent);
+  }
+}
+
+.line-numbers code > .line.highlighted {
+  margin-left: calc(-1rem - 1.5rem - 16px);
+  padding-left: calc(1rem + 1.5rem + 14px);
 }
 
 code,

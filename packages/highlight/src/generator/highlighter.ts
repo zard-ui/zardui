@@ -26,10 +26,17 @@ export async function getHighlighter(): Promise<Highlighter> {
   return highlighterInstance;
 }
 
-export async function highlightCode(code: string, lang: string): Promise<string> {
+export async function highlightCode(code: string, lang: string, highlightLines?: number[]): Promise<string> {
   const highlighter = await getHighlighter();
 
   const resolvedLang = resolveLanguage(lang);
+
+  const lines = code.split('\n');
+  const decorations = highlightLines?.map(line => ({
+    start: { line: line - 1, character: 0 },
+    end: { line: line - 1, character: lines[line - 1]?.length ?? 0 },
+    properties: { class: 'highlighted' },
+  }));
 
   return highlighter.codeToHtml(code, {
     lang: resolvedLang,
@@ -38,6 +45,7 @@ export async function highlightCode(code: string, lang: string): Promise<string>
       light: 'github-light',
     },
     defaultColor: false,
+    decorations,
   });
 }
 

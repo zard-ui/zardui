@@ -8,6 +8,7 @@ export interface ComponentInstallData {
   cliAdd?: CodeTabData;
   manualCode?: CodeBlockData[];
   manualDeps?: CodeTabData;
+  register?: CodeBlockData;
 }
 
 export interface ComponentData {

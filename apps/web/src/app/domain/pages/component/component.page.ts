@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
+
 import { AiAssistComponent } from '@doc/domain/components/ai-assist/ai-assist.component';
 import { ApiReferenceComponent } from '@doc/domain/components/api-reference/api-reference.component';
 
@@ -23,6 +25,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   imports: [
     AiAssistComponent,
     ApiReferenceComponent,
+    CodeTabsComponent,
     DocContentComponent,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
@@ -113,6 +116,7 @@ export class ComponentPage implements OnInit {
       component.installData?.cliAdd,
       component.installData?.manualCode,
       component.installData?.manualDeps,
+      component.installData?.register,
     );
     this.installGuide.set(installGuide);
     this.componentData.set(component);

@@ -16,11 +16,36 @@ const BASIC_DEPENDENCIES = [
   'tailwindcss-animate',
   '@ng-icons/core',
   '@ng-icons/lucide',
-  'embla-carousel-angular',
-  'embla-carousel-autoplay',
-  'embla-carousel-class-names',
-  'embla-carousel-wheel-gestures',
 ];
+
+interface RegisterConfig {
+  title: string;
+  code: string;
+  language: string;
+  highlightLines?: number[];
+}
+
+const REGISTER_CONFIGS: Record<string, RegisterConfig> = {
+  toast: {
+    title: 'app.component.ts',
+    language: 'angular-ts',
+    highlightLines: [3, 8, 11],
+    code: `import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { ZardToastComponent } from '@/shared/components/toast/toast.component';
+
+@Component({
+  selector: 'app-root',
+  standalone: true,
+  imports: [RouterOutlet, ZardToastComponent],
+  template: \`
+    <router-outlet></router-outlet>
+    <z-toaster />
+  \`,
+})
+export class AppComponent {}`,
+  },
+};
 
 interface ComponentDependency {
   name: string;
@@ -76,6 +101,30 @@ async function generateCliFiles(componentName: string, deps: ComponentDependency
 
     const depsConst = toConstName(componentName, 'CLI_INSTALL_DEPS');
     fs.writeFileSync(path.join(cliDir, `install-deps-${componentName}.ts`), generateTabExport(depsConst, depsTabs));
+    count++;
+  }
+
+  // Register step (only if component has register config)
+  const registerConfig = REGISTER_CONFIGS[componentName];
+  if (registerConfig) {
+    const registerDir = path.join(OUTPUT_PATH, 'register');
+    fs.ensureDirSync(registerDir);
+    const html = await highlightCode(registerConfig.code, registerConfig.language, registerConfig.highlightLines);
+    const block: CodeBlockData = {
+      html,
+      code: registerConfig.code,
+      language: registerConfig.language,
+      title: registerConfig.title,
+      showLineNumbers: true,
+      copyButton: true,
+      expandable: false,
+      highlightLines: registerConfig.highlightLines,
+    };
+    const registerConst = toConstName(componentName, 'REGISTER');
+    fs.writeFileSync(
+      path.join(registerDir, `register-${componentName}.ts`),
+      generateCodeBlockExport(registerConst, block),
+    );
     count++;
   }
 
@@ -224,6 +273,12 @@ function analyzeComponentDependencies(componentDir: string, componentName: strin
     { pattern: '@angular/cdk/overlay', name: '@angular/cdk/overlay', npmPackage: '@angular/cdk', type: 'angular' },
     { pattern: '@angular/cdk/portal', name: '@angular/cdk/portal', npmPackage: '@angular/cdk', type: 'angular' },
     { pattern: 'ngx-sonner', name: 'ngx-sonner', npmPackage: 'ngx-sonner', type: 'external' },
+    {
+      pattern: 'embla-carousel-angular',
+      name: 'embla-carousel-angular',
+      npmPackage: 'embla-carousel-angular',
+      type: 'external',
+    },
   ];
 
   for (const check of checks) {
@@ -256,6 +311,13 @@ function generateTabExport(constName: string, data: CodeTabData): string {
   return `import type { CodeTabData } from '@highlight/types';
 
 export const ${constName}: CodeTabData = ${JSON.stringify(data, null, 2)};
+`;
+}
+
+function generateCodeBlockExport(constName: string, data: CodeBlockData): string {
+  return `import type { CodeBlockData } from '@highlight/types';
+
+export const ${constName}: CodeBlockData = ${JSON.stringify(data, null, 2)};
 `;
 }
 
