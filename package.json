@@ -36,7 +36,7 @@
   },
   "dependencies": {
     "@angular/aria": "21.2.3",
-    "@angular/cdk": "21.2.3",
+    "@angular/cdk": "21.2.5",
     "@angular/common": "21.2.5",
     "@angular/compiler": "21.2.5",
     "@angular/core": "21.2.5",
