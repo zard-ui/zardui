@@ -45,17 +45,20 @@ export const imageVariants = cva('relative object-cover object-center size-full 
   },
 });
 
-export const avatarGroupVariants = cva('flex items-center [&_img]:ring-2 [&_img]:ring-background', {
-  variants: {
-    zOrientation: {
-      horizontal: 'flex-row -space-x-3',
-      vertical: 'flex-col -space-y-3',
+export const avatarGroupVariants = cva(
+  'group/avatar-group flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:ring-background',
+  {
+    variants: {
+      zOrientation: {
+        horizontal: 'flex-row -space-x-3',
+        vertical: 'flex-col -space-y-3',
+      },
+    },
+    defaultVariants: {
+      zOrientation: 'horizontal',
     },
   },
-  defaultVariants: {
-    zOrientation: 'horizontal',
-  },
-});
+);
 
 export type ZardAvatarSizeVariants = NonNullable<VariantProps<typeof avatarVariants>['zSize']>;
 export type ZardAvatarShapeVariants = NonNullable<VariantProps<typeof avatarVariants>['zShape']>;
