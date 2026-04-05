@@ -1,0 +1,19 @@
+import type { CodeBlockData } from '@highlight/types';
+
+export const CAROUSEL_USAGE_IMPORT: CodeBlockData = {
+  html: '<pre class="shiki shiki-themes github-dark github-light" style="--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff" tabindex="0"><code><span class="line"><span style="--shiki-dark:#F97583;--shiki-light:#D73A49">import</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E"> { ZardCarouselImports } </span><span style="--shiki-dark:#F97583;--shiki-light:#D73A49">from</span><span style="--shiki-dark:#9ECBFF;--shiki-light:#032F62"> \'@/shared/components/carousel/carousel.imports\'</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">;</span></span></code></pre>',
+  code: "import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';",
+  language: 'angular-ts',
+  showLineNumbers: true,
+  copyButton: true,
+  expandable: false,
+};
+
+export const CAROUSEL_USAGE_CODE: CodeBlockData = {
+  html: '<pre class="shiki shiki-themes github-dark github-light" style="--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff" tabindex="0"><code><span class="line"><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">&#x3C;</span><span style="--shiki-dark:#85E89D;--shiki-light:#22863A">z-carousel</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">></span></span>\n<span class="line"><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">  &#x3C;</span><span style="--shiki-dark:#85E89D;--shiki-light:#22863A">z-carousel-content</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">></span></span>\n<span class="line"><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">    &#x3C;</span><span style="--shiki-dark:#85E89D;--shiki-light:#22863A">z-carousel-item</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">>Slide 1&#x3C;/</span><span style="--shiki-dark:#85E89D;--shiki-light:#22863A">z-carousel-item</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">></span></span>\n<span class="line"><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">    &#x3C;</span><span style="--shiki-dark:#85E89D;--shiki-light:#22863A">z-carousel-item</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">>Slide 2&#x3C;/</span><span style="--shiki-dark:#85E89D;--shiki-light:#22863A">z-carousel-item</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">></span></span>\n<span class="line"><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">    &#x3C;</span><span style="--shiki-dark:#85E89D;--shiki-light:#22863A">z-carousel-item</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">>Slide 3&#x3C;/</span><span style="--shiki-dark:#85E89D;--shiki-light:#22863A">z-carousel-item</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">></span></span>\n<span class="line"><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">  &#x3C;/</span><span style="--shiki-dark:#85E89D;--shiki-light:#22863A">z-carousel-content</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">></span></span>\n<span class="line"><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">&#x3C;/</span><span style="--shiki-dark:#85E89D;--shiki-light:#22863A">z-carousel</span><span style="--shiki-dark:#E1E4E8;--shiki-light:#24292E">></span></span></code></pre>',
+  code: '<z-carousel>\n  <z-carousel-content>\n    <z-carousel-item>Slide 1</z-carousel-item>\n    <z-carousel-item>Slide 2</z-carousel-item>\n    <z-carousel-item>Slide 3</z-carousel-item>\n  </z-carousel-content>\n</z-carousel>',
+  language: 'angular-html',
+  showLineNumbers: true,
+  copyButton: true,
+  expandable: false,
+};
