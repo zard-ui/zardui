@@ -35,7 +35,7 @@
     "node": ">=20.19.0"
   },
   "dependencies": {
-    "@angular/aria": "21.2.3",
+    "@angular/aria": "21.2.5",
     "@angular/cdk": "21.2.3",
     "@angular/common": "21.2.5",
     "@angular/compiler": "21.2.5",
