@@ -10,6 +10,11 @@ export interface CodeBlockData {
   highlightLines?: number[];
 }
 
+export interface ComponentUsageData {
+  importBlock: CodeBlockData;
+  codeBlock: CodeBlockData;
+}
+
 export interface CodeTabData {
   tabs: CodeTabItem[];
 }

@@ -115,6 +115,18 @@
       </header>
     </section>
 
+    @if (data.usage) {
+      <section class="flex flex-col gap-3" scrollSpyItem="usage" id="usage">
+        <h2 class="font-heading scroll-m-28 text-xl font-medium tracking-tight">Usage</h2>
+        <div class="overflow-hidden rounded-lg">
+          <z-code-block [data]="data.usage.importBlock" [embedded]="true" />
+        </div>
+        <div class="overflow-hidden rounded-lg">
+          <z-code-block [data]="data.usage.codeBlock" [embedded]="true" />
+        </div>
+      </section>
+    }
+
     <div class="flex flex-col gap-12" scrollSpyItem="examples" id="examples">
       <section class="flex flex-col gap-4">
         <h2 class="font-heading mt-10 scroll-m-28 text-xl font-medium tracking-tight first:mt-0 lg:mt-12">Examples</h2>

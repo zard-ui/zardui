@@ -8,6 +8,7 @@ import { TOGGLE_DEMO_WITH_FORMS } from '@generated/components/toggle/demo/with-f
 import { TOGGLE_DEMO_WITH_TEXT } from '@generated/components/toggle/demo/with-text';
 import { TOGGLE_CLI_ADD } from '@generated/installation/cli/add-toggle';
 import { TOGGLE_MANUAL_CODE } from '@generated/installation/manual/toggle';
+import { TOGGLE_USAGE_CODE, TOGGLE_USAGE_IMPORT } from '@generated/usage/toggle';
 
 import { ZardDemoToggleDefaultComponent } from './default';
 import { ZardDemoToggleDisabledComponent } from './disabled';
@@ -28,6 +29,7 @@ export const TOGGLE = {
     cliAdd: TOGGLE_CLI_ADD,
     manualCode: TOGGLE_MANUAL_CODE,
   },
+  usage: { importBlock: TOGGLE_USAGE_IMPORT, codeBlock: TOGGLE_USAGE_CODE },
   examples: [
     {
       name: 'default',

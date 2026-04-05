@@ -3,6 +3,7 @@ import { RESIZABLE_DEMO_VERTICAL } from '@generated/components/resizable/demo/ve
 import { RESIZABLE_DEMO_WITH_MIN_MAX } from '@generated/components/resizable/demo/with-min-max';
 import { RESIZABLE_CLI_ADD } from '@generated/installation/cli/add-resizable';
 import { RESIZABLE_MANUAL_CODE } from '@generated/installation/manual/resizable';
+import { RESIZABLE_USAGE_CODE, RESIZABLE_USAGE_IMPORT } from '@generated/usage/resizable';
 
 import { ZardDemoResizableDefaultComponent } from './default';
 import { ZardDemoResizableVerticalComponent } from './vertical';
@@ -19,6 +20,7 @@ export const RESIZABLE = {
     cliAdd: RESIZABLE_CLI_ADD,
     manualCode: RESIZABLE_MANUAL_CODE,
   },
+  usage: { importBlock: RESIZABLE_USAGE_IMPORT, codeBlock: RESIZABLE_USAGE_CODE },
   examples: [
     {
       name: 'default',

@@ -2,6 +2,7 @@ import { RADIO_DEMO_DEFAULT } from '@generated/components/radio/demo/default';
 import { RADIO_DEMO_DISABLED } from '@generated/components/radio/demo/disabled';
 import { RADIO_CLI_ADD } from '@generated/installation/cli/add-radio';
 import { RADIO_MANUAL_CODE } from '@generated/installation/manual/radio';
+import { RADIO_USAGE_IMPORT, RADIO_USAGE_CODE } from '@generated/usage/radio';
 
 import { ZardDemoRadioDefaultComponent } from './default';
 import { ZardDemoRadioDisabledComponent } from './disabled';
@@ -16,6 +17,7 @@ export const RADIO = {
     cliAdd: RADIO_CLI_ADD,
     manualCode: RADIO_MANUAL_CODE,
   },
+  usage: { importBlock: RADIO_USAGE_IMPORT, codeBlock: RADIO_USAGE_CODE },
   examples: [
     {
       name: 'default',

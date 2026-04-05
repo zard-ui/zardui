@@ -3,6 +3,7 @@ import { SHEET_DEMO_DIMENSIONS } from '@generated/components/sheet/demo/dimensio
 import { SHEET_DEMO_SIDE } from '@generated/components/sheet/demo/side';
 import { SHEET_CLI_ADD } from '@generated/installation/cli/add-sheet';
 import { SHEET_MANUAL_CODE } from '@generated/installation/manual/sheet';
+import { SHEET_USAGE_CODE, SHEET_USAGE_IMPORT } from '@generated/usage/sheet';
 
 import { ZardDemoSheetBasicComponent } from './basic';
 import { ZardDemoSheetDimensionsComponent } from './dimensions';
@@ -18,6 +19,7 @@ export const SHEET = {
     cliAdd: SHEET_CLI_ADD,
     manualCode: SHEET_MANUAL_CODE,
   },
+  usage: { importBlock: SHEET_USAGE_IMPORT, codeBlock: SHEET_USAGE_CODE },
   examples: [
     {
       name: 'basic',

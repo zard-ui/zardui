@@ -4,6 +4,7 @@ import { POPOVER_DEMO_INTERACTIVE } from '@generated/components/popover/demo/int
 import { POPOVER_DEMO_PLACEMENT } from '@generated/components/popover/demo/placement';
 import { POPOVER_CLI_ADD } from '@generated/installation/cli/add-popover';
 import { POPOVER_MANUAL_CODE } from '@generated/installation/manual/popover';
+import { POPOVER_USAGE_IMPORT, POPOVER_USAGE_CODE } from '@generated/usage/popover';
 
 import { ZardDemoPopoverDefaultComponent } from './default';
 import { ZardDemoPopoverHoverComponent } from './hover';
@@ -20,6 +21,7 @@ export const POPOVER = {
     cliAdd: POPOVER_CLI_ADD,
     manualCode: POPOVER_MANUAL_CODE,
   },
+  usage: { importBlock: POPOVER_USAGE_IMPORT, codeBlock: POPOVER_USAGE_CODE },
   examples: [
     {
       name: 'default',

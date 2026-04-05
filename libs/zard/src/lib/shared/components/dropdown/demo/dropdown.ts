@@ -2,6 +2,7 @@ import { DROPDOWN_DEMO_DEFAULT } from '@generated/components/dropdown/demo/defau
 import { DROPDOWN_DEMO_HOVER } from '@generated/components/dropdown/demo/hover';
 import { DROPDOWN_CLI_ADD } from '@generated/installation/cli/add-dropdown';
 import { DROPDOWN_MANUAL_CODE } from '@generated/installation/manual/dropdown';
+import { DROPDOWN_USAGE_IMPORT, DROPDOWN_USAGE_CODE } from '@generated/usage/dropdown';
 
 import { ZardDropdownHoverDemoComponent } from '@/shared/components/dropdown/demo/hover';
 
@@ -17,6 +18,7 @@ export const DROPDOWN = {
     cliAdd: DROPDOWN_CLI_ADD,
     manualCode: DROPDOWN_MANUAL_CODE,
   },
+  usage: { importBlock: DROPDOWN_USAGE_IMPORT, codeBlock: DROPDOWN_USAGE_CODE },
   examples: [
     {
       name: 'default',

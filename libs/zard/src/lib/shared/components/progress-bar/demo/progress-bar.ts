@@ -4,6 +4,7 @@ import { PROGRESS_BAR_DEMO_SHAPE } from '@generated/components/progress-bar/demo
 import { PROGRESS_BAR_DEMO_SIZE } from '@generated/components/progress-bar/demo/size';
 import { PROGRESS_BAR_CLI_ADD } from '@generated/installation/cli/add-progress-bar';
 import { PROGRESS_BAR_MANUAL_CODE } from '@generated/installation/manual/progress-bar';
+import { PROGRESS_BAR_USAGE_IMPORT, PROGRESS_BAR_USAGE_CODE } from '@generated/usage/progress-bar';
 
 import { ZardDemoProgressBarBasicComponent } from './basic';
 import { ZardDemoProgressBarIndeterminateComponent } from './indeterminate';
@@ -22,6 +23,7 @@ export const PROGRESS_BAR = {
     cliAdd: PROGRESS_BAR_CLI_ADD,
     manualCode: PROGRESS_BAR_MANUAL_CODE,
   },
+  usage: { importBlock: PROGRESS_BAR_USAGE_IMPORT, codeBlock: PROGRESS_BAR_USAGE_CODE },
   examples: [
     {
       name: 'basic',

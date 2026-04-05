@@ -3,6 +3,7 @@ import { KBD_DEMO_GROUP } from '@generated/components/kbd/demo/group';
 import { KBD_DEMO_TOOLTIP } from '@generated/components/kbd/demo/tooltip';
 import { KBD_CLI_ADD } from '@generated/installation/cli/add-kbd';
 import { KBD_MANUAL_CODE } from '@generated/installation/manual/kbd';
+import { KBD_USAGE_IMPORT, KBD_USAGE_CODE } from '@generated/usage/kbd';
 
 import { ZardDemoKbdDefaultComponent } from './default';
 import { ZardDemoKbdGroupComponent } from './group';
@@ -19,6 +20,7 @@ export const KBD = {
     cliAdd: KBD_CLI_ADD,
     manualCode: KBD_MANUAL_CODE,
   },
+  usage: { importBlock: KBD_USAGE_IMPORT, codeBlock: KBD_USAGE_CODE },
   examples: [
     {
       name: 'default',

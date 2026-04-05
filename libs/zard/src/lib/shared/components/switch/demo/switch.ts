@@ -4,6 +4,7 @@ import { SWITCH_DEMO_DISABLED } from '@generated/components/switch/demo/disabled
 import { SWITCH_DEMO_SIZE } from '@generated/components/switch/demo/size';
 import { SWITCH_CLI_ADD } from '@generated/installation/cli/add-switch';
 import { SWITCH_MANUAL_CODE } from '@generated/installation/manual/switch';
+import { SWITCH_USAGE_CODE, SWITCH_USAGE_IMPORT } from '@generated/usage/switch';
 
 import { ZardDemoSwitchDefaultComponent } from './default';
 import { ZardDemoSwitchDestructiveComponent } from './destructive';
@@ -20,6 +21,7 @@ export const SWITCH = {
     cliAdd: SWITCH_CLI_ADD,
     manualCode: SWITCH_MANUAL_CODE,
   },
+  usage: { importBlock: SWITCH_USAGE_IMPORT, codeBlock: SWITCH_USAGE_CODE },
   examples: [
     {
       name: 'default',

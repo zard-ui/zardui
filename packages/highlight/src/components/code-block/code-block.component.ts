@@ -63,7 +63,7 @@ const LANGUAGE_ICONS: Record<string, string> = {
               <z-copy-button
                 [code]="d.code"
                 [inHeader]="true"
-                class="text-muted-foreground hover:bg-muted focus-visible:ring-ring ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-md bg-transparent transition-all duration-200 ease-in-out focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+                class="text-muted-foreground focus-visible:ring-ring ml-auto flex h-6 w-6 cursor-pointer items-center justify-center rounded-md bg-transparent transition-all duration-200 ease-in-out focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
               />
             }
           </div>
@@ -80,7 +80,7 @@ const LANGUAGE_ICONS: Record<string, string> = {
         @if (d.copyButton && !d.title) {
           <z-copy-button
             [code]="d.code"
-            class="bg-secondary text-muted-foreground hover:bg-muted focus-visible:ring-ring absolute top-3 right-3 z-20 flex h-6 w-6 cursor-pointer items-center justify-center rounded-md border transition-all duration-200 ease-in-out focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+            class="bg-code text-muted-foreground focus-visible:ring-ring absolute top-3 right-3 z-20 flex h-6 w-6 cursor-pointer items-center justify-center rounded-md focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
           />
         }
       </div>

@@ -1,6 +1,7 @@
 import { CARD_DEMO_DEFAULT } from '@generated/components/card/demo/default';
 import { CARD_CLI_ADD } from '@generated/installation/cli/add-card';
 import { CARD_MANUAL_CODE } from '@generated/installation/manual/card';
+import { CARD_USAGE_IMPORT, CARD_USAGE_CODE } from '@generated/usage/card';
 
 import { ZardDemoCardDefaultComponent } from './default';
 import { CARD_API } from '../doc/api';
@@ -15,6 +16,7 @@ export const CARD = {
     cliAdd: CARD_CLI_ADD,
     manualCode: CARD_MANUAL_CODE,
   },
+  usage: { importBlock: CARD_USAGE_IMPORT, codeBlock: CARD_USAGE_CODE },
   examples: [
     {
       name: 'default',

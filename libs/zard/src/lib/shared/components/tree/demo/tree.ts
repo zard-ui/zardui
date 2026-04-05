@@ -4,6 +4,7 @@ import { TREE_DEMO_SELECTION } from '@generated/components/tree/demo/selection';
 import { TREE_DEMO_VIRTUAL_SCROLL } from '@generated/components/tree/demo/virtual-scroll';
 import { TREE_CLI_ADD } from '@generated/installation/cli/add-tree';
 import { TREE_MANUAL_CODE } from '@generated/installation/manual/tree';
+import { TREE_USAGE_CODE, TREE_USAGE_IMPORT } from '@generated/usage/tree';
 
 import { ZardDemoTreeBasicComponent } from './basic';
 import { ZardDemoTreeCheckableComponent } from './checkable';
@@ -21,6 +22,7 @@ export const TREE = {
     cliAdd: TREE_CLI_ADD,
     manualCode: TREE_MANUAL_CODE,
   },
+  usage: { importBlock: TREE_USAGE_IMPORT, codeBlock: TREE_USAGE_CODE },
   examples: [
     {
       name: 'basic',

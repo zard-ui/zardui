@@ -3,6 +3,7 @@ import { generateDocsFiles } from './docs-writer';
 import { disposeHighlighter } from './highlighter';
 import { generateInstallationFiles } from './installation-writer';
 import { generatePageDataFiles } from './page-data-writer';
+import { generateUsageFiles } from './usage-writer';
 import { startWatcher } from './watch';
 
 const isWatch = process.argv.includes('--watch');
@@ -10,17 +11,19 @@ const isWatch = process.argv.includes('--watch');
 async function generate(): Promise<void> {
   console.log('🔄 Generating highlighted code files...\n');
 
-  const [demoCount, installCount, docsCount, pageCount] = await Promise.all([
+  const [demoCount, installCount, docsCount, pageCount, usageCount] = await Promise.all([
     generateDemoFiles(),
     generateInstallationFiles(),
     generateDocsFiles(),
     generatePageDataFiles(),
+    generateUsageFiles(),
   ]);
 
   console.log(`✅ Generated ${demoCount} demo files`);
   console.log(`✅ Generated ${installCount} installation files`);
   console.log(`✅ Generated ${docsCount} documentation files`);
   console.log(`✅ Generated ${pageCount} page data files`);
+  console.log(`✅ Generated ${usageCount} usage files`);
   console.log('');
 }
 

@@ -5,6 +5,7 @@ import { INPUT_GROUP_DEMO_SIZE } from '@generated/components/input-group/demo/si
 import { INPUT_GROUP_DEMO_TEXT } from '@generated/components/input-group/demo/text';
 import { INPUT_GROUP_CLI_ADD } from '@generated/installation/cli/add-input-group';
 import { INPUT_GROUP_MANUAL_CODE } from '@generated/installation/manual/input-group';
+import { INPUT_GROUP_USAGE_IMPORT, INPUT_GROUP_USAGE_CODE } from '@generated/usage/input-group';
 
 import { ZardDemoInputGroupBorderlessComponent } from './borderless';
 import { ZardDemoInputGroupDefaultComponent } from './default';
@@ -22,6 +23,7 @@ export const INPUT_GROUP = {
     cliAdd: INPUT_GROUP_CLI_ADD,
     manualCode: INPUT_GROUP_MANUAL_CODE,
   },
+  usage: { importBlock: INPUT_GROUP_USAGE_IMPORT, codeBlock: INPUT_GROUP_USAGE_CODE },
   examples: [
     {
       name: 'default',

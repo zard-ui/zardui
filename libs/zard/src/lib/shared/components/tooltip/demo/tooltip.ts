@@ -4,6 +4,7 @@ import { TOOLTIP_DEMO_HOVER } from '@generated/components/tooltip/demo/hover';
 import { TOOLTIP_DEMO_POSITION } from '@generated/components/tooltip/demo/position';
 import { TOOLTIP_CLI_ADD } from '@generated/installation/cli/add-tooltip';
 import { TOOLTIP_MANUAL_CODE } from '@generated/installation/manual/tooltip';
+import { TOOLTIP_USAGE_CODE, TOOLTIP_USAGE_IMPORT } from '@generated/usage/tooltip';
 
 import { ZardDemoTooltipClickComponent } from './click';
 import { ZardDemoTooltipEventsComponent } from './events';
@@ -21,6 +22,7 @@ export const TOOLTIP = {
     cliAdd: TOOLTIP_CLI_ADD,
     manualCode: TOOLTIP_MANUAL_CODE,
   },
+  usage: { importBlock: TOOLTIP_USAGE_IMPORT, codeBlock: TOOLTIP_USAGE_CODE },
   examples: [
     {
       name: 'hover',

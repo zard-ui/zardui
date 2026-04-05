@@ -1,6 +1,7 @@
 import { ALERT_DIALOG_DEMO_DEFAULT } from '@generated/components/alert-dialog/demo/default';
 import { ALERT_DIALOG_CLI_ADD } from '@generated/installation/cli/add-alert-dialog';
 import { ALERT_DIALOG_MANUAL_CODE } from '@generated/installation/manual/alert-dialog';
+import { ALERT_DIALOG_USAGE_IMPORT, ALERT_DIALOG_USAGE_CODE } from '@generated/usage/alert-dialog';
 
 import { ZardDemoAlertDialogDefaultComponent } from './default';
 import { ALERT_DIALOG_API } from '../doc/api';
@@ -14,6 +15,7 @@ export const ALERT_DIALOG = {
     cliAdd: ALERT_DIALOG_CLI_ADD,
     manualCode: ALERT_DIALOG_MANUAL_CODE,
   },
+  usage: { importBlock: ALERT_DIALOG_USAGE_IMPORT, codeBlock: ALERT_DIALOG_USAGE_CODE },
   examples: [
     {
       name: 'default',

@@ -4,6 +4,7 @@ import { SLIDER_DEMO_MIN_MAX } from '@generated/components/slider/demo/min-max';
 import { SLIDER_DEMO_VERTICAL } from '@generated/components/slider/demo/vertical';
 import { SLIDER_CLI_ADD } from '@generated/installation/cli/add-slider';
 import { SLIDER_MANUAL_CODE } from '@generated/installation/manual/slider';
+import { SLIDER_USAGE_CODE, SLIDER_USAGE_IMPORT } from '@generated/usage/slider';
 
 import { ZardDemoSliderDefaultComponent } from './default';
 import { ZardDemoSliderDisabledComponent } from './disabled';
@@ -21,6 +22,7 @@ export const SLIDER = {
     cliAdd: SLIDER_CLI_ADD,
     manualCode: SLIDER_MANUAL_CODE,
   },
+  usage: { importBlock: SLIDER_USAGE_IMPORT, codeBlock: SLIDER_USAGE_CODE },
   examples: [
     {
       name: 'default',

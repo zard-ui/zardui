@@ -5,6 +5,7 @@ import { INPUT_DEMO_STATUS } from '@generated/components/input/demo/status';
 import { INPUT_DEMO_TEXT_AREA } from '@generated/components/input/demo/text-area';
 import { INPUT_CLI_ADD } from '@generated/installation/cli/add-input';
 import { INPUT_MANUAL_CODE } from '@generated/installation/manual/input';
+import { INPUT_USAGE_IMPORT, INPUT_USAGE_CODE } from '@generated/usage/input';
 
 import { ZardDemoInputBorderlessComponent } from './borderless';
 import { ZardDemoInputDefaultComponent } from './default';
@@ -22,6 +23,7 @@ export const INPUT = {
     cliAdd: INPUT_CLI_ADD,
     manualCode: INPUT_MANUAL_CODE,
   },
+  usage: { importBlock: INPUT_USAGE_IMPORT, codeBlock: INPUT_USAGE_CODE },
   examples: [
     {
       name: 'default',

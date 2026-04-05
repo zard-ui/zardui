@@ -5,6 +5,7 @@ import { TOGGLE_GROUP_DEMO_SIZES } from '@generated/components/toggle-group/demo
 import { TOGGLE_GROUP_DEMO_WITH_TEXT } from '@generated/components/toggle-group/demo/with-text';
 import { TOGGLE_GROUP_CLI_ADD } from '@generated/installation/cli/add-toggle-group';
 import { TOGGLE_GROUP_MANUAL_CODE } from '@generated/installation/manual/toggle-group';
+import { TOGGLE_GROUP_USAGE_CODE, TOGGLE_GROUP_USAGE_IMPORT } from '@generated/usage/toggle-group';
 
 import ToggleGroupDefaultComponent from './default';
 import ToggleGroupOutlineComponent from './outline';
@@ -22,6 +23,7 @@ export const TOGGLE_GROUP = {
     cliAdd: TOGGLE_GROUP_CLI_ADD,
     manualCode: TOGGLE_GROUP_MANUAL_CODE,
   },
+  usage: { importBlock: TOGGLE_GROUP_USAGE_IMPORT, codeBlock: TOGGLE_GROUP_USAGE_CODE },
   examples: [
     {
       name: 'default',

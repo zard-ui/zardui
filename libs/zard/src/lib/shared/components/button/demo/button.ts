@@ -6,6 +6,7 @@ import { BUTTON_DEMO_SIZE } from '@generated/components/button/demo/size';
 import { BUTTON_DEMO_TYPE } from '@generated/components/button/demo/type';
 import { BUTTON_CLI_ADD } from '@generated/installation/cli/add-button';
 import { BUTTON_MANUAL_CODE } from '@generated/installation/manual/button';
+import { BUTTON_USAGE_IMPORT, BUTTON_USAGE_CODE } from '@generated/usage/button';
 
 import { ZardDemoButtonDefaultComponent } from './default';
 import { ZardDemoButtonFullComponent } from './full';
@@ -24,6 +25,7 @@ export const BUTTON = {
     cliAdd: BUTTON_CLI_ADD,
     manualCode: BUTTON_MANUAL_CODE,
   },
+  usage: { importBlock: BUTTON_USAGE_IMPORT, codeBlock: BUTTON_USAGE_CODE },
   examples: [
     {
       name: 'default',

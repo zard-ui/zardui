@@ -3,6 +3,7 @@ import { LAYOUT_DEMO_FULL_LAYOUT } from '@generated/components/layout/demo/full-
 import { LAYOUT_DEMO_SIDEBAR } from '@generated/components/layout/demo/sidebar';
 import { LAYOUT_CLI_ADD } from '@generated/installation/cli/add-layout';
 import { LAYOUT_MANUAL_CODE } from '@generated/installation/manual/layout';
+import { LAYOUT_USAGE_IMPORT, LAYOUT_USAGE_CODE } from '@generated/usage/layout';
 
 import { LayoutDemoBasicComponent } from './basic';
 import { LayoutDemoFullComponent } from './full-layout';
@@ -20,6 +21,7 @@ export const LAYOUT = {
     cliAdd: LAYOUT_CLI_ADD,
     manualCode: LAYOUT_MANUAL_CODE,
   },
+  usage: { importBlock: LAYOUT_USAGE_IMPORT, codeBlock: LAYOUT_USAGE_CODE },
   examples: [
     {
       name: 'basic',

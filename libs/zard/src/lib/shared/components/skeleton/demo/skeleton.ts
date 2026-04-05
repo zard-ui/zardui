@@ -2,6 +2,7 @@ import { SKELETON_DEMO_CARD } from '@generated/components/skeleton/demo/card';
 import { SKELETON_DEMO_DEFAULT } from '@generated/components/skeleton/demo/default';
 import { SKELETON_CLI_ADD } from '@generated/installation/cli/add-skeleton';
 import { SKELETON_MANUAL_CODE } from '@generated/installation/manual/skeleton';
+import { SKELETON_USAGE_CODE, SKELETON_USAGE_IMPORT } from '@generated/usage/skeleton';
 
 import { ZardDemoSkeletonCardComponent } from './card';
 import { ZardDemoSkeletonDefaultComponent } from './default';
@@ -17,6 +18,7 @@ export const SKELETON = {
     cliAdd: SKELETON_CLI_ADD,
     manualCode: SKELETON_MANUAL_CODE,
   },
+  usage: { importBlock: SKELETON_USAGE_IMPORT, codeBlock: SKELETON_USAGE_CODE },
   examples: [
     {
       name: 'default',

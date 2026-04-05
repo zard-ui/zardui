@@ -2,6 +2,7 @@ import { DIVIDER_DEMO_DEFAULT } from '@generated/components/divider/demo/default
 import { DIVIDER_DEMO_VERTICAL } from '@generated/components/divider/demo/vertical';
 import { DIVIDER_CLI_ADD } from '@generated/installation/cli/add-divider';
 import { DIVIDER_MANUAL_CODE } from '@generated/installation/manual/divider';
+import { DIVIDER_USAGE_IMPORT, DIVIDER_USAGE_CODE } from '@generated/usage/divider';
 
 import { ZardDemoDividerDefaultComponent } from './default';
 import { ZardDemoDividerVerticalComponent } from './vertical';
@@ -16,6 +17,7 @@ export const DIVIDER = {
     cliAdd: DIVIDER_CLI_ADD,
     manualCode: DIVIDER_MANUAL_CODE,
   },
+  usage: { importBlock: DIVIDER_USAGE_IMPORT, codeBlock: DIVIDER_USAGE_CODE },
   examples: [
     {
       name: 'default',

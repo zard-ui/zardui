@@ -5,6 +5,7 @@ import { ACCORDION_DEMO_DISABLED } from '@generated/components/accordion/demo/di
 import { ACCORDION_DEMO_MULTIPLE } from '@generated/components/accordion/demo/multiple';
 import { ACCORDION_CLI_ADD } from '@generated/installation/cli/add-accordion';
 import { ACCORDION_MANUAL_CODE } from '@generated/installation/manual/accordion';
+import { ACCORDION_USAGE_IMPORT, ACCORDION_USAGE_CODE } from '@generated/usage/accordion';
 
 import { ZardDemoAccordionBasicComponent } from './basic';
 import { ZardDemoAccordionBordersComponent } from './borders';
@@ -23,6 +24,7 @@ export const ACCORDION = {
     cliAdd: ACCORDION_CLI_ADD,
     manualCode: ACCORDION_MANUAL_CODE,
   },
+  usage: { importBlock: ACCORDION_USAGE_IMPORT, codeBlock: ACCORDION_USAGE_CODE },
   preview: {
     name: 'preview',
     component: ZardDemoAccordionPreviewComponent,

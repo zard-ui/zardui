@@ -16,5 +16,5 @@
     }
   },
   "exclude": ["src/**/*.spec.ts", "src/test-setup.ts", "jest.config.ts", "src/**/*.test.ts"],
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "../../apps/web/src/generated/**/*.ts", "../../packages/highlight/src/**/*.ts"]
 }

@@ -2,6 +2,7 @@ import { PAGINATION_DEMO_CUSTOM } from '@generated/components/pagination/demo/cu
 import { PAGINATION_DEMO_DEFAULT } from '@generated/components/pagination/demo/default';
 import { PAGINATION_CLI_ADD } from '@generated/installation/cli/add-pagination';
 import { PAGINATION_MANUAL_CODE } from '@generated/installation/manual/pagination';
+import { PAGINATION_USAGE_IMPORT, PAGINATION_USAGE_CODE } from '@generated/usage/pagination';
 
 import { ZardDemoPaginationCustomComponent } from './custom';
 import { ZardDemoPaginationDefaultComponent } from './default';
@@ -16,6 +17,7 @@ export const PAGINATION = {
     cliAdd: PAGINATION_CLI_ADD,
     manualCode: PAGINATION_MANUAL_CODE,
   },
+  usage: { importBlock: PAGINATION_USAGE_IMPORT, codeBlock: PAGINATION_USAGE_CODE },
   examples: [
     {
       name: 'default',

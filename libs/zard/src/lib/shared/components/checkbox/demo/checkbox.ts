@@ -5,6 +5,7 @@ import { CHECKBOX_DEMO_SHAPE } from '@generated/components/checkbox/demo/shape';
 import { CHECKBOX_DEMO_SIZE } from '@generated/components/checkbox/demo/size';
 import { CHECKBOX_CLI_ADD } from '@generated/installation/cli/add-checkbox';
 import { CHECKBOX_MANUAL_CODE } from '@generated/installation/manual/checkbox';
+import { CHECKBOX_USAGE_IMPORT, CHECKBOX_USAGE_CODE } from '@generated/usage/checkbox';
 
 import { ZardDemoCheckboxDefaultComponent } from './default';
 import { ZardDemoCheckboxDestructiveComponent } from './destructive';
@@ -22,6 +23,7 @@ export const CHECKBOX = {
     cliAdd: CHECKBOX_CLI_ADD,
     manualCode: CHECKBOX_MANUAL_CODE,
   },
+  usage: { importBlock: CHECKBOX_USAGE_IMPORT, codeBlock: CHECKBOX_USAGE_CODE },
   examples: [
     {
       name: 'default',

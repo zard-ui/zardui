@@ -2,6 +2,7 @@ import { AVATAR_DEMO_BASIC } from '@generated/components/avatar/demo/basic';
 import { AVATAR_DEMO_STATUS } from '@generated/components/avatar/demo/status';
 import { AVATAR_CLI_ADD } from '@generated/installation/cli/add-avatar';
 import { AVATAR_MANUAL_CODE } from '@generated/installation/manual/avatar';
+import { AVATAR_USAGE_IMPORT, AVATAR_USAGE_CODE } from '@generated/usage/avatar';
 
 import { ZardDemoAvatarBasicComponent } from './basic';
 import { ZardDemoAvatarStatusComponent } from './status';
@@ -16,6 +17,7 @@ export const AVATAR = {
     cliAdd: AVATAR_CLI_ADD,
     manualCode: AVATAR_MANUAL_CODE,
   },
+  usage: { importBlock: AVATAR_USAGE_IMPORT, codeBlock: AVATAR_USAGE_CODE },
   examples: [
     {
       name: 'basic',

@@ -2,6 +2,7 @@ import { MENU_DEMO_CONTEXT_MENU } from '@generated/components/menu/demo/context-
 import { MENU_DEMO_DEFAULT } from '@generated/components/menu/demo/default';
 import { MENU_CLI_ADD } from '@generated/installation/cli/add-menu';
 import { MENU_MANUAL_CODE } from '@generated/installation/manual/menu';
+import { MENU_USAGE_IMPORT, MENU_USAGE_CODE } from '@generated/usage/menu';
 
 import { ZardDemoContextMenu } from '@/shared/components/menu/demo/context-menu';
 
@@ -17,6 +18,7 @@ export const MENU = {
     cliAdd: MENU_CLI_ADD,
     manualCode: MENU_MANUAL_CODE,
   },
+  usage: { importBlock: MENU_USAGE_IMPORT, codeBlock: MENU_USAGE_CODE },
   examples: [
     {
       name: 'default',

@@ -3,6 +3,7 @@ import { EMPTY_DEMO_CUSTOM_IMAGE } from '@generated/components/empty/demo/custom
 import { EMPTY_DEMO_DEFAULT } from '@generated/components/empty/demo/default';
 import { EMPTY_CLI_ADD } from '@generated/installation/cli/add-empty';
 import { EMPTY_MANUAL_CODE } from '@generated/installation/manual/empty';
+import { EMPTY_USAGE_IMPORT, EMPTY_USAGE_CODE } from '@generated/usage/empty';
 
 import { ZardDemoEmptyAdvancedComponent } from './advanced';
 import { ZardDemoEmptyCustomImageComponent } from './custom-image';
@@ -18,6 +19,7 @@ export const EMPTY = {
     cliAdd: EMPTY_CLI_ADD,
     manualCode: EMPTY_MANUAL_CODE,
   },
+  usage: { importBlock: EMPTY_USAGE_IMPORT, codeBlock: EMPTY_USAGE_CODE },
   examples: [
     {
       name: 'default',

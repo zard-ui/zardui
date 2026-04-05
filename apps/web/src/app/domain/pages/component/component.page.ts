@@ -2,22 +2,22 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, signal 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
+import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
 
 import { AiAssistComponent } from '@doc/domain/components/ai-assist/ai-assist.component';
 import { ApiReferenceComponent } from '@doc/domain/components/api-reference/api-reference.component';
-
-import { ComponentData, COMPONENTS_REGISTRY } from '../../../shared/constants/components.constant';
-import { Step } from '../../../shared/constants/install.constant';
-import { HyphenToSpacePipe } from '../../../shared/pipes/hyphen-to-space.pipe';
-import { DynamicInstallationService } from '../../../shared/services/dynamic-installation.service';
-import { SeoService } from '../../../shared/services/seo.service';
-import { ZardCodeBoxComponent } from '../../../widget/components/zard-code-box/zard-code-box.component';
-import { DocContentComponent } from '../../components/doc-content/doc-content.component';
-import { NavigationConfig } from '../../components/dynamic-anchor/dynamic-anchor.component';
-import { StepsComponent } from '../../components/steps/steps.component';
-import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
-import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
+import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
+import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
+import { StepsComponent } from '@doc/domain/components/steps/steps.component';
+import { ScrollSpyItemDirective } from '@doc/domain/directives/scroll-spy-item.directive';
+import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive';
+import { ComponentData, COMPONENTS_REGISTRY } from '@doc/shared/constants/components.constant';
+import { Step } from '@doc/shared/constants/install.constant';
+import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
+import { DynamicInstallationService } from '@doc/shared/services/dynamic-installation.service';
+import { SeoService } from '@doc/shared/services/seo.service';
+import { ZardCodeBoxComponent } from '@doc/widget/components/zard-code-box/zard-code-box.component';
 
 @Component({
   selector: 'z-component',
@@ -25,6 +25,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   imports: [
     AiAssistComponent,
     ApiReferenceComponent,
+    CodeBlockComponent,
     CodeTabsComponent,
     DocContentComponent,
     ScrollSpyDirective,
@@ -48,6 +49,7 @@ export class ComponentPage implements OnInit {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
       { id: 'installation', label: 'Installation', type: 'core' },
+      { id: 'usage', label: 'Usage', type: 'core' },
       { id: 'examples', label: 'Examples', type: 'core', children: [] },
       { id: 'api', label: 'API', type: 'core' },
     ],

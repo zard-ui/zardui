@@ -5,6 +5,7 @@ import { FORM_DEMO_SIGNAL_FORM } from '@generated/components/form/demo/signal-fo
 import { FORM_DEMO_VALIDATION } from '@generated/components/form/demo/validation';
 import { FORM_CLI_ADD } from '@generated/installation/cli/add-form';
 import { FORM_MANUAL_CODE } from '@generated/installation/manual/form';
+import { FORM_USAGE_IMPORT, FORM_USAGE_CODE } from '@generated/usage/form';
 
 import { ZardDemoFormComplexComponent } from '@/shared/components/form/demo/complex';
 import { ZardDemoFormDefaultComponent } from '@/shared/components/form/demo/default';
@@ -23,6 +24,7 @@ export const FORM = {
     cliAdd: FORM_CLI_ADD,
     manualCode: FORM_MANUAL_CODE,
   },
+  usage: { importBlock: FORM_USAGE_IMPORT, codeBlock: FORM_USAGE_CODE },
   examples: [
     {
       name: 'default',

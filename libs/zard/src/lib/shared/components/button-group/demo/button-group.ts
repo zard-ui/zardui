@@ -7,6 +7,7 @@ import { BUTTON_GROUP_DEMO_SELECT } from '@generated/components/button-group/dem
 import { BUTTON_GROUP_DEMO_SIZE } from '@generated/components/button-group/demo/size';
 import { BUTTON_GROUP_CLI_ADD } from '@generated/installation/cli/add-button-group';
 import { BUTTON_GROUP_MANUAL_CODE } from '@generated/installation/manual/button-group';
+import { BUTTON_GROUP_USAGE_IMPORT, BUTTON_GROUP_USAGE_CODE } from '@generated/usage/button-group';
 
 import { ZardDemoButtonGroupDefaultComponent } from './default';
 import { ZardDemoButtonGroupDividerComponent } from './divider';
@@ -26,6 +27,7 @@ export const BUTTON_GROUP = {
     cliAdd: BUTTON_GROUP_CLI_ADD,
     manualCode: BUTTON_GROUP_MANUAL_CODE,
   },
+  usage: { importBlock: BUTTON_GROUP_USAGE_IMPORT, codeBlock: BUTTON_GROUP_USAGE_CODE },
   examples: [
     {
       name: 'default',

@@ -5,6 +5,7 @@ import { CALENDAR_DEMO_RANGE } from '@generated/components/calendar/demo/range';
 import { CALENDAR_DEMO_WITH_CONSTRAINTS } from '@generated/components/calendar/demo/with-constraints';
 import { CALENDAR_CLI_ADD } from '@generated/installation/cli/add-calendar';
 import { CALENDAR_MANUAL_CODE } from '@generated/installation/manual/calendar';
+import { CALENDAR_USAGE_IMPORT, CALENDAR_USAGE_CODE } from '@generated/usage/calendar';
 
 import { ZardDemoCalendarDefaultComponent } from './default';
 import { ZardDemoCalendarExpandYearSelectionRangeComponent } from './expand-year-selection-range';
@@ -24,6 +25,7 @@ export const CALENDAR = {
     cliAdd: CALENDAR_CLI_ADD,
     manualCode: CALENDAR_MANUAL_CODE,
   },
+  usage: { importBlock: CALENDAR_USAGE_IMPORT, codeBlock: CALENDAR_USAGE_CODE },
   examples: [
     {
       name: 'default',

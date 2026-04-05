@@ -2,6 +2,7 @@ import { DIALOG_DEMO_BASIC } from '@generated/components/dialog/demo/basic';
 import { DIALOG_DEMO_ICONS } from '@generated/components/dialog/demo/icons';
 import { DIALOG_CLI_ADD } from '@generated/installation/cli/add-dialog';
 import { DIALOG_MANUAL_CODE } from '@generated/installation/manual/dialog';
+import { DIALOG_USAGE_IMPORT, DIALOG_USAGE_CODE } from '@generated/usage/dialog';
 
 import { ZardDemoDialogBasicComponent } from './basic';
 import { ZardDemoDialogWithIconsComponent } from './icons';
@@ -16,6 +17,7 @@ export const DIALOG = {
     cliAdd: DIALOG_CLI_ADD,
     manualCode: DIALOG_MANUAL_CODE,
   },
+  usage: { importBlock: DIALOG_USAGE_IMPORT, codeBlock: DIALOG_USAGE_CODE },
   examples: [
     {
       name: 'basic',

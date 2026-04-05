@@ -3,6 +3,7 @@ import { BREADCRUMB_DEMO_ELLIPSIS } from '@generated/components/breadcrumb/demo/
 import { BREADCRUMB_DEMO_SEPARATOR } from '@generated/components/breadcrumb/demo/separator';
 import { BREADCRUMB_CLI_ADD } from '@generated/installation/cli/add-breadcrumb';
 import { BREADCRUMB_MANUAL_CODE } from '@generated/installation/manual/breadcrumb';
+import { BREADCRUMB_USAGE_IMPORT, BREADCRUMB_USAGE_CODE } from '@generated/usage/breadcrumb';
 
 import { ZardDemoBreadcrumbDefaultComponent } from './default';
 import { ZardDemoBreadcrumbEllipsisComponent } from './ellipsis';
@@ -18,6 +19,7 @@ export const BREADCRUMB = {
     cliAdd: BREADCRUMB_CLI_ADD,
     manualCode: BREADCRUMB_MANUAL_CODE,
   },
+  usage: { importBlock: BREADCRUMB_USAGE_IMPORT, codeBlock: BREADCRUMB_USAGE_CODE },
   examples: [
     {
       name: 'default',

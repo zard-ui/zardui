@@ -3,6 +3,7 @@ import { SEGMENTED_DEMO_DISABLED } from '@generated/components/segmented/demo/di
 import { SEGMENTED_DEMO_SIZES } from '@generated/components/segmented/demo/sizes';
 import { SEGMENTED_CLI_ADD } from '@generated/installation/cli/add-segmented';
 import { SEGMENTED_MANUAL_CODE } from '@generated/installation/manual/segmented';
+import { SEGMENTED_USAGE_CODE, SEGMENTED_USAGE_IMPORT } from '@generated/usage/segmented';
 
 import { ZardDemoSegmentedDefaultComponent } from './default';
 import { ZardDemoSegmentedDisabledComponent } from './disabled';
@@ -19,6 +20,7 @@ export const SEGMENTED = {
     cliAdd: SEGMENTED_CLI_ADD,
     manualCode: SEGMENTED_MANUAL_CODE,
   },
+  usage: { importBlock: SEGMENTED_USAGE_IMPORT, codeBlock: SEGMENTED_USAGE_CODE },
   examples: [
     {
       name: 'default',

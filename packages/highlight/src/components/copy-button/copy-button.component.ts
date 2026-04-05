@@ -18,7 +18,7 @@ import { ChangeDetectionStrategy, Component, input, signal, ViewEncapsulation } 
       <img
         src="/icons/clipboard.svg"
         alt="Copy"
-        class="size-4 invert-0 transition-transform duration-200 group-hover:scale-110 dark:invert"
+        class="size-4 invert-0 transition-transform duration-200 dark:invert"
       />
     }
   `,

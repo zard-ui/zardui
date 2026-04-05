@@ -4,6 +4,7 @@ import { COMBOBOX_DEMO_FORM } from '@generated/components/combobox/demo/form';
 import { COMBOBOX_DEMO_GROUPED } from '@generated/components/combobox/demo/grouped';
 import { COMBOBOX_CLI_ADD } from '@generated/installation/cli/add-combobox';
 import { COMBOBOX_MANUAL_CODE } from '@generated/installation/manual/combobox';
+import { COMBOBOX_USAGE_IMPORT, COMBOBOX_USAGE_CODE } from '@generated/usage/combobox';
 
 import { ZardDemoComboboxDefaultComponent } from './default';
 import { ZardDemoComboboxDisabledComponent } from './disabled';
@@ -20,6 +21,7 @@ export const COMBOBOX = {
     cliAdd: COMBOBOX_CLI_ADD,
     manualCode: COMBOBOX_MANUAL_CODE,
   },
+  usage: { importBlock: COMBOBOX_USAGE_IMPORT, codeBlock: COMBOBOX_USAGE_CODE },
   examples: [
     {
       name: 'default',
