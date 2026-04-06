@@ -1,6 +1,9 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
+import { provideIcons } from '@ng-icons/core';
+import { lucideBold, lucideItalic } from '@ng-icons/lucide';
+
 import {
   ZardToggleGroupComponent,
   type ZardToggleGroupItem,
@@ -19,7 +22,11 @@ describe('ZardToggleGroupComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ZardToggleGroupComponent, ReactiveFormsModule],
-    }).compileComponents();
+    })
+      .overrideComponent(ZardToggleGroupComponent, {
+        set: { viewProviders: [provideIcons({ lucideItalic, lucideBold })] },
+      })
+      .compileComponents();
 
     fixture = TestBed.createComponent(ZardToggleGroupComponent);
     component = fixture.componentInstance;
@@ -155,8 +162,8 @@ describe('ZardToggleGroupComponent', () => {
 
   it('should render icons when provided', () => {
     const itemsWithIcons: ZardToggleGroupItem[] = [
-      { value: 'bold', icon: 'bold', ariaLabel: 'Toggle bold' },
-      { value: 'italic', icon: 'italic', ariaLabel: 'Toggle italic' },
+      { value: 'bold', icon: 'lucideBold', ariaLabel: 'Toggle bold' },
+      { value: 'italic', icon: 'lucideItalic', ariaLabel: 'Toggle italic' },
     ];
 
     fixture.componentRef.setInput('items', itemsWithIcons);
@@ -172,7 +179,7 @@ describe('ZardToggleGroupComponent', () => {
 
   it('should render both icon and label when provided', () => {
     const itemsWithIconsAndLabels: ZardToggleGroupItem[] = [
-      { value: 'bold', icon: 'bold', label: 'Bold', ariaLabel: 'Toggle bold' },
+      { value: 'bold', icon: 'lucideBold', label: 'Bold', ariaLabel: 'Toggle bold' },
     ];
 
     fixture.componentRef.setInput('items', itemsWithIconsAndLabels);

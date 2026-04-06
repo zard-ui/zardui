@@ -7,7 +7,7 @@
     "declaration": true,
     "composite": true
   },
-  "files": ["src/main.ts", "src/main.server.ts", "src/server.ts"],
-  "include": ["src/**/*.d.ts", "src/generated/**/*.ts"],
-  "exclude": ["jest.config.ts", "src/**/*.test.ts", "src/**/*.spec.ts"]
+  "files": ["./src/main.ts", "./src/main.server.ts", "./src/server.ts"],
+  "include": ["./src/**/*.d.ts", "./src/generated/**/*.ts"],
+  "exclude": ["./jest.config.ts", "./src/**/*.test.ts", "./src/**/*.spec.ts"]
 }

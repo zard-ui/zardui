@@ -25,7 +25,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 export class ZardAccordionComponent implements AfterContentInit {
   readonly items = contentChildren(ZardAccordionItemComponent);
 
-  readonly class = input<ClassValue>('', { alias: 'class' });
+  readonly class = input<ClassValue>('');
   readonly zType = input<'single' | 'multiple'>('single');
   readonly zCollapsible = input<boolean>(true);
   readonly zDefaultValue = input<string | string[]>('');

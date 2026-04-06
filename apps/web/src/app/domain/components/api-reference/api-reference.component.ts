@@ -35,7 +35,7 @@ import type { ApiSection } from './api-reference.types';
                   <td
                     class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded-sm [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
                   >
-                    <code class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+                    <code class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono! text-sm font-semibold">
                       {{ prop.name }}
                     </code>
                   </td>
@@ -47,14 +47,14 @@ import type { ApiSection } from './api-reference.types';
                   <td
                     class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded-sm [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
                   >
-                    <code class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+                    <code class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono! text-sm font-semibold">
                       {{ prop.type }}
                     </code>
                   </td>
                   <td
                     class="[&_code]:border-ring [&_code]:bg-muted p-4 text-left align-middle font-medium [&_code]:mx-1 [&_code]:rounded-sm [&_code]:border [&_code]:border-none [&_code]:px-2 [&_code]:py-1 [&_code]:font-sans [&_code]:text-xs [&_code]:whitespace-nowrap"
                   >
-                    <code class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm font-semibold">
+                    <code class="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono! text-sm font-semibold">
                       {{ prop.default }}
                     </code>
                   </td>

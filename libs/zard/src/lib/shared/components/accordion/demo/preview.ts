@@ -6,7 +6,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-preview',
   imports: [ZardAccordionImports],
   template: `
-    <div z-accordion zDefaultValue="shipping" zType="single" class="max-w-sm">
+    <z-accordion zDefaultValue="returns" zType="single" class="max-w-sm">
       <z-accordion-item zValue="shipping" zTitle="What are your shipping options?">
         We offer standard (5-7 days), express (2-3 days), and overnight shipping. Free shipping on international orders.
       </z-accordion-item>
@@ -19,7 +19,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
       <z-accordion-item zValue="support" zTitle="How can I contact customer support?">
         Reach us via email, live chat, or phone. We respond within 24 hours during business days.
       </z-accordion-item>
-    </div>
+    </z-accordion>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

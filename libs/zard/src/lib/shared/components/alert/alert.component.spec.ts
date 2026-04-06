@@ -3,8 +3,7 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { zardInfoIcon } from '@/shared/core';
+import { lucideInfo } from '@ng-icons/lucide';
 
 import { ZardAlertComponent } from './alert.component';
 
@@ -12,10 +11,10 @@ import { ZardAlertComponent } from './alert.component';
   selector: 'test-host-component',
   imports: [ZardAlertComponent, NgIcon],
   template: `
-    <ng-template #iconTemplate><ng-icon name="info" /></ng-template>
+    <ng-template #iconTemplate><ng-icon name="lucideInfo" /></ng-template>
     <z-alert zTitle="Test Title" zDescription="Test Description" [zIcon]="iconTemplate" class="w-1/2" />
   `,
-  viewProviders: [provideIcons({ info: zardInfoIcon })],
+  viewProviders: [provideIcons({ lucideInfo })],
 })
 class TestHostComponent {}
 
@@ -60,7 +59,7 @@ describe('ZardAlertComponent', () => {
 
     expect(iconElement).toBeTruthy();
     expect(iconComponent).toBeTruthy();
-    expect(iconComponent?.getAttribute('name')).toBe('info');
+    expect(iconComponent?.getAttribute('name')).toBe('lucideInfo');
   });
 
   it('renders only description when title is omitted', () => {

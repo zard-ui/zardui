@@ -12,7 +12,7 @@ test.describe('Accordion component', () => {
   });
 
   test('renders accordion items', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     await expect(firstCard).toBeVisible();
 
     const items = firstCard.locator('z-accordion-item');
@@ -21,7 +21,7 @@ test.describe('Accordion component', () => {
   });
 
   test('one item is expanded by default', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     // At least one accordion item should have data-state="open"
     const expandedRegions = firstCard.locator('z-accordion-item [role="region"][data-state="open"]');
     const count = await expandedRegions.count();
@@ -29,7 +29,7 @@ test.describe('Accordion component', () => {
   });
 
   test('clicking a collapsed item expands it', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     // First item is collapsed by default (item-2 is the default expanded one)
     const firstItem = firstCard.locator('z-accordion-item').first();
     const trigger = firstItem.locator('button').first();
@@ -43,7 +43,7 @@ test.describe('Accordion component', () => {
   });
 
   test('clicking an expanded item collapses it', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     // Find the currently expanded item by data-state
     const items = firstCard.locator('z-accordion-item');
     const count = await items.count();

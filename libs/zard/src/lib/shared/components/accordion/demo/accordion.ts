@@ -3,6 +3,7 @@ import { ACCORDION_DEMO_BORDERS } from '@generated/components/accordion/demo/bor
 import { ACCORDION_DEMO_CARDS } from '@generated/components/accordion/demo/cards';
 import { ACCORDION_DEMO_DISABLED } from '@generated/components/accordion/demo/disabled';
 import { ACCORDION_DEMO_MULTIPLE } from '@generated/components/accordion/demo/multiple';
+import { ACCORDION_DEMO_PREVIEW } from '@generated/components/accordion/demo/preview';
 import { ACCORDION_CLI_ADD } from '@generated/installation/cli/add-accordion';
 import { ACCORDION_MANUAL_CODE } from '@generated/installation/manual/accordion';
 import { ACCORDION_USAGE_IMPORT, ACCORDION_USAGE_CODE } from '@generated/usage/accordion';
@@ -29,7 +30,7 @@ export const ACCORDION = {
     name: 'preview',
     component: ZardDemoAccordionPreviewComponent,
     column: false,
-    codeData: ACCORDION_DEMO_BASIC,
+    codeData: ACCORDION_DEMO_PREVIEW,
   },
   examples: [
     {

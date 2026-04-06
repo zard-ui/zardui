@@ -36,7 +36,7 @@ const SEARCH_DEBOUNCE_MS = 150;
       <z-command-list>
         <z-command-empty>No results found.</z-command-empty>
         <z-command-option-group zLabel="Test Group">
-          <z-command-option zLabel="Test Option" zValue="test" zShortcut="⌘T" zIcon="search" />
+          <z-command-option zLabel="Test Option" zValue="test" zShortcut="⌘T" zIcon="lucideSearch" />
           <z-command-option zLabel="Disabled Option" zValue="disabled" [zDisabled]="true" />
           <z-command-option zLabel="Search Option" zValue="search" zCommand="search test" />
         </z-command-option-group>

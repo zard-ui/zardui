@@ -21,10 +21,10 @@ import { ZardEmptyComponent } from '../empty.component';
 
     <ng-template #customImage>
       <z-avatar-group>
-        <z-avatar zSrc="https://github.com/srizzon.png" zSize="md" class="grayscale" />
-        <z-avatar zSrc="https://github.com/Luizgomess.png" zSize="md" class="grayscale" />
-        <z-avatar zSrc="https://github.com/ribeiromatheuss.png" zSize="md" class="grayscale" />
-        <z-avatar zSrc="https://github.com/mikij.png" zSize="md" class="grayscale" />
+        <z-avatar zSrc="https://github.com/srizzon.png" class="grayscale" />
+        <z-avatar zSrc="https://github.com/Luizgomess.png" class="grayscale" />
+        <z-avatar zSrc="https://github.com/ribeiromatheuss.png" class="grayscale" />
+        <z-avatar zSrc="https://github.com/mikij.png" class="grayscale" />
       </z-avatar-group>
     </ng-template>
 

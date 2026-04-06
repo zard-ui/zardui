@@ -11,12 +11,12 @@ test.describe('Toast component', () => {
   });
 
   test('renders trigger button', async () => {
-    const trigger = demoPage.firstDemoCard.locator('button[z-button]');
+    const trigger = demoPage.firstDemoBox.locator('button[z-button]');
     await expect(trigger).toBeVisible();
   });
 
   test('clicking trigger shows a toast notification', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('button[z-button]');
+    const trigger = demoPage.firstDemoBox.locator('button[z-button]');
     await trigger.click();
 
     // ngx-sonner renders toasts with [data-sonner-toast] attribute
@@ -25,7 +25,7 @@ test.describe('Toast component', () => {
   });
 
   test('toast has content', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('button[z-button]');
+    const trigger = demoPage.firstDemoBox.locator('button[z-button]');
     await trigger.click();
 
     const toast = page.locator('[data-sonner-toast]').first();
@@ -36,7 +36,7 @@ test.describe('Toast component', () => {
   });
 
   test('toast auto-dismisses', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('button[z-button]');
+    const trigger = demoPage.firstDemoBox.locator('button[z-button]');
     await trigger.click();
 
     const toast = page.locator('[data-sonner-toast]').first();
