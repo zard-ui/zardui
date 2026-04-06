@@ -2,10 +2,9 @@
   class="sticky top-[calc(var(--header-height)+1px)] z-30 ml-auto hidden h-[90svh] w-(--sidebar-width) flex-col gap-4 overflow-hidden overscroll-none pb-8 xl:flex"
 >
   <div class="h-(--top-spacing) shrink-0"></div>
-  <aside class="no-scrollbar hidden flex-col gap-8 overflow-y-auto px-8 xl:flex">
+  <aside class="no-scrollbar hidden flex-col gap-6 overflow-y-auto px-8 xl:flex">
+    <p class="bg-background text-muted-foreground sticky top-0 text-xs font-medium">On this page</p>
     <ul class="flex flex-col gap-2 p-4 pt-0 text-sm">
-      <p class="bg-background text-muted-foreground sticky top-0 h-6 text-xs font-medium">On this page</p>
-
       @for (item of navigation().items; track item.id) {
         <li>
           <a

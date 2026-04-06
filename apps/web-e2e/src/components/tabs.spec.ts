@@ -12,7 +12,7 @@ test.describe('Tabs component', () => {
   });
 
   test('renders tab group with multiple tabs', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     await expect(firstCard).toBeVisible();
 
     // Tab buttons are inside [role="tablist"] nav; z-button directive strips role="tab"
@@ -24,7 +24,7 @@ test.describe('Tabs component', () => {
   });
 
   test('first tab is active by default', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     const firstTab = firstCard.locator('[role="tablist"] button').first();
     await expect(firstTab).toHaveAttribute('aria-selected', 'true');
 
@@ -34,7 +34,7 @@ test.describe('Tabs component', () => {
   });
 
   test('clicking another tab switches content', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
 
     const tabTriggers = firstCard.locator('[role="tablist"] button');
     const count = await tabTriggers.count();
@@ -50,7 +50,7 @@ test.describe('Tabs component', () => {
   });
 
   test('only one tab panel is visible at a time', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
 
     // Click a different tab
     const tabTriggers = firstCard.locator('[role="tablist"] button');

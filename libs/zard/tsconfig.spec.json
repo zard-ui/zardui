@@ -8,15 +8,15 @@
     "composite": true,
     "declaration": true,
     "verbatimModuleSyntax": null,
-    "baseUrl": ".",
     "paths": {
-      "@/*": ["src/lib/*"],
+      "@/*": ["./src/lib/*"],
       "@generated/*": ["../../apps/web/src/generated/*"],
-      "@highlight/*": ["../../packages/highlight/src/*"]
+      "@highlight/*": ["../../packages/highlight/src/*"],
+      "@doc/*": ["../../apps/web/src/app/*"]
     },
     "moduleResolution": "bundler",
     "isolatedModules": true
   },
-  "files": ["src/test-setup.ts"],
-  "include": ["jest.config.ts", "src/**/*.ts", "src/**/*.test.ts", "src/**/*.spec.ts", "src/**/*.d.ts"]
+  "files": ["./src/test-setup.ts"],
+  "include": ["./jest.config.ts", "./src/**/*.ts", "./src/**/*.test.ts", "./src/**/*.spec.ts", "./src/**/*.d.ts"]
 }

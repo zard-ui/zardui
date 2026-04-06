@@ -2,30 +2,39 @@ import { Component } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { ZardAvatarComponent, type ZardAvatarStatus } from './avatar.component';
-import { type ZardAvatarVariants, type ZardImageVariants } from './avatar.variants';
+import { provideIcons } from '@ng-icons/core';
+import { lucideCheck } from '@ng-icons/lucide';
+
+import { type ZardAvatarSizeVariants } from '@/shared/components/avatar/avatar.variants';
+
+import { ZardAvatarComponent } from './avatar.component';
 
 @Component({
   imports: [ZardAvatarComponent],
   template: `
     <z-avatar
       [zSize]="zSize"
-      [zShape]="zShape"
-      [zStatus]="zStatus"
       [zSrc]="zSrc"
       [zAlt]="zAlt"
       [zFallback]="zFallback"
+      [zShowBadge]="zShowBadge"
+      [zBadgeIcon]="zBadgeIcon"
+      [zBadgeClass]="zBadgeClass"
+      [zPriority]="zPriority"
       [class]="customClass"
     />
   `,
+  viewProviders: [provideIcons({ lucideCheck })],
 })
 class TestHostComponent {
-  zSize: ZardAvatarVariants['zSize'] = 'default';
-  zShape: ZardImageVariants['zShape'] = 'circle';
-  zStatus: ZardAvatarStatus | null = null;
+  zSize: ZardAvatarSizeVariants = 'default';
   zSrc: string | undefined = undefined;
   zAlt = '';
   zFallback = 'ZA';
+  zShowBadge = false;
+  zBadgeIcon = '';
+  zBadgeClass = '';
+  zPriority = false;
   customClass = '';
 }
 
@@ -54,16 +63,12 @@ describe('ZardAvatarComponent', () => {
     it('should have default values for inputs', () => {
       // Reset host values to test component defaults
       hostComponent.zSize = 'default';
-      hostComponent.zShape = 'circle';
-      hostComponent.zStatus = null;
       hostComponent.zSrc = undefined;
       hostComponent.zAlt = '';
       hostComponent.zFallback = '';
       fixture.detectChanges();
 
       expect(avatarComponent.zSize()).toBe('default');
-      expect(avatarComponent.zShape()).toBe('circle');
-      expect(avatarComponent.zStatus()).toBeNull();
       expect(avatarComponent.zSrc()).toBeUndefined();
       expect(avatarComponent.zAlt()).toBe('');
       expect(avatarComponent.zFallback()).toBe('');
@@ -71,13 +76,12 @@ describe('ZardAvatarComponent', () => {
 
     it('should apply correct classes based on variants', () => {
       hostComponent.zSize = 'lg';
-      hostComponent.zShape = 'circle';
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
 
-      expect(avatarElement.classList.contains('size-14')).toBeTruthy();
-      expect(avatarElement.classList.contains('rounded-full')).toBeTruthy();
+      expect(avatarElement).toHaveClass('size-10');
+      expect(avatarElement).toHaveClass('rounded-full');
     });
 
     it('should append custom classes', () => {
@@ -86,7 +90,7 @@ describe('ZardAvatarComponent', () => {
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains(customClass)).toBeTruthy();
+      expect(avatarElement).toHaveClass(customClass);
     });
 
     it('should apply small size classes', () => {
@@ -94,23 +98,15 @@ describe('ZardAvatarComponent', () => {
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('size-8')).toBeTruthy();
+      expect(avatarElement).toHaveClass('size-6');
     });
 
     it('should apply medium size classes', () => {
-      hostComponent.zSize = 'md';
+      hostComponent.zSize = 'lg';
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('size-12')).toBeTruthy();
-    });
-
-    it('should apply square shape class', () => {
-      hostComponent.zShape = 'square';
-      fixture.detectChanges();
-
-      const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.classList.contains('rounded-none')).toBeTruthy();
+      expect(avatarElement).toHaveClass('size-10');
     });
   });
 
@@ -138,7 +134,7 @@ describe('ZardAvatarComponent', () => {
       hostComponent.zFallback = 'AB';
       fixture.detectChanges();
 
-      const fallbackElement = fixture.debugElement.query(By.css('span.text-base'));
+      const fallbackElement = fixture.debugElement.query(By.css('span.text-sm'));
       expect(fallbackElement).toBeTruthy();
       expect(fallbackElement.nativeElement.textContent.trim()).toBe('AB');
     });
@@ -156,7 +152,7 @@ describe('ZardAvatarComponent', () => {
       expect(imgElement).toBeVisible();
     });
 
-    it('should handle image error event and reset state when zSrc changes', () => {
+    it('handles image error event and resets state when zSrc changes', () => {
       hostComponent.zSrc = 'invalid-image.jpg';
       fixture.detectChanges();
 
@@ -178,53 +174,135 @@ describe('ZardAvatarComponent', () => {
     });
   });
 
-  describe('Status indicators', () => {
-    it('should set data-status attribute when status is provided', () => {
-      hostComponent.zStatus = 'online';
+  describe('Badge feature', () => {
+    it('does not render badge by default when zShowBadge is false', () => {
+      hostComponent.zShowBadge = false;
+      fixture.detectChanges();
+
+      const badgeElement = fixture.debugElement.query(By.css('[data-slot="avatar"] > div'));
+      expect(badgeElement).toBeFalsy();
+    });
+
+    it('renders badge when zShowBadge is true', () => {
+      hostComponent.zShowBadge = true;
+      fixture.detectChanges();
+
+      const badgeElement = fixture.debugElement.query(By.css('[data-slot="avatar"] > div'));
+      expect(badgeElement).toBeTruthy();
+    });
+
+    it('applies correct badge classes', () => {
+      hostComponent.zShowBadge = true;
+      fixture.detectChanges();
+
+      const badgeElement = fixture.debugElement.query(By.css('[data-slot="avatar"] > div')).nativeElement;
+      expect(badgeElement).toHaveClass('absolute');
+      expect(badgeElement).toHaveClass('right-0');
+      expect(badgeElement).toHaveClass('bottom-0');
+      expect(badgeElement).toHaveClass('z-10');
+    });
+
+    it('applies custom badge classes via zBadgeClass input', () => {
+      const customBadgeClass = 'custom-badge-class';
+      hostComponent.zShowBadge = true;
+      hostComponent.zBadgeClass = customBadgeClass;
+      fixture.detectChanges();
+
+      const badgeElement = fixture.debugElement.query(By.css('[data-slot="avatar"] > div')).nativeElement;
+      expect(badgeElement.classList.contains(customBadgeClass)).toBeTruthy();
+    });
+
+    it('renders badge icon when zBadgeIcon is provided', () => {
+      hostComponent.zShowBadge = true;
+      hostComponent.zBadgeIcon = 'lucideCheck';
+      fixture.detectChanges();
+
+      const iconElement = fixture.debugElement.query(By.css('ng-icon'));
+      expect(iconElement).toBeTruthy();
+    });
+
+    it('does not render badge icon when zBadgeIcon is empty', () => {
+      hostComponent.zShowBadge = true;
+      hostComponent.zBadgeIcon = '';
+      fixture.detectChanges();
+
+      const iconElement = fixture.debugElement.query(By.css('ng-icon'));
+      expect(iconElement).toBeFalsy();
+    });
+
+    it('applies size-specific badge classes for sm size', () => {
+      hostComponent.zSize = 'sm';
+      hostComponent.zShowBadge = true;
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.getAttribute('data-status')).toBe('online');
+      expect(avatarElement.getAttribute('data-size')).toBe('sm');
     });
 
-    it('should not set data-status attribute when status is null', () => {
-      hostComponent.zStatus = null;
+    it('applies size-specific badge classes for lg size', () => {
+      hostComponent.zSize = 'lg';
+      hostComponent.zShowBadge = true;
       fixture.detectChanges();
 
       const avatarElement = fixture.debugElement.query(By.directive(ZardAvatarComponent)).nativeElement;
-      expect(avatarElement.getAttribute('data-status')).toBeNull();
+      expect(avatarElement.getAttribute('data-size')).toBe('lg');
     });
+  });
 
-    it('should display online status indicator', () => {
-      hostComponent.zStatus = 'online';
+  describe('Image priority', () => {
+    it('renders img with priority attribute when zPriority is true', () => {
+      hostComponent.zSrc = 'test-url.jpg';
+      hostComponent.zPriority = true;
       fixture.detectChanges();
 
-      const statusElement = fixture.debugElement.query(By.css('svg.text-green-500'));
-      expect(statusElement).toBeTruthy();
+      const imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(imgElement.getAttribute('fetchpriority')).toBe('high');
     });
 
-    it('should display offline status indicator', () => {
-      hostComponent.zStatus = 'offline';
+    it('renders img without priority attribute when zPriority is false', () => {
+      hostComponent.zSrc = 'test-url.jpg';
+      hostComponent.zPriority = false;
       fixture.detectChanges();
 
-      const statusElement = fixture.debugElement.query(By.css('svg.text-red-500 circle'));
-      expect(statusElement).toBeTruthy();
+      const imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(imgElement.getAttribute('fetchpriority')).toBe('auto');
+    });
+  });
+
+  describe('Effect behavior', () => {
+    it('resets image error state when zSrc changes', () => {
+      hostComponent.zSrc = 'invalid-image.jpg';
+      fixture.detectChanges();
+
+      const imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      imgElement.dispatchEvent(new Event('error'));
+      fixture.detectChanges();
+
+      expect(imgElement).not.toBeVisible();
+
+      hostComponent.zSrc = 'new-valid-image.jpg';
+      fixture.detectChanges();
+
+      const newImgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(newImgElement.src).toContain('new-valid-image.jpg');
+      expect(newImgElement).toBeVisible();
     });
 
-    it('should display do not disturb status indicator', () => {
-      hostComponent.zStatus = 'doNotDisturb';
+    it('resets image loaded state when zSrc changes', () => {
+      hostComponent.zSrc = 'valid-image.jpg';
       fixture.detectChanges();
 
-      const statusElement = fixture.debugElement.query(By.css('svg.text-red-500 path'));
-      expect(statusElement).toBeTruthy();
-    });
-
-    it('should display away status indicator', () => {
-      hostComponent.zStatus = 'away';
+      const imgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      imgElement.dispatchEvent(new Event('load'));
       fixture.detectChanges();
 
-      const statusElement = fixture.debugElement.query(By.css('svg.text-yellow-400'));
-      expect(statusElement).toBeTruthy();
+      expect(imgElement).toBeVisible();
+
+      hostComponent.zSrc = 'another-image.jpg';
+      fixture.detectChanges();
+
+      const newImgElement = fixture.debugElement.query(By.css('img')).nativeElement;
+      expect(newImgElement.src).toContain('another-image.jpg');
     });
   });
 });

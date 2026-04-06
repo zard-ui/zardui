@@ -12,7 +12,7 @@ test.describe('Input component', () => {
   });
 
   test('renders default demo with input fields', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     await expect(firstCard).toBeVisible();
 
     const inputs = firstCard.locator('input[z-input]');
@@ -21,20 +21,20 @@ test.describe('Input component', () => {
   });
 
   test('input accepts user typing', async () => {
-    const input = demoPage.firstDemoCard.locator('input[z-input]').first();
+    const input = demoPage.firstDemoBox.locator('input[z-input]').first();
     await input.clear();
     await input.fill('test value');
     await expect(input).toHaveValue('test value');
   });
 
   test('input has placeholder attribute', async () => {
-    const input = demoPage.firstDemoCard.locator('input[z-input]').first();
+    const input = demoPage.firstDemoBox.locator('input[z-input]').first();
     const placeholder = await input.getAttribute('placeholder');
     expect(placeholder).toBeTruthy();
   });
 
   test('disabled input cannot be modified', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     const inputs = firstCard.locator('input[z-input]');
 
     // Find a disabled input among the inputs

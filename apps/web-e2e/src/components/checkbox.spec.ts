@@ -12,7 +12,7 @@ test.describe('Checkbox component', () => {
   });
 
   test('renders checkbox elements', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     await expect(firstCard).toBeVisible();
 
     const checkboxes = firstCard.locator('[z-checkbox]');
@@ -21,7 +21,7 @@ test.describe('Checkbox component', () => {
   });
 
   test('checkbox uses native checked state', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     // The component wraps a native <input type="checkbox">
     const inputs = firstCard.locator('[z-checkbox] input[type="checkbox"]');
     const count = await inputs.count();
@@ -29,26 +29,25 @@ test.describe('Checkbox component', () => {
   });
 
   test('clicking unchecked checkbox toggles to checked', async () => {
-    const firstCard = demoPage.firstDemoCard;
+    const firstCard = demoPage.firstDemoBox;
     // First checkbox in the demo is unchecked by default
-    const checkbox = firstCard.locator('[z-checkbox]').first();
-    const input = checkbox.locator('input[type="checkbox"]');
+    const input = firstCard.locator('[z-checkbox] input[type="checkbox"]').first();
 
     await expect(input).not.toBeChecked();
-    await checkbox.click();
+    await input.click();
     await expect(input).toBeChecked();
   });
 
   test('clicking checked checkbox toggles to unchecked', async () => {
-    const firstCard = demoPage.firstDemoCard;
-    const checkboxes = firstCard.locator('[z-checkbox]');
-    const count = await checkboxes.count();
+    const firstCard = demoPage.firstDemoBox;
+    const inputs = firstCard.locator('[z-checkbox] input[type="checkbox"]');
+    const count = await inputs.count();
 
     // Find a checked checkbox and toggle it off
     for (let i = 0; i < count; i++) {
-      const input = checkboxes.nth(i).locator('input[type="checkbox"]');
+      const input = inputs.nth(i);
       if (await input.isChecked()) {
-        await checkboxes.nth(i).click();
+        await input.click();
         await expect(input).not.toBeChecked();
         return;
       }

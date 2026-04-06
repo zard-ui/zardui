@@ -1,11 +1,14 @@
+import { AVATAR_DEMO_BADGE } from '@generated/components/avatar/demo/badge';
 import { AVATAR_DEMO_BASIC } from '@generated/components/avatar/demo/basic';
-import { AVATAR_DEMO_STATUS } from '@generated/components/avatar/demo/status';
+import { AVATAR_DEMO_GROUP } from '@generated/components/avatar/demo/group';
 import { AVATAR_CLI_ADD } from '@generated/installation/cli/add-avatar';
 import { AVATAR_MANUAL_CODE } from '@generated/installation/manual/avatar';
 import { AVATAR_USAGE_IMPORT, AVATAR_USAGE_CODE } from '@generated/usage/avatar';
 
+import { ZardDemoAvatarGroupComponent } from '@/shared/components/avatar/demo/group';
+
+import { ZardDemoAvatarBadgeComponent } from './badge';
 import { ZardDemoAvatarBasicComponent } from './basic';
-import { ZardDemoAvatarStatusComponent } from './status';
 import { AVATAR_API } from '../doc/api';
 
 export const AVATAR = {
@@ -25,9 +28,14 @@ export const AVATAR = {
       codeData: AVATAR_DEMO_BASIC,
     },
     {
-      name: 'status',
-      component: ZardDemoAvatarStatusComponent,
-      codeData: AVATAR_DEMO_STATUS,
+      name: 'badge',
+      component: ZardDemoAvatarBadgeComponent,
+      codeData: AVATAR_DEMO_BADGE,
+    },
+    {
+      name: 'group',
+      component: ZardDemoAvatarGroupComponent,
+      codeData: AVATAR_DEMO_GROUP,
     },
   ],
 };

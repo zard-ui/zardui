@@ -15,9 +15,9 @@
     "skipLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@cli/*": ["src/*"]
+      "@cli/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/**/*.spec.ts", "src/**/*.test.ts", "node_modules", "dist"]
+  "include": ["./src/**/*.ts"],
+  "exclude": ["./src/**/*.spec.ts", "./src/**/*.test.ts", "../../node_modules", "../../dist"]
 }

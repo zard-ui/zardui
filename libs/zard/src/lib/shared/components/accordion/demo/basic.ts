@@ -6,7 +6,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-basic',
   imports: [ZardAccordionImports],
   template: `
-    <div z-accordion zDefaultValue="item-1" zType="single" class="max-w-sm">
+    <z-accordion zDefaultValue="item-1" zType="single" class="max-w-sm">
       <z-accordion-item zValue="item-1" zTitle="How do I reset my password?">
         Click on 'Forgot Password' on the login page, enter your email address, and we'll send you a link to reset your
         password. The link will expire in 24 hours.
@@ -21,7 +21,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
         We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely through our
         payment partners.
       </z-accordion-item>
-    </div>
+    </z-accordion>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

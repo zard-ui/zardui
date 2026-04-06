@@ -12,7 +12,7 @@ import { ZardCardComponent } from '@/shared/components/card';
       zDescription="Common questions about your account, plans, payments and cancellations."
       class="w-full max-w-sm"
     >
-      <div z-accordion zDefaultValue="plans" zType="single">
+      <z-accordion zDefaultValue="plans" zType="single">
         <z-accordion-item zValue="plans" zTitle="What subscription plans do you offer?">
           We offer three subscription tiers: Starter ($9/month), Professional ($29/month), and Enterprise ($99/month).
           Each plan includes increasing storage limits, API access, priority support, and team collaboration features.
@@ -27,7 +27,7 @@ import { ZardCardComponent } from '@/shared/components/card';
           You can cancel your subscription anytime from your account settings. There are no cancellation fees or
           penalties. Your access will continue until the end of your current billing period.
         </z-accordion-item>
-      </div>
+      </z-accordion>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

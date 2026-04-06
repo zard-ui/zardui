@@ -11,29 +11,33 @@ import {
 } from '@angular/core';
 import type { SafeUrl } from '@angular/platform-browser';
 
+import { NgIcon } from '@ng-icons/core';
+import type { ClassValue } from 'clsx';
+
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
   avatarVariants,
+  badgeVariants,
+  fallbackVariants,
   imageVariants,
-  type ZardAvatarShapeVariants,
   type ZardAvatarSizeVariants,
 } from './avatar.variants';
 
-export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
-
 @Component({
   selector: 'z-avatar, [z-avatar]',
-  imports: [NgOptimizedImage],
+  imports: [NgOptimizedImage, NgIcon],
   template: `
     @if (zFallback() && (!zSrc() || !imageLoaded())) {
-      <span class="absolute z-0 m-auto text-base">{{ zFallback() }}</span>
+      <span [class]="fallbackClasses()">
+        {{ zFallback() }}
+      </span>
     }
 
     @if (zSrc() && !imageError()) {
       <img
-        [width]="40"
-        [height]="40"
+        [width]="32"
+        [height]="32"
         [alt]="zAlt()"
         [class]="imgClasses()"
         [ngSrc]="zSrc()"
@@ -43,96 +47,33 @@ export type ZardAvatarStatus = 'online' | 'offline' | 'doNotDisturb' | 'away';
       />
     }
 
-    @if (zStatus()) {
-      @switch (zStatus()) {
-        @case ('online') {
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="absolute -right-1.25 -bottom-1.25 z-20 size-5 text-green-500"
-          >
-            <circle cx="12" cy="12" r="10" fill="currentColor" />
-          </svg>
+    @if (zShowBadge()) {
+      <div [class]="badgeClasses()">
+        @if (zBadgeIcon()) {
+          <ng-icon [name]="zBadgeIcon()" size="8" />
         }
-        @case ('offline') {
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="absolute -right-1.25 -bottom-1.25 z-20 size-5 text-red-500"
-          >
-            <circle cx="12" cy="12" r="10" fill="currentColor" />
-          </svg>
-        }
-        @case ('doNotDisturb') {
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="absolute -right-1.25 -bottom-1.25 z-20 size-5 text-red-500"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M8 12h8" fill="currentColor" />
-          </svg>
-        }
-        @case ('away') {
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            stroke="white"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            class="absolute -right-1.25 -bottom-1.25 z-20 size-5 rotate-y-180 text-yellow-400"
-          >
-            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" fill="currentColor" />
-          </svg>
-        }
-      }
+      </div>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'containerClasses()',
-    '[style.width]': 'customSize()',
-    '[style.height]': 'customSize()',
+    '[class]': 'avatarClasses()',
     '[attr.data-slot]': '"avatar"',
-    '[attr.data-status]': 'zStatus() ?? null',
+    '[attr.data-size]': 'zSize()',
   },
   exportAs: 'zAvatar',
 })
 export class ZardAvatarComponent {
-  readonly class = input<string>('');
+  readonly class = input<ClassValue>('');
   readonly zAlt = input<string>('');
+  readonly zBadgeClass = input<ClassValue>('');
+  readonly zBadgeIcon = input<string>('');
   readonly zFallback = input<string>('');
   readonly zPriority = input(false, { transform: booleanAttribute });
-  readonly zShape = input<ZardAvatarShapeVariants>('circle');
   readonly zSize = input<ZardAvatarSizeVariants>('default');
   readonly zSrc = input<string | SafeUrl>('');
-  readonly zStatus = input<ZardAvatarStatus>();
+  readonly zShowBadge = input(false, { transform: booleanAttribute });
 
   protected readonly imageError = signal(false);
   protected readonly imageLoaded = signal(false);
@@ -146,16 +87,15 @@ export class ZardAvatarComponent {
     });
   }
 
-  protected readonly containerClasses = computed(() =>
-    mergeClasses(avatarVariants({ zShape: this.zShape(), zSize: this.zSize() }), this.class()),
+  protected readonly avatarClasses = computed(() =>
+    mergeClasses(avatarVariants({ zSize: this.zSize() }), this.class()),
   );
 
-  protected readonly customSize = computed(() => {
-    const size = this.zSize();
-    return typeof size === 'number' ? `${size}px` : null;
-  });
+  protected readonly fallbackClasses = computed(() => fallbackVariants());
 
-  protected readonly imgClasses = computed(() => imageVariants({ zShape: this.zShape(), zSize: this.zSize() }));
+  protected readonly badgeClasses = computed(() => mergeClasses(badgeVariants, this.zBadgeClass()));
+
+  protected readonly imgClasses = computed(() => imageVariants({ zSize: this.zSize() }));
 
   protected onImageLoad(): void {
     this.imageLoaded.set(true);

@@ -9,9 +9,9 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "paths": {
-      "@highlight/*": ["packages/highlight/src/*"]
+      "@highlight/*": ["./src/*"]
     }
   },
-  "include": ["src/**/*.ts"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["./src/**/*.ts"],
+  "exclude": ["../../node_modules", "../../dist"]
 }

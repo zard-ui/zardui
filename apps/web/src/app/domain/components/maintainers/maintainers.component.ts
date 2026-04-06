@@ -30,7 +30,6 @@ export interface MaintainerData {
             [zSrc]="maintainer.avatar_url"
             [zAlt]="maintainer.name + ' avatar'"
             [zFallback]="maintainer.name.substring(0, 2).toUpperCase()"
-            zSize="md"
             class="shrink-0"
           ></z-avatar>
 

@@ -12,12 +12,12 @@ test.describe('Dropdown component', () => {
   });
 
   test('renders trigger button', async () => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await expect(trigger).toBeVisible();
   });
 
   test('opens dropdown menu on click', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await trigger.click();
 
     const menu = page.locator('[role="menu"]');
@@ -25,7 +25,7 @@ test.describe('Dropdown component', () => {
   });
 
   test('shows menu items when open', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await trigger.click();
 
     const menu = page.locator('[role="menu"]');
@@ -36,7 +36,7 @@ test.describe('Dropdown component', () => {
   });
 
   test('has a disabled menu item', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await trigger.click();
 
     const menu = page.locator('[role="menu"]');
@@ -47,7 +47,7 @@ test.describe('Dropdown component', () => {
   });
 
   test('closes dropdown when clicking outside', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await trigger.click();
 
     const menu = page.locator('[role="menu"]');
@@ -58,7 +58,7 @@ test.describe('Dropdown component', () => {
   });
 
   test('navigates items with arrow keys', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
 
     // Open dropdown and wait for menu to be both visible AND focused
     const menu = page.locator('[role="menu"]');
@@ -93,7 +93,7 @@ test.describe('Dropdown component', () => {
     await page.locator('#examples').waitFor({ state: 'attached', timeout: 10_000 });
     await page.locator('#examples').scrollIntoViewIfNeeded({ timeout: 5000 });
 
-    const firstTrigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const firstTrigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     const secondTrigger = demoPage.getDemoByName('hover').locator('[z-dropdown]');
 
     await expect(firstTrigger).toHaveAttribute('aria-haspopup', 'menu');
@@ -113,7 +113,7 @@ test.describe('Dropdown component', () => {
   });
 
   test('passes accessibility checks when open', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await trigger.click();
     await page.locator('[role="menu"]').waitFor({ state: 'visible', timeout: 5000 });
     await checkA11y(page, undefined, ['button-name', 'color-contrast', 'scrollable-region-focusable']);
