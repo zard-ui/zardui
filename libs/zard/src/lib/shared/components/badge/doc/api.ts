@@ -8,10 +8,10 @@ export const BADGE_API: ApiSection[] = [
       {
         name: 'zType',
         description: 'Badge type',
-        type: "'default' | 'secondary' | 'destructive' | 'outline'",
+        type: "'default' | 'secondary' | 'destructive' | 'outline' | 'ghost' | 'link'",
         default: "'default'",
       },
-      { name: 'zShape', description: 'Badge shape', type: "'default' | 'square' | 'pill'", default: "'default'" },
+      { name: 'class', description: 'Additional CSS classes', type: 'string', default: "''" },
     ],
   },
 ];

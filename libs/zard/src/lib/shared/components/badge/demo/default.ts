@@ -1,13 +1,10 @@
 import { Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideBadgeCheck } from '@ng-icons/lucide';
-
 import { ZardBadgeComponent } from '../badge.component';
 
 @Component({
   selector: 'z-demo-badge-default',
-  imports: [ZardBadgeComponent, NgIcon],
+  imports: [ZardBadgeComponent],
   template: `
     <div class="flex flex-col items-center gap-2">
       <div class="flex w-full flex-wrap gap-2">
@@ -15,18 +12,9 @@ import { ZardBadgeComponent } from '../badge.component';
         <z-badge zType="secondary">Secondary</z-badge>
         <z-badge zType="destructive">Destructive</z-badge>
         <z-badge zType="outline">Outline</z-badge>
-      </div>
-      <div class="flex w-full flex-wrap gap-2">
-        <z-badge zType="secondary" zShape="pill" class="bg-blue-500 text-white dark:bg-blue-600">
-          <ng-icon name="lucideBadgeCheck" />
-          Verified
-        </z-badge>
-        <z-badge zShape="pill" class="h-5 min-w-5 px-1 font-mono tabular-nums">8</z-badge>
-        <z-badge zShape="pill" zType="destructive" class="h-5 min-w-5 px-1 font-mono tabular-nums">99</z-badge>
-        <z-badge zShape="pill" zType="outline" class="h-5 min-w-5 px-1 font-mono tabular-nums">20+</z-badge>
+        <z-badge zType="ghost">Ghost</z-badge>
       </div>
     </div>
   `,
-  viewProviders: [provideIcons({ lucideBadgeCheck })],
 })
 export class ZardDemoBadgeDefaultComponent {}
