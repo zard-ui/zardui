@@ -345,6 +345,142 @@ describe('ZardSelectComponent', () => {
     });
   });
 
+  describe('regression: dynamic projected items and effect-driven close', () => {
+    @Component({
+      imports: [ZardSelectComponent, ZardSelectItemComponent, ReactiveFormsModule],
+      template: `
+        <z-select [formControl]="control">
+          @for (item of items(); track item.value) {
+            <z-select-item [zValue]="item.value">{{ item.label }}</z-select-item>
+          }
+        </z-select>
+      `,
+    })
+    class DynamicHostComponent {
+      readonly items = signal<{ value: string; label: string }[]>([
+        { value: 'a', label: 'Alpha' },
+        { value: 'b', label: 'Beta' },
+        { value: 'c', label: 'Charlie' },
+      ]);
+
+      readonly control = new FormControl('');
+    }
+
+    let hostComponent: DynamicHostComponent;
+    let hostFixture: ComponentFixture<DynamicHostComponent>;
+    let selectComponent: ZardSelectComponent;
+
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [DynamicHostComponent],
+        providers: [
+          {
+            provide: EVENT_MANAGER_PLUGINS,
+            useClass: ZardEventManagerPlugin,
+            multi: true,
+          },
+        ],
+      }).compileComponents();
+
+      hostFixture = TestBed.createComponent(DynamicHostComponent);
+      hostComponent = hostFixture.componentInstance;
+      hostFixture.detectChanges();
+      await hostFixture.whenStable();
+
+      selectComponent = hostFixture.debugElement.query(By.directive(ZardSelectComponent)).componentInstance;
+      hostFixture.detectChanges();
+      await hostFixture.whenStable();
+    });
+
+    afterEach(() => {
+      TestBed.resetTestingModule();
+    });
+
+    it('picks up new projected items after @for collection mutation', fakeAsync(() => {
+      expect(selectComponent.selectItems().length).toBe(3);
+
+      hostComponent.items.update(items => [...items, { value: 'd', label: 'Delta' }]);
+      hostFixture.detectChanges();
+      flush();
+
+      expect(selectComponent.selectItems().length).toBe(4);
+      expect(selectComponent.selectItems()[3].zValue()).toBe('d');
+    }));
+
+    it('preserves selection after adding new projected items', fakeAsync(() => {
+      hostComponent.control.setValue('b');
+      hostFixture.detectChanges();
+      flush();
+
+      expect(selectComponent.zValue()).toBe('b');
+
+      hostComponent.items.update(items => [...items, { value: 'd', label: 'Delta' }]);
+      hostFixture.detectChanges();
+      flush();
+
+      expect(selectComponent.zValue()).toBe('b');
+      expect(selectComponent.selectedLabels()).toContain('Beta');
+    }));
+
+    it('closes dropdown via close(false) when disabledState becomes true while open', fakeAsync(() => {
+      const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
+        .nativeElement as HTMLElement;
+      const onTouchedSpy = jest.fn();
+      selectComponent.registerOnTouched(onTouchedSpy);
+
+      selectComponent.toggle();
+      flush();
+      hostFixture.detectChanges();
+
+      expect(selectComponent.isOpen()).toBe(true);
+
+      hostComponent.control.disable();
+      hostFixture.detectChanges();
+      flush();
+
+      expect(selectComponent.isOpen()).toBe(false);
+      expect(selectElement).toHaveAttribute('data-disabled');
+      expect(onTouchedSpy).not.toHaveBeenCalled();
+    }));
+
+    it('propagates CVA onChange after projected item mutation', fakeAsync(() => {
+      hostComponent.items.update(items => [...items, { value: 'd', label: 'Delta' }]);
+      hostFixture.detectChanges();
+      flush();
+
+      selectComponent.toggle();
+      flush();
+      hostFixture.detectChanges();
+
+      expect(selectComponent.isOpen()).toBe(true);
+
+      const overlayElement = selectComponent['overlayRef']?.overlayElement;
+      const deltaItem = overlayElement?.querySelector<HTMLElement>('z-select-item[value="d"]');
+      deltaItem?.click();
+      flush();
+      hostFixture.detectChanges();
+
+      expect(hostComponent.control.value).toBe('d');
+      expect(selectComponent.zValue()).toBe('d');
+      expect(selectComponent.isOpen()).toBe(false);
+    }));
+
+    it('falls back to raw value in selectedLabels when selected item is removed', fakeAsync(() => {
+      hostComponent.control.setValue('b');
+      hostFixture.detectChanges();
+      flush();
+
+      expect(selectComponent.selectedLabels()).toContain('Beta');
+
+      hostComponent.items.update(items => items.filter(i => i.value !== 'b'));
+      hostFixture.detectChanges();
+      flush();
+
+      expect(selectComponent.zValue()).toBe('b');
+      expect(selectComponent.selectedLabels()).toEqual(['b']);
+    }));
+  });
+
   describe('Multiselect mode', () => {
     @Component({
       imports: [ZardSelectComponent, ZardSelectItemComponent],
