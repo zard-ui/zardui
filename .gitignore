@@ -51,6 +51,7 @@ Thumbs.db
 .clineignore
 memory-bank
 .amazonq
+.kilo
 .kilocode
 .kilo
 .opencode
@@ -87,3 +88,6 @@ opencode.json
 tsconfig.tsbuildinfo
 /jest_dx/
 nx-native-file-cache-*
+
+# Beads / Dolt files (added by bd init)
+.beads-credential-key
