@@ -1,3 +1,13 @@
+## 1.0.0-beta.76 (2026-04-15)
+
+### 🐛 Bug Fixes
+
+- **select:** fixed select item rendering on items collection update ([#573](https://github.com/zard-ui/zardui/pull/573))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
 ## 1.0.0-beta.75 (2026-04-01)
 
 ### ✨ Features
