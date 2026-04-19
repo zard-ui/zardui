@@ -87,7 +87,7 @@
     "shiki": "^4.0.2",
     "tailwind-merge": "^3.5.0",
     "tailwindcss": "^4.2.2",
-    "ts-morph": "^27.0.2",
+    "ts-morph": "^28.0.0",
     "unified": "^11.0.5",
     "xmlbuilder": "^15.1.1",
     "zod": "^4.3.6",
