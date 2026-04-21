@@ -8,15 +8,11 @@ import { kbdVariants } from './kbd.variants';
 
 @Component({
   selector: 'z-kbd, [z-kbd]',
-  standalone: true,
   template: `
-    <kbd><ng-content /></kbd>
+    <kbd data-slot="kbd" [class]="classes()"><ng-content /></kbd>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  host: {
-    '[class]': 'classes()',
-  },
   exportAs: 'zKbd',
 })
 export class ZardKbdComponent {

@@ -6,14 +6,12 @@ import { ZardKbdComponent } from '../kbd.component';
 @Component({
   selector: 'z-demo-kbd-group',
   imports: [ZardKbdGroupComponent, ZardKbdComponent],
-  standalone: true,
   template: `
-    <z-kbd-group>
+    <z-kbd-group class="text-muted-foreground text-sm">
       Use
+      <z-kbd>Ctrl + B</z-kbd>
       <z-kbd>Ctrl + K</z-kbd>
-      or
-      <z-kbd>Ctrl + O</z-kbd>
-      to open menu
+      to open command palette
     </z-kbd-group>
   `,
 })
