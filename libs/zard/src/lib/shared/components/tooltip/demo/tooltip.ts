@@ -1,10 +1,15 @@
 import { TOOLTIP_DEMO_CLICK } from '@generated/components/tooltip/demo/click';
+import { TOOLTIP_DEMO_DISABLED } from '@generated/components/tooltip/demo/disabled';
 import { TOOLTIP_DEMO_EVENTS } from '@generated/components/tooltip/demo/events';
 import { TOOLTIP_DEMO_HOVER } from '@generated/components/tooltip/demo/hover';
 import { TOOLTIP_DEMO_POSITION } from '@generated/components/tooltip/demo/position';
+import { TOOLTIP_DEMO_WITH_KBD } from '@generated/components/tooltip/demo/with-kbd';
 import { TOOLTIP_CLI_ADD } from '@generated/installation/cli/add-tooltip';
 import { TOOLTIP_MANUAL_CODE } from '@generated/installation/manual/tooltip';
 import { TOOLTIP_USAGE_CODE, TOOLTIP_USAGE_IMPORT } from '@generated/usage/tooltip';
+
+import { ZardDemoTooltipDisabledButtonComponent } from '@/shared/components/tooltip/demo/disabled';
+import { ZardDemoTooltipWithKbdComponent } from '@/shared/components/tooltip/demo/with-kbd';
 
 import { ZardDemoTooltipClickComponent } from './click';
 import { ZardDemoTooltipEventsComponent } from './events';
@@ -38,6 +43,16 @@ export const TOOLTIP = {
       name: 'position',
       component: ZardDemoTooltipPositionComponent,
       codeData: TOOLTIP_DEMO_POSITION,
+    },
+    {
+      name: 'with-keyboard-shortcut',
+      component: ZardDemoTooltipWithKbdComponent,
+      codeData: TOOLTIP_DEMO_WITH_KBD,
+    },
+    {
+      name: 'disabled-button',
+      component: ZardDemoTooltipDisabledButtonComponent,
+      codeData: TOOLTIP_DEMO_DISABLED,
     },
     {
       name: 'events',

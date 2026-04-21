@@ -12,6 +12,12 @@ export const TOOLTIP_API: ApiSection[] = [
         type: "'top' | 'bottom' | 'left' | 'right'",
         default: "'top'",
       },
+      {
+        name: 'zPositionOffset',
+        description: 'The position of the tooltip offset',
+        type: 'number',
+        default: '4',
+      },
       { name: 'zTrigger', description: 'The tooltip trigger mode', type: "'hover' | 'click'", default: "'hover'" },
       {
         name: 'zShowDelay',
