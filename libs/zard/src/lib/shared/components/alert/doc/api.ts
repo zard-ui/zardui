@@ -5,7 +5,7 @@ export const ALERT_API: ApiSection[] = [
     selector: 'z-alert',
     description: 'Displays a callout for user attention.',
     props: [
-      { name: '[zTitle]', description: 'Alert title', type: 'string | TemplateRef<void>', default: '-' },
+      { name: '[zAction]', description: 'Alert action', type: 'TemplateRef<void>', default: '-' },
       { name: '[zDescription]', description: 'Alert description', type: 'string | TemplateRef<void>', default: '-' },
       {
         name: '[zIcon]',
@@ -13,6 +13,13 @@ export const ALERT_API: ApiSection[] = [
         type: 'TemplateRef<void> | string',
         default: '-',
       },
+      {
+        name: '[zRole]',
+        description: "Overrides the ARIA role. Defaults to 'status' when [zAction] is set, otherwise 'alert'.",
+        type: "'alert' | 'status'",
+        default: '-',
+      },
+      { name: '[zTitle]', description: 'Alert title', type: 'string | TemplateRef<void>', default: '-' },
       { name: '[zType]', description: 'Alert variant', type: "'default' | 'destructive'", default: "'default'" },
     ],
   },

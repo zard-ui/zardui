@@ -1,17 +1,15 @@
 import { Component } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
 import { render } from '@testing-library/angular';
 
-import { zardChevronDownIcon } from '@/shared/core';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardAccordionItemComponent } from './accordion-item.component';
 import { ZardAccordionComponent } from './accordion.component';
 
 jest.mock('../../utils/merge-classes', () => ({
-  mergeClasses: jest.fn().mockImplementation((variants, cls) => cls || 'default-classes'),
+  mergeClasses: jest.fn().mockImplementation((variants, cls) => cls || 'w-full'),
   transform: jest.fn(value => value),
   noopFn: jest.fn(),
 }));
@@ -22,15 +20,14 @@ const getHostComponent = (
   isCollapsible = true,
 ) => {
   @Component({
-    imports: [ZardAccordionComponent, ZardAccordionItemComponent, NgIcon],
+    imports: [ZardAccordionComponent, ZardAccordionItemComponent],
     template: `
-      <z-accordion [zType]="type" [zCollapsible]="collapsible" [zDefaultValue]="defaultValue">
+      <z-accordion [zType]="type" [zCollapsible]="collapsible" [zDefaultValue]="defaultValue" class="w-full">
         <z-accordion-item zValue="item-1">Text 1</z-accordion-item>
         <z-accordion-item zValue="item-2">Text 2</z-accordion-item>
         <z-accordion-item zValue="item-3">Text 3</z-accordion-item>
       </z-accordion>
     `,
-    viewProviders: [provideIcons({ chevronDown: zardChevronDownIcon })],
   })
   class TestHostComponent {
     type: 'single' | 'multiple' = mode;
@@ -59,7 +56,7 @@ describe('ZardAccordionComponent', () => {
     fixture.detectChanges();
 
     const hostElement: HTMLElement = fixture.debugElement.query(By.directive(ZardAccordionComponent)).nativeElement;
-    expect(hostElement).toHaveClass('default-classes');
+    expect(hostElement).toHaveClass('w-full');
     expect(mergeClasses).toHaveBeenCalled();
   });
 
