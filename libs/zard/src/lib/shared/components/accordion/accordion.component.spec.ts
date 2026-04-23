@@ -24,7 +24,7 @@ const getHostComponent = (
   @Component({
     imports: [ZardAccordionComponent, ZardAccordionItemComponent, NgIcon],
     template: `
-      <z-accordion [zType]="type" [zCollapsible]="collapsible" [zDefaultValue]="defaultValue">
+      <z-accordion [zType]="type" [zCollapsible]="collapsible" [zDefaultValue]="defaultValue" class="w-full">
         <z-accordion-item zValue="item-1">Text 1</z-accordion-item>
         <z-accordion-item zValue="item-2">Text 2</z-accordion-item>
         <z-accordion-item zValue="item-3">Text 3</z-accordion-item>
@@ -59,7 +59,7 @@ describe('ZardAccordionComponent', () => {
     fixture.detectChanges();
 
     const hostElement: HTMLElement = fixture.debugElement.query(By.directive(ZardAccordionComponent)).nativeElement;
-    expect(hostElement).toHaveClass('default-classes');
+    expect(hostElement).toHaveClass('w-full');
     expect(mergeClasses).toHaveBeenCalled();
   });
 
