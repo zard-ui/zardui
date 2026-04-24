@@ -197,7 +197,7 @@ async function buildComponentCodeBlocks(componentDir: string, componentName: str
     const filePath = path.join(componentDir, fileName);
     if (!fs.existsSync(filePath)) continue;
 
-    const code = fs.readFileSync(filePath, 'utf-8');
+    const code = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
     const language = fileName.endsWith('.html') ? 'angular-html' : 'angular-ts';
     const html = await highlightCode(code, language);
 
@@ -227,7 +227,7 @@ async function buildComponentCodeBlocks(componentDir: string, componentName: str
     const filePath = path.join(componentDir, fileName);
     if (!fs.statSync(filePath).isFile()) continue;
 
-    const code = fs.readFileSync(filePath, 'utf-8');
+    const code = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
     const language = fileName.endsWith('.html') ? 'angular-html' : 'angular-ts';
     const html = await highlightCode(code, language);
 

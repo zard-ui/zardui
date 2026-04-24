@@ -25,7 +25,7 @@ export async function generateDocsFiles(): Promise<number> {
 
     for (const file of files) {
       const filePath = path.join(sectionDir, file);
-      const content = fs.readFileSync(filePath, 'utf-8');
+      const content = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
       const blocks = extractCodeBlocks(content);
 
       if (blocks.length === 0) continue;

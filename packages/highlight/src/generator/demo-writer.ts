@@ -30,7 +30,7 @@ export async function generateDemoFiles(): Promise<number> {
       if (isConfigFile(file, componentName)) continue;
 
       const filePath = path.join(demoDir, file);
-      const code = fs.readFileSync(filePath, 'utf-8');
+      const code = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
       const html = await highlightCode(code, 'angular-ts');
 
       const data: CodeBlockData = {
@@ -64,7 +64,7 @@ export async function generateSingleDemo(filePath: string): Promise<void> {
   if (isConfigFile(fileName, componentName)) return;
   if (path.extname(fileName) !== '.ts') return;
 
-  const code = fs.readFileSync(filePath, 'utf-8');
+  const code = fs.readFileSync(filePath, 'utf-8').replace(/\r\n/g, '\n');
   const html = await highlightCode(code, 'angular-ts');
 
   const data: CodeBlockData = {
