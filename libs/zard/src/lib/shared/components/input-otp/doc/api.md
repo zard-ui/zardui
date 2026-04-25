@@ -6,13 +6,14 @@ The main OTP input container component.
 
 ### Inputs
 
-| Property     | Type               | Default        | Description                        |
-| ------------ | ------------------ | -------------- | ---------------------------------- |
-| `zId`        | `string`           | auto-generated | The ID of the input element        |
-| `zMaxLength` | `number`           | `6`            | Maximum number of characters       |
-| `zPattern`   | `string \| RegExp` | `'[0-9]*'`     | Regex pattern for input validation |
-| `zClass`     | `ClassValue`       | `''`           | Additional CSS classes             |
-| `readonly`   | `boolean`          | `false`        | Makes the input readonly           |
+| Property        | Type                          | Default     | Description                                                       |
+| --------------- | ----------------------------- | ----------- | ----------------------------------------------------------------- |
+| `zMaxLength`    | `number`                      | `undefined` | Maximum number of characters. Auto-detected from slot count.      |
+| `zPattern`      | `string`                      | `'[0-9]'`   | Per-character regex pattern for input validation                  |
+| `zReadonly`     | `boolean`                     | `false`     | Makes the input readonly                                          |
+| `zIntegerOnly`  | `boolean`                     | `true`      | Restricts inputmode to numeric and limits keyboard input          |
+| `zSize`         | `'sm' \| 'default' \| 'lg'`   | `'default'` | Size variant; cascades to projected slots and separators          |
+| `zClass`        | `ClassValue`                  | `''`        | Additional CSS classes                                            |
 
 ### Outputs
 
@@ -30,6 +31,17 @@ The main OTP input container component.
 | `registerOnTouched` | `fn: () => void`           | `void` | Registers touched callback            |
 | `setDisabledState`  | `isDisabled: boolean`      | `void` | Sets disabled state                   |
 
+## ZardInputOtpSignalComponent
+
+A drop-in alternative to `ZardInputOtpComponent` that implements Angular signal forms' `FormValueControl<string>` contract. Use this variant when binding via `[formField]` from `@angular/forms/signals`.
+
+Inherits all inputs and outputs from `ZardInputOtpComponent` and adds:
+
+| Property   | Type                    | Default | Description                                                            |
+| ---------- | ----------------------- | ------- | ---------------------------------------------------------------------- |
+| `value`    | `ModelSignal<string>`   | `''`    | Two-way bound by `[formField]`; reflects the field value.              |
+| `disabled` | `ModelSignal<boolean>`  | `false` | Two-way bound by `[formField]`; mirrors the field's disabled state.    |
+
 ## ZardInputOtpSlotComponent
 
 Individual slot component for each character.
@@ -39,7 +51,7 @@ Individual slot component for each character.
 | Property | Type         | Default      | Description            |
 | -------- | ------------ | ------------ | ---------------------- |
 | `zIndex` | `number`     | **required** | The index of this slot |
-| `zClass` | `ClassValue` | `''`         | Additional CSS classes |
+| `class`  | `ClassValue` | `''`         | Additional CSS classes |
 
 ### State
 
@@ -57,7 +69,7 @@ Container component for grouping slots together.
 
 | Property | Type         | Default | Description            |
 | -------- | ------------ | ------- | ---------------------- |
-| `zClass` | `ClassValue` | `''`    | Additional CSS classes |
+| `class`  | `ClassValue` | `''`    | Additional CSS classes |
 
 ## ZardInputOtpSeparatorComponent
 
@@ -67,7 +79,7 @@ Visual separator component between groups.
 
 | Property | Type         | Default | Description            |
 | -------- | ------------ | ------- | ---------------------- |
-| `zClass` | `ClassValue` | `''`    | Additional CSS classes |
+| `class`  | `ClassValue` | `''`    | Additional CSS classes |
 
 ## Usage Examples
 
@@ -155,12 +167,12 @@ onComplete(value: string): void {
 
 ## Styling
 
-All components use CVA (Class Variance Authority) for styling and can be customized via the `zClass` input:
+All components use CVA (Class Variance Authority) for styling. The main component accepts `zClass`; subcomponents accept the native `class` attribute:
 
 ```html
-<z-input-otp zClass="gap-4">
-  <z-input-otp-group zClass="gap-1">
-    <z-input-otp-slot [zIndex]="0" zClass="h-12 w-12 text-lg" />
+<z-input-otp zClass="gap-4" zSize="lg">
+  <z-input-otp-group class="gap-1">
+    <z-input-otp-slot [zIndex]="0" class="h-12 w-12 text-lg" />
     <!-- more slots -->
   </z-input-otp-group>
 </z-input-otp>
@@ -168,10 +180,8 @@ All components use CVA (Class Variance Authority) for styling and can be customi
 
 ## Accessibility
 
-The component follows WAI-ARIA best practices:
-
-- Proper `role` attributes
-- Keyboard navigation support
-- Focus management
-- Screen reader support
-- Disabled state handling
+- Each slot input ships with `aria-label="One-time password digit N of M"`.
+- Slot inputs declare `autocomplete="one-time-code"` and `inputmode="numeric"` (or `"text"` when `zIntegerOnly` is `false`).
+- The separator is marked `aria-hidden="true"`.
+- The host element exposes `data-disabled` while the form control is disabled.
+- Arrow keys move focus across slots, `Backspace` jumps back when a slot is empty, and `Tab` is never trapped.

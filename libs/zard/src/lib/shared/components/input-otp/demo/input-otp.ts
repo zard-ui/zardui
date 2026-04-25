@@ -3,6 +3,7 @@ import { ZardDemoInputOtpDefaultComponent } from '@/shared/components/input-otp/
 import { ZardDemoInputOtpFormComponent } from '@/shared/components/input-otp/demo/form';
 import { ZardDemoInputOtpPatternComponent } from '@/shared/components/input-otp/demo/pattern';
 import { ZardDemoInputOtpSeparatorComponent } from '@/shared/components/input-otp/demo/separator';
+import { ZardDemoInputOtpSignalComponent } from '@/shared/components/input-otp/demo/signal';
 
 export const INPUT_OTP = {
   componentName: 'input-otp',
@@ -34,6 +35,11 @@ export const INPUT_OTP = {
     {
       name: 'separator',
       component: ZardDemoInputOtpSeparatorComponent,
+      column: true,
+    },
+    {
+      name: 'signal',
+      component: ZardDemoInputOtpSignalComponent,
       column: true,
     },
   ],
