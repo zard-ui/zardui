@@ -128,8 +128,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 
   writeValue(value: string): void {
     if (value) {
-      const tokens: string[] = Array.isArray(value) ? value : String(value).split('');
-      this.tokens.set(tokens.slice(0, this.effectiveMaxLength()));
+      this.tokens.set(value.split('').slice(0, this.effectiveMaxLength()));
     } else {
       this.tokens.set([]);
     }
