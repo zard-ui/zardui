@@ -12,9 +12,11 @@ import { ZardToggleComponent } from '../toggle.component';
     <div class="flex items-center gap-2">
       <z-toggle zAriaLabel="Toggle italic" zType="outline">
         <ng-icon name="lucideItalic" />
+        Italic
       </z-toggle>
       <z-toggle zAriaLabel="Toggle bold" zType="outline">
         <ng-icon name="lucideBold" />
+        Bold
       </z-toggle>
     </div>
   `,

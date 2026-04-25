@@ -26,12 +26,13 @@ export const TOGGLE = {
     manualCode: TOGGLE_MANUAL_CODE,
   },
   usage: { importBlock: TOGGLE_USAGE_IMPORT, codeBlock: TOGGLE_USAGE_CODE },
+  preview: {
+    name: 'preview',
+    component: ZardDemoToggleDefaultComponent,
+    codeData: TOGGLE_DEMO_DEFAULT,
+    column: false,
+  },
   examples: [
-    {
-      name: 'default',
-      component: ZardDemoToggleDefaultComponent,
-      codeData: TOGGLE_DEMO_DEFAULT,
-    },
     {
       name: 'outline',
       description: 'Use zType="outline" for an outline style.',
