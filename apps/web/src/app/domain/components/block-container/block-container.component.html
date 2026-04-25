@@ -1,12 +1,13 @@
 <div class="overflow-hidden">
   <div class="flex items-center justify-between px-6 py-4">
     <section class="flex items-center gap-2">
-      <z-segmented
-        class="&>div>button:px-2"
-        [zOptions]="tabOptions"
-        [zDefaultValue]="activeTab()"
-        (zChange)="onTabChange($event)"
+      <z-toggle-group
+        zMode="single"
+        zType="outline"
         zSize="sm"
+        [items]="tabOptions"
+        [defaultValue]="activeTab()"
+        (valueChange)="onTabChange($event)"
       />
 
       <z-divider zOrientation="vertical" class="h-4"></z-divider>

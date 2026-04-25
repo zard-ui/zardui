@@ -32,7 +32,6 @@ export * from './lib/shared/components/popover';
 export * from './lib/shared/components/progress-bar';
 export * from './lib/shared/components/radio';
 export * from './lib/shared/components/resizable';
-export * from './lib/shared/components/segmented';
 export * from './lib/shared/components/select';
 export * from './lib/shared/components/sheet';
 export * from './lib/shared/components/skeleton';

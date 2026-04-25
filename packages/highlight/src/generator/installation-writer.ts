@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 
+import { writeIfChanged } from './file-utils';
 import { highlightCode } from './highlighter';
 import type { CodeBlockData, CodeTabData, CodeTabItem } from '../types';
 
@@ -85,8 +86,7 @@ async function generateCliFiles(componentName: string, deps: ComponentDependency
   ]);
 
   const addConst = toConstName(componentName, 'CLI_ADD');
-  fs.writeFileSync(path.join(cliDir, `add-${componentName}.ts`), generateTabExport(addConst, addTabs));
-  count++;
+  if (writeIfChanged(path.join(cliDir, `add-${componentName}.ts`), generateTabExport(addConst, addTabs))) count++;
 
   // CLI install deps (only if extra deps)
   const extraDeps = getExtraDependencies(deps);
@@ -100,8 +100,8 @@ async function generateCliFiles(componentName: string, deps: ComponentDependency
     ]);
 
     const depsConst = toConstName(componentName, 'CLI_INSTALL_DEPS');
-    fs.writeFileSync(path.join(cliDir, `install-deps-${componentName}.ts`), generateTabExport(depsConst, depsTabs));
-    count++;
+    if (writeIfChanged(path.join(cliDir, `install-deps-${componentName}.ts`), generateTabExport(depsConst, depsTabs)))
+      count++;
   }
 
   // Register step (only if component has register config)
@@ -121,11 +121,13 @@ async function generateCliFiles(componentName: string, deps: ComponentDependency
       highlightLines: registerConfig.highlightLines,
     };
     const registerConst = toConstName(componentName, 'REGISTER');
-    fs.writeFileSync(
-      path.join(registerDir, `register-${componentName}.ts`),
-      generateCodeBlockExport(registerConst, block),
-    );
-    count++;
+    if (
+      writeIfChanged(
+        path.join(registerDir, `register-${componentName}.ts`),
+        generateCodeBlockExport(registerConst, block),
+      )
+    )
+      count++;
   }
 
   return count;
@@ -152,16 +154,20 @@ async function generateManualFiles(
     ]);
 
     const depsConst = toConstName(componentName, 'MANUAL_INSTALL_DEPS');
-    fs.writeFileSync(path.join(manualDir, `install-deps-${componentName}.ts`), generateTabExport(depsConst, depsTabs));
-    count++;
+    if (
+      writeIfChanged(path.join(manualDir, `install-deps-${componentName}.ts`), generateTabExport(depsConst, depsTabs))
+    )
+      count++;
   }
 
   // Manual component code (expandable)
   const codeBlocks = await buildComponentCodeBlocks(componentDir, componentName);
   if (codeBlocks.length > 0) {
     const codeConst = toConstName(componentName, 'MANUAL_CODE');
-    fs.writeFileSync(path.join(manualDir, `${componentName}.ts`), generateCodeBlockArrayExport(codeConst, codeBlocks));
-    count++;
+    if (
+      writeIfChanged(path.join(manualDir, `${componentName}.ts`), generateCodeBlockArrayExport(codeConst, codeBlocks))
+    )
+      count++;
   }
 
   return count;

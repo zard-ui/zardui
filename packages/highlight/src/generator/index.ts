@@ -19,11 +19,11 @@ async function generate(): Promise<void> {
     generateUsageFiles(),
   ]);
 
-  console.log(`✅ Generated ${demoCount} demo files`);
-  console.log(`✅ Generated ${installCount} installation files`);
-  console.log(`✅ Generated ${docsCount} documentation files`);
-  console.log(`✅ Generated ${pageCount} page data files`);
-  console.log(`✅ Generated ${usageCount} usage files`);
+  console.log(`✅ Wrote ${demoCount} demo files`);
+  console.log(`✅ Wrote ${installCount} installation files`);
+  console.log(`✅ Wrote ${docsCount} documentation files`);
+  console.log(`✅ Wrote ${pageCount} page data files`);
+  console.log(`✅ Wrote ${usageCount} usage files`);
   console.log('');
 }
 

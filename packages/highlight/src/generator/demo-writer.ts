@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 
+import { writeIfChanged } from './file-utils';
 import { highlightCode } from './highlighter';
 import type { CodeBlockData } from '../types';
 
@@ -25,6 +26,8 @@ export async function generateDemoFiles(): Promise<number> {
     const outputDir = path.join(OUTPUT_PATH, componentName, 'demo');
     fs.ensureDirSync(outputDir);
 
+    const writtenNames = new Set<string>();
+
     for (const file of demoFiles) {
       if (path.extname(file) !== '.ts') continue;
       if (isConfigFile(file, componentName)) continue;
@@ -46,8 +49,14 @@ export async function generateDemoFiles(): Promise<number> {
       const outputFile = path.join(outputDir, path.basename(file));
       const content = generateTsExport(constName, data);
 
-      fs.writeFileSync(outputFile, content);
-      count++;
+      if (writeIfChanged(outputFile, content)) count++;
+      writtenNames.add(path.basename(file));
+    }
+
+    for (const existing of fs.readdirSync(outputDir)) {
+      if (path.extname(existing) === '.ts' && !writtenNames.has(existing)) {
+        fs.unlinkSync(path.join(outputDir, existing));
+      }
     }
   }
 
@@ -81,7 +90,7 @@ export async function generateSingleDemo(filePath: string): Promise<void> {
   fs.ensureDirSync(outputDir);
 
   const outputFile = path.join(outputDir, fileName);
-  fs.writeFileSync(outputFile, generateTsExport(constName, data));
+  writeIfChanged(outputFile, generateTsExport(constName, data));
 }
 
 function isConfigFile(fileName: string, componentName: string): boolean {

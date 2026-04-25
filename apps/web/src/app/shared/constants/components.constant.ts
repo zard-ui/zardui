@@ -200,11 +200,6 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/resizable/demo/resizable').then(m => m.RESIZABLE),
   },
   {
-    componentName: 'segmented',
-    description: 'A set of two or more buttons that functions as a single control.',
-    loadData: () => import('@zard/components/segmented/demo/segmented').then(m => m.SEGMENTED),
-  },
-  {
     componentName: 'select',
     description: 'Displays a list of options for the user to pick from — triggered by a button.',
     loadData: () => import('@zard/components/select/demo/select').then(m => m.SELECT),

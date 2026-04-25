@@ -7,6 +7,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 
+import { writeIfChanged } from './file-utils';
 import { highlightCode } from './highlighter';
 import { parseCodeFenceMeta, type CodeFenceMeta } from './meta-parser';
 import type { CodeBlockData, CodeTabData, CodeTabItem } from '../types';
@@ -49,8 +50,7 @@ export async function generatePageDataFiles(): Promise<number> {
 
       const baseName = path.basename(file, '.md');
       const outputFile = path.join(outputDir, `${baseName}.ts`);
-      fs.writeFileSync(outputFile, generatePageExportFile(exports));
-      count++;
+      if (writeIfChanged(outputFile, generatePageExportFile(exports))) count++;
     }
   }
 

@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 
+import { writeIfChanged } from './file-utils';
 import { highlightCode } from './highlighter';
 import { extractCodeBlocks } from './meta-parser';
 import type { CodeBlockData, CodeTabData, CodeTabItem } from '../types';
@@ -49,7 +50,7 @@ export async function generateDocsFiles(): Promise<number> {
         }
         const data: CodeTabData = { tabs };
         const outputFile = path.join(outputDir, `${baseName}.ts`);
-        fs.writeFileSync(outputFile, generateTabExport(constName, data));
+        if (writeIfChanged(outputFile, generateTabExport(constName, data))) count++;
       } else if (blocks.length === 1) {
         const block = blocks[0];
         const html = await highlightCode(block.code, block.meta.language);
@@ -64,7 +65,7 @@ export async function generateDocsFiles(): Promise<number> {
           expandableTitle: block.meta.expandableTitle,
         };
         const outputFile = path.join(outputDir, `${baseName}.ts`);
-        fs.writeFileSync(outputFile, generateCodeBlockExport(constName, data));
+        if (writeIfChanged(outputFile, generateCodeBlockExport(constName, data))) count++;
       } else {
         // Multiple non-tabbed blocks → export as array
         const dataBlocks: CodeBlockData[] = [];
@@ -82,10 +83,8 @@ export async function generateDocsFiles(): Promise<number> {
           });
         }
         const outputFile = path.join(outputDir, `${baseName}.ts`);
-        fs.writeFileSync(outputFile, generateCodeBlockArrayExport(constName, dataBlocks));
+        if (writeIfChanged(outputFile, generateCodeBlockArrayExport(constName, dataBlocks))) count++;
       }
-
-      count++;
     }
   }
 
