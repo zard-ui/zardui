@@ -10,7 +10,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   selector: 'z-command-divider',
   template: `
     @if (shouldShow()) {
-      <div [class]="classes()" role="separator"></div>
+      <div [class]="classes()" role="separator" data-slot="command-separator"></div>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

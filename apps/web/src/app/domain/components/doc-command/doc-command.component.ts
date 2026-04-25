@@ -9,14 +9,17 @@ import { SIDEBAR_PATHS } from '@doc/shared/constants/routes.constant';
 import { ZardCommandImports } from '@zard/components/command';
 import type { ZardCommandComponent, ZardCommandOption } from '@zard/components/command/command.component';
 import { ZardDialogRef } from '@zard/components/dialog/dialog-ref';
+import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
 
 @Component({
-  imports: [ZardCommandImports],
+  imports: [ZardCommandImports, ZardEmptyComponent],
   template: `
     <z-command #commandRef class="md:min-w-125" (zCommandSelected)="handleCommand($event)">
       <z-command-input placeholder="Search documentation..."></z-command-input>
       <z-command-list>
-        <z-command-empty>No results found.</z-command-empty>
+        @if (commandRef.isEmpty()) {
+          <z-empty zTitle="No results found." class="py-6" />
+        }
 
         <z-command-option-group zLabel="Getting Started">
           @for (item of gettingStartedItems; track item.path) {

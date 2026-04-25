@@ -30,9 +30,10 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
     @if (isOptionVisible()) {
       <div
         [class]="classes()"
+        data-slot="command-item"
         [attr.role]="'option'"
         [attr.aria-selected]="isSelected()"
-        [attr.data-selected]="isSelected()"
+        [attr.data-selected]="isSelected() ? '' : null"
         [attr.data-disabled]="zDisabled()"
         [attr.tabindex]="0"
         (click)="onClick()"
@@ -40,11 +41,11 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         (mouseenter)="onMouseEnter()"
       >
         @if (zIcon()) {
-          <ng-icon [name]="zIcon()!" class="mr-2 flex size-4! shrink-0 items-center justify-center" />
+          <ng-icon [name]="zIcon()!" />
         }
         <span class="flex-1">{{ zLabel() }}</span>
         @if (zShortcut()) {
-          <span [class]="shortcutClasses()">{{ zShortcut() }}</span>
+          <span [class]="shortcutClasses()" data-slot="command-shortcut">{{ zShortcut() }}</span>
         }
       </div>
     }
@@ -70,11 +71,9 @@ export class ZardCommandOptionComponent {
 
   readonly isSelected = signal(false);
 
-  protected readonly classes = computed(() => {
-    const baseClasses = commandItemVariants({ variant: this.variant() });
-    const selectedClasses = this.isSelected() ? 'bg-accent text-accent-foreground' : '';
-    return mergeClasses(baseClasses, selectedClasses, this.class());
-  });
+  protected readonly classes = computed(() =>
+    mergeClasses(commandItemVariants({ variant: this.variant() }), this.class()),
+  );
 
   protected readonly shortcutClasses = computed(() => mergeClasses(commandShortcutVariants()));
 
@@ -123,10 +122,11 @@ export class ZardCommandOptionComponent {
   }
 
   onMouseEnter() {
-    if (this.zDisabled()) {
-      return;
-    }
-    // Visual feedback for hover
+    if (this.zDisabled()) return;
+    const parent = this.commandComponent;
+    if (!parent) return;
+    const idx = parent.filteredOptions().indexOf(this);
+    if (idx >= 0) parent.setActiveByIndex(idx);
   }
 
   setSelected(selected: boolean) {

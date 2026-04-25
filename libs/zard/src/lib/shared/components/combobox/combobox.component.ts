@@ -27,7 +27,6 @@ import { ZardButtonComponent, type ZardButtonTypeVariants } from '@/shared/compo
 import { comboboxVariants, type ZardComboboxWidthVariants } from '@/shared/components/combobox/combobox.variants';
 import {
   ZardCommandComponent,
-  ZardCommandEmptyComponent,
   ZardCommandInputComponent,
   ZardCommandListComponent,
   ZardCommandOptionComponent,
@@ -60,7 +59,6 @@ export interface ZardComboboxGroup {
     ZardCommandComponent,
     ZardCommandInputComponent,
     ZardCommandListComponent,
-    ZardCommandEmptyComponent,
     ZardCommandOptionComponent,
     ZardCommandOptionGroupComponent,
     ZardPopoverDirective,
@@ -101,10 +99,8 @@ export interface ZardComboboxGroup {
           }
 
           <z-command-list id="combobox-listbox" role="listbox">
-            @if (emptyText()) {
-              <z-command-empty>
-                <z-empty [zDescription]="emptyText()" />
-              </z-command-empty>
+            @if (emptyText() && commandRef.isEmpty()) {
+              <z-empty [zDescription]="emptyText()" />
             }
 
             @for (group of groups(); track group.label ?? $index) {

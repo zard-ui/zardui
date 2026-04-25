@@ -20,6 +20,7 @@ import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCommandImports, type ZardCommandOption } from '@zard/components/command';
 import { ZardDropdownImports } from '@zard/components/dropdown';
+import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
 import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
 import { ZardMenuImports } from '@zard/components/menu';
@@ -75,6 +76,7 @@ const SAMPLE_DATA = {
     ZardBadgeComponent,
     ZardButtonComponent,
     ...ZardCommandImports,
+    ZardEmptyComponent,
     ...ZardDropdownImports,
     ...ZardMenuImports,
     NgIcon,
@@ -132,10 +134,12 @@ const SAMPLE_DATA = {
             </button>
             <ng-template #mentionPopover>
               <z-popover class="w-64 p-0 [--radius:0.75rem]">
-                <z-command class="min-h-auto" (zCommandSelected)="onMentionSelected($event)">
+                <z-command #mentionCmd="zCommand" class="min-h-auto" (zCommandSelected)="onMentionSelected($event)">
                   <z-command-input placeholder="Search pages..." />
                   <z-command-list class="max-h-64">
-                    <z-command-empty>No results found.</z-command-empty>
+                    @if (mentionCmd.isEmpty()) {
+                      <z-empty zTitle="No results found." class="py-6" />
+                    }
                     @if (availablePages().length > 0) {
                       <z-command-option-group zLabel="Pages">
                         @for (item of availablePages(); track item.title) {

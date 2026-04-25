@@ -13,7 +13,7 @@ import type { ClassValue } from 'clsx';
 
 import { ZardCommandOptionComponent } from '@/shared/components/command/command-option.component';
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
-import { commandGroupHeadingVariants, commandGroupVariants } from '@/shared/components/command/command.variants';
+import { commandGroupVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export abstract class ZardCommandOptionGroup {
@@ -25,9 +25,9 @@ export abstract class ZardCommandOptionGroup {
   selector: 'z-command-option-group',
   template: `
     @if (isGroupVisible()) {
-      <div [class]="classes()" role="group">
+      <div [class]="classes()" role="group" data-slot="command-group">
         @if (zLabel()) {
-          <div [class]="headingClasses()" role="presentation">
+          <div data-slot="command-group-heading" role="presentation">
             {{ zLabel() }}
           </div>
         }
@@ -49,8 +49,7 @@ export class ZardCommandOptionGroupComponent implements ZardCommandOptionGroup {
   readonly zLabel = input.required<string>();
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(commandGroupVariants({}), this.class()));
-  protected readonly headingClasses = computed(() => mergeClasses(commandGroupHeadingVariants({})));
+  protected readonly classes = computed(() => mergeClasses(commandGroupVariants(), this.class()));
   private readonly optionComponents = computed(() =>
     this.optionComponentsAsChildren().length ? this.optionComponentsAsChildren() : this.registeredOptionComponents(),
   );

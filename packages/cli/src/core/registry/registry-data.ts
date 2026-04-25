@@ -697,10 +697,6 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'command-empty.component.ts',
-        content: '',
-      },
-      {
         name: 'command-option.component.ts',
         content: '',
       },

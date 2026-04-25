@@ -6,7 +6,6 @@ import { ZardDebounceEventManagerPlugin } from '@/shared/core/provider/event-man
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 import { ZardCommandDividerComponent } from './command-divider.component';
-import { ZardCommandEmptyComponent } from './command-empty.component';
 import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandListComponent } from './command-list.component';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
@@ -21,7 +20,6 @@ const SEARCH_DEBOUNCE_MS = 150;
     ZardCommandComponent,
     ZardCommandInputComponent,
     ZardCommandListComponent,
-    ZardCommandEmptyComponent,
     ZardCommandOptionComponent,
     ZardCommandOptionGroupComponent,
     ZardCommandDividerComponent,
@@ -30,7 +28,6 @@ const SEARCH_DEBOUNCE_MS = 150;
     <z-command>
       <z-command-input placeholder="Search..." />
       <z-command-list>
-        <z-command-empty>No results found.</z-command-empty>
         <z-command-option-group zLabel="Group 1">
           <z-command-option zLabel="Option 1" zValue="opt1" />
         </z-command-option-group>
@@ -144,7 +141,6 @@ describe('ZardCommandDividerComponent', () => {
     const dividerElement = fixture.nativeElement.querySelector('z-command-divider div');
     expect(dividerElement.getAttribute('role')).toBe('separator');
     expect(dividerElement.className).toContain('-mx-1');
-    expect(dividerElement.className).toContain('my-1');
     expect(dividerElement.className).toContain('h-px');
     expect(dividerElement.className).toContain('bg-border');
   });

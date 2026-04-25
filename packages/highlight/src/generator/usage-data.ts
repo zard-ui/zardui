@@ -81,12 +81,14 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   command: {
     importCode: `import { ZardCommandImports } from '@/shared/components/command/command.imports';`,
-    templateCode: `<z-command>
+    templateCode: `<z-command #cmd="zCommand">
   <z-command-input placeholder="Type a command..." />
   <z-command-list>
-    <z-command-empty>No results found.</z-command-empty>
-    <z-command-option-group label="Suggestions">
-      <z-command-option>Calendar</z-command-option>
+    @if (cmd.isEmpty()) {
+      <div class="py-6 text-center text-sm">No results found.</div>
+    }
+    <z-command-option-group zLabel="Suggestions">
+      <z-command-option zLabel="Calendar" zValue="calendar" />
     </z-command-option-group>
   </z-command-list>
 </z-command>`,

@@ -4,6 +4,7 @@ import {
   computed,
   contentChild,
   contentChildren,
+  effect,
   forwardRef,
   input,
   output,
@@ -17,7 +18,7 @@ import type { ClassValue } from 'clsx';
 
 import { ZardCommandInputComponent } from '@/shared/components/command/command-input.component';
 import { ZardCommandOptionComponent } from '@/shared/components/command/command-option.component';
-import { commandVariants, type ZardCommandSizeVariants } from '@/shared/components/command/command.variants';
+import { commandVariants } from '@/shared/components/command/command.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export interface ZardCommandOption {
@@ -73,6 +74,7 @@ export abstract class ZardCommand {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'command',
     role: 'combobox',
     'aria-haspopup': 'listbox',
     '[attr.aria-expanded]': 'true',
@@ -85,7 +87,6 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
   private readonly optionComponentsAsChildren = contentChildren(ZardCommandOptionComponent, { descendants: true });
   private readonly registeredOptionComponents = signal<ZardCommandOptionComponent[]>([]);
 
-  readonly size = input<ZardCommandSizeVariants>('default');
   readonly class = input<ClassValue>('');
 
   readonly zCommandChange = output<ZardCommandOption>();
@@ -93,7 +94,19 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
 
   // Internal signals for search functionality
   readonly searchTerm = signal('');
-  readonly selectedIndex = signal(-1);
+  readonly selectedIndex = signal(0);
+
+  /**
+   * Clamps selectedIndex to valid bounds of filteredOptions.
+   * Returns -1 if there are no options, otherwise wraps to 0 if out of range.
+   */
+  private readonly resolvedIndex = computed(() => {
+    const len = this.filteredOptions().length;
+    if (len === 0) return -1;
+    const idx = this.selectedIndex();
+    if (idx < 0 || idx >= len) return 0;
+    return idx;
+  });
 
   protected readonly optionComponents = computed(() =>
     this.optionComponentsAsChildren().length ? this.optionComponentsAsChildren() : this.registeredOptionComponents(),
@@ -110,7 +123,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
   // Signal to trigger updates when optionComponents change
   private readonly optionsUpdateTrigger = signal(0);
 
-  protected readonly classes = computed(() => mergeClasses(commandVariants({ size: this.size() }), this.class()));
+  protected readonly classes = computed(() => mergeClasses(commandVariants(), this.class()));
 
   // Computed signal for filtered options - this will automatically update when searchTerm or options change
   readonly filteredOptions = computed(() => {
@@ -132,6 +145,16 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
       const command = option.zCommand()?.toLowerCase() ?? '';
       return label.includes(lowerSearchTerm) || command.includes(lowerSearchTerm);
     });
+  });
+
+  /**
+   * True when there is a search term and no results match. Useful to render
+   * an empty state next to the command list (e.g. <z-empty />).
+   */
+  readonly isEmpty = computed(() => {
+    const searchTerm = this.searchTerm().trim();
+    if (!searchTerm) return false;
+    return this.filteredOptions().length === 0;
   });
 
   // Status message for screen readers
@@ -160,6 +183,11 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
 
   constructor() {
     this.triggerOptionsUpdate();
+
+    effect(() => {
+      const idx = this.resolvedIndex();
+      this.filteredOptions().forEach((opt, i) => opt.setSelected(i === idx));
+    });
   }
 
   /**
@@ -171,8 +199,15 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
 
   onSearch(searchTerm: string) {
     this.searchTerm.set(searchTerm);
-    this.selectedIndex.set(-1);
-    this.updateSelectedOption();
+    this.selectedIndex.set(0);
+  }
+
+  /**
+   * Sets the active item by index. Called by command-option on mouseenter
+   * and by command-list on mouseleave (with 0 to reset to first).
+   */
+  setActiveByIndex(index: number) {
+    this.selectedIndex.set(index);
   }
 
   selectOption(option: ZardCommandOptionComponent) {
@@ -193,29 +228,24 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
   // in @Component host: '(keydown)': 'onKeyDown($event)'
   onKeyDown(event: Event) {
     const filteredOptions = this.filteredOptions();
-    if (filteredOptions.length === 0) {
-      return;
-    }
+    if (filteredOptions.length === 0) return;
 
     const { key } = event as KeyboardEvent;
-
-    const currentIndex = this.selectedIndex();
+    const currentIndex = this.resolvedIndex();
 
     switch (key) {
       case 'ArrowDown': {
         const nextIndex = currentIndex < filteredOptions.length - 1 ? currentIndex + 1 : 0;
         this.selectedIndex.set(nextIndex);
-        this.updateSelectedOption();
+        filteredOptions[nextIndex]?.focus();
         break;
       }
-
       case 'ArrowUp': {
         const prevIndex = currentIndex > 0 ? currentIndex - 1 : filteredOptions.length - 1;
         this.selectedIndex.set(prevIndex);
-        this.updateSelectedOption();
+        filteredOptions[prevIndex]?.focus();
         break;
       }
-
       case 'Enter':
         if (currentIndex >= 0 && currentIndex < filteredOptions.length) {
           const selectedOption = filteredOptions[currentIndex];
@@ -224,28 +254,9 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
           }
         }
         break;
-
       case 'Escape':
-        this.selectedIndex.set(-1);
-        this.updateSelectedOption();
+        this.selectedIndex.set(0);
         break;
-    }
-  }
-
-  private updateSelectedOption() {
-    const filteredOptions = this.filteredOptions();
-    const selectedIndex = this.selectedIndex();
-
-    // Clear previous selection
-    for (const option of filteredOptions) {
-      option.setSelected(false);
-    }
-
-    // Set new selection
-    if (selectedIndex >= 0 && selectedIndex < filteredOptions.length) {
-      const selectedOption = filteredOptions[selectedIndex];
-      selectedOption.setSelected(true);
-      selectedOption.focus();
     }
   }
 

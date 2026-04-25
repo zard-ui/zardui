@@ -8,7 +8,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 @Component({
   selector: 'z-command-list',
   template: `
-    <div [class]="classes()" role="listbox" id="command-list">
+    <div [class]="classes()" role="listbox" id="command-list" data-slot="command-list">
       <ng-content />
     </div>
   `,

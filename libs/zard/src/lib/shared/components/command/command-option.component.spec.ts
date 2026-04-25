@@ -53,7 +53,7 @@ describe('ZardCommandOptionComponent', () => {
   });
 
   it('should show icon when provided', () => {
-    const iconElement = fixture.nativeElement.querySelector('.mr-2');
+    const iconElement = fixture.nativeElement.querySelector('ng-icon');
     expect(iconElement).toBeTruthy();
   });
 

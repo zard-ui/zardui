@@ -52,11 +52,6 @@ export const COMMAND_API: ApiSection[] = [
     props: [{ name: 'class', description: 'Additional CSS classes', type: 'string', default: "''" }],
   },
   {
-    selector: 'z-command-empty',
-    description: 'Displays when no search results are found. Automatically shows/hides based on search state.',
-    props: [{ name: 'class', description: 'Additional CSS classes', type: 'string', default: "''" }],
-  },
-  {
     selector: 'z-command-option',
     description:
       'Individual selectable option within the command palette with enhanced accessibility and interaction features.',

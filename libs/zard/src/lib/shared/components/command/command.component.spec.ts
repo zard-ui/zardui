@@ -9,7 +9,6 @@ import { ZardDebounceEventManagerPlugin } from '@/shared/core/provider/event-man
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 import { ZardCommandDividerComponent } from './command-divider.component';
-import { ZardCommandEmptyComponent } from './command-empty.component';
 import { ZardCommandInputComponent } from './command-input.component';
 import { ZardCommandListComponent } from './command-list.component';
 import { ZardCommandOptionGroupComponent } from './command-option-group.component';
@@ -24,17 +23,15 @@ const SEARCH_DEBOUNCE_MS = 150;
     ZardCommandComponent,
     ZardCommandInputComponent,
     ZardCommandListComponent,
-    ZardCommandEmptyComponent,
     ZardCommandOptionComponent,
     ZardCommandOptionGroupComponent,
     ZardCommandDividerComponent,
     NgIcon,
   ],
   template: `
-    <z-command size="default" (zCommandSelected)="onSelect($event)" (zCommandChange)="onChange($event)">
+    <z-command (zCommandSelected)="onSelect($event)" (zCommandChange)="onChange($event)">
       <z-command-input placeholder="Test placeholder" />
       <z-command-list>
-        <z-command-empty>No results found.</z-command-empty>
         <z-command-option-group zLabel="Test Group">
           <z-command-option zLabel="Test Option" zValue="test" zShortcut="⌘T" zIcon="lucideSearch" />
           <z-command-option zLabel="Disabled Option" zValue="disabled" [zDisabled]="true" />
