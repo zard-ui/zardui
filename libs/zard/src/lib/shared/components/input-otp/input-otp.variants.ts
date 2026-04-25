@@ -61,7 +61,8 @@ export const inputOtpSeparatorVariants = cva('flex items-center justify-center t
   },
 });
 
-export type ZardInputOtpSizeVariants = NonNullable<VariantProps<typeof inputOtpVariants>['zSize']>;
+export type ZardInputOtpSize = NonNullable<VariantProps<typeof inputOtpVariants>['zSize']>;
+export type ZardInputOtpVariants = VariantProps<typeof inputOtpVariants>;
 export type ZardInputOtpSlotVariants = VariantProps<typeof inputOtpSlotVariants>;
 export type ZardInputOtpGroupVariants = VariantProps<typeof inputOtpGroupVariants>;
 export type ZardInputOtpSeparatorVariants = VariantProps<typeof inputOtpSeparatorVariants>;

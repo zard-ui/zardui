@@ -1,15 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+import { ZardInputOtpComponent } from './input-otp.component';
 import { inputOtpSeparatorVariants } from './input-otp.variants';
 
 @Component({
   selector: 'z-input-otp-separator, [z-input-otp-separator]',
   template: `
-    <div [class]="classes()" role="separator">
+    <div [class]="classes()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -27,11 +28,16 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    'aria-hidden': 'true',
     '[attr.data-input-otp-separator]': '""',
   },
 })
 export class ZardInputOtpSeparatorComponent {
+  private readonly inputOtp = inject(ZardInputOtpComponent, { optional: true });
+
   readonly class = input<ClassValue>('');
 
-  readonly classes = computed(() => mergeClasses(inputOtpSeparatorVariants(), this.class()));
+  readonly classes = computed(() =>
+    mergeClasses(inputOtpSeparatorVariants({ zSize: this.inputOtp?.zSize() ?? 'default' }), this.class()),
+  );
 }

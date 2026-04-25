@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputOtpGroupComponent } from '../input-otp-group.component';
-import { ZardInputOtpSlotComponent } from '../input-otp-slot.component';
-import { ZardInputOtpComponent } from '../input-otp.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardInputOtpGroupComponent } from '@/shared/components/input-otp/input-otp-group.component';
+import { ZardInputOtpSlotComponent } from '@/shared/components/input-otp/input-otp-slot.component';
+import { ZardInputOtpComponent } from '@/shared/components/input-otp/input-otp.component';
 
 @Component({
   selector: 'zard-demo-input-otp-form',
