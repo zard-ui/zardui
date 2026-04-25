@@ -1,6 +1,6 @@
 # Input OTP
 
-Accessible one-time password component with copy paste functionality.
+Accessible one-time password component with copy-paste functionality.
 
 ## Features
 
@@ -10,7 +10,7 @@ Accessible one-time password component with copy paste functionality.
 - ✅ Pattern validation (digits only, alphanumeric, custom regex)
 - ✅ Auto-focus management
 - ✅ Disabled and readonly states
-- ✅ Form integration with Angular Forms (Template-driven & Reactive)
+- ✅ Form integration with Angular Forms (Template-driven, Reactive, and Signal Forms)
 - ✅ Slot grouping with customizable separators
 - ✅ Fake caret animation on active slot
 - ✅ `zComplete` event when all slots are filled
@@ -28,9 +28,11 @@ npx @ngzard/ui add input-otp
 Create the component directory structure and add the following files to your project:
 
 - `input-otp.component.ts`
+- `input-otp-signal.component.ts`
 - `input-otp-slot.component.ts`
 - `input-otp-group.component.ts`
 - `input-otp-separator.component.ts`
+- `input-otp.tokens.ts`
 - `input-otp.variants.ts`
 
 ## Usage
@@ -42,7 +44,7 @@ import {
   ZardInputOtpSlotComponent,
   ZardInputOtpGroupComponent,
   ZardInputOtpSeparatorComponent,
-} from '@zard/components/input-otp';
+} from '@ngzard/ui';
 
 @Component({
   selector: 'app-example',
@@ -143,6 +145,48 @@ form = new FormGroup({
 </z-input-otp>
 ```
 
+### Signal Forms
+
+For Angular's signal forms (`@angular/forms/signals`), use the `ZardInputOtpSignalComponent` variant. It implements `FormValueControl<string>` and binds via `[formField]`.
+
+```typescript
+import { Component, signal } from '@angular/core';
+import { form, minLength, required, FormField } from '@angular/forms/signals';
+import {
+  ZardInputOtpSignalComponent,
+  ZardInputOtpSlotComponent,
+  ZardInputOtpGroupComponent,
+} from '@ngzard/ui';
+
+@Component({
+  imports: [
+    ZardInputOtpSignalComponent,
+    ZardInputOtpSlotComponent,
+    ZardInputOtpGroupComponent,
+    FormField,
+  ],
+  template: `
+    <z-input-otp-signal [formField]="otpForm.pin">
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="0" />
+        <z-input-otp-slot [zIndex]="1" />
+        <z-input-otp-slot [zIndex]="2" />
+        <z-input-otp-slot [zIndex]="3" />
+        <z-input-otp-slot [zIndex]="4" />
+        <z-input-otp-slot [zIndex]="5" />
+      </z-input-otp-group>
+    </z-input-otp-signal>
+  `,
+})
+export class Example {
+  private model = signal({ pin: '' });
+  protected otpForm = form(this.model, otp => {
+    required(otp.pin);
+    minLength(otp.pin, 6);
+  });
+}
+```
+
 ## Event Handling
 
 ```typescript
@@ -166,10 +210,18 @@ export class ExampleComponent {
 
 ## Accessibility
 
-The component includes proper ARIA attributes and full keyboard navigation:
+Each slot input is rendered as a real `<input>` with:
 
-- **Arrow Left / Right**: Navigate between slots
-- **Backspace**: Delete current character or move to previous slot
-- **Delete**: Clear current slot
-- **Paste**: Automatically fills all slots from clipboard, filtered by pattern
-- **Tab**: Standard focus navigation
+- `aria-label="One-time password digit N of M"` for screen readers
+- `autocomplete="one-time-code"` so password managers and SMS autofill recognize the field
+- `inputmode="numeric"` (or `"text"` when `zIntegerOnly` is `false`) for the right mobile keyboard
+
+The separator carries `aria-hidden="true"` so it isn't announced, and the host exposes `data-disabled` when the form control is disabled.
+
+Keyboard support:
+
+- **Arrow Left / Right**: navigate between slots
+- **Backspace**: delete the current character or move to the previous slot
+- **Delete**: clear the current slot
+- **Tab**: standard focus navigation (no keyboard trap)
+- **Paste**: fills the remaining slots from the clipboard, filtered by `zPattern`
