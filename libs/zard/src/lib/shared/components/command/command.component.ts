@@ -97,16 +97,40 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
   readonly selectedIndex = signal(0);
 
   /**
-   * Clamps selectedIndex to valid bounds of filteredOptions.
-   * Returns -1 if there are no options, otherwise wraps to 0 if out of range.
+   * Clamps selectedIndex to valid bounds of filteredOptions and skips disabled
+   * options. Returns -1 when there are no enabled options to highlight.
    */
   private readonly resolvedIndex = computed(() => {
-    const len = this.filteredOptions().length;
+    const options = this.filteredOptions();
+    const len = options.length;
     if (len === 0) return -1;
-    const idx = this.selectedIndex();
-    if (idx < 0 || idx >= len) return 0;
-    return idx;
+
+    const raw = this.selectedIndex();
+    const target = raw < 0 || raw >= len ? 0 : raw;
+
+    if (!options[target].zDisabled()) return target;
+
+    for (let i = 1; i < len; i++) {
+      const candidate = (target + i) % len;
+      if (!options[candidate].zDisabled()) return candidate;
+    }
+    return -1;
   });
+
+  /**
+   * Finds the next enabled option index in the given direction, wrapping
+   * around. Returns -1 if there is no enabled option.
+   */
+  private findEnabledIndex(from: number, direction: 1 | -1, options: readonly ZardCommandOptionComponent[]): number {
+    const len = options.length;
+    if (len === 0) return -1;
+    let idx = from;
+    for (let i = 0; i < len; i++) {
+      idx = (idx + direction + len) % len;
+      if (!options[idx].zDisabled()) return idx;
+    }
+    return -1;
+  }
 
   protected readonly optionComponents = computed(() =>
     this.optionComponentsAsChildren().length ? this.optionComponentsAsChildren() : this.registeredOptionComponents(),
@@ -235,15 +259,19 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
 
     switch (key) {
       case 'ArrowDown': {
-        const nextIndex = currentIndex < filteredOptions.length - 1 ? currentIndex + 1 : 0;
-        this.selectedIndex.set(nextIndex);
-        filteredOptions[nextIndex]?.focus();
+        const nextIndex = this.findEnabledIndex(currentIndex, 1, filteredOptions);
+        if (nextIndex >= 0) {
+          this.selectedIndex.set(nextIndex);
+          filteredOptions[nextIndex].focus();
+        }
         break;
       }
       case 'ArrowUp': {
-        const prevIndex = currentIndex > 0 ? currentIndex - 1 : filteredOptions.length - 1;
-        this.selectedIndex.set(prevIndex);
-        filteredOptions[prevIndex]?.focus();
+        const prevIndex = this.findEnabledIndex(currentIndex, -1, filteredOptions);
+        if (prevIndex >= 0) {
+          this.selectedIndex.set(prevIndex);
+          filteredOptions[prevIndex].focus();
+        }
         break;
       }
       case 'Enter':
