@@ -200,7 +200,11 @@
 
 @utility theme-container {
   @apply font-sans;
-  transition: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease;
+
+  transition:
+    color 0.3s ease,
+    background-color 0.3s ease,
+    border-color 0.3s ease;
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;
@@ -371,7 +375,6 @@ table.api-table--service tbody td:first-child code {
 table.api-table--pipe tbody td:first-child code {
   @apply border-purple-500/20! bg-purple-500/10! text-purple-600! dark:text-purple-400!;
 }
-
 
 .embla {
   overflow: hidden;
