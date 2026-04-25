@@ -1,6 +1,9 @@
 <section class="mb-10">
   @if (componentType()) {
-    <h3 class="font-heading my-4 scroll-m-28 text-lg font-medium tracking-tight first-letter:uppercase">
+    <h3
+      class="font-heading mt-4 scroll-m-28 text-lg font-medium tracking-tight first-letter:uppercase"
+      [class.mb-4]="!demoDescription()"
+    >
       {{ componentType()! | hyphenToSpace }}
     </h3>
   }
@@ -48,7 +51,7 @@
 
           @if (codeCollapsed()) {
             <div
-              class="from-code via-code/70 absolute inset-0 flex items-center justify-center bg-gradient-to-t to-transparent"
+              class="from-code via-code/70 absolute inset-0 flex items-center justify-center bg-linear-to-t to-transparent"
             >
               <button
                 type="button"

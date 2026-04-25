@@ -1,6 +1,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 
+import { writeIfChanged } from './file-utils';
 import { highlightCode } from './highlighter';
 import { USAGE_DATA } from './usage-data';
 import type { CodeBlockData } from '../types';
@@ -40,8 +41,7 @@ export const ${constPrefix}_USAGE_IMPORT: CodeBlockData = ${JSON.stringify(impor
 
 export const ${constPrefix}_USAGE_CODE: CodeBlockData = ${JSON.stringify(codeBlock, null, 2)};
 `;
-    fs.writeFileSync(path.join(OUTPUT_PATH, `${componentName}.ts`), content);
-    count++;
+    if (writeIfChanged(path.join(OUTPUT_PATH, `${componentName}.ts`), content)) count++;
   }
 
   return count;

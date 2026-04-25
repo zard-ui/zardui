@@ -103,7 +103,6 @@ export const COMPONENTS_PATH = {
     { name: 'Resizable', path: '/docs/components/resizable', available: true },
     { name: 'Sheet', path: '/docs/components/sheet', available: true },
     { name: 'Radio', path: '/docs/components/radio', available: true },
-    { name: 'Segmented', path: '/docs/components/segmented', available: true },
     { name: 'Loader', path: '/docs/components/loader', available: true },
     { name: 'Dropdown', path: '/docs/components/dropdown', available: true },
     { name: 'Popover', path: '/docs/components/popover', available: true },
