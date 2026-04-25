@@ -107,7 +107,7 @@ describe('ZardInputOtpComponent', () => {
     const event = new ClipboardEvent('paste', {
       clipboardData: new DataTransfer(),
     });
-    event.clipboardData!.setData('text/plain', '1234567890');
+    event.clipboardData?.setData('text/plain', '1234567890');
     inputs[0].dispatchEvent(event);
     fixture.detectChanges();
 
@@ -120,7 +120,7 @@ describe('ZardInputOtpComponent', () => {
     inputs[0].focus();
 
     const event = new ClipboardEvent('paste', { clipboardData: new DataTransfer() });
-    event.clipboardData!.setData('text/plain', '1a2b3c');
+    event.clipboardData?.setData('text/plain', '1a2b3c');
     inputs[0].dispatchEvent(event);
     fixture.detectChanges();
 

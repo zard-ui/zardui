@@ -1,7 +1,7 @@
-import { InjectionToken } from '@angular/core';
+import { InjectionToken, type Signal } from '@angular/core';
 
 export interface ZardInputOtpSlotApi {
-  readonly zIndex: () => number;
+  readonly zIndex: Signal<number>;
   focus(): void;
   updateState(char: string, isActive: boolean, hasFakeCaret: boolean): void;
 }
