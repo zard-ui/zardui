@@ -89,7 +89,7 @@
 </div>
 
 <div class="bg-background/50 border-t p-4 backdrop-blur-sm">
-  <button z-button zFull (click)="copyToClipboard()" class="h-10 gap-2 font-medium">
+  <button z-button (click)="copyToClipboard()" class="h-10 w-full gap-2 font-medium">
     @if (copySuccess()) {
       <ng-icon name="lucideCheck" class="size-4!" />
       Copied to clipboard!

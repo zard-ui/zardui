@@ -69,26 +69,6 @@ describe('ZardButtonComponent', () => {
     });
   });
 
-  describe('full width', () => {
-    it('applies w-full class when zFull is true', async () => {
-      await render('<button z-button [zFull]="true">Button</button>', {
-        imports: [ZardButtonComponent],
-      });
-
-      const button = screen.getByRole('button');
-      expect(button).toHaveClass('w-full');
-    });
-
-    it('does not apply w-full class when zFull is false', async () => {
-      await render('<button z-button [zFull]="false">Button</button>', {
-        imports: [ZardButtonComponent],
-      });
-
-      const button = screen.getByRole('button');
-      expect(button).not.toHaveClass('w-full');
-    });
-  });
-
   describe('size variants', () => {
     it('applies default size classes', async () => {
       await render('<button z-button>Button</button>', {

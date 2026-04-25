@@ -86,7 +86,7 @@ export class Authentication01Component {
             <label for="remember" class="text-sm cursor-pointer select-none">Remember me for 30 days</label>
           </div>
 
-          <button type="submit" z-button zFull [zLoading]="isLoading()" [disabled]="isLoading()">Sign in</button>
+          <button type="submit" z-button class="w-full" [zLoading]="isLoading()" [disabled]="isLoading()">Sign in</button>
         </form>
       </z-card>
 

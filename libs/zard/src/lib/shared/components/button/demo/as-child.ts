@@ -3,11 +3,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardButtonComponent } from '../button.component';
 
 @Component({
-  selector: 'z-demo-button-link',
+  selector: 'z-demo-button-as-child',
   imports: [ZardButtonComponent],
   template: `
-    <button z-button zType="link">Link</button>
+    <a z-button href="/login">Login</a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoButtonLinkComponent {}
+export class ZardDemoButtonAsChildComponent {}

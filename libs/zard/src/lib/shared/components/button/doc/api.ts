@@ -6,7 +6,6 @@ export const BUTTON_API: ApiSection[] = [
     description: 'Displays a button or a component that looks like a button.',
     props: [
       { name: 'zDisabled', description: 'Button disabled state', type: 'boolean', default: 'false' },
-      { name: 'zFull', description: 'Button width 100%', type: 'boolean', default: 'false' },
       { name: 'zLoading', description: 'Button loading state', type: 'boolean', default: 'false' },
       { name: 'zShape', description: 'Button shape', type: "'default' | 'circle' | 'square'", default: "'default'" },
       {
