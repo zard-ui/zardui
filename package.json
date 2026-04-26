@@ -52,7 +52,7 @@
     "@ng-icons/core": "^33.2.0",
     "@ng-icons/lucide": "^33.2.0",
     "@shikijs/rehype": "^4.0.2",
-    "@tailwindcss/postcss": "^4.2.2",
+    "@tailwindcss/postcss": "^4.2.4",
     "@vercel/analytics": "^2.0.1",
     "@vercel/og": "^0.11.1",
     "@vercel/speed-insights": "^2.0.0",
