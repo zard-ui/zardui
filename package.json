@@ -50,7 +50,7 @@
     "@fontsource-variable/geist": "^5.2.8",
     "@fontsource-variable/geist-mono": "^5.2.7",
     "@ng-icons/core": "^33.2.0",
-    "@ng-icons/lucide": "^33.2.0",
+    "@ng-icons/lucide": "^33.2.2",
     "@shikijs/rehype": "^4.0.2",
     "@tailwindcss/postcss": "^4.2.2",
     "@vercel/analytics": "^2.0.1",
