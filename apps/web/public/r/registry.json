@@ -443,14 +443,15 @@
       ]
     },
     {
-      "name": "toast",
+      "name": "sonner",
       "type": "registry:component",
       "dependencies": [
         "ngx-sonner"
       ],
       "files": [
-        "toast.component.ts",
-        "toast.variants.ts",
+        "sonner.component.ts",
+        "sonner.service.ts",
+        "sonner.variants.ts",
         "index.ts"
       ]
     },

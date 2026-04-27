@@ -235,9 +235,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/tabs/demo/tabs').then(m => m.TABS),
   },
   {
-    componentName: 'toast',
-    description: 'A succinct message that is displayed temporarily.',
-    loadData: () => import('@zard/components/toast/demo/toast').then(m => m.TOAST),
+    componentName: 'sonner',
+    description: 'An opinionated toast component for Angular.',
+    loadData: () => import('@zard/components/sonner/demo/sonner').then(m => m.SONNER),
   },
   {
     componentName: 'toggle',

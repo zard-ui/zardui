@@ -1,6 +1,6 @@
 import type { CodeTabData } from '@highlight/types';
 
-export const TOAST_MANUAL_INSTALL_DEPS: CodeTabData = {
+export const SONNER_CLI_INSTALL_DEPS: CodeTabData = {
   "tabs": [
     {
       "label": "npm",

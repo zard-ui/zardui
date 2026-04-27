@@ -49,7 +49,7 @@
 /docs/components/switch
 /docs/components/table
 /docs/components/tabs
-/docs/components/toast
+/docs/components/sonner
 /docs/components/toggle
 /docs/components/toggle-group
 /docs/components/tooltip

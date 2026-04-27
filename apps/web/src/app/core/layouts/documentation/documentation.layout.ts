@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { SidebarComponent } from '@doc/domain/components/sidebar/sidebar.component';
 import { environment } from '@doc/env/environment';
 
-import { ZardToastComponent } from '@zard/components/toast/toast.component';
+import { ZardSonnerComponent } from '@zard/components/sonner/sonner.component';
 import { DarkModeOptions, ZardDarkMode } from '@zard/services/dark-mode';
 
 @Component({
@@ -20,10 +20,10 @@ import { DarkModeOptions, ZardDarkMode } from '@zard/services/dark-mode';
         </section>
       </div>
     </main>
-    <z-toaster [theme]="currentTheme()" />
+    <z-sonner [theme]="currentTheme()" />
   `,
   standalone: true,
-  imports: [RouterModule, SidebarComponent, ZardToastComponent],
+  imports: [RouterModule, SidebarComponent, ZardSonnerComponent],
 })
 export class DocumentationLayout {
   private readonly darkModeService = inject(ZardDarkMode);
