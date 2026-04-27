@@ -139,6 +139,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/input-group/demo/input-group').then(m => m.INPUT_GROUP),
   },
   {
+    componentName: 'input-otp',
+    description: 'Displays a form input field for one-time password (OTP) or verification code.',
+    loadData: () => import('@zard/components/input-otp/demo/input-otp').then(m => m.INPUT_OTP),
+  },
+  {
     componentName: 'kbd',
     description: 'Displays a keyboard key or shortcut.',
     loadData: () => import('@zard/components/kbd/demo/kbd').then(m => m.KBD),

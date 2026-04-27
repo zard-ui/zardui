@@ -3,14 +3,15 @@
 ```angular-ts title="input-otp.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   type AfterContentInit,
+  afterNextRender,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   computed,
   contentChildren,
   type ElementRef,
   forwardRef,
   inject,
+  Injector,
   input,
   output,
   signal,
@@ -22,8 +23,8 @@ import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { ZardInputOtpSlotComponent } from './input-otp-slot.component';
-import { inputOtpVariants } from './input-otp.variants';
+import { ZARD_INPUT_OTP_SLOT, type ZardInputOtpSlotApi } from './input-otp.tokens';
+import { inputOtpSlotVariants, inputOtpVariants, type ZardInputOtpSize } from './input-otp.variants';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -33,14 +34,15 @@ type OnChangeType = (value: string) => void;
   template: `
     <div [class]="classes()" [attr.data-input-otp-container]="''">
       @if (!hasSlots()) {
-        @for (i of getRange(); track i) {
+        @for (i of range(); track i) {
           <input
             #otpInput
             type="text"
-            [value]="tokens[i - 1] || ''"
+            [value]="tokens()[i - 1] || ''"
             [attr.maxlength]="1"
             [attr.inputmode]="inputMode()"
             [attr.autocomplete]="'one-time-code'"
+            [attr.aria-label]="ariaLabel(i)"
             [disabled]="disabled()"
             [readonly]="zReadonly()"
             [class]="slotClasses(i - 1)"
@@ -75,20 +77,22 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   readonly zClass = input<ClassValue>('');
   readonly zReadonly = input<boolean>(false);
   readonly zIntegerOnly = input<boolean>(true);
+  readonly zSize = input<ZardInputOtpSize>('default');
 
   zValueChange = output<string>();
   zComplete = output<string>();
 
-  readonly slots = contentChildren(ZardInputOtpSlotComponent, { descendants: true });
+  readonly slots = contentChildren<ZardInputOtpSlotApi>(ZARD_INPUT_OTP_SLOT, { descendants: true });
 
-  tokens: string[] = [];
+  readonly tokens = signal<string[]>([]);
   readonly disabled = signal<boolean>(false);
   readonly focusedIndex = signal<number>(-1);
-  readonly classes = computed(() => mergeClasses(inputOtpVariants(), this.zClass()));
+  readonly classes = computed(() => mergeClasses(inputOtpVariants({ zSize: this.zSize() }), this.zClass()));
   readonly inputMode = computed(() => (this.zIntegerOnly() ? 'numeric' : 'text'));
 
   readonly hasSlots = signal(false);
   readonly effectiveMaxLength = computed(() => this.zMaxLength() ?? (this.hasSlots() ? this.slots().length : 6));
+  readonly range = computed(() => Array.from({ length: this.effectiveMaxLength() }, (_, index) => index + 1));
 
   private onTouched: OnTouchedType = () => {
     /* empty */
@@ -98,48 +102,40 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     /* empty */
   };
 
-  private cd = inject(ChangeDetectorRef);
+  private readonly injector = inject(Injector);
 
   ngAfterContentInit(): void {
     if (this.slots().length > 0) {
       this.hasSlots.set(true);
     }
-    this.cd.markForCheck();
+    this.syncSlots();
+  }
+
+  ariaLabel(position: number): string {
+    return `One-time password digit ${position} of ${this.effectiveMaxLength()}`;
   }
 
   slotClasses(index: number): string {
-    const baseClasses = [
-      'relative flex h-9 w-9 items-center justify-center',
-      'border-y border-r border-input text-sm transition-all text-center',
-      'bg-background',
-      'focus:z-10 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
-      'disabled:cursor-not-allowed disabled:opacity-50',
-      'placeholder:text-muted-foreground',
-    ];
+    const extras: string[] = [];
 
     if (index === 0) {
-      baseClasses.push('rounded-l-md border-l');
+      extras.push('rounded-l-md border-l');
     }
 
     if (index === this.effectiveMaxLength() - 1) {
-      baseClasses.push('rounded-r-md');
+      extras.push('rounded-r-md');
     }
 
-    return mergeClasses(baseClasses);
-  }
-
-  getRange(): number[] {
-    return Array.from({ length: this.effectiveMaxLength() }, (_, index) => index + 1);
+    return mergeClasses(inputOtpSlotVariants({ zSize: this.zSize() }), extras);
   }
 
   writeValue(value: string): void {
     if (value) {
-      const tokens: string[] = Array.isArray(value) ? value : String(value).split('');
-      this.tokens = tokens.slice(0, this.effectiveMaxLength());
+      this.tokens.set(value.split('').slice(0, this.effectiveMaxLength()));
     } else {
-      this.tokens = [];
+      this.tokens.set([]);
     }
-    this.cd.markForCheck();
+    this.syncSlots();
   }
 
   registerOnChange(fn: OnChangeType): void {
@@ -152,11 +148,13 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 
   setDisabledState(isDisabled: boolean): void {
     this.disabled.set(isDisabled);
-    this.cd.markForCheck();
   }
 
   onInput(event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
+    if (!isInputElement(event.target)) {
+      return;
+    }
+    const input = event.target;
     const { value } = input;
 
     if (index === 0 && value.length > 1) {
@@ -168,14 +166,18 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     const regex = new RegExp(this.zPattern());
 
     if (value && !regex.test(value)) {
-      input.value = this.tokens[index] || '';
+      input.value = this.tokens()[index] || '';
       return;
     }
 
-    this.tokens[index] = value;
+    this.tokens.update(prev => {
+      const next = prev.slice();
+      next[index] = value;
+      return next;
+    });
     this.updateModel();
 
-    const { inputType } = event as InputEvent;
+    const inputType = isInputEvent(event) ? event.inputType : '';
     if (inputType === 'deleteContentBackward') {
       this.moveToPrev(event);
     } else if (inputType === 'insertText' || inputType === 'deleteContentForward') {
@@ -184,26 +186,33 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   }
 
   updateModel(): void {
-    const newValue = this.tokens.join('');
-    this.onChange(newValue);
+    const newValue = this.tokens().join('');
+    this.emitValue(newValue);
     this.zValueChange.emit(newValue);
 
-    if (newValue.length === this.zMaxLength()) {
+    if (newValue.length === this.effectiveMaxLength()) {
       this.zComplete.emit(newValue);
     }
 
-    this.cd.markForCheck();
+    this.syncSlots();
+  }
+
+  protected emitValue(newValue: string): void {
+    this.onChange(newValue);
   }
 
   onInputFocus(event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
-    input.select();
+    if (isInputElement(event.target)) {
+      event.target.select();
+    }
     this.focusedIndex.set(index);
+    this.syncSlots();
   }
 
   onInputBlur(): void {
     this.focusedIndex.set(-1);
     this.onTouched();
+    this.syncSlots();
   }
 
   onPaste(event: ClipboardEvent): void {
@@ -227,16 +236,20 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       .filter(char => regex.test(char))
       .join('');
 
-    this.tokens = pastedCode.split('');
+    this.tokens.set(pastedCode.split(''));
     this.updateModel();
 
-    const nextIndex = Math.min(this.tokens.length, this.effectiveMaxLength() - 1);
-    const inputsArray = this.inputs();
-    if (inputsArray[nextIndex]) {
-      setTimeout(() => {
-        inputsArray[nextIndex].nativeElement.focus();
-      }, 0);
-    }
+    const nextIndex = Math.min(this.tokens().length, this.effectiveMaxLength() - 1);
+    afterNextRender(
+      () => {
+        if (this.hasSlots()) {
+          this.slots()[nextIndex]?.focus();
+        } else {
+          this.inputs()[nextIndex]?.nativeElement.focus();
+        }
+      },
+      { injector: this.injector },
+    );
   }
 
   onKeyDown(event: KeyboardEvent): void {
@@ -244,7 +257,10 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       return;
     }
 
-    const input = event.target as HTMLInputElement;
+    if (!isInputElement(event.target)) {
+      return;
+    }
+    const input = event.target;
 
     switch (event.key) {
       case 'ArrowLeft':
@@ -264,18 +280,25 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
         }
         break;
 
+      case 'Delete':
+        break;
+
       case 'ArrowRight':
         this.moveToNext(event);
         event.preventDefault();
         break;
 
       default: {
+        if (event.key.length > 1) {
+          return;
+        }
+
         const hasSelection = input.selectionStart !== input.selectionEnd;
-        const isAtMaxLength = this.tokens.join('').length >= this.effectiveMaxLength();
+        const isAtMaxLength = this.tokens().join('').length >= this.effectiveMaxLength();
         const regex = new RegExp(this.zPattern());
         const isValidKey = regex.test(event.key);
 
-        if (!isValidKey || (isAtMaxLength && event.key !== 'Delete' && !hasSelection)) {
+        if (!isValidKey || (isAtMaxLength && !hasSelection)) {
           event.preventDefault();
         }
         break;
@@ -284,8 +307,10 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   }
 
   moveToNext(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const nextInput = this.findNextInput(input);
+    if (!isInputElement(event.target)) {
+      return;
+    }
+    const nextInput = this.findNextInput(event.target);
     if (nextInput) {
       nextInput.focus();
       nextInput.select();
@@ -293,8 +318,10 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   }
 
   moveToPrev(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const prevInput = this.findPrevInput(input);
+    if (!isInputElement(event.target)) {
+      return;
+    }
+    const prevInput = this.findPrevInput(event.target);
     if (prevInput) {
       prevInput.focus();
       prevInput.select();
@@ -302,6 +329,10 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   }
 
   findNextInput(element: HTMLElement): HTMLInputElement | null {
+    if (element.hasAttribute('data-input-otp-container')) {
+      return null;
+    }
+
     const nextElement = element.nextElementSibling;
     if (!nextElement) {
       const parent = element.parentElement;
@@ -311,8 +342,8 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       return this.findNextInput(parent);
     }
 
-    if (nextElement.nodeName === 'INPUT') {
-      return nextElement as HTMLInputElement;
+    if (nextElement instanceof HTMLInputElement) {
+      return nextElement;
     }
 
     const inputInside = nextElement.querySelector('input');
@@ -324,6 +355,10 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   }
 
   findPrevInput(element: HTMLElement): HTMLInputElement | null {
+    if (element.hasAttribute('data-input-otp-container')) {
+      return null;
+    }
+
     const prevElement = element.previousElementSibling;
     if (!prevElement) {
       const parent = element.parentElement;
@@ -333,17 +368,39 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       return this.findPrevInput(parent);
     }
 
-    if (prevElement.nodeName === 'INPUT') {
-      return prevElement as HTMLInputElement;
+    if (prevElement instanceof HTMLInputElement) {
+      return prevElement;
     }
 
     const inputs = prevElement.querySelectorAll('input');
     if (inputs.length) {
-      return inputs[inputs.length - 1] as HTMLInputElement;
+      return inputs[inputs.length - 1];
     }
 
     return this.findPrevInput(prevElement as HTMLElement);
   }
+
+  protected syncSlots(): void {
+    if (!this.hasSlots()) {
+      return;
+    }
+    const slotsArray = this.slots();
+    const focused = this.focusedIndex();
+    const tokens = this.tokens();
+    for (let i = 0; i < slotsArray.length; i++) {
+      const char = tokens[i] || '';
+      const isActive = i === focused;
+      slotsArray[i].updateState(char, isActive, isActive && !char);
+    }
+  }
+}
+
+function isInputElement(target: EventTarget | null): target is HTMLInputElement {
+  return target instanceof HTMLInputElement;
+}
+
+function isInputEvent(event: Event): event is InputEvent {
+  return event instanceof InputEvent;
 }
 
 ```
@@ -414,7 +471,8 @@ export const inputOtpSeparatorVariants = cva('flex items-center justify-center t
   },
 });
 
-export type ZardInputOtpSizeVariants = NonNullable<VariantProps<typeof inputOtpVariants>['zSize']>;
+export type ZardInputOtpSize = NonNullable<VariantProps<typeof inputOtpVariants>['zSize']>;
+export type ZardInputOtpVariants = VariantProps<typeof inputOtpVariants>;
 export type ZardInputOtpSlotVariants = VariantProps<typeof inputOtpSlotVariants>;
 export type ZardInputOtpGroupVariants = VariantProps<typeof inputOtpGroupVariants>;
 export type ZardInputOtpSeparatorVariants = VariantProps<typeof inputOtpSeparatorVariants>;
@@ -426,8 +484,10 @@ export type ZardInputOtpSeparatorVariants = VariantProps<typeof inputOtpSeparato
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export * from './input-otp-group.component';
 export * from './input-otp-separator.component';
+export * from './input-otp-signal.component';
 export * from './input-otp-slot.component';
 export * from './input-otp.component';
+export * from './input-otp.tokens';
 export * from './input-otp.variants';
 
 ```
@@ -466,18 +526,19 @@ export class ZardInputOtpGroupComponent {
 
 
 ```angular-ts title="input-otp-separator.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
+import { ZardInputOtpComponent } from './input-otp.component';
 import { inputOtpSeparatorVariants } from './input-otp.variants';
 
 @Component({
   selector: 'z-input-otp-separator, [z-input-otp-separator]',
   template: `
-    <div [class]="classes()" role="separator">
+    <div [class]="classes()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="16"
@@ -495,13 +556,87 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    'aria-hidden': 'true',
     '[attr.data-input-otp-separator]': '""',
   },
 })
 export class ZardInputOtpSeparatorComponent {
+  private readonly inputOtp = inject(ZardInputOtpComponent, { optional: true });
+
   readonly class = input<ClassValue>('');
 
-  readonly classes = computed(() => mergeClasses(inputOtpSeparatorVariants(), this.class()));
+  readonly classes = computed(() =>
+    mergeClasses(inputOtpSeparatorVariants({ zSize: this.inputOtp?.zSize() ?? 'default' }), this.class()),
+  );
+}
+
+```
+
+
+
+```angular-ts title="input-otp-signal.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { ChangeDetectionStrategy, Component, effect, forwardRef, model } from '@angular/core';
+import type { FormValueControl } from '@angular/forms/signals';
+
+import { ZardInputOtpComponent } from './input-otp.component';
+
+@Component({
+  selector: 'z-input-otp-signal, [z-input-otp-signal]',
+  template: `
+    <div [class]="classes()" [attr.data-input-otp-container]="''">
+      @if (!hasSlots()) {
+        @for (i of range(); track i) {
+          <input
+            #otpInput
+            type="text"
+            [value]="tokens()[i - 1] || ''"
+            [attr.maxlength]="1"
+            [attr.inputmode]="inputMode()"
+            [attr.autocomplete]="'one-time-code'"
+            [attr.aria-label]="ariaLabel(i)"
+            [disabled]="disabled()"
+            [readonly]="zReadonly()"
+            [class]="slotClasses(i - 1)"
+            (input)="onInput($event, i - 1)"
+            (focus)="onInputFocus($event, i - 1)"
+            (blur)="onInputBlur()"
+            (paste)="onPaste($event)"
+            (keydown)="onKeyDown($event)"
+          />
+        }
+      }
+      <ng-content />
+    </div>
+  `,
+  providers: [
+    {
+      provide: ZardInputOtpComponent,
+      useExisting: forwardRef(() => ZardInputOtpSignalComponent),
+    },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '[attr.data-disabled]': 'disabled() ? "" : null',
+  },
+})
+export class ZardInputOtpSignalComponent extends ZardInputOtpComponent implements FormValueControl<string> {
+  readonly value = model<string>('');
+  override readonly disabled = model<boolean>(false);
+
+  constructor() {
+    super();
+
+    effect(() => {
+      const next = this.value() ?? '';
+      if (this.tokens().join('') !== next) {
+        super.writeValue(next);
+      }
+    });
+  }
+
+  protected override emitValue(newValue: string): void {
+    this.value.set(newValue);
+  }
 }
 
 ```
@@ -514,6 +649,7 @@ import {
   Component,
   computed,
   type ElementRef,
+  forwardRef,
   inject,
   input,
   signal,
@@ -525,6 +661,7 @@ import type { ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardInputOtpComponent } from './input-otp.component';
+import { ZARD_INPUT_OTP_SLOT } from './input-otp.tokens';
 import { inputOtpSlotVariants } from './input-otp.variants';
 
 @Component({
@@ -537,6 +674,7 @@ import { inputOtpSlotVariants } from './input-otp.variants';
       [attr.maxlength]="1"
       [attr.inputmode]="inputOtp?.inputMode() || 'numeric'"
       [attr.autocomplete]="'one-time-code'"
+      [attr.aria-label]="ariaLabel()"
       [disabled]="inputOtp?.disabled()"
       [readonly]="inputOtp?.zReadonly()"
       [class]="classes()"
@@ -570,6 +708,12 @@ import { inputOtpSlotVariants } from './input-otp.variants';
       animation: caret-blink 1s ease-out infinite;
     }
   `,
+  providers: [
+    {
+      provide: ZARD_INPUT_OTP_SLOT,
+      useExisting: forwardRef(() => ZardInputOtpSlotComponent),
+    },
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     '[attr.data-slot]': '""',
@@ -588,7 +732,14 @@ export class ZardInputOtpSlotComponent {
   readonly isActive = signal<boolean>(false);
   readonly hasFakeCaret = signal<boolean>(false);
 
-  readonly classes = computed(() => mergeClasses(inputOtpSlotVariants(), this.class()));
+  readonly classes = computed(() =>
+    mergeClasses(inputOtpSlotVariants({ zSize: this.inputOtp?.zSize() ?? 'default' }), this.class()),
+  );
+
+  readonly ariaLabel = computed(() => {
+    const total = this.inputOtp?.effectiveMaxLength() ?? this.zIndex() + 1;
+    return `One-time password digit ${this.zIndex() + 1} of ${total}`;
+  });
 
   getInputElement(): HTMLInputElement {
     return this.slotInputRef().nativeElement;
@@ -606,8 +757,10 @@ export class ZardInputOtpSlotComponent {
   }
 
   onInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const { value } = input;
+    if (!isInputElement(event.target)) {
+      return;
+    }
+    const { value } = event.target;
 
     if (this.zIndex() === 0 && value.length > 1) {
       this.inputOtp?.handlePaste(value);
@@ -619,8 +772,9 @@ export class ZardInputOtpSlotComponent {
   }
 
   onFocus(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    input.select();
+    if (isInputElement(event.target)) {
+      event.target.select();
+    }
     this.inputOtp?.onInputFocus(event, this.zIndex());
   }
 
@@ -629,6 +783,7 @@ export class ZardInputOtpSlotComponent {
   }
 
   onPaste(event: ClipboardEvent): void {
+    event.preventDefault();
     if (this.inputOtp?.disabled() || this.inputOtp?.zReadonly()) {
       return;
     }
@@ -637,8 +792,6 @@ export class ZardInputOtpSlotComponent {
     if (paste?.length) {
       this.inputOtp?.onPaste(event);
     }
-
-    event.preventDefault();
   }
 
   onKeyDown(event: KeyboardEvent): void {
@@ -656,6 +809,25 @@ export class ZardInputOtpSlotComponent {
     }
   }
 }
+
+function isInputElement(target: EventTarget | null): target is HTMLInputElement {
+  return target instanceof HTMLInputElement;
+}
+
+```
+
+
+
+```angular-ts title="input-otp.tokens.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+import { InjectionToken, type Signal } from '@angular/core';
+
+export interface ZardInputOtpSlotApi {
+  readonly zIndex: Signal<number>;
+  focus(): void;
+  updateState(char: string, isActive: boolean, hasFakeCaret: boolean): void;
+}
+
+export const ZARD_INPUT_OTP_SLOT = new InjectionToken<ZardInputOtpSlotApi>('ZardInputOtpSlot');
 
 ```
 
