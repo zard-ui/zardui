@@ -4,22 +4,23 @@ import { ZardAlertDialogService } from '@/shared/components/alert-dialog/alert-d
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 
 @Component({
-  selector: 'zard-demo-alert-dialog-default',
+  selector: 'zard-demo-alert-dialog-small',
   imports: [ZardButtonComponent],
   template: `
     <button z-button zType="outline" (click)="open()">Show Dialog</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoAlertDialogDefaultComponent {
+export class ZardDemoAlertDialogSmallComponent {
   private readonly alertDialogService = inject(ZardAlertDialogService);
 
   open() {
     this.alertDialogService.create({
-      zTitle: 'Are you absolutely sure?',
-      zDescription: 'This action cannot be undone. This will permanently delete your account from our servers.',
-      zOkText: 'Continue',
-      zCancelText: 'Cancel',
+      zSize: 'sm',
+      zTitle: 'Allow accessory to connect?',
+      zDescription: 'Do you want to allow the USB accessory to connect to this device?',
+      zOkText: 'Allow',
+      zCancelText: "Don't allow",
     });
   }
 }
