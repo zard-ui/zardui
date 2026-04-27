@@ -9,8 +9,8 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
   template: `
     <div class="w-full min-w-md">
       <div z-field>
-        <label z-field-label>Department</label>
-        <z-select zPlaceholder="Choose department">
+        <label z-field-label for="department">Department</label>
+        <z-select zPlaceholder="Choose department" id="department">
           <z-select-item zValue="engineering">Engineering</z-select-item>
           <z-select-item zValue="design">Design</z-select-item>
           <z-select-item zValue="marketing">Marketing</z-select-item>

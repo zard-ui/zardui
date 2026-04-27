@@ -99,6 +99,16 @@
       ]
     },
     {
+      "name": "field",
+      "type": "registry:component",
+      "files": [
+        "field.component.ts",
+        "field.variants.ts",
+        "field.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "badge",
       "type": "registry:component",
       "files": [

@@ -44,7 +44,14 @@ export const FIELD_API: ApiSection[] = [
   {
     selector: 'z-field-label',
     description: 'Label for a form control. Use on <label> for proper semantics, or as <z-field-label>.',
-    props: [],
+    props: [
+      {
+        name: '[for]',
+        description: "Associates the label with a form control by referencing the control's id.",
+        type: 'string',
+        default: '',
+      },
+    ],
   },
   {
     selector: 'z-field-title',

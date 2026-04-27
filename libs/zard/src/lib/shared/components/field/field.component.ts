@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
   type TemplateRef,
   ViewEncapsulation,
@@ -121,13 +123,29 @@ export class ZardFieldContentComponent {
   encapsulation: ViewEncapsulation.None,
   host: {
     'data-slot': 'field-label',
+    '[attr.for]': 'for()',
     '[class]': 'classes()',
+    '(click)': 'onLabelClick()',
   },
   exportAs: 'zFieldLabel',
 })
 export class ZardFieldLabelComponent {
+  private readonly elementRef = inject(ElementRef);
+
   readonly class = input<ClassValue>('');
+  readonly for = input('');
   protected readonly classes = computed(() => mergeClasses(fieldLabelVariants(), this.class()));
+
+  protected onLabelClick(): void {
+    if (!this.for()) {
+      return;
+    }
+
+    const target = this.elementRef.nativeElement.getRootNode()?.querySelector(`#${CSS.escape(this.for())}`);
+    if (target && target !== this.elementRef.nativeElement) {
+      target.focus();
+    }
+  }
 }
 
 @Component({
@@ -229,10 +247,15 @@ export class ZardFieldErrorComponent {
 
   protected readonly uniqueErrors = computed(() => {
     const errs = this.zErrors();
-    if (!errs?.length) return [] as ZardFieldErrorEntry[];
+    if (!errs?.length) {
+      return [] as ZardFieldErrorEntry[];
+    }
+
     const map = new Map<string | undefined, ZardFieldErrorEntry>();
     for (const e of errs) {
-      if (!e) continue;
+      if (!e) {
+        continue;
+      }
       map.set(e.message, e);
     }
     return [...map.values()];

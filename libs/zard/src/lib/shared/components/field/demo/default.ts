@@ -39,7 +39,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
               <div class="grid grid-cols-3 gap-4">
                 <div z-field>
-                  <label z-field-label for="checkout-exp-month">Month</label>
+                  <label z-field-label for="checkout-exp-month" class="w-fit">Month</label>
                   <z-select id="checkout-exp-month" zPlaceholder="MM">
                     <z-select-item zValue="01">01</z-select-item>
                     <z-select-item zValue="02">02</z-select-item>
