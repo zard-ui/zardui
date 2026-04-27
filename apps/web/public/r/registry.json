@@ -135,7 +135,6 @@
       ],
       "files": [
         "alert-dialog.component.ts",
-        "alert-dialog.component.html",
         "alert-dialog.service.ts",
         "alert-dialog-ref.ts",
         "alert-dialog.variants.ts",
@@ -357,7 +356,6 @@
         "command.component.ts",
         "command-input.component.ts",
         "command-list.component.ts",
-        "command-empty.component.ts",
         "command-option.component.ts",
         "command-option-group.component.ts",
         "command-divider.component.ts",
@@ -426,15 +424,6 @@
       ]
     },
     {
-      "name": "segmented",
-      "type": "registry:component",
-      "files": [
-        "segmented.component.ts",
-        "segmented.variants.ts",
-        "index.ts"
-      ]
-    },
-    {
       "name": "skeleton",
       "type": "registry:component",
       "files": [
@@ -454,14 +443,15 @@
       ]
     },
     {
-      "name": "toast",
+      "name": "sonner",
       "type": "registry:component",
       "dependencies": [
         "ngx-sonner"
       ],
       "files": [
-        "toast.component.ts",
-        "toast.variants.ts",
+        "sonner.component.ts",
+        "sonner.service.ts",
+        "sonner.variants.ts",
         "index.ts"
       ]
     },

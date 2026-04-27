@@ -27,21 +27,21 @@ interface RegisterConfig {
 }
 
 const REGISTER_CONFIGS: Record<string, RegisterConfig> = {
-  toast: {
+  sonner: {
     title: 'app.component.ts',
     language: 'angular-ts',
     highlightLines: [3, 8, 11],
     code: `import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { ZardToastComponent } from '@/shared/components/toast/toast.component';
+import { ZardSonnerComponent } from '@/shared/components/sonner/sonner.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, ZardToastComponent],
+  imports: [RouterOutlet, ZardSonnerComponent],
   template: \`
     <router-outlet></router-outlet>
-    <z-toaster />
+    <z-sonner />
   \`,
 })
 export class AppComponent {}`,

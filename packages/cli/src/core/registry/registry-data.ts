@@ -885,15 +885,19 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'toast',
+    name: 'sonner',
     dependencies: ['ngx-sonner'],
     files: [
       {
-        name: 'toast.component.ts',
+        name: 'sonner.component.ts',
         content: '',
       },
       {
-        name: 'toast.variants.ts',
+        name: 'sonner.service.ts',
+        content: '',
+      },
+      {
+        name: 'sonner.variants.ts',
         content: '',
       },
       {

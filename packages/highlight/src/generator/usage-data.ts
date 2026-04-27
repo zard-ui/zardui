@@ -259,9 +259,9 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
   <z-tab label="Password">Password content here.</z-tab>
 </z-tab-group>`,
   },
-  toast: {
-    importCode: `import { ZardToastComponent } from '@/shared/components/toast/toast.component';`,
-    templateCode: `<z-toaster />`,
+  sonner: {
+    importCode: `import { ZardSonnerComponent } from '@/shared/components/sonner/sonner.component';`,
+    templateCode: `<z-sonner />`,
   },
   toggle: {
     importCode: `import { ZardToggleComponent } from '@/shared/components/toggle/toggle.component';`,

@@ -94,7 +94,7 @@ export const COMPONENTS_PATH = {
     { name: 'Switch', path: '/docs/components/switch', available: true },
     { name: 'Table', path: '/docs/components/table', available: true },
     { name: 'Tabs', path: '/docs/components/tabs', available: true },
-    { name: 'Toast', path: '/docs/components/toast', available: true },
+    { name: 'Sonner', path: '/docs/components/sonner', available: true },
     { name: 'Toggle', path: '/docs/components/toggle', available: true },
     { name: 'Toggle Group', path: '/docs/components/toggle-group', available: true },
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
