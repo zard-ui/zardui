@@ -58,7 +58,6 @@
 /docs/components/resizable
 /docs/components/sheet
 /docs/components/radio
-/docs/components/segmented
 /docs/components/loader
 /docs/components/dropdown
 /docs/components/popover

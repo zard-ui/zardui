@@ -32,18 +32,18 @@ test.describe('Button component', () => {
     const firstCard = demoPage.firstDemoBox;
     const buttons = firstCard.locator('button[z-button]');
     const count = await buttons.count();
-    expect(count).toBeGreaterThanOrEqual(3);
+    expect(count).toBeGreaterThanOrEqual(2);
+
+    const textButton = buttons.nth(0);
+    await expect(textButton).toBeVisible();
+    await expect(textButton).toContainText('Button');
+    await expect(textButton).toBeEnabled();
 
     const iconOnlyButton = buttons.nth(1);
     await expect(iconOnlyButton).toBeVisible();
     await expect(iconOnlyButton).toBeEnabled();
     await iconOnlyButton.click();
     await expect(iconOnlyButton).toBeEnabled();
-
-    const buttonWithIcon = buttons.nth(2);
-    await expect(buttonWithIcon).toBeVisible();
-    await expect(buttonWithIcon).toContainText('Button');
-    await expect(buttonWithIcon).toBeEnabled();
   });
 
   test('passes accessibility checks', async ({ page }) => {

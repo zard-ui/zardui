@@ -9,10 +9,10 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-default',
+  selector: 'demo-toggle-group-disabled',
   imports: [ZardToggleGroupComponent],
   template: `
-    <z-toggle-group zMode="multiple" zType="outline" [zItems]="items" (valueChange)="onToggleChange($event)" />
+    <z-toggle-group [zDisabled]="true" zMode="multiple" [zItems]="items" (valueChange)="onToggleChange($event)" />
   `,
   viewProviders: [
     provideIcons({
@@ -22,7 +22,7 @@ import {
     }),
   ],
 })
-export default class ToggleGroupDefaultComponent {
+export default class ToggleGroupDisabledComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'bold',

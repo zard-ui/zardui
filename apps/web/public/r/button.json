@@ -12,7 +12,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export * from './button.component';\r\nexport * from './button.variants';\r\n"
+      "content": "export * from './button.component';\nexport * from './button.variants';\n"
     }
   ],
   "demos": [

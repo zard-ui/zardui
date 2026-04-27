@@ -1,43 +1,9 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
-export const toggleGroupVariants = cva('flex w-fit items-center rounded-md', {
-  variants: {
-    zType: {
-      default: '',
-      outline: 'shadow-sm',
-    },
-    zSize: {
-      sm: '',
-      md: '',
-      lg: '',
-    },
-  },
-  defaultVariants: {
-    zType: 'default',
-    zSize: 'md',
-  },
-});
-
-export const toggleGroupItemVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-none gap-2 text-sm font-medium ring-offset-background transition-colors hover:bg-muted hover:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-accent data-[state=on]:text-accent-foreground',
-  {
-    variants: {
-      zType: {
-        default: 'bg-transparent',
-        outline: 'border border-input bg-transparent hover:bg-accent hover:text-accent-foreground',
-      },
-      zSize: {
-        sm: 'h-8 px-2.5 text-xs',
-        md: 'h-9 px-3 text-sm',
-        lg: 'h-10 px-4 text-sm',
-      },
-    },
-    defaultVariants: {
-      zType: 'default',
-      zSize: 'md',
-    },
-  },
+export const toggleGroupVariants = cva(
+  'group/toggle-group flex w-fit flex-row items-center gap-[--spacing(var(--gap))] rounded-lg data-[size=sm]:rounded-[min(var(--radius-md),10px)] data-vertical:flex-col data-vertical:items-stretch',
 );
 
-export type ZardToggleGroupVariants = VariantProps<typeof toggleGroupVariants>;
-export type ZardToggleGroupItemVariants = VariantProps<typeof toggleGroupItemVariants>;
+export const toggleGroupItemVariants = cva(
+  'shrink-0 group-data-[spacing=0]/toggle-group:rounded-none group-data-[spacing=0]/toggle-group:px-2 focus:z-10 focus-visible:z-10 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-end]:pr-1.5 group-data-[spacing=0]/toggle-group:has-data-[icon=inline-start]:pl-1.5 group-data-horizontal/toggle-group:data-[spacing=0]:first:rounded-l-lg group-data-vertical/toggle-group:data-[spacing=0]:first:rounded-t-lg group-data-horizontal/toggle-group:data-[spacing=0]:last:rounded-r-lg group-data-vertical/toggle-group:data-[spacing=0]:last:rounded-b-lg group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:border-l-0 group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:border-t-0 group-data-horizontal/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-l group-data-vertical/toggle-group:data-[spacing=0]:data-[variant=outline]:first:border-t',
+);

@@ -3,16 +3,21 @@ import { Component } from '@angular/core';
 import { provideIcons } from '@ng-icons/core';
 import { lucideBold, lucideItalic, lucideUnderline } from '@ng-icons/lucide';
 
-import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-group.component';
+import {
+  ZardToggleGroupComponent,
+  type ZardToggleGroupItem,
+} from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-with-text',
+  selector: 'demo-toggle-group-vertical',
   imports: [ZardToggleGroupComponent],
   template: `
     <z-toggle-group
       zMode="multiple"
-      [items]="items"
-      [defaultValue]="['italic']"
+      zOrientation="vertical"
+      [zDefaultValue]="['bold', 'italic']"
+      [zItems]="items"
+      [zSpacing]="1"
       (valueChange)="onToggleChange($event)"
     />
   `,
@@ -24,29 +29,26 @@ import { ZardToggleGroupComponent, type ZardToggleGroupItem } from '../toggle-gr
     }),
   ],
 })
-export default class ToggleGroupWithTextComponent {
+export default class ToggleGroupVerticalComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'bold',
       icon: 'lucideBold',
-      label: 'Bold',
       ariaLabel: 'Toggle bold',
     },
     {
       value: 'italic',
       icon: 'lucideItalic',
-      label: 'Italic',
       ariaLabel: 'Toggle italic',
     },
     {
       value: 'underline',
       icon: 'lucideUnderline',
-      label: 'Underline',
       ariaLabel: 'Toggle underline',
     },
   ];
 
   onToggleChange(value: string | string[]) {
-    console.log('Selected formatting:', value);
+    console.log('Toggle group changed:', value);
   }
 }

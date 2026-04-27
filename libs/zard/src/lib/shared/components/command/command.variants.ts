@@ -9,7 +9,7 @@ export const commandListVariants = cva(
 );
 
 export const commandGroupVariants = cva(
-  'overflow-hidden text-foreground **:[[data-slot=command-group-heading]]:px-2 **:[[data-slot=command-group-heading]]:py-1.5 **:[[data-slot=command-group-heading]]:text-xs **:[[data-slot=command-group-heading]]:font-medium **:[[data-slot=command-group-heading]]:text-muted-foreground',
+  'overflow-hidden text-foreground **:data-[slot=command-group-heading]:px-2 **:data-[slot=command-group-heading]:py-1.5 **:data-[slot=command-group-heading]:text-xs **:data-[slot=command-group-heading]:font-medium **:data-[slot=command-group-heading]:text-muted-foreground',
 );
 
 export const commandItemVariants = cva(

@@ -5,8 +5,8 @@
         zMode="single"
         zType="outline"
         zSize="sm"
-        [items]="tabOptions"
-        [defaultValue]="activeTab()"
+        [zItems]="tabOptions"
+        [zValue]="activeTab()"
         (valueChange)="onTabChange($event)"
       />
 
@@ -20,9 +20,8 @@
       <z-toggle-group
         zMode="single"
         zType="outline"
-        zSize="md"
-        [items]="viewportOptions"
-        [value]="viewportSize()"
+        [zItems]="viewportOptions"
+        [zValue]="viewportSize()"
         (valueChange)="onViewportChange($event)"
       />
     }

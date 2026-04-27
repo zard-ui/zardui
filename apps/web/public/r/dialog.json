@@ -20,11 +20,11 @@
     },
     {
       "name": "dialog.imports.ts",
-      "content": "import { OverlayModule } from '@angular/cdk/overlay';\r\nimport { PortalModule } from '@angular/cdk/portal';\r\n\r\nimport { ZardButtonComponent } from '@/shared/components/button';\r\nimport { ZardDialogComponent } from '@/shared/components/dialog/dialog.component';\r\n\r\nexport const ZardDialogImports = [ZardButtonComponent, ZardDialogComponent, OverlayModule, PortalModule] as const;\r\n"
+      "content": "import { OverlayModule } from '@angular/cdk/overlay';\nimport { PortalModule } from '@angular/cdk/portal';\n\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardDialogComponent } from '@/shared/components/dialog/dialog.component';\n\nexport const ZardDialogImports = [ZardButtonComponent, ZardDialogComponent, OverlayModule, PortalModule] as const;\n"
     },
     {
       "name": "index.ts",
-      "content": "export { ZardDialogComponent, ZardDialogOptions } from './dialog.component';\r\nexport { type OnClickCallback as DialogOnClickCallback } from './dialog.component';\r\nexport * from './dialog.service';\r\nexport * from './dialog-ref';\r\nexport * from './dialog.variants';\r\nexport * from './dialog.imports';\r\n"
+      "content": "export { ZardDialogComponent, ZardDialogOptions } from './dialog.component';\nexport { type OnClickCallback as DialogOnClickCallback } from './dialog.component';\nexport * from './dialog.service';\nexport * from './dialog-ref';\nexport * from './dialog.variants';\nexport * from './dialog.imports';\n"
     }
   ],
   "registryDependencies": [
