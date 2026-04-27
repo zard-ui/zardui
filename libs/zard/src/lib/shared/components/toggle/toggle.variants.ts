@@ -20,5 +20,5 @@ export const toggleVariants = cva(
     },
   },
 );
-export type ZardToggleTypeVariants = NonNullable<VariantProps<typeof toggleVariants>>['zType'];
-export type ZardToggleSizeVariants = NonNullable<VariantProps<typeof toggleVariants>>['zSize'];
+export type ZardToggleTypeVariants = NonNullable<VariantProps<typeof toggleVariants>['zType']>;
+export type ZardToggleSizeVariants = NonNullable<VariantProps<typeof toggleVariants>['zSize']>;

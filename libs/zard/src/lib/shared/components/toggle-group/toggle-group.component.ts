@@ -15,9 +15,14 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { NgIcon, type IconName } from '@ng-icons/core';
 import type { ClassValue } from 'clsx';
 
+import {
+  toggleVariants,
+  type ZardToggleSizeVariants,
+  type ZardToggleTypeVariants,
+} from '@/shared/components/toggle/toggle.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { toggleGroupVariants, toggleGroupItemVariants } from './toggle-group.variants';
+import { toggleGroupItemVariants, toggleGroupVariants } from './toggle-group.variants';
 
 export interface ZardToggleGroupItem {
   value: string;
@@ -34,19 +39,34 @@ type OnChangeType = (value: string | string[]) => void;
   selector: 'z-toggle-group',
   imports: [NgIcon],
   template: `
-    <div [class]="classes()" role="group" [attr.data-orientation]="'horizontal'">
-      @for (item of items(); track item.value; let i = $index) {
+    <div
+      role="group"
+      data-slot="toggle-group"
+      [class]="classes()"
+      [attr.data-variant]="zType()"
+      [attr.data-size]="zSize()"
+      [attr.data-orientation]="zOrientation()"
+      [attr.data-horizontal]="zOrientation() === 'horizontal' || null"
+      [attr.data-vertical]="zOrientation() === 'vertical' || null"
+      [attr.data-spacing]="zSpacing()"
+      [style.--gap]="zSpacing()"
+    >
+      @for (item of zItems(); track item.value) {
         <button
           type="button"
+          data-slot="toggle-group-item"
+          [attr.data-variant]="zType()"
+          [attr.data-size]="zSize()"
+          [attr.data-spacing]="zSpacing()"
           [attr.aria-pressed]="isItemPressed(item.value)"
           [attr.data-state]="isItemPressed(item.value) ? 'on' : 'off'"
           [attr.aria-label]="item.ariaLabel"
-          [class]="getItemClasses(i, items().length)"
+          [class]="itemClasses()"
           [disabled]="disabledState() || item.disabled"
           (click)="toggleItem(item)"
         >
           @if (item.icon) {
-            <ng-icon [name]="item.icon" class="size-4! shrink-0" />
+            <ng-icon [name]="item.icon" class="size-4!" />
           }
           @if (item.label) {
             <span>{{ item.label }}</span>
@@ -69,34 +89,38 @@ type OnChangeType = (value: string | string[]) => void;
   exportAs: 'zToggleGroup',
 })
 export class ZardToggleGroupComponent implements ControlValueAccessor {
-  readonly zMode = input<'single' | 'multiple'>('multiple');
-  readonly zType = input<'default' | 'outline'>('default');
-  readonly zSize = input<'sm' | 'md' | 'lg'>('md');
-  readonly value = input<string | string[]>();
-  readonly defaultValue = input<string | string[]>();
-  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
-  readonly items = input<ZardToggleGroupItem[]>([]);
+  readonly zDefaultValue = input<string | string[]>();
+  readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zMode = input<'single' | 'multiple'>('multiple');
+  readonly zItems = input<ZardToggleGroupItem[]>([]);
+  readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
+  readonly zSize = input<ZardToggleSizeVariants>('default');
+  readonly zSpacing = input(0);
+  readonly zType = input<ZardToggleTypeVariants>('default');
+  readonly zValue = input<string | string[]>();
 
   readonly valueChange = output<string | string[]>();
 
   protected readonly disabledState = linkedSignal(() => this.zDisabled());
   private readonly internalValue = signal<string | string[] | undefined>(undefined);
 
-  protected readonly classes = computed(() =>
+  protected readonly classes = computed(() => mergeClasses(toggleGroupVariants(), this.class()));
+
+  protected readonly itemClasses = computed(() =>
     mergeClasses(
-      toggleGroupVariants({
+      toggleGroupItemVariants(),
+      toggleVariants({
         zType: this.zType(),
         zSize: this.zSize(),
       }),
-      this.class(),
     ),
   );
 
   protected readonly currentValue = computed(() => {
     const internal = this.internalValue();
-    const input = this.value();
-    const defaultVal = this.defaultValue();
+    const input = this.zValue();
+    const defaultVal = this.zDefaultValue();
 
     if (internal !== undefined) {
       return internal;
@@ -110,34 +134,6 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
 
     return this.zMode() === 'single' ? '' : [];
   });
-
-  protected getItemClasses(index: number, total: number): string {
-    const baseClasses = toggleGroupItemVariants({
-      zType: this.zType(),
-      zSize: this.zSize(),
-    });
-
-    const positionClasses = [];
-
-    if (index === 0) {
-      positionClasses.push('first:rounded-l-md');
-    }
-    if (index === total - 1) {
-      positionClasses.push('last:rounded-r-md');
-    }
-
-    if (this.zType() === 'outline') {
-      if (index === 0) {
-        positionClasses.push('border-l');
-      } else {
-        positionClasses.push('border-l-0');
-      }
-    }
-
-    positionClasses.push('focus:z-10', 'focus-visible:z-10');
-
-    return mergeClasses(baseClasses, ...positionClasses);
-  }
 
   protected isItemPressed(itemValue: string): boolean {
     const current = this.currentValue();

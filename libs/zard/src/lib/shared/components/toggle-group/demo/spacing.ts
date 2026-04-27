@@ -6,34 +6,21 @@ import {
 } from '@/shared/components/toggle-group/toggle-group.component';
 
 @Component({
-  selector: 'demo-toggle-group-sizes',
+  selector: 'demo-toggle-group-spacing',
   imports: [ZardToggleGroupComponent],
   template: `
-    <div class="space-y-4">
-      <div>
-        <z-toggle-group
-          zDefaultValue="top"
-          zMode="single"
-          zSize="sm"
-          [zItems]="items"
-          zType="outline"
-          (valueChange)="onToggleChange($event)"
-        />
-      </div>
-      <div>
-        <z-toggle-group
-          zDefaultValue="top"
-          zMode="single"
-          zSize="lg"
-          [zItems]="items"
-          zType="outline"
-          (valueChange)="onToggleChange($event)"
-        />
-      </div>
-    </div>
+    <z-toggle-group
+      zDefaultValue="top"
+      zMode="single"
+      zSize="sm"
+      zType="outline"
+      [zItems]="items"
+      [zSpacing]="2"
+      (valueChange)="onToggleChange($event)"
+    />
   `,
 })
-export default class ToggleGroupSizesComponent {
+export default class ToggleGroupSpacingComponent {
   items: ZardToggleGroupItem[] = [
     {
       value: 'top',

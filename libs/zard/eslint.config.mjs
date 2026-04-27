@@ -24,7 +24,7 @@ const betterTailwindBase = {
     'better-tailwindcss/no-unknown-classes': [
       'error',
       {
-        ignore: ['animate-spinner'],
+        ignore: ['animate-spinner', 'no-scrollbar'],
       },
     ],
   },

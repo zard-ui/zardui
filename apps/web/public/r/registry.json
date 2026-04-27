@@ -135,7 +135,6 @@
       ],
       "files": [
         "alert-dialog.component.ts",
-        "alert-dialog.component.html",
         "alert-dialog.service.ts",
         "alert-dialog-ref.ts",
         "alert-dialog.variants.ts",
@@ -357,7 +356,6 @@
         "command.component.ts",
         "command-input.component.ts",
         "command-list.component.ts",
-        "command-empty.component.ts",
         "command-option.component.ts",
         "command-option-group.component.ts",
         "command-divider.component.ts",
@@ -422,15 +420,6 @@
         "resizable-handle.component.ts",
         "resizable.variants.ts",
         "resizable.imports.ts",
-        "index.ts"
-      ]
-    },
-    {
-      "name": "segmented",
-      "type": "registry:component",
-      "files": [
-        "segmented.component.ts",
-        "segmented.variants.ts",
         "index.ts"
       ]
     },

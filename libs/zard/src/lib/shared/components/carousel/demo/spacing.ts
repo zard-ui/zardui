@@ -14,8 +14,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
           zMode="single"
           zType="outline"
           zSize="sm"
-          [items]="options"
-          [defaultValue]="currentSpacing()"
+          [zItems]="options"
+          [zDefaultValue]="currentSpacing()"
           (valueChange)="onChange($event)"
         />
       </div>
