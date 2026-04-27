@@ -4,8 +4,6 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
 
 import { ZardInputDirective } from '../../input/input.directive';
-import { ZardSelectItemComponent } from '../../select/select-item.component';
-import { ZardSelectComponent } from '../../select/select.component';
 import { Z_MODAL_DATA, ZardDialogService } from '../dialog.service';
 
 interface iDialogData {
@@ -15,43 +13,17 @@ interface iDialogData {
 
 @Component({
   selector: 'zard-demo-dialog-basic',
-  imports: [FormsModule, ReactiveFormsModule, ZardInputDirective, ZardSelectComponent, ZardSelectItemComponent],
+  imports: [FormsModule, ReactiveFormsModule, ZardInputDirective],
   template: `
     <form [formGroup]="form" class="grid gap-4">
       <div class="grid gap-3">
-        <label
-          for="name"
-          class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-        >
-          Name
-        </label>
-        <input z-input formControlName="name" />
+        <label for="name" class="text-sm leading-none font-medium select-none">Name</label>
+        <input z-input zSize="sm" id="name" formControlName="name" />
       </div>
 
       <div class="grid gap-3">
-        <label
-          for="username"
-          class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-        >
-          Username
-        </label>
-        <input z-input formControlName="username" />
-      </div>
-
-      <div class="grid gap-3">
-        <label
-          for="region"
-          class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-        >
-          Region
-        </label>
-        <z-select formControlName="region">
-          <z-select-item zValue="africa">Africa</z-select-item>
-          <z-select-item zValue="america">America</z-select-item>
-          <z-select-item zValue="asia">Asia</z-select-item>
-          <z-select-item zValue="australia">Australia</z-select-item>
-          <z-select-item zValue="europe">Europe</z-select-item>
-        </z-select>
+        <label for="username" class="text-sm leading-none font-medium select-none">Username</label>
+        <input z-input zSize="sm" id="username" formControlName="username" />
       </div>
     </form>
   `,
@@ -59,12 +31,11 @@ interface iDialogData {
   exportAs: 'zardDemoDialogBasic',
 })
 export class ZardDemoDialogBasicInputComponent implements AfterViewInit {
-  private zData: iDialogData = inject(Z_MODAL_DATA);
+  private zData = inject(Z_MODAL_DATA) as iDialogData;
 
   form = new FormGroup({
     name: new FormControl('Pedro Duarte'),
     username: new FormControl('@peduarte'),
-    region: new FormControl(''),
   });
 
   ngAfterViewInit(): void {
@@ -92,13 +63,11 @@ export class ZardDemoDialogBasicComponent {
       zData: {
         name: 'Samuel Rizzon',
         username: '@samuelrizzondev',
-        region: 'america',
       } as iDialogData,
       zOkText: 'Save changes',
       zOnOk: instance => {
         console.log('Form submitted:', instance.form.value);
       },
-      zWidth: '425px',
     });
   }
 }
