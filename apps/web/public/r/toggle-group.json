@@ -12,7 +12,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export * from './toggle-group.component';\r\nexport * from './toggle-group.variants';\r\n"
+      "content": "export * from './toggle-group.component';\nexport * from './toggle-group.variants';\n"
     }
   ],
   "registryDependencies": [

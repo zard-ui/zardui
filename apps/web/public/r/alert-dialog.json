@@ -20,7 +20,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export { ZardAlertDialogComponent, ZardAlertDialogOptions, ZardAlertDialogModule } from './alert-dialog.component';\r\nexport { type OnClickCallback as AlertDialogOnClickCallback } from './alert-dialog.component';\r\nexport * from './alert-dialog.service';\r\nexport * from './alert-dialog-ref';\r\nexport * from './alert-dialog.variants';\r\n"
+      "content": "export { ZardAlertDialogComponent, ZardAlertDialogOptions, ZardAlertDialogModule } from './alert-dialog.component';\nexport { type OnClickCallback as AlertDialogOnClickCallback } from './alert-dialog.component';\nexport * from './alert-dialog.service';\nexport * from './alert-dialog-ref';\nexport * from './alert-dialog.variants';\n"
     }
   ],
   "registryDependencies": [
