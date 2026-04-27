@@ -38,7 +38,7 @@ type OnChangeType = (value: boolean) => void;
         #input
         type="checkbox"
         name="checkbox"
-        [id]="z.id()"
+        [id]="zId() || z.id()"
         [class]="classes()"
         [checked]="checked()"
         [disabled]="disabled()"
@@ -51,7 +51,7 @@ type OnChangeType = (value: boolean) => void;
         [class]="checked() ? 'opacity-100' : 'opacity-0'"
       />
     </main>
-    <label [class]="labelClasses()" [for]="z.id()">
+    <label [class]="labelClasses()" [for]="zId() || z.id()">
       <ng-content />
     </label>
   `,
@@ -79,6 +79,7 @@ export class ZardCheckboxComponent implements ControlValueAccessor {
   readonly zType = input<ZardCheckboxTypeVariants>('default');
   readonly zSize = input<ZardCheckboxSizeVariants>('default');
   readonly zShape = input<ZardCheckboxShapeVariants>('default');
+  readonly zId = input<string>('');
 
   private onChange: OnChangeType = noopFn;
   private onTouched: OnTouchedType = noopFn;

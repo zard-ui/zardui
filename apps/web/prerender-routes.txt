@@ -36,6 +36,7 @@
 /docs/components/date-picker
 /docs/components/divider
 /docs/components/empty
+/docs/components/field
 /docs/components/form
 /docs/components/input
 /docs/components/input-group

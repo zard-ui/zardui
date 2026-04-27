@@ -121,6 +121,16 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardEmptyComponent } from '@/shared/components/empty/empty.component';`,
     templateCode: `<z-empty zTitle="No data" zDescription="There is no data to display."></z-empty>`,
   },
+  field: {
+    importCode: `import { ZardFieldImports } from '@/shared/components/field/field.imports';`,
+    templateCode: `<div z-field-group>
+  <div z-field>
+    <label z-field-label for="email">Email</label>
+    <input z-input id="email" placeholder="m@example.com" />
+    <p z-field-description>We'll never share your email.</p>
+  </div>
+</div>`,
+  },
   form: {
     importCode: `import { ZardFormImports } from '@/shared/components/form/form.imports';`,
     templateCode: `<z-form-field>

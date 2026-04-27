@@ -193,6 +193,27 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'field',
+    files: [
+      {
+        name: 'field.component.ts',
+        content: '',
+      },
+      {
+        name: 'field.variants.ts',
+        content: '',
+      },
+      {
+        name: 'field.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'badge',
     files: [
       {
