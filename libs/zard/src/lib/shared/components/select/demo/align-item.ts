@@ -22,7 +22,7 @@ import { ZardSwitchComponent } from '@/shared/components/switch';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSelectAlignItemComponent {
-  readonly alignItem = signal(true);
+  readonly alignItem = signal(false);
   readonly selectedFruit = signal('blueberry');
 
   protected readonly position = computed<ZardSelectPositionVariants>(() =>

@@ -104,6 +104,7 @@ describe('ZardSelectComponent', () => {
     it('should initialize with default values', () => {
       expect(component.zValue()).toBe('');
       expect(component.zPlaceholder()).toBe('Select an option...');
+      expect(component.zPosition()).toBe('popper');
       expect(component.zDisabled()).toBe(false);
     });
 
@@ -243,7 +244,7 @@ describe('ZardSelectComponent', () => {
       expect(hostFixture.nativeElement.querySelector('button')).toHaveAttribute('aria-label', 'Choose a value');
     });
 
-    it('sets trigger width style and overlay width when opened', fakeAsync(() => {
+    it('uses popper positioning by default when opened', fakeAsync(() => {
       const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
         .nativeElement as HTMLElement;
       Object.defineProperty(selectElement, 'offsetWidth', { configurable: true, value: 240 });
@@ -261,14 +262,15 @@ describe('ZardSelectComponent', () => {
       expect(content).toHaveAttribute('role', 'listbox');
       expect(content.style.getPropertyValue('--z-select-trigger-width')).toBe('240px');
       expect(content.style.getPropertyValue('--z-select-trigger-height')).toBe('36px');
-      expect(content).toHaveAttribute('data-align-trigger', 'true');
+      expect(content).toHaveAttribute('data-position', 'popper');
+      expect(content).not.toHaveAttribute('data-align-trigger');
       expect(content).toHaveClass('w-full');
       expect(viewport).toHaveAttribute('role', 'presentation');
       expect(viewport).toHaveClass('p-1');
-      expect(viewport).toHaveAttribute('data-position', 'item-aligned');
+      expect(viewport).toHaveAttribute('data-position', 'popper');
       expect(viewport).toHaveClass('box-border');
       expect(viewport).toHaveClass('min-h-0');
-      expect(overlayPane.style.width).toBe('240px');
+      expect(overlayPane.style.minWidth).toBe('240px');
     }));
 
     it('focuses and highlights the selected item when opened', fakeAsync(() => {

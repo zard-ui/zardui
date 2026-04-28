@@ -49,7 +49,7 @@ export const selectContentVariants = cva(
       },
     },
     defaultVariants: {
-      zPosition: 'item-aligned',
+      zPosition: 'popper',
     },
   },
 );
@@ -62,7 +62,7 @@ export const selectViewportVariants = cva('max-h-96 min-h-0 flex-1 box-border ov
     },
   },
   defaultVariants: {
-    zPosition: 'item-aligned',
+    zPosition: 'popper',
   },
 });
 

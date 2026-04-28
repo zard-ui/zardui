@@ -15,7 +15,7 @@
 | `[zMaxLabelCount]` | Limits visible labels in multiselect mode        | `number`                       | `1`                     |
 | `[zMultiple]`      | Enables multiselect mode                         | `boolean`                      | `false`                 |
 | `[zPlaceholder]`   | Placeholder text                                 | `string`                       | `'Select an option...'` |
-| `[zPosition]`      | Overlay positioning mode                         | `'item-aligned' \| 'popper'`   | `'item-aligned'`        |
+| `[zPosition]`      | Overlay positioning mode                         | `'item-aligned' \| 'popper'`   | `'popper'`              |
 | `[zSize]`          | Trigger and item size                            | `'sm' \| 'default' \| 'lg'`    | `'default'`             |
 | `[(zValue)]`       | Selected value                                   | `string \| string[]`           | `'' \| []`              |
 

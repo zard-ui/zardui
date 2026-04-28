@@ -213,7 +213,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   readonly zMaxLabelCount = input(1, { transform: numberAttribute });
   readonly zMultiple = input(false, { transform: booleanAttribute });
   readonly zPlaceholder = input<string>('Select an option...');
-  readonly zPosition = input<ZardSelectPositionVariants>('item-aligned');
+  readonly zPosition = input<ZardSelectPositionVariants>('popper');
   readonly zSize = input<ZardSelectSizeVariants>('default');
   readonly zValue = model<string | string[]>(this.zMultiple() ? [] : '');
 

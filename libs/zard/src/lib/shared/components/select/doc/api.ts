@@ -38,7 +38,7 @@ export const SELECT_API: ApiSection[] = [
         name: '[zPosition]',
         description: 'Overlay positioning mode',
         type: "'item-aligned' | 'popper'",
-        default: "'item-aligned'",
+        default: "'popper'",
       },
       { name: '[zSize]', description: 'Trigger and item size', type: "'sm' | 'default' | 'lg'", default: "'default'" },
       { name: '[(zValue)]', description: 'Selected value', type: 'string | string[]', default: "'' | []" },
