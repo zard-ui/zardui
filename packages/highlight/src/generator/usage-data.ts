@@ -206,10 +206,10 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   select: {
     importCode: `import { ZardSelectImports } from '@/shared/components/select/select.imports';`,
-    templateCode: `<z-select placeholder="Select a fruit">
-  <z-select-item value="apple">Apple</z-select-item>
-  <z-select-item value="banana">Banana</z-select-item>
-  <z-select-item value="orange">Orange</z-select-item>
+    templateCode: `<z-select zPlaceholder="Select a fruit">
+  <z-select-item zValue="apple">Apple</z-select-item>
+  <z-select-item zValue="banana">Banana</z-select-item>
+  <z-select-item zValue="blueberry">Blueberry</z-select-item>
 </z-select>`,
   },
   sheet: {

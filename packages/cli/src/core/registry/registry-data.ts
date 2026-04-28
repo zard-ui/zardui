@@ -433,6 +433,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'select-group.component.ts',
+        content: '',
+      },
+      {
         name: 'select.variants.ts',
         content: '',
       },

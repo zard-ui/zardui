@@ -216,6 +216,7 @@
       "files": [
         "select.component.ts",
         "select-item.component.ts",
+        "select-group.component.ts",
         "select.variants.ts",
         "select.imports.ts",
         "index.ts"
