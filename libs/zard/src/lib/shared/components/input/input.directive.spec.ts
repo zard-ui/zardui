@@ -4,7 +4,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { form, FormField, min } from '@angular/forms/signals';
 import { By } from '@angular/platform-browser';
 
-import { screen } from '@testing-library/angular';
+import { fireEvent, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
 import { ZardInputDirective } from './input.directive';
@@ -37,6 +37,17 @@ class TestFormHostComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 class TestNumberFormHostComponent {
+  control = new FormControl<number | null>(null);
+}
+
+@Component({
+  imports: [ZardInputDirective, ReactiveFormsModule],
+  template: `
+    <input z-input type="range" [formControl]="control" data-testid="range-form-input" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+class TestRangeFormHostComponent {
   control = new FormControl<number | null>(null);
 }
 
@@ -112,6 +123,27 @@ describe('ZardInputDirective with number forms', () => {
     expect(control.value).toBeNull();
 
     await user.type(input, '42');
+    expect(control.value).toBe(42);
+  });
+
+  it('syncs range input changes as numbers with reactive forms', async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestRangeFormHostComponent, ReactiveFormsModule],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(TestRangeFormHostComponent);
+    const { control } = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const input = screen.getByTestId('range-form-input');
+
+    control.setValue(7);
+    fixture.detectChanges();
+    expect((input as HTMLInputElement).valueAsNumber).toBe(7);
+
+    (input as HTMLInputElement).value = '42';
+    fireEvent.input(input);
+
     expect(control.value).toBe(42);
   });
 
