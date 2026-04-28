@@ -56,7 +56,7 @@ export class ZardInputDirective implements ControlValueAccessor {
   readonly zBorderless = input(false, { transform: booleanAttribute });
   readonly zSize = input<ZardInputSizeVariants>('default');
   readonly zStatus = input<ZardInputStatusVariants>();
-  readonly value = model<ZardInputValue>('');
+  readonly value = model<ZardInputValue>(null);
 
   readonly size = linkedSignal<ZardInputSizeVariants>(() => this.zSize());
 
