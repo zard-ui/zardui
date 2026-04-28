@@ -38,7 +38,8 @@ export class May2025Component implements ChangelogEntryComponent {
   readonly examples: ChangelogExample[] = [
     {
       name: 'default',
-      description: 'Dropdown select with grouped options, keyboard navigation, and custom item rendering.',
+      description:
+        'Dropdown select with grouped options, multi-select support, keyboard navigation, and custom item rendering.',
       component: ZardDemoSelectDefaultComponent,
       componentName: 'select',
       codeData: SELECT_DEMO_DEFAULT,

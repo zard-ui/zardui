@@ -3,6 +3,7 @@ import { SELECT_DEMO_DEFAULT } from '@generated/components/select/demo/default';
 import { SELECT_DEMO_DISABLED } from '@generated/components/select/demo/disabled';
 import { SELECT_DEMO_GROUPS } from '@generated/components/select/demo/groups';
 import { SELECT_DEMO_INVALID } from '@generated/components/select/demo/invalid';
+import { SELECT_DEMO_MULTI_SELECT } from '@generated/components/select/demo/multi-select';
 import { SELECT_DEMO_RTL } from '@generated/components/select/demo/rtl';
 import { SELECT_DEMO_SCROLLABLE } from '@generated/components/select/demo/scrollable';
 import { SELECT_CLI_ADD } from '@generated/installation/cli/add-select';
@@ -15,6 +16,7 @@ import { ZardDemoSelectDefaultComponent } from './default';
 import { ZardDemoSelectDisabledComponent } from './disabled';
 import { ZardDemoSelectGroupsComponent } from './groups';
 import { ZardDemoSelectInvalidComponent } from './invalid';
+import { ZardDemoMultiSelectBasicComponent } from './multi-select';
 import { ZardDemoSelectRtlComponent } from './rtl';
 import { ZardDemoSelectScrollableComponent } from './scrollable';
 import { SELECT_API } from '../doc/api';
@@ -91,6 +93,11 @@ export const SELECT = {
       name: 'rtl',
       component: ZardDemoSelectRtlComponent,
       codeData: SELECT_DEMO_RTL,
+    },
+    {
+      name: 'multi-select',
+      component: ZardDemoMultiSelectBasicComponent,
+      codeData: SELECT_DEMO_MULTI_SELECT,
     },
   ],
 };
