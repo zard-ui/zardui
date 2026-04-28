@@ -133,7 +133,12 @@ export class ZardInputDirective implements ControlValueAccessor {
       const currentValue = this.value();
 
       if (typeof currentValue === 'number' || currentValue === null) {
-        return element.value === '' ? null : element.valueAsNumber;
+        if (element.value === '') {
+          return null;
+        }
+
+        const numericValue = element.valueAsNumber;
+        return Number.isNaN(numericValue) ? null : numericValue;
       }
     }
 

@@ -126,6 +126,26 @@ describe('ZardInputDirective with number forms', () => {
     expect(control.value).toBe(42);
   });
 
+  it('normalizes NaN numeric input values to null', async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestNumberFormHostComponent, ReactiveFormsModule],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(TestNumberFormHostComponent);
+    const { control } = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const input = screen.getByTestId('number-form-input') as HTMLInputElement;
+    control.setValue(7);
+    fixture.detectChanges();
+    Object.defineProperty(input, 'valueAsNumber', { configurable: true, value: Number.NaN });
+
+    input.value = '42';
+    fireEvent.input(input);
+
+    expect(control.value).toBeNull();
+  });
+
   it('syncs range input changes as numbers with reactive forms', async () => {
     await TestBed.configureTestingModule({
       imports: [TestRangeFormHostComponent, ReactiveFormsModule],
