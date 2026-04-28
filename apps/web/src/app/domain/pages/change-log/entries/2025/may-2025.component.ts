@@ -8,7 +8,7 @@ import { SWITCH_DEMO_DEFAULT } from '@generated/components/switch/demo/default';
 
 import { ZardDemoCheckboxDefaultComponent } from '@zard/components/checkbox/demo/default';
 import { ZardDemoRadioDefaultComponent } from '@zard/components/radio/demo/default';
-import { ZardDemoSelectBasicComponent } from '@zard/components/select/demo/default';
+import { ZardDemoSelectDefaultComponent } from '@zard/components/select/demo/default';
 import { ZardDemoSliderDefaultComponent } from '@zard/components/slider/demo/default';
 import { ZardDemoSwitchDefaultComponent } from '@zard/components/switch/demo/default';
 
@@ -38,9 +38,8 @@ export class May2025Component implements ChangelogEntryComponent {
   readonly examples: ChangelogExample[] = [
     {
       name: 'default',
-      description:
-        'Advanced dropdown select with search functionality, multi-select support, and custom item rendering.',
-      component: ZardDemoSelectBasicComponent,
+      description: 'Dropdown select with grouped options, keyboard navigation, and custom item rendering.',
+      component: ZardDemoSelectDefaultComponent,
       componentName: 'select',
       codeData: SELECT_DEMO_DEFAULT,
     },
