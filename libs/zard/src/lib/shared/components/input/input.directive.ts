@@ -117,7 +117,7 @@ export class ZardInputDirective implements ControlValueAccessor {
     this.value.set(newValue);
   }
 
-  private isNumberLikeInput(element: ZardInputElement): element is HTMLInputElement {
+  private isNumericInput(element: ZardInputElement): element is HTMLInputElement {
     return element.tagName.toLowerCase() === 'input' && ['number', 'range'].includes(element.type);
   }
 
@@ -126,7 +126,7 @@ export class ZardInputDirective implements ControlValueAccessor {
       return '';
     }
 
-    if (this.isNumberLikeInput(element)) {
+    if (this.isNumericInput(element)) {
       const currentValue = this.value();
 
       if (typeof currentValue === 'number' || currentValue === null) {
@@ -140,7 +140,7 @@ export class ZardInputDirective implements ControlValueAccessor {
   private writeNativeValue(value: ZardInputValue): void {
     const element = this.elementRef.nativeElement;
 
-    if (this.isNumberLikeInput(element) && typeof value === 'number') {
+    if (this.isNumericInput(element) && typeof value === 'number') {
       element.value = Number.isNaN(value) ? '' : String(value);
       return;
     }

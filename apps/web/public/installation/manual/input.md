@@ -1,3 +1,5 @@
+
+
 ```angular-ts title="input.directive.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import {
   booleanAttribute,
@@ -26,7 +28,7 @@ import {
 
 type OnTouchedType = () => void;
 type ZardInputElement = HTMLInputElement | HTMLTextAreaElement;
-type ZardInputValue = string | number | null;
+type ZardInputValue = string | number | null | undefined;
 type OnChangeType = (value: ZardInputValue) => void;
 
 @Directive({
@@ -113,19 +115,21 @@ export class ZardInputDirective implements ControlValueAccessor {
     this.disable(isDisabled);
   }
 
-  writeValue(value?: ZardInputValue): void {
-    const newValue = value === undefined ? '' : value;
+  writeValue(value: ZardInputValue): void {
+    const newValue = value ?? '';
     this.value.set(newValue);
   }
 
-  private isNumberLikeInput(element: ZardInputElement): element is HTMLInputElement {
+  private isNumericInput(element: ZardInputElement): element is HTMLInputElement {
     return element.tagName.toLowerCase() === 'input' && ['number', 'range'].includes(element.type);
   }
 
   private readNativeValue(element: ZardInputElement | null): ZardInputValue {
-    if (!element) return '';
+    if (!element) {
+      return '';
+    }
 
-    if (this.isNumberLikeInput(element)) {
+    if (this.isNumericInput(element)) {
       const currentValue = this.value();
 
       if (typeof currentValue === 'number' || currentValue === null) {
@@ -139,15 +143,18 @@ export class ZardInputDirective implements ControlValueAccessor {
   private writeNativeValue(value: ZardInputValue): void {
     const element = this.elementRef.nativeElement;
 
-    if (this.isNumberLikeInput(element) && typeof value === 'number') {
+    if (this.isNumericInput(element) && typeof value === 'number') {
       element.value = Number.isNaN(value) ? '' : String(value);
       return;
     }
 
-    element.value = value === null ? '' : String(value);
+    element.value = String(value ?? '');
   }
 }
+
 ```
+
+
 
 ```angular-ts title="input.variants.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -190,9 +197,14 @@ export const inputVariants = cva('w-full min-w-0', {
 export type ZardInputTypeVariants = NonNullable<VariantProps<typeof inputVariants>['zType']>;
 export type ZardInputSizeVariants = NonNullable<VariantProps<typeof inputVariants>['zSize']>;
 export type ZardInputStatusVariants = NonNullable<VariantProps<typeof inputVariants>['zStatus']>;
+
 ```
+
+
 
 ```angular-ts title="index.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
 export * from './input.directive';
 export * from './input.variants';
+
 ```
+
