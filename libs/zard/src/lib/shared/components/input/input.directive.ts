@@ -25,7 +25,7 @@ import {
 
 type OnTouchedType = () => void;
 type ZardInputElement = HTMLInputElement | HTMLTextAreaElement;
-type ZardInputValue = string | number | null;
+type ZardInputValue = string | number | null | undefined;
 type OnChangeType = (value: ZardInputValue) => void;
 
 @Directive({
@@ -112,8 +112,8 @@ export class ZardInputDirective implements ControlValueAccessor {
     this.disable(isDisabled);
   }
 
-  writeValue(value?: ZardInputValue): void {
-    const newValue = value === undefined ? '' : value;
+  writeValue(value: ZardInputValue): void {
+    const newValue = value ?? '';
     this.value.set(newValue);
   }
 
@@ -145,6 +145,6 @@ export class ZardInputDirective implements ControlValueAccessor {
       return;
     }
 
-    element.value = value === null ? '' : String(value);
+    element.value = String(value ?? '');
   }
 }
