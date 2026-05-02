@@ -6,11 +6,16 @@ export const SWITCH_API: ApiSection[] = [
     description: 'A customizable switch with minimal configuration.',
     props: [
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
-      { name: '[(zChecked)]', description: 'Switch state (two-way binding)', type: 'boolean', default: 'true' },
+      { name: '[(zChecked)]', description: 'Switch state (two-way binding)', type: 'boolean', default: 'false' },
       { name: '[zDisabled]', description: 'Switch disabled state', type: 'boolean', default: 'false' },
+      {
+        name: '[zInvalid]',
+        description: 'Switch invalid state (sets aria-invalid)',
+        type: 'boolean',
+        default: 'false',
+      },
       { name: '[zId]', description: 'Switch id', type: 'string', default: '-' },
-      { name: '[zType]', description: 'Switch type', type: "'default' | 'destructive'", default: "'default'" },
-      { name: '[zSize]', description: 'Switch size', type: "'default' | 'sm' | 'lg'", default: "'default'" },
+      { name: '[zSize]', description: 'Switch size', type: "'default' | 'sm'", default: "'default'" },
     ],
   },
 ];
