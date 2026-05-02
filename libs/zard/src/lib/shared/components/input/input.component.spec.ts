@@ -6,7 +6,7 @@ import { By } from '@angular/platform-browser';
 import { screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
-import { ZardInputDirective } from './input.directive';
+import { ZardInputDirective } from './input.component';
 
 @Component({
   imports: [ZardInputDirective],

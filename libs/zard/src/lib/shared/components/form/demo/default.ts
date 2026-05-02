@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ZardIdDirective } from '@/shared/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.directive';
+import { ZardInputDirective } from '../../input/input.component';
 import { ZardFormImports } from '../form.imports';
 
 @Component({

@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardInputDirective } from '../input.directive';
+import { ZardInputDirective } from '../input.component';
 
 @Component({
   selector: 'z-demo-input-status',

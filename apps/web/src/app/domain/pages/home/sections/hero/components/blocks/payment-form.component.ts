@@ -3,9 +3,10 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardInputDirective } from '@zard/components/input/input.component';
 import { ZardSelectItemComponent } from '@zard/components/select/select-item.component';
 import { ZardSelectComponent } from '@zard/components/select/select.component';
+import { ZardTextareaDirective } from '@zard/components/textarea/textarea.component';
 
 @Component({
   selector: 'z-block-payment-form',
@@ -15,6 +16,7 @@ import { ZardSelectComponent } from '@zard/components/select/select.component';
     ZardButtonComponent,
     ZardCheckboxComponent,
     ZardInputDirective,
+    ZardTextareaDirective,
     ZardSelectComponent,
     ZardSelectItemComponent,
     ZardDividerComponent,
@@ -97,7 +99,7 @@ import { ZardSelectComponent } from '@zard/components/select/select.component';
               <!-- Field: Comments -->
               <div class="flex flex-col gap-2">
                 <label class="text-sm font-medium" for="checkout-comments">Comments</label>
-                <textarea z-input id="checkout-comments" placeholder="Add any additional comments"></textarea>
+                <textarea z-textarea id="checkout-comments" placeholder="Add any additional comments"></textarea>
               </div>
             </div>
           </fieldset>

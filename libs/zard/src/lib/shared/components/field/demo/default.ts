@@ -4,8 +4,9 @@ import { FormsModule } from '@angular/forms';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
-import { ZardInputDirective } from '@/shared/components/input/input.directive';
+import { ZardInputDirective } from '@/shared/components/input/input.component';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
+import { ZardTextareaDirective } from '@/shared/components/textarea/textarea.component';
 
 @Component({
   selector: 'z-demo-field-default',
@@ -14,6 +15,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
     ZardButtonComponent,
     ZardCheckboxComponent,
     ZardInputDirective,
+    ZardTextareaDirective,
     ZardSelectImports,
     FormsModule,
   ],
@@ -100,11 +102,10 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
               <div z-field>
                 <label z-field-label for="checkout-comments">Comments</label>
                 <textarea
-                  z-input
+                  z-textarea
                   id="checkout-comments"
                   placeholder="Add any additional comments"
                   class="resize-none"
-                  zSize="sm"
                 ></textarea>
               </div>
             </div>

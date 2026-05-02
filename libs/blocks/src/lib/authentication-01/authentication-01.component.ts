@@ -9,7 +9,7 @@ import {
   ZardFormLabelComponent,
   ZardFormControlComponent,
 } from '@zard/components/form/form.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardInputDirective } from '@zard/components/input/input.component';
 
 @Component({
   selector: 'lib-authentication-01',

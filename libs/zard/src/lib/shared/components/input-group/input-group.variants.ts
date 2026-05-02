@@ -9,8 +9,8 @@ export const inputGroupVariants = cva(
     '[&_input[z-input]]:border-0! [&_input[z-input]]:bg-transparent! [&_input[z-input]]:outline-none!',
     '[&_input[z-input]]:ring-0! [&_input[z-input]]:ring-offset-0! [&_input[z-input]]:px-0!',
     '[&_input[z-input]]:py-0! [&_input[z-input]]:h-full! [&_input[z-input]]:flex-1',
-    '[&_textarea[z-input]]:border-0! [&_textarea[z-input]]:bg-transparent! [&_textarea[z-input]]:outline-none!',
-    '[&_textarea[z-input]]:ring-0! [&_textarea[z-input]]:ring-offset-0! [&_textarea[z-input]]:px-2.5! [&_textarea[z-input]]:py-2!',
+    '[&_textarea[z-textarea]]:border-0! [&_textarea[z-textarea]]:bg-transparent! [&_textarea[z-textarea]]:outline-none!',
+    '[&_textarea[z-textarea]]:ring-0! [&_textarea[z-textarea]]:ring-offset-0! [&_textarea[z-textarea]]:px-2.5! [&_textarea[z-textarea]]:py-2!',
     'has-[textarea]:flex-col has-[textarea]:h-auto',
     // focus state
     'has-[[data-slot=input-group-control]:focus-visible]:border-ring has-[[data-slot=input-group-control]:focus-visible]:ring-3 has-[[data-slot=input-group-control]:focus-visible]:ring-ring/50',

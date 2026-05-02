@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardInputDirective } from '@zard/components/input/input.component';
 
 import { hexToOklch, isValidHex, isValidOklch, oklchToHex } from '../../utils/oklch-converter';
 

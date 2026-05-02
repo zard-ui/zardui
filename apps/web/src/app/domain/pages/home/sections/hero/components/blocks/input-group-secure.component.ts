@@ -4,7 +4,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideInfo, lucideStar } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardInputDirective } from '@zard/components/input/input.component';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
 import { ZardIdDirective } from '@zard/core';

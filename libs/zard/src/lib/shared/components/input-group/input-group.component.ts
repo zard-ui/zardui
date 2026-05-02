@@ -27,9 +27,10 @@ import {
   type ZardInputGroupAddonAlignVariants,
   type ZardInputGroupAddonPositionVariants,
 } from './input-group.variants';
-import { ZardInputDirective } from '../input/input.directive';
+import { ZardInputDirective } from '../input/input.component';
 import type { ZardInputSizeVariants } from '../input/input.variants';
 import { ZardLoaderComponent } from '../loader/loader.component';
+import { ZardTextareaDirective } from '../textarea/textarea.component';
 
 @Component({
   selector: 'z-input-group',
@@ -44,7 +45,7 @@ import { ZardLoaderComponent } from '../loader/loader.component';
       }
 
       <div [class]="inputWrapperClasses()">
-        <ng-content select="input[z-input], textarea[z-input]" />
+        <ng-content select="input[z-input], textarea[z-textarea]" />
 
         @if (zLoading()) {
           <z-loader zSize="sm" />
@@ -80,13 +81,15 @@ export class ZardInputGroupComponent {
   readonly zSize = input<ZardInputSizeVariants>('default');
 
   private readonly contentInput = contentChild<ZardInputDirective>(ZardInputDirective);
+  private readonly contentTextarea = contentChild<ZardTextareaDirective>(ZardTextareaDirective);
+  private readonly contentControl = computed(() => this.contentTextarea() ?? this.contentInput());
   private readonly uniqueId = viewChild<ZardIdDirective>('z');
 
   protected readonly addonBeforeId = computed(() => `${this.uniqueId()?.id() ?? 'input-group'}-addon-before`);
   protected readonly addonAfterId = computed(() => `${this.uniqueId()?.id() ?? 'input-group'}-addon-after`);
   protected readonly isAddonBeforeTemplate = computed(() => isTemplateRef(this.zAddonBefore()));
   protected readonly classes = computed(() => {
-    const isTextarea = this.contentInput()?.getType() === 'textarea';
+    const isTextarea = this.contentTextarea() != null;
     return mergeClasses(
       'w-full',
       inputGroupVariants({
@@ -118,15 +121,18 @@ export class ZardInputGroupComponent {
 
   constructor() {
     effect(() => {
-      const contentInput = this.contentInput();
+      const inputDirective = this.contentInput();
+      const textareaDirective = this.contentTextarea();
       const disabled = this.zDisabled();
       const size = this.zSize();
 
-      if (size) {
-        contentInput?.size.set(size);
+      if (size && inputDirective) {
+        inputDirective.size.set(size);
       }
-      contentInput?.disable(disabled);
-      contentInput?.setDataSlot('input-group-control');
+      inputDirective?.disable(disabled);
+      inputDirective?.setDataSlot('input-group-control');
+      textareaDirective?.disable(disabled);
+      textareaDirective?.setDataSlot('input-group-control');
     });
   }
 
@@ -137,7 +143,7 @@ export class ZardInputGroupComponent {
         zDisabled: this.zDisabled() || this.zLoading(),
         zPosition: position,
         zSize: this.zSize(),
-        zType: this.contentInput()?.getType() ?? 'default',
+        zType: this.contentTextarea() != null ? 'textarea' : 'default',
       }),
     );
   }

@@ -2,7 +2,7 @@ import { Component, type TemplateRef, ViewChild } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardInputGroupComponent } from './input-group.component';
-import { ZardInputDirective } from '../input/input.directive';
+import { ZardInputDirective } from '../input/input.component';
 import { inputVariants, type ZardInputSizeVariants } from '../input/input.variants';
 
 @Component({

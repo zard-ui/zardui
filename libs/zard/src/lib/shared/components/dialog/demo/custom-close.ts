@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardDialogRef } from '@/shared/components/dialog/dialog-ref';
 import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
-import { ZardInputDirective } from '@/shared/components/input/input.directive';
+import { ZardInputDirective } from '@/shared/components/input/input.component';
 
 @Component({
   selector: 'zard-demo-dialog-custom-close-content',

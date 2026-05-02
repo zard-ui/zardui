@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardInputDirective } from '../../input/input.directive';
+import { ZardInputDirective } from '../../input/input.component';
 import { ZardInputGroupComponent } from '../input-group.component';
 
 @Component({

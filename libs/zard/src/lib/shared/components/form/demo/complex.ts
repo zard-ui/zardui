@@ -4,7 +4,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardCheckboxComponent } from '../../checkbox/checkbox.component';
-import { ZardInputDirective } from '../../input/input.directive';
+import { ZardInputDirective } from '../../input/input.component';
 import { ZardSelectItemComponent } from '../../select/select-item.component';
 import { ZardSelectComponent } from '../../select/select.component';
 import { ZardFormImports } from '../form.imports';

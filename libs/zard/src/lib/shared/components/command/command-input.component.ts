@@ -16,7 +16,7 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
 
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
-import { ZardInputDirective } from '@/shared/components/input/input.directive';
+import { ZardInputDirective } from '@/shared/components/input/input.component';
 import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';
 
 @Component({

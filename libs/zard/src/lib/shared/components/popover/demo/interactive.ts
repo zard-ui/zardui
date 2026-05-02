@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/
 import { FormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.directive';
+import { ZardInputDirective } from '../../input/input.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component';
 
 @Component({

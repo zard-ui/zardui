@@ -5,7 +5,7 @@ import { lucidePlus } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardInputDirective } from '@zard/components/input/input.component';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
 import { ZardTooltipDirective } from '@zard/components/tooltip';
 

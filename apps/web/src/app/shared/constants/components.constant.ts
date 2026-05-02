@@ -160,6 +160,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/input-group/demo/input-group').then(m => m.INPUT_GROUP),
   },
   {
+    componentName: 'textarea',
+    description: 'Displays a multi-line text input field.',
+    loadData: () => import('@zard/components/textarea/demo/textarea').then(m => m.TEXTAREA),
+  },
+  {
     componentName: 'kbd',
     description: 'Displays a keyboard key or shortcut.',
     loadData: () => import('@zard/components/kbd/demo/kbd').then(m => m.KBD),

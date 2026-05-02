@@ -6,7 +6,7 @@ import { lucideArrowUp, lucideCheck, lucideInfo, lucidePlus, lucideSearch } from
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardDividerComponent } from '@zard/components/divider';
 import { ZardDropdownImports } from '@zard/components/dropdown';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardInputDirective } from '@zard/components/input/input.component';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
 import { ZardTooltipDirective } from '@zard/components/tooltip';
 

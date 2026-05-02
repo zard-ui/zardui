@@ -411,11 +411,36 @@ export const registry: ComponentRegistry[] = [
     name: 'input',
     files: [
       {
-        name: 'input.directive.ts',
+        name: 'input.component.ts',
+        content: '',
+      },
+      {
+        name: 'input.imports.ts',
         content: '',
       },
       {
         name: 'input.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'textarea',
+    files: [
+      {
+        name: 'textarea.component.ts',
+        content: '',
+      },
+      {
+        name: 'textarea.imports.ts',
+        content: '',
+      },
+      {
+        name: 'textarea.variants.ts',
         content: '',
       },
       {

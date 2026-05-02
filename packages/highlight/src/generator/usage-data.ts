@@ -142,8 +142,14 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
 </z-form-field>`,
   },
   input: {
-    importCode: `import { ZardInputDirective } from '@/shared/components/input/input.directive';`,
-    templateCode: `<input z-input type="text" placeholder="Email" />`,
+    importCode: `import { ZardInputImports } from '@/shared/components/input/input.imports';`,
+    templateCode: `<z-input zPlaceholder="Email" />
+<input z-input type="text" placeholder="Email" />`,
+  },
+  textarea: {
+    importCode: `import { ZardTextareaImports } from '@/shared/components/textarea/textarea.imports';`,
+    templateCode: `<z-textarea zPlaceholder="Type your message" zRows="6" />
+<textarea z-textarea rows="6" placeholder="Type your message"></textarea>`,
   },
   'input-group': {
     importCode: `import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';`,

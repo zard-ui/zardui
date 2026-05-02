@@ -21,11 +21,11 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCommandImports, type ZardCommandOption } from '@zard/components/command';
 import { ZardDropdownImports } from '@zard/components/dropdown';
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
 import { ZardMenuImports } from '@zard/components/menu';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
+import { ZardTextareaDirective } from '@zard/components/textarea/textarea.component';
 import { ZardTooltipDirective } from '@zard/components/tooltip';
 import { ZardIdDirective } from '@zard/core';
 
@@ -80,11 +80,11 @@ const SAMPLE_DATA = {
     ...ZardDropdownImports,
     ...ZardMenuImports,
     NgIcon,
-    ZardInputDirective,
     ZardInputGroupComponent,
     ZardPopoverComponent,
     ZardPopoverDirective,
     ZardSwitchComponent,
+    ZardTextareaDirective,
     ZardTooltipDirective,
     ZardIdDirective,
   ],
@@ -109,7 +109,7 @@ const SAMPLE_DATA = {
         <label class="sr-only" [attr.for]="z.id()">Prompt</label>
         <z-input-group [zAddonBefore]="addonBefore" [zAddonAfter]="addonAfter" zAddonAlign="block" class="rounded-2xl!">
           <textarea
-            z-input
+            z-textarea
             [id]="z.id()"
             placeholder="Ask, search, or make anything..."
             class="field-sizing-content min-h-16 resize-none"

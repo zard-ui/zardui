@@ -3,7 +3,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 
 import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
 
-import { ZardInputDirective } from '../../input/input.directive';
+import { ZardInputDirective } from '../../input/input.component';
 import { Z_MODAL_DATA, ZardDialogService } from '../dialog.service';
 
 interface iDialogData {

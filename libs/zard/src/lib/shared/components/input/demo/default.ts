@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, type AfterViewInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
-import { ZardInputDirective } from '../input.directive';
+import { ZardInputDirective } from '../input.component';
 
 @Component({
   selector: 'z-demo-input-default',

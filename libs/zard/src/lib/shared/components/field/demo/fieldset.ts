@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
-import { ZardInputDirective } from '@/shared/components/input/input.directive';
+import { ZardInputDirective } from '@/shared/components/input/input.component';
 
 @Component({
   selector: 'z-demo-field-fieldset',

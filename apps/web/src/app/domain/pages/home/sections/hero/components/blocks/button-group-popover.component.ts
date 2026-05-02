@@ -5,8 +5,8 @@ import { lucideBot, lucideChevronDown } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
+import { ZardTextareaDirective } from '@zard/components/textarea/textarea.component';
 
 @Component({
   selector: 'z-block-button-group-popover',
@@ -15,9 +15,9 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
     ZardButtonComponent,
     ZardButtonGroupComponent,
     NgIcon,
-    ZardInputDirective,
     ZardPopoverComponent,
     ZardPopoverDirective,
+    ZardTextareaDirective,
   ],
   viewProviders: [provideIcons({ lucideBot, lucideChevronDown })],
   template: `
@@ -46,7 +46,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/pop
           <div class="bg-border h-px"></div>
           <div class="p-4 text-sm">
             <textarea
-              z-input
+              z-textarea
               aria-label="Task description"
               placeholder="Describe your task in natural language."
               class="mb-4 resize-none"

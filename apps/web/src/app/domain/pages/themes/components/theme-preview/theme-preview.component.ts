@@ -21,7 +21,7 @@ import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardInputDirective } from '@zard/components/input/input.component';
 import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
 import { ZardSkeletonComponent } from '@zard/components/skeleton/skeleton.component';
 import { ZardSliderComponent } from '@zard/components/slider/slider.component';
