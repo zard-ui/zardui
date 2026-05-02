@@ -20,8 +20,6 @@
     "e2e": "nx e2e web-e2e",
     "e2e:ui": "nx e2e web-e2e -- --ui",
     "generate:highlight": "npx tsx packages/highlight/src/generator/index.ts",
-    "convert:demos": "npx tsx scripts/convert-demos-to-md.cts",
-    "generate:installation": "npx tsx scripts/generate-installation-guides.cts",
     "generate:highlight:run": "npx tsx packages/highlight/src/generator/index.ts",
     "release:cli": "npx nx release --projects=packages/cli",
     "publish:cli": "npx nx run cli:publish",
