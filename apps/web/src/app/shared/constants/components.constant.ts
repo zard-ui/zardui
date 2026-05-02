@@ -140,6 +140,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/empty/demo/empty').then(m => m.EMPTY),
   },
   {
+    componentName: 'field',
+    description: 'Composable building blocks for accessible form layouts with labels, descriptions and errors.',
+    loadData: () => import('@zard/components/field/demo/field').then(m => m.FIELD),
+  },
+  {
     componentName: 'form',
     description: 'Building forms with Angular reactive forms and Zard UI components.',
     loadData: () => import('@zard/components/form/demo/form').then(m => m.FORM),

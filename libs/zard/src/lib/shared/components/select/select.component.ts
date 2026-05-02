@@ -107,10 +107,12 @@ const COMPACT_MODE_WIDTH_THRESHOLD = 100;
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideChevronDown })],
   host: {
+    tabindex: '-1',
     '[attr.data-active]': 'isFocus() ? "" : null',
     '[attr.data-disabled]': 'disabledState() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '[class]': 'classes()',
+    '(focus)': 'onHostFocus($event)',
     '(keydown.{enter,space,arrowdown,arrowup,escape}.prevent)': 'onTriggerKeydown($event)',
   },
 })
@@ -159,6 +161,13 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   protected onFocus(): void {
     if (this.isCompact()) {
       this.isFocus.set(true);
+    }
+  }
+
+  protected onHostFocus(event: FocusEvent): void {
+    if (event.target === this.elementRef.nativeElement) {
+      this.focusButton();
+      this.open();
     }
   }
 

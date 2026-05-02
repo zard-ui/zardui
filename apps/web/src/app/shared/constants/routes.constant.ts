@@ -81,6 +81,7 @@ export const COMPONENTS_PATH = {
     { name: 'Date Picker', path: '/docs/components/date-picker', available: true },
     { name: 'Divider', path: '/docs/components/divider', available: true },
     { name: 'Empty', path: '/docs/components/empty', available: true },
+    { name: 'Field', path: '/docs/components/field', available: true },
     { name: 'Form', path: '/docs/components/form', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Input Group', path: '/docs/components/input-group', available: true },

@@ -27,12 +27,13 @@ export const TOGGLE_GROUP = {
     manualCode: TOGGLE_GROUP_MANUAL_CODE,
   },
   usage: { importBlock: TOGGLE_GROUP_USAGE_IMPORT, codeBlock: TOGGLE_GROUP_USAGE_CODE },
+  preview: {
+    name: 'preview',
+    component: ToggleGroupDefaultComponent,
+    codeData: TOGGLE_GROUP_DEMO_DEFAULT,
+    column: false,
+  },
   examples: [
-    {
-      name: 'default',
-      component: ToggleGroupDefaultComponent,
-      codeData: TOGGLE_GROUP_DEMO_DEFAULT,
-    },
     {
       name: 'outline',
       description: 'Use zType="outline" for an outline style.',
