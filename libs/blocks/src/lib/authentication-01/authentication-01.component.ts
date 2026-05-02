@@ -9,7 +9,7 @@ import {
   ZardFormLabelComponent,
   ZardFormControlComponent,
 } from '@zard/components/form/form.component';
-import { ZardInputDirective } from '@zard/components/input/input.component';
+import { ZardInputComponent } from '@zard/components/input/input.component';
 
 @Component({
   selector: 'lib-authentication-01',
@@ -19,7 +19,7 @@ import { ZardInputDirective } from '@zard/components/input/input.component';
     ZardButtonComponent,
     ZardCardComponent,
     ZardCheckboxComponent,
-    ZardInputDirective,
+    ZardInputComponent,
     ZardFormFieldComponent,
     ZardFormLabelComponent,
     ZardFormControlComponent,

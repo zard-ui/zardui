@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardInputDirective } from '../../input/input.component';
+import { ZardInputComponent } from '../../input/input.component';
 import { ZardInputGroupComponent } from '../input-group.component';
 
 @Component({
   selector: 'z-demo-input-group-size',
-  imports: [ZardInputGroupComponent, ZardInputDirective],
+  imports: [ZardInputGroupComponent, ZardInputComponent],
   template: `
     <div class="flex flex-col space-y-4">
       <z-input-group zSize="sm" zAddonBefore="https://" zAddonAfter=".com" class="mb-4">

@@ -6,10 +6,10 @@ import { By } from '@angular/platform-browser';
 import { screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
-import { ZardInputDirective } from './input.component';
+import { ZardInputComponent } from './input.component';
 
 @Component({
-  imports: [ZardInputDirective],
+  imports: [ZardInputComponent],
   template: `
     <input z-input data-testid="test-input" />
   `,
@@ -18,7 +18,7 @@ import { ZardInputDirective } from './input.component';
 class TestHostComponent {}
 
 @Component({
-  imports: [ZardInputDirective, ReactiveFormsModule],
+  imports: [ZardInputComponent, ReactiveFormsModule],
   template: `
     <input z-input [formControl]="control" data-testid="form-input" />
   `,
@@ -28,7 +28,7 @@ class TestFormHostComponent {
   control = new FormControl('');
 }
 
-describe('ZardInputDirective', () => {
+describe('ZardInputComponent', () => {
   let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(async () => {
@@ -48,7 +48,7 @@ describe('ZardInputDirective', () => {
 
   it('disables input when disable method is called', async () => {
     const input = screen.getByTestId('test-input');
-    const directive = fixture.debugElement.query(By.directive(ZardInputDirective))?.injector.get(ZardInputDirective);
+    const directive = fixture.debugElement.query(By.directive(ZardInputComponent))?.injector.get(ZardInputComponent);
 
     if (directive) {
       directive.disable(true);
@@ -60,7 +60,7 @@ describe('ZardInputDirective', () => {
   });
 });
 
-describe('ZardInputDirective with Forms', () => {
+describe('ZardInputComponent with Forms', () => {
   let fixture: ComponentFixture<TestFormHostComponent>;
   let user: ReturnType<typeof userEvent.setup>;
   let control: FormControl;
@@ -78,7 +78,7 @@ describe('ZardInputDirective with Forms', () => {
 
   describe('ControlValueAccessor implementation', () => {
     it('implements ControlValueAccessor interface methods', () => {
-      const directive = fixture.debugElement.query(By.directive(ZardInputDirective))?.injector.get(ZardInputDirective);
+      const directive = fixture.debugElement.query(By.directive(ZardInputComponent))?.injector.get(ZardInputComponent);
 
       expect(directive?.writeValue).toBeDefined();
       expect(directive?.registerOnChange).toBeDefined();
@@ -87,7 +87,7 @@ describe('ZardInputDirective with Forms', () => {
 
     it('writes value to native element when writeValue is called', () => {
       const input = screen.getByTestId('form-input');
-      const directive = fixture.debugElement.query(By.directive(ZardInputDirective))?.injector.get(ZardInputDirective);
+      const directive = fixture.debugElement.query(By.directive(ZardInputComponent))?.injector.get(ZardInputComponent);
 
       directive?.writeValue('test value');
       fixture.detectChanges();
@@ -97,7 +97,7 @@ describe('ZardInputDirective with Forms', () => {
 
     it('handles undefined and empty string values in writeValue', () => {
       const input = screen.getByTestId('form-input');
-      const directive = fixture.debugElement.query(By.directive(ZardInputDirective))?.injector.get(ZardInputDirective);
+      const directive = fixture.debugElement.query(By.directive(ZardInputComponent))?.injector.get(ZardInputComponent);
 
       directive?.writeValue(undefined);
       fixture.detectChanges();
@@ -110,7 +110,7 @@ describe('ZardInputDirective with Forms', () => {
 
     it('calls registerOnChange callback when input value changes', async () => {
       const input = screen.getByTestId('form-input');
-      const directive = fixture.debugElement.query(By.directive(ZardInputDirective))?.injector.get(ZardInputDirective);
+      const directive = fixture.debugElement.query(By.directive(ZardInputComponent))?.injector.get(ZardInputComponent);
       const onChangeSpy = jest.fn();
 
       directive?.registerOnChange(onChangeSpy);
@@ -123,7 +123,7 @@ describe('ZardInputDirective with Forms', () => {
 
     it('calls registerOnTouched callback when input loses focus', async () => {
       const input = screen.getByTestId('form-input');
-      const directive = fixture.debugElement.query(By.directive(ZardInputDirective))?.injector.get(ZardInputDirective);
+      const directive = fixture.debugElement.query(By.directive(ZardInputComponent))?.injector.get(ZardInputComponent);
       const onTouchedSpy = jest.fn();
 
       directive?.registerOnTouched(onTouchedSpy);
@@ -194,7 +194,7 @@ describe('ZardInputDirective with Forms', () => {
 
     it('maintains sync after multiple blur events', async () => {
       const input = screen.getByTestId('form-input');
-      const directive = fixture.debugElement.query(By.directive(ZardInputDirective))?.injector.get(ZardInputDirective);
+      const directive = fixture.debugElement.query(By.directive(ZardInputComponent))?.injector.get(ZardInputComponent);
       const onTouchedSpy = jest.fn();
 
       directive?.registerOnTouched(onTouchedSpy);

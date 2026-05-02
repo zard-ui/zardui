@@ -146,6 +146,7 @@ export const inputGroupInputVariants = cva(
   },
 );
 
+export type ZardInputGroupSizeVariants = NonNullable<VariantProps<typeof inputGroupVariants>['zSize']>;
 export type ZardInputGroupAddonAlignVariants = NonNullable<VariantProps<typeof inputGroupAddonVariants>['zAlign']>;
 export type ZardInputGroupAddonPositionVariants = NonNullable<
   VariantProps<typeof inputGroupAddonVariants>['zPosition']

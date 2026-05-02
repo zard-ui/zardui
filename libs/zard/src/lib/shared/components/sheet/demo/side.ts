@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject, signal, type AfterViewInit 
 import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardInputDirective } from '@/shared/components/input';
+import { ZardInputComponent } from '@/shared/components/input';
 import { ZardRadioGroupImports } from '@/shared/components/radio-group';
 import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
 import { Z_SHEET_DATA, ZardSheetService } from '@/shared/components/sheet/sheet.service';
@@ -14,7 +14,7 @@ interface iSheetData {
 
 @Component({
   selector: 'zard-demo-sheet-side',
-  imports: [FormsModule, ReactiveFormsModule, ZardInputDirective],
+  imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
   template: `
     <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
       <div class="grid gap-3">

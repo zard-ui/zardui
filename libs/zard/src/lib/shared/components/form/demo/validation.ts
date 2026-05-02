@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.component';
+import { ZardInputComponent } from '../../input/input.component';
 import { ZardFormImports } from '../form.imports';
 
 @Component({
   selector: 'zard-demo-form-validation',
-  imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputDirective, ZardFormImports],
+  imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputComponent, ZardFormImports],
   template: `
     <form [formGroup]="validationForm" (ngSubmit)="onSubmit()" class="max-w-sm space-y-6">
       <z-form-field>
@@ -18,7 +18,7 @@ import { ZardFormImports } from '../form.imports';
             type="text"
             placeholder="Your full name"
             formControlName="name"
-            [zStatus]="nameControl.invalid && nameControl.touched ? 'error' : undefined"
+            [attr.aria-invalid]="nameControl.invalid && nameControl.touched ? 'true' : null"
           />
         </z-form-control>
         @if (nameControl.hasError('required') && nameControl.touched) {
@@ -38,7 +38,7 @@ import { ZardFormImports } from '../form.imports';
             type="email"
             placeholder="your.email@example.com"
             formControlName="email"
-            [zStatus]="emailControl.invalid && emailControl.touched ? 'error' : undefined"
+            [attr.aria-invalid]="emailControl.invalid && emailControl.touched ? 'true' : null"
           />
         </z-form-control>
         @if (emailControl.hasError('required') && emailControl.touched) {
@@ -58,13 +58,7 @@ import { ZardFormImports } from '../form.imports';
             type="url"
             placeholder="https://example.com"
             formControlName="website"
-            [zStatus]="
-              websiteControl.invalid && websiteControl.touched
-                ? 'error'
-                : websiteControl.valid && websiteControl.touched
-                  ? 'success'
-                  : undefined
-            "
+            [attr.aria-invalid]="websiteControl.invalid && websiteControl.touched ? 'true' : null"
           />
         </z-form-control>
         @if (websiteControl.hasError('pattern') && websiteControl.touched) {

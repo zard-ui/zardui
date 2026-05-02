@@ -16,12 +16,12 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
 
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
-import { ZardInputDirective } from '@/shared/components/input/input.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';
 
 @Component({
   selector: 'z-command-input',
-  imports: [NgIcon, ZardInputGroupComponent, ZardInputDirective],
+  imports: [NgIcon, ZardInputGroupComponent, ZardInputComponent],
   template: `
     <div data-slot="command-input-wrapper" class="p-1 pb-0">
       <z-input-group

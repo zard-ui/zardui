@@ -3,7 +3,7 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardInputDirective } from '@zard/components/input/input.component';
+import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardSelectItemComponent } from '@zard/components/select/select-item.component';
 import { ZardSelectComponent } from '@zard/components/select/select.component';
 import { ZardTextareaDirective } from '@zard/components/textarea/textarea.component';
@@ -15,7 +15,7 @@ import { ZardTextareaDirective } from '@zard/components/textarea/textarea.compon
   imports: [
     ZardButtonComponent,
     ZardCheckboxComponent,
-    ZardInputDirective,
+    ZardInputComponent,
     ZardTextareaDirective,
     ZardSelectComponent,
     ZardSelectItemComponent,
@@ -36,19 +36,19 @@ import { ZardTextareaDirective } from '@zard/components/textarea/textarea.compon
               <!-- Field: Name on Card -->
               <div class="flex flex-col gap-2">
                 <label class="text-sm font-medium" for="checkout-card-name">Name on Card</label>
-                <input z-input zSize="sm" id="checkout-card-name" placeholder="John Doe" required />
+                <input z-input id="checkout-card-name" placeholder="John Doe" required />
               </div>
 
               <!-- Card Number + CVV -->
               <div class="grid grid-cols-3 gap-4">
                 <div class="col-span-2 flex flex-col gap-2">
                   <label class="text-sm font-medium" for="checkout-card-number">Card Number</label>
-                  <input z-input zSize="sm" id="checkout-card-number" placeholder="1234 5678 9012 3456" required />
+                  <input z-input id="checkout-card-number" placeholder="1234 5678 9012 3456" required />
                   <p class="text-muted-foreground text-sm">Enter your 16-digit number.</p>
                 </div>
                 <div class="col-span-1 flex flex-col gap-2">
                   <label class="text-sm font-medium" for="checkout-cvv">CVV</label>
-                  <input z-input zSize="sm" id="checkout-cvv" placeholder="123" required />
+                  <input z-input id="checkout-cvv" placeholder="123" required />
                 </div>
               </div>
 
@@ -56,7 +56,7 @@ import { ZardTextareaDirective } from '@zard/components/textarea/textarea.compon
               <div class="grid grid-cols-2 gap-4">
                 <div class="flex flex-col gap-2">
                   <label class="text-sm font-medium" for="checkout-exp-month">Month</label>
-                  <z-select id="checkout-exp-month" zSize="sm" zPlaceholder="MM" class="w-full">
+                  <z-select id="checkout-exp-month" zPlaceholder="MM" class="w-full">
                     @for (month of months; track month) {
                       <z-select-item [zValue]="month">{{ month }}</z-select-item>
                     }
@@ -64,7 +64,7 @@ import { ZardTextareaDirective } from '@zard/components/textarea/textarea.compon
                 </div>
                 <div class="flex flex-col gap-2">
                   <label class="text-sm font-medium" for="checkout-exp-year">Year</label>
-                  <z-select id="checkout-exp-year" zSize="sm" zPlaceholder="YYYY" class="w-full">
+                  <z-select id="checkout-exp-year" zPlaceholder="YYYY" class="w-full">
                     @for (year of years; track year) {
                       <z-select-item [zValue]="year">{{ year }}</z-select-item>
                     }

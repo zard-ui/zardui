@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, signal, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ZardInputDirective } from '@zard/components/input/input.component';
+import { ZardInputComponent } from '@zard/components/input/input.component';
 
 import { hexToOklch, isValidHex, isValidOklch, oklchToHex } from '../../utils/oklch-converter';
 
@@ -10,7 +10,7 @@ let colorPickerFieldId = 0;
 @Component({
   selector: 'app-color-picker-field',
   standalone: true,
-  imports: [FormsModule, ZardInputDirective],
+  imports: [FormsModule, ZardInputComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   template: `

@@ -3,12 +3,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
 
-import { ZardInputDirective } from '../../input/input.component';
+import { ZardInputComponent } from '../../input/input.component';
 import { ZardInputGroupComponent } from '../input-group.component';
 
 @Component({
   selector: 'z-demo-input-group-loading',
-  imports: [ZardInputGroupComponent, ZardInputDirective, NgIcon],
+  imports: [ZardInputGroupComponent, ZardInputComponent, NgIcon],
   template: `
     <div class="flex flex-col space-y-4">
       <z-input-group [zAddonBefore]="search" zLoading>

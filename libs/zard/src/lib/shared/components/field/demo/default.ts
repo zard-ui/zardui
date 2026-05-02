@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
-import { ZardInputDirective } from '@/shared/components/input/input.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 import { ZardTextareaDirective } from '@/shared/components/textarea/textarea.component';
 
@@ -14,7 +14,7 @@ import { ZardTextareaDirective } from '@/shared/components/textarea/textarea.com
     ...ZardFieldImports,
     ZardButtonComponent,
     ZardCheckboxComponent,
-    ZardInputDirective,
+    ZardInputComponent,
     ZardTextareaDirective,
     ZardSelectImports,
     FormsModule,

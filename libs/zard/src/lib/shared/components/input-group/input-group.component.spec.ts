@@ -2,11 +2,12 @@ import { Component, type TemplateRef, ViewChild } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ZardInputGroupComponent } from './input-group.component';
-import { ZardInputDirective } from '../input/input.component';
-import { inputVariants, type ZardInputSizeVariants } from '../input/input.variants';
+import { type ZardInputGroupSizeVariants } from './input-group.variants';
+import { ZardInputComponent } from '../input/input.component';
+import { inputVariants } from '../input/input.variants';
 
 @Component({
-  imports: [ZardInputGroupComponent, ZardInputDirective],
+  imports: [ZardInputGroupComponent, ZardInputComponent],
   standalone: true,
   template: `
     <ng-template #customTemplate>Custom Template</ng-template>
@@ -18,7 +19,7 @@ import { inputVariants, type ZardInputSizeVariants } from '../input/input.varian
 class TestHostComponent {
   @ViewChild('customTemplate', { static: true }) customTemplate!: TemplateRef<void>;
 
-  size: ZardInputSizeVariants = 'default';
+  size: ZardInputGroupSizeVariants = 'default';
   disabled = false;
   addonBefore: string | TemplateRef<void> = '';
   addonAfter: string | TemplateRef<void> = '';
@@ -32,7 +33,7 @@ describe('ZardInputGroupComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ZardInputGroupComponent, ZardInputDirective, TestHostComponent],
+      imports: [ZardInputGroupComponent, ZardInputComponent, TestHostComponent],
     }).compileComponents();
   });
 
@@ -61,7 +62,7 @@ describe('ZardInputGroupComponent', () => {
     });
 
     it('should handle size variants', () => {
-      const sizes: Array<ZardInputSizeVariants> = ['sm', 'default', 'lg'];
+      const sizes: Array<ZardInputGroupSizeVariants> = ['sm', 'default', 'lg'];
 
       sizes.forEach(size => {
         hostComponent.size = size;
@@ -242,12 +243,12 @@ describe('ZardInputGroupComponent', () => {
   });
 });
 
-describe('ZardInputDirective', () => {
+describe('ZardInputComponent', () => {
   let fixture: ComponentFixture<TestHostComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ZardInputGroupComponent, ZardInputDirective, TestHostComponent],
+      imports: [ZardInputGroupComponent, ZardInputComponent, TestHostComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestHostComponent);
@@ -259,7 +260,7 @@ describe('ZardInputDirective', () => {
 
   it('should apply correct classes to input element', () => {
     const inputElement = fixture.debugElement.nativeElement.querySelector('input[z-input]');
-    // The input element gets its classes from ZardInputDirective
+    // The input element gets its classes from ZardInputComponent
     expect(inputElement).toHaveClass(inputVariants());
   });
 });

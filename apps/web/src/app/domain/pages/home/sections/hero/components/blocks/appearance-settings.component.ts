@@ -7,7 +7,7 @@ import { lucideMinus, lucidePlus } from '@ng-icons/lucide';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardInputDirective } from '@zard/components/input/input.component';
+import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardRadioGroupImports } from '@zard/components/radio-group/radio-group.imports';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 
@@ -18,7 +18,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
   imports: [
     ZardButtonComponent,
     ZardButtonGroupComponent,
-    ZardInputDirective,
+    ZardInputComponent,
     ZardDividerComponent,
     ZardSwitchComponent,
     ...ZardRadioGroupImports,

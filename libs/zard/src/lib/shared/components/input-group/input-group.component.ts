@@ -26,9 +26,9 @@ import {
   inputGroupVariants,
   type ZardInputGroupAddonAlignVariants,
   type ZardInputGroupAddonPositionVariants,
+  type ZardInputGroupSizeVariants,
 } from './input-group.variants';
-import { ZardInputDirective } from '../input/input.component';
-import type { ZardInputSizeVariants } from '../input/input.variants';
+import { ZardInputComponent } from '../input/input.component';
 import { ZardLoaderComponent } from '../loader/loader.component';
 import { ZardTextareaDirective } from '../textarea/textarea.component';
 
@@ -78,9 +78,9 @@ export class ZardInputGroupComponent {
   readonly zAddonBefore = input<string | TemplateRef<void>>('');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zLoading = input(false, { transform: booleanAttribute });
-  readonly zSize = input<ZardInputSizeVariants>('default');
+  readonly zSize = input<ZardInputGroupSizeVariants>('default');
 
-  private readonly contentInput = contentChild<ZardInputDirective>(ZardInputDirective);
+  private readonly contentInput = contentChild<ZardInputComponent>(ZardInputComponent);
   private readonly contentTextarea = contentChild<ZardTextareaDirective>(ZardTextareaDirective);
   private readonly contentControl = computed(() => this.contentTextarea() ?? this.contentInput());
   private readonly uniqueId = viewChild<ZardIdDirective>('z');
@@ -124,11 +124,7 @@ export class ZardInputGroupComponent {
       const inputDirective = this.contentInput();
       const textareaDirective = this.contentTextarea();
       const disabled = this.zDisabled();
-      const size = this.zSize();
 
-      if (size && inputDirective) {
-        inputDirective.size.set(size);
-      }
       inputDirective?.disable(disabled);
       inputDirective?.setDataSlot('input-group-control');
       textareaDirective?.disable(disabled);

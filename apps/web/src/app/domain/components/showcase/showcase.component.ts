@@ -9,7 +9,7 @@ import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardInputDirective } from '@zard/components/input/input.component';
+import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTooltipImports } from '@zard/components/tooltip';
@@ -119,7 +119,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
     ZardCarouselItemComponent,
     ZardButtonComponent,
     ZardBadgeComponent,
-    ZardInputDirective,
+    ZardInputComponent,
     ZardCheckboxComponent,
     ZardSwitchComponent,
     ZardProgressBarComponent,

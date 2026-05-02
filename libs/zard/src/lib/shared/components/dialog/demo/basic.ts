@@ -3,7 +3,7 @@ import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 
 import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';
 
-import { ZardInputDirective } from '../../input/input.component';
+import { ZardInputComponent } from '../../input/input.component';
 import { Z_MODAL_DATA, ZardDialogService } from '../dialog.service';
 
 interface iDialogData {
@@ -13,17 +13,17 @@ interface iDialogData {
 
 @Component({
   selector: 'zard-demo-dialog-basic',
-  imports: [FormsModule, ReactiveFormsModule, ZardInputDirective],
+  imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
   template: `
     <form [formGroup]="form" class="grid gap-4">
       <div class="grid gap-3">
         <label for="name" class="text-sm leading-none font-medium select-none">Name</label>
-        <input z-input zSize="sm" id="name" formControlName="name" />
+        <input z-input id="name" formControlName="name" />
       </div>
 
       <div class="grid gap-3">
         <label for="username" class="text-sm leading-none font-medium select-none">Username</label>
-        <input z-input zSize="sm" id="username" formControlName="username" />
+        <input z-input id="username" formControlName="username" />
       </div>
     </form>
   `,
