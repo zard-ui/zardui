@@ -193,10 +193,12 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardProgressBarComponent } from '@/shared/components/progress-bar/progress-bar.component';`,
     templateCode: `<z-progress-bar [progress]="60"></z-progress-bar>`,
   },
-  radio: {
-    importCode: `import { ZardRadioComponent } from '@/shared/components/radio/radio.component';`,
-    templateCode: `<z-radio name="option" [value]="'one'" zLabel="Option One"></z-radio>
-<z-radio name="option" [value]="'two'" zLabel="Option Two"></z-radio>`,
+  'radio-group': {
+    importCode: `import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';`,
+    templateCode: `<z-radio-group [(value)]="selected">
+  <z-radio value="one" />
+  <z-radio value="two" />
+</z-radio-group>`,
   },
   resizable: {
     importCode: `import { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';`,

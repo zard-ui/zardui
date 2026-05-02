@@ -103,7 +103,7 @@ export const COMPONENTS_PATH = {
     { name: 'Menu', path: '/docs/components/menu', available: true },
     { name: 'Resizable', path: '/docs/components/resizable', available: true },
     { name: 'Sheet', path: '/docs/components/sheet', available: true },
-    { name: 'Radio', path: '/docs/components/radio', available: true },
+    { name: 'Radio Group', path: '/docs/components/radio-group', available: true },
     { name: 'Loader', path: '/docs/components/loader', available: true },
     { name: 'Dropdown', path: '/docs/components/dropdown', available: true },
     { name: 'Popover', path: '/docs/components/popover', available: true },

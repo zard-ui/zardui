@@ -617,14 +617,18 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'radio',
+    name: 'radio-group',
     files: [
       {
-        name: 'radio.component.ts',
+        name: 'radio-group.component.ts',
         content: '',
       },
       {
-        name: 'radio.variants.ts',
+        name: 'radio-group.variants.ts',
+        content: '',
+      },
+      {
+        name: 'radio-group.imports.ts',
         content: '',
       },
       {

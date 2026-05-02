@@ -195,9 +195,10 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/progress-bar/demo/progress-bar').then(m => m.PROGRESS_BAR),
   },
   {
-    componentName: 'radio',
-    description: 'A set of checkable buttons where no more than one can be checked at a time.',
-    loadData: () => import('@zard/components/radio/demo/radio').then(m => m.RADIO),
+    componentName: 'radio-group',
+    description:
+      'A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked at a time.',
+    loadData: () => import('@zard/components/radio-group/demo/radio-group').then(m => m.RADIO_GROUP),
   },
   {
     componentName: 'resizable',
