@@ -123,7 +123,7 @@ export class ZardFieldContentComponent {
   encapsulation: ViewEncapsulation.None,
   host: {
     'data-slot': 'field-label',
-    '[attr.for]': 'for()',
+    '[attr.for]': 'for() || null',
     '[class]': 'classes()',
     '(click)': 'onLabelClick()',
   },
