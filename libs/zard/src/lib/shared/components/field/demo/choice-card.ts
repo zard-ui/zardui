@@ -8,7 +8,7 @@ import { ZardRadioComponent } from '@/shared/components/radio/radio.component';
   selector: 'z-demo-field-choice-card',
   imports: [...ZardFieldImports, ZardRadioComponent, FormsModule],
   template: `
-    <div class="w-full min-w-md">
+    <div class="w-full min-w-xs">
       <div z-field-group>
         <fieldset z-field-set>
           <legend z-field-legend zVariant="label">Compute Environment</legend>

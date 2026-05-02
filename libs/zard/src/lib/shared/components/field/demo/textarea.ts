@@ -7,12 +7,18 @@ import { ZardInputDirective } from '@/shared/components/input/input.directive';
   selector: 'z-demo-field-textarea',
   imports: [...ZardFieldImports, ZardInputDirective],
   template: `
-    <div class="w-full min-w-md">
+    <div class="w-full min-w-xs">
       <fieldset z-field-set>
         <div z-field-group>
           <div z-field>
             <label z-field-label for="feedback">Feedback</label>
-            <textarea z-input id="feedback" placeholder="Your feedback helps us improve..." rows="4"></textarea>
+            <textarea
+              z-input
+              id="feedback"
+              placeholder="Your feedback helps us improve..."
+              zSize="sm"
+              rows="4"
+            ></textarea>
             <p z-field-description>Share your thoughts about our service.</p>
           </div>
         </div>

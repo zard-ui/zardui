@@ -7,7 +7,7 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
   selector: 'z-demo-field-slider',
   imports: [...ZardFieldImports, ZardSliderComponent],
   template: `
-    <div class="w-full min-w-md">
+    <div class="w-full min-w-xs">
       <div z-field>
         <div z-field-title>Volume</div>
         <p z-field-description>

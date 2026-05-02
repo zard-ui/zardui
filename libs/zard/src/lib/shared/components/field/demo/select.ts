@@ -7,10 +7,10 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
   selector: 'z-demo-field-select',
   imports: [...ZardFieldImports, ZardSelectImports],
   template: `
-    <div class="w-full min-w-md">
+    <div class="w-full min-w-xs">
       <div z-field>
         <label z-field-label for="department">Department</label>
-        <z-select zPlaceholder="Choose department" id="department">
+        <z-select zPlaceholder="Choose department" id="department" zSize="sm">
           <z-select-item zValue="engineering">Engineering</z-select-item>
           <z-select-item zValue="design">Design</z-select-item>
           <z-select-item zValue="marketing">Marketing</z-select-item>

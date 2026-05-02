@@ -8,7 +8,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
   selector: 'z-demo-field-checkbox',
   imports: [...ZardFieldImports, ZardCheckboxComponent, FormsModule],
   template: `
-    <div class="w-full min-w-md">
+    <div class="w-full min-w-xs">
       <div z-field-group>
         <fieldset z-field-set>
           <legend z-field-legend zVariant="label">Show these items on the desktop</legend>

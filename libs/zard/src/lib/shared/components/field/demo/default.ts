@@ -28,19 +28,19 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
             <div z-field-group>
               <div z-field>
                 <label z-field-label for="checkout-card-name">Name on Card</label>
-                <input z-input id="checkout-card-name" placeholder="Evil Rabbit" required />
+                <input z-input id="checkout-card-name" placeholder="Evil Rabbit" zSize="sm" required />
               </div>
 
               <div z-field>
                 <label z-field-label for="checkout-card-number">Card Number</label>
-                <input z-input id="checkout-card-number" placeholder="1234 5678 9012 3456" required />
+                <input z-input id="checkout-card-number" placeholder="1234 5678 9012 3456" zSize="sm" required />
                 <p z-field-description>Enter your 16-digit card number.</p>
               </div>
 
               <div class="grid grid-cols-3 gap-4">
                 <div z-field>
                   <label z-field-label for="checkout-exp-month" class="w-fit">Month</label>
-                  <z-select id="checkout-exp-month" zPlaceholder="MM">
+                  <z-select id="checkout-exp-month" zPlaceholder="MM" zSize="sm">
                     <z-select-item zValue="01">01</z-select-item>
                     <z-select-item zValue="02">02</z-select-item>
                     <z-select-item zValue="03">03</z-select-item>
@@ -57,7 +57,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
                 </div>
                 <div z-field>
                   <label z-field-label for="checkout-exp-year">Year</label>
-                  <z-select id="checkout-exp-year" zPlaceholder="YYYY">
+                  <z-select id="checkout-exp-year" zPlaceholder="YYYY" zSize="sm">
                     <z-select-item zValue="2024">2024</z-select-item>
                     <z-select-item zValue="2025">2025</z-select-item>
                     <z-select-item zValue="2026">2026</z-select-item>
@@ -68,7 +68,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
                 </div>
                 <div z-field>
                   <label z-field-label for="checkout-cvv">CVV</label>
-                  <input z-input id="checkout-cvv" placeholder="123" required />
+                  <input z-input id="checkout-cvv" placeholder="123" zSize="sm" required />
                 </div>
               </div>
             </div>
@@ -104,6 +104,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
                   id="checkout-comments"
                   placeholder="Add any additional comments"
                   class="resize-none"
+                  zSize="sm"
                 ></textarea>
               </div>
             </div>

@@ -7,10 +7,10 @@ import { ZardSwitchComponent } from '@/shared/components/switch/switch.component
   selector: 'z-demo-field-switch',
   imports: [...ZardFieldImports, ZardSwitchComponent],
   template: `
-    <div class="flex w-full min-w-md justify-center">
+    <div class="flex w-full min-w-xs justify-center">
       <div z-field zOrientation="horizontal" class="w-fit">
         <label z-field-label for="2fa">Multi-factor authentication</label>
-        <z-switch zId="2fa" />
+        <z-switch zId="2fa" zSize="sm" />
       </div>
     </div>
   `,

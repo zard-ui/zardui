@@ -8,7 +8,7 @@ import { ZardRadioComponent } from '@/shared/components/radio/radio.component';
   selector: 'z-demo-field-radio',
   imports: [...ZardFieldImports, ZardRadioComponent, FormsModule],
   template: `
-    <div class="w-full min-w-md">
+    <div class="w-full min-w-xs">
       <fieldset z-field-set>
         <legend z-field-legend zVariant="label">Subscription Plan</legend>
         <p z-field-description>Yearly and lifetime plans offer significant savings.</p>

@@ -8,7 +8,7 @@ import { ZardFieldImports } from '@/shared/components/field/field.imports';
   selector: 'z-demo-field-field-group',
   imports: [...ZardFieldImports, ZardCheckboxComponent, FormsModule],
   template: `
-    <div class="w-full min-w-md">
+    <div class="w-full min-w-xs">
       <div z-field-group>
         <fieldset z-field-set>
           <label z-field-label>Responses</label>
