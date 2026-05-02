@@ -1,9 +1,10 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { form, FormField, min } from '@angular/forms/signals';
 import { By } from '@angular/platform-browser';
 
-import { screen } from '@testing-library/angular';
+import { fireEvent, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
 
 import { ZardInputDirective } from './input.directive';
@@ -26,6 +27,42 @@ class TestHostComponent {}
 })
 class TestFormHostComponent {
   control = new FormControl('');
+}
+
+@Component({
+  imports: [ZardInputDirective, ReactiveFormsModule],
+  template: `
+    <input z-input type="number" [formControl]="control" data-testid="number-form-input" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+class TestNumberFormHostComponent {
+  control = new FormControl<number | null>(null);
+}
+
+@Component({
+  imports: [ZardInputDirective, ReactiveFormsModule],
+  template: `
+    <input z-input type="range" [formControl]="control" data-testid="range-form-input" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+class TestRangeFormHostComponent {
+  control = new FormControl<number | null>(null);
+}
+
+@Component({
+  imports: [ZardInputDirective, FormField],
+  template: `
+    <input z-input type="number" [formField]="profileForm.age" data-testid="signal-number-input" />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+class TestSignalNumberFormHostComponent {
+  readonly profileModel = signal({ age: 1 });
+  readonly profileForm = form(this.profileModel, profile => {
+    min(profile.age, 0);
+  });
 }
 
 describe('ZardInputDirective', () => {
@@ -57,6 +94,97 @@ describe('ZardInputDirective', () => {
     } else {
       fail('Directive not found');
     }
+  });
+});
+
+describe('ZardInputDirective with number forms', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
+  it('syncs number input changes as numbers with reactive forms', async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestNumberFormHostComponent, ReactiveFormsModule],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(TestNumberFormHostComponent);
+    const { control } = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const input = screen.getByTestId('number-form-input');
+
+    control.setValue(7);
+    fixture.detectChanges();
+    expect(input).toHaveValue(7);
+
+    await user.clear(input);
+    expect(control.value).toBeNull();
+
+    await user.type(input, '42');
+    expect(control.value).toBe(42);
+  });
+
+  it('normalizes NaN numeric input values to null', async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestNumberFormHostComponent, ReactiveFormsModule],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(TestNumberFormHostComponent);
+    const { control } = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const input = screen.getByTestId('number-form-input') as HTMLInputElement;
+    control.setValue(7);
+    fixture.detectChanges();
+    Object.defineProperty(input, 'valueAsNumber', { configurable: true, value: Number.NaN });
+
+    input.value = '42';
+    fireEvent.input(input);
+
+    expect(control.value).toBeNull();
+  });
+
+  it('syncs range input changes as numbers with reactive forms', async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestRangeFormHostComponent, ReactiveFormsModule],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(TestRangeFormHostComponent);
+    const { control } = fixture.componentInstance;
+    fixture.detectChanges();
+
+    const input = screen.getByTestId('range-form-input');
+
+    control.setValue(7);
+    fixture.detectChanges();
+    expect((input as HTMLInputElement).valueAsNumber).toBe(7);
+
+    (input as HTMLInputElement).value = '42';
+    fireEvent.input(input);
+
+    expect(control.value).toBe(42);
+  });
+
+  it('binds number fields with signal forms validation', async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestSignalNumberFormHostComponent],
+    }).compileComponents();
+
+    const fixture = TestBed.createComponent(TestSignalNumberFormHostComponent);
+    fixture.detectChanges();
+
+    const input = screen.getByTestId('signal-number-input');
+
+    expect(input).toHaveValue(1);
+    expect(fixture.componentInstance.profileForm.age().valid()).toBe(true);
+
+    await user.clear(input);
+    await user.type(input, '24');
+
+    expect(fixture.componentInstance.profileModel().age).toBe(24);
+    expect(fixture.componentInstance.profileForm.age().valid()).toBe(true);
   });
 });
 
@@ -95,11 +223,15 @@ describe('ZardInputDirective with Forms', () => {
       expect(input).toHaveValue('test value');
     });
 
-    it('handles undefined and empty string values in writeValue', () => {
+    it('handles nullish and empty string values in writeValue', () => {
       const input = screen.getByTestId('form-input');
       const directive = fixture.debugElement.query(By.directive(ZardInputDirective))?.injector.get(ZardInputDirective);
 
       directive?.writeValue(undefined);
+      fixture.detectChanges();
+      expect(input).toHaveValue('');
+
+      directive?.writeValue(null);
       fixture.detectChanges();
       expect(input).toHaveValue('');
 
