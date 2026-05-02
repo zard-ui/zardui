@@ -1,3 +1,13 @@
+## 1.0.0-beta.77 (2026-05-02)
+
+### 🐛 Bug Fixes
+
+- **input:** support number signal forms ([#598](https://github.com/zard-ui/zardui/pull/598))
+
+### ❤️ Thank You
+
+- Otabek @OlimjonovOtabek
+
 ## 1.0.0-beta.76 (2026-04-15)
 
 ### 🐛 Bug Fixes
