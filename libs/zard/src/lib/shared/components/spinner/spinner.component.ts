@@ -4,10 +4,10 @@ import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { loaderVariants, type ZardLoaderVariants } from './loader.variants';
+import { spinnerVariants, type ZardSpinnerVariants } from './spinner.variants';
 
 @Component({
-  selector: 'z-loader',
+  selector: 'z-spinner',
   template: `
     <div class="relative top-1/2 left-1/2 h-[inherit] w-[inherit]">
       @for (_ of bars; track $index) {
@@ -42,15 +42,15 @@ import { loaderVariants, type ZardLoaderVariants } from './loader.variants';
   host: {
     '[class]': 'classes()',
   },
-  exportAs: 'zLoader',
+  exportAs: 'zSpinner',
 })
-export class ZardLoaderComponent {
+export class ZardSpinnerComponent {
   readonly class = input<ClassValue>('');
-  readonly zSize = input<ZardLoaderVariants['zSize']>('default');
+  readonly zSize = input<ZardSpinnerVariants['zSize']>('default');
 
   protected readonly bars = Array.from({ length: 12 });
   protected readonly animationDelay = (index: number) => `-${1.3 - index * 0.1}s`;
   protected readonly transform = (index: number) => `rotate(${30 * index}deg) translate(146%)`;
 
-  protected readonly classes = computed(() => mergeClasses(loaderVariants({ zSize: this.zSize() }), this.class()));
+  protected readonly classes = computed(() => mergeClasses(spinnerVariants({ zSize: this.zSize() }), this.class()));
 }

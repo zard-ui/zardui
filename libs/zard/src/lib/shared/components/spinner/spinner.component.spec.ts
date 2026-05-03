@@ -1,17 +1,17 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ZardLoaderComponent } from './loader.component';
+import { ZardSpinnerComponent } from './spinner.component';
 
-describe('ZardLoaderComponent', () => {
-  let component: ZardLoaderComponent;
-  let fixture: ComponentFixture<ZardLoaderComponent>;
+describe('ZardSpinnerComponent', () => {
+  let component: ZardSpinnerComponent;
+  let fixture: ComponentFixture<ZardSpinnerComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ZardLoaderComponent],
+      imports: [ZardSpinnerComponent],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(ZardLoaderComponent);
+    fixture = TestBed.createComponent(ZardSpinnerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -8,7 +8,7 @@ import { catchError, distinctUntilChanged, filter, switchMap, tap } from 'rxjs/o
 
 import { MarkdownService } from '@doc/shared/services/markdown.service';
 
-import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
+import { ZardSpinnerComponent } from '@zard/components/spinner/spinner.component';
 
 @Component({
   selector: 'z-markdown-renderer',
@@ -16,7 +16,7 @@ import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
     <div class="markdown-content">
       @if (loading()) {
         <div class="flex items-center justify-center p-8">
-          <z-loader />
+          <z-spinner />
           <span class="ml-2 text-gray-600">Loading...</span>
         </div>
       } @else if (error()) {
@@ -28,7 +28,7 @@ import { ZardLoaderComponent } from '@zard/components/loader/loader.component';
       }
     </div>
   `,
-  imports: [ZardLoaderComponent],
+  imports: [ZardSpinnerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarkdownRendererComponent {

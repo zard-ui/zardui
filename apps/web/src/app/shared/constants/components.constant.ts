@@ -175,9 +175,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/layout/demo/layout').then(m => m.LAYOUT),
   },
   {
-    componentName: 'loader',
+    componentName: 'spinner',
     description: 'Displays a loading spinner.',
-    loadData: () => import('@zard/components/loader/demo/loader').then(m => m.LOADER),
+    loadData: () => import('@zard/components/spinner/demo/spinner').then(m => m.SPINNER),
   },
   {
     componentName: 'menu',

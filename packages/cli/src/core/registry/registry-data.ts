@@ -604,14 +604,14 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'loader',
+    name: 'spinner',
     files: [
       {
-        name: 'loader.component.ts',
+        name: 'spinner.component.ts',
         content: '',
       },
       {
-        name: 'loader.variants.ts',
+        name: 'spinner.variants.ts',
         content: '',
       },
       {

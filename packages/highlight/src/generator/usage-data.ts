@@ -170,9 +170,9 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   <z-footer>Footer</z-footer>
 </z-layout>`,
   },
-  loader: {
-    importCode: `import { ZardLoaderComponent } from '@/shared/components/loader/loader.component';`,
-    templateCode: `<z-loader></z-loader>`,
+  spinner: {
+    importCode: `import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';`,
+    templateCode: `<z-spinner></z-spinner>`,
   },
   menu: {
     importCode: `import { ZardMenuImports } from '@/shared/components/menu/menu.imports';`,
