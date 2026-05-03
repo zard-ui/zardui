@@ -51,7 +51,7 @@ class TestHostWithFormControlComponent {
   imports: [ZardSelectImports],
   template: `
     <z-select
-      class="api-select"
+      class="w-64"
       [(zValue)]="value"
       [zPosition]="position()"
       [zSize]="size()"
@@ -444,7 +444,7 @@ describe('ZardSelectComponent', () => {
       const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
         .nativeElement as HTMLElement;
       const trigger = hostFixture.nativeElement.querySelector('[data-slot="select-trigger"]') as HTMLElement;
-      expect(selectElement).toHaveClass('api-select');
+      expect(selectElement).toHaveClass('w-64');
       expect(selectElement).not.toHaveAttribute('dir');
       expect(trigger).toHaveAttribute('data-size', 'lg');
       expect(trigger).toHaveClass('h-10');
