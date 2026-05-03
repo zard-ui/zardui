@@ -193,6 +193,27 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'field',
+    files: [
+      {
+        name: 'field.component.ts',
+        content: '',
+      },
+      {
+        name: 'field.variants.ts',
+        content: '',
+      },
+      {
+        name: 'field.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'badge',
     files: [
       {
@@ -390,7 +411,7 @@ export const registry: ComponentRegistry[] = [
     name: 'input',
     files: [
       {
-        name: 'input.directive.ts',
+        name: 'input.component.ts',
         content: '',
       },
       {
@@ -404,10 +425,31 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'textarea',
+    files: [
+      {
+        name: 'textarea.component.ts',
+        content: '',
+      },
+      {
+        name: 'textarea.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'input-group',
     files: [
       {
         name: 'input-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-group.imports.ts',
         content: '',
       },
       {
@@ -600,14 +642,18 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'radio',
+    name: 'radio-group',
     files: [
       {
-        name: 'radio.component.ts',
+        name: 'radio-group.component.ts',
         content: '',
       },
       {
-        name: 'radio.variants.ts',
+        name: 'radio-group.variants.ts',
+        content: '',
+      },
+      {
+        name: 'radio-group.imports.ts',
         content: '',
       },
       {

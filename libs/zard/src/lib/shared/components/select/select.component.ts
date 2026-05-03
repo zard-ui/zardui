@@ -177,12 +177,14 @@ let nextSelectId = 0;
   viewProviders: [provideIcons({ lucideChevronDown, lucideChevronUp })],
   host: {
     'data-slot': 'select',
+    tabindex: '-1',
     '[attr.data-active]': 'isFocus() ? "" : null',
     '[attr.data-disabled]': 'disabledState() ? "" : null',
     '[attr.data-invalid]': 'zInvalid() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '[attr.dir]': 'dirAttribute()',
     '[class]': 'classes()',
+    '(focus)': 'onHostFocus($event)',
     '(keydown.{enter,space,arrowdown,arrowup,escape}.prevent)': 'onTriggerKeydown($event)',
   },
   exportAs: 'zSelect',
@@ -259,6 +261,13 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   protected onFocus(): void {
     if (this.isCompact()) {
       this.isFocus.set(!this.hasValue());
+    }
+  }
+
+  protected onHostFocus(event: FocusEvent): void {
+    if (event.target === this.elementRef.nativeElement) {
+      this.focusButton();
+      this.open();
     }
   }
 

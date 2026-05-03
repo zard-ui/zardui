@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component, signal, viewChild } from '@angular/
 import { FormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputDirective } from '../../input/input.directive';
+import { ZardInputComponent } from '../../input/input.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component';
 
 @Component({
   selector: 'z-popover-interactive-demo',
-  imports: [FormsModule, ZardButtonComponent, ZardPopoverComponent, ZardPopoverDirective, ZardInputDirective],
+  imports: [FormsModule, ZardButtonComponent, ZardPopoverComponent, ZardPopoverDirective, ZardInputComponent],
   standalone: true,
   template: `
     <button z-button zPopover [zContent]="interactiveContent" zType="outline" #popoverTrigger>Settings</button>

@@ -22,7 +22,11 @@ import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.compon
             <span
               class="inline-grid max-w-0 -translate-x-1 scale-0 transition-all duration-150 has-checked:max-w-4 has-checked:translate-x-0 has-checked:scale-100"
             >
-              <z-checkbox zShape="circle" [ngModel]="selected().includes(option)" (ngModelChange)="toggle(option)" />
+              <z-checkbox
+                class="rounded-full"
+                [ngModel]="selected().includes(option)"
+                (ngModelChange)="toggle(option)"
+              />
             </span>
             <span class="whitespace-nowrap">{{ option }}</span>
           </label>

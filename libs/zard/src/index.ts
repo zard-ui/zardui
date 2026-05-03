@@ -20,6 +20,7 @@ export * from './lib/shared/components/dialog';
 export * from './lib/shared/components/divider';
 export * from './lib/shared/components/dropdown';
 export * from './lib/shared/components/empty';
+export * from './lib/shared/components/field';
 export * from './lib/shared/components/form';
 export * from './lib/shared/components/input';
 export * from './lib/shared/components/input-group';

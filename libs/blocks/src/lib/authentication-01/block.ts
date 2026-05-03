@@ -20,7 +20,7 @@ export const authentication01Block: Block = {
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { Component, signal } from '@angular/core';
 
@@ -32,7 +32,7 @@ import { Component, signal } from '@angular/core';
     ZardButtonComponent,
     ZardCardComponent,
     ZardCheckboxComponent,
-    ZardInputDirective,
+    ZardInputComponent,
     ZardFormFieldComponent,
     ZardFormLabelComponent,
     ZardFormControlComponent,

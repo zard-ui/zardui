@@ -3,11 +3,11 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardDialogRef } from '@/shared/components/dialog/dialog-ref';
 import { ZardDialogService } from '@/shared/components/dialog/dialog.service';
-import { ZardInputDirective } from '@/shared/components/input/input.directive';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
 
 @Component({
   selector: 'zard-demo-dialog-custom-close-content',
-  imports: [ZardButtonComponent, ZardInputDirective],
+  imports: [ZardButtonComponent, ZardInputComponent],
   template: `
     <div class="flex items-center gap-2">
       <div class="grid flex-1 gap-2">

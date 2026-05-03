@@ -1,13 +1,13 @@
 import { Component, signal } from '@angular/core';
 
-import { ZardInputDirective } from '../../input/input.directive';
+import { ZardInputComponent } from '../../input/input.component';
 import { ZardSelectItemComponent } from '../../select/select-item.component';
 import { ZardSelectComponent } from '../../select/select.component';
 import { ZardButtonGroupComponent } from '../button-group.component';
 
 @Component({
   selector: 'z-demo-button-group-select',
-  imports: [ZardButtonGroupComponent, ZardSelectComponent, ZardSelectItemComponent, ZardInputDirective],
+  imports: [ZardButtonGroupComponent, ZardSelectComponent, ZardSelectItemComponent, ZardInputComponent],
   template: `
     <z-button-group>
       <z-select [(zValue)]="currency" class="w-fit">

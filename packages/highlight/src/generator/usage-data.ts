@@ -121,6 +121,16 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardEmptyComponent } from '@/shared/components/empty/empty.component';`,
     templateCode: `<z-empty zTitle="No data" zDescription="There is no data to display."></z-empty>`,
   },
+  field: {
+    importCode: `import { ZardFieldImports } from '@/shared/components/field/field.imports';`,
+    templateCode: `<div z-field-group>
+  <div z-field>
+    <label z-field-label for="email">Email</label>
+    <input z-input id="email" placeholder="m@example.com" />
+    <p z-field-description>We'll never share your email.</p>
+  </div>
+</div>`,
+  },
   form: {
     importCode: `import { ZardFormImports } from '@/shared/components/form/form.imports';`,
     templateCode: `<z-form-field>
@@ -132,12 +142,19 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
 </z-form-field>`,
   },
   input: {
-    importCode: `import { ZardInputDirective } from '@/shared/components/input/input.directive';`,
-    templateCode: `<input z-input type="text" placeholder="Email" />`,
+    importCode: `import { ZardInputComponent } from '@/shared/components/input/input.component';`,
+    templateCode: `<input z-input type="email" placeholder="Email" />`,
+  },
+  textarea: {
+    importCode: `import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';`,
+    templateCode: `<textarea z-textarea rows="6" placeholder="Type your message"></textarea>`,
   },
   'input-group': {
-    importCode: `import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';`,
-    templateCode: `<z-input-group zAddonBefore="https://">
+    importCode: `import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';`,
+    templateCode: `<z-input-group>
+  <z-input-group-addon>
+    <span z-input-group-text>https://</span>
+  </z-input-group-addon>
   <input z-input placeholder="example.com" />
 </z-input-group>`,
   },
@@ -183,10 +200,12 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardProgressBarComponent } from '@/shared/components/progress-bar/progress-bar.component';`,
     templateCode: `<z-progress-bar [progress]="60"></z-progress-bar>`,
   },
-  radio: {
-    importCode: `import { ZardRadioComponent } from '@/shared/components/radio/radio.component';`,
-    templateCode: `<z-radio name="option" [value]="'one'" zLabel="Option One"></z-radio>
-<z-radio name="option" [value]="'two'" zLabel="Option Two"></z-radio>`,
+  'radio-group': {
+    importCode: `import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';`,
+    templateCode: `<z-radio-group [(value)]="selected">
+  <z-radio value="one" />
+  <z-radio value="two" />
+</z-radio-group>`,
   },
   resizable: {
     importCode: `import { ZardResizableImports } from '@/shared/components/resizable/resizable.imports';`,

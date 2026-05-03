@@ -141,6 +141,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/empty/demo/empty').then(m => m.EMPTY),
   },
   {
+    componentName: 'field',
+    description: 'Composable building blocks for accessible form layouts with labels, descriptions and errors.',
+    loadData: () => import('@zard/components/field/demo/field').then(m => m.FIELD),
+  },
+  {
     componentName: 'form',
     description: 'Building forms with Angular reactive forms and Zard UI components.',
     loadData: () => import('@zard/components/form/demo/form').then(m => m.FORM),
@@ -154,6 +159,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     componentName: 'input-group',
     description: 'Groups input elements together with addons.',
     loadData: () => import('@zard/components/input-group/demo/input-group').then(m => m.INPUT_GROUP),
+  },
+  {
+    componentName: 'textarea',
+    description: 'Displays a multi-line text input field.',
+    loadData: () => import('@zard/components/textarea/demo/textarea').then(m => m.TEXTAREA),
   },
   {
     componentName: 'kbd',
@@ -191,9 +201,10 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/progress-bar/demo/progress-bar').then(m => m.PROGRESS_BAR),
   },
   {
-    componentName: 'radio',
-    description: 'A set of checkable buttons where no more than one can be checked at a time.',
-    loadData: () => import('@zard/components/radio/demo/radio').then(m => m.RADIO),
+    componentName: 'radio-group',
+    description:
+      'A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked at a time.',
+    loadData: () => import('@zard/components/radio-group/demo/radio-group').then(m => m.RADIO_GROUP),
   },
   {
     componentName: 'resizable',

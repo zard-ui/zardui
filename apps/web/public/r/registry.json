@@ -99,6 +99,16 @@
       ]
     },
     {
+      "name": "field",
+      "type": "registry:component",
+      "files": [
+        "field.component.ts",
+        "field.variants.ts",
+        "field.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "badge",
       "type": "registry:component",
       "files": [
@@ -193,8 +203,17 @@
       "name": "input",
       "type": "registry:component",
       "files": [
-        "input.directive.ts",
+        "input.component.ts",
         "input.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:component",
+      "files": [
+        "textarea.component.ts",
+        "textarea.variants.ts",
         "index.ts"
       ]
     },
@@ -203,6 +222,7 @@
       "type": "registry:component",
       "files": [
         "input-group.component.ts",
+        "input-group.imports.ts",
         "input-group.variants.ts",
         "index.ts"
       ]
@@ -301,11 +321,12 @@
       ]
     },
     {
-      "name": "radio",
+      "name": "radio-group",
       "type": "registry:component",
       "files": [
-        "radio.component.ts",
-        "radio.variants.ts",
+        "radio-group.component.ts",
+        "radio-group.variants.ts",
+        "radio-group.imports.ts",
         "index.ts"
       ]
     },

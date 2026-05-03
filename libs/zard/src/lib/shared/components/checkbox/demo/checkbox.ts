@@ -1,17 +1,21 @@
+import { CHECKBOX_DEMO_BASIC } from '@generated/components/checkbox/demo/basic';
 import { CHECKBOX_DEMO_DEFAULT } from '@generated/components/checkbox/demo/default';
-import { CHECKBOX_DEMO_DESTRUCTIVE } from '@generated/components/checkbox/demo/destructive';
+import { CHECKBOX_DEMO_DESCRIPTION } from '@generated/components/checkbox/demo/description';
 import { CHECKBOX_DEMO_DISABLED } from '@generated/components/checkbox/demo/disabled';
-import { CHECKBOX_DEMO_SHAPE } from '@generated/components/checkbox/demo/shape';
-import { CHECKBOX_DEMO_SIZE } from '@generated/components/checkbox/demo/size';
+import { CHECKBOX_DEMO_GROUP } from '@generated/components/checkbox/demo/group';
+import { CHECKBOX_DEMO_INVALID } from '@generated/components/checkbox/demo/invalid';
+import { CHECKBOX_DEMO_TABLE } from '@generated/components/checkbox/demo/table';
 import { CHECKBOX_CLI_ADD } from '@generated/installation/cli/add-checkbox';
 import { CHECKBOX_MANUAL_CODE } from '@generated/installation/manual/checkbox';
-import { CHECKBOX_USAGE_IMPORT, CHECKBOX_USAGE_CODE } from '@generated/usage/checkbox';
+import { CHECKBOX_USAGE_CODE, CHECKBOX_USAGE_IMPORT } from '@generated/usage/checkbox';
 
+import { ZardDemoCheckboxBasicComponent } from './basic';
 import { ZardDemoCheckboxDefaultComponent } from './default';
-import { ZardDemoCheckboxDestructiveComponent } from './destructive';
+import { ZardDemoCheckboxDescriptionComponent } from './description';
 import { ZardDemoCheckboxDisabledComponent } from './disabled';
-import { ZardDemoCheckboxShapeComponent } from './shape';
-import { ZardDemoCheckboxSizeComponent } from './size';
+import { ZardDemoCheckboxGroupComponent } from './group';
+import { ZardDemoCheckboxInvalidComponent } from './invalid';
+import { ZardDemoCheckboxTableComponent } from './table';
 import { CHECKBOX_API } from '../doc/api';
 
 export const CHECKBOX = {
@@ -24,31 +28,49 @@ export const CHECKBOX = {
     manualCode: CHECKBOX_MANUAL_CODE,
   },
   usage: { importBlock: CHECKBOX_USAGE_IMPORT, codeBlock: CHECKBOX_USAGE_CODE },
+  preview: {
+    name: 'preview',
+    component: ZardDemoCheckboxDefaultComponent,
+    column: false,
+    codeData: CHECKBOX_DEMO_DEFAULT,
+  },
   examples: [
     {
-      name: 'default',
-      component: ZardDemoCheckboxDefaultComponent,
-      codeData: CHECKBOX_DEMO_DEFAULT,
+      name: 'invalid',
+      description: 'Set aria-invalid on the checkbox and data-invalid on the field wrapper to show the invalid styles.',
+      component: ZardDemoCheckboxInvalidComponent,
+      codeData: CHECKBOX_DEMO_INVALID,
     },
     {
-      name: 'destructive',
-      component: ZardDemoCheckboxDestructiveComponent,
-      codeData: CHECKBOX_DEMO_DESTRUCTIVE,
+      name: 'basic',
+      description: 'Pair the checkbox with Field and FieldLabel for proper layout and labeling.',
+      component: ZardDemoCheckboxBasicComponent,
+      codeData: CHECKBOX_DEMO_BASIC,
     },
     {
-      name: 'size',
-      component: ZardDemoCheckboxSizeComponent,
-      codeData: CHECKBOX_DEMO_SIZE,
-    },
-    {
-      name: 'shape',
-      component: ZardDemoCheckboxShapeComponent,
-      codeData: CHECKBOX_DEMO_SHAPE,
+      name: 'description',
+      description: 'Use FieldContent and FieldDescription for helper text.',
+      component: ZardDemoCheckboxDescriptionComponent,
+      codeData: CHECKBOX_DEMO_DESCRIPTION,
     },
     {
       name: 'disabled',
+      description:
+        'Use the disabled prop to prevent interaction and add the data-disabled attribute to the Field component for disabled styles.',
       component: ZardDemoCheckboxDisabledComponent,
       codeData: CHECKBOX_DEMO_DISABLED,
+    },
+    {
+      name: 'group',
+      description: 'Use multiple fields to create a checkbox list.',
+      component: ZardDemoCheckboxGroupComponent,
+      codeData: CHECKBOX_DEMO_GROUP,
+    },
+    {
+      name: 'table',
+      description: 'Combine the checkbox with the Table component for selectable rows.',
+      component: ZardDemoCheckboxTableComponent,
+      codeData: CHECKBOX_DEMO_TABLE,
     },
   ],
 };

@@ -43,7 +43,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
+import { ZardInputComponent } from '@zard/components/input/input.component';
 import {
   ZardFormFieldComponent,
   ZardFormLabelComponent,
@@ -58,7 +58,7 @@ import {
     ZardButtonComponent,
     ZardCardComponent,
     ZardCheckboxComponent,
-    ZardInputDirective,
+    ZardInputComponent,
     ZardFormFieldComponent,
     ZardFormLabelComponent,
     ZardFormControlComponent,

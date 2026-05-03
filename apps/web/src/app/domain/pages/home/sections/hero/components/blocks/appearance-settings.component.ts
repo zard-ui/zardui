@@ -7,8 +7,8 @@ import { lucideMinus, lucidePlus } from '@ng-icons/lucide';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
-import { ZardRadioComponent } from '@zard/components/radio/radio.component';
+import { ZardInputComponent } from '@zard/components/input/input.component';
+import { ZardRadioGroupImports } from '@zard/components/radio-group/radio-group.imports';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 
 @Component({
@@ -18,10 +18,10 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
   imports: [
     ZardButtonComponent,
     ZardButtonGroupComponent,
-    ZardInputDirective,
+    ZardInputComponent,
     ZardDividerComponent,
     ZardSwitchComponent,
-    ZardRadioComponent,
+    ...ZardRadioGroupImports,
     NgIcon,
     FormsModule,
   ],
@@ -35,9 +35,9 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
             Select the compute environment for your cluster.
           </p>
 
-          <div class="grid gap-3">
+          <z-radio-group class="gap-3" name="compute-env" [(ngModel)]="computeEnv">
             <label
-              class="has-checked:bg-primary/5 has-checked:border-primary dark:has-checked:bg-primary/10 flex w-full cursor-pointer items-center gap-3 rounded-md border p-4"
+              class="has-data-checked:bg-primary/5 has-data-checked:border-primary dark:has-data-checked:bg-primary/10 flex w-full cursor-pointer items-center gap-3 rounded-md border p-4"
             >
               <div class="flex flex-1 flex-col gap-1.5 leading-snug">
                 <div class="text-sm font-medium">Kubernetes</div>
@@ -45,11 +45,11 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
                   Run GPU workloads on a K8s configured cluster. This is the default.
                 </p>
               </div>
-              <z-radio name="compute-env" [value]="'kubernetes'" [(ngModel)]="computeEnv" />
+              <z-radio value="kubernetes" />
             </label>
 
             <label
-              class="has-checked:bg-primary/5 has-checked:border-primary dark:has-checked:bg-primary/10 flex w-full cursor-pointer items-center gap-3 rounded-md border p-4"
+              class="has-data-checked:bg-primary/5 has-data-checked:border-primary dark:has-data-checked:bg-primary/10 flex w-full cursor-pointer items-center gap-3 rounded-md border p-4"
             >
               <div class="flex flex-1 flex-col gap-1.5 leading-snug">
                 <div class="text-sm font-medium">Virtual Machine</div>
@@ -57,9 +57,9 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
                   Access a VM configured cluster to run workloads. (Coming soon)
                 </p>
               </div>
-              <z-radio name="compute-env" [value]="'vm'" [(ngModel)]="computeEnv" />
+              <z-radio value="vm" />
             </label>
-          </div>
+          </z-radio-group>
         </fieldset>
 
         <z-divider class="-my-2" />

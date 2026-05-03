@@ -36,6 +36,7 @@
 /docs/components/date-picker
 /docs/components/divider
 /docs/components/empty
+/docs/components/field
 /docs/components/form
 /docs/components/input
 /docs/components/input-group
@@ -49,6 +50,7 @@
 /docs/components/switch
 /docs/components/table
 /docs/components/tabs
+/docs/components/textarea
 /docs/components/sonner
 /docs/components/toggle
 /docs/components/toggle-group
@@ -57,7 +59,7 @@
 /docs/components/menu
 /docs/components/resizable
 /docs/components/sheet
-/docs/components/radio
+/docs/components/radio-group
 /docs/components/loader
 /docs/components/dropdown
 /docs/components/popover

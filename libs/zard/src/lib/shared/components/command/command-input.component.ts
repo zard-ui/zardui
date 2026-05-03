@@ -16,22 +16,23 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideSearch } from '@ng-icons/lucide';
 
 import { ZardCommandComponent } from '@/shared/components/command/command.component';
-import { ZardInputDirective } from '@/shared/components/input/input.directive';
-import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
 
 @Component({
   selector: 'z-command-input',
-  imports: [NgIcon, ZardInputGroupComponent, ZardInputDirective],
+  imports: [NgIcon, ZardInputComponent, ...ZardInputGroupImports],
   template: `
     <div data-slot="command-input-wrapper" class="p-1 pb-0">
       <z-input-group
-        class="border-input/30 has-[input:focus-visible]:border-input/30! h-8! rounded-lg! shadow-none! has-[input:focus-visible]:ring-0! [&>div]:h-8!"
-        [zAddonBefore]="searchIcon"
+        class="border-input/30 has-[input:focus-visible]:border-input/30! shadow-none! has-[input:focus-visible]:ring-0!"
       >
+        <z-input-group-addon>
+          <ng-icon name="lucideSearch" class="size-4! shrink-0 opacity-50" />
+        </z-input-group-addon>
         <input
           z-input
           #searchInput
-          class="h-8! w-full border-transparent! bg-transparent text-sm outline-hidden focus-visible:border-transparent! focus-visible:ring-0! disabled:cursor-not-allowed disabled:opacity-50"
           [placeholder]="placeholder()"
           [value]="searchTerm()"
           [disabled]="disabled()"
@@ -50,10 +51,6 @@ import { ZardInputGroupComponent } from '@/shared/components/input-group/input-g
         />
       </z-input-group>
     </div>
-
-    <ng-template #searchIcon>
-      <ng-icon name="lucideSearch" class="size-4! shrink-0 opacity-50" />
-    </ng-template>
   `,
   providers: [
     {

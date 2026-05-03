@@ -1,13 +1,13 @@
 import { Component } from '@angular/core';
 
 import { CHECKBOX_DEMO_DEFAULT } from '@generated/components/checkbox/demo/default';
-import { RADIO_DEMO_DEFAULT } from '@generated/components/radio/demo/default';
+import { RADIO_GROUP_DEMO_DEFAULT } from '@generated/components/radio-group/demo/default';
 import { SELECT_DEMO_DEFAULT } from '@generated/components/select/demo/default';
 import { SLIDER_DEMO_DEFAULT } from '@generated/components/slider/demo/default';
 import { SWITCH_DEMO_DEFAULT } from '@generated/components/switch/demo/default';
 
 import { ZardDemoCheckboxDefaultComponent } from '@zard/components/checkbox/demo/default';
-import { ZardDemoRadioDefaultComponent } from '@zard/components/radio/demo/default';
+import { ZardDemoRadioGroupDefaultComponent } from '@zard/components/radio-group/demo/default';
 import { ZardDemoSelectDefaultComponent } from '@zard/components/select/demo/default';
 import { ZardDemoSliderDefaultComponent } from '@zard/components/slider/demo/default';
 import { ZardDemoSwitchDefaultComponent } from '@zard/components/switch/demo/default';
@@ -54,9 +54,9 @@ export class May2025Component implements ChangelogEntryComponent {
     {
       name: 'default',
       description: 'Radio button group for mutually exclusive options with customizable layouts and orientation.',
-      component: ZardDemoRadioDefaultComponent,
-      componentName: 'radio',
-      codeData: RADIO_DEMO_DEFAULT,
+      component: ZardDemoRadioGroupDefaultComponent,
+      componentName: 'radio-group',
+      codeData: RADIO_GROUP_DEMO_DEFAULT,
     },
     {
       name: 'default',
