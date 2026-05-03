@@ -1,146 +1,124 @@
 import {
-  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
   contentChild,
+  Directive,
   effect,
+  ElementRef,
+  inject,
   input,
-  type TemplateRef,
-  viewChild,
   ViewEncapsulation,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
-import { ZardIdDirective } from '@/shared/core';
-import {
-  isTemplateRef,
-  ZardStringTemplateOutletDirective,
-} from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
   inputGroupAddonVariants,
-  inputGroupInputVariants,
+  inputGroupButtonVariants,
+  inputGroupTextVariants,
   inputGroupVariants,
   type ZardInputGroupAddonAlignVariants,
-  type ZardInputGroupAddonPositionVariants,
-  type ZardInputGroupSizeVariants,
+  type ZardInputGroupButtonSizeVariants,
+  type ZardInputGroupButtonVariantVariants,
 } from './input-group.variants';
 import { ZardInputComponent } from '../input/input.component';
-import { ZardLoaderComponent } from '../loader/loader.component';
 import { ZardTextareaComponent } from '../textarea/textarea.component';
 
 @Component({
-  selector: 'z-input-group',
-  imports: [ZardStringTemplateOutletDirective, ZardLoaderComponent, ZardIdDirective],
-  template: `
-    <ng-container zardId="input-group" #z="zardId">
-      @let addonBefore = zAddonBefore();
-      @if (addonBefore) {
-        <div [class]="addonBeforeClasses()" [id]="addonBeforeId()" [attr.aria-disabled]="zDisabled() || zLoading()">
-          <ng-container *zStringTemplateOutlet="addonBefore">{{ addonBefore }}</ng-container>
-        </div>
-      }
-
-      <div [class]="inputWrapperClasses()">
-        <ng-content select="input[z-input], textarea[z-textarea]" />
-
-        @if (zLoading()) {
-          <z-loader zSize="sm" />
-        }
-      </div>
-
-      @let addonAfter = zAddonAfter();
-      @if (addonAfter) {
-        <div [class]="addonAfterClasses()" [id]="addonAfterId()" [attr.aria-disabled]="zDisabled() || zLoading()">
-          <ng-container *zStringTemplateOutlet="addonAfter">{{ addonAfter }}</ng-container>
-        </div>
-      }
-    </ng-container>
-  `,
+  selector: 'z-input-group, [z-input-group]',
+  template: '<ng-content />',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'classes()',
-    '[attr.aria-disabled]': 'zDisabled() || zLoading()',
-    '[attr.data-disabled]': 'zDisabled() || zLoading()',
-    '[attr.aria-busy]': 'zLoading()',
-    'data-slot': 'input-group',
     role: 'group',
+    'data-slot': 'input-group',
+    '[class]': 'classes()',
   },
+  exportAs: 'zInputGroup',
 })
 export class ZardInputGroupComponent {
   readonly class = input<ClassValue>('');
-  readonly zAddonAfter = input<string | TemplateRef<void>>('');
-  readonly zAddonAlign = input<ZardInputGroupAddonAlignVariants>('inline');
-  readonly zAddonBefore = input<string | TemplateRef<void>>('');
-  readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly zLoading = input(false, { transform: booleanAttribute });
-  readonly zSize = input<ZardInputGroupSizeVariants>('default');
 
-  private readonly contentInput = contentChild<ZardInputComponent>(ZardInputComponent);
-  private readonly contentTextarea = contentChild<ZardTextareaComponent>(ZardTextareaComponent);
-  private readonly contentControl = computed(() => this.contentTextarea() ?? this.contentInput());
-  private readonly uniqueId = viewChild<ZardIdDirective>('z');
+  private readonly contentInput = contentChild(ZardInputComponent);
+  private readonly contentTextarea = contentChild(ZardTextareaComponent);
 
-  protected readonly addonBeforeId = computed(() => `${this.uniqueId()?.id() ?? 'input-group'}-addon-before`);
-  protected readonly addonAfterId = computed(() => `${this.uniqueId()?.id() ?? 'input-group'}-addon-after`);
-  protected readonly isAddonBeforeTemplate = computed(() => isTemplateRef(this.zAddonBefore()));
-  protected readonly classes = computed(() => {
-    const isTextarea = this.contentTextarea() != null;
-    return mergeClasses(
-      'w-full',
-      inputGroupVariants({
-        zSize: this.zSize(),
-        zDisabled: this.zDisabled() || this.zLoading(),
-      }),
-      !isTextarea && !this.zAddonBefore() ? 'pl-2.5' : '',
-      !isTextarea && !this.zAddonAfter() ? 'pr-2.5' : '',
-      this.class(),
-    );
-  });
-
-  protected readonly inputWrapperClasses = computed(() =>
-    mergeClasses(
-      inputGroupInputVariants({
-        zSize: this.zSize(),
-        zHasAddonBefore: Boolean(this.zAddonBefore()),
-        zHasAddonAfter: Boolean(this.zAddonAfter()),
-        zDisabled: this.zDisabled() || this.zLoading(),
-      }),
-      'relative',
-    ),
-  );
-
-  protected readonly addonAfterClasses = computed(() => this.addonClasses('after'));
-  protected readonly addonBeforeClasses = computed(() =>
-    mergeClasses(this.addonClasses('before'), this.isAddonBeforeTemplate() ? 'pr-0.5' : ''),
-  );
+  protected readonly classes = computed(() => mergeClasses(inputGroupVariants(), this.class()));
 
   constructor() {
     effect(() => {
-      const inputDirective = this.contentInput();
-      const textareaDirective = this.contentTextarea();
-      const disabled = this.zDisabled();
-
-      inputDirective?.disable(disabled);
-      inputDirective?.setDataSlot('input-group-control');
-      textareaDirective?.disable(disabled);
-      textareaDirective?.setDataSlot('input-group-control');
+      this.contentInput()?.setDataSlot('input-group-control');
+      this.contentTextarea()?.setDataSlot('input-group-control');
     });
   }
+}
 
-  private addonClasses(position: ZardInputGroupAddonPositionVariants): string {
-    return mergeClasses(
-      inputGroupAddonVariants({
-        zAlign: this.zAddonAlign(),
-        zDisabled: this.zDisabled() || this.zLoading(),
-        zPosition: position,
-        zSize: this.zSize(),
-        zType: this.contentTextarea() != null ? 'textarea' : 'default',
-      }),
-    );
+@Component({
+  selector: 'z-input-group-addon, [z-input-group-addon]',
+  template: '<ng-content />',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    role: 'group',
+    'data-slot': 'input-group-addon',
+    '[attr.data-align]': 'zAlign()',
+    '[class]': 'classes()',
+    '(click)': 'onClick($event)',
+  },
+  exportAs: 'zInputGroupAddon',
+})
+export class ZardInputGroupAddonComponent {
+  private readonly elementRef = inject(ElementRef<HTMLElement>);
+
+  readonly class = input<ClassValue>('');
+  readonly zAlign = input<ZardInputGroupAddonAlignVariants>('inline-start');
+
+  protected readonly classes = computed(() =>
+    mergeClasses(inputGroupAddonVariants({ zAlign: this.zAlign() }), this.class()),
+  );
+
+  protected onClick(event: MouseEvent): void {
+    if ((event.target as HTMLElement).closest('button')) return;
+    const control = this.elementRef.nativeElement.parentElement?.querySelector('input, textarea') as HTMLElement | null;
+    control?.focus();
   }
+}
+
+@Directive({
+  selector: 'button[z-input-group-button]',
+  host: {
+    type: 'button',
+    'data-slot': 'input-group-button',
+    '[attr.data-size]': 'zSize()',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zInputGroupButton',
+})
+export class ZardInputGroupButtonDirective {
+  readonly class = input<ClassValue>('');
+  readonly zVariant = input<ZardInputGroupButtonVariantVariants>('ghost');
+  readonly zSize = input<ZardInputGroupButtonSizeVariants>('xs');
+
+  protected readonly classes = computed(() =>
+    mergeClasses(inputGroupButtonVariants({ zVariant: this.zVariant(), zSize: this.zSize() }), this.class()),
+  );
+}
+
+@Component({
+  selector: 'z-input-group-text, span[z-input-group-text]',
+  template: '<ng-content />',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'input-group-text',
+    '[class]': 'classes()',
+  },
+  exportAs: 'zInputGroupText',
+})
+export class ZardInputGroupTextComponent {
+  readonly class = input<ClassValue>('');
+
+  protected readonly classes = computed(() => mergeClasses(inputGroupTextVariants(), this.class()));
 }

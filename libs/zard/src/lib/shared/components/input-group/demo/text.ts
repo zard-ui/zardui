@@ -1,37 +1,37 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputComponent } from '../../input/input.component';
-import { ZardTextareaComponent } from '../../textarea/textarea.component';
-import { ZardInputGroupComponent } from '../input-group.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
+import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
 
 @Component({
   selector: 'z-demo-input-group-text',
-  imports: [ZardInputGroupComponent, ZardInputComponent, ZardTextareaComponent, ZardButtonComponent],
+  imports: [ZardInputComponent, ZardTextareaComponent, ...ZardInputGroupImports],
   template: `
-    <z-input-group zAddonBefore="$" zAddonAfter="USD" class="mb-4">
-      <input z-input placeholder="0.00" type="number" />
-    </z-input-group>
-
-    <z-input-group zAddonBefore="https://" zAddonAfter=".com" class="mb-4">
-      <input z-input placeholder="example.com" />
-    </z-input-group>
-
-    <z-input-group zAddonAfter="@company.com" class="mb-4">
-      <input z-input placeholder="Enter your username" />
-    </z-input-group>
-
-    <z-input-group [zAddonAfter]="actions" class="mb-4">
-      <textarea z-textarea class="resize-none" placeholder="Enter your message"></textarea>
-    </z-input-group>
-
-    <ng-template #actions>
-      <div class="flex w-full items-center justify-between">
-        <span class="text-muted-foreground text-xs">120 characters left</span>
-        <button type="submit" z-button zSize="sm">Submit</button>
-      </div>
-    </ng-template>
+    <div class="grid w-full min-w-sm gap-6">
+      <z-input-group>
+        <z-input-group-addon><span z-input-group-text>$</span></z-input-group-addon>
+        <input z-input placeholder="0.00" />
+        <z-input-group-addon zAlign="inline-end"><span z-input-group-text>USD</span></z-input-group-addon>
+      </z-input-group>
+      <z-input-group>
+        <z-input-group-addon><span z-input-group-text>https://</span></z-input-group-addon>
+        <input z-input placeholder="example.com" class="pl-0.5!" />
+        <z-input-group-addon zAlign="inline-end"><span z-input-group-text>.com</span></z-input-group-addon>
+      </z-input-group>
+      <z-input-group>
+        <input z-input placeholder="Enter your username" />
+        <z-input-group-addon zAlign="inline-end">
+          <span z-input-group-text>&#64;company.com</span>
+        </z-input-group-addon>
+      </z-input-group>
+      <z-input-group>
+        <textarea z-textarea placeholder="Enter your message"></textarea>
+        <z-input-group-addon zAlign="block-end">
+          <span z-input-group-text class="text-muted-foreground text-xs">120 characters left</span>
+        </z-input-group-addon>
+      </z-input-group>
+    </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputGroupTextComponent {}

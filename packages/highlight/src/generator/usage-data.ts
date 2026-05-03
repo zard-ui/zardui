@@ -150,8 +150,11 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<textarea z-textarea rows="6" placeholder="Type your message"></textarea>`,
   },
   'input-group': {
-    importCode: `import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';`,
-    templateCode: `<z-input-group zAddonBefore="https://">
+    importCode: `import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';`,
+    templateCode: `<z-input-group>
+  <z-input-group-addon>
+    <span z-input-group-text>https://</span>
+  </z-input-group-addon>
   <input z-input placeholder="example.com" />
 </z-input-group>`,
   },

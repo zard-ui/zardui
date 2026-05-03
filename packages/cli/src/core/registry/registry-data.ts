@@ -449,6 +449,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'input-group.imports.ts',
+        content: '',
+      },
+      {
         name: 'input-group.variants.ts',
         content: '',
       },

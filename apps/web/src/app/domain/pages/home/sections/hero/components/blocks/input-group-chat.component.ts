@@ -6,7 +6,7 @@ import { lucidePlus } from '@ng-icons/lucide';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardInputComponent } from '@zard/components/input/input.component';
-import { ZardInputGroupComponent } from '@zard/components/input-group/input-group.component';
+import { ZardInputGroupImports } from '@zard/components/input-group/input-group.imports';
 import { ZardTooltipDirective } from '@zard/components/tooltip';
 
 @Component({
@@ -15,8 +15,8 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
   imports: [
     ZardButtonComponent,
     ZardButtonGroupComponent,
-    ZardInputGroupComponent,
     ZardInputComponent,
+    ...ZardInputGroupImports,
     NgIcon,
     ZardTooltipDirective,
   ],
@@ -29,52 +29,52 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
         </button>
       </z-button-group>
       <z-button-group class="flex-1">
-        <z-input-group zSize="sm" [zAddonAfter]="voiceButton">
+        <z-input-group>
           <input
             z-input
             [attr.aria-label]="voiceEnabled() ? 'Voice recording active' : 'Message'"
             [placeholder]="voiceEnabled() ? 'Record and send audio...' : 'Send a message...'"
             [disabled]="voiceEnabled()"
           />
-        </z-input-group>
-        <ng-template #voiceButton>
-          <button
-            type="button"
-            z-button
-            zTooltip="Voice Mode"
-            zType="ghost"
-            zSize="sm"
-            zShape="circle"
-            class="size-6!"
-            [class.bg-primary]="voiceEnabled()"
-            [class.text-primary-foreground]="voiceEnabled()"
-            [attr.aria-pressed]="voiceEnabled()"
-            [attr.data-active]="voiceEnabled()"
-            aria-label="Voice Mode"
-            (click)="toggleVoice()"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              class="lucide lucide-audio-lines-icon lucide-audio-lines"
-              aria-hidden="true"
+          <z-input-group-addon zAlign="inline-end">
+            <button
+              type="button"
+              z-button
+              zTooltip="Voice Mode"
+              zType="ghost"
+              zSize="sm"
+              zShape="circle"
+              class="size-6!"
+              [class.bg-primary]="voiceEnabled()"
+              [class.text-primary-foreground]="voiceEnabled()"
+              [attr.aria-pressed]="voiceEnabled()"
+              [attr.data-active]="voiceEnabled()"
+              aria-label="Voice Mode"
+              (click)="toggleVoice()"
             >
-              <path d="M2 10v3" />
-              <path d="M6 6v11" />
-              <path d="M10 3v18" />
-              <path d="M14 8v7" />
-              <path d="M18 5v13" />
-              <path d="M22 10v3" />
-            </svg>
-          </button>
-        </ng-template>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="lucide lucide-audio-lines-icon lucide-audio-lines"
+                aria-hidden="true"
+              >
+                <path d="M2 10v3" />
+                <path d="M6 6v11" />
+                <path d="M10 3v18" />
+                <path d="M14 8v7" />
+                <path d="M18 5v13" />
+                <path d="M22 10v3" />
+              </svg>
+            </button>
+          </z-input-group-addon>
+        </z-input-group>
       </z-button-group>
     </z-button-group>
   `,
