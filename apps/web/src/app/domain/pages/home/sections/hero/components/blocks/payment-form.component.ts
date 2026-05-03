@@ -6,7 +6,7 @@ import { ZardDividerComponent } from '@zard/components/divider/divider.component
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardSelectItemComponent } from '@zard/components/select/select-item.component';
 import { ZardSelectComponent } from '@zard/components/select/select.component';
-import { ZardTextareaDirective } from '@zard/components/textarea/textarea.component';
+import { ZardTextareaComponent } from '@zard/components/textarea/textarea.component';
 
 @Component({
   selector: 'z-block-payment-form',
@@ -16,7 +16,7 @@ import { ZardTextareaDirective } from '@zard/components/textarea/textarea.compon
     ZardButtonComponent,
     ZardCheckboxComponent,
     ZardInputComponent,
-    ZardTextareaDirective,
+    ZardTextareaComponent,
     ZardSelectComponent,
     ZardSelectItemComponent,
     ZardDividerComponent,

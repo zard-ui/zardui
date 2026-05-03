@@ -6,7 +6,7 @@ import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.com
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
-import { ZardTextareaDirective } from '@/shared/components/textarea/textarea.component';
+import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
 
 @Component({
   selector: 'z-demo-field-default',
@@ -15,7 +15,7 @@ import { ZardTextareaDirective } from '@/shared/components/textarea/textarea.com
     ZardButtonComponent,
     ZardCheckboxComponent,
     ZardInputComponent,
-    ZardTextareaDirective,
+    ZardTextareaComponent,
     ZardSelectImports,
     FormsModule,
   ],

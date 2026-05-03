@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
-import { ZardTextareaDirective } from '@/shared/components/textarea/textarea.component';
+import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
 
 @Component({
   selector: 'z-demo-field-textarea',
-  imports: [...ZardFieldImports, ZardTextareaDirective],
+  imports: [...ZardFieldImports, ZardTextareaComponent],
   template: `
     <div class="w-full min-w-xs">
       <fieldset z-field-set>

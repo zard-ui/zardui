@@ -6,7 +6,7 @@ import { lucideBot, lucideChevronDown } from '@ng-icons/lucide';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
-import { ZardTextareaDirective } from '@zard/components/textarea/textarea.component';
+import { ZardTextareaComponent } from '@zard/components/textarea/textarea.component';
 
 @Component({
   selector: 'z-block-button-group-popover',
@@ -17,7 +17,7 @@ import { ZardTextareaDirective } from '@zard/components/textarea/textarea.compon
     NgIcon,
     ZardPopoverComponent,
     ZardPopoverDirective,
-    ZardTextareaDirective,
+    ZardTextareaComponent,
   ],
   viewProviders: [provideIcons({ lucideBot, lucideChevronDown })],
   template: `

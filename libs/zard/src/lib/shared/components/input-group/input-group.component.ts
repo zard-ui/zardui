@@ -30,7 +30,7 @@ import {
 } from './input-group.variants';
 import { ZardInputComponent } from '../input/input.component';
 import { ZardLoaderComponent } from '../loader/loader.component';
-import { ZardTextareaDirective } from '../textarea/textarea.component';
+import { ZardTextareaComponent } from '../textarea/textarea.component';
 
 @Component({
   selector: 'z-input-group',
@@ -81,7 +81,7 @@ export class ZardInputGroupComponent {
   readonly zSize = input<ZardInputGroupSizeVariants>('default');
 
   private readonly contentInput = contentChild<ZardInputComponent>(ZardInputComponent);
-  private readonly contentTextarea = contentChild<ZardTextareaDirective>(ZardTextareaDirective);
+  private readonly contentTextarea = contentChild<ZardTextareaComponent>(ZardTextareaComponent);
   private readonly contentControl = computed(() => this.contentTextarea() ?? this.contentInput());
   private readonly uniqueId = viewChild<ZardIdDirective>('z');
 

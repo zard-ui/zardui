@@ -432,10 +432,6 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'textarea.imports.ts',
-        content: '',
-      },
-      {
         name: 'textarea.variants.ts',
         content: '',
       },

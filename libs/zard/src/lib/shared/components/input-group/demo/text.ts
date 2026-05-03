@@ -2,12 +2,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardInputComponent } from '../../input/input.component';
-import { ZardTextareaDirective } from '../../textarea/textarea.component';
+import { ZardTextareaComponent } from '../../textarea/textarea.component';
 import { ZardInputGroupComponent } from '../input-group.component';
 
 @Component({
   selector: 'z-demo-input-group-text',
-  imports: [ZardInputGroupComponent, ZardInputComponent, ZardTextareaDirective, ZardButtonComponent],
+  imports: [ZardInputGroupComponent, ZardInputComponent, ZardTextareaComponent, ZardButtonComponent],
   template: `
     <z-input-group zAddonBefore="$" zAddonAfter="USD" class="mb-4">
       <input z-input placeholder="0.00" type="number" />

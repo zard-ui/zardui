@@ -146,9 +146,8 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<input z-input type="email" placeholder="Email" />`,
   },
   textarea: {
-    importCode: `import { ZardTextareaImports } from '@/shared/components/textarea/textarea.imports';`,
-    templateCode: `<z-textarea zPlaceholder="Type your message" zRows="6" />
-<textarea z-textarea rows="6" placeholder="Type your message"></textarea>`,
+    importCode: `import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';`,
+    templateCode: `<textarea z-textarea rows="6" placeholder="Type your message"></textarea>`,
   },
   'input-group': {
     importCode: `import { ZardInputGroupComponent } from '@/shared/components/input-group/input-group.component';`,

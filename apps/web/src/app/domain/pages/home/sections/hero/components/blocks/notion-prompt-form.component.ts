@@ -25,7 +25,7 @@ import { ZardInputGroupComponent } from '@zard/components/input-group/input-grou
 import { ZardMenuImports } from '@zard/components/menu';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
-import { ZardTextareaDirective } from '@zard/components/textarea/textarea.component';
+import { ZardTextareaComponent } from '@zard/components/textarea/textarea.component';
 import { ZardTooltipDirective } from '@zard/components/tooltip';
 import { ZardIdDirective } from '@zard/core';
 
@@ -84,7 +84,7 @@ const SAMPLE_DATA = {
     ZardPopoverComponent,
     ZardPopoverDirective,
     ZardSwitchComponent,
-    ZardTextareaDirective,
+    ZardTextareaComponent,
     ZardTooltipDirective,
     ZardIdDirective,
   ],
