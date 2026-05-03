@@ -111,7 +111,6 @@ let nextSelectId = 0;
         [attr.data-side]="overlaySide()"
         [attr.data-position]="zPosition()"
         [attr.data-align-trigger]="zPosition() === 'item-aligned' ? 'true' : null"
-        [attr.dir]="dirAttribute()"
         [attr.aria-multiselectable]="zMultiple() ? 'true' : null"
         [style.--z-select-trigger-height]="triggerHeightStyle()"
         [style.--z-select-trigger-width]="triggerWidthStyle()"
@@ -182,7 +181,6 @@ let nextSelectId = 0;
     '[attr.data-disabled]': 'disabledState() ? "" : null',
     '[attr.data-invalid]': 'zInvalid() ? "" : null',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
-    '[attr.dir]': 'dirAttribute()',
     '[class]': 'classes()',
     '(focus)': 'onHostFocus($event)',
     '(keydown.{enter,space,arrowdown,arrowup,escape}.prevent)': 'onTriggerKeydown($event)',
@@ -208,7 +206,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
 
   readonly class = input<ClassValue>('');
   readonly zAlign = input<ZardSelectAlignVariants>('center');
-  readonly zDir = input<'ltr' | 'rtl' | 'auto'>('auto');
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zInvalid = input(false, { transform: booleanAttribute });
   readonly zLabel = input<string>('');
@@ -250,8 +247,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     const value = this.zValue();
     return Array.isArray(value) ? value.length > 0 : value !== '';
   });
-
-  protected readonly dirAttribute = computed(() => (this.zDir() === 'auto' ? null : this.zDir()));
 
   protected readonly triggerHeightStyle = computed(() => `${this.triggerHeight()}px`);
   protected readonly triggerWidthStyle = computed(() => `${this.triggerWidth()}px`);

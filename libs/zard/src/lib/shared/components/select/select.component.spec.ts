@@ -53,7 +53,6 @@ class TestHostWithFormControlComponent {
     <z-select
       class="api-select"
       [(zValue)]="value"
-      [zDir]="dir()"
       [zPosition]="position()"
       [zSize]="size()"
       (zSelectionChange)="selectionChanges.push($event)"
@@ -65,7 +64,6 @@ class TestHostWithFormControlComponent {
 })
 class TestApiHostComponent {
   readonly value = signal<string | string[]>('');
-  readonly dir = signal<'ltr' | 'rtl' | 'auto'>('auto');
   readonly position = signal<'item-aligned' | 'popper'>('item-aligned');
   readonly size = signal<'sm' | 'default' | 'lg'>('default');
   readonly selectionChanges: Array<string | string[]> = [];
@@ -439,8 +437,7 @@ describe('ZardSelectComponent', () => {
       TestBed.resetTestingModule();
     });
 
-    it('applies class, direction, and size inputs to the public DOM', () => {
-      hostComponent.dir.set('rtl');
+    it('applies class and size inputs to the public DOM', () => {
       hostComponent.size.set('lg');
       hostFixture.detectChanges();
 
@@ -448,7 +445,7 @@ describe('ZardSelectComponent', () => {
         .nativeElement as HTMLElement;
       const trigger = hostFixture.nativeElement.querySelector('[data-slot="select-trigger"]') as HTMLElement;
       expect(selectElement).toHaveClass('api-select');
-      expect(selectElement).toHaveAttribute('dir', 'rtl');
+      expect(selectElement).not.toHaveAttribute('dir');
       expect(trigger).toHaveAttribute('data-size', 'lg');
       expect(trigger).toHaveClass('h-10');
       expect(trigger).toHaveClass('text-base');

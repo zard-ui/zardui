@@ -12,12 +12,6 @@ export const SELECT_API: ApiSection[] = [
         type: "'start' | 'center' | 'end'",
         default: "'center'",
       },
-      {
-        name: '[zDir]',
-        description: 'Text direction for trigger and content',
-        type: "'ltr' | 'rtl' | 'auto'",
-        default: "'auto'",
-      },
       { name: '[zDisabled]', description: 'Disables the select', type: 'boolean', default: 'false' },
       {
         name: '[zInvalid]',

@@ -8,7 +8,6 @@
 | ------------------ | ------------------------------------------------ | ------------------------------ | ----------------------- |
 | `[class]`          | Custom CSS classes                               | `ClassValue`                   | `''`                    |
 | `[zAlign]`         | Overlay alignment relative to the trigger        | `'start' \| 'center' \| 'end'` | `'center'`              |
-| `[zDir]`           | Text direction for trigger and content           | `'ltr' \| 'rtl' \| 'auto'`     | `'auto'`                |
 | `[zDisabled]`      | Disables the select                              | `boolean`                      | `false`                 |
 | `[zInvalid]`       | Applies invalid ARIA state and destructive style | `boolean`                      | `false`                 |
 | `[zLabel]`         | Optional manual display label                    | `string`                       | `''`                    |

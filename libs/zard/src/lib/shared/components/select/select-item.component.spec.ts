@@ -183,7 +183,7 @@ describe('ZardSelectItemComponent', () => {
       expect(indicator).toBeTruthy();
       expect(indicator.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
       expect(indicator).toHaveClass('right-2');
-      expect(indicator).toHaveClass('rtl:left-2');
+      expect(indicator.className).not.toContain('left-2');
     });
 
     it('keeps the selected indicator color aligned with the item text', () => {
