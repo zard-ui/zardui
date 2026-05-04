@@ -18,6 +18,7 @@ export interface ComponentData {
   examples: ExampleData[];
   installData?: ComponentInstallData;
   usage?: ComponentUsageData;
+  composition?: CodeBlockData;
   fullWidth?: boolean;
   api?: ApiSection[];
 }

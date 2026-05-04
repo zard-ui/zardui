@@ -45,15 +45,7 @@ export class ComponentPage implements OnInit {
 
   activeAnchor = 'overview';
   componentData = signal<ComponentData | undefined>(undefined);
-  navigationConfig: NavigationConfig = {
-    items: [
-      { id: 'overview', label: 'Overview', type: 'core' },
-      { id: 'installation', label: 'Installation', type: 'core' },
-      { id: 'usage', label: 'Usage', type: 'core' },
-      { id: 'examples', label: 'Examples', type: 'core', children: [] },
-      { id: 'api', label: 'API', type: 'core' },
-    ],
-  };
+  navigationConfig: NavigationConfig = { items: [] };
 
   activeTab = signal<'manual' | 'cli'>('cli');
   installGuide = signal<{ manual: Step[]; cli: Step[] } | undefined>(undefined);
@@ -120,17 +112,30 @@ export class ComponentPage implements OnInit {
       component.installData?.manualDeps,
       component.installData?.register,
     );
+    const exampleNavigationItems = component.examples.map(example => ({
+      id: example.name,
+      label: example.name,
+      type: 'custom' as const,
+    }));
+
+    this.navigationConfig = {
+      items: [
+        { id: 'overview', label: 'Overview', type: 'core' },
+        { id: 'installation', label: 'Installation', type: 'core' },
+        { id: 'usage', label: 'Usage', type: 'core' },
+        ...(component.composition ? [{ id: 'composition', label: 'Composition', type: 'core' as const }] : []),
+        {
+          id: 'examples',
+          label: 'Examples',
+          type: 'core',
+          children: exampleNavigationItems,
+        },
+        { id: 'api', label: 'API', type: 'core' },
+      ],
+    };
+
     this.installGuide.set(installGuide);
     this.componentData.set(component);
-
-    const examplesItem = this.navigationConfig.items.find(item => item.id === 'examples');
-    if (examplesItem) {
-      examplesItem.children = component.examples.map(example => ({
-        id: example.name,
-        label: example.name,
-        type: 'custom' as const,
-      }));
-    }
     this.setPageTitle();
   }
 

@@ -50,6 +50,7 @@
 /docs/components/switch
 /docs/components/table
 /docs/components/tabs
+/docs/components/textarea
 /docs/components/sonner
 /docs/components/toggle
 /docs/components/toggle-group
@@ -58,7 +59,7 @@
 /docs/components/menu
 /docs/components/resizable
 /docs/components/sheet
-/docs/components/radio
+/docs/components/radio-group
 /docs/components/loader
 /docs/components/dropdown
 /docs/components/popover

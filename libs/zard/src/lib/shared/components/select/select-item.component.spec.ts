@@ -54,6 +54,7 @@ describe('ZardSelectItemComponent', () => {
 
       const hostElement = fixture.nativeElement as HTMLElement;
       expect(hostElement).toHaveAttribute('data-disabled', '');
+      expect(hostElement).toHaveAttribute('aria-disabled', 'true');
     });
 
     it('removes data-disabled when enabled', () => {
@@ -83,8 +84,9 @@ describe('ZardSelectItemComponent', () => {
       fixture.detectChanges();
 
       const hostElement = fixture.nativeElement as HTMLElement;
-      expect(hostElement).toHaveClass('min-h-9');
       expect(hostElement).toHaveClass('py-1.5');
+      expect(hostElement).toHaveClass('text-sm');
+      expect(hostElement).not.toHaveClass('min-h-9');
     });
 
     it('applies correct classes for small size', () => {
@@ -92,8 +94,9 @@ describe('ZardSelectItemComponent', () => {
       fixture.detectChanges();
 
       const hostElement = fixture.nativeElement as HTMLElement;
-      expect(hostElement).toHaveClass('min-h-8');
       expect(hostElement).toHaveClass('py-1');
+      expect(hostElement).toHaveClass('text-xs');
+      expect(hostElement).not.toHaveClass('min-h-8');
     });
 
     it('applies correct classes for large size', () => {
@@ -101,8 +104,20 @@ describe('ZardSelectItemComponent', () => {
       fixture.detectChanges();
 
       const hostElement = fixture.nativeElement as HTMLElement;
-      expect(hostElement).toHaveClass('min-h-10');
       expect(hostElement).toHaveClass('py-2');
+      expect(hostElement).toHaveClass('text-base');
+      expect(hostElement).not.toHaveClass('min-h-10');
+    });
+
+    it('uses the shadcn select item structure', () => {
+      const hostElement = fixture.nativeElement as HTMLElement;
+      expect(hostElement).toHaveClass('w-full');
+      expect(hostElement).toHaveClass('cursor-default');
+      expect(hostElement).not.toHaveClass('mb-0.5');
+      expect(hostElement).not.toHaveClass('text-nowrap');
+      expect(hostElement.className).toContain('focus:bg-accent');
+      expect(hostElement.className).toContain('focus:text-accent-foreground');
+      expect(hostElement.className).not.toContain('hover:bg-accent');
     });
 
     it('applies correct classes for normal mode', () => {
@@ -119,8 +134,9 @@ describe('ZardSelectItemComponent', () => {
       fixture.detectChanges();
 
       const hostElement = fixture.nativeElement as HTMLElement;
-      expect(hostElement).toHaveClass('pl-6.5');
-      expect(hostElement).toHaveClass('pr-2');
+      expect(hostElement).toHaveClass('pr-8');
+      expect(hostElement).toHaveClass('pl-2');
+      expect(hostElement).not.toHaveClass('pl-6.5');
     });
   });
 
@@ -135,6 +151,55 @@ describe('ZardSelectItemComponent', () => {
 
       const hostElement = fixture.nativeElement as HTMLElement;
       expect(hostElement).toHaveAttribute('data-selected', '');
+    });
+
+    it('does not style the selected state as the highlighted state', () => {
+      component.setSelectHost({
+        selectedValue: () => ['test-value'],
+        selectItem: jest.fn(),
+        navigateTo: jest.fn(),
+      });
+      fixture.detectChanges();
+
+      const hostElement = fixture.nativeElement as HTMLElement;
+      expect(hostElement).toHaveAttribute('data-selected', '');
+      expect(hostElement.className).toContain('data-highlighted:bg-accent');
+      expect(hostElement.className).not.toContain('data-selected:bg-accent');
+      expect(hostElement.className).not.toContain('data-selected:text-accent-foreground');
+    });
+
+    it('renders the shadcn indicator slot before text while positioning it on the trailing side', () => {
+      component.setSelectHost({
+        selectedValue: () => ['test-value'],
+        selectItem: jest.fn(),
+        navigateTo: jest.fn(),
+      });
+      fixture.detectChanges();
+
+      const hostElement = fixture.nativeElement as HTMLElement;
+      const text = hostElement.querySelector('[data-slot="select-item-text"]') as HTMLElement;
+      const indicator = hostElement.querySelector('[data-slot="select-item-indicator"]') as HTMLElement;
+      expect(text).toBeTruthy();
+      expect(indicator).toBeTruthy();
+      expect(indicator.compareDocumentPosition(text) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+      expect(indicator).toHaveClass('right-2');
+      expect(indicator.className).not.toContain('left-2');
+    });
+
+    it('keeps the selected indicator color aligned with the item text', () => {
+      component.setSelectHost({
+        selectedValue: () => ['test-value'],
+        selectItem: jest.fn(),
+        navigateTo: jest.fn(),
+      });
+      fixture.detectChanges();
+
+      const hostElement = fixture.nativeElement as HTMLElement;
+      const indicator = hostElement.querySelector('[data-slot="select-item-indicator"]') as HTMLElement;
+      const icon = hostElement.querySelector('[data-testid="check-icon"]') as HTMLElement;
+      expect(indicator).toBeTruthy();
+      expect(icon).toHaveClass('text-current');
+      expect(hostElement.className).toContain('[&_svg:not([class*="text-"])]:text-muted-foreground');
     });
 
     it('sets aria-selected true when selected', () => {
