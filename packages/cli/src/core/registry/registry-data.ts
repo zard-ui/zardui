@@ -463,6 +463,27 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'item',
+    files: [
+      {
+        name: 'item.component.ts',
+        content: '',
+      },
+      {
+        name: 'item.imports.ts',
+        content: '',
+      },
+      {
+        name: 'item.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'select',
     registryDependencies: ['badge'],
     files: [
@@ -608,14 +629,10 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'loader',
+    name: 'spinner',
     files: [
       {
-        name: 'loader.component.ts',
-        content: '',
-      },
-      {
-        name: 'loader.variants.ts',
+        name: 'spinner.component.ts',
         content: '',
       },
       {

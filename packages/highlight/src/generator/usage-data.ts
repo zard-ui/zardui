@@ -158,6 +158,15 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   <input z-input placeholder="example.com" />
 </z-input-group>`,
   },
+  item: {
+    importCode: `import { ZardItemImports } from '@/shared/components/item/item.imports';`,
+    templateCode: `<z-item zVariant="outline">
+  <z-item-content>
+    <z-item-title>Title</z-item-title>
+    <z-item-description>Description</z-item-description>
+  </z-item-content>
+</z-item>`,
+  },
   kbd: {
     importCode: `import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';`,
     templateCode: `<z-kbd>⌘ K</z-kbd>`,
@@ -170,9 +179,9 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   <z-footer>Footer</z-footer>
 </z-layout>`,
   },
-  loader: {
-    importCode: `import { ZardLoaderComponent } from '@/shared/components/loader/loader.component';`,
-    templateCode: `<z-loader></z-loader>`,
+  spinner: {
+    importCode: `import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';`,
+    templateCode: `<z-spinner></z-spinner>`,
   },
   menu: {
     importCode: `import { ZardMenuImports } from '@/shared/components/menu/menu.imports';`,
