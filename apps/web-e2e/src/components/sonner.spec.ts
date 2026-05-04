@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test';
 
 import { ComponentDemoPage } from '../utils/component-page';
 
-test.describe('Toast component', () => {
+test.describe('Sonner (Toast) component', () => {
   let demoPage: ComponentDemoPage;
 
   test.beforeEach(async ({ page }) => {
-    demoPage = new ComponentDemoPage(page, 'toast');
+    demoPage = new ComponentDemoPage(page, 'sonner');
     await demoPage.goto();
   });
 
@@ -19,7 +19,6 @@ test.describe('Toast component', () => {
     const trigger = demoPage.firstDemoBox.locator('button[z-button]');
     await trigger.click();
 
-    // ngx-sonner renders toasts with [data-sonner-toast] attribute
     const toast = page.locator('[data-sonner-toast]').first();
     await expect(toast).toBeVisible({ timeout: 5000 });
   });
@@ -30,7 +29,6 @@ test.describe('Toast component', () => {
 
     const toast = page.locator('[data-sonner-toast]').first();
     await expect(toast).toBeVisible({ timeout: 5000 });
-    // Toast should not be empty
     const text = await toast.textContent();
     expect(text?.trim().length).toBeGreaterThan(0);
   });
@@ -41,7 +39,6 @@ test.describe('Toast component', () => {
 
     const toast = page.locator('[data-sonner-toast]').first();
     await expect(toast).toBeVisible({ timeout: 5000 });
-    // Sonner default auto-dismiss is ~4s
     await expect(toast).not.toBeVisible({ timeout: 10_000 });
   });
 });
