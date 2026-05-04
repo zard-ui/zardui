@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 
 import { PROGRESS_BAR_DEMO_BASIC } from '@generated/components/progress-bar/demo/basic';
 import { SKELETON_DEMO_DEFAULT } from '@generated/components/skeleton/demo/default';
-import { SPINNER_DEMO_DEFAULT } from '@generated/components/spinner/demo/default';
+import { SPINNER_DEMO_CUSTOMIZATION } from '@generated/components/spinner/demo/customization';
 
 import { ZardDemoProgressBarBasicComponent } from '@zard/components/progress-bar/demo/basic';
 import { ZardDemoSkeletonDefaultComponent } from '@zard/components/skeleton/demo/default';
-import { ZardDemoSpinnerDefaultComponent } from '@zard/components/spinner/demo/default';
+import { ZardDemoSpinnerCustomizationComponent } from '@zard/components/spinner/demo/customization';
 
 import {
   type ChangelogEntryComponent,
@@ -49,11 +49,12 @@ export class September2025Component implements ChangelogEntryComponent {
       codeData: SKELETON_DEMO_DEFAULT,
     },
     {
-      name: 'default',
-      description: 'Animated loading spinner with multiple size variants for indicating async operations in progress.',
-      component: ZardDemoSpinnerDefaultComponent,
+      name: 'customization',
+      description:
+        'Animated loading spinner customizable via the [zIcon] template input for swapping the underlying icon.',
+      component: ZardDemoSpinnerCustomizationComponent,
       componentName: 'spinner',
-      codeData: SPINNER_DEMO_DEFAULT,
+      codeData: SPINNER_DEMO_CUSTOMIZATION,
     },
   ];
 }

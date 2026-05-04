@@ -16,20 +16,20 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       <z-input-group>
         <input z-input placeholder="Searching..." />
         <z-input-group-addon zAlign="inline-end">
-          <z-spinner zSize="sm" />
+          <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
         <input z-input placeholder="Processing..." />
         <z-input-group-addon>
-          <z-spinner zSize="sm" />
+          <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>
         <input z-input placeholder="Saving changes..." />
         <z-input-group-addon zAlign="inline-end">
           <span z-input-group-text>Saving...</span>
-          <z-spinner zSize="sm" />
+          <z-spinner />
         </z-input-group-addon>
       </z-input-group>
       <z-input-group>

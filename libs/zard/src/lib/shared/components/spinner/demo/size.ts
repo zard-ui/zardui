@@ -6,9 +6,12 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
   selector: 'z-demo-spinner-size',
   imports: [ZardSpinnerComponent],
   template: `
-    <z-spinner zSize="sm" />
-    <z-spinner zSize="default" />
-    <z-spinner zSize="lg" />
+    <div class="flex items-center gap-6">
+      <z-spinner class="size-3" />
+      <z-spinner class="size-4" />
+      <z-spinner class="size-6" />
+      <z-spinner class="size-8" />
+    </div>
   `,
 })
 export class ZardDemoSpinnerSizeComponent {}

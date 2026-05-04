@@ -611,10 +611,6 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
-        name: 'spinner.variants.ts',
-        content: '',
-      },
-      {
         name: 'index.ts',
         content: '',
       },

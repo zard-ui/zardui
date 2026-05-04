@@ -1,56 +1,53 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  type TemplateRef,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
+import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/string-template-outlet/string-template-outlet.directive';
 import { mergeClasses } from '@/shared/utils/merge-classes';
-
-import { spinnerVariants, type ZardSpinnerVariants } from './spinner.variants';
 
 @Component({
   selector: 'z-spinner',
+  imports: [ZardStringTemplateOutletDirective],
   template: `
-    <div class="relative top-1/2 left-1/2 h-[inherit] w-[inherit]">
-      @for (_ of bars; track $index) {
-        <div
-          class="animate-spinner absolute -top-[3.9%] -left-[10%] h-[8%] w-[24%] rounded-md bg-black dark:bg-white"
-          [style]="{
-            animationDelay: animationDelay($index),
-            transform: transform($index),
-          }"
-        ></div>
-      }
-    </div>
-  `,
-  styles: `
-    @layer utilities {
-      @keyframes spinner {
-        0% {
-          opacity: 1;
-        }
-        100% {
-          opacity: 0.15;
-        }
-      }
-
-      .animate-spinner {
-        animation: spinner 1.2s linear infinite;
-      }
+    @let icon = zIcon();
+    @if (icon) {
+      <ng-container *zStringTemplateOutlet="icon; context: iconContext()" />
+    } @else {
+      <svg
+        data-slot="spinner"
+        xmlns="http://www.w3.org/2000/svg"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        [class]="classes()"
+      >
+        <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+      </svg>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'classes()',
+    class: 'inline-flex',
+    role: 'status',
+    'aria-label': 'Loading',
   },
   exportAs: 'zSpinner',
 })
 export class ZardSpinnerComponent {
   readonly class = input<ClassValue>('');
-  readonly zSize = input<ZardSpinnerVariants['zSize']>('default');
+  readonly zIcon = input<TemplateRef<{ $implicit: string }> | undefined>(undefined);
 
-  protected readonly bars = Array.from({ length: 12 });
-  protected readonly animationDelay = (index: number) => `-${1.3 - index * 0.1}s`;
-  protected readonly transform = (index: number) => `rotate(${30 * index}deg) translate(146%)`;
-
-  protected readonly classes = computed(() => mergeClasses(spinnerVariants({ zSize: this.zSize() }), this.class()));
+  protected readonly classes = computed(() => mergeClasses('size-4 animate-spin', this.class()));
+  protected readonly iconContext = computed(() => ({ $implicit: this.classes() }));
 }
