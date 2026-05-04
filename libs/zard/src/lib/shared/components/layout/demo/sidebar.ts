@@ -175,7 +175,7 @@ interface MenuItem {
             <ng-icon name="lucidePanelLeft" />
           </button>
 
-          <z-separator zOrientation="vertical" class="ml-2 h-4" />
+          <z-separator zOrientation="vertical" class="ml-2 h-4 self-center!" />
 
           <z-breadcrumb zWrap="wrap" zAlign="start">
             <z-breadcrumb-item [routerLink]="['/docs/components/layout']">Home</z-breadcrumb-item>

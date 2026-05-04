@@ -74,7 +74,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
               <z-dropdown-menu-item>Manual</z-dropdown-menu-item>
             </z-dropdown-menu-content>
             <span class="text-muted-foreground ml-auto text-sm">52% used</span>
-            <z-separator zOrientation="vertical" class="mx-2 h-4!" />
+            <z-separator zOrientation="vertical" class="mx-2 h-4! self-center!" />
             <button type="button" z-button zType="default" zShape="circle" zSize="icon-sm" aria-label="Send">
               <ng-icon name="lucideArrowUp" />
             </button>
