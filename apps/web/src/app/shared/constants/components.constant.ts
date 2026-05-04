@@ -161,6 +161,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/input-group/demo/input-group').then(m => m.INPUT_GROUP),
   },
   {
+    componentName: 'item',
+    description: 'A versatile component for displaying content with media, title, description, and actions.',
+    loadData: () => import('@zard/components/item/demo/item').then(m => m.ITEM),
+  },
+  {
     componentName: 'textarea',
     description: 'Displays a multi-line text input field.',
     loadData: () => import('@zard/components/textarea/demo/textarea').then(m => m.TEXTAREA),

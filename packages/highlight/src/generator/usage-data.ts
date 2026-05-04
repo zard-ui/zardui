@@ -158,6 +158,15 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   <input z-input placeholder="example.com" />
 </z-input-group>`,
   },
+  item: {
+    importCode: `import { ZardItemImports } from '@/shared/components/item/item.imports';`,
+    templateCode: `<z-item zVariant="outline">
+  <z-item-content>
+    <z-item-title>Title</z-item-title>
+    <z-item-description>Description</z-item-description>
+  </z-item-content>
+</z-item>`,
+  },
   kbd: {
     importCode: `import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';`,
     templateCode: `<z-kbd>⌘ K</z-kbd>`,

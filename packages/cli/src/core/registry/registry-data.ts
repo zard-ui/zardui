@@ -463,6 +463,27 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'item',
+    files: [
+      {
+        name: 'item.component.ts',
+        content: '',
+      },
+      {
+        name: 'item.imports.ts',
+        content: '',
+      },
+      {
+        name: 'item.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'select',
     registryDependencies: ['badge'],
     files: [
