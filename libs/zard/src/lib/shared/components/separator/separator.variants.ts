@@ -1,54 +1,18 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const separatorVariants = cva('bg-border block', {
-  variants: {
-    zOrientation: {
-      horizontal: 'h-px w-full',
-      vertical: 'w-px h-full inline-block',
+export const separatorVariants = cva(
+  'bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px data-[orientation=vertical]:self-stretch',
+  {
+    variants: {
+      zOrientation: {
+        horizontal: '',
+        vertical: '',
+      },
     },
-    zSpacing: {
-      none: '',
-      sm: '',
-      default: '',
-      lg: '',
+    defaultVariants: {
+      zOrientation: 'horizontal',
     },
   },
-  defaultVariants: {
-    zOrientation: 'horizontal',
-    zSpacing: 'default',
-  },
-  compoundVariants: [
-    {
-      zOrientation: 'horizontal',
-      zSpacing: 'sm',
-      class: 'my-2',
-    },
-    {
-      zOrientation: 'horizontal',
-      zSpacing: 'default',
-      class: 'my-4',
-    },
-    {
-      zOrientation: 'horizontal',
-      zSpacing: 'lg',
-      class: 'my-8',
-    },
-    {
-      zOrientation: 'vertical',
-      zSpacing: 'sm',
-      class: 'mx-2',
-    },
-    {
-      zOrientation: 'vertical',
-      zSpacing: 'default',
-      class: 'mx-4',
-    },
-    {
-      zOrientation: 'vertical',
-      zSpacing: 'lg',
-      class: 'mx-8',
-    },
-  ],
-});
+);
 
 export type ZardSeparatorVariants = VariantProps<typeof separatorVariants>;

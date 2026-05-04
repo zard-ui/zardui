@@ -117,7 +117,7 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
                   <ng-icon name="lucideChevronRight" />
                 </button>
 
-                <z-separator zSpacing="sm" />
+                <z-separator class="my-2" />
 
                 <button type="button" z-menu-item (click)="log('Community')">
                   <ng-icon name="lucideUsers" class="mr-2" />
@@ -132,7 +132,7 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
                 <button type="button" z-menu-item (click)="log('Tutorials')">Tutorials</button>
                 <button type="button" z-menu-item (click)="log('FAQ')">FAQ</button>
 
-                <z-separator zSpacing="sm" />
+                <z-separator class="my-2" />
 
                 <button type="button" z-menu-item (click)="log('Contact Support')">Contact Support</button>
                 <button type="button" z-menu-item (click)="log('Live Chat')">Live Chat</button>

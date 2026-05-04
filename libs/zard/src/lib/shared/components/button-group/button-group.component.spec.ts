@@ -86,12 +86,12 @@ describe('ButtonGroup', () => {
 
       let divider = r.fixture.nativeElement.querySelector('z-separator');
 
-      expect(divider.getAttribute('aria-orientation')).toBe('vertical');
+      expect(divider.getAttribute('data-orientation')).toBe('vertical');
 
       orientation.set('horizontal');
       r.fixture.detectChanges();
       divider = r.fixture.nativeElement.querySelector('z-separator');
-      expect(divider.getAttribute('aria-orientation')).toBe('horizontal');
+      expect(divider.getAttribute('data-orientation')).toBe('horizontal');
     });
 
     it('should inherit orientation from the parent component if set', async () => {
@@ -111,13 +111,13 @@ describe('ButtonGroup', () => {
 
       let divider = r.fixture.nativeElement.querySelector('z-separator');
       // divider is inverse of parent presentationaly
-      expect(divider.getAttribute('aria-orientation')).toBe('horizontal');
+      expect(divider.getAttribute('data-orientation')).toBe('horizontal');
 
       orientation.set('horizontal');
       r.fixture.detectChanges();
 
       divider = r.fixture.nativeElement.querySelector('z-separator');
-      expect(divider.getAttribute('aria-orientation')).toBe('vertical');
+      expect(divider.getAttribute('data-orientation')).toBe('vertical');
     });
 
     it('should apply the appropriate classes for both orientations', async () => {

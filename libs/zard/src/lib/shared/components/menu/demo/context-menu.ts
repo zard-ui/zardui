@@ -43,7 +43,7 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
           <div class="flex items-center">More Tools</div>
           <ng-icon name="lucideChevronRight" />
         </button>
-        <z-separator zSpacing="sm" />
+        <z-separator class="my-2" />
         <z-menu-label>People</z-menu-label>
         <button type="button" z-menu-item (click)="log('Pedro Duarte')">Pedro Duarte</button>
         <button type="button" z-menu-item (click)="log('Colm Tuite')">Colm Tuite</button>
@@ -55,9 +55,9 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
         <button type="button" z-menu-item (click)="log('Save Page')">Save Page...</button>
         <button type="button" z-menu-item (click)="log('Create Shortcut')">Create Shortcut...</button>
         <button type="button" z-menu-item (click)="log('Name Window')">Name Window...</button>
-        <z-separator zSpacing="sm" />
+        <z-separator class="my-2" />
         <button type="button" z-menu-item (click)="log('Developer Tools')">Developer Tools</button>
-        <z-separator zSpacing="sm" />
+        <z-separator class="my-2" />
         <button type="button" z-menu-item zType="destructive" (click)="log('Delete')">Delete</button>
       </div>
     </ng-template>

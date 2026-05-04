@@ -22,7 +22,7 @@ describe('ZardSeparatorComponent', () => {
 
   it('should render horizontal by default', () => {
     const separatorElement = fixture.nativeElement;
-    expect(separatorElement.getAttribute('aria-orientation')).toBe('horizontal');
+    expect(separatorElement.getAttribute('data-orientation')).toBe('horizontal');
   });
 
   it('should render vertical when set', () => {
@@ -30,6 +30,22 @@ describe('ZardSeparatorComponent', () => {
     fixture.detectChanges();
 
     const separatorElement = fixture.nativeElement;
+    expect(separatorElement.getAttribute('data-orientation')).toBe('vertical');
+  });
+
+  it('is decorative by default with role="none"', () => {
+    const separatorElement = fixture.nativeElement;
+    expect(separatorElement.getAttribute('role')).toBe('none');
+    expect(separatorElement.getAttribute('aria-orientation')).toBeNull();
+  });
+
+  it('exposes role="separator" when zDecorative is false', () => {
+    fixture.componentRef.setInput('zDecorative', false);
+    fixture.componentRef.setInput('zOrientation', 'vertical');
+    fixture.detectChanges();
+
+    const separatorElement = fixture.nativeElement;
+    expect(separatorElement.getAttribute('role')).toBe('separator');
     expect(separatorElement.getAttribute('aria-orientation')).toBe('vertical');
   });
 });

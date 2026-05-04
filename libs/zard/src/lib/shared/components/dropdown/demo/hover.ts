@@ -34,7 +34,7 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
         <z-menu-shortcut>⌘K</z-menu-shortcut>
       </z-dropdown-menu-item>
 
-      <z-separator zSpacing="sm" class="-mx-1" />
+      <z-separator class="-mx-1 my-2" />
 
       <z-dropdown-menu-item (click)="onTeam()">Team</z-dropdown-menu-item>
 
@@ -43,13 +43,13 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
         <z-menu-shortcut>⌘+T</z-menu-shortcut>
       </z-dropdown-menu-item>
 
-      <z-separator zSpacing="sm" class="-mx-1" />
+      <z-separator class="-mx-1 my-2" />
 
       <z-dropdown-menu-item (click)="onGitHub()">GitHub</z-dropdown-menu-item>
       <z-dropdown-menu-item (click)="onSupport()">Support</z-dropdown-menu-item>
       <z-dropdown-menu-item [disabled]="true">API</z-dropdown-menu-item>
 
-      <z-separator zSpacing="sm" class="-mx-1" />
+      <z-separator class="-mx-1 my-2" />
 
       <z-dropdown-menu-item (click)="onLogout()">
         Log out

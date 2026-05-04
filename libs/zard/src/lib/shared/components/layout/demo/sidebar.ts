@@ -157,7 +157,7 @@ interface MenuItem {
                   <ng-icon name="lucideSettings" class="mr-2" />
                   Settings
                 </button>
-                <z-separator zSpacing="sm" />
+                <z-separator class="my-2" />
                 <button type="button" z-menu-item>
                   <ng-icon name="lucideLogOut" class="mr-2" />
                   Logout

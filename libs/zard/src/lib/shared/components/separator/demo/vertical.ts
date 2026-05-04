@@ -7,10 +7,12 @@ import { ZardSeparatorComponent } from '../separator.component';
   imports: [ZardSeparatorComponent],
   standalone: true,
   template: `
-    <div class="flex h-20">
-      <p>Left</p>
+    <div class="flex h-5 items-center gap-4 text-sm">
+      <div>Blog</div>
       <z-separator zOrientation="vertical" />
-      <p>Right</p>
+      <div>Docs</div>
+      <z-separator zOrientation="vertical" />
+      <div>Source</div>
     </div>
   `,
 })

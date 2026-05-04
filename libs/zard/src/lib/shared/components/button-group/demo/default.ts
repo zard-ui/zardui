@@ -51,7 +51,7 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
                 Archive
               </button>
 
-              <z-separator zSpacing="sm" />
+              <z-separator class="my-2" />
 
               <button type="button" z-menu-item>
                 <ng-icon name="lucideClock" />
@@ -88,7 +88,7 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
                 </ng-template>
               </button>
 
-              <z-separator zSpacing="sm" />
+              <z-separator class="my-2" />
 
               <button type="button" z-menu-item class="text-red-500">
                 <ng-icon name="lucideTrash" />

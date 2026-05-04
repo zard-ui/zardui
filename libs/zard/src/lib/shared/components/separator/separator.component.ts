@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -13,24 +20,18 @@ import { separatorVariants, type ZardSeparatorVariants } from './separator.varia
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[attr.role]': `'separator'`,
-    '[attr.aria-orientation]': 'zOrientation()',
+    'data-slot': 'separator',
+    '[attr.data-orientation]': 'zOrientation()',
+    '[attr.role]': 'zDecorative() ? "none" : "separator"',
+    '[attr.aria-orientation]': '!zDecorative() && zOrientation() === "vertical" ? "vertical" : null',
     '[class]': 'classes()',
   },
   exportAs: 'zSeparator',
 })
 export class ZardSeparatorComponent {
   readonly zOrientation = input<ZardSeparatorVariants['zOrientation']>('horizontal');
-  readonly zSpacing = input<ZardSeparatorVariants['zSpacing']>('default');
+  readonly zDecorative = input(true, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() =>
-    mergeClasses(
-      separatorVariants({
-        zOrientation: this.zOrientation(),
-        zSpacing: this.zSpacing(),
-      }),
-      this.class(),
-    ),
-  );
+  protected readonly classes = computed(() => mergeClasses(separatorVariants(), this.class()));
 }

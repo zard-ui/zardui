@@ -53,7 +53,7 @@ export class ZardButtonGroupComponent {
   selector: 'z-button-group-divider',
   imports: [ZardSeparatorComponent],
   template: `
-    <z-separator [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />
+    <z-separator [class]="classes()" aria-hidden="true" [zOrientation]="orientation()" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
