@@ -10,7 +10,6 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
 @Component({
   selector: 'z-demo-input-group-kbd',
   imports: [ZardInputComponent, ZardKbdComponent, NgIcon, ...ZardInputGroupImports],
-  viewProviders: [provideIcons({ lucideSearch })],
   template: `
     <z-input-group class="min-w-sm">
       <input z-input placeholder="Search..." />
@@ -22,5 +21,6 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
       </z-input-group-addon>
     </z-input-group>
   `,
+  viewProviders: [provideIcons({ lucideSearch })],
 })
 export class ZardDemoInputGroupKbdComponent {}

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardSonnerPosition } from '@/shared/components/sonner/sonner.component';
+import { type ZardSonnerPosition } from '@/shared/components/sonner/sonner.component';
 import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
 
 @Component({

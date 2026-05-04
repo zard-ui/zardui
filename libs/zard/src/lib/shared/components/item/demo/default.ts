@@ -9,7 +9,6 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
 @Component({
   selector: 'z-demo-item-default',
   imports: [ZardButtonComponent, NgIcon, ...ZardItemImports],
-  viewProviders: [provideIcons({ lucideBadgeCheck, lucideChevronRight })],
   template: `
     <div class="flex w-full min-w-md flex-col gap-6">
       <z-item zVariant="outline">
@@ -35,5 +34,6 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </a>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideBadgeCheck, lucideChevronRight })],
 })
 export class ZardDemoItemDefaultComponent {}

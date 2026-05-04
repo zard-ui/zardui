@@ -8,7 +8,6 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
 @Component({
   selector: 'z-demo-item-link',
   imports: [NgIcon, ...ZardItemImports],
-  viewProviders: [provideIcons({ lucideChevronRight, lucideExternalLink })],
   template: `
     <div class="flex w-full min-w-md flex-col gap-4">
       <a z-item href="#">
@@ -32,5 +31,6 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </a>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideChevronRight, lucideExternalLink })],
 })
 export class ZardDemoItemLinkComponent {}

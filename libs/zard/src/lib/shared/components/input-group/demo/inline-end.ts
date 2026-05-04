@@ -10,7 +10,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 @Component({
   selector: 'z-demo-input-group-inline-end',
   imports: [ZardInputComponent, NgIcon, ...ZardInputGroupImports, ...ZardFieldImports],
-  viewProviders: [provideIcons({ lucideEyeOff })],
   template: `
     <div z-field class="min-w-sm">
       <label z-field-label for="inline-end-input">Input</label>
@@ -23,5 +22,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       <p z-field-description>Icon positioned at the end.</p>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideEyeOff })],
 })
 export class ZardDemoInputGroupInlineEndComponent {}

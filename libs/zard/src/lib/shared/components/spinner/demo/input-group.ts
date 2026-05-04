@@ -11,7 +11,6 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
 @Component({
   selector: 'z-demo-spinner-input-group',
   imports: [ZardInputComponent, ZardTextareaComponent, ZardSpinnerComponent, NgIcon, ...ZardInputGroupImports],
-  viewProviders: [provideIcons({ lucideArrowUp })],
   template: `
     <div class="flex w-full min-w-md flex-col gap-4">
       <z-input-group>
@@ -25,7 +24,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
         <z-input-group-addon zAlign="block-end">
           <z-spinner />
           Validating...
-          <button z-input-group-button zVariant="default" zSize="icon-xs" class="ml-auto">
+          <button type="button" z-input-group-button zVariant="default" zSize="icon-xs" class="ml-auto">
             <ng-icon name="lucideArrowUp" />
             <span class="sr-only">Send</span>
           </button>
@@ -33,5 +32,6 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       </z-input-group>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideArrowUp })],
 })
 export class ZardDemoSpinnerInputGroupComponent {}

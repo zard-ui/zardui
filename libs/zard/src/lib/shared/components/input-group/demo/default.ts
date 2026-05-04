@@ -9,7 +9,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 @Component({
   selector: 'z-demo-input-group-default',
   imports: [ZardInputComponent, NgIcon, ...ZardInputGroupImports],
-  viewProviders: [provideIcons({ lucideSearch })],
   template: `
     <z-input-group class="min-w-xs">
       <input z-input placeholder="Search..." />
@@ -19,5 +18,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       <z-input-group-addon zAlign="inline-end">12 results</z-input-group-addon>
     </z-input-group>
   `,
+  viewProviders: [provideIcons({ lucideSearch })],
 })
 export class ZardDemoInputGroupDefaultComponent {}

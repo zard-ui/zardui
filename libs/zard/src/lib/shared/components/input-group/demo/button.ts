@@ -10,13 +10,13 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
 @Component({
   selector: 'z-demo-input-group-button',
   imports: [ZardInputComponent, ZardPopoverComponent, ZardPopoverDirective, NgIcon, ...ZardInputGroupImports],
-  viewProviders: [provideIcons({ lucideCopy, lucideCheck, lucideInfo, lucideStar })],
   template: `
     <div class="grid w-full min-w-sm gap-6">
       <z-input-group>
         <input z-input placeholder="https://x.com/shadcn" readonly />
         <z-input-group-addon zAlign="inline-end">
           <button
+            type="button"
             z-input-group-button
             zSize="icon-xs"
             aria-label="Copy"
@@ -30,14 +30,21 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
 
       <z-input-group class="[--radius:9999px]">
         <z-input-group-addon>
-          <button z-input-group-button zVariant="secondary" zSize="icon-xs" zPopover [zContent]="popoverContent">
+          <button
+            type="button"
+            z-input-group-button
+            zVariant="secondary"
+            zSize="icon-xs"
+            zPopover
+            [zContent]="popoverContent"
+          >
             <ng-icon name="lucideInfo" />
           </button>
         </z-input-group-addon>
         <z-input-group-addon class="text-muted-foreground pl-1.5">https://</z-input-group-addon>
         <input z-input id="input-secure-19" />
         <z-input-group-addon zAlign="inline-end">
-          <button z-input-group-button zSize="icon-xs" (click)="toggleFavorite()">
+          <button type="button" z-input-group-button zSize="icon-xs" (click)="toggleFavorite()">
             <ng-icon
               name="lucideStar"
               [attr.data-favorite]="isFavorite()"
@@ -50,7 +57,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
       <z-input-group>
         <input z-input placeholder="Type to search..." />
         <z-input-group-addon zAlign="inline-end">
-          <button z-input-group-button zVariant="secondary">Search</button>
+          <button type="button" z-input-group-button zVariant="secondary">Search</button>
         </z-input-group-addon>
       </z-input-group>
 
@@ -62,6 +69,7 @@ import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/
       </ng-template>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideCopy, lucideCheck, lucideInfo, lucideStar })],
 })
 export class ZardDemoInputGroupButtonComponent {
   protected readonly isCopied = signal(false);
