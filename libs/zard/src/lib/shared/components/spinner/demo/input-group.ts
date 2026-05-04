@@ -13,7 +13,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
   imports: [ZardInputComponent, ZardTextareaComponent, ZardSpinnerComponent, NgIcon, ...ZardInputGroupImports],
   viewProviders: [provideIcons({ lucideArrowUp })],
   template: `
-    <div class="flex w-full max-w-md flex-col gap-4">
+    <div class="flex w-full min-w-md flex-col gap-4">
       <z-input-group>
         <input z-input placeholder="Send a message..." disabled />
         <z-input-group-addon zAlign="inline-end">
