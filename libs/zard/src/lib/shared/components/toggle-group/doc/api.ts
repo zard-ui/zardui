@@ -19,6 +19,12 @@ export const TOGGLE_GROUP_API: ApiSection[] = [
         default: 'false',
       },
       {
+        name: 'zItemClass',
+        description: 'Additional CSS classes for group item',
+        type: 'ClassValue',
+        default: "''",
+      },
+      {
         name: 'zItems',
         description: 'Array of toggle items to display',
         type: 'ZardToggleGroupItem[]',

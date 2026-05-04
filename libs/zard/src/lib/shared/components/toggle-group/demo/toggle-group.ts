@@ -1,3 +1,4 @@
+import { TOGGLE_GROUP_DEMO_CUSTOM } from '@generated/components/toggle-group/demo/custom';
 import { TOGGLE_GROUP_DEMO_DEFAULT } from '@generated/components/toggle-group/demo/default';
 import { TOGGLE_GROUP_DEMO_DISABLED } from '@generated/components/toggle-group/demo/disabled';
 import { TOGGLE_GROUP_DEMO_OUTLINE } from '@generated/components/toggle-group/demo/outline';
@@ -8,6 +9,7 @@ import { TOGGLE_GROUP_CLI_ADD } from '@generated/installation/cli/add-toggle-gro
 import { TOGGLE_GROUP_MANUAL_CODE } from '@generated/installation/manual/toggle-group';
 import { TOGGLE_GROUP_USAGE_CODE, TOGGLE_GROUP_USAGE_IMPORT } from '@generated/usage/toggle-group';
 
+import ToggleGroupCustomComponent from '@/shared/components/toggle-group/demo/custom';
 import ToggleGroupVerticalComponent from '@/shared/components/toggle-group/demo/vertical';
 
 import ToggleGroupDefaultComponent from './default';
@@ -62,6 +64,12 @@ export const TOGGLE_GROUP = {
       name: 'disabled',
       component: ToggleGroupDisabledComponent,
       codeData: TOGGLE_GROUP_DEMO_DISABLED,
+    },
+    {
+      name: 'custom',
+      description: 'A custom toggle group example.',
+      component: ToggleGroupCustomComponent,
+      codeData: TOGGLE_GROUP_DEMO_CUSTOM,
     },
   ],
 };
