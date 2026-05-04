@@ -11,12 +11,12 @@ import {
 } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+import { ZardSeparatorComponent } from '@/shared/components/separator';
 
 @Component({
   selector: 'zard-demo-menu-default',
-  imports: [ZardMenuImports, ZardButtonComponent, ZardDividerComponent, NgIcon],
+  imports: [ZardMenuImports, ZardButtonComponent, ZardSeparatorComponent, NgIcon],
   template: `
     <nav class="flex items-center justify-between p-4">
       <div class="flex items-center space-x-6">
@@ -117,7 +117,7 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
                   <ng-icon name="lucideChevronRight" />
                 </button>
 
-                <z-divider zSpacing="sm" />
+                <z-separator zSpacing="sm" />
 
                 <button type="button" z-menu-item (click)="log('Community')">
                   <ng-icon name="lucideUsers" class="mr-2" />
@@ -132,7 +132,7 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
                 <button type="button" z-menu-item (click)="log('Tutorials')">Tutorials</button>
                 <button type="button" z-menu-item (click)="log('FAQ')">FAQ</button>
 
-                <z-divider zSpacing="sm" />
+                <z-separator zSpacing="sm" />
 
                 <button type="button" z-menu-item (click)="log('Contact Support')">Contact Support</button>
                 <button type="button" z-menu-item (click)="log('Live Chat')">Live Chat</button>

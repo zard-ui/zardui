@@ -18,8 +18,8 @@ import {
   buttonGroupVariants,
   type ZardButtonGroupVariants,
 } from './button-group.variants';
-import { ZardDividerComponent } from '../divider/divider.component';
-import { type ZardDividerVariants } from '../divider/divider.variants';
+import { ZardSeparatorComponent } from '../separator/separator.component';
+import { type ZardSeparatorVariants } from '../separator/separator.variants';
 
 @Component({
   selector: 'z-button-group',
@@ -51,9 +51,9 @@ export class ZardButtonGroupComponent {
 
 @Component({
   selector: 'z-button-group-divider',
-  imports: [ZardDividerComponent],
+  imports: [ZardSeparatorComponent],
   template: `
-    <z-divider [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />
+    <z-separator [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -63,7 +63,7 @@ export class ZardButtonGroupComponent {
   exportAs: 'zButtonGroupDivider',
 })
 export class ZardButtonGroupDividerComponent {
-  readonly zOrientation = input<ZardDividerVariants['zOrientation']>(null);
+  readonly zOrientation = input<ZardSeparatorVariants['zOrientation']>(null);
   readonly class = input<ClassValue>('');
 
   private readonly parent = inject(ZardButtonGroupComponent, {

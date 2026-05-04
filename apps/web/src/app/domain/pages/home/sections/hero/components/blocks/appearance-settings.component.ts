@@ -6,9 +6,9 @@ import { lucideMinus, lucidePlus } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardRadioGroupImports } from '@zard/components/radio-group/radio-group.imports';
+import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 
 @Component({
@@ -19,7 +19,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
     ZardButtonComponent,
     ZardButtonGroupComponent,
     ZardInputComponent,
-    ZardDividerComponent,
+    ZardSeparatorComponent,
     ZardSwitchComponent,
     ...ZardRadioGroupImports,
     NgIcon,
@@ -62,7 +62,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
           </z-radio-group>
         </fieldset>
 
-        <z-divider class="-my-2" />
+        <z-separator class="-my-2" />
 
         <div class="flex w-full flex-row items-center gap-3">
           <div class="flex flex-1 flex-col gap-1.5 leading-snug">
@@ -104,7 +104,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
           </z-button-group>
         </div>
 
-        <z-divider class="-my-2" />
+        <z-separator class="-my-2" />
 
         <div class="flex w-full flex-row items-center gap-3">
           <div class="flex flex-1 flex-col gap-1.5 leading-snug">

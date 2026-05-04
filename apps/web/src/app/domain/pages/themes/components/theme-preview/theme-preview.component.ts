@@ -19,10 +19,10 @@ import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
+import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
 import { ZardSkeletonComponent } from '@zard/components/skeleton/skeleton.component';
 import { ZardSliderComponent } from '@zard/components/slider/slider.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
@@ -42,7 +42,7 @@ import { ThemeGeneratorService } from '../../services/theme-generator.service';
     ZardButtonComponent,
     ZardCardComponent,
     ZardCheckboxComponent,
-    ZardDividerComponent,
+    ZardSeparatorComponent,
     ZardEmptyComponent,
     ZardIdDirective,
     ZardInputComponent,

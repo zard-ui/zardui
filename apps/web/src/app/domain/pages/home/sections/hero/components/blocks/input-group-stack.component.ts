@@ -4,10 +4,10 @@ import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideArrowUp, lucideCheck, lucideInfo, lucidePlus, lucideSearch } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardDividerComponent } from '@zard/components/divider';
 import { ZardDropdownImports } from '@zard/components/dropdown';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardInputGroupImports } from '@zard/components/input-group/input-group.imports';
+import { ZardSeparatorComponent } from '@zard/components/separator';
 import { ZardTextareaComponent } from '@zard/components/textarea/textarea.component';
 import { ZardTooltipDirective } from '@zard/components/tooltip';
 
@@ -20,7 +20,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
     ZardTextareaComponent,
     ...ZardInputGroupImports,
     NgIcon,
-    ZardDividerComponent,
+    ZardSeparatorComponent,
     ZardDropdownImports,
     ZardTooltipDirective,
   ],
@@ -74,7 +74,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
               <z-dropdown-menu-item>Manual</z-dropdown-menu-item>
             </z-dropdown-menu-content>
             <span class="text-muted-foreground ml-auto text-sm">52% used</span>
-            <z-divider zOrientation="vertical" class="mx-2 h-4!" />
+            <z-separator zOrientation="vertical" class="mx-2 h-4!" />
             <button type="button" z-button zType="default" zShape="circle" zSize="icon-sm" aria-label="Send">
               <ng-icon name="lucideArrowUp" />
             </button>

@@ -612,14 +612,14 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'divider',
+    name: 'separator',
     files: [
       {
-        name: 'divider.component.ts',
+        name: 'separator.component.ts',
         content: '',
       },
       {
-        name: 'divider.variants.ts',
+        name: 'separator.variants.ts',
         content: '',
       },
       {
@@ -1042,7 +1042,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'button-group',
-    registryDependencies: ['divider'],
+    registryDependencies: ['separator'],
     files: [
       {
         name: 'button-group.component.ts',

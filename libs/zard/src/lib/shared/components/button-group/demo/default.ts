@@ -16,12 +16,12 @@ import {
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
-import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+import { ZardSeparatorComponent } from '@/shared/components/separator';
 
 @Component({
   selector: 'z-demo-button-group-default',
-  imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon, ZardMenuImports, ZardDividerComponent],
+  imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon, ZardMenuImports, ZardSeparatorComponent],
   template: `
     <z-button-group>
       <z-button-group class="hidden sm:flex">
@@ -51,7 +51,7 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
                 Archive
               </button>
 
-              <z-divider zSpacing="sm" />
+              <z-separator zSpacing="sm" />
 
               <button type="button" z-menu-item>
                 <ng-icon name="lucideClock" />
@@ -88,7 +88,7 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
                 </ng-template>
               </button>
 
-              <z-divider zSpacing="sm" />
+              <z-separator zSpacing="sm" />
 
               <button type="button" z-menu-item class="text-red-500">
                 <ng-icon name="lucideTrash" />

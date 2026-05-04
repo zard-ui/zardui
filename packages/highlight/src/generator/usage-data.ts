@@ -103,9 +103,9 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   <p>Dialog content goes here.</p>
 </z-dialog>`,
   },
-  divider: {
-    importCode: `import { ZardDividerComponent } from '@/shared/components/divider/divider.component';`,
-    templateCode: `<z-divider></z-divider>`,
+  separator: {
+    importCode: `import { ZardSeparatorComponent } from '@/shared/components/separator/separator.component';`,
+    templateCode: `<z-separator></z-separator>`,
   },
   dropdown: {
     importCode: `import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';`,

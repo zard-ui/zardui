@@ -3,12 +3,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronRight } from '@ng-icons/lucide';
 
-import { ZardDividerComponent } from '@/shared/components/divider';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+import { ZardSeparatorComponent } from '@/shared/components/separator';
 
 @Component({
   selector: 'z-demo-context-menu',
-  imports: [ZardMenuImports, ZardDividerComponent, NgIcon],
+  imports: [ZardMenuImports, ZardSeparatorComponent, NgIcon],
   template: `
     <div
       z-context-menu
@@ -43,7 +43,7 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
           <div class="flex items-center">More Tools</div>
           <ng-icon name="lucideChevronRight" />
         </button>
-        <z-divider zSpacing="sm" />
+        <z-separator zSpacing="sm" />
         <z-menu-label>People</z-menu-label>
         <button type="button" z-menu-item (click)="log('Pedro Duarte')">Pedro Duarte</button>
         <button type="button" z-menu-item (click)="log('Colm Tuite')">Colm Tuite</button>
@@ -55,9 +55,9 @@ import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
         <button type="button" z-menu-item (click)="log('Save Page')">Save Page...</button>
         <button type="button" z-menu-item (click)="log('Create Shortcut')">Create Shortcut...</button>
         <button type="button" z-menu-item (click)="log('Name Window')">Name Window...</button>
-        <z-divider zSpacing="sm" />
+        <z-separator zSpacing="sm" />
         <button type="button" z-menu-item (click)="log('Developer Tools')">Developer Tools</button>
-        <z-divider zSpacing="sm" />
+        <z-separator zSpacing="sm" />
         <button type="button" z-menu-item zType="destructive" (click)="log('Delete')">Delete</button>
       </div>
     </ng-template>

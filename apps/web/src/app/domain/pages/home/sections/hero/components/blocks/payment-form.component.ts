@@ -2,10 +2,10 @@ import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardSelectItemComponent } from '@zard/components/select/select-item.component';
 import { ZardSelectComponent } from '@zard/components/select/select.component';
+import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
 import { ZardTextareaComponent } from '@zard/components/textarea/textarea.component';
 
 @Component({
@@ -19,7 +19,7 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
     ZardTextareaComponent,
     ZardSelectComponent,
     ZardSelectItemComponent,
-    ZardDividerComponent,
+    ZardSeparatorComponent,
   ],
   template: `
     <div class="w-full max-w-md rounded-lg border p-6">
@@ -75,7 +75,7 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
           </fieldset>
 
           <!-- FieldSeparator -->
-          <z-divider />
+          <z-separator />
 
           <!-- FieldSet: Billing Address -->
           <fieldset class="flex flex-col gap-4">
@@ -90,7 +90,7 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
           </fieldset>
 
           <!-- FieldSeparator -->
-          <z-divider />
+          <z-separator />
 
           <!-- FieldSet: Comments -->
           <fieldset class="flex flex-col gap-4">

@@ -18,9 +18,9 @@ import {
 import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardDividerComponent } from '@/shared/components/divider';
 import { LayoutImports } from '@/shared/components/layout/layout.imports';
 import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+import { ZardSeparatorComponent } from '@/shared/components/separator';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 import { ZardTooltipImports } from '@/shared/components/tooltip';
 
@@ -39,7 +39,7 @@ interface MenuItem {
     ZardMenuImports,
     ZardSkeletonComponent,
     ZardTooltipImports,
-    ZardDividerComponent,
+    ZardSeparatorComponent,
     ZardAvatarComponent,
     NgIcon,
   ],
@@ -157,7 +157,7 @@ interface MenuItem {
                   <ng-icon name="lucideSettings" class="mr-2" />
                   Settings
                 </button>
-                <z-divider zSpacing="sm" />
+                <z-separator zSpacing="sm" />
                 <button type="button" z-menu-item>
                   <ng-icon name="lucideLogOut" class="mr-2" />
                   Logout
@@ -175,7 +175,7 @@ interface MenuItem {
             <ng-icon name="lucidePanelLeft" />
           </button>
 
-          <z-divider zOrientation="vertical" class="ml-2 h-4" />
+          <z-separator zOrientation="vertical" class="ml-2 h-4" />
 
           <z-breadcrumb zWrap="wrap" zAlign="start">
             <z-breadcrumb-item [routerLink]="['/docs/components/layout']">Home</z-breadcrumb-item>

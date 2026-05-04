@@ -2,11 +2,11 @@ import { Component } from '@angular/core';
 
 import { AVATAR_DEMO_BASIC } from '@generated/components/avatar/demo/basic';
 import { BREADCRUMB_DEMO_DEFAULT } from '@generated/components/breadcrumb/demo/default';
-import { DIVIDER_DEMO_DEFAULT } from '@generated/components/divider/demo/default';
+import { SEPARATOR_DEMO_DEFAULT } from '@generated/components/separator/demo/default';
 
 import { ZardDemoAvatarBasicComponent } from '@zard/components/avatar/demo/basic';
 import { ZardDemoBreadcrumbDefaultComponent } from '@zard/components/breadcrumb/demo/default';
-import { ZardDemoDividerDefaultComponent } from '@zard/components/divider/demo/default';
+import { ZardDemoSeparatorDefaultComponent } from '@zard/components/separator/demo/default';
 
 import {
   type ChangelogEntryComponent,
@@ -42,10 +42,10 @@ export class August2025Component implements ChangelogEntryComponent {
     {
       name: 'default',
       description:
-        'Visual divider component for separating content sections with horizontal and vertical orientations.',
-      component: ZardDemoDividerDefaultComponent,
-      componentName: 'divider',
-      codeData: DIVIDER_DEMO_DEFAULT,
+        'Visual separator component for separating content sections with horizontal and vertical orientations.',
+      component: ZardDemoSeparatorDefaultComponent,
+      componentName: 'separator',
+      codeData: SEPARATOR_DEMO_DEFAULT,
     },
     {
       name: 'default',

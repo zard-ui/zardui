@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const dividerVariants = cva('bg-border block', {
+export const separatorVariants = cva('bg-border block', {
   variants: {
     zOrientation: {
       horizontal: 'h-px w-full',
@@ -51,4 +51,4 @@ export const dividerVariants = cva('bg-border block', {
   ],
 });
 
-export type ZardDividerVariants = VariantProps<typeof dividerVariants>;
+export type ZardSeparatorVariants = VariantProps<typeof separatorVariants>;

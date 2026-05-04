@@ -22,7 +22,7 @@ export const ITEM_API: ApiSection[] = [
   },
   {
     selector: 'z-item-separator',
-    description: 'Horizontal divider rendered between items in a group.',
+    description: 'Horizontal separator rendered between items in a group.',
     props: [{ name: '[class]', description: 'Override or extend default classes.', type: 'ClassValue', default: '-' }],
   },
   {

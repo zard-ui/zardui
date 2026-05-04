@@ -126,9 +126,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/dialog/demo/dialog').then(m => m.DIALOG),
   },
   {
-    componentName: 'divider',
+    componentName: 'separator',
     description: 'Visually or semantically separates content.',
-    loadData: () => import('@zard/components/divider/demo/divider').then(m => m.DIVIDER),
+    loadData: () => import('@zard/components/separator/demo/separator').then(m => m.SEPARATOR),
   },
   {
     componentName: 'dropdown',

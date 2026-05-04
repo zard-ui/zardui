@@ -13,7 +13,7 @@ import { LayoutService } from '@doc/shared/services/layout.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
+import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
 import { environment } from '../../../../environments/environment';
@@ -38,7 +38,7 @@ const DarkModeSvg = `
     MobileMenuComponent,
     RouterModule,
     ZardButtonComponent,
-    ZardDividerComponent,
+    ZardSeparatorComponent,
     NgIcon,
   ],
   host: {

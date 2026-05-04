@@ -4,10 +4,10 @@ import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { dividerVariants, type ZardDividerVariants } from './divider.variants';
+import { separatorVariants, type ZardSeparatorVariants } from './separator.variants';
 
 @Component({
-  selector: 'z-divider',
+  selector: 'z-separator',
   standalone: true,
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -17,16 +17,16 @@ import { dividerVariants, type ZardDividerVariants } from './divider.variants';
     '[attr.aria-orientation]': 'zOrientation()',
     '[class]': 'classes()',
   },
-  exportAs: 'zDivider',
+  exportAs: 'zSeparator',
 })
-export class ZardDividerComponent {
-  readonly zOrientation = input<ZardDividerVariants['zOrientation']>('horizontal');
-  readonly zSpacing = input<ZardDividerVariants['zSpacing']>('default');
+export class ZardSeparatorComponent {
+  readonly zOrientation = input<ZardSeparatorVariants['zOrientation']>('horizontal');
+  readonly zSpacing = input<ZardSeparatorVariants['zSpacing']>('default');
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() =>
     mergeClasses(
-      dividerVariants({
+      separatorVariants({
         zOrientation: this.zOrientation(),
         zSpacing: this.zSpacing(),
       }),

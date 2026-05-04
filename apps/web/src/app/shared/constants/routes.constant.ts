@@ -79,7 +79,7 @@ export const COMPONENTS_PATH = {
     { name: 'Combobox', path: '/docs/components/combobox', available: true },
     { name: 'Command', path: '/docs/components/command', available: true },
     { name: 'Date Picker', path: '/docs/components/date-picker', available: true },
-    { name: 'Divider', path: '/docs/components/divider', available: true },
+    { name: 'Separator', path: '/docs/components/separator', available: true },
     { name: 'Empty', path: '/docs/components/empty', available: true },
     { name: 'Field', path: '/docs/components/field', available: true },
     { name: 'Form', path: '/docs/components/form', available: true },
