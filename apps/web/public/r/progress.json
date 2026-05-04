@@ -1,0 +1,32 @@
+{
+  "name": "progress",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "progress.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, computed, input, ViewEncapsulation } from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\nimport { progressVariants } from './progress.variants';\n\n@Component({\n  selector: 'z-progress',\n  template: `\n    <div\n      data-slot=\"progress-indicator\"\n      class=\"bg-primary size-full flex-1 transition-all\"\n      [style.transform]=\"indicatorTransform()\"\n    ></div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    'data-slot': 'progress',\n    role: 'progressbar',\n    'aria-valuemin': '0',\n    'aria-valuemax': '100',\n    '[attr.aria-valuenow]': 'clampedValue()',\n    '[class]': 'classes()',\n  },\n  exportAs: 'zProgress',\n})\nexport class ZardProgressComponent {\n  readonly value = input(0);\n  readonly class = input<ClassValue>('');\n\n  protected readonly clampedValue = computed(() => {\n    const v = this.value();\n    if (v > 100) return 100;\n    if (v < 0) return 0;\n    return v;\n  });\n\n  protected readonly indicatorTransform = computed(() => `translateX(-${100 - this.clampedValue()}%)`);\n\n  protected readonly classes = computed(() => mergeClasses(progressVariants(), this.class()));\n}\n"
+    },
+    {
+      "name": "progress.variants.ts",
+      "content": "import { cva } from 'class-variance-authority';\n\nexport const progressVariants = cva('bg-muted relative flex h-1 w-full items-center overflow-x-hidden rounded-full');\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './progress.component';\nexport * from './progress.variants';\n"
+    }
+  ],
+  "demos": [
+    {
+      "name": "controlled.ts",
+      "content": "import { ChangeDetectionStrategy, Component, signal } from '@angular/core';\n\nimport { ZardProgressComponent } from '@/shared/components/progress/progress.component';\nimport { ZardSliderComponent } from '@/shared/components/slider/slider.component';\n\n@Component({\n  selector: 'z-demo-progress-controlled',\n  imports: [ZardProgressComponent, ZardSliderComponent],\n  template: `\n    <div class=\"flex w-full min-w-sm flex-col gap-4\">\n      <z-progress [value]=\"value()\" />\n      <z-slider [zDefault]=\"value()\" zMin=\"0\" zMax=\"100\" zStep=\"1\" (zSlideIndexChange)=\"value.set($event)\" />\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressControlledComponent {\n  protected readonly value = signal(50);\n}\n"
+    },
+    {
+      "name": "label.ts",
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field/field.imports';\nimport { ZardProgressComponent } from '@/shared/components/progress/progress.component';\n\n@Component({\n  selector: 'z-demo-progress-label',\n  imports: [ZardProgressComponent, ...ZardFieldImports],\n  template: `\n    <z-field class=\"w-full min-w-sm\">\n      <z-field-label for=\"progress-upload\">\n        <span>Upload progress</span>\n        <span class=\"ml-auto\">66%</span>\n      </z-field-label>\n      <z-progress id=\"progress-upload\" [value]=\"66\" />\n    </z-field>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressLabelComponent {}\n"
+    },
+    {
+      "name": "preview.ts",
+      "content": "import { afterNextRender, ChangeDetectionStrategy, Component, signal } from '@angular/core';\n\nimport { ZardProgressComponent } from '@/shared/components/progress/progress.component';\n\n@Component({\n  selector: 'z-demo-progress-preview',\n  imports: [ZardProgressComponent],\n  template: `\n    <z-progress class=\"w-60\" [value]=\"value()\" />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressPreviewComponent {\n  protected readonly value = signal(13);\n\n  constructor() {\n    afterNextRender(() => {\n      setTimeout(() => this.value.set(66), 500);\n    });\n  }\n}\n"
+    }
+  ]
+}

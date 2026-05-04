@@ -384,20 +384,6 @@ describe('ZardToggleGroupComponent', () => {
     testHostFixture.detectChanges();
 
     const component = testHostFixture.componentInstance.toggleGroupComponent();
-    const emitSpy = jest.fn();
-    component.valueChange.subscribe(emitSpy);
-
-    const buttons = testHostFixture.nativeElement.querySelectorAll('button');
-    buttons[0].click();
-
-    expect(emitSpy).toHaveBeenCalledWith('item-a');
-  });
-
-  it('should toggle item with custom template', () => {
-    const testHostFixture = TestBed.createComponent(TestHostComponent);
-    testHostFixture.detectChanges();
-
-    const component = testHostFixture.componentInstance.toggleGroupComponent();
 
     jest.spyOn(component.valueChange, 'emit');
 

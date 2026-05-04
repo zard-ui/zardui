@@ -1,0 +1,36 @@
+{
+  "name": "separator",
+  "type": "registry:component",
+  "files": [
+    {
+      "name": "separator.component.ts",
+      "content": "import {\n  booleanAttribute,\n  ChangeDetectionStrategy,\n  Component,\n  computed,\n  input,\n  ViewEncapsulation,\n} from '@angular/core';\n\nimport type { ClassValue } from 'clsx';\n\nimport { mergeClasses } from '@/shared/utils/merge-classes';\n\nimport { separatorVariants, type ZardSeparatorVariants } from './separator.variants';\n\n@Component({\n  selector: 'z-separator',\n  standalone: true,\n  template: '',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n  encapsulation: ViewEncapsulation.None,\n  host: {\n    'data-slot': 'separator',\n    '[attr.data-orientation]': 'zOrientation()',\n    '[attr.role]': 'zDecorative() ? \"none\" : \"separator\"',\n    '[attr.aria-orientation]': '!zDecorative() && zOrientation() === \"vertical\" ? \"vertical\" : null',\n    '[class]': 'classes()',\n  },\n  exportAs: 'zSeparator',\n})\nexport class ZardSeparatorComponent {\n  readonly zOrientation = input<ZardSeparatorVariants['zOrientation']>('horizontal');\n  readonly zDecorative = input(true, { transform: booleanAttribute });\n  readonly class = input<ClassValue>('');\n\n  protected readonly classes = computed(() => mergeClasses(separatorVariants(), this.class()));\n}\n"
+    },
+    {
+      "name": "separator.variants.ts",
+      "content": "import { cva, type VariantProps } from 'class-variance-authority';\n\nexport const separatorVariants = cva(\n  'bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:w-px data-[orientation=vertical]:self-stretch',\n  {\n    variants: {\n      zOrientation: {\n        horizontal: '',\n        vertical: '',\n      },\n    },\n    defaultVariants: {\n      zOrientation: 'horizontal',\n    },\n  },\n);\n\nexport type ZardSeparatorVariants = VariantProps<typeof separatorVariants>;\n"
+    },
+    {
+      "name": "index.ts",
+      "content": "export * from './separator.component';\nexport * from './separator.variants';\n"
+    }
+  ],
+  "demos": [
+    {
+      "name": "list.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSeparatorComponent } from '../separator.component';\n\n@Component({\n  selector: 'z-demo-separator-list',\n  imports: [ZardSeparatorComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex w-full min-w-sm flex-col gap-2 text-sm\">\n      <dl class=\"flex items-center justify-between\">\n        <dt>Item 1</dt>\n        <dd class=\"text-muted-foreground\">Value 1</dd>\n      </dl>\n      <z-separator />\n      <dl class=\"flex items-center justify-between\">\n        <dt>Item 2</dt>\n        <dd class=\"text-muted-foreground\">Value 2</dd>\n      </dl>\n      <z-separator />\n      <dl class=\"flex items-center justify-between\">\n        <dt>Item 3</dt>\n        <dd class=\"text-muted-foreground\">Value 3</dd>\n      </dl>\n    </div>\n  `,\n})\nexport class ZardDemoSeparatorListComponent {}\n"
+    },
+    {
+      "name": "menu.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSeparatorComponent } from '../separator.component';\n\n@Component({\n  selector: 'z-demo-separator-menu',\n  imports: [ZardSeparatorComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex items-center gap-2 text-sm md:gap-4\">\n      <div class=\"flex flex-col gap-1\">\n        <span class=\"font-medium\">Settings</span>\n        <span class=\"text-muted-foreground text-xs\">Manage preferences</span>\n      </div>\n      <z-separator zOrientation=\"vertical\" />\n      <div class=\"flex flex-col gap-1\">\n        <span class=\"font-medium\">Account</span>\n        <span class=\"text-muted-foreground text-xs\">Profile & security</span>\n      </div>\n      <z-separator zOrientation=\"vertical\" class=\"hidden md:block\" />\n      <div class=\"hidden flex-col gap-1 md:flex\">\n        <span class=\"font-medium\">Help</span>\n        <span class=\"text-muted-foreground text-xs\">Support & docs</span>\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoSeparatorMenuComponent {}\n"
+    },
+    {
+      "name": "preview.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSeparatorComponent } from '../separator.component';\n\n@Component({\n  selector: 'z-demo-separator-preview',\n  imports: [ZardSeparatorComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex max-w-sm flex-col gap-4 text-sm\">\n      <div class=\"flex flex-col gap-1.5\">\n        <div class=\"leading-none font-medium\">Zard/ui</div>\n        <div class=\"text-muted-foreground\">The Next Level for Your Angular Projects</div>\n      </div>\n      <z-separator />\n      <div>A set of beautifully designed components that you can customize, extend, and build on.</div>\n    </div>\n  `,\n})\nexport class ZardDemoSeparatorPreviewComponent {}\n"
+    },
+    {
+      "name": "vertical.ts",
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSeparatorComponent } from '../separator.component';\n\n@Component({\n  selector: 'z-demo-separator-vertical',\n  imports: [ZardSeparatorComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex h-5 items-center gap-4 text-sm\">\n      <div>Blog</div>\n      <z-separator zOrientation=\"vertical\" />\n      <div>Docs</div>\n      <z-separator zOrientation=\"vertical\" />\n      <div>Source</div>\n    </div>\n  `,\n})\nexport class ZardDemoSeparatorVerticalComponent {}\n"
+    }
+  ]
+}
