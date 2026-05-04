@@ -31,7 +31,7 @@ export * from './lib/shared/components/spinner';
 export * from './lib/shared/components/menu';
 export * from './lib/shared/components/pagination';
 export * from './lib/shared/components/popover';
-export * from './lib/shared/components/progress-bar';
+export * from './lib/shared/components/progress';
 export * from './lib/shared/components/radio-group';
 export * from './lib/shared/components/resizable';
 export * from './lib/shared/components/select';

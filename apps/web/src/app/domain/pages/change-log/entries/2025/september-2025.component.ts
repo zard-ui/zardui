@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
-import { PROGRESS_BAR_DEMO_BASIC } from '@generated/components/progress-bar/demo/basic';
+import { PROGRESS_DEMO_PREVIEW } from '@generated/components/progress/demo/preview';
 import { SKELETON_DEMO_DEFAULT } from '@generated/components/skeleton/demo/default';
 import { SPINNER_DEMO_CUSTOMIZATION } from '@generated/components/spinner/demo/customization';
 
-import { ZardDemoProgressBarBasicComponent } from '@zard/components/progress-bar/demo/basic';
+import { ZardDemoProgressPreviewComponent } from '@zard/components/progress/demo/preview';
 import { ZardDemoSkeletonDefaultComponent } from '@zard/components/skeleton/demo/default';
 import { ZardDemoSpinnerCustomizationComponent } from '@zard/components/spinner/demo/customization';
 
@@ -33,12 +33,11 @@ export class September2025Component implements ChangelogEntryComponent {
 
   readonly examples: ChangelogExample[] = [
     {
-      name: 'basic',
-      description:
-        'Visual progress indicator with customizable variants for tracking task completion and loading states.',
-      component: ZardDemoProgressBarBasicComponent,
-      componentName: 'progress-bar',
-      codeData: PROGRESS_BAR_DEMO_BASIC,
+      name: 'preview',
+      description: 'Visual progress indicator showing the completion progress of a task.',
+      component: ZardDemoProgressPreviewComponent,
+      componentName: 'progress',
+      codeData: PROGRESS_DEMO_PREVIEW,
     },
     {
       name: 'default',

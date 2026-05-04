@@ -205,9 +205,9 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   <p>Place content for the popover here.</p>
 </ng-template>`,
   },
-  'progress-bar': {
-    importCode: `import { ZardProgressBarComponent } from '@/shared/components/progress-bar/progress-bar.component';`,
-    templateCode: `<z-progress-bar [progress]="60"></z-progress-bar>`,
+  progress: {
+    importCode: `import { ZardProgressComponent } from '@/shared/components/progress/progress.component';`,
+    templateCode: `<z-progress [value]="60"></z-progress>`,
   },
   'radio-group': {
     importCode: `import { ZardRadioGroupImports } from '@/shared/components/radio-group/radio-group.imports';`,

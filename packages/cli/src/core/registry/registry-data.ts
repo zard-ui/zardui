@@ -642,14 +642,14 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'progress-bar',
+    name: 'progress',
     files: [
       {
-        name: 'progress-bar.component.ts',
+        name: 'progress.component.ts',
         content: '',
       },
       {
-        name: 'progress-bar.variants.ts',
+        name: 'progress.variants.ts',
         content: '',
       },
       {

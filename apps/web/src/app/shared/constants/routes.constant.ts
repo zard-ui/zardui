@@ -89,7 +89,7 @@ export const COMPONENTS_PATH = {
     { name: 'Layout', path: '/docs/components/layout', available: true },
     { name: 'Dialog', path: '/docs/components/dialog', available: true },
     { name: 'Pagination', path: '/docs/components/pagination', available: true },
-    { name: 'Progress Bar', path: '/docs/components/progress-bar', available: true },
+    { name: 'Progress', path: '/docs/components/progress', available: true },
     { name: 'Select', path: '/docs/components/select', available: true },
     { name: 'Slider', path: '/docs/components/slider', available: true },
     { name: 'Skeleton', path: '/docs/components/skeleton', available: true },

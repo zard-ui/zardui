@@ -15,7 +15,7 @@
         <p class="text-muted-foreground text-xs">Complete</p>
       </div>
     </div>
-    <z-progress-bar [progress]="overallProgress" class="h-2" />
+    <z-progress [value]="overallProgress" class="h-2" />
   </div>
 
   <div class="relative mx-auto max-w-4xl">
@@ -98,7 +98,7 @@
 
               <p class="text-muted-foreground mb-4 text-sm">{{ phase.description }}</p>
 
-              <z-progress-bar [progress]="phase.progress" class="mb-4 h-1.5" />
+              <z-progress [value]="phase.progress" class="mb-4 h-1.5" />
 
               <div class="mb-4">
                 <h4 class="text-muted-foreground mb-2 text-xs font-semibold uppercase">Goals</h4>

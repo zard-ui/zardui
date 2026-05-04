@@ -6,7 +6,7 @@ import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
-import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
+import { ZardProgressComponent } from '@zard/components/progress/progress.component';
 
 interface RoadmapPhase {
   id: string;
@@ -23,7 +23,7 @@ interface RoadmapPhase {
   selector: 'z-roadmap',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [DocContentComponent, DocHeadingComponent, ZardCardComponent, ZardBadgeComponent, ZardProgressBarComponent],
+  imports: [DocContentComponent, DocHeadingComponent, ZardCardComponent, ZardBadgeComponent, ZardProgressComponent],
   templateUrl: './roadmap.page.html',
 })
 export class RoadmapPage implements OnInit {

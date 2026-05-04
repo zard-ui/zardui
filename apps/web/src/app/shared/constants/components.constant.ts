@@ -201,9 +201,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/popover/demo/popover').then(m => m.POPOVER),
   },
   {
-    componentName: 'progress-bar',
+    componentName: 'progress',
     description: 'Displays an indicator showing the completion progress of a task.',
-    loadData: () => import('@zard/components/progress-bar/demo/progress-bar').then(m => m.PROGRESS_BAR),
+    loadData: () => import('@zard/components/progress/demo/progress').then(m => m.PROGRESS),
   },
   {
     componentName: 'radio-group',
