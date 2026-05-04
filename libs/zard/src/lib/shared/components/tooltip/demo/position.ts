@@ -6,7 +6,6 @@ import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports'
 @Component({
   selector: 'z-demo-tooltip-position',
   imports: [ZardButtonComponent, ZardTooltipImports],
-  standalone: true,
   template: `
     <div class="flex flex-col space-y-2">
       <button type="button" z-button zType="outline" zTooltip="Tooltip content" zPosition="top">Top</button>

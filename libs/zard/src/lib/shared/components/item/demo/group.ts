@@ -16,7 +16,6 @@ interface Person {
 @Component({
   selector: 'z-demo-item-group',
   imports: [ZardAvatarComponent, ZardButtonComponent, NgIcon, ...ZardItemImports],
-  viewProviders: [provideIcons({ lucidePlus })],
   template: `
     <z-item-group class="min-w-sm">
       @for (person of people; track person.username) {
@@ -37,6 +36,7 @@ interface Person {
       }
     </z-item-group>
   `,
+  viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoItemGroupComponent {
   protected readonly people: Person[] = [

@@ -11,7 +11,6 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
 @Component({
   selector: 'z-demo-input-group-block-start',
   imports: [ZardInputComponent, ZardTextareaComponent, NgIcon, ...ZardInputGroupImports, ...ZardFieldImports],
-  viewProviders: [provideIcons({ lucideCopy, lucideFileCode })],
   template: `
     <div z-field-group class="min-w-sm">
       <div z-field>
@@ -36,7 +35,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
           <z-input-group-addon zAlign="block-start">
             <ng-icon name="lucideFileCode" class="text-muted-foreground" />
             <span z-input-group-text class="font-mono">script.js</span>
-            <button z-input-group-button zSize="icon-xs" class="ml-auto">
+            <button type="button" z-input-group-button zSize="icon-xs" class="ml-auto">
               <ng-icon name="lucideCopy" />
               <span class="sr-only">Copy</span>
             </button>
@@ -46,5 +45,6 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
       </div>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideCopy, lucideFileCode })],
 })
 export class ZardDemoInputGroupBlockStartComponent {}

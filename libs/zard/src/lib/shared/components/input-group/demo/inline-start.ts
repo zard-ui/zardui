@@ -10,7 +10,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 @Component({
   selector: 'z-demo-input-group-inline-start',
   imports: [ZardInputComponent, NgIcon, ...ZardInputGroupImports, ...ZardFieldImports],
-  viewProviders: [provideIcons({ lucideSearch })],
   template: `
     <div z-field class="min-w-sm">
       <label z-field-label for="inline-start-input">Input</label>
@@ -23,5 +22,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       <p z-field-description>Icon positioned at the start.</p>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideSearch })],
 })
 export class ZardDemoInputGroupInlineStartComponent {}

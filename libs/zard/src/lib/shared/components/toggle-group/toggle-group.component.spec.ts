@@ -1,3 +1,4 @@
+import { Component, computed, type TemplateRef, viewChild } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
@@ -338,4 +339,106 @@ describe('ZardToggleGroupComponent', () => {
     const buttons = fixture.nativeElement.querySelectorAll('button');
     expect(buttons[0].getAttribute('data-slot')).toBe('toggle-group-item');
   });
+
+  it('should render custom template when provided', () => {
+    const testHostFixture = TestBed.createComponent(TestHostComponent);
+    testHostFixture.detectChanges();
+
+    const buttons = testHostFixture.nativeElement.querySelectorAll('button');
+    expect(buttons.length).toBe(2);
+
+    const firstButtonContent = buttons[0].textContent;
+    const secondButtonContent = buttons[1].textContent;
+
+    expect(firstButtonContent).toContain('Custom A');
+    expect(firstButtonContent).toContain('Label A');
+    expect(secondButtonContent).toContain('Custom B');
+    expect(secondButtonContent).toContain('Label B');
+  });
+
+  it('should apply zItemClass to individual toggle items', () => {
+    fixture.componentRef.setInput('zItems', mockToggleItems);
+    fixture.componentRef.setInput('zItemClass', 'w-full');
+    fixture.detectChanges();
+
+    const buttons = fixture.nativeElement.querySelectorAll('button');
+    buttons.forEach((button: HTMLButtonElement) => {
+      expect(button.className).toContain('w-full');
+    });
+  });
+
+  it('should render template instead of icon and label when both are provided', () => {
+    const testHostFixture = TestBed.createComponent(TestHostComponent);
+    testHostFixture.detectChanges();
+
+    const buttons = testHostFixture.nativeElement.querySelectorAll('button');
+    const firstButtonIcon = buttons[0].querySelector('ng-icon');
+    const buttonSpans = buttons[0].querySelectorAll('span');
+
+    expect(firstButtonIcon).toBeNull();
+    expect(buttonSpans.length).toBe(2);
+  });
+
+  it('should toggle item with custom template', () => {
+    const testHostFixture = TestBed.createComponent(TestHostComponent);
+    testHostFixture.detectChanges();
+
+    const component = testHostFixture.componentInstance.toggleGroupComponent();
+    const emitSpy = jest.fn();
+    component.valueChange.subscribe(emitSpy);
+
+    const buttons = testHostFixture.nativeElement.querySelectorAll('button');
+    buttons[0].click();
+
+    expect(emitSpy).toHaveBeenCalledWith('item-a');
+  });
+
+  it('should toggle item with custom template', () => {
+    const testHostFixture = TestBed.createComponent(TestHostComponent);
+    testHostFixture.detectChanges();
+
+    const component = testHostFixture.componentInstance.toggleGroupComponent();
+
+    jest.spyOn(component.valueChange, 'emit');
+
+    const buttons = testHostFixture.nativeElement.querySelectorAll('button');
+    buttons[0].click();
+
+    expect(component.valueChange.emit).toHaveBeenCalledWith('item-a');
+  });
 });
+
+@Component({
+  selector: 'test-host',
+  imports: [ZardToggleGroupComponent],
+  template: `
+    <z-toggle-group [zItems]="items()" zMode="single" />
+    <ng-template #templateA>
+      <span>Custom A</span>
+      <span>Label A</span>
+    </ng-template>
+    <ng-template #templateB>
+      <span>Custom B</span>
+      <span>Label B</span>
+    </ng-template>
+  `,
+})
+class TestHostComponent {
+  readonly templateA = viewChild.required<TemplateRef<void>>('templateA');
+  readonly templateB = viewChild.required<TemplateRef<void>>('templateB');
+
+  readonly toggleGroupComponent = viewChild.required(ZardToggleGroupComponent);
+
+  readonly items = computed<ZardToggleGroupItem[]>(() => [
+    {
+      value: 'item-a',
+      template: this.templateA(),
+      ariaLabel: 'Item A',
+    },
+    {
+      value: 'item-b',
+      template: this.templateB(),
+      ariaLabel: 'Item B',
+    },
+  ]);
+}

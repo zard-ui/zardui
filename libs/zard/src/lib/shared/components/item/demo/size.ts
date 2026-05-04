@@ -8,7 +8,6 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
 @Component({
   selector: 'z-demo-item-size',
   imports: [NgIcon, ...ZardItemImports],
-  viewProviders: [provideIcons({ lucideInbox })],
   template: `
     <div class="flex w-full min-w-md flex-col gap-6">
       <z-item zVariant="outline">
@@ -40,5 +39,6 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </z-item>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideInbox })],
 })
 export class ZardDemoItemSizeComponent {}

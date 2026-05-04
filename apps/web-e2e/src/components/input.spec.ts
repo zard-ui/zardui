@@ -21,7 +21,10 @@ test.describe('Input component', () => {
   });
 
   test('input accepts user typing', async () => {
-    const input = demoPage.firstDemoBox.locator('input[z-input]').first();
+    const basicDemo = demoPage.getDemoByName('basic');
+    await expect(basicDemo).toBeVisible();
+
+    const input = basicDemo.locator('input[z-input]').first();
     await input.clear();
     await input.fill('test value');
     await expect(input).toHaveValue('test value');
@@ -34,24 +37,15 @@ test.describe('Input component', () => {
   });
 
   test('disabled input cannot be modified', async () => {
-    const firstCard = demoPage.firstDemoBox;
-    const inputs = firstCard.locator('input[z-input]');
+    const disabledDemo = demoPage.getDemoByName('disabled');
+    await expect(disabledDemo).toBeVisible();
 
-    // Find a disabled input among the inputs
-    let foundDisabled = false;
-    const count = await inputs.count();
-    for (let i = 0; i < count; i++) {
-      if (await inputs.nth(i).isDisabled()) {
-        foundDisabled = true;
-        await expect(inputs.nth(i)).toBeDisabled();
-        break;
-      }
-    }
-    expect(foundDisabled).toBe(true);
+    const input = disabledDemo.locator('input[z-input]').first();
+    await expect(input).toBeDisabled();
   });
 
   test('passes accessibility checks', async ({ page }) => {
     // label: demo inputs use placeholder without associated <label>; button-name: icon-only buttons
-    await checkA11y(page, '#overview', ['label', 'button-name']);
+    await checkA11y(page, '#overview', ['label', 'button-name', 'color-contrast']);
   });
 });

@@ -10,7 +10,6 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
 @Component({
   selector: 'z-demo-input-group-spinner',
   imports: [ZardInputComponent, ZardSpinnerComponent, NgIcon, ...ZardInputGroupImports],
-  viewProviders: [provideIcons({ lucideLoader })],
   template: `
     <div class="grid w-full min-w-sm gap-4">
       <z-input-group>
@@ -43,5 +42,6 @@ import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.compon
       </z-input-group>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideLoader })],
 })
 export class ZardDemoInputGroupSpinnerComponent {}

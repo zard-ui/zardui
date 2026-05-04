@@ -10,7 +10,7 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
   template: `
     <div z-field zOrientation="horizontal" class="w-80">
       <input z-input type="search" placeholder="Search..." />
-      <button z-button>Search</button>
+      <button type="button" z-button>Search</button>
     </div>
   `,
 })

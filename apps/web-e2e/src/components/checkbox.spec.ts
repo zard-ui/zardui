@@ -15,15 +15,14 @@ test.describe('Checkbox component', () => {
     const firstCard = demoPage.firstDemoBox;
     await expect(firstCard).toBeVisible();
 
-    const checkboxes = firstCard.locator('[z-checkbox]');
+    const checkboxes = firstCard.locator('z-checkbox');
     const count = await checkboxes.count();
     expect(count).toBeGreaterThan(0);
   });
 
   test('checkbox uses native checked state', async () => {
     const firstCard = demoPage.firstDemoBox;
-    // The component wraps a native <input type="checkbox">
-    const inputs = firstCard.locator('[z-checkbox] input[type="checkbox"]');
+    const inputs = firstCard.locator('z-checkbox input[type="checkbox"]');
     const count = await inputs.count();
     expect(count).toBeGreaterThan(0);
   });
@@ -31,7 +30,7 @@ test.describe('Checkbox component', () => {
   test('clicking unchecked checkbox toggles to checked', async () => {
     const firstCard = demoPage.firstDemoBox;
     // First checkbox in the demo is unchecked by default
-    const input = firstCard.locator('[z-checkbox] input[type="checkbox"]').first();
+    const input = firstCard.locator('z-checkbox input[type="checkbox"]').first();
 
     await expect(input).not.toBeChecked();
     await input.click();
@@ -40,7 +39,7 @@ test.describe('Checkbox component', () => {
 
   test('clicking checked checkbox toggles to unchecked', async () => {
     const firstCard = demoPage.firstDemoBox;
-    const inputs = firstCard.locator('[z-checkbox] input[type="checkbox"]');
+    const inputs = firstCard.locator('z-checkbox input[type="checkbox"]');
     const count = await inputs.count();
 
     // Find a checked checkbox and toggle it off

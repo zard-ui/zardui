@@ -10,7 +10,6 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
 @Component({
   selector: 'z-demo-item-avatar',
   imports: [ZardAvatarComponent, ZardAvatarGroupComponent, ZardButtonComponent, NgIcon, ...ZardItemImports],
-  viewProviders: [provideIcons({ lucidePlus })],
   template: `
     <div class="flex w-full min-w-lg flex-col gap-6">
       <z-item zVariant="outline">
@@ -46,5 +45,6 @@ import { ZardItemImports } from '@/shared/components/item/item.imports';
       </z-item>
     </div>
   `,
+  viewProviders: [provideIcons({ lucidePlus })],
 })
 export class ZardDemoItemAvatarComponent {}

@@ -9,7 +9,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 @Component({
   selector: 'z-demo-input-group-icon',
   imports: [ZardInputComponent, NgIcon, ...ZardInputGroupImports],
-  viewProviders: [provideIcons({ lucideSearch, lucideMail, lucideCreditCard, lucideCheck, lucideStar, lucideInfo })],
   template: `
     <div class="grid w-full min-w-sm gap-6">
       <z-input-group>
@@ -42,5 +41,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       </z-input-group>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideSearch, lucideMail, lucideCreditCard, lucideCheck, lucideStar, lucideInfo })],
 })
 export class ZardDemoInputGroupIconComponent {}

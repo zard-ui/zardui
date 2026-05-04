@@ -8,7 +8,6 @@
     "types": [],
     "moduleResolution": "bundler",
     "composite": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": ["./src/lib/*"],
       "@generated/*": ["../../apps/web/src/generated/*"],

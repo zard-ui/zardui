@@ -8,7 +8,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 @Component({
   selector: 'z-demo-input-group-custom',
   imports: [NgIcon, ...ZardInputGroupImports],
-  viewProviders: [provideIcons({ lucidePencil })],
   template: `
     <z-input-group class="w-80">
       <z-input-group-addon><ng-icon name="lucidePencil" /></z-input-group-addon>
@@ -20,5 +19,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       />
     </z-input-group>
   `,
+  viewProviders: [provideIcons({ lucidePencil })],
 })
 export class ZardDemoInputGroupCustomComponent {}

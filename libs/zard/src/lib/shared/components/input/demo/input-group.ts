@@ -10,7 +10,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 @Component({
   selector: 'z-demo-input-input-group',
   imports: [ZardInputComponent, NgIcon, ...ZardInputGroupImports, ...ZardFieldImports],
-  viewProviders: [provideIcons({ lucideInfo })],
   template: `
     <div z-field class="w-80">
       <label z-field-label for="input-group-url">Website URL</label>
@@ -25,5 +24,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       </z-input-group>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideInfo })],
 })
 export class ZardDemoInputInputGroupComponent {}

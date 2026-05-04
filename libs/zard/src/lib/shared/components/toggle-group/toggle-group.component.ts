@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   booleanAttribute,
   ChangeDetectionStrategy,
@@ -8,6 +9,7 @@ import {
   linkedSignal,
   output,
   signal,
+  type TemplateRef,
   ViewEncapsulation,
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -28,6 +30,7 @@ export interface ZardToggleGroupItem {
   value: string;
   label?: string;
   icon?: IconName;
+  template?: TemplateRef<void>;
   disabled?: boolean;
   ariaLabel?: string;
 }
@@ -37,7 +40,7 @@ type OnChangeType = (value: string | string[]) => void;
 
 @Component({
   selector: 'z-toggle-group',
-  imports: [NgIcon],
+  imports: [NgIcon, NgTemplateOutlet],
   template: `
     <div
       role="group"
@@ -65,13 +68,17 @@ type OnChangeType = (value: string | string[]) => void;
           [disabled]="disabledState() || item.disabled"
           (click)="toggleItem(item)"
         >
-          @if (item.icon) {
-            <ng-icon [name]="item.icon" class="size-4!" />
-          }
-          @if (item.label) {
-            <span>{{ item.label }}</span>
-          } @else if (!item.icon) {
-            <span>{{ item.value }}</span>
+          @if (item.template) {
+            <ng-container [ngTemplateOutlet]="item.template" />
+          } @else {
+            @if (item.icon) {
+              <ng-icon [name]="item.icon" class="size-4!" />
+            }
+            @if (item.label) {
+              <span>{{ item.label }}</span>
+            } @else if (!item.icon) {
+              <span>{{ item.value }}</span>
+            }
           }
         </button>
       }
@@ -93,6 +100,7 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
   readonly zDefaultValue = input<string | string[]>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly zMode = input<'single' | 'multiple'>('multiple');
+  readonly zItemClass = input<ClassValue>('');
   readonly zItems = input<ZardToggleGroupItem[]>([]);
   readonly zOrientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly zSize = input<ZardToggleSizeVariants>('default');
@@ -114,6 +122,7 @@ export class ZardToggleGroupComponent implements ControlValueAccessor {
         zType: this.zType(),
         zSize: this.zSize(),
       }),
+      this.zItemClass(),
     ),
   );
 

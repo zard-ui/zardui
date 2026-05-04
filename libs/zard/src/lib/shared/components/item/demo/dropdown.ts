@@ -17,7 +17,6 @@ interface Person {
 @Component({
   selector: 'z-demo-item-dropdown',
   imports: [ZardAvatarComponent, ZardButtonComponent, NgIcon, ...ZardDropdownImports, ...ZardItemImports],
-  viewProviders: [provideIcons({ lucideChevronDown })],
   template: `
     <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">
       Select
@@ -44,6 +43,7 @@ interface Person {
       }
     </z-dropdown-menu-content>
   `,
+  viewProviders: [provideIcons({ lucideChevronDown })],
 })
 export class ZardDemoItemDropdownComponent {
   protected readonly people: Person[] = [

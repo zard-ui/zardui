@@ -10,13 +10,19 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 @Component({
   selector: 'z-demo-input-group-dropdown',
   imports: [ZardInputComponent, NgIcon, ZardDropdownImports, ...ZardInputGroupImports],
-  viewProviders: [provideIcons({ lucideEllipsis, lucideChevronDown })],
   template: `
     <div class="grid w-full min-w-sm gap-4">
       <z-input-group>
         <input z-input placeholder="Enter file name" />
         <z-input-group-addon zAlign="inline-end">
-          <button z-input-group-button zSize="icon-xs" aria-label="More" z-dropdown [zDropdownMenu]="moreMenu">
+          <button
+            type="button"
+            z-input-group-button
+            zSize="icon-xs"
+            aria-label="More"
+            z-dropdown
+            [zDropdownMenu]="moreMenu"
+          >
             <ng-icon name="lucideEllipsis" />
           </button>
           <z-dropdown-menu-content #moreMenu="zDropdownMenuContent">
@@ -30,7 +36,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       <z-input-group class="[--radius:1rem]">
         <input z-input placeholder="Enter search query" />
         <z-input-group-addon zAlign="inline-end">
-          <button z-input-group-button class="pr-1.5! text-xs" z-dropdown [zDropdownMenu]="searchMenu">
+          <button type="button" z-input-group-button class="pr-1.5! text-xs" z-dropdown [zDropdownMenu]="searchMenu">
             Search In...
             <ng-icon name="lucideChevronDown" class="size-3" />
           </button>
@@ -43,5 +49,6 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
       </z-input-group>
     </div>
   `,
+  viewProviders: [provideIcons({ lucideEllipsis, lucideChevronDown })],
 })
 export class ZardDemoInputGroupDropdownComponent {}
