@@ -228,6 +228,16 @@
       ]
     },
     {
+      "name": "item",
+      "type": "registry:component",
+      "files": [
+        "item.component.ts",
+        "item.imports.ts",
+        "item.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "select",
       "type": "registry:component",
       "registryDependencies": [
@@ -303,11 +313,10 @@
       ]
     },
     {
-      "name": "loader",
+      "name": "spinner",
       "type": "registry:component",
       "files": [
-        "loader.component.ts",
-        "loader.variants.ts",
+        "spinner.component.ts",
         "index.ts"
       ]
     },
