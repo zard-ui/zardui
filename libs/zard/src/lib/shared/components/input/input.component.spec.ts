@@ -95,9 +95,13 @@ describe('ZardInputComponent with Forms', () => {
       expect(input).toHaveValue('test value');
     });
 
-    it('handles undefined and empty string values in writeValue', () => {
+    it('handles nullish and empty string values in writeValue', () => {
       const input = screen.getByTestId('form-input');
       const directive = fixture.debugElement.query(By.directive(ZardInputComponent))?.injector.get(ZardInputComponent);
+
+      directive?.writeValue(undefined);
+      fixture.detectChanges();
+      expect(input).toHaveValue('');
 
       directive?.writeValue(undefined);
       fixture.detectChanges();

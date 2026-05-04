@@ -19,7 +19,9 @@ import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 import { inputVariants } from './input.variants';
 
 type OnTouchedType = () => void;
-type OnChangeType = (value: string) => void;
+type ZardInputElement = HTMLInputElement | HTMLTextAreaElement;
+type ZardInputValue = string | number | null | undefined;
+type OnChangeType = (value: ZardInputValue) => void;
 
 @Component({
   selector: 'input[z-input]',
@@ -47,12 +49,13 @@ export class ZardInputComponent implements ControlValueAccessor {
   private onChangeFn: OnChangeType = noopFn;
 
   readonly class = input<ClassValue>('');
-  readonly value = model<string>('');
+  readonly value = model<ZardInputValue>(null);
 
   protected readonly classes = computed(() => mergeClasses(inputVariants(), this.class()));
 
   constructor() {
     effect(() => {
+      this.writeNativeValue(this.value());
       const value = this.value();
       if (value !== undefined && value !== null) {
         this.elementRef.nativeElement.value = value;
@@ -71,8 +74,8 @@ export class ZardInputComponent implements ControlValueAccessor {
   }
 
   protected updateValue(target: EventTarget | null): void {
-    const el = target as HTMLInputElement | null;
-    this.value.set(el?.value ?? '');
+    const el = target as ZardInputElement | null;
+    this.value.set(this.readNativeValue(el));
     this.onChangeFn(this.value());
   }
 
@@ -94,5 +97,41 @@ export class ZardInputComponent implements ControlValueAccessor {
 
   writeValue(value?: string): void {
     this.value.set(value ?? '');
+  }
+
+  private isNumericInput(element: ZardInputElement): element is HTMLInputElement {
+    return element.tagName.toLowerCase() === 'input' && ['number', 'range'].includes(element.type);
+  }
+
+  private readNativeValue(element: ZardInputElement | null): ZardInputValue {
+    if (!element) {
+      return '';
+    }
+
+    if (this.isNumericInput(element)) {
+      const currentValue = this.value();
+
+      if (typeof currentValue === 'number' || currentValue === null) {
+        if (element.value === '') {
+          return null;
+        }
+
+        const numericValue = element.valueAsNumber;
+        return Number.isNaN(numericValue) ? null : numericValue;
+      }
+    }
+
+    return element.value;
+  }
+
+  private writeNativeValue(value: ZardInputValue): void {
+    const element = this.elementRef.nativeElement;
+
+    if (this.isNumericInput(element) && typeof value === 'number') {
+      element.value = Number.isNaN(value) ? '' : String(value);
+      return;
+    }
+
+    element.value = String(value ?? '');
   }
 }

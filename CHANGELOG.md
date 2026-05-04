@@ -6,14 +6,14 @@
 
 #### Migration Guide
 
-| Before | After | Notes |
-|--------|-------|-------|
-| `[zValue]` (one-way) | `[(zValue)]` | `zValue` is now a `model()` — use two-way binding |
-| `[zDefault]="true"` | `[(zValue)]="myVar"` where `myVar = signal(true)` | `zDefault` input removed; set initial state via `zValue` |
-| `disabled` (HTML attribute) | `[zDisabled]` | `disabled` attribute alias removed |
-| `zSize="md"` | `zSize="default"` (or omit) | Size `'md'` renamed to `'default'` |
-| `aria-label="..."` | `[zAriaLabel]="'...'"` | `zAriaLabel` is now required, HTML attribute alias removed |
-| `ZardToggleVariants` | `ZardToggleTypeVariants` / `ZardToggleSizeVariants` | Variant types split into separate type exports |
+| Before                      | After                                               | Notes                                                      |
+| --------------------------- | --------------------------------------------------- | ---------------------------------------------------------- |
+| `[zValue]` (one-way)        | `[(zValue)]`                                        | `zValue` is now a `model()` — use two-way binding          |
+| `[zDefault]="true"`         | `[(zValue)]="myVar"` where `myVar = signal(true)`   | `zDefault` input removed; set initial state via `zValue`   |
+| `disabled` (HTML attribute) | `[zDisabled]`                                       | `disabled` attribute alias removed                         |
+| `zSize="md"`                | `zSize="default"` (or omit)                         | Size `'md'` renamed to `'default'`                         |
+| `aria-label="..."`          | `[zAriaLabel]="'...'"`                              | `zAriaLabel` is now required, HTML attribute alias removed |
+| `ZardToggleVariants`        | `ZardToggleTypeVariants` / `ZardToggleSizeVariants` | Variant types split into separate type exports             |
 
 ### 📦 Code Refactoring
 
@@ -25,6 +25,14 @@
 ### ❤️ Thank You
 
 - Mickey Lazarevic @mikij
+
+### 🐛 Bug Fixes
+
+- **input:** support number signal forms ([#598](https://github.com/zard-ui/zardui/pull/598))
+
+### ❤️ Thank You
+
+- Otabek @OlimjonovOtabek
 
 ## 1.0.0-beta.76 (2026-04-15)
 
@@ -310,7 +318,7 @@ This was a version bump only, there were no code changes.
 
 ### 🐛 Bug Fixes
 
-- light or dark colors for code  properly follow dark mode servi… ([#390](https://github.com/zard-ui/zardui/pull/390))
+- light or dark colors for code properly follow dark mode servi… ([#390](https://github.com/zard-ui/zardui/pull/390))
 - CLI component installer execution fix ([#393](https://github.com/zard-ui/zardui/pull/393))
 - route should not overlap with file name ([#396](https://github.com/zard-ui/zardui/pull/396))
 - input component - forms support fix ([#397](https://github.com/zard-ui/zardui/pull/397))

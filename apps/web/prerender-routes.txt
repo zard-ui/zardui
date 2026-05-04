@@ -40,6 +40,7 @@
 /docs/components/form
 /docs/components/input
 /docs/components/input-group
+/docs/components/item
 /docs/components/layout
 /docs/components/dialog
 /docs/components/pagination
@@ -60,7 +61,7 @@
 /docs/components/resizable
 /docs/components/sheet
 /docs/components/radio-group
-/docs/components/loader
+/docs/components/spinner
 /docs/components/dropdown
 /docs/components/popover
 /docs/components/kbd
