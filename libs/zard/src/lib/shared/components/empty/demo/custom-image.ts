@@ -1,19 +1,24 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardEmptyComponent } from '../empty.component';
+import { ZardAvatarComponent } from '@/shared/components/avatar';
+import { ZardButtonComponent } from '@/shared/components/button';
+
+import { ZardEmptyComponent } from '@/shared/components/empty';
 
 @Component({
   selector: 'z-demo-empty-custom-image',
-  imports: [ZardButtonComponent, ZardEmptyComponent],
+  imports: [ZardAvatarComponent, ZardButtonComponent, ZardEmptyComponent],
   template: `
     <z-empty
-      zImage="images/avatar/imgs/avatar_image.jpg"
+      [zImage]="customImage"
       zTitle="User Offline"
       zDescription="This user is currently offline. You can leave a message to notify them or try again later."
       [zActions]="[actionPrimary]"
-      class="[&_img]:size-12 [&_img]:rounded-full [&_img]:grayscale"
     />
+
+    <ng-template #customImage>
+      <z-avatar zSize="lg" zSrc="images/avatar/imgs/avatar_image.jpg" zFallback="CN" zAlt="User avatar" class="grayscale" />
+    </ng-template>
 
     <ng-template #actionPrimary>
       <button type="button" z-button>Leave Message</button>

@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 
-import { EMPTY_DEMO_DEFAULT } from '@generated/components/empty/demo/default';
+import { EMPTY_DEMO_PREVIEW } from '@generated/components/empty/demo/preview';
 import { SHEET_DEMO_BASIC } from '@generated/components/sheet/demo/basic';
 
-import { ZardDemoEmptyDefaultComponent } from '@zard/components/empty/demo/default';
+import { ZardDemoEmptyPreviewComponent } from '@zard/components/empty/demo/preview';
 import { ZardDemoSheetBasicComponent } from '@zard/components/sheet/demo/basic';
 
 import {
@@ -39,11 +39,11 @@ export class October2025Component implements ChangelogEntryComponent {
       codeData: SHEET_DEMO_BASIC,
     },
     {
-      name: 'default',
+      name: 'preview',
       description: 'Clean empty state component for "no data" scenarios with customizable messages and icons.',
-      component: ZardDemoEmptyDefaultComponent,
+      component: ZardDemoEmptyPreviewComponent,
       componentName: 'empty',
-      codeData: EMPTY_DEMO_DEFAULT,
+      codeData: EMPTY_DEMO_PREVIEW,
     },
   ];
 }

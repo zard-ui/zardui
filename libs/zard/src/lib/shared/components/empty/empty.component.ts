@@ -34,34 +34,34 @@ import {
     @let description = zDescription();
     @let actions = zActions();
 
-    <div [class]="headerClasses()">
+    <div data-slot="empty-header" [class]="headerClasses()">
       @if (image) {
-        <div [class]="imageClasses()">
+        <div data-slot="empty-media" data-variant="default" [class]="imageClasses()">
           <ng-container *zStringTemplateOutlet="image">
             <img [ngSrc]="image" width="64" height="64" alt="Empty" class="mx-auto" />
           </ng-container>
         </div>
       } @else if (icon) {
-        <div [class]="iconClasses()" data-testid="icon">
-          <ng-icon [name]="icon" class="size-5!" />
+        <div data-slot="empty-media" data-variant="icon" [class]="iconClasses()" data-testid="icon">
+          <ng-icon [name]="icon" class="size-4!" />
         </div>
       }
 
       @if (title) {
-        <div [class]="titleClasses()">
+        <div data-slot="empty-title" [class]="titleClasses()">
           <ng-container *zStringTemplateOutlet="title">{{ title }}</ng-container>
         </div>
       }
 
       @if (description) {
-        <div [class]="descriptionClasses()">
+        <div data-slot="empty-description" [class]="descriptionClasses()">
           <ng-container *zStringTemplateOutlet="description">{{ description }}</ng-container>
         </div>
       }
     </div>
 
     @if (actions.length) {
-      <div [class]="actionsClasses()">
+      <div data-slot="empty-content" [class]="actionsClasses()">
         @for (action of actions; track $index) {
           <ng-container *zStringTemplateOutlet="action" />
         }
@@ -73,6 +73,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'empty',
     '[class]': 'classes()',
   },
   exportAs: 'zEmpty',
