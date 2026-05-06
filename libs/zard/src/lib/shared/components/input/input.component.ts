@@ -14,9 +14,10 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { ZardInputGroupComponent } from '@/shared/components/input-group';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
-import { inputVariants } from './input.variants';
+import { inputGroupInputVariants, inputVariants } from './input.variants';
 
 type OnTouchedType = () => void;
 type ZardInputElement = HTMLInputElement | HTMLTextAreaElement;
@@ -36,7 +37,7 @@ type OnChangeType = (value: ZardInputValue) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'input',
+    '[attr.data-slot]': 'parentGroup ? "input-group-control" : "input"',
     '[class]': 'classes()',
     '(input)': 'updateValue($event.target)',
     '(blur)': 'onBlur()',
@@ -44,14 +45,18 @@ type OnChangeType = (value: ZardInputValue) => void;
   exportAs: 'zInput',
 })
 export class ZardInputComponent implements ControlValueAccessor {
+  readonly parentGroup = inject(ZardInputGroupComponent, { optional: true });
   private readonly elementRef = inject(ElementRef<HTMLInputElement>);
+
   private onTouchedFn: OnTouchedType = noopFn;
   private onChangeFn: OnChangeType = noopFn;
 
   readonly class = input<ClassValue>('');
   readonly value = model<ZardInputValue>(null);
 
-  protected readonly classes = computed(() => mergeClasses(inputVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(inputVariants(), this.parentGroup ? inputGroupInputVariants() : '', this.class()),
+  );
 
   constructor() {
     effect(() => {
@@ -61,12 +66,6 @@ export class ZardInputComponent implements ControlValueAccessor {
         this.elementRef.nativeElement.value = value;
       }
     });
-  }
-
-  setDataSlot(name: string): void {
-    if (this.elementRef?.nativeElement?.dataset) {
-      this.elementRef.nativeElement.dataset.slot = name;
-    }
   }
 
   disable(b: boolean): void {

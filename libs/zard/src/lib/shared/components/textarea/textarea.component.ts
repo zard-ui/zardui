@@ -14,9 +14,10 @@ import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
 
+import { ZardInputGroupComponent } from '@/shared/components/input-group';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
-import { textareaVariants } from './textarea.variants';
+import { inputGroupTextAreaVariants, textareaVariants } from './textarea.variants';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: string) => void;
@@ -34,7 +35,7 @@ type OnChangeType = (value: string) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    'data-slot': 'textarea',
+    '[attr.data-slot]': 'parentGroup ? "input-group-control" : "textarea"',
     '[class]': 'classes()',
     '(input)': 'updateValue($event.target)',
     '(blur)': 'onBlur()',
@@ -42,14 +43,18 @@ type OnChangeType = (value: string) => void;
   exportAs: 'zTextarea',
 })
 export class ZardTextareaComponent implements ControlValueAccessor {
+  readonly parentGroup = inject(ZardInputGroupComponent, { optional: true });
   private readonly elementRef = inject(ElementRef<HTMLTextAreaElement>);
+
   private onTouchedFn: OnTouchedType = noopFn;
   private onChangeFn: OnChangeType = noopFn;
 
   readonly class = input<ClassValue>('');
   readonly value = model<string>('');
 
-  protected readonly classes = computed(() => mergeClasses(textareaVariants(), this.class()));
+  protected readonly classes = computed(() =>
+    mergeClasses(textareaVariants(), this.parentGroup ? inputGroupTextAreaVariants() : '', this.class()),
+  );
 
   constructor() {
     effect(() => {
@@ -58,12 +63,6 @@ export class ZardTextareaComponent implements ControlValueAccessor {
         this.elementRef.nativeElement.value = value;
       }
     });
-  }
-
-  setDataSlot(name: string): void {
-    if (this.elementRef?.nativeElement?.dataset) {
-      this.elementRef.nativeElement.dataset.slot = name;
-    }
   }
 
   disable(b: boolean): void {
