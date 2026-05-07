@@ -35,8 +35,10 @@ export interface ZardResizeEvent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'resizable-panel-group',
+    '[attr.data-group]': 'true',
     '[class]': 'classes()',
-    '[attr.data-layout]': 'zLayout()',
+    '[attr.aria-orientation]': 'zLayout()',
   },
   exportAs: 'zResizable',
 })
@@ -46,6 +48,7 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
   private readonly document = inject(DOCUMENT);
 
   private readonly isBrowser = isPlatformBrowser(this.platformId);
+  private readonly isResizing = signal(false);
   private listenersCleanup!: () => void | undefined;
 
   readonly zLayout = input<ZardResizableLayoutVariants>('horizontal');
@@ -58,7 +61,6 @@ export class ZardResizableComponent implements AfterContentInit, OnDestroy {
 
   readonly panels = contentChildren(ZardResizablePanelComponent);
   readonly panelSizes = signal<number[]>([]);
-  protected readonly isResizing = signal(false);
   protected readonly activeHandleIndex = signal<number | null>(null);
   protected readonly classes = computed(() =>
     mergeClasses(resizableVariants({ zLayout: this.zLayout() }), this.class()),

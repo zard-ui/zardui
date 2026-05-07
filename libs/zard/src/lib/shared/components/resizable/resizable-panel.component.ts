@@ -16,15 +16,16 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
   selector: 'z-resizable-panel',
-  standalone: true,
   template: `
     <ng-content />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'resizable-panel',
     '[class]': 'classes()',
     '[attr.data-collapsed]': 'isCollapsed()',
+    '[attr.data-panel]': 'true',
   },
   exportAs: 'zResizablePanel',
 })
