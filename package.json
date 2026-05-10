@@ -104,7 +104,7 @@
     "@commitlint/cli": "^20.5.0",
     "@commitlint/config-conventional": "^20.5.0",
     "@eslint/js": "^9.39.3",
-    "@happy-dom/jest-environment": "^20.8.9",
+    "@happy-dom/jest-environment": "^20.9.0",
     "@nx/angular": "22.6.4",
     "@nx/eslint": "22.6.4",
     "@nx/eslint-plugin": "22.6.4",
