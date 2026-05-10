@@ -163,7 +163,7 @@
     "tsup": "^8.5.1",
     "tsx": "^4.21.0",
     "typescript": "5.9.3",
-    "typescript-eslint": "^8.58.0",
+    "typescript-eslint": "^8.59.2",
     "verdaccio": "^6.4.0"
   },
   "nx": {
