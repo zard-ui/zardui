@@ -91,7 +91,7 @@
     "unified": "^11.0.5",
     "xmlbuilder": "^15.1.1",
     "zod": "^4.3.6",
-    "zone.js": "0.16.1"
+    "zone.js": "0.16.2"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "21.2.6",
