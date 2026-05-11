@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardButtonComponent } from '@/shared/components/button';
-
 import { ZardEmptyComponent } from '@/shared/components/empty';
 
 @Component({
@@ -17,7 +16,13 @@ import { ZardEmptyComponent } from '@/shared/components/empty';
     />
 
     <ng-template #customImage>
-      <z-avatar zSize="lg" zSrc="images/avatar/imgs/avatar_image.jpg" zFallback="CN" zAlt="User avatar" class="grayscale" />
+      <z-avatar
+        zSize="lg"
+        zSrc="images/avatar/imgs/avatar_image.jpg"
+        zFallback="CN"
+        zAlt="User avatar"
+        class="grayscale"
+      />
     </ng-template>
 
     <ng-template #actionPrimary>

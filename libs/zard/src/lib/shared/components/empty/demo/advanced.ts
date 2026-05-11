@@ -5,7 +5,6 @@ import { lucidePlus } from '@ng-icons/lucide';
 
 import { ZardAvatarComponent, ZardAvatarGroupComponent } from '@/shared/components/avatar';
 import { ZardButtonComponent } from '@/shared/components/button';
-
 import { ZardEmptyComponent } from '@/shared/components/empty';
 
 @Component({

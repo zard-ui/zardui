@@ -31,8 +31,11 @@ import { ZardKbdComponent } from '@/shared/components/kbd/kbd.component';
       </ng-template>
 
       <ng-template #supportLink>
-        <p class="text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4">
-          Need help? <a href="#">Contact support</a>
+        <p
+          class="text-muted-foreground [&>a:hover]:text-primary text-sm/relaxed [&>a]:underline [&>a]:underline-offset-4"
+        >
+          Need help?
+          <a href="#">Contact support</a>
         </p>
       </ng-template>
     </z-empty>
