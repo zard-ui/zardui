@@ -304,11 +304,11 @@
       ]
     },
     {
-      "name": "divider",
+      "name": "separator",
       "type": "registry:component",
       "files": [
-        "divider.component.ts",
-        "divider.variants.ts",
+        "separator.component.ts",
+        "separator.variants.ts",
         "index.ts"
       ]
     },
@@ -321,11 +321,11 @@
       ]
     },
     {
-      "name": "progress-bar",
+      "name": "progress",
       "type": "registry:component",
       "files": [
-        "progress-bar.component.ts",
-        "progress-bar.variants.ts",
+        "progress.component.ts",
+        "progress.variants.ts",
         "index.ts"
       ]
     },
@@ -519,7 +519,7 @@
       "name": "button-group",
       "type": "registry:component",
       "registryDependencies": [
-        "divider"
+        "separator"
       ],
       "files": [
         "button-group.component.ts",

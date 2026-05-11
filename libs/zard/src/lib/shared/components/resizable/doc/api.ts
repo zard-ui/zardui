@@ -35,7 +35,7 @@ export const RESIZABLE_API: ApiSection[] = [
       {
         name: 'zDefaultSize',
         description: 'Initial size as percentage',
-        type: 'number | undefined',
+        type: 'number | string | undefined',
         default: 'undefined',
       },
       { name: 'zMin', description: 'Minimum size as percentage', type: 'number', default: '0' },

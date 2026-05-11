@@ -6,7 +6,7 @@ import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plu
 
 import { ZardResizableHandleComponent } from './resizable-handle.component';
 import { ZardResizablePanelComponent } from './resizable-panel.component';
-import { ZardResizableComponent } from './resizable.component';
+import { ZardResizableComponent, type ZardResizeEvent } from './resizable.component';
 
 @Component({
   selector: 'test-handle-host',
@@ -14,36 +14,33 @@ import { ZardResizableComponent } from './resizable.component';
   standalone: true,
   template: `
     <z-resizable [zLayout]="layout">
-      <z-resizable-panel [zCollapsible]="panel1Collapsible">Panel 1</z-resizable-panel>
+      <z-resizable-panel [zDefaultSize]="defaultSize1" [zCollapsible]="collapsible1" [zResizable]="resizable1">
+        Panel 1
+      </z-resizable-panel>
       <z-resizable-handle
-        [zHandleIndex]="handleIndex"
+        [zHandleIndex]="0"
         [zWithHandle]="withHandle"
-        [zDisabled]="disabled"
+        [zDisabled]="handleDisabled"
         [class]="customClass"
       />
-      <z-resizable-panel [zCollapsible]="panel2Collapsible">Panel 2</z-resizable-panel>
+      <z-resizable-panel [zDefaultSize]="defaultSize2" [zCollapsible]="collapsible2" [zResizable]="resizable2">
+        Panel 2
+      </z-resizable-panel>
     </z-resizable>
   `,
 })
 class TestHandleHostComponent {
   layout: 'horizontal' | 'vertical' = 'horizontal';
-  handleIndex = 0;
-  withHandle = true;
-  disabled = false;
+  defaultSize1 = 50;
+  defaultSize2 = 50;
+  collapsible1 = false;
+  collapsible2 = false;
+  resizable1 = true;
+  resizable2 = true;
+  withHandle = false;
+  handleDisabled = false;
   customClass = '';
-  panel1Collapsible = false;
-  panel2Collapsible = false;
 }
-
-@Component({
-  selector: 'test-standalone-handle',
-  imports: [ZardResizableHandleComponent],
-  standalone: true,
-  template: `
-    <z-resizable-handle [zHandleIndex]="0" [zWithHandle]="true" [zDisabled]="false" />
-  `,
-})
-class TestStandaloneHandleComponent {}
 
 describe('ZardResizableHandleComponent', () => {
   let fixture: ComponentFixture<TestHandleHostComponent>;
@@ -71,414 +68,440 @@ describe('ZardResizableHandleComponent', () => {
     handleComponent = fixture.debugElement.query(By.directive(ZardResizableHandleComponent)).componentInstance;
     handleElement = fixture.debugElement.query(By.directive(ZardResizableHandleComponent)).nativeElement;
     resizableComponent = fixture.debugElement.query(By.directive(ZardResizableComponent)).componentInstance;
+
+    Object.defineProperty(
+      fixture.debugElement.query(By.directive(ZardResizableComponent)).nativeElement,
+      'offsetWidth',
+      { value: 1000, configurable: true },
+    );
   });
 
   describe('Component Creation', () => {
-    it('should create', () => {
+    it('creates the handle component', () => {
       expect(handleComponent).toBeTruthy();
     });
 
-    it('should inject resizable component', () => {
-      expect(handleComponent['resizable']).toBe(resizableComponent);
+    it('sets data-slot attribute to resizable-handle', () => {
+      expect(handleElement.getAttribute('data-slot')).toBe('resizable-handle');
     });
 
-    it('should have exportAs property', () => {
-      const debugElement = fixture.debugElement.query(By.directive(ZardResizableHandleComponent));
-      expect(debugElement.componentInstance).toBeTruthy();
-    });
-  });
-
-  describe('Input Properties', () => {
-    it('should set handle index', () => {
-      expect(handleComponent.zHandleIndex()).toBe(0);
-
-      hostComponent.handleIndex = 1;
-      fixture.detectChanges();
-      expect(handleComponent.zHandleIndex()).toBe(1);
-    });
-
-    it('should set with handle property', () => {
-      expect(handleComponent.zWithHandle()).toBe(true);
-
-      hostComponent.withHandle = false;
-      fixture.detectChanges();
-      expect(handleComponent.zWithHandle()).toBe(false);
-    });
-
-    it('should set disabled property', () => {
-      expect(handleComponent.zDisabled()).toBe(false);
-
-      hostComponent.disabled = true;
-      fixture.detectChanges();
-      expect(handleComponent.zDisabled()).toBe(true);
-    });
-
-    it('should handle transform inputs correctly', () => {
-      // Test boolean transform for withHandle (empty string = true)
-      hostComponent.withHandle = '' as any;
-      fixture.detectChanges();
-      expect(handleComponent.zWithHandle()).toBe(true);
-
-      hostComponent.withHandle = 'false' as any;
-      fixture.detectChanges();
-      expect(handleComponent.zWithHandle()).toBe(false);
-
-      // Test boolean transform for disabled
-      hostComponent.disabled = '' as any;
-      fixture.detectChanges();
-      expect(handleComponent.zDisabled()).toBe(true);
-
-      hostComponent.disabled = 'false' as any;
-      fixture.detectChanges();
-      expect(handleComponent.zDisabled()).toBe(false);
-    });
-  });
-
-  describe('Layout Detection', () => {
-    it('should detect horizontal layout from parent', () => {
-      expect(handleElement.getAttribute('data-layout')).toBe('horizontal');
-    });
-
-    it('should detect vertical layout from parent', () => {
-      hostComponent.layout = 'vertical';
-      fixture.detectChanges();
-      expect(handleElement.getAttribute('data-layout')).toBe('vertical');
-    });
-
-    it('should default to horizontal when no parent resizable', () => {
-      const standaloneFixture = TestBed.createComponent(TestStandaloneHandleComponent);
-      standaloneFixture.detectChanges();
-
-      const standaloneElement = standaloneFixture.debugElement.query(
-        By.directive(ZardResizableHandleComponent),
-      ).nativeElement;
-      expect(standaloneElement.getAttribute('data-layout')).toBe('horizontal');
-    });
-  });
-
-  describe('Host Attributes', () => {
-    it('should set data-layout attribute', () => {
-      expect(handleElement.getAttribute('data-layout')).toBe('horizontal');
-
-      hostComponent.layout = 'vertical';
-      fixture.detectChanges();
-      expect(handleElement.getAttribute('data-layout')).toBe('vertical');
-    });
-
-    it('should set tabindex when not disabled', () => {
-      expect(handleElement.getAttribute('tabindex')).toBe('0');
-    });
-
-    it('should remove tabindex when disabled', () => {
-      hostComponent.disabled = true;
-      fixture.detectChanges();
-      expect(handleElement.getAttribute('tabindex')).toBeNull();
-    });
-
-    it('should set role attribute', () => {
+    it('sets role separator', () => {
       expect(handleElement.getAttribute('role')).toBe('separator');
     });
 
-    it('should set aria-orientation for horizontal layout', () => {
+    it('sets data-separator to inactive by default', () => {
+      expect(handleElement.getAttribute('data-separator')).toBe('inactive');
+    });
+
+    it('sets data-separator to active on mousedown', () => {
+      handleComponent.handleMouseDown(new MouseEvent('mousedown', { clientX: 500 }));
+      fixture.detectChanges();
+
+      expect(handleElement.getAttribute('data-separator')).toBe('active');
+    });
+  });
+
+  describe('Default Inputs', () => {
+    it('defaults zWithHandle to false', () => {
+      expect(handleComponent.zWithHandle()).toBe(false);
+    });
+
+    it('defaults zDisabled to false', () => {
+      expect(handleComponent.zDisabled()).toBe(false);
+    });
+
+    it('defaults zHandleIndex to 0', () => {
+      expect(handleComponent.zHandleIndex()).toBe(0);
+    });
+  });
+
+  describe('Layout Computation', () => {
+    it('computes handle layout as vertical when group is horizontal', () => {
+      hostComponent.layout = 'horizontal';
+      fixture.detectChanges();
+
       expect(handleElement.getAttribute('aria-orientation')).toBe('vertical');
     });
 
-    it('should set aria-orientation for vertical layout', () => {
+    it('computes handle layout as horizontal when group is vertical', () => {
       hostComponent.layout = 'vertical';
       fixture.detectChanges();
+
       expect(handleElement.getAttribute('aria-orientation')).toBe('horizontal');
-    });
-
-    it('should set aria-disabled when disabled', () => {
-      expect(handleElement.getAttribute('aria-disabled')).toBe('false');
-
-      hostComponent.disabled = true;
-      fixture.detectChanges();
-      expect(handleElement.getAttribute('aria-disabled')).toBe('true');
     });
   });
 
   describe('CSS Classes', () => {
-    it('should apply default CSS classes for horizontal layout', () => {
-      expect(handleElement.classList).toContain('group');
+    it('applies default handle classes', () => {
       expect(handleElement.classList).toContain('relative');
       expect(handleElement.classList).toContain('flex');
-      expect(handleElement.classList).toContain('cursor-col-resize');
     });
 
-    it('should apply CSS classes for vertical layout', () => {
+    it('applies cursor-ew-resize for horizontal group layout', () => {
+      expect(handleElement.classList).toContain('cursor-ew-resize');
+    });
+
+    it('applies cursor-ns-resize for vertical group layout', () => {
       hostComponent.layout = 'vertical';
       fixture.detectChanges();
 
-      expect(handleElement.classList).toContain('group');
-      expect(handleElement.classList).toContain('relative');
-      expect(handleElement.classList).toContain('flex');
-      expect(handleElement.classList).toContain('cursor-row-resize');
+      expect(handleElement.classList).toContain('cursor-ns-resize');
     });
 
-    it('should apply disabled CSS classes', () => {
-      hostComponent.disabled = true;
+    it('merges custom class with default classes', () => {
+      hostComponent.customClass = 'my-custom-handle';
       fixture.detectChanges();
 
-      expect(handleElement.classList).toContain('cursor-default');
+      expect(handleElement.classList).toContain('my-custom-handle');
+      expect(handleElement.classList).toContain('relative');
+    });
+  });
+
+  describe('Disabled State', () => {
+    it('sets aria-disabled when disabled', () => {
+      hostComponent.handleDisabled = true;
+      fixture.detectChanges();
+
+      expect(handleElement.getAttribute('aria-disabled')).toBe('true');
+    });
+
+    it('removes tabindex when disabled', () => {
+      hostComponent.handleDisabled = true;
+      fixture.detectChanges();
+
+      expect(handleElement.getAttribute('tabindex')).toBeNull();
+    });
+
+    it('sets tabindex to 0 when enabled', () => {
+      hostComponent.handleDisabled = false;
+      fixture.detectChanges();
+
+      expect(handleElement.getAttribute('tabindex')).toBe('0');
+    });
+
+    it('applies disabled cursor classes when disabled', () => {
+      hostComponent.handleDisabled = true;
+      fixture.detectChanges();
+
       expect(handleElement.classList).toContain('pointer-events-none');
       expect(handleElement.classList).toContain('opacity-50');
     });
 
-    it('should apply custom CSS classes', () => {
-      hostComponent.customClass = 'custom-handle-class';
+    it('does not start resize on mousedown when disabled', () => {
+      hostComponent.handleDisabled = true;
       fixture.detectChanges();
 
-      expect(handleElement.classList).toContain('custom-handle-class');
+      const spy = jest.spyOn(resizableComponent, 'startResize');
+      handleComponent.handleMouseDown(new MouseEvent('mousedown'));
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('does not start resize on touchstart when disabled', () => {
+      hostComponent.handleDisabled = true;
+      fixture.detectChanges();
+
+      const spy = jest.spyOn(resizableComponent, 'startResize');
+      const touchMock = { clientX: 100, clientY: 100 } as Touch;
+      const listMock = { length: 1, item: () => touchMock, 0: touchMock };
+      const touchEvent = new TouchEvent('touchstart', { touches: listMock as unknown as Touch[] });
+
+      handleComponent.handleTouchStart(touchEvent);
+
+      expect(spy).not.toHaveBeenCalled();
     });
   });
 
-  describe('Handle Indicator', () => {
-    it('should render handle indicator when withHandle is true', () => {
+  describe('With Handle Indicator', () => {
+    it('does not render handle indicator by default', () => {
       const indicator = handleElement.querySelector('div');
+
+      expect(indicator).toBeNull();
+    });
+
+    it('renders handle indicator when zWithHandle is true', () => {
+      hostComponent.withHandle = true;
+      fixture.detectChanges();
+
+      const indicator = handleElement.querySelector('div');
+
       expect(indicator).toBeTruthy();
     });
+  });
 
-    it('should not render handle indicator when withHandle is false', () => {
-      hostComponent.withHandle = false;
-      fixture.detectChanges();
+  describe('Mouse Interactions', () => {
+    it('starts resize on mousedown', () => {
+      const spy = jest.spyOn(resizableComponent, 'startResize');
+      const event = new MouseEvent('mousedown', { clientX: 500 });
 
-      const indicator = handleElement.querySelector('div');
-      expect(indicator).toBeFalsy();
+      handleComponent.handleMouseDown(event);
+
+      expect(spy).toHaveBeenCalledWith(0, event);
     });
 
-    it('should apply correct indicator classes for horizontal layout', () => {
-      const indicator = handleElement.querySelector('div');
-      expect(indicator?.classList).toContain('w-px');
-      expect(indicator?.classList).toContain('h-8');
-    });
-
-    it('should apply correct indicator classes for vertical layout', () => {
-      hostComponent.layout = 'vertical';
+    it('does not start resize when panel is not resizable', () => {
+      hostComponent.resizable1 = false;
       fixture.detectChanges();
 
-      const indicator = handleElement.querySelector('div');
-      expect(indicator?.classList).toContain('w-8');
-      expect(indicator?.classList).toContain('h-px');
+      const spy = jest.spyOn(resizableComponent, 'startResize');
+      handleComponent.handleMouseDown(new MouseEvent('mousedown'));
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('does not start resize when adjacent panel is not resizable', () => {
+      hostComponent.resizable2 = false;
+      fixture.detectChanges();
+
+      const spy = jest.spyOn(resizableComponent, 'startResize');
+      handleComponent.handleMouseDown(new MouseEvent('mousedown'));
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('resets to inactive state on mouseup', () => {
+      handleComponent.handleMouseUp();
+      fixture.detectChanges();
+
+      expect(handleElement.getAttribute('data-separator')).toBe('inactive');
+    });
+
+    it('transitions to hover state on mouseenter', () => {
+      handleComponent.handleMouseHover(true);
+      fixture.detectChanges();
+
+      expect(handleElement.getAttribute('data-separator')).toBe('hover');
+    });
+
+    it('transitions to inactive state on mouseleave', () => {
+      handleComponent.handleMouseHover(false);
+      fixture.detectChanges();
+
+      expect(handleElement.getAttribute('data-separator')).toBe('inactive');
+    });
+
+    it('ignores hover events while mouse is down', () => {
+      handleComponent.handleMouseDown(new MouseEvent('mousedown', { clientX: 500 }));
+
+      handleComponent.handleMouseHover(true);
+      fixture.detectChanges();
+
+      expect(handleElement.getAttribute('data-separator')).toBe('active');
+    });
+
+    it('ignores hover events when disabled', () => {
+      hostComponent.handleDisabled = true;
+      fixture.detectChanges();
+
+      handleComponent.handleMouseHover(true);
+      fixture.detectChanges();
+
+      expect(handleElement.getAttribute('data-separator')).toBe('inactive');
     });
   });
 
-  describe('Mouse Events', () => {
-    beforeEach(() => {
-      jest.spyOn(resizableComponent, 'startResize');
-    });
-
-    it('should handle mouse down event', () => {
-      const mouseEvent = new MouseEvent('mousedown', { clientX: 100 });
-      handleElement.dispatchEvent(mouseEvent);
-
-      expect(resizableComponent.startResize).toHaveBeenCalledWith(0, mouseEvent);
-    });
-
-    it('should not handle mouse down when disabled', () => {
-      hostComponent.disabled = true;
-      fixture.detectChanges();
-
-      const mouseEvent = new MouseEvent('mousedown', { clientX: 100 });
-      handleElement.dispatchEvent(mouseEvent);
-
-      expect(resizableComponent.startResize).not.toHaveBeenCalled();
-    });
-
-    it('should not handle mouse down when no resizable parent', () => {
-      const standaloneFixture = TestBed.createComponent(TestStandaloneHandleComponent);
-      standaloneFixture.detectChanges();
-
-      const standaloneElement = standaloneFixture.debugElement.query(
-        By.directive(ZardResizableHandleComponent),
-      ).nativeElement;
-      const mouseEvent = new MouseEvent('mousedown', { clientX: 100 });
-
-      expect(() => {
-        standaloneElement.dispatchEvent(mouseEvent);
-      }).not.toThrow();
-    });
-  });
-
-  describe('Touch Events', () => {
-    beforeEach(() => {
-      jest.spyOn(resizableComponent, 'startResize');
-    });
-
-    it('should handle touch start event', () => {
+  describe('Touch Interactions', () => {
+    it('starts resize on touchstart', () => {
+      const spy = jest.spyOn(resizableComponent, 'startResize');
       const touchMock = { clientX: 500, clientY: 300 } as Touch;
-      const listMock: TouchList = { length: 1, item: (index: number) => touchMock, 0: touchMock };
-      const touchEvent = new TouchEvent('touchstart', {
-        touches: listMock as unknown as Touch[],
-      });
+      const listMock = { length: 1, item: () => touchMock, 0: touchMock };
+      const touchEvent = new TouchEvent('touchstart', { touches: listMock as unknown as Touch[] });
 
-      handleElement.dispatchEvent(touchEvent);
+      handleComponent.handleTouchStart(touchEvent);
 
-      expect(resizableComponent.startResize).toHaveBeenCalledWith(0, touchEvent);
+      expect(spy).toHaveBeenCalledWith(0, touchEvent);
     });
 
-    it('should not handle touch start when disabled', () => {
-      hostComponent.disabled = true;
+    it('sets inactive state on touchend', () => {
+      handleComponent.handleTouchEnd();
       fixture.detectChanges();
 
-      const touchEvent = new TouchEvent('touchstart', {
-        touches: [{ clientX: 100, clientY: 50 } as Touch],
-      });
-      handleElement.dispatchEvent(touchEvent);
-
-      expect(resizableComponent.startResize).not.toHaveBeenCalled();
+      expect(handleElement.getAttribute('data-separator')).toBe('inactive');
     });
   });
 
-  describe('Keyboard Events', () => {
-    beforeEach(() => {
-      jest.spyOn(resizableComponent, 'collapsePanel');
-    });
-
-    it('should handle arrow keys for horizontal layout', () => {
-      const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
-
-      handleElement.dispatchEvent(rightArrowEvent);
-
-      expect(rightArrowEvent.defaultPrevented).toBe(true);
-    });
-
-    it('should handle arrow keys for vertical layout', () => {
-      hostComponent.layout = 'vertical';
+  describe('Keyboard Interactions', () => {
+    it('collapses panel on Enter when panel is collapsible', () => {
+      hostComponent.collapsible1 = true;
       fixture.detectChanges();
 
-      const downArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowDown', cancelable: true });
-      handleElement.dispatchEvent(downArrowEvent);
+      const spy = jest.spyOn(resizableComponent, 'collapsePanel');
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'Enter' }));
 
-      expect(downArrowEvent.defaultPrevented).toBe(true);
+      expect(spy).toHaveBeenCalledWith(0);
     });
 
-    it('should handle Shift+Arrow for larger steps', () => {
-      const shiftRightEvent = new KeyboardEvent('keydown', {
-        key: 'ArrowRight',
-        shiftKey: true,
-        cancelable: true,
-      });
-
-      handleElement.dispatchEvent(shiftRightEvent);
-
-      expect(shiftRightEvent.defaultPrevented).toBe(true);
-    });
-
-    it('should handle Home key', () => {
-      const homeEvent = new KeyboardEvent('keydown', { key: 'Home', cancelable: true });
-
-      handleElement.dispatchEvent(homeEvent);
-
-      expect(homeEvent.defaultPrevented).toBe(true);
-    });
-
-    it('should handle End key', () => {
-      const endEvent = new KeyboardEvent('keydown', { key: 'End', cancelable: true });
-
-      handleElement.dispatchEvent(endEvent);
-
-      expect(endEvent.defaultPrevented).toBe(true);
-    });
-
-    it('should handle Enter/Space for collapsible panels', () => {
-      hostComponent.panel1Collapsible = true;
+    it('collapses adjacent panel on Enter when it is collapsible', () => {
+      hostComponent.collapsible2 = true;
       fixture.detectChanges();
 
-      const enterEvent = new KeyboardEvent('keydown', { key: 'Enter', cancelable: true });
-
-      handleElement.dispatchEvent(enterEvent);
-
-      expect(enterEvent.defaultPrevented).toBe(true);
-      expect(resizableComponent.collapsePanel).toHaveBeenCalledWith(0);
-    });
-
-    it('should handle Space for collapsible panels', () => {
-      hostComponent.panel2Collapsible = true;
-      fixture.detectChanges();
-
-      const spaceEvent = new KeyboardEvent('keydown', { key: ' ', cancelable: true });
-
-      handleElement.dispatchEvent(spaceEvent);
-
-      expect(spaceEvent.defaultPrevented).toBe(true);
-      expect(resizableComponent.collapsePanel).toHaveBeenCalledWith(1);
-    });
-
-    it('should ignore unsupported keys', () => {
-      const tabEvent = new KeyboardEvent('keydown', { key: 'Tab', cancelable: true });
-      handleElement.dispatchEvent(tabEvent);
-
-      expect(tabEvent.defaultPrevented).toBe(false);
-    });
-
-    it('should not handle keyboard events when disabled', () => {
-      hostComponent.disabled = true;
-      fixture.detectChanges();
-
-      const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
-      handleElement.dispatchEvent(rightArrowEvent);
-
-      expect(rightArrowEvent.defaultPrevented).toBe(false);
-    });
-
-    it('should not handle keyboard events when no resizable parent', () => {
-      const standaloneFixture = TestBed.createComponent(TestStandaloneHandleComponent);
-      standaloneFixture.detectChanges();
-
-      const standaloneHandle = standaloneFixture.debugElement.query(
-        By.directive(ZardResizableHandleComponent),
-      ).nativeElement;
-      const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight', cancelable: true });
-      jest.spyOn(handleComponent as any, 'adjustSizes');
-
-      expect(() => {
-        standaloneHandle.dispatchEvent(rightArrowEvent);
-      }).not.toThrow();
-      expect(standaloneHandle['resizable']).toBeUndefined();
-      expect(handleComponent['adjustSizes']).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('Private Methods', () => {
-    it('should call adjustSizes method when arrow keys are pressed', () => {
-      const spy = jest.spyOn(handleComponent as any, 'adjustSizes');
-
-      const rightArrowEvent = new KeyboardEvent('keydown', { key: 'ArrowRight' });
-      handleElement.dispatchEvent(rightArrowEvent);
+      const spy = jest.spyOn(resizableComponent, 'collapsePanel');
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'Enter' }));
 
       expect(spy).toHaveBeenCalledWith(1);
     });
 
-    it('should call moveToExtreme method for Home/End keys', () => {
-      const spy = jest.spyOn(handleComponent as any, 'moveToExtreme');
+    it('does not collapse on Enter when no panel is collapsible', () => {
+      const spy = jest.spyOn(resizableComponent, 'collapsePanel');
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'Enter' }));
 
-      const homeEvent = new KeyboardEvent('keydown', { key: 'Home' });
-      handleElement.dispatchEvent(homeEvent);
+      expect(spy).not.toHaveBeenCalled();
+    });
 
-      expect(spy).toHaveBeenCalledWith(true);
+    it('collapses panel on Space when panel is collapsible', () => {
+      hostComponent.collapsible1 = true;
+      fixture.detectChanges();
 
-      const endEvent = new KeyboardEvent('keydown', { key: 'End' });
-      handleElement.dispatchEvent(endEvent);
+      const spy = jest.spyOn(resizableComponent, 'collapsePanel');
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: ' ' }));
 
-      expect(spy).toHaveBeenCalledWith(false);
+      expect(spy).toHaveBeenCalledWith(0);
+    });
+
+    it('ignores keyboard events when disabled', () => {
+      hostComponent.handleDisabled = true;
+      fixture.detectChanges();
+
+      const spy = jest.spyOn(resizableComponent, 'collapsePanel');
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'Enter' }));
+
+      expect(spy).not.toHaveBeenCalled();
+    });
+
+    it('adjusts sizes on ArrowLeft for horizontal group', () => {
+      const initialSizes = [...resizableComponent.panelSizes()];
+
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+
+      const sizes = resizableComponent.panelSizes();
+      expect(sizes[0]).toBeLessThan(initialSizes[0]);
+      expect(sizes[1]).toBeGreaterThan(initialSizes[1]);
+    });
+
+    it('adjusts sizes on ArrowRight for horizontal group', () => {
+      const initialSizes = [...resizableComponent.panelSizes()];
+
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+
+      const sizes = resizableComponent.panelSizes();
+      expect(sizes[0]).toBeGreaterThan(initialSizes[0]);
+      expect(sizes[1]).toBeLessThan(initialSizes[1]);
+    });
+
+    it('adjusts sizes on ArrowUp for vertical group', () => {
+      hostComponent.layout = 'vertical';
+      fixture.detectChanges();
+
+      Object.defineProperty(
+        fixture.debugElement.query(By.directive(ZardResizableComponent)).nativeElement,
+        'offsetHeight',
+        { value: 600, configurable: true },
+      );
+
+      const initialSizes = [...resizableComponent.panelSizes()];
+
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+
+      const sizes = resizableComponent.panelSizes();
+      expect(sizes[0]).toBeLessThan(initialSizes[0]);
+      expect(sizes[1]).toBeGreaterThan(initialSizes[1]);
+    });
+
+    it('adjusts sizes on ArrowDown for vertical group', () => {
+      hostComponent.layout = 'vertical';
+      fixture.detectChanges();
+
+      Object.defineProperty(
+        fixture.debugElement.query(By.directive(ZardResizableComponent)).nativeElement,
+        'offsetHeight',
+        { value: 600, configurable: true },
+      );
+
+      const initialSizes = [...resizableComponent.panelSizes()];
+
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+
+      const sizes = resizableComponent.panelSizes();
+      expect(sizes[0]).toBeGreaterThan(initialSizes[0]);
+      expect(sizes[1]).toBeLessThan(initialSizes[1]);
+    });
+
+    it('applies larger delta with shift key on ArrowRight', () => {
+      const initialSizes = [...resizableComponent.panelSizes()];
+
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+      const afterNormal = [...resizableComponent.panelSizes()];
+      const normalDelta = Math.abs(afterNormal[0] - initialSizes[0]);
+
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight', shiftKey: true }));
+      const afterShift = resizableComponent.panelSizes();
+      const shiftDelta = Math.abs(afterShift[0] - afterNormal[0]);
+
+      expect(shiftDelta).toBeGreaterThan(normalDelta);
+      expect(shiftDelta).toBe(10);
+    });
+
+    it('ignores ArrowLeft/Right for vertical group', () => {
+      hostComponent.layout = 'vertical';
+      fixture.detectChanges();
+
+      const initialSizes = [...resizableComponent.panelSizes()];
+
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowLeft' }));
+
+      expect(resizableComponent.panelSizes()).toEqual(initialSizes);
+    });
+
+    it('ignores ArrowUp/Down for horizontal group', () => {
+      const initialSizes = [...resizableComponent.panelSizes()];
+
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowUp' }));
+
+      expect(resizableComponent.panelSizes()).toEqual(initialSizes);
+    });
+
+    it('emits resize event on arrow key adjustment', () => {
+      const emitted: ZardResizeEvent[] = [];
+      resizableComponent.zResize.subscribe(event => emitted.push(event));
+
+      handleComponent.handleKeyDown(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+
+      expect(emitted.length).toBe(1);
+      expect(emitted[0].layout).toBe('horizontal');
     });
   });
 
-  describe('Default Values', () => {
-    let defaultComponent: ZardResizableHandleComponent;
+  describe('Integration', () => {
+    let resizeEvents: ZardResizeEvent[];
 
     beforeEach(() => {
-      const defaultFixture = TestBed.createComponent(ZardResizableHandleComponent);
-      defaultComponent = defaultFixture.componentInstance;
-      defaultFixture.detectChanges();
+      resizeEvents = [];
+      resizableComponent.zResize.subscribe(event => resizeEvents.push(event));
     });
 
-    it('should have correct default values', () => {
-      expect(defaultComponent.zWithHandle()).toBe(false);
-      expect(defaultComponent.zDisabled()).toBe(false);
-      expect(defaultComponent.zHandleIndex()).toBe(0);
-      expect(defaultComponent.class()).toBe('');
+    it('completes a full mouse resize cycle', () => {
+      const initialSizes = [...resizableComponent.panelSizes()];
+
+      const mouseDown = new MouseEvent('mousedown', { clientX: 500 });
+      handleComponent.handleMouseDown(mouseDown);
+
+      const mouseMove = new MouseEvent('mousemove', { clientX: 600 });
+      document.dispatchEvent(mouseMove);
+
+      const lastEvent = resizeEvents[resizeEvents.length - 1];
+      expect(lastEvent.sizes[0]).toBeGreaterThan(initialSizes[0]);
+      expect(lastEvent.sizes[1]).toBeLessThan(initialSizes[1]);
+      expect(resizeEvents.length).toBeGreaterThanOrEqual(1);
+
+      const mouseUp = new MouseEvent('mouseup');
+      document.dispatchEvent(mouseUp);
+
+      const countAfterUp = resizeEvents.length;
+
+      const extraMove = new MouseEvent('mousemove', { clientX: 700 });
+      document.dispatchEvent(extraMove);
+
+      expect(resizeEvents.length).toBe(countAfterUp);
     });
   });
 });

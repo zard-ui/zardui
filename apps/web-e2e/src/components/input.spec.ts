@@ -46,6 +46,7 @@ test.describe('Input component', () => {
 
   test('passes accessibility checks', async ({ page }) => {
     // label: demo inputs use placeholder without associated <label>; button-name: icon-only buttons
+    // color-contrast: Shiki syntax highlighting has insufficient contrast (4.3:1)
     await checkA11y(page, '#overview', ['label', 'button-name', 'color-contrast']);
   });
 });

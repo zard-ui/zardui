@@ -2,9 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  contentChild,
   Directive,
-  effect,
   ElementRef,
   inject,
   input,
@@ -24,8 +22,6 @@ import {
   type ZardInputGroupButtonSizeVariants,
   type ZardInputGroupButtonVariantVariants,
 } from './input-group.variants';
-import { ZardInputComponent } from '../input/input.component';
-import { ZardTextareaComponent } from '../textarea/textarea.component';
 
 @Component({
   selector: 'z-input-group, [z-input-group]',
@@ -42,17 +38,7 @@ import { ZardTextareaComponent } from '../textarea/textarea.component';
 export class ZardInputGroupComponent {
   readonly class = input<ClassValue>('');
 
-  private readonly contentInput = contentChild(ZardInputComponent);
-  private readonly contentTextarea = contentChild(ZardTextareaComponent);
-
   protected readonly classes = computed(() => mergeClasses(inputGroupVariants(), this.class()));
-
-  constructor() {
-    effect(() => {
-      this.contentInput()?.setDataSlot('input-group-control');
-      this.contentTextarea()?.setDataSlot('input-group-control');
-    });
-  }
 }
 
 @Component({
@@ -80,7 +66,10 @@ export class ZardInputGroupAddonComponent {
   );
 
   protected onClick(event: MouseEvent): void {
-    if ((event.target as HTMLElement).closest('button')) return;
+    if ((event.target as HTMLElement).closest('button')) {
+      return;
+    }
+
     const control = this.elementRef.nativeElement.parentElement?.querySelector('input, textarea') as HTMLElement | null;
     control?.focus();
   }

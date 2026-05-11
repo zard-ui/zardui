@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const resizableVariants = cva('flex size-full data-[layout=vertical]:flex-col overflow-hidden', {
+export const resizableVariants = cva('flex size-full aria-[orientation=vertical]:flex-col', {
   variants: {
     zLayout: {
       horizontal: '',
@@ -25,14 +25,12 @@ export const resizablePanelVariants = cva('relative overflow-hidden shrink-0 h-f
 });
 
 export const resizableHandleVariants = cva(
-  'group relative flex shrink-0 items-center justify-center bg-border transition-colors hover:bg-border/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring focus-visible:ring-offset-1',
+  'relative flex min-w-px items-center justify-center bg-border ring-offset-background after:absolute after:inset-y-0 after:left-1/2 after:w-1 after:-translate-x-1/2 focus-visible:ring-1 focus-visible:ring-ring focus-visible:outline-hidden aria-[orientation=horizontal]:min-h-px aria-[orientation=horizontal]:w-full aria-[orientation=horizontal]:after:left-0 aria-[orientation=horizontal]:after:h-1 aria-[orientation=horizontal]:after:w-full aria-[orientation=horizontal]:after:translate-x-0 aria-[orientation=horizontal]:after:-translate-y-1/2 [&[aria-orientation=horizontal]>div]:rotate-90',
   {
     variants: {
       zLayout: {
-        horizontal:
-          'w-px min-w-px cursor-col-resize after:absolute after:inset-y-0 after:left-1/2 after:w-4 after:-translate-x-1/2',
-        vertical:
-          'h-px min-h-px w-full cursor-row-resize after:absolute after:inset-x-0 after:top-1/2 after:h-4 after:-translate-y-1/2',
+        horizontal: 'cursor-ns-resize',
+        vertical: 'cursor-ew-resize',
       },
       zDisabled: {
         true: 'cursor-default pointer-events-none opacity-50',
@@ -40,25 +38,11 @@ export const resizableHandleVariants = cva(
       },
     },
     defaultVariants: {
-      zLayout: 'horizontal',
       zDisabled: false,
     },
   },
 );
 
-export const resizableHandleIndicatorVariants = cva(
-  'absolute z-10 bg-muted-foreground/30 transition-colors group-hover:bg-muted-foreground/50 rounded-full',
-  {
-    variants: {
-      zLayout: {
-        vertical: 'w-8 h-px',
-        horizontal: 'w-px h-8',
-      },
-    },
-    defaultVariants: {
-      zLayout: 'horizontal',
-    },
-  },
-);
+export const resizableHandleIndicatorVariants = cva('z-10 flex h-6 w-1 shrink-0 rounded-lg bg-border');
 
 export type ZardResizableLayoutVariants = NonNullable<VariantProps<typeof resizableVariants>['zLayout']>;

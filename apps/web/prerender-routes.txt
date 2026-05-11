@@ -34,7 +34,7 @@
 /docs/components/combobox
 /docs/components/command
 /docs/components/date-picker
-/docs/components/divider
+/docs/components/separator
 /docs/components/empty
 /docs/components/field
 /docs/components/form
@@ -44,7 +44,7 @@
 /docs/components/layout
 /docs/components/dialog
 /docs/components/pagination
-/docs/components/progress-bar
+/docs/components/progress
 /docs/components/select
 /docs/components/slider
 /docs/components/skeleton

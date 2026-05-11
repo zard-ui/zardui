@@ -30,10 +30,10 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
             <ng-icon name="lucideFileCode2" />
             script.js
           </span>
-          <button type="button" z-input-group-button zSize="icon-xs" class="ml-auto">
+          <button type="button" z-input-group-button zSize="icon-xs" class="ml-auto" aria-label="Refresh">
             <ng-icon name="lucideRefreshCw" />
           </button>
-          <button type="button" z-input-group-button zSize="icon-xs">
+          <button type="button" z-input-group-button zSize="icon-xs" aria-label="Copy">
             <ng-icon name="lucideCopy" />
           </button>
         </z-input-group-addon>
