@@ -1,74 +1,18 @@
-import { cva, type VariantProps } from 'class-variance-authority';
+import { cva } from 'class-variance-authority';
 
 export const sliderVariants = cva(
-  'relative flex w-full touch-none items-center select-none data-[orientation=vertical]:h-full data-[orientation=vertical]:min-h-44 data-[orientation=vertical]:w-auto data-[orientation=vertical]:flex-col',
-  {
-    variants: {
-      orientation: {
-        horizontal: 'items-center',
-        vertical: 'flex-col h-full min-h-44 w-auto',
-      },
-      disabled: {
-        true: 'opacity-50 pointer-events-none',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      orientation: 'horizontal',
-      disabled: false,
-    },
-  },
+  'relative flex w-full touch-none items-center select-none data-disabled:opacity-50 data-vertical:h-full data-vertical:min-h-40 data-vertical:w-auto data-vertical:flex-col',
 );
-
-export type SliderVariants = VariantProps<typeof sliderVariants>;
 
 export const sliderTrackVariants = cva(
-  'flex bg-muted relative grow overflow-hidden rounded-full data-[orientation=horizontal]:h-1.5 data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-1.5',
-  {
-    variants: {
-      zOrientation: {
-        horizontal: 'h-1.5 w-full',
-        vertical: 'w-1.5 h-full min-h-44',
-      },
-    },
-    defaultVariants: {
-      zOrientation: 'horizontal',
-    },
-  },
+  'bg-muted relative grow overflow-hidden rounded-full data-horizontal:h-1 data-horizontal:w-full data-vertical:h-full data-vertical:w-1',
 );
 
-export type SliderTrackVariants = VariantProps<typeof sliderTrackVariants>;
-
-export const sliderRangeVariants = cva(
-  'bg-primary absolute data-[orientation=horizontal]:h-full data-[orientation=vertical]:w-full',
-  {
-    variants: {
-      zOrientation: {
-        horizontal: 'h-full',
-        vertical: 'w-full',
-      },
-    },
-    defaultVariants: {
-      zOrientation: 'horizontal',
-    },
-  },
-);
-
-export type SliderRangeVariants = VariantProps<typeof sliderRangeVariants>;
+export const sliderRangeVariants = cva('bg-primary absolute select-none data-horizontal:h-full data-vertical:w-full');
 
 export const sliderThumbVariants = cva(
-  'border-primary bg-background ring-ring/50 block size-4 shrink-0 rounded-full border shadow-sm transition-[color,box-shadow] focus-visible:ring-4 focus-visible:outline-hidden disabled:pointer-events-none disabled:opacity-50',
-  {
-    variants: {
-      disabled: {
-        true: '',
-        false: 'hover:ring-4',
-      },
-    },
-  },
+  'relative block size-3 shrink-0 rounded-full border border-ring bg-white ring-ring/50 transition-[color,box-shadow] select-none after:absolute after:-inset-2 hover:ring-3 focus-visible:ring-3 focus-visible:outline-hidden active:ring-3 disabled:pointer-events-none disabled:opacity-50',
 );
-
-export type SliderThumbVariants = VariantProps<typeof sliderThumbVariants>;
 
 export const sliderOrientationVariants = cva('absolute', {
   variants: {
@@ -81,5 +25,3 @@ export const sliderOrientationVariants = cva('absolute', {
     zOrientation: 'horizontal',
   },
 });
-
-export type SliderOrientationVariants = VariantProps<typeof sliderOrientationVariants>;

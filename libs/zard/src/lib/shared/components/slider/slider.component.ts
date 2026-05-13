@@ -5,26 +5,25 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  DestroyRef,
   ElementRef,
   forwardRef,
   inject,
   input,
   linkedSignal,
   numberAttribute,
-  type OnChanges,
-  type OnDestroy,
   output,
   signal,
-  type SimpleChanges,
   viewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 import type { ClassValue } from 'clsx';
-import { filter, fromEvent, map, Subject, switchMap, takeUntil, tap } from 'rxjs';
+import { filter, fromEvent, map, switchMap, takeUntil, tap } from 'rxjs';
 
-import { mergeClasses } from '@/shared/utils/merge-classes';
+import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 import { clamp, convertValueToPercentage, roundToStep } from '@/shared/utils/number';
 
 import {
@@ -40,8 +39,6 @@ type OnChangeType = (value: number) => void;
 
 @Component({
   selector: 'z-slider-track',
-  imports: [],
-  standalone: true,
   template: `
     <span #track data-slot="slider-track" [attr.data-orientation]="orientation()" [class]="classes()">
       <ng-content />
@@ -50,7 +47,8 @@ type OnChangeType = (value: number) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': '"data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full"',
+    '[style.width]': '"inherit"',
+    '[style.height]': '"inherit"',
     '[attr.data-orientation]': 'orientation()',
   },
 })
@@ -58,9 +56,7 @@ export class ZSliderTrackComponent {
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() =>
-    mergeClasses(sliderTrackVariants({ zOrientation: this.orientation() }), this.class()),
-  );
+  protected readonly classes = computed(() => mergeClasses(sliderTrackVariants(), 'flex', this.class()));
 
   private readonly trackEl = viewChild.required<ElementRef<HTMLElement>>('track');
 
@@ -71,8 +67,6 @@ export class ZSliderTrackComponent {
 
 @Component({
   selector: 'z-slider-range',
-  imports: [],
-  standalone: true,
   template: `
     <span
       data-slot="slider-range"
@@ -93,15 +87,11 @@ export class ZSliderRangeComponent {
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() =>
-    mergeClasses(sliderRangeVariants({ zOrientation: this.orientation() }), this.class()),
-  );
+  protected readonly classes = computed(() => mergeClasses(sliderRangeVariants(), this.class()));
 }
 
 @Component({
   selector: 'z-slider-thumb',
-  imports: [],
-  standalone: true,
   template: `
     <span
       #thumb
@@ -134,9 +124,7 @@ export class ZSliderThumbComponent {
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() =>
-    mergeClasses(sliderThumbVariants({ disabled: this.disabled() }), this.class()),
-  );
+  protected readonly classes = computed(() => mergeClasses(sliderThumbVariants(), this.class()));
 
   protected readonly orientationClasses = computed(() =>
     mergeClasses(sliderOrientationVariants({ zOrientation: this.orientation() })),
@@ -152,12 +140,12 @@ export class ZSliderThumbComponent {
 @Component({
   selector: 'z-slider',
   imports: [ZSliderTrackComponent, ZSliderRangeComponent, ZSliderThumbComponent],
-  standalone: true,
   template: `
     <span
       data-slot="slider"
+      [attr.data-disabled]="disabled()"
       [attr.data-orientation]="zOrientation()"
-      class="flex data-[orientation=horizontal]:w-full data-[orientation=horizontal]:items-center data-[orientation=vertical]:h-full data-[orientation=vertical]:justify-center"
+      [class]="classes()"
     >
       <z-slider-track [orientation]="zOrientation()">
         <z-slider-range [orientation]="zOrientation()" [percent]="percentValue()" />
@@ -186,14 +174,17 @@ export class ZSliderThumbComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    '[class]': 'classes()',
     '[attr.data-orientation]': 'zOrientation()',
     '[attr.aria-disabled]': 'disabled() ? true : null',
     '[attr.data-disabled]': 'disabled() ? true : null',
   },
   exportAs: 'zSlider',
 })
-export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit, OnChanges, OnDestroy {
+export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit {
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly document = inject(DOCUMENT);
+  private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+
   readonly zMin = input(0, { transform: numberAttribute });
   readonly zMax = input(100, { transform: numberAttribute });
   readonly zDefault = input(0, { transform: numberAttribute });
@@ -209,12 +200,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
   readonly thumbRef = viewChild.required(ZSliderThumbComponent);
   readonly trackRef = viewChild.required(ZSliderTrackComponent);
 
-  private elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  private document = inject(DOCUMENT);
-
-  protected readonly classes = computed(() =>
-    mergeClasses(sliderVariants({ orientation: this.zOrientation() }), this.class()),
-  );
+  protected readonly classes = computed(() => mergeClasses(sliderVariants(), this.class()));
 
   protected readonly disabled = linkedSignal(() => this.zDisabled());
 
@@ -223,25 +209,16 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
 
   readonly thumbOffset = signal(0);
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onTouched: OnTouchedType = () => {};
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  private onChange: OnChangeType = () => {};
+  private onTouched: OnTouchedType = noopFn;
+  private onChange: OnChangeType = noopFn;
 
-  private destroy$ = new Subject<void>();
-
-  ngOnChanges(changes: SimpleChanges): void {
-    if ('zValue' in changes && !changes['zValue'].firstChange) {
-      const value = this.zValue();
-      if (value !== this.lastEmittedValue()) {
-        this.setInitialValue();
-      }
-    }
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
+  constructor() {
+    toObservable(this.zValue)
+      .pipe(
+        filter(value => value !== this.lastEmittedValue()),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.setInitialValue());
   }
 
   ngAfterViewInit() {
@@ -278,12 +255,9 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit,
             }),
           ),
         ),
-        takeUntil(this.destroy$),
+        takeUntilDestroyed(this.destroyRef),
       )
       .subscribe(percentage => {
-        if (this.disabled()) {
-          return;
-        }
         this.updateSliderFromPercentage(percentage);
         this.onTouched();
       });

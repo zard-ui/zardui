@@ -7,8 +7,11 @@ import { ZardSliderComponent } from '../slider.component';
   imports: [ZardSliderComponent],
   template: `
     <div class="flex h-87.5 w-full items-center justify-center p-10">
-      <z-slider class="w-[60%]" zDefault="100" zMin="30" zMax="120" zOrientation="vertical" />
+      <z-slider class="mx-auto w-full max-w-xs" [zDefault]="100" zMin="30" zMax="120" zOrientation="vertical" />
     </div>
   `,
+  host: {
+    '[style.width]': '"inherit"',
+  },
 })
 export class ZardDemoSliderVerticalComponent {}

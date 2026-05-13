@@ -1,10 +1,13 @@
 import { SLIDER_DEMO_DEFAULT } from '@generated/components/slider/demo/default';
 import { SLIDER_DEMO_DISABLED } from '@generated/components/slider/demo/disabled';
 import { SLIDER_DEMO_MIN_MAX } from '@generated/components/slider/demo/min-max';
+import { SLIDER_DEMO_RANGE } from '@generated/components/slider/demo/range';
 import { SLIDER_DEMO_VERTICAL } from '@generated/components/slider/demo/vertical';
 import { SLIDER_CLI_ADD } from '@generated/installation/cli/add-slider';
 import { SLIDER_MANUAL_CODE } from '@generated/installation/manual/slider';
 import { SLIDER_USAGE_CODE, SLIDER_USAGE_IMPORT } from '@generated/usage/slider';
+
+import { ZardDemoSliderRangeComponent } from '@/shared/components/slider/demo/range';
 
 import { ZardDemoSliderDefaultComponent } from './default';
 import { ZardDemoSliderDisabledComponent } from './disabled';
@@ -23,11 +26,12 @@ export const SLIDER = {
     manualCode: SLIDER_MANUAL_CODE,
   },
   usage: { importBlock: SLIDER_USAGE_IMPORT, codeBlock: SLIDER_USAGE_CODE },
+  preview: { name: 'default', component: ZardDemoSliderDefaultComponent, codeData: SLIDER_DEMO_DEFAULT },
   examples: [
     {
-      name: 'default',
-      component: ZardDemoSliderDefaultComponent,
-      codeData: SLIDER_DEMO_DEFAULT,
+      name: 'range',
+      component: ZardDemoSliderRangeComponent,
+      codeData: SLIDER_DEMO_RANGE,
     },
     {
       name: 'disabled',
