@@ -1,5 +1,4 @@
-import { Component, ChangeDetectionStrategy, inject, viewChild, effect, ElementRef, untracked } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 
 import {
   BlockEmptyAvatarGroupComponent,
@@ -8,23 +7,22 @@ import {
   BlockFieldSliderComponent,
   BlockInputGroupStackComponent,
 } from './blocks';
-import { ThemeGeneratorService } from '../../../../themes/services/theme-generator.service';
+import { HeroDefaultContentComponent } from './hero-default-content.component';
 
 @Component({
   selector: 'z-hero-examples-grid',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    RouterOutlet,
     BlockEmptyAvatarGroupComponent,
     BlockSpinnerBadgesComponent,
     BlockInputGroupChatComponent,
     BlockFieldSliderComponent,
     BlockInputGroupStackComponent,
+    HeroDefaultContentComponent,
   ],
   template: `
     <div class="container-wrapper section-soft flex-1 pb-6">
       <div class="container overflow-hidden">
-        <!-- Mobile: Column 2 blocks -->
         <section class="flex flex-col gap-6 *:w-full *:max-w-full md:hidden">
           <z-block-empty-avatar-group />
           <z-block-spinner-badges />
@@ -32,29 +30,11 @@ import { ThemeGeneratorService } from '../../../../themes/services/theme-generat
           <z-block-field-slider />
           <z-block-input-group-stack />
         </section>
-
-        <!-- Desktop Content (from router) -->
         <section #sec class="theme-container hidden md:block">
-          <router-outlet />
+          <z-hero-default-content />
         </section>
       </div>
     </div>
   `,
 })
-export class HeroExamplesGridComponent {
-  protected readonly themeService = inject(ThemeGeneratorService);
-  private readonly sectionRef = viewChild<ElementRef>('sec');
-
-  constructor() {
-    let onInit = true;
-    effect(() => {
-      const style = this.themeService.scopedStyles();
-      const section = untracked(this.sectionRef);
-
-      if (!onInit && section) {
-        section.nativeElement.style = style;
-      }
-      onInit = false;
-    });
-  }
-}
+export class HeroExamplesGridComponent {}
