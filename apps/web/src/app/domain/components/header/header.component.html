@@ -28,7 +28,7 @@
         @if (githubData) {
           <a z-button class="flex" zType="ghost" zSize="sm" [href]="githubData.url" target="_blank">
             <img [src]="githubData.icon" [alt]="githubData.iconAlt" class="h-4 dark:invert" />
-            <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars() || '' }}</span>
+            <span class="text-muted-foreground text-xs tabular-nums">{{ repoStars() }}</span>
           </a>
         }
         <z-separator zOrientation="vertical" class="3xl:block hidden h-4! self-center!" />

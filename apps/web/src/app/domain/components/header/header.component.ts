@@ -60,7 +60,7 @@ export class HeaderComponent {
   private readonly githubService = inject(GithubService);
   private readonly darkModeService = inject(ZardDarkMode);
   private readonly layoutService = inject(LayoutService);
-  readonly repoStars = this.githubService.starsCount;
+  readonly repoStars = this.githubService.starsCountFormatted;
   readonly isLayoutFixed = this.layoutService.isLayoutFixed;
 
   toggleTheme(): void {
