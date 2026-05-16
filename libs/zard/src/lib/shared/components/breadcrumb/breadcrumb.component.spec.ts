@@ -1,373 +1,375 @@
 import { Component, type TemplateRef, viewChild } from '@angular/core';
-import { type ComponentFixture, TestBed } from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
+import { TestBed } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
+
+import { fireEvent, render, screen, within } from '@testing-library/angular';
 
 import {
   ZardBreadcrumbComponent,
   ZardBreadcrumbEllipsisComponent,
   ZardBreadcrumbItemComponent,
+  ZardBreadcrumbLinkComponent,
+  ZardBreadcrumbPageComponent,
+  ZardBreadcrumbSeparatorComponent,
 } from './breadcrumb.component';
 
+const breadcrumbImports = [
+  ZardBreadcrumbComponent,
+  ZardBreadcrumbItemComponent,
+  ZardBreadcrumbLinkComponent,
+  ZardBreadcrumbPageComponent,
+  ZardBreadcrumbSeparatorComponent,
+  ZardBreadcrumbEllipsisComponent,
+];
+
+const renderBreadcrumb = (template: string) =>
+  render(template, {
+    imports: breadcrumbImports,
+    providers: [provideRouter([])],
+  });
+
+const getSeparators = (container: HTMLElement) =>
+  Array.from(container.querySelectorAll<HTMLElement>('[data-slot="breadcrumb-separator"]'));
+
 @Component({
-  selector: 'test-host-component',
-  imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent],
+  selector: 'z-test-template-separator',
+  imports: breadcrumbImports,
   template: `
-    <z-breadcrumb>
+    <z-breadcrumb [zSeparator]="separator">
       <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
-      <z-breadcrumb-item>
-        <z-breadcrumb-ellipsis />
-      </z-breadcrumb-item>
-      <z-breadcrumb-item [routerLink]="['/components']">Components</z-breadcrumb-item>
-      <z-breadcrumb-item>
-        <span aria-current="page">Breadcrumb</span>
-      </z-breadcrumb-item>
+      <z-breadcrumb-item [routerLink]="['/docs']">Docs</z-breadcrumb-item>
+      <z-breadcrumb-item>Current</z-breadcrumb-item>
+    </z-breadcrumb>
+
+    <ng-template #customSeparator>
+      <span data-testid="template-separator">::</span>
+    </ng-template>
+  `,
+})
+class TemplateSeparatorHost {
+  readonly customSeparator = viewChild.required<TemplateRef<void>>('customSeparator');
+  separator: string | TemplateRef<void> = '';
+}
+
+@Component({
+  selector: 'z-test-variants',
+  imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
+  template: `
+    <z-breadcrumb [zAlign]="align" [zWrap]="wrap" [zSize]="size">
+      <z-breadcrumb-item>Home</z-breadcrumb-item>
+      <z-breadcrumb-item>Current</z-breadcrumb-item>
     </z-breadcrumb>
   `,
 })
-class TestHostComponent {}
+class VariantsHost {
+  align: 'start' | 'center' | 'end' = 'start';
+  wrap: 'wrap' | 'nowrap' = 'wrap';
+  size: 'sm' | 'md' | 'lg' = 'md';
+}
 
-describe('BreadcrumbComponents Integration', () => {
-  let fixture: ComponentFixture<TestHostComponent>;
-  let component: TestHostComponent;
+@Component({
+  selector: 'z-test-ellipsis-color',
+  imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent],
+  template: `
+    <z-breadcrumb>
+      <z-breadcrumb-item>Home</z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <z-breadcrumb-ellipsis [zColor]="color" />
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>Current</z-breadcrumb-item>
+    </z-breadcrumb>
+  `,
+})
+class EllipsisColorHost {
+  color: 'muted' | 'strong' = 'muted';
+}
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestHostComponent],
-      providers: [provideRouter([])],
-    }).compileComponents();
+describe('ZardBreadcrumbComponent', () => {
+  it('renders navigation with the default breadcrumb label', async () => {
+    await renderBreadcrumb(`
+      <z-breadcrumb>
+        <z-breadcrumb-item>Current</z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
 
-    fixture = TestBed.createComponent(TestHostComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+    expect(screen.getByRole('navigation', { name: 'breadcrumb' })).toBeVisible();
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
+  it('uses zLabel for the navigation accessible name', async () => {
+    await renderBreadcrumb(`
+      <z-breadcrumb zLabel="Page hierarchy">
+        <z-breadcrumb-item>Current</z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    expect(screen.getByRole('navigation', { name: 'Page hierarchy' })).toBeVisible();
   });
 
-  it('should render all breadcrumb components', () => {
-    expect(fixture.debugElement.query(By.directive(ZardBreadcrumbComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardBreadcrumbItemComponent))).toBeTruthy();
-    expect(fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent))).toBeTruthy();
-  });
-
-  it('should have default classes for ZardBreadcrumbComponent', () => {
-    const breadcrumDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbComponent));
-    const nav = breadcrumDebug.nativeElement.querySelector('nav');
-    expect(nav).toHaveClass('w-full text-sm');
-  });
-
-  it('should have default classes for breadcrumb list (ol element)', () => {
-    const breadcrumbDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbComponent));
-    const ol = breadcrumbDebug.nativeElement.querySelector('ol');
-    expect(ol).toHaveClass('text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word');
-  });
-
-  it('should have default classes for ZardBreadcrumbItemComponent', () => {
-    const breadcrumItemDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbItemComponent));
-    const li = breadcrumItemDebug.nativeElement.querySelector('li');
-    expect(li).toHaveClass('inline-flex items-center gap-1.5');
-  });
-
-  it('should have default classes for ZardBreadcrumbEllipsisComponent', () => {
-    const breadcrumDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent)).nativeElement;
-    expect(breadcrumDebug).toHaveClass('flex');
-  });
-
-  it('should render projected content correctly', () => {
-    const items = fixture.debugElement.queryAll(By.directive(ZardBreadcrumbItemComponent));
-    const currentPage = fixture.debugElement.query(By.css('[aria-current="page"]')).nativeElement;
-
-    expect(items[0].nativeElement.textContent.trim()).toBe('Home');
-    expect(currentPage.textContent.trim()).toBe('Breadcrumb');
-  });
-
-  it('breadcrumb <nav> should have aria-label="breadcrumb"', () => {
-    const nav = fixture.debugElement.query(By.css('nav')).nativeElement;
-    expect(nav.getAttribute('aria-label')).toBe('breadcrumb');
-  });
-
-  it('last breadcrumb item should have aria-current="page"', () => {
-    const currentPage = fixture.debugElement.query(By.css('[aria-current="page"]'));
-    expect(currentPage).toBeTruthy();
-    expect(currentPage.nativeElement.textContent.trim()).toBe('Breadcrumb');
-  });
-
-  it('breadcrumb-ellipsis should contain ng-icon component', () => {
-    const breadcrumbPageDebug = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent));
-    const iconElement = breadcrumbPageDebug.query(By.css('ng-icon'));
-    expect(iconElement).toBeTruthy();
-    expect(iconElement.nativeElement.getAttribute('name')).toBe('lucideEllipsis');
-  });
-
-  it('should support routerLink on breadcrumb items', () => {
-    const items = fixture.debugElement.queryAll(By.directive(ZardBreadcrumbItemComponent));
-    // We have 4 breadcrumb items: 2 links + 1 ellipsis container + 1 current page
-    expect(items.length).toBe(4);
-    // Verify items can be rendered
-    expect(items[0].componentInstance).toBeTruthy();
-  });
-
-  it('should render separator between items except last one', () => {
-    const separators = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"]'));
-    // Should have 3 separators for 4 items
-    expect(separators.length).toBe(3);
-  });
-
-  it('should render default chevron separator when zSeparator is not provided', () => {
-    const separator = fixture.debugElement.query(By.css('li[aria-hidden="true"][role="presentation"] ng-icon'));
-    expect(separator).toBeTruthy();
-    expect(separator.nativeElement.getAttribute('name')).toBe('lucideChevronRight');
-  });
-});
-
-describe('BreadcrumbComponent - Custom Separator', () => {
-  @Component({
-    selector: 'test-separator-component',
-    imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
-    template: `
-      <z-breadcrumb [zSeparator]="separator">
+  it('renders an ordered list with breadcrumb list items', async () => {
+    await renderBreadcrumb(`
+      <z-breadcrumb>
         <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
         <z-breadcrumb-item [routerLink]="['/docs']">Docs</z-breadcrumb-item>
         <z-breadcrumb-item>Current</z-breadcrumb-item>
       </z-breadcrumb>
+    `);
 
-      <ng-template #customTemplate>
-        <span data-testid="custom-separator">→</span>
-      </ng-template>
-    `,
-  })
-  class TestSeparatorComponent {
-    readonly customTemplate = viewChild.required<TemplateRef<void>>('customTemplate');
-    separator: string | TemplateRef<void> = '';
-  }
+    const list = screen.getByRole('list');
+    const items = within(list).getAllByRole('listitem');
 
-  let fixture: ComponentFixture<TestSeparatorComponent>;
-  let component: TestSeparatorComponent;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestSeparatorComponent],
-      providers: [provideRouter([])],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestSeparatorComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges(); // initialize required view query
+    expect(list.tagName).toBe('OL');
+    expect(items).toHaveLength(3);
+    expect(items.every(item => item.parentElement === list)).toBe(true);
+    expect(items.map(item => item.textContent?.trim())).toEqual(['Home', 'Docs', 'Current']);
   });
 
-  it('should render string separator when zSeparator is a string', () => {
-    component.separator = '/';
-    fixture.detectChanges();
-
-    const separators = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"]'));
-    expect(separators.length).toBe(2); // 3 items = 2 separators
-    expect(separators[0].nativeElement.textContent.trim()).toBe('/');
-  });
-
-  it('should render template separator when zSeparator is a TemplateRef', () => {
-    component.separator = component.customTemplate();
-    fixture.detectChanges();
-
-    const separators = fixture.debugElement.queryAll(
-      By.css('li[aria-hidden="true"][role="presentation"] [data-testid="custom-separator"]'),
-    );
-    expect(separators.length).toBe(2); // 3 items = 2 separators
-    expect(separators[0].nativeElement.textContent.trim()).toBe('→');
-  });
-
-  it('should render default chevron when zSeparator is null', () => {
-    component.separator = '';
-    fixture.detectChanges();
-
-    const chevrons = fixture.debugElement.queryAll(By.css('li[aria-hidden="true"][role="presentation"] ng-icon'));
-    expect(chevrons.length).toBe(2);
-    expect(chevrons[0].nativeElement.getAttribute('name')).toBe('lucideChevronRight');
-  });
-
-  it('should update separator dynamically when input changes', () => {
-    component.separator = '/';
-    fixture.detectChanges();
-
-    let separatorText = fixture.debugElement
-      .query(By.css('li[aria-hidden="true"][role="presentation"]'))
-      .nativeElement.textContent.trim();
-    expect(separatorText).toBe('/');
-
-    component.separator = '>';
-    fixture.detectChanges();
-
-    separatorText = fixture.debugElement
-      .query(By.css('li[aria-hidden="true"][role="presentation"]'))
-      .nativeElement.textContent.trim();
-    expect(separatorText).toBe('>');
-  });
-});
-
-describe('BreadcrumbComponent - Alignment and Wrapping', () => {
-  @Component({
-    selector: 'test-alignment-component',
-    imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
-    standalone: true,
-    template: `
-      <z-breadcrumb [zAlign]="align" [zWrap]="wrap">
-        <z-breadcrumb-item>Home</z-breadcrumb-item>
-        <z-breadcrumb-item>Docs</z-breadcrumb-item>
-      </z-breadcrumb>
-    `,
-  })
-  class TestAlignmentComponent {
-    align: 'start' | 'center' | 'end' = 'start';
-    wrap: 'wrap' | 'nowrap' = 'wrap';
-  }
-
-  let fixture: ComponentFixture<TestAlignmentComponent>;
-  let component: TestAlignmentComponent;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestAlignmentComponent],
-      providers: [provideRouter([])],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestAlignmentComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('should apply default alignment (start) to breadcrumb list', () => {
-    fixture.detectChanges();
-    const ol = fixture.debugElement.query(By.css('ol')).nativeElement;
-    expect(ol.classList).toContain('justify-start');
-  });
-
-  it('should apply center alignment when zAlign is center', () => {
-    component.align = 'center';
-    fixture.detectChanges();
-
-    const ol = fixture.debugElement.query(By.css('ol')).nativeElement;
-    expect(ol.classList).toContain('justify-center');
-  });
-
-  it('should apply end alignment when zAlign is end', () => {
-    component.align = 'end';
-    fixture.detectChanges();
-
-    const ol = fixture.debugElement.query(By.css('ol')).nativeElement;
-    expect(ol.classList).toContain('justify-end');
-  });
-
-  it('should apply default wrap behavior to breadcrumb list', () => {
-    fixture.detectChanges();
-    const ol = fixture.debugElement.query(By.css('ol')).nativeElement;
-    expect(ol.classList).toContain('flex-wrap');
-  });
-
-  it('should apply nowrap when zWrap is nowrap', () => {
-    component.wrap = 'nowrap';
-    fixture.detectChanges();
-
-    const ol = fixture.debugElement.query(By.css('ol')).nativeElement;
-    expect(ol.classList).toContain('flex-nowrap');
-  });
-});
-
-describe('BreadcrumbComponent - Size Variants', () => {
-  @Component({
-    selector: 'test-size-component',
-    imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent],
-    standalone: true,
-    template: `
-      <z-breadcrumb [zSize]="size">
-        <z-breadcrumb-item>Home</z-breadcrumb-item>
-      </z-breadcrumb>
-    `,
-  })
-  class TestSizeComponent {
-    size: 'sm' | 'md' | 'lg' = 'md';
-  }
-
-  let fixture: ComponentFixture<TestSizeComponent>;
-  let component: TestSizeComponent;
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestSizeComponent],
-      providers: [provideRouter([])],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestSizeComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('should apply small size class when zSize is sm', () => {
-    component.size = 'sm';
-    fixture.detectChanges();
-
-    const nav = fixture.debugElement.query(By.css('nav')).nativeElement;
-    expect(nav.classList).toContain('text-xs');
-  });
-
-  it('should apply medium size class when zSize is md', () => {
-    component.size = 'md';
-    fixture.detectChanges();
-
-    const nav = fixture.debugElement.query(By.css('nav')).nativeElement;
-    expect(nav.classList).toContain('text-sm');
-  });
-
-  it('should apply large size class when zSize is lg', () => {
-    component.size = 'lg';
-    fixture.detectChanges();
-
-    const nav = fixture.debugElement.query(By.css('nav')).nativeElement;
-    expect(nav.classList).toContain('text-base');
-  });
-});
-
-describe('BreadcrumbEllipsisComponent - Color Variants', () => {
-  @Component({
-    selector: 'test-ellipsis-component',
-    imports: [ZardBreadcrumbComponent, ZardBreadcrumbItemComponent, ZardBreadcrumbEllipsisComponent],
-    standalone: true,
-    template: `
+  it('renders composed links and pages through their dedicated components', async () => {
+    await renderBreadcrumb(`
       <z-breadcrumb>
-        <z-breadcrumb-item>Home</z-breadcrumb-item>
         <z-breadcrumb-item>
-          <z-breadcrumb-ellipsis [zColor]="color" />
+          <a z-breadcrumb-link href="/">Home</a>
+        </z-breadcrumb-item>
+        <z-breadcrumb-item>
+          <span z-breadcrumb-page>Current</span>
+        </z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    const link = screen.getByText('Home');
+    const page = screen.getByText('Current');
+
+    expect(link.tagName).toBe('A');
+    expect(link).toHaveAttribute('data-slot', 'breadcrumb-link');
+    expect(page).toHaveAttribute('data-slot', 'breadcrumb-page');
+    expect(page).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('renders the final plain item as the current page', async () => {
+    await renderBreadcrumb(`
+      <z-breadcrumb>
+        <z-breadcrumb-item [routerLink]="['/docs']">Docs</z-breadcrumb-item>
+        <z-breadcrumb-item>Current</z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    const currentPage = screen.getByText('Current');
+
+    expect(currentPage.tagName).toBe('SPAN');
+    expect(currentPage).toHaveAttribute('data-slot', 'breadcrumb-page');
+    expect(currentPage).toHaveAttribute('aria-current', 'page');
+  });
+
+  it('keeps item-level routerLink compatibility for plain non-final items', async () => {
+    await renderBreadcrumb(`
+      <z-breadcrumb>
+        <z-breadcrumb-item
+          [routerLink]="['/docs/components']"
+          [queryParams]="{ tab: 'api' }"
+          fragment="props"
+        >
+          Components
+        </z-breadcrumb-item>
+        <z-breadcrumb-item>Breadcrumb</z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    const link = screen.getByRole('link', { name: 'Components' });
+
+    expect(link).toHaveAttribute('data-slot', 'breadcrumb-link');
+    expect(link.getAttribute('href')).toBe('/docs/components?tab=api#props');
+  });
+
+  it('makes custom element links keyboard focusable when they have a navigation target', async () => {
+    await renderBreadcrumb(`
+      <z-breadcrumb>
+        <z-breadcrumb-item>
+          <z-breadcrumb-link [routerLink]="['/docs']">Docs</z-breadcrumb-link>
         </z-breadcrumb-item>
         <z-breadcrumb-item>Current</z-breadcrumb-item>
       </z-breadcrumb>
-    `,
-  })
-  class TestEllipsisComponent {
-    color: 'muted' | 'strong' = 'muted';
-  }
+    `);
 
-  let fixture: ComponentFixture<TestEllipsisComponent>;
-  let component: TestEllipsisComponent;
+    const link = screen.getByRole('link', { name: 'Docs' });
+    const router = TestBed.inject(Router);
+    const navigateSpy = jest.spyOn(router, 'navigateByUrl').mockResolvedValue(true);
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestEllipsisComponent],
+    expect(link.tagName).toBe('Z-BREADCRUMB-LINK');
+    expect(link).toHaveAttribute('tabindex', '0');
+
+    fireEvent.keyDown(link, { key: 'Enter' });
+
+    expect(navigateSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('allows native buttons to reuse breadcrumb link styling for composed controls', async () => {
+    await renderBreadcrumb(`
+      <z-breadcrumb>
+        <z-breadcrumb-item>
+          <button z-breadcrumb-link type="button">Components</button>
+        </z-breadcrumb-item>
+        <z-breadcrumb-item>Current</z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    const button = screen.getByRole('button', { name: 'Components' });
+
+    expect(button).toHaveAttribute('data-slot', 'breadcrumb-link');
+    expect(button).toHaveClass('transition-colors');
+    expect(button).not.toHaveAttribute('role');
+    expect(button).not.toHaveAttribute('tabindex');
+  });
+
+  it('renders default presentation separators between items', async () => {
+    const { container } = await renderBreadcrumb(`
+      <z-breadcrumb>
+        <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
+        <z-breadcrumb-item [routerLink]="['/docs']">Docs</z-breadcrumb-item>
+        <z-breadcrumb-item>Current</z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    const separators = getSeparators(container);
+
+    expect(separators).toHaveLength(2);
+    expect(separators[0]).toHaveAttribute('aria-hidden', 'true');
+    expect(separators[0]).toHaveAttribute('role', 'presentation');
+    expect(separators[0].querySelector('ng-icon')).toHaveAttribute('name', 'lucideChevronRight');
+  });
+
+  it('uses string separators from zSeparator', async () => {
+    const { container } = await renderBreadcrumb(`
+      <z-breadcrumb zSeparator="/">
+        <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
+        <z-breadcrumb-item [routerLink]="['/docs']">Docs</z-breadcrumb-item>
+        <z-breadcrumb-item>Current</z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    const separators = getSeparators(container);
+
+    expect(separators).toHaveLength(2);
+    expect(separators.map(separator => separator.textContent?.trim())).toEqual(['/', '/']);
+  });
+
+  it('uses template separators from zSeparator', async () => {
+    const { fixture } = await render(TemplateSeparatorHost, {
       providers: [provideRouter([])],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestEllipsisComponent);
-    component = fixture.componentInstance;
-  });
-
-  it('should apply default color (muted) to ellipsis', () => {
-    fixture.detectChanges();
-    const ellipsis = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent)).nativeElement;
-    expect(ellipsis.classList).toContain('text-muted-foreground');
-  });
-
-  it('should apply strong color when zColor is strong', () => {
-    component.color = 'strong';
+    });
+    fixture.componentInstance.separator = fixture.componentInstance.customSeparator();
     fixture.detectChanges();
 
-    const ellipsis = fixture.debugElement.query(By.directive(ZardBreadcrumbEllipsisComponent)).nativeElement;
-    expect(ellipsis.classList).toContain('text-foreground');
+    const templateSeparators = screen.getAllByTestId('template-separator');
+
+    expect(templateSeparators).toHaveLength(2);
+    expect(templateSeparators.map(separator => separator.textContent?.trim())).toEqual(['::', '::']);
+  });
+
+  it('suppresses automatic separators when explicit separators are projected', async () => {
+    const { container } = await renderBreadcrumb(`
+      <z-breadcrumb>
+        <z-breadcrumb-item>
+          <a z-breadcrumb-link href="/">Home</a>
+        </z-breadcrumb-item>
+        <li z-breadcrumb-separator>/</li>
+        <z-breadcrumb-item>
+          <a z-breadcrumb-link href="/docs">Docs</a>
+        </z-breadcrumb-item>
+        <li z-breadcrumb-separator>/</li>
+        <z-breadcrumb-item>
+          <span z-breadcrumb-page>Current</span>
+        </z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    const separators = getSeparators(container);
+
+    expect(separators).toHaveLength(2);
+    expect(separators.map(separator => separator.textContent?.trim())).toEqual(['/', '/']);
+  });
+
+  it('renders ellipsis with its icon and screen-reader label', async () => {
+    const { container } = await renderBreadcrumb(`
+      <z-breadcrumb>
+        <z-breadcrumb-item [routerLink]="['/']">Home</z-breadcrumb-item>
+        <z-breadcrumb-item>
+          <z-breadcrumb-ellipsis />
+        </z-breadcrumb-item>
+        <z-breadcrumb-item>Current</z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    const ellipsis = container.querySelector<HTMLElement>('[data-slot="breadcrumb-ellipsis"]');
+    const label = screen.getByText('More breadcrumbs');
+
+    expect(ellipsis).toBeInTheDocument();
+    expect(ellipsis?.querySelector('ng-icon')).toHaveAttribute('name', 'lucideEllipsis');
+    expect(label).toHaveClass('sr-only');
+  });
+
+  it('merges custom classes with breadcrumb part classes', async () => {
+    const { container } = await renderBreadcrumb(`
+      <z-breadcrumb zLabel="Classes" class="nav-extra">
+        <z-breadcrumb-item class="item-extra">
+          <a z-breadcrumb-link href="/" class="link-extra">Home</a>
+        </z-breadcrumb-item>
+        <li z-breadcrumb-separator class="separator-extra">/</li>
+        <z-breadcrumb-item>
+          <z-breadcrumb-ellipsis class="ellipsis-extra" />
+        </z-breadcrumb-item>
+        <li z-breadcrumb-separator class="separator-extra">/</li>
+        <z-breadcrumb-item>
+          <span z-breadcrumb-page class="page-extra">Current</span>
+        </z-breadcrumb-item>
+      </z-breadcrumb>
+    `);
+
+    const nav = screen.getByRole('navigation', { name: 'Classes' });
+    const link = screen.getByText('Home');
+    const item = link.closest('[data-slot="breadcrumb-item"]');
+    const separator = getSeparators(container)[0];
+    const ellipsis = container.querySelector<HTMLElement>('[data-slot="breadcrumb-ellipsis"]');
+    const page = screen.getByText('Current');
+
+    expect(nav).toHaveClass('w-full', 'text-sm', 'nav-extra');
+    expect(item).toHaveClass('inline-flex', 'items-center', 'item-extra');
+    expect(link).toHaveClass('transition-colors', 'link-extra');
+    expect(separator).toHaveClass('text-muted-foreground', 'separator-extra');
+    expect(ellipsis).toHaveClass('flex', 'ellipsis-extra');
+    expect(page).toHaveClass('font-normal', 'page-extra');
+  });
+
+  it('applies alignment and wrapping variants to the list', async () => {
+    const { fixture } = await render(VariantsHost, {
+      providers: [provideRouter([])],
+    });
+    fixture.componentInstance.align = 'center';
+    fixture.componentInstance.wrap = 'nowrap';
+    fixture.detectChanges();
+
+    const list = screen.getByRole('list');
+
+    expect(list).toHaveClass('justify-center', 'flex-nowrap');
+  });
+
+  it('applies size variants to the navigation', async () => {
+    const { fixture } = await render(VariantsHost, {
+      providers: [provideRouter([])],
+    });
+    fixture.componentInstance.size = 'lg';
+    fixture.detectChanges();
+
+    expect(screen.getByRole('navigation', { name: 'breadcrumb' })).toHaveClass('text-base');
+  });
+
+  it('applies ellipsis color variants', async () => {
+    const { fixture, container } = await render(EllipsisColorHost, {
+      providers: [provideRouter([])],
+    });
+    fixture.componentInstance.color = 'strong';
+    fixture.detectChanges();
+
+    const ellipsis = container.querySelector<HTMLElement>('[data-slot="breadcrumb-ellipsis"]');
+
+    expect(ellipsis).toHaveClass('text-foreground');
   });
 });
