@@ -334,7 +334,7 @@ export class ZardBreadcrumbSeparatorComponent {
     }
 
     @if (shouldRenderSeparator()) {
-      <span z-breadcrumb-separator (click)="$event.stopPropagation()">
+      <span z-breadcrumb-separator>
         @if (isTemplate(separator())) {
           <ng-container *zStringTemplateOutlet="separator()" />
         } @else if (separator()) {
