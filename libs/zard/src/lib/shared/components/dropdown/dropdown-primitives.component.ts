@@ -152,11 +152,11 @@ export class ZardDropdownMenuCheckboxItemComponent {
   template: `
     <ng-content />
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   providers: [
     { provide: ZARD_DROPDOWN_RADIO_GROUP, useExisting: forwardRef(() => ZardDropdownMenuRadioGroupComponent) },
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     role: 'group',
     'data-slot': 'dropdown-menu-radio-group',
