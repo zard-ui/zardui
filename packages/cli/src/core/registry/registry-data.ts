@@ -386,6 +386,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'dropdown-primitives.component.ts',
+        content: '',
+      },
+      {
         name: 'dropdown-trigger.directive.ts',
         content: '',
       },

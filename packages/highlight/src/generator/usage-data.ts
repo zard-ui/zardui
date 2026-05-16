@@ -109,13 +109,13 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   dropdown: {
     importCode: `import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';`,
-    templateCode: `<z-dropdown-menu>
-  <button z-button zType="outline" zardDropdownTrigger>Open</button>
-  <z-dropdown-menu-content>
-    <z-dropdown-menu-item label="Profile"></z-dropdown-menu-item>
-    <z-dropdown-menu-item label="Settings"></z-dropdown-menu-item>
-  </z-dropdown-menu-content>
-</z-dropdown-menu>`,
+    templateCode: `<button z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
+
+<z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-48">
+  <z-dropdown-menu-item>Profile</z-dropdown-menu-item>
+  <z-dropdown-menu-item>Settings</z-dropdown-menu-item>
+  <z-dropdown-menu-item zDisabled>Subscription</z-dropdown-menu-item>
+</z-dropdown-menu-content>`,
   },
   empty: {
     importCode: `import { ZardEmptyComponent } from '@/shared/components/empty/empty.component';`,

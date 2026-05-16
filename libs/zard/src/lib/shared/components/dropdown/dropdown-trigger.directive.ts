@@ -1,4 +1,13 @@
-import { computed, Directive, ElementRef, inject, input, type OnInit, ViewContainerRef } from '@angular/core';
+import {
+  booleanAttribute,
+  computed,
+  Directive,
+  ElementRef,
+  inject,
+  input,
+  type OnInit,
+  ViewContainerRef,
+} from '@angular/core';
 
 import type { ZardDropdownMenuContentComponent } from './dropdown-menu-content.component';
 import { ZardDropdownService } from './dropdown.service';
@@ -6,11 +15,14 @@ import { ZardDropdownService } from './dropdown.service';
 @Directive({
   selector: '[z-dropdown], [zDropdown]',
   host: {
+    'data-slot': 'dropdown-menu-trigger',
     '[attr.tabindex]': '0',
     '[attr.role]': '"button"',
     '[attr.aria-haspopup]': '"menu"',
     '[attr.aria-expanded]': 'isThisDropdownOpen()',
     '[attr.aria-disabled]': 'zDisabled()',
+    '[attr.data-state]': 'isThisDropdownOpen() ? "open" : "closed"',
+    '[attr.data-disabled]': 'zDisabled() || null',
     '(click.prevent-with-stop)': 'onClick()',
     '(mouseenter)': 'onHoverToggle($event)',
     '(mouseleave)': 'onHoverToggle($event)',
@@ -30,7 +42,7 @@ export class ZardDropdownDirective implements OnInit {
 
   readonly zDropdownMenu = input<ZardDropdownMenuContentComponent>();
   readonly zTrigger = input<'click' | 'hover'>('click');
-  readonly zDisabled = input<boolean>(false);
+  readonly zDisabled = input(false, { transform: booleanAttribute });
 
   ngOnInit() {
     // Ensure button has proper accessibility attributes

@@ -99,6 +99,11 @@ export class ZardDropdownService {
     return trigger;
   }
 
+  closeAndFocusTrigger() {
+    const trigger = this.closeAndReturnTrigger();
+    trigger?.nativeElement.focus();
+  }
+
   private createOverlay(triggerElement: ElementRef) {
     if (this.overlayRef) {
       this.destroyOverlay();
@@ -191,7 +196,9 @@ export class ZardDropdownService {
     }
     const dropdownElement = this.overlayRef.overlayElement;
     return Array.from(
-      dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]'),
+      dropdownElement.querySelectorAll<HTMLElement>(
+        'z-dropdown-menu-item, [z-dropdown-menu-item], z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item], z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
+      ),
     ).filter(item => item.dataset['disabled'] === undefined);
   }
 

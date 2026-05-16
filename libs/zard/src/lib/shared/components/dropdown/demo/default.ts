@@ -2,96 +2,23 @@ import { Component } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';
-import { ZardMenuImports } from '@/shared/components/menu';
-import { ZardSeparatorComponent } from '@/shared/components/separator';
 
 @Component({
   selector: 'z-dropdown-demo',
-  imports: [ZardDropdownImports, ZardButtonComponent, ZardSeparatorComponent, ZardMenuImports],
+  imports: [ZardDropdownImports, ZardButtonComponent],
   template: `
-    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
+    <button type="button" z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open menu</button>
 
-    <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-56">
-      <z-menu-label>My Account</z-menu-label>
-
-      <z-dropdown-menu-item (click)="onProfile()">
-        Profile
-        <z-menu-shortcut>⇧⌘P</z-menu-shortcut>
-      </z-dropdown-menu-item>
-
-      <z-dropdown-menu-item (click)="onBilling()">
-        Billing
-        <z-menu-shortcut>⌘B</z-menu-shortcut>
-      </z-dropdown-menu-item>
-
-      <z-dropdown-menu-item (click)="onSettings()">
-        Settings
-        <z-menu-shortcut>⌘S</z-menu-shortcut>
-      </z-dropdown-menu-item>
-
-      <z-dropdown-menu-item (click)="onKeyboardShortcuts()">
-        Keyboard shortcuts
-        <z-menu-shortcut>⌘K</z-menu-shortcut>
-      </z-dropdown-menu-item>
-
-      <z-separator class="-mx-1 my-2" />
-
-      <z-dropdown-menu-item (click)="onTeam()">Team</z-dropdown-menu-item>
-
-      <z-dropdown-menu-item (click)="onNewTeam()">
-        New Team
-        <z-menu-shortcut>⌘+T</z-menu-shortcut>
-      </z-dropdown-menu-item>
-
-      <z-separator class="-mx-1 my-2" />
-
-      <z-dropdown-menu-item (click)="onGitHub()">GitHub</z-dropdown-menu-item>
-      <z-dropdown-menu-item (click)="onSupport()">Support</z-dropdown-menu-item>
-      <z-dropdown-menu-item [disabled]="true">API</z-dropdown-menu-item>
-
-      <z-separator class="-mx-1 my-2" />
-
-      <z-dropdown-menu-item (click)="onLogout()">
-        Log out
-        <z-menu-shortcut>⇧⌘Q</z-menu-shortcut>
-      </z-dropdown-menu-item>
+    <z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-48">
+      <z-dropdown-menu-item (click)="log('Profile')">Profile</z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Billing')">Billing</z-dropdown-menu-item>
+      <z-dropdown-menu-item (click)="log('Team')">Team</z-dropdown-menu-item>
+      <z-dropdown-menu-item [disabled]="true">Subscription</z-dropdown-menu-item>
     </z-dropdown-menu-content>
   `,
 })
 export class ZardDropdownDemoComponent {
-  onProfile() {
-    console.log('Profile clicked');
-  }
-
-  onBilling() {
-    console.log('Billing clicked');
-  }
-
-  onSettings() {
-    console.log('Settings clicked');
-  }
-
-  onKeyboardShortcuts() {
-    console.log('Keyboard shortcuts clicked');
-  }
-
-  onTeam() {
-    console.log('Team clicked');
-  }
-
-  onNewTeam() {
-    console.log('New Team clicked');
-  }
-
-  onGitHub() {
-    console.log('GitHub clicked');
-  }
-
-  onSupport() {
-    console.log('Support clicked');
-  }
-
-  onLogout() {
-    console.log('Log out clicked');
+  log(item: string) {
+    console.log(`${item} clicked`);
   }
 }
