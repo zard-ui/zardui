@@ -61,7 +61,7 @@ import { ZardTooltipDirective } from '@zard/components/tooltip';
 
       <!-- Textarea with actions -->
       <z-input-group>
-        <textarea z-textarea aria-label="Prompt" placeholder="Ask, Search or Chat..." class="min-h-0"></textarea>
+        <textarea z-textarea aria-label="Prompt" placeholder="Ask, Search or Chat..."></textarea>
         <z-input-group-addon zAlign="block-end">
           <div class="flex w-full items-center">
             <button type="button" z-button zType="outline" zShape="circle" zSize="icon-sm" aria-label="Add">

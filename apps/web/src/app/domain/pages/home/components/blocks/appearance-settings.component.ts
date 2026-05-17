@@ -6,6 +6,7 @@ import { lucideMinus, lucidePlus } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
+import { ZardFieldImports } from '@zard/components/field/field.imports';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardRadioGroupImports } from '@zard/components/radio-group/radio-group.imports';
 import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
@@ -21,6 +22,7 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
     ZardInputComponent,
     ZardSeparatorComponent,
     ZardSwitchComponent,
+    ...ZardFieldImports,
     ...ZardRadioGroupImports,
     NgIcon,
     FormsModule,
@@ -29,45 +31,38 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
   template: `
     <div class="flex flex-1 flex-col gap-6">
       <div class="flex w-full flex-1 flex-col gap-7">
-        <fieldset class="flex flex-col gap-6">
-          <legend class="mb-3 text-base font-medium">Compute Environment</legend>
-          <p class="text-muted-foreground -mt-1.5 text-sm leading-normal font-normal">
-            Select the compute environment for your cluster.
-          </p>
+        <fieldset z-field-set>
+          <legend z-field-legend>Compute Environment</legend>
+          <p z-field-description>Select the compute environment for your cluster.</p>
 
-          <z-radio-group class="gap-3" name="compute-env" [(ngModel)]="computeEnv">
-            <label
-              class="has-data-checked:bg-primary/5 has-data-checked:border-primary dark:has-data-checked:bg-primary/10 flex w-full cursor-pointer items-center gap-3 rounded-md border p-4"
-            >
-              <div class="flex flex-1 flex-col gap-1.5 leading-snug">
-                <div class="text-sm font-medium">Kubernetes</div>
-                <p class="text-muted-foreground text-sm leading-normal font-normal">
-                  Run GPU workloads on a K8s configured cluster. This is the default.
-                </p>
+          <z-radio-group name="compute-env" [(ngModel)]="computeEnv">
+            <label z-field-label for="compute-env-kubernetes">
+              <div z-field zOrientation="horizontal">
+                <div z-field-content>
+                  <div z-field-title>Kubernetes</div>
+                  <p z-field-description>Run GPU workloads on a K8s configured cluster. This is the default.</p>
+                </div>
+                <z-radio zId="compute-env-kubernetes" value="kubernetes" />
               </div>
-              <z-radio value="kubernetes" />
             </label>
-
-            <label
-              class="has-data-checked:bg-primary/5 has-data-checked:border-primary dark:has-data-checked:bg-primary/10 flex w-full cursor-pointer items-center gap-3 rounded-md border p-4"
-            >
-              <div class="flex flex-1 flex-col gap-1.5 leading-snug">
-                <div class="text-sm font-medium">Virtual Machine</div>
-                <p class="text-muted-foreground text-sm leading-normal font-normal">
-                  Access a VM configured cluster to run workloads. (Coming soon)
-                </p>
+            <label z-field-label for="compute-env-vm">
+              <div z-field zOrientation="horizontal">
+                <div z-field-content>
+                  <div z-field-title>Virtual Machine</div>
+                  <p z-field-description>Access a VM configured cluster to run workloads. (Coming soon)</p>
+                </div>
+                <z-radio zId="compute-env-vm" value="vm" />
               </div>
-              <z-radio value="vm" />
             </label>
           </z-radio-group>
         </fieldset>
 
         <z-separator class="-my-2" />
 
-        <div class="flex w-full flex-row items-center gap-3">
-          <div class="flex flex-1 flex-col gap-1.5 leading-snug">
-            <label class="text-sm font-medium" for="number-of-gpus">Number of GPUs</label>
-            <p class="text-muted-foreground text-sm leading-normal font-normal">You can add more later.</p>
+        <div z-field zOrientation="horizontal">
+          <div z-field-content>
+            <label z-field-label for="number-of-gpus">Number of GPUs</label>
+            <p z-field-description>You can add more later.</p>
           </div>
           <z-button-group>
             <input
@@ -106,12 +101,12 @@ import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 
         <z-separator class="-my-2" />
 
-        <div class="flex w-full flex-row items-center gap-3">
-          <div class="flex flex-1 flex-col gap-1.5 leading-snug">
-            <label class="text-sm font-medium" for="tinting">Wallpaper Tinting</label>
-            <p class="text-muted-foreground text-sm leading-normal font-normal">Allow the wallpaper to be tinted.</p>
+        <div z-field zOrientation="horizontal">
+          <div z-field-content>
+            <label z-field-label for="tinting">Wallpaper Tinting</label>
+            <p z-field-description>Allow the wallpaper to be tinted.</p>
           </div>
-          <z-switch zSize="sm" zId="tinting" />
+          <z-switch zId="tinting" />
         </div>
       </div>
     </div>

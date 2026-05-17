@@ -8,11 +8,12 @@ import { ZardSeparatorComponent } from '@zard/components/separator/separator.com
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ZardSeparatorComponent],
   template: `
-    <div class="relative my-4 h-5 text-sm">
-      <z-separator class="absolute inset-0 -top-1.25" />
-      <span class="bg-background text-muted-foreground relative mx-auto block w-fit px-2">
+    <div class="flex items-center gap-3 text-sm">
+      <z-separator class="flex-1" />
+      <span class="text-muted-foreground whitespace-nowrap">
         <ng-content />
       </span>
+      <z-separator class="flex-1" />
     </div>
   `,
 })

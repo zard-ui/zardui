@@ -21,7 +21,7 @@ import { HeroDefaultContentComponent } from './hero-default-content.component';
     HeroDefaultContentComponent,
   ],
   template: `
-    <div class="container-wrapper section-soft flex-1 pb-6">
+    <div class="container-wrapper flex-1 pb-6">
       <div class="container overflow-hidden">
         <section class="flex flex-col gap-6 *:w-full *:max-w-full md:hidden">
           <z-block-empty-avatar-group />
