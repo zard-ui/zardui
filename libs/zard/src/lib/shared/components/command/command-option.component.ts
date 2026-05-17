@@ -40,6 +40,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         (keydown.{enter,space}.prevent)="onClick()"
         (mouseenter)="onMouseEnter()"
       >
+        <ng-content select="[data-slot=command-option-leading]" />
         @if (zIcon()) {
           <ng-icon [name]="zIcon()!" />
         }
@@ -47,6 +48,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
         @if (zShortcut()) {
           <span [class]="shortcutClasses()" data-slot="command-shortcut">{{ zShortcut() }}</span>
         }
+        <ng-content select="[data-slot=command-option-trailing]" />
       </div>
     }
   `,
