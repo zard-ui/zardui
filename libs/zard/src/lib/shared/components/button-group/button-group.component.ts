@@ -30,7 +30,9 @@ import { type ZardSeparatorVariants } from '../separator/separator.variants';
   encapsulation: ViewEncapsulation.None,
   host: {
     role: 'group',
+    'data-slot': 'button-group',
     '[class]': 'classes()',
+    '[attr.data-orientation]': 'zOrientation()',
     '[attr.aria-orientation]': 'zOrientation()',
   },
   exportAs: 'zButtonGroup',
@@ -59,6 +61,7 @@ export class ZardButtonGroupComponent {
   encapsulation: ViewEncapsulation.None,
   host: {
     class: 'contents',
+    'data-slot': 'button-group-separator',
   },
   exportAs: 'zButtonGroupDivider',
 })
@@ -92,6 +95,7 @@ export class ZardButtonGroupDividerComponent {
 @Directive({
   selector: '[z-button-group-text]',
   host: {
+    'data-slot': 'button-group-text',
     '[class]': 'classes()',
   },
   exportAs: 'zButtonGroupText',
