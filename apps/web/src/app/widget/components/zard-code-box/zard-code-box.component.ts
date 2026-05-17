@@ -6,11 +6,12 @@ import { CodeBlockComponent } from '@highlight/components/code-block/code-block.
 import { CopyButtonComponent } from '@highlight/components/copy-button/copy-button.component';
 import type { CodeBlockData } from '@highlight/types';
 
+import { ProseDirective } from '@doc/domain/directives/prose.directive';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 
 @Component({
   selector: 'z-code-box',
-  imports: [NgComponentOutlet, HyphenToSpacePipe, CodeBlockComponent, CopyButtonComponent],
+  imports: [NgComponentOutlet, HyphenToSpacePipe, CodeBlockComponent, CopyButtonComponent, ProseDirective],
   templateUrl: './zard-code-box.component.html',
   encapsulation: ViewEncapsulation.None,
 })

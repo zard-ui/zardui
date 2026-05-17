@@ -35,7 +35,7 @@ export const TOGGLE = {
   examples: [
     {
       name: 'outline',
-      description: 'Use zType="outline" for an outline style.',
+      description: 'Use `zType="outline"` for an outline style.',
       component: ZardDemoToggleOutlineComponent,
       codeData: TOGGLE_DEMO_OUTLINE,
     },
@@ -46,7 +46,7 @@ export const TOGGLE = {
     },
     {
       name: 'size',
-      description: 'Use the zSize input to change the size of the toggle.',
+      description: 'Use the `zSize` input to change the size of the toggle.',
       component: ZardDemoToggleSizeComponent,
       codeData: TOGGLE_DEMO_SIZE,
     },

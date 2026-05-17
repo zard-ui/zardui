@@ -8,9 +8,7 @@
     </h3>
   }
   @if (demoDescription()) {
-    <p class="my-4 leading-relaxed first-letter:uppercase">
-      {{ demoDescription()! }}
-    </p>
+    <p class="my-4 leading-relaxed text-pretty first-letter:uppercase" [prose]="demoDescription()"></p>
   }
 
   @if (fullScreen()) {

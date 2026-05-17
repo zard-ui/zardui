@@ -38,25 +38,25 @@ export const TOGGLE_GROUP = {
   examples: [
     {
       name: 'outline',
-      description: 'Use zType="outline" for an outline style.',
+      description: 'Use `zType="outline"` for an outline style.',
       component: ToggleGroupOutlineComponent,
       codeData: TOGGLE_GROUP_DEMO_OUTLINE,
     },
     {
       name: 'size',
-      description: 'Use the zSize to change the size of the toggle group.',
+      description: 'Use the `zSize` to change the size of the toggle group.',
       component: ToggleGroupSizesComponent,
       codeData: TOGGLE_GROUP_DEMO_SIZES,
     },
     {
       name: 'spacing',
-      description: 'Use zSpacing to add spacing between toggle group items.',
+      description: 'Use `zSpacing` to add spacing between toggle group items.',
       component: ToggleGroupSpacingComponent,
       codeData: TOGGLE_GROUP_DEMO_SPACING,
     },
     {
       name: 'vertical',
-      description: 'Use zOrientation="vertical" for vertical toggle groups.',
+      description: 'Use `zOrientation="vertical"` for vertical toggle groups.',
       component: ToggleGroupVerticalComponent,
       codeData: TOGGLE_GROUP_DEMO_VERTICAL,
     },

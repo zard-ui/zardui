@@ -37,26 +37,27 @@ export const CHECKBOX = {
   examples: [
     {
       name: 'invalid',
-      description: 'Set aria-invalid on the checkbox and data-invalid on the field wrapper to show the invalid styles.',
+      description:
+        'Set `aria-invalid` on the checkbox and `data-invalid` on the field wrapper to show the invalid styles.',
       component: ZardDemoCheckboxInvalidComponent,
       codeData: CHECKBOX_DEMO_INVALID,
     },
     {
       name: 'basic',
-      description: 'Pair the checkbox with Field and FieldLabel for proper layout and labeling.',
+      description: 'Pair the checkbox with `Field` and `FieldLabel` for proper layout and labeling.',
       component: ZardDemoCheckboxBasicComponent,
       codeData: CHECKBOX_DEMO_BASIC,
     },
     {
       name: 'description',
-      description: 'Use FieldContent and FieldDescription for helper text.',
+      description: 'Use `FieldContent` and `FieldDescription` for helper text.',
       component: ZardDemoCheckboxDescriptionComponent,
       codeData: CHECKBOX_DEMO_DESCRIPTION,
     },
     {
       name: 'disabled',
       description:
-        'Use the disabled prop to prevent interaction and add the data-disabled attribute to the Field component for disabled styles.',
+        'Use the `disabled` prop to prevent interaction and add the `data-disabled` attribute to the `Field` component for disabled styles.',
       component: ZardDemoCheckboxDisabledComponent,
       codeData: CHECKBOX_DEMO_DISABLED,
     },
@@ -68,7 +69,7 @@ export const CHECKBOX = {
     },
     {
       name: 'table',
-      description: 'Combine the checkbox with the Table component for selectable rows.',
+      description: 'Combine the checkbox with the `Table` component for selectable rows.',
       component: ZardDemoCheckboxTableComponent,
       codeData: CHECKBOX_DEMO_TABLE,
     },

@@ -36,31 +36,31 @@ export const RADIO_GROUP = {
   examples: [
     {
       name: 'description',
-      description: 'Radio group items with a description using the Field component.',
+      description: 'Radio group items with a description using the `Field` component.',
       component: ZardDemoRadioGroupDescriptionComponent,
       codeData: RADIO_GROUP_DEMO_DESCRIPTION,
     },
     {
       name: 'choice-card',
-      description: 'Use FieldLabel to wrap the entire Field for a clickable card-style selection.',
+      description: 'Use `FieldLabel` to wrap the entire `Field` for a clickable card-style selection.',
       component: ZardDemoRadioGroupChoiceCardComponent,
       codeData: RADIO_GROUP_DEMO_CHOICE_CARD,
     },
     {
       name: 'fieldset',
-      description: 'Use FieldSet and FieldLegend to group radio items with a label and description.',
+      description: 'Use `FieldSet` and `FieldLegend` to group radio items with a label and description.',
       component: ZardDemoRadioGroupFieldsetComponent,
       codeData: RADIO_GROUP_DEMO_FIELDSET,
     },
     {
       name: 'disabled',
-      description: 'Use the disabled prop on RadioGroupItem to disable individual items.',
+      description: 'Use the `disabled` prop on `RadioGroupItem` to disable individual items.',
       component: ZardDemoRadioGroupDisabledComponent,
       codeData: RADIO_GROUP_DEMO_DISABLED,
     },
     {
       name: 'invalid',
-      description: 'Use aria-invalid on RadioGroupItem and data-invalid on Field to show validation errors.',
+      description: 'Use `aria-invalid` on `RadioGroupItem` and `data-invalid` on `Field` to show validation errors.',
       component: ZardDemoRadioGroupInvalidComponent,
       codeData: RADIO_GROUP_DEMO_INVALID,
     },

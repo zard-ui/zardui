@@ -40,27 +40,27 @@ export const SWITCH = {
     },
     {
       name: 'choice-card',
-      description: 'Card-style selection where FieldLabel wraps the entire Field for a clickable card pattern.',
+      description: 'Card-style selection where `FieldLabel` wraps the entire `Field` for a clickable card pattern.',
       component: ZardDemoSwitchChoiceCardComponent,
       codeData: SWITCH_DEMO_CHOICE_CARD,
     },
     {
       name: 'disabled',
       description:
-        'Add the zDisabled prop to the Switch component to disable the switch. Add the data-disabled prop to the Field component for styling.',
+        'Add the `zDisabled` prop to the `Switch` component to disable the switch. Add the `data-disabled` prop to the `Field` component for styling.',
       component: ZardDemoSwitchDisabledComponent,
       codeData: SWITCH_DEMO_DISABLED,
     },
     {
       name: 'invalid',
       description:
-        'Add the zInvalid prop to the Switch component to indicate an invalid state. Add the data-invalid prop to the Field component for styling.',
+        'Add the `zInvalid` prop to the `Switch` component to indicate an invalid state. Add the `data-invalid` prop to the `Field` component for styling.',
       component: ZardDemoSwitchInvalidComponent,
       codeData: SWITCH_DEMO_INVALID,
     },
     {
       name: 'size',
-      description: 'Use the zSize prop to change the size of the switch.',
+      description: 'Use the `zSize` prop to change the size of the switch.',
       component: ZardDemoSwitchSizeComponent,
       codeData: SWITCH_DEMO_SIZE,
     },
