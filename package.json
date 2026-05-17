@@ -161,7 +161,7 @@
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "tsup": "^8.5.1",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.1",
     "typescript": "5.9.3",
     "typescript-eslint": "^8.59.2",
     "verdaccio": "^6.6.0"
