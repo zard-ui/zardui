@@ -4,13 +4,19 @@ import { RouterModule } from '@angular/router';
 
 import { SeoService } from '@doc/shared/services/seo.service';
 
-import { NewHeroComponent } from './sections/hero/hero.component';
+import { HeroExamplesGridComponent } from './components/hero-examples-grid.component';
+import { HeroHeaderComponent } from './components/hero-header.component';
 
 @Component({
   selector: 'z-home',
-  imports: [RouterModule, NewHeroComponent],
+  imports: [RouterModule, HeroHeaderComponent, HeroExamplesGridComponent],
   template: `
-    <z-new-hero></z-new-hero>
+    <main class="flex flex-1 flex-col">
+      <div class="flex flex-1 flex-col">
+        <z-hero-header />
+        <z-hero-examples-grid />
+      </div>
+    </main>
   `,
 })
 export class HomePage implements OnInit {

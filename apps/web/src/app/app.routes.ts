@@ -12,15 +12,6 @@ export const appRoutes: Route[] = [
       {
         path: '',
         loadComponent: () => import('./domain/pages/home/home.page').then(c => c.HomePage),
-        children: [
-          {
-            path: '',
-            loadComponent: () =>
-              import('./domain/pages/home/sections/hero/components/hero-default-content.component').then(
-                c => c.HeroDefaultContentComponent,
-              ),
-          },
-        ],
       },
     ],
   },
