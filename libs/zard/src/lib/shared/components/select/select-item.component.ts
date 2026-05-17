@@ -20,7 +20,6 @@ import {
   selectItemStateVariants,
   selectItemVariants,
   type ZardSelectItemModeVariants,
-  type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
@@ -84,19 +83,12 @@ export class ZardSelectItemComponent {
   });
 
   readonly zMode = signal<ZardSelectItemModeVariants>('normal');
-  readonly zSize = signal<ZardSelectSizeVariants>('default');
 
   protected readonly classes = computed(() =>
-    mergeClasses(
-      selectItemVariants({ zMode: this.zMode(), zSize: this.zSize() }),
-      selectItemStateVariants(),
-      this.class(),
-    ),
+    mergeClasses(selectItemVariants({ zMode: this.zMode() }), selectItemStateVariants(), this.class()),
   );
 
-  protected readonly iconClasses = computed(() =>
-    mergeClasses(selectItemIconVariants({ zMode: this.zMode(), zSize: this.zSize() })),
-  );
+  protected readonly iconClasses = computed(() => mergeClasses(selectItemIconVariants({ zMode: this.zMode() })));
 
   protected readonly strokeWidth = computed(() => (this.zMode() === 'compact' ? 3 : 2));
 

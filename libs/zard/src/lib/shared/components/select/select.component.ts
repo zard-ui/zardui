@@ -53,7 +53,6 @@ import {
   selectViewportVariants,
   type ZardSelectAlignVariants,
   type ZardSelectPositionVariants,
-  type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -71,7 +70,6 @@ let nextSelectId = 0;
       type="button"
       role="combobox"
       data-slot="select-trigger"
-      [attr.data-size]="zSize()"
       [class]="triggerClasses()"
       [disabled]="disabledState()"
       [attr.aria-controls]="isOpen() ? listboxId : null"
@@ -98,7 +96,7 @@ let nextSelectId = 0;
           <span class="text-muted-foreground truncate">{{ zPlaceholder() }}</span>
         }
       </span>
-      <ng-icon name="lucideChevronDown" class="size-4! opacity-50" />
+      <ng-icon name="lucideChevronDown" class="text-muted-foreground size-4!" />
     </button>
 
     <ng-template #dropdownTemplate>
@@ -212,8 +210,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   readonly zMaxLabelCount = input(1, { transform: numberAttribute });
   readonly zMultiple = input(false, { transform: booleanAttribute });
   readonly zPlaceholder = input<string>('Select an option...');
-  readonly zPosition = input<ZardSelectPositionVariants>('popper');
-  readonly zSize = input<ZardSelectSizeVariants>('default');
+  readonly zPosition = input<ZardSelectPositionVariants>('item-aligned');
   readonly zValue = model<string | string[]>(this.zMultiple() ? [] : '');
 
   readonly zSelectionChange = output<string | string[]>();
@@ -304,24 +301,8 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   );
 
   protected readonly triggerClasses = computed(() =>
-    mergeClasses(
-      selectTriggerVariants({
-        zSize: this.zSize(),
-      }),
-      this.zMultiple() && this.multiselectTriggerClasses(),
-    ),
+    mergeClasses(selectTriggerVariants({}), this.zMultiple() && 'h-auto min-h-8 py-1'),
   );
-
-  private multiselectTriggerClasses(): string {
-    switch (this.zSize()) {
-      case 'sm':
-        return 'h-auto min-h-8 py-1';
-      case 'lg':
-        return 'h-auto min-h-10 py-2';
-      default:
-        return 'h-auto min-h-9 py-1.5';
-    }
-  }
 
   ngOnDestroy() {
     this.stopScrollOptions();
@@ -442,7 +423,6 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
         selectItem: (value: string, label: string) => this.selectItem(value, label),
         navigateTo: () => this.navigateTo(item, index),
       });
-      item.zSize.set(this.zSize());
       item.zMode.set(isCompact ? 'compact' : 'normal');
     }
   }

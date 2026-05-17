@@ -6,7 +6,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
   selector: 'z-demo-select-scrollable',
   imports: [ZardSelectImports],
   template: `
-    <z-select class="w-75" zPlaceholder="Select a timezone" zPosition="popper" [(zValue)]="selectedTimezone">
+    <z-select class="w-full min-w-64" zPlaceholder="Select a timezone" zPosition="popper" [(zValue)]="selectedTimezone">
       <z-select-group>
         <z-select-label>North America</z-select-label>
         <z-select-item zValue="est">Eastern Standard Time (EST)</z-select-item>
