@@ -192,6 +192,7 @@
         "dropdown.component.ts",
         "dropdown-item.component.ts",
         "dropdown-menu-content.component.ts",
+        "dropdown-primitives.component.ts",
         "dropdown-trigger.directive.ts",
         "dropdown.imports.ts",
         "dropdown.service.ts",

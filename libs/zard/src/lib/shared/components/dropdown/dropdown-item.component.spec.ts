@@ -10,17 +10,35 @@ import { ZardDropdownService } from './dropdown.service';
 @Component({
   imports: [ZardDropdownMenuItemComponent],
   template: `
-    <z-dropdown-menu-item [variant]="variant" [inset]="inset" [disabled]="disabled">
+    <z-dropdown-menu-item
+      [variant]="variant"
+      [zType]="zType"
+      [inset]="inset"
+      [zInset]="zInset"
+      [disabled]="disabled"
+      [zDisabled]="zDisabled"
+    >
       {{ text }}
     </z-dropdown-menu-item>
   `,
 })
 class TestComponent {
   variant: 'default' | 'destructive' = 'default';
+  zType: 'default' | 'destructive' | undefined = undefined;
   inset = false;
+  zInset: boolean | undefined = undefined;
   disabled = false;
+  zDisabled: boolean | undefined = undefined;
   text = 'Test Item';
 }
+
+@Component({
+  imports: [ZardDropdownMenuItemComponent],
+  template: `
+    <button z-dropdown-menu-item variant="destructive" inset disabled>Delete project</button>
+  `,
+})
+class AttributeSelectorTestComponent {}
 
 describe('ZardDropdownMenuItemComponent', () => {
   let component: TestComponent;
@@ -30,6 +48,7 @@ describe('ZardDropdownMenuItemComponent', () => {
   beforeEach(async () => {
     const mockDropdownService = {
       close: jest.fn(),
+      closeAndFocusTrigger: jest.fn(),
       isOpen: jest.fn().mockReturnValue(false),
       toggle: jest.fn(),
     } as unknown as jest.Mocked<ZardDropdownService>;
@@ -64,6 +83,7 @@ describe('ZardDropdownMenuItemComponent', () => {
       expect(itemElement).toBeTruthy();
       expect(itemElement).toHaveAttribute('role', 'menuitem');
       expect(itemElement).toHaveAttribute('tabindex', '-1');
+      expect(itemElement).toHaveAttribute('data-slot', 'dropdown-menu-item');
     });
 
     it('displays text content', () => {
@@ -124,16 +144,16 @@ describe('ZardDropdownMenuItemComponent', () => {
   });
 
   describe('Click handling', () => {
-    it('calls dropdownService.close() on click when enabled', fakeAsync(() => {
+    it('calls dropdownService.closeAndFocusTrigger() on click when enabled', fakeAsync(() => {
       const itemDebugElement = fixture.debugElement.children[0];
       const itemComponent = itemDebugElement.componentInstance as ZardDropdownMenuItemComponent;
       itemComponent.onClick();
       flush();
 
-      expect(dropdownService.close).toHaveBeenCalled();
+      expect(dropdownService.closeAndFocusTrigger).toHaveBeenCalled();
     }));
 
-    it('does not call dropdownService.close() on click when disabled', () => {
+    it('does not call dropdownService.closeAndFocusTrigger() on click when disabled', () => {
       component.disabled = true;
       fixture.detectChanges();
 
@@ -141,7 +161,26 @@ describe('ZardDropdownMenuItemComponent', () => {
       const itemComponent = itemDebugElement.componentInstance as ZardDropdownMenuItemComponent;
       itemComponent.onClick();
 
-      expect(dropdownService.close).not.toHaveBeenCalled();
+      expect(dropdownService.closeAndFocusTrigger).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('Z-prefixed inputs', () => {
+    it('prefers z-prefixed item inputs over legacy inputs', () => {
+      component.variant = 'default';
+      component.zType = 'destructive';
+      component.inset = false;
+      component.zInset = true;
+      component.disabled = false;
+      component.zDisabled = true;
+      fixture.detectChanges();
+
+      const itemElement = fixture.nativeElement.querySelector('z-dropdown-menu-item');
+
+      expect(itemElement).toHaveAttribute('data-variant', 'destructive');
+      expect(itemElement).toHaveAttribute('data-inset');
+      expect(itemElement).toHaveAttribute('data-disabled');
+      expect(itemElement).toHaveAttribute('aria-disabled', 'true');
     });
   });
 
@@ -190,5 +229,30 @@ describe('ZardDropdownMenuItemComponent standalone', () => {
 
     const element = fixture.nativeElement;
     expect(element).toHaveClass('custom-class');
+  });
+});
+
+describe('ZardDropdownMenuItemComponent attribute selector', () => {
+  let fixture: ComponentFixture<AttributeSelectorTestComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AttributeSelectorTestComponent],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(AttributeSelectorTestComponent);
+    fixture.detectChanges();
+  });
+
+  it('sets shadcn-aligned state attributes on attribute selector hosts', () => {
+    const itemElement = fixture.nativeElement.querySelector('[z-dropdown-menu-item]');
+
+    expect(itemElement).toHaveAttribute('role', 'menuitem');
+    expect(itemElement).toHaveAttribute('tabindex', '-1');
+    expect(itemElement).toHaveAttribute('data-slot', 'dropdown-menu-item');
+    expect(itemElement).toHaveAttribute('data-variant', 'destructive');
+    expect(itemElement).toHaveAttribute('data-inset');
+    expect(itemElement).toHaveAttribute('data-disabled');
+    expect(itemElement).toHaveAttribute('aria-disabled', 'true');
   });
 });
