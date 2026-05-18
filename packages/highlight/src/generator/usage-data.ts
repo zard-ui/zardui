@@ -34,9 +34,15 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   breadcrumb: {
     importCode: `import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';`,
     templateCode: `<z-breadcrumb>
-  <z-breadcrumb-item label="Home" url="/"></z-breadcrumb-item>
-  <z-breadcrumb-item label="Components" url="/docs/components"></z-breadcrumb-item>
-  <z-breadcrumb-item label="Breadcrumb"></z-breadcrumb-item>
+  <z-breadcrumb-item>
+    <a z-breadcrumb-link routerLink="/">Home</a>
+  </z-breadcrumb-item>
+  <z-breadcrumb-item>
+    <a z-breadcrumb-link routerLink="/docs/components">Components</a>
+  </z-breadcrumb-item>
+  <z-breadcrumb-item>
+    <span z-breadcrumb-page>Breadcrumb</span>
+  </z-breadcrumb-item>
 </z-breadcrumb>`,
   },
   button: {
