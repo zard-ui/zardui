@@ -34,8 +34,6 @@ export class BlocksPage implements OnInit {
     { label: 'Sidebar', route: '/blocks/sidebar' },
     { label: 'Login', route: '/blocks/login' },
     { label: 'Signup', route: '/blocks/signup' },
-    { label: 'OTP', route: '/blocks/otp' },
-    { label: 'Calendar', route: '/blocks/calendar' },
   ];
 
   ngOnInit(): void {

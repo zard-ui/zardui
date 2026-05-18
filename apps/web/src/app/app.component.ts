@@ -45,8 +45,14 @@ export class AppComponent {
   private readonly viewportScroller = inject(ViewportScroller);
 
   private scrollTimeoutId: number | null = null;
-  private readonly currentUrl = signal(this.router.url);
+  private readonly currentUrl = signal(this.resolveInitialUrl());
   protected readonly isPreviewRoute = computed(() => this.currentUrl().startsWith(PREVIEW_URL_PREFIX));
+
+  private resolveInitialUrl(): string {
+    const pathname = this.document.location?.pathname;
+    if (pathname) return pathname;
+    return this.router.url || '/';
+  }
 
   constructor() {
     this.router.events
