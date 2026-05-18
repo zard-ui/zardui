@@ -1,7 +1,16 @@
 import { isPlatformBrowser, ViewportScroller } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, DOCUMENT, inject, PLATFORM_ID } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  DestroyRef,
+  DOCUMENT,
+  inject,
+  PLATFORM_ID,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { Router, RouterModule, Scroll } from '@angular/router';
+import { NavigationEnd, Router, RouterModule, Scroll } from '@angular/router';
 
 import { inject as injectAnalytics } from '@vercel/analytics';
 import { injectSpeedInsights } from '@vercel/speed-insights';
@@ -12,14 +21,19 @@ import { HeaderComponent } from '@doc/domain/components/header/header.component'
 import { getHeaderOffset } from '@doc/domain/directives/scroll-spy.directive';
 
 const LOADING_TIMEOUT = 1000;
+const PREVIEW_URL_PREFIX = '/blocks/preview/';
 
 @Component({
   imports: [RouterModule, HeaderComponent, FooterComponent],
   selector: 'z-root',
   template: `
-    <z-header></z-header>
+    @if (!isPreviewRoute()) {
+      <z-header></z-header>
+    }
     <router-outlet></router-outlet>
-    <z-footer></z-footer>
+    @if (!isPreviewRoute()) {
+      <z-footer></z-footer>
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -31,8 +45,17 @@ export class AppComponent {
   private readonly viewportScroller = inject(ViewportScroller);
 
   private scrollTimeoutId: number | null = null;
+  private readonly currentUrl = signal(this.router.url);
+  protected readonly isPreviewRoute = computed(() => this.currentUrl().startsWith(PREVIEW_URL_PREFIX));
 
   constructor() {
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(e => this.currentUrl.set(e.urlAfterRedirects));
+
     if (isPlatformBrowser(this.platformId)) {
       injectAnalytics();
       injectSpeedInsights();
