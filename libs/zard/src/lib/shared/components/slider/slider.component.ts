@@ -36,7 +36,7 @@ import {
 } from './slider.variants';
 
 type OnTouchedType = () => void;
-type OnChangeType = (value: number | number[]) => void;
+type OnChangeType = (value: number[]) => void;
 
 @Component({
   selector: 'z-slider-track',
@@ -99,7 +99,11 @@ export class ZSliderRangeComponent {
     const make = (left: string, right: string) =>
       isHorizontal ? { left, right, bottom: null, top: null } : { left: null, right: null, bottom: left, top: right };
 
-    if (p.length <= 1) {
+    if (p.length === 0) {
+      return [make('0', '100%')];
+    }
+
+    if (p.length === 1) {
       return [make('0', 100 - p[0] + '%')];
     }
 
@@ -283,7 +287,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
             const [userMin, userMax] = [this.zMin(), this.zMax()];
             clickValue = userMin + (userMax - userMin) * clickPercentage;
           } else {
-            clickValue = clamp(clickPercentage * 100, this.getMinMax() as [number, number]);
+            clickValue = clamp(clickPercentage * 100, this.getMinMax());
           }
 
           const currentValues = this.values();
@@ -404,7 +408,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       this.zSlideIndexChange.emit(currentValues);
       this.lastEmittedValue.set(currentValues);
       this.values.set(currentValues);
-      this.onChange(currentValues.length > 1 ? currentValues : newValue);
+      this.onChange(currentValues);
     }
   }
 
@@ -437,7 +441,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
       this.zSlideIndexChange.emit(currentValues);
       this.lastEmittedValue.set(currentValues);
       this.values.set(currentValues);
-      this.onChange(currentValues.length > 1 ? currentValues : value);
+      this.onChange(currentValues);
     }
   }
 
@@ -464,7 +468,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
     for (let i = 0; i < count; i++) {
       const def = clamp(defaults[i] ?? min, [min, max]);
       const raw = rawValues[i];
-      const value = raw !== undefined && raw !== -1 && raw >= min && raw <= max ? raw : def;
+      const value = raw !== undefined && raw >= min && raw <= max ? raw : def;
       values.push(roundToStep(value, min, step));
     }
 
@@ -473,7 +477,7 @@ export class ZardSliderComponent implements ControlValueAccessor, AfterViewInit 
     this.thumbOffset.set(0);
   }
 
-  private getMinMax(): number[] {
+  private getMinMax(): [number, number] {
     return [Math.max(this.zMin(), 0), Math.min(this.zMax(), 100)];
   }
 }

@@ -19,7 +19,7 @@ import { ZardSliderComponent } from '../slider.component';
         zMin="0"
         zMax="1"
         zStep="0.1"
-        [zDefault]="value()"
+        [zValue]="value()"
         (zSlideIndexChange)="onSlide($event)"
       />
     </div>
