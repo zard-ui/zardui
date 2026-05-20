@@ -1,6 +1,7 @@
 <section class="mb-10">
   @if (componentType()) {
     <h3
+      anchor
       class="font-heading mt-4 scroll-m-28 text-lg font-medium tracking-tight first-letter:uppercase"
       [class.mb-4]="!demoDescription()"
     >
@@ -8,9 +9,7 @@
     </h3>
   }
   @if (demoDescription()) {
-    <p class="my-4 leading-relaxed first-letter:uppercase">
-      {{ demoDescription()! }}
-    </p>
+    <p class="my-4 leading-relaxed text-pretty first-letter:uppercase" [prose]="demoDescription()"></p>
   }
 
   @if (fullScreen()) {

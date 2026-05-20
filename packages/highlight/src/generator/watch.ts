@@ -4,39 +4,63 @@ import path from 'node:path';
 import { generateSingleDemo } from './demo-writer';
 
 const COMPONENTS_PATH = path.resolve('libs/zard/src/lib/shared/components');
+const DEBOUNCE_MS = 300;
 
-let debounceTimer: ReturnType<typeof setTimeout> | null = null;
-const DEBOUNCE_MS = 3000;
+type Timer = ReturnType<typeof setTimeout>;
 
 export function startWatcher(onInstallationChange: () => Promise<void>): void {
   console.log('👀 Watching for file changes...\n');
 
-  fs.watch(COMPONENTS_PATH, { persistent: true, recursive: true }, (eventType, fileName) => {
-    if (eventType !== 'change' || !fileName) return;
+  const demoTimers = new Map<string, Timer>();
+  let installationTimer: Timer | null = null;
 
-    const isDemoFile = fileName.includes('demo') && fileName.endsWith('.ts');
-    const isComponentFile = fileName.endsWith('.component.ts') || fileName.endsWith('.variants.ts');
+  const scheduleDemo = (fullPath: string, fileName: string) => {
+    const existing = demoTimers.get(fullPath);
+    if (existing) clearTimeout(existing);
+
+    demoTimers.set(
+      fullPath,
+      setTimeout(() => {
+        demoTimers.delete(fullPath);
+        console.log(`📝 ${fileName} changed — regenerating demo...`);
+        generateSingleDemo(fullPath)
+          .then(() => console.log('✅ Demo updated\n'))
+          .catch(err => console.error('❌ Demo regeneration failed:', err));
+      }, DEBOUNCE_MS),
+    );
+  };
+
+  const scheduleInstallation = (fileName: string) => {
+    if (installationTimer) clearTimeout(installationTimer);
+
+    installationTimer = setTimeout(() => {
+      installationTimer = null;
+      console.log(`🔧 ${fileName} changed — regenerating installation guides...`);
+      onInstallationChange()
+        .then(() => console.log('✅ Installation guides updated\n'))
+        .catch(err => console.error('❌ Installation regeneration failed:', err));
+    }, DEBOUNCE_MS);
+  };
+
+  fs.watch(COMPONENTS_PATH, { persistent: true, recursive: true }, (eventType, fileName) => {
+    if (!fileName) return;
+    if (eventType !== 'change' && eventType !== 'rename') return;
+
+    const normalized = fileName.replace(/\\/g, '/');
+    const isDemoFile = normalized.includes('/demo/') && normalized.endsWith('.ts');
+    const isComponentFile = normalized.endsWith('.component.ts') || normalized.endsWith('.variants.ts');
 
     if (!isDemoFile && !isComponentFile) return;
 
-    if (debounceTimer) return;
-    debounceTimer = setTimeout(() => {
-      debounceTimer = null;
-    }, DEBOUNCE_MS);
+    const fullPath = path.join(COMPONENTS_PATH, fileName);
+    if (!fs.existsSync(fullPath)) return;
 
     if (isDemoFile) {
-      const fullPath = path.join(COMPONENTS_PATH, fileName);
-      console.log(`📝 ${fileName} changed — regenerating demo...`);
-      generateSingleDemo(fullPath).then(() => {
-        console.log('✅ Demo updated\n');
-      });
+      scheduleDemo(fullPath, normalized);
     }
 
     if (isComponentFile) {
-      console.log(`🔧 ${fileName} changed — regenerating installation guides...`);
-      onInstallationChange().then(() => {
-        console.log('✅ Installation guides updated\n');
-      });
+      scheduleInstallation(normalized);
     }
   });
 }

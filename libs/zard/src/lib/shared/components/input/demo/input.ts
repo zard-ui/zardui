@@ -56,40 +56,40 @@ export const INPUT = {
     },
     {
       name: 'field',
-      description: 'Use Field, FieldLabel, and FieldDescription to create an input with a label and description.',
+      description: 'Use `Field`, `FieldLabel`, and `FieldDescription` to create an input with a label and description.',
       component: ZardDemoInputFieldComponent,
       codeData: INPUT_DEMO_FIELD,
     },
     {
       name: 'field-group',
-      description: 'Use FieldGroup to show multiple Field blocks and to build forms.',
+      description: 'Use `FieldGroup` to show multiple `Field` blocks and to build forms.',
       component: ZardDemoInputFieldGroupComponent,
       codeData: INPUT_DEMO_FIELD_GROUP,
     },
     {
       name: 'disabled',
       description:
-        'Use the disabled prop to disable the input. To style the disabled state, add the data-disabled attribute to the Field component.',
+        'Use the `disabled` prop to disable the input. To style the disabled state, add the `data-disabled` attribute to the `Field` component.',
       component: ZardDemoInputDisabledComponent,
       codeData: INPUT_DEMO_DISABLED,
     },
     {
       name: 'invalid',
       description:
-        'Use the aria-invalid prop to mark the input as invalid. To style the invalid state, add the data-invalid attribute to the Field component.',
+        'Use the `aria-invalid` prop to mark the input as invalid. To style the invalid state, add the `data-invalid` attribute to the `Field` component.',
       component: ZardDemoInputInvalidComponent,
       codeData: INPUT_DEMO_INVALID,
     },
     {
       name: 'file',
-      description: 'Use the type="file" prop to create a file input.',
+      description: 'Use the `type="file"` prop to create a file input.',
       component: ZardDemoInputFileComponent,
       codeData: INPUT_DEMO_FILE,
     },
     {
       name: 'inline',
       description:
-        'Use Field with orientation="horizontal" to create an inline input. Pair with Button to create a search input with a button.',
+        'Use `Field` with `orientation="horizontal"` to create an inline input. Pair with `Button` to create a search input with a button.',
       component: ZardDemoInputInlineComponent,
       codeData: INPUT_DEMO_INLINE,
     },
@@ -101,27 +101,27 @@ export const INPUT = {
     },
     {
       name: 'required',
-      description: 'Use the required attribute to indicate required inputs.',
+      description: 'Use the `required` attribute to indicate required inputs.',
       component: ZardDemoInputRequiredComponent,
       codeData: INPUT_DEMO_REQUIRED,
     },
     {
       name: 'badge',
-      description: 'Use Badge in the label to highlight a recommended field.',
+      description: 'Use `Badge` in the label to highlight a recommended field.',
       component: ZardDemoInputBadgeComponent,
       codeData: INPUT_DEMO_BADGE,
     },
     {
       name: 'input-group',
       description:
-        'To add icons, text, or buttons inside an input, use the InputGroup component. See the Input Group component for more examples.',
+        'To add icons, text, or buttons inside an input, use the `InputGroup` component. See the Input Group component for more examples.',
       component: ZardDemoInputInputGroupComponent,
       codeData: INPUT_DEMO_INPUT_GROUP,
     },
     {
       name: 'button-group',
       description:
-        'To add buttons to an input, use the ButtonGroup component. See the Button Group component for more examples.',
+        'To add buttons to an input, use the `ButtonGroup` component. See the Button Group component for more examples.',
       component: ZardDemoInputButtonGroupComponent,
       codeData: INPUT_DEMO_BUTTON_GROUP,
     },

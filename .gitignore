@@ -91,3 +91,8 @@ nx-native-file-cache-*
 
 # Beads / Dolt files (added by bd init)
 .beads-credential-key
+
+# Local env
+.env
+.env.local
+.env.*.local

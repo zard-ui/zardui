@@ -30,13 +30,13 @@ export const RESIZABLE = {
   examples: [
     {
       name: 'vertical',
-      description: 'Use zLayout="vertical" for vertical resizing.',
+      description: 'Use `zLayout="vertical"` for vertical resizing.',
       component: ZardDemoResizableVerticalComponent,
       codeData: RESIZABLE_DEMO_VERTICAL,
     },
     {
       name: 'with-handle',
-      description: 'Use the "zWithHandle" input on "z-resizable-handle" to show a visible handle.',
+      description: 'Use the `zWithHandle` input on `z-resizable-handle` to show a visible handle.',
       component: ZardDemoResizableWithHandleComponent,
       codeData: RESIZABLE_DEMO_WITH_HANDLE,
     },

@@ -32,8 +32,8 @@ export class DocResearcherComponent {
       zOkText: null,
       zCancelText: null,
       zMaskClosable: true,
-      zWidth: '500px',
-      zCustomClasses: '!p-0 !gap-0 !border-0 !bg-transparent !shadow-none',
+      zWidth: '600px',
+      zCustomClasses: '!p-0 !gap-0 !border-0 !max-w-lg',
     });
   }
 }

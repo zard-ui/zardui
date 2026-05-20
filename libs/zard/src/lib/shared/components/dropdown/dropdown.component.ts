@@ -36,8 +36,12 @@ import { dropdownContentVariants } from './dropdown.variants';
       zardId="dropdown-trigger"
       #zId="zardId"
       [id]="zId.id()"
+      data-slot="dropdown-menu-trigger"
       (click)="toggle()"
       (keydown.{enter,space}.prevent)="toggle()"
+      [attr.aria-haspopup]="'menu'"
+      [attr.aria-expanded]="isOpen()"
+      [attr.aria-disabled]="isDisabled()"
       tabindex="0"
     >
       <ng-content select="[dropdown-trigger]" />
@@ -48,7 +52,9 @@ import { dropdownContentVariants } from './dropdown.variants';
       <div
         [class]="contentClasses()"
         role="menu"
+        data-slot="dropdown-menu-content"
         [attr.data-state]="'open'"
+        (click)="onDropdownClick($event)"
         (keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent)="onDropdownKeydown($event)"
         tabindex="-1"
       >
@@ -60,6 +66,7 @@ import { dropdownContentVariants } from './dropdown.variants';
   encapsulation: ViewEncapsulation.None,
   host: {
     class: 'relative inline-block text-left',
+    'data-slot': 'dropdown-menu',
     '[attr.data-state]': 'isOpen() ? "open" : "closed"',
     '(document:click)': 'onDocumentClick($event)',
   },
@@ -80,12 +87,17 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 
   readonly class = input<ClassValue>('');
   readonly disabled = input(false, { transform: booleanAttribute });
+  readonly zDisabled = input<boolean | undefined, unknown>(undefined, {
+    alias: 'zDisabled',
+    transform: value => (value === undefined ? undefined : booleanAttribute(value)),
+  });
 
   readonly openChange = output<boolean>();
 
   readonly isOpen = signal(false);
   readonly focusedIndex = signal<number>(-1);
 
+  protected readonly isDisabled = computed(() => this.zDisabled() ?? this.disabled());
   protected readonly contentClasses = computed(() => mergeClasses(dropdownContentVariants(), this.class()));
 
   ngOnDestroy() {
@@ -126,8 +138,24 @@ export class ZardDropdownMenuComponent implements OnDestroy {
     }
   }
 
+  onDropdownClick(event: Event) {
+    const target = event.target as HTMLElement;
+    const item = target.closest<HTMLElement>(
+      'z-dropdown-menu-item, [z-dropdown-menu-item], z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item], z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
+    );
+
+    if (!item || item.dataset['disabled'] !== undefined) {
+      return;
+    }
+
+    setTimeout(() => {
+      this.close();
+      this.focusTrigger();
+    }, 0);
+  }
+
   toggle() {
-    if (this.disabled()) {
+    if (this.isDisabled()) {
       return;
     }
     if (this.isOpen()) {
@@ -222,7 +250,9 @@ export class ZardDropdownMenuComponent implements OnDestroy {
     }
     const dropdownElement = this.overlayRef.overlayElement;
     return Array.from(
-      dropdownElement.querySelectorAll<HTMLElement>('z-dropdown-menu-item, [z-dropdown-menu-item]'),
+      dropdownElement.querySelectorAll<HTMLElement>(
+        'z-dropdown-menu-item, [z-dropdown-menu-item], z-dropdown-menu-checkbox-item, [z-dropdown-menu-checkbox-item], z-dropdown-menu-radio-item, [z-dropdown-menu-radio-item]',
+      ),
     ).filter(item => item.dataset['disabled'] === undefined);
   }
 

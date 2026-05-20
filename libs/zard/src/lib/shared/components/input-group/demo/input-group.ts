@@ -49,25 +49,25 @@ export const INPUT_GROUP = {
   examples: [
     {
       name: 'inline-start',
-      description: 'Use zAlign="inline-start" to position the addon at the start of the input. This is the default.',
+      description: 'Use `zAlign="inline-start"` to position the addon at the start of the input. This is the default.',
       component: ZardDemoInputGroupInlineStartComponent,
       codeData: INPUT_GROUP_DEMO_INLINE_START,
     },
     {
       name: 'inline-end',
-      description: 'Use zAlign="inline-end" to position the addon at the end of the input.',
+      description: 'Use `zAlign="inline-end"` to position the addon at the end of the input.',
       component: ZardDemoInputGroupInlineEndComponent,
       codeData: INPUT_GROUP_DEMO_INLINE_END,
     },
     {
       name: 'block-start',
-      description: 'Use zAlign="block-start" to position the addon above the input.',
+      description: 'Use `zAlign="block-start"` to position the addon above the input.',
       component: ZardDemoInputGroupBlockStartComponent,
       codeData: INPUT_GROUP_DEMO_BLOCK_START,
     },
     {
       name: 'block-end',
-      description: 'Use zAlign="block-end" to position the addon below the input.',
+      description: 'Use `zAlign="block-end"` to position the addon below the input.',
       component: ZardDemoInputGroupBlockEndComponent,
       codeData: INPUT_GROUP_DEMO_BLOCK_END,
     },
@@ -109,7 +109,7 @@ export const INPUT_GROUP = {
     {
       name: 'custom',
       description:
-        'Add the data-slot="input-group-control" attribute to your custom input for automatic focus state handling.',
+        'Add the `data-slot="input-group-control"` attribute to your custom input for automatic focus state handling.',
       component: ZardDemoInputGroupCustomComponent,
       codeData: INPUT_GROUP_DEMO_CUSTOM,
     },

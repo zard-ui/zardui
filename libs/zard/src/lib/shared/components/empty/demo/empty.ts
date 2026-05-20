@@ -34,13 +34,13 @@ export const EMPTY = {
   examples: [
     {
       name: 'outline',
-      description: 'Use the border utility class to create an outline empty state.',
+      description: 'Use the `border` utility class to create an outline empty state.',
       component: ZardDemoEmptyOutlineComponent,
       codeData: EMPTY_DEMO_OUTLINE,
     },
     {
       name: 'background',
-      description: 'Use the bg-* and bg-gradient-* utilities to add a background to the empty state.',
+      description: 'Use the `bg-*` and `bg-gradient-*` utilities to add a background to the empty state.',
       component: ZardDemoEmptyBackgroundComponent,
       codeData: EMPTY_DEMO_BACKGROUND,
     },
@@ -51,13 +51,13 @@ export const EMPTY = {
     },
     {
       name: 'avatar-group',
-      description: 'Use the EmptyMedia component to display an avatar group in the empty state.',
+      description: 'Use the `EmptyMedia` component to display an avatar group in the empty state.',
       component: ZardDemoEmptyAdvancedComponent,
       codeData: EMPTY_DEMO_ADVANCED,
     },
     {
       name: 'input-group',
-      description: 'Use the InputGroup component to add a search input to the empty state.',
+      description: 'Use the `InputGroup` component to add a search input to the empty state.',
       component: ZardDemoEmptyInputGroupComponent,
       codeData: EMPTY_DEMO_INPUT_GROUP,
     },

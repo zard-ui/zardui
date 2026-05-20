@@ -42,14 +42,14 @@ export const ACCORDION = {
     },
     {
       name: 'multiple',
-      description: 'Use type="multiple" to allow multiple items to be open at the same time.',
+      description: 'Use `type="multiple"` to allow multiple items to be open at the same time.',
       component: ZardDemoAccordionMultipleComponent,
       column: true,
       codeData: ACCORDION_DEMO_MULTIPLE,
     },
     {
       name: 'disabled',
-      description: 'Use the disabled prop on AccordionItem to disable individual items.',
+      description: 'Use the `disabled` prop on `AccordionItem` to disable individual items.',
       component: ZardDemoAccordionDisabledComponent,
       column: true,
       codeData: ACCORDION_DEMO_DISABLED,
@@ -57,14 +57,14 @@ export const ACCORDION = {
     {
       name: 'borders',
       description:
-        'Add border to the Accordion and border-b last:border-b-0 to the AccordionItem to add borders to the items.',
+        'Add `border` to the `Accordion` and `border-b last:border-b-0` to the `AccordionItem` to add borders to the items.',
       component: ZardDemoAccordionBordersComponent,
       column: true,
       codeData: ACCORDION_DEMO_BORDERS,
     },
     {
       name: 'Card',
-      description: 'Wrap the Accordion in a Card component.',
+      description: 'Wrap the `Accordion` in a `Card` component.',
       component: ZardDemoAccordionCardComponent,
       column: true,
       codeData: ACCORDION_DEMO_CARDS,

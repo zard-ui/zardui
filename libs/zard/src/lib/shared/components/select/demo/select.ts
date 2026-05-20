@@ -56,24 +56,29 @@ export const SELECT = {
   },
   usage: { importBlock: SELECT_USAGE_IMPORT, codeBlock: SELECT_USAGE_CODE },
   composition: SELECT_COMPOSITION,
+  preview: {
+    name: 'preview',
+    component: ZardDemoSelectDefaultComponent,
+    column: false,
+    codeData: SELECT_DEMO_DEFAULT,
+  },
   examples: [
     {
-      name: 'default',
-      component: ZardDemoSelectDefaultComponent,
-      codeData: SELECT_DEMO_DEFAULT,
-    },
-    {
       name: 'align-item',
+      description:
+        'Use the position prop on SelectContent to control alignment. When position="item-aligned" (default), the popup positions so the selected item appears over the trigger. When position="popper", the popup aligns to the trigger edge.',
       component: ZardDemoSelectAlignItemComponent,
       codeData: SELECT_DEMO_ALIGN_ITEM,
     },
     {
       name: 'groups',
+      description: 'Use SelectGroup, SelectLabel, and SelectSeparator to organize items.',
       component: ZardDemoSelectGroupsComponent,
       codeData: SELECT_DEMO_GROUPS,
     },
     {
       name: 'scrollable',
+      description: 'A select with many items that scrolls.',
       component: ZardDemoSelectScrollableComponent,
       codeData: SELECT_DEMO_SCROLLABLE,
     },
@@ -84,6 +89,8 @@ export const SELECT = {
     },
     {
       name: 'invalid',
+      description:
+        'Add the data-invalid attribute to the Field component and the aria-invalid attribute to the SelectTrigger component to show an error state.',
       component: ZardDemoSelectInvalidComponent,
       codeData: SELECT_DEMO_INVALID,
     },

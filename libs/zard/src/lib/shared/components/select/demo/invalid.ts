@@ -7,7 +7,7 @@ import { ZardSelectImports } from '@/shared/components/select/select.imports';
   selector: 'z-demo-select-invalid',
   imports: [...ZardFieldImports, ZardSelectImports],
   template: `
-    <div z-field class="w-75" data-invalid="true">
+    <div z-field class="w-full min-w-48" data-invalid="true">
       <label z-field-label for="select-invalid">Fruit</label>
       <z-select id="select-invalid" zPlaceholder="Select a fruit" zInvalid [(zValue)]="selectedFruit">
         <z-select-item zValue="apple">Apple</z-select-item>

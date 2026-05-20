@@ -9,7 +9,7 @@
         <li>
           <a
             [class]="
-              'text-muted-foreground hover:text-foreground text-[0.8rem] no-underline transition-colors ' +
+              'text-muted-foreground hover:text-foreground cursor-pointer text-[0.8rem] no-underline transition-colors ' +
               (activeAnchor() === item.id ? 'text-foreground! font-medium' : '')
             "
             (click)="scrollToAnchor(item.id)"
@@ -22,7 +22,7 @@
               <div class="mt-1 ml-4">
                 <a
                   [class]="
-                    'text-muted-foreground hover:text-foreground text-[0.8rem] no-underline transition-colors ' +
+                    'text-muted-foreground hover:text-foreground cursor-pointer text-[0.8rem] no-underline transition-colors ' +
                     (activeAnchor() === child.id ? 'text-foreground! font-medium' : '')
                   "
                   (click)="scrollToAnchor(child.id)"

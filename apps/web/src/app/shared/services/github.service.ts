@@ -33,6 +33,11 @@ export class GithubService {
     return this.repoResource.value().stargazers_count;
   });
 
+  readonly starsCountFormatted = computed(() => {
+    const count = this.starsCount();
+    return count > 0 ? formatCompactCount(count) : '';
+  });
+
   readonly contributors = computed(() => {
     if (this.contributorsResource.error()) return [];
     return this.contributorsResource.value();
@@ -42,4 +47,10 @@ export class GithubService {
     this.repoResource.value();
     this.contributorsResource.value();
   }
+}
+
+function formatCompactCount(value: number): string {
+  if (value < 1000) return String(value);
+  const thousands = Math.floor(value / 100) / 10;
+  return `${thousands.toFixed(1).replace(/\.0$/, '')}k`;
 }

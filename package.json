@@ -4,7 +4,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "start": "npm run generate:highlight && concurrently \"npm run generate:highlight -- --watch\" \"npx nx run web:serve --configuration=local --port=4222\"",
+    "start": "node --env-file-if-exists=.env scripts/dev.mjs",
     "prepare": "husky",
     "build": "npm run generate:highlight && npm run build:registry && node apps/web/update-routes.mjs && npx nx run web:build --configuration=production",
     "build:registry": "npx tsx scripts/build-registry.cts",

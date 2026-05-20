@@ -34,9 +34,15 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   breadcrumb: {
     importCode: `import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';`,
     templateCode: `<z-breadcrumb>
-  <z-breadcrumb-item label="Home" url="/"></z-breadcrumb-item>
-  <z-breadcrumb-item label="Components" url="/docs/components"></z-breadcrumb-item>
-  <z-breadcrumb-item label="Breadcrumb"></z-breadcrumb-item>
+  <z-breadcrumb-item>
+    <a z-breadcrumb-link routerLink="/">Home</a>
+  </z-breadcrumb-item>
+  <z-breadcrumb-item>
+    <a z-breadcrumb-link routerLink="/docs/components">Components</a>
+  </z-breadcrumb-item>
+  <z-breadcrumb-item>
+    <span z-breadcrumb-page>Breadcrumb</span>
+  </z-breadcrumb-item>
 </z-breadcrumb>`,
   },
   button: {
@@ -109,13 +115,13 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   dropdown: {
     importCode: `import { ZardDropdownImports } from '@/shared/components/dropdown/dropdown.imports';`,
-    templateCode: `<z-dropdown-menu>
-  <button z-button zType="outline" zardDropdownTrigger>Open</button>
-  <z-dropdown-menu-content>
-    <z-dropdown-menu-item label="Profile"></z-dropdown-menu-item>
-    <z-dropdown-menu-item label="Settings"></z-dropdown-menu-item>
-  </z-dropdown-menu-content>
-</z-dropdown-menu>`,
+    templateCode: `<button z-button zType="outline" z-dropdown [zDropdownMenu]="menu">Open</button>
+
+<z-dropdown-menu-content #menu="zDropdownMenuContent" class="w-48">
+  <z-dropdown-menu-item>Profile</z-dropdown-menu-item>
+  <z-dropdown-menu-item>Settings</z-dropdown-menu-item>
+  <z-dropdown-menu-item zDisabled>Subscription</z-dropdown-menu-item>
+</z-dropdown-menu-content>`,
   },
   empty: {
     importCode: `import { ZardEmptyComponent } from '@/shared/components/empty/empty.component';`,
