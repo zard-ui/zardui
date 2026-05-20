@@ -10,8 +10,5 @@ import { ZardSliderComponent } from '../slider.component';
       <z-slider class="mx-auto w-full max-w-xs" [zDefault]="[25, 50]" />
     </div>
   `,
-  host: {
-    '[style.width]': '"inherit"',
-  },
 })
 export class ZardDemoSliderRangeComponent {}

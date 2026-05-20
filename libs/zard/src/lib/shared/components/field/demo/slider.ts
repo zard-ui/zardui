@@ -30,5 +30,5 @@ import { ZardSliderComponent } from '@/shared/components/slider/slider.component
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoFieldSliderComponent {
-  protected readonly value = signal(40);
+  protected readonly value = signal([40]);
 }

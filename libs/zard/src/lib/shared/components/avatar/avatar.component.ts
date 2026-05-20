@@ -18,7 +18,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
   avatarVariants,
-  badgeVariants,
+  avatarBadgeVariants,
   fallbackVariants,
   imageVariants,
   type ZardAvatarSizeVariants,
@@ -93,7 +93,7 @@ export class ZardAvatarComponent {
 
   protected readonly fallbackClasses = computed(() => fallbackVariants());
 
-  protected readonly badgeClasses = computed(() => mergeClasses(badgeVariants, this.zBadgeClass()));
+  protected readonly badgeClasses = computed(() => mergeClasses(avatarBadgeVariants, this.zBadgeClass()));
 
   protected readonly imgClasses = computed(() => imageVariants({ zSize: this.zSize() }));
 

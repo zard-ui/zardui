@@ -18,7 +18,7 @@
   "demos": [
     {
       "name": "controlled.ts",
-      "content": "import { ChangeDetectionStrategy, Component, signal } from '@angular/core';\n\nimport { ZardProgressComponent } from '@/shared/components/progress/progress.component';\nimport { ZardSliderComponent } from '@/shared/components/slider/slider.component';\n\n@Component({\n  selector: 'z-demo-progress-controlled',\n  imports: [ZardProgressComponent, ZardSliderComponent],\n  template: `\n    <div class=\"flex w-full min-w-sm flex-col gap-4\">\n      <z-progress [value]=\"value()\" />\n      <z-slider [zDefault]=\"value()\" zMin=\"0\" zMax=\"100\" zStep=\"1\" (zSlideIndexChange)=\"value.set($event)\" />\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressControlledComponent {\n  protected readonly value = signal(50);\n}\n"
+      "content": "import { ChangeDetectionStrategy, Component, signal } from '@angular/core';\n\nimport { ZardProgressComponent } from '@/shared/components/progress/progress.component';\nimport { ZardSliderComponent } from '@/shared/components/slider/slider.component';\n\n@Component({\n  selector: 'z-demo-progress-controlled',\n  imports: [ZardProgressComponent, ZardSliderComponent],\n  template: `\n    <div class=\"flex w-full min-w-sm flex-col gap-4\">\n      <z-progress [value]=\"value()[0]\" />\n      <z-slider [zDefault]=\"value()\" zMin=\"0\" zMax=\"100\" zStep=\"1\" (zSlideIndexChange)=\"value.set($event)\" />\n    </div>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoProgressControlledComponent {\n  protected readonly value = signal([50]);\n}\n"
     },
     {
       "name": "label.ts",

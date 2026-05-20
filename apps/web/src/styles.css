@@ -1,5 +1,6 @@
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
+@import '../../../libs/zard/src/lib/shared/core/css/tailwind.css';
 @import '@fontsource-variable/geist-mono';
 @import '@fontsource-variable/geist';
 
@@ -149,25 +150,6 @@
   --color-selection: var(--selection);
   --color-selection-foreground: var(--selection-foreground);
   --color-code-tab: var(--code-tab-button);
-}
-
-@custom-variant data-horizontal {
-  &:where([data-orientation='horizontal']) {
-    @slot;
-  }
-}
-
-@custom-variant data-vertical {
-  &:where([data-orientation='vertical']) {
-    @slot;
-  }
-}
-
-@custom-variant data-disabled {
-  &:where([data-disabled='true']),
-  &:where([data-disabled]:not([data-disabled='false'])) {
-    @slot;
-  }
 }
 
 @layer base {

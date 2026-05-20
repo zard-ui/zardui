@@ -75,7 +75,8 @@ export class ThemeSidebarComponent {
     this.themeService.updateVariable(key, value, mode);
   }
 
-  onRadiusChange(value: number): void {
+  onRadiusChange(values: number[]): void {
+    const value = values[0];
     this.themeService.updateRadius(`${value}rem`);
   }
 
