@@ -3,7 +3,6 @@
 /docs/components
 /blocks
 /themes
-/colors
 /docs/introduction
 /docs/components
 /docs/roadmap

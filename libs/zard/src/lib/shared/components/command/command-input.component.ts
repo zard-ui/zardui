@@ -66,7 +66,7 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
-  readonly searchInput = viewChild.required<ElementRef<HTMLInputElement>>('searchInput');
+  readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
 
   readonly placeholder = input<string>('Type a command or search...');
 
@@ -124,6 +124,6 @@ export class ZardCommandInputComponent implements ControlValueAccessor {
   }
 
   focus(): void {
-    this.searchInput().nativeElement.focus();
+    this.searchInput()?.nativeElement?.focus();
   }
 }

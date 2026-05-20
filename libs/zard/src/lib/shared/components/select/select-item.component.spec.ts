@@ -79,34 +79,10 @@ describe('ZardSelectItemComponent', () => {
   });
 
   describe('variant styling', () => {
-    it('applies correct classes for default size', () => {
-      component.zSize.set('default');
-      fixture.detectChanges();
-
-      const hostElement = fixture.nativeElement as HTMLElement;
-      expect(hostElement).toHaveClass('py-1.5');
-      expect(hostElement).toHaveClass('text-sm');
-      expect(hostElement).not.toHaveClass('min-h-9');
-    });
-
-    it('applies correct classes for small size', () => {
-      component.zSize.set('sm');
-      fixture.detectChanges();
-
+    it('applies correct default classes', () => {
       const hostElement = fixture.nativeElement as HTMLElement;
       expect(hostElement).toHaveClass('py-1');
-      expect(hostElement).toHaveClass('text-xs');
-      expect(hostElement).not.toHaveClass('min-h-8');
-    });
-
-    it('applies correct classes for large size', () => {
-      component.zSize.set('lg');
-      fixture.detectChanges();
-
-      const hostElement = fixture.nativeElement as HTMLElement;
-      expect(hostElement).toHaveClass('py-2');
-      expect(hostElement).toHaveClass('text-base');
-      expect(hostElement).not.toHaveClass('min-h-10');
+      expect(hostElement).toHaveClass('text-sm');
     });
 
     it('uses the shadcn select item structure', () => {

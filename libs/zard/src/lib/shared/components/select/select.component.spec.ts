@@ -18,6 +18,7 @@ import { ZardSelectImports } from './select.imports';
       [zPlaceholder]="placeholder()"
       [zDisabled]="disabled()"
       [zInvalid]="invalid()"
+      [zPosition]="position()"
     >
       <z-select-item zValue="option1">Option 1</z-select-item>
       <z-select-item zValue="option2">Option 2</z-select-item>
@@ -31,6 +32,7 @@ class TestHostComponent {
   readonly placeholder = signal('Select an option...');
   readonly disabled = signal(false);
   readonly invalid = signal(false);
+  readonly position = signal<'item-aligned' | 'popper'>('item-aligned');
 }
 
 @Component({
@@ -54,7 +56,6 @@ class TestHostWithFormControlComponent {
       class="w-64"
       [(zValue)]="value"
       [zPosition]="position()"
-      [zSize]="size()"
       (zSelectionChange)="selectionChanges.push($event)"
     >
       <z-select-item zValue="apple">Apple</z-select-item>
@@ -65,7 +66,6 @@ class TestHostWithFormControlComponent {
 class TestApiHostComponent {
   readonly value = signal<string | string[]>('');
   readonly position = signal<'item-aligned' | 'popper'>('item-aligned');
-  readonly size = signal<'sm' | 'default' | 'lg'>('default');
   readonly selectionChanges: Array<string | string[]> = [];
 }
 
@@ -102,7 +102,7 @@ describe('ZardSelectComponent', () => {
     it('should initialize with default values', () => {
       expect(component.zValue()).toBe('');
       expect(component.zPlaceholder()).toBe('Select an option...');
-      expect(component.zPosition()).toBe('popper');
+      expect(component.zPosition()).toBe('item-aligned');
       expect(component.zDisabled()).toBe(false);
     });
 
@@ -242,7 +242,9 @@ describe('ZardSelectComponent', () => {
       expect(hostFixture.nativeElement.querySelector('button')).toHaveAttribute('aria-label', 'Choose a value');
     });
 
-    it('uses popper positioning by default when opened', fakeAsync(() => {
+    it('uses popper positioning when zPosition is set to popper', fakeAsync(() => {
+      hostComponent.position.set('popper');
+      hostFixture.detectChanges();
       const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
         .nativeElement as HTMLElement;
       Object.defineProperty(selectElement, 'offsetWidth', { configurable: true, value: 240 });
@@ -256,7 +258,6 @@ describe('ZardSelectComponent', () => {
       const overlayPane = document.querySelector('.cdk-overlay-pane') as HTMLElement;
       const content = overlayPane.querySelector('[data-slot="select-content"]') as HTMLElement;
       const viewport = content.querySelector('[data-slot="select-viewport"]') as HTMLElement;
-      expect(trigger).toHaveAttribute('data-size', 'default');
       expect(content).toHaveAttribute('role', 'listbox');
       expect(content.style.getPropertyValue('--z-select-trigger-width')).toBe('240px');
       expect(content.style.getPropertyValue('--z-select-trigger-height')).toBe('36px');
@@ -437,8 +438,7 @@ describe('ZardSelectComponent', () => {
       TestBed.resetTestingModule();
     });
 
-    it('applies class and size inputs to the public DOM', () => {
-      hostComponent.size.set('lg');
+    it('applies class input to the public DOM', () => {
       hostFixture.detectChanges();
 
       const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
@@ -446,9 +446,7 @@ describe('ZardSelectComponent', () => {
       const trigger = hostFixture.nativeElement.querySelector('[data-slot="select-trigger"]') as HTMLElement;
       expect(selectElement).toHaveClass('w-64');
       expect(selectElement).not.toHaveAttribute('dir');
-      expect(trigger).toHaveAttribute('data-size', 'lg');
-      expect(trigger).toHaveClass('h-10');
-      expect(trigger).toHaveClass('text-base');
+      expect(trigger).not.toHaveAttribute('data-size');
     });
 
     it('applies popper positioning attributes and trigger min-width sizing when opened', fakeAsync(() => {
@@ -1236,8 +1234,8 @@ describe('ZardSelectComponent', () => {
       const trigger = hostFixture.nativeElement.querySelector('[data-slot="select-trigger"]') as HTMLElement;
       const valueSlot = trigger.querySelector('[data-slot="select-value"]') as HTMLElement;
       expect(trigger).toHaveClass('h-auto');
-      expect(trigger).toHaveClass('min-h-9');
-      expect(trigger).toHaveClass('py-1.5');
+      expect(trigger).toHaveClass('min-h-8');
+      expect(trigger).toHaveClass('py-1');
       expect(valueSlot).toHaveClass('flex-wrap');
       expect(valueSlot).toHaveClass('overflow-visible');
       expect(trigger.className).not.toContain('line-clamp-1');
