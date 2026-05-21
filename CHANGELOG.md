@@ -1,3 +1,13 @@
+## 1.0.0-beta.80 (2026-05-21)
+
+### 🐛 Bug Fixes
+
+- **alert-dialog:** disable mask closable by default ([#628](https://github.com/zard-ui/zardui/pull/628))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
 ## 1.0.0-beta.79 (2026-05-20)
 
 This was a version bump only, there were no code changes.
