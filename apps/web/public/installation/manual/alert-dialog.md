@@ -253,7 +253,7 @@ export class ZardAlertDialogRef<T = unknown> {
   }
 
   private handleMaskClick(): void {
-    const hasMaskClosable = this.config.zMaskClosable ?? true;
+    const hasMaskClosable = this.config.zMaskClosable ?? false;
     if (hasMaskClosable) {
       this.overlayRef
         .outsidePointerEvents()
