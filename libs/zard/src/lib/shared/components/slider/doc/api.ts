@@ -4,13 +4,29 @@ export const SLIDER_API: ApiSection[] = [
   {
     selector: '[z-slider]',
     description:
-      'A flexible and accessible component that allows users to select a numeric value from within a configurable range using pointer or keyboard interaction.',
+      'A flexible and accessible component that allows users to select a numeric value from within a configurable range using pointer or keyboard interaction. Supports single value or range (two thumbs) by passing an array with two values.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       { name: '[zMin]', description: 'Minimum selectable value', type: 'number', default: '0' },
-      { name: '[zMax]', description: 'Maximum selectable value', type: 'number', default: '100' },
-      { name: '[zDefault]', description: 'Default value when zValue is absent', type: 'number', default: '0' },
-      { name: '[zValue]', description: 'Controlled value input', type: 'number | null', default: 'null' },
+      {
+        name: '[zMax]',
+        description:
+          'Maximum selectable value. When zMax <= 1, values are automatically normalized to a 0-100% visual scale',
+        type: 'number',
+        default: '100',
+      },
+      {
+        name: '[zDefault]',
+        description: 'Default value(s) when zValue is absent. Single thumb: [value]. Range: [lower, upper]',
+        type: 'number[]',
+        default: '[0]',
+      },
+      {
+        name: '[zValue]',
+        description: 'Controlled value input. Single thumb: [value]. Range: [lower, upper]',
+        type: 'number[]',
+        default: '[]',
+      },
       { name: '[zStep]', description: 'Step increment for the value', type: 'number', default: '1' },
       { name: '[zDisabled]', description: 'Disables slider interaction', type: 'boolean', default: 'false' },
       {
@@ -21,8 +37,8 @@ export const SLIDER_API: ApiSection[] = [
       },
       {
         name: '(zSlideIndexChange)',
-        description: 'Emitted when the slider value changes',
-        type: 'number',
+        description: 'Emitted when a thumb value changes. Always emits the full array of current values',
+        type: 'number[]',
         default: '-',
       },
     ],

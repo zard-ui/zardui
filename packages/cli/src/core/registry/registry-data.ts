@@ -35,6 +35,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'css/tailwind.css',
+        content: '',
+      },
+      {
         name: 'index.ts',
         content: '',
       },

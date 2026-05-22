@@ -371,7 +371,10 @@ export class ZardComboboxComponent implements ControlValueAccessor {
               afterNextRender(() => {
                 const inputElement = this.commandInputRef();
                 if (inputElement) {
-                  inputElement.searchInput().nativeElement.value = key;
+                  const searchInput = inputElement.searchInput();
+                  if (searchInput) {
+                    searchInput.nativeElement.value = key;
+                  }
                   inputElement.updateParentComponents(key);
                   inputElement.focus();
                 }
