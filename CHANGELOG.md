@@ -1,4 +1,30 @@
-## 1.0.0-beta.77 (2026-04-24)
+## 1.0.0-beta.80 (2026-05-21)
+
+### 🐛 Bug Fixes
+
+- **alert-dialog:** disable mask closable by default ([#628](https://github.com/zard-ui/zardui/pull/628))
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
+## 1.0.0-beta.79 (2026-05-20)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.78 (2026-05-11)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.77 (2026-05-02)
+
+### 🐛 Bug Fixes
+
+- **input:** support number signal forms ([#598](https://github.com/zard-ui/zardui/pull/598))
+
+### ❤️ Thank You
+
+- Otabek @OlimjonovOtabek
 
 ### 💥 Breaking Changes
 
@@ -25,14 +51,6 @@
 ### ❤️ Thank You
 
 - Mickey Lazarevic @mikij
-
-### 🐛 Bug Fixes
-
-- **input:** support number signal forms ([#598](https://github.com/zard-ui/zardui/pull/598))
-
-### ❤️ Thank You
-
-- Otabek @OlimjonovOtabek
 
 ## 1.0.0-beta.76 (2026-04-15)
 

@@ -43,7 +43,9 @@ export class ZardAlertDialogRef<T = unknown> {
       ? (document.activeElement as HTMLElement | null)
       : null;
 
-    if (!this.overlayRef || !this.containerInstance) return;
+    if (!this.overlayRef || !this.containerInstance) {
+      return;
+    }
 
     ZardAlertDialogRef.stack.push(this as unknown as ZardAlertDialogRef);
 
@@ -58,7 +60,7 @@ export class ZardAlertDialogRef<T = unknown> {
       .pipe(takeUntil(detached$))
       .subscribe(() => this.handleOk());
 
-    if (config.zMaskClosable ?? true) {
+    if (config.zMaskClosable) {
       this.overlayRef
         .outsidePointerEvents()
         .pipe(takeUntil(detached$))
@@ -85,7 +87,9 @@ export class ZardAlertDialogRef<T = unknown> {
   }
 
   close(): void {
-    if (this._isClosing()) return;
+    if (this._isClosing()) {
+      return;
+    }
     this._isClosing.set(true);
 
     if (isPlatformBrowser(this.platformId) && this.containerInstance) {
@@ -97,7 +101,9 @@ export class ZardAlertDialogRef<T = unknown> {
   }
 
   private dispose(): void {
-    if (this.disposed) return;
+    if (this.disposed) {
+      return;
+    }
     this.disposed = true;
 
     if (this.disposeTimer !== null) {
@@ -114,7 +120,9 @@ export class ZardAlertDialogRef<T = unknown> {
     }
 
     const idx = ZardAlertDialogRef.stack.indexOf(this as unknown as ZardAlertDialogRef);
-    if (idx >= 0) ZardAlertDialogRef.stack.splice(idx, 1);
+    if (idx >= 0) {
+      ZardAlertDialogRef.stack.splice(idx, 1);
+    }
 
     if (isPlatformBrowser(this.platformId) && this.previouslyFocusedElement?.isConnected) {
       this.previouslyFocusedElement.focus();
