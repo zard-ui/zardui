@@ -1,12 +1,15 @@
 export const availableThemes: string[] = ['neutral', 'stone', 'zinc', 'gray', 'slate'];
 
-const tailwindConfiguration = `
+const getTailwindConfiguration = (corePath: string): string => {
+  return `
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
+@import '${corePath}/css/tailwind';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
 `;
+};
 
 const inlineTheme = `
 @theme inline {
@@ -88,8 +91,8 @@ const windowsScrollbar = `
 }
 `;
 
-export const neutral = `
-${tailwindConfiguration}
+export const neutral = (corePath: string) => `
+${getTailwindConfiguration(corePath)}
 
 :root {
   --radius: 0.625rem;
@@ -165,8 +168,8 @@ ${layerBase}
 ${windowsScrollbar}
 `;
 
-export const stone = `
-${tailwindConfiguration}
+export const stone = (corePath: string) => `
+${getTailwindConfiguration(corePath)}
 
 :root {
   --radius: 0.625rem;
@@ -242,8 +245,8 @@ ${layerBase}
 ${windowsScrollbar}
 `;
 
-export const zinc = `
-${tailwindConfiguration}
+export const zinc = (corePath: string) => `
+${getTailwindConfiguration(corePath)}
 
 :root {
   --radius: 0.625rem;
@@ -319,8 +322,8 @@ ${layerBase}
 ${windowsScrollbar}
 `;
 
-export const gray = `
-${tailwindConfiguration}
+export const gray = (corePath: string) => `
+${getTailwindConfiguration(corePath)}
 
 :root {
   --radius: 0.625rem;
@@ -396,8 +399,8 @@ ${layerBase}
 ${windowsScrollbar}
 `;
 
-export const slate = `
-${tailwindConfiguration}
+export const slate = (corePath: string) => `
+${getTailwindConfiguration(corePath)}
 
 :root {
   --radius: 0.625rem;

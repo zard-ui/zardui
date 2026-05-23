@@ -4,7 +4,9 @@ import { existsSync } from 'fs';
 import * as fsPromises from 'fs/promises';
 import * as path from 'path';
 
-const ZARD_PROVIDER_IMPORT = "import { provideZard } from '@/shared/core/provider/providezard';\n";
+const ZARD_PROVIDER_IMPORT = (corePath: string) => `
+import { provideZard } from '${corePath}/provider/providezard';
+`;
 const ZARD_PROVIDER_ENTRY = 'provideZard(),';
 
 /**
@@ -24,7 +26,7 @@ export async function updateAngularConfig(cwd: string, config: Config): Promise<
     let content: string = await fsPromises.readFile(appConfigPath, 'utf8');
 
     // Add new import at the top
-    if (!content.includes(ZARD_PROVIDER_IMPORT.trim())) {
+    if (!content.includes(ZARD_PROVIDER_IMPORT(config.aliases.core).trim())) {
       const importRegex = /^import .* from '.*';\n?/gm;
       let lastImportMatch: RegExpMatchArray | null = null;
       let match: RegExpMatchArray | null;
@@ -33,11 +35,12 @@ export async function updateAngularConfig(cwd: string, config: Config): Promise<
         lastImportMatch = match;
       }
 
-      if (lastImportMatch) {
+      if (lastImportMatch && lastImportMatch.index) {
         const insertionIndex = lastImportMatch.index + lastImportMatch[0].length;
-        content = content.slice(0, insertionIndex) + ZARD_PROVIDER_IMPORT + content.slice(insertionIndex);
+        content =
+          content.slice(0, insertionIndex) + ZARD_PROVIDER_IMPORT(config.aliases.core) + content.slice(insertionIndex);
       } else {
-        content = ZARD_PROVIDER_IMPORT + content;
+        content = ZARD_PROVIDER_IMPORT(config.aliases.core) + content;
       }
     } else {
       logger.warn('Import statement already exists. Skipping.');
