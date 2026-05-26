@@ -1,11 +1,14 @@
-import { PAGINATION_DEMO_CUSTOM } from '@generated/components/pagination/demo/custom';
-import { PAGINATION_DEMO_DEFAULT } from '@generated/components/pagination/demo/default';
+import { PAGINATION_DEMO_ICONSONLY } from '@generated/components/pagination/demo/iconsonly';
+import { PAGINATION_DEMO_PREVIEW } from '@generated/components/pagination/demo/preview';
+import { PAGINATION_DEMO_SIMPLE } from '@generated/components/pagination/demo/simple';
 import { PAGINATION_CLI_ADD } from '@generated/installation/cli/add-pagination';
 import { PAGINATION_MANUAL_CODE } from '@generated/installation/manual/pagination';
 import { PAGINATION_USAGE_IMPORT, PAGINATION_USAGE_CODE } from '@generated/usage/pagination';
 
-import { ZardDemoPaginationCustomComponent } from './custom';
-import { ZardDemoPaginationDefaultComponent } from './default';
+import { ZardDemoPaginationIconsOnlyComponent } from '@/shared/components/pagination/demo/iconsonly';
+
+import { ZardDemoPaginationPreviewComponent } from './preview';
+import { ZardDemoPaginationSimpleComponent } from './simple';
 import { PAGINATION_API } from '../doc/api';
 
 export const PAGINATION = {
@@ -18,16 +21,23 @@ export const PAGINATION = {
     manualCode: PAGINATION_MANUAL_CODE,
   },
   usage: { importBlock: PAGINATION_USAGE_IMPORT, codeBlock: PAGINATION_USAGE_CODE },
+  preview: {
+    component: ZardDemoPaginationPreviewComponent,
+    codeData: PAGINATION_DEMO_PREVIEW,
+  },
   examples: [
     {
-      name: 'default',
-      component: ZardDemoPaginationDefaultComponent,
-      codeData: PAGINATION_DEMO_DEFAULT,
+      name: 'simple',
+      description: 'A simple pagination with only page numbers.',
+      component: ZardDemoPaginationSimpleComponent,
+      codeData: PAGINATION_DEMO_SIMPLE,
     },
     {
-      name: 'custom',
-      component: ZardDemoPaginationCustomComponent,
-      codeData: PAGINATION_DEMO_CUSTOM,
+      name: 'icons-only',
+      description:
+        'Use just the previous and next buttons without page numbers. This is useful for data tables with a rows per page selector.',
+      component: ZardDemoPaginationIconsOnlyComponent,
+      codeData: PAGINATION_DEMO_ICONSONLY,
     },
   ],
 };

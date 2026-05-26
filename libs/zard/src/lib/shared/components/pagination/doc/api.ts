@@ -21,9 +21,19 @@ export const PAGINATION_API: ApiSection[] = [
       },
       { name: '[zDisabled]', description: 'Disables pagination interaction', type: 'boolean', default: 'false' },
       { name: '[(zPageIndex)]', description: 'Current page index', type: 'number', default: '1' },
-      { name: '[zSize]', description: 'Button size', type: "'default' | 'sm' | 'lg'", default: "'default'" },
+      {
+        name: '[zSimple]',
+        description: 'A simple pagination with only page numbers.',
+        type: 'boolean',
+        default: 'false',
+      },
+      {
+        name: '[zSize]',
+        description: 'Button size',
+        type: "'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'",
+        default: "'icon'",
+      },
       { name: '[zTotal]', description: 'Total number of pages', type: 'number', default: '1' },
-      { name: '(zPageIndexChange)', description: 'Emitted when the current page changes', type: 'number', default: '' },
     ],
   },
   {
@@ -43,7 +53,12 @@ export const PAGINATION_API: ApiSection[] = [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       { name: '[zActive]', description: 'Whether the button is currently active', type: 'boolean', default: 'false' },
       { name: '[zDisabled]', description: 'Whether the button is disabled', type: 'boolean', default: 'false' },
-      { name: '[zSize]', description: 'Button size', type: "'default' | 'sm' | 'lg'", default: "'default'" },
+      {
+        name: '[zSize]',
+        description: 'Button size',
+        type: "'icon' | 'icon-xs' | 'icon-sm' | 'icon-lg'",
+        default: "'icon'",
+      },
     ],
   },
   {
@@ -52,7 +67,7 @@ export const PAGINATION_API: ApiSection[] = [
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       { name: '[zDisabled]', description: 'Whether the button is disabled', type: 'boolean', default: 'false' },
-      { name: '[zSize]', description: 'Button size', type: "'default' | 'sm' | 'lg'", default: "'default'" },
+      { name: '[zSize]', description: 'Button size', type: "'default' | 'xs' | 'sm' | 'lg'", default: "'default'" },
     ],
   },
   {
@@ -61,7 +76,7 @@ export const PAGINATION_API: ApiSection[] = [
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'string', default: "''" },
       { name: '[zDisabled]', description: 'Whether the button is disabled', type: 'boolean', default: 'false' },
-      { name: '[zSize]', description: 'Button size', type: "'default' | 'sm' | 'lg'", default: "'default'" },
+      { name: '[zSize]', description: 'Button size', type: "'default' | 'xs' | 'sm' | 'lg'", default: "'default'" },
     ],
   },
   {
