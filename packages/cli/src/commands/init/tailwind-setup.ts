@@ -23,7 +23,10 @@ export async function createPostCssConfig(cwd: string): Promise<void> {
 export async function applyThemeToStyles(cwd: string, config: Config): Promise<void> {
   const stylesPath = path.join(cwd, config.tailwind.css);
   const selectedTheme = config.tailwind.baseColor;
-  const themeContent = getThemeContent(selectedTheme);
+  const parts = config.baseUrl.split('/');
+  const base = parts.length > 1 ? parts[1] : parts[0];
+  const corePath = './' + base + config.aliases.core.substring(1);
+  const themeContent = getThemeContent(selectedTheme, corePath);
 
   await writeFile(stylesPath, themeContent, 'utf8');
 }
