@@ -4,7 +4,7 @@ import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { avatarGroupVariants, type ZardAvatarGroupVariants } from './avatar.variants';
+import { avatarGroupVariants, type ZardAvatarGroupOrientationVariants } from './avatar.variants';
 
 @Component({
   selector: 'z-avatar-group',
@@ -19,7 +19,7 @@ import { avatarGroupVariants, type ZardAvatarGroupVariants } from './avatar.vari
   exportAs: 'zAvatarGroup',
 })
 export class ZardAvatarGroupComponent {
-  readonly zOrientation = input<ZardAvatarGroupVariants['zOrientation']>('horizontal');
+  readonly zOrientation = input<ZardAvatarGroupOrientationVariants>('horizontal');
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() =>

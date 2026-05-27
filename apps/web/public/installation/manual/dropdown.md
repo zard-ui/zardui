@@ -160,7 +160,6 @@ export class ZardDropdownMenuComponent implements OnDestroy {
 
     setTimeout(() => {
       this.focusDropdown();
-      this.focusFirstItem(this.getDropdownItems());
     }, 0);
   }
 
@@ -236,12 +235,17 @@ export class ZardDropdownMenuComponent implements OnDestroy {
     }
 
     const currentIndex = this.focusedIndex();
-    let nextIndex = currentIndex + direction;
+    let nextIndex: number;
 
-    if (nextIndex < 0) {
-      nextIndex = items.length - 1;
-    } else if (nextIndex >= items.length) {
-      nextIndex = 0;
+    if (currentIndex === -1) {
+      nextIndex = direction > 0 ? 0 : items.length - 1;
+    } else {
+      nextIndex = currentIndex + direction;
+      if (nextIndex < 0) {
+        nextIndex = items.length - 1;
+      } else if (nextIndex >= items.length) {
+        nextIndex = 0;
+      }
     }
 
     this.focusedIndex.set(nextIndex);
@@ -632,7 +636,6 @@ export class ZardDropdownService {
     // Setup keyboard navigation
     setTimeout(() => {
       this.setupKeyboardNavigation();
-      this.focusFirstItem();
     }, 0);
 
     // Close on outside click
@@ -768,12 +771,18 @@ export class ZardDropdownService {
     }
 
     const currentIndex = this.focusedIndex();
-    let nextIndex = currentIndex + direction;
+    let nextIndex: number;
 
-    if (nextIndex < 0) {
-      nextIndex = items.length - 1;
-    } else if (nextIndex >= items.length) {
-      nextIndex = 0;
+    if (currentIndex === -1) {
+      // No item focused yet — start from first or last depending on direction
+      nextIndex = direction > 0 ? 0 : items.length - 1;
+    } else {
+      nextIndex = currentIndex + direction;
+      if (nextIndex < 0) {
+        nextIndex = items.length - 1;
+      } else if (nextIndex >= items.length) {
+        nextIndex = 0;
+      }
     }
 
     this.focusItemAtIndex(items, nextIndex);

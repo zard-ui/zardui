@@ -1,7 +1,16 @@
-import { ChangeDetectionStrategy, Component, computed, effect, input, signal, untracked } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  input,
+  signal,
+  untracked,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideClipboard, lucideFolder } from '@ng-icons/lucide';
+import { lucideClipboard, lucideFile, lucideFolder } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardTreeComponent } from '@zard/components/tree/tree.component';
@@ -15,7 +24,8 @@ import type { BlockFile } from '../block-container/block-container.component';
   imports: [SimpleCodeHighlightComponent, ZardTreeComponent, NgIcon, ZardButtonComponent],
   templateUrl: './block-code-viewer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideClipboard, lucideFolder })],
+  encapsulation: ViewEncapsulation.None,
+  viewProviders: [provideIcons({ lucideClipboard, lucideFile, lucideFolder })],
 })
 export class BlockCodeViewerComponent {
   readonly files = input.required<BlockFile[]>();

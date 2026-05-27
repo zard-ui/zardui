@@ -27,7 +27,9 @@ import {
 } from './input.variants';
 
 type OnTouchedType = () => void;
-type OnChangeType = (value: string) => void;
+type ZardInputElement = HTMLInputElement | HTMLTextAreaElement;
+type ZardInputValue = string | number | null | undefined;
+type OnChangeType = (value: ZardInputValue) => void;
 
 @Directive({
   selector: 'input[z-input], textarea[z-input]',
@@ -46,7 +48,7 @@ type OnChangeType = (value: string) => void;
   exportAs: 'zInput',
 })
 export class ZardInputDirective implements ControlValueAccessor {
-  private readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject<ElementRef<ZardInputElement>>(ElementRef);
   private onTouched: OnTouchedType = noopFn;
   private onChangeFn: OnChangeType = noopFn;
 
@@ -54,7 +56,7 @@ export class ZardInputDirective implements ControlValueAccessor {
   readonly zBorderless = input(false, { transform: booleanAttribute });
   readonly zSize = input<ZardInputSizeVariants>('default');
   readonly zStatus = input<ZardInputStatusVariants>();
-  readonly value = model<string>('');
+  readonly value = model<ZardInputValue>(null);
 
   readonly size = linkedSignal<ZardInputSizeVariants>(() => this.zSize());
 
@@ -72,11 +74,7 @@ export class ZardInputDirective implements ControlValueAccessor {
 
   constructor() {
     effect(() => {
-      const value = this.value();
-
-      if (value !== undefined && value !== null) {
-        this.elementRef.nativeElement.value = value;
-      }
+      this.writeNativeValue(this.value());
     });
   }
 
@@ -86,13 +84,13 @@ export class ZardInputDirective implements ControlValueAccessor {
 
   setDataSlot(name: string): void {
     if (this.elementRef?.nativeElement?.dataset) {
-      this.elementRef.nativeElement.dataset.slot = name;
+      this.elementRef.nativeElement.dataset['slot'] = name;
     }
   }
 
   protected updateValue(target: EventTarget | null): void {
-    const el = target as HTMLInputElement | HTMLTextAreaElement | null;
-    this.value.set(el?.value ?? '');
+    const el = target as ZardInputElement | null;
+    this.value.set(this.readNativeValue(el));
     this.onChangeFn(this.value());
   }
 
@@ -117,10 +115,45 @@ export class ZardInputDirective implements ControlValueAccessor {
     this.disable(isDisabled);
   }
 
-  writeValue(value?: string): void {
+  writeValue(value: ZardInputValue): void {
     const newValue = value ?? '';
     this.value.set(newValue);
-    this.elementRef.nativeElement.value = newValue;
+  }
+
+  private isNumericInput(element: ZardInputElement): element is HTMLInputElement {
+    return element.tagName.toLowerCase() === 'input' && ['number', 'range'].includes(element.type);
+  }
+
+  private readNativeValue(element: ZardInputElement | null): ZardInputValue {
+    if (!element) {
+      return '';
+    }
+
+    if (this.isNumericInput(element)) {
+      const currentValue = this.value();
+
+      if (typeof currentValue === 'number' || currentValue === null) {
+        if (element.value === '') {
+          return null;
+        }
+
+        const numericValue = element.valueAsNumber;
+        return Number.isNaN(numericValue) ? null : numericValue;
+      }
+    }
+
+    return element.value;
+  }
+
+  private writeNativeValue(value: ZardInputValue): void {
+    const element = this.elementRef.nativeElement;
+
+    if (this.isNumericInput(element) && typeof value === 'number') {
+      element.value = Number.isNaN(value) ? '' : String(value);
+      return;
+    }
+
+    element.value = String(value ?? '');
   }
 }
 
@@ -133,17 +166,17 @@ import { cva, type VariantProps } from 'class-variance-authority';
 
 export type zInputIcon = 'email' | 'password' | 'text';
 
-export const inputVariants = cva('w-full', {
+export const inputVariants = cva('w-full min-w-0', {
   variants: {
     zType: {
       default:
-        'flex rounded-md border px-4 font-normal border-input bg-transparent file:border-0 file:text-foreground file:bg-transparent file:font-medium placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+        'flex rounded-lg border border-input bg-transparent px-2.5 font-normal transition-colors file:inline-flex file:border-0 file:bg-transparent file:font-medium file:text-foreground placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 dark:bg-input/30 dark:disabled:bg-input/80',
       textarea:
-        'flex pb-2 min-h-20 h-auto rounded-md border border-input bg-background px-3 py-2 text-base placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] disabled:cursor-not-allowed disabled:opacity-50',
+        'flex pb-2 min-h-20 h-auto rounded-lg border border-input bg-transparent px-3 py-2 text-base transition-colors placeholder:text-muted-foreground outline-none focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:cursor-not-allowed disabled:bg-input/50 disabled:opacity-50 dark:bg-input/30 dark:disabled:bg-input/80',
     },
     zSize: {
-      default: 'text-sm',
-      sm: 'text-xs',
+      default: 'text-base md:text-sm',
+      sm: 'text-base md:text-sm',
       lg: 'text-base',
     },
     zStatus: {
@@ -160,9 +193,9 @@ export const inputVariants = cva('w-full', {
     zSize: 'default',
   },
   compoundVariants: [
-    { zType: 'default', zSize: 'default', class: 'h-9 py-2 file:max-md:py-0' },
-    { zType: 'default', zSize: 'sm', class: 'h-8 file:md:py-2 file:max-md:py-1.5' },
-    { zType: 'default', zSize: 'lg', class: 'h-10 py-1 file:md:py-3 file:max-md:py-2.5' },
+    { zType: 'default', zSize: 'default', class: 'h-9 py-1 file:h-7 file:text-sm file:max-md:py-0' },
+    { zType: 'default', zSize: 'sm', class: 'h-8 py-1 file:h-6 file:text-sm file:max-md:py-1.5' },
+    { zType: 'default', zSize: 'lg', class: 'h-10 py-1 file:h-7 file:text-sm file:max-md:py-2.5' },
   ],
 });
 

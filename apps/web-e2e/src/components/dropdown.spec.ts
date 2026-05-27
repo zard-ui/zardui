@@ -33,7 +33,6 @@ test.describe('Dropdown component', () => {
 
     const items = page.locator('[role="menuitem"]');
     await expect(items.first()).toBeVisible({ timeout: 3000 });
-    await expect(items.first()).toHaveAttribute('data-highlighted', '', { timeout: 3000 });
   });
 
   test('has a disabled menu item', async ({ page }) => {
@@ -60,28 +59,40 @@ test.describe('Dropdown component', () => {
 
   test('navigates items with arrow keys', async ({ page }) => {
     const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
-    await trigger.click();
 
+    // Open dropdown and wait for menu to be both visible AND focused
     const menu = page.locator('[role="menu"]');
+    await trigger.click();
     await expect(menu).toBeVisible({ timeout: 5000 });
+    await expect(menu).toBeFocused({ timeout: 5000 });
 
     const items = page.locator('[role="menuitem"]:not([data-disabled])');
     const firstItem = items.first();
     const secondItem = items.nth(1);
 
-    await expect(firstItem).toHaveAttribute('data-highlighted', '', { timeout: 3000 });
+    // Use expect().toHaveAttribute() which auto-waits for the condition
+    await page.keyboard.press('ArrowDown');
+    await expect(firstItem).toHaveAttribute('data-highlighted', '', { timeout: 5000 });
 
     await page.keyboard.press('ArrowDown');
-    await expect(secondItem).toHaveAttribute('data-highlighted', '', { timeout: 3000 });
+    await expect(secondItem).toHaveAttribute('data-highlighted', '', { timeout: 5000 });
     await expect(firstItem).not.toHaveAttribute('data-highlighted');
 
     await page.keyboard.press('ArrowUp');
-    await expect(firstItem).toHaveAttribute('data-highlighted', '', { timeout: 3000 });
+    await expect(firstItem).toHaveAttribute('data-highlighted', '', { timeout: 5000 });
     await expect(secondItem).not.toHaveAttribute('data-highlighted');
   });
 
   test('trigger aria-expanded is isolated between dropdowns', async ({ page }) => {
-    await demoPage.examplesSection.scrollIntoViewIfNeeded();
+    // The #examples section is inside a @defer(on viewport) block.
+    // Scroll to it programmatically to trigger the defer condition,
+    // then wait for the element to appear in the DOM.
+    await page.evaluate(() => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' });
+    });
+    await page.locator('#examples').waitFor({ state: 'attached', timeout: 10_000 });
+    await page.locator('#examples').scrollIntoViewIfNeeded({ timeout: 5000 });
+
     const firstTrigger = demoPage.firstDemoCard.locator('[z-dropdown]');
     const secondTrigger = demoPage.getDemoByName('hover').locator('[z-dropdown]');
 

@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { zardBoldIcon } from '@/shared/core';
+import { lucideBold } from '@ng-icons/lucide';
 
 import { ZardToggleComponent } from './toggle.component';
 
@@ -11,10 +10,10 @@ import { ZardToggleComponent } from './toggle.component';
   imports: [ZardToggleComponent, NgIcon],
   template: `
     <z-toggle aria-label="Test component" [zValue]="zValue" [zDefault]="zDefault" [disabled]="disabled">
-      <ng-icon name="bold" />
+      <ng-icon name="lucideBold" />
     </z-toggle>
   `,
-  viewProviders: [provideIcons({ bold: zardBoldIcon })],
+  viewProviders: [provideIcons({ lucideBold })],
 })
 class TestZardToggleComponent {
   zDefault = false;

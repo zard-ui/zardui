@@ -26,6 +26,13 @@ export const avatarVariants = cva(
 
 export const imageVariants = cva('relative object-cover object-center size-full z-10', {
   variants: {
+    zSize: {
+      sm: 'size-8',
+      default: 'size-10',
+      md: 'size-12',
+      lg: 'size-14',
+      xl: 'size-16',
+    },
     zShape: {
       circle: 'rounded-full',
       rounded: 'rounded-md',
@@ -34,6 +41,7 @@ export const imageVariants = cva('relative object-cover object-center size-full 
   },
   defaultVariants: {
     zShape: 'circle',
+    zSize: 'default',
   },
 });
 
@@ -49,6 +57,6 @@ export const avatarGroupVariants = cva('flex items-center [&_img]:ring-2 [&_img]
   },
 });
 
-export type ZardAvatarVariants = VariantProps<typeof avatarVariants>;
-export type ZardImageVariants = VariantProps<typeof imageVariants>;
-export type ZardAvatarGroupVariants = VariantProps<typeof avatarGroupVariants>;
+export type ZardAvatarSizeVariants = NonNullable<VariantProps<typeof avatarVariants>['zSize']>;
+export type ZardAvatarShapeVariants = NonNullable<VariantProps<typeof avatarVariants>['zShape']>;
+export type ZardAvatarGroupOrientationVariants = NonNullable<VariantProps<typeof avatarGroupVariants>['zOrientation']>;

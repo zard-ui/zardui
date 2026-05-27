@@ -1,4 +1,4 @@
-import { Component, computed, inject, type OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ViewEncapsulation, computed, inject, type OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
@@ -26,6 +26,8 @@ interface BlockPreview {
 
 @Component({
   selector: 'z-block-instructions',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   imports: [
     RouterLink,
     ZardButtonComponent,

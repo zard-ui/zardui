@@ -95,8 +95,7 @@ describe('ZardInputGroupComponent', () => {
       const addon = hostFixture.debugElement.nativeElement.querySelector('[id*="addon-before"]');
       expect(addon).toBeTruthy();
       expect(addon.textContent.trim()).toBe('https://');
-      expect(addon.className).toContain('rounded-l-md');
-      expect(addon.className).toContain('border-r-0');
+      expect(addon.className).toContain('order-first');
     });
 
     it('should render addon after with string', () => {
@@ -106,8 +105,7 @@ describe('ZardInputGroupComponent', () => {
       const addon = hostFixture.debugElement.nativeElement.querySelector('[id*="addon-after"]');
       expect(addon).toBeTruthy();
       expect(addon.textContent.trim()).toBe('.com');
-      expect(addon.className).toContain('rounded-r-md');
-      expect(addon.className).toContain('border-l-0');
+      expect(addon.className).toContain('order-last');
     });
 
     it('should render addon before with template', () => {
@@ -132,8 +130,8 @@ describe('ZardInputGroupComponent', () => {
       expect(afterAddon).toBeTruthy();
 
       // Check that addons have correct border styles
-      expect(beforeAddon.className).toContain('border-r-0');
-      expect(afterAddon.className).toContain('border-l-0');
+      expect(beforeAddon.className).toContain('order-first');
+      expect(afterAddon.className).toContain('order-last');
 
       // Check that input wrapper is styled correctly when both addons are present
       expect(inputWrapper.className).toContain('rounded-l-none');
@@ -170,7 +168,7 @@ describe('ZardInputGroupComponent', () => {
 
       const addon = hostFixture.debugElement.nativeElement.querySelector('[id*="addon-before"]');
       expect(addon.className).toContain('h-7.5');
-      expect(addon.className).toContain('text-xs');
+      expect(addon.className).toContain('text-sm');
     });
   });
 
@@ -209,7 +207,7 @@ describe('ZardInputGroupComponent', () => {
       const input = hostFixture.debugElement.nativeElement.querySelector('input[z-input]');
 
       expect(wrapper).toBeTruthy();
-      expect(inputWrapper.className).toContain('rounded-md'); // isAlone = true
+      expect(inputWrapper.className).toContain('rounded-lg'); // isAlone = true
       expect(input).toBeTruthy();
     });
   });

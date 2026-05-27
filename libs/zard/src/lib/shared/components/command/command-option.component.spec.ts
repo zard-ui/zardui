@@ -15,7 +15,7 @@ import { ZardCommandOptionComponent } from './command-option.component';
       zLabel="Test Option"
       zValue="test-value"
       zShortcut="⌘K"
-      zIcon="search"
+      zIcon="lucideSearch"
       [zDisabled]="disabled"
       variant="default"
     />

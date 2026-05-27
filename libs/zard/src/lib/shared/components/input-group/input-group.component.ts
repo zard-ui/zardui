@@ -85,16 +85,19 @@ export class ZardInputGroupComponent {
   protected readonly addonBeforeId = computed(() => `${this.uniqueId()?.id() ?? 'input-group'}-addon-before`);
   protected readonly addonAfterId = computed(() => `${this.uniqueId()?.id() ?? 'input-group'}-addon-after`);
   protected readonly isAddonBeforeTemplate = computed(() => isTemplateRef(this.zAddonBefore()));
-  protected readonly classes = computed(() =>
-    mergeClasses(
+  protected readonly classes = computed(() => {
+    const isTextarea = this.contentInput()?.getType() === 'textarea';
+    return mergeClasses(
       'w-full',
       inputGroupVariants({
         zSize: this.zSize(),
         zDisabled: this.zDisabled() || this.zLoading(),
       }),
+      !isTextarea && !this.zAddonBefore() ? 'pl-2.5' : '',
+      !isTextarea && !this.zAddonAfter() ? 'pr-2.5' : '',
       this.class(),
-    ),
-  );
+    );
+  });
 
   protected readonly inputWrapperClasses = computed(() =>
     mergeClasses(

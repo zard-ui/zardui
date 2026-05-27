@@ -238,7 +238,7 @@ describe('ZardDropdownService', () => {
       } as unknown as ViewContainerRef;
     });
 
-    it('focuses first item on open', async () => {
+    it('focuses menu container on open', async () => {
       const menuElement = document.createElement('div');
       menuElement.setAttribute('role', 'menu');
 
@@ -252,7 +252,7 @@ describe('ZardDropdownService', () => {
 
       await new Promise(resolve => setTimeout(resolve, 100));
 
-      expect(firstItem.dataset['highlighted']).toBe('');
+      expect(firstItem.dataset['highlighted']).toBeUndefined();
     });
   });
 });

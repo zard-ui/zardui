@@ -261,6 +261,7 @@ describe('ZardDropdownMenuComponent', () => {
       const menuElement = overlayContainer?.querySelector('[role="menu"]');
       expect(menuElement).toBeTruthy();
       menuElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
+      menuElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
       fixture.detectChanges();
 
       const menuItems = overlayContainer?.querySelectorAll<HTMLElement>('[z-dropdown-menu-item]');
@@ -276,6 +277,7 @@ describe('ZardDropdownMenuComponent', () => {
       const overlayContainer = document.querySelector('.cdk-overlay-container');
       const menuElement = overlayContainer?.querySelector('[role="menu"]');
       expect(menuElement).toBeTruthy();
+      menuElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
       menuElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true, cancelable: true }));
       menuElement!.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowUp', bubbles: true, cancelable: true }));
       fixture.detectChanges();

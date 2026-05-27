@@ -20,8 +20,7 @@ test.describe('Dialog component', () => {
     const trigger = demoPage.firstDemoCard.locator('button[z-button]').first();
     await trigger.click();
 
-    // Dialog renders via CDK overlay as <z-dialog>
-    const dialog = page.locator('z-dialog');
+    const dialog = page.locator('.cdk-overlay-container z-dialog');
     await expect(dialog).toBeVisible({ timeout: 5000 });
   });
 
@@ -29,10 +28,9 @@ test.describe('Dialog component', () => {
     const trigger = demoPage.firstDemoCard.locator('button[z-button]').first();
     await trigger.click();
 
-    const dialog = page.locator('z-dialog');
+    const dialog = page.locator('.cdk-overlay-container z-dialog');
     await expect(dialog).toBeVisible({ timeout: 5000 });
 
-    // Dialog should have form inputs
     const inputs = dialog.locator('input[z-input]');
     const count = await inputs.count();
     expect(count).toBeGreaterThan(0);
@@ -42,7 +40,7 @@ test.describe('Dialog component', () => {
     const trigger = demoPage.firstDemoCard.locator('button[z-button]').first();
     await trigger.click();
 
-    const dialog = page.locator('z-dialog');
+    const dialog = page.locator('.cdk-overlay-container z-dialog');
     await expect(dialog).toBeVisible({ timeout: 5000 });
 
     await page.keyboard.press('Escape');
@@ -53,10 +51,9 @@ test.describe('Dialog component', () => {
     const trigger = demoPage.firstDemoCard.locator('button[z-button]').first();
     await trigger.click();
 
-    const dialog = page.locator('z-dialog');
+    const dialog = page.locator('.cdk-overlay-container z-dialog');
     await expect(dialog).toBeVisible({ timeout: 5000 });
 
-    // Click the cancel button inside the dialog
     const cancelButton = dialog.locator('[data-testid="z-cancel-button"]');
     await expect(cancelButton).toBeVisible();
     await cancelButton.click();
@@ -66,8 +63,7 @@ test.describe('Dialog component', () => {
   test('passes accessibility checks when open', async ({ page }) => {
     const trigger = demoPage.firstDemoCard.locator('button[z-button]').first();
     await trigger.click();
-    await page.locator('z-dialog').waitFor({ state: 'visible', timeout: 5000 });
-    // button-name: close button has icon only; color-contrast + label: demo form styling
+    await page.locator('.cdk-overlay-container z-dialog').waitFor({ state: 'visible', timeout: 5000 });
     await checkA11y(page, undefined, ['button-name', 'color-contrast', 'label']);
   });
 });

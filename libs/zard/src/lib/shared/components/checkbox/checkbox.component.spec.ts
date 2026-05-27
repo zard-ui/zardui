@@ -118,24 +118,24 @@ describe('ZardCheckboxComponent', () => {
         {
           index: 0,
           type: 'default',
-          expectedClasses: ['border-primary', 'checked:bg-primary'],
+          expectedClasses: ['checked:border-primary', 'checked:bg-primary'],
         },
         {
           index: 1,
           type: 'default',
-          expectedClasses: ['border-primary', 'checked:bg-primary'],
+          expectedClasses: ['checked:border-primary', 'checked:bg-primary'],
         },
         {
           index: 2,
           type: 'destructive',
-          expectedClasses: ['border-destructive', 'checked:bg-destructive'],
+          expectedClasses: ['checked:border-destructive', 'checked:bg-destructive'],
         },
       ];
 
       typeVariants.forEach(variant => {
         const checkbox = checkboxElements[variant.index];
         variant.expectedClasses.forEach(cls => {
-          expect(checkbox.classList).toContain(cls);
+          expect(checkbox).toHaveClass(cls);
         });
       });
     });
