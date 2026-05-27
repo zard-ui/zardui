@@ -1,9 +1,9 @@
-import { Component, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { ZardPaginationImports } from '../pagination.imports';
 
 @Component({
-  selector: 'z-demo-pagination-custom',
+  selector: 'z-demo-pagination-preview',
   imports: [ZardPaginationImports],
   template: `
     <z-pagination [zTotal]="totalPages" [(zPageIndex)]="currentPage" [zContent]="content" />
@@ -33,10 +33,11 @@ import { ZardPaginationImports } from '../pagination.imports';
       </ul>
     </ng-template>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoPaginationCustomComponent {
-  readonly totalPages = 5;
-  readonly currentPage = signal(3);
+export class ZardDemoPaginationPreviewComponent {
+  readonly totalPages = 3;
+  readonly currentPage = signal(2);
 
   readonly pages = signal<number[]>(Array.from({ length: this.totalPages }, (_, i) => i + 1));
 
