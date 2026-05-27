@@ -20,6 +20,7 @@
           [dynamicComponent]="data.preview.component"
           [onlyDemo]="data.preview.onlyDemo"
           [column]="data.preview.column || false"
+          [fillContainer]="data.componentName === 'slider'"
         ></z-code-box>
       } @else {
         <z-code-box
@@ -27,6 +28,7 @@
           [dynamicComponent]="data.examples[0].component"
           [onlyDemo]="data.examples[0].onlyDemo"
           [column]="data.examples[0].column || false"
+          [fillContainer]="data.componentName === 'slider'"
         ></z-code-box>
       }
     </div>
@@ -153,6 +155,7 @@
             [fullScreen]="item.fullScreen"
             [onlyDemo]="item.onlyDemo"
             [column]="item.column"
+            [fillContainer]="data.componentName === 'slider'"
           ></z-code-box>
         }
       </section>

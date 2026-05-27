@@ -31,6 +31,7 @@ export class ZardCodeBoxComponent {
   readonly fullScreen = input<boolean | undefined>(false);
   readonly flexAlign = input<'start' | 'center' | 'end' | undefined>('center');
   readonly column = input<boolean | undefined>(false);
+  readonly fillContainer = input<boolean | undefined>(false);
   readonly dynamicComponent = input<ComponentType<unknown>>();
   readonly codeData = input<CodeBlockData>();
 
@@ -40,5 +41,10 @@ export class ZardCodeBoxComponent {
     const data = this.codeData();
     if (!data) return undefined;
     return { ...data, expandable: false, copyButton: false };
+  });
+
+  readonly previewClasses = computed(() => {
+    const base = 'preview relative flex min-h-72 w-full justify-center p-6 md:p-10';
+    return this.fillContainer() ? `${base} [&>*]:size-full` : base;
   });
 }
