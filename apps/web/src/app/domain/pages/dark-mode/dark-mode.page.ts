@@ -12,7 +12,7 @@ import { SeoService } from '@doc/shared/services/seo.service';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardCardImports } from '@zard/components/card/card.imports';
 import { EDarkModes, ZardDarkMode } from '@zard/services/dark-mode';
 
 import { DocContentComponent } from '../../components/doc-content/doc-content.component';
@@ -31,7 +31,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     CodeBlockComponent,
     CodeTabsComponent,
     ZardButtonComponent,
-    ZardCardComponent,
+    ZardCardImports,
     NgIcon,
     ZardButtonGroupComponent,
   ],

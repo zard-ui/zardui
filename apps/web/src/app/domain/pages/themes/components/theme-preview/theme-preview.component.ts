@@ -17,7 +17,7 @@ import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardCardImports } from '@zard/components/card/card.imports';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
 import { ZardInputComponent } from '@zard/components/input/input.component';
@@ -40,7 +40,7 @@ import { ThemeGeneratorService } from '../../services/theme-generator.service';
     ZardAvatarComponent,
     ZardBadgeComponent,
     ZardButtonComponent,
-    ZardCardComponent,
+    ZardCardImports,
     ZardCheckboxComponent,
     ZardSeparatorComponent,
     ZardEmptyComponent,

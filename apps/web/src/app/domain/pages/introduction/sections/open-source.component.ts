@@ -4,7 +4,7 @@ import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBan, lucideCircleCheck, lucideCircleDollarSign, lucideX, lucideZap } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardCardImports } from '@zard/components/card/card.imports';
 
 interface OpenSourceFeature {
   title: string;
@@ -19,7 +19,7 @@ interface StandAgainstItem {
 
 @Component({
   selector: 'open-source-section',
-  imports: [ZardBadgeComponent, ZardCardComponent, NgIcon],
+  imports: [ZardBadgeComponent, ZardCardImports, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -34,7 +34,10 @@ interface StandAgainstItem {
 
       <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
         @for (feature of features; track $index) {
-          <z-card [zTitle]="title">
+          <z-card>
+            <z-card-header>
+              <z-card-title [zTitle]="title" />
+            </z-card-header>
             <ng-template #title>
               <div
                 class="flex h-10 w-10 items-center justify-center rounded-full bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400"
@@ -43,7 +46,7 @@ interface StandAgainstItem {
               </div>
               <h3 class="mt-4 text-base font-semibold">{{ feature.title }}</h3>
             </ng-template>
-            <p class="text-muted-foreground mt-2 text-sm">{{ feature.description }}</p>
+            <p z-card-content class="text-muted-foreground mt-2 text-sm">{{ feature.description }}</p>
           </z-card>
         }
       </div>
