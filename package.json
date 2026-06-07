@@ -44,7 +44,7 @@
     "@angular/platform-browser": "21.2.13",
     "@angular/platform-browser-dynamic": "21.2.13",
     "@angular/platform-server": "21.2.13",
-    "@angular/router": "21.2.13",
+    "@angular/router": "22.0.0",
     "@angular/ssr": "21.2.11",
     "@antfu/ni": "^30.1.0",
     "@fontsource-variable/geist": "^5.2.9",
