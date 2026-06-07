@@ -157,7 +157,7 @@
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "tailwindcss-animate": "^1.0.7",
-    "ts-jest": "^29.4.10",
+    "ts-jest": "^29.4.11",
     "ts-node": "^10.9.2",
     "tslib": "^2.8.1",
     "tsup": "^8.5.1",
