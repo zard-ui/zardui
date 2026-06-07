@@ -96,7 +96,7 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "21.2.11",
     "@angular-devkit/core": "21.2.11",
-    "@angular-devkit/schematics": "21.2.11",
+    "@angular-devkit/schematics": "22.0.0",
     "@angular/cli": "21.2.11",
     "@angular/compiler-cli": "21.2.13",
     "@angular/language-service": "21.2.13",
