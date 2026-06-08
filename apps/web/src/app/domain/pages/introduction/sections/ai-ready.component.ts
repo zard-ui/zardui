@@ -4,7 +4,7 @@ import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBookOpenText, lucideSun } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardCardImports } from '@zard/components/card/card.imports';
 
 interface AIFeatureCard {
   title: string;
@@ -14,7 +14,7 @@ interface AIFeatureCard {
 
 @Component({
   selector: 'ai-ready-section',
-  imports: [ZardBadgeComponent, ZardCardComponent, NgIcon],
+  imports: [ZardBadgeComponent, ZardCardImports, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -30,7 +30,10 @@ interface AIFeatureCard {
 
       <div class="grid gap-6 md:grid-cols-2">
         @for (card of cards; track $index) {
-          <z-card [zTitle]="title">
+          <z-card>
+            <z-card-header>
+              <z-card-title [zTitle]="title" />
+            </z-card-header>
             <ng-template #title>
               <div class="flex items-center gap-2">
                 <ng-icon [name]="card.icon" class="text-lg font-normal" />

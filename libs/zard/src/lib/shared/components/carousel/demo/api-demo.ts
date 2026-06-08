@@ -2,12 +2,13 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
 import { type EmblaCarouselType } from 'embla-carousel';
 
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+
 import { ZardButtonComponent } from '../../button/button.component';
-import { ZardCardComponent } from '../../card';
 import { ZardCarouselImports } from '../carousel.imports';
 
 @Component({
-  imports: [ZardCarouselImports, ZardButtonComponent, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardButtonComponent, ZardCardImports],
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <z-carousel [zOptions]="{ loop: false }" (zSelected)="onSlideChange()" (zInited)="onCarouselInit($event)">
@@ -15,7 +16,9 @@ import { ZardCarouselImports } from '../carousel.imports';
           @for (slide of slides; track slide) {
             <z-carousel-item>
               <z-card>
-                <div class="flex h-40 items-center justify-center text-4xl font-semibold">{{ slide }}</div>
+                <div z-card-content class="flex h-40 items-center justify-center text-4xl font-semibold">
+                  {{ slide }}
+                </div>
               </z-card>
             </z-carousel-item>
           }

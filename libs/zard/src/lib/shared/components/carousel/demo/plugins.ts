@@ -3,12 +3,12 @@ import { ChangeDetectionStrategy, Component, type OnInit, inject, signal } from 
 import { type EmblaCarouselType, type EmblaPluginType } from 'embla-carousel';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardCardComponent } from '@/shared/components/card';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardCarouselPluginsService } from '@/shared/components/carousel/carousel-plugins.service';
 import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
-  imports: [ZardCarouselImports, ZardButtonComponent, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardButtonComponent, ZardCardImports],
   template: `
     <div class="mx-auto w-3/4 max-w-md">
       <div class="mb-4 flex gap-2">
@@ -30,7 +30,9 @@ import { ZardCarouselImports } from '@/shared/components/carousel/carousel.impor
           @for (slide of slides; track slide) {
             <z-carousel-item>
               <z-card>
-                <div class="flex h-40 items-center justify-center text-4xl font-semibold">{{ slide }}</div>
+                <div z-card-content class="flex h-40 items-center justify-center text-4xl font-semibold">
+                  {{ slide }}
+                </div>
               </z-card>
             </z-carousel-item>
           }

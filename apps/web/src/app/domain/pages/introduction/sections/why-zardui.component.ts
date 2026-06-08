@@ -3,7 +3,12 @@ import { Component } from '@angular/core';
 import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideLayers2, lucideSparkles, lucideUsers, lucideZap } from '@ng-icons/lucide';
 
-import { ZardCardComponent } from '@zard/components/card/card.component';
+import {
+  ZardCardComponent,
+  ZardCardHeaderComponent,
+  ZardCardTitleComponent,
+  ZardCardContentComponent,
+} from '@zard/components/card/card.component';
 
 interface FeatureCard {
   title: string;
@@ -13,7 +18,7 @@ interface FeatureCard {
 
 @Component({
   selector: 'why-zardui-section',
-  imports: [ZardCardComponent, NgIcon],
+  imports: [ZardCardComponent, NgIcon, ZardCardHeaderComponent, ZardCardTitleComponent, ZardCardContentComponent],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
@@ -25,14 +30,19 @@ interface FeatureCard {
 
       <div class="grid gap-4 md:grid-cols-2">
         @for (card of cards; track $index) {
-          <z-card [zTitle]="title">
+          <z-card>
+            <z-card-header>
+              <z-card-title [zTitle]="title" />
+            </z-card-header>
             <ng-template #title>
               <div class="bg-primary/10 flex h-10 w-10 items-center justify-center rounded-lg text-lg">
                 <ng-icon [name]="card.icon" class="text-primary" />
               </div>
             </ng-template>
-            <h3 class="mt-4 text-lg font-semibold">{{ card.title }}</h3>
-            <p class="text-muted-foreground mt-2 text-sm">{{ card.description }}</p>
+            <div z-card-content>
+              <h3 class="mt-4 text-lg font-semibold">{{ card.title }}</h3>
+              <p class="text-muted-foreground mt-2 text-sm">{{ card.description }}</p>
+            </div>
           </z-card>
         }
       </div>

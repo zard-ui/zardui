@@ -1,12 +1,12 @@
 import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
 
-import { ZardCardComponent } from '@/shared/components/card';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 import { ZardToggleGroupComponent } from '@/shared/components/toggle-group';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
-  imports: [ZardCarouselImports, ZardToggleGroupComponent, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardToggleGroupComponent, ZardCardImports],
   template: `
     <div class="mx-auto w-3/4 max-w-4xl">
       <div class="mb-4 flex justify-center gap-2">
@@ -25,7 +25,9 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
           @for (slide of slides; track slide) {
             <z-carousel-item [class]="itemSpacingClass()">
               <z-card>
-                <div class="flex h-40 items-center justify-center text-4xl font-semibold">{{ slide }}</div>
+                <div z-card-content class="flex h-40 items-center justify-center text-4xl font-semibold">
+                  {{ slide }}
+                </div>
               </z-card>
             </z-carousel-item>
           }

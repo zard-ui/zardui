@@ -2,32 +2,77 @@ import type { ApiSection } from '@doc/domain/components/api-reference/api-refere
 
 export const CARD_API: ApiSection[] = [
   {
-    selector: 'z-card',
-    description:
-      'A structured container for displaying content with body section and optional header and footer sections.',
+    selector: 'z-card, [z-card]',
+    description: 'A structured container for displaying content with optional header and footer sections.',
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
-      { name: '[zAction]', description: 'Card action button (requires zTitle)', type: 'string', default: "''" },
       {
-        name: '[zDescription]',
-        description: 'Card description content (requires zTitle)',
-        type: 'string | TemplateRef<void> | undefined',
-        default: '-',
+        name: '[zSize]',
+        description: 'Size variant of the card',
+        type: "'default' | 'sm'",
+        default: "'default'",
       },
-      { name: '[zFooterBorder]', description: 'Card footer with border', type: 'boolean', default: 'false' },
+    ],
+  },
+  {
+    selector: 'z-card-header, [z-card-header]',
+    description: 'Container for card title, description, and optional action.',
+    props: [
       {
         name: '[zHeaderBorder]',
-        description: 'Card header with border (requires zTitle)',
+        description: 'Adds a bottom border to the header',
         type: 'boolean',
         default: 'false',
       },
+    ],
+  },
+  {
+    selector: 'z-card-title, [z-card-title]',
+    description: 'Card title text or template.',
+    props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       {
         name: '[zTitle]',
-        description: 'Card title content. Required to have header',
+        description: 'Title content — string or template reference',
         type: 'string | TemplateRef<void> | undefined',
         default: '-',
       },
-      { name: '(zActionClick)', description: 'Emits action button click', type: 'void', default: '-' },
+    ],
+  },
+  {
+    selector: 'z-card-description, [z-card-description]',
+    description: 'Card description text or template.',
+    props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
+      {
+        name: '[zDescription]',
+        description: 'Description content — string or template reference',
+        type: 'string | TemplateRef<void> | undefined',
+        default: '-',
+      },
+    ],
+  },
+  {
+    selector: 'z-card-action, [z-card-action]',
+    description: 'Action button displayed in the card header.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
+  },
+  {
+    selector: 'z-card-content, [z-card-content]',
+    description: 'Main content area of the card.',
+    props: [{ name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" }],
+  },
+  {
+    selector: 'z-card-footer, [z-card-footer]',
+    description: 'Footer section of the card.',
+    props: [
+      { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
+      {
+        name: '[zFooterBorder]',
+        description: 'Adds a top border to the footer',
+        type: 'boolean',
+        default: 'false',
+      },
     ],
   },
 ];

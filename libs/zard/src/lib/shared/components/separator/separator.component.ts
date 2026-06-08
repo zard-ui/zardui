@@ -15,7 +15,6 @@ import { separatorVariants, type ZardSeparatorVariants } from './separator.varia
 
 @Component({
   selector: 'z-separator',
-  standalone: true,
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
@@ -33,5 +32,7 @@ export class ZardSeparatorComponent {
   readonly zDecorative = input(true, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() => mergeClasses(separatorVariants(), this.class()));
+  // shadcn/ui uses div through SeparatorPrimitive. We don't use div, so we need to add 'block' class
+  // to make it match shadcn/ui styling
+  protected readonly classes = computed(() => mergeClasses(separatorVariants(), 'block', this.class()));
 }
