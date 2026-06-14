@@ -244,6 +244,38 @@ describe('ZardInputOtpComponent', () => {
     expect(otp.effectiveMaxLength()).toBe(4);
   });
 
+  it('should clamp an over-long initial value to the projected slot count', () => {
+    @Component({
+      imports: [ZardInputOtpComponent, ZardInputOtpSlotComponent, ZardInputOtpGroupComponent, ReactiveFormsModule],
+      template: `
+        <z-input-otp [formControl]="control">
+          <z-input-otp-group>
+            <z-input-otp-slot [zIndex]="0" />
+            <z-input-otp-slot [zIndex]="1" />
+            <z-input-otp-slot [zIndex]="2" />
+            <z-input-otp-slot [zIndex]="3" />
+          </z-input-otp-group>
+        </z-input-otp>
+      `,
+      changeDetection: ChangeDetectionStrategy.OnPush,
+    })
+    class InitialValueHost {
+      control = new FormControl('123456');
+    }
+
+    const host = TestBed.createComponent(InitialValueHost);
+    host.detectChanges();
+
+    const otp = host.debugElement.query(By.directive(ZardInputOtpComponent)).componentInstance as ZardInputOtpComponent;
+    expect(otp.tokens().length).toBe(4);
+    expect(otp.tokens().join('')).toBe('1234');
+
+    const values = host.debugElement
+      .queryAll(By.css('[data-slot] input'))
+      .map(d => (d.nativeElement as HTMLInputElement).value);
+    expect(values.join('')).toBe('1234');
+  });
+
   it('should block paste and input when zReadonly is true', async () => {
     @Component({
       imports: [ZardInputOtpComponent, ZardInputOtpSlotComponent, ZardInputOtpGroupComponent],

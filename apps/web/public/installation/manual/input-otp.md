@@ -112,6 +112,11 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   ngAfterContentInit(): void {
     if (this.slots().length > 0) {
       this.hasSlots.set(true);
+      const maxLength = this.effectiveMaxLength();
+      const currentTokens = this.tokens();
+      if (currentTokens.length > maxLength) {
+        this.tokens.set(currentTokens.slice(0, maxLength));
+      }
     }
     this.syncSlots();
   }
