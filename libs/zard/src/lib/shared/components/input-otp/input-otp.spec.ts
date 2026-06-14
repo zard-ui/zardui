@@ -211,6 +211,15 @@ describe('ZardInputOtpComponent', () => {
     expect(document.activeElement).toBe(inputs[5]);
   });
 
+  it('should move focus to the previous slot on Backspace when the slot is empty', () => {
+    const inputs = slotInputs();
+    inputs[1].focus();
+    expect(document.activeElement).toBe(inputs[1]);
+
+    inputs[1].dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', cancelable: true }));
+    expect(document.activeElement).toBe(inputs[0]);
+  });
+
   it('should auto-detect effectiveMaxLength from slot count when zMaxLength is undefined', async () => {
     @Component({
       imports: [ZardInputOtpComponent, ZardInputOtpSlotComponent, ZardInputOtpGroupComponent],
@@ -233,5 +242,63 @@ describe('ZardInputOtpComponent', () => {
 
     const otp = auto.debugElement.query(By.directive(ZardInputOtpComponent)).componentInstance as ZardInputOtpComponent;
     expect(otp.effectiveMaxLength()).toBe(4);
+  });
+
+  it('should block paste and input when zReadonly is true', async () => {
+    @Component({
+      imports: [ZardInputOtpComponent, ZardInputOtpSlotComponent, ZardInputOtpGroupComponent],
+      template: `
+        <z-input-otp [zReadonly]="true" [zMaxLength]="3">
+          <z-input-otp-group>
+            <z-input-otp-slot [zIndex]="0" />
+            <z-input-otp-slot [zIndex]="1" />
+            <z-input-otp-slot [zIndex]="2" />
+          </z-input-otp-group>
+        </z-input-otp>
+      `,
+      changeDetection: ChangeDetectionStrategy.OnPush,
+    })
+    class ReadonlyHost {}
+
+    const ro = TestBed.createComponent(ReadonlyHost);
+    ro.detectChanges();
+
+    const otp = ro.debugElement.query(By.directive(ZardInputOtpComponent)).componentInstance as ZardInputOtpComponent;
+    const inputs = ro.debugElement.queryAll(By.css('[data-slot] input')).map(d => d.nativeElement as HTMLInputElement);
+
+    inputs.forEach(input => expect(input.readOnly).toBe(true));
+
+    inputs[0].focus();
+    const event = new ClipboardEvent('paste', { clipboardData: new DataTransfer() });
+    event.clipboardData?.setData('text/plain', '123');
+    inputs[0].dispatchEvent(event);
+    ro.detectChanges();
+
+    expect(otp.tokens().join('')).toBe('');
+  });
+
+  it('should switch inputMode to "text" when zIntegerOnly is false', async () => {
+    @Component({
+      imports: [ZardInputOtpComponent, ZardInputOtpSlotComponent, ZardInputOtpGroupComponent],
+      template: `
+        <z-input-otp [zIntegerOnly]="false" [zMaxLength]="3">
+          <z-input-otp-group>
+            <z-input-otp-slot [zIndex]="0" />
+            <z-input-otp-slot [zIndex]="1" />
+            <z-input-otp-slot [zIndex]="2" />
+          </z-input-otp-group>
+        </z-input-otp>
+      `,
+      changeDetection: ChangeDetectionStrategy.OnPush,
+    })
+    class TextModeHost {}
+
+    const textMode = TestBed.createComponent(TextModeHost);
+    textMode.detectChanges();
+
+    const inputs = textMode.debugElement
+      .queryAll(By.css('[data-slot] input'))
+      .map(d => d.nativeElement as HTMLInputElement);
+    inputs.forEach(input => expect(input.getAttribute('inputmode')).toBe('text'));
   });
 });
