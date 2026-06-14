@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, forwardRef, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, forwardRef, model, untracked } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 
 import { ZardInputOtpComponent } from './input-otp.component';
@@ -51,7 +51,8 @@ export class ZardInputOtpSignalComponent extends ZardInputOtpComponent implement
 
     effect(() => {
       const next = this.value() ?? '';
-      if (this.tokens().join('') !== next) {
+      const current = untracked(() => this.tokens().join(''));
+      if (current !== next) {
         super.writeValue(next);
       }
     });
