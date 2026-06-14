@@ -13,7 +13,7 @@ The main OTP input container component.
 | `zReadonly`     | `boolean`                     | `false`     | Makes the input readonly                                          |
 | `zIntegerOnly`  | `boolean`                     | `true`      | Restricts inputmode to numeric and limits keyboard input          |
 | `zSize`         | `'sm' \| 'default' \| 'lg'`   | `'default'` | Size variant; cascades to projected slots and separators          |
-| `zClass`        | `ClassValue`                  | `''`        | Additional CSS classes                                            |
+| `class`         | `ClassValue`                  | `''`        | Additional CSS classes                                            |
 
 ### Outputs
 
@@ -167,10 +167,10 @@ onComplete(value: string): void {
 
 ## Styling
 
-All components use CVA (Class Variance Authority) for styling. The main component accepts `zClass`; subcomponents accept the native `class` attribute:
+All components use CVA (Class Variance Authority) for styling. Every component accepts a `class` input for additional classes:
 
 ```html
-<z-input-otp zClass="gap-4" zSize="lg">
+<z-input-otp class="gap-4" zSize="lg">
   <z-input-otp-group class="gap-1">
     <z-input-otp-slot [zIndex]="0" class="h-12 w-12 text-lg" />
     <!-- more slots -->
