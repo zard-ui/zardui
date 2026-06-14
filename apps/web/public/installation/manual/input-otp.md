@@ -4,6 +4,7 @@
 import {
   type AfterContentInit,
   afterNextRender,
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -15,6 +16,7 @@ import {
   input,
   output,
   signal,
+  ViewEncapsulation,
   viewChildren,
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -66,6 +68,7 @@ type OnChangeType = (value: string) => void;
     },
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[attr.data-disabled]': 'disabled() ? "" : null',
   },
@@ -76,8 +79,8 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   readonly zMaxLength = input<number | undefined>(undefined);
   readonly zPattern = input<string>('[0-9]');
   readonly class = input<ClassValue>('');
-  readonly zReadonly = input<boolean>(false);
-  readonly zIntegerOnly = input<boolean>(true);
+  readonly zReadonly = input(false, { transform: booleanAttribute });
+  readonly zIntegerOnly = input(true, { transform: booleanAttribute });
   readonly zSize = input<ZardInputOtpSize>('default');
 
   zValueChange = output<string>();
