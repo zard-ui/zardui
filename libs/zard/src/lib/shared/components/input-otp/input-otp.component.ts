@@ -21,6 +21,7 @@ import type { ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZARD_INPUT_OTP_SLOT, type ZardInputOtpSlotApi } from './input-otp.tokens';
+import { isInputElement, isInputEvent } from './input-otp.utils';
 import { inputOtpSlotVariants, inputOtpVariants, type ZardInputOtpSize } from './input-otp.variants';
 
 type OnTouchedType = () => void;
@@ -71,7 +72,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 
   readonly zMaxLength = input<number | undefined>(undefined);
   readonly zPattern = input<string>('[0-9]');
-  readonly zClass = input<ClassValue>('');
+  readonly class = input<ClassValue>('');
   readonly zReadonly = input<boolean>(false);
   readonly zIntegerOnly = input<boolean>(true);
   readonly zSize = input<ZardInputOtpSize>('default');
@@ -84,8 +85,9 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   readonly tokens = signal<string[]>([]);
   readonly disabled = signal<boolean>(false);
   readonly focusedIndex = signal<number>(-1);
-  readonly classes = computed(() => mergeClasses(inputOtpVariants({ zSize: this.zSize() }), this.zClass()));
+  readonly classes = computed(() => mergeClasses(inputOtpVariants({ zSize: this.zSize() }), this.class()));
   readonly inputMode = computed(() => (this.zIntegerOnly() ? 'numeric' : 'text'));
+  readonly patternRegex = computed(() => new RegExp(this.zPattern()));
 
   readonly hasSlots = signal(false);
   readonly effectiveMaxLength = computed(() => this.zMaxLength() ?? (this.hasSlots() ? this.slots().length : 6));
@@ -160,7 +162,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       return;
     }
 
-    const regex = new RegExp(this.zPattern());
+    const regex = this.patternRegex();
 
     if (value && !regex.test(value)) {
       input.value = this.tokens()[index] || '';
@@ -226,7 +228,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   }
 
   handlePaste(paste: string): void {
-    const regex = new RegExp(this.zPattern());
+    const regex = this.patternRegex();
     const pastedCode = paste
       .substring(0, this.effectiveMaxLength())
       .split('')
@@ -292,8 +294,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 
         const hasSelection = input.selectionStart !== input.selectionEnd;
         const isAtMaxLength = this.tokens().join('').length >= this.effectiveMaxLength();
-        const regex = new RegExp(this.zPattern());
-        const isValidKey = regex.test(event.key);
+        const isValidKey = this.patternRegex().test(event.key);
 
         if (!isValidKey || (isAtMaxLength && !hasSelection)) {
           event.preventDefault();
@@ -390,12 +391,4 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       slotsArray[i].updateState(char, isActive, isActive && !char);
     }
   }
-}
-
-function isInputElement(target: EventTarget | null): target is HTMLInputElement {
-  return target instanceof HTMLInputElement;
-}
-
-function isInputEvent(event: Event): event is InputEvent {
-  return event instanceof InputEvent;
 }

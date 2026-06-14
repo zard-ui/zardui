@@ -16,6 +16,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardInputOtpComponent } from './input-otp.component';
 import { ZARD_INPUT_OTP_SLOT } from './input-otp.tokens';
+import { isInputElement } from './input-otp.utils';
 import { inputOtpSlotVariants } from './input-otp.variants';
 
 @Component({
@@ -105,11 +106,6 @@ export class ZardInputOtpSlotComponent {
     input.select();
   }
 
-  rejectInput(): void {
-    const input = this.getInputElement();
-    input.value = this.char();
-  }
-
   onInput(event: Event): void {
     if (!isInputElement(event.target)) {
       return;
@@ -162,8 +158,4 @@ export class ZardInputOtpSlotComponent {
       input.value = char;
     }
   }
-}
-
-function isInputElement(target: EventTarget | null): target is HTMLInputElement {
-  return target instanceof HTMLInputElement;
 }
