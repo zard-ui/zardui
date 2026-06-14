@@ -24,6 +24,7 @@ import type { ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZARD_INPUT_OTP_SLOT, type ZardInputOtpSlotApi } from './input-otp.tokens';
+import { isInputElement, isInputEvent } from './input-otp.utils';
 import { inputOtpSlotVariants, inputOtpVariants, type ZardInputOtpSize } from './input-otp.variants';
 
 type OnTouchedType = () => void;
@@ -74,7 +75,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 
   readonly zMaxLength = input<number | undefined>(undefined);
   readonly zPattern = input<string>('[0-9]');
-  readonly zClass = input<ClassValue>('');
+  readonly class = input<ClassValue>('');
   readonly zReadonly = input<boolean>(false);
   readonly zIntegerOnly = input<boolean>(true);
   readonly zSize = input<ZardInputOtpSize>('default');
@@ -87,8 +88,9 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   readonly tokens = signal<string[]>([]);
   readonly disabled = signal<boolean>(false);
   readonly focusedIndex = signal<number>(-1);
-  readonly classes = computed(() => mergeClasses(inputOtpVariants({ zSize: this.zSize() }), this.zClass()));
+  readonly classes = computed(() => mergeClasses(inputOtpVariants({ zSize: this.zSize() }), this.class()));
   readonly inputMode = computed(() => (this.zIntegerOnly() ? 'numeric' : 'text'));
+  readonly patternRegex = computed(() => new RegExp(this.zPattern()));
 
   readonly hasSlots = signal(false);
   readonly effectiveMaxLength = computed(() => this.zMaxLength() ?? (this.hasSlots() ? this.slots().length : 6));
@@ -163,7 +165,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       return;
     }
 
-    const regex = new RegExp(this.zPattern());
+    const regex = this.patternRegex();
 
     if (value && !regex.test(value)) {
       input.value = this.tokens()[index] || '';
@@ -229,7 +231,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   }
 
   handlePaste(paste: string): void {
-    const regex = new RegExp(this.zPattern());
+    const regex = this.patternRegex();
     const pastedCode = paste
       .substring(0, this.effectiveMaxLength())
       .split('')
@@ -295,8 +297,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 
         const hasSelection = input.selectionStart !== input.selectionEnd;
         const isAtMaxLength = this.tokens().join('').length >= this.effectiveMaxLength();
-        const regex = new RegExp(this.zPattern());
-        const isValidKey = regex.test(event.key);
+        const isValidKey = this.patternRegex().test(event.key);
 
         if (!isValidKey || (isAtMaxLength && !hasSelection)) {
           event.preventDefault();
@@ -393,14 +394,6 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
       slotsArray[i].updateState(char, isActive, isActive && !char);
     }
   }
-}
-
-function isInputElement(target: EventTarget | null): target is HTMLInputElement {
-  return target instanceof HTMLInputElement;
-}
-
-function isInputEvent(event: Event): event is InputEvent {
-  return event instanceof InputEvent;
 }
 
 ```
@@ -575,7 +568,7 @@ export class ZardInputOtpSeparatorComponent {
 
 
 ```angular-ts title="input-otp-signal.component.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
-import { ChangeDetectionStrategy, Component, effect, forwardRef, model } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, forwardRef, model, untracked } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 
 import { ZardInputOtpComponent } from './input-otp.component';
@@ -628,7 +621,8 @@ export class ZardInputOtpSignalComponent extends ZardInputOtpComponent implement
 
     effect(() => {
       const next = this.value() ?? '';
-      if (this.tokens().join('') !== next) {
+      const current = untracked(() => this.tokens().join(''));
+      if (current !== next) {
         super.writeValue(next);
       }
     });
@@ -662,6 +656,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardInputOtpComponent } from './input-otp.component';
 import { ZARD_INPUT_OTP_SLOT } from './input-otp.tokens';
+import { isInputElement } from './input-otp.utils';
 import { inputOtpSlotVariants } from './input-otp.variants';
 
 @Component({
@@ -751,11 +746,6 @@ export class ZardInputOtpSlotComponent {
     input.select();
   }
 
-  rejectInput(): void {
-    const input = this.getInputElement();
-    input.value = this.char();
-  }
-
   onInput(event: Event): void {
     if (!isInputElement(event.target)) {
       return;
@@ -810,10 +800,6 @@ export class ZardInputOtpSlotComponent {
   }
 }
 
-function isInputElement(target: EventTarget | null): target is HTMLInputElement {
-  return target instanceof HTMLInputElement;
-}
-
 ```
 
 
@@ -828,6 +814,19 @@ export interface ZardInputOtpSlotApi {
 }
 
 export const ZARD_INPUT_OTP_SLOT = new InjectionToken<ZardInputOtpSlotApi>('ZardInputOtpSlot');
+
+```
+
+
+
+```angular-ts title="input-otp.utils.ts" expandable="true" expandableTitle="Expand" copyButton showLineNumbers
+export function isInputElement(target: EventTarget | null): target is HTMLInputElement {
+  return target instanceof HTMLInputElement;
+}
+
+export function isInputEvent(event: Event): event is InputEvent {
+  return event instanceof InputEvent;
+}
 
 ```
 
