@@ -127,7 +127,7 @@
     "@types/express": "^5.0.6",
     "@types/fs-extra": "^11.0.4",
     "@types/jest": "30.0.0",
-    "@types/node": "^25.9.1",
+    "@types/node": "^26.0.0",
     "@types/prompts": "^2.4.9",
     "@typescript-eslint/utils": "^8.59.4",
     "angular-eslint": "21.4.0",
