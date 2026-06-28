@@ -12,6 +12,26 @@
     <p class="my-4 leading-relaxed text-pretty first-letter:uppercase" [prose]="demoDescription()"></p>
   }
 
+  @if (codeBeforeList().length) {
+    <div class="mb-6 flex flex-col gap-4">
+      @for (before of codeBeforeList(); track $index) {
+        <div class="flex flex-col gap-3">
+          @if (before.title) {
+            <h4 class="font-heading scroll-m-28 text-base font-medium tracking-tight first-letter:uppercase">
+              {{ before.title }}
+            </h4>
+          }
+          @if (before.description) {
+            <p class="leading-relaxed text-pretty first-letter:uppercase" [prose]="before.description"></p>
+          }
+          <div class="overflow-hidden rounded-lg border">
+            <z-code-block [data]="before.codeData" [embedded]="true" />
+          </div>
+        </div>
+      }
+    </div>
+  }
+
   @if (fullScreen()) {
     @if (dynamicComponent()) {
       <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
@@ -21,51 +41,87 @@
       class="group/code-box relative flex w-full flex-col overflow-hidden rounded-xl border"
       [class.mb-12]="!onlyDemo() && codeData()"
     >
-      <div
-        [class]="previewClasses()"
-        [class.items-center]="flexAlign() === 'center'"
-        [class.items-start]="flexAlign() === 'start'"
-        [class.items-end]="flexAlign() === 'end'"
-        [class.flex-col]="column()"
-        [class.gap-4]="true"
-      >
-        @if (dynamicComponent()) {
+      @if (dynamicComponent()) {
+        <div
+          [class]="previewClasses()"
+          [style.min-height]="previewHeight() || null"
+          [class.items-center]="flexAlign() === 'center'"
+          [class.items-start]="flexAlign() === 'start'"
+          [class.items-end]="flexAlign() === 'end'"
+          [class.flex-col]="column()"
+          [class.gap-4]="true"
+        >
           <ng-container *ngComponentOutlet="dynamicComponent() ?? null"></ng-container>
-        }
-      </div>
+        </div>
+      }
 
       @if (!onlyDemo() && codeBlockData(); as code) {
-        <div
-          class="relative border-t"
-          [class.overflow-hidden]="codeCollapsed()"
-          [class.max-h-32]="codeCollapsed()"
-          [class.max-h-96]="!codeCollapsed()"
-          [class.no-scrollbar]="!codeCollapsed()"
-          [class.overflow-x-auto]="!codeCollapsed()"
-          [class.overflow-y-auto]="!codeCollapsed()"
-          [class.overscroll-y-auto]="!codeCollapsed()"
-          [class.overscroll-x-contain]="!codeCollapsed()"
-        >
-          <z-code-block [data]="code" [embedded]="true" />
+        @if (dynamicComponent()) {
+          <div
+            class="relative border-t"
+            [style.max-height]="codeHeight() || null"
+            [class.overflow-hidden]="codeCollapsed()"
+            [class.max-h-32]="codeCollapsed()"
+            [class.max-h-96]="!codeCollapsed()"
+            [class.no-scrollbar]="!codeCollapsed()"
+            [class.overflow-x-auto]="!codeCollapsed()"
+            [class.overflow-y-auto]="!codeCollapsed()"
+            [class.overscroll-y-auto]="!codeCollapsed()"
+            [class.overscroll-x-contain]="!codeCollapsed()"
+          >
+            <z-code-block [data]="code" [embedded]="true" />
 
-          @if (codeCollapsed()) {
-            <div
-              class="from-code via-code/70 absolute inset-0 flex items-center justify-center bg-linear-to-t to-transparent"
-            >
-              <button
-                type="button"
-                class="bg-background text-foreground hover:bg-muted dark:bg-background dark:text-foreground dark:hover:bg-muted relative z-10 cursor-pointer rounded-lg border px-4 py-1.5 text-sm font-medium shadow-sm"
-                (click)="codeCollapsed.set(false)"
+            @if (codeCollapsed()) {
+              <div
+                class="from-code via-code/70 absolute inset-0 flex items-center justify-center bg-linear-to-t to-transparent"
               >
-                View Code
-              </button>
-            </div>
-          } @else {
+                <button
+                  type="button"
+                  class="bg-background text-foreground hover:bg-muted dark:bg-background dark:text-foreground dark:hover:bg-muted relative z-10 cursor-pointer rounded-lg border px-4 py-1.5 text-sm font-medium shadow-sm"
+                  (click)="codeCollapsed.set(false)"
+                >
+                  View Code
+                </button>
+              </div>
+            } @else {
+              <z-copy-button
+                [code]="codeData()!.code"
+                class="text-muted-foreground hover:bg-muted/80 focus-visible:ring-ring bg-code absolute top-3 right-3 z-20 flex h-7 w-7 cursor-pointer items-center justify-center rounded-md transition-all duration-200 ease-in-out focus-visible:ring-2 focus-visible:outline-none"
+              />
+            }
+          </div>
+        } @else {
+          <div
+            class="no-scrollbar relative max-h-[34rem] overflow-auto overscroll-contain"
+            [style.max-height]="codeHeight() || null"
+          >
+            <z-code-block [data]="code" [embedded]="true" />
+
             <z-copy-button
               [code]="codeData()!.code"
               class="text-muted-foreground hover:bg-muted/80 focus-visible:ring-ring bg-code absolute top-3 right-3 z-20 flex h-7 w-7 cursor-pointer items-center justify-center rounded-md transition-all duration-200 ease-in-out focus-visible:ring-2 focus-visible:outline-none"
             />
+          </div>
+        }
+      }
+    </div>
+  }
+
+  @if (codeAfterList().length) {
+    <div class="mt-6 flex flex-col gap-4">
+      @for (after of codeAfterList(); track $index) {
+        <div class="flex flex-col gap-3">
+          @if (after.title) {
+            <h4 class="font-heading scroll-m-28 text-base font-medium tracking-tight first-letter:uppercase">
+              {{ after.title }}
+            </h4>
           }
+          @if (after.description) {
+            <p class="leading-relaxed text-pretty first-letter:uppercase" [prose]="after.description"></p>
+          }
+          <div class="overflow-hidden rounded-lg border">
+            <z-code-block [data]="after.codeData" [embedded]="true" />
+          </div>
         </div>
       }
     </div>

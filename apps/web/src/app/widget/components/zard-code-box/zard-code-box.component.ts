@@ -8,6 +8,7 @@ import type { CodeBlockData } from '@highlight/types';
 
 import { AnchorDirective } from '@doc/domain/directives/anchor.directive';
 import { ProseDirective } from '@doc/domain/directives/prose.directive';
+import type { CodeSnippet } from '@doc/shared/constants/components.constant';
 import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
 
 @Component({
@@ -24,6 +25,7 @@ import { HyphenToSpacePipe } from '@doc/shared/pipes/hyphen-to-space.pipe';
   encapsulation: ViewEncapsulation.None,
 })
 export class ZardCodeBoxComponent {
+  // Supports single or multiple codeBefore/codeAfter snippets via codeBeforeList/codeAfterList.
   readonly componentType = input<string>();
   readonly demoDescription = input<string | undefined>();
   readonly onlyDemo = input<boolean | undefined>(false);
@@ -34,8 +36,17 @@ export class ZardCodeBoxComponent {
   readonly fillContainer = input<boolean | undefined>(false);
   readonly dynamicComponent = input<ComponentType<unknown>>();
   readonly codeData = input<CodeBlockData>();
+  readonly codeBefore = input<CodeSnippet | CodeSnippet[]>();
+  readonly codeAfter = input<CodeSnippet | CodeSnippet[]>();
+  /** Optional CSS max-height (e.g. '28rem') overriding the default code block height. */
+  readonly codeHeight = input<string>();
+  /** Optional CSS min-height (e.g. '32rem') overriding the default preview (component) area height. */
+  readonly previewHeight = input<string>();
 
   readonly codeCollapsed = signal(true);
+
+  readonly codeBeforeList = computed(() => toSnippetList(this.codeBefore()));
+  readonly codeAfterList = computed(() => toSnippetList(this.codeAfter()));
 
   readonly codeBlockData = computed(() => {
     const data = this.codeData();
@@ -47,4 +58,9 @@ export class ZardCodeBoxComponent {
     const base = 'preview relative flex min-h-72 w-full justify-center p-6 md:p-10';
     return this.fillContainer() ? `${base} [&>*]:size-full` : base;
   });
+}
+
+function toSnippetList(value: CodeSnippet | CodeSnippet[] | undefined): CodeSnippet[] {
+  if (!value) return [];
+  return Array.isArray(value) ? value : [value];
 }

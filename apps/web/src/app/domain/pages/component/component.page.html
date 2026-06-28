@@ -20,6 +20,8 @@
           [dynamicComponent]="data.preview.component"
           [onlyDemo]="data.preview.onlyDemo"
           [column]="data.preview.column || false"
+          [codeHeight]="data.preview.codeHeight"
+          [previewHeight]="data.preview.previewHeight"
           [fillContainer]="data.componentName === 'slider'"
         ></z-code-box>
       } @else {
@@ -28,10 +30,31 @@
           [dynamicComponent]="data.examples[0].component"
           [onlyDemo]="data.examples[0].onlyDemo"
           [column]="data.examples[0].column || false"
+          [codeHeight]="data.examples[0].codeHeight"
+          [previewHeight]="data.examples[0].previewHeight"
           [fillContainer]="data.componentName === 'slider'"
         ></z-code-box>
       }
     </div>
+
+    @if (data.about; as about) {
+      <section class="flex flex-col gap-3" scrollSpyItem="about" id="about">
+        <h2 class="font-heading scroll-m-28 text-xl font-medium tracking-tight">{{ about.title ?? 'About' }}</h2>
+        <p class="text-muted-foreground leading-relaxed">
+          {{ about.description }}
+          @if (about.link; as link) {
+            <a
+              [href]="link.href"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-foreground font-medium underline underline-offset-4"
+            >
+              {{ link.label }}
+            </a>
+          }
+        </p>
+      </section>
+    }
 
     <section class="flex flex-col gap-4" scrollSpyItem="installation" id="installation">
       <header class="mb-3">
@@ -151,6 +174,10 @@
             [componentType]="item.name"
             [demoDescription]="item.description"
             [codeData]="item.codeData"
+            [codeBefore]="item.codeBefore"
+            [codeAfter]="item.codeAfter"
+            [codeHeight]="item.codeHeight"
+            [previewHeight]="item.previewHeight"
             [dynamicComponent]="item.component"
             [fullScreen]="item.fullScreen"
             [onlyDemo]="item.onlyDemo"
