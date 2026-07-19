@@ -21,7 +21,7 @@ import { ScrollOnActiveDirective } from './scroll-on-active.directive';
         class="via-border absolute top-12 right-2 bottom-0 hidden h-full w-px bg-linear-to-b from-transparent to-transparent lg:flex"
       ></div>
       <nav
-        class="no-scrollbar mx-auto flex min-h-0 w-(--sidebar-menu-width) flex-1 flex-col gap-2 overflow-auto overflow-x-hidden px-2 group-data-[collapsible=icon]:overflow-hidden"
+        class="no-scrollbar mr-auto flex min-h-0 w-(--sidebar-menu-width) flex-1 flex-col gap-2 overflow-auto overflow-x-hidden px-2 group-data-[collapsible=icon]:overflow-hidden"
       >
         @for (doc of sidebarPaths; track $index) {
           <div class="relative flex w-full min-w-0 flex-col p-2 pt-6">
@@ -68,6 +68,11 @@ import { ScrollOnActiveDirective } from './scroll-on-active.directive';
   `,
 
   standalone: true,
+  // `display: contents` removes the host box from layout so the inner <aside>
+  // becomes the direct grid item. Without this, the host wrapper (kept at the
+  // aside's own height by the grid's `items-start`) leaves the sticky no travel
+  // room and the sidebar scrolls away instead of sticking.
+  host: { class: 'contents' },
   imports: [RouterModule, ZardBadgeComponent, ScrollOnActiveDirective],
 })
 export class SidebarComponent {

@@ -24,10 +24,12 @@ interface StandAgainstItem {
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
         <div class="flex flex-col-reverse items-start gap-3 md:flex-row md:items-center">
-          <h2 class="text-3xl font-bold tracking-tight">Open Source Philosophy</h2>
+          <h2 class="font-heading mt-10 text-xl font-medium tracking-tight first:mt-0 lg:mt-12">
+            Open Source Philosophy
+          </h2>
           <z-badge class="bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">100% Free</z-badge>
         </div>
-        <p class="text-muted-foreground text-base leading-7">
+        <p class="text-foreground text-base leading-7">
           Built by the community, for the community. No corporate overlords, no paywalls, no compromises.
         </p>
       </div>
@@ -46,7 +48,7 @@ interface StandAgainstItem {
               </div>
               <h3 class="mt-4 text-base font-semibold">{{ feature.title }}</h3>
             </ng-template>
-            <p z-card-content class="text-muted-foreground mt-2 text-sm">{{ feature.description }}</p>
+            <p z-card-content class="text-muted-foreground text-sm">{{ feature.description }}</p>
           </z-card>
         }
       </div>

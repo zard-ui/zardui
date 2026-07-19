@@ -18,11 +18,11 @@ interface AIFeatureCard {
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-3">
-          <h2 class="text-3xl font-bold tracking-tight">AI Ready</h2>
+        <div class="flex items-center gap-2">
+          <h2 class="font-heading mt-10 text-xl font-medium tracking-tight first:mt-0 lg:mt-12">AI Ready</h2>
           <z-badge zType="secondary">Future Ready</z-badge>
         </div>
-        <p class="text-muted-foreground text-base leading-7">
+        <p class="text-foreground text-sm leading-7">
           ZardUI components are designed with AI development in mind. Clear patterns, consistent APIs, and comprehensive
           documentation make it easy for AI tools to understand and work with our components.
         </p>
@@ -40,7 +40,9 @@ interface AIFeatureCard {
                 <h3 class="text-base">{{ card.title }}</h3>
               </div>
             </ng-template>
-            <p class="text-muted-foreground text-base leading-7">{{ card.description }}</p>
+            <z-card-content>
+              <p class="text-muted-foreground text-sm">{{ card.description }}</p>
+            </z-card-content>
           </z-card>
         }
       </div>

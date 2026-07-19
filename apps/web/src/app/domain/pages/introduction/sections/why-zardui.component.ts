@@ -21,9 +21,9 @@ interface FeatureCard {
   imports: [ZardCardComponent, NgIcon, ZardCardHeaderComponent, ZardCardTitleComponent, ZardCardContentComponent],
   template: `
     <section class="flex flex-col gap-8">
-      <div class="flex flex-col gap-4">
-        <h2 class="text-3xl font-bold tracking-tight">Why ZardUI?</h2>
-        <p class="text-muted-foreground text-base leading-7">
+      <div class="flex flex-col gap-2">
+        <h2 class="font-heading mt-10 text-xl font-medium tracking-tight first:mt-0 lg:mt-12">Why ZardUI?</h2>
+        <p class="text-foreground text-sm leading-7">
           Finally, a component library that doesn't force you to choose between beauty and functionality.
         </p>
       </div>
