@@ -121,6 +121,7 @@ export class ComponentPage implements OnInit {
     this.navigationConfig = {
       items: [
         { id: 'overview', label: 'Overview', type: 'core' },
+        ...(component.about ? [{ id: 'about', label: 'About', type: 'core' as const }] : []),
         { id: 'installation', label: 'Installation', type: 'core' },
         { id: 'usage', label: 'Usage', type: 'core' },
         ...(component.composition ? [{ id: 'composition', label: 'Composition', type: 'core' as const }] : []),

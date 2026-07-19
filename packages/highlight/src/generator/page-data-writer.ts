@@ -127,7 +127,7 @@ async function buildTabExport(blocks: ParsedBlock[], index: number): Promise<Pag
 }
 
 async function buildBlockExport(block: ParsedBlock, index: number): Promise<PageExport> {
-  const html = await highlightCode(block.code, block.meta.language);
+  const html = await highlightCode(block.code, block.meta.language, block.meta.highlightLines);
   return {
     name: `BLOCK_${index}`,
     type: 'block',
@@ -140,6 +140,7 @@ async function buildBlockExport(block: ParsedBlock, index: number): Promise<Page
       copyButton: block.meta.copyButton,
       expandable: block.meta.expandable,
       expandableTitle: block.meta.expandableTitle,
+      highlightLines: block.meta.highlightLines,
     } as CodeBlockData,
   };
 }

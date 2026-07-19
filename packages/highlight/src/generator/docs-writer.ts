@@ -53,7 +53,7 @@ export async function generateDocsFiles(): Promise<number> {
         if (writeIfChanged(outputFile, generateTabExport(constName, data))) count++;
       } else if (blocks.length === 1) {
         const block = blocks[0];
-        const html = await highlightCode(block.code, block.meta.language);
+        const html = await highlightCode(block.code, block.meta.language, block.meta.highlightLines);
         const data: CodeBlockData = {
           html,
           code: block.code,
@@ -63,6 +63,7 @@ export async function generateDocsFiles(): Promise<number> {
           copyButton: block.meta.copyButton,
           expandable: block.meta.expandable,
           expandableTitle: block.meta.expandableTitle,
+          highlightLines: block.meta.highlightLines,
         };
         const outputFile = path.join(outputDir, `${baseName}.ts`);
         if (writeIfChanged(outputFile, generateCodeBlockExport(constName, data))) count++;
@@ -70,7 +71,7 @@ export async function generateDocsFiles(): Promise<number> {
         // Multiple non-tabbed blocks → export as array
         const dataBlocks: CodeBlockData[] = [];
         for (const block of blocks) {
-          const html = await highlightCode(block.code, block.meta.language);
+          const html = await highlightCode(block.code, block.meta.language, block.meta.highlightLines);
           dataBlocks.push({
             html,
             code: block.code,
@@ -80,6 +81,7 @@ export async function generateDocsFiles(): Promise<number> {
             copyButton: block.meta.copyButton,
             expandable: block.meta.expandable,
             expandableTitle: block.meta.expandableTitle,
+            highlightLines: block.meta.highlightLines,
           });
         }
         const outputFile = path.join(outputDir, `${baseName}.ts`);

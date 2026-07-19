@@ -11,9 +11,16 @@ export interface ComponentInstallData {
   register?: CodeBlockData;
 }
 
+export interface AboutData {
+  title?: string;
+  description: string;
+  link?: { label: string; href: string };
+}
+
 export interface ComponentData {
   componentName: string;
   description: string;
+  about?: AboutData;
   preview?: ExampleData;
   examples: ExampleData[];
   installData?: ComponentInstallData;
@@ -23,13 +30,29 @@ export interface ComponentData {
   api?: ApiSection[];
 }
 
+/** A standalone code block with an optional heading/description, shown around (or instead of) a demo. */
+export interface CodeSnippet {
+  title?: string;
+  description?: string;
+  codeData: CodeBlockData;
+}
+
 export interface ExampleData {
   name: string;
   description?: string;
   type?: string;
   column?: boolean;
-  component: ComponentType<unknown>;
+  /** Optional: when omitted, the example renders as a code-only block (no live preview). */
+  component?: ComponentType<unknown>;
   codeData?: CodeBlockData;
+  /** Extra code block(s) rendered above the demo (below the example description). */
+  codeBefore?: CodeSnippet | CodeSnippet[];
+  /** Extra code block(s) rendered below the demo. */
+  codeAfter?: CodeSnippet | CodeSnippet[];
+  /** Optional CSS max-height (e.g. '28rem') overriding the default code block height. */
+  codeHeight?: string;
+  /** Optional CSS min-height (e.g. '32rem') overriding the default preview (component) area height. */
+  previewHeight?: string;
   onlyDemo?: boolean;
   fullScreen?: boolean;
   fullWidth?: boolean;
