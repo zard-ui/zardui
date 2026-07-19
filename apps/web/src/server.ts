@@ -133,27 +133,34 @@ function categorizeComponents(): Record<string, Array<{ name: string; path: stri
       if (
         [
           'Button',
-          'Input',
-          'Checkbox',
-          'Radio',
-          'Select',
-          'Switch',
-          'Slider',
+          'Button Group',
           'Calendar',
-          'Date Picker',
+          'Checkbox',
           'Combobox',
+          'Date Picker',
+          'Field',
           'Form',
+          'Input',
           'Input Group',
+          'Radio Group',
+          'Select',
+          'Slider',
+          'Switch',
+          'Textarea',
         ].includes(item.name)
       ) {
         categories['Form & Input'].push(component);
-      } else if (['Accordion', 'Breadcrumb', 'Menu', 'Tabs', 'Divider', 'Resizable'].includes(item.name)) {
+      } else if (
+        ['Accordion', 'Breadcrumb', 'Layout', 'Menu', 'Pagination', 'Resizable', 'Separator', 'Tabs', 'Tree'].includes(
+          item.name,
+        )
+      ) {
         categories['Layout & Navigation'].push(component);
-      } else if (['Dialog', 'Alert Dialog', 'Sheet', 'Popover', 'Tooltip', 'Dropdown', 'Command'].includes(item.name)) {
+      } else if (['Alert Dialog', 'Command', 'Dialog', 'Dropdown', 'Popover', 'Sheet', 'Tooltip'].includes(item.name)) {
         categories['Overlays & Dialogs'].push(component);
-      } else if (['Alert', 'Toast', 'Progress Bar', 'Loader', 'Skeleton', 'Badge', 'Empty'].includes(item.name)) {
+      } else if (['Alert', 'Badge', 'Empty', 'Progress', 'Skeleton', 'Sonner', 'Spinner'].includes(item.name)) {
         categories['Feedback & Status'].push(component);
-      } else if (['Avatar', 'Card', 'Table'].includes(item.name)) {
+      } else if (['Avatar', 'Card', 'Carousel', 'Table'].includes(item.name)) {
         categories['Display & Media'].push(component);
       } else {
         categories['Misc'].push(component);
