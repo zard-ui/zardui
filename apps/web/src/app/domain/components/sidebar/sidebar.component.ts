@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { SIDEBAR_PATHS } from '@doc/shared/constants/routes.constant';
+import { SIDEBAR_PATHS, type NavSection } from '@doc/shared/constants/routes.constant';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 
@@ -35,16 +35,28 @@ import { ScrollOnActiveDirective } from './scroll-on-active.directive';
                 @for (path of doc.data; track $index) {
                   <li class="group/menu-item relative">
                     @if (path.available) {
-                      <a
-                        [routerLink]="path.path"
-                        class="ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground 3xl:fixed:w-full 3xl:fixed:max-w-48 relative flex h-7.5 w-fit items-center gap-2 overflow-hidden rounded-md border border-transparent px-2 text-left text-[0.8rem] font-medium outline-hidden transition-[width,height,padding] after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50"
-                        routerLinkActive="bg-accent text-accent-foreground border-accent overflow-visible hover:bg-accent"
-                        [routerLinkActiveOptions]="{ exact: true }"
-                        scrollOnActive
-                      >
-                        <span class="absolute inset-0 flex w-(--sidebar-width) bg-transparent"></span>
-                        {{ path.name }}
-                      </a>
+                      @if (path.external) {
+                        <a
+                          [href]="path.path"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          class="ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground 3xl:fixed:w-full 3xl:fixed:max-w-48 relative flex h-7.5 w-fit items-center gap-2 overflow-hidden rounded-md border border-transparent px-2 text-left text-[0.8rem] font-medium outline-hidden transition-[width,height,padding] after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50"
+                        >
+                          <span class="absolute inset-0 flex w-(--sidebar-width) bg-transparent"></span>
+                          {{ path.name }}
+                        </a>
+                      } @else {
+                        <a
+                          [routerLink]="path.path"
+                          class="ring-sidebar-ring hover:bg-sidebar-accent hover:text-sidebar-accent-foreground active:bg-sidebar-accent active:text-sidebar-accent-foreground 3xl:fixed:w-full 3xl:fixed:max-w-48 relative flex h-7.5 w-fit items-center gap-2 overflow-hidden rounded-md border border-transparent px-2 text-left text-[0.8rem] font-medium outline-hidden transition-[width,height,padding] after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-50"
+                          routerLinkActive="bg-accent text-accent-foreground border-accent overflow-visible hover:bg-accent"
+                          [routerLinkActiveOptions]="{ exact: true }"
+                          scrollOnActive
+                        >
+                          <span class="absolute inset-0 flex w-(--sidebar-width) bg-transparent"></span>
+                          {{ path.name }}
+                        </a>
+                      }
                     } @else {
                       <span
                         class="ring-sidebar-ring 3xl:fixed:w-full 3xl:fixed:max-w-48 relative flex h-7.5 w-fit cursor-not-allowed items-center gap-2 overflow-hidden rounded-md border border-transparent px-2 text-left text-[0.8rem] font-medium outline-hidden transition-[width,height,padding] after:absolute after:inset-x-0 after:-inset-y-1 after:z-0 after:rounded-md disabled:pointer-events-none disabled:opacity-50"
@@ -76,5 +88,5 @@ import { ScrollOnActiveDirective } from './scroll-on-active.directive';
   imports: [RouterModule, ZardBadgeComponent, ScrollOnActiveDirective],
 })
 export class SidebarComponent {
-  readonly sidebarPaths = SIDEBAR_PATHS;
+  readonly sidebarPaths: NavSection[] = SIDEBAR_PATHS;
 }

@@ -1,7 +1,20 @@
 export const DEFAULT_COMPONENT = 'accordion';
 export const DEFAULT_DOC = 'installation';
 
-export const HEADER_PATHS = [
+export interface NavItem {
+  name: string;
+  path: string;
+  available: boolean;
+  /** When true, the item is a raw file/external URL and opens in a new tab instead of routing. */
+  external?: boolean;
+}
+
+export interface NavSection {
+  title: string;
+  data: NavItem[];
+}
+
+export const HEADER_PATHS: NavItem[] = [
   { name: 'Docs', path: '/docs', available: true },
   { name: 'Components', path: '/docs/components', available: true },
   { name: 'Blocks', path: '/blocks', available: true },
@@ -9,7 +22,7 @@ export const HEADER_PATHS = [
   { name: 'Themes', path: '/themes', available: true },
 ];
 
-export const SECTIONS = {
+export const SECTIONS: NavSection = {
   title: 'Sections',
   data: [
     { name: 'Get Started', path: '/docs/introduction', available: true },
@@ -41,7 +54,7 @@ export const SECTIONS = {
   ],
 };
 
-export const DOCS_PATH = {
+export const DOCS_PATH: NavSection = {
   title: 'Get Started',
   data: [
     { name: 'Installation', path: '/docs/installation', available: true },
@@ -52,14 +65,14 @@ export const DOCS_PATH = {
     { name: 'Blocks', path: '/docs/blocks', available: true },
     { name: 'Pre processors', path: '/docs/pre-processors', available: true },
     { name: 'Figma', path: '/docs/figma', available: true },
-    { name: 'llms.txt', path: '/llms', available: true },
+    { name: 'llms.txt', path: '/llms.txt', available: true, external: true },
 
     { name: 'Version Support', path: '/docs/version-support', available: true },
     { name: 'About & Credits', path: '/docs/about', available: true },
   ],
 };
 
-export const COMPONENTS_PATH = {
+export const COMPONENTS_PATH: NavSection = {
   title: 'Components',
   data: [
     { name: 'Accordion', path: '/docs/components/accordion', available: true },
@@ -112,4 +125,4 @@ export const COMPONENTS_PATH = {
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
-export const SIDEBAR_PATHS = [SECTIONS, DOCS_PATH, COMPONENTS_PATH];
+export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, COMPONENTS_PATH];
