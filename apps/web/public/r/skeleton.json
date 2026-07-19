@@ -12,7 +12,7 @@
     },
     {
       "name": "index.ts",
-      "content": "export * from './skeleton.component';\r\nexport * from './skeleton.variants';\r\n"
+      "content": "export * from './skeleton.component';\nexport * from './skeleton.variants';\n"
     }
   ],
   "demos": [
@@ -22,11 +22,11 @@
     },
     {
       "name": "card.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\r\n\r\nimport { ZardCardImports } from '@/shared/components/card/card.imports';\r\nimport { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';\r\n\r\n@Component({\r\n  selector: 'z-demo-skeleton-card',\r\n  imports: [ZardCardImports, ZardSkeletonComponent],\r\n  template: `\r\n    <z-card class=\"w-full min-w-xs\">\r\n      <z-card-header>\r\n        <z-card-title [zTitle]=\"titleSkeleton\" />\r\n        <z-card-description [zDescription]=\"descriptionSkeleton\" />\r\n      </z-card-header>\r\n      <z-card-content>\r\n        <z-skeleton class=\"aspect-video w-full\" />\r\n      </z-card-content>\r\n    </z-card>\r\n\r\n    <ng-template #titleSkeleton>\r\n      <z-skeleton class=\"h-4 w-2/3\" />\r\n    </ng-template>\r\n\r\n    <ng-template #descriptionSkeleton>\r\n      <z-skeleton class=\"h-4 w-1/2\" />\r\n    </ng-template>\r\n  `,\r\n  changeDetection: ChangeDetectionStrategy.OnPush,\r\n})\r\nexport class ZardDemoSkeletonCardComponent {}\r\n"
+      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardCardImports } from '@/shared/components/card/card.imports';\nimport { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-card',\n  imports: [ZardCardImports, ZardSkeletonComponent],\n  template: `\n    <z-card class=\"w-full min-w-xs\">\n      <z-card-header>\n        <z-card-title [zTitle]=\"titleSkeleton\" />\n        <z-card-description [zDescription]=\"descriptionSkeleton\" />\n      </z-card-header>\n      <z-card-content>\n        <z-skeleton class=\"aspect-video w-full\" />\n      </z-card-content>\n    </z-card>\n\n    <ng-template #titleSkeleton>\n      <z-skeleton class=\"h-4 w-2/3\" />\n    </ng-template>\n\n    <ng-template #descriptionSkeleton>\n      <z-skeleton class=\"h-4 w-1/2\" />\n    </ng-template>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoSkeletonCardComponent {}\n"
     },
     {
       "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\r\n\r\nimport { ZardSkeletonComponent } from '../skeleton.component';\r\n\r\n@Component({\r\n  selector: 'z-demo-skeleton-default',\r\n  imports: [ZardSkeletonComponent],\r\n  standalone: true,\r\n  template: `\r\n    <div class=\"flex items-center space-x-4\">\r\n      <z-skeleton class=\"size-12 rounded-full\" />\r\n      <div class=\"space-y-2\">\r\n        <z-skeleton class=\"h-4 w-[250px]\" />\r\n        <z-skeleton class=\"h-4 w-[200px]\" />\r\n      </div>\r\n    </div>\r\n  `,\r\n})\r\nexport class ZardDemoSkeletonDefaultComponent {}\r\n"
+      "content": "import { Component } from '@angular/core';\n\nimport { ZardSkeletonComponent } from '../skeleton.component';\n\n@Component({\n  selector: 'z-demo-skeleton-default',\n  imports: [ZardSkeletonComponent],\n  standalone: true,\n  template: `\n    <div class=\"flex items-center space-x-4\">\n      <z-skeleton class=\"size-12 rounded-full\" />\n      <div class=\"space-y-2\">\n        <z-skeleton class=\"h-4 w-[250px]\" />\n        <z-skeleton class=\"h-4 w-[200px]\" />\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoSkeletonDefaultComponent {}\n"
     },
     {
       "name": "form.ts",
