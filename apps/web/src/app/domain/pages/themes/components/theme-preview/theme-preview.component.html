@@ -26,7 +26,7 @@
     </div>
   </div>
 
-  <z-tab-group class="flex flex-1 flex-col overflow-hidden" zTabsPosition="top">
+  <z-tab-group class="flex flex-1 flex-col overflow-hidden">
     <z-tab label="Components" class="mb-0">
       <div
         class="[&:hover::-webkit-scrollbar-thumb]:bg-border h-full overflow-y-auto [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-transparent [&::-webkit-scrollbar-track]:bg-transparent"
@@ -39,8 +39,12 @@
             </div>
 
             <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              <z-card zTitle="Buttons" zDescription="All button variants">
-                <div class="flex flex-wrap gap-2">
+              <z-card>
+                <z-card-header>
+                  <z-card-title zTitle="Buttons" />
+                  <z-card-description zDescription="All button variants" />
+                </z-card-header>
+                <div z-card-content class="flex flex-wrap gap-2">
                   <button z-button zSize="sm">Default</button>
                   <button z-button zType="secondary" zSize="sm">Secondary</button>
                   <button z-button zType="outline" zSize="sm">Outline</button>
@@ -50,8 +54,12 @@
                 </div>
               </z-card>
 
-              <z-card zTitle="Badges" zDescription="Status indicators">
-                <div class="flex flex-wrap gap-2">
+              <z-card>
+                <z-card-header>
+                  <z-card-title zTitle="Badges" />
+                  <z-card-description zDescription="Status indicators" />
+                </z-card-header>
+                <div z-card-content class="flex flex-wrap gap-2">
                   <z-badge>Default</z-badge>
                   <z-badge zType="secondary">Secondary</z-badge>
                   <z-badge zType="outline">Outline</z-badge>
@@ -59,8 +67,12 @@
                 </div>
               </z-card>
 
-              <z-card zTitle="Avatars" zDescription="User profile images">
-                <div class="flex items-center gap-3">
+              <z-card>
+                <z-card-header>
+                  <z-card-title zTitle="Avatars" />
+                  <z-card-description zDescription="User profile images" />
+                </z-card-header>
+                <div z-card-content class="flex items-center gap-3">
                   <z-avatar zSrc="https://github.com/shadcn.png" zFallback="CN" />
                   <z-avatar zFallback="AB" />
                   <z-avatar zFallback="ZD" />
@@ -68,8 +80,12 @@
                 </div>
               </z-card>
 
-              <z-card zTitle="Form Controls" zDescription="Input elements">
-                <div class="space-y-4">
+              <z-card>
+                <z-card-header>
+                  <z-card-title zTitle="Form Controls" />
+                  <z-card-description zDescription="Input elements" />
+                </z-card-header>
+                <div z-card-content class="space-y-4">
                   <div class="space-y-1.5" zardId="email" #z="zardId">
                     <label [for]="z.id()" class="text-sm font-medium">Email</label>
                     <input [id]="z.id()" z-input placeholder="you@example.com" />
@@ -84,53 +100,65 @@
                 </div>
               </z-card>
 
-              <z-card zTitle="Progress" zDescription="Loading states">
-                <div class="space-y-4">
+              <z-card>
+                <z-card-header>
+                  <z-card-title zTitle="Progress" />
+                  <z-card-description zDescription="Loading states" />
+                </z-card-header>
+                <div z-card-content class="space-y-4">
                   <div class="space-y-1.5">
                     <div class="flex justify-between text-xs">
                       <span class="text-muted-foreground">Processing</span>
                       <span class="text-foreground font-medium">33%</span>
                     </div>
-                    <z-progress-bar [progress]="33" />
+                    <z-progress [value]="33" />
                   </div>
                   <div class="space-y-1.5">
                     <div class="flex justify-between text-xs">
                       <span class="text-muted-foreground">Uploading</span>
                       <span class="text-foreground font-medium">66%</span>
                     </div>
-                    <z-progress-bar [progress]="66" />
+                    <z-progress [value]="66" />
                   </div>
                   <div class="space-y-1.5">
                     <div class="flex justify-between text-xs">
                       <span class="text-muted-foreground">Complete</span>
                       <span class="text-foreground font-medium">100%</span>
                     </div>
-                    <z-progress-bar [progress]="100" />
+                    <z-progress [value]="100" />
                   </div>
                 </div>
               </z-card>
 
-              <z-card zTitle="Slider" zDescription="Range selection">
-                <div class="space-y-6">
+              <z-card>
+                <z-card-header>
+                  <z-card-title zTitle="Slider" />
+                  <z-card-description zDescription="Range selection" />
+                </z-card-header>
+                <div z-card-content class="space-y-6">
                   <div class="space-y-2">
                     <div class="flex justify-between text-xs">
                       <span class="text-muted-foreground">Volume</span>
                       <span class="text-foreground font-medium">50%</span>
                     </div>
-                    <z-slider [zDefault]="50" />
+                    <z-slider [zDefault]="[50]" />
                   </div>
                   <div class="space-y-2">
                     <div class="flex justify-between text-xs">
                       <span class="text-muted-foreground">Brightness</span>
                       <span class="text-foreground font-medium">25%</span>
                     </div>
-                    <z-slider [zDefault]="25" />
+                    <z-slider [zDefault]="[25]" />
                   </div>
                 </div>
               </z-card>
 
-              <z-card zTitle="Alerts" zDescription="Notification messages" class="md:col-span-2 lg:col-span-3">
-                <div class="grid gap-3 md:grid-cols-2">
+              <z-card class="md:col-span-2 lg:col-span-3">
+                <z-card-header>
+                  <z-card-title zTitle="Alerts" />
+                  <z-card-description zDescription="Notification messages" />
+                </z-card-header>
+                <div z-card-content class="grid gap-3 md:grid-cols-2">
                   <z-alert
                     zTitle="Information"
                     zDescription="Your session will expire in 5 minutes."
@@ -144,8 +172,12 @@
                 </div>
               </z-card>
 
-              <z-card zTitle="Skeleton" zDescription="Loading placeholders" class="md:col-span-2 lg:col-span-3">
-                <div class="flex items-center gap-4">
+              <z-card class="md:col-span-2 lg:col-span-3">
+                <z-card-header>
+                  <z-card-title zTitle="Skeleton" />
+                  <z-card-description zDescription="Loading placeholders" />
+                </z-card-header>
+                <div z-card-content class="flex items-center gap-4">
                   <z-skeleton class="size-14 shrink-0 rounded-full" />
                   <div class="flex-1 space-y-2">
                     <z-skeleton class="h-4 w-3/4" />
@@ -173,98 +205,115 @@
 
             <div class="mb-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
               <z-card>
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="text-muted-foreground text-sm">Total Revenue</p>
-                    <p class="text-foreground text-2xl font-bold">$45,231</p>
+                <z-card-content>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-muted-foreground text-sm">Total Revenue</p>
+                      <p class="text-foreground text-2xl font-bold">$45,231</p>
+                    </div>
+                    <div class="bg-primary/10 flex items-center rounded-full p-3">
+                      <ng-icon name="lucideDollarSign" class="text-primary size-5!" />
+                    </div>
                   </div>
-                  <div class="bg-primary/10 rounded-full p-3">
-                    <ng-icon name="lucideDollarSign" class="text-primary size-5!" />
-                  </div>
-                </div>
-                <p class="text-muted-foreground mt-2 text-xs">
-                  <span class="text-green-500">+20.1%</span>
-                  from last month
-                </p>
+                  <p class="text-muted-foreground mt-2 text-xs">
+                    <span class="text-green-500">+20.1%</span>
+                    from last month
+                  </p>
+                </z-card-content>
               </z-card>
 
               <z-card>
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="text-muted-foreground text-sm">Subscriptions</p>
-                    <p class="text-foreground text-2xl font-bold">+2,350</p>
+                <z-card-content>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-muted-foreground text-sm">Subscriptions</p>
+                      <p class="text-foreground text-2xl font-bold">+2,350</p>
+                    </div>
+                    <div class="bg-primary/10 flex items-center rounded-full p-3">
+                      <ng-icon name="lucideUserPlus" class="text-primary size-5!" />
+                    </div>
                   </div>
-                  <div class="bg-primary/10 rounded-full p-3">
-                    <ng-icon name="lucideUserPlus" class="text-primary size-5!" />
-                  </div>
-                </div>
-                <p class="text-muted-foreground mt-2 text-xs">
-                  <span class="text-green-500">+180.1%</span>
-                  from last month
-                </p>
+                  <p class="text-muted-foreground mt-2 text-xs">
+                    <span class="text-green-500">+180.1%</span>
+                    from last month
+                  </p>
+                </z-card-content>
               </z-card>
 
               <z-card>
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="text-muted-foreground text-sm">Sales</p>
-                    <p class="text-foreground text-2xl font-bold">+12,234</p>
+                <z-card-content>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-muted-foreground text-sm">Sales</p>
+                      <p class="text-foreground text-2xl font-bold">+12,234</p>
+                    </div>
+                    <div class="bg-primary/10 flex items-center rounded-full p-3">
+                      <ng-icon name="lucideCreditCard" class="text-primary size-5!" />
+                    </div>
                   </div>
-                  <div class="bg-primary/10 rounded-full p-3">
-                    <ng-icon name="lucideCreditCard" class="text-primary size-5!" />
-                  </div>
-                </div>
-                <p class="text-muted-foreground mt-2 text-xs">
-                  <span class="text-green-500">+19%</span>
-                  from last month
-                </p>
+                  <p class="text-muted-foreground mt-2 text-xs">
+                    <span class="text-green-500">+19%</span>
+                    from last month
+                  </p>
+                </z-card-content>
               </z-card>
 
               <z-card>
-                <div class="flex items-center justify-between">
-                  <div>
-                    <p class="text-muted-foreground text-sm">Active Now</p>
-                    <p class="text-foreground text-2xl font-bold">+573</p>
+                <z-card-content>
+                  <div class="flex items-center justify-between">
+                    <div>
+                      <p class="text-muted-foreground text-sm">Active Now</p>
+                      <p class="text-foreground text-2xl font-bold">+573</p>
+                    </div>
+                    <div class="bg-primary/10 flex items-center rounded-full p-3">
+                      <ng-icon name="lucideActivity" class="text-primary size-5!" />
+                    </div>
                   </div>
-                  <div class="bg-primary/10 rounded-full p-3">
-                    <ng-icon name="lucideActivity" class="text-primary size-5!" />
-                  </div>
-                </div>
-                <p class="text-muted-foreground mt-2 text-xs">
-                  <span class="text-green-500">+201</span>
-                  since last hour
-                </p>
+                  <p class="text-muted-foreground mt-2 text-xs">
+                    <span class="text-green-500">+201</span>
+                    since last hour
+                  </p>
+                </z-card-content>
               </z-card>
             </div>
 
             <div class="grid gap-4 lg:grid-cols-7">
-              <z-card zTitle="Overview" class="lg:col-span-4">
-                <div class="flex h-55 items-end gap-1.5 pt-2">
-                  @for (height of chartHeights; track $index) {
-                    <div
-                      class="bg-primary/80 hover:bg-primary flex-1 rounded-t transition-colors"
-                      [style.height.%]="height"
-                    ></div>
-                  }
-                </div>
-                <div class="text-muted-foreground mt-3 flex justify-between text-[10px] font-medium">
-                  <span>Jan</span>
-                  <span>Feb</span>
-                  <span>Mar</span>
-                  <span>Apr</span>
-                  <span>May</span>
-                  <span>Jun</span>
-                  <span>Jul</span>
-                  <span>Aug</span>
-                  <span>Sep</span>
-                  <span>Oct</span>
-                  <span>Nov</span>
-                  <span>Dec</span>
-                </div>
+              <z-card class="lg:col-span-4">
+                <z-card-header>
+                  <z-card-title zTitle="Overview" />
+                </z-card-header>
+                <z-card-content>
+                  <div class="flex h-55 items-end gap-1.5 pt-2">
+                    @for (height of chartHeights; track $index) {
+                      <div
+                        class="bg-primary/80 hover:bg-primary flex-1 rounded-t transition-colors"
+                        [style.height.%]="height"
+                      ></div>
+                    }
+                  </div>
+                  <div class="text-muted-foreground mt-3 flex justify-between text-[10px] font-medium">
+                    <span>Jan</span>
+                    <span>Feb</span>
+                    <span>Mar</span>
+                    <span>Apr</span>
+                    <span>May</span>
+                    <span>Jun</span>
+                    <span>Jul</span>
+                    <span>Aug</span>
+                    <span>Sep</span>
+                    <span>Oct</span>
+                    <span>Nov</span>
+                    <span>Dec</span>
+                  </div>
+                </z-card-content>
               </z-card>
 
-              <z-card zTitle="Recent Sales" zDescription="265 sales this month" class="lg:col-span-3">
-                <div class="space-y-4">
+              <z-card class="lg:col-span-3">
+                <z-card-header>
+                  <z-card-title zTitle="Recent Sales" />
+                  <z-card-description zDescription="265 sales this month" />
+                </z-card-header>
+                <div z-card-content class="space-y-4">
                   @for (sale of recentSales; track sale.email) {
                     <div class="flex items-center gap-3">
                       <z-avatar [zFallback]="sale.initials" />
@@ -278,8 +327,12 @@
                 </div>
               </z-card>
 
-              <z-card zTitle="Team Members" zDescription="Invite your team to collaborate" class="lg:col-span-4">
-                <div class="space-y-3">
+              <z-card class="lg:col-span-4">
+                <z-card-header>
+                  <z-card-title zTitle="Team Members" />
+                  <z-card-description zDescription="Invite your team to collaborate" />
+                </z-card-header>
+                <div z-card-content class="space-y-3">
                   @for (member of teamMembers; track member.email) {
                     <div class="flex items-center gap-3">
                       <z-avatar [zFallback]="member.initials" />
@@ -291,15 +344,20 @@
                     </div>
                   }
                 </div>
-                <z-divider zSpacing="lg" />
-                <button z-button zType="outline" zFull zSize="sm">
-                  <ng-icon name="lucidePlus" class="mr-2 size-4!" />
-                  Invite Member
-                </button>
+                <z-card-footer zFooterBorder>
+                  <button z-button zType="outline" class="w-full" zSize="sm">
+                    <ng-icon name="lucidePlus" class="mr-2 size-4!" />
+                    Invite Member
+                  </button>
+                </z-card-footer>
               </z-card>
 
-              <z-card zTitle="Notifications" zDescription="Manage your preferences" class="lg:col-span-3">
-                <div class="space-y-4">
+              <z-card class="lg:col-span-3">
+                <z-card-header>
+                  <z-card-title zTitle="Notifications" />
+                  <z-card-description zDescription="Manage your preferences" />
+                </z-card-header>
+                <div z-card-content class="space-y-4">
                   <div class="flex items-center justify-between gap-4">
                     <div class="min-w-0">
                       <p class="text-foreground text-sm font-medium">Push Notifications</p>
@@ -307,7 +365,7 @@
                     </div>
                     <z-switch />
                   </div>
-                  <z-divider />
+                  <z-separator />
                   <div class="flex items-center justify-between gap-4">
                     <div class="min-w-0">
                       <p class="text-foreground text-sm font-medium">Email Updates</p>
@@ -315,7 +373,7 @@
                     </div>
                     <z-switch [ngModel]="true" />
                   </div>
-                  <z-divider />
+                  <z-separator />
                   <div class="flex items-center justify-between gap-4">
                     <div class="min-w-0">
                       <p class="text-foreground text-sm font-medium">Marketing</p>

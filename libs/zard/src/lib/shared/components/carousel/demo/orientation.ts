@@ -1,21 +1,23 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardCardComponent } from '../../card';
-import { ZardCarouselImports } from '../carousel.imports';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
 
 @Component({
-  imports: [ZardCarouselImports, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardCardImports],
   template: `
-    <div class="mx-auto w-3/4 max-w-md">
-      <z-carousel zOrientation="vertical" class="w-full">
-        <z-carousel-content class="h-[200px] md:h-[300px]">
+    <div class="w-full min-w-xs">
+      <z-carousel [zOptions]="{ align: 'start' }" zOrientation="vertical">
+        <z-carousel-content class="-mt-1 h-[270px]">
           @for (slide of slides; track slide) {
-            <z-carousel-item>
-              <z-card class="w-full">
-                <div class="flex h-[100px] items-center justify-center text-4xl font-semibold md:h-[200px]">
-                  {{ slide }}
-                </div>
-              </z-card>
+            <z-carousel-item class="basis-1/2 pt-1">
+              <div class="p-1">
+                <z-card>
+                  <z-card-content class="flex items-center justify-center p-6">
+                    <span class="text-3xl font-semibold">{{ slide }}</span>
+                  </z-card-content>
+                </z-card>
+              </div>
             </z-carousel-item>
           }
         </z-carousel-content>

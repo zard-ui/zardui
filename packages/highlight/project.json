@@ -1,0 +1,21 @@
+{
+  "name": "highlight",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/highlight/src",
+  "projectType": "library",
+  "tags": ["type:highlight"],
+  "targets": {
+    "generate": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx packages/highlight/src/generator/index.ts"
+      }
+    },
+    "generate:watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx tsx packages/highlight/src/generator/index.ts --watch"
+      }
+    }
+  }
+}

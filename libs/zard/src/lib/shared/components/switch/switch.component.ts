@@ -16,7 +16,7 @@ import type { ClassValue } from 'clsx';
 import { ZardIdDirective } from '@/shared/core';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
-import { switchVariants, type ZardSwitchSizeVariants, type ZardSwitchTypeVariants } from './switch.variants';
+import { switchVariants, type ZardSwitchSizeVariants } from './switch.variants';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;
@@ -25,13 +25,14 @@ type OnChangeType = (value: boolean) => void;
   selector: 'z-switch',
   imports: [ZardIdDirective],
   template: `
-    <span class="flex items-center space-x-2" zardId="switch" #z="zardId">
+    <span class="flex items-center space-x-2" zardId="switch" #z="zardId" [attr.data-checked]="zChecked() ? '' : null">
       <button
         [id]="zId() || z.id()"
         type="button"
         role="switch"
         [attr.data-state]="status()"
         [attr.aria-checked]="zChecked()"
+        [attr.aria-invalid]="zInvalid() ? 'true' : null"
         [class]="classes()"
         [disabled]="zDisabled() || formDisabled()"
         (click)="onSwitchChange()"
@@ -39,7 +40,7 @@ type OnChangeType = (value: boolean) => void;
         <span
           [attr.data-size]="zSize()"
           [attr.data-state]="status()"
-          class="bg-background pointer-events-none block size-5 rounded-full shadow-lg ring-0 transition-transform data-[size=lg]:size-6 data-[size=sm]:size-4 data-[state=checked]:translate-x-5 data-[size=lg]:data-[state=checked]:translate-x-6 data-[size=sm]:data-[state=checked]:translate-x-4 data-[state=unchecked]:translate-x-0 data-[size=lg]:data-[state=unchecked]:translate-x-0 data-[size=sm]:data-[state=unchecked]:translate-x-0"
+          class="bg-background dark:data-[state=checked]:bg-primary-foreground dark:data-[state=unchecked]:bg-foreground pointer-events-none block rounded-full ring-0 transition-transform data-[size=default]:size-4 data-[size=sm]:size-3 data-[state=checked]:translate-x-[calc(100%-2px)] data-[state=unchecked]:translate-x-0"
         ></span>
       </button>
 
@@ -64,19 +65,17 @@ type OnChangeType = (value: boolean) => void;
 })
 export class ZardSwitchComponent implements ControlValueAccessor {
   readonly class = input<ClassValue>('');
-  readonly zChecked = model<boolean>(true);
+  readonly zChecked = model<boolean>(false);
   readonly zId = input<string>('');
   readonly zSize = input<ZardSwitchSizeVariants>('default');
-  readonly zType = input<ZardSwitchTypeVariants>('default');
   readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zInvalid = input(false, { transform: booleanAttribute });
 
   private onChange: OnChangeType = noopFn;
   private onTouched: OnTouchedType = noopFn;
 
   protected readonly status = computed(() => (this.zChecked() ? 'checked' : 'unchecked'));
-  protected readonly classes = computed(() =>
-    mergeClasses(switchVariants({ zType: this.zType(), zSize: this.zSize() }), this.class()),
-  );
+  protected readonly classes = computed(() => mergeClasses(switchVariants({ zSize: this.zSize() }), this.class()));
 
   protected readonly formDisabled = signal(false);
 

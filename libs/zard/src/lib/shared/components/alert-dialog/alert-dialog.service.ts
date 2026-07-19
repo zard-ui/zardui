@@ -18,6 +18,18 @@ type ContentType<T> = ComponentType<T> | TemplateRef<T> | string | undefined;
 
 export const Z_ALERT_MODAL_DATA = new InjectionToken<unknown>('Z_ALERT_MODAL_DATA');
 
+/**
+ * Type-safe accessor for the data passed to an alert dialog via {@link ZardAlertDialogOptions.zData}.
+ *
+ * Must be called from an injection context (component constructor / field initializer).
+ *
+ * @example
+ * private readonly data = injectAlertDialogData<MyData>();
+ */
+export function injectAlertDialogData<T>(): T {
+  return inject(Z_ALERT_MODAL_DATA) as T;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -26,8 +38,24 @@ export class ZardAlertDialogService {
   private readonly injector = inject(Injector);
   private readonly platformId = inject(PLATFORM_ID);
 
+  /**
+   * Opens an alert dialog with the given configuration.
+   *
+   * On non-browser platforms (SSR / build) the returned `ZardAlertDialogRef`
+   * is a no-op that resolves cleanly when calling `close()`.
+   */
   create<T>(config: ZardAlertDialogOptions<T>): ZardAlertDialogRef<T> {
-    return this.open<T>(config.zContent, config);
+    if (!isPlatformBrowser(this.platformId)) {
+      return new ZardAlertDialogRef<T>(null, config, null, this.platformId);
+    }
+
+    const overlayRef = this.createOverlay();
+    const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
+    const alertDialogRef = this.attachAlertDialogContent<T>(config.zContent, alertDialogContainer, overlayRef, config);
+
+    alertDialogContainer.alertDialogRef = alertDialogRef;
+
+    return alertDialogRef;
   }
 
   confirm<T>(
@@ -36,69 +64,38 @@ export class ZardAlertDialogService {
       zCancelText?: string;
     },
   ): ZardAlertDialogRef<T> {
-    const confirmConfig: ZardAlertDialogOptions<T> = {
+    return this.create({
       ...config,
       zOkText: config.zOkText ?? 'Confirm',
       zCancelText: config.zCancelText ?? 'Cancel',
       zOkDestructive: config.zOkDestructive ?? false,
-    };
-    return this.create(confirmConfig);
+    });
   }
 
   warning<T>(config: Omit<ZardAlertDialogOptions<T>, 'zOkText'> & { zOkText?: string }): ZardAlertDialogRef<T> {
-    const warningConfig: ZardAlertDialogOptions<T> = {
+    return this.create({
       ...config,
       zOkText: config.zOkText ?? 'OK',
       zCancelText: null,
-    };
-    return this.create(warningConfig);
+    });
   }
 
   info<T>(config: Omit<ZardAlertDialogOptions<T>, 'zOkText'> & { zOkText?: string }): ZardAlertDialogRef<T> {
-    const infoConfig: ZardAlertDialogOptions<T> = {
+    return this.create({
       ...config,
       zOkText: config.zOkText ?? 'OK',
       zCancelText: null,
-    };
-    return this.create(infoConfig);
-  }
-
-  private open<T>(componentOrTemplateRef: ContentType<T>, config: ZardAlertDialogOptions<T>) {
-    const overlayRef = this.createOverlay();
-
-    if (!overlayRef) {
-      return new ZardAlertDialogRef(
-        undefined as unknown as OverlayRef,
-        config,
-        undefined as unknown as ZardAlertDialogComponent<T>,
-      );
-    }
-
-    const alertDialogContainer = this.attachAlertDialogContainer<T>(overlayRef, config);
-    const alertDialogRef = this.attachAlertDialogContent<T>(
-      componentOrTemplateRef,
-      alertDialogContainer,
-      overlayRef,
-      config,
-    );
-
-    alertDialogContainer.alertDialogRef = alertDialogRef;
-
-    return alertDialogRef;
-  }
-
-  private createOverlay(): OverlayRef | undefined {
-    if (!isPlatformBrowser(this.platformId)) {
-      return undefined;
-    }
-
-    const overlayConfig = new OverlayConfig({
-      hasBackdrop: true,
-      backdropClass: 'cdk-overlay-dark-backdrop',
-      positionStrategy: this.overlay.position().global(),
     });
+  }
 
-    return this.overlay.create(overlayConfig);
+  private createOverlay(): OverlayRef {
+    return this.overlay.create(
+      new OverlayConfig({
+        hasBackdrop: true,
+        backdropClass: ['bg-black/10', 'supports-backdrop-filter:backdrop-blur-xs'],
+        positionStrategy: this.overlay.position().global(),
+      }),
+    );
   }
 
   private attachAlertDialogContainer<T>(overlayRef: OverlayRef, config: ZardAlertDialogOptions<T>) {
@@ -116,9 +113,7 @@ export class ZardAlertDialogService {
       injector,
     );
 
-    const containerRef = overlayRef.attach(containerPortal);
-
-    return containerRef.instance;
+    return overlayRef.attach(containerPortal).instance;
   }
 
   private attachAlertDialogContent<T>(
@@ -126,31 +121,27 @@ export class ZardAlertDialogService {
     alertDialogContainer: ZardAlertDialogComponent<T>,
     overlayRef: OverlayRef,
     config: ZardAlertDialogOptions<T>,
-  ) {
-    const alertDialogRef = new ZardAlertDialogRef<T>(overlayRef, config, alertDialogContainer);
+  ): ZardAlertDialogRef<T> {
+    const alertDialogRef = new ZardAlertDialogRef<T>(overlayRef, config, alertDialogContainer, this.platformId);
 
     if (componentOrTemplateRef instanceof TemplateRef) {
-      alertDialogContainer.attachTemplatePortal(
-        new TemplatePortal<T>(
-          componentOrTemplateRef,
-          null as unknown as ViewContainerRef,
-          {
-            alertDialogRef,
-          } as T,
-        ),
-      );
+      // CDK's TemplatePortal type requires a ViewContainerRef even though it tolerates null at runtime,
+      // and types the template context as T (the template's data shape) — we expose `alertDialogRef` instead.
+      const vcr = (config.zViewContainerRef ?? null) as unknown as ViewContainerRef;
+      const ctx = { alertDialogRef } as unknown as T;
+      alertDialogContainer.attachTemplatePortal(new TemplatePortal(componentOrTemplateRef, vcr, ctx));
     } else if (componentOrTemplateRef && typeof componentOrTemplateRef !== 'string') {
       const injector = this.createInjector<T>(alertDialogRef, config);
-      const contentRef = alertDialogContainer.attachComponentPortal(
+      const contentRef = alertDialogContainer.attachComponentPortal<T>(
         new ComponentPortal(componentOrTemplateRef, config.zViewContainerRef, injector),
       );
-      alertDialogRef.componentInstance = contentRef.instance;
+      alertDialogRef.setComponentInstance(contentRef.instance);
     }
 
     return alertDialogRef;
   }
 
-  private createInjector<T>(alertDialogRef: ZardAlertDialogRef<T>, config: ZardAlertDialogOptions<T>) {
+  private createInjector<T>(alertDialogRef: ZardAlertDialogRef<T>, config: ZardAlertDialogOptions<T>): Injector {
     return Injector.create({
       parent: this.injector,
       providers: [

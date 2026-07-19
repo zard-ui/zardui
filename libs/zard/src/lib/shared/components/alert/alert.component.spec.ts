@@ -3,8 +3,7 @@ import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-
-import { zardInfoIcon } from '@/shared/core';
+import { lucideInfo } from '@ng-icons/lucide';
 
 import { ZardAlertComponent } from './alert.component';
 
@@ -12,10 +11,10 @@ import { ZardAlertComponent } from './alert.component';
   selector: 'test-host-component',
   imports: [ZardAlertComponent, NgIcon],
   template: `
-    <ng-template #iconTemplate><ng-icon name="info" /></ng-template>
+    <ng-template #iconTemplate><ng-icon name="lucideInfo" /></ng-template>
     <z-alert zTitle="Test Title" zDescription="Test Description" [zIcon]="iconTemplate" class="w-1/2" />
   `,
-  viewProviders: [provideIcons({ info: zardInfoIcon })],
+  viewProviders: [provideIcons({ lucideInfo })],
 })
 class TestHostComponent {}
 
@@ -60,7 +59,7 @@ describe('ZardAlertComponent', () => {
 
     expect(iconElement).toBeTruthy();
     expect(iconComponent).toBeTruthy();
-    expect(iconComponent?.getAttribute('name')).toBe('info');
+    expect(iconComponent?.getAttribute('name')).toBe('lucideInfo');
   });
 
   it('renders only description when title is omitted', () => {
@@ -189,5 +188,48 @@ describe('ZardAlertComponent', () => {
 
     expect(iconElement).toBeTruthy();
     expect(iconComponent).toBeTruthy();
+  });
+
+  it('renders action when zAction template is provided', () => {
+    @Component({
+      selector: 'test-host-action',
+      imports: [ZardAlertComponent],
+      template: `
+        <ng-template #actionTemplate><button type="button">Action</button></ng-template>
+        <z-alert zTitle="Title" zDescription="Description" [zAction]="actionTemplate" />
+      `,
+    })
+    class TestHostAction {}
+
+    const actionFixture = TestBed.createComponent(TestHostAction);
+    actionFixture.detectChanges();
+
+    const alert = actionFixture.debugElement.query(By.directive(ZardAlertComponent)).nativeElement;
+    const actionElement = alert.querySelector('[data-slot="alert-action"]');
+    const buttonElement = alert.querySelector('button');
+
+    expect(alert.getAttribute('role')).toBe('status');
+    expect(actionElement).toBeTruthy();
+    expect(buttonElement).toBeTruthy();
+    expect(buttonElement?.textContent).toContain('Action');
+  });
+
+  it('does not render action when zAction is not provided', () => {
+    @Component({
+      selector: 'test-host-no-action',
+      imports: [ZardAlertComponent],
+      template: `
+        <z-alert zTitle="Title" zDescription="Description" />
+      `,
+    })
+    class TestHostNoAction {}
+
+    const noActionFixture = TestBed.createComponent(TestHostNoAction);
+    noActionFixture.detectChanges();
+
+    const alert = noActionFixture.debugElement.query(By.directive(ZardAlertComponent)).nativeElement;
+    const actionElement = alert.querySelector('[data-slot="alert-action"]');
+
+    expect(actionElement).toBeNull();
   });
 });

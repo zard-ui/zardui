@@ -1,7 +1,6 @@
 export * from '@/shared/components/command/command.component';
 export * from '@/shared/components/command/command-input.component';
 export * from '@/shared/components/command/command-list.component';
-export * from '@/shared/components/command/command-empty.component';
 export * from '@/shared/components/command/command-option.component';
 export * from '@/shared/components/command/command-option-group.component';
 export * from '@/shared/components/command/command-divider.component';

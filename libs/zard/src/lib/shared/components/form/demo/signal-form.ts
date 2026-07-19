@@ -3,11 +3,11 @@ import { form, required, email, minLength, maxLength, submit, FormField } from '
 
 import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardFormImports } from '@/shared/components/form/form.imports';
-import { ZardInputDirective } from '@/shared/components/input';
+import { ZardInputComponent } from '@/shared/components/input';
 
 @Component({
   selector: 'zard-demo-form-signal',
-  imports: [ZardButtonComponent, ZardInputDirective, ZardFormImports, FormField],
+  imports: [ZardButtonComponent, ZardInputComponent, ZardFormImports, FormField],
   template: `
     <form (submit)="onSubmit($event)" class="max-w-sm space-y-6">
       <z-form-field>

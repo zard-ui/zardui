@@ -1,10 +1,40 @@
 import { ComponentType } from '@angular/cdk/overlay';
 
+import type { CodeBlockData, CodeTabData, ComponentUsageData } from '@highlight/types';
+
+import type { ApiSection } from '@doc/domain/components/api-reference/api-reference.types';
+
+export interface ComponentInstallData {
+  cliAdd?: CodeTabData;
+  manualCode?: CodeBlockData[];
+  manualDeps?: CodeTabData;
+  register?: CodeBlockData;
+}
+
+export interface AboutData {
+  title?: string;
+  description: string;
+  link?: { label: string; href: string };
+}
+
 export interface ComponentData {
   componentName: string;
   description: string;
+  about?: AboutData;
+  preview?: ExampleData;
   examples: ExampleData[];
+  installData?: ComponentInstallData;
+  usage?: ComponentUsageData;
+  composition?: CodeBlockData;
   fullWidth?: boolean;
+  api?: ApiSection[];
+}
+
+/** A standalone code block with an optional heading/description, shown around (or instead of) a demo. */
+export interface CodeSnippet {
+  title?: string;
+  description?: string;
+  codeData: CodeBlockData;
 }
 
 export interface ExampleData {
@@ -12,7 +42,17 @@ export interface ExampleData {
   description?: string;
   type?: string;
   column?: boolean;
-  component: ComponentType<unknown>;
+  /** Optional: when omitted, the example renders as a code-only block (no live preview). */
+  component?: ComponentType<unknown>;
+  codeData?: CodeBlockData;
+  /** Extra code block(s) rendered above the demo (below the example description). */
+  codeBefore?: CodeSnippet | CodeSnippet[];
+  /** Extra code block(s) rendered below the demo. */
+  codeAfter?: CodeSnippet | CodeSnippet[];
+  /** Optional CSS max-height (e.g. '28rem') overriding the default code block height. */
+  codeHeight?: string;
+  /** Optional CSS min-height (e.g. '32rem') overriding the default preview (component) area height. */
+  previewHeight?: string;
   onlyDemo?: boolean;
   fullScreen?: boolean;
   fullWidth?: boolean;
@@ -109,9 +149,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/dialog/demo/dialog').then(m => m.DIALOG),
   },
   {
-    componentName: 'divider',
+    componentName: 'separator',
     description: 'Visually or semantically separates content.',
-    loadData: () => import('@zard/components/divider/demo/divider').then(m => m.DIVIDER),
+    loadData: () => import('@zard/components/separator/demo/separator').then(m => m.SEPARATOR),
   },
   {
     componentName: 'dropdown',
@@ -122,6 +162,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     componentName: 'empty',
     description: 'Empty state placeholder when there is no data.',
     loadData: () => import('@zard/components/empty/demo/empty').then(m => m.EMPTY),
+  },
+  {
+    componentName: 'field',
+    description: 'Composable building blocks for accessible form layouts with labels, descriptions and errors.',
+    loadData: () => import('@zard/components/field/demo/field').then(m => m.FIELD),
   },
   {
     componentName: 'form',
@@ -139,6 +184,16 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/input-group/demo/input-group').then(m => m.INPUT_GROUP),
   },
   {
+    componentName: 'item',
+    description: 'A versatile component for displaying content with media, title, description, and actions.',
+    loadData: () => import('@zard/components/item/demo/item').then(m => m.ITEM),
+  },
+  {
+    componentName: 'textarea',
+    description: 'Displays a multi-line text input field.',
+    loadData: () => import('@zard/components/textarea/demo/textarea').then(m => m.TEXTAREA),
+  },
+  {
     componentName: 'kbd',
     description: 'Displays a keyboard key or shortcut.',
     loadData: () => import('@zard/components/kbd/demo/kbd').then(m => m.KBD),
@@ -149,9 +204,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/layout/demo/layout').then(m => m.LAYOUT),
   },
   {
-    componentName: 'loader',
+    componentName: 'spinner',
     description: 'Displays a loading spinner.',
-    loadData: () => import('@zard/components/loader/demo/loader').then(m => m.LOADER),
+    loadData: () => import('@zard/components/spinner/demo/spinner').then(m => m.SPINNER),
   },
   {
     componentName: 'menu',
@@ -169,24 +224,20 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/popover/demo/popover').then(m => m.POPOVER),
   },
   {
-    componentName: 'progress-bar',
+    componentName: 'progress',
     description: 'Displays an indicator showing the completion progress of a task.',
-    loadData: () => import('@zard/components/progress-bar/demo/progress-bar').then(m => m.PROGRESS_BAR),
+    loadData: () => import('@zard/components/progress/demo/progress').then(m => m.PROGRESS),
   },
   {
-    componentName: 'radio',
-    description: 'A set of checkable buttons where no more than one can be checked at a time.',
-    loadData: () => import('@zard/components/radio/demo/radio').then(m => m.RADIO),
+    componentName: 'radio-group',
+    description:
+      'A set of checkable buttons—known as radio buttons—where no more than one of the buttons can be checked at a time.',
+    loadData: () => import('@zard/components/radio-group/demo/radio-group').then(m => m.RADIO_GROUP),
   },
   {
     componentName: 'resizable',
     description: 'Accessible resizable panel groups and layouts with keyboard support.',
     loadData: () => import('@zard/components/resizable/demo/resizable').then(m => m.RESIZABLE),
-  },
-  {
-    componentName: 'segmented',
-    description: 'A set of two or more buttons that functions as a single control.',
-    loadData: () => import('@zard/components/segmented/demo/segmented').then(m => m.SEGMENTED),
   },
   {
     componentName: 'select',
@@ -224,9 +275,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/tabs/demo/tabs').then(m => m.TABS),
   },
   {
-    componentName: 'toast',
-    description: 'A succinct message that is displayed temporarily.',
-    loadData: () => import('@zard/components/toast/demo/toast').then(m => m.TOAST),
+    componentName: 'sonner',
+    description: 'An opinionated toast component for Angular.',
+    loadData: () => import('@zard/components/sonner/demo/sonner').then(m => m.SONNER),
   },
   {
     componentName: 'toggle',

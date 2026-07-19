@@ -1,25 +1,18 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const switchVariants = cva(
-  'peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=unchecked]:bg-input',
+  'peer relative inline-flex shrink-0 cursor-pointer items-center rounded-full border border-transparent transition-all outline-none after:absolute after:-inset-x-3 after:-inset-y-2 focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input dark:data-[state=unchecked]:bg-input/80 disabled:cursor-not-allowed disabled:opacity-50',
   {
     variants: {
-      zType: {
-        default: 'data-[state=checked]:bg-primary',
-        destructive: 'data-[state=checked]:bg-destructive',
-      },
       zSize: {
-        default: 'h-6 w-11',
-        sm: 'h-5 w-9',
-        lg: 'h-7 w-13',
+        default: 'h-[18.4px] w-[32px]',
+        sm: 'h-[14px] w-[24px]',
       },
     },
     defaultVariants: {
-      zType: 'default',
       zSize: 'default',
     },
   },
 );
 
 export type ZardSwitchSizeVariants = NonNullable<VariantProps<typeof switchVariants>['zSize']>;
-export type ZardSwitchTypeVariants = NonNullable<VariantProps<typeof switchVariants>['zType']>;

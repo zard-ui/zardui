@@ -1,21 +1,13 @@
-import { Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowUp, lucidePopcorn } from '@ng-icons/lucide';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardButtonComponent } from '../button.component';
 
 @Component({
   selector: 'z-demo-button-default',
-  imports: [ZardButtonComponent, NgIcon],
+  imports: [ZardButtonComponent],
   template: `
-    <button type="button" z-button zType="outline">Button</button>
-    <button type="button" z-button zType="outline"><ng-icon name="lucideArrowUp" /></button>
-    <button type="button" z-button zType="outline">
-      Button
-      <ng-icon name="lucidePopcorn" />
-    </button>
+    <button z-button>Button</button>
   `,
-  viewProviders: [provideIcons({ lucideArrowUp, lucidePopcorn })],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoButtonDefaultComponent {}

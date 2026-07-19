@@ -1,42 +1,29 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCircleCheck, lucidePopcorn } from '@ng-icons/lucide';
+import { provideIcons } from '@ng-icons/core';
+import { lucideCircleCheck, lucideInfo } from '@ng-icons/lucide';
 
 import { ZardAlertComponent } from '../alert.component';
 
 @Component({
   selector: 'z-demo-alert-basic',
-  imports: [ZardAlertComponent, NgIcon],
+  imports: [ZardAlertComponent],
   template: `
-    <div class="grid w-full max-w-xl items-start gap-4">
+    <div class="grid w-full max-w-md items-start gap-4">
       <z-alert
-        [zIcon]="successIcon"
-        zTitle="Success! Your changes have been saved"
-        zDescription="This is an alert with icon, title and description."
+        zIcon="lucideCircleCheck"
+        zTitle="Payment successful"
+        zDescription="Your payment of $29.99 has been processed. A receipt has been sent to your email address."
       />
 
-      <z-alert [zIcon]="customIcon" zTitle="This Alert has a title and an icon. No description." />
-
-      <ng-template #customIcon>
-        <ng-icon name="lucidePopcorn" />
-      </ng-template>
-
-      <z-alert zType="destructive" zTitle="Unable to process your payment." [zDescription]="customDescription" />
-
-      <ng-template #customDescription>
-        <p>Please verify your billing information and try again.</p>
-        <ul class="list-disc pl-5">
-          <li>Check your card details</li>
-          <li>Ensure sufficient funds</li>
-          <li>Verify billing address</li>
-        </ul>
-      </ng-template>
-
-      <ng-template #successIcon><ng-icon name="lucideCircleCheck" /></ng-template>
+      <z-alert
+        zIcon="lucideInfo"
+        zTitle="New feature available"
+        zDescription="We've added dark mode support. You can enable it in your account settings."
+      />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideCircleCheck, lucidePopcorn })],
+  viewProviders: [provideIcons({ lucideCircleCheck, lucideInfo })],
 })
 export class ZardDemoAlertBasicComponent {}

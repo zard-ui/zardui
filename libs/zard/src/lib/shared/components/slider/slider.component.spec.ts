@@ -31,10 +31,10 @@ class TestHostComponent {
   min = 0;
   max = 100;
   step = 10;
-  value = 40;
+  value: number[] = [40];
   orientation = 'horizontal';
   disabled = false;
-  default = 20;
+  default: number[] = [20];
 }
 
 describe('ZardSliderComponent (orientation: horizontal)', () => {
@@ -84,8 +84,8 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
   it('should render default CSS classes on slider container', () => {
     const slider = fixture.debugElement.query(By.css('[data-slot="slider"]')).nativeElement;
     expect(slider.classList).toContain('flex');
-    expect(slider.classList).toContain('data-[orientation=horizontal]:items-center');
-    expect(slider.classList).toContain('data-[orientation=horizontal]:w-full');
+    expect(slider.classList).toContain('items-center');
+    expect(slider.classList).toContain('w-full');
   });
 
   it('should render projected value into the thumb correctly', () => {
@@ -99,13 +99,13 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
   });
 
   it('should respect zDisabled input and reflect as aria-disabled', () => {
-    component.value = 60;
+    component.value = [60];
     fixture.detectChanges();
 
     const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-disabled')).toBeNull();
 
-    fixture.componentInstance.value = 50;
+    fixture.componentInstance.value = [50];
     fixture.detectChanges();
     const compInstance = fixture.debugElement.query(By.directive(ZardSliderComponent)).componentInstance;
     compInstance.setDisabledState(true);
@@ -128,16 +128,16 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
   });
 
   it('should reflect zValue correctly on thumb', () => {
-    component.value = 70;
+    component.value = [70];
     fixture.detectChanges();
 
     const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuenow')).toBe('70');
   });
 
-  it('should apply zDefault as initial value if zValue is undefined', () => {
-    component.value = undefined as any;
-    component.default = 20;
+  it('should apply zDefault as initial value if zValue is empty', () => {
+    component.value = [];
+    component.default = [20];
     fixture.detectChanges();
 
     const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
@@ -146,7 +146,7 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
 
   it('should round value to nearest step increment', () => {
     component.step = 25;
-    component.value = 47;
+    component.value = [47];
     fixture.detectChanges();
 
     const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
@@ -192,6 +192,193 @@ describe('ZardSliderComponent (orientation: horizontal)', () => {
     thumbHost.dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }));
     fixture.detectChanges();
     expect(thumbHost.querySelector('span')?.getAttribute('aria-valuenow')).toBe('100');
+  });
+});
+
+describe('ZardSliderComponent (range: two thumbs)', () => {
+  let fixture: ComponentFixture<TestHostComponent>;
+  let component: TestHostComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestHostComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestHostComponent);
+    component = fixture.componentInstance;
+    component.value = [20, 80];
+    fixture.detectChanges();
+  });
+
+  it('renders two thumbs', () => {
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    expect(thumbs.length).toBe(2);
+  });
+
+  it('renders one range segment between the two thumbs', () => {
+    const ranges = fixture.debugElement.queryAll(By.directive(ZSliderRangeComponent));
+    const rangeHost = ranges[0].nativeElement as HTMLElement;
+    const spans = rangeHost.querySelectorAll('[data-slot="slider-range"]');
+    expect(spans.length).toBe(1);
+  });
+
+  it('sets aria-valuenow on each thumb to its respective value', () => {
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+
+    const first = thumbs[0].nativeElement.querySelector('span');
+    const second = thumbs[1].nativeElement.querySelector('span');
+
+    expect(first.getAttribute('aria-valuenow')).toBe('20');
+    expect(second.getAttribute('aria-valuenow')).toBe('80');
+  });
+
+  it('positions both thumbs with percentage style', () => {
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+
+    expect(thumbs[0].nativeElement.style.left).toContain('%');
+    expect(thumbs[1].nativeElement.style.left).toContain('%');
+  });
+
+  it('prevents first thumb from moving past the second via arrow key', () => {
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const firstThumbHost = thumbs[0].nativeElement as HTMLElement;
+
+    firstThumbHost.focus();
+    firstThumbHost.dispatchEvent(new KeyboardEvent('keydown', { key: 'End' }));
+    fixture.detectChanges();
+
+    const firstValue = +firstThumbHost.querySelector('span')!.getAttribute('aria-valuenow')!;
+    const secondValue = +thumbs[1].nativeElement.querySelector('span')!.getAttribute('aria-valuenow')!;
+
+    expect(firstValue).toBeLessThanOrEqual(secondValue);
+  });
+
+  it('prevents second thumb from moving past the first via arrow key', () => {
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const secondThumbHost = thumbs[1].nativeElement as HTMLElement;
+
+    secondThumbHost.focus();
+    secondThumbHost.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
+    fixture.detectChanges();
+
+    const firstValue = +thumbs[0].nativeElement.querySelector('span')!.getAttribute('aria-valuenow')!;
+    const secondValue = +secondThumbHost.querySelector('span')!.getAttribute('aria-valuenow')!;
+
+    expect(secondValue).toBeGreaterThanOrEqual(firstValue);
+  });
+});
+
+describe('ZardSliderComponent (multiple: three thumbs)', () => {
+  let fixture: ComponentFixture<TestHostComponent>;
+  let component: TestHostComponent;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestHostComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestHostComponent);
+    component = fixture.componentInstance;
+    component.value = [10, 50, 90];
+    fixture.detectChanges();
+  });
+
+  it('renders three thumbs', () => {
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    expect(thumbs.length).toBe(3);
+  });
+
+  it('renders two range segments between the three thumbs', () => {
+    const ranges = fixture.debugElement.queryAll(By.directive(ZSliderRangeComponent));
+    const rangeHost = ranges[0].nativeElement as HTMLElement;
+    const spans = rangeHost.querySelectorAll('[data-slot="slider-range"]');
+    expect(spans.length).toBe(2);
+  });
+
+  it('sets aria-valuenow on each thumb to its respective value', () => {
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+
+    const values = thumbs.map(t => t.nativeElement.querySelector('span').getAttribute('aria-valuenow'));
+    expect(values).toEqual(['10', '50', '90']);
+  });
+
+  it('keeps middle thumb between the first and third after key input', () => {
+    const thumbs = fixture.debugElement.queryAll(By.directive(ZSliderThumbComponent));
+    const middleThumbHost = thumbs[1].nativeElement as HTMLElement;
+
+    middleThumbHost.focus();
+    middleThumbHost.dispatchEvent(new KeyboardEvent('keydown', { key: 'Home' }));
+    fixture.detectChanges();
+
+    const firstValue = +thumbs[0].nativeElement.querySelector('span')!.getAttribute('aria-valuenow')!;
+    const middleValue = +middleThumbHost.querySelector('span')!.getAttribute('aria-valuenow')!;
+    const lastValue = +thumbs[2].nativeElement.querySelector('span')!.getAttribute('aria-valuenow')!;
+
+    expect(middleValue).toBeGreaterThanOrEqual(firstValue);
+    expect(middleValue).toBeLessThanOrEqual(lastValue);
+  });
+});
+
+describe('ZardSliderComponent (zSlideIndexChange output)', () => {
+  let fixture: ComponentFixture<TestSliderOutputHostComponent>;
+  let component: TestSliderOutputHostComponent;
+
+  @Component({
+    selector: 'test-slider-output-host',
+    imports: [ZardSliderComponent],
+    standalone: true,
+    template: `
+      <z-slider [zMin]="0" [zMax]="100" [zStep]="10" [zValue]="[40]" (zSlideIndexChange)="onSlide($event)" />
+    `,
+  })
+  class TestSliderOutputHostComponent {
+    lastEmitted: number[] | null = null;
+
+    onSlide(values: number[]) {
+      this.lastEmitted = values;
+    }
+  }
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [TestSliderOutputHostComponent],
+      providers: [
+        {
+          provide: EVENT_MANAGER_PLUGINS,
+          useClass: ZardEventManagerPlugin,
+          multi: true,
+        },
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(TestSliderOutputHostComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('emits number[] from zSlideIndexChange on arrow key press', () => {
+    const thumbHost = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement as HTMLElement;
+
+    thumbHost.focus();
+    thumbHost.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowRight' }));
+    fixture.detectChanges();
+
+    expect(component.lastEmitted).toEqual([50]);
+    expect(Array.isArray(component.lastEmitted)).toBe(true);
   });
 });
 
@@ -243,8 +430,8 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
   it('should render default CSS classes on slider container', () => {
     const slider = fixture.debugElement.query(By.css('[data-slot="slider"]')).nativeElement;
     expect(slider.classList).toContain('flex');
-    expect(slider.classList).toContain('data-[orientation=vertical]:justify-center');
-    expect(slider.classList).toContain('data-[orientation=vertical]:h-full');
+    expect(slider.classList).toContain('data-vertical:flex-col');
+    expect(slider.classList).toContain('data-vertical:h-full');
   });
 
   it('should render projected value into the thumb correctly', () => {
@@ -258,13 +445,13 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
   });
 
   it('should respect zDisabled input and reflect as aria-disabled', () => {
-    component.value = 60;
+    component.value = [60];
     fixture.detectChanges();
 
     const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-disabled')).toBeNull();
 
-    fixture.componentInstance.value = 50;
+    fixture.componentInstance.value = [50];
     fixture.detectChanges();
     const compInstance = fixture.debugElement.query(By.directive(ZardSliderComponent)).componentInstance;
     compInstance.setDisabledState(true);
@@ -287,16 +474,16 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
   });
 
   it('should reflect zValue correctly on thumb', () => {
-    component.value = 70;
+    component.value = [70];
     fixture.detectChanges();
 
     const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
     expect(thumb.getAttribute('aria-valuenow')).toBe('70');
   });
 
-  it('should apply zDefault as initial value if zValue is undefined', () => {
-    component.value = undefined as any;
-    component.default = 20;
+  it('should apply zDefault as initial value if zValue is empty', () => {
+    component.value = [];
+    component.default = [20];
     fixture.detectChanges();
 
     const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');
@@ -305,7 +492,7 @@ describe('ZardSliderComponent (orientation: vertical)', () => {
 
   it('should round value to nearest step increment', () => {
     component.step = 25;
-    component.value = 47;
+    component.value = [47];
     fixture.detectChanges();
 
     const thumb = fixture.debugElement.query(By.directive(ZSliderThumbComponent)).nativeElement.querySelector('span');

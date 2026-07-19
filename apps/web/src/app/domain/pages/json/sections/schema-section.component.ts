@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 
-import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
+import { JSON_SCHEMA_EXAMPLE } from '@generated/documentation/json/schema-example';
+import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import type { CodeBlockData } from '@highlight/types';
 
 @Component({
   selector: 'z-json-schema-section',
   standalone: true,
-  imports: [MarkdownRendererComponent],
+  imports: [CodeBlockComponent],
   template: `
     <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="schema" id="schema">
       <div class="flex flex-col gap-4 sm:gap-6">
@@ -21,9 +23,11 @@ import { MarkdownRendererComponent } from '@doc/domain/components/render/markdow
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
           file. This enables autocompletion and validation in your IDE.
         </p>
-        <z-markdown-renderer markdownUrl="documentation/json/schema-example.md"></z-markdown-renderer>
+        <z-code-block [data]="schemaExample" />
       </div>
     </section>
   `,
 })
-export class JsonSchemaSectionComponent {}
+export class JsonSchemaSectionComponent {
+  readonly schemaExample: CodeBlockData = JSON_SCHEMA_EXAMPLE;
+}

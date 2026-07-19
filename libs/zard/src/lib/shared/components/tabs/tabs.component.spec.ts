@@ -1,35 +1,25 @@
 import { Component, type Type } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronDown, lucideChevronLeft, lucideChevronRight, lucideChevronUp } from '@ng-icons/lucide';
 import { render } from '@testing-library/angular';
 
 import { noopFn } from '@/shared/utils';
 
 import { ZardTabComponent, ZardTabGroupComponent } from './tabs.component';
 
-const getHostComponent = (position: 'top' | 'bottom' | 'left' | 'right' = 'top'): Type<unknown> => {
+const getHostComponent = (orientation: 'horizontal' | 'vertical' = 'horizontal'): Type<unknown> => {
   @Component({
-    imports: [ZardTabGroupComponent, ZardTabComponent, NgIcon],
+    imports: [ZardTabGroupComponent, ZardTabComponent],
     template: `
-      <z-tab-group [zTabsPosition]="position">
+      <z-tab-group [zOrientation]="orientation">
         <z-tab label="First">First content</z-tab>
         <z-tab label="Second">Second content</z-tab>
         <z-tab label="Third">Third content</z-tab>
       </z-tab-group>
     `,
-    viewProviders: [
-      provideIcons({
-        lucideChevronLeft,
-        lucideChevronUp,
-        lucideChevronRight,
-        lucideChevronDown,
-      }),
-    ],
   })
   class TestHostComponent {
-    position = position;
+    orientation = orientation;
   }
   return TestHostComponent;
 };
@@ -113,12 +103,35 @@ describe('ZardTabGroupComponent', () => {
     expect(updatedTabPanels[2].nativeElement.hasAttribute('hidden')).toBeTruthy();
   });
 
-  it('applies correct classes for different positions', async () => {
-    const { fixture } = await render(getHostComponent('left'));
+  it('applies horizontal layout classes by default', async () => {
+    const { fixture } = await render(getHostComponent('horizontal'));
     fixture.detectChanges();
 
-    const tabGroup = fixture.debugElement.query(By.directive(ZardTabGroupComponent));
-    expect(tabGroup.nativeElement).toHaveClass('flex-row');
+    const host = fixture.debugElement.query(By.directive(ZardTabGroupComponent)).nativeElement as HTMLElement;
+    expect(host.className).toContain('flex-col');
+    expect(host.getAttribute('data-orientation')).toBe('horizontal');
+  });
+
+  it('applies vertical layout classes when zOrientation is vertical', async () => {
+    const { fixture } = await render(getHostComponent('vertical'));
+    fixture.detectChanges();
+
+    const host = fixture.debugElement.query(By.directive(ZardTabGroupComponent)).nativeElement as HTMLElement;
+    expect(host.className).toContain('flex-row');
+    expect(host.getAttribute('data-orientation')).toBe('vertical');
+  });
+
+  it('marks the active button with data-active', async () => {
+    const { fixture } = await render(getHostComponent());
+    fixture.detectChanges();
+
+    const tabGroup = fixture.debugElement.query(By.directive(ZardTabGroupComponent)).componentInstance;
+    tabGroup.setActiveTab(1);
+    fixture.detectChanges();
+
+    const buttons = fixture.debugElement.queryAll(By.css('button[role="tab"]'));
+    expect((buttons[0].nativeElement as HTMLElement).hasAttribute('data-active')).toBe(false);
+    expect((buttons[1].nativeElement as HTMLElement).hasAttribute('data-active')).toBe(true);
   });
 
   it('has selectTabByIndex method', async () => {
@@ -147,28 +160,87 @@ describe('ZardTabGroupComponent', () => {
     consoleWarn.mockRestore();
   });
 
-  it('calculates isHorizontal correctly', async () => {
-    const { fixture } = await render(getHostComponent('left'));
+  it('applies default variant pill classes on nav element', async () => {
+    @Component({
+      imports: [ZardTabGroupComponent, ZardTabComponent],
+      template: `
+        <z-tab-group>
+          <z-tab label="First">First</z-tab>
+          <z-tab label="Second">Second</z-tab>
+        </z-tab-group>
+      `,
+    })
+    class Host {}
+
+    const { fixture } = await render(Host);
     fixture.detectChanges();
 
-    const tabGroup = fixture.debugElement.query(By.directive(ZardTabGroupComponent)).componentInstance;
-    expect(tabGroup.isHorizontal()).toBe(false);
+    const nav = fixture.debugElement.query(By.css('nav[role="tablist"]')).nativeElement as HTMLElement;
+    expect(nav.className).toContain('bg-muted');
+    expect(nav.className).toContain('rounded-lg');
+    expect(nav.getAttribute('data-variant')).toBe('default');
   });
 
-  it('calculates navBeforeContent correctly for top position', async () => {
-    const { fixture } = await render(getHostComponent('top'));
+  it('applies line variant classes on nav element', async () => {
+    @Component({
+      imports: [ZardTabGroupComponent, ZardTabComponent],
+      template: `
+        <z-tab-group zVariant="line">
+          <z-tab label="First">First</z-tab>
+          <z-tab label="Second">Second</z-tab>
+        </z-tab-group>
+      `,
+    })
+    class Host {}
+
+    const { fixture } = await render(Host);
     fixture.detectChanges();
 
-    const tabGroup = fixture.debugElement.query(By.directive(ZardTabGroupComponent)).componentInstance;
-    expect(tabGroup.navBeforeContent()).toBe(true);
+    const nav = fixture.debugElement.query(By.css('nav[role="tablist"]')).nativeElement as HTMLElement;
+    expect(nav.className).toContain('bg-transparent');
+    expect(nav.className).not.toContain('bg-muted');
+    expect(nav.getAttribute('data-variant')).toBe('line');
   });
 
-  it('calculates navBeforeContent correctly for bottom position', async () => {
-    const { fixture } = await render(getHostComponent('bottom'));
+  it('disables individual tab button when zDisabled is true on z-tab', async () => {
+    @Component({
+      imports: [ZardTabGroupComponent, ZardTabComponent],
+      template: `
+        <z-tab-group>
+          <z-tab label="Enabled">A</z-tab>
+          <z-tab label="Disabled" [zDisabled]="true">B</z-tab>
+        </z-tab-group>
+      `,
+    })
+    class Host {}
+
+    const { fixture } = await render(Host);
     fixture.detectChanges();
 
-    const tabGroup = fixture.debugElement.query(By.directive(ZardTabGroupComponent)).componentInstance;
-    expect(tabGroup.navBeforeContent()).toBe(false);
+    const buttons = fixture.debugElement.queryAll(By.css('button[role="tab"]'));
+    expect((buttons[0].nativeElement as HTMLButtonElement).disabled).toBe(false);
+    expect((buttons[1].nativeElement as HTMLButtonElement).disabled).toBe(true);
+  });
+
+  it('disables all tab buttons when zDisabled is true on z-tab-group', async () => {
+    @Component({
+      imports: [ZardTabGroupComponent, ZardTabComponent],
+      template: `
+        <z-tab-group [zDisabled]="true">
+          <z-tab label="One">A</z-tab>
+          <z-tab label="Two">B</z-tab>
+        </z-tab-group>
+      `,
+    })
+    class Host {}
+
+    const { fixture } = await render(Host);
+    fixture.detectChanges();
+
+    const buttons = fixture.debugElement.queryAll(By.css('button[role="tab"]'));
+    buttons.forEach(btn => {
+      expect((btn.nativeElement as HTMLButtonElement).disabled).toBe(true);
+    });
   });
 });
 

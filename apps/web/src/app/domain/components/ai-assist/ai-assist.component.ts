@@ -20,8 +20,8 @@ import { environment } from '@doc/env/environment';
 import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '@doc/shared/constants/routes.constant';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
+import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
 
 import type { AiAssistOption } from './ai-assist.types';
 
@@ -29,7 +29,14 @@ import type { AiAssistOption } from './ai-assist.types';
   selector: 'z-assist',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [RouterLink, ZardPopoverComponent, ZardPopoverDirective, ZardDividerComponent, ZardButtonComponent, NgIcon],
+  imports: [
+    RouterLink,
+    ZardPopoverComponent,
+    ZardPopoverDirective,
+    ZardSeparatorComponent,
+    ZardButtonComponent,
+    NgIcon,
+  ],
   templateUrl: './ai-assist.component.html',
   host: {
     '[class]': 'hostClasses()',

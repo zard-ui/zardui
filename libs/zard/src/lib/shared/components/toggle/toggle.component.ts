@@ -6,8 +6,8 @@ import {
   forwardRef,
   input,
   linkedSignal,
+  model,
   output,
-  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { type ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
@@ -16,7 +16,7 @@ import type { ClassValue } from 'clsx';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { toggleVariants, type ZardToggleVariants } from './toggle.variants';
+import { toggleVariants, type ZardToggleSizeVariants, type ZardToggleTypeVariants } from './toggle.variants';
 
 type OnTouchedType = () => void;
 type OnChangeType = (value: boolean) => void;
@@ -26,9 +26,10 @@ type OnChangeType = (value: boolean) => void;
   template: `
     <button
       type="button"
+      data-slot="toggle"
       [attr.aria-label]="zAriaLabel()"
-      [attr.aria-pressed]="value()"
-      [attr.data-state]="value() ? 'on' : 'off'"
+      [attr.aria-pressed]="zValue()"
+      [attr.data-state]="state()"
       [class]="classes()"
       [disabled]="disabled()"
       (click)="toggle()"
@@ -51,21 +52,18 @@ type OnChangeType = (value: boolean) => void;
   exportAs: 'zToggle',
 })
 export class ZardToggleComponent implements ControlValueAccessor {
-  readonly zValue = input<boolean | undefined>();
-  readonly zDefault = input<boolean>(false);
-  readonly zDisabled = input(false, { alias: 'disabled', transform: booleanAttribute });
-  readonly zType = input<ZardToggleVariants['zType']>('default');
-  readonly zSize = input<ZardToggleVariants['zSize']>('md');
-  readonly zAriaLabel = input<string>('', { alias: 'aria-label' });
+  readonly zValue = model(false);
+  readonly zDisabled = input(false, { transform: booleanAttribute });
+  readonly zType = input<ZardToggleTypeVariants>('default');
+  readonly zSize = input<ZardToggleSizeVariants>('default');
+  readonly zAriaLabel = input.required<string>();
   readonly class = input<ClassValue>('');
 
   readonly zToggleClick = output<void>();
   readonly zToggleHover = output<void>();
   readonly zToggleChange = output<boolean>();
 
-  private readonly isUsingNgModel = signal(false);
-
-  protected readonly value = linkedSignal(() => this.zValue() ?? this.zDefault());
+  protected readonly state = computed(() => (this.zValue() ? 'on' : 'off'));
 
   protected readonly disabled = linkedSignal(() => this.zDisabled());
 
@@ -87,27 +85,24 @@ export class ZardToggleComponent implements ControlValueAccessor {
       return;
     }
 
-    const next = !this.value();
-
-    if (this.zValue() === undefined) {
-      this.value.set(next);
-    }
+    this.zValue.update(v => !v);
 
     this.zToggleClick.emit();
-    this.zToggleChange.emit(next);
-    this.onChangeFn(next);
+    this.zToggleChange.emit(this.zValue());
+    this.onChangeFn(this.zValue());
     this.onTouched();
   }
 
   writeValue(val: boolean): void {
-    this.value.set(val ?? this.zDefault());
+    this.zValue.set(val);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnChange(fn: any): void {
     this.onChangeFn = fn;
-    this.isUsingNgModel.set(true);
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   registerOnTouched(fn: any): void {
     this.onTouched = fn;
   }

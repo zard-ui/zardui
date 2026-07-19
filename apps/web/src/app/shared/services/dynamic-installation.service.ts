@@ -1,91 +1,83 @@
 import { Injectable } from '@angular/core';
 
+import type { CodeBlockData, CodeTabData } from '@highlight/types';
+
 import { Step } from '../constants/install.constant';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DynamicInstallationService {
-  generateInstallationSteps(componentName: string): { cli: Step[]; manual: Step[] } {
+  generateInstallationSteps(
+    componentName: string,
+    cliAddData?: CodeTabData,
+    manualCodeData?: CodeBlockData[],
+    manualDepsData?: CodeTabData,
+    registerData?: CodeBlockData,
+  ): { cli: Step[]; manual: Step[] } {
     return {
-      cli: this.generateCliSteps(componentName),
-      manual: this.generateManualSteps(componentName),
+      cli: this.generateCliSteps(componentName, cliAddData, registerData),
+      manual: this.generateManualSteps(componentName, manualCodeData, manualDepsData, registerData),
     };
   }
 
-  private generateCliSteps(componentName: string): Step[] {
+  private generateCliSteps(componentName: string, cliAddData?: CodeTabData, registerData?: CodeBlockData): Step[] {
     const steps: Step[] = [];
 
-    steps.push({
+    const step: Step = {
       title: 'Run the CLI',
       subtitle: 'Use the CLI to add the component to your project.',
-      file: {
-        path: `/installation/cli/add-${componentName}.md`,
-        lineNumber: false,
-      },
-    });
+    };
+    if (cliAddData) {
+      step.codeTabData = cliAddData;
+    }
+    steps.push(step);
 
-    const hasExtraSteps = this.checkIfComponentHasRegisterStep(componentName);
-    if (hasExtraSteps) {
+    if (registerData) {
       steps.push({
         title: `Register ${componentName} to your project`,
-        file: {
-          path: `/installation/cli/register-${componentName}.md`,
-          lineNumber: true,
-        },
+        codeBlockData: registerData,
       });
     }
 
     return steps;
   }
 
-  private generateManualSteps(componentName: string): Step[] {
+  private generateManualSteps(
+    componentName: string,
+    manualCodeData?: CodeBlockData[],
+    manualDepsData?: CodeTabData,
+    registerData?: CodeBlockData,
+  ): Step[] {
     const steps: Step[] = [];
 
-    const hasDependencies = this.checkIfComponentHasDependencies(componentName);
-    if (hasDependencies) {
+    if (manualDepsData) {
       steps.push({
         title: 'Install dependencies',
         subtitle: 'Install the required dependencies for this component.',
-        file: {
-          path: `/installation/manual/install-deps-${componentName}.md`,
-          lineNumber: false,
-        },
+        codeTabData: manualDepsData,
       });
     }
 
-    steps.push({
-      title: 'Add the component files',
-      subtitle: `Create the component directory structure and add the following files to your project.`,
-      path: `components/${componentName}`,
-      file: {
-        path: `/installation/manual/${componentName}.md`,
-        lineNumber: true,
-      },
-      expandable: true,
-    });
+    if (manualCodeData) {
+      const files = manualCodeData.filter(block => block.title !== 'index.ts');
 
-    const hasExtraSteps = this.checkIfComponentHasRegisterStep(componentName);
-    if (hasExtraSteps) {
+      for (const block of files) {
+        steps.push({
+          title: `Add ${block.title ?? 'file'}`,
+          subtitle: `Create the following file in your project.`,
+          codeBlockData: block,
+        });
+      }
+    }
+
+    if (registerData) {
       steps.push({
-        title: `Register ${componentName}  to your project`,
-        file: {
-          path: `/installation/cli/register-${componentName}.md`,
-          lineNumber: true,
-        },
+        title: `Register ${componentName} to your project`,
+        codeBlockData: registerData,
       });
     }
 
     return steps;
-  }
-
-  private checkIfComponentHasDependencies(componentName: string): boolean {
-    const componentsWithDeps = ['toast', 'carousel'];
-    return componentsWithDeps.includes(componentName);
-  }
-
-  private checkIfComponentHasRegisterStep(componentName: string): boolean {
-    const componentsWithDeps = ['toast'];
-    return componentsWithDeps.includes(componentName);
   }
 }

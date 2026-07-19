@@ -8,7 +8,7 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "paths": {
-      "@zard/*": ["libs/zard/src/lib/*"]
+      "@zard/*": ["../zard/src/lib/*"]
     },
     "module": "preserve",
     "moduleResolution": "bundler"

@@ -26,6 +26,32 @@ This was a version bump only, there were no code changes.
 
 - Otabek @OlimjonovOtabek
 
+### 💥 Breaking Changes
+
+- **toggle:** modernize toggle component API with model() signal and updated variants
+
+#### Migration Guide
+
+| Before                      | After                                               | Notes                                                      |
+| --------------------------- | --------------------------------------------------- | ---------------------------------------------------------- |
+| `[zValue]` (one-way)        | `[(zValue)]`                                        | `zValue` is now a `model()` — use two-way binding          |
+| `[zDefault]="true"`         | `[(zValue)]="myVar"` where `myVar = signal(true)`   | `zDefault` input removed; set initial state via `zValue`   |
+| `disabled` (HTML attribute) | `[zDisabled]`                                       | `disabled` attribute alias removed                         |
+| `zSize="md"`                | `zSize="default"` (or omit)                         | Size `'md'` renamed to `'default'`                         |
+| `aria-label="..."`          | `[zAriaLabel]="'...'"`                              | `zAriaLabel` is now required, HTML attribute alias removed |
+| `ZardToggleVariants`        | `ZardToggleTypeVariants` / `ZardToggleSizeVariants` | Variant types split into separate type exports             |
+
+### 📦 Code Refactoring
+
+- **toggle:** replace input+linkedSignal with model() for two-way binding
+- **toggle:** make zAriaLabel required for accessibility
+- **toggle:** update CVA variants with modern TailwindCSS v4 classes
+- **toggle:** rewrite tests from TestBed to Testing Library with comprehensive coverage
+
+### ❤️ Thank You
+
+- Mickey Lazarevic @mikij
+
 ## 1.0.0-beta.76 (2026-04-15)
 
 ### 🐛 Bug Fixes
@@ -310,7 +336,7 @@ This was a version bump only, there were no code changes.
 
 ### 🐛 Bug Fixes
 
-- light or dark colors for code  properly follow dark mode servi… ([#390](https://github.com/zard-ui/zardui/pull/390))
+- light or dark colors for code properly follow dark mode servi… ([#390](https://github.com/zard-ui/zardui/pull/390))
 - CLI component installer execution fix ([#393](https://github.com/zard-ui/zardui/pull/393))
 - route should not overlap with file name ([#396](https://github.com/zard-ui/zardui/pull/396))
 - input component - forms support fix ([#397](https://github.com/zard-ui/zardui/pull/397))

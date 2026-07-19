@@ -9,8 +9,8 @@ import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import { ZardInputDirective } from '@zard/components/input/input.directive';
-import { ZardProgressBarComponent } from '@zard/components/progress-bar/progress-bar.component';
+import { ZardInputComponent } from '@zard/components/input/input.component';
+import { ZardProgressComponent } from '@zard/components/progress/progress.component';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTooltipImports } from '@zard/components/tooltip';
 
@@ -68,7 +68,7 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
                           <z-switch></z-switch>
                         }
                         @case ('progress') {
-                          <z-progress-bar [progress]="65"></z-progress-bar>
+                          <z-progress [value]="65"></z-progress>
                         }
                         @case ('avatar') {
                           <z-avatar
@@ -119,10 +119,10 @@ import { ZardCarouselComponent, ZardCarouselItemComponent } from './carousel/car
     ZardCarouselItemComponent,
     ZardButtonComponent,
     ZardBadgeComponent,
-    ZardInputDirective,
+    ZardInputComponent,
     ZardCheckboxComponent,
     ZardSwitchComponent,
-    ZardProgressBarComponent,
+    ZardProgressComponent,
     ZardAvatarComponent,
     ZardTooltipImports,
     NgIcon,
@@ -170,7 +170,7 @@ export class ShowcaseComponent {
       description: 'Toggle switches for settings and preferences.',
     },
     {
-      title: 'Progress Bar',
+      title: 'Progress',
       type: 'progress' as const,
       bgClass: '',
       textClass: 'text-muted-foreground',

@@ -1,1 +1,0 @@
-// No TypeScript files found for navigation-menu

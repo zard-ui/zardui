@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideBold } from '@ng-icons/lucide';
+import { lucideBookmark } from '@ng-icons/lucide';
 
 import { ZardToggleComponent } from '../toggle.component';
 
@@ -9,10 +9,11 @@ import { ZardToggleComponent } from '../toggle.component';
   selector: 'z-demo-toggle-default',
   imports: [ZardToggleComponent, NgIcon],
   template: `
-    <z-toggle aria-label="Default toggle">
-      <ng-icon name="lucideBold" />
+    <z-toggle zAriaLabel="Toggle bookmark" zSize="sm" zType="outline">
+      <ng-icon name="lucideBookmark" class="group-data-[state=on]/toggle:[&_path]:fill-foreground" />
+      Bookmark
     </z-toggle>
   `,
-  viewProviders: [provideIcons({ lucideBold })],
+  viewProviders: [provideIcons({ lucideBookmark })],
 })
 export class ZardDemoToggleDefaultComponent {}

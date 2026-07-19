@@ -1,20 +1,15 @@
 import { Component } from '@angular/core';
 
-import { ZardAvatarGroupComponent } from '../avatar-group.component';
-import { ZardAvatarComponent } from '../avatar.component';
+import { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';
 
 @Component({
   selector: 'z-demo-avatar-basic',
-  imports: [ZardAvatarComponent, ZardAvatarGroupComponent],
+  imports: [ZardAvatarComponent],
   template: `
-    <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zFallback="ZA" zSize="sm" />
-    <z-avatar zSrc="error-image.png" zFallback="ZA" zSize="sm" />
-
-    <z-avatar-group>
-      <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zFallback="JD" zSize="sm" />
-      <z-avatar zSrc="https://github.com/srizzon.png" zFallback="SA" zSize="sm" />
-      <z-avatar zSrc="https://github.com/Luizgomess.png" zFallback="LU" zSize="sm" />
-    </z-avatar-group>
+    <div class="mb-4 flex gap-3">
+      <z-avatar zSrc="/images/avatar/imgs/avatar_image.jpg" zFallback="ZA" />
+      <z-avatar zSrc="error-image.png" zFallback="ZA" />
+    </div>
   `,
 })
 export class ZardDemoAvatarBasicComponent {}

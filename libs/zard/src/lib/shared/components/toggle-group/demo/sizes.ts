@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 
-import { provideIcons } from '@ng-icons/core';
-import { lucideBold, lucideItalic, lucideUnderline } from '@ng-icons/lucide';
-
 import {
   ZardToggleGroupComponent,
   type ZardToggleGroupItem,
@@ -14,49 +11,53 @@ import {
   template: `
     <div class="space-y-4">
       <div>
-        <h3 class="mb-2 text-sm font-medium">Small</h3>
-        <z-toggle-group zMode="multiple" zSize="sm" [items]="items" (valueChange)="onToggleChange($event)" />
+        <z-toggle-group
+          zDefaultValue="top"
+          zMode="single"
+          zSize="sm"
+          [zItems]="items"
+          zType="outline"
+          (valueChange)="onToggleChange($event)"
+        />
       </div>
-
       <div>
-        <h3 class="mb-2 text-sm font-medium">Default</h3>
-        <z-toggle-group zMode="multiple" zSize="md" [items]="items" (valueChange)="onToggleChange($event)" />
-      </div>
-
-      <div>
-        <h3 class="mb-2 text-sm font-medium">Large</h3>
-        <z-toggle-group zMode="multiple" zSize="lg" [items]="items" (valueChange)="onToggleChange($event)" />
+        <z-toggle-group
+          zDefaultValue="top"
+          zMode="single"
+          zSize="lg"
+          [zItems]="items"
+          zType="outline"
+          (valueChange)="onToggleChange($event)"
+        />
       </div>
     </div>
   `,
-  viewProviders: [
-    provideIcons({
-      lucideBold,
-      lucideItalic,
-      lucideUnderline,
-    }),
-  ],
 })
 export default class ToggleGroupSizesComponent {
   items: ZardToggleGroupItem[] = [
     {
-      value: 'bold',
-      icon: 'lucideBold',
-      ariaLabel: 'Toggle bold',
+      value: 'top',
+      label: 'Top',
+      ariaLabel: 'Toggle top',
     },
     {
-      value: 'italic',
-      icon: 'lucideItalic',
-      ariaLabel: 'Toggle italic',
+      value: 'bottom',
+      label: 'Bottom',
+      ariaLabel: 'Toggle bottom',
     },
     {
-      value: 'underline',
-      icon: 'lucideUnderline',
-      ariaLabel: 'Toggle underline',
+      value: 'left',
+      label: 'Left',
+      ariaLabel: 'Toggle left',
+    },
+    {
+      value: 'right',
+      label: 'Right',
+      ariaLabel: 'Toggle right',
     },
   ];
 
   onToggleChange(value: string | string[]) {
-    console.log('Selected formatting:', value);
+    console.log('Selected:', value);
   }
 }

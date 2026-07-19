@@ -18,8 +18,8 @@ import {
   buttonGroupVariants,
   type ZardButtonGroupVariants,
 } from './button-group.variants';
-import { ZardDividerComponent } from '../divider/divider.component';
-import { type ZardDividerVariants } from '../divider/divider.variants';
+import { ZardSeparatorComponent } from '../separator/separator.component';
+import { type ZardSeparatorVariants } from '../separator/separator.variants';
 
 @Component({
   selector: 'z-button-group',
@@ -30,7 +30,9 @@ import { type ZardDividerVariants } from '../divider/divider.variants';
   encapsulation: ViewEncapsulation.None,
   host: {
     role: 'group',
+    'data-slot': 'button-group',
     '[class]': 'classes()',
+    '[attr.data-orientation]': 'zOrientation()',
     '[attr.aria-orientation]': 'zOrientation()',
   },
   exportAs: 'zButtonGroup',
@@ -51,19 +53,20 @@ export class ZardButtonGroupComponent {
 
 @Component({
   selector: 'z-button-group-divider',
-  imports: [ZardDividerComponent],
+  imports: [ZardSeparatorComponent],
   template: `
-    <z-divider [class]="classes()" zSpacing="none" aria-hidden="true" [zOrientation]="orientation()" />
+    <z-separator [class]="classes()" aria-hidden="true" [zOrientation]="orientation()" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
     class: 'contents',
+    'data-slot': 'button-group-separator',
   },
   exportAs: 'zButtonGroupDivider',
 })
 export class ZardButtonGroupDividerComponent {
-  readonly zOrientation = input<ZardDividerVariants['zOrientation']>(null);
+  readonly zOrientation = input<ZardSeparatorVariants['zOrientation']>(null);
   readonly class = input<ClassValue>('');
 
   private readonly parent = inject(ZardButtonGroupComponent, {
@@ -92,6 +95,7 @@ export class ZardButtonGroupDividerComponent {
 @Directive({
   selector: '[z-button-group-text]',
   host: {
+    'data-slot': 'button-group-text',
     '[class]': 'classes()',
   },
   exportAs: 'zButtonGroupText',

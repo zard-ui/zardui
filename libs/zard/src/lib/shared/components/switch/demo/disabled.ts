@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
-import { ZardSwitchComponent } from '../switch.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardSwitchComponent } from '@/shared/components/switch/switch.component';
 
 @Component({
   selector: 'z-demo-switch-disabled',
-  imports: [ZardSwitchComponent, ReactiveFormsModule],
+  imports: [...ZardFieldImports, ZardSwitchComponent],
   template: `
-    <z-switch [(zChecked)]="model" [zDisabled]="true">Disabled</z-switch>
-    <z-switch [formControl]="checkControl">Disabled in forms</z-switch>
+    <div z-field zOrientation="horizontal" data-disabled="true" class="w-fit">
+      <z-switch zId="switch-disabled-unchecked" zDisabled />
+      <label z-field-label for="switch-disabled-unchecked">Disabled</label>
+    </div>
   `,
 })
-export class ZardDemoSwitchDisabledComponent {
-  model = false;
-  checkControl = new FormControl({ value: true, disabled: true });
-}
+export class ZardDemoSwitchDisabledComponent {}

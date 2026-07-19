@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowRight } from '@ng-icons/lucide';
+import { lucideDot } from '@ng-icons/lucide';
 
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 
@@ -9,16 +9,24 @@ import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb
   selector: 'z-demo-breadcrumb-separator',
   imports: [ZardBreadcrumbImports, NgIcon],
   template: `
-    <z-breadcrumb [zSeparator]="customSeparator">
-      <z-breadcrumb-item>Home</z-breadcrumb-item>
-      <z-breadcrumb-item>Components</z-breadcrumb-item>
-      <z-breadcrumb-item>Breadcrumb</z-breadcrumb-item>
+    <z-breadcrumb zLabel="Breadcrumb with custom separator">
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link [routerLink]="['/']">Home</a>
+      </z-breadcrumb-item>
+      <li z-breadcrumb-separator>
+        <ng-icon name="lucideDot" />
+      </li>
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link [routerLink]="['/docs/components']">Components</a>
+      </z-breadcrumb-item>
+      <li z-breadcrumb-separator>
+        <ng-icon name="lucideDot" />
+      </li>
+      <z-breadcrumb-item>
+        <span z-breadcrumb-page>Breadcrumb</span>
+      </z-breadcrumb-item>
     </z-breadcrumb>
-
-    <ng-template #customSeparator>
-      <ng-icon name="lucideArrowRight" />
-    </ng-template>
   `,
-  viewProviders: [provideIcons({ lucideArrowRight })],
+  viewProviders: [provideIcons({ lucideDot })],
 })
 export class ZardDemoBreadcrumbSeparatorComponent {}

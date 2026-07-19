@@ -5,9 +5,11 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
+const port = process.env.PORT || '4222';
+
 export default {
   '/llms.txt': {
-    target: 'http://localhost:4222',
+    target: `http://localhost:${port}`,
     secure: false,
     logLevel: 'info',
     bypass: function (req, res) {

@@ -35,6 +35,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'css/tailwind.css',
+        content: '',
+      },
+      {
         name: 'index.ts',
         content: '',
       },
@@ -184,6 +188,27 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'empty.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'field',
+    files: [
+      {
+        name: 'field.component.ts',
+        content: '',
+      },
+      {
+        name: 'field.variants.ts',
+        content: '',
+      },
+      {
+        name: 'field.imports.ts',
         content: '',
       },
       {
@@ -365,6 +390,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'dropdown-primitives.component.ts',
+        content: '',
+      },
+      {
         name: 'dropdown-trigger.directive.ts',
         content: '',
       },
@@ -390,11 +419,28 @@ export const registry: ComponentRegistry[] = [
     name: 'input',
     files: [
       {
-        name: 'input.directive.ts',
+        name: 'input.component.ts',
         content: '',
       },
       {
         name: 'input.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'textarea',
+    files: [
+      {
+        name: 'textarea.component.ts',
+        content: '',
+      },
+      {
+        name: 'textarea.variants.ts',
         content: '',
       },
       {
@@ -411,7 +457,32 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'input-group.imports.ts',
+        content: '',
+      },
+      {
         name: 'input-group.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
+    name: 'item',
+    files: [
+      {
+        name: 'item.component.ts',
+        content: '',
+      },
+      {
+        name: 'item.imports.ts',
+        content: '',
+      },
+      {
+        name: 'item.variants.ts',
         content: '',
       },
       {
@@ -430,6 +501,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'select-item.component.ts',
+        content: '',
+      },
+      {
+        name: 'select-group.component.ts',
         content: '',
       },
       {
@@ -545,14 +620,14 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'divider',
+    name: 'separator',
     files: [
       {
-        name: 'divider.component.ts',
+        name: 'separator.component.ts',
         content: '',
       },
       {
-        name: 'divider.variants.ts',
+        name: 'separator.variants.ts',
         content: '',
       },
       {
@@ -562,14 +637,10 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'loader',
+    name: 'spinner',
     files: [
       {
-        name: 'loader.component.ts',
-        content: '',
-      },
-      {
-        name: 'loader.variants.ts',
+        name: 'spinner.component.ts',
         content: '',
       },
       {
@@ -579,14 +650,14 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'progress-bar',
+    name: 'progress',
     files: [
       {
-        name: 'progress-bar.component.ts',
+        name: 'progress.component.ts',
         content: '',
       },
       {
-        name: 'progress-bar.variants.ts',
+        name: 'progress.variants.ts',
         content: '',
       },
       {
@@ -596,14 +667,18 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'radio',
+    name: 'radio-group',
     files: [
       {
-        name: 'radio.component.ts',
+        name: 'radio-group.component.ts',
         content: '',
       },
       {
-        name: 'radio.variants.ts',
+        name: 'radio-group.variants.ts',
+        content: '',
+      },
+      {
+        name: 'radio-group.imports.ts',
         content: '',
       },
       {
@@ -694,10 +769,6 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'command-list.component.ts',
-        content: '',
-      },
-      {
-        name: 'command-empty.component.ts',
         content: '',
       },
       {
@@ -889,15 +960,19 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'toast',
+    name: 'sonner',
     dependencies: ['ngx-sonner'],
     files: [
       {
-        name: 'toast.component.ts',
+        name: 'sonner.component.ts',
         content: '',
       },
       {
-        name: 'toast.variants.ts',
+        name: 'sonner.service.ts',
+        content: '',
+      },
+      {
+        name: 'sonner.variants.ts',
         content: '',
       },
       {
@@ -975,7 +1050,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'button-group',
-    registryDependencies: ['divider'],
+    registryDependencies: ['separator'],
     files: [
       {
         name: 'button-group.component.ts',

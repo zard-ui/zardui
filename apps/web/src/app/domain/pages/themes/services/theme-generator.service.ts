@@ -83,6 +83,7 @@ export class ThemeGeneratorService {
     return `
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
+@import './app/shared/core/css/tailwind.css';
 @plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
@@ -141,7 +142,7 @@ ${darkVars}
     @apply bg-background text-foreground;
   }
 
-    input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;

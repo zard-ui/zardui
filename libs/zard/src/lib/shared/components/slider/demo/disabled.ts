@@ -6,8 +6,8 @@ import { ZardSliderComponent } from '../slider.component';
   selector: 'z-demo-slider-disabled',
   imports: [ZardSliderComponent],
   template: `
-    <div class="flex min-h-87.5 w-full items-center justify-center p-10">
-      <z-slider class="w-[60%]" zDefault="50" zDisabled="true" />
+    <div class="flex min-h-50 w-full items-center p-10">
+      <z-slider class="mx-auto w-full max-w-xs" [zDefault]="[50]" zDisabled />
     </div>
   `,
 })
