@@ -1,3 +1,15 @@
+## 1.0.0-beta.81 (2026-07-19)
+
+### 🐛 Bug Fixes
+
+- **web:** skip prerender for llms.txt to avoid output collision ([#659](https://github.com/zard-ui/zardui/pull/659))
+- **web:** skip external nav items when generating prerender routes ([d9aa5569](https://github.com/zard-ui/zardui/commit/d9aa5569))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+- Luiz Gomes
+
 ## 1.0.0-beta.80 (2026-05-21)
 
 ### 🐛 Bug Fixes
