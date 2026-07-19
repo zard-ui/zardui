@@ -905,23 +905,6 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'segmented',
-    files: [
-      {
-        name: 'segmented.component.ts',
-        content: '',
-      },
-      {
-        name: 'segmented.variants.ts',
-        content: '',
-      },
-      {
-        name: 'index.ts',
-        content: '',
-      },
-    ],
-  },
-  {
     name: 'skeleton',
     files: [
       {

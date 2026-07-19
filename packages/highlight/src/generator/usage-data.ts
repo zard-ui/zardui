@@ -230,14 +230,6 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   <z-resizable-panel>Panel Two</z-resizable-panel>
 </z-resizable>`,
   },
-  segmented: {
-    importCode: `import { ZardSegmentedComponent } from '@/shared/components/segmented/segmented.component';`,
-    templateCode: `<z-segmented [zOptions]="[
-  { value: 'daily', label: 'Daily' },
-  { value: 'weekly', label: 'Weekly' },
-  { value: 'monthly', label: 'Monthly' }
-]"></z-segmented>`,
-  },
   select: {
     importCode: `import { ZardSelectImports } from '@/shared/components/select/select.imports';`,
     templateCode: `<z-select zPlaceholder="Select a fruit">
