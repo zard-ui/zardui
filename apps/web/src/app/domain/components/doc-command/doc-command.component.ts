@@ -32,6 +32,7 @@ type CommandGroup = {
 };
 
 const NAVIGATE_PREFIX = 'navigate:';
+const EXTERNAL_PREFIX = 'external:';
 const COPY_OKLCH_PREFIX = 'copy-oklch:';
 
 @Component({
@@ -134,7 +135,7 @@ export class CommandDocComponent implements AfterViewInit, OnDestroy {
         return {
           name: item.name,
           kind: isComponent ? 'component' : 'page',
-          value: `${NAVIGATE_PREFIX}${item.path}`,
+          value: `${item.external ? EXTERNAL_PREFIX : NAVIGATE_PREFIX}${item.path}`,
           icon: (isComponent ? 'lucideCircleDashed' : 'lucideArrowRight') as IconName,
           shortcut: '',
           copyPayload: isComponent ? `npx zard-cli add ${name}` : '',
@@ -220,6 +221,13 @@ export class CommandDocComponent implements AfterViewInit, OnDestroy {
     if (value.startsWith(NAVIGATE_PREFIX)) {
       const path = value.slice(NAVIGATE_PREFIX.length);
       this.router.navigate([path]);
+      this.dialogRef.close();
+      return;
+    }
+
+    if (value.startsWith(EXTERNAL_PREFIX)) {
+      const path = value.slice(EXTERNAL_PREFIX.length);
+      window.open(path, '_blank', 'noopener,noreferrer');
       this.dialogRef.close();
       return;
     }
