@@ -6,11 +6,13 @@
       z-button
       zType="secondary"
       class="text-secondary-foreground h-8 gap-1.5 rounded-md px-3 md:h-7 md:text-[0.8rem]"
+      [attr.aria-label]="featureCopyPage ? 'Copy page as Markdown' : null"
+      (click)="featureCopyPage && onCopyPage()"
     >
       @if (featureCopyPage) {
         <span class="flex items-center gap-2">
-          <ng-icon name="lucideCopy" class="size-4!" />
-          Copy Page
+          <ng-icon [name]="copied() ? 'lucideCheck' : 'lucideCopy'" class="size-4!" />
+          {{ copied() ? 'Copied' : 'Copy Page' }}
         </span>
       } @else {
         <span>AI Assist</span>
