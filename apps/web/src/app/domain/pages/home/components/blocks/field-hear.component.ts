@@ -1,20 +1,23 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
 
 @Component({
   selector: 'z-block-field-hear',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardCardComponent, ZardCheckboxComponent, FormsModule],
+  imports: [ZardCardImports, ZardCheckboxComponent, FormsModule],
   template: `
     <z-card zTitle="How did you hear about us?" class="gap-2">
-      <p class="text-muted-foreground -mt-3 mb-4 line-clamp-1 text-sm leading-normal font-normal">
-        Select the option that best describes how you heard about us
-      </p>
-      <div class="flex flex-row flex-wrap gap-2">
+      <div z-card-header>
+        <z-card-title zTitle="How did you hear about us?" />
+        <z-card-description zDescription="Select the option that best describes how you..." />
+      </div>
+
+      <div z-card-content class="flex flex-row flex-wrap gap-2">
         @for (option of options; track option) {
           <label
             class="has-checked:bg-primary/5 has-checked:border-primary/30 dark:has-checked:bg-primary/10 dark:has-checked:border-primary/20 flex w-fit cursor-pointer items-center gap-0 overflow-hidden rounded-full border px-3 py-1.5 text-sm font-medium transition-all duration-150 has-checked:gap-1.5 has-checked:pl-2"
