@@ -13,7 +13,7 @@ import { CommandDocComponent } from '../doc-command/doc-command.component';
     <button
       z-button
       zType="outline"
-      class="w-full justify-start shadow-none sm:pr-12 md:w-40 lg:w-56 xl:w-64"
+      class="w-full justify-start border-0 shadow-none sm:pr-12 md:w-40 lg:w-56 xl:w-64"
       (click)="openCommandDialog()"
     >
       <span class="hidden lg:inline-flex">Search documentation...</span>

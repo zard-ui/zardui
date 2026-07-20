@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node --env-file-if-exists=.env scripts/dev.mjs",
     "prepare": "husky",
-    "build": "npm run generate:highlight && npm run build:registry && node apps/web/update-routes.mjs && npx nx run web:build --configuration=production",
+    "build": "npm run generate:highlight && npm run generate:md && npm run build:registry && node apps/web/update-routes.mjs && npx nx run web:build --configuration=production && npm run generate:md:docs",
     "build:registry": "npx tsx scripts/build-registry.cts",
     "build:cli": "npx nx run cli:build",
     "build:mcp": "npx nx run mcp:build",
@@ -21,6 +21,8 @@
     "e2e:ui": "nx e2e web-e2e -- --ui",
     "generate:highlight": "npx tsx packages/highlight/src/generator/index.ts",
     "generate:highlight:run": "npx tsx packages/highlight/src/generator/index.ts",
+    "generate:md": "npx tsx --tsconfig apps/web/tsconfig.generate.json apps/web/generate-markdown.mts",
+    "generate:md:docs": "node apps/web/generate-docs-markdown.mjs",
     "release:cli": "npx nx release --projects=packages/cli",
     "publish:cli": "npx nx run cli:publish",
     "release": "npx nx release",

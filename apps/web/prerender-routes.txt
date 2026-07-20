@@ -63,3 +63,4 @@
 /docs/components/dropdown
 /docs/components/popover
 /docs/components/kbd
+/docs/installation/angular

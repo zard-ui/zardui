@@ -3,7 +3,7 @@ export const environment = {
   appVersion: 'beta',
   package: 'zard-cli',
   features: {
-    copyPage: false,
-    copyMD: false,
+    copyPage: true,
+    copyMD: true,
   },
 };

@@ -60,6 +60,8 @@ memory-bank
 .beads
 
 docs
+# Generated per-page Markdown (component docs) is a committed build artifact, like generated/.
+!/apps/web/public/docs/
 issues
 
 CLAUDE.md
