@@ -1,3 +1,17 @@
+## 1.0.0-beta.83 (2026-07-21)
+
+### 📦 Code Refactoring
+
+- **home:** use composable card API in field-hear block ([6a5b1423](https://github.com/zard-ui/zardui/commit/6a5b1423))
+
+### 📝 Documentation
+
+- **accordion:** update demos to attribute selector and card imports ([9e7d82b8](https://github.com/zard-ui/zardui/commit/9e7d82b8))
+
+### ❤️ Thank You
+
+- Luiz Gomes
+
 ## 1.0.0-beta.82 (2026-07-20)
 
 This was a version bump only, there were no code changes.
