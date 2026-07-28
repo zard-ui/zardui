@@ -5,6 +5,7 @@
 /themes
 /docs/introduction
 /docs/components
+/docs/mcp
 /docs/roadmap
 /docs/changelog
 /docs/installation

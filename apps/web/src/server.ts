@@ -108,6 +108,7 @@ function getDescriptionForRoute(path: string): string {
     '/docs/dark-mode': 'Implementing dark mode in your Angular application.',
     '/docs/cli': 'Command-line tool for installing and managing Zard UI components.',
     '/docs/figma': 'Figma design resources and component library.',
+    '/docs/mcp': 'MCP server that connects AI assistants to the Zard UI registry.',
     '/llms.txt': 'LLM-optimized documentation format for AI assistants.',
     '/docs/about': 'Credits, project information, and acknowledgments.',
   };

@@ -1,0 +1,12 @@
+import type { CodeBlockData } from '@highlight/types';
+
+export const BLOCK_0: CodeBlockData = {
+  "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">{</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">  \"mcpServers\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">: {</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">    \"zard-ui\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">: {</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">      \"command\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">: </span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"npx\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">,</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">      \"args\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">: [</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"-y\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">, </span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"zard-mcp\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">]</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">    }</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">  }</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">}</span></span></code></pre>",
+  "code": "{\n  \"mcpServers\": {\n    \"zard-ui\": {\n      \"command\": \"npx\",\n      \"args\": [\"-y\", \"zard-mcp\"]\n    }\n  }\n}",
+  "language": "json",
+  "title": "claude_desktop_config.json",
+  "showLineNumbers": false,
+  "copyButton": true,
+  "expandable": false
+};
+
