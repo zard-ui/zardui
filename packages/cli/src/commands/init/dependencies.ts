@@ -1,7 +1,7 @@
 import { type Config } from '@cli/utils/config.js';
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger } from '@cli/utils/logger.js';
-import { installPackages } from '@cli/utils/package-manager.js';
+import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/package-manager.js';
 
 type ProjectInfo = {
   framework: string;
@@ -25,11 +25,20 @@ export async function installDependencies(cwd: string, config: Config, projectIn
     logger.info('Tailwind CSS is already installed. Skipping Tailwind dependencies installation.');
   }
 
-  await installWithRetry(deps, cwd, config.packageManager, false);
+  // Cada lote que sobra vazio é uma invocação inteira do gerenciador poupada —
+  // o caso comum de um `init` repetido é justamente esse, nada a instalar.
+  const [missingDeps, missingDevDeps] = await Promise.all([
+    filterInstalledPackages(deps, cwd),
+    filterInstalledPackages(devDeps, cwd),
+  ]);
 
-  if (devDeps.length > 0) {
-    await installWithRetry(devDeps, cwd, config.packageManager, true);
+  if (!missingDeps.length && !missingDevDeps.length) {
+    logger.info('All dependencies are already installed.');
+    return;
   }
+
+  await installPackagesWithRetry(missingDeps, cwd, config.packageManager, false);
+  await installPackagesWithRetry(missingDevDeps, cwd, config.packageManager, true);
 }
 
 function getCdkVersion(angularVersion?: string): string {
@@ -40,18 +49,4 @@ function getCdkVersion(angularVersion?: string): string {
   const majorVersion = Number.parseInt(angularVersion.split('.')[0]);
 
   return `@angular/cdk@^${majorVersion}`;
-}
-
-async function installWithRetry(
-  packages: string[],
-  cwd: string,
-  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
-  isDev: boolean,
-): Promise<void> {
-  try {
-    await installPackages(packages, cwd, packageManager, isDev);
-  } catch {
-    logger.warn('Installation failed, retrying with --legacy-peer-deps...');
-    await installPackages(packages, cwd, packageManager, isDev, true);
-  }
 }
