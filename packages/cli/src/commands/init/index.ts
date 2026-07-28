@@ -1,21 +1,15 @@
-import { installComponent } from '@cli/commands/add/component-installer.js';
-import { promptForConfig } from '@cli/commands/init/config-prompter.js';
-import { installDependencies } from '@cli/commands/init/dependencies.js';
-import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tailwind-setup.js';
-import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
-import { Config, resolveConfigPaths } from '@cli/utils/config.js';
+import { buildConfig, defaultAnswers, inspectCssFile } from '@cli/commands/init/config-prompter.js';
+import { buildInitSteps, type InitStep } from '@cli/commands/init/steps.js';
+import { runInitWizard } from '@cli/commands/init/wizard.js';
+import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
+import { type Config } from '@cli/utils/config.js';
 import { CliError } from '@cli/utils/errors.js';
-import { getProjectInfo, ProjectInfo } from '@cli/utils/get-project-info.js';
+import { getProjectInfo, type ProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
-import { detectPackageManager } from '@cli/utils/package-manager.js';
-import chalk from 'chalk';
+import { detectPackageManager, suggestedRunner } from '@cli/utils/package-manager.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
-import { mkdir, writeFile } from 'node:fs/promises';
 import * as path from 'node:path';
-import prompts from 'prompts';
-
-import { updateAngularConfig } from './update-angular-config.js';
 
 export const init = new Command()
   .name('init')
@@ -28,38 +22,40 @@ export const init = new Command()
     validateWorkingDirectory(cwd);
 
     const projectInfo = await getProjectInfo(cwd);
-
     validateAngularProject(projectInfo);
 
-    const componentsJsonPath = path.resolve(cwd, 'components.json');
-    const isReInitializing = existsSync(componentsJsonPath);
+    const isReInitializing = existsSync(path.resolve(cwd, 'components.json'));
+    const packageManager = await detectPackageManager(cwd);
 
-    if (isReInitializing) {
-      const shouldContinue = await confirmReinitialization();
-      if (!shouldContinue) {
-        logger.info('Re-initialization cancelled.');
-        process.exit(0);
-      }
+    const buildSteps = (config: Config): InitStep[] => buildInitSteps(cwd, config, projectInfo, isReInitializing);
+
+    if (!isInteractive()) {
+      await runHeadless({ cwd, projectInfo, packageManager, isReInitializing, buildSteps, yes: options.yes });
+      return;
     }
 
-    logger.info(isReInitializing ? 'Re-initializing ZardUI...' : 'Initializing ZardUI...');
-    logger.break();
+    try {
+      const { config, logs } = await runInitWizard({
+        cwd,
+        projectInfo,
+        packageManager,
+        isReInitializing,
+        skipConfirmation: options.yes,
+        buildSteps,
+      });
 
-    const detectedPm = await detectPackageManager();
-    logger.break();
-
-    const config = await promptForConfig(cwd, projectInfo, detectedPm);
-
-    if (!options.yes) {
-      const shouldProceed = await confirmConfiguration();
-      if (!shouldProceed) {
+      reportSuccess(config, buildSteps(config), logs);
+    } catch (error) {
+      if (error instanceof WizardCancelledError) {
+        printReport({
+          status: 'cancelled',
+          headline: error.message,
+          notes: ['Nothing was changed in your project.'],
+        });
         process.exit(0);
       }
+      throw error;
     }
-
-    await runInitializationSteps(cwd, config, projectInfo, isReInitializing);
-
-    displaySuccessMessage(config);
   });
 
 function validateWorkingDirectory(cwd: string): void {
@@ -74,85 +70,65 @@ function validateAngularProject(projectInfo: ProjectInfo): void {
   }
 }
 
-async function confirmReinitialization(): Promise<boolean> {
-  logger.warn('ZardUI is already initialized in this project.');
-  const { reinitialize } = await prompts({
-    type: 'confirm',
-    name: 'reinitialize',
-    message: 'Do you want to re-initialize? This will overwrite your existing configuration and utils.',
-    initial: true,
-  });
-
-  return reinitialize;
+interface HeadlessOptions {
+  cwd: string;
+  projectInfo: ProjectInfo;
+  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun';
+  isReInitializing: boolean;
+  yes: boolean;
+  buildSteps(config: Config): InitStep[];
 }
 
-async function confirmConfiguration(): Promise<boolean> {
-  const { proceed } = await prompts({
-    type: 'confirm',
-    name: 'proceed',
-    message: 'Write configuration to components.json?',
-    initial: true,
-  });
-
-  return proceed;
-}
-
-async function runInitializationSteps(
-  cwd: string,
-  config: Config,
-  projectInfo: ProjectInfo,
-  isReInitializing: boolean,
-): Promise<void> {
-  const initSpinner = spinner('Initializing project...').start();
-
-  await writeFile(path.resolve(cwd, 'components.json'), JSON.stringify(config, null, 2), 'utf8');
-
-  initSpinner.text = 'Installing dependencies...';
-  await installDependencies(cwd, config, projectInfo);
-
-  initSpinner.text = 'Configuring Angular...';
-  await updateAngularConfig(cwd, config);
-
-  if (!projectInfo.hasTailwind || isReInitializing) {
-    initSpinner.text = 'Setting up PostCSS...';
-    await createPostCssConfig(cwd);
+/**
+ * Caminho sem UI — CI, pipes e terminais não interativos.
+ *
+ * Aqui ninguém pode responder nada, então os defaults valem e `--yes` é
+ * obrigatório: sem ele a CLI se recusa a sobrescrever o CSS global do projeto.
+ */
+async function runHeadless(options: HeadlessOptions): Promise<void> {
+  if (!options.yes) {
+    throw new CliError(
+      'Running without an interactive terminal requires --yes, since init overwrites your global CSS.',
+      'NOT_INTERACTIVE',
+    );
   }
 
-  initSpinner.text = 'Applying theme...';
-  await applyThemeToStyles(cwd, config);
+  const answers = defaultAnswers(options.projectInfo);
+  const cssState = await inspectCssFile(options.cwd, answers.globalCss);
 
-  initSpinner.text = 'Updating TypeScript config...';
-  await updateTsConfig(cwd, config);
+  if (cssState === 'missing') {
+    throw new CliError(
+      `CSS file not found at: ${answers.globalCss}. Run init in an interactive terminal to choose another path.`,
+      'CSS_NOT_FOUND',
+    );
+  }
 
-  initSpinner.text = 'Installing core dependencies...';
-  await installCoreDependencies(cwd, config);
+  const config = buildConfig(answers, options.packageManager);
+  const steps = options.buildSteps(config);
 
-  initSpinner.succeed('Project initialized');
+  logger.info(options.isReInitializing ? 'Re-initializing ZardUI...' : 'Initializing ZardUI...');
+
+  for (const step of steps) {
+    const stepSpinner = spinner(`${step.label} — ${step.note}`).start();
+    try {
+      await step.run();
+      stepSpinner.succeed(step.label);
+    } catch (error) {
+      stepSpinner.fail(`${step.label}: ${error instanceof Error ? error.message : String(error)}`);
+      throw error;
+    }
+  }
+
+  reportSuccess(config, steps, []);
 }
 
-async function installCoreDependencies(cwd: string, config: Config): Promise<void> {
-  const resolvedConfig = await resolveConfigPaths(cwd, config);
-
-  await mkdir(resolvedConfig.resolvedPaths.core, { recursive: true });
-  await mkdir(resolvedConfig.resolvedPaths.utils, { recursive: true });
-
-  await installComponent('core', resolvedConfig.resolvedPaths.core, resolvedConfig);
-  await installComponent('utils', resolvedConfig.resolvedPaths.utils, resolvedConfig);
-}
-
-function displaySuccessMessage(config: Config): void {
-  logger.break();
-  logger.success('ZardUI has been initialized successfully!');
-  logger.break();
-
-  const runCommand =
-    config.packageManager === 'npm'
-      ? 'npx'
-      : config.packageManager === 'yarn'
-        ? 'yarn dlx'
-        : `${config.packageManager}x`;
-
-  logger.info('You can now add components using:');
-  logger.info(chalk.bold(`  ${runCommand} zard-cli add [component]`));
-  logger.break();
+function reportSuccess(config: Config, steps: readonly InitStep[], logs: readonly LogRecord[]): void {
+  printReport({
+    status: 'success',
+    headline: 'ZardUI has been initialized successfully!',
+    items: steps.map(step => `${step.label} — ${step.note}`),
+    notes: ['You can now add components using:'],
+    commands: [{ command: `${suggestedRunner(config.packageManager)} zard-cli add`, argument: '[component]' }],
+    logs,
+  });
 }

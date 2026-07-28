@@ -1,18 +1,33 @@
 import { installComponent, validateTargetPath } from '@cli/commands/add/component-installer.js';
 import { selectComponents } from '@cli/commands/add/component-selector.js';
 import { updateProvideZardWithDarkMode } from '@cli/commands/add/dark-mode-setup.js';
-import { resolveDependencies, getTargetDir, type ComponentMeta } from '@cli/commands/add/dependency-resolver.js';
+import {
+  getAllComponentNames,
+  getTargetDir,
+  resolveDependencies,
+  type ComponentMeta,
+} from '@cli/commands/add/dependency-resolver.js';
+import { runAddWizard } from '@cli/commands/add/wizard.js';
 import { injectThemeScript } from '@cli/commands/init/theme-loader.js';
-import { getConfig, resolveConfigPaths } from '@cli/utils/config.js';
+import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
+import { getConfig, resolveConfigPaths, type Config } from '@cli/utils/config.js';
 import { CliError } from '@cli/utils/errors.js';
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
 import { logger, spinner } from '@cli/utils/logger.js';
-import { installPackages } from '@cli/utils/package-manager.js';
-import chalk from 'chalk';
+import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/package-manager.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
-import prompts from 'prompts';
+
+type ResolvedConfig = Awaited<ReturnType<typeof resolveConfigPaths>>;
+
+interface AddOptions {
+  yes: boolean;
+  overwrite: boolean;
+  cwd: string;
+  all: boolean;
+  path?: string;
+}
 
 export const add = new Command()
   .name('add')
@@ -23,7 +38,7 @@ export const add = new Command()
   .option('-c, --cwd <cwd>', 'the working directory. defaults to the current directory.', process.cwd())
   .option('-a, --all', 'add all available components', false)
   .option('-p, --path <path>', 'the path to add the component to.')
-  .action(async (components, options) => {
+  .action(async (components: string[], options: AddOptions) => {
     const cwd = path.resolve(options.cwd);
 
     validateWorkingDirectory(cwd);
@@ -34,50 +49,136 @@ export const add = new Command()
 
     const config = await loadConfiguration(cwd);
     const projectInfo = await validateProject(cwd);
-    const resolvedConfig = await resolveConfigPaths(cwd, config);
+    const resolvedConfig: ResolvedConfig = await resolveConfigPaths(cwd, config);
 
-    const selectedComponents = await selectComponents(components, options.all);
+    const preselected = await selectComponents(components, options.all);
 
-    const addSpinner = spinner('Resolving components...').start();
-    const { componentsToInstall, dependenciesToInstall } = await resolveDependencies(
-      selectedComponents,
-      resolvedConfig,
-      cwd,
-      options,
-    );
-    addSpinner.stop();
+    warnOnPrereleaseAngular(projectInfo.angularVersionRaw);
 
-    if (componentsToInstall.length === 0) {
-      logger.info('All components already installed.');
+    const actions = {
+      loadNames: () => getAllComponentNames(),
+      resolve: async (names: string[]) => {
+        const { componentsToInstall, dependenciesToInstall } = await resolveDependencies(
+          names,
+          resolvedConfig,
+          cwd,
+          options,
+        );
+        return {
+          components: componentsToInstall,
+          dependencies: resolveCompatibleVersions(dependenciesToInstall, projectInfo.angularVersion),
+        };
+      },
+      installDependencies: (packages: string[]) => installDependencies(packages, cwd, config.packageManager),
+      installComponent: (component: ComponentMeta) =>
+        installComponent(component.name, getTargetDir(component, resolvedConfig, cwd, options.path), resolvedConfig, {
+          customPath: Boolean(options.path),
+        }),
+      setupDarkMode: async (indexHtml: string) => {
+        await injectThemeScript(cwd, indexHtml);
+        await updateProvideZardWithDarkMode(cwd, resolvedConfig);
+      },
+    };
+
+    if (!isInteractive()) {
+      await runHeadless(preselected, options, actions);
       return;
     }
 
-    const resolvedDeps = resolveCompatibleVersions(dependenciesToInstall, projectInfo.angularVersion);
+    try {
+      const { installed, logs } = await runAddWizard({
+        preselected,
+        skipConfirmation: options.yes,
+        ...actions,
+      });
 
-    if (projectInfo.angularVersionRaw && /-(rc|next|canary)/.test(projectInfo.angularVersionRaw)) {
-      logger.warn(
-        `You are using a pre-release version of Angular (${projectInfo.angularVersionRaw}). Some dependencies may have compatibility issues.`,
-      );
-    }
-
-    if (!options.yes) {
-      const shouldProceed = await confirmInstallation(componentsToInstall.length, resolvedDeps.length);
-      if (!shouldProceed) {
+      reportSuccess(installed, logs);
+    } catch (error) {
+      if (error instanceof WizardCancelledError) {
+        printReport({ status: 'cancelled', headline: error.message, notes: ['No files were written.'] });
         process.exit(0);
       }
+      throw error;
     }
-
-    await installDependencies(resolvedDeps, cwd, config.packageManager);
-    await installComponents(componentsToInstall, cwd, resolvedConfig, options);
-
-    const isDarkModeBeingInstalled = componentsToInstall.some(c => c.name === 'dark-mode');
-    if (isDarkModeBeingInstalled) {
-      await setupDarkMode(cwd, resolvedConfig);
-    }
-
-    logger.break();
-    logger.success('Done!');
   });
+
+type AddActions = {
+  loadNames(): Promise<string[]>;
+  resolve(names: string[]): Promise<{ components: ComponentMeta[]; dependencies: string[] }>;
+  installDependencies(packages: string[]): Promise<void>;
+  installComponent(component: ComponentMeta): Promise<void>;
+  setupDarkMode(indexHtml: string): Promise<void>;
+};
+
+/**
+ * Caminho sem UI — CI, pipes e terminais não interativos.
+ *
+ * Sem alguém para escolher na lista, os componentes precisam vir por argumento
+ * ou via `--all`; a confirmação é dispensada porque não há como respondê-la.
+ */
+async function runHeadless(preselected: string[], options: AddOptions, actions: AddActions): Promise<void> {
+  if (!preselected.length) {
+    throw new CliError(
+      'No components specified. Pass the component names or --all when running without an interactive terminal.',
+      'NO_COMPONENTS',
+    );
+  }
+
+  const resolveSpinner = spinner('Resolving components...').start();
+  const { components, dependencies } = await actions.resolve(preselected);
+  resolveSpinner.stop();
+
+  if (components.length === 0) {
+    logger.info('All components already installed.');
+    return;
+  }
+
+  if (dependencies.length) {
+    const depsSpinner = spinner('Installing dependencies...').start();
+    await actions.installDependencies(dependencies);
+    depsSpinner.succeed('Dependencies installed');
+  }
+
+  const installed: string[] = [];
+  const failed: string[] = [];
+
+  for (const component of components) {
+    const componentSpinner = spinner(`Installing ${component.name}...`).start();
+    try {
+      await actions.installComponent(component);
+      installed.push(component.name);
+      componentSpinner.succeed(component.name);
+    } catch (error) {
+      failed.push(component.name);
+      componentSpinner.fail(component.name);
+      logger.debug(`Failed to install ${component.name}: ${error instanceof Error ? error.message : error}`);
+    }
+  }
+
+  if (components.some(component => component.name === 'dark-mode')) {
+    logger.warn('Dark mode needs an index.html path; run `zard-cli add dark-mode` interactively to configure it.');
+  }
+
+  if (failed.length) {
+    throw new CliError(`Failed to install: ${failed.join(', ')}`, 'INSTALL_FAILED');
+  }
+
+  reportSuccess(installed, []);
+}
+
+function reportSuccess(installed: readonly string[], logs: readonly LogRecord[]): void {
+  if (!installed.length) {
+    printReport({ status: 'success', headline: 'All components are already installed.', logs });
+    return;
+  }
+
+  printReport({
+    status: 'success',
+    headline: `Installed ${installed.length} component${installed.length > 1 ? 's' : ''}.`,
+    items: [...installed],
+    logs,
+  });
+}
 
 function validateWorkingDirectory(cwd: string): void {
   if (!existsSync(cwd)) {
@@ -85,7 +186,7 @@ function validateWorkingDirectory(cwd: string): void {
   }
 }
 
-async function loadConfiguration(cwd: string) {
+async function loadConfiguration(cwd: string): Promise<Config> {
   const config = await getConfig(cwd);
 
   if (!config) {
@@ -105,21 +206,18 @@ async function validateProject(cwd: string) {
   return projectInfo;
 }
 
-async function confirmInstallation(componentsCount: number, depsCount: number): Promise<boolean> {
-  const { proceed } = await prompts({
-    type: 'confirm',
-    name: 'proceed',
-    message: `Ready to install ${componentsCount} component(s) and ${depsCount} dependencies. Proceed?`,
-    initial: true,
-  });
-
-  return proceed;
+function warnOnPrereleaseAngular(angularVersionRaw: string | null): void {
+  if (angularVersionRaw && /-(rc|next|canary)/.test(angularVersionRaw)) {
+    logger.warn(
+      `You are using a pre-release version of Angular (${angularVersionRaw}). Some dependencies may have compatibility issues.`,
+    );
+  }
 }
 
 const ANGULAR_VERSION_PACKAGES = ['embla-carousel-angular'];
 
 function resolveCompatibleVersions(dependencies: Set<string>, angularVersion: string | null): string[] {
-  const angularMajor = angularVersion ? parseInt(angularVersion.split('.')[0], 10) : null;
+  const angularMajor = angularVersion ? parseInt(angularVersion.split('.')[0] as string, 10) : null;
 
   return Array.from(dependencies).map(dep => {
     if (angularMajor && ANGULAR_VERSION_PACKAGES.includes(dep)) {
@@ -136,71 +234,13 @@ async function installDependencies(
 ): Promise<void> {
   if (packages.length === 0) return;
 
-  const depsSpinner = spinner('Installing dependencies...').start();
-  try {
-    await installPackages(packages, cwd, packageManager, false);
-  } catch {
-    depsSpinner.text = 'Retrying with --legacy-peer-deps...';
-    await installPackages(packages, cwd, packageManager, false, true);
-  }
-  depsSpinner.succeed('Dependencies installed');
-}
-
-async function installComponents(
-  componentsToInstall: ComponentMeta[],
-  cwd: string,
-  resolvedConfig: any,
-  options: { path?: string },
-): Promise<void> {
-  const installSpinner = spinner('Installing components...').start();
-  const installed: string[] = [];
-  const failed: string[] = [];
-
-  for (const component of componentsToInstall) {
-    try {
-      installSpinner.text = `Installing ${component.name}...`;
-
-      const targetDir = getTargetDir(component, resolvedConfig, cwd, options.path);
-
-      await installComponent(component.name, targetDir, resolvedConfig);
-      installed.push(component.name);
-    } catch (error) {
-      failed.push(component.name);
-      logger.debug(`Failed to install ${component.name}: ${error instanceof Error ? error.message : error}`);
-    }
-  }
-
-  if (failed.length > 0) {
-    installSpinner.fail(`Failed to install: ${failed.join(', ')}`);
-  } else {
-    installSpinner.succeed(`Installed ${installed.length} component${installed.length > 1 ? 's' : ''}`);
-  }
-}
-
-async function setupDarkMode(cwd: string, resolvedConfig: any): Promise<void> {
-  logger.break();
-  logger.info('Dark mode requires additional configuration.');
-
-  const { indexFile } = await prompts({
-    type: 'text',
-    name: 'indexFile',
-    message: `Where is your ${chalk.cyan('index.html')} file?`,
-    initial: 'src/index.html',
-  });
-
-  if (!indexFile) {
-    logger.warn('Skipping dark mode script injection.');
+  // Um projeto já inicializado costuma ter todas elas: sem o filtro, cada `add`
+  // pagaria uma revalidação completa da árvore para não instalar nada.
+  const missing = await filterInstalledPackages(packages, cwd);
+  if (missing.length === 0) {
+    logger.debug(`Dependencies already installed: ${packages.join(', ')}`);
     return;
   }
 
-  const darkModeSpinner = spinner('Configuring dark mode...').start();
-
-  try {
-    await injectThemeScript(cwd, indexFile);
-    await updateProvideZardWithDarkMode(cwd, resolvedConfig);
-    darkModeSpinner.succeed('Dark mode configured');
-  } catch (error) {
-    darkModeSpinner.fail('Failed to configure dark mode');
-    logger.debug(`Dark mode error: ${error instanceof Error ? error.message : error}`);
-  }
+  await installPackagesWithRetry(missing, cwd, packageManager, false);
 }
