@@ -1,12 +1,8 @@
-import { Config } from '@cli/utils/config.js';
-import { ProjectInfo } from '@cli/utils/get-project-info';
-import { logger } from '@cli/utils/logger.js';
-import { getAvailableThemes, getThemeDisplayName } from '@cli/utils/theme-selector.js';
-import chalk from 'chalk';
+import { type Config } from '@cli/utils/config.js';
+import { type ProjectInfo } from '@cli/utils/get-project-info.js';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import * as path from 'node:path';
-import prompts from 'prompts';
 import { z } from 'zod';
 
 export const SCHEMA_URL = 'https://zardui.com/schema.json';
@@ -29,99 +25,73 @@ export const configSchema = z.object({
   }),
 });
 
-export async function promptForConfig(
-  cwd: string,
-  projectInfo: ProjectInfo,
-  packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun',
-): Promise<Config> {
-  const highlight = (text: string) => chalk.cyan(text);
+/** As respostas do wizard, antes de virarem um `components.json`. */
+export interface InitAnswers {
+  appConfig: string;
+  theme: string;
+  globalCss: string;
+  componentsAlias: string;
+  utilsAlias: string;
+}
 
-  const options = await prompts([
-    {
-      type: 'text',
-      name: 'app.config',
-      message: `Where is your ${highlight('app.config.ts')} file?`,
-      initial: projectInfo.hasNx ? 'apps/[app]/src/app/app.config.ts' : 'src/app/app.config.ts',
-    },
-    {
-      type: 'select',
-      name: 'theme',
-      message: `Choose a ${highlight('theme')} for your components:`,
-      choices: getAvailableThemes().map(theme => ({
-        title: getThemeDisplayName(theme),
-        value: theme,
-      })),
-      initial: 0,
-    },
-    {
-      type: 'text',
-      name: 'tailwindCss',
-      message: `Where is your ${highlight('global CSS')} file?`,
-      initial: projectInfo.hasNx ? 'apps/[app]/src/styles.css' : 'src/styles.css',
-    },
-    {
-      type: 'text',
-      name: 'components',
-      message: `Configure the import alias for ${highlight('components')}:`,
-      initial: '@/shared/components',
-    },
-    {
-      type: 'text',
-      name: 'utils',
-      message: `Configure the import alias for ${highlight('utils')}:`,
-      initial: '@/shared/utils',
-    },
-  ]);
+export function defaultAnswers(projectInfo: ProjectInfo): InitAnswers {
+  return {
+    appConfig: projectInfo.hasNx ? 'apps/[app]/src/app/app.config.ts' : 'src/app/app.config.ts',
+    theme: 'neutral',
+    globalCss: projectInfo.hasNx ? 'apps/[app]/src/styles.css' : 'src/styles.css',
+    componentsAlias: '@/shared/components',
+    utilsAlias: '@/shared/utils',
+  };
+}
 
-  await validateCssFile(cwd, options.tailwindCss);
+/**
+ * De onde os componentes são escritos, deduzido do `app.config.ts`.
+ *
+ * Fixar `src/app` quebrava todo layout que não fosse app único na raiz: o
+ * próprio wizard sugere `apps/[app]/src/app/app.config.ts` para workspace, e os
+ * componentes acabavam num `src/app` na raiz que não pertence a projeto nenhum.
+ * O diretório do app.config é exatamente a raiz do código do app.
+ */
+export function deriveBaseUrl(appConfigFile: string): string {
+  const dir = path.dirname(appConfigFile).replace(/\\/g, '/');
+  return dir === '.' ? 'src/app' : dir;
+}
 
-  const componentsAlias = options.components;
-  const utilsAlias = options.utils;
-  const sharedBase = path.dirname(componentsAlias);
+export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun'): Config {
+  const sharedBase = path.dirname(answers.componentsAlias).replace(/\\/g, '/');
 
-  const config = configSchema.parse({
+  return configSchema.parse({
     $schema: SCHEMA_URL,
     style: 'css',
-    appConfigFile: options['app.config'],
+    appConfigFile: answers.appConfig,
     packageManager,
     tailwind: {
-      css: options.tailwindCss,
-      baseColor: options.theme,
+      css: answers.globalCss,
+      baseColor: answers.theme,
     },
-    baseUrl: 'src/app',
+    baseUrl: deriveBaseUrl(answers.appConfig),
     aliases: {
-      components: componentsAlias,
-      utils: utilsAlias,
+      components: answers.componentsAlias,
+      utils: answers.utilsAlias,
       core: `${sharedBase}/core`,
       services: `${sharedBase}/services`,
     },
   });
-
-  return config;
 }
 
-async function validateCssFile(cwd: string, tailwindCss: string): Promise<void> {
-  const cssPath = path.join(cwd, tailwindCss);
+/**
+ * Estado do CSS global informado pelo usuário.
+ *
+ * O init sobrescreve esse arquivo com os tokens do tema, então o wizard precisa
+ * saber, antes de avançar, se ele existe e se há conteúdo a perder.
+ */
+export type CssFileState = 'missing' | 'empty' | 'has-content';
 
-  if (!existsSync(cssPath)) {
-    logger.error(`CSS file not found at: ${tailwindCss}`);
-    logger.error('Please ensure your CSS file exists before continuing.');
-    process.exit(1);
-  }
+export async function inspectCssFile(cwd: string, relativePath: string): Promise<CssFileState> {
+  const cssPath = path.join(cwd, relativePath);
 
-  const existingContent = await readFile(cssPath, 'utf8');
+  if (!existsSync(cssPath)) return 'missing';
 
-  if (existingContent.trim().length > 0) {
-    const { overwrite } = await prompts({
-      type: 'confirm',
-      name: 'overwrite',
-      message: `Your CSS file already has content. This will overwrite everything with ZardUI theme configuration. Continue?`,
-      initial: true,
-    });
-
-    if (!overwrite) {
-      logger.info('Installation cancelled.');
-      process.exit(0);
-    }
-  }
+  const content = await readFile(cssPath, 'utf8');
+  return content.trim().length > 0 ? 'has-content' : 'empty';
 }

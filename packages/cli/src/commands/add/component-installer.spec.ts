@@ -28,6 +28,7 @@ import { Config } from '@cli/utils/config.js';
 import { CliError, InstallError } from '@cli/utils/errors.js';
 import { fetchComponent } from '@cli/utils/registry.js';
 import { promises as fs } from 'node:fs';
+import * as path from 'node:path';
 
 const mockFetchComponent = fetchComponent as jest.MockedFunction<typeof fetchComponent>;
 const mockMkdir = fs.mkdir as jest.MockedFunction<typeof fs.mkdir>;
@@ -75,6 +76,11 @@ describe('validateTargetPath', () => {
 });
 
 describe('installComponent', () => {
+  // Montados com path.join: o instalador usa o separador da plataforma, e uma
+  // expectativa escrita com `/` só passaria em POSIX.
+  const TARGET = path.join('/project', 'src', 'components', 'button');
+  const inTarget = (file: string): string => path.join(TARGET, file);
+
   beforeEach(() => {
     mockFetchComponent.mockReset();
     mockMkdir.mockReset();
@@ -96,21 +102,13 @@ describe('installComponent', () => {
       ],
     });
 
-    await installComponent('button', '/project/src/components/button', fakeConfig);
+    await installComponent(TARGET, TARGET, fakeConfig);
 
-    expect(mockMkdir).toHaveBeenCalledWith('/project/src/components/button', {
+    expect(mockMkdir).toHaveBeenCalledWith(TARGET, {
       recursive: true,
     });
-    expect(mockWriteFile).toHaveBeenCalledWith(
-      '/project/src/components/button/button.component.ts',
-      'export class Button {}',
-      'utf8',
-    );
-    expect(mockWriteFile).toHaveBeenCalledWith(
-      '/project/src/components/button/button.component.css',
-      '.button { color: red; }',
-      'utf8',
-    );
+    expect(mockWriteFile).toHaveBeenCalledWith(inTarget('button.component.ts'), 'export class Button {}', 'utf8');
+    expect(mockWriteFile).toHaveBeenCalledWith(inTarget('button.component.css'), '.button { color: red; }', 'utf8');
   });
 
   it('should rollback written files on error', async () => {
@@ -130,13 +128,11 @@ describe('installComponent', () => {
       .mockResolvedValueOnce(undefined)
       .mockRejectedValueOnce(new Error('disk full'));
 
-    await expect(installComponent('button', '/project/src/components/button', fakeConfig)).rejects.toThrow(
-      InstallError,
-    );
+    await expect(installComponent('button', TARGET, fakeConfig)).rejects.toThrow(InstallError);
 
     // Should attempt to unlink the two successfully written files
-    expect(mockUnlink).toHaveBeenCalledWith('/project/src/components/button/file1.ts');
-    expect(mockUnlink).toHaveBeenCalledWith('/project/src/components/button/file2.ts');
+    expect(mockUnlink).toHaveBeenCalledWith(inTarget('file1.ts'));
+    expect(mockUnlink).toHaveBeenCalledWith(inTarget('file2.ts'));
     // file3 was never written, so we should only have 2 unlink calls
     expect(mockUnlink).toHaveBeenCalledTimes(2);
   });

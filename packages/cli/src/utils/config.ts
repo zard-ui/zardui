@@ -87,8 +87,33 @@ export async function getConfig(cwd: string): Promise<Config | null> {
   }
 }
 
+/**
+ * Separa o prefixo do alias do caminho que vem depois dele.
+ *
+ * `@`, `@app`, `~` — o nome não importa: o prefixo é um apelido para `baseUrl`,
+ * e o resto é o caminho dentro do projeto. Tratar só `@/` fazia um alias como
+ * `@app/components` escapar da substituição e virar uma pasta literal chamada
+ * `@app` na raiz, fora de qualquer coisa que o tsconfig mapeie.
+ */
+export function splitAlias(alias: string): { prefix: string; rest: string } {
+  const clean = alias.replace(/\/+$/, '');
+  const separator = clean.indexOf('/');
+
+  if (separator === -1) return { prefix: clean, rest: '' };
+
+  return { prefix: clean.slice(0, separator), rest: clean.slice(separator + 1) };
+}
+
+/** O prefixo do alias, com `/*` — a chave que o tsconfig precisa mapear. */
+export function aliasPattern(alias: string): string {
+  return `${splitAlias(alias).prefix}/*`;
+}
+
 export function resolveAliasToPath(alias: string, baseUrl: string): string {
-  return alias.replace(/^@\//, `${baseUrl}/`);
+  const { rest } = splitAlias(alias);
+  const base = baseUrl.replace(/\/+$/, '');
+
+  return rest ? `${base}/${rest}` : base;
 }
 
 export async function resolveConfigPaths(cwd: string, config: Config) {

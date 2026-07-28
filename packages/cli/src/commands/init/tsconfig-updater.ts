@@ -1,4 +1,4 @@
-import { type Config } from '@cli/utils/config.js';
+import { aliasPattern, type Config } from '@cli/utils/config.js';
 import { logger } from '@cli/utils/logger.js';
 import * as commentJson from 'comment-json';
 import { existsSync } from 'fs';
@@ -33,24 +33,35 @@ function updatePaths(tsconfig: any, config: Config): any {
     tsconfig.compilerOptions = {};
   }
 
-  if (!tsconfig.compilerOptions.baseUrl) {
-    tsconfig.compilerOptions.baseUrl = './';
-  }
-
   if (!tsconfig.compilerOptions.paths) {
     tsconfig.compilerOptions.paths = {};
   }
 
-  const pathMappings = {
-    '@/*': [`${config.baseUrl}/*`],
-  };
-
+  // A chave vem do alias escolhido, não de um `@/*` fixo: quem configurou
+  // `@app/components` gera imports com esse prefixo, e mapear outro deixaria
+  // todo import do projeto sem resolver.
   tsconfig.compilerOptions.paths = {
     ...tsconfig.compilerOptions.paths,
-    ...pathMappings,
+    [aliasPattern(config.aliases.components)]: [`${pathMappingBase(tsconfig, config)}/*`],
   };
 
   return tsconfig;
+}
+
+/**
+ * Escreve o mapeamento sem introduzir `baseUrl`.
+ *
+ * Declarar `baseUrl` quebra o build em TypeScript 6 — a opção virou erro e some
+ * no 7 —, e desde o 4.1 ela não é mais necessária: sem ela, os caminhos são
+ * resolvidos a partir do próprio tsconfig. Projetos que já declaram a opção
+ * continuam sendo respeitados, com o mapeamento escrito em relação a ela.
+ */
+function pathMappingBase(tsconfig: any, config: Config): string {
+  const baseUrl = tsconfig.compilerOptions.baseUrl;
+
+  if (!baseUrl) return `./${config.baseUrl}`;
+
+  return path.posix.relative(path.posix.normalize(baseUrl), path.posix.normalize(config.baseUrl)) || '.';
 }
 
 async function writeTsConfig(tsconfigPath: string, tsconfig: any): Promise<void> {

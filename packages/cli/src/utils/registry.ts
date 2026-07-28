@@ -87,10 +87,31 @@ export async function getAvailableComponents(registryUrl?: string): Promise<stri
   return index.items.map(item => item.name);
 }
 
-export function transformContent(content: string, config: Config): string {
+/** Sem isto, um alias digitado como `@/ui/components/` produz `@/ui/components//button`. */
+function trimSlashes(alias: string): string {
+  return alias.replace(/\/+$/, '');
+}
+
+export interface TransformOptions {
+  /**
+   * O destino veio de `--path`, fora do alias configurado.
+   *
+   * Nesse caso os componentes do lote viram vizinhos no disco, e é o caminho
+   * relativo que resolve — o alias apontaria para a pasta onde eles não estão.
+   * `utils` e `core` continuam no alias, porque quem os instalou foi o `init`.
+   */
+  readonly siblingComponents?: boolean;
+}
+
+export function transformContent(content: string, config: Config, options: TransformOptions = {}): string {
   let transformed = content;
 
-  const { aliases } = config;
+  const aliases = {
+    components: options.siblingComponents ? '..' : trimSlashes(config.aliases.components),
+    utils: trimSlashes(config.aliases.utils),
+    core: trimSlashes(config.aliases.core),
+    services: trimSlashes(config.aliases.services),
+  };
 
   // Replace utils imports
   transformed = transformed.replace(
@@ -123,8 +144,14 @@ export function transformContent(content: string, config: Config): string {
       continue;
     }
 
-    const regex = new RegExp(`(['"])@\\/shared\\/${key}\\/([\\w\\-\\/.]+)\\1`, 'g');
-    transformed = transformed.replace(regex, `$1${value}/$2$1`);
+    // O subpath é opcional: `card.component.ts` importa o barrel direto
+    // (`from '@/shared/core'`). Exigindo `/algo` depois da chave, esse import
+    // escapava da substituição e o componente instalado continuava apontando
+    // para `@/shared/core` — uma pasta que não existe com alias customizado.
+    const regex = new RegExp(`(['"])@\\/shared\\/${key}(\\/[\\w\\-\\/.]+)?\\1`, 'g');
+    transformed = transformed.replace(regex, (_match, quote: string, subpath?: string) => {
+      return `${quote}${value}${subpath ?? ''}${quote}`;
+    });
   }
 
   return transformed;
@@ -134,6 +161,7 @@ export async function fetchComponent(
   componentName: string,
   config: Config,
   registryUrl?: string,
+  options: TransformOptions = {},
 ): Promise<RegistryItem> {
   const item = await fetchComponentFromRegistry(componentName, registryUrl);
 
@@ -143,7 +171,7 @@ export async function fetchComponent(
 
   const transformedFiles = item.files.map(file => ({
     name: file.name,
-    content: transformContent(file.content, config),
+    content: transformContent(file.content, config, options),
   }));
 
   return {
