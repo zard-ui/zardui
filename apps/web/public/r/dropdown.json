@@ -39,6 +39,9 @@
       "content": "export * from './dropdown.component';\nexport * from './dropdown-item.component';\nexport * from './dropdown-menu-content.component';\nexport * from './dropdown-primitives.component';\nexport * from './dropdown-trigger.directive';\nexport * from './dropdown.service';\nexport * from './dropdown.imports';\nexport * from './dropdown.variants';\n"
     }
   ],
+  "registryDependencies": [
+    "menu"
+  ],
   "demos": [
     {
       "name": "avatar.ts",

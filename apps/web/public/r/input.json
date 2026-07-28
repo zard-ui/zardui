@@ -15,6 +15,9 @@
       "content": "export * from './input.component';\nexport * from './input.variants';\n"
     }
   ],
+  "registryDependencies": [
+    "input-group"
+  ],
   "demos": [
     {
       "name": "badge.ts",

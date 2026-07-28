@@ -2,7 +2,7 @@
   "$schema": "https://zardui.com/schema/registry.json",
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.82",
+  "version": "1.0.0-beta.83",
   "items": [
     {
       "name": "core",
@@ -189,6 +189,9 @@
     {
       "name": "dropdown",
       "type": "registry:component",
+      "registryDependencies": [
+        "menu"
+      ],
       "files": [
         "dropdown.component.ts",
         "dropdown-item.component.ts",
@@ -204,6 +207,9 @@
     {
       "name": "input",
       "type": "registry:component",
+      "registryDependencies": [
+        "input-group"
+      ],
       "files": [
         "input.component.ts",
         "input.variants.ts",
@@ -213,6 +219,9 @@
     {
       "name": "textarea",
       "type": "registry:component",
+      "registryDependencies": [
+        "input-group"
+      ],
       "files": [
         "textarea.component.ts",
         "textarea.variants.ts",
@@ -385,6 +394,9 @@
     {
       "name": "command",
       "type": "registry:component",
+      "registryDependencies": [
+        "input"
+      ],
       "files": [
         "command.component.ts",
         "command-input.component.ts",
@@ -543,6 +555,7 @@
       "name": "carousel",
       "type": "registry:component",
       "dependencies": [
+        "embla-carousel",
         "embla-carousel-angular",
         "embla-carousel-autoplay",
         "embla-carousel-class-names",

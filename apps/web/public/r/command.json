@@ -39,6 +39,9 @@
       "content": "export * from '@/shared/components/command/command.component';\nexport * from '@/shared/components/command/command-input.component';\nexport * from '@/shared/components/command/command-list.component';\nexport * from '@/shared/components/command/command-option.component';\nexport * from '@/shared/components/command/command-option-group.component';\nexport * from '@/shared/components/command/command-divider.component';\nexport * from '@/shared/components/command/command.imports';\nexport * from '@/shared/components/command/command.variants';\n"
     }
   ],
+  "registryDependencies": [
+    "input"
+  ],
   "demos": [
     {
       "name": "basic.ts",

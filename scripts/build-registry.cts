@@ -59,12 +59,24 @@ function getSourcePath(componentName: string, basePath: string): string {
   return path.join(LIB_PATH, 'components', basePath);
 }
 
+/**
+ * Lê um arquivo do repositório com quebras de linha normalizadas.
+ *
+ * O conteúdo vai literal para dentro do JSON do registry e é gravado assim no
+ * projeto de quem instala. Lido cru no Windows, cada arquivo entraria com
+ * `\r\n` embutido — o registry mudaria por inteiro conforme quem rodou o build
+ * e todo componente instalado chegaria com CRLF na máquina do usuário.
+ */
+function readText(filePath: string): string {
+  return fs.readFileSync(filePath, 'utf8').replace(/\r\n/g, '\n');
+}
+
 function readComponentFile(componentName: string, basePath: string, fileName: string): string | null {
   const sourcePath = getSourcePath(componentName, basePath);
   const filePath = path.join(sourcePath, fileName);
   try {
     if (fs.existsSync(filePath)) {
-      return fs.readFileSync(filePath, 'utf8');
+      return readText(filePath);
     }
     console.warn(`  ⚠️  File not found: ${filePath}`);
     return null;
@@ -83,8 +95,8 @@ function readComponentDocs(componentName: string, basePath: string): { overview:
   const overviewPath = path.join(docPath, 'overview.md');
   const apiPath = path.join(docPath, 'api.md');
 
-  const overview = fs.existsSync(overviewPath) ? fs.readFileSync(overviewPath, 'utf8') : '';
-  const api = fs.existsSync(apiPath) ? fs.readFileSync(apiPath, 'utf8') : '';
+  const overview = fs.existsSync(overviewPath) ? readText(overviewPath) : '';
+  const api = fs.existsSync(apiPath) ? readText(apiPath) : '';
 
   if (!overview && !api) return null;
   return { overview, api };
@@ -96,13 +108,14 @@ function readComponentDemos(componentName: string, basePath: string): RegistryFi
 
   if (!fs.existsSync(demoPath)) return [];
 
-  const demoFiles = fs.readdirSync(demoPath)
+  const demoFiles = fs
+    .readdirSync(demoPath)
     .filter(f => f.endsWith('.ts') && f !== `${componentName}.ts`)
     .sort();
 
   return demoFiles
     .map(fileName => {
-      const content = fs.readFileSync(path.join(demoPath, fileName), 'utf8');
+      const content = readText(path.join(demoPath, fileName));
       return { name: fileName, content };
     })
     .filter(f => f.content.length > 0);
@@ -251,9 +264,7 @@ function buildBlocksRegistry() {
   console.log('\n🧱 Building blocks registry...\n');
   fs.ensureDirSync(BLOCKS_OUTPUT_PATH);
 
-  const blockDirs = fs.readdirSync(BLOCKS_PATH).filter(dir =>
-    fs.statSync(path.join(BLOCKS_PATH, dir)).isDirectory()
-  );
+  const blockDirs = fs.readdirSync(BLOCKS_PATH).filter(dir => fs.statSync(path.join(BLOCKS_PATH, dir)).isDirectory());
 
   interface BlockMeta {
     id: string;
@@ -275,7 +286,7 @@ function buildBlocksRegistry() {
     const blockTsPath = path.join(BLOCKS_PATH, dir, 'block.ts');
     if (!fs.existsSync(blockTsPath)) continue;
 
-    const blockContent = fs.readFileSync(blockTsPath, 'utf8');
+    const blockContent = readText(blockTsPath);
 
     const idMatch = blockContent.match(/id:\s*'([^']+)'/);
     const titleMatch = blockContent.match(/title:\s*'([^']+)'/);
@@ -293,12 +304,13 @@ function buildBlocksRegistry() {
 
     // Extract files from block.ts content
     const files: BlockFile[] = [];
-    const componentFiles = fs.readdirSync(path.join(BLOCKS_PATH, dir))
+    const componentFiles = fs
+      .readdirSync(path.join(BLOCKS_PATH, dir))
       .filter(f => f !== 'block.ts' && (f.endsWith('.ts') || f.endsWith('.html')));
 
     for (const fileName of componentFiles) {
       const filePath = path.join(BLOCKS_PATH, dir, fileName);
-      const content = fs.readFileSync(filePath, 'utf8');
+      const content = readText(filePath);
       const language = fileName.endsWith('.ts') ? 'typescript' : 'html';
       files.push({
         name: fileName,

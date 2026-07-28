@@ -15,6 +15,9 @@
       "content": "export * from './textarea.component';\nexport * from './textarea.variants';\n"
     }
   ],
+  "registryDependencies": [
+    "input-group"
+  ],
   "demos": [
     {
       "name": "button.ts",
