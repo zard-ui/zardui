@@ -1,6 +1,7 @@
 # Base color — Slate
 
 Mirrors the `slate` preset in `packages/cli/src/core/themes/theme-definitions.ts`.
+Swap these two blocks in `src/styles.css` to change the base color.
 
 ```css title="src/styles.css" copyButton expandable="true"
 :root {
@@ -20,6 +21,7 @@ Mirrors the `slate` preset in `packages/cli/src/core/themes/theme-definitions.ts
   --accent: oklch(0.968 0.007 247.896);
   --accent-foreground: oklch(0.208 0.042 265.755);
   --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(0.929 0.013 255.508);
   --input: oklch(0.929 0.013 255.508);
   --ring: oklch(0.704 0.04 256.788);
@@ -54,6 +56,7 @@ Mirrors the `slate` preset in `packages/cli/src/core/themes/theme-definitions.ts
   --accent: oklch(0.279 0.041 260.031);
   --accent-foreground: oklch(0.984 0.003 247.858);
   --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.984 0.003 247.858);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.551 0.027 264.364);

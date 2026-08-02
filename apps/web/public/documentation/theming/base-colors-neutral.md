@@ -1,6 +1,7 @@
 # Base color — Neutral
 
 Mirrors the `neutral` preset in `packages/cli/src/core/themes/theme-definitions.ts`.
+Swap these two blocks in `src/styles.css` to change the base color.
 
 ```css title="src/styles.css" copyButton expandable="true"
 :root {
@@ -20,6 +21,7 @@ Mirrors the `neutral` preset in `packages/cli/src/core/themes/theme-definitions.
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -54,6 +56,7 @@ Mirrors the `neutral` preset in `packages/cli/src/core/themes/theme-definitions.
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);

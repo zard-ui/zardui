@@ -1,6 +1,7 @@
 # Base color — Stone
 
 Mirrors the `stone` preset in `packages/cli/src/core/themes/theme-definitions.ts`.
+Swap these two blocks in `src/styles.css` to change the base color.
 
 ```css title="src/styles.css" copyButton expandable="true"
 :root {
@@ -20,6 +21,7 @@ Mirrors the `stone` preset in `packages/cli/src/core/themes/theme-definitions.ts
   --accent: oklch(0.97 0.001 106.424);
   --accent-foreground: oklch(0.216 0.006 56.043);
   --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0.001 106.423);
   --border: oklch(0.923 0.003 48.717);
   --input: oklch(0.923 0.003 48.717);
   --ring: oklch(0.709 0.01 56.259);
@@ -54,6 +56,7 @@ Mirrors the `stone` preset in `packages/cli/src/core/themes/theme-definitions.ts
   --accent: oklch(0.268 0.007 34.298);
   --accent-foreground: oklch(0.985 0.001 106.423);
   --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0.001 106.423);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.553 0.013 58.071);

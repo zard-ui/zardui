@@ -1,19 +1,20 @@
 # Other color formats
 
-TailwindCSS v4 accepts any CSS color function.
+The raw tokens in `:root` / `.dark` hold plain CSS colors, so any color function works.
+Keep the `@theme inline` mapping untouched — that is what turns a token into a Tailwind utility.
 
-```css
-@theme {
-  /* OKLCH (recommended) */
-  --color-primary: oklch(0.64 0.22 260);
-  
+```css title="src/styles.css" copyButton
+:root {
+  /* OKLCH — what ZardUI ships */
+  --primary: oklch(0.205 0 0);
+
   /* RGB */
-  --color-secondary: rgb(59 130 246);
-  
+  --secondary: rgb(244 244 245);
+
   /* HSL */
-  --color-accent: hsl(210 100% 50%);
-  
+  --accent: hsl(240 5% 96%);
+
   /* HEX */
-  --color-muted: #6b7280;
+  --muted: #f4f4f5;
 }
 ```

@@ -1,6 +1,7 @@
 # Base color — Gray
 
 Mirrors the `gray` preset in `packages/cli/src/core/themes/theme-definitions.ts`.
+Swap these two blocks in `src/styles.css` to change the base color.
 
 ```css title="src/styles.css" copyButton expandable="true"
 :root {
@@ -20,6 +21,7 @@ Mirrors the `gray` preset in `packages/cli/src/core/themes/theme-definitions.ts`
   --accent: oklch(0.967 0.003 264.542);
   --accent-foreground: oklch(0.21 0.034 264.665);
   --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0.002 247.839);
   --border: oklch(0.928 0.006 264.531);
   --input: oklch(0.928 0.006 264.531);
   --ring: oklch(0.707 0.022 261.325);
@@ -54,6 +56,7 @@ Mirrors the `gray` preset in `packages/cli/src/core/themes/theme-definitions.ts`
   --accent: oklch(0.278 0.033 256.848);
   --accent-foreground: oklch(0.985 0.002 247.839);
   --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0.002 247.839);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.551 0.027 264.364);

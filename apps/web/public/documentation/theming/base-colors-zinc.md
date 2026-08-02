@@ -1,6 +1,7 @@
 # Base color — Zinc
 
 Mirrors the `zinc` preset in `packages/cli/src/core/themes/theme-definitions.ts`.
+Swap these two blocks in `src/styles.css` to change the base color.
 
 ```css title="src/styles.css" copyButton expandable="true"
 :root {
@@ -20,6 +21,7 @@ Mirrors the `zinc` preset in `packages/cli/src/core/themes/theme-definitions.ts`
   --accent: oklch(0.967 0.001 286.375);
   --accent-foreground: oklch(0.21 0.006 285.885);
   --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.92 0.004 286.32);
   --input: oklch(0.92 0.004 286.32);
   --ring: oklch(0.705 0.015 286.067);
@@ -54,6 +56,7 @@ Mirrors the `zinc` preset in `packages/cli/src/core/themes/theme-definitions.ts`
   --accent: oklch(0.274 0.006 286.033);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.552 0.016 285.938);

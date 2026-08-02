@@ -1,11 +1,13 @@
 # TailwindCSS v4 configuration
 
-The full `src/styles.css` a ZardUI project needs.
+The complete `src/styles.css` a ZardUI project needs. Identical to what `npx @ngzard/ui init`
+writes for the `neutral` base color, plus the `--destructive-foreground` definition.
 
 ```css title="src/styles.css" copyButton expandable="true"
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
-@plugin 'tailwindcss-animate';
+@import './app/shared/core/css/tailwind';
+@plugin "tailwindcss-animate";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -26,6 +28,7 @@ The full `src/styles.css` a ZardUI project needs.
   --accent: oklch(0.97 0 0);
   --accent-foreground: oklch(0.205 0 0);
   --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
@@ -60,6 +63,7 @@ The full `src/styles.css` a ZardUI project needs.
   --accent: oklch(0.269 0 0);
   --accent-foreground: oklch(0.985 0 0);
   --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.985 0 0);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
@@ -125,15 +129,30 @@ The full `src/styles.css` a ZardUI project needs.
     @apply bg-background text-foreground;
   }
 
-  input[type='number']::-webkit-inner-spin-button,
-  input[type='number']::-webkit-outer-spin-button {
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
     -webkit-appearance: none;
     margin: 0;
   }
 
-  input[type='number'] {
+  input[type="number"] {
     -moz-appearance: textfield;
     appearance: textfield; /* Added for general compatibility */
   }
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--muted-foreground);
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-track {
+  border-radius: 5px;
+  background: var(--muted);
 }
 ```
