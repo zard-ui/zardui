@@ -14,14 +14,7 @@ const SLOT_CLASSES =
 
 @Component({
   selector: 'z-demo-input-otp-form',
-  imports: [
-    ...ZardInputOtpImports,
-    ...ZardFieldImports,
-    ZardCardImports,
-    ZardButtonComponent,
-    ReactiveFormsModule,
-    NgIcon,
-  ],
+  imports: [ZardInputOtpImports, ZardFieldImports, ZardCardImports, ZardButtonComponent, ReactiveFormsModule, NgIcon],
   template: `
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <z-card class="mx-auto max-w-md">

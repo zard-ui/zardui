@@ -5,7 +5,7 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 
 @Component({
   selector: 'z-demo-input-otp-invalid',
-  imports: [...ZardInputOtpImports, FormsModule],
+  imports: [ZardInputOtpImports, FormsModule],
   template: `
     <z-input-otp [zMaxLength]="6" [(ngModel)]="value">
       <z-input-otp-group>

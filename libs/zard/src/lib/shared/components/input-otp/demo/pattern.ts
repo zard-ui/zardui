@@ -6,7 +6,7 @@ import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.util
 
 @Component({
   selector: 'z-demo-input-otp-pattern',
-  imports: [...ZardInputOtpImports, ...ZardFieldImports],
+  imports: [ZardInputOtpImports, ZardFieldImports],
   template: `
     <div z-field class="w-fit">
       <label z-field-label for="digits-only">Digits Only</label>

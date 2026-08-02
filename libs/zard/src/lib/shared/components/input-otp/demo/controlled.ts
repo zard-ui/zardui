@@ -5,7 +5,7 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 
 @Component({
   selector: 'z-demo-input-otp-controlled',
-  imports: [...ZardInputOtpImports, FormsModule],
+  imports: [ZardInputOtpImports, FormsModule],
   template: `
     <div class="space-y-2">
       <z-input-otp [zMaxLength]="6" [(ngModel)]="value">

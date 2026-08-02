@@ -984,7 +984,7 @@ import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.util
 
 @Component({
   selector: 'z-demo-input-otp-pattern',
-  imports: [...ZardInputOtpImports, ...ZardFieldImports],
+  imports: [ZardInputOtpImports, ZardFieldImports],
   template: `
     <div z-field class="w-fit">
       <label z-field-label for="digits-only">Digits Only</label>
@@ -1017,7 +1017,7 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 
 @Component({
   selector: 'z-demo-input-otp-separator',
-  imports: [...ZardInputOtpImports],
+  imports: [ZardInputOtpImports],
   template: `
     <z-input-otp [zMaxLength]="6">
       <z-input-otp-group>
@@ -1053,7 +1053,7 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 
 @Component({
   selector: 'z-demo-input-otp-controlled',
-  imports: [...ZardInputOtpImports, FormsModule],
+  imports: [ZardInputOtpImports, FormsModule],
   template: `
     <div class="space-y-2">
       <z-input-otp [zMaxLength]="6" [(ngModel)]="value">
@@ -1093,7 +1093,7 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 
 @Component({
   selector: 'z-demo-input-otp-disabled',
-  imports: [...ZardInputOtpImports, FormsModule],
+  imports: [ZardInputOtpImports, FormsModule],
   template: `
     <z-input-otp id="disabled" [zMaxLength]="6" [(ngModel)]="value" [disabled]="true">
       <z-input-otp-group>
@@ -1127,7 +1127,7 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 
 @Component({
   selector: 'z-demo-input-otp-invalid',
-  imports: [...ZardInputOtpImports, FormsModule],
+  imports: [ZardInputOtpImports, FormsModule],
   template: `
     <z-input-otp [zMaxLength]="6" [(ngModel)]="value">
       <z-input-otp-group>
@@ -1164,7 +1164,7 @@ import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.util
 
 @Component({
   selector: 'z-demo-input-otp-four-digits',
-  imports: [...ZardInputOtpImports],
+  imports: [ZardInputOtpImports],
   template: `
     <z-input-otp [zMaxLength]="4" [zPattern]="REGEXP_ONLY_DIGITS">
       <z-input-otp-group>
@@ -1193,7 +1193,7 @@ import { REGEXP_ONLY_DIGITS_AND_CHARS } from '@/shared/components/input-otp/inpu
 
 @Component({
   selector: 'z-demo-input-otp-alphanumeric',
-  imports: [...ZardInputOtpImports],
+  imports: [ZardInputOtpImports],
   template: `
     <z-input-otp [zMaxLength]="6" [zPattern]="REGEXP_ONLY_DIGITS_AND_CHARS" [zIntegerOnly]="false">
       <z-input-otp-group>
@@ -1236,14 +1236,7 @@ const SLOT_CLASSES =
 
 @Component({
   selector: 'z-demo-input-otp-form',
-  imports: [
-    ...ZardInputOtpImports,
-    ...ZardFieldImports,
-    ZardCardImports,
-    ZardButtonComponent,
-    ReactiveFormsModule,
-    NgIcon,
-  ],
+  imports: [ZardInputOtpImports, ZardFieldImports, ZardCardImports, ZardButtonComponent, ReactiveFormsModule, NgIcon],
   template: `
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
       <z-card class="mx-auto max-w-md">

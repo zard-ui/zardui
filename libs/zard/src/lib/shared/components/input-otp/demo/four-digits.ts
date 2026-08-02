@@ -5,7 +5,7 @@ import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.util
 
 @Component({
   selector: 'z-demo-input-otp-four-digits',
-  imports: [...ZardInputOtpImports],
+  imports: [ZardInputOtpImports],
   template: `
     <z-input-otp [zMaxLength]="4" [zPattern]="REGEXP_ONLY_DIGITS">
       <z-input-otp-group>
