@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
-import { ZardInputOtpGroupComponent } from '@/shared/components/input-otp/input-otp-group.component';
-import { ZardInputOtpSlotComponent } from '@/shared/components/input-otp/input-otp-slot.component';
-import { ZardInputOtpComponent } from '@/shared/components/input-otp/input-otp.component';
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
 
 @Component({
-  selector: 'zard-demo-input-otp-controlled',
-  imports: [ZardInputOtpComponent, ZardInputOtpSlotComponent, ZardInputOtpGroupComponent, FormsModule],
-  standalone: true,
+  selector: 'z-demo-input-otp-controlled',
+  imports: [...ZardInputOtpImports, FormsModule],
   template: `
     <div class="space-y-2">
-      <z-input-otp [zMaxLength]="6" [(ngModel)]="value" (zValueChange)="handleValueChange($event)">
+      <z-input-otp [zMaxLength]="6" [(ngModel)]="value" (zComplete)="completed = $event">
         <z-input-otp-group>
           <z-input-otp-slot [zIndex]="0" />
           <z-input-otp-slot [zIndex]="1" />
@@ -24,6 +21,8 @@ import { ZardInputOtpComponent } from '@/shared/components/input-otp/input-otp.c
       <div class="text-center text-sm">
         @if (value === '') {
           <span class="text-muted-foreground">Enter your one-time password.</span>
+        } @else if (value === completed) {
+          <span>Completed: {{ completed }}</span>
         } @else {
           <span>You entered: {{ value }}</span>
         }
@@ -33,8 +32,5 @@ import { ZardInputOtpComponent } from '@/shared/components/input-otp/input-otp.c
 })
 export class ZardDemoInputOtpControlledComponent {
   value = '';
-
-  handleValueChange(value: string): void {
-    console.log('OTP value changed:', value);
-  }
+  completed = '';
 }

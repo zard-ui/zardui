@@ -2,7 +2,7 @@
   "$schema": "https://zardui.com/schema/registry.json",
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.82",
+  "version": "1.0.0-beta.83",
   "items": [
     {
       "name": "core",
@@ -226,6 +226,22 @@
         "input-group.component.ts",
         "input-group.imports.ts",
         "input-group.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "input-otp",
+      "type": "registry:component",
+      "files": [
+        "input-otp.component.ts",
+        "input-otp-signal.component.ts",
+        "input-otp-slot.component.ts",
+        "input-otp-group.component.ts",
+        "input-otp-separator.component.ts",
+        "input-otp.imports.ts",
+        "input-otp.tokens.ts",
+        "input-otp.utils.ts",
+        "input-otp.variants.ts",
         "index.ts"
       ]
     },

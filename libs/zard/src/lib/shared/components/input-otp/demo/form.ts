@@ -2,30 +2,17 @@ import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardInputOtpGroupComponent } from '@/shared/components/input-otp/input-otp-group.component';
-import { ZardInputOtpSlotComponent } from '@/shared/components/input-otp/input-otp-slot.component';
-import { ZardInputOtpComponent } from '@/shared/components/input-otp/input-otp.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
 
 @Component({
-  selector: 'zard-demo-input-otp-form',
-  imports: [
-    ZardInputOtpComponent,
-    ZardInputOtpSlotComponent,
-    ZardInputOtpGroupComponent,
-    ZardButtonComponent,
-    ReactiveFormsModule,
-  ],
-  standalone: true,
+  selector: 'z-demo-input-otp-form',
+  imports: [...ZardInputOtpImports, ...ZardFieldImports, ZardButtonComponent, ReactiveFormsModule],
   template: `
     <form [formGroup]="form" (ngSubmit)="onSubmit()" class="w-2/3 space-y-6">
-      <div class="space-y-2">
-        <label
-          for="pin"
-          class="text-sm leading-none font-medium peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-        >
-          One-Time Password
-        </label>
-        <z-input-otp [zMaxLength]="6" formControlName="pin" id="pin" (zComplete)="onComplete($event)">
+      <div z-field>
+        <label z-field-label for="pin">One-Time Password</label>
+        <z-input-otp id="pin" [zMaxLength]="6" formControlName="pin">
           <z-input-otp-group>
             <z-input-otp-slot [zIndex]="0" />
             <z-input-otp-slot [zIndex]="1" />
@@ -35,32 +22,33 @@ import { ZardInputOtpComponent } from '@/shared/components/input-otp/input-otp.c
             <z-input-otp-slot [zIndex]="5" />
           </z-input-otp-group>
         </z-input-otp>
-        <p class="text-muted-foreground text-sm">Please enter the one-time password sent to your phone.</p>
-        @if (form.get('pin')?.hasError('required') && form.get('pin')?.touched) {
-          <p class="text-destructive text-sm">Your one-time password is required.</p>
+        <p z-field-description>Please enter the one-time password sent to your phone.</p>
+        @if (form.controls.pin.touched && form.controls.pin.hasError('required')) {
+          <z-field-error>Your one-time password is required.</z-field-error>
         }
-        @if (form.get('pin')?.hasError('minlength') && form.get('pin')?.touched) {
-          <p class="text-destructive text-sm">Your one-time password must be 6 characters.</p>
+        @if (form.controls.pin.touched && form.controls.pin.hasError('minlength')) {
+          <z-field-error>Your one-time password must be 6 characters.</z-field-error>
         }
       </div>
 
-      <button z-button type="submit" [disabled]="!form.valid">Submit</button>
+      <button z-button type="submit" [disabled]="form.invalid">Submit</button>
+
+      @if (submitted) {
+        <p class="text-muted-foreground text-sm">Submitted: {{ submitted }}</p>
+      }
     </form>
   `,
 })
 export class ZardDemoInputOtpFormComponent {
+  submitted = '';
+
   form = new FormGroup({
     pin: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]),
   });
 
   onSubmit(): void {
     if (this.form.valid) {
-      console.log('Form submitted:', this.form.value);
-      alert(`OTP submitted: ${this.form.value.pin}`);
+      this.submitted = this.form.value.pin ?? '';
     }
-  }
-
-  onComplete(value: string): void {
-    console.log('OTP completed:', value);
   }
 }

@@ -2,41 +2,42 @@ import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 import { FormField, form, minLength, required, submit } from '@angular/forms/signals';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardInputOtpGroupComponent } from '@/shared/components/input-otp/input-otp-group.component';
-import { ZardInputOtpSignalComponent } from '@/shared/components/input-otp/input-otp-signal.component';
-import { ZardInputOtpSlotComponent } from '@/shared/components/input-otp/input-otp-slot.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
 
 @Component({
-  selector: 'zard-demo-input-otp-signal',
-  imports: [
-    ZardButtonComponent,
-    ZardInputOtpSignalComponent,
-    ZardInputOtpSlotComponent,
-    ZardInputOtpGroupComponent,
-    FormField,
-  ],
-  standalone: true,
+  selector: 'z-demo-input-otp-signal',
+  imports: [...ZardInputOtpImports, ...ZardFieldImports, ZardButtonComponent, FormField],
   template: `
     <form (submit)="onSubmit($event)" class="w-2/3 space-y-4">
-      <label class="text-sm font-medium" for="otp">One-Time Password</label>
-      <z-input-otp-signal id="otp" [formField]="otpForm.pin">
-        <z-input-otp-group>
-          <z-input-otp-slot [zIndex]="0" />
-          <z-input-otp-slot [zIndex]="1" />
-          <z-input-otp-slot [zIndex]="2" />
-          <z-input-otp-slot [zIndex]="3" />
-          <z-input-otp-slot [zIndex]="4" />
-          <z-input-otp-slot [zIndex]="5" />
-        </z-input-otp-group>
-      </z-input-otp-signal>
-      <p class="text-muted-foreground text-sm">Current value: {{ otpForm().value().pin }}</p>
+      <div z-field>
+        <label z-field-label for="otp-signal">One-Time Password</label>
+        <z-input-otp-signal id="otp-signal" [formField]="otpForm.pin">
+          <z-input-otp-group>
+            <z-input-otp-slot [zIndex]="0" />
+            <z-input-otp-slot [zIndex]="1" />
+            <z-input-otp-slot [zIndex]="2" />
+            <z-input-otp-slot [zIndex]="3" />
+            <z-input-otp-slot [zIndex]="4" />
+            <z-input-otp-slot [zIndex]="5" />
+          </z-input-otp-group>
+        </z-input-otp-signal>
+        <p z-field-description>Current value: {{ otpForm().value().pin }}</p>
+      </div>
+
       <button z-button type="submit" [disabled]="otpForm().invalid()">Verify</button>
+
+      @if (submitted()) {
+        <p class="text-muted-foreground text-sm">Submitted: {{ submitted() }}</p>
+      }
     </form>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputOtpSignalComponent {
   private readonly otpModel = signal({ pin: '' });
+
+  protected readonly submitted = signal('');
 
   protected readonly otpForm = form(this.otpModel, otp => {
     required(otp.pin);
@@ -46,7 +47,7 @@ export class ZardDemoInputOtpSignalComponent {
   async onSubmit(event: Event): Promise<void> {
     event.preventDefault();
     await submit(this.otpForm, async f => {
-      console.log('OTP submitted:', f().value());
+      this.submitted.set(f().value().pin);
     });
   }
 }

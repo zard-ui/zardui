@@ -494,6 +494,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'input-otp.imports.ts',
+        content: '',
+      },
+      {
         name: 'input-otp.tokens.ts',
         content: '',
       },

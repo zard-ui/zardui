@@ -1,17 +1,14 @@
 import { Component } from '@angular/core';
 
-import { ZardInputOtpGroupComponent } from '@/shared/components/input-otp/input-otp-group.component';
-import { ZardInputOtpSlotComponent } from '@/shared/components/input-otp/input-otp-slot.component';
-import { ZardInputOtpComponent } from '@/shared/components/input-otp/input-otp.component';
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
 
 export const REGEXP_ONLY_DIGITS = '[0-9]';
 export const REGEXP_ONLY_CHARS = '[a-zA-Z]';
 export const REGEXP_ONLY_DIGITS_AND_CHARS = '[a-zA-Z0-9]';
 
 @Component({
-  selector: 'zard-demo-input-otp-pattern',
-  imports: [ZardInputOtpComponent, ZardInputOtpSlotComponent, ZardInputOtpGroupComponent],
-  standalone: true,
+  selector: 'z-demo-input-otp-pattern',
+  imports: [...ZardInputOtpImports],
   template: `
     <div class="space-y-4">
       <div>
@@ -30,7 +27,7 @@ export const REGEXP_ONLY_DIGITS_AND_CHARS = '[a-zA-Z0-9]';
 
       <div>
         <p class="text-muted-foreground mb-2 text-sm">Letters and numbers</p>
-        <z-input-otp [zMaxLength]="6" [zPattern]="REGEXP_ONLY_DIGITS_AND_CHARS">
+        <z-input-otp [zMaxLength]="6" [zPattern]="REGEXP_ONLY_DIGITS_AND_CHARS" [zIntegerOnly]="false">
           <z-input-otp-group>
             <z-input-otp-slot [zIndex]="0" />
             <z-input-otp-slot [zIndex]="1" />

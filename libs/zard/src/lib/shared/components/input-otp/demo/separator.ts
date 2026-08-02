@@ -1,19 +1,10 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardInputOtpGroupComponent } from '@/shared/components/input-otp/input-otp-group.component';
-import { ZardInputOtpSeparatorComponent } from '@/shared/components/input-otp/input-otp-separator.component';
-import { ZardInputOtpSlotComponent } from '@/shared/components/input-otp/input-otp-slot.component';
-import { ZardInputOtpComponent } from '@/shared/components/input-otp/input-otp.component';
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
 
 @Component({
-  selector: 'zard-demo-input-otp-separator',
-  imports: [
-    ZardInputOtpComponent,
-    ZardInputOtpSlotComponent,
-    ZardInputOtpGroupComponent,
-    ZardInputOtpSeparatorComponent,
-  ],
-  standalone: true,
+  selector: 'z-demo-input-otp-separator',
+  imports: [...ZardInputOtpImports],
   template: `
     <z-input-otp [zMaxLength]="6">
       <z-input-otp-group>
@@ -32,5 +23,6 @@ import { ZardInputOtpComponent } from '@/shared/components/input-otp/input-otp.c
       </z-input-otp-group>
     </z-input-otp>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoInputOtpSeparatorComponent {}
