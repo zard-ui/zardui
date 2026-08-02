@@ -100,7 +100,7 @@ const PROMPTS = {
   themeCss: 'Where should the theme tokens live?',
   components: 'Configure the import alias for components:',
   utils: 'Configure the import alias for utils:',
-  done: 'ZardUI has been initialized successfully!',
+  done: 'zard/ui has been initialized successfully!',
 } as const;
 
 async function startWizard(cwd: string, over: Partial<InitWizardOptions> = {}): Promise<Run> {

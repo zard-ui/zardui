@@ -56,7 +56,7 @@ export function buildInitSteps(
   if (!isLibrary) {
     steps.push({
       label: config.appConfigFile,
-      note: 'ZardUI providers',
+      note: 'zard/ui providers',
       run: () => updateAngularConfig(cwd, config),
     });
 

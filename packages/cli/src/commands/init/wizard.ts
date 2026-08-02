@@ -57,11 +57,11 @@ const OVERWRITE_STEP: Step = {
   id: 'overwriteCss',
   kind: 'confirm',
   prompt:
-    'Your CSS file already has content. This will overwrite everything with ZardUI theme configuration. Continue?',
+    'Your CSS file already has content. This will overwrite everything with zard/ui theme configuration. Continue?',
   label: 'overwrite CSS',
   detail: 'The theme tokens must live in your global CSS, or the components will not render.',
   confirmDefault: true,
-  danger: 'Choosing No cancels the installation. This step is essential for ZardUI to work.',
+  danger: 'Choosing No cancels the installation. This step is essential for zard/ui to work.',
 };
 
 function themeStep(): Step {
@@ -86,16 +86,16 @@ function themeStep(): Step {
  * que o nome dele aparece, para a escolha não ficar implícita.
  */
 function targetDescription(state: State, options: InitWizardOptions): string {
-  if (!state.kindChosen) return 'Setting up ZardUI in your project…';
+  if (!state.kindChosen) return 'Setting up zard/ui in your project…';
 
   const label = PROJECT_KINDS.find(option => option.value === state.answers.kind)?.label ?? 'Angular';
   const project = candidateProjects(state.answers.kind, options.projectInfo).find(
     candidate => candidate.root === state.answers.projectRoot,
   );
 
-  if (project) return `Setting up ZardUI in ${project.name} (${label})…`;
+  if (project) return `Setting up zard/ui in ${project.name} (${label})…`;
 
-  return `Setting up ZardUI in your ${label} project…`;
+  return `Setting up zard/ui in your ${label} project…`;
 }
 
 /**
@@ -180,7 +180,7 @@ function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind): Step[] {
       kind: 'text',
       prompt: 'Where is your app.config.ts file?',
       label: 'app.config.ts',
-      detail: 'ZardUI registers its global providers in this file.',
+      detail: 'zard/ui registers its global providers in this file.',
     },
     themeStep(),
     {
@@ -188,7 +188,7 @@ function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind): Step[] {
       kind: 'text',
       prompt: 'Where is your global CSS file?',
       label: 'global CSS',
-      detail: 'ZardUI writes its design tokens and the base layer into this file.',
+      detail: 'zard/ui writes its design tokens and the base layer into this file.',
     },
     {
       id: 'componentsAlias',
@@ -543,7 +543,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     }
 
     if (state.phase === 'reinit') {
-      body.push(question('ZardUI is already initialized. Re-initialize this project?'));
+      body.push(question('zard/ui is already initialized. Re-initialize this project?'));
       body.push(confirmField(state.confirmValue));
       body.push(hint('This overwrites your existing components.json, theme tokens and shared utils.'));
       body.push(spacer());
@@ -563,7 +563,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     } else if (state.phase === 'confirming') {
       body.push(question('Write configuration to components.json?'));
       body.push(confirmField(state.confirmValue));
-      body.push(hint('Nothing has been written yet — this is the last step before ZardUI touches your project.'));
+      body.push(hint('Nothing has been written yet — this is the last step before zard/ui touches your project.'));
       body.push(spacer());
       body.push(
         controls([
@@ -670,7 +670,7 @@ function executionBlock(state: State): Node[] {
 
   if (state.phase === 'done') {
     nodes.push(text(''));
-    nodes.push(resultPanel('success', 'ZardUI has been initialized successfully!'));
+    nodes.push(resultPanel('success', 'zard/ui has been initialized successfully!'));
   }
 
   return nodes;
@@ -680,7 +680,7 @@ function abortBlock(): Node[] {
   return [
     resultPanel('danger', 'Installation stopped'),
     text(''),
-    text('   ZardUI must write its theme configuration into your global CSS.', { color: 'foreground' }),
+    text('   zard/ui must write its theme configuration into your global CSS.', { color: 'foreground' }),
     text('   Without it, the components will not render correctly.', { color: 'muted' }),
     text(''),
     text('   Nothing was changed. Run init again and accept that step, or move', { color: 'muted', dim: true }),

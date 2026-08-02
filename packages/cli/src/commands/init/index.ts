@@ -175,7 +175,7 @@ async function runHeadless(options: HeadlessOptions): Promise<void> {
   const config = buildConfig(answers, options.packageManager);
   const steps = options.buildSteps(config);
 
-  logger.info(options.isReInitializing ? 'Re-initializing ZardUI...' : 'Initializing ZardUI...');
+  logger.info(options.isReInitializing ? 'Re-initializing zard/ui...' : 'Initializing zard/ui...');
 
   for (const step of steps) {
     const stepSpinner = spinner(`${step.label} — ${step.note}`).start();
@@ -194,7 +194,7 @@ async function runHeadless(options: HeadlessOptions): Promise<void> {
 function reportSuccess(config: Config, steps: readonly InitStep[], logs: readonly LogRecord[]): void {
   printReport({
     status: 'success',
-    headline: 'ZardUI has been initialized successfully!',
+    headline: 'zard/ui has been initialized successfully!',
     items: steps.map(step => `${step.label} — ${step.note}`),
     notes: nextStepsFor(config),
     commands: [{ command: `${suggestedRunner(config.packageManager)} zard-cli add`, argument: '[component]' }],
