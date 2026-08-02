@@ -7,7 +7,7 @@ description: Complete dark mode system in ZardUI using TailwindCSS v4 custom var
 
 Complete dark mode system in ZardUI using TailwindCSS v4 custom variants and the ZardDarkMode service for seamless theme switching.
 
-Dark mode in ZardUI is a single Angular service, `ZardDarkMode`, paired with the TailwindCSS v4 `@custom-variant dark`. Install it with a single CLI command or wire it up by hand — both paths are documented below.
+Dark mode in ZardUI is a single Angular service — `ZardDarkMode` — paired with the TailwindCSS v4 `@custom-variant dark` variant. Install it with a single CLI command or wire it up by hand; both paths are documented below.
 
 ## How it works
 
@@ -23,7 +23,7 @@ Every time the preference changes, `updateThemeMode` toggles the `.dark` class a
 
 ### System preference stays live
 
-When the mode is `system`, the service subscribes to `(prefers-color-scheme: dark)` through Angular's `MediaMatcher` and follows the operating system as it changes — no reload required.
+When the mode is set to `system` the service subscribes to `(prefers-color-scheme: dark)` through Angular's `MediaMatcher` and follows the operating system as it changes — no reload required.
 
 ## Installation
 
@@ -399,7 +399,7 @@ export class HeaderComponent {
 
 ### Prerequisites
 
-The command expects a project that has already been initialized with `zard-cli init`, which means a `components.json` at the root of the project and a `shared/core/provider/providezard.ts` file. Without the config the command stops with `Configuration not found`.
+The command expects a project that has already been initialized with `zard-cli init` — that is, a `components.json` at the root of the project and a `shared/core/provider/providezard.ts` file. Without the config the command stops with a `Configuration not found` error.
 
 ### What the command changes
 
@@ -407,24 +407,24 @@ Unlike a component, dark mode is not a plain file copy. Four things happen:
 
 - `dark-mode.ts` and `index.ts` are created in your services directory.
 - An inline `<script>` is injected right before `</head>` in the `index.html` you point it at.
-- `provideAppInitializer(() => inject(ZardDarkMode).init())` becomes the first provider inside `makeEnvironmentProviders([...])` in `shared/core/provider/providezard.ts`, along with the `inject` and `provideAppInitializer` imports from `@angular/core` and the `ZardDarkMode` import.
+- `provideAppInitializer(() => inject(ZardDarkMode).init())` becomes the first provider inside `makeEnvironmentProviders([...])` in `shared/core/provider/providezard.ts` — together with the `inject` and `provideAppInitializer` imports from `@angular/core` and the `ZardDarkMode` import.
 - If `providezard.ts` does not exist, the CLI warns and skips that step. Run `zard-cli init` first, or follow the manual installation.
 
 ### Options
 
 - `-y, --yes` — Skip the confirmation prompt. The `index.html` question is still asked, because the CLI cannot guess that path for you.
 - `-o, --overwrite` — Overwrite an existing `dark-mode.ts` instead of leaving it untouched. Use it to pull in a newer version of the service.
-- `-p, --path <path>` — Write the service somewhere other than the folder resolved from `components.json`.
+- `-p, --path <path>` — Write the service somewhere other than the folder resolved from your `components.json` aliases.
 - `-c, --cwd <cwd>` — Run against another working directory, handy in a monorepo.
 - `-a, --all` — Add every component in the registry, dark mode included.
 
 ### Running it twice is safe
 
-Both edits are idempotent. The theme script is not injected again when `localStorage.theme` is already present in the `index.html`, and the provider is not duplicated when `ZardDarkMode` already appears in `providezard.ts`.
+Both edits are idempotent. The theme script is not injected again when `localStorage.theme` is already present in the `index.html` file, and the provider is not duplicated when `ZardDarkMode` already appears in `providezard.ts` itself.
 
 ### Where the service is written
 
-The registry entry declares `basePath: 'services'`, so the destination comes from the `aliases.services` entry of your `components.json` — which defaults to `@/shared/services`. The same alias is used for the import statement added to `providezard.ts`, so a custom alias stays consistent on both ends.
+The registry entry declares `basePath: 'services'` so the destination comes from the `aliases.services` entry of your `components.json` — which defaults to `@/shared/services` when you have not customized it. The same alias is used for the import statement added to `providezard.ts` so a custom alias stays consistent on both ends.
 
 ### When to prefer the manual installation
 
@@ -463,11 +463,13 @@ export class ThemeSwitcherComponent {
 
 ### Switching themes
 
-Calling `toggleTheme()` with no argument flips between light and dark. Pass a value — `EDarkModes.LIGHT`, `EDarkModes.DARK` or `EDarkModes.SYSTEM` — to set a specific mode instead. That is exactly what the three buttons in the interactive demo do.
+Calling `toggleTheme()` with no argument flips between light and dark. Pass a value — `EDarkModes.LIGHT` / `EDarkModes.DARK` / `EDarkModes.SYSTEM` — to set a specific mode instead. That is exactly what the three buttons in the interactive demo do.
 
 ### Preference versus applied theme
 
-This is the one distinction worth internalizing. `currentTheme()` returns the preference the user picked — `'light'`, `'dark'` or `'system'`. It is a read-only signal, so nothing outside the service can mutate it. `themeMode()` returns the theme actually applied to the document — `'light'` or `'dark'`, never `'system'`, because it has already resolved `system` against `prefers-color-scheme`. Use the first one to render the selected state of a theme picker, and the second one to decide whether to show a sun or a moon.
+This is the one distinction worth internalizing. `currentTheme()` returns the preference the user picked — `'light'` / `'dark'` / `'system'` — as a read-only signal, so nothing outside the service can mutate it.
+
+`themeMode()` returns the theme actually applied to the document, which is only ever `'light'` or `'dark'` and never `'system'` because it has already resolved the system mode against `prefers-color-scheme` for you. Use the first one to render the selected state of a theme picker, and the second one to decide whether to show a sun or a moon.
 
 ```typescript
 // The user picked "system" and the operating system is currently in dark mode.
@@ -478,7 +480,7 @@ darkMode.themeMode(); //    'dark'   — the theme actually applied to the <html
 
 ### Persistence and initialization
 
-The preference is written to `localStorage` under the `theme` key on every change, which is the same key the inline script reads on the next load. `init()` reads that value back and starts listening to the media query — it is already called for you by the `provideAppInitializer` registered during installation, so you rarely call it by hand. The service is also SSR-safe: on the server every method returns early instead of touching `document` or `localStorage`.
+The preference is written to `localStorage` under the `theme` key on every change, which is the same key the inline script reads on the next load. `init()` reads that value back and starts listening to the media query — it is already called for you by the `provideAppInitializer` registered during installation, so you rarely call it by hand. The service is also SSR-safe: on the server every method returns early instead of touching `document` or `localStorage` at all.
 
 ## Interactive Demo
 

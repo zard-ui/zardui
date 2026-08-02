@@ -14,11 +14,11 @@
 
   <div class="flex flex-col gap-4">
     <p class="text-muted-foreground text-sm sm:text-base">
-      Dark mode in ZardUI is a single Angular service,
+      Dark mode in ZardUI is a single Angular service —
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ZardDarkMode</code>
-      , paired with the TailwindCSS v4
+      — paired with the TailwindCSS v4
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;custom-variant dark</code>
-      . Install it with a single CLI command or wire it up by hand — both paths are documented below.
+      variant. Install it with a single CLI command or wire it up by hand; both paths are documented below.
     </p>
   </div>
 
@@ -69,9 +69,9 @@
       <div class="flex flex-col gap-1">
         <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">System preference stays live</h3>
         <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-          When the mode is
+          When the mode is set to
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">system</code>
-          , the service subscribes to
+          the service subscribes to
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">(prefers-color-scheme: dark)</code>
           through Angular's
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">MediaMatcher</code>
@@ -192,13 +192,13 @@
       <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
         The command expects a project that has already been initialized with
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli init</code>
-        , which means a
+        — that is, a
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
         at the root of the project and a
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">shared/core/provider/providezard.ts</code>
-        file. Without the config the command stops with
+        file. Without the config the command stops with a
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">Configuration not found</code>
-        . Read more about the
+        error. Read more about the
         <a routerLink="/docs/cli" class="text-foreground font-medium underline underline-offset-4">CLI</a>
         and the
         <a routerLink="/docs/components-json" class="text-foreground font-medium underline underline-offset-4">
@@ -237,7 +237,7 @@
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">makeEnvironmentProviders([...])</code>
           in
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">shared/core/provider/providezard.ts</code>
-          , along with the
+          — together with the
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">inject</code>
           and
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">provideAppInitializer</code>
@@ -271,9 +271,9 @@
         instead of leaving it untouched. Use it to pull in a newer version of the service.
         <br />
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-p, --path &lt;path&gt;</code>
-        — Write the service somewhere other than the folder resolved from
+        — Write the service somewhere other than the folder resolved from your
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
-        .
+        aliases.
         <br />
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-c, --cwd &lt;cwd&gt;</code>
         — Run against another working directory, handy in a monorepo.
@@ -290,11 +290,11 @@
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">localStorage.theme</code>
         is already present in the
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">index.html</code>
-        , and the provider is not duplicated when
+        file, and the provider is not duplicated when
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ZardDarkMode</code>
         already appears in
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">providezard.ts</code>
-        .
+        itself.
       </p>
     </div>
 
@@ -303,15 +303,15 @@
       <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
         The registry entry declares
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">basePath: 'services'</code>
-        , so the destination comes from the
+        so the destination comes from the
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">aliases.services</code>
         entry of your
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
         — which defaults to
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;/shared/services</code>
-        . The same alias is used for the import statement added to
+        when you have not customized it. The same alias is used for the import statement added to
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">providezard.ts</code>
-        , so a custom alias stays consistent on both ends.
+        so a custom alias stays consistent on both ends.
       </p>
     </div>
 
@@ -366,9 +366,9 @@
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">toggleTheme()</code>
         with no argument flips between light and dark. Pass a value —
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">EDarkModes.LIGHT</code>
-        ,
+        /
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">EDarkModes.DARK</code>
-        or
+        /
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">EDarkModes.SYSTEM</code>
         — to set a specific mode instead. That is exactly what the three buttons in the demo below do.
       </p>
@@ -381,24 +381,24 @@
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">currentTheme()</code>
         returns the preference the user picked —
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'light'</code>
-        ,
+        /
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'dark'</code>
-        or
+        /
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'system'</code>
-        . It is a read-only signal, so nothing outside the service can mutate it.
+        — as a read-only signal, so nothing outside the service can mutate it.
+      </p>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">themeMode()</code>
-        returns the theme actually applied to the document —
+        returns the theme actually applied to the document, which is only ever
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'light'</code>
         or
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'dark'</code>
-        , never
+        and never
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'system'</code>
-        , because it has already resolved
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">system</code>
-        against
+        because it has already resolved the system mode against
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">prefers-color-scheme</code>
-        . Use the first one to render the selected state of a theme picker, and the second one to decide whether to show
-        a sun or a moon.
+        for you. Use the first one to render the selected state of a theme picker, and the second one to decide whether
+        to show a sun or a moon.
       </p>
     </div>
 
@@ -420,7 +420,7 @@
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">document</code>
         or
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">localStorage</code>
-        .
+        at all.
       </p>
     </div>
 
@@ -429,9 +429,9 @@
       <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
         The header of this documentation site is built exactly like this — a ghost button that calls
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">toggleTheme()</code>
-        and swaps its icon based on
+        and swaps its icon based on the value of
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">themeMode()</code>
-        .
+        at that moment.
       </p>
       <z-code-block [data]="headerComponentBlock" />
       <z-code-block [data]="headerTemplateBlock" />
