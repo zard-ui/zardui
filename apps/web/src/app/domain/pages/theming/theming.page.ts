@@ -38,6 +38,7 @@ import { TokenTableComponent } from './components/token-table/token-table.compon
 import { TroubleshootingListComponent } from './components/troubleshooting-list/troubleshooting-list.component';
 import { OKLCH_REASONS } from './data/migration.data';
 import { THEME_TOKENS } from './data/tokens.data';
+import { ThemingClipboardService } from './services/theming-clipboard.service';
 
 @Component({
   selector: 'z-theming',
@@ -61,6 +62,8 @@ import { THEME_TOKENS } from './data/tokens.data';
     TroubleshootingListComponent,
   ],
   templateUrl: './theming.page.html',
+  // Scoped to the page so the "last copied" state does not leak into other routes.
+  providers: [ThemingClipboardService],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThemingPage implements OnInit {

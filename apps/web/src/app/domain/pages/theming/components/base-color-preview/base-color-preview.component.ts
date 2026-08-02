@@ -1,13 +1,19 @@
-import { ChangeDetectionStrategy, Component, computed, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
+import { RouterLink } from '@angular/router';
 
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import type { CodeBlockData } from '@highlight/types';
 
 import { ZardAccordionImports } from '@zard/components/accordion/accordion.imports';
+import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
+import { ZardButtonComponent } from '@zard/components/button/button.component';
+import { ZardCardImports } from '@zard/components/card/card.imports';
+import { ZardInputComponent } from '@zard/components/input/input.component';
 
 import { BASE_COLORS } from '../../data/base-colors.data';
 import type { BaseColorTheme, ThemeMode } from '../../models/theming.model';
-import { toScopedStyles } from '../../utils/theme-css.util';
+import { ThemingClipboardService } from '../../services/theming-clipboard.service';
+import { toCssVariables, toScopedStyles } from '../../utils/theme-css.util';
 
 /** Tokens shown as swatches — the ones a reader recognises at a glance. */
 const PREVIEW_TOKENS = [
@@ -24,16 +30,25 @@ const PREVIEW_TOKENS = [
 @Component({
   selector: 'z-base-color-preview',
   standalone: true,
-  imports: [CodeBlockComponent, ZardAccordionImports],
+  imports: [
+    RouterLink,
+    CodeBlockComponent,
+    ZardAccordionImports,
+    ZardBadgeComponent,
+    ZardButtonComponent,
+    ZardCardImports,
+    ZardInputComponent,
+  ],
   templateUrl: './base-color-preview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BaseColorPreviewComponent {
+  private readonly clipboard = inject(ThemingClipboardService);
+
   /** Full `src/styles.css` block per base color, keyed by theme id. */
   readonly codeBlocks = input<Record<string, CodeBlockData>>({});
 
   readonly themes = BASE_COLORS;
-  readonly previewTokens = PREVIEW_TOKENS;
 
   private readonly selectedId = signal<BaseColorTheme['id']>(BASE_COLORS[0].id);
   protected readonly mode = signal<ThemeMode>('light');
@@ -51,6 +66,20 @@ export class BaseColorPreviewComponent {
 
   select(id: BaseColorTheme['id']): void {
     this.selectedId.set(id);
+  }
+
+  setMode(mode: ThemeMode): void {
+    this.mode.set(mode);
+  }
+
+  /** Copies the `:root` and `.dark` blocks — the part that actually changes between base colors. */
+  copyVariables(): void {
+    const theme = this.selected();
+    this.clipboard.copy(toCssVariables(theme), `${theme.label} CSS variables`);
+  }
+
+  copySwatch(value: string): void {
+    this.clipboard.copy(value);
   }
 
   /** Small square shown inside each theme button, so the choice reads visually. */

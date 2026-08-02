@@ -1,4 +1,46 @@
-<div class="flex flex-col gap-8">
+<div class="flex flex-col gap-6">
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <label class="flex flex-1 flex-col gap-1.5">
+      <span class="sr-only">Filter tokens by name, utility or component</span>
+      <input
+        type="search"
+        placeholder="Filter by token, utility or component…"
+        class="border-input bg-input/30 focus-visible:outline-ring w-full rounded-md border px-3 py-1.5 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 sm:max-w-80"
+        [value]="query()"
+        (input)="onQuery($event)"
+      />
+    </label>
+
+    <div role="group" aria-label="Color scheme" class="flex shrink-0 gap-1">
+      <button
+        type="button"
+        [attr.aria-pressed]="mode() === 'light'"
+        [class]="
+          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ' +
+          (mode() === 'light' ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
+        "
+        (click)="setMode('light')"
+      >
+        Light
+      </button>
+      <button
+        type="button"
+        [attr.aria-pressed]="mode() === 'dark'"
+        [class]="
+          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ' +
+          (mode() === 'dark' ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
+        "
+        (click)="setMode('dark')"
+      >
+        Dark
+      </button>
+    </div>
+  </div>
+
+  <p class="text-muted-foreground text-xs" aria-live="polite">
+    Showing {{ visibleCount() }} of {{ totalTokens }} tokens · {{ mode() }} values for {{ baseColor().label }}
+  </p>
+
   @for (section of sections(); track section.id) {
     <section class="flex flex-col gap-3">
       <div class="flex flex-col gap-1">
@@ -7,15 +49,14 @@
       </div>
 
       <div class="overflow-x-auto rounded-lg border">
-        <table class="w-full min-w-160 border-collapse text-left text-sm">
+        <table class="w-full min-w-140 border-collapse text-left text-sm">
           <caption class="sr-only">
-            {{ section.label }} tokens, with their light and dark values in the {{ baseColor().label }} base color
+            {{ section.label }} tokens with their {{ mode() }} values in the {{ baseColor().label }} base color
           </caption>
           <thead class="bg-muted/50">
             <tr>
               <th scope="col" class="px-4 py-2.5 font-medium">Token</th>
-              <th scope="col" class="px-4 py-2.5 font-medium">Light</th>
-              <th scope="col" class="px-4 py-2.5 font-medium">Dark</th>
+              <th scope="col" class="px-4 py-2.5 font-medium">Value</th>
               <th scope="col" class="px-4 py-2.5 font-medium">Used by</th>
             </tr>
           </thead>
@@ -23,42 +64,45 @@
             @for (row of section.rows; track row.token.name) {
               <tr class="border-t align-top">
                 <th scope="row" class="px-4 py-3 font-normal">
-                  <code class="text-xs font-medium">--{{ row.token.name }}</code>
+                  <button
+                    type="button"
+                    class="focus-visible:outline-ring cursor-pointer rounded text-left focus-visible:outline-2 focus-visible:outline-offset-2"
+                    [attr.aria-label]="'Copy token name --' + row.token.name"
+                    (click)="copy('--' + row.token.name)"
+                  >
+                    <code class="text-xs font-medium">--{{ row.token.name }}</code>
+                  </button>
                   <p
                     class="text-muted-foreground mt-1 text-xs font-normal"
                     [innerHTML]="row.token.description | inlineCode"
                   ></p>
                   @if (row.token.utilities.length) {
-                    <p class="mt-1.5 flex flex-wrap gap-1">
+                    <span class="mt-1.5 flex flex-wrap gap-1">
                       @for (utility of row.token.utilities; track utility) {
                         <code class="bg-muted rounded px-1.5 py-0.5 text-[11px]">{{ utility }}</code>
                       }
-                    </p>
+                    </span>
                   }
                 </th>
 
                 <td class="px-4 py-3">
-                  <span class="flex items-center gap-2">
+                  <button
+                    type="button"
+                    class="focus-visible:outline-ring flex cursor-pointer items-center gap-2 rounded text-left focus-visible:outline-2 focus-visible:outline-offset-2"
+                    [attr.aria-label]="'Copy ' + mode() + ' value of --' + row.token.name + ': ' + row.value"
+                    (click)="copy(row.value)"
+                  >
                     <span
                       class="border-border inline-flex size-5 shrink-0 items-center justify-center rounded border"
-                      [style.background]="baseColor().light['background']"
+                      [style.background]="surface()"
                     >
-                      <span class="size-3.5 rounded-xs" [style.background]="row.light"></span>
+                      <span class="size-3.5 rounded-xs" [style.background]="row.value"></span>
                     </span>
-                    <code class="text-muted-foreground text-[11px] break-all">{{ row.light }}</code>
-                  </span>
-                </td>
-
-                <td class="px-4 py-3">
-                  <span class="flex items-center gap-2">
-                    <span
-                      class="border-border inline-flex size-5 shrink-0 items-center justify-center rounded border"
-                      [style.background]="baseColor().dark['background']"
-                    >
-                      <span class="size-3.5 rounded-xs" [style.background]="row.dark"></span>
-                    </span>
-                    <code class="text-muted-foreground text-[11px] break-all">{{ row.dark }}</code>
-                  </span>
+                    <code class="text-muted-foreground text-[11px] break-all">{{ row.value }}</code>
+                    @if (lastCopied() === row.value) {
+                      <span class="text-muted-foreground text-[11px]">copied</span>
+                    }
+                  </button>
                 </td>
 
                 <td class="text-muted-foreground px-4 py-3 text-xs">
@@ -75,5 +119,9 @@
         </table>
       </div>
     </section>
+  } @empty {
+    <p class="text-muted-foreground rounded-lg border border-dashed p-6 text-center text-sm">
+      No token matches “{{ query() }}”.
+    </p>
   }
 </div>

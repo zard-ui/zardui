@@ -1,40 +1,107 @@
 <div class="flex flex-col gap-4">
-  <div role="group" aria-label="Base color" class="flex flex-wrap gap-2">
-    @for (theme of themes; track theme.id) {
+  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+    <div role="group" aria-label="Base color" class="flex flex-wrap gap-2">
+      @for (theme of themes; track theme.id) {
+        <button
+          type="button"
+          [attr.aria-pressed]="selected().id === theme.id"
+          [class]="
+            'focus-visible:outline-ring flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ' +
+            (selected().id === theme.id ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
+          "
+          (click)="select(theme.id)"
+        >
+          <span
+            class="border-border size-3.5 shrink-0 rounded-full border"
+            [style.background]="buttonSwatch(theme)"
+          ></span>
+          {{ theme.label }}
+        </button>
+      }
+    </div>
+
+    <div role="group" aria-label="Preview color scheme" class="flex shrink-0 gap-1">
       <button
         type="button"
-        [attr.aria-pressed]="selected().id === theme.id"
+        [attr.aria-pressed]="!isDark()"
         [class]="
-          'focus-visible:outline-ring flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ' +
-          (selected().id === theme.id ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
+          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ' +
+          (!isDark() ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
         "
-        (click)="select(theme.id)"
+        (click)="setMode('light')"
       >
-        <span
-          class="border-border size-3.5 shrink-0 rounded-full border"
-          [style.background]="buttonSwatch(theme)"
-        ></span>
-        {{ theme.label }}
+        Light
       </button>
-    }
+      <button
+        type="button"
+        [attr.aria-pressed]="isDark()"
+        [class]="
+          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ' +
+          (isDark() ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
+        "
+        (click)="setMode('dark')"
+      >
+        Dark
+      </button>
+    </div>
   </div>
 
   <div class="border-border overflow-hidden rounded-lg border">
+    <!-- The theme is applied to this container only: variables via [style], `.dark` via a class. -->
     <div
-      class="bg-background text-foreground flex flex-col gap-5 p-4 sm:p-6"
+      class="bg-background text-foreground flex flex-col gap-6 p-4 sm:p-6"
       [class.dark]="isDark()"
       [style]="scopedStyles()"
     >
       <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
         @for (swatch of swatches(); track swatch.name) {
-          <div class="border-border flex flex-col gap-1.5 rounded-md border p-2">
+          <button
+            type="button"
+            class="border-border focus-visible:outline-ring flex cursor-pointer flex-col gap-1.5 rounded-md border p-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2"
+            [attr.aria-label]="'Copy ' + swatch.value + ' — value of --' + swatch.name"
+            (click)="copySwatch(swatch.value)"
+          >
             <span class="border-border h-8 w-full rounded border" [style.background]="swatch.value"></span>
             <code class="text-[11px] leading-tight">--{{ swatch.name }}</code>
             <code class="text-muted-foreground text-[10px] leading-tight break-all">{{ swatch.value }}</code>
-          </div>
+          </button>
         }
       </div>
+
+      <!-- Real components, rendered under the selected theme. -->
+      <z-card class="w-full">
+        <div z-card-header>
+          <z-card-title zTitle="Live preview" />
+          <z-card-description [zDescription]="selected().label + ' · ' + (isDark() ? 'dark' : 'light')" />
+        </div>
+        <div z-card-content class="flex flex-col gap-4">
+          <input z-input type="text" placeholder="Email address" aria-label="Email address (preview only)" />
+          <div class="flex flex-wrap items-center gap-2">
+            <button z-button type="button">Primary</button>
+            <button z-button type="button" zType="secondary">Secondary</button>
+            <button z-button type="button" zType="destructive">Delete</button>
+            <z-badge>Badge</z-badge>
+            <z-badge zType="secondary">Secondary</z-badge>
+            <z-badge zType="destructive">Destructive</z-badge>
+          </div>
+          <p class="text-muted-foreground text-sm">Muted copy, for the text that supports the rest.</p>
+        </div>
+      </z-card>
     </div>
+  </div>
+
+  <div class="flex flex-wrap items-center gap-2">
+    <button
+      z-button
+      type="button"
+      zType="outline"
+      zSize="sm"
+      [attr.aria-label]="'Copy the CSS variables for the ' + selected().label + ' base color'"
+      (click)="copyVariables()"
+    >
+      Copy {{ selected().label }} variables
+    </button>
+    <a z-button zType="ghost" zSize="sm" routerLink="/themes">Build your own theme →</a>
   </div>
 
   @if (activeBlock(); as block) {
