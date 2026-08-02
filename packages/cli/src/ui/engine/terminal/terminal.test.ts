@@ -59,3 +59,29 @@ describe('terminal raw mode', () => {
     expect(stdin.pause).toHaveBeenCalledTimes(1);
   });
 });
+
+describe('terminal colors', () => {
+  /**
+   * O último frame quase sempre termina no meio de uma cor. Sem zerar o SGR
+   * antes de sair do alt-screen, esse atributo continua valendo no buffer
+   * principal e o shell do usuário fica escrevendo colorido depois que a CLI
+   * já saiu.
+   */
+  it('should reset attributes before leaving the alt screen', () => {
+    const { stdin, stdout } = fakeStreams();
+    const terminal = createTerminal({ stdin, stdout });
+    const write = stdout.write as unknown as jest.Mock;
+
+    terminal.enterAltScreen();
+    write.mockClear();
+
+    terminal.restore();
+
+    const written = write.mock.calls.map(call => String(call[0]));
+    const reset = written.findIndex(bytes => bytes === '\x1b[0m');
+    const leaveAltScreen = written.findIndex(bytes => bytes.includes('?1049l'));
+
+    expect(reset).toBeGreaterThanOrEqual(0);
+    expect(leaveAltScreen).toBeGreaterThan(reset);
+  });
+});

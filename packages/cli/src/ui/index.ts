@@ -14,4 +14,5 @@ export * from './output.js';
 export * from './report.js';
 export * from './runner.js';
 export * from './style.js';
+export * from './text-input.js';
 export * from './theme.js';

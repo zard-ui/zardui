@@ -123,6 +123,11 @@ export function createTerminal(options: TerminalOptions = {}): Terminal {
       return { dispose: () => inp.off('data', cb) };
     },
     restore() {
+      // O reset de atributos vem primeiro, e antes de sair do alt-screen: o
+      // último frame quase sempre termina no meio de uma cor, e sem zerar o SGR
+      // esse atributo continua valendo no buffer principal — o shell do usuário
+      // fica escrevendo colorido depois que a CLI já saiu.
+      out.write('\x1b[0m');
       this.showCursor(true);
       this.enableMouse(false);
       this.exitAltScreen();

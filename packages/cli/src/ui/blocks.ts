@@ -39,12 +39,24 @@ export function question(prompt: string): Node {
 }
 
 /** Campo de texto com cursor em bloco. */
-export function textField(value: string): Node {
+/**
+ * Campo de texto com o cursor onde ele realmente está.
+ *
+ * Desenhar o cursor sempre no fim escondia que ele pode andar — e sem enxergar
+ * a posição não há como editar o meio do valor com alguma confiança. O
+ * caractere sob o cursor é invertido; no fim da linha isso dá o mesmo bloco
+ * cheio de antes.
+ */
+export function textField(value: string, caret = [...value].length): Node {
+  const chars = [...value];
+  const position = Math.max(0, Math.min(caret, chars.length));
+
   return row(
     { gap: 0 },
     text('   › ', { color: 'muted' }),
-    text(value, { color: 'foreground' }),
-    text('█', { color: 'primary' }),
+    text(chars.slice(0, position).join(''), { color: 'foreground' }),
+    text(chars[position] ?? ' ', { color: 'foreground', inverse: true }),
+    text(chars.slice(position + 1).join(''), { color: 'foreground' }),
   );
 }
 

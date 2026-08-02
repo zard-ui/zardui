@@ -1,62 +1,8 @@
-import { EventEmitter } from 'node:events';
-
 import { screen, text } from './engine/index.js';
 import { createGate } from './gate.js';
 import { beginCapture, capture, endCapture, isCapturing } from './log-sink.js';
 import { isInteractive, NonInteractiveError, runWizard, WizardCancelledError } from './runner.js';
-
-/**
- * Simula um TTY para exercitar o runner sem um terminal real: stdout vira um
- * buffer e stdin passa a ser um emissor onde injetamos bytes de teclado.
- */
-function fakeTty() {
-  const written: string[] = [];
-  const originalWrite = process.stdout.write.bind(process.stdout);
-  const originalStdin = process.stdin;
-  const descriptors = {
-    isTTY: Object.getOwnPropertyDescriptor(process.stdout, 'isTTY'),
-    columns: Object.getOwnPropertyDescriptor(process.stdout, 'columns'),
-    rows: Object.getOwnPropertyDescriptor(process.stdout, 'rows'),
-  };
-
-  process.stdout.write = ((chunk: string) => {
-    written.push(String(chunk));
-    return true;
-  }) as typeof process.stdout.write;
-
-  Object.defineProperty(process.stdout, 'isTTY', { value: true, configurable: true });
-  Object.defineProperty(process.stdout, 'columns', { value: 80, configurable: true });
-  Object.defineProperty(process.stdout, 'rows', { value: 24, configurable: true });
-
-  const stdin = new EventEmitter() as EventEmitter & {
-    isTTY: boolean;
-    setRawMode(value: boolean): void;
-    resume(): void;
-    pause(): void;
-  };
-  let rawMode = false;
-  stdin.isTTY = true;
-  stdin.setRawMode = value => {
-    rawMode = value;
-  };
-  stdin.resume = () => undefined;
-  stdin.pause = () => undefined;
-  Object.defineProperty(process, 'stdin', { value: stdin, configurable: true });
-
-  return {
-    output: () => written.join(''),
-    isRawMode: () => rawMode,
-    press: (bytes: string) => stdin.emit('data', Buffer.from(bytes, 'utf8')),
-    restore: () => {
-      process.stdout.write = originalWrite;
-      Object.defineProperty(process, 'stdin', { value: originalStdin, configurable: true });
-      for (const [key, descriptor] of Object.entries(descriptors)) {
-        if (descriptor) Object.defineProperty(process.stdout, key, descriptor);
-        else delete (process.stdout as unknown as Record<string, unknown>)[key];
-      }
-    },
-  };
-}
+import { fakeTty } from './testing/fake-tty.js';
 
 const flush = (ms = 40) => new Promise(resolve => setTimeout(resolve, ms));
 
