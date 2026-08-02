@@ -67,6 +67,7 @@ type OnChangeType = (value: string) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    '[attr.data-slot]': '"input-otp"',
     '[attr.data-disabled]': 'disabled() ? "" : null',
   },
 })
@@ -88,7 +89,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   readonly tokens = signal<string[]>([]);
   readonly disabled = signal<boolean>(false);
   readonly focusedIndex = signal<number>(-1);
-  readonly classes = computed(() => mergeClasses(inputOtpVariants({ zSize: this.zSize() }), this.class()));
+  readonly classes = computed(() => mergeClasses(inputOtpVariants(), this.class()));
   readonly inputMode = computed(() => (this.zIntegerOnly() ? 'numeric' : 'text'));
   readonly patternRegex = computed(() => new RegExp(this.zPattern()));
 
@@ -126,11 +127,11 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     const extras: string[] = [];
 
     if (index === 0) {
-      extras.push('rounded-l-md border-l');
+      extras.push('rounded-l-lg border-l');
     }
 
     if (index === this.effectiveMaxLength() - 1) {
-      extras.push('rounded-r-md');
+      extras.push('rounded-r-lg');
     }
 
     return mergeClasses(inputOtpSlotVariants({ zSize: this.zSize() }), extras);

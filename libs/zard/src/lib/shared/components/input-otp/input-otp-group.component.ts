@@ -15,6 +15,7 @@ import { inputOtpGroupVariants } from './input-otp.variants';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    '[attr.data-slot]': '"input-otp-group"',
     '[attr.data-input-otp-group]': '""',
   },
 })

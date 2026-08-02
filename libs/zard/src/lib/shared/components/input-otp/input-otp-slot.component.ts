@@ -42,7 +42,7 @@ import { inputOtpSlotVariants } from './input-otp.variants';
     />
     @if (hasFakeCaret() && !char()) {
       <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div class="animate-caret-blink bg-foreground h-4 w-px"></div>
+        <div class="animate-caret-blink bg-foreground h-4 w-px duration-1000"></div>
       </div>
     }
   `,
@@ -71,7 +71,7 @@ import { inputOtpSlotVariants } from './input-otp.variants';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[attr.data-slot]': '""',
+    '[attr.data-slot]': '"input-otp-slot"',
     class: 'relative',
   },
 })
@@ -88,7 +88,12 @@ export class ZardInputOtpSlotComponent {
   readonly hasFakeCaret = signal<boolean>(false);
 
   readonly classes = computed(() =>
-    mergeClasses(inputOtpSlotVariants({ zSize: this.inputOtp?.zSize() ?? 'default' }), this.class()),
+    mergeClasses(
+      inputOtpSlotVariants({ zSize: this.inputOtp?.zSize() ?? 'default' }),
+      // The blinking caret is rendered by this component, so the native one is hidden.
+      'caret-transparent',
+      this.class(),
+    ),
   );
 
   readonly ariaLabel = computed(() => {

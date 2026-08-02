@@ -87,6 +87,7 @@ type OnChangeType = (value: string) => void;
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    '[attr.data-slot]': '"input-otp"',
     '[attr.data-disabled]': 'disabled() ? "" : null',
   },
 })
@@ -108,7 +109,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   readonly tokens = signal<string[]>([]);
   readonly disabled = signal<boolean>(false);
   readonly focusedIndex = signal<number>(-1);
-  readonly classes = computed(() => mergeClasses(inputOtpVariants({ zSize: this.zSize() }), this.class()));
+  readonly classes = computed(() => mergeClasses(inputOtpVariants(), this.class()));
   readonly inputMode = computed(() => (this.zIntegerOnly() ? 'numeric' : 'text'));
   readonly patternRegex = computed(() => new RegExp(this.zPattern()));
 
@@ -146,11 +147,11 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
     const extras: string[] = [];
 
     if (index === 0) {
-      extras.push('rounded-l-md border-l');
+      extras.push('rounded-l-lg border-l');
     }
 
     if (index === this.effectiveMaxLength() - 1) {
-      extras.push('rounded-r-md');
+      extras.push('rounded-r-lg');
     }
 
     return mergeClasses(inputOtpSlotVariants({ zSize: this.zSize() }), extras);
@@ -425,46 +426,20 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
-import { mergeClasses } from '@/shared/utils/merge-classes';
-
-export const inputOtpVariants = cva(mergeClasses('flex items-center has-[:disabled]:opacity-50'), {
-  variants: {
-    zSize: {
-      sm: 'gap-1 text-xs',
-      default: 'gap-2 text-sm',
-      lg: 'gap-3 text-base',
-    },
-  },
-  defaultVariants: {
-    zSize: 'default',
-  },
-});
+export const inputOtpVariants = cva('flex items-center has-disabled:opacity-50');
 
 export const inputOtpGroupVariants = cva(
-  mergeClasses(
-    'flex items-center',
-    '[&>z-input-otp-slot:first-child_input]:rounded-l-md [&>z-input-otp-slot:first-child_input]:border-l',
-    '[&>z-input-otp-slot:last-child_input]:rounded-r-md',
-  ),
+  'flex items-center rounded-lg has-aria-invalid:border-destructive has-aria-invalid:ring-3 has-aria-invalid:ring-destructive/20 [&>z-input-otp-slot:first-child_input]:rounded-l-lg [&>z-input-otp-slot:first-child_input]:border-l [&>z-input-otp-slot:last-child_input]:rounded-r-lg dark:has-aria-invalid:ring-destructive/40',
 );
 
 export const inputOtpSlotVariants = cva(
-  mergeClasses(
-    'relative flex items-center justify-center',
-    'border-y border-r border-input bg-transparent text-center',
-    'shadow-xs transition-[color,box-shadow] outline-none',
-    'focus:z-10 focus:border-ring focus:ring-ring/50 focus:ring-[3px]',
-    'disabled:cursor-not-allowed disabled:opacity-50',
-    'placeholder:text-muted-foreground',
-    'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
-    'data-[active]:border-ring data-[active]:ring-ring/50 data-[active]:ring-[3px] data-[active]:z-10',
-  ),
+  'relative flex items-center justify-center border-y border-r border-input bg-transparent text-center transition-all outline-none focus:z-10 focus:border-ring focus:ring-3 focus:ring-ring/50 disabled:cursor-not-allowed aria-invalid:border-destructive data-active:z-10 data-active:border-ring data-active:ring-3 data-active:ring-ring/50 data-active:aria-invalid:border-destructive data-active:aria-invalid:ring-destructive/20 dark:bg-input/30 dark:data-active:aria-invalid:ring-destructive/40',
   {
     variants: {
       zSize: {
-        sm: 'h-8 w-8 text-xs',
-        default: 'h-9 w-9 text-sm',
-        lg: 'h-10 w-10 text-base',
+        sm: 'size-7 text-xs',
+        default: 'size-8 text-sm',
+        lg: 'size-10 text-base',
       },
     },
     defaultVariants: {
@@ -473,12 +448,12 @@ export const inputOtpSlotVariants = cva(
   },
 );
 
-export const inputOtpSeparatorVariants = cva('flex items-center justify-center text-muted-foreground', {
+export const inputOtpSeparatorVariants = cva('flex items-center', {
   variants: {
     zSize: {
-      sm: '[&_svg]:size-3',
-      default: '[&_svg]:size-4',
-      lg: '[&_svg]:size-5',
+      sm: "[&_svg:not([class*='size-'])]:size-3",
+      default: "[&_svg:not([class*='size-'])]:size-4",
+      lg: "[&_svg:not([class*='size-'])]:size-5",
     },
   },
   defaultVariants: {
@@ -486,7 +461,7 @@ export const inputOtpSeparatorVariants = cva('flex items-center justify-center t
   },
 });
 
-export type ZardInputOtpSize = NonNullable<VariantProps<typeof inputOtpVariants>['zSize']>;
+export type ZardInputOtpSize = NonNullable<VariantProps<typeof inputOtpSlotVariants>['zSize']>;
 export type ZardInputOtpVariants = VariantProps<typeof inputOtpVariants>;
 export type ZardInputOtpSlotVariants = VariantProps<typeof inputOtpSlotVariants>;
 export type ZardInputOtpGroupVariants = VariantProps<typeof inputOtpGroupVariants>;
@@ -522,6 +497,7 @@ import { inputOtpGroupVariants } from './input-otp.variants';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    '[attr.data-slot]': '"input-otp-group"',
     '[attr.data-input-otp-group]': '""',
   },
 })
@@ -548,8 +524,6 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
     <div [class]="classes()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -564,6 +538,7 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'aria-hidden': 'true',
+    '[attr.data-slot]': '"input-otp-separator"',
     '[attr.data-input-otp-separator]': '""',
   },
 })
@@ -690,7 +665,7 @@ import { inputOtpSlotVariants } from './input-otp.variants';
     />
     @if (hasFakeCaret() && !char()) {
       <div class="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div class="animate-caret-blink bg-foreground h-4 w-px"></div>
+        <div class="animate-caret-blink bg-foreground h-4 w-px duration-1000"></div>
       </div>
     }
   `,
@@ -719,7 +694,7 @@ import { inputOtpSlotVariants } from './input-otp.variants';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '[attr.data-slot]': '""',
+    '[attr.data-slot]': '"input-otp-slot"',
     class: 'relative',
   },
 })
@@ -736,7 +711,12 @@ export class ZardInputOtpSlotComponent {
   readonly hasFakeCaret = signal<boolean>(false);
 
   readonly classes = computed(() =>
-    mergeClasses(inputOtpSlotVariants({ zSize: this.inputOtp?.zSize() ?? 'default' }), this.class()),
+    mergeClasses(
+      inputOtpSlotVariants({ zSize: this.inputOtp?.zSize() ?? 'default' }),
+      // The blinking caret is rendered by this component, so the native one is hidden.
+      'caret-transparent',
+      this.class(),
+    ),
   );
 
   readonly ariaLabel = computed(() => {

@@ -13,8 +13,6 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
     <div [class]="classes()">
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        width="16"
-        height="16"
         viewBox="0 0 24 24"
         fill="none"
         stroke="currentColor"
@@ -29,6 +27,7 @@ import { inputOtpSeparatorVariants } from './input-otp.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     'aria-hidden': 'true',
+    '[attr.data-slot]': '"input-otp-separator"',
     '[attr.data-input-otp-separator]': '""',
   },
 })
