@@ -72,8 +72,10 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
 export class EnviromentsPage implements OnInit {
   protected readonly environments = [
     { name: 'angular', icon: 'angular.svg', path: '/docs/installation/angular', available: true },
-    { name: 'nx', icon: 'nx.svg', path: '/docs/installation/nx', available: false },
-    { name: 'analog.js', icon: 'analog.svg', path: '/docs/installation/analog', available: false },
+    { name: 'nx', icon: 'nx.svg', path: '/docs/installation/nx', available: true },
+    { name: 'analog.js', icon: 'analog.svg', path: '/docs/installation/analog', available: true },
+    { name: 'angular library', icon: 'angular.svg', path: '/docs/installation/angular-library', available: true },
+    { name: 'nx library', icon: 'nx.svg', path: '/docs/installation/nx-library', available: true },
   ];
 
   readonly navigationConfig: NavigationConfig = {

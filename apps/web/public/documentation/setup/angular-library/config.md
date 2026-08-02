@@ -2,13 +2,14 @@
 {
   "$schema": "https://zardui.com/schema.json",
   "style": "css",
-  "appConfigFile": "src/app/app.config.ts",
-  "packageManager": "npm", // npm, pnpm, yarn or bun
+  "projectType": "angular-library",
+  "appConfigFile": "",
+  "packageManager": "npm",
   "tailwind": {
-    "css": "src/styles.css",
+    "css": "projects/ui/src/styles.css",
     "baseColor": "neutral"
   },
-  "baseUrl": "src/app",
+  "baseUrl": "projects/ui/src/lib",
   "aliases": {
     "components": "@/shared/components",
     "utils": "@/shared/utils",

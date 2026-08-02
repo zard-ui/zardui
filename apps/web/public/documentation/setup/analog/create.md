@@ -1,3 +1,3 @@
 ```bash title="Terminal" copyButton
-ng new my-app --style=tailwind
+npm create analog@latest
 ```

@@ -205,7 +205,7 @@
 
                 <!-- CLI Installation -->
                 <div class="mb-6">
-                  <z-steps [steps]="getInstallSteps(example.componentName)"></z-steps>
+                  <z-steps [steps]="installSteps()[example.componentName] ?? []"></z-steps>
                 </div>
 
                 <!-- Component Example -->

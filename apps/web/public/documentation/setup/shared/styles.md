@@ -1,4 +1,4 @@
-```css title="src/styles.css"  expandable="true" showLineNumbers copyButton
+```css title="styles.css" expandable="true" showLineNumbers copyButton
 @layer ng-icon, theme, base, components, utilities;
 @import 'tailwindcss';
 @plugin 'tailwindcss-animate';

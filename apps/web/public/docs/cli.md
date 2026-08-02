@@ -19,28 +19,42 @@ Run the init command to set up ZardUI in your Angular project. This will configu
 npx zard-cli init
 ```
 
-The init command will guide you through an interactive setup:
+The init command will guide you through an interactive setup. The first question is what
+kind of project you are setting up — everything after it follows from that answer:
 
 terminal
 
 ```
-Initializing ZardUI...
-
+✔ What are you setting up? › Angular
 ✔ Where is your app.config.ts file? … src/app/app.config.ts
-✔ Where is your index.html file? … src/index.html
 ✔ Choose a theme for your components: › Neutral (Default)
 ✔ Where is your global CSS file? … src/styles.css
-✔ Configure the import alias for components: … src/app/shared/components
-✔ Configure the import alias for utils: … src/app/shared/utils
+✔ Configure the import alias for components: … @/shared/components
+✔ Configure the import alias for utils: … @/shared/utils
 ✔ Your CSS file already has content. This will overwrite everything with ZardUI theme configuration. Continue? … yes
 ✔ Write configuration to components.json? … yes
-✔ Writing configuration...
 
 ZardUI has been initialized successfully!
 
 You can now add components using:
   npx zard-cli add [component]
 ```
+
+### Project types
+
+ZardUI supports five kinds of project. The type you pick decides where the components
+live, which files init configures, and how Tailwind is wired into the build.
+
+| Type | What init configures |
+| --- | --- |
+| `angular` | `app.config.ts` providers, `.postcssrc.json` and the global CSS at the project root |
+| `nx` | The same, but scoped to the chosen app: `apps/<app>/.postcssrc.json`, paths in `tsconfig.base.json` |
+| `analog` | Registers Tailwind as a Vite plugin in `vite.config.ts` — Analog builds with Vite, so there is no PostCSS config |
+| `angular-library` | Ships the theme with the library (`ng-package.json` asset), no app providers |
+| `nx-library` | The same, under `libs/<lib>`, with paths in `tsconfig.base.json` |
+
+When a workspace declares more than one compatible project, init asks which one should
+receive the components.
 
 ### Step 2: Add components
 
@@ -95,16 +109,29 @@ npx zard-cli init
 **Options:**
 
 `-y, --yes` - Skip confirmation prompts
+`-c, --cwd <cwd>` - Working directory, defaults to the current one
+`-t, --type <type>` - Project type: `angular`, `nx`, `analog`, `angular-library` or `nx-library`
+`-p, --project <name>` - Workspace project to configure, when more than one is compatible
+
+Outside an interactive terminal (CI, pipes) there is nobody to answer the prompts, so
+`--yes` is required and `--type` takes the place of the first question:
+
+```
+npx zard-cli init --yes --type nx --project web
+```
 
 **Interactive Setup:**
 
 When you run the init command, you'll be guided through the following prompts:
 
 ```
+✔ What are you setting up? › Nx
+✔ Which app should receive the components? › web
+✔ Where is your app.config.ts file? … apps/web/src/app/app.config.ts
 ✔ Choose a theme for your components: › Neutral (Default)
-✔ Where is your global CSS file? … src/styles.css
-✔ Configure the import alias for components: … src/app/shared/components
-✔ Configure the import alias for utils: … src/app/shared/utils
+✔ Where is your global CSS file? … apps/web/src/styles.css
+✔ Configure the import alias for components: … @/shared/components
+✔ Configure the import alias for utils: … @/shared/utils
 ✔ Write configuration to components.json? … yes
 ```
 
