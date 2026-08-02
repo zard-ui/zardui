@@ -80,13 +80,24 @@ const nxLibrary = project({
 const nxWorkspace = projectInfo([nxApplication, nxLibrary], { workspace: 'nx', hasNx: true });
 
 describe('PROJECT_KINDS', () => {
-  // A ordem é a do menu: aplicações antes de bibliotecas, e é intencional.
-  it('should offer every supported project type, applications first', () => {
-    expect(PROJECT_KINDS.map(kind => kind.value)).toEqual(['angular', 'nx', 'analog', 'angular-library', 'nx-library']);
+  // A ordem é a do menu: cada ecossistema junto, com a aplicação antes da
+  // biblioteca, e Angular abrindo a lista porque é o default.
+  it('should group every supported type by ecosystem, Angular first', () => {
+    expect(PROJECT_KINDS.map(kind => kind.value)).toEqual(['angular', 'angular-library', 'nx', 'nx-library', 'analog']);
   });
 
   it('should describe each type so the choice is not a guess', () => {
     expect(PROJECT_KINDS.every(kind => kind.detail.length > 0)).toBe(true);
+  });
+
+  // A cor diz de relance a que mundo o tipo pertence, e não faria isso se
+  // variasse entre a aplicação e a biblioteca do mesmo ecossistema.
+  it('should paint both flavours of an ecosystem with the same colour', () => {
+    const colorOf = (value: string) => PROJECT_KINDS.find(kind => kind.value === value)?.color;
+
+    expect(colorOf('angular')).toBe(colorOf('angular-library'));
+    expect(colorOf('nx')).toBe(colorOf('nx-library'));
+    expect(new Set(PROJECT_KINDS.map(kind => kind.color)).size).toBe(3);
   });
 });
 

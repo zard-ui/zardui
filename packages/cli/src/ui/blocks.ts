@@ -63,16 +63,31 @@ export function textField(value: string, caret = [...value].length): Node {
 export interface Choice {
   readonly label: string;
   readonly hint?: string;
+  /**
+   * Cor própria do item, quando ele representa algo que já tem identidade —
+   * um framework, por exemplo. Sem ela o rótulo segue o estado (ativo ou não).
+   */
+  readonly color?: string;
 }
 
-/** Lista de escolha única, com o item ativo marcado por `❯`. */
+/**
+ * Lista de escolha única, com o item ativo marcado por `❯`.
+ *
+ * Um item colorido mantém a cor esteja ativo ou não: é ela que identifica o
+ * que ele é. O estado continua legível pelo marcador e pelo peso — negrito no
+ * ativo, apagado nos demais.
+ */
 export function choiceList(choices: readonly Choice[], activeIndex: number): Node[] {
   return choices.map((choice, index) => {
     const active = index === activeIndex;
     return row(
       { gap: 0 },
       text(active ? '   ❯  ' : '      ', { color: 'primary', bold: active }),
-      text(choice.label, { color: active ? 'foreground' : 'muted', bold: active }),
+      text(choice.label, {
+        color: choice.color ?? (active ? 'foreground' : 'muted'),
+        bold: active,
+        dim: !active,
+      }),
       ...(choice.hint ? [text(`   ${choice.hint}`, { color: 'muted', dim: true })] : []),
     );
   });

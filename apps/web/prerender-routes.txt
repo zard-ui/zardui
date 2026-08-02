@@ -64,7 +64,7 @@
 /docs/components/popover
 /docs/components/kbd
 /docs/installation/angular
-/docs/installation/nx
-/docs/installation/analog
 /docs/installation/angular-library
+/docs/installation/nx
 /docs/installation/nx-library
+/docs/installation/analog

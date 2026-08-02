@@ -7,13 +7,16 @@
 
 import { banner, column, row, text, type Node } from './engine/index.js';
 
+/** O nome da marca como ela se escreve — a barra faz parte dele. */
+export const BRAND = 'zard/ui';
+
 export const ZARDUI_BANNER = [
-  '███████╗ █████╗ ██████╗ ██████╗ ██╗   ██╗██╗',
-  '╚══███╔╝██╔══██╗██╔══██╗██╔══██╗██║   ██║██║',
-  '  ███╔╝ ███████║██████╔╝██║  ██║██║   ██║██║',
-  ' ███╔╝  ██╔══██║██╔══██╗██║  ██║██║   ██║██║',
-  '███████╗██║  ██║██║  ██║██████╔╝╚██████╔╝██║',
-  '╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝  ╚═════╝ ╚═╝',
+  '███████╗ █████╗ ██████╗ ██████╗     ██╗██╗   ██╗██╗',
+  '╚══███╔╝██╔══██╗██╔══██╗██╔══██╗   ██╔╝██║   ██║██║',
+  '  ███╔╝ ███████║██████╔╝██║  ██║  ██╔╝ ██║   ██║██║',
+  ' ███╔╝  ██╔══██║██╔══██╗██║  ██║ ██╔╝  ██║   ██║██║',
+  '███████╗██║  ██║██║  ██║██████╔╝██╔╝   ╚██████╔╝██║',
+  '╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝     ╚═════╝ ╚═╝',
 ];
 
 const BANNER_COLOR = '#fafafa';
@@ -24,17 +27,17 @@ const BANNER_MIN_ROWS = 24;
 
 export function brandBanner(rows: number): Node[] {
   if (rows < BANNER_MIN_ROWS) {
-    return [row({ gap: 1 }, text('◇', { color: 'primary' }), text('ZardUI', { color: 'foreground', bold: true }))];
+    return [row({ gap: 1 }, text('◇', { color: 'primary' }), text(BRAND, { color: 'foreground', bold: true }))];
   }
   return [banner({ lines: ZARDUI_BANNER, colors: [BANNER_COLOR] }), text(TAGLINE, { color: 'muted', dim: true })];
 }
 
-/** Cabeçalho compacto de um comando: `◇ ZardUI · initialize`. */
+/** Cabeçalho compacto de um comando: `◇ zard/ui · initialize`. */
 export function commandHeader(command: string, description?: string): Node {
   const head = row(
     { gap: 1 },
     text('◇', { color: 'success' }),
-    text('ZardUI', { color: 'foreground', bold: true }),
+    text(BRAND, { color: 'foreground', bold: true }),
     text(`· ${command}`, { color: 'muted' }),
   );
 

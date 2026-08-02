@@ -70,12 +70,14 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
   ],
 })
 export class EnviromentsPage implements OnInit {
+  // Mesma ordem do menu da CLI: cada ecossistema junto, com a aplicação antes
+  // da biblioteca, e Angular abrindo a lista porque é o default.
   protected readonly environments = [
     { name: 'angular', icon: 'angular.svg', path: '/docs/installation/angular', available: true },
-    { name: 'nx', icon: 'nx.svg', path: '/docs/installation/nx', available: true },
-    { name: 'analog.js', icon: 'analog.svg', path: '/docs/installation/analog', available: true },
     { name: 'angular library', icon: 'angular.svg', path: '/docs/installation/angular-library', available: true },
+    { name: 'nx', icon: 'nx.svg', path: '/docs/installation/nx', available: true },
     { name: 'nx library', icon: 'nx.svg', path: '/docs/installation/nx-library', available: true },
+    { name: 'analog.js', icon: 'analog.svg', path: '/docs/installation/analog', available: true },
   ];
 
   readonly navigationConfig: NavigationConfig = {

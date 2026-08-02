@@ -112,7 +112,7 @@ function kindStep(): Step {
     prompt: 'What are you setting up?',
     label: 'project type',
     detail: 'Decides where the components live and what init has to configure.',
-    choices: PROJECT_KINDS.map(option => ({ label: option.label, hint: option.detail })),
+    choices: PROJECT_KINDS.map(option => ({ label: option.label, hint: option.detail, color: option.color })),
     values: PROJECT_KINDS.map(option => option.value),
   };
 }

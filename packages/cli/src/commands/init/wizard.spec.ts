@@ -171,9 +171,9 @@ describe('runInitWizard', () => {
     const run = await startWizard(await workspaceOnDisk());
 
     try {
-      // Só há uma aplicação no workspace, então o wizard não pergunta qual —
-      // ele já sugere os caminhos dela.
-      await run.reach([KEY.down, KEY.enter], PROMPTS.appConfig);
+      // Nx é o terceiro item do menu; só há uma aplicação no workspace, então
+      // o wizard não pergunta qual — ele já sugere os caminhos dela.
+      await run.reach([KEY.down, KEY.down, KEY.enter], PROMPTS.appConfig);
       expect(run.screen()).toContain(onScreen('apps/nx-app/src/app/app.config.ts'));
       expect(run.screen()).not.toContain(onScreen(PROMPTS.app));
 
@@ -204,8 +204,8 @@ describe('runInitWizard', () => {
     const run = await startWizard(await workspaceOnDisk());
 
     try {
-      // Nx Library é o quinto item do menu, e o tema é a pergunta seguinte.
-      await run.reach([KEY.down, KEY.down, KEY.down, KEY.down, KEY.enter], PROMPTS.theme);
+      // Nx Library é o quarto item do menu, e o tema é a pergunta seguinte.
+      await run.reach([KEY.down, KEY.down, KEY.down, KEY.enter], PROMPTS.theme);
       await run.reach([KEY.enter], PROMPTS.themeCss);
 
       expect(run.screen()).not.toContain(onScreen(PROMPTS.appConfig));

@@ -22,34 +22,54 @@ export interface ProjectKindOption {
   readonly value: ProjectKind;
   readonly label: string;
   readonly detail: string;
+  /** A cor do ecossistema, para o menu dizer de relance a que mundo o tipo pertence. */
+  readonly color: string;
 }
 
-/** A ordem é a do menu: aplicações primeiro, do caso mais comum ao mais raro. */
+/**
+ * As cores de cada ecossistema no menu.
+ *
+ * Angular fica no branco da base — é o caso padrão, e destacá-lo com uma cor
+ * daria a impressão de que é uma opção especial entre as outras.
+ */
+const ANGULAR = '#fafafa';
+const NX = '#6aa9ff';
+const ANALOG = '#fb7185';
+
+/**
+ * A ordem é a do menu: cada ecossistema com a aplicação antes da biblioteca,
+ * do mais comum ao mais raro. Angular abre a lista porque é o default.
+ */
 export const PROJECT_KINDS: readonly ProjectKindOption[] = [
   {
     value: 'angular',
     label: 'Angular',
     detail: 'Application — providers in app.config.ts, tokens in the global CSS.',
-  },
-  {
-    value: 'nx',
-    label: 'Nx',
-    detail: 'Application inside an Nx workspace — paths go to tsconfig.base.json.',
-  },
-  {
-    value: 'analog',
-    label: 'Analog.js',
-    detail: 'Vite-powered Angular app — Tailwind is a Vite plugin, not PostCSS.',
+    color: ANGULAR,
   },
   {
     value: 'angular-library',
     label: 'Angular Library',
     detail: 'Publishable library — components ship with it, no app providers.',
+    color: ANGULAR,
+  },
+  {
+    value: 'nx',
+    label: 'Nx',
+    detail: 'Application inside an Nx workspace — paths go to tsconfig.base.json.',
+    color: NX,
   },
   {
     value: 'nx-library',
     label: 'Nx Library',
     detail: 'Library inside an Nx workspace — lives in libs/, no app providers.',
+    color: NX,
+  },
+  {
+    value: 'analog',
+    label: 'Analog.js',
+    detail: 'Vite-powered Angular app — Tailwind is a Vite plugin, not PostCSS.',
+    color: ANALOG,
   },
 ];
 
