@@ -2,7 +2,7 @@
   @for (part of parts; track part.id; let last = $last) {
     <li class="flex flex-col gap-2 p-4 sm:p-5" [class.border-b]="!last">
       <code
-        class="bg-muted text-foreground w-fit max-w-full overflow-x-auto rounded px-2 py-1 font-mono text-xs whitespace-pre sm:text-sm"
+        class="bg-muted text-foreground w-fit max-w-full overflow-x-auto rounded px-2 py-1 font-mono text-xs whitespace-nowrap sm:text-sm"
       >
         {{ part.snippet }}
       </code>
