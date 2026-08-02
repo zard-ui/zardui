@@ -1,0 +1,254 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Documentation System"
+    description="Every code block on this site is generated. This page explains from what, by which script, and how to add a page of your own."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      Nothing on the documentation site writes raw
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">&lt;pre&gt;</code>
+      markup. Code comes from Markdown sources or from the library itself, is highlighted with Shiki at generation time,
+      and is committed as TypeScript under
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">apps/web/src/generated</code>
+      . That keeps the runtime free of a highlighter and makes every snippet reviewable in a diff.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="generators" id="generators">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        The Six Generators
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm run generate:highlight</code>
+        runs
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">packages/highlight/src/generator/index.ts</code>
+        , which executes all six writers in parallel and prints how many files each one wrote.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Generator</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Reads</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Writes</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (generator of generators; track generator.name) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs whitespace-nowrap">
+                  {{ generator.name }}
+                </code>
+              </td>
+              <td class="text-muted-foreground p-4 align-middle font-mono text-xs">{{ generator.reads }}</td>
+              <td class="text-muted-foreground p-4 align-middle font-mono text-xs">{{ generator.writes }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <z-callout variant="info" title="The watcher runs the same code" icon="i">
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm start</code>
+      runs the generator once, then keeps it alive in watch mode next to the dev server, so editing a demo refreshes its
+      code block without a manual step.
+    </z-callout>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="code-fences" id="code-fences">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Code Fence Metadata
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        A fence in
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">apps/web/public/documentation/</code>
+        opens with its language followed by any of the attributes below, parsed by
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">meta-parser.ts</code>
+        . Supported languages are
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">typescript</code>
+        ,
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">javascript</code>
+        ,
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">html</code>
+        ,
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">css</code>
+        ,
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">json</code>
+        ,
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">bash</code>
+        ,
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">shell</code>
+        ,
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">angular-ts</code>
+        and
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">angular-html</code>
+        .
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Attribute</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Effect</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (meta of metaAttributes; track meta.attribute) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs whitespace-nowrap">
+                  {{ meta.attribute }}
+                </code>
+              </td>
+              <td class="text-muted-foreground p-4 align-middle">{{ meta.effect }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Exports are numbered by order of appearance —
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">BLOCK_0</code>
+        ,
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">TABS_0</code>
+        ,
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">BLOCK_1</code>
+        — so inserting a fence in the middle of a file renumbers everything after it. Import with an alias to keep the
+        page readable, and rerun the generator after every edit.
+      </p>
+    </div>
+
+    <z-code-block [data]="importBlock" />
+    <z-code-block [data]="renderBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="page-anatomy" id="page-anatomy">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Anatomy of a Page
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Documentation pages are assembled from a small set of components. Reuse them instead of inventing new markup —
+        the post-build Markdown converter recognises this exact structure.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Selector</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of buildingBlocks; track item.selector) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs whitespace-nowrap">{{ item.selector }}</code>
+              </td>
+              <td class="text-muted-foreground p-4 align-middle">{{ item.role }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <z-code-block [data]="pageSkeletonBlock" />
+    <z-code-block [data]="templateSkeletonBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="markdown-pipeline" id="markdown-pipeline">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Post-build Markdown
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Every page is also served as raw Markdown at
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">&lt;path&gt;.md</code>
+        . That is what the "Copy Page" button copies and what
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">llms.txt</code>
+        points AI assistants to. Two scripts produce it:
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <div class="flex flex-col gap-2 rounded-lg border p-5">
+        <span class="font-mono text-sm font-medium">npm run generate:md</span>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          Serialises each component's structured data into
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">
+            apps/web/public/docs/components/&lt;name&gt;.md
+          </code>
+          . Runs before the build.
+        </p>
+      </div>
+      <div class="flex flex-col gap-2 rounded-lg border p-5">
+        <span class="font-mono text-sm font-medium">npm run generate:md:docs</span>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          Reads the prerendered HTML of every static page and converts the
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">z-content</code>
+          subtree to Markdown under
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">apps/web/public/docs/</code>
+          . Runs after the build, because it needs the rendered output.
+        </p>
+      </div>
+    </div>
+
+    <z-code-block [data]="pipelineBlock" />
+
+    <z-callout variant="warning" title="An empty .md means a broken page" icon="!">
+      The converter walks the
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">z-content</code>
+      element and skips chrome such as buttons and navigation. If your page produces an empty file, it strayed from the
+      standard structure — wrap the content in
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">z-content</code>
+      and use semantic headings.
+    </z-callout>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="new-page" id="new-page">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Adding a New Page
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Seven steps, in this order. Skipping step 5 or 6 leaves the page reachable by URL but invisible in the
+        navigation and absent from the prerendered output.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      @for (step of newPageSteps; track step.step) {
+        <div class="flex gap-4 rounded-lg border p-5">
+          <span
+            class="bg-muted text-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
+          >
+            {{ step.step }}
+          </span>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-medium">{{ step.title }}</span>
+            <p class="text-muted-foreground text-sm leading-relaxed">{{ step.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+</z-content>
