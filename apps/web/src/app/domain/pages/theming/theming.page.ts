@@ -9,11 +9,11 @@ import { THEMING_BASE_COLORS_SLATE } from '@generated/documentation/theming/base
 import { THEMING_BASE_COLORS_STONE } from '@generated/documentation/theming/base-colors-stone';
 import { THEMING_BASE_COLORS_ZINC } from '@generated/documentation/theming/base-colors-zinc';
 import { THEMING_CONVENTION_EXAMPLE } from '@generated/documentation/theming/convention-example';
+import { THEMING_CSS_VARIABLES_INTRO } from '@generated/documentation/theming/css-variables-intro';
+import { THEMING_CSS_VARIABLES_V4 } from '@generated/documentation/theming/css-variables-v4';
+import { THEMING_OTHER_COLOR_FORMATS } from '@generated/documentation/theming/other-color-formats';
+import { THEMING_UTILITY_CLASSES_INTRO } from '@generated/documentation/theming/utility-classes-intro';
 import { THEMING_VARIABLES_LIST } from '@generated/documentation/theming/variables-list';
-import { BLOCK_0 as CSS_VARS_INTRO_BLOCK } from '@generated/pages/theming/css-variables-intro';
-import { BLOCK_0 as CSS_VARS_V4_BLOCK } from '@generated/pages/theming/css-variables-v4';
-import { BLOCK_0 as OTHER_COLOR_FORMATS_BLOCK } from '@generated/pages/theming/other-color-formats';
-import { BLOCK_0 as UTILITY_CLASSES_INTRO_BLOCK } from '@generated/pages/theming/utility-classes-intro';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
 import type { CodeBlockData } from '@highlight/types';
 
@@ -42,10 +42,10 @@ export class ThemingPage implements OnInit {
   activeAnchor?: string;
 
   readonly appConfig: CodeBlockData = THEMING_APP_CONFIG;
-  readonly cssVarsIntroBlock: CodeBlockData = CSS_VARS_INTRO_BLOCK;
-  readonly cssVarsV4Block: CodeBlockData = CSS_VARS_V4_BLOCK;
-  readonly utilityClassesIntroBlock: CodeBlockData = UTILITY_CLASSES_INTRO_BLOCK;
-  readonly otherColorFormatsBlock: CodeBlockData = OTHER_COLOR_FORMATS_BLOCK;
+  readonly cssVarsIntroBlock: CodeBlockData = THEMING_CSS_VARIABLES_INTRO;
+  readonly cssVarsV4Block: CodeBlockData = THEMING_CSS_VARIABLES_V4;
+  readonly utilityClassesIntroBlock: CodeBlockData = THEMING_UTILITY_CLASSES_INTRO;
+  readonly otherColorFormatsBlock: CodeBlockData = THEMING_OTHER_COLOR_FORMATS;
   readonly conventionExample: CodeBlockData = THEMING_CONVENTION_EXAMPLE;
   readonly variablesList: CodeBlockData = THEMING_VARIABLES_LIST;
   readonly addingColorsExample: CodeBlockData[] = THEMING_ADDING_COLORS_EXAMPLE;
