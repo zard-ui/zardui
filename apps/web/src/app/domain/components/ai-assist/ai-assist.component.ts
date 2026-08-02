@@ -25,7 +25,7 @@ import type { ClassValue } from 'clsx';
 import { filter, map, startWith } from 'rxjs/operators';
 
 import { environment } from '@doc/env/environment';
-import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '@doc/shared/constants/routes.constant';
+import { SECTIONS, DOCS_PATH, CONTRIBUTE_PATH, COMPONENTS_PATH } from '@doc/shared/constants/routes.constant';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
@@ -64,7 +64,7 @@ export class AiAssistComponent {
   private readonly router = inject(Router);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
-  private readonly appRoutes = [...SECTIONS.data, ...DOCS_PATH.data, ...COMPONENTS_PATH.data]
+  private readonly appRoutes = [...SECTIONS.data, ...DOCS_PATH.data, ...CONTRIBUTE_PATH.data, ...COMPONENTS_PATH.data]
     .filter(route => route.available)
     .filter(route => route.path !== '/llms.txt');
 

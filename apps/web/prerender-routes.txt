@@ -17,6 +17,17 @@
 /docs/figma
 /docs/version-support
 /docs/about
+/docs/contribute
+/docs/contribute/setup
+/docs/contribute/architecture
+/docs/contribute/project-structure
+/docs/contribute/components
+/docs/contribute/blocks
+/docs/contribute/documentation
+/docs/contribute/testing
+/docs/contribute/workflow
+/docs/contribute/release
+/docs/contribute/faq
 /docs/components/accordion
 /docs/components/alert
 /docs/components/alert-dialog
