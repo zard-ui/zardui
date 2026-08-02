@@ -333,4 +333,88 @@ describe('ZardInputOtpComponent', () => {
       .map(d => d.nativeElement as HTMLInputElement);
     inputs.forEach(input => expect(input.getAttribute('inputmode')).toBe('text'));
   });
+
+  it('should let a keystroke replace the character of a filled slot', () => {
+    const inputs = slotInputs();
+    component.control.setValue('123456');
+    fixture.detectChanges();
+
+    const target = inputs[2];
+    target.focus();
+    target.setSelectionRange(1, 1);
+
+    const event = new KeyboardEvent('keydown', { key: '9', cancelable: true });
+    target.dispatchEvent(event);
+    fixture.detectChanges();
+
+    expect(event.defaultPrevented).toBe(false);
+    expect(target.selectionStart).toBe(0);
+    expect(target.selectionEnd).toBe(1);
+
+    typeInto(target, '9');
+    expect(component.control.value).toBe('129456');
+  });
+
+  it('should mark every slot as selected on ctrl+a and copy the whole value', () => {
+    const otp = fixture.debugElement.query(By.directive(ZardInputOtpComponent))
+      .componentInstance as ZardInputOtpComponent;
+    component.control.setValue('123456');
+    fixture.detectChanges();
+
+    const inputs = slotInputs();
+    inputs[0].focus();
+
+    const selectAll = new KeyboardEvent('keydown', { key: 'a', ctrlKey: true, cancelable: true });
+    inputs[0].dispatchEvent(selectAll);
+    fixture.detectChanges();
+
+    expect(selectAll.defaultPrevented).toBe(true);
+    expect(otp.allSelected()).toBe(true);
+    inputs.forEach(input => expect(input.hasAttribute('data-active')).toBe(true));
+
+    const copy = new ClipboardEvent('copy', { clipboardData: new DataTransfer(), bubbles: true, cancelable: true });
+    inputs[0].dispatchEvent(copy);
+    fixture.detectChanges();
+
+    expect(copy.defaultPrevented).toBe(true);
+    expect(copy.clipboardData?.getData('text/plain')).toBe('123456');
+  });
+
+  it('should replace the whole value when typing with every slot selected', () => {
+    const otp = fixture.debugElement.query(By.directive(ZardInputOtpComponent))
+      .componentInstance as ZardInputOtpComponent;
+    component.control.setValue('123456');
+    fixture.detectChanges();
+
+    const inputs = slotInputs();
+    inputs[0].focus();
+    otp.selectAll();
+    fixture.detectChanges();
+
+    const event = new KeyboardEvent('keydown', { key: '7', cancelable: true });
+    inputs[0].dispatchEvent(event);
+    fixture.detectChanges();
+
+    expect(event.defaultPrevented).toBe(true);
+    expect(otp.allSelected()).toBe(false);
+    expect(component.control.value).toBe('7');
+  });
+
+  it('should clear the value on backspace with every slot selected', () => {
+    const otp = fixture.debugElement.query(By.directive(ZardInputOtpComponent))
+      .componentInstance as ZardInputOtpComponent;
+    component.control.setValue('123456');
+    fixture.detectChanges();
+
+    const inputs = slotInputs();
+    inputs[0].focus();
+    otp.selectAll();
+    fixture.detectChanges();
+
+    inputs[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Backspace', cancelable: true }));
+    fixture.detectChanges();
+
+    expect(component.control.value).toBe('');
+    expect(otp.allSelected()).toBe(false);
+  });
 });

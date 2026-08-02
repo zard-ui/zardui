@@ -7,7 +7,6 @@ import { INPUT_OTP_DEMO_INVALID } from '@generated/components/input-otp/demo/inv
 import { INPUT_OTP_DEMO_PATTERN } from '@generated/components/input-otp/demo/pattern';
 import { INPUT_OTP_DEMO_PREVIEW } from '@generated/components/input-otp/demo/preview';
 import { INPUT_OTP_DEMO_SEPARATOR } from '@generated/components/input-otp/demo/separator';
-import { INPUT_OTP_DEMO_SIGNAL } from '@generated/components/input-otp/demo/signal';
 import { INPUT_OTP_SNIPPET_PATTERN_ALPHANUMERIC } from '@generated/components/input-otp/snippets';
 import { INPUT_OTP_CLI_ADD } from '@generated/installation/cli/add-input-otp';
 import { INPUT_OTP_MANUAL_CODE } from '@generated/installation/manual/input-otp';
@@ -22,7 +21,6 @@ import { ZardDemoInputOtpInvalidComponent } from './invalid';
 import { ZardDemoInputOtpPatternComponent } from './pattern';
 import { ZardDemoInputOtpPreviewComponent } from './preview';
 import { ZardDemoInputOtpSeparatorComponent } from './separator';
-import { ZardDemoInputOtpSignalComponent } from './signal';
 import { INPUT_OTP_API } from '../doc/api';
 
 export const INPUT_OTP = {
@@ -98,14 +96,6 @@ export const INPUT_OTP = {
       component: ZardDemoInputOtpFormComponent,
       column: true,
       codeData: INPUT_OTP_DEMO_FORM,
-    },
-    {
-      name: 'signal',
-      description:
-        'Use `InputOtpSignal` with `[formField]` to bind the OTP to a signal form from `@angular/forms/signals`.',
-      component: ZardDemoInputOtpSignalComponent,
-      column: true,
-      codeData: INPUT_OTP_DEMO_SIGNAL,
     },
   ],
 };
