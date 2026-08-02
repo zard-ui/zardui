@@ -9,7 +9,7 @@ import { InlineCodePipe } from '../../pipes/inline-code.pipe';
   imports: [InlineCodePipe],
   template: `
     <div class="overflow-x-auto rounded-lg border">
-      <table class="w-full min-w-160 border-collapse text-left text-sm">
+      <table class="w-full min-w-3xl border-collapse text-left text-sm">
         <caption class="sr-only">Differences between a shadcn Tailwind v3 setup and a ZardUI Tailwind v4 setup</caption>
         <thead class="bg-muted/50">
           <tr>
@@ -26,10 +26,10 @@ import { InlineCodePipe } from '../../pipes/inline-code.pipe';
                 <p class="text-muted-foreground mt-1 text-xs font-normal" [innerHTML]="row.note | inlineCode"></p>
               </th>
               <td class="px-4 py-3">
-                <code class="text-muted-foreground text-[11px] break-all">{{ row.before }}</code>
+                <code class="text-muted-foreground text-xs break-words">{{ row.before }}</code>
               </td>
               <td class="px-4 py-3">
-                <code class="text-[11px] break-all">{{ row.after }}</code>
+                <code class="text-xs break-words">{{ row.after }}</code>
               </td>
             </tr>
           }

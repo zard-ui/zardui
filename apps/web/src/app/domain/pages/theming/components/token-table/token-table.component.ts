@@ -77,7 +77,7 @@ export class TokenTableComponent {
     return (
       token.name.includes(needle) ||
       token.description.toLowerCase().includes(needle) ||
-      token.utilities.some(utility => utility.includes(needle)) ||
+      token.utilities.some(prefix => `${prefix}-${token.name}`.includes(needle)) ||
       token.usedBy.some(component => component.includes(needle))
     );
   }

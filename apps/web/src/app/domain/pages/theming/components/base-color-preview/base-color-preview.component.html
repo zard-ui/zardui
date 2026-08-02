@@ -1,18 +1,18 @@
 <div class="flex flex-col gap-4">
-  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
     <div role="group" aria-label="Base color" class="flex flex-wrap gap-2">
       @for (theme of themes; track theme.id) {
         <button
           type="button"
           [attr.aria-pressed]="selected().id === theme.id"
           [class]="
-            'focus-visible:outline-ring flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ' +
+            'focus-visible:border-ring focus-visible:ring-ring/50 flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:ring-3 motion-reduce:transition-none ' +
             (selected().id === theme.id ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
           "
           (click)="select(theme.id)"
         >
           <span
-            class="border-border size-3.5 shrink-0 rounded-full border"
+            class="border-border size-4 shrink-0 rounded-full border"
             [style.background]="buttonSwatch(theme)"
           ></span>
           {{ theme.label }}
@@ -25,7 +25,7 @@
         type="button"
         [attr.aria-pressed]="!isDark()"
         [class]="
-          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ' +
+          'focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:ring-3 motion-reduce:transition-none ' +
           (!isDark() ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
         "
         (click)="setMode('light')"
@@ -36,7 +36,7 @@
         type="button"
         [attr.aria-pressed]="isDark()"
         [class]="
-          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ' +
+          'focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:ring-3 motion-reduce:transition-none ' +
           (isDark() ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
         "
         (click)="setMode('dark')"
@@ -53,17 +53,17 @@
       [class.dark]="isDark()"
       [style]="scopedStyles()"
     >
-      <div class="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div class="grid grid-cols-2 gap-2 sm:grid-cols-2">
         @for (swatch of swatches(); track swatch.name) {
           <button
             type="button"
-            class="border-border focus-visible:outline-ring flex cursor-pointer flex-col gap-1.5 rounded-md border p-2 text-left focus-visible:outline-2 focus-visible:outline-offset-2"
+            class="border-border focus-visible:border-ring focus-visible:ring-ring/50 flex cursor-pointer flex-col gap-1.5 rounded-md border p-2 text-left focus-visible:ring-3"
             [attr.aria-label]="'Copy ' + swatch.value + ' — value of --' + swatch.name"
             (click)="copySwatch(swatch.value)"
           >
             <span class="border-border h-8 w-full rounded border" [style.background]="swatch.value"></span>
-            <code class="text-[11px] leading-tight">--{{ swatch.name }}</code>
-            <code class="text-muted-foreground text-[10px] leading-tight break-all">{{ swatch.value }}</code>
+            <code class="text-xs">--{{ swatch.name }}</code>
+            <code class="text-muted-foreground text-xs break-words">{{ swatch.value }}</code>
           </button>
         }
       </div>

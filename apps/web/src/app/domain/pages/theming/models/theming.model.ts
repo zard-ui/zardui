@@ -14,7 +14,11 @@ export interface ThemeToken {
   group: TokenGroup;
   /** What the token is for, in one sentence. */
   description: string;
-  /** Tailwind utilities this token backs, e.g. `bg-primary`. */
+  /**
+   * Tailwind utility prefixes this token backs — `['bg', 'text']` renders as
+   * `bg-primary`, `text-primary`. Stored as prefixes on purpose: full class names sitting in a
+   * data file get picked up by Tailwind's content scanner and emitted into the shared stylesheet.
+   */
   utilities: string[];
   /** Library components that consume the token today (empty when nothing uses it yet). */
   usedBy: string[];

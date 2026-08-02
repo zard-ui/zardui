@@ -2,22 +2,22 @@
   <div class="grid gap-3 sm:grid-cols-2">
     @for (pair of pairs; track pair.background) {
       <div class="border-border flex flex-col gap-2 rounded-lg border p-3">
-        <div class="flex items-baseline justify-between gap-2">
+        <div class="flex items-center justify-between gap-2">
           <code class="text-xs font-medium">--{{ pair.background }}</code>
-          <code class="text-muted-foreground text-[11px]">--{{ pair.foreground }}</code>
+          <code class="text-muted-foreground text-xs">--{{ pair.foreground }}</code>
         </div>
 
         <div class="grid grid-cols-2 gap-2">
           @for (sample of pair.samples; track sample.mode) {
             <div class="flex flex-col gap-1">
               <div
-                class="flex h-14 items-center justify-center rounded-md text-sm font-semibold"
+                class="flex h-12 items-center justify-center rounded-md text-sm font-semibold"
                 [style.background]="sample.background"
                 [style.color]="sample.foreground"
               >
                 Aa
               </div>
-              <p class="text-muted-foreground flex items-center justify-between gap-1 text-[11px]">
+              <p class="text-muted-foreground flex items-center justify-between gap-1 text-xs">
                 <span>{{ sample.mode }}</span>
                 <span [class.text-destructive]="!sample.passesAA">
                   {{ sample.ratio }}:1

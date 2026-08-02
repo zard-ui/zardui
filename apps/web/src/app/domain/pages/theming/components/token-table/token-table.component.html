@@ -1,11 +1,11 @@
 <div class="flex flex-col gap-6">
-  <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+  <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
     <label class="flex flex-1 flex-col gap-1.5">
       <span class="sr-only">Filter tokens by name, utility or component</span>
       <input
         type="search"
         placeholder="Filter by token, utility or component…"
-        class="border-input bg-input/30 focus-visible:outline-ring w-full rounded-md border px-3 py-1.5 text-sm focus-visible:outline-2 focus-visible:outline-offset-2 sm:max-w-80"
+        class="border-input bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border px-3 py-1.5 text-sm focus-visible:ring-3 sm:max-w-sm"
         [value]="query()"
         (input)="onQuery($event)"
       />
@@ -16,7 +16,7 @@
         type="button"
         [attr.aria-pressed]="mode() === 'light'"
         [class]="
-          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ' +
+          'focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:ring-3 motion-reduce:transition-none ' +
           (mode() === 'light' ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
         "
         (click)="setMode('light')"
@@ -27,7 +27,7 @@
         type="button"
         [attr.aria-pressed]="mode() === 'dark'"
         [class]="
-          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ' +
+          'focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:ring-3 motion-reduce:transition-none ' +
           (mode() === 'dark' ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
         "
         (click)="setMode('dark')"
@@ -49,7 +49,7 @@
       </div>
 
       <div class="overflow-x-auto rounded-lg border">
-        <table class="w-full min-w-140 border-collapse text-left text-sm">
+        <table class="w-full min-w-3xl border-collapse text-left text-sm">
           <caption class="sr-only">
             {{ section.label }} tokens with their {{ mode() }} values in the {{ baseColor().label }} base color
           </caption>
@@ -66,7 +66,7 @@
                 <th scope="row" class="px-4 py-3 font-normal">
                   <button
                     type="button"
-                    class="focus-visible:outline-ring cursor-pointer rounded text-left focus-visible:outline-2 focus-visible:outline-offset-2"
+                    class="focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer rounded text-left focus-visible:ring-3"
                     [attr.aria-label]="'Copy token name --' + row.token.name"
                     (click)="copy('--' + row.token.name)"
                   >
@@ -78,8 +78,8 @@
                   ></p>
                   @if (row.token.utilities.length) {
                     <span class="mt-1.5 flex flex-wrap gap-1">
-                      @for (utility of row.token.utilities; track utility) {
-                        <code class="bg-muted rounded px-1.5 py-0.5 text-[11px]">{{ utility }}</code>
+                      @for (prefix of row.token.utilities; track prefix) {
+                        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">{{ prefix }}-{{ row.token.name }}</code>
                       }
                     </span>
                   }
@@ -88,7 +88,7 @@
                 <td class="px-4 py-3">
                   <button
                     type="button"
-                    class="focus-visible:outline-ring flex cursor-pointer items-center gap-2 rounded text-left focus-visible:outline-2 focus-visible:outline-offset-2"
+                    class="focus-visible:border-ring focus-visible:ring-ring/50 flex cursor-pointer items-center gap-2 rounded text-left focus-visible:ring-3"
                     [attr.aria-label]="'Copy ' + mode() + ' value of --' + row.token.name + ': ' + row.value"
                     (click)="copy(row.value)"
                   >
@@ -96,11 +96,11 @@
                       class="border-border inline-flex size-5 shrink-0 items-center justify-center rounded border"
                       [style.background]="surface()"
                     >
-                      <span class="size-3.5 rounded-xs" [style.background]="row.value"></span>
+                      <span class="size-4 rounded-sm" [style.background]="row.value"></span>
                     </span>
-                    <code class="text-muted-foreground text-[11px] break-all">{{ row.value }}</code>
+                    <code class="text-muted-foreground text-xs break-words">{{ row.value }}</code>
                     @if (lastCopied() === row.value) {
-                      <span class="text-muted-foreground text-[11px]">copied</span>
+                      <span class="text-muted-foreground text-xs">copied</span>
                     }
                   </button>
                 </td>

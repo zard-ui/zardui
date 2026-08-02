@@ -9,7 +9,7 @@ const HTML_ESCAPES: Record<string, string> = {
   "'": '&#39;',
 };
 
-const CODE_CLASSES = 'bg-muted rounded px-1 py-0.5 font-mono text-[0.9em]';
+const CODE_CLASSES = 'bg-muted rounded px-1 py-0.5 font-mono';
 
 /**
  * Renders the `` `inline code` `` spans used in this page's data files.

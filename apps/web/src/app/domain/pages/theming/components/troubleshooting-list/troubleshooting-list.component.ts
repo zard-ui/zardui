@@ -13,11 +13,15 @@ import { InlineCodePipe } from '../../pipes/inline-code.pipe';
     <div z-accordion zType="single" class="w-full">
       @for (entry of entries; track entry.id) {
         <z-accordion-item [zValue]="entry.id" [zTitle]="entry.symptom">
-          <dl class="grid grid-cols-[max-content_1fr] gap-x-3 gap-y-1.5 text-xs sm:text-sm">
-            <dt class="text-foreground font-medium">Cause</dt>
-            <dd class="text-muted-foreground" [innerHTML]="entry.cause | inlineCode"></dd>
-            <dt class="text-foreground font-medium">Fix</dt>
-            <dd class="text-muted-foreground" [innerHTML]="entry.fix | inlineCode"></dd>
+          <dl class="flex flex-col gap-1.5 text-xs sm:text-sm">
+            <div class="flex gap-2">
+              <dt class="text-foreground shrink-0 font-medium">Cause</dt>
+              <dd class="text-muted-foreground" [innerHTML]="entry.cause | inlineCode"></dd>
+            </div>
+            <div class="flex gap-2">
+              <dt class="text-foreground shrink-0 font-medium">Fix</dt>
+              <dd class="text-muted-foreground" [innerHTML]="entry.fix | inlineCode"></dd>
+            </div>
           </dl>
         </z-accordion-item>
       }
