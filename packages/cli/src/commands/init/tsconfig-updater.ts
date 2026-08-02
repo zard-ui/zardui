@@ -5,11 +5,18 @@ import { existsSync } from 'fs';
 import { writeFile, readFile } from 'node:fs/promises';
 import * as path from 'path';
 
-export async function updateTsConfig(cwd: string, config: Config): Promise<void> {
-  const tsconfigPath = path.join(cwd, 'tsconfig.json');
+/**
+ * Escreve o alias no tsconfig que os projetos realmente estendem.
+ *
+ * Num workspace Nx isso é o `tsconfig.base.json`: o `tsconfig.json` da raiz não
+ * é herdado por projeto nenhum, e o mapeamento escrito nele nunca chegaria ao
+ * compilador — o alias resolvia no editor e quebrava no build.
+ */
+export async function updateTsConfig(cwd: string, config: Config, tsconfigFile = 'tsconfig.json'): Promise<void> {
+  const tsconfigPath = path.join(cwd, tsconfigFile);
 
   if (!existsSync(tsconfigPath)) {
-    logger.warn('tsconfig.json not found, skipping path configuration');
+    logger.warn(`${tsconfigFile} not found, skipping path configuration`);
     return;
   }
 
@@ -18,7 +25,7 @@ export async function updateTsConfig(cwd: string, config: Config): Promise<void>
     const updatedTsConfig = updatePaths(tsconfig, config);
     await writeTsConfig(tsconfigPath, updatedTsConfig);
   } catch (error) {
-    logger.warn('Failed to update tsconfig.json paths');
+    logger.warn(`Failed to update ${tsconfigFile} paths`);
     logger.error(error);
   }
 }

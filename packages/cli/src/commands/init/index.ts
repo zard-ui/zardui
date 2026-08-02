@@ -1,4 +1,11 @@
 import { buildConfig, defaultAnswers, inspectCssFile } from '@cli/commands/init/config-prompter.js';
+import {
+  candidateProjects,
+  detectProjectKind,
+  isLibraryKind,
+  PROJECT_KINDS,
+  type ProjectKind,
+} from '@cli/commands/init/project-kind.js';
 import { buildInitSteps, type InitStep } from '@cli/commands/init/steps.js';
 import { runInitWizard } from '@cli/commands/init/wizard.js';
 import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
@@ -16,6 +23,8 @@ export const init = new Command()
   .description('initialize your project and install dependencies')
   .option('-y, --yes', 'skip confirmation prompt.', false)
   .option('-c, --cwd <cwd>', 'the working directory. defaults to the current directory.', process.cwd())
+  .option('-t, --type <type>', `the project type: ${PROJECT_KINDS.map(kind => kind.value).join(', ')}.`)
+  .option('-p, --project <name>', 'the workspace project to configure. defaults to the first compatible one.')
   .action(async options => {
     const cwd = path.resolve(options.cwd);
 
@@ -24,13 +33,25 @@ export const init = new Command()
     const projectInfo = await getProjectInfo(cwd);
     validateAngularProject(projectInfo);
 
+    const kind = resolveKind(options.type);
+    const projectRoot = resolveProjectRoot(options.project, kind ?? detectProjectKind(projectInfo), projectInfo);
+
     const isReInitializing = existsSync(path.resolve(cwd, 'components.json'));
     const packageManager = await detectPackageManager(cwd);
 
     const buildSteps = (config: Config): InitStep[] => buildInitSteps(cwd, config, projectInfo, isReInitializing);
 
     if (!isInteractive()) {
-      await runHeadless({ cwd, projectInfo, packageManager, isReInitializing, buildSteps, yes: options.yes });
+      await runHeadless({
+        cwd,
+        projectInfo,
+        packageManager,
+        isReInitializing,
+        buildSteps,
+        yes: options.yes,
+        kind,
+        projectRoot,
+      });
       return;
     }
 
@@ -42,6 +63,8 @@ export const init = new Command()
         isReInitializing,
         skipConfirmation: options.yes,
         buildSteps,
+        presetKind: kind,
+        presetProjectRoot: projectRoot,
       });
 
       reportSuccess(config, buildSteps(config), logs);
@@ -70,12 +93,55 @@ function validateAngularProject(projectInfo: ProjectInfo): void {
   }
 }
 
+/**
+ * O tipo pedido em `--type`, quando houver.
+ *
+ * É a resposta à primeira pergunta do wizard dada de antemão — o que torna o
+ * init utilizável em CI, onde ninguém pode escolher no menu.
+ */
+function resolveKind(value: string | undefined): ProjectKind | undefined {
+  if (!value) return undefined;
+
+  const kind = PROJECT_KINDS.find(option => option.value === value);
+
+  if (!kind) {
+    throw new CliError(
+      `Unknown project type "${value}". Expected one of: ${PROJECT_KINDS.map(option => option.value).join(', ')}.`,
+      'UNKNOWN_PROJECT_TYPE',
+    );
+  }
+
+  return kind.value;
+}
+
+/** A raiz do projeto pedido em `--project`, procurado entre os compatíveis. */
+function resolveProjectRoot(name: string | undefined, kind: ProjectKind, projectInfo: ProjectInfo): string | undefined {
+  if (!name) return undefined;
+
+  const candidates = candidateProjects(kind, projectInfo);
+  const project = candidates.find(candidate => candidate.name === name);
+
+  if (!project) {
+    const available = candidates.map(candidate => candidate.name).join(', ') || 'none';
+    throw new CliError(
+      `Project "${name}" is not a ${kind} project in this workspace. Available: ${available}.`,
+      'UNKNOWN_PROJECT',
+    );
+  }
+
+  return project.root;
+}
+
 interface HeadlessOptions {
   cwd: string;
   projectInfo: ProjectInfo;
   packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun';
   isReInitializing: boolean;
   yes: boolean;
+  /** O que `--type` pediu; sem ele, o workspace decide. */
+  kind?: ProjectKind;
+  /** O que `--project` pediu; sem ele, o primeiro projeto compatível. */
+  projectRoot?: string;
   buildSteps(config: Config): InitStep[];
 }
 
@@ -93,10 +159,13 @@ async function runHeadless(options: HeadlessOptions): Promise<void> {
     );
   }
 
-  const answers = defaultAnswers(options.projectInfo);
+  const kind = options.kind ?? detectProjectKind(options.projectInfo);
+  const answers = defaultAnswers(options.projectInfo, kind, options.projectRoot);
   const cssState = await inspectCssFile(options.cwd, answers.globalCss);
 
-  if (cssState === 'missing') {
+  // Numa biblioteca o CSS de tema é criado pelo init, então não existir é o
+  // esperado; numa aplicação, o arquivo tem que estar lá e ligado ao build.
+  if (cssState === 'missing' && !isLibraryKind(answers.kind)) {
     throw new CliError(
       `CSS file not found at: ${answers.globalCss}. Run init in an interactive terminal to choose another path.`,
       'CSS_NOT_FOUND',
@@ -127,8 +196,28 @@ function reportSuccess(config: Config, steps: readonly InitStep[], logs: readonl
     status: 'success',
     headline: 'ZardUI has been initialized successfully!',
     items: steps.map(step => `${step.label} — ${step.note}`),
-    notes: ['You can now add components using:'],
+    notes: nextStepsFor(config),
     commands: [{ command: `${suggestedRunner(config.packageManager)} zard-cli add`, argument: '[component]' }],
     logs,
   });
+}
+
+/**
+ * O que ainda falta fazer à mão.
+ *
+ * Numa biblioteca o init não tem onde registrar `provideZard()` nem como
+ * importar os tokens — as duas coisas pertencem ao app que consome a lib, e
+ * sem esse aviso o usuário só descobre quando os componentes não renderizam.
+ */
+function nextStepsFor(config: Config): string[] {
+  if (!isLibraryKind(config.projectType)) {
+    return ['You can now add components using:'];
+  }
+
+  return [
+    'The consuming app still needs to register provideZard() in its app.config.ts',
+    `and import the theme tokens from this library's ${path.basename(config.tailwind.css)}.`,
+    '',
+    'You can now add components using:',
+  ];
 }

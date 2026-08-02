@@ -8,6 +8,7 @@ import {
   type ComponentMeta,
 } from '@cli/commands/add/dependency-resolver.js';
 import { runAddWizard } from '@cli/commands/add/wizard.js';
+import { indexHtmlFor } from '@cli/commands/init/project-kind.js';
 import { injectThemeScript } from '@cli/commands/init/theme-loader.js';
 import { isInteractive, printReport, WizardCancelledError, type LogRecord } from '@cli/ui/index.js';
 import { getConfig, resolveConfigPaths, type Config } from '@cli/utils/config.js';
@@ -78,6 +79,7 @@ export const add = new Command()
         await injectThemeScript(cwd, indexHtml);
         await updateProvideZardWithDarkMode(cwd, resolvedConfig);
       },
+      defaultIndexHtml: indexHtmlFor(config.projectType, config.baseUrl),
     };
 
     if (!isInteractive()) {
@@ -108,6 +110,7 @@ type AddActions = {
   installDependencies(packages: string[]): Promise<void>;
   installComponent(component: ComponentMeta): Promise<void>;
   setupDarkMode(indexHtml: string): Promise<void>;
+  defaultIndexHtml: string;
 };
 
 /**

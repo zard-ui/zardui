@@ -1,4 +1,5 @@
 import { buildConfig, defaultAnswers, inspectCssFile, type InitAnswers } from '@cli/commands/init/config-prompter.js';
+import { candidateProjects, isLibraryKind, PROJECT_KINDS, type ProjectKind } from '@cli/commands/init/project-kind.js';
 import { type InitStep } from '@cli/commands/init/steps.js';
 import {
   answeredLine,
@@ -12,9 +13,11 @@ import {
   progress,
   question,
   resultPanel,
+  editInput,
   runWizard,
   screen,
   spacer,
+  startInput,
   taskHeader,
   taskList,
   text,
@@ -25,10 +28,11 @@ import {
   type LogRecord,
   type Node,
   type TaskLine,
+  type TextInput,
   type WizardContext,
 } from '@cli/ui/index.js';
 import { type Config } from '@cli/utils/config.js';
-import { type ProjectInfo } from '@cli/utils/get-project-info.js';
+import { type ProjectInfo, type WorkspaceProject } from '@cli/utils/get-project-info.js';
 import { getAvailableThemes, getThemeDisplayName } from '@cli/utils/theme-selector.js';
 
 type StepKind = 'text' | 'select' | 'confirm';
@@ -73,8 +77,104 @@ function themeStep(): Step {
   };
 }
 
-function baseSteps(): Step[] {
+/**
+ * A linha do cabeçalho, dizendo onde a instalação vai cair.
+ *
+ * Antes da primeira resposta não há alvo nenhum a anunciar — o tipo é escolha
+ * do usuário, e adiantá-lo aqui daria a impressão de que a CLI já decidiu. Com
+ * um único projeto compatível o wizard também não pergunta qual, então é aqui
+ * que o nome dele aparece, para a escolha não ficar implícita.
+ */
+function targetDescription(state: State, options: InitWizardOptions): string {
+  if (!state.kindChosen) return 'Setting up ZardUI in your project…';
+
+  const label = PROJECT_KINDS.find(option => option.value === state.answers.kind)?.label ?? 'Angular';
+  const project = candidateProjects(state.answers.kind, options.projectInfo).find(
+    candidate => candidate.root === state.answers.projectRoot,
+  );
+
+  if (project) return `Setting up ZardUI in ${project.name} (${label})…`;
+
+  return `Setting up ZardUI in your ${label} project…`;
+}
+
+/**
+ * A primeira pergunta, sempre.
+ *
+ * Quem decide o tipo é o usuário: a lista abre inteira, na ordem do menu, sem
+ * pré-seleção derivada do que há no diretório. Tudo o que vem depois — os
+ * caminhos sugeridos, as etapas que rodam — é consequência desta resposta.
+ */
+function kindStep(): Step {
+  return {
+    id: 'kind',
+    kind: 'select',
+    prompt: 'What are you setting up?',
+    label: 'project type',
+    detail: 'Decides where the components live and what init has to configure.',
+    choices: PROJECT_KINDS.map(option => ({ label: option.label, hint: option.detail })),
+    values: PROJECT_KINDS.map(option => option.value),
+  };
+}
+
+/**
+ * Escolha do projeto, só quando há mais de um compatível.
+ *
+ * Com um único candidato a pergunta não teria resposta alternativa; o nome
+ * aparece no cabeçalho, e o usuário segue direto para a próxima etapa.
+ */
+function projectStep(projects: WorkspaceProject[], kind: ProjectKind): Step {
+  const library = isLibraryKind(kind);
+
+  return {
+    id: 'projectRoot',
+    kind: 'select',
+    prompt: library ? 'Which library should receive the components?' : 'Which app should receive the components?',
+    label: library ? 'library' : 'app',
+    detail: library
+      ? 'The components become part of this library and ship with it.'
+      : 'Its app.config.ts and global CSS are the ones init configures.',
+    choices: projects.map(project => ({ label: project.name, hint: project.root || '.' })),
+    values: projects.map(project => project.root),
+  };
+}
+
+function baseSteps(projectInfo: ProjectInfo, kind: ProjectKind): Step[] {
+  const candidates = candidateProjects(kind, projectInfo);
+  const chooseProject = candidates.length > 1 ? [projectStep(candidates, kind)] : [];
+
+  if (isLibraryKind(kind)) {
+    return [
+      kindStep(),
+      ...chooseProject,
+      themeStep(),
+      {
+        id: 'globalCss',
+        kind: 'text',
+        prompt: 'Where should the theme tokens live?',
+        label: 'theme CSS',
+        detail: 'Created inside the library and shipped with it, for the consuming app to import.',
+      },
+      {
+        id: 'componentsAlias',
+        kind: 'text',
+        prompt: 'Configure the import alias for components:',
+        label: 'components alias',
+        detail: 'Where `add` generates component source; also written to tsconfig paths.',
+      },
+      {
+        id: 'utilsAlias',
+        kind: 'text',
+        prompt: 'Configure the import alias for utils:',
+        label: 'utils alias',
+        detail: 'Home of the class-merging helpers shared by every component.',
+      },
+    ];
+  }
+
   return [
+    kindStep(),
+    ...chooseProject,
     {
       id: 'appConfig',
       kind: 'text',
@@ -114,12 +214,10 @@ interface State {
   steps: Step[];
   stepIndex: number;
   answers: InitAnswers;
-  input: string;
-  /**
-   * true enquanto o campo ainda mostra o valor sugerido e o usuário não digitou
-   * nada: a primeira tecla substitui a sugestão inteira, em vez de emendar nela.
-   */
-  inputPristine: boolean;
+  /** Falso até o usuário responder o tipo — o cabeçalho não adianta a escolha. */
+  kindChosen: boolean;
+  /** Valor e cursor do campo de texto ativo. */
+  input: TextInput;
   choiceIndex: number;
   confirmValue: boolean;
   /** Erro de validação do passo atual — some quando o usuário edita. */
@@ -140,6 +238,15 @@ export interface InitWizardOptions {
   readonly isReInitializing: boolean;
   /** Pula a confirmação final (`--yes`). */
   readonly skipConfirmation: boolean;
+  /**
+   * O tipo pedido em `--type`, se houver.
+   *
+   * A pergunta continua sendo feita — a flag só posiciona o cursor no que o
+   * usuário já disse querer, em vez de deixá-lo procurar na lista de novo.
+   */
+  readonly presetKind?: ProjectKind;
+  /** O projeto pedido em `--project`, pelo mesmo motivo. */
+  readonly presetProjectRoot?: string;
   /** Etapas de execução, montadas só quando o config está pronto. */
   buildSteps(config: Config): InitStep[];
 }
@@ -150,16 +257,20 @@ export interface InitWizardResult {
 }
 
 export async function runInitWizard(options: InitWizardOptions): Promise<InitWizardResult> {
-  const answers = defaultAnswers(options.projectInfo);
+  // O menu abre no primeiro tipo da lista, não no que o diretório sugere: a
+  // escolha é do usuário, e um cursor já posicionado noutro item transformaria
+  // um palpite da CLI na resposta que ele confirma sem ler.
+  const firstKind = options.presetKind ?? (PROJECT_KINDS[0] as (typeof PROJECT_KINDS)[number]).value;
+  const answers = defaultAnswers(options.projectInfo, firstKind, options.presetProjectRoot);
   const state: State = {
     // Reinicializar sobrescreve configuração já existente: a confirmação vem
     // antes de qualquer pergunta e não é pulada por --yes.
     phase: options.isReInitializing ? 'reinit' : 'prompting',
-    steps: baseSteps(),
+    steps: baseSteps(options.projectInfo, firstKind),
     stepIndex: 0,
     answers,
-    input: answers.appConfig,
-    inputPristine: true,
+    kindChosen: false,
+    input: startInput(answers.appConfig),
     choiceIndex: 0,
     confirmValue: true,
     error: null,
@@ -184,8 +295,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     const step = currentStep();
     state.error = null;
     if (step.kind === 'text') {
-      state.input = answerOf(step);
-      state.inputPristine = true;
+      state.input = startInput(answerOf(step));
     } else if (step.kind === 'select') {
       const values = step.values ?? [];
       state.choiceIndex = Math.max(0, values.indexOf(answerOf(step)));
@@ -193,6 +303,10 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
       state.confirmValue = step.confirmDefault ?? true;
     }
   };
+
+  // A primeira etapa também precisa dos campos preparados: sem isto o menu
+  // abre com o cursor no topo em vez do tipo que a detecção sugeriu.
+  enterStep();
 
   const startExecution = (ctx: WizardContext<Config>): void => {
     const resolved = buildConfig(state.answers, options.packageManager);
@@ -274,6 +388,30 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
       return;
     }
 
+    // Trocar o tipo de projeto troca as perguntas seguintes e os defaults que
+    // dependem dele — o caminho do CSS, por exemplo, deixa de ser o do app. O
+    // tema é preservado porque não depende do tipo.
+    if (step.id === 'kind') {
+      const kind = value as ProjectKind;
+      state.answers = { ...defaultAnswers(options.projectInfo, kind), theme: state.answers.theme };
+      state.steps = baseSteps(options.projectInfo, kind);
+      state.kindChosen = true;
+      advance(ctx);
+      return;
+    }
+
+    // Trocar o projeto alvo move junto o app.config e o CSS global: são
+    // caminhos daquele projeto, e mantê-los apontando para o anterior faria o
+    // init escrever no app errado.
+    if (step.id === 'projectRoot') {
+      state.answers = {
+        ...defaultAnswers(options.projectInfo, state.answers.kind, value),
+        theme: state.answers.theme,
+      };
+      advance(ctx);
+      return;
+    }
+
     state.answers[step.id] = value;
 
     if (step.id !== 'globalCss') {
@@ -282,13 +420,14 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     }
 
     // O caminho do CSS é o único que precisa existir antes de seguir: é ele que
-    // recebe os tokens do tema.
+    // recebe os tokens do tema. Numa biblioteca não há CSS global prévio — o
+    // arquivo é criado pelo init, então "não existe" é o caso esperado.
     state.checking = true;
     ctx.refresh();
     void inspectCssFile(options.cwd, value).then(
       result => {
         state.checking = false;
-        if (result === 'missing') {
+        if (result === 'missing' && !isLibraryKind(state.answers.kind)) {
           state.error = 'File not found. Check the path and try again.';
         } else {
           syncOverwriteStep(result === 'has-content');
@@ -360,16 +499,13 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
 
     if (step.kind === 'text') {
       if (event.key === 'enter') {
-        const value = state.input.trim() || answerOf(step);
-        commit(ctx, value);
-      } else if (event.key === 'backspace') {
-        // Backspace assume o valor sugerido e passa a editá-lo.
-        state.inputPristine = false;
-        state.input = [...state.input].slice(0, -1).join('');
-        state.error = null;
-      } else if (event.key.length === 1 && !event.ctrl && !event.alt) {
-        state.input = state.inputPristine ? event.key : state.input + event.key;
-        state.inputPristine = false;
+        commit(ctx, state.input.value.trim() || answerOf(step));
+        return;
+      }
+
+      const edited = editInput(state.input, event);
+      if (edited) {
+        state.input = edited;
         state.error = null;
       }
       return;
@@ -393,10 +529,7 @@ export async function runInitWizard(options: InitWizardOptions): Promise<InitWiz
     const body: Node[] = [
       ...brandBanner(rows),
       text(''),
-      commandHeader(
-        options.isReInitializing ? 're-initialize' : 'initialize',
-        `Setting up ZardUI in your ${options.projectInfo.hasNx ? 'Nx' : 'Angular'} project…`,
-      ),
+      commandHeader(options.isReInitializing ? 're-initialize' : 'initialize', targetDescription(state, options)),
       text(''),
     ];
 
@@ -481,7 +614,7 @@ function activeStep(state: State): Node[] {
   const nodes: Node[] = [question(step.prompt)];
 
   if (step.kind === 'text') {
-    nodes.push(textField(state.input));
+    nodes.push(textField(state.input.value, state.input.caret));
   } else if (step.kind === 'select') {
     nodes.push(...choiceList(step.choices ?? [], state.choiceIndex));
   } else {

@@ -21,6 +21,7 @@ jest.mock('fs', () => ({ existsSync: (...args: unknown[]) => mockExistsSync(...a
 jest.mock('node:fs/promises', () => ({
   readFile: (...args: unknown[]) => mockReadFile(...args),
   writeFile: (...args: unknown[]) => mockWriteFile(...args),
+  mkdir: jest.fn().mockResolvedValue(undefined),
   access: jest.fn(),
 }));
 
@@ -634,6 +635,8 @@ describe('applyThemeToStyles', () => {
 
 describe('buildConfig', () => {
   const answers = (over: Partial<Parameters<typeof buildConfig>[0]> = {}) => ({
+    kind: 'angular' as const,
+    libraryRoot: '',
     appConfig: 'src/app/app.config.ts',
     theme: 'neutral',
     globalCss: 'src/styles.css',

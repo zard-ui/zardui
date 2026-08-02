@@ -6,6 +6,7 @@ import {
   confirmField,
   controls,
   createGate,
+  editInput,
   hint,
   page,
   progress,
@@ -14,6 +15,7 @@ import {
   runWizard,
   screen,
   spacer,
+  startInput,
   taskHeader,
   taskList,
   text,
@@ -23,6 +25,7 @@ import {
   type LogRecord,
   type Node,
   type TaskLine,
+  type TextInput,
   type WizardContext,
 } from '@cli/ui/index.js';
 
@@ -46,9 +49,8 @@ interface State {
   tasksDone: number;
   /** Quando a etapa atual começou, para exibir há quanto tempo ela roda. */
   taskStartedAt: number;
-  indexHtml: string;
-  /** Ver init/wizard.ts: a primeira tecla substitui o caminho sugerido. */
-  indexHtmlPristine: boolean;
+  /** Valor e cursor do campo onde o caminho do index.html é informado. */
+  indexHtml: TextInput;
   transcript: [string, string][];
   failure: string | null;
   installed: string[];
@@ -66,6 +68,13 @@ export interface AddWizardOptions {
   installComponent(component: ComponentMeta): Promise<void>;
   /** Só é chamado quando dark-mode entra na instalação. */
   setupDarkMode(indexHtml: string): Promise<void>;
+  /**
+   * Onde o index.html deve estar, segundo o tipo de projeto configurado.
+   *
+   * Um `src/index.html` fixo só existe no app Angular único: num workspace ele
+   * está sob `apps/<app>/`, e no Analog é a página de entrada do Vite, na raiz.
+   */
+  readonly defaultIndexHtml: string;
 }
 
 export interface AddWizardResult {
@@ -74,7 +83,6 @@ export interface AddWizardResult {
 }
 
 const DARK_MODE = 'dark-mode';
-const DEFAULT_INDEX_HTML = 'src/index.html';
 
 export async function runAddWizard(options: AddWizardOptions): Promise<AddWizardResult> {
   const state: State = {
@@ -90,8 +98,7 @@ export async function runAddWizard(options: AddWizardOptions): Promise<AddWizard
     tasks: [],
     tasksDone: 0,
     taskStartedAt: 0,
-    indexHtml: DEFAULT_INDEX_HTML,
-    indexHtmlPristine: true,
+    indexHtml: startInput(options.defaultIndexHtml),
     transcript: [],
     failure: null,
     installed: [],
@@ -125,15 +132,17 @@ export async function runAddWizard(options: AddWizardOptions): Promise<AddWizard
     }
 
     if (state.phase === 'darkMode') {
-      if (event.key === 'enter') darkMode.settle(state.indexHtml.trim() || DEFAULT_INDEX_HTML);
-      else if (event.key === 'escape') darkMode.settle(null);
-      else if (event.key === 'backspace') {
-        state.indexHtmlPristine = false;
-        state.indexHtml = [...state.indexHtml].slice(0, -1).join('');
-      } else if (event.key.length === 1 && !event.ctrl && !event.alt) {
-        state.indexHtml = state.indexHtmlPristine ? event.key : state.indexHtml + event.key;
-        state.indexHtmlPristine = false;
+      if (event.key === 'enter') {
+        darkMode.settle(state.indexHtml.value.trim() || options.defaultIndexHtml);
+        return;
       }
+      if (event.key === 'escape') {
+        darkMode.settle(null);
+        return;
+      }
+
+      const edited = editInput(state.indexHtml, event);
+      if (edited) state.indexHtml = edited;
       return;
     }
 
@@ -358,7 +367,7 @@ function buildView(state: State): Node {
     );
   } else if (state.phase === 'darkMode') {
     body.push(question('Where is your index.html file?'));
-    body.push(textField(state.indexHtml));
+    body.push(textField(state.indexHtml.value, state.indexHtml.caret));
     body.push(hint('Dark mode injects a small script there to apply the theme before first paint.'));
     body.push(spacer());
     body.push(

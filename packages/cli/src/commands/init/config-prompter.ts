@@ -1,5 +1,14 @@
+import {
+  candidateProjects,
+  detectProjectKind,
+  fallbackRootFor,
+  isLibraryKind,
+  libraryBaseUrl,
+  libraryStylesPath,
+  type ProjectKind,
+} from '@cli/commands/init/project-kind.js';
 import { type Config } from '@cli/utils/config.js';
-import { type ProjectInfo } from '@cli/utils/get-project-info.js';
+import { type ProjectInfo, type WorkspaceProject } from '@cli/utils/get-project-info.js';
 import { existsSync } from 'node:fs';
 import { readFile } from 'node:fs/promises';
 import * as path from 'node:path';
@@ -10,6 +19,7 @@ export const SCHEMA_URL = 'https://zardui.com/schema.json';
 export const configSchema = z.object({
   $schema: z.string(),
   style: z.enum(['css']),
+  projectType: z.enum(['angular', 'angular-library', 'nx', 'nx-library', 'analog']),
   appConfigFile: z.string(),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']),
   tailwind: z.object({
@@ -27,6 +37,9 @@ export const configSchema = z.object({
 
 /** As respostas do wizard, antes de virarem um `components.json`. */
 export interface InitAnswers {
+  kind: ProjectKind;
+  /** Raiz do projeto escolhido, relativa ao workspace; vazia no app único. */
+  projectRoot: string;
   appConfig: string;
   theme: string;
   globalCss: string;
@@ -34,27 +47,79 @@ export interface InitAnswers {
   utilsAlias: string;
 }
 
-export function defaultAnswers(projectInfo: ProjectInfo): InitAnswers {
-  return {
-    appConfig: projectInfo.hasNx ? 'apps/[app]/src/app/app.config.ts' : 'src/app/app.config.ts',
+/**
+ * O projeto que o tipo escolhido sugere como alvo.
+ *
+ * Havendo mais de um compatível, o wizard pergunta — mas alguém precisa abrir a
+ * lista escolhido, e o primeiro declarado é a resposta menos surpreendente.
+ */
+function targetProject(
+  projectInfo: ProjectInfo,
+  kind: ProjectKind,
+  projectRoot?: string,
+): WorkspaceProject | undefined {
+  const candidates = candidateProjects(kind, projectInfo);
+
+  return candidates.find(project => project.root === projectRoot) ?? candidates[0];
+}
+
+/**
+ * Os caminhos sugeridos para o tipo que o usuário escolheu.
+ *
+ * Vêm do projeto declarado no workspace sempre que ele existe — o `styles` do
+ * target de build é onde o CSS global realmente está, e adivinhá-lo era o que
+ * fazia o init sugerir caminhos que não existiam em layouts de monorepo.
+ */
+export function defaultAnswers(
+  projectInfo: ProjectInfo,
+  kind = detectProjectKind(projectInfo),
+  projectRoot?: string,
+): InitAnswers {
+  const project = targetProject(projectInfo, kind, projectRoot);
+  const root = project?.root ?? fallbackRootFor(kind);
+
+  const shared = {
+    kind,
+    projectRoot: root,
     theme: 'neutral',
-    globalCss: projectInfo.hasNx ? 'apps/[app]/src/styles.css' : 'src/styles.css',
     componentsAlias: '@/shared/components',
     utilsAlias: '@/shared/utils',
+  };
+
+  if (isLibraryKind(kind)) {
+    return {
+      ...shared,
+      // Não há app.config numa biblioteca; o campo fica vazio no components.json.
+      appConfig: '',
+      globalCss: libraryStylesPath(root),
+    };
+  }
+
+  const sourceRoot = project?.sourceRoot ?? (root ? `${root}/src` : 'src');
+
+  return {
+    ...shared,
+    appConfig: `${sourceRoot}/app/app.config.ts`,
+    globalCss: project?.styles[0] ?? `${sourceRoot}/styles.css`,
   };
 }
 
 /**
  * De onde os componentes são escritos, deduzido do `app.config.ts`.
  *
- * Fixar `src/app` quebrava todo layout que não fosse app único na raiz: o
- * próprio wizard sugere `apps/[app]/src/app/app.config.ts` para workspace, e os
- * componentes acabavam num `src/app` na raiz que não pertence a projeto nenhum.
- * O diretório do app.config é exatamente a raiz do código do app.
+ * Fixar `src/app` quebrava todo layout que não fosse app único na raiz: num
+ * workspace o app.config vive em `apps/<app>/src/app`, e os componentes
+ * acabavam num `src/app` na raiz que não pertence a projeto nenhum. O diretório
+ * do app.config é exatamente a raiz do código do app.
  */
 export function deriveBaseUrl(appConfigFile: string): string {
   const dir = path.dirname(appConfigFile).replace(/\\/g, '/');
   return dir === '.' ? 'src/app' : dir;
+}
+
+/** Numa biblioteca o app.config não existe, então quem manda é a raiz da lib. */
+function baseUrlFor(answers: InitAnswers): string {
+  return isLibraryKind(answers.kind) ? libraryBaseUrl(answers.projectRoot) : deriveBaseUrl(answers.appConfig);
 }
 
 export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn' | 'pnpm' | 'bun'): Config {
@@ -63,13 +128,14 @@ export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn'
   return configSchema.parse({
     $schema: SCHEMA_URL,
     style: 'css',
+    projectType: answers.kind,
     appConfigFile: answers.appConfig,
     packageManager,
     tailwind: {
       css: answers.globalCss,
       baseColor: answers.theme,
     },
-    baseUrl: deriveBaseUrl(answers.appConfig),
+    baseUrl: baseUrlFor(answers),
     aliases: {
       components: answers.componentsAlias,
       utils: answers.utilsAlias,

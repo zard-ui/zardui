@@ -1,6 +1,6 @@
 import { resolveAliasToPath, type Config } from '@cli/utils/config.js';
 import { getThemeContent } from '@cli/utils/theme-selector.js';
-import { writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import * as path from 'path';
 
 const POSTCSS_CONFIG = `{
@@ -10,14 +10,19 @@ const POSTCSS_CONFIG = `{
 }
 `;
 
-export async function setupTailwind(cwd: string, config: Config): Promise<void> {
-  await createPostCssConfig(cwd);
-  await applyThemeToStyles(cwd, config);
-}
+/**
+ * Escreve o `.postcssrc.json` na raiz do projeto que vai usá-lo.
+ *
+ * O build do Angular procura o arquivo a partir do CSS que está processando e
+ * sobe até a raiz do workspace, então o projeto é o lugar mais específico que
+ * funciona — e num monorepo com vários apps é o único que não configura todos
+ * eles de uma vez. `projectRoot` é `.` no app único.
+ */
+export async function createPostCssConfig(cwd: string, projectRoot = '.'): Promise<void> {
+  const targetDir = path.resolve(cwd, projectRoot);
 
-export async function createPostCssConfig(cwd: string): Promise<void> {
-  const postcssConfigPath = path.join(cwd, '.postcssrc.json');
-  await writeFile(postcssConfigPath, POSTCSS_CONFIG, 'utf8');
+  await mkdir(targetDir, { recursive: true });
+  await writeFile(path.join(targetDir, '.postcssrc.json'), POSTCSS_CONFIG, 'utf8');
 }
 
 /**
@@ -43,5 +48,8 @@ export async function applyThemeToStyles(cwd: string, config: Config): Promise<v
   const stylesPath = path.join(cwd, config.tailwind.css);
   const themeContent = getThemeContent(config.tailwind.baseColor, coreImportPath(cwd, config));
 
+  // Numa biblioteca esse arquivo normalmente não existe — é o init que o cria,
+  // para a lib expor os tokens a quem a consome.
+  await mkdir(path.dirname(stylesPath), { recursive: true });
   await writeFile(stylesPath, themeContent, 'utf8');
 }

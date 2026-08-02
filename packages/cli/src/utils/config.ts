@@ -21,6 +21,9 @@ const configSchema = z.object({
   $schema: z.string().optional(),
   appConfigFile: z.string().default('src/app/app.config.ts'),
   style: z.enum(['css']).default('css'),
+  // Ausente nos components.json escritos antes do menu de tipo de projeto;
+  // aplicação Angular é o que eles descrevem.
+  projectType: z.enum(['angular', 'angular-library', 'nx', 'nx-library', 'analog']).default('angular'),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']).default('npm'),
   registryUrl: z.string().optional(),
   tailwind: z
@@ -49,6 +52,7 @@ export type Config = z.infer<typeof configSchema>;
 
 export const DEFAULT_CONFIG: Config = {
   style: 'css',
+  projectType: 'angular',
   appConfigFile: 'src/app/app.config.ts',
   packageManager: 'npm',
   tailwind: {
