@@ -1,0 +1,149 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Release"
+    description="Releases are automated. This page exists so you know what happens to your commits after the merge — and why their format matters."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      There is no manual release ritual. Merging into
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">master</code>
+      triggers the deploy workflow, which builds, tests, versions, tags and publishes. Your commit messages are the
+      input to that machine.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="pipeline" id="pipeline">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        The Pipeline
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Six stages, defined in
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">.github/workflows/release.yml</code>
+        .
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      @for (stage of stages; track stage.step) {
+        <div class="flex gap-4 rounded-lg border p-5">
+          <span
+            class="bg-muted text-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
+          >
+            {{ stage.step }}
+          </span>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-medium">{{ stage.title }}</span>
+            <p class="text-muted-foreground text-sm leading-relaxed">{{ stage.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <z-code-block [data]="pipelineBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="version-bump" id="version-bump">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Version Bump
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The mapping from commit type to semver bump is configured under
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">release.conventionalCommits</code>
+        in
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">nx.json</code>
+        . Before versioning, the workflow runs
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">scripts/normalize-commits.cts</code>
+        so the emoji prefix does not confuse the conventional-commit parser.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Commits since the last release</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Bump</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (rule of bumpRules; track rule.commits) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">{{ rule.commits }}</td>
+              <td class="text-muted-foreground p-4 align-middle font-medium">{{ rule.bump }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <z-callout variant="info" title="Beta by default" icon="i">
+      The workflow defaults to a
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">prerelease</code>
+      bump with the
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">beta</code>
+      preid, so day-to-day merges publish under the
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">beta</code>
+      npm tag. A stable
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">latest</code>
+      release is triggered manually by a maintainer choosing patch, minor or major.
+    </z-callout>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="packages" id="packages">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Published Packages
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Three artifacts leave this repository, on two different schedules.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Package</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Workflow</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Trigger</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (item of packages; track item.name) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle font-medium">{{ item.name }}</td>
+              <td class="text-muted-foreground p-4 align-middle font-mono text-xs">{{ item.workflow }}</td>
+              <td class="text-muted-foreground p-4 align-middle">{{ item.trigger }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="your-part" id="your-part">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Your Part</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Write correct commit messages. That is the whole contract. Do not bump versions, do not edit
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">CHANGELOG.md</code>
+        , do not create tags — the automation owns all three, and a manual edit only creates a conflict.
+      </p>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        If you are curious about what your change would release, preview it locally without touching anything.
+      </p>
+    </div>
+
+    <z-code-block [data]="dryRunBlock" />
+  </section>
+</z-content>

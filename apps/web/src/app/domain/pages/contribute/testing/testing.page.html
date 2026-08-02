@@ -1,0 +1,124 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Testing"
+    description="Two suites guard the library: Jest unit tests next to each component, and Playwright specs that drive the real documentation pages."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      The CI runs both. Unit tests run on every pull request; the E2E job runs after the build and includes automated
+      accessibility checks, so a regression in keyboard support or ARIA state fails the pipeline.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="unit-tests" id="unit-tests">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Unit Tests</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm test</code>
+        expands to
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">nx run-many --target=test --p=libs/*</code>
+        , so it covers every library in the workspace.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Piece</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entry of unitStack; track entry.tool) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle font-medium whitespace-nowrap">{{ entry.tool }}</td>
+              <td class="text-muted-foreground p-4 align-middle">{{ entry.detail }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <z-code-block [data]="unitTestBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="e2e-tests" id="e2e-tests">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">E2E Tests</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        E2E specs run against the documentation site itself, so they exercise the component exactly as a user meets it —
+        server-rendered, hydrated, inside a real page.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Piece</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Detail</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (entry of e2eStack; track entry.tool) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle font-mono text-xs">{{ entry.tool }}</td>
+              <td class="text-muted-foreground p-4 align-middle">{{ entry.detail }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <z-code-block [data]="e2eTestBlock" />
+
+    <z-callout variant="info" title="Disabling an axe rule" icon="i">
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">checkA11y</code>
+      takes a list of rule ids to skip. Use it only for known, documented limitations — the button spec disables
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">color-contrast</code>
+      because Shiki's syntax colours fail the ratio — and always leave a comment saying why.
+    </z-callout>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="governance" id="governance">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        E2E Governance
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Because the specs run against live documentation pages, an unrelated copy change can break them. These four
+        rules keep the suite trustworthy.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      @for (rule of governanceRules; track rule.rule) {
+        <div class="flex flex-col gap-2 rounded-lg border p-5">
+          <span class="text-sm font-medium">{{ rule.rule }}</span>
+          <p class="text-muted-foreground text-sm leading-relaxed">{{ rule.detail }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="commands" id="commands">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Commands</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Running the full E2E suite is expensive. Locally, run the unit tests on every change and the E2E suite before
+        opening the pull request.
+      </p>
+    </div>
+
+    <z-code-block [data]="commandsBlock" />
+  </section>
+</z-content>
