@@ -1,3 +1,13 @@
+## 1.0.0-beta.84 (2026-08-02)
+
+### 🐛 Bug Fixes
+
+- **mcp:** exclude spec files from the tsc build ([b8f9600c](https://github.com/zard-ui/zardui/commit/b8f9600c))
+
+### ❤️ Thank You
+
+- Luiz Gomes
+
 ## 1.0.0-beta.83 (2026-07-21)
 
 ### 📦 Code Refactoring
