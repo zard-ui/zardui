@@ -5,6 +5,9 @@ import { test, expect } from '@playwright/test';
  * page has a generated `.md` served as a static asset at `<path>.md` (like
  * llms.txt), so it is genuinely navigable and copyable in dev and prod.
  */
+/** `lucideCheck`, the icon the copy button swaps to once the page has been copied. */
+const LUCIDE_CHECK_PATH = 'M20 6 9 17l-5-5';
+
 test.describe('Component page as Markdown', () => {
   test('is served as a navigable static .md file', async ({ request }) => {
     const response = await request.get('/docs/components/button.md');
@@ -40,8 +43,9 @@ test.describe('Component page as Markdown', () => {
 
     await copyButton.click();
 
-    // The label flips to "Copied" only after clipboard.writeText resolves.
-    await expect(copyButton).toContainText('Copied');
+    // The label stays "Copy Page"; it is the icon that flips from copy to check,
+    // and only after clipboard.writeText resolves.
+    await expect(copyButton.locator('svg path').first()).toHaveAttribute('d', LUCIDE_CHECK_PATH);
 
     const clipboard = await page.evaluate(() => navigator.clipboard.readText());
     expect(clipboard).toContain('# Button');
