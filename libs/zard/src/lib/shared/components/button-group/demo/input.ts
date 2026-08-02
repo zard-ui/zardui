@@ -5,11 +5,11 @@ import { lucideSearch } from '@ng-icons/lucide';
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
-import { ZardInputDirective } from '@/shared/components/input';
+import { ZardInputComponent } from '@/shared/components/input';
 
 @Component({
   selector: 'z-demo-button-group-input',
-  imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon, ZardInputDirective],
+  imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon, ZardInputComponent],
   template: `
     <z-button-group>
       <input z-input placeholder="Search..." />

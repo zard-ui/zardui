@@ -9,7 +9,7 @@ import { ZardToggleComponent } from '../toggle.component';
   selector: 'z-demo-toggle-with-text',
   imports: [ZardToggleComponent, NgIcon],
   template: `
-    <z-toggle>
+    <z-toggle zAriaLabel="Toggle italic">
       <ng-icon name="lucideItalic" />
       Italic
     </z-toggle>

@@ -12,12 +12,7 @@ import {
   selector: 'demo-toggle-group-default',
   imports: [ZardToggleGroupComponent],
   template: `
-    <z-toggle-group
-      zMode="multiple"
-      [items]="items"
-      [defaultValue]="['italic']"
-      (valueChange)="onToggleChange($event)"
-    />
+    <z-toggle-group zMode="multiple" zType="outline" [zItems]="items" (valueChange)="onToggleChange($event)" />
   `,
   viewProviders: [
     provideIcons({

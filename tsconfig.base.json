@@ -4,7 +4,7 @@
     "rootDir": ".",
     "sourceMap": true,
     "declaration": false,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "experimentalDecorators": true,
     "importHelpers": true,
     "target": "es2022",
@@ -12,11 +12,10 @@
     "lib": ["es2022", "dom"],
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
-    "baseUrl": ".",
     "esModuleInterop": true,
     "paths": {
-      "@zardui/generators": ["tools/generators/component/index.ts"]
+      "@zardui/generators": ["./tools/generators/component/index.ts"]
     }
   },
-  "exclude": ["node_modules", "tmp"]
+  "exclude": ["./node_modules", "./tmp"]
 }

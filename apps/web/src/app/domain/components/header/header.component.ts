@@ -4,19 +4,19 @@ import { RouterModule } from '@angular/router';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideGalleryHorizontal } from '@ng-icons/lucide';
 
+import { DocResearcherComponent } from '@doc/domain/components/doc-researcher/doc-researcher.component';
+import { MobileMenuComponent } from '@doc/domain/components/mobile-nav/mobile-nav.component';
+import { SOCIAL_MEDIAS } from '@doc/shared/constants/medias.constant';
+import { HEADER_PATHS } from '@doc/shared/constants/routes.constant';
+import { GithubService } from '@doc/shared/services/github.service';
 import { LayoutService } from '@doc/shared/services/layout.service';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
+import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
 import { environment } from '../../../../environments/environment';
-import { SOCIAL_MEDIAS } from '../../../shared/constants/medias.constant';
-import { HEADER_PATHS } from '../../../shared/constants/routes.constant';
-import { GithubService } from '../../../shared/services/github.service';
-import { DocResearcherComponent } from '../doc-researcher/doc-researcher.component';
-import { MobileMenuComponent } from '../mobile-nav/mobile-nav.component';
 
 const DarkModeSvg = `
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -38,7 +38,7 @@ const DarkModeSvg = `
     MobileMenuComponent,
     RouterModule,
     ZardButtonComponent,
-    ZardDividerComponent,
+    ZardSeparatorComponent,
     NgIcon,
   ],
   host: {
@@ -55,12 +55,13 @@ export class HeaderComponent {
   readonly docResearcher = viewChild.required(DocResearcherComponent);
 
   readonly headerPaths = HEADER_PATHS;
-  readonly githubData = SOCIAL_MEDIAS.find(media => media.name === 'GitHub');
+  readonly githubData = SOCIAL_MEDIAS.find(m => m.name === 'GitHub') ?? null;
   readonly appVersion = environment.appVersion;
   private readonly githubService = inject(GithubService);
   private readonly darkModeService = inject(ZardDarkMode);
   private readonly layoutService = inject(LayoutService);
-  readonly repoStars = this.githubService.starsCount;
+  readonly repoStars = this.githubService.starsCountFormatted;
+  readonly isLayoutFixed = this.layoutService.isLayoutFixed;
 
   toggleTheme(): void {
     this.darkModeService.toggleTheme();
@@ -68,10 +69,6 @@ export class HeaderComponent {
 
   toggleLayout(): void {
     this.layoutService.toggleLayout();
-  }
-
-  isLayoutFixed(): boolean {
-    return this.layoutService.isLayoutFixed();
   }
 
   handleKeyboardShortcut(event: KeyboardEvent) {

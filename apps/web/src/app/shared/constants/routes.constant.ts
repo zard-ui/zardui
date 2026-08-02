@@ -1,16 +1,28 @@
 export const DEFAULT_COMPONENT = 'accordion';
 export const DEFAULT_DOC = 'installation';
 
-export const HEADER_PATHS = [
+export interface NavItem {
+  name: string;
+  path: string;
+  available: boolean;
+  /** When true, the item is a raw file/external URL and opens in a new tab instead of routing. */
+  external?: boolean;
+}
+
+export interface NavSection {
+  title: string;
+  data: NavItem[];
+}
+
+export const HEADER_PATHS: NavItem[] = [
   { name: 'Docs', path: '/docs', available: true },
   { name: 'Components', path: '/docs/components', available: true },
   { name: 'Blocks', path: '/blocks', available: true },
   { name: 'Charts', path: '/charts', available: false },
   { name: 'Themes', path: '/themes', available: true },
-  { name: 'Colors', path: '/colors', available: true },
 ];
 
-export const SECTIONS = {
+export const SECTIONS: NavSection = {
   title: 'Sections',
   data: [
     { name: 'Get Started', path: '/docs/introduction', available: true },
@@ -42,7 +54,7 @@ export const SECTIONS = {
   ],
 };
 
-export const DOCS_PATH = {
+export const DOCS_PATH: NavSection = {
   title: 'Get Started',
   data: [
     { name: 'Installation', path: '/docs/installation', available: true },
@@ -53,14 +65,14 @@ export const DOCS_PATH = {
     { name: 'Blocks', path: '/docs/blocks', available: true },
     { name: 'Pre processors', path: '/docs/pre-processors', available: true },
     { name: 'Figma', path: '/docs/figma', available: true },
-    { name: 'llms.txt', path: '/llms', available: true },
+    { name: 'llms.txt', path: '/llms.txt', available: true, external: true },
 
     { name: 'Version Support', path: '/docs/version-support', available: true },
     { name: 'About & Credits', path: '/docs/about', available: true },
   ],
 };
 
-export const COMPONENTS_PATH = {
+export const COMPONENTS_PATH: NavSection = {
   title: 'Components',
   data: [
     { name: 'Accordion', path: '/docs/components/accordion', available: true },
@@ -79,23 +91,26 @@ export const COMPONENTS_PATH = {
     { name: 'Combobox', path: '/docs/components/combobox', available: true },
     { name: 'Command', path: '/docs/components/command', available: true },
     { name: 'Date Picker', path: '/docs/components/date-picker', available: true },
-    { name: 'Divider', path: '/docs/components/divider', available: true },
+    { name: 'Separator', path: '/docs/components/separator', available: true },
     { name: 'Empty', path: '/docs/components/empty', available: true },
+    { name: 'Field', path: '/docs/components/field', available: true },
     { name: 'Form', path: '/docs/components/form', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Input Group', path: '/docs/components/input-group', available: true },
     { name: 'Input OTP', path: '/docs/components/input-otp', available: true },
+    { name: 'Item', path: '/docs/components/item', available: true },
     { name: 'Layout', path: '/docs/components/layout', available: true },
     { name: 'Dialog', path: '/docs/components/dialog', available: true },
     { name: 'Pagination', path: '/docs/components/pagination', available: true },
-    { name: 'Progress Bar', path: '/docs/components/progress-bar', available: true },
+    { name: 'Progress', path: '/docs/components/progress', available: true },
     { name: 'Select', path: '/docs/components/select', available: true },
     { name: 'Slider', path: '/docs/components/slider', available: true },
     { name: 'Skeleton', path: '/docs/components/skeleton', available: true },
     { name: 'Switch', path: '/docs/components/switch', available: true },
     { name: 'Table', path: '/docs/components/table', available: true },
     { name: 'Tabs', path: '/docs/components/tabs', available: true },
-    { name: 'Toast', path: '/docs/components/toast', available: true },
+    { name: 'Textarea', path: '/docs/components/textarea', available: true },
+    { name: 'Sonner', path: '/docs/components/sonner', available: true },
     { name: 'Toggle', path: '/docs/components/toggle', available: true },
     { name: 'Toggle Group', path: '/docs/components/toggle-group', available: true },
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
@@ -103,13 +118,12 @@ export const COMPONENTS_PATH = {
     { name: 'Menu', path: '/docs/components/menu', available: true },
     { name: 'Resizable', path: '/docs/components/resizable', available: true },
     { name: 'Sheet', path: '/docs/components/sheet', available: true },
-    { name: 'Radio', path: '/docs/components/radio', available: true },
-    { name: 'Segmented', path: '/docs/components/segmented', available: true },
-    { name: 'Loader', path: '/docs/components/loader', available: true },
+    { name: 'Radio Group', path: '/docs/components/radio-group', available: true },
+    { name: 'Spinner', path: '/docs/components/spinner', available: true },
     { name: 'Dropdown', path: '/docs/components/dropdown', available: true },
     { name: 'Popover', path: '/docs/components/popover', available: true },
     { name: 'Kbd', path: '/docs/components/kbd', available: true },
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
-export const SIDEBAR_PATHS = [SECTIONS, DOCS_PATH, COMPONENTS_PATH];
+export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, COMPONENTS_PATH];

@@ -2,7 +2,7 @@
   "$schema": "https://zardui.com/schema/registry.json",
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.80",
+  "version": "1.0.0-beta.82",
   "items": [
     {
       "name": "core",
@@ -13,6 +13,7 @@
         "provider/event-manager-plugins/zard-debounce-event-manager-plugin.ts",
         "provider/event-manager-plugins/zard-event-manager-plugin.ts",
         "provider/providezard.ts",
+        "css/tailwind.css",
         "index.ts"
       ]
     },
@@ -99,6 +100,16 @@
       ]
     },
     {
+      "name": "field",
+      "type": "registry:component",
+      "files": [
+        "field.component.ts",
+        "field.variants.ts",
+        "field.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "badge",
       "type": "registry:component",
       "files": [
@@ -135,7 +146,6 @@
       ],
       "files": [
         "alert-dialog.component.ts",
-        "alert-dialog.component.html",
         "alert-dialog.service.ts",
         "alert-dialog-ref.ts",
         "alert-dialog.variants.ts",
@@ -183,6 +193,7 @@
         "dropdown.component.ts",
         "dropdown-item.component.ts",
         "dropdown-menu-content.component.ts",
+        "dropdown-primitives.component.ts",
         "dropdown-trigger.directive.ts",
         "dropdown.imports.ts",
         "dropdown.service.ts",
@@ -194,8 +205,17 @@
       "name": "input",
       "type": "registry:component",
       "files": [
-        "input.directive.ts",
+        "input.component.ts",
         "input.variants.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "textarea",
+      "type": "registry:component",
+      "files": [
+        "textarea.component.ts",
+        "textarea.variants.ts",
         "index.ts"
       ]
     },
@@ -204,19 +224,18 @@
       "type": "registry:component",
       "files": [
         "input-group.component.ts",
+        "input-group.imports.ts",
         "input-group.variants.ts",
         "index.ts"
       ]
     },
     {
-      "name": "input-otp",
+      "name": "item",
       "type": "registry:component",
       "files": [
-        "input-otp-group.component.ts",
-        "input-otp-separator.component.ts",
-        "input-otp-slot.component.ts",
-        "input-otp.component.ts",
-        "input-otp.variants.ts",
+        "item.component.ts",
+        "item.imports.ts",
+        "item.variants.ts",
         "index.ts"
       ]
     },
@@ -229,6 +248,7 @@
       "files": [
         "select.component.ts",
         "select-item.component.ts",
+        "select-group.component.ts",
         "select.variants.ts",
         "select.imports.ts",
         "index.ts"
@@ -286,38 +306,38 @@
       ]
     },
     {
-      "name": "divider",
+      "name": "separator",
       "type": "registry:component",
       "files": [
-        "divider.component.ts",
-        "divider.variants.ts",
+        "separator.component.ts",
+        "separator.variants.ts",
         "index.ts"
       ]
     },
     {
-      "name": "loader",
+      "name": "spinner",
       "type": "registry:component",
       "files": [
-        "loader.component.ts",
-        "loader.variants.ts",
+        "spinner.component.ts",
         "index.ts"
       ]
     },
     {
-      "name": "progress-bar",
+      "name": "progress",
       "type": "registry:component",
       "files": [
-        "progress-bar.component.ts",
-        "progress-bar.variants.ts",
+        "progress.component.ts",
+        "progress.variants.ts",
         "index.ts"
       ]
     },
     {
-      "name": "radio",
+      "name": "radio-group",
       "type": "registry:component",
       "files": [
-        "radio.component.ts",
-        "radio.variants.ts",
+        "radio-group.component.ts",
+        "radio-group.variants.ts",
+        "radio-group.imports.ts",
         "index.ts"
       ]
     },
@@ -369,7 +389,6 @@
         "command.component.ts",
         "command-input.component.ts",
         "command-list.component.ts",
-        "command-empty.component.ts",
         "command-option.component.ts",
         "command-option-group.component.ts",
         "command-divider.component.ts",
@@ -438,15 +457,6 @@
       ]
     },
     {
-      "name": "segmented",
-      "type": "registry:component",
-      "files": [
-        "segmented.component.ts",
-        "segmented.variants.ts",
-        "index.ts"
-      ]
-    },
-    {
       "name": "skeleton",
       "type": "registry:component",
       "files": [
@@ -466,14 +476,15 @@
       ]
     },
     {
-      "name": "toast",
+      "name": "sonner",
       "type": "registry:component",
       "dependencies": [
         "ngx-sonner"
       ],
       "files": [
-        "toast.component.ts",
-        "toast.variants.ts",
+        "sonner.component.ts",
+        "sonner.service.ts",
+        "sonner.variants.ts",
         "index.ts"
       ]
     },
@@ -510,7 +521,7 @@
       "name": "button-group",
       "type": "registry:component",
       "registryDependencies": [
-        "divider"
+        "separator"
       ],
       "files": [
         "button-group.component.ts",

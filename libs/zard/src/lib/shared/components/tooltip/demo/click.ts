@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
 
+import { ZardButtonComponent } from '@/shared/components/button';
 import { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';
-
-import { ZardButtonComponent } from '../../button/button.component';
 
 @Component({
   selector: 'z-demo-tooltip-click',

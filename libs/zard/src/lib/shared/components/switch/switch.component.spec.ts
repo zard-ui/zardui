@@ -11,12 +11,9 @@ import { switchVariants } from './switch.variants';
   imports: [ZardSwitchComponent],
   template: `
     <z-switch [zChecked]="true">Default Switch</z-switch>
-    <z-switch [zChecked]="true" zType="default">Default Type</z-switch>
-    <z-switch [zChecked]="true" zType="destructive">Destructive Type</z-switch>
 
     <z-switch [zChecked]="true" zSize="default">Default Size</z-switch>
     <z-switch [zChecked]="true" zSize="sm">Small Size</z-switch>
-    <z-switch [zChecked]="true" zSize="lg">Large Size</z-switch>
 
     <z-switch [zChecked]="true" zDisabled="true">Disabled Switch</z-switch>
   `,
@@ -149,90 +146,41 @@ describe('ZardSwitchComponent', () => {
     });
   });
 
-  describe('Type Variants', () => {
-    it('applies default type variant classes', async () => {
-      const checked = signal(true);
-      const zType = signal<'default' | 'destructive'>('default');
-      const zSize = signal<'default' | 'sm' | 'lg'>('default');
-
-      await render(ZardSwitchComponent, {
-        bindings: [inputBinding('zChecked', checked), inputBinding('zType', zType), inputBinding('zSize', zSize)],
-      });
-
-      const switchButton = screen.getByRole('switch');
-      const expectedClasses = switchVariants({ zType: 'default', zSize: 'default' }).split(' ');
-
-      expectedClasses.forEach(cls => {
-        expect(switchButton).toHaveClass(cls);
-      });
-    });
-
-    it('applies destructive type variant classes', async () => {
-      const checked = signal(true);
-      const zType = signal<'default' | 'destructive'>('destructive');
-      const zSize = signal<'default' | 'sm' | 'lg'>('default');
-
-      await render(ZardSwitchComponent, {
-        bindings: [inputBinding('zChecked', checked), inputBinding('zType', zType), inputBinding('zSize', zSize)],
-      });
-
-      const switchButton = screen.getByRole('switch');
-      const expectedClasses = switchVariants({ zType: 'destructive', zSize: 'default' }).split(' ');
-
-      expectedClasses.forEach(cls => {
-        expect(switchButton).toHaveClass(cls);
-      });
-
-      expect(switchButton).toHaveClass('data-[state=checked]:bg-destructive');
-    });
-  });
-
   describe('Size Variants', () => {
     it('applies default size classes', async () => {
       const checked = signal(true);
-      const zType = signal<'default' | 'destructive'>('default');
-      const zSize = signal<'default' | 'sm' | 'lg'>('default');
+      const zSize = signal<'default' | 'sm'>('default');
 
       await render(ZardSwitchComponent, {
-        bindings: [inputBinding('zChecked', checked), inputBinding('zType', zType), inputBinding('zSize', zSize)],
+        bindings: [inputBinding('zChecked', checked), inputBinding('zSize', zSize)],
       });
 
       const switchButton = screen.getByRole('switch');
-      expect(switchButton).toHaveClass('h-6');
-      expect(switchButton).toHaveClass('w-11');
+      const expectedClasses = switchVariants({ zSize: 'default' }).split(' ');
+
+      expectedClasses.forEach(cls => {
+        expect(switchButton).toHaveClass(cls);
+      });
+      expect(switchButton).toHaveClass('h-[18.4px]');
+      expect(switchButton).toHaveClass('w-[32px]');
     });
 
     it('applies small size classes', async () => {
       const checked = signal(true);
-      const zType = signal<'default' | 'destructive'>('default');
-      const zSize = signal<'default' | 'sm' | 'lg'>('sm');
+      const zSize = signal<'default' | 'sm'>('sm');
 
       await render(ZardSwitchComponent, {
-        bindings: [inputBinding('zChecked', checked), inputBinding('zType', zType), inputBinding('zSize', zSize)],
+        bindings: [inputBinding('zChecked', checked), inputBinding('zSize', zSize)],
       });
 
       const switchButton = screen.getByRole('switch');
-      expect(switchButton).toHaveClass('h-5');
-      expect(switchButton).toHaveClass('w-9');
-    });
-
-    it('applies large size classes', async () => {
-      const checked = signal(true);
-      const zType = signal<'default' | 'destructive'>('default');
-      const zSize = signal<'default' | 'sm' | 'lg'>('lg');
-
-      await render(ZardSwitchComponent, {
-        bindings: [inputBinding('zChecked', checked), inputBinding('zType', zType), inputBinding('zSize', zSize)],
-      });
-
-      const switchButton = screen.getByRole('switch');
-      expect(switchButton).toHaveClass('h-7');
-      expect(switchButton).toHaveClass('w-13');
+      expect(switchButton).toHaveClass('h-[14px]');
+      expect(switchButton).toHaveClass('w-[24px]');
     });
 
     it('applies correct size attributes to thumb element', async () => {
       const checked = signal(true);
-      const zSize = signal<'default' | 'sm' | 'lg'>('lg');
+      const zSize = signal<'default' | 'sm'>('sm');
 
       await render(ZardSwitchComponent, {
         bindings: [inputBinding('zChecked', checked), inputBinding('zSize', zSize)],
@@ -240,8 +188,8 @@ describe('ZardSwitchComponent', () => {
 
       const switchButton = screen.getByRole('switch');
       const thumb = switchButton.querySelector('span');
-      expect(thumb).toHaveAttribute('data-size', 'lg');
-      expect(thumb).toHaveClass('data-[size=lg]:size-6');
+      expect(thumb).toHaveAttribute('data-size', 'sm');
+      expect(thumb).toHaveClass('data-[size=sm]:size-3');
     });
   });
 
@@ -498,15 +446,13 @@ describe('ZardSwitchComponent', () => {
 
   describe('Thumb Element', () => {
     it.each([
-      ['sm', 'checked', 'data-[size=sm]:data-[state=checked]:translate-x-4'],
-      ['default', 'checked', 'data-[state=checked]:translate-x-5'],
-      ['lg', 'checked', 'data-[size=lg]:data-[state=checked]:translate-x-6'],
+      ['sm', 'checked', 'data-[state=checked]:translate-x-[calc(100%-2px)]'],
+      ['default', 'checked', 'data-[state=checked]:translate-x-[calc(100%-2px)]'],
       ['sm', 'unchecked', 'data-[state=unchecked]:translate-x-0'],
       ['default', 'unchecked', 'data-[state=unchecked]:translate-x-0'],
-      ['lg', 'unchecked', 'data-[state=unchecked]:translate-x-0'],
     ])('applies correct transform class for size=%s and state=%s', async (zSize, zState, expectedClass) => {
       const checked = signal(zState === 'checked');
-      const size = signal<'default' | 'sm' | 'lg'>(zSize as 'default' | 'sm' | 'lg');
+      const size = signal<'default' | 'sm'>(zSize as 'default' | 'sm');
 
       await render(ZardSwitchComponent, {
         bindings: [inputBinding('zChecked', checked), inputBinding('zSize', size)],
@@ -534,11 +480,10 @@ describe('ZardSwitchComponent', () => {
       expect(thumb).toHaveClass('bg-background');
       expect(thumb).toHaveClass('pointer-events-none');
       expect(thumb).toHaveClass('block');
-      expect(thumb).toHaveClass('size-5');
       expect(thumb).toHaveClass('rounded-full');
-      expect(thumb).toHaveClass('shadow-lg');
       expect(thumb).toHaveClass('ring-0');
       expect(thumb).toHaveClass('transition-transform');
+      expect(thumb).toHaveClass('data-[size=default]:size-4');
     });
   });
 

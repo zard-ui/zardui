@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
 
-import { ZardDemoLoaderDefaultComponent } from '@zard/components/loader/demo/default';
-import { ZardDemoProgressBarBasicComponent } from '@zard/components/progress-bar/demo/basic';
+import { PROGRESS_DEMO_PREVIEW } from '@generated/components/progress/demo/preview';
+import { SKELETON_DEMO_DEFAULT } from '@generated/components/skeleton/demo/default';
+import { SPINNER_DEMO_CUSTOMIZATION } from '@generated/components/spinner/demo/customization';
+
+import { ZardDemoProgressPreviewComponent } from '@zard/components/progress/demo/preview';
 import { ZardDemoSkeletonDefaultComponent } from '@zard/components/skeleton/demo/default';
+import { ZardDemoSpinnerCustomizationComponent } from '@zard/components/spinner/demo/customization';
 
 import {
   type ChangelogEntryComponent,
@@ -29,11 +33,11 @@ export class September2025Component implements ChangelogEntryComponent {
 
   readonly examples: ChangelogExample[] = [
     {
-      name: 'basic',
-      description:
-        'Visual progress indicator with customizable variants for tracking task completion and loading states.',
-      component: ZardDemoProgressBarBasicComponent,
-      componentName: 'progress-bar',
+      name: 'preview',
+      description: 'Visual progress indicator showing the completion progress of a task.',
+      component: ZardDemoProgressPreviewComponent,
+      componentName: 'progress',
+      codeData: PROGRESS_DEMO_PREVIEW,
     },
     {
       name: 'default',
@@ -41,12 +45,15 @@ export class September2025Component implements ChangelogEntryComponent {
         'Loading placeholder component for better perceived performance during content loading with pulse animation.',
       component: ZardDemoSkeletonDefaultComponent,
       componentName: 'skeleton',
+      codeData: SKELETON_DEMO_DEFAULT,
     },
     {
-      name: 'default',
-      description: 'Animated loading spinner with multiple size variants for indicating async operations in progress.',
-      component: ZardDemoLoaderDefaultComponent,
-      componentName: 'loader',
+      name: 'customization',
+      description:
+        'Animated loading spinner customizable via the [zIcon] template input for swapping the underlying icon.',
+      component: ZardDemoSpinnerCustomizationComponent,
+      componentName: 'spinner',
+      codeData: SPINNER_DEMO_CUSTOMIZATION,
     },
   ];
 }

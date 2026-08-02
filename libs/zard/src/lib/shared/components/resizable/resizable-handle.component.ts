@@ -5,7 +5,9 @@ import {
   computed,
   inject,
   input,
+  signal,
   ViewEncapsulation,
+  type WritableSignal,
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
@@ -21,20 +23,25 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   selector: 'z-resizable-handle, [z-resizable-handle]',
   template: `
     @if (zWithHandle()) {
-      <div [class]="handleClasses()"></div>
+      <div [class]="handleClasses"></div>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'resizable-handle',
     role: 'separator',
     '[class]': 'classes()',
-    '[attr.data-layout]': 'layout()',
     '[attr.tabindex]': 'zDisabled() ? null : 0',
-    '[attr.aria-orientation]': 'layout() === "vertical" ? "horizontal" : "vertical"',
+    '[attr.aria-orientation]': 'layout()',
     '[attr.aria-disabled]': 'zDisabled()',
+    '[attr.data-separator]': 'dataSeparator()',
+    '(mouseenter)': 'handleMouseHover(true)',
+    '(mouseleave)': 'handleMouseHover(false)',
     '(mousedown)': 'handleMouseDown($event)',
+    '(mouseup)': 'handleMouseUp()',
     '(touchstart)': 'handleTouchStart($event)',
+    '(touchend)': 'handleTouchEnd()',
     '(keydown.{arrowleft,arrowright,arrowup,arrowdown,home,end,enter,space}.prevent)': 'handleKeyDown($event)',
   },
   exportAs: 'zResizableHandle',
@@ -47,7 +54,15 @@ export class ZardResizableHandleComponent {
   readonly zHandleIndex = input<number>(0);
   readonly class = input<ClassValue>('');
 
-  protected readonly layout = computed(() => this.resizable?.zLayout() ?? 'horizontal');
+  protected isMouseDown = false;
+
+  protected readonly layout = computed(() => {
+    if (this.resizable) {
+      const groupOrientation = this.resizable.zLayout();
+      return groupOrientation === 'horizontal' ? 'vertical' : 'horizontal';
+    }
+    return 'vertical';
+  });
 
   protected readonly classes = computed(() =>
     mergeClasses(
@@ -59,20 +74,52 @@ export class ZardResizableHandleComponent {
     ),
   );
 
-  protected readonly handleClasses = computed(() => resizableHandleIndicatorVariants({ zLayout: this.layout() }));
+  protected readonly dataSeparator: WritableSignal<'inactive' | 'active' | 'hover'> = signal('inactive');
+
+  protected readonly handleClasses = resizableHandleIndicatorVariants();
 
   handleMouseDown(event: MouseEvent): void {
-    if (this.zDisabled() || !this.resizable) {
+    if (!this.canResize() || !this.resizable) {
+      return;
+    }
+    this.isMouseDown = true;
+    this.dataSeparator.set('active');
+    this.resizable.startResize(this.zHandleIndex(), event);
+  }
+
+  handleMouseUp(): void {
+    this.isMouseDown = false;
+    this.dataSeparator.set('inactive');
+  }
+
+  handleMouseHover(isHover: boolean): void {
+    if (this.zDisabled() || !this.resizable || this.isMouseDown) {
+      return;
+    }
+    this.dataSeparator.update(() => (isHover ? 'hover' : 'inactive'));
+  }
+
+  handleTouchStart(event: TouchEvent): void {
+    if (!this.canResize() || !this.resizable) {
       return;
     }
     this.resizable.startResize(this.zHandleIndex(), event);
   }
 
-  handleTouchStart(event: TouchEvent): void {
+  handleTouchEnd(): void {
     if (this.zDisabled() || !this.resizable) {
       return;
     }
-    this.resizable.startResize(this.zHandleIndex(), event);
+    this.dataSeparator.set('inactive');
+  }
+
+  private canResize(): boolean {
+    if (this.zDisabled() || !this.resizable) {
+      return false;
+    }
+    const panels = this.resizable.panels();
+    const handleIndex = this.zHandleIndex();
+    return !!panels[handleIndex]?.zResizable() && !!panels[handleIndex + 1]?.zResizable();
   }
 
   handleKeyDown(event: Event): void {
@@ -90,22 +137,22 @@ export class ZardResizableHandleComponent {
 
     switch (key) {
       case 'ArrowLeft':
-        if (layout === 'horizontal') {
+        if (layout === 'vertical') {
           delta = -step;
         }
         break;
       case 'ArrowRight':
-        if (layout === 'horizontal') {
+        if (layout === 'vertical') {
           delta = step;
         }
         break;
       case 'ArrowUp':
-        if (layout === 'vertical') {
+        if (layout === 'horizontal') {
           delta = -step;
         }
         break;
       case 'ArrowDown':
-        if (layout === 'vertical') {
+        if (layout === 'horizontal') {
           delta = step;
         }
         break;

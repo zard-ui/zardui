@@ -1,11 +1,12 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
-export const dropdownContentVariants = cva(
-  'bg-popover text-popover-foreground z-50 min-w-50 overflow-y-auto rounded-md border p-1 shadow-md',
-);
+export const dropdownContentVariants = cva([
+  'z-50 min-w-32 max-h-96 overflow-x-hidden overflow-y-auto rounded-md border bg-popover p-1 text-popover-foreground',
+  'shadow-md outline-none animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
+]);
 
 export const dropdownItemVariants = cva(
-  'relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0',
+  'relative flex cursor-default select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus-visible:bg-accent focus-visible:text-accent-foreground data-highlighted:bg-accent data-highlighted:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 data-disabled:cursor-not-allowed [&_svg:not([class*=size-])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0',
   {
     variants: {
       variant: {
@@ -26,3 +27,4 @@ export const dropdownItemVariants = cva(
 );
 
 export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>;
+export type ZardDropdownItemTypeVariants = NonNullable<ZardDropdownItemVariants['variant']>;

@@ -1,182 +1,131 @@
 import { Component } from '@angular/core';
-import { type ComponentFixture, TestBed } from '@angular/core/testing';
+
+import { render, screen, within } from '@testing-library/angular';
+import userEvent from '@testing-library/user-event';
 
 import { ZardPaginationComponent } from './pagination.component';
 
 @Component({
-  selector: 'test-host-component',
   imports: [ZardPaginationComponent],
-  standalone: true,
   template: `
-    <z-pagination
-      [(zPageIndex)]="pageIndex"
-      [zTotal]="totalPages"
-      zSize="default"
-      (zPageIndexChange)="onPageChange($event)"
-      [class]="customClass"
-    />
+    <z-pagination [(zPageIndex)]="pageIndex" [zTotal]="totalPages" zSize="icon" [class]="customClass" />
+    <p data-testid="page-index">Page: {{ pageIndex }}</p>
   `,
 })
 class TestHostComponent {
   pageIndex = 1;
   totalPages = 5;
-  lastEmittedPage: number | null = null;
   customClass = 'custom-pagination-class';
-
-  onPageChange(page: number) {
-    this.lastEmittedPage = page;
-  }
 }
 
-describe('ZardPaginationComponent Integration (Jest)', () => {
-  let fixture: ComponentFixture<TestHostComponent>;
-  let hostComponent: TestHostComponent;
-  let nativeEl: HTMLElement;
+function getNavButton(name: RegExp): HTMLButtonElement {
+  const buttons = screen.getAllByRole('button', { name });
+  return (buttons.find(btn => btn.hasAttribute('z-pagination-button')) ?? buttons[0]) as HTMLButtonElement;
+}
 
-  const getButtons = (): NodeListOf<HTMLButtonElement> => nativeEl.querySelectorAll('button[z-pagination-button]');
+describe('ZardPaginationComponent', () => {
+  it('renders correct number of list items including prev and next', async () => {
+    await render(TestHostComponent);
 
-  const getPrevButton = (): HTMLButtonElement | null => getButtons()[0] ?? null;
+    const pagination = screen.getByRole('group', { name: 'Pagination' });
+    const listItems = within(pagination).getAllByRole('listitem');
 
-  const getNextButton = (): HTMLButtonElement | null => {
-    const buttons = getButtons();
-    return buttons[buttons.length - 1] ?? null;
-  };
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [TestHostComponent],
-    }).compileComponents();
-
-    fixture = TestBed.createComponent(TestHostComponent);
-    hostComponent = fixture.componentInstance;
-    nativeEl = fixture.nativeElement;
-    fixture.detectChanges();
+    expect(listItems.length).toBe(7);
   });
 
-  it('should create the host component', () => {
-    expect(hostComponent).toBeTruthy();
+  it('highlights current page with aria-current', async () => {
+    await render(TestHostComponent);
+
+    const pagination = screen.getByRole('group', { name: 'Pagination' });
+    const activeButton = within(pagination).getAllByRole('button', { current: 'page' })[0];
+
+    expect(activeButton).toBeInTheDocument();
+    expect(activeButton).toHaveTextContent('1');
   });
 
-  it('should render the correct number of page buttons (including prev and next)', () => {
-    const pageButtons = nativeEl.querySelectorAll('button[z-pagination-button]');
-    // prev + next + page buttons
-    expect(pageButtons.length).toBe(hostComponent.totalPages + 2);
+  it('updates pageIndex when clicking a different page button', async () => {
+    const r = await render(TestHostComponent);
+    const page3Button = getNavButton(/To page 3/);
+
+    await userEvent.click(page3Button);
+    r.fixture.detectChanges();
+
+    expect(r.fixture.componentInstance.pageIndex).toBe(3);
   });
 
-  it('should highlight the current page using aria-current', () => {
-    const activeButton = Array.from(getButtons()).find(btn => btn.getAttribute('aria-current') === 'page');
+  it('does not update pageIndex when clicking the active page button', async () => {
+    const r = await render(TestHostComponent);
+    const initialPage = r.fixture.componentInstance.pageIndex;
 
-    expect(activeButton).toBeTruthy();
-    expect(activeButton?.textContent?.trim()).toBe('To page ' + hostComponent.pageIndex.toString());
+    const activeButton = getNavButton(/To page 1/);
+    await userEvent.click(activeButton);
+    r.fixture.detectChanges();
+
+    expect(r.fixture.componentInstance.pageIndex).toBe(initialPage);
   });
 
-  it('should emit zPageIndexChange when clicking a different page button', () => {
-    const page3Button = Array.from(getButtons()).find(btn => btn.textContent?.trim() === 'To page 3');
+  it('indicates last page for screen reader', async () => {
+    const r = await render(TestHostComponent);
+    const lastPageButton = getNavButton(/To last page, page 5/);
 
-    expect(page3Button).toBeTruthy();
-    expect(page3Button).toHaveTextContent('To page 3');
+    expect(lastPageButton).toBeInTheDocument();
 
-    page3Button?.click();
-    fixture.detectChanges();
+    await userEvent.click(lastPageButton);
+    r.fixture.detectChanges();
 
-    expect(hostComponent.lastEmittedPage).toBe(3);
-    expect(hostComponent.pageIndex).toBe(3);
+    expect(r.fixture.componentInstance.pageIndex).toBe(5);
   });
 
-  it('should not emit zPageIndexChange when clicking the active page button', () => {
-    const activeButton = Array.from(getButtons()).find(btn => btn.getAttribute('aria-current') === 'page');
+  it('disables Previous button on first page', async () => {
+    await render(TestHostComponent);
 
-    expect(activeButton).toBeTruthy();
+    const prevButton = getNavButton(/To previous page/);
 
-    hostComponent.lastEmittedPage = null;
-    activeButton?.click();
-    fixture.detectChanges();
-
-    expect(hostComponent.lastEmittedPage).toBeNull();
+    expect(prevButton).toBeDisabled();
   });
 
-  it('should indicate last page for screen reader', () => {
-    const lastPageButton = Array.from(getButtons()).find(btn => btn.textContent?.trim() === 'To last page, page 5');
+  it('enables Previous button on page > 1 and navigates back', async () => {
+    const r = await render(TestHostComponent);
+    r.fixture.componentInstance.pageIndex = 2;
+    r.fixture.detectChanges();
 
-    expect(lastPageButton).toBeTruthy();
-    expect(lastPageButton).toHaveTextContent('To last page, page 5');
+    const prevButton = getNavButton(/To previous page/);
+    expect(prevButton).not.toBeDisabled();
 
-    lastPageButton?.click();
-    fixture.detectChanges();
+    await userEvent.click(prevButton);
+    r.fixture.detectChanges();
 
-    expect(hostComponent.lastEmittedPage).toBe(5);
-    expect(hostComponent.pageIndex).toBe(5);
+    expect(r.fixture.componentInstance.pageIndex).toBe(1);
   });
 
-  describe('Previous button behavior', () => {
-    it('should disable "Previous" button on first page', () => {
-      const prevBtn = getPrevButton();
-      expect(prevBtn).toBeTruthy();
-      expect(prevBtn).toHaveTextContent('To previous page');
-      expect(prevBtn).toHaveAttribute('data-slot', 'pagination-button');
-      expect(prevBtn).toHaveAttribute('disabled');
+  it('disables Next button on last page', async () => {
+    const r = await render(TestHostComponent);
+    r.fixture.componentInstance.pageIndex = r.fixture.componentInstance.totalPages;
+    r.fixture.detectChanges();
 
-      hostComponent.lastEmittedPage = null;
-      prevBtn?.click();
-      fixture.detectChanges();
-
-      expect(hostComponent.lastEmittedPage).toBeNull();
-    });
-
-    it('should enable "Previous" button on page > 1 and emit page change', () => {
-      hostComponent.pageIndex = 2;
-      fixture.detectChanges();
-
-      const prevBtn = getPrevButton();
-      expect(prevBtn).toBeTruthy();
-      expect(prevBtn).not.toHaveAttribute('disabled');
-
-      hostComponent.lastEmittedPage = null;
-      prevBtn?.click();
-      fixture.detectChanges();
-
-      expect(hostComponent.lastEmittedPage).toBe(1);
-    });
+    const nextButton = getNavButton(/To next page/);
+    expect(nextButton).toBeDisabled();
   });
 
-  describe('Next button behavior', () => {
-    it('should disable "Next" button on last page and not emit', () => {
-      hostComponent.pageIndex = hostComponent.totalPages;
-      fixture.detectChanges();
+  it('enables Next button on page < total and navigates forward', async () => {
+    const r = await render(TestHostComponent);
+    r.fixture.componentInstance.pageIndex = r.fixture.componentInstance.totalPages - 1;
+    r.fixture.detectChanges();
 
-      const nextBtn = getNextButton();
-      expect(nextBtn).toBeTruthy();
-      expect(nextBtn).toHaveTextContent('To next page');
-      expect(nextBtn).toHaveAttribute('data-slot', 'pagination-button');
-      expect(nextBtn).toHaveAttribute('disabled');
+    const nextButton = getNavButton(/To next page/);
+    expect(nextButton).not.toBeDisabled();
 
-      hostComponent.lastEmittedPage = null;
-      nextBtn?.click();
-      fixture.detectChanges();
+    await userEvent.click(nextButton);
+    r.fixture.detectChanges();
 
-      expect(hostComponent.lastEmittedPage).toBeNull();
-    });
-
-    it('should enable "Next" button on page < total and emit page change', () => {
-      hostComponent.pageIndex = hostComponent.totalPages - 1;
-      fixture.detectChanges();
-
-      const nextBtn = getNextButton();
-      expect(nextBtn).toBeTruthy();
-      expect(nextBtn).not.toHaveAttribute('disabled');
-
-      hostComponent.lastEmittedPage = null;
-      nextBtn?.click();
-      fixture.detectChanges();
-
-      expect(hostComponent.lastEmittedPage).toBe(hostComponent.totalPages);
-    });
+    expect(r.fixture.componentInstance.pageIndex).toBe(r.fixture.componentInstance.totalPages);
   });
 
-  it('should apply custom class to pagination root element', () => {
-    const paginationHost = nativeEl.querySelector('z-pagination');
+  it('applies custom class to pagination root element', async () => {
+    await render(TestHostComponent);
 
-    expect(paginationHost).toBeTruthy();
-    expect(paginationHost).toHaveClass(hostComponent.customClass);
+    const pagination = screen.getByRole('group', { name: 'Pagination' });
+
+    expect(pagination).toHaveClass('custom-pagination-class');
   });
 });

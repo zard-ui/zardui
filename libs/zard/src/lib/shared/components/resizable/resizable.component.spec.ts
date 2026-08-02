@@ -96,8 +96,12 @@ describe('ZardResizableComponent', () => {
       expect(resizableComponent.zLayout()).toBe('horizontal');
     });
 
-    it('should set data-layout attribute on host', () => {
-      expect(resizableElement.getAttribute('data-layout')).toBe('horizontal');
+    it('should set aria-orientation attribute on host', () => {
+      expect(resizableElement.getAttribute('aria-orientation')).toBe('horizontal');
+    });
+
+    it('should set data-group attribute on host', () => {
+      expect(resizableElement.getAttribute('data-group')).toBe('true');
     });
 
     it('should apply CSS classes for horizontal layout', () => {
@@ -111,7 +115,7 @@ describe('ZardResizableComponent', () => {
       fixture.detectChanges();
 
       expect(resizableComponent.zLayout()).toBe('vertical');
-      expect(resizableElement.getAttribute('data-layout')).toBe('vertical');
+      expect(resizableElement.getAttribute('aria-orientation')).toBe('vertical');
     });
 
     it('should handle lazy mode', () => {
@@ -278,7 +282,7 @@ describe('ZardResizableComponent', () => {
 
     it('should handle touch events', () => {
       const touchMock = { clientX: 500, clientY: 300 } as Touch;
-      const listMock: TouchList = { length: 1, item: (index: number) => touchMock, 0: touchMock };
+      const listMock = { length: 1, item: (index: number) => touchMock, 0: touchMock };
       const touchStartEvent = new TouchEvent('touchstart', {
         touches: listMock as unknown as Touch[],
       });

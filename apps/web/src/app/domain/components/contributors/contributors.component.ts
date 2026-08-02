@@ -28,7 +28,6 @@ export interface Contributor {
               [zSrc]="contributor.avatar_url"
               [zAlt]="contributor.login + ' avatar'"
               [zFallback]="contributor.login.substring(0, 2).toUpperCase()"
-              zSize="md"
               zShape="rounded"
               class="ring-background hover:ring-primary/20 ring-2 transition-all"
             ></z-avatar>

@@ -8,7 +8,6 @@ import { kbdGroupVariants } from './kbd.variants';
 
 @Component({
   selector: 'z-kbd-group, [z-kbd-group]',
-  standalone: true,
   template: `
     <ng-content />
   `,
@@ -16,6 +15,7 @@ import { kbdGroupVariants } from './kbd.variants';
   encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
+    'data-slot': 'kbd-group',
   },
   exportAs: 'zKbdGroup',
 })

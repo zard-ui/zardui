@@ -3,8 +3,7 @@ import { Component, input, signal } from '@angular/core';
 import { IconName, provideIcons } from '@ng-icons/core';
 import { lucideMonitor, lucideSmartphone, lucideTablet } from '@ng-icons/lucide';
 
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
-import { ZardSegmentedComponent } from '@zard/components/segmented/segmented.component';
+import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
 import { ZardToggleGroupComponent } from '@zard/components/toggle-group/toggle-group.component';
 
 import { BlockCodeViewerComponent } from '../block-code-viewer/block-code-viewer.component';
@@ -38,13 +37,7 @@ export interface ViewportOption {
 
 @Component({
   selector: 'z-block-container',
-  imports: [
-    ZardSegmentedComponent,
-    ZardDividerComponent,
-    ZardToggleGroupComponent,
-    BlockPreviewComponent,
-    BlockCodeViewerComponent,
-  ],
+  imports: [ZardSeparatorComponent, ZardToggleGroupComponent, BlockPreviewComponent, BlockCodeViewerComponent],
   templateUrl: './block-container.component.html',
   viewProviders: [
     provideIcons({
@@ -71,8 +64,10 @@ export class BlockContainerComponent {
     { value: 'mobile', ariaLabel: 'Mobile view', icon: 'lucideSmartphone' },
   ];
 
-  protected onTabChange(value: string): void {
-    this.activeTab.set(value as 'preview' | 'code');
+  protected onTabChange(value: string | string[]): void {
+    if (typeof value === 'string' && value) {
+      this.activeTab.set(value as 'preview' | 'code');
+    }
   }
 
   protected onViewportChange(value: string | string[]): void {

@@ -1,34 +1,18 @@
-import { ChangeDetectionStrategy, Component, type OnInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component } from '@angular/core';
 
-import { ZardCheckboxComponent } from '../checkbox.component';
+import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
 
 @Component({
   selector: 'z-demo-checkbox-disabled',
-  imports: [ZardCheckboxComponent, FormsModule, ReactiveFormsModule],
+  imports: [ZardCheckboxComponent, ...ZardFieldImports],
   template: `
-    <div class="flex flex-col gap-8">
-      <form [formGroup]="form">
-        <span z-checkbox formControlName="acceptTerms">Accept Terms</span>
-        <span z-checkbox formControlName="newsletter">Subscribe</span>
-      </form>
-
-      <div>
-        <span z-checkbox [zDisabled]="true">Disabled</span>
-        <span z-checkbox [zDisabled]="true" [(ngModel)]="checked">Disabled</span>
+    <div z-field-group class="mx-auto w-56">
+      <div z-field zOrientation="horizontal" data-disabled="true">
+        <z-checkbox zId="toggle-checkbox-disabled" zDisabled />
+        <label z-field-label for="toggle-checkbox-disabled">Enable notifications</label>
       </div>
     </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoCheckboxDisabledComponent implements OnInit {
-  checked = true;
-  form = new FormGroup({
-    acceptTerms: new FormControl(false),
-    newsletter: new FormControl(false),
-  });
-
-  ngOnInit() {
-    this.form.disable();
-  }
-}
+export class ZardDemoCheckboxDisabledComponent {}

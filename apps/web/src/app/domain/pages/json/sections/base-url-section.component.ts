@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 
-import { MarkdownRendererComponent } from '@doc/domain/components/render/markdown-renderer.component';
+import { JSON_BASE_URL_EXAMPLE } from '@generated/documentation/json/base-url-example';
+import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
+import type { CodeBlockData } from '@highlight/types';
 
 @Component({
   selector: 'z-json-base-url-section',
   standalone: true,
-  imports: [MarkdownRendererComponent],
+  imports: [CodeBlockComponent],
   template: `
     <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="base-url" id="base-url">
       <div class="flex flex-col gap-4 sm:gap-6">
@@ -28,9 +30,11 @@ import { MarkdownRendererComponent } from '@doc/domain/components/render/markdow
           <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;/</code>
           prefix in your aliases, the CLI resolves paths relative to this base URL.
         </p>
-        <z-markdown-renderer markdownUrl="documentation/json/base-url-example.md"></z-markdown-renderer>
+        <z-code-block [data]="baseUrlExample" />
       </div>
     </section>
   `,
 })
-export class JsonBaseUrlSectionComponent {}
+export class JsonBaseUrlSectionComponent {
+  readonly baseUrlExample: CodeBlockData = JSON_BASE_URL_EXAMPLE;
+}

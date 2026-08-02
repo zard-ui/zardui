@@ -53,12 +53,15 @@ memory-bank
 .amazonq
 .kilo
 .kilocode
+.kilo
 .opencode
 .nx
 .claude
 .beads
 
 docs
+# Generated per-page Markdown (component docs) is a committed build artifact, like generated/.
+!/apps/web/public/docs/
 issues
 
 CLAUDE.md
@@ -90,3 +93,8 @@ nx-native-file-cache-*
 
 # Beads / Dolt files (added by bd init)
 .beads-credential-key
+
+# Local env
+.env
+.env.local
+.env.*.local

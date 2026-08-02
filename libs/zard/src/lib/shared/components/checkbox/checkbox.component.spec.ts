@@ -11,16 +11,6 @@ import { ZardCheckboxComponent } from './checkbox.component';
   imports: [ZardCheckboxComponent, FormsModule],
   template: `
     <span z-checkbox>Default</span>
-    <span z-checkbox zType="default">Default Type</span>
-    <span z-checkbox zType="destructive">Destructive</span>
-
-    <span z-checkbox zSize="default">Default Size</span>
-    <span z-checkbox zSize="lg">Large Size</span>
-
-    <span z-checkbox zShape="default">Default Shape</span>
-    <span z-checkbox zShape="circle">Circle Shape</span>
-    <span z-checkbox zShape="square">Square Shape</span>
-
     <span z-checkbox zDisabled="true">Disabled</span>
   `,
 })
@@ -99,8 +89,7 @@ describe('ZardCheckboxComponent', () => {
         'transition',
         'shadow-sm',
         'hover:shadow-md',
-        'focus-visible:outline-none',
-        'focus-visible:ring-4',
+        'focus-visible:ring-3',
         'focus-visible:ring-ring/50',
       ];
 
@@ -112,91 +101,9 @@ describe('ZardCheckboxComponent', () => {
     });
   });
 
-  describe('Type Variants', () => {
-    it('should apply correct classes for zType', () => {
-      const typeVariants = [
-        {
-          index: 0,
-          type: 'default',
-          expectedClasses: ['checked:border-primary', 'checked:bg-primary'],
-        },
-        {
-          index: 1,
-          type: 'default',
-          expectedClasses: ['checked:border-primary', 'checked:bg-primary'],
-        },
-        {
-          index: 2,
-          type: 'destructive',
-          expectedClasses: ['checked:border-destructive', 'checked:bg-destructive'],
-        },
-      ];
-
-      typeVariants.forEach(variant => {
-        const checkbox = checkboxElements[variant.index];
-        variant.expectedClasses.forEach(cls => {
-          expect(checkbox).toHaveClass(cls);
-        });
-      });
-    });
-  });
-
-  describe('Size Variants', () => {
-    it('should apply correct classes for zSize', () => {
-      const sizeVariants = [
-        {
-          index: 3,
-          size: 'default',
-          expectedClasses: ['size-4'],
-        },
-        {
-          index: 4,
-          size: 'lg',
-          expectedClasses: ['size-6'],
-        },
-      ];
-
-      sizeVariants.forEach(variant => {
-        const checkbox = checkboxElements[variant.index];
-        variant.expectedClasses.forEach(cls => {
-          expect(checkbox.classList).toContain(cls);
-        });
-      });
-    });
-  });
-
-  describe('Shape Variants', () => {
-    it('should apply correct classes for zShape', () => {
-      const shapeVariants = [
-        {
-          index: 5,
-          shape: 'default',
-          expectedClasses: ['rounded-[4px]'],
-        },
-        {
-          index: 6,
-          shape: 'circle',
-          expectedClasses: ['rounded-full'],
-        },
-        {
-          index: 7,
-          shape: 'square',
-          expectedClasses: ['rounded-none'],
-        },
-      ];
-
-      shapeVariants.forEach(variant => {
-        const checkbox = checkboxElements[variant.index];
-        variant.expectedClasses.forEach(cls => {
-          expect(checkbox.classList).toContain(cls);
-        });
-      });
-    });
-  });
-
   describe('Disabled State', () => {
     it('should apply disabled classes', () => {
-      const disabledCheckbox = checkboxElements[8];
+      const disabledCheckbox = checkboxElements[1];
 
       expect(disabledCheckbox.disabled).toBeTruthy();
       expect(disabledCheckbox).toHaveClass('disabled:cursor-not-allowed disabled:opacity-50');

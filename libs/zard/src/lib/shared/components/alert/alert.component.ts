@@ -8,6 +8,7 @@ import { ZardStringTemplateOutletDirective } from '@/shared/core/directives/stri
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import {
+  alertActionVariants,
   alertDescriptionVariants,
   alertIconVariants,
   alertTitleVariants,
@@ -35,8 +36,14 @@ import {
       }
 
       @if (zDescription()) {
-        <div [class]="descriptionClasses()" data-slot="alert-description">
+        <div data-slot="alert-description" [class]="descriptionClasses()">
           <ng-container *zStringTemplateOutlet="zDescription()">{{ zDescription() }}</ng-container>
+        </div>
+      }
+
+      @if (zAction()) {
+        <div data-slot="alert-action" [class]="actionClasses()">
+          <ng-container *zStringTemplateOutlet="zAction()" />
         </div>
       }
     </div>
@@ -45,28 +52,27 @@ import {
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCircleAlert })],
   host: {
-    role: 'alert',
+    '[attr.role]': 'role()',
     '[class]': 'classes()',
-    '[attr.data-slot]': '"alert"',
+    'data-slot': 'alert',
   },
   exportAs: 'zAlert',
 })
 export class ZardAlertComponent {
   readonly class = input<ClassValue>('');
-  readonly zTitle = input<string | TemplateRef<void>>('');
+  readonly zAction = input<TemplateRef<void>>();
   readonly zDescription = input<string | TemplateRef<void>>('');
   readonly zIcon = input<TemplateRef<void> | string>();
+  readonly zRole = input<'alert' | 'status'>();
+  readonly zTitle = input<string | TemplateRef<void>>('');
   readonly zType = input<ZardAlertTypeVariants>('default');
 
+  protected readonly actionClasses = computed(() => alertActionVariants());
   protected readonly classes = computed(() => mergeClasses(alertVariants({ zType: this.zType() }), this.class()));
-
-  protected readonly iconClasses = computed(() => alertIconVariants());
-
-  protected readonly titleClasses = computed(() => alertTitleVariants());
-
   protected readonly descriptionClasses = computed(() => alertDescriptionVariants({ zType: this.zType() }));
-
-  protected readonly shouldShowIcon = computed(() => this.zIcon() !== undefined || this.zType() === 'destructive');
+  protected readonly iconClasses = computed(() => alertIconVariants());
+  protected readonly role = computed(() => this.zRole() ?? (this.zAction() ? 'status' : 'alert'));
+  protected readonly titleClasses = computed(() => alertTitleVariants());
 
   protected readonly iconName = computed((): string | undefined => {
     const customIcon = this.zIcon();

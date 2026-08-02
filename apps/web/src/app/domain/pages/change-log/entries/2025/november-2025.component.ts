@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
 
-import { ZardDemoCarouselDefaultComponent } from '@zard/components/carousel/demo/default';
+import { CAROUSEL_DEMO_PREVIEW } from '@generated/components/carousel/demo/preview';
+import { KBD_DEMO_DEFAULT } from '@generated/components/kbd/demo/default';
+
+import { ZardDemoCarouselPreviewComponent } from '@zard/components/carousel/demo/preview';
 import { ZardDemoKbdDefaultComponent } from '@zard/components/kbd/demo/default';
 
 import {
@@ -31,14 +34,16 @@ export class November2025Component implements ChangelogEntryComponent {
       name: 'default',
       description:
         'A slideshow component for cycling through elements with support for mouse drag, touch swipe, and automatic playback.',
-      component: ZardDemoCarouselDefaultComponent,
+      component: ZardDemoCarouselPreviewComponent,
       componentName: 'carousel',
+      codeData: CAROUSEL_DEMO_PREVIEW,
     },
     {
       name: 'default',
       description: 'Display keyboard keys and shortcuts in a visually consistent way.',
       component: ZardDemoKbdDefaultComponent,
       componentName: 'kbd',
+      codeData: KBD_DEMO_DEFAULT,
     },
   ];
 }

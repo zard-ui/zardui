@@ -15,7 +15,7 @@ export const breadcrumbVariants = cva('w-full', {
 export type ZardBreadcrumbSizeVariants = NonNullable<VariantProps<typeof breadcrumbVariants>['zSize']>;
 
 export const breadcrumbListVariants = cva(
-  'text-muted-foreground flex flex-wrap items-center gap-1.5 wrap-break-word sm:gap-2.5',
+  'text-muted-foreground flex flex-wrap items-center gap-1.5 break-words sm:gap-2.5',
   {
     variants: {
       zAlign: {
@@ -37,12 +37,21 @@ export const breadcrumbListVariants = cva(
 export type ZardBreadcrumbAlignVariants = NonNullable<VariantProps<typeof breadcrumbListVariants>['zAlign']>;
 export type ZardBreadcrumbWrapVariants = NonNullable<VariantProps<typeof breadcrumbListVariants>['zWrap']>;
 
-export const breadcrumbItemVariants = cva(
-  'inline-flex items-center gap-1.5 transition-colors cursor-pointer hover:text-foreground last:text-foreground last:font-normal last:pointer-events-none',
-);
+export const breadcrumbItemVariants = cva('inline-flex items-center gap-1.5');
 export type ZardBreadcrumbItemVariants = VariantProps<typeof breadcrumbItemVariants>;
 
-export const breadcrumbEllipsisVariants = cva('flex', {
+export const breadcrumbLinkVariants = cva('transition-colors hover:text-foreground');
+export type ZardBreadcrumbLinkVariants = VariantProps<typeof breadcrumbLinkVariants>;
+
+export const breadcrumbPageVariants = cva('font-normal text-foreground');
+export type ZardBreadcrumbPageVariants = VariantProps<typeof breadcrumbPageVariants>;
+
+export const breadcrumbSeparatorVariants = cva(
+  'text-muted-foreground [&_svg]:size-3.5 [&_ng-icon]:flex! [&_ng-icon]:items-center! [&_ng-icon]:size-3.5!',
+);
+export type ZardBreadcrumbSeparatorVariants = VariantProps<typeof breadcrumbSeparatorVariants>;
+
+export const breadcrumbEllipsisVariants = cva('flex size-9 items-center justify-center', {
   variants: {
     zColor: {
       muted: 'text-muted-foreground',

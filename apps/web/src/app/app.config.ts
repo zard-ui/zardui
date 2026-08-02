@@ -1,13 +1,6 @@
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { ApplicationConfig, inject, provideAppInitializer, provideZoneChangeDetection } from '@angular/core';
 import {
-  ApplicationConfig,
-  importProvidersFrom,
-  inject,
-  provideAppInitializer,
-  provideZoneChangeDetection,
-} from '@angular/core';
-import {
-  BrowserModule,
   provideClientHydration,
   withEventReplay,
   withHttpTransferCacheOptions,
@@ -19,11 +12,11 @@ import { provideZard } from '@zard/core/provider/providezard';
 import { ZardDarkMode } from '@zard/services/dark-mode';
 
 import { appRoutes } from './app.routes';
+import { GithubService } from './shared/services/github.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideClientHydration(withEventReplay(), withHttpTransferCacheOptions({}), withIncrementalHydration()),
-    importProvidersFrom(BrowserModule),
     provideZoneChangeDetection({ eventCoalescing: true }),
     provideRouter(
       appRoutes,
@@ -34,6 +27,9 @@ export const appConfig: ApplicationConfig = {
     ),
     provideHttpClient(withFetch()),
     provideZard(),
-    provideAppInitializer(() => inject(ZardDarkMode).init()),
+    provideAppInitializer(() => {
+      inject(ZardDarkMode).init();
+      return inject(GithubService).init();
+    }),
   ],
 };

@@ -1,91 +1,31 @@
-import { Component, signal, computed, ChangeDetectionStrategy } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardCardComponent } from '@/shared/components/card';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardCarouselImports } from '@/shared/components/carousel/carousel.imports';
-import { ZardSegmentedComponent } from '@/shared/components/segmented';
-import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
-  imports: [ZardCarouselImports, ZardSegmentedComponent, ZardCardComponent],
+  imports: [ZardCarouselImports, ZardCardImports],
   template: `
-    <div class="mx-auto w-3/4 max-w-4xl">
-      <div class="mb-4 flex justify-center gap-2">
-        <z-segmented [zOptions]="options" zDefaultValue="md" (zChange)="onChange($event)" />
-      </div>
-
-      <z-carousel [zOptions]="{ align: 'start' }">
-        <z-carousel-content [class]="contentSpacingClass()">
+    <div class="w-full max-w-[12rem] sm:max-w-xs md:max-w-sm">
+      <z-carousel>
+        <z-carousel-content class="-ml-1">
           @for (slide of slides; track slide) {
-            <z-carousel-item [class]="itemSpacingClass()">
-              <z-card>
-                <div class="flex h-40 items-center justify-center text-4xl font-semibold">{{ slide }}</div>
-              </z-card>
+            <z-carousel-item class="basis-1/2 pl-1 lg:basis-1/3">
+              <div class="p-1">
+                <z-card>
+                  <z-card-content class="flex aspect-square items-center justify-center p-6">
+                    <span class="text-2xl font-semibold">{{ slide }}</span>
+                  </z-card-content>
+                </z-card>
+              </div>
             </z-carousel-item>
           }
         </z-carousel-content>
       </z-carousel>
-
-      <div class="mt-4 text-center text-sm">
-        <p>
-          <strong>Content class:</strong>
-          {{ contentSpacingClass() }}
-        </p>
-        <p>
-          <strong>Item class:</strong>
-          {{ itemSpacingClass() }}
-        </p>
-      </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoCarouselSpacingComponent {
-  protected slides = ['1', '2', '3', '4', '5', '6'];
-  readonly currentSpacing = signal<'sm' | 'md' | 'lg' | 'xl'>('md');
-
-  // Computed classes based on current spacing
-  protected readonly contentSpacingClass = computed(() => {
-    const spacing = this.currentSpacing();
-    const spacingMap = {
-      sm: '-ml-2',
-      md: '-ml-4',
-      lg: '-ml-6',
-      xl: '-ml-8',
-    };
-    return spacingMap[spacing];
-  });
-
-  protected readonly itemSpacingClass = computed(() => {
-    const spacing = this.currentSpacing();
-    const spacingMap = {
-      sm: 'pl-2',
-      md: 'pl-4',
-      lg: 'pl-6',
-      xl: 'pl-8',
-    };
-    return mergeClasses('basis-1/3', spacingMap[spacing]);
-  });
-
-  options = [
-    {
-      value: 'sm',
-      label: 'Small',
-    },
-    {
-      value: 'md',
-      label: 'Medium',
-    },
-    {
-      value: 'lg',
-      label: 'Large',
-    },
-    {
-      value: 'xl',
-      label: 'Extra Large',
-    },
-  ];
-
-  onChange(value: string) {
-    this.currentSpacing.set(value as 'sm' | 'md' | 'lg' | 'xl');
-  }
+  protected slides = ['1', '2', '3', '4', '5'];
 }

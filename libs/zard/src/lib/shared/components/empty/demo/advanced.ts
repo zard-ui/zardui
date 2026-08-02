@@ -5,8 +5,7 @@ import { lucidePlus } from '@ng-icons/lucide';
 
 import { ZardAvatarComponent, ZardAvatarGroupComponent } from '@/shared/components/avatar';
 import { ZardButtonComponent } from '@/shared/components/button';
-
-import { ZardEmptyComponent } from '../empty.component';
+import { ZardEmptyComponent } from '@/shared/components/empty';
 
 @Component({
   selector: 'z-demo-empty-advanced-customization',
@@ -21,10 +20,10 @@ import { ZardEmptyComponent } from '../empty.component';
 
     <ng-template #customImage>
       <z-avatar-group>
-        <z-avatar zSrc="https://github.com/srizzon.png" zSize="md" class="grayscale" />
-        <z-avatar zSrc="https://github.com/Luizgomess.png" zSize="md" class="grayscale" />
-        <z-avatar zSrc="https://github.com/ribeiromatheuss.png" zSize="md" class="grayscale" />
-        <z-avatar zSrc="https://github.com/mikij.png" zSize="md" class="grayscale" />
+        <z-avatar zSize="lg" zSrc="https://github.com/srizzon.png" class="grayscale" />
+        <z-avatar zSize="lg" zSrc="https://github.com/Luizgomess.png" class="grayscale" />
+        <z-avatar zSize="lg" zSrc="https://github.com/ribeiromatheuss.png" class="grayscale" />
+        <z-avatar zSize="lg" zSrc="https://github.com/mikij.png" class="grayscale" />
       </z-avatar-group>
     </ng-template>
 

@@ -73,20 +73,21 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly renderer = inject(Renderer2);
 
-  private delaySubject?: Subject<DelayConfig>;
+  private ariaEffectRef?: ReturnType<typeof effect>;
   private componentRef?: ComponentRef<ZardTooltipComponent>;
+  private delaySubject?: Subject<DelayConfig>;
   private listenersRefs: (() => void)[] = [];
   private overlayRef?: OverlayRef;
-  private ariaEffectRef?: ReturnType<typeof effect>;
 
+  readonly zHideDelay = input(100, { transform: numberAttribute });
   readonly zPosition = input<ZardTooltipPositionVariants>('top');
+  readonly zPositionOffset = input(4);
+  readonly zShowDelay = input(150, { transform: numberAttribute });
   readonly zTrigger = input<ZardTooltipTriggers>('hover');
   readonly zTooltip = input<ZardTooltipType>(null);
-  readonly zShowDelay = input(150, { transform: numberAttribute });
-  readonly zHideDelay = input(100, { transform: numberAttribute });
 
-  readonly zShow = output<void>();
   readonly zHide = output<void>();
+  readonly zShow = output<void>();
 
   private readonly tooltipText = computed<string | TemplateRef<void>>(() => {
     let tooltipText = this.zTooltip();
@@ -100,9 +101,16 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
 
   ngOnInit() {
     if (isPlatformBrowser(this.platformId)) {
+      const position = TOOLTIP_POSITIONS_MAP[this.zPosition()];
+      const positionOffset = this.zPositionOffset();
+      if (this.zPosition() === 'top' || this.zPosition() === 'bottom') {
+        position.offsetY = this.zPosition() === 'top' ? -positionOffset : positionOffset;
+      } else {
+        position.offsetX = this.zPosition() === 'left' ? -positionOffset : positionOffset;
+      }
       const positionStrategy = this.overlayPositionBuilder
         .flexibleConnectedTo(this.elementRef)
-        .withPositions([TOOLTIP_POSITIONS_MAP[this.zPosition()]]);
+        .withPositions([position]);
       this.overlayRef = this.overlay.create({ positionStrategy });
 
       runInInjectionContext(this.injector, () => {
@@ -277,6 +285,7 @@ export class ZardTooltipDirective implements OnInit, OnDestroy {
     '[attr.id]': 'tooltipId()',
     '[attr.data-side]': 'position()',
     '[attr.data-state]': 'state()',
+    'data-slot': 'tooltip-content',
     role: 'tooltip',
   },
 })

@@ -8,16 +8,18 @@ import {
   input,
   linkedSignal,
   signal,
+  ViewEncapsulation,
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideCheck } from '@ng-icons/lucide';
+import type { ClassValue } from 'clsx';
 
 import {
   selectItemIconVariants,
+  selectItemStateVariants,
   selectItemVariants,
   type ZardSelectItemModeVariants,
-  type ZardSelectSizeVariants,
 } from '@/shared/components/select/select.variants';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
@@ -32,24 +34,33 @@ interface SelectHost {
   selector: 'z-select-item, [z-select-item]',
   imports: [NgIcon],
   template: `
-    @if (isSelected()) {
-      <span [class]="iconClasses()">
-        <ng-icon name="lucideCheck" [strokeWidth]="strokeWidth()" aria-hidden="true" data-testid="check-icon" />
-      </span>
-    }
-    <span class="truncate">
+    <span data-slot="select-item-indicator" [class]="iconClasses()">
+      @if (isSelected()) {
+        <ng-icon
+          name="lucideCheck"
+          class="size-4! text-current"
+          [strokeWidth]="strokeWidth()"
+          aria-hidden="true"
+          data-testid="check-icon"
+        />
+      }
+    </span>
+    <span data-slot="select-item-text" class="truncate">
       <ng-content />
     </span>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideCheck })],
   host: {
     role: 'option',
     tabindex: '-1',
+    'data-slot': 'select-item',
     '[class]': 'classes()',
     '[attr.value]': 'zValue()',
     '[attr.data-disabled]': 'zDisabled() ? "" : null',
     '[attr.data-selected]': 'isSelected() ? "" : null',
+    '[attr.aria-disabled]': 'zDisabled()',
     '[attr.aria-selected]': 'isSelected()',
     '(click)': 'onClick()',
     '(mouseenter)': 'onMouseEnter()',
@@ -61,7 +72,7 @@ export class ZardSelectItemComponent {
 
   readonly zValue = input.required<string>();
   readonly zDisabled = input(false, { transform: booleanAttribute });
-  readonly class = input<string>('');
+  readonly class = input<ClassValue>('');
 
   private readonly select = signal<SelectHost | null>(null);
   noopFn = noopFn;
@@ -72,15 +83,12 @@ export class ZardSelectItemComponent {
   });
 
   readonly zMode = signal<ZardSelectItemModeVariants>('normal');
-  readonly zSize = signal<ZardSelectSizeVariants>('default');
 
   protected readonly classes = computed(() =>
-    mergeClasses(selectItemVariants({ zMode: this.zMode(), zSize: this.zSize() }), this.class()),
+    mergeClasses(selectItemVariants({ zMode: this.zMode() }), selectItemStateVariants(), this.class()),
   );
 
-  protected readonly iconClasses = computed(() =>
-    mergeClasses(selectItemIconVariants({ zMode: this.zMode(), zSize: this.zSize() })),
-  );
+  protected readonly iconClasses = computed(() => mergeClasses(selectItemIconVariants({ zMode: this.zMode() })));
 
   protected readonly strokeWidth = computed(() => (this.zMode() === 'compact' ? 3 : 2));
 

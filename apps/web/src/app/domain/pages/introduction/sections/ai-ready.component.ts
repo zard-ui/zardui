@@ -4,7 +4,7 @@ import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideBookOpenText, lucideSun } from '@ng-icons/lucide';
 
 import { ZardBadgeComponent } from '@zard/components/badge/badge.component';
-import { ZardCardComponent } from '@zard/components/card/card.component';
+import { ZardCardImports } from '@zard/components/card/card.imports';
 
 interface AIFeatureCard {
   title: string;
@@ -14,15 +14,15 @@ interface AIFeatureCard {
 
 @Component({
   selector: 'ai-ready-section',
-  imports: [ZardBadgeComponent, ZardCardComponent, NgIcon],
+  imports: [ZardBadgeComponent, ZardCardImports, NgIcon],
   template: `
     <section class="flex flex-col gap-8">
       <div class="flex flex-col gap-4">
-        <div class="flex items-center gap-3">
-          <h2 class="text-3xl font-bold tracking-tight">AI Ready</h2>
+        <div class="flex items-center gap-2">
+          <h2 class="font-heading mt-10 text-xl font-medium tracking-tight first:mt-0 lg:mt-12">AI Ready</h2>
           <z-badge zType="secondary">Future Ready</z-badge>
         </div>
-        <p class="text-muted-foreground text-base leading-7">
+        <p class="text-foreground text-sm leading-7">
           ZardUI components are designed with AI development in mind. Clear patterns, consistent APIs, and comprehensive
           documentation make it easy for AI tools to understand and work with our components.
         </p>
@@ -30,14 +30,19 @@ interface AIFeatureCard {
 
       <div class="grid gap-6 md:grid-cols-2">
         @for (card of cards; track $index) {
-          <z-card [zTitle]="title">
+          <z-card>
+            <z-card-header>
+              <z-card-title [zTitle]="title" />
+            </z-card-header>
             <ng-template #title>
               <div class="flex items-center gap-2">
                 <ng-icon [name]="card.icon" class="text-lg font-normal" />
                 <h3 class="text-base">{{ card.title }}</h3>
               </div>
             </ng-template>
-            <p class="text-muted-foreground text-base leading-7">{{ card.description }}</p>
+            <z-card-content>
+              <p class="text-muted-foreground text-sm">{{ card.description }}</p>
+            </z-card-content>
           </z-card>
         }
       </div>

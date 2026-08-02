@@ -11,13 +11,21 @@ test.describe('Dropdown component', () => {
     await demoPage.goto();
   });
 
+  async function loadExamples() {
+    await demoPage.page.evaluate(() => {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' });
+    });
+    await demoPage.page.locator('#examples').waitFor({ state: 'attached', timeout: 10_000 });
+    await demoPage.page.locator('#examples').scrollIntoViewIfNeeded({ timeout: 5000 });
+  }
+
   test('renders trigger button', async () => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await expect(trigger).toBeVisible();
   });
 
   test('opens dropdown menu on click', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await trigger.click();
 
     const menu = page.locator('[role="menu"]');
@@ -25,7 +33,7 @@ test.describe('Dropdown component', () => {
   });
 
   test('shows menu items when open', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await trigger.click();
 
     const menu = page.locator('[role="menu"]');
@@ -36,7 +44,7 @@ test.describe('Dropdown component', () => {
   });
 
   test('has a disabled menu item', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await trigger.click();
 
     const menu = page.locator('[role="menu"]');
@@ -46,8 +54,64 @@ test.describe('Dropdown component', () => {
     await expect(disabledItem).toBeVisible({ timeout: 3000 });
   });
 
+  test('renders separators and shortcuts in the menu surface', async ({ page }) => {
+    await loadExamples();
+
+    const shortcutsDemo = demoPage.getDemoByName('shortcuts');
+    await expect(shortcutsDemo).toBeVisible({ timeout: 5000 });
+    await shortcutsDemo.locator('[z-dropdown]').click();
+
+    const menu = page.locator('[role="menu"]').last();
+    await expect(menu).toBeVisible({ timeout: 5000 });
+
+    const separator = menu.locator('[data-slot="dropdown-menu-separator"]').first();
+    await expect(separator).toHaveAttribute('role', 'separator', { timeout: 3000 });
+    await expect(menu.locator('[data-slot="dropdown-menu-shortcut"]').filter({ hasText: '⌘S' })).toBeVisible({
+      timeout: 3000,
+    });
+  });
+
+  test('renders checkbox demo menu items when exposed in examples', async ({ page }) => {
+    await loadExamples();
+
+    const checkboxDemo = demoPage.getDemoByName('checkboxes');
+    await expect(checkboxDemo).toBeVisible({ timeout: 5000 });
+    await checkboxDemo.locator('[z-dropdown]').click();
+
+    const menu = page.locator('[role="menu"]').last();
+    await expect(menu).toBeVisible({ timeout: 5000 });
+    await expect(menu.getByRole('menuitemcheckbox', { name: /Status Bar/ })).toBeVisible({ timeout: 3000 });
+    await expect(menu.getByRole('menuitemcheckbox', { name: /Activity Bar/ })).toBeVisible({ timeout: 3000 });
+  });
+
+  test('renders radio group demo menu items when exposed in examples', async ({ page }) => {
+    await loadExamples();
+
+    const radioGroupDemo = demoPage.getDemoByName('radio-group');
+    await expect(radioGroupDemo).toBeVisible({ timeout: 5000 });
+    await radioGroupDemo.locator('[z-dropdown]').click();
+
+    const menu = page.locator('[role="menu"]').last();
+    await expect(menu).toBeVisible({ timeout: 5000 });
+    await expect(menu.getByRole('menuitemradio', { name: /Top/ })).toBeVisible({ timeout: 3000 });
+    await expect(menu.getByRole('menuitemradio', { name: /Bottom/ })).toBeVisible({ timeout: 3000 });
+    await expect(menu.getByRole('menuitemradio', { name: /Right/ })).toBeVisible({ timeout: 3000 });
+  });
+
+  test('renders submenu demo trigger when exposed in examples', async ({ page }) => {
+    await loadExamples();
+
+    const submenuDemo = demoPage.getDemoByName('submenu');
+    await expect(submenuDemo).toBeVisible({ timeout: 5000 });
+    await submenuDemo.locator('[z-dropdown]').click();
+
+    const menu = page.locator('[role="menu"]').last();
+    await expect(menu).toBeVisible({ timeout: 5000 });
+    await expect(menu.getByText('More Tools')).toBeVisible({ timeout: 3000 });
+  });
+
   test('closes dropdown when clicking outside', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await trigger.click();
 
     const menu = page.locator('[role="menu"]');
@@ -58,7 +122,7 @@ test.describe('Dropdown component', () => {
   });
 
   test('navigates items with arrow keys', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
 
     // Open dropdown and wait for menu to be both visible AND focused
     const menu = page.locator('[role="menu"]');
@@ -87,13 +151,9 @@ test.describe('Dropdown component', () => {
     // The #examples section is inside a @defer(on viewport) block.
     // Scroll to it programmatically to trigger the defer condition,
     // then wait for the element to appear in the DOM.
-    await page.evaluate(() => {
-      window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' });
-    });
-    await page.locator('#examples').waitFor({ state: 'attached', timeout: 10_000 });
-    await page.locator('#examples').scrollIntoViewIfNeeded({ timeout: 5000 });
+    await loadExamples();
 
-    const firstTrigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const firstTrigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     const secondTrigger = demoPage.getDemoByName('hover').locator('[z-dropdown]');
 
     await expect(firstTrigger).toHaveAttribute('aria-haspopup', 'menu');
@@ -113,7 +173,7 @@ test.describe('Dropdown component', () => {
   });
 
   test('passes accessibility checks when open', async ({ page }) => {
-    const trigger = demoPage.firstDemoCard.locator('[z-dropdown]');
+    const trigger = demoPage.firstDemoBox.locator('[z-dropdown]');
     await trigger.click();
     await page.locator('[role="menu"]').waitFor({ state: 'visible', timeout: 5000 });
     await checkA11y(page, undefined, ['button-name', 'color-contrast', 'scrollable-region-focusable']);

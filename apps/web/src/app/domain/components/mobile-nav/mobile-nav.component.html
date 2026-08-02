@@ -68,18 +68,30 @@
             <div class="text-muted-foreground text-sm font-medium">{{ doc.title }}</div>
             <div class="flex flex-col gap-3">
               @for (path of doc.data; track $index) {
-                <a
-                  [routerLink]="path.path"
-                  routerLinkActive="font-semibold"
-                  [routerLinkActiveOptions]="{ exact: true }"
-                  (click)="isAvailable(path.available)"
-                  class="hover:text-foreground flex items-center gap-2 text-2xl font-medium capitalize transition-colors"
-                >
-                  {{ path.name }}
-                  @if (!path.available) {
-                    <z-badge zType="secondary" class="px-1.5 py-0.5 text-xs">soon</z-badge>
-                  }
-                </a>
+                @if (path.external) {
+                  <a
+                    [href]="path.path"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    (click)="closeMenu()"
+                    class="hover:text-foreground flex items-center gap-2 text-2xl font-medium capitalize transition-colors"
+                  >
+                    {{ path.name }}
+                  </a>
+                } @else {
+                  <a
+                    [routerLink]="path.path"
+                    routerLinkActive="font-semibold"
+                    [routerLinkActiveOptions]="{ exact: true }"
+                    (click)="isAvailable(path.available)"
+                    class="hover:text-foreground flex items-center gap-2 text-2xl font-medium capitalize transition-colors"
+                  >
+                    {{ path.name }}
+                    @if (!path.available) {
+                      <z-badge zType="secondary" class="px-1.5 py-0.5 text-xs">soon</z-badge>
+                    }
+                  </a>
+                }
               }
             </div>
           </div>

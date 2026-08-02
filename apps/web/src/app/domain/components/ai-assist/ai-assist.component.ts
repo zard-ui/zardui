@@ -1,4 +1,4 @@
-import { DOCUMENT, isPlatformBrowser } from '@angular/common';
+import { isPlatformBrowser } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,13 +6,21 @@ import {
   inject,
   input,
   PLATFORM_ID,
+  signal,
   ViewEncapsulation,
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { Router, NavigationEnd, RouterLink } from '@angular/router';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideArrowLeft, lucideArrowRight, lucideChevronDown, lucideChevronUp, lucideCopy } from '@ng-icons/lucide';
+import {
+  lucideArrowLeft,
+  lucideArrowRight,
+  lucideCheck,
+  lucideChevronDown,
+  lucideChevronUp,
+  lucideCopy,
+} from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 import { filter, map, startWith } from 'rxjs/operators';
 
@@ -20,8 +28,8 @@ import { environment } from '@doc/env/environment';
 import { SECTIONS, DOCS_PATH, COMPONENTS_PATH } from '@doc/shared/constants/routes.constant';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
-import { ZardDividerComponent } from '@zard/components/divider/divider.component';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover/popover.component';
+import { ZardSeparatorComponent } from '@zard/components/separator/separator.component';
 
 import type { AiAssistOption } from './ai-assist.types';
 
@@ -29,7 +37,14 @@ import type { AiAssistOption } from './ai-assist.types';
   selector: 'z-assist',
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  imports: [RouterLink, ZardPopoverComponent, ZardPopoverDirective, ZardDividerComponent, ZardButtonComponent, NgIcon],
+  imports: [
+    RouterLink,
+    ZardPopoverComponent,
+    ZardPopoverDirective,
+    ZardSeparatorComponent,
+    ZardButtonComponent,
+    NgIcon,
+  ],
   templateUrl: './ai-assist.component.html',
   host: {
     '[class]': 'hostClasses()',
@@ -37,6 +52,7 @@ import type { AiAssistOption } from './ai-assist.types';
   viewProviders: [
     provideIcons({
       lucideCopy,
+      lucideCheck,
       lucideChevronDown,
       lucideChevronUp,
       lucideArrowLeft,
@@ -46,7 +62,6 @@ import type { AiAssistOption } from './ai-assist.types';
 })
 export class AiAssistComponent {
   private readonly router = inject(Router);
-  private readonly document = inject(DOCUMENT);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private readonly appRoutes = [...SECTIONS.data, ...DOCS_PATH.data, ...COMPONENTS_PATH.data]
@@ -105,6 +120,14 @@ export class AiAssistComponent {
     return path ? `${this.baseUrl}${path}` : this.baseUrl;
   });
 
+  /** Same-origin `<path>.md` URL — served by the Express handler in server.ts. */
+  protected readonly markdownPath = computed(() => {
+    const path = this.currentPath().split(/[?#]/)[0] || '/';
+    return `${path}.md`;
+  });
+
+  protected readonly copied = signal(false);
+
   protected readonly aiOptions = computed<AiAssistOption[]>(() => {
     const currentUrl = this.currentPageUrl();
     const options: AiAssistOption[] = [
@@ -124,16 +147,16 @@ export class AiAssistComponent {
       options.unshift({
         id: 'markdown',
         label: 'View as Markdown',
-        url: `${currentUrl}.md`,
+        url: this.markdownPath(),
       });
     }
 
     return options;
   });
 
-  onCopyPage(): void {
+  async onCopyPage(): Promise<void> {
     if (!this.isBrowser) return;
-    this.copyPageContent();
+    await this.copyPageContent();
   }
 
   private buildAiUrl(provider: 'chatgpt' | 'claude', currentUrl: string): string {
@@ -153,11 +176,18 @@ export class AiAssistComponent {
     if (!this.isBrowser) return;
 
     try {
-      const pageContent = this.document.body.innerText;
-      await navigator.clipboard.writeText(pageContent);
-      console.log('Page content copied to clipboard');
+      // Fetch the page's generated `.md` (a static asset, served in dev and prod
+      // like llms.txt). Guard against the SPA fallback for pages without a file.
+      const response = await fetch(this.markdownPath());
+      if (!response.ok || response.redirected) return;
+      if ((response.headers.get('content-type') ?? '').includes('text/html')) return;
+
+      await navigator.clipboard.writeText(await response.text());
+
+      this.copied.set(true);
+      setTimeout(() => this.copied.set(false), 2000);
     } catch (err) {
-      console.error('Failed to copy page content:', err);
+      console.error('Failed to copy page markdown:', err);
     }
   }
 }

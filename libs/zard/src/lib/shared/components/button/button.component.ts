@@ -38,9 +38,12 @@ import {
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideLoaderCircle })],
   host: {
+    'data-slot': 'button',
     '[class]': 'classes()',
-    '[attr.data-icon-only]': 'iconOnly() || null',
     '[attr.data-disabled]': 'isNotInsideOfButtonOrLink() && zDisabled() || null',
+    '[attr.data-icon-only]': 'iconOnly() || null',
+    '[attr.data-size]': 'zSize()',
+    '[attr.data-variant]': 'zType()',
     '[attr.aria-disabled]': 'isNotInsideOfButtonOrLink() && zDisabled() || null',
     '[attr.disabled]': 'isNotInsideOfButtonOrLink() && zDisabled() ? "" : null',
     '[attr.role]': 'isNotInsideOfButtonOrLink() ? "button" : null',
@@ -55,7 +58,6 @@ export class ZardButtonComponent implements OnDestroy {
   readonly zSize = input<ZardButtonSizeVariants>('default');
   readonly zShape = input<ZardButtonShapeVariants>('default');
   readonly class = input<ClassValue>('');
-  readonly zFull = input(false, { transform: booleanAttribute });
   readonly zLoading = input(false, { transform: booleanAttribute });
   readonly zDisabled = input(false, { transform: booleanAttribute });
 
@@ -114,7 +116,6 @@ export class ZardButtonComponent implements OnDestroy {
         zType: this.zType(),
         zSize: this.zSize(),
         zShape: this.zShape(),
-        zFull: this.zFull(),
         zLoading: this.zLoading(),
         zDisabled: this.zDisabled(),
       }),

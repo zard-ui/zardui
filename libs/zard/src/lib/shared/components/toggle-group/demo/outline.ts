@@ -1,8 +1,5 @@
 import { Component } from '@angular/core';
 
-import { provideIcons } from '@ng-icons/core';
-import { lucideBold, lucideItalic, lucideUnderline } from '@ng-icons/lucide';
-
 import {
   ZardToggleGroupComponent,
   type ZardToggleGroupItem,
@@ -12,36 +9,30 @@ import {
   selector: 'demo-toggle-group-outline',
   imports: [ZardToggleGroupComponent],
   template: `
-    <z-toggle-group zMode="multiple" zType="outline" [items]="items" (valueChange)="onToggleChange($event)" />
+    <z-toggle-group
+      zDefaultValue="all"
+      zMode="single"
+      zType="outline"
+      [zItems]="items"
+      (valueChange)="onToggleChange($event)"
+    />
   `,
-  viewProviders: [
-    provideIcons({
-      lucideBold,
-      lucideItalic,
-      lucideUnderline,
-    }),
-  ],
 })
 export default class ToggleGroupOutlineComponent {
   items: ZardToggleGroupItem[] = [
     {
-      value: 'bold',
-      icon: 'lucideBold',
-      ariaLabel: 'Toggle bold',
+      value: 'all',
+      label: 'All',
+      ariaLabel: 'Toggle all',
     },
     {
-      value: 'italic',
-      icon: 'lucideItalic',
-      ariaLabel: 'Toggle italic',
-    },
-    {
-      value: 'underline',
-      icon: 'lucideUnderline',
-      ariaLabel: 'Toggle underline',
+      value: 'missed',
+      label: 'Missed',
+      ariaLabel: 'Toggle missed',
     },
   ];
 
   onToggleChange(value: string | string[]) {
-    console.log('Selected formatting:', value);
+    console.log('Selected:', value);
   }
 }

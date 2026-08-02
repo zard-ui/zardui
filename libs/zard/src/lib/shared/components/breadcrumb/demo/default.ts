@@ -1,23 +1,22 @@
 import { Component } from '@angular/core';
 
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideHouse } from '@ng-icons/lucide';
-
 import { ZardBreadcrumbImports } from '../breadcrumb.imports';
 
 @Component({
   selector: 'z-demo-breadcrumb-default',
-  imports: [ZardBreadcrumbImports, NgIcon],
+  imports: [ZardBreadcrumbImports],
   template: `
-    <z-breadcrumb zWrap="wrap" zAlign="start">
-      <z-breadcrumb-item [routerLink]="['/']">
-        <ng-icon name="lucideHouse" />
-        Home
+    <z-breadcrumb zLabel="Default breadcrumb">
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link [routerLink]="['/']">Home</a>
       </z-breadcrumb-item>
-      <z-breadcrumb-item [routerLink]="['/docs/components']">Components</z-breadcrumb-item>
-      <z-breadcrumb-item>Breadcrumb</z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <a z-breadcrumb-link [routerLink]="['/docs/components']">Components</a>
+      </z-breadcrumb-item>
+      <z-breadcrumb-item>
+        <span z-breadcrumb-page>Breadcrumb</span>
+      </z-breadcrumb-item>
     </z-breadcrumb>
   `,
-  viewProviders: [provideIcons({ lucideHouse })],
 })
 export class ZardDemoBreadcrumbDefaultComponent {}

@@ -1,30 +1,22 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
-import { ZardBadgeComponent } from '@/shared/components/badge';
 import { ZardSelectImports } from '@/shared/components/select/select.imports';
 
 @Component({
-  selector: 'z-demo-select-basic',
-  imports: [ZardBadgeComponent, ZardSelectImports],
+  selector: 'z-demo-select-default',
+  imports: [ZardSelectImports],
   template: `
-    <div class="flex flex-col gap-4">
-      <span>
-        Selected value:
-        @if (selectedValue) {
-          <z-badge>{{ selectedValue }}</z-badge>
-        }
-      </span>
-      <z-select class="w-75" zPlaceholder="Select a fruit" [(zValue)]="selectedValue">
-        <z-select-item zValue="apple">Apple</z-select-item>
-        <z-select-item zValue="banana">Banana</z-select-item>
-        <z-select-item zValue="blueberry">Blueberry</z-select-item>
-        <z-select-item zValue="grapes">Grapes</z-select-item>
-        <z-select-item zValue="pineapple" zDisabled>Pineapple</z-select-item>
-      </z-select>
-    </div>
+    <z-select class="w-full min-w-48" zPlaceholder="Select a fruit" [(zValue)]="selectedFruit">
+      <z-select-label>Fruits</z-select-label>
+      <z-select-item zValue="apple">Apple</z-select-item>
+      <z-select-item zValue="banana">Banana</z-select-item>
+      <z-select-item zValue="blueberry">Blueberry</z-select-item>
+      <z-select-item zValue="grapes">Grapes</z-select-item>
+      <z-select-item zValue="pineapple">Pineapple</z-select-item>
+    </z-select>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoSelectBasicComponent {
-  selectedValue = '';
+export class ZardDemoSelectDefaultComponent {
+  readonly selectedFruit = signal('');
 }

@@ -6,22 +6,22 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-basic',
   imports: [ZardAccordionImports],
   template: `
-    <z-accordion zDefaultValue="item-2">
-      <z-accordion-item zValue="item-1" zTitle="A Study in Scarlet">
-        The first case of Sherlock Holmes and Dr. Watson. They investigate a murder in London, which leads to a
-        backstory involving Mormons in the U.S. Introduces Holmes’s deductive method.
+    <div z-accordion zDefaultValue="item-1" zType="single" class="max-w-sm">
+      <z-accordion-item zValue="item-1" zTitle="How do I reset my password?">
+        Click on 'Forgot Password' on the login page, enter your email address, and we'll send you a link to reset your
+        password. The link will expire in 24 hours.
       </z-accordion-item>
 
-      <z-accordion-item zValue="item-2" zTitle="The Sign of Four" zDescription="Sir Arthur Conan Doyle">
-        The first case of Sherlock Holmes and Dr. Watson. They investigate a murder in London, which leads to a
-        backstory involving Mormons in the U.S. Introduces Holmes’s deductive method.
+      <z-accordion-item zValue="item-2" zTitle="Can I change my subscription plan?">
+        Yes, you can upgrade or downgrade your plan at any time from your account settings. Changes will be reflected in
+        your next billing cycle.
       </z-accordion-item>
 
-      <z-accordion-item zValue="item-3" zTitle="The Hound of the Baskervilles">
-        Holmes and Watson investigate the legend of a demonic hound haunting the Baskerville family. Set in the eerie
-        Dartmoor moorlands, the story involves betrayal and greed.
+      <z-accordion-item zValue="item-3" zTitle="What payment methods do you accept?">
+        We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely through our
+        payment partners.
       </z-accordion-item>
-    </z-accordion>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

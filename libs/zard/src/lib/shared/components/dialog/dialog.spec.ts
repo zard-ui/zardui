@@ -221,4 +221,119 @@ describe('ZardDialogComponent', () => {
       expect(document.querySelector('z-dialog')).toBeNull();
     });
   });
+
+  describe('[a11y]', () => {
+    it('should expose role=dialog and aria-modal on the host', () => {
+      openDialog();
+
+      if (!isPlatformBrowser(platformId)) return;
+
+      const dialog = document.querySelector('z-dialog') as HTMLElement;
+      expect(dialog).toBeTruthy();
+      expect(dialog.getAttribute('role')).toBe('dialog');
+      expect(dialog.getAttribute('aria-modal')).toBe('true');
+    });
+
+    it('should link aria-labelledby to the title and aria-describedby to the description', () => {
+      openDialog();
+
+      if (!isPlatformBrowser(platformId)) return;
+
+      const dialog = document.querySelector('z-dialog') as HTMLElement;
+      const labelledBy = dialog.getAttribute('aria-labelledby');
+      const describedBy = dialog.getAttribute('aria-describedby');
+
+      expect(labelledBy).toBeTruthy();
+      expect(describedBy).toBeTruthy();
+      expect(document.getElementById(labelledBy!)?.textContent).toContain('Test Dialog');
+      expect(document.getElementById(describedBy!)?.textContent).toContain('This is a test dialog.');
+    });
+
+    it('should restore focus to the trigger button after close', async () => {
+      if (!isPlatformBrowser(platformId)) return;
+
+      const trigger = fixture.nativeElement.querySelector('button') as HTMLButtonElement;
+      trigger.focus();
+      expect(document.activeElement).toBe(trigger);
+
+      trigger.click();
+      fixture.detectChanges();
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      const dialog = document.querySelector('z-dialog');
+      expect(dialog).toBeTruthy();
+
+      // Close the dialog
+      const cancelBtn = dialog?.querySelector<HTMLButtonElement>('[data-testid="z-cancel-button"]');
+      cancelBtn?.click();
+      fixture.detectChanges();
+      await new Promise(resolve => setTimeout(resolve, 200));
+
+      expect(document.querySelector('z-dialog')).toBeNull();
+      expect(document.activeElement).toBe(trigger);
+    });
+  });
+
+  describe('[stack management]', () => {
+    it('should only close the topmost dialog when Escape is pressed', async () => {
+      if (!isPlatformBrowser(platformId)) return;
+
+      const dialogService = TestBed.inject(ZardDialogService);
+      const first = dialogService.create({ zTitle: 'First', zContent: 'one' });
+      const second = dialogService.create({ zTitle: 'Second', zContent: 'two' });
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      let dialogs = document.querySelectorAll('z-dialog');
+      expect(dialogs.length).toBe(2);
+
+      const topOverlay = dialogs[1].closest('.cdk-overlay-pane') as HTMLElement;
+      topOverlay.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      await new Promise(resolve => setTimeout(resolve, 200));
+
+      dialogs = document.querySelectorAll('z-dialog');
+      expect(dialogs.length).toBe(1);
+      expect(second.isClosing()).toBe(true);
+      expect(first.isClosing()).toBe(false);
+      expect(dialogs[0].querySelector('[data-testid="z-title"]')?.textContent).toContain('First');
+
+      first.close();
+      await new Promise(resolve => setTimeout(resolve, 200));
+    });
+  });
+
+  describe('[signals]', () => {
+    it('should reflect close state and result in isClosing/result signals', async () => {
+      if (!isPlatformBrowser(platformId)) return;
+
+      const dialogService = TestBed.inject(ZardDialogService);
+      const ref = dialogService.create<unknown, unknown>({ zTitle: 'Signal test', zContent: 'x' });
+
+      expect(ref.isClosing()).toBe(false);
+      expect(ref.result()).toBeUndefined();
+
+      ref.close('done');
+
+      expect(ref.isClosing()).toBe(true);
+      expect(ref.result()).toBe('done');
+
+      await new Promise(resolve => setTimeout(resolve, 200));
+      expect(document.querySelector('z-dialog')).toBeNull();
+    });
+  });
+
+  describe('[duration]', () => {
+    it('should propagate zDuration to the --z-dialog-duration CSS custom property', async () => {
+      if (!isPlatformBrowser(platformId)) return;
+
+      const dialogService = TestBed.inject(ZardDialogService);
+      dialogService.create<unknown, unknown>({ zTitle: 'Duration', zContent: 'x', zDuration: 250 });
+      await new Promise(resolve => setTimeout(resolve, 50));
+
+      const dialog = document.querySelector('z-dialog') as HTMLElement;
+      expect(dialog.style.getPropertyValue('--z-dialog-duration')).toBe('250ms');
+
+      dialog.querySelector<HTMLButtonElement>('[data-testid="z-cancel-button"]')?.click();
+      await new Promise(resolve => setTimeout(resolve, 300));
+    });
+  });
 });

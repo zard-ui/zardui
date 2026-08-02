@@ -181,8 +181,15 @@ describe('ZardDropdownService', () => {
     let viewContainerRef: ViewContainerRef;
     let menuElement: HTMLElement;
     let menuItems: HTMLElement[];
+    let keydownHandler: ((event: KeyboardEvent) => void) | undefined;
 
     beforeEach(() => {
+      keydownHandler = undefined;
+      mockRenderer.listen.mockImplementation((_target, _eventName, callback) => {
+        keydownHandler = callback as (event: KeyboardEvent) => void;
+        return mockUnlistenFn;
+      });
+
       triggerElement = new ElementRef(document.createElement('button'));
       templateRef = { elementRef: new ElementRef(document.createElement('div')) } as TemplateRef<unknown>;
       viewContainerRef = {
@@ -213,12 +220,69 @@ describe('ZardDropdownService', () => {
       expect(mockRenderer.listen).toHaveBeenCalled();
     });
 
+    it('listens for the supported keyboard command set on the menu container', async () => {
+      service.toggle(triggerElement, templateRef, viewContainerRef);
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      expect(mockRenderer.listen).toHaveBeenCalledWith(
+        menuElement,
+        'keydown.{arrowdown,arrowup,enter,space,escape,home,end}.prevent',
+        expect.any(Function),
+      );
+    });
+
     it('does not set up keyboard navigation when menu element is missing', () => {
       mockOverlayRef.overlayElement = document.createElement('div');
 
       service.toggle(triggerElement, templateRef, viewContainerRef);
 
       expect(mockRenderer.listen).not.toHaveBeenCalled();
+    });
+
+    it('navigates element and attribute selector items while skipping disabled items', async () => {
+      menuElement.innerHTML = '';
+      const elementItem = document.createElement('z-dropdown-menu-item');
+      const disabledItem = document.createElement('z-dropdown-menu-item');
+      const attributeItem = document.createElement('button');
+      attributeItem.setAttribute('z-dropdown-menu-item', '');
+      disabledItem.dataset['disabled'] = '';
+      menuElement.append(elementItem, disabledItem, attributeItem);
+
+      service.toggle(triggerElement, templateRef, viewContainerRef);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      keydownHandler?.(new KeyboardEvent('keydown', { key: 'End' }));
+
+      expect(attributeItem).toHaveAttribute('data-highlighted', '');
+      expect(disabledItem).not.toHaveAttribute('data-highlighted');
+
+      keydownHandler?.(new KeyboardEvent('keydown', { key: 'Home' }));
+
+      expect(elementItem).toHaveAttribute('data-highlighted', '');
+      expect(attributeItem).not.toHaveAttribute('data-highlighted');
+    });
+
+    it('activates the highlighted item with Enter and Space keys', async () => {
+      const firstItemClick = jest.spyOn(menuItems[0], 'click');
+
+      service.toggle(triggerElement, templateRef, viewContainerRef);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      keydownHandler?.(new KeyboardEvent('keydown', { key: 'ArrowDown' }));
+      keydownHandler?.(new KeyboardEvent('keydown', { key: 'Enter' }));
+      keydownHandler?.(new KeyboardEvent('keydown', { key: ' ' }));
+
+      expect(firstItemClick).toHaveBeenCalledTimes(2);
+    });
+
+    it('returns focus to the trigger when Escape closes the menu', async () => {
+      const focusSpy = jest.spyOn(triggerElement.nativeElement, 'focus');
+
+      service.toggle(triggerElement, templateRef, viewContainerRef);
+      await new Promise(resolve => setTimeout(resolve, 100));
+      keydownHandler?.(new KeyboardEvent('keydown', { key: 'Escape' }));
+
+      expect(service.isOpen()).toBe(false);
+      expect(focusSpy).toHaveBeenCalled();
     });
   });
 
