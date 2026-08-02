@@ -1,0 +1,79 @@
+<div class="flex flex-col gap-8">
+  @for (section of sections(); track section.id) {
+    <section class="flex flex-col gap-3">
+      <div class="flex flex-col gap-1">
+        <h3 class="text-base font-semibold sm:text-lg">{{ section.label }}</h3>
+        <p class="text-muted-foreground text-xs sm:text-sm">{{ section.summary }}</p>
+      </div>
+
+      <div class="overflow-x-auto rounded-lg border">
+        <table class="w-full min-w-160 border-collapse text-left text-sm">
+          <caption class="sr-only">
+            {{ section.label }} tokens, with their light and dark values in the {{ baseColor().label }} base color
+          </caption>
+          <thead class="bg-muted/50">
+            <tr>
+              <th scope="col" class="px-4 py-2.5 font-medium">Token</th>
+              <th scope="col" class="px-4 py-2.5 font-medium">Light</th>
+              <th scope="col" class="px-4 py-2.5 font-medium">Dark</th>
+              <th scope="col" class="px-4 py-2.5 font-medium">Used by</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of section.rows; track row.token.name) {
+              <tr class="border-t align-top">
+                <th scope="row" class="px-4 py-3 font-normal">
+                  <code class="text-xs font-medium">--{{ row.token.name }}</code>
+                  <p
+                    class="text-muted-foreground mt-1 text-xs font-normal"
+                    [innerHTML]="row.token.description | inlineCode"
+                  ></p>
+                  @if (row.token.utilities.length) {
+                    <p class="mt-1.5 flex flex-wrap gap-1">
+                      @for (utility of row.token.utilities; track utility) {
+                        <code class="bg-muted rounded px-1.5 py-0.5 text-[11px]">{{ utility }}</code>
+                      }
+                    </p>
+                  }
+                </th>
+
+                <td class="px-4 py-3">
+                  <span class="flex items-center gap-2">
+                    <span
+                      class="border-border inline-flex size-5 shrink-0 items-center justify-center rounded border"
+                      [style.background]="baseColor().light['background']"
+                    >
+                      <span class="size-3.5 rounded-xs" [style.background]="row.light"></span>
+                    </span>
+                    <code class="text-muted-foreground text-[11px] break-all">{{ row.light }}</code>
+                  </span>
+                </td>
+
+                <td class="px-4 py-3">
+                  <span class="flex items-center gap-2">
+                    <span
+                      class="border-border inline-flex size-5 shrink-0 items-center justify-center rounded border"
+                      [style.background]="baseColor().dark['background']"
+                    >
+                      <span class="size-3.5 rounded-xs" [style.background]="row.dark"></span>
+                    </span>
+                    <code class="text-muted-foreground text-[11px] break-all">{{ row.dark }}</code>
+                  </span>
+                </td>
+
+                <td class="text-muted-foreground px-4 py-3 text-xs">
+                  @if (row.token.usedBy.length) {
+                    <span>{{ row.token.usedBy.length }} components</span>
+                    <p class="mt-1">{{ row.token.usedBy.join(', ') }}</p>
+                  } @else {
+                    <span class="italic">Not used yet</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  }
+</div>
