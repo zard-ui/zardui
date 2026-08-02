@@ -8,7 +8,7 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
   imports: [...ZardInputOtpImports, FormsModule],
   template: `
     <div class="space-y-2">
-      <z-input-otp [zMaxLength]="6" [(ngModel)]="value" (zComplete)="completed = $event">
+      <z-input-otp [zMaxLength]="6" [(ngModel)]="value">
         <z-input-otp-group>
           <z-input-otp-slot [zIndex]="0" />
           <z-input-otp-slot [zIndex]="1" />
@@ -20,11 +20,9 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
       </z-input-otp>
       <div class="text-center text-sm">
         @if (value === '') {
-          <span class="text-muted-foreground">Enter your one-time password.</span>
-        } @else if (value === completed) {
-          <span>Completed: {{ completed }}</span>
+          Enter your one-time password.
         } @else {
-          <span>You entered: {{ value }}</span>
+          You entered: {{ value }}
         }
       </div>
     </div>
@@ -32,5 +30,4 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 })
 export class ZardDemoInputOtpControlledComponent {
   value = '';
-  completed = '';
 }

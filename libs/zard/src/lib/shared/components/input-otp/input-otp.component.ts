@@ -43,6 +43,7 @@ type OnChangeType = (value: string) => void;
             [attr.inputmode]="inputMode()"
             [attr.autocomplete]="'one-time-code'"
             [attr.aria-label]="ariaLabel(i)"
+            [attr.aria-invalid]="zInvalid() ? 'true' : null"
             [disabled]="disabled()"
             [readonly]="zReadonly()"
             [class]="slotClasses(i - 1)"
@@ -79,6 +80,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   readonly class = input<ClassValue>('');
   readonly zReadonly = input(false, { transform: booleanAttribute });
   readonly zIntegerOnly = input(true, { transform: booleanAttribute });
+  readonly zInvalid = input(false, { transform: booleanAttribute });
   readonly zSize = input<ZardInputOtpSize>('default');
 
   zValueChange = output<string>();

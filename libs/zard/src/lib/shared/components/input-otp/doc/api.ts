@@ -27,6 +27,12 @@ export const INPUT_OTP_API: ApiSection[] = [
         default: 'true',
       },
       {
+        name: '[zInvalid]',
+        description: 'Marks every slot as invalid; cascades to projected slots',
+        type: 'boolean',
+        default: 'false',
+      },
+      {
         name: '[zSize]',
         description: 'Size variant; cascades to projected slots and separators',
         type: "'sm' | 'default' | 'lg'",
@@ -62,6 +68,12 @@ export const INPUT_OTP_API: ApiSection[] = [
     props: [
       { name: '[class]', description: 'Custom CSS classes', type: 'ClassValue', default: "''" },
       { name: '[zIndex]', description: 'Zero-based position of the slot', type: 'number', default: 'required' },
+      {
+        name: '[zInvalid]',
+        description: 'Marks this slot as invalid; also inherited from the parent InputOtp',
+        type: 'boolean',
+        default: 'false',
+      },
     ],
   },
   {

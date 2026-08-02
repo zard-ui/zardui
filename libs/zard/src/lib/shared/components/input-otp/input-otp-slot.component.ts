@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -30,6 +31,7 @@ import { inputOtpSlotVariants } from './input-otp.variants';
       [attr.inputmode]="inputOtp?.inputMode() || 'numeric'"
       [attr.autocomplete]="'one-time-code'"
       [attr.aria-label]="ariaLabel()"
+      [attr.aria-invalid]="invalid() ? 'true' : null"
       [disabled]="inputOtp?.disabled()"
       [readonly]="inputOtp?.zReadonly()"
       [class]="classes()"
@@ -81,7 +83,11 @@ export class ZardInputOtpSlotComponent {
   inputOtp = inject(ZardInputOtpComponent, { optional: true });
 
   readonly zIndex = input.required<number>();
+  readonly zInvalid = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
+
+  /** A slot is invalid when marked directly or when the whole input is. */
+  readonly invalid = computed(() => this.zInvalid() || (this.inputOtp?.zInvalid() ?? false));
 
   readonly char = signal<string>('');
   readonly isActive = signal<boolean>(false);

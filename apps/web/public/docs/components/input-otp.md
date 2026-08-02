@@ -63,6 +63,7 @@ type OnChangeType = (value: string) => void;
             [attr.inputmode]="inputMode()"
             [attr.autocomplete]="'one-time-code'"
             [attr.aria-label]="ariaLabel(i)"
+            [attr.aria-invalid]="zInvalid() ? 'true' : null"
             [disabled]="disabled()"
             [readonly]="zReadonly()"
             [class]="slotClasses(i - 1)"
@@ -99,6 +100,7 @@ export class ZardInputOtpComponent implements ControlValueAccessor, AfterContent
   readonly class = input<ClassValue>('');
   readonly zReadonly = input(false, { transform: booleanAttribute });
   readonly zIntegerOnly = input(true, { transform: booleanAttribute });
+  readonly zInvalid = input(false, { transform: booleanAttribute });
   readonly zSize = input<ZardInputOtpSize>('default');
 
   zValueChange = output<string>();
@@ -622,6 +624,7 @@ export class ZardInputOtpSignalComponent extends ZardInputOtpComponent implement
 
 ```angular-ts
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -653,6 +656,7 @@ import { inputOtpSlotVariants } from './input-otp.variants';
       [attr.inputmode]="inputOtp?.inputMode() || 'numeric'"
       [attr.autocomplete]="'one-time-code'"
       [attr.aria-label]="ariaLabel()"
+      [attr.aria-invalid]="invalid() ? 'true' : null"
       [disabled]="inputOtp?.disabled()"
       [readonly]="inputOtp?.zReadonly()"
       [class]="classes()"
@@ -704,7 +708,11 @@ export class ZardInputOtpSlotComponent {
   inputOtp = inject(ZardInputOtpComponent, { optional: true });
 
   readonly zIndex = input.required<number>();
+  readonly zInvalid = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
+
+  /** A slot is invalid when marked directly or when the whole input is. */
+  readonly invalid = computed(() => this.zInvalid() || (this.inputOtp?.zInvalid() ?? false));
 
   readonly char = signal<string>('');
   readonly isActive = signal<boolean>(false);
@@ -818,6 +826,11 @@ export const ZARD_INPUT_OTP_SLOT = new InjectionToken<ZardInputOtpSlotApi>('Zard
 ```
 
 ```angular-ts
+/** Ready-made `zPattern` values, mirroring the ones shipped by the `input-otp` library. */
+export const REGEXP_ONLY_DIGITS = '[0-9]';
+export const REGEXP_ONLY_CHARS = '[a-zA-Z]';
+export const REGEXP_ONLY_DIGITS_AND_CHARS = '[a-zA-Z0-9]';
+
 export function isInputElement(target: EventTarget | null): target is HTMLInputElement {
   return target instanceof HTMLInputElement;
 }
@@ -851,41 +864,52 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 
 ## Examples
 
-### Default
+### Pattern
 
-Six slots split into two groups by a separator.
+Use `zPattern` to restrict the characters a slot accepts.
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from '@/shared/components/input-otp/input-otp.utils';
 
+<z-input-otp [zMaxLength]="6" [zPattern]="REGEXP_ONLY_DIGITS_AND_CHARS" [zIntegerOnly]="false">
+  ...
+</z-input-otp>
+```
+
+```angular-ts
+import { Component } from '@angular/core';
+
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
+import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.utils';
 
 @Component({
-  selector: 'z-demo-input-otp-default',
-  imports: [...ZardInputOtpImports],
+  selector: 'z-demo-input-otp-pattern',
+  imports: [...ZardInputOtpImports, ...ZardFieldImports],
   template: `
-    <z-input-otp [zMaxLength]="6">
-      <z-input-otp-group>
-        <z-input-otp-slot [zIndex]="0" />
-        <z-input-otp-slot [zIndex]="1" />
-        <z-input-otp-slot [zIndex]="2" />
-      </z-input-otp-group>
-      <z-input-otp-separator />
-      <z-input-otp-group>
-        <z-input-otp-slot [zIndex]="3" />
-        <z-input-otp-slot [zIndex]="4" />
-        <z-input-otp-slot [zIndex]="5" />
-      </z-input-otp-group>
-    </z-input-otp>
+    <div z-field class="w-fit">
+      <label z-field-label for="digits-only">Digits Only</label>
+      <z-input-otp id="digits-only" [zMaxLength]="6" [zPattern]="REGEXP_ONLY_DIGITS">
+        <z-input-otp-group>
+          <z-input-otp-slot [zIndex]="0" />
+          <z-input-otp-slot [zIndex]="1" />
+          <z-input-otp-slot [zIndex]="2" />
+          <z-input-otp-slot [zIndex]="3" />
+          <z-input-otp-slot [zIndex]="4" />
+          <z-input-otp-slot [zIndex]="5" />
+        </z-input-otp-group>
+      </z-input-otp>
+    </div>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoInputOtpDefaultComponent {}
+export class ZardDemoInputOtpPatternComponent {
+  readonly REGEXP_ONLY_DIGITS = REGEXP_ONLY_DIGITS;
+}
 ```
 
 ### Separator
 
-Use `InputOtpSeparator` between every `InputOtpGroup` to split the slots into smaller blocks.
+Use `InputOtpSeparator` between groups to split the slots into smaller blocks.
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
@@ -920,7 +944,7 @@ export class ZardDemoInputOtpSeparatorComponent {}
 
 ### Controlled
 
-Bind the value with `ngModel` and listen to `(zComplete)` to react as soon as every slot is filled.
+Bind the value with `ngModel` to read and write it from the parent component.
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -933,7 +957,7 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
   imports: [...ZardInputOtpImports, FormsModule],
   template: `
     <div class="space-y-2">
-      <z-input-otp [zMaxLength]="6" [(ngModel)]="value" (zComplete)="completed = $event">
+      <z-input-otp [zMaxLength]="6" [(ngModel)]="value">
         <z-input-otp-group>
           <z-input-otp-slot [zIndex]="0" />
           <z-input-otp-slot [zIndex]="1" />
@@ -945,11 +969,9 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
       </z-input-otp>
       <div class="text-center text-sm">
         @if (value === '') {
-          <span class="text-muted-foreground">Enter your one-time password.</span>
-        } @else if (value === completed) {
-          <span>Completed: {{ completed }}</span>
+          Enter your one-time password.
         } @else {
-          <span>You entered: {{ value }}</span>
+          You entered: {{ value }}
         }
       </div>
     </div>
@@ -957,61 +979,140 @@ import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imp
 })
 export class ZardDemoInputOtpControlledComponent {
   value = '';
-  completed = '';
 }
 ```
 
-### Pattern
+### Disabled
 
-Use `zPattern` to restrict the accepted characters. Set `[zIntegerOnly]="false"` when letters are allowed.
+Use the `disabled` binding to disable every slot at once.
+
+```angular-ts
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
+
+@Component({
+  selector: 'z-demo-input-otp-disabled',
+  imports: [...ZardInputOtpImports, FormsModule],
+  template: `
+    <z-input-otp id="disabled" [zMaxLength]="6" [(ngModel)]="value" [disabled]="true">
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="0" />
+        <z-input-otp-slot [zIndex]="1" />
+        <z-input-otp-slot [zIndex]="2" />
+      </z-input-otp-group>
+      <z-input-otp-separator />
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="3" />
+        <z-input-otp-slot [zIndex]="4" />
+        <z-input-otp-slot [zIndex]="5" />
+      </z-input-otp-group>
+    </z-input-otp>
+  `,
+})
+export class ZardDemoInputOtpDisabledComponent {
+  value = '123456';
+}
+```
+
+### Invalid
+
+Use `zInvalid` on a slot — or on the whole `InputOtp` — to mark the value as invalid.
+
+```angular-ts
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
+
+@Component({
+  selector: 'z-demo-input-otp-invalid',
+  imports: [...ZardInputOtpImports, FormsModule],
+  template: `
+    <z-input-otp [zMaxLength]="6" [(ngModel)]="value">
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="0" zInvalid />
+        <z-input-otp-slot [zIndex]="1" zInvalid />
+      </z-input-otp-group>
+      <z-input-otp-separator />
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="2" zInvalid />
+        <z-input-otp-slot [zIndex]="3" zInvalid />
+      </z-input-otp-group>
+      <z-input-otp-separator />
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="4" zInvalid />
+        <z-input-otp-slot [zIndex]="5" zInvalid />
+      </z-input-otp-group>
+    </z-input-otp>
+  `,
+})
+export class ZardDemoInputOtpInvalidComponent {
+  value = '000000';
+}
+```
+
+### Four digits
+
+Use `zMaxLength` to change how many slots the input holds.
 
 ```angular-ts
 import { Component } from '@angular/core';
 
 import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
-
-export const REGEXP_ONLY_DIGITS = '[0-9]';
-export const REGEXP_ONLY_CHARS = '[a-zA-Z]';
-export const REGEXP_ONLY_DIGITS_AND_CHARS = '[a-zA-Z0-9]';
+import { REGEXP_ONLY_DIGITS } from '@/shared/components/input-otp/input-otp.utils';
 
 @Component({
-  selector: 'z-demo-input-otp-pattern',
+  selector: 'z-demo-input-otp-four-digits',
   imports: [...ZardInputOtpImports],
   template: `
-    <div class="space-y-4">
-      <div>
-        <p class="text-muted-foreground mb-2 text-sm">Only digits</p>
-        <z-input-otp [zMaxLength]="6" [zPattern]="REGEXP_ONLY_DIGITS">
-          <z-input-otp-group>
-            <z-input-otp-slot [zIndex]="0" />
-            <z-input-otp-slot [zIndex]="1" />
-            <z-input-otp-slot [zIndex]="2" />
-            <z-input-otp-slot [zIndex]="3" />
-            <z-input-otp-slot [zIndex]="4" />
-            <z-input-otp-slot [zIndex]="5" />
-          </z-input-otp-group>
-        </z-input-otp>
-      </div>
-
-      <div>
-        <p class="text-muted-foreground mb-2 text-sm">Letters and numbers</p>
-        <z-input-otp [zMaxLength]="6" [zPattern]="REGEXP_ONLY_DIGITS_AND_CHARS" [zIntegerOnly]="false">
-          <z-input-otp-group>
-            <z-input-otp-slot [zIndex]="0" />
-            <z-input-otp-slot [zIndex]="1" />
-            <z-input-otp-slot [zIndex]="2" />
-            <z-input-otp-slot [zIndex]="3" />
-            <z-input-otp-slot [zIndex]="4" />
-            <z-input-otp-slot [zIndex]="5" />
-          </z-input-otp-group>
-        </z-input-otp>
-      </div>
-    </div>
+    <z-input-otp [zMaxLength]="4" [zPattern]="REGEXP_ONLY_DIGITS">
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="0" />
+        <z-input-otp-slot [zIndex]="1" />
+        <z-input-otp-slot [zIndex]="2" />
+        <z-input-otp-slot [zIndex]="3" />
+      </z-input-otp-group>
+    </z-input-otp>
   `,
 })
-export class ZardDemoInputOtpPatternComponent {
-  REGEXP_ONLY_DIGITS = REGEXP_ONLY_DIGITS;
-  REGEXP_ONLY_DIGITS_AND_CHARS = REGEXP_ONLY_DIGITS_AND_CHARS;
+export class ZardDemoInputOtpFourDigitsComponent {
+  readonly REGEXP_ONLY_DIGITS = REGEXP_ONLY_DIGITS;
+}
+```
+
+### Alphanumeric
+
+Pair `REGEXP_ONLY_DIGITS_AND_CHARS` with `[zIntegerOnly]="false"` to accept letters too.
+
+```angular-ts
+import { Component } from '@angular/core';
+
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
+import { REGEXP_ONLY_DIGITS_AND_CHARS } from '@/shared/components/input-otp/input-otp.utils';
+
+@Component({
+  selector: 'z-demo-input-otp-alphanumeric',
+  imports: [...ZardInputOtpImports],
+  template: `
+    <z-input-otp [zMaxLength]="6" [zPattern]="REGEXP_ONLY_DIGITS_AND_CHARS" [zIntegerOnly]="false">
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="0" />
+        <z-input-otp-slot [zIndex]="1" />
+        <z-input-otp-slot [zIndex]="2" />
+      </z-input-otp-group>
+      <z-input-otp-separator />
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="3" />
+        <z-input-otp-slot [zIndex]="4" />
+        <z-input-otp-slot [zIndex]="5" />
+      </z-input-otp-group>
+    </z-input-otp>
+  `,
+})
+export class ZardDemoInputOtpAlphanumericComponent {
+  readonly REGEXP_ONLY_DIGITS_AND_CHARS = REGEXP_ONLY_DIGITS_AND_CHARS;
 }
 ```
 
@@ -1023,54 +1124,91 @@ Use `formControlName` to bind the OTP to a reactive form.
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideRefreshCw } from '@ng-icons/lucide';
+
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardFieldImports } from '@/shared/components/field/field.imports';
 import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
 
+const SLOT_CLASSES =
+  '[&_[data-slot=input-otp-slot]>input]:h-12 [&_[data-slot=input-otp-slot]>input]:w-11 [&_[data-slot=input-otp-slot]>input]:text-xl';
+
 @Component({
   selector: 'z-demo-input-otp-form',
-  imports: [...ZardInputOtpImports, ...ZardFieldImports, ZardButtonComponent, ReactiveFormsModule],
+  imports: [
+    ...ZardInputOtpImports,
+    ...ZardFieldImports,
+    ZardCardImports,
+    ZardButtonComponent,
+    ReactiveFormsModule,
+    NgIcon,
+  ],
   template: `
-    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="w-2/3 space-y-6">
-      <div z-field>
-        <label z-field-label for="pin">One-Time Password</label>
-        <z-input-otp id="pin" [zMaxLength]="6" formControlName="pin">
-          <z-input-otp-group>
-            <z-input-otp-slot [zIndex]="0" />
-            <z-input-otp-slot [zIndex]="1" />
-            <z-input-otp-slot [zIndex]="2" />
-            <z-input-otp-slot [zIndex]="3" />
-            <z-input-otp-slot [zIndex]="4" />
-            <z-input-otp-slot [zIndex]="5" />
-          </z-input-otp-group>
-        </z-input-otp>
-        <p z-field-description>Please enter the one-time password sent to your phone.</p>
-        @if (form.controls.pin.touched && form.controls.pin.hasError('required')) {
-          <z-field-error>Your one-time password is required.</z-field-error>
-        }
-        @if (form.controls.pin.touched && form.controls.pin.hasError('minlength')) {
-          <z-field-error>Your one-time password must be 6 characters.</z-field-error>
-        }
-      </div>
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+      <z-card class="mx-auto max-w-md">
+        <div z-card-header>
+          <z-card-title zTitle="Verify your login" />
+          <z-card-description [zDescription]="description" />
+          <ng-template #description>
+            Enter the verification code we sent to your email address:
+            <span class="font-medium">m&#64;example.com</span>
+          </ng-template>
+        </div>
 
-      <button z-button type="submit" [disabled]="form.invalid">Submit</button>
+        <div z-card-content>
+          <div z-field>
+            <div class="flex items-center justify-between">
+              <label z-field-label for="otp-verification">Verification code</label>
+              <button z-button type="button" zType="outline" zSize="xs">
+                <ng-icon name="lucideRefreshCw" />
+                Resend Code
+              </button>
+            </div>
+            <z-input-otp id="otp-verification" [zMaxLength]="6" formControlName="code">
+              <z-input-otp-group [class]="slotClasses">
+                <z-input-otp-slot [zIndex]="0" />
+                <z-input-otp-slot [zIndex]="1" />
+                <z-input-otp-slot [zIndex]="2" />
+              </z-input-otp-group>
+              <z-input-otp-separator class="mx-2" />
+              <z-input-otp-group [class]="slotClasses">
+                <z-input-otp-slot [zIndex]="3" />
+                <z-input-otp-slot [zIndex]="4" />
+                <z-input-otp-slot [zIndex]="5" />
+              </z-input-otp-group>
+            </z-input-otp>
+            <p z-field-description>
+              <a href="#">I no longer have access to this email address.</a>
+            </p>
+          </div>
+        </div>
 
-      @if (submitted) {
-        <p class="text-muted-foreground text-sm">Submitted: {{ submitted }}</p>
-      }
+        <div z-card-footer>
+          <div z-field>
+            <button z-button type="submit" class="w-full" [disabled]="form.invalid">Verify</button>
+            <div class="text-muted-foreground text-sm">
+              Having trouble signing in?
+              <a href="#" class="hover:text-primary underline underline-offset-4 transition-colors">Contact support</a>
+            </div>
+          </div>
+        </div>
+      </z-card>
     </form>
   `,
+  viewProviders: [provideIcons({ lucideRefreshCw })],
 })
 export class ZardDemoInputOtpFormComponent {
-  submitted = '';
+  readonly slotClasses = SLOT_CLASSES;
 
-  form = new FormGroup({
-    pin: new FormControl('', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]),
+  readonly form = new FormGroup({
+    code: new FormControl('', [Validators.required, Validators.minLength(6)]),
   });
 
   onSubmit(): void {
     if (this.form.valid) {
-      this.submitted = this.form.value.pin ?? '';
+      console.log('Verification code:', this.form.value.code);
     }
   }
 }
@@ -1149,6 +1287,7 @@ Container for a one-time password input. Renders its own slots when none are pro
 | `[zPattern]` | Per-character regex pattern used to validate typed and pasted input | `string` | `'[0-9]'` |
 | `[zReadonly]` | Makes every slot readonly | `boolean` | `false` |
 | `[zIntegerOnly]` | Sets inputmode to numeric and restricts keyboard input to digits | `boolean` | `true` |
+| `[zInvalid]` | Marks every slot as invalid; cascades to projected slots | `boolean` | `false` |
 | `[zSize]` | Size variant; cascades to projected slots and separators | `'sm' \| 'default' \| 'lg'` | `'default'` |
 | `(zValueChange)` | Emitted whenever the value changes | `string` | `-` |
 | `(zComplete)` | Emitted when every slot is filled | `string` | `-` |
@@ -1170,6 +1309,7 @@ Individual character slot. Displays the character, the active state, and the bli
 | --- | --- | --- | --- |
 | `[class]` | Custom CSS classes | `ClassValue` | `''` |
 | `[zIndex]` | Zero-based position of the slot | `number` | `required` |
+| `[zInvalid]` | Marks this slot as invalid; also inherited from the parent InputOtp | `boolean` | `false` |
 
 ### z-input-otp-group, [z-input-otp-group]
 
