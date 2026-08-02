@@ -61,7 +61,9 @@ Major updates this month with new interactive components including Carousel, But
 
 Use the CLI to add carousel to your project.
 
-### default
+```
+npx zard-cli@latest add carousel
+```
 
 A slideshow component for cycling through elements with support for mouse drag, touch swipe, and automatic playback.
 
@@ -115,7 +117,9 @@ export class ZardDemoCarouselPreviewComponent {
 
 Use the CLI to add kbd to your project.
 
-### default
+```
+npx zard-cli@latest add kbd
+```
 
 Display keyboard keys and shortcuts in a visually consistent way.
 
@@ -163,7 +167,9 @@ Breaking changes with icons migration from lucide-static to lucide-angular for b
 
 Use the CLI to add sheet to your project.
 
-### basic
+```
+npx zard-cli@latest add sheet
+```
 
 A versatile sheet component for side panels and overlays with customizable positioning and smooth transitions.
 
@@ -270,7 +276,9 @@ export class ZardDemoSheetBasicComponent {
 
 Use the CLI to add empty to your project.
 
-### preview
+```
+npx zard-cli@latest add empty
+```
 
 Clean empty state component for "no data" scenarios with customizable messages and icons.
 
@@ -336,7 +344,9 @@ Focus on loading and feedback components this month. New Progress, Skeleton, and
 
 Use the CLI to add progress to your project.
 
-### preview
+```
+npx zard-cli@latest add progress
+```
 
 Visual progress indicator showing the completion progress of a task.
 
@@ -370,7 +380,9 @@ export class ZardDemoProgressPreviewComponent {
 
 Use the CLI to add skeleton to your project.
 
-### default
+```
+npx zard-cli@latest add skeleton
+```
 
 Loading placeholder component for better perceived performance during content loading with pulse animation.
 
@@ -402,7 +414,9 @@ export class ZardDemoSkeletonDefaultComponent {}
 
 Use the CLI to add spinner to your project.
 
-### customization
+```
+npx zard-cli@latest add spinner
+```
 
 Animated loading spinner customizable via the [zIcon] template input for swapping the underlying icon.
 
@@ -457,7 +471,9 @@ Enhanced navigation and display components. New Avatar component with fallback s
 
 Use the CLI to add avatar to your project.
 
-### basic
+```
+npx zard-cli@latest add avatar
+```
 
 User profile image component with automatic fallback to initials and multiple size variants.
 
@@ -487,7 +503,9 @@ export class ZardDemoAvatarBasicComponent {}
 
 Use the CLI to add separator to your project.
 
-### preview
+```
+npx zard-cli@latest add separator
+```
 
 Visual separator component for separating content sections with horizontal and vertical orientations.
 
@@ -526,7 +544,9 @@ export class ZardDemoSeparatorPreviewComponent {}
 
 Use the CLI to add breadcrumb to your project.
 
-### default
+```
+npx zard-cli@latest add breadcrumb
+```
 
 Navigation breadcrumb trail showing the current page location within a hierarchical structure.
 
@@ -567,7 +587,9 @@ Major release of navigation and content organization components. New Tabs for mu
 
 Use the CLI to add tabs to your project.
 
-### default
+```
+npx zard-cli@latest add tabs
+```
 
 Tabbed interface component for organizing content into separate views with smooth transitions and keyboard navigation.
 
@@ -663,7 +685,9 @@ export class ZardDemoTabsDefaultComponent {}
 
 Use the CLI to add accordion to your project.
 
-### basic
+```
+npx zard-cli@latest add accordion
+```
 
 Collapsible content panels for organizing information in a compact space with expand/collapse animations.
 
@@ -682,7 +706,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-basic',
   imports: [ZardAccordionImports],
   template: `
-    <z-accordion zDefaultValue="item-1" zType="single" class="max-w-sm">
+    <div z-accordion zDefaultValue="item-1" zType="single" class="max-w-sm">
       <z-accordion-item zValue="item-1" zTitle="How do I reset my password?">
         Click on 'Forgot Password' on the login page, enter your email address, and we'll send you a link to reset your
         password. The link will expire in 24 hours.
@@ -697,7 +721,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
         We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely through our
         payment partners.
       </z-accordion-item>
-    </z-accordion>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -710,7 +734,9 @@ export class ZardDemoAccordionBasicComponent {}
 
 Use the CLI to add tooltip to your project.
 
-### hover
+```
+npx zard-cli@latest add tooltip
+```
 
 Contextual information overlay displayed on hover with customizable positioning and delay settings.
 
@@ -742,7 +768,9 @@ Overlay components release! New Dialog, Popover, Alert Dialog, and Dropdown Menu
 
 Use the CLI to add dialog to your project.
 
-### basic
+```
+npx zard-cli@latest add dialog
+```
 
 Modal dialog component for displaying important content that requires user attention with backdrop overlay.
 
@@ -828,7 +856,9 @@ export class ZardDemoDialogBasicComponent {
 
 Use the CLI to add popover to your project.
 
-### default
+```
+npx zard-cli@latest add popover
+```
 
 Floating content container that appears on trigger with customizable positioning and close behavior.
 
@@ -865,7 +895,9 @@ export class ZardDemoPopoverDefaultComponent {}
 
 Use the CLI to add alert-dialog to your project.
 
-### default
+```
+npx zard-cli@latest add alert-dialog
+```
 
 Confirmation dialog for critical actions requiring explicit user confirmation with cancel and confirm options.
 
@@ -903,7 +935,9 @@ export class ZardDemoAlertDialogDefaultComponent {
 
 Use the CLI to add dropdown to your project.
 
-### default
+```
+npx zard-cli@latest add dropdown
+```
 
 Context menu with hierarchical actions, keyboard navigation, and support for nested submenus.
 
@@ -946,7 +980,9 @@ Comprehensive form controls release! New Select, Checkbox, Radio, Switch, and Sl
 
 Use the CLI to add select to your project.
 
-### default
+```
+npx zard-cli@latest add select
+```
 
 Dropdown select with grouped options, multi-select support, keyboard navigation, and custom item rendering.
 
@@ -981,7 +1017,9 @@ export class ZardDemoSelectDefaultComponent {
 
 Use the CLI to add checkbox to your project.
 
-### default
+```
+npx zard-cli@latest add checkbox
+```
 
 Checkbox input component with indeterminate state support and full accessibility features.
 
@@ -1045,7 +1083,9 @@ export class ZardDemoCheckboxDefaultComponent {
 
 Use the CLI to add radio-group to your project.
 
-### default
+```
+npx zard-cli@latest add radio-group
+```
 
 Radio button group for mutually exclusive options with customizable layouts and orientation.
 
@@ -1093,7 +1133,9 @@ export class ZardDemoRadioGroupDefaultComponent {
 
 Use the CLI to add switch to your project.
 
-### default
+```
+npx zard-cli@latest add switch
+```
 
 Toggle switch component for boolean settings with smooth animation transitions.
 
@@ -1120,7 +1162,9 @@ export class ZardDemoSwitchDefaultComponent {}
 
 Use the CLI to add slider to your project.
 
-### default
+```
+npx zard-cli@latest add slider
+```
 
 Range slider for numeric value selection with min/max bounds, step support, and value display.
 
@@ -1153,7 +1197,9 @@ Form foundations and CLI launch! New Input and Form components with validation s
 
 Use the CLI to add input to your project.
 
-### default
+```
+npx zard-cli@latest add input
+```
 
 Text input field component with multiple variants, sizes, and built-in validation state indicators.
 
@@ -1187,7 +1233,9 @@ export class ZardDemoInputDefaultComponent {}
 
 Use the CLI to add form to your project.
 
-### default
+```
+npx zard-cli@latest add form
+```
 
 Complete form component with field management, validation, error handling, and submission control.
 
@@ -1281,7 +1329,9 @@ export class ZardDemoFormDefaultComponent {
 
 Use the CLI to add button to your project.
 
-### default
+```
+npx zard-cli@latest add button
+```
 
 Versatile button component with multiple variants (primary, secondary, outline, ghost), sizes, and loading states.
 
@@ -1307,7 +1357,9 @@ export class ZardDemoButtonDefaultComponent {}
 
 Use the CLI to add card to your project.
 
-### default
+```
+npx zard-cli@latest add card
+```
 
 Container component for grouping related content with optional header, footer, and customizable padding.
 
@@ -1401,7 +1453,9 @@ export class ZardDemoCardDefaultComponent {
 
 Use the CLI to add badge to your project.
 
-### default
+```
+npx zard-cli@latest add badge
+```
 
 Small label component for displaying status, categories, counts, or tags with various color variants.
 
@@ -1444,7 +1498,9 @@ export class ZardDemoBadgeDefaultComponent {}
 
 Use the CLI to add alert to your project.
 
-### basic
+```
+npx zard-cli@latest add alert
+```
 
 Notification component for displaying important information to users with different severity levels.
 
@@ -1494,7 +1550,9 @@ export class ZardDemoAlertBasicComponent {}
 
 Use the CLI to add table to your project.
 
-### simple
+```
+npx zard-cli@latest add table
+```
 
 Data table component with sorting, filtering, pagination, and customizable column rendering.
 
