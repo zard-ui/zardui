@@ -9,7 +9,8 @@ import { InlineCodePipe } from '../../pipes/inline-code.pipe';
   standalone: true,
   imports: [RouterLink, InlineCodePipe],
   template: `
-    <nav aria-label="Related documentation" class="grid gap-3 sm:grid-cols-2">
+    <!-- A plain div, not a <nav>: the markdown serializer drops <nav> subtrees. -->
+    <div class="grid gap-3 sm:grid-cols-2">
       @for (step of steps; track step.href) {
         <a
           [routerLink]="step.href"
@@ -19,7 +20,7 @@ import { InlineCodePipe } from '../../pipes/inline-code.pipe';
           <span class="text-muted-foreground text-xs sm:text-sm" [innerHTML]="step.description | inlineCode"></span>
         </a>
       }
-    </nav>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

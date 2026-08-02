@@ -1,5 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input, signal } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideCheck, lucideClipboard } from '@ng-icons/lucide';
+
 import { BASE_COLORS } from '../../data/base-colors.data';
 import { THEME_TOKENS, TOKEN_GROUPS } from '../../data/tokens.data';
 import type { BaseColorTheme, ThemeMode, ThemeToken, TokenGroup } from '../../models/theming.model';
@@ -21,9 +24,10 @@ interface TokenSection {
 @Component({
   selector: 'z-token-table',
   standalone: true,
-  imports: [InlineCodePipe],
+  imports: [InlineCodePipe, NgIcon],
   templateUrl: './token-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCheck, lucideClipboard })],
 })
 export class TokenTableComponent {
   private readonly clipboard = inject(ThemingClipboardService);
