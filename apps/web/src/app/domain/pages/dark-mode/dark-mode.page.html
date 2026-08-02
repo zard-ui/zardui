@@ -7,87 +7,444 @@
   <!-- Overview Section -->
   <z-doc-heading
     title="Dark Mode"
-    description="Complete dark mode system in ZardUI using TailwindCSS v4 custom variants and ZardDarkMode service for seamless theme switching."
+    description="Complete dark mode system in ZardUI using TailwindCSS v4 custom variants and the ZardDarkMode service for seamless theme switching."
     scrollSpyItem="overview"
     id="overview"
   />
 
-  <div class="flex flex-col gap-6">
-    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
-      ZardUI implements a robust dark mode system using
-      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">&#64;custom-variant dark</code>
-      from TailwindCSS v4 combined with an Angular
-      <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">Dark Mode Service</code>
-      for state management and persistence.
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm sm:text-base">
+      Dark mode in ZardUI is a single Angular service,
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ZardDarkMode</code>
+      , paired with the TailwindCSS v4
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;custom-variant dark</code>
+      . Install it with a single CLI command or wire it up by hand — both paths are documented below.
     </p>
   </div>
 
-  <!-- Current Implementation Section -->
-  <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="current-implementation" id="current-implementation">
-    <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Current Implementation</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
-        The current system works by applying the
-        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">.dark</code>
-        class to the root HTML element, activating all dark style variations defined in the components.
-      </p>
-    </div>
-  </section>
-
-  <!-- Service Details Section -->
-  <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="service-details" id="service-details">
-    <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Dark Mode Service</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
-        The core of the system is an Angular service that manages theme state, persistence, and CSS class application.
-        To install it, use CLI:
+  <!-- How It Works Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="how-it-works" id="how-it-works">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        How it works
+      </h2>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        There is no theme provider to wrap your app in and no context to thread through components. The service owns a
+        single piece of state — the theme preference — and writes the result of that state onto the root
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&lt;html&gt;</code>
+        element. TailwindCSS does the rest.
       </p>
     </div>
 
-    <z-code-tabs [data]="serviceInstallationTabs" />
-
-    <div class="flex flex-col gap-6">
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
-        It will also update
-        <b>index.html</b>
-        to set appropriate dark mode theme before Angular is initialized and rendered.
-      </p>
-    </div>
-  </section>
-
-  <!-- Usage in App Section -->
-  <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="usage-in-app" id="usage-in-app">
-    <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Usage in Application</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
-        The service is initialized within
-        <b>index.html</b>
-        . The HeaderComponent contains an example of how to use the service for toggle control.
-      </p>
-    </div>
-
-    <div class="flex flex-col gap-6">
-      <div>
-        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">
-          Usage in Header Component
-          <span class="text-muted-foreground font-normal">(or any component you want to use to trigger the theme)</span>
-        </h3>
+    <div class="bg-card flex flex-col gap-5 rounded-lg border p-4 sm:p-6">
+      <div class="flex flex-col gap-1">
+        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight first:mt-0">The service applies the theme</h3>
         <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-          The header uses the service to implement the theme toggle button, allowing users to switch between light and
-          dark mode.
+          Every time the preference changes,
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">updateThemeMode</code>
+          toggles the
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">.dark</code>
+          class and sets the
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">data-theme</code>
+          attribute on the
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&lt;html&gt;</code>
+          element.
         </p>
-        <z-code-block [data]="headerComponentBlock" />
-        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Button Template</h3>
-        <z-code-block [data]="headerTemplateBlock" />
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">TailwindCSS resolves the variant</h3>
+        <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">
+            &#64;custom-variant dark (&amp;:is(.dark *))
+          </code>
+          in
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/styles.css</code>
+          tells TailwindCSS to resolve every
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">dark:</code>
+          utility against that class, so components restyle themselves without a single line of extra code.
+        </p>
+      </div>
+
+      <div class="flex flex-col gap-1">
+        <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">System preference stays live</h3>
+        <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+          When the mode is
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">system</code>
+          , the service subscribes to
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">(prefers-color-scheme: dark)</code>
+          through Angular's
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">MediaMatcher</code>
+          and follows the operating system as it changes — no reload required.
+        </p>
       </div>
     </div>
   </section>
 
+  <!-- Installation Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="installation" id="installation">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Installation
+      </h2>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        Let the CLI wire everything up for you, or follow the manual steps when your project does not match the default
+        structure.
+      </p>
+    </div>
+
+    <div class="overflow-hidden transition-all duration-200 ease-in-out">
+      <nav
+        class="text-muted-foreground mb-3 flex gap-6"
+        role="tablist"
+        aria-label="Installation method"
+        #tabList
+        (keydown.{arrowleft,arrowright,home,end,space,enter}.prevent)="onInstallKeyDown($event, tabList)"
+      >
+        <button
+          id="cli-tab"
+          role="tab"
+          [attr.aria-selected]="activeTab() === 'cli'"
+          [attr.aria-controls]="'cli-panel'"
+          [attr.tabindex]="activeTab() === 'cli' ? 0 : -1"
+          class="cursor-pointer px-0 py-1 pb-2 text-base font-medium"
+          (click)="activeTab.set('cli')"
+          [class.text-foreground]="activeTab() === 'cli'"
+          [class.border-b-2]="activeTab() === 'cli'"
+          [class.border-primary]="activeTab() === 'cli'"
+        >
+          Command
+        </button>
+        <button
+          id="manual-tab"
+          role="tab"
+          [attr.aria-selected]="activeTab() === 'manual'"
+          [attr.aria-controls]="'manual-panel'"
+          [attr.tabindex]="activeTab() === 'manual' ? 0 : -1"
+          class="cursor-pointer px-0 py-1 pb-2 text-base font-medium"
+          (click)="activeTab.set('manual')"
+          [class.border-b-2]="activeTab() === 'manual'"
+          [class.border-primary]="activeTab() === 'manual'"
+          [class.text-foreground]="activeTab() === 'manual'"
+        >
+          Manual
+        </button>
+      </nav>
+
+      <section
+        role="tabpanel"
+        id="cli-panel"
+        [attr.aria-labelledby]="'cli-tab'"
+        class="transition-all duration-200 ease-in-out"
+        [class.translate-x-0]="activeTab() === 'cli'"
+        [class.-translate-x-full]="activeTab() !== 'cli'"
+        [class.opacity-0]="activeTab() !== 'cli'"
+        [class.invisible]="activeTab() !== 'cli'"
+        [class.h-0]="activeTab() !== 'cli'"
+        [class.overflow-hidden]="activeTab() !== 'cli'"
+        [class.pointer-events-none]="activeTab() !== 'cli'"
+      >
+        <z-steps [steps]="cliSteps" />
+        <p class="text-muted-foreground -mt-6 pl-[3.15rem] text-base leading-relaxed">
+          <a
+            routerLink="/docs/dark-mode"
+            fragment="usage"
+            class="text-foreground font-medium underline underline-offset-4"
+          >
+            See the usage example
+          </a>
+        </p>
+      </section>
+
+      <section
+        role="tabpanel"
+        id="manual-panel"
+        [attr.aria-labelledby]="'manual-tab'"
+        class="transition-all duration-200 ease-in-out"
+        [class.translate-x-0]="activeTab() === 'manual'"
+        [class.translate-x-full]="activeTab() !== 'manual'"
+        [class.opacity-0]="activeTab() !== 'manual'"
+        [class.invisible]="activeTab() !== 'manual'"
+        [class.h-0]="activeTab() !== 'manual'"
+        [class.overflow-hidden]="activeTab() !== 'manual'"
+        [class.pointer-events-none]="activeTab() !== 'manual'"
+      >
+        <z-steps [steps]="manualSteps" />
+      </section>
+    </div>
+  </section>
+
+  <!-- CLI Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="cli" id="cli">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Working with the CLI
+      </h2>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli add dark-mode</code>
+        is the only entry in the registry that also edits files you already own. It is worth knowing exactly what it
+        does before you run it.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Prerequisites</h3>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        The command expects a project that has already been initialized with
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli init</code>
+        , which means a
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
+        at the root of the project and a
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">shared/core/provider/providezard.ts</code>
+        file. Without the config the command stops with
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">Configuration not found</code>
+        . Read more about the
+        <a routerLink="/docs/cli" class="text-foreground font-medium underline underline-offset-4">CLI</a>
+        and the
+        <a routerLink="/docs/components-json" class="text-foreground font-medium underline underline-offset-4">
+          components.json
+        </a>
+        file.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">What the command changes</h3>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        Unlike a component, dark mode is not a plain file copy. Four things happen:
+      </p>
+      <ul class="text-muted-foreground flex list-disc flex-col gap-3 pl-6 text-base leading-relaxed">
+        <li>
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">dark-mode.ts</code>
+          and
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">index.ts</code>
+          are created in your services directory.
+        </li>
+        <li>
+          An inline
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&lt;script&gt;</code>
+          is injected right before
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&lt;/head&gt;</code>
+          in the
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">index.html</code>
+          you point it at.
+        </li>
+        <li>
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">
+            provideAppInitializer(() =&gt; inject(ZardDarkMode).init())
+          </code>
+          becomes the first provider inside
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">makeEnvironmentProviders([...])</code>
+          in
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">shared/core/provider/providezard.ts</code>
+          , along with the
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">inject</code>
+          and
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">provideAppInitializer</code>
+          imports from
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;angular/core</code>
+          and the
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ZardDarkMode</code>
+          import.
+        </li>
+        <li>
+          If
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">providezard.ts</code>
+          does not exist, the CLI warns and skips that step. Run
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli init</code>
+          first, or follow the Manual tab.
+        </li>
+      </ul>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Options</h3>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-y, --yes</code>
+        — Skip the confirmation prompt. The
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">index.html</code>
+        question is still asked, because the CLI cannot guess that path for you.
+        <br />
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-o, --overwrite</code>
+        — Overwrite an existing
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">dark-mode.ts</code>
+        instead of leaving it untouched. Use it to pull in a newer version of the service.
+        <br />
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-p, --path &lt;path&gt;</code>
+        — Write the service somewhere other than the folder resolved from
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
+        .
+        <br />
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-c, --cwd &lt;cwd&gt;</code>
+        — Run against another working directory, handy in a monorepo.
+        <br />
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">-a, --all</code>
+        — Add every component in the registry, dark mode included.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Running it twice is safe</h3>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        Both edits are idempotent. The theme script is not injected again when
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">localStorage.theme</code>
+        is already present in the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">index.html</code>
+        , and the provider is not duplicated when
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ZardDarkMode</code>
+        already appears in
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">providezard.ts</code>
+        .
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Where the service is written</h3>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        The registry entry declares
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">basePath: 'services'</code>
+        , so the destination comes from the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">aliases.services</code>
+        entry of your
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">components.json</code>
+        — which defaults to
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;/shared/services</code>
+        . The same alias is used for the import statement added to
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">providezard.ts</code>
+        , so a custom alias stays consistent on both ends.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">When to prefer the manual installation</h3>
+      <ul class="text-muted-foreground flex list-disc flex-col gap-3 pl-6 text-base leading-relaxed">
+        <li>
+          The project has no
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">providezard.ts</code>
+          — the provider step would be skipped anyway.
+        </li>
+        <li>The folder structure is customized beyond what the aliases can express.</li>
+        <li>
+          You are in a monorepo where
+          <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">index.html</code>
+          lives outside the default path and you would rather edit it yourself.
+        </li>
+      </ul>
+    </div>
+
+    <div class="bg-muted/30 rounded-lg border p-4 sm:p-6">
+      <p class="text-muted-foreground text-xs sm:text-sm">
+        <strong>Note:</strong>
+        if you leave the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">index.html</code>
+        question blank, the CLI logs
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">Skipping dark mode script injection</code>
+        and returns without touching the file. The service still works, but the first paint happens before the theme is
+        resolved — expect a flash of the wrong theme on load until you add the script yourself.
+      </p>
+    </div>
+  </section>
+
+  <!-- Usage Section -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="usage" id="usage">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Usage</h2>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">ZardDarkMode</code>
+        is provided in root, so a plain
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">inject()</code>
+        is all you need. Everything it exposes is a signal, which means templates update on their own.
+      </p>
+    </div>
+
+    <z-code-block [data]="themeSwitcherBlock" />
+
+    <div class="flex flex-col gap-4">
+      <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Switching themes</h3>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        Calling
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">toggleTheme()</code>
+        with no argument flips between light and dark. Pass a value —
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">EDarkModes.LIGHT</code>
+        ,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">EDarkModes.DARK</code>
+        or
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">EDarkModes.SYSTEM</code>
+        — to set a specific mode instead. That is exactly what the three buttons in the demo below do.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Preference versus applied theme</h3>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        This is the one distinction worth internalizing.
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">currentTheme()</code>
+        returns the preference the user picked —
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'light'</code>
+        ,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'dark'</code>
+        or
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'system'</code>
+        . It is a read-only signal, so nothing outside the service can mutate it.
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">themeMode()</code>
+        returns the theme actually applied to the document —
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'light'</code>
+        or
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'dark'</code>
+        , never
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">'system'</code>
+        , because it has already resolved
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">system</code>
+        against
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">prefers-color-scheme</code>
+        . Use the first one to render the selected state of a theme picker, and the second one to decide whether to show
+        a sun or a moon.
+      </p>
+    </div>
+
+    <z-code-block [data]="themeSignalsBlock" />
+
+    <div class="flex flex-col gap-4">
+      <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Persistence and initialization</h3>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        The preference is written to
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">localStorage</code>
+        under the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">theme</code>
+        key on every change, which is the same key the inline script reads on the next load.
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">init()</code>
+        reads that value back and starts listening to the media query — it is already called for you by the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">provideAppInitializer</code>
+        registered during installation, so you rarely call it by hand. The service is also SSR-safe: on the server every
+        method returns early instead of touching
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">document</code>
+        or
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">localStorage</code>
+        .
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">A toggle in a header component</h3>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+        The header of this documentation site is built exactly like this — a ghost button that calls
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">toggleTheme()</code>
+        and swaps its icon based on
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">themeMode()</code>
+        .
+      </p>
+      <z-code-block [data]="headerComponentBlock" />
+      <z-code-block [data]="headerTemplateBlock" />
+    </div>
+  </section>
+
   <!-- Interactive Demo Section -->
-  <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="demo" id="demo">
-    <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Interactive Demo</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="demo" id="demo">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Interactive Demo
+      </h2>
+      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
         Test the dark mode system in action and see how components react to theme changes.
       </p>
     </div>
