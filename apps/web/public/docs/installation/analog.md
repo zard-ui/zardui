@@ -1,29 +1,29 @@
 ---
-title: Angular
-description: Install and configure zard/ui for Angular.
+title: Analog.js
+description: Install and configure zard/ui for Analog.js.
 ---
 
-# Angular
+# Analog.js
 
-Install and configure zard/ui for Angular.
+Install and configure zard/ui for Analog.js.
 
 ## CLI
 
 ### Create project
 
-Start the cli and create an application that uses Tailwind as default styling. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
+Create an Analog.js application. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
 
 ```bash
 Terminal
 ```
 
 ```
-ng new my-app --style=tailwind
+npm create analog@latest
 ```
 
 ### Add Zard/ui
 
-Prepare your entire project using the zard/ui cli. Pick "Angular" on the first question:
+Prepare your entire project using the zard/ui cli. Pick "Analog.js" on the first question:
 
 ```
 npx zard-cli@latest init
@@ -37,14 +37,14 @@ You can now start adding components to your project. [Open the components page a
 
 ### Create project
 
-Start the cli and create an application that uses Tailwind as default styling. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
+Create an Analog.js application. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
 
 ```bash
 Terminal
 ```
 
 ```
-ng new my-app --style=tailwind
+npm create analog@latest
 ```
 
 ### Add dependencies
@@ -53,23 +53,28 @@ Add the following dependencies to your project:
 
 ```
 npm install @angular/cdk class-variance-authority clsx tailwind-merge @ng-icons/core @ng-icons/lucide
-npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate
+npm install -D tailwindcss @tailwindcss/vite tailwindcss-animate
 ```
 
 ### Configure the Tailwind pipeline
 
-Create a .postcssrc.json at the root of your project. Projects created with --style=tailwind already have it.
+Analog builds with Vite, so Tailwind is a Vite plugin and a .postcssrc.json would never be read. Register it in vite.config.ts:
 
 ```bash
-.postcssrc.json
+vite.config.ts
 ```
 
 ```
-{
-  "plugins": {
-    "@tailwindcss/postcss": {}
-  }
-}
+import { defineConfig } from 'vite';
+import analog from '@analogjs/platform';
+import tailwindcss from '@tailwindcss/vite';
+
+export default defineConfig(() => ({
+  plugins: [
+    analog(),
+    tailwindcss(),
+  ],
+}));
 ```
 
 ### Configure path aliases
@@ -687,7 +692,7 @@ components.json
 {
   "$schema": "https://zardui.com/schema.json",
   "style": "css",
-  "projectType": "angular",
+  "projectType": "analog",
   "appConfigFile": "src/app/app.config.ts",
   "packageManager": "npm",
   "tailwind": {

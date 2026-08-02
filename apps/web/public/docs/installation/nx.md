@@ -1,29 +1,29 @@
 ---
-title: Angular
-description: Install and configure zard/ui for Angular.
+title: Nx
+description: Install and configure zard/ui for an application inside an Nx workspace.
 ---
 
-# Angular
+# Nx
 
-Install and configure zard/ui for Angular.
+Install and configure zard/ui for an application inside an Nx workspace.
 
 ## CLI
 
 ### Create project
 
-Start the cli and create an application that uses Tailwind as default styling. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
+Create an Nx workspace with an Angular application. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
 
 ```bash
 Terminal
 ```
 
 ```
-ng new my-app --style=tailwind
+npx create-nx-workspace@latest my-workspace --preset=angular-monorepo --style=css
 ```
 
 ### Add Zard/ui
 
-Prepare your entire project using the zard/ui cli. Pick "Angular" on the first question:
+Run the cli at the workspace root. Pick "Nx" on the first question, then the app that receives the components:
 
 ```
 npx zard-cli@latest init
@@ -35,21 +35,21 @@ You can now start adding components to your project. [Open the components page a
 
 ## Manual
 
-### Create project
+### Create workspace
 
-Start the cli and create an application that uses Tailwind as default styling. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
+Create an Nx workspace with an Angular application. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
 
 ```bash
 Terminal
 ```
 
 ```
-ng new my-app --style=tailwind
+npx create-nx-workspace@latest my-workspace --preset=angular-monorepo --style=css
 ```
 
 ### Add dependencies
 
-Add the following dependencies to your project:
+Add the following dependencies at the root of the workspace:
 
 ```
 npm install @angular/cdk class-variance-authority clsx tailwind-merge @ng-icons/core @ng-icons/lucide
@@ -58,7 +58,7 @@ npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate
 
 ### Configure the Tailwind pipeline
 
-Create a .postcssrc.json at the root of your project. Projects created with --style=tailwind already have it.
+Create a .postcssrc.json inside the application, at apps/my-app/. The Angular build looks for it from the stylesheet upwards.
 
 ```bash
 .postcssrc.json
@@ -74,17 +74,17 @@ Create a .postcssrc.json at the root of your project. Projects created with --st
 
 ### Configure path aliases
 
-Add these lines inside compilerOptions on your tsconfig.json. Do not add baseUrl, it is an error from TypeScript 6 on.
+Add these lines inside compilerOptions on your tsconfig.base.json. Do not add baseUrl, it is an error from TypeScript 6 on.
 
 ```bash
-tsconfig.json
+tsconfig.base.json
 ```
 
 ```
 {
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/app/*"]
+      "@/*": ["./apps/my-app/src/app/*"]
     }
   }
 }
@@ -92,7 +92,7 @@ tsconfig.json
 
 ### Configure styles
 
-Add the following to src/styles.css. You can learn more about using CSS variables for theming in the [theming section.](/docs/theming)
+Add the following to apps/my-app/src/styles.css. You can learn more about using CSS variables for theming in the [theming section.](/docs/theming)
 
 ```bash
 styles.css
@@ -241,7 +241,7 @@ Expand
 
 ### Register the providers
 
-Add provideZard() to the providers of your src/app/app.config.ts
+Add provideZard() to the providers of your apps/my-app/src/app/app.config.ts
 
 ```bash
 app.config.ts
@@ -261,7 +261,7 @@ export const appConfig: ApplicationConfig = {
 
 ### Add the core utilities to zard
 
-Create a core folder at src/app/shared/core
+Create a core folder at apps/my-app/src/app/shared/core
 
 ```bash
 core/diretives/string-template-outlet/string-template-outlet.directive.ts
@@ -613,7 +613,7 @@ export function provideZard(): EnvironmentProviders {
 
 ### Add a lib helper
 
-Create a utils folder at src/app/shared/utils
+Create a utils folder at apps/my-app/src/app/shared/utils
 
 ```bash
 utils/merge-classes.ts
@@ -687,14 +687,14 @@ components.json
 {
   "$schema": "https://zardui.com/schema.json",
   "style": "css",
-  "projectType": "angular",
-  "appConfigFile": "src/app/app.config.ts",
+  "projectType": "nx",
+  "appConfigFile": "apps/my-app/src/app/app.config.ts",
   "packageManager": "npm",
   "tailwind": {
-    "css": "src/styles.css",
+    "css": "apps/my-app/src/styles.css",
     "baseColor": "neutral"
   },
-  "baseUrl": "src/app",
+  "baseUrl": "apps/my-app/src/app",
   "aliases": {
     "components": "@/shared/components",
     "utils": "@/shared/utils",

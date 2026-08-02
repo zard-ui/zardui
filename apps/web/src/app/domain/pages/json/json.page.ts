@@ -8,6 +8,7 @@ import { JsonBaseUrlSectionComponent } from './sections/base-url-section.compone
 import { JsonCurrentStructureSectionComponent } from './sections/current-structure-section.component';
 import { JsonIntroductionSectionComponent } from './sections/introduction-section.component';
 import { JsonPackageManagerSectionComponent } from './sections/package-manager-section.component';
+import { JsonProjectTypeSectionComponent } from './sections/project-type-section.component';
 import { JsonSchemaSectionComponent } from './sections/schema-section.component';
 import { JsonStyleSectionComponent } from './sections/style-section.component';
 import { JsonTailwindSectionComponent } from './sections/tailwind-section.component';
@@ -28,6 +29,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     JsonIntroductionSectionComponent,
     JsonSchemaSectionComponent,
     JsonStyleSectionComponent,
+    JsonProjectTypeSectionComponent,
     JsonAppConfigSectionComponent,
     JsonPackageManagerSectionComponent,
     JsonTailwindSectionComponent,
@@ -53,6 +55,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
       <z-json-introduction-section />
       <z-json-schema-section />
       <z-json-style-section />
+      <z-json-project-type-section />
       <z-json-app-config-section />
       <z-json-package-manager-section />
       <z-json-tailwind-section />
@@ -72,6 +75,7 @@ export class JsonPage implements OnInit {
       { id: 'overview', label: 'Overview', type: 'core' },
       { id: 'schema', label: '$schema', type: 'custom' },
       { id: 'style', label: 'Style', type: 'custom' },
+      { id: 'project-type', label: 'Project Type', type: 'custom' },
       { id: 'app-config', label: 'App Config', type: 'custom' },
       { id: 'package-manager', label: 'Package Manager', type: 'custom' },
       { id: 'tailwind', label: 'Tailwind', type: 'custom' },

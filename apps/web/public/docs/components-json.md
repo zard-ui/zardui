@@ -47,7 +47,9 @@ The style for your components. Currently, **Zard/ui only supports the "css" styl
 
 The `projectType` property records the kind of project you chose when running init. The CLI uses it to know where the components live and how the build is wired: which file holds the TypeScript paths, whether Tailwind goes through PostCSS or a Vite plugin, and whether there is an application to register providers in.
 
-**Supported values:**`angular` , `nx` , `analog` , `angular-library` or `nx-library`
+**Supported values:**`angular` , `angular-library` , `nx` , `nx-library` or `analog`
+
+components.json
 
 ```
 {
@@ -60,8 +62,6 @@ A `components.json` written before this property existed is read as `angular` .
 ## App Config File
 
 The `appConfigFile` property specifies the path to your Angular application's configuration file. This is used by the CLI to automatically add providers like `provideZard()` when needed.
-
-Libraries leave it empty: there is no application config to write to, and the app that consumes the library is the one that registers `provideZard()` .
 
 ```
 {

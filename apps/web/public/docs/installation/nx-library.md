@@ -1,29 +1,29 @@
 ---
-title: Angular
-description: Install and configure zard/ui for Angular.
+title: Nx Library
+description: Install and configure zard/ui inside a library of an Nx workspace.
 ---
 
-# Angular
+# Nx Library
 
-Install and configure zard/ui for Angular.
+Install and configure zard/ui inside a library of an Nx workspace.
 
 ## CLI
 
 ### Create project
 
-Start the cli and create an application that uses Tailwind as default styling. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
+Generate the library that will hold the components. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
 
 ```bash
 Terminal
 ```
 
 ```
-ng new my-app --style=tailwind
+npx nx g @nx/angular:library --name=ui --directory=libs/ui
 ```
 
 ### Add Zard/ui
 
-Prepare your entire project using the zard/ui cli. Pick "Angular" on the first question:
+Run the cli at the workspace root. Pick "Nx Library" on the first question, then the library that receives the components:
 
 ```
 npx zard-cli@latest init
@@ -35,56 +35,40 @@ You can now start adding components to your project. [Open the components page a
 
 ## Manual
 
-### Create project
+### Create the library
 
-Start the cli and create an application that uses Tailwind as default styling. [Since Tailwind is the core of the project, we do not recommend using other pre-processors.](/docs/scss)
+Generate the library that will hold the components.
 
 ```bash
 Terminal
 ```
 
 ```
-ng new my-app --style=tailwind
+npx nx g @nx/angular:library --name=ui --directory=libs/ui
 ```
 
 ### Add dependencies
 
-Add the following dependencies to your project:
+Add the following dependencies. There is no PostCSS setup here, the consuming app owns the build:
 
 ```
 npm install @angular/cdk class-variance-authority clsx tailwind-merge @ng-icons/core @ng-icons/lucide
-npm install -D tailwindcss @tailwindcss/postcss postcss tailwindcss-animate
-```
-
-### Configure the Tailwind pipeline
-
-Create a .postcssrc.json at the root of your project. Projects created with --style=tailwind already have it.
-
-```bash
-.postcssrc.json
-```
-
-```
-{
-  "plugins": {
-    "@tailwindcss/postcss": {}
-  }
-}
+npm install -D tailwindcss tailwindcss-animate
 ```
 
 ### Configure path aliases
 
-Add these lines inside compilerOptions on your tsconfig.json. Do not add baseUrl, it is an error from TypeScript 6 on.
+Add these lines inside compilerOptions on your tsconfig.base.json. Do not add baseUrl, it is an error from TypeScript 6 on.
 
 ```bash
-tsconfig.json
+tsconfig.base.json
 ```
 
 ```
 {
   "compilerOptions": {
     "paths": {
-      "@/*": ["./src/app/*"]
+      "@/*": ["./libs/ui/src/lib/*"]
     }
   }
 }
@@ -92,7 +76,7 @@ tsconfig.json
 
 ### Configure styles
 
-Add the following to src/styles.css. You can learn more about using CSS variables for theming in the [theming section.](/docs/theming)
+Add the following to libs/ui/src/styles.css. You can learn more about using CSS variables for theming in the [theming section.](/docs/theming)
 
 ```bash
 styles.css
@@ -239,29 +223,9 @@ Expand
 }
 ```
 
-### Register the providers
-
-Add provideZard() to the providers of your src/app/app.config.ts
-
-```bash
-app.config.ts
-```
-
-```
-import { ApplicationConfig } from '@angular/core';
-
-import { provideZard } from '@/shared/core/provider/providezard';
-
-export const appConfig: ApplicationConfig = {
-  providers: [
-    provideZard(),
-  ],
-};
-```
-
 ### Add the core utilities to zard
 
-Create a core folder at src/app/shared/core
+Create a core folder at libs/ui/src/lib/shared/core
 
 ```bash
 core/diretives/string-template-outlet/string-template-outlet.directive.ts
@@ -613,7 +577,7 @@ export function provideZard(): EnvironmentProviders {
 
 ### Add a lib helper
 
-Create a utils folder at src/app/shared/utils
+Create a utils folder at libs/ui/src/lib/shared/utils
 
 ```bash
 utils/merge-classes.ts
@@ -687,14 +651,14 @@ components.json
 {
   "$schema": "https://zardui.com/schema.json",
   "style": "css",
-  "projectType": "angular",
-  "appConfigFile": "src/app/app.config.ts",
+  "projectType": "nx-library",
+  "appConfigFile": "",
   "packageManager": "npm",
   "tailwind": {
-    "css": "src/styles.css",
+    "css": "libs/ui/src/styles.css",
     "baseColor": "neutral"
   },
-  "baseUrl": "src/app",
+  "baseUrl": "libs/ui/src/lib",
   "aliases": {
     "components": "@/shared/components",
     "utils": "@/shared/utils",
@@ -707,3 +671,7 @@ components.json
 ### That's it
 
 You can now start adding components to your project.
+
+### Wire it up in the consuming app
+
+The application that imports this library still has to register provideZard() in its app.config.ts and import the theme from the library styles.css.
