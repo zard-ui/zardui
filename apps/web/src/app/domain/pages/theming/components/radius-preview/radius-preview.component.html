@@ -10,7 +10,7 @@
           type="button"
           [attr.aria-pressed]="radius() === preset"
           [class]="
-            'focus-visible:outline-ring rounded-md border px-2.5 py-1 font-mono text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ' +
+            'focus-visible:outline-ring rounded-md border px-2.5 py-1 font-mono text-xs transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ' +
             (radius() === preset ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
           "
           (click)="setRadius(preset)"

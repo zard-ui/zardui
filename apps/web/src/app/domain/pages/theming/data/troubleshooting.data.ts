@@ -9,7 +9,7 @@ export const TROUBLESHOOTING: TroubleshootingEntry[] = [
   },
   {
     id: 'dark-values-ignored',
-    symptom: 'The `.dark` block exists but the light colors stay on screen.',
+    symptom: 'The .dark block exists but the light colors stay on screen.',
     cause: '`@theme` was used instead of `@theme inline`. Tailwind copied the light values into the output.',
     fix: 'Use `@theme inline`. It emits `var(--primary)` instead of the resolved color, so `.dark` can still win.',
   },
@@ -27,7 +27,7 @@ export const TROUBLESHOOTING: TroubleshootingEntry[] = [
   },
   {
     id: 'icons-wrong-color',
-    symptom: '`text-primary` on an `<ng-icon>` has no effect.',
+    symptom: 'text-primary on an ng-icon has no effect.',
     cause: 'The `@layer` order is missing or `ng-icon` is not first, so icon rules outrank your utilities.',
     fix: 'Keep `@layer ng-icon, theme, base, components, utilities;` as the very first line of the file.',
   },
@@ -39,7 +39,7 @@ export const TROUBLESHOOTING: TroubleshootingEntry[] = [
   },
   {
     id: 'destructive-foreground-empty',
-    symptom: '`text-destructive-foreground` renders with no color.',
+    symptom: 'text-destructive-foreground renders with no color.',
     cause:
       '`@theme inline` maps `--color-destructive-foreground` to `--destructive-foreground`, which the CLI never defines.',
     fix: 'Add `--destructive-foreground` to both `:root` and `.dark`, as the CSS on this page does.',

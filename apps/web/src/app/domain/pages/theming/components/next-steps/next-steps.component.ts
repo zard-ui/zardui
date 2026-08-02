@@ -14,7 +14,7 @@ import { InlineCodePipe } from '../../pipes/inline-code.pipe';
         <li>
           <a
             [routerLink]="step.href"
-            class="hover:bg-muted/50 focus-visible:outline-ring flex h-full flex-col gap-1 rounded-lg border p-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            class="hover:bg-muted/50 focus-visible:outline-ring flex h-full flex-col gap-1 rounded-lg border p-4 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none"
           >
             <span class="text-sm font-semibold sm:text-base">{{ step.title }}</span>
             <span class="text-muted-foreground text-xs sm:text-sm" [innerHTML]="step.description | inlineCode"></span>

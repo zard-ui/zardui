@@ -68,6 +68,7 @@ import { ThemingClipboardService } from './services/theming-clipboard.service';
 })
 export class ThemingPage implements OnInit {
   private readonly seoService = inject(SeoService);
+
   readonly activeAnchor = signal<string | undefined>(undefined);
 
   readonly quickStartTabs: CodeTabData = THEMING_QUICK_START;

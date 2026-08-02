@@ -56,7 +56,7 @@ Swap these two blocks in `src/styles.css` to change the base color.
   --accent: oklch(0.268 0.007 34.298);
   --accent-foreground: oklch(0.985 0.001 106.423);
   --destructive: oklch(0.704 0.191 22.216);
-  --destructive-foreground: oklch(0.985 0.001 106.423);
+  --destructive-foreground: oklch(0.216 0.006 56.043);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.553 0.013 58.071);

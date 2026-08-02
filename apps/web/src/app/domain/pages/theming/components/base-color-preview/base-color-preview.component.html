@@ -6,7 +6,7 @@
           type="button"
           [attr.aria-pressed]="selected().id === theme.id"
           [class]="
-            'focus-visible:outline-ring flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ' +
+            'focus-visible:outline-ring flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ' +
             (selected().id === theme.id ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
           "
           (click)="select(theme.id)"
@@ -25,7 +25,7 @@
         type="button"
         [attr.aria-pressed]="!isDark()"
         [class]="
-          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ' +
+          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ' +
           (!isDark() ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
         "
         (click)="setMode('light')"
@@ -36,7 +36,7 @@
         type="button"
         [attr.aria-pressed]="isDark()"
         [class]="
-          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 ' +
+          'focus-visible:outline-ring rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 motion-reduce:transition-none ' +
           (isDark() ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
         "
         (click)="setMode('dark')"
