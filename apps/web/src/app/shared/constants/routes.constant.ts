@@ -97,6 +97,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Form', path: '/docs/components/form', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Input Group', path: '/docs/components/input-group', available: true },
+    { name: 'Input OTP', path: '/docs/components/input-otp', available: true },
     { name: 'Item', path: '/docs/components/item', available: true },
     { name: 'Layout', path: '/docs/components/layout', available: true },
     { name: 'Dialog', path: '/docs/components/dialog', available: true },

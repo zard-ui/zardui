@@ -184,6 +184,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/input-group/demo/input-group').then(m => m.INPUT_GROUP),
   },
   {
+    componentName: 'input-otp',
+    description: 'Accessible one-time password component with copy-paste functionality.',
+    loadData: () => import('@zard/components/input-otp/demo/input-otp').then(m => m.INPUT_OTP),
+  },
+  {
     componentName: 'item',
     description: 'A versatile component for displaying content with media, title, description, and actions.',
     loadData: () => import('@zard/components/item/demo/item').then(m => m.ITEM),

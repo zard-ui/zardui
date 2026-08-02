@@ -14,7 +14,7 @@ import { ZardAccordionItemComponent } from '@/shared/components/accordion/accord
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
-  selector: 'z-accordion',
+  selector: 'z-accordion, [z-accordion]',
   template: `
     <ng-content />
   `,

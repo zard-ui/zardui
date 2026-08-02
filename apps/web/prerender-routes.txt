@@ -38,6 +38,7 @@
 /docs/components/form
 /docs/components/input
 /docs/components/input-group
+/docs/components/input-otp
 /docs/components/item
 /docs/components/layout
 /docs/components/dialog
