@@ -1,11 +1,15 @@
-import { type Tree, formatFiles, generateFiles } from '@nx/devkit';
+import { type Tree, formatFiles, generateFiles, logger } from '@nx/devkit';
 import * as path from 'path';
 
-import type { BlockGeneratorSchema } from './schema';
+import type { BlockGeneratorSchema, BlockRegistryCategory } from './schema';
 
 const BLOCKS_DIR = 'libs/blocks/src/lib';
 const INDEX_PATH = 'libs/blocks/src/index.ts';
 const REGISTRY_PATH = 'apps/web/src/app/domain/config/blocks-registry.ts';
+const PUBLIC_IMAGES_DIR = 'apps/web/public/blocks';
+
+/** Must mirror `BlockCategory` in apps/web/src/app/domain/services/blocks.service.ts. */
+const REGISTRY_CATEGORIES: BlockRegistryCategory[] = ['featured', 'sidebar', 'login', 'signup', 'otp', 'calendar'];
 
 function toClassName(name: string): string {
   return name
@@ -28,147 +32,148 @@ function toTitle(name: string): string {
     .join(' ');
 }
 
+function escapeSingleQuotes(value: string): string {
+  return value.replace(/'/g, "\\'");
+}
+
 export default async function blockGenerator(tree: Tree, schema: BlockGeneratorSchema) {
   const kebabName = schema.name.toLowerCase();
+
+  if (!/^[a-z][a-z0-9]*(-[a-z0-9]+)*$/.test(kebabName)) {
+    throw new Error(`Invalid block name "${schema.name}". Use kebab-case, e.g. "sidebar-01".`);
+  }
+
+  if (tree.exists(`${BLOCKS_DIR}/${kebabName}`)) {
+    throw new Error(`Block "${kebabName}" already exists at ${BLOCKS_DIR}/${kebabName}.`);
+  }
+
+  const category = (schema.category ?? 'featured') as BlockRegistryCategory;
+  if (!REGISTRY_CATEGORIES.includes(category)) {
+    throw new Error(
+      `Unknown registry category "${category}". BLOCKS_REGISTRY only accepts: ${REGISTRY_CATEGORIES.join(', ')}. ` +
+        `Add the new key to BlockCategory in apps/web/src/app/domain/services/blocks.service.ts first.`,
+    );
+  }
+
   const className = toClassName(kebabName);
   const camelName = toCamelCase(kebabName);
-  const title = toTitle(kebabName);
-  const category = schema.category || 'featured';
+  const title = schema.title ?? toTitle(kebabName);
+  // `Block.category` is a display label ('Authentication'), not the registry key.
+  const label = schema.label ?? title;
 
   const templateVars = {
     name: kebabName,
     className,
     camelName,
     title,
-    description: schema.description,
-    category,
+    titleEscaped: escapeSingleQuotes(title),
+    description: escapeSingleQuotes(schema.description),
+    label: escapeSingleQuotes(label),
     template: '',
   };
 
-  // 1. Generate block files from templates
+  // 1. Generate block files from templates. `files: []` is left empty on purpose:
+  //    scripts/sync-blocks.ts is the single source of truth for that array.
   generateFiles(tree, path.join(__dirname, 'files'), BLOCKS_DIR, templateVars);
 
-  // 2. Populate files[] in block.ts with generated component content
-  populateBlockFiles(tree, kebabName);
+  // 2. Add exports to libs/blocks/src/index.ts
+  addExportsToIndex(tree, kebabName);
 
-  // 3. Add exports to libs/blocks/src/index.ts
-  addExportsToIndex(tree, kebabName, className);
-
-  // 4. Add entry to BLOCKS_REGISTRY
-  addRegistryEntry(tree, kebabName, camelName, category);
+  // 3. Add entry to BLOCKS_REGISTRY
+  addRegistryEntry(tree, camelName, category);
 
   await formatFiles(tree);
+
+  logger.info(
+    [
+      '',
+      `✅ Block "${kebabName}" scaffolded under ${BLOCKS_DIR}/${kebabName}.`,
+      '',
+      'Required manual steps:',
+      `  1. Build the block in ${BLOCKS_DIR}/${kebabName}/${kebabName}.component.{ts,html}.`,
+      '  2. Run `npm run sync:blocks` to populate `files[]` in block.ts with the component sources.',
+      '     (`files[]` is generated — never edit it by hand.)',
+      '  3. Add the preview screenshots the block card renders:',
+      `       ${PUBLIC_IMAGES_DIR}/${kebabName}/light.png`,
+      `       ${PUBLIC_IMAGES_DIR}/${kebabName}/dark.png`,
+      '     Without them the card on /blocks renders a broken image.',
+      '  4. Run `npm run build:registry` so the CLI can install the block.',
+      '',
+    ].join('\n'),
+  );
 }
 
-function escapeBackticks(content: string): string {
-  return content.replace(/\\/g, '\\\\').replace(/`/g, '\\`').replace(/\$\{/g, '\\${');
-}
-
-function populateBlockFiles(tree: Tree, name: string): void {
-  const blockDir = `${BLOCKS_DIR}/${name}`;
-  const blockTsPath = `${blockDir}/block.ts`;
-  const blockContent = tree.read(blockTsPath, 'utf-8');
-  if (!blockContent) return;
-
-  const componentFiles = [`${name}.component.ts`, `${name}.component.html`];
-  const filesEntries = componentFiles
-    .map(fileName => {
-      const content = tree.read(`${blockDir}/${fileName}`, 'utf-8');
-      if (!content) return null;
-      const language = fileName.endsWith('.ts') ? 'typescript' : 'html';
-      return `    {
-      name: '${fileName}',
-      path: 'src/components/${name}/${fileName}',
-      content: \`${escapeBackticks(content)}\`,
-      language: '${language}',
-    }`;
-    })
-    .filter(Boolean);
-
-  const filesArray = `[\n${filesEntries.join(',\n')},\n  ]`;
-
-  // Use bracket counting (backtick-aware) to find the closing `]` of files array
-  const filesIdx = blockContent.indexOf('files:');
-  if (filesIdx === -1) return;
-
-  const openBracketIdx = blockContent.indexOf('[', filesIdx);
-  if (openBracketIdx === -1) return;
-
-  let depth = 0;
-  let inBacktick = false;
-  let closeBracketIdx = -1;
-  for (let i = openBracketIdx; i < blockContent.length; i++) {
-    const ch = blockContent[i];
-    const prev = blockContent[i - 1];
-    if (ch === '`' && prev !== '\\') {
-      inBacktick = !inBacktick;
-      continue;
-    }
-    if (inBacktick) continue;
-    if (ch === '[') depth++;
-    else if (ch === ']') depth--;
-    if (depth === 0) {
-      closeBracketIdx = i;
-      break;
-    }
-  }
-  if (closeBracketIdx === -1) return;
-
-  const before = blockContent.slice(0, filesIdx);
-  const after = blockContent.slice(closeBracketIdx + 1);
-  tree.write(blockTsPath, `${before}files: ${filesArray}${after}`);
-}
-
-function addExportsToIndex(tree: Tree, name: string, className: string): void {
+function addExportsToIndex(tree: Tree, name: string): void {
   const content = tree.read(INDEX_PATH, 'utf-8');
-  if (!content) return;
+  if (!content) {
+    throw new Error(`Could not read ${INDEX_PATH}.`);
+  }
 
   const componentExport = `export * from './lib/${name}/${name}.component';`;
   const blockExport = `export * from './lib/${name}/block';`;
 
   if (content.includes(componentExport)) return;
 
-  const newContent = content.trimEnd() + '\n' + componentExport + '\n' + blockExport + '\n';
-  tree.write(INDEX_PATH, newContent);
+  tree.write(INDEX_PATH, `${content.trimEnd()}\n${componentExport}\n${blockExport}\n`);
 }
 
-function addRegistryEntry(tree: Tree, name: string, camelName: string, category: string): void {
+/**
+ * Registers the block in BLOCKS_REGISTRY. Blocks are listed in `featured` (the
+ * landing bucket of /blocks) *and* in their own category, mirroring how the only
+ * existing block (authentication-01) is registered — `/blocks` renders one
+ * category at a time and defaults to `featured`, so a block missing from it
+ * would never show on the landing page.
+ */
+function addRegistryEntry(tree: Tree, camelName: string, category: BlockRegistryCategory): void {
   const content = tree.read(REGISTRY_PATH, 'utf-8');
-  if (!content) return;
-
-  const blockVarName = `${camelName}Block`;
-
-  // Check if entry already exists
-  if (content.includes(blockVarName)) return;
-
-  // 1. Add import
-  const importLine = `import { ${blockVarName} } from '@blocks';`;
-  const lastImportIdx = content.lastIndexOf('import ');
-  const lastImportEnd = content.indexOf('\n', lastImportIdx);
-  const before = content.slice(0, lastImportEnd + 1);
-  const after = content.slice(lastImportEnd + 1);
-  let updated = before + importLine + '\n' + after;
-
-  // 2. Add to featured array (default category)
-  const featuredPattern = /featured:\s*\[([^\]]*)\]/;
-  const featuredMatch = updated.match(featuredPattern);
-  if (featuredMatch) {
-    const currentEntries = featuredMatch[1].trim();
-    const newEntries = currentEntries ? `${currentEntries}, ${blockVarName}` : blockVarName;
-    updated = updated.replace(featuredPattern, `featured: [${newEntries}]`);
+  if (!content) {
+    throw new Error(`Could not read ${REGISTRY_PATH}.`);
   }
 
-  // 3. Also add to the specific category if different from featured
-  if (category.toLowerCase() !== 'featured') {
-    const catKey = category.toLowerCase();
-    const catPattern = new RegExp(`(${catKey}:\\s*\\[)([^\\]]*)\\]`);
-    const catMatch = updated.match(catPattern);
-    if (catMatch) {
-      const currentEntries = catMatch[2].trim();
-      const newEntries = currentEntries ? `${currentEntries}, ${blockVarName}` : blockVarName;
-      updated = updated.replace(catPattern, `$1${newEntries}]`);
-    }
+  const blockVarName = `${camelName}Block`;
+  if (new RegExp(`\\b${blockVarName}\\b`).test(content)) return;
+
+  let updated = addRegistryImport(content, blockVarName);
+
+  for (const key of category === 'featured' ? ['featured'] : ['featured', category]) {
+    updated = addToCategoryArray(updated, key, blockVarName);
   }
 
   tree.write(REGISTRY_PATH, updated);
+}
+
+function addRegistryImport(content: string, blockVarName: string): string {
+  const importPattern = /import\s*\{([^}]*)\}\s*from\s*'@blocks';/;
+  const match = content.match(importPattern);
+
+  if (!match) {
+    throw new Error(`Could not find the \`from '@blocks'\` import in ${REGISTRY_PATH}.`);
+  }
+
+  const members = match[1]
+    .split(',')
+    .map(member => member.trim())
+    .filter(Boolean);
+
+  members.push(blockVarName);
+  members.sort((a, b) => a.localeCompare(b));
+
+  return content.replace(importPattern, `import { ${members.join(', ')} } from '@blocks';`);
+}
+
+function addToCategoryArray(content: string, category: string, blockVarName: string): string {
+  const pattern = new RegExp(`(${category}:\\s*\\[)([^\\]]*)\\]`);
+  const match = content.match(pattern);
+
+  if (!match) {
+    throw new Error(
+      `Category "${category}" is missing from BLOCKS_REGISTRY in ${REGISTRY_PATH}. ` +
+        `Add it there (and to BlockCategory) before generating a block for it.`,
+    );
+  }
+
+  const current = match[2].trim().replace(/,$/, '');
+  const entries = current ? `${current}, ${blockVarName}` : blockVarName;
+
+  return content.replace(pattern, `$1${entries}]`);
 }
