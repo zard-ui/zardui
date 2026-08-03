@@ -1,33 +1,18 @@
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import { type ChangelogEntry } from '../changelog-entry.interface';
 
-import {
-  type ChangelogEntryComponent,
-  type ChangelogEntryMeta,
-  type ChangelogExample,
-  type ChangelogHighlight,
-} from '../changelog-entry.interface';
-
-@Component({
-  selector: 'z-changelog-march-2026',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-  template: ``,
-})
-export class March2026Component implements ChangelogEntryComponent {
-  readonly meta: ChangelogEntryMeta = {
+export const MARCH_2026: ChangelogEntry = {
+  meta: {
     month: 'March 2026',
     year: 2026,
     monthNumber: 3,
     date: new Date(2026, 2, 1),
     id: '03-2026',
-  };
+  },
 
-  readonly overview =
-    'Complete icon system migration! We replaced the custom `ZardIconComponent` with `@ng-icons/lucide`, bringing better tree-shaking, a wider icon selection, and a simpler API across all components.';
+  overview:
+    'Complete icon system migration! We replaced the custom `ZardIconComponent` with `@ng-icons/lucide`, bringing better tree-shaking, a wider icon selection, and a simpler API across all components.',
 
-  readonly examples: ChangelogExample[] = [];
-
-  readonly highlights: ChangelogHighlight[] = [
+  highlights: [
     {
       title: 'Migration to @ng-icons/lucide',
       description:
@@ -47,5 +32,5 @@ export class March2026Component implements ChangelogEntryComponent {
       icon: 'terminal',
       code: 'npm install @ng-icons/core @ng-icons/lucide',
     },
-  ];
-}
+  ],
+};
