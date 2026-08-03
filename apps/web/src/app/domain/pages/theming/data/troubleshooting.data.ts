@@ -1,4 +1,4 @@
-import type { NextStep, TroubleshootingEntry } from '../models/theming.model';
+import type { TroubleshootingEntry } from '../models/theming.model';
 
 export const TROUBLESHOOTING: TroubleshootingEntry[] = [
   {
@@ -43,28 +43,5 @@ export const TROUBLESHOOTING: TroubleshootingEntry[] = [
     cause:
       '`@theme inline` maps `--color-destructive-foreground` to `--destructive-foreground`, which the CLI never defines.',
     fix: 'Add `--destructive-foreground` to both `:root` and `.dark`, as the CSS on this page does.',
-  },
-];
-
-export const NEXT_STEPS: NextStep[] = [
-  {
-    title: 'Theme generator',
-    description: 'Tweak every token with live preview and export the finished CSS.',
-    href: '/themes',
-  },
-  {
-    title: 'Colors',
-    description: 'The full Tailwind palette in OKLCH, HEX, RGB and HSL.',
-    href: '/colors',
-  },
-  {
-    title: 'Dark mode',
-    description: 'Wire up `ZardDarkMode` and persist the user preference.',
-    href: '/docs/dark-mode',
-  },
-  {
-    title: 'CLI',
-    description: 'What `zard-cli init` asks for and what `add` writes.',
-    href: '/docs/cli',
   },
 ];

@@ -65,12 +65,3 @@ export interface TroubleshootingEntry {
   cause: string;
   fix: string;
 }
-
-/** A card in the "Next steps" grid. */
-export interface NextStep {
-  title: string;
-  description: string;
-  href: string;
-  /** External links open in a new tab. */
-  external?: boolean;
-}

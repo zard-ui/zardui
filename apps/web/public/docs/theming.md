@@ -11,21 +11,13 @@ A ZardUI theme is a set of CSS variables in `src/styles.css` . Each one is mappe
 
 There are three ways to get a theme:
 
-- **Run the CLI.**`zard-cli init` writes the whole file and asks which base color you want. See Quick start .
-- **Copy the CSS.** Paste the stylesheet below into an existing project. See Base colors .
+- **Run the CLI.**`zard-cli init` writes the whole file and asks which base color you want — see [Installation](/docs/installation) .
+- **Copy the CSS.** The complete stylesheet is in How it works , explained line by line.
 - **Build your own.** The [theme generator](/themes) gives you every token with a live preview and exports finished CSS.
 
-## Quick start
+## How it works
 
-The fastest path is the CLI. It creates `.postcssrc.json` , writes `src/styles.css` for the base color you pick, and registers the ZardUI provider.
-
-```
-npx zard-cli@latest init
-```
-
-### Doing it by hand
-
-Paste the stylesheet below into `src/styles.css` . It is the exact output the CLI produces for the Neutral base color — every line is explained in How it works .
+This is the whole file, exactly as `zard-cli init` writes it for the Neutral base color. Paste it into `src/styles.css` and every component is themed.
 
 src/styles.css
 
@@ -183,23 +175,9 @@ src/styles.css
 }
 ```
 
-Then register the provider, in case the CLI did not update the file for you:
+### Line by line
 
-src/app/app.config.ts
-
-```
-import { ApplicationConfig } from '@angular/core';
-
-import { provideZard } from '@/shared/core/provider/providezard';
-
-export const appConfig: ApplicationConfig = {
-  providers: [provideZard()],
-};
-```
-
-## How it works
-
-Nine parts, in the order they appear in the file. Each one earns its place — the last line of every entry says what breaks without it.
+Nine parts, in the order they appear above. Each one earns its place — the last line of every entry says what breaks without it.
 
 1. `@layer ng-icon, theme, base, components, utilities;`Cascade layer order Declaring the layers up front fixes their priority. `ng-icon` comes first, so it has the lowest weight — `@ng-icons/core` ships its rules inside `@layer ng-icon`.Without it Icon styles win over your utilities: `text-primary` on an `<ng-icon>` stops changing its color.
 2. `@import 'tailwindcss';`TailwindCSS itself Pulls in preflight, the default theme and the utility engine. Everything below extends it.Without it No utility class resolves at all.
@@ -644,25 +622,6 @@ src/styles.css
 
 Need the values? The [colors page](/colors) lists the full Tailwind palette in OKLCH, HEX, RGB and HSL.
 
-## Migrating from shadcn
-
-Coming from a shadcn setup on Tailwind v3, the token names are unchanged. What moves is where they are declared and how they are written.
-
-### What changes
-
-| Topic | shadcn · Tailwind v3 | ZardUI · Tailwind v4 |
-| --- | --- | --- |
-| Color value A bare HSL triplet only worked because Tailwind wrapped it in `hsl()`. OKLCH values are complete CSS colors. | `--primary: 222.2 84% 4.9%;` | `--primary: oklch(0.205 0 0);` |
-| Token wiring Tailwind v4 has no JS config. The mapping lives in CSS, and `inline` is what keeps `.dark` able to override it. | `primary: 'hsl(var(--primary))' in tailwind.config.js` | `--color-primary: var(--primary); inside @theme inline` |
-| Opacity modifiers The `<alpha-value>` placeholder is gone — v4 applies opacity modifiers to any color automatically. | `primary: 'hsl(var(--primary) / <alpha-value>)'` | `bg-primary/90` |
-| Dark mode Same class-based strategy, declared in CSS. | `darkMode: 'class' in tailwind.config.js` | `@custom-variant dark (&:is(.dark *));` |
-| Where variables live Keeping tokens out of `@layer base` means an app stylesheet can override them without a layer battle. | `@layer base { :root { … } }` | `:root { … } at the top level` |
-| New tokens Added for parity with shadcn blocks. The radius scale is derived from `--radius`. | `—` | `--chart-1…5, --sidebar-*, --radius-sm/md/lg/xl` |
-
-#### Convert your palette, do not retype it
-
-Paste each HSL triplet into the colors page to read back the OKLCH equivalent, or run the values through culori — it is already a dependency of this repository.
-
 ## Troubleshooting
 
 Every entry below is a real failure mode of the setup on this page, with the line that causes it.
@@ -826,10 +785,3 @@ and
 .dark
 
 , as the CSS on this page does.
-
-## Next steps
-
-- [Theme generator Tweak every token with live preview and export the finished CSS.](/themes)
-- [Colors The full Tailwind palette in OKLCH, HEX, RGB and HSL.](/colors)
-- [Dark mode Wire up `ZardDarkMode` and persist the user preference.](/docs/dark-mode)
-- [CLI What `zard-cli init` asks for and what `add` writes.](/docs/cli)

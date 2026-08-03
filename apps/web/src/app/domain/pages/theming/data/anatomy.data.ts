@@ -1,6 +1,17 @@
 import type { AnatomyPart } from '../models/theming.model';
 
 /**
+ * Why the format is OKLCH at all. Each claim is about OKLCH itself, not about this repo.
+ * Plain prose — these strings are interpolated as text, not run through the inline-code pipe.
+ */
+export const OKLCH_REASONS: string[] = [
+  'Lightness is perceptual: the same lightness value looks equally light at any hue, so a palette stays balanced when you shift the hue.',
+  'Interpolation stays clean — color-mix() and opacity modifiers do not drift toward grey the way HSL does.',
+  'It reaches colors outside sRGB on displays that support them, without changing the syntax.',
+  'It is a plain CSS color, so it works in :root with no build-time wrapper.',
+];
+
+/**
  * `src/styles.css`, line by line.
  *
  * Every `reason` and `breaksWhenMissing` below is checked against this repository — the layer

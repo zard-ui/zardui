@@ -33,15 +33,15 @@
       <li>
         <strong class="text-foreground font-medium">Run the CLI.</strong>
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs">zard-cli init</code>
-        writes the whole file and asks which base color you want. See
-        <a class="underline underline-offset-4" href="#quick-start">Quick start</a>
+        writes the whole file and asks which base color you want — see
+        <a class="underline underline-offset-4" routerLink="/docs/installation">Installation</a>
         .
       </li>
       <li>
         <strong class="text-foreground font-medium">Copy the CSS.</strong>
-        Paste the stylesheet below into an existing project. See
-        <a class="underline underline-offset-4" href="#base-colors">Base colors</a>
-        .
+        The complete stylesheet is in
+        <a class="underline underline-offset-4" href="#how-it-works">How it works</a>
+        , explained line by line.
       </li>
       <li>
         <strong class="text-foreground font-medium">Build your own.</strong>
@@ -52,41 +52,6 @@
     </ul>
   </div>
 
-  <!-- Quick start -->
-  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="quick-start" id="quick-start">
-    <div class="flex flex-col gap-4">
-      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
-        Quick start
-      </h2>
-      <p class="text-muted-foreground text-base leading-relaxed">
-        The fastest path is the CLI. It creates
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">.postcssrc.json</code>
-        , writes
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/styles.css</code>
-        for the base color you pick, and registers the ZardUI provider.
-      </p>
-    </div>
-
-    <z-code-tabs [data]="quickStartTabs" />
-
-    <div class="flex flex-col gap-3">
-      <h3 class="text-base font-semibold sm:text-lg">Doing it by hand</h3>
-      <p class="text-muted-foreground text-sm leading-relaxed">
-        Paste the stylesheet below into
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/styles.css</code>
-        . It is the exact output the CLI produces for the Neutral base color — every line is explained in
-        <a class="underline underline-offset-4" href="#how-it-works">How it works</a>
-        .
-      </p>
-      <z-code-block [data]="cssVarsV4Block" />
-
-      <p class="text-muted-foreground text-sm leading-relaxed">
-        Then register the provider, in case the CLI did not update the file for you:
-      </p>
-      <z-code-block [data]="appConfig" />
-    </div>
-  </section>
-
   <!-- How it works -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="how-it-works" id="how-it-works">
     <div class="flex flex-col gap-4">
@@ -94,8 +59,21 @@
         How it works
       </h2>
       <p class="text-muted-foreground text-base leading-relaxed">
-        Nine parts, in the order they appear in the file. Each one earns its place — the last line of every entry says
-        what breaks without it.
+        This is the whole file, exactly as
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli init</code>
+        writes it for the Neutral base color. Paste it into
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/styles.css</code>
+        and every component is themed.
+      </p>
+    </div>
+
+    <z-code-block [data]="cssVarsV4Block" />
+
+    <div class="flex flex-col gap-4">
+      <h3 class="text-base font-semibold sm:text-lg">Line by line</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Nine parts, in the order they appear above. Each one earns its place — the last line of every entry says what
+        breaks without it.
       </p>
     </div>
 
@@ -289,27 +267,6 @@
     </div>
   </section>
 
-  <!-- Migrating -->
-  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="migrating" id="migrating">
-    <div class="flex flex-col gap-4">
-      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
-        Migrating from shadcn
-      </h2>
-      <p class="text-muted-foreground text-base leading-relaxed">
-        Coming from a shadcn setup on Tailwind v3, the token names are unchanged. What moves is where they are declared
-        and how they are written.
-      </p>
-    </div>
-
-    <h3 class="text-base font-semibold sm:text-lg">What changes</h3>
-    <z-migration-table />
-
-    <z-callout variant="warning" title="Convert your palette, do not retype it" icon="!">
-      Paste each HSL triplet into the colors page to read back the OKLCH equivalent, or run the values through culori —
-      it is already a dependency of this repository.
-    </z-callout>
-  </section>
-
   <!-- Troubleshooting -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="troubleshooting" id="troubleshooting">
     <div class="flex flex-col gap-4">
@@ -322,14 +279,5 @@
     </div>
 
     <z-troubleshooting-list />
-  </section>
-
-  <!-- Next steps -->
-  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="next-steps" id="next-steps">
-    <div class="flex flex-col gap-4">
-      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Next steps</h2>
-    </div>
-
-    <z-theming-next-steps />
   </section>
 </z-content>

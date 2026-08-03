@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject, type OnInit, signal } from 
 import { RouterModule } from '@angular/router';
 
 import { THEMING_ADDING_COLORS_EXAMPLE } from '@generated/documentation/theming/adding-colors-example';
-import { THEMING_APP_CONFIG } from '@generated/documentation/theming/app.config';
 import { THEMING_BASE_COLORS_GRAY } from '@generated/documentation/theming/base-colors-gray';
 import { THEMING_BASE_COLORS_NEUTRAL } from '@generated/documentation/theming/base-colors-neutral';
 import { THEMING_BASE_COLORS_SLATE } from '@generated/documentation/theming/base-colors-slate';
@@ -12,13 +11,11 @@ import { THEMING_CONVENTION_EXAMPLE } from '@generated/documentation/theming/con
 import { THEMING_CSS_VARIABLES_INTRO } from '@generated/documentation/theming/css-variables-intro';
 import { THEMING_CSS_VARIABLES_V4 } from '@generated/documentation/theming/css-variables-v4';
 import { THEMING_OTHER_COLOR_FORMATS } from '@generated/documentation/theming/other-color-formats';
-import { THEMING_QUICK_START } from '@generated/documentation/theming/quick-start';
 import { THEMING_ROUTE_THEME } from '@generated/documentation/theming/route-theme';
 import { THEMING_SCOPED_TOKENS } from '@generated/documentation/theming/scoped-tokens';
 import { THEMING_UTILITY_CLASSES_INTRO } from '@generated/documentation/theming/utility-classes-intro';
 import { CodeBlockComponent } from '@highlight/components/code-block/code-block.component';
-import { CodeTabsComponent } from '@highlight/components/code-tabs/code-tabs.component';
-import type { CodeBlockData, CodeTabData } from '@highlight/types';
+import type { CodeBlockData } from '@highlight/types';
 
 import { CalloutComponent } from '@doc/domain/components/callout/callout.component';
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
@@ -30,13 +27,11 @@ import { SeoService } from '@doc/shared/services/seo.service';
 
 import { BaseColorPreviewComponent } from './components/base-color-preview/base-color-preview.component';
 import { ConventionPreviewComponent } from './components/convention-preview/convention-preview.component';
-import { MigrationTableComponent } from './components/migration-table/migration-table.component';
-import { ThemingNextStepsComponent } from './components/next-steps/next-steps.component';
 import { RadiusPreviewComponent } from './components/radius-preview/radius-preview.component';
 import { ThemeAnatomyComponent } from './components/theme-anatomy/theme-anatomy.component';
 import { TokenTableComponent } from './components/token-table/token-table.component';
 import { TroubleshootingListComponent } from './components/troubleshooting-list/troubleshooting-list.component';
-import { OKLCH_REASONS } from './data/migration.data';
+import { OKLCH_REASONS } from './data/anatomy.data';
 import { THEME_TOKENS } from './data/tokens.data';
 import { ThemingClipboardService } from './services/theming-clipboard.service';
 
@@ -51,13 +46,10 @@ import { ThemingClipboardService } from './services/theming-clipboard.service';
     ScrollSpyDirective,
     ScrollSpyItemDirective,
     CodeBlockComponent,
-    CodeTabsComponent,
     BaseColorPreviewComponent,
     ConventionPreviewComponent,
-    MigrationTableComponent,
     RadiusPreviewComponent,
     ThemeAnatomyComponent,
-    ThemingNextStepsComponent,
     TokenTableComponent,
     TroubleshootingListComponent,
   ],
@@ -71,8 +63,6 @@ export class ThemingPage implements OnInit {
 
   readonly activeAnchor = signal<string | undefined>(undefined);
 
-  readonly quickStartTabs: CodeTabData = THEMING_QUICK_START;
-  readonly appConfig: CodeBlockData = THEMING_APP_CONFIG;
   readonly cssVarsIntroBlock: CodeBlockData = THEMING_CSS_VARIABLES_INTRO;
   readonly cssVarsV4Block: CodeBlockData = THEMING_CSS_VARIABLES_V4;
   readonly utilityClassesIntroBlock: CodeBlockData = THEMING_UTILITY_CLASSES_INTRO;
@@ -97,7 +87,6 @@ export class ThemingPage implements OnInit {
   readonly navigationConfig: NavigationConfig = {
     items: [
       { id: 'overview', label: 'Overview', type: 'core' },
-      { id: 'quick-start', label: 'Quick start', type: 'custom' },
       { id: 'how-it-works', label: 'How it works', type: 'custom' },
       { id: 'convention', label: 'Convention', type: 'custom' },
       { id: 'token-reference', label: 'Token reference', type: 'custom' },
@@ -105,9 +94,7 @@ export class ThemingPage implements OnInit {
       { id: 'base-colors', label: 'Base colors', type: 'custom' },
       { id: 'dark-mode', label: 'Dark mode', type: 'custom' },
       { id: 'customizing', label: 'Customizing', type: 'custom' },
-      { id: 'migrating', label: 'Migrating from shadcn', type: 'custom' },
       { id: 'troubleshooting', label: 'Troubleshooting', type: 'custom' },
-      { id: 'next-steps', label: 'Next steps', type: 'custom' },
     ],
   };
 
