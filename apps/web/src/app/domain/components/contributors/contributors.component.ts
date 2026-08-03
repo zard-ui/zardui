@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { ZardAvatarComponent } from '@zard/components/avatar/avatar.component';
-import { ZardTooltipImports } from '@zard/components/tooltip';
 
 export interface Contributor {
   login: string;
@@ -12,27 +11,31 @@ export interface Contributor {
 
 @Component({
   selector: 'z-contributors',
-  imports: [ZardAvatarComponent, ZardTooltipImports],
+  imports: [ZardAvatarComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex flex-wrap gap-4">
+    <div class="grid grid-cols-2 gap-2 sm:grid-cols-3">
       @for (contributor of contributors(); track contributor.login) {
-        <div class="relative" [zTooltip]="contributor.login" zPosition="top" zTrigger="hover">
-          <a
-            [href]="contributor.html_url"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="block transition-transform hover:scale-110"
-          >
-            <z-avatar
-              [zSrc]="contributor.avatar_url"
-              [zAlt]="contributor.login + ' avatar'"
-              [zFallback]="contributor.login.substring(0, 2).toUpperCase()"
-              zShape="rounded"
-              class="ring-background hover:ring-primary/20 ring-2 transition-all"
-            ></z-avatar>
-          </a>
-        </div>
+        <a
+          [href]="contributor.html_url"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="bg-card text-card-foreground group hover:bg-accent/50 hover:border-foreground/20 flex items-center gap-2.5 rounded-lg border p-2.5 no-underline transition-colors"
+        >
+          <z-avatar
+            [zSrc]="contributor.avatar_url"
+            [zAlt]="contributor.login + ' avatar'"
+            [zFallback]="contributor.login.substring(0, 2).toUpperCase()"
+            class="size-8 shrink-0"
+          ></z-avatar>
+
+          <div class="flex min-w-0 flex-col">
+            <h3 class="truncate font-mono text-xs font-medium">{{ contributor.login }}</h3>
+            <span class="text-muted-foreground truncate text-xs">
+              {{ contributor.contributions }} {{ contributor.contributions === 1 ? 'commit' : 'commits' }}
+            </span>
+          </div>
+        </a>
       }
     </div>
   `,
