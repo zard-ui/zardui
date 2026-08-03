@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 
-import { ZardTableComponent } from '../table.component';
+import { ZardTableImports } from '../table.imports';
 
 interface Person {
   key: string;
@@ -11,24 +11,23 @@ interface Person {
 
 @Component({
   selector: 'z-demo-table-simple',
-  imports: [ZardTableComponent],
-  standalone: true,
+  imports: [ZardTableImports],
   template: `
     <table z-table>
-      <caption>A list of your recent invoices.</caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Address</th>
+      <caption z-table-caption>A list of your recent invoices.</caption>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head>Name</th>
+          <th z-table-head>Age</th>
+          <th z-table-head>Address</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody z-table-body>
         @for (data of listOfData; track data.key) {
-          <tr>
-            <td class="font-medium">{{ data.name }}</td>
-            <td>{{ data.age }}</td>
-            <td>{{ data.address }}</td>
+          <tr z-table-row>
+            <td z-table-cell class="font-medium">{{ data.name }}</td>
+            <td z-table-cell>{{ data.age }}</td>
+            <td z-table-cell>{{ data.address }}</td>
           </tr>
         }
       </tbody>
