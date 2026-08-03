@@ -1,0 +1,136 @@
+<div class="flex flex-col gap-6">
+  <div class="flex flex-col justify-between gap-3 sm:flex-row sm:items-center">
+    <label class="flex flex-1 flex-col gap-1.5">
+      <span class="sr-only">Filter tokens by name, utility or component</span>
+      <input
+        type="search"
+        placeholder="Filter by token, utility or component…"
+        class="border-input bg-input/30 focus-visible:border-ring focus-visible:ring-ring/50 w-full rounded-md border px-3 py-1.5 text-sm focus-visible:ring-3 sm:max-w-sm"
+        [value]="query()"
+        (input)="onQuery($event)"
+      />
+    </label>
+
+    <div role="group" aria-label="Color scheme" class="flex shrink-0 gap-1">
+      <button
+        type="button"
+        [attr.aria-pressed]="mode() === 'light'"
+        [class]="
+          'focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:ring-3 motion-reduce:transition-none ' +
+          (mode() === 'light' ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
+        "
+        (click)="setMode('light')"
+      >
+        Light
+      </button>
+      <button
+        type="button"
+        [attr.aria-pressed]="mode() === 'dark'"
+        [class]="
+          'focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border px-3 py-1.5 text-sm transition-colors focus-visible:ring-3 motion-reduce:transition-none ' +
+          (mode() === 'dark' ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
+        "
+        (click)="setMode('dark')"
+      >
+        Dark
+      </button>
+    </div>
+  </div>
+
+  <p class="text-muted-foreground text-xs" aria-live="polite">
+    Showing {{ visibleCount() }} of {{ totalTokens }} tokens · {{ mode() }} values for {{ baseColor().label }}
+  </p>
+
+  @for (section of sections(); track section.id) {
+    <section class="flex flex-col gap-3">
+      <div class="flex flex-col gap-1">
+        <h3 class="text-base font-semibold sm:text-lg">{{ section.label }}</h3>
+        <p class="text-muted-foreground text-xs sm:text-sm">{{ section.summary }}</p>
+      </div>
+
+      <div class="overflow-x-auto rounded-lg border">
+        <table class="w-full min-w-3xl border-collapse text-left text-sm">
+          <caption class="sr-only">
+            {{ section.label }} tokens with their {{ mode() }} values in the {{ baseColor().label }} base color
+          </caption>
+          <thead class="bg-muted/50">
+            <tr>
+              <th scope="col" class="px-4 py-2.5 font-medium">Token</th>
+              <th scope="col" class="px-4 py-2.5 font-medium">Value</th>
+              <th scope="col" class="px-4 py-2.5 font-medium">Used by</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (row of section.rows; track row.token.name) {
+              <tr class="border-t align-top">
+                <!-- The name and value live outside the copy buttons on purpose: the markdown
+                     serializer drops <button> subtrees, and this table has to survive that. -->
+                <th scope="row" class="px-4 py-3 font-normal">
+                  <span class="flex items-center gap-1.5">
+                    <code class="text-xs font-medium">--{{ row.token.name }}</code>
+                    <button
+                      type="button"
+                      class="text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer rounded focus-visible:ring-3"
+                      [attr.aria-label]="'Copy token name --' + row.token.name"
+                      (click)="copy('--' + row.token.name)"
+                    >
+                      <ng-icon name="lucideClipboard" class="size-3" />
+                    </button>
+                  </span>
+                  <p
+                    class="text-muted-foreground mt-1 text-xs font-normal"
+                    [innerHTML]="row.token.description | inlineCode"
+                  ></p>
+                  @if (row.token.utilities.length) {
+                    <span class="mt-1.5 flex flex-wrap gap-1">
+                      @for (prefix of row.token.utilities; track prefix) {
+                        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">{{ prefix }}-{{ row.token.name }}</code>
+                      }
+                    </span>
+                  }
+                </th>
+
+                <td class="px-4 py-3">
+                  <span class="flex items-center gap-2">
+                    <span
+                      class="border-border inline-flex size-5 shrink-0 items-center justify-center rounded border"
+                      [style.background]="surface()"
+                    >
+                      <span class="size-4 rounded-sm" [style.background]="row.value"></span>
+                    </span>
+                    <code class="text-muted-foreground text-xs break-words">{{ row.value }}</code>
+                    <button
+                      type="button"
+                      class="text-muted-foreground hover:text-foreground focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer rounded focus-visible:ring-3"
+                      [attr.aria-label]="'Copy ' + mode() + ' value of --' + row.token.name + ': ' + row.value"
+                      (click)="copy(row.value)"
+                    >
+                      @if (lastCopied() === row.value) {
+                        <ng-icon name="lucideCheck" class="size-3" />
+                      } @else {
+                        <ng-icon name="lucideClipboard" class="size-3" />
+                      }
+                    </button>
+                  </span>
+                </td>
+
+                <td class="text-muted-foreground px-4 py-3 text-xs">
+                  @if (row.token.usedBy.length; as count) {
+                    <span>{{ count }} {{ count === 1 ? 'component' : 'components' }}</span>
+                    <p class="mt-1">{{ row.token.usedBy.join(', ') }}</p>
+                  } @else {
+                    <span class="italic">Not used yet</span>
+                  }
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+    </section>
+  } @empty {
+    <p class="text-muted-foreground rounded-lg border border-dashed p-6 text-center text-sm">
+      No token matches “{{ query() }}”.
+    </p>
+  }
+</div>

@@ -1,0 +1,64 @@
+<div class="flex flex-col gap-4">
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="text-muted-foreground text-sm">
+      <code>--radius</code>
+      :
+    </span>
+    <div role="group" aria-label="Radius value" class="flex flex-wrap gap-1">
+      @for (preset of presets; track preset) {
+        <button
+          type="button"
+          [attr.aria-pressed]="radius() === preset"
+          [class]="
+            'focus-visible:border-ring focus-visible:ring-ring/50 rounded-md border px-2.5 py-1 font-mono text-xs transition-colors focus-visible:ring-3 motion-reduce:transition-none ' +
+            (radius() === preset ? 'bg-accent text-accent-foreground border-ring' : 'hover:bg-muted')
+          "
+          (click)="setRadius(preset)"
+        >
+          {{ preset }}
+        </button>
+      }
+    </div>
+    <button z-button type="button" zType="outline" zSize="sm" (click)="copyRadius()">Copy declaration</button>
+  </div>
+
+  <!-- Only --radius is overridden here; the four steps below are derived by @theme inline. -->
+  <div class="border-border rounded-lg border p-4 sm:p-6" [style]="scopedStyles()">
+    <div class="flex flex-wrap items-end gap-4">
+      <span class="bg-primary block size-12 rounded-sm"></span>
+      <span class="bg-primary block size-12 rounded-md"></span>
+      <span class="bg-primary block size-12 rounded-lg"></span>
+      <span class="bg-primary block size-12 rounded-xl"></span>
+      <button z-button type="button">Button</button>
+      <z-card class="w-40">
+        <div z-card-content class="text-muted-foreground p-4 text-xs">Card</div>
+      </z-card>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto rounded-lg border">
+    <table class="w-full min-w-3xl border-collapse text-left text-sm">
+      <caption class="sr-only">Radius utilities derived from the --radius variable</caption>
+      <thead class="bg-muted/50">
+        <tr>
+          <th scope="col" class="px-4 py-2.5 font-medium">Utility</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">Definition</th>
+          <th scope="col" class="px-4 py-2.5 font-medium">At {{ defaultRadius }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (step of steps; track step.utility) {
+          <tr class="border-t">
+            <th scope="row" class="px-4 py-3 font-normal">
+              <code class="text-xs font-medium">{{ step.utility }}</code>
+            </th>
+            <td class="px-4 py-3">
+              <code class="text-muted-foreground text-xs break-words">{{ step.formula }}</code>
+            </td>
+            <td class="text-muted-foreground px-4 py-3 text-xs">{{ step.resolved }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
