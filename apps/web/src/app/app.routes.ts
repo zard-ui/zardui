@@ -97,6 +97,10 @@ export const appRoutes: Route[] = [
         path: 'changelog',
         loadComponent: async () => import('./domain/pages/change-log/change-log.page').then(c => c.ChangeLogPage),
       },
+      {
+        path: 'featured',
+        loadChildren: async () => (await import('./domain/pages/featured/featured.routes')).FEATURED_ROUTES,
+      },
     ],
   },
   {

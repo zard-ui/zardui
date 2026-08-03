@@ -1,3 +1,25 @@
+## 1.0.0-beta.88 (2026-08-03)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.87 (2026-08-03)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.86 (2026-08-03)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.85 (2026-08-03)
+
+### ✨ Features
+
+- **about:** add sponsors section and rework credits hierarchy ([#672](https://github.com/zard-ui/zardui/pull/672))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
 ## 1.0.0-beta.84 (2026-08-02)
 
 ### 🐛 Bug Fixes
