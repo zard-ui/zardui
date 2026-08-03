@@ -1,0 +1,83 @@
+<z-content
+  [navigationConfig]="navigationConfig"
+  [activeAnchor]="activeAnchor"
+  scrollSpy
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="YouTube"
+    description="Talks, live streams and tutorials the community recorded about Zard UI, gathered in one place."
+    scrollSpyItem="overview"
+    id="overview"
+  ></z-doc-heading>
+
+  <z-alert
+    zTitle="Made by the community"
+    zDescription="Every video below was produced by someone outside the core team. Each card opens the original video on YouTube, in the channel of whoever recorded it — long live streams jump straight to the moment Zard UI shows up."
+  />
+
+  @for (group of groups(); track group.id) {
+    <section class="flex flex-col gap-6 sm:gap-8" [scrollSpyItem]="group.id" [id]="group.id">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        {{ group.label }}
+      </h2>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        @for (video of group.videos; track video.id) {
+          <a
+            [href]="video.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group focus-visible:ring-ring focus-visible:ring-offset-background flex flex-col gap-3 rounded-lg outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
+          >
+            <div class="bg-muted relative aspect-video overflow-hidden rounded-lg border">
+              <img
+                [src]="video.thumbnail"
+                [alt]="'Video thumbnail: ' + video.title"
+                loading="lazy"
+                decoding="async"
+                class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                (error)="onThumbnailError(video.id)"
+                (load)="onThumbnailLoad(video.id, $event)"
+              />
+
+              <div
+                class="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+              >
+                <span
+                  class="flex h-14 w-14 items-center justify-center rounded-full bg-red-600 shadow-lg transition-transform duration-300 group-hover:scale-110"
+                >
+                  <svg class="ml-0.5 h-6 w-6 text-white" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M8 5v14l11-7z" />
+                  </svg>
+                </span>
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <h3 class="text-sm leading-snug font-medium text-balance">{{ video.title }}</h3>
+              @if (video.author) {
+                <p class="text-muted-foreground text-xs">{{ video.author }}</p>
+              }
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+  }
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="contribute" id="contribute">
+    <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Contribute</h2>
+
+    <z-alert zTitle="Recorded a video about Zard UI?" [zDescription]="contributeDescription" />
+
+    <ng-template #contributeDescription>
+      <p>
+        Send the link to
+        <a href="mailto:hello@luizgomes.dev?subject=Zard%20UI%20video%20submission">hello&#64;luizgomes.dev</a>
+        and we will add it to this page. Submissions go through a review before being published, so it may take a while
+        until your video shows up here. Content in any language is welcome.
+      </p>
+    </ng-template>
+  </section>
+</z-content>
