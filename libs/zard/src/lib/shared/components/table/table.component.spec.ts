@@ -6,6 +6,7 @@ import {
   ZardTableCaptionComponent,
   ZardTableCellComponent,
   ZardTableComponent,
+  ZardTableFooterComponent,
   ZardTableHeadComponent,
   ZardTableHeaderComponent,
   ZardTableRowComponent,
@@ -265,6 +266,32 @@ describe('TableComponents', () => {
       expect(compiled.getAttribute('class')).toContain('mt-4');
       expect(compiled.getAttribute('class')).toContain('text-sm');
       expect(compiled.getAttribute('class')).toContain('text-muted-foreground');
+    });
+  });
+
+  describe('ZardTableFooterComponent', () => {
+    let component: ZardTableFooterComponent;
+    let fixture: ComponentFixture<ZardTableFooterComponent>;
+
+    beforeEach(async () => {
+      await TestBed.configureTestingModule({
+        imports: [ZardTableFooterComponent],
+      }).compileComponents();
+
+      fixture = TestBed.createComponent(ZardTableFooterComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should apply default classes', () => {
+      const compiled = fixture.nativeElement;
+      expect(compiled.getAttribute('class')).toContain('border-t');
+      expect(compiled.getAttribute('class')).toContain('bg-muted/50');
+      expect(compiled.getAttribute('class')).toContain('font-medium');
     });
   });
 });

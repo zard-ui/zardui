@@ -28,6 +28,7 @@ import {
   tableBodyVariants,
   tableCaptionVariants,
   tableCellVariants,
+  tableFooterVariants,
   tableHeaderVariants,
   tableHeadVariants,
   tableRowVariants,
@@ -170,6 +171,24 @@ export class ZardTableCaptionComponent {
 
   protected readonly classes = computed(() => mergeClasses(tableCaptionVariants(), this.class()));
 }
+
+@Component({
+  selector: 'tfoot[z-table-footer]',
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'classes()',
+  },
+  exportAs: 'zTableFooter',
+})
+export class ZardTableFooterComponent {
+  readonly class = input<ClassValue>('');
+
+  protected readonly classes = computed(() => mergeClasses(tableFooterVariants(), this.class()));
+}
 ```
 
 ```angular-ts
@@ -207,13 +226,16 @@ export const tableBodyVariants = cva('[&_tr:last-child]:border-0', {
   defaultVariants: {},
 });
 
-export const tableRowVariants = cva('border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted', {
-  variants: {},
-  defaultVariants: {},
-});
+export const tableRowVariants = cva(
+  'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
+  {
+    variants: {},
+    defaultVariants: {},
+  },
+);
 
 export const tableHeadVariants = cva(
-  'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
+  'h-10 px-2 text-left align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},
@@ -221,7 +243,7 @@ export const tableHeadVariants = cva(
 );
 
 export const tableCellVariants = cva(
-  'p-2 align-middle [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
+  'p-2 align-middle has-[[role=checkbox]]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},
@@ -232,6 +254,10 @@ export const tableCaptionVariants = cva('mt-4 text-sm text-muted-foreground', {
   variants: {},
   defaultVariants: {},
 });
+
+export const tableFooterVariants = cva(
+  'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
+);
 
 export type ZardTableSizeVariants = NonNullable<VariantProps<typeof tableVariants>['zSize']>;
 export type ZardTableTypeVariants = NonNullable<VariantProps<typeof tableVariants>['zType']>;
