@@ -8,7 +8,10 @@ import { MAY_2025 } from './2025/may-2025';
 import { NOVEMBER_2025 } from './2025/november-2025';
 import { OCTOBER_2025 } from './2025/october-2025';
 import { SEPTEMBER_2025 } from './2025/september-2025';
+import { AUGUST_2026 } from './2026/august-2026';
+import { JULY_2026 } from './2026/july-2026';
 import { MARCH_2026 } from './2026/march-2026';
+import { MAY_2026 } from './2026/may-2026';
 import { type ChangelogEntry } from './changelog-entry.interface';
 
 /**
@@ -20,6 +23,9 @@ import { type ChangelogEntry } from './changelog-entry.interface';
  * Add new months here — order does not matter, the list is sorted by date.
  */
 export const CHANGELOG_ENTRIES: readonly ChangelogEntry[] = [
+  AUGUST_2026,
+  JULY_2026,
+  MAY_2026,
   MARCH_2026,
   DECEMBER_2025,
   NOVEMBER_2025,
