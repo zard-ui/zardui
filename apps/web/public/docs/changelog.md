@@ -849,8 +849,6 @@ npx zard-cli@latest add avatar
 
 User profile image component with automatic fallback to initials and multiple size variants.
 
-ZA
-
 ```
 import { Component } from '@angular/core';
 
