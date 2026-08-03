@@ -72,6 +72,14 @@ export const DOCS_PATH: NavSection = {
   ],
 };
 
+export const FEATURED_PATH: NavSection = {
+  title: 'Featured',
+  data: [
+    { name: 'YouTube', path: '/docs/featured/youtube', available: true },
+    { name: 'Articles', path: '/docs/featured/articles', available: false },
+  ],
+};
+
 export const COMPONENTS_PATH: NavSection = {
   title: 'Components',
   data: [
@@ -126,4 +134,4 @@ export const COMPONENTS_PATH: NavSection = {
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
-export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, COMPONENTS_PATH];
+export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, FEATURED_PATH, COMPONENTS_PATH];
