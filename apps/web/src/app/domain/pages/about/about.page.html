@@ -12,7 +12,7 @@
   />
 
   <div class="flex flex-col gap-6">
-    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+    <p class="leading-relaxed">
       ZardUI is an open-source Angular component library built with
       <code class="bg-muted rounded px-2 py-1 font-mono text-xs sm:text-sm">TailwindCSS</code>
       , inspired by
@@ -22,11 +22,34 @@
     </p>
   </div>
 
+  <!-- Sponsors Section -->
+  <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="sponsors" id="sponsors">
+    <div class="flex flex-col gap-6">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Sponsors</h2>
+      <p class="leading-relaxed">
+        These are the people who back ZardUI through GitHub Sponsors. Their support keeps the project moving, and
+        <strong class="text-foreground font-semibold">100% of every sponsorship is reinvested into the project</strong>
+        — infrastructure, tooling, and the time it takes to build and maintain components.
+      </p>
+    </div>
+
+    @if (sponsorsLoading()) {
+      <z-sponsors-loading />
+    } @else {
+      <z-sponsors [sponsors]="sponsors()" />
+    }
+
+    <a z-button target="_blank" rel="noopener noreferrer" [href]="sponsorsUrl" class="mx-auto w-fit">
+      <img src="/icons/github.svg" alt="github icon" class="h-4 w-4 invert dark:invert-0" />
+      Become a Sponsor
+    </a>
+  </section>
+
   <!-- Founders Section -->
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="founders" id="founders">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Founders</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Founders</h2>
+      <p class="leading-relaxed">
         Meet the people behind ZardUI who started this journey to create exceptional developer experiences.
       </p>
     </div>
@@ -40,8 +63,8 @@
 
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="maintainers" id="maintainers">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Mantainers</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Mantainers</h2>
+      <p class="leading-relaxed">
         The dedicated team members who help maintain and improve ZardUI, ensuring quality and consistency.
       </p>
     </div>
@@ -56,8 +79,10 @@
   <!-- Contributors Section -->
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="contributors" id="contributors">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Contributors</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Contributors
+      </h2>
+      <p class="leading-relaxed">
         A huge thank you to all the amazing developers who have contributed to making ZardUI better.
       </p>
     </div>
@@ -72,15 +97,21 @@
   <!-- Credits Section -->
   <section class="flex flex-col gap-8 sm:gap-10" scrollSpyItem="credits" id="credits">
     <div class="flex flex-col gap-6">
-      <h2 class="text-xl font-bold tracking-tight sm:text-2xl lg:text-3xl">Credits & Acknowledgments</h2>
-      <p class="text-muted-foreground text-base leading-relaxed sm:text-lg">
-        ZardUI wouldn't be possible without these amazing projects and communities.
-      </p>
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Credits & Acknowledgments
+      </h2>
+      <p class="leading-relaxed">ZardUI wouldn't be possible without these amazing projects and communities.</p>
     </div>
 
     <div class="flex flex-col gap-4">
       @for (item of creditItems; track item.title) {
-        <z-credit-card [title]="item.title" [description]="item.description" />
+        <z-credit-card
+          [title]="item.title"
+          [description]="item.description"
+          [url]="item.url"
+          [author]="item.author"
+          [authorUrl]="item.authorUrl"
+        />
       }
     </div>
   </section>
