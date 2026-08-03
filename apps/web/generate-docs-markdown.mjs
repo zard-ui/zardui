@@ -103,10 +103,12 @@ function tabContainer(el) {
 
 /** Convert an HTML <table> (e.g. a component's API reference) to a Markdown table. */
 function convertTable(table) {
+  // Escape the backslash together with the pipe: escaping `|` alone would turn a literal
+  // `\` in the cell into the escape for our own `\|`, leaking a column separator.
   const cell = tr =>
     [...tr.children]
       .filter(c => /^(TH|TD)$/.test(c.tagName))
-      .map(c => inlineText(c).replace(/\|/g, '\\|').replace(/\s+/g, ' ').trim());
+      .map(c => inlineText(c).replace(/[\\|]/g, '\\$&').replace(/\s+/g, ' ').trim());
   const rows = [...table.querySelectorAll('tr')].map(cell).filter(r => r.length);
   if (rows.length < 2) return '';
 

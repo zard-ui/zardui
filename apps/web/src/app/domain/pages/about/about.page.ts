@@ -17,6 +17,7 @@ import { ScrollSpyDirective } from '@doc/domain/directives/scroll-spy.directive'
 import { SPONSORS_URL } from '@doc/shared/constants/sponsors.constant';
 import { GithubService } from '@doc/shared/services/github.service';
 import { SeoService } from '@doc/shared/services/seo.service';
+import { SponsorsService } from '@doc/shared/services/sponsors.service';
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 
@@ -44,14 +45,11 @@ import { ZardButtonComponent } from '@zard/components/button/button.component';
 export class AboutPage implements OnInit {
   private readonly githubService = inject(GithubService);
   private readonly seoService = inject(SeoService);
+  // Injected only here: sponsors are fetched (and bundled) for this page alone.
+  private readonly sponsorsService = inject(SponsorsService);
 
   readonly activeAnchor = signal<string | undefined>(undefined);
   readonly sponsorsUrl = SPONSORS_URL;
-
-  constructor() {
-    // Sponsors are fetched only here, so no other prerendered route spends GitHub calls on them.
-    this.githubService.loadSponsors();
-  }
 
   ngOnInit(): void {
     this.seoService.setDocsSeo(
@@ -94,8 +92,8 @@ export class AboutPage implements OnInit {
 
   // Sponsors are an independent list: people already listed as maintainers or
   // contributors intentionally show up here too.
-  readonly sponsors = this.githubService.sponsors;
-  readonly sponsorsLoading = this.githubService.sponsorsLoading;
+  readonly sponsors = this.sponsorsService.sponsors;
+  readonly sponsorsLoading = this.sponsorsService.sponsorsLoading;
 
   readonly founders = computed(() =>
     this.contributors()
