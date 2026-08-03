@@ -13,13 +13,25 @@ import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 
 import { dirname, join } from 'node:path';
 import { Window } from 'happy-dom';
 
-const domParser = new (new Window().DOMParser)();
+const domParser = new new Window().DOMParser();
 
 const BROWSER_DOCS = 'dist/apps/web/browser/docs';
 const PUBLIC_DOCS = 'apps/web/public/docs';
 
 // Chrome / non-content elements to drop before converting.
-const SKIP = new Set(['SCRIPT', 'STYLE', 'SVG', 'BUTTON', 'NAV', 'Z-ASSIST', 'Z-DYNAMIC-ANCHOR', 'NG-ICON']);
+// `Z-AVATAR` renders an initials fallback (`<span>HE</span>`) next to the image while it
+// loads, which is decorative — without it the person's own name/username is the link text.
+const SKIP = new Set([
+  'SCRIPT',
+  'STYLE',
+  'SVG',
+  'BUTTON',
+  'NAV',
+  'Z-ASSIST',
+  'Z-AVATAR',
+  'Z-DYNAMIC-ANCHOR',
+  'NG-ICON',
+]);
 const INLINE = new Set(['A', 'STRONG', 'B', 'EM', 'I', 'CODE', 'SPAN', 'SMALL', 'LABEL']);
 
 /**
@@ -91,7 +103,12 @@ function tabContainer(el) {
 
 /** Convert an HTML <table> (e.g. a component's API reference) to a Markdown table. */
 function convertTable(table) {
-  const cell = tr => [...tr.children].filter(c => /^(TH|TD)$/.test(c.tagName)).map(c => inlineText(c).replace(/\|/g, '\\|').replace(/\s+/g, ' ').trim());
+  // Escape the backslash together with the pipe: escaping `|` alone would turn a literal
+  // `\` in the cell into the escape for our own `\|`, leaking a column separator.
+  const cell = tr =>
+    [...tr.children]
+      .filter(c => /^(TH|TD)$/.test(c.tagName))
+      .map(c => inlineText(c).replace(/[\\|]/g, '\\$&').replace(/\s+/g, ' ').trim());
   const rows = [...table.querySelectorAll('tr')].map(cell).filter(r => r.length);
   if (rows.length < 2) return '';
 
@@ -182,7 +199,10 @@ function blockMarkdown(node, out) {
             .join('\n'),
         );
       }
-    } else if (/bg-code|code-tabs-wrapper/.test(child.getAttribute('class') || '') && child.querySelectorAll('pre').length >= 2) {
+    } else if (
+      /bg-code|code-tabs-wrapper/.test(child.getAttribute('class') || '') &&
+      child.querySelectorAll('pre').length >= 2
+    ) {
       // Code-tabs (npm/pnpm/yarn/bun) — two implementations (`bg-code` on doc pages,
       // `code-tabs-wrapper` on install steps). Keep only the first variant, not all four.
       const code = child.querySelector('pre').textContent.replace(/\n+$/, '');
@@ -197,7 +217,13 @@ function blockMarkdown(node, out) {
       const href = child.getAttribute('href') || '';
       const heading = child.querySelector('h1,h2,h3,h4,h5,h6');
       const text = (heading ? heading.textContent : inlineText(child)).replace(/\s+/g, ' ').trim();
-      if (text) out.push(href && !href.startsWith('#') ? `- [${text}](${href})` : text);
+      // A link styled as a button is an action, not a list entry — emitting it as a
+      // bullet would append it to whatever list precedes it (e.g. the sponsors list).
+      const isButton = child.getAttribute('data-slot') === 'button';
+      if (text) {
+        if (!href || href.startsWith('#')) out.push(text);
+        else out.push(isButton ? `[${text}](${href})` : `- [${text}](${href})`);
+      }
     } else if (INLINE.has(tag)) {
       const text = inlineText(child).trim();
       if (text) out.push(text);
@@ -343,7 +369,8 @@ function generate() {
   }
 
   console.log(`✅ Wrote ${count} documentation markdown files to ${PUBLIC_DOCS}`);
-  if (recovered.length) console.log(`↳ Recovered ${recovered.length} component stub(s) from HTML: ${recovered.join(', ')}`);
+  if (recovered.length)
+    console.log(`↳ Recovered ${recovered.length} component stub(s) from HTML: ${recovered.join(', ')}`);
   if (skipped.length) console.warn(`⚠️  Skipped (no content extracted): ${skipped.join(', ')}`);
 }
 
