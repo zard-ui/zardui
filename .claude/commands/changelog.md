@@ -205,6 +205,11 @@ export const AUGUST_2026_EXAMPLES: ChangelogExample[] = [
 
 `componentName` must be an existing folder in `libs/zard/src/lib/shared/components/`.
 
+Add `fillContainer: true` when the component takes its width from its parent — the demo host is a
+flex item in the preview area, so a component that only says `w-full` collapses to zero pixels. The
+slider is the known case. After the build, check it in the browser: if the demo looks invisible or a
+few pixels wide, that is what you are missing.
+
 ### Tone
 
 English, first person plural, the same register as the published months: *"We replaced…"*,

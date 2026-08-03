@@ -40,6 +40,11 @@ export interface ChangelogExample {
   componentName: string; // Component folder name, used for the install command
   codeData?: CodeBlockData;
   cliAdd?: CodeTabData; // `zard-cli add <componentName>` tabs
+  /**
+   * Stretch the demo to fill the preview area. Needed by components that size
+   * themselves from their parent (the slider collapses to zero width without it).
+   */
+  fillContainer?: boolean;
 }
 
 /**

@@ -32,6 +32,7 @@ import { type ChangelogExample } from '../entries/changelog-entry.interface';
             [demoDescription]="item.example.description"
             [codeData]="item.example.codeData"
             [dynamicComponent]="item.example.component"
+            [fillContainer]="item.example.fillContainer"
           ></z-code-box>
         </div>
       }

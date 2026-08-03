@@ -58,5 +58,8 @@ export const MAY_2025_EXAMPLES: ChangelogExample[] = [
     componentName: 'slider',
     codeData: SLIDER_DEMO_DEFAULT,
     cliAdd: SLIDER_CLI_ADD,
+    // The slider takes its width from its parent, so it needs the preview area
+    // to stretch it; without this it renders zero pixels wide.
+    fillContainer: true,
   },
 ];
