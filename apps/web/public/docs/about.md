@@ -9,6 +9,18 @@ Learn more about ZardUI, our team, and the amazing contributors who make this pr
 
 ZardUI is an open-source Angular component library built with `TailwindCSS` , inspired by `shadcn/ui` . Our mission is to provide developers with beautiful, accessible, and highly customizable components that accelerate development while maintaining design consistency.
 
+## Sponsors
+
+These are the people who back ZardUI through GitHub Sponsors. Their support keeps the project moving, and **100% of every sponsorship is reinvested into the project** — infrastructure, tooling, and the time it takes to build and maintain components.
+
+- [Joosep Parts](https://github.com/Nurech)
+- [Pavan Mollagavelli](https://github.com/neopavan)
+- [Kelver Arruda](https://github.com/kelverarruda)
+- [Jokosonso](https://github.com/craftfirecode)
+- [Lucas Silva](https://github.com/asyncLucas)
+
+[Become a Sponsor](https://github.com/sponsors/zard-ui)
+
 ## Founders
 
 Meet the people behind ZardUI who started this journey to create exceptional developer experiences.
@@ -28,37 +40,37 @@ The dedicated team members who help maintain and improve ZardUI, ensuring qualit
 
 A huge thank you to all the amazing developers who have contributed to making ZardUI better.
 
-- [HE](https://github.com/henriquecustodia)
-- [EL](https://github.com/elderfonseca)
-- [LU](https://github.com/Luiz1nn)
-- [MI](https://github.com/mihajm)
-- [RA](https://github.com/ragul1697)
-- [IE](https://github.com/IEdiong)
-- [BR](https://github.com/Brenerr)
-- [VI](https://github.com/viniciuscigma)
-- [LU](https://github.com/luizvidal)
-- [RY](https://github.com/RyanDrop)
-- [OL](https://github.com/OlimjonovOtabek)
-- [IB](https://github.com/ibnkhayatmed)
-- [NO](https://github.com/Noskilo)
-- [AS](https://github.com/asyncLucas)
-- [HZ](https://github.com/hzokbe)
-- [KE](https://github.com/KevinValmo)
-- [JU](https://github.com/julianosouzanh)
-- [LU](https://github.com/LucasHenriqueAbreu)
-- [FV](https://github.com/fveltmann)
-- [FE](https://github.com/fernandoarag)
-- [EK](https://github.com/Ekram70)
-- [DA](https://github.com/davidpvilaca)
-- [CN](https://github.com/cnaples79)
-- [FO](https://github.com/Fortivera)
-- [AL](https://github.com/ale-neto)
+- [henriquecustodia](https://github.com/henriquecustodia)
+- [elderfonseca](https://github.com/elderfonseca)
+- [Luiz1nn](https://github.com/Luiz1nn)
+- [mihajm](https://github.com/mihajm)
+- [ragul1697](https://github.com/ragul1697)
+- [IEdiong](https://github.com/IEdiong)
+- [Brenerr](https://github.com/Brenerr)
+- [viniciuscigma](https://github.com/viniciuscigma)
+- [tonghuaroot](https://github.com/tonghuaroot)
+- [luizvidal](https://github.com/luizvidal)
+- [RyanDrop](https://github.com/RyanDrop)
+- [OlimjonovOtabek](https://github.com/OlimjonovOtabek)
+- [ibnkhayatmed](https://github.com/ibnkhayatmed)
+- [Noskilo](https://github.com/Noskilo)
+- [asyncLucas](https://github.com/asyncLucas)
+- [hzokbe](https://github.com/hzokbe)
+- [KevinValmo](https://github.com/KevinValmo)
+- [julianosouzanh](https://github.com/julianosouzanh)
+- [LucasHenriqueAbreu](https://github.com/LucasHenriqueAbreu)
+- [fveltmann](https://github.com/fveltmann)
+- [fernandoarag](https://github.com/fernandoarag)
+- [Ekram70](https://github.com/Ekram70)
+- [davidpvilaca](https://github.com/davidpvilaca)
+- [cnaples79](https://github.com/cnaples79)
+- [Fortivera](https://github.com/Fortivera)
 
 ## Credits & Acknowledgments
 
 ZardUI wouldn't be possible without these amazing projects and communities.
 
-### shadcn/ui
+### Shadcn/ui
 
 The design philosophy and component patterns that inspired ZardUI's architecture and aesthetic.
 
@@ -66,7 +78,7 @@ The design philosophy and component patterns that inspired ZardUI's architecture
 
 The utility-first CSS framework that powers ZardUI's styling system and enables rapid customization.
 
-### NG-ZORRO
+### Ng-zorro
 
 An enterprise-class Angular UI library that inspired ZardUI with its exceptional developer experience and comprehensive component patterns.
 
@@ -81,6 +93,18 @@ The monorepo toolkit that enables ZardUI's scalable development workflow and bui
 ### CVA
 
 Class Variance Authority provides type-safe styling variants that make ZardUI components highly customizable.
+
+### [Ng-icons](https://ng-icons.github.io/ng-icons/#/)
+
+The icon library that brings thousands of icons to ZardUI components through a single, tree-shakable Angular API.
+
+Maintained by [ashley-hunter](https://github.com/ashley-hunter)
+
+### [Embla-carousel-angular](https://github.com/donaldxdonald/embla-carousel-angular)
+
+The lightweight and accessible carousel engine that powers the ZardUI carousel component under the hood.
+
+Maintained by [donaldxdonald](https://github.com/donaldxdonald)
 
 ### Open Source Community
 

@@ -7,19 +7,18 @@ import { ZardSkeletonComponent } from '@zard/components/skeleton/skeleton.compon
   standalone: true,
   imports: [ZardSkeletonComponent],
   template: `
-    <div class="flex flex-col gap-6 sm:gap-8">
-      @for (item of [1, 2]; track item) {
-        <div class="from-card to-card/50 rounded-xl border bg-gradient-to-br p-8 shadow-lg sm:p-10">
-          <div class="flex flex-col items-start gap-6 sm:flex-row sm:items-center sm:gap-8">
-            <z-skeleton class="h-20 w-20 shrink-0 rounded-full"></z-skeleton>
-            <div class="flex w-full flex-1 flex-col gap-3 sm:gap-4">
-              <div class="flex flex-col gap-2">
-                <z-skeleton class="h-8 w-3/4 sm:h-9"></z-skeleton>
-                <z-skeleton class="h-6 w-1/2 sm:h-7"></z-skeleton>
-              </div>
-              <z-skeleton class="h-5 w-32 sm:h-6"></z-skeleton>
-            </div>
+    <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6">
+      @for (item of [1, 2]; track $index) {
+        <div
+          class="from-card to-muted/40 relative flex flex-col items-center gap-4 rounded-xl border bg-gradient-to-br p-6 shadow-sm sm:p-8"
+        >
+          <z-skeleton class="absolute top-4 right-4 h-5 w-20 rounded-full"></z-skeleton>
+          <z-skeleton class="size-20 shrink-0 rounded-full"></z-skeleton>
+          <div class="flex w-full flex-col items-center gap-1.5">
+            <z-skeleton class="h-7 w-40 max-w-full"></z-skeleton>
+            <z-skeleton class="h-5 w-52 max-w-full"></z-skeleton>
           </div>
+          <z-skeleton class="h-6 w-32 rounded-full"></z-skeleton>
         </div>
       }
     </div>
