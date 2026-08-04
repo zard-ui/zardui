@@ -107,6 +107,8 @@ function getDescriptionForRoute(path: string): string {
       'Understanding SCSS/Sass integration with Tailwind v4 - risks, limitations, and alternatives.',
     '/docs/dark-mode': 'Implementing dark mode in your Angular application.',
     '/docs/cli': 'Command-line tool for installing and managing Zard UI components.',
+    '/docs/registry':
+      'How Zard UI distributes components: the static JSON registry consumed by the CLI and MCP server.',
     '/docs/figma': 'Figma design resources and component library.',
     '/llms.txt': 'LLM-optimized documentation format for AI assistants.',
     '/docs/about': 'Credits, project information, and acknowledgments.',
