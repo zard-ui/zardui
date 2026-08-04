@@ -5,6 +5,7 @@
 /themes
 /docs/introduction
 /docs/components
+/docs/registry
 /docs/roadmap
 /docs/changelog
 /docs/installation

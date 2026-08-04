@@ -34,7 +34,7 @@ export const SECTIONS: NavSection = {
     {
       name: 'Registry',
       path: '/docs/registry',
-      available: false,
+      available: true,
     },
     {
       name: 'MCP Server',

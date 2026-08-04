@@ -68,6 +68,10 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/cli/cli.page').then(c => c.CliPage),
       },
       {
+        path: 'registry',
+        loadComponent: () => import('./domain/pages/registry/registry.page').then(c => c.RegistryPage),
+      },
+      {
         path: 'components',
         loadChildren: async () => (await import('./domain/pages/component/component.routes')).COMPONENTS_ROUTES,
       },
