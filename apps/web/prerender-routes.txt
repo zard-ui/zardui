@@ -66,4 +66,15 @@
 /docs/components/dropdown
 /docs/components/popover
 /docs/components/kbd
+/docs/contribute
+/docs/contribute/setup
+/docs/contribute/architecture
+/docs/contribute/project-structure
+/docs/contribute/components
+/docs/contribute/blocks
+/docs/contribute/documentation
+/docs/contribute/testing
+/docs/contribute/workflow
+/docs/contribute/release
+/docs/contribute/faq
 /docs/installation/angular

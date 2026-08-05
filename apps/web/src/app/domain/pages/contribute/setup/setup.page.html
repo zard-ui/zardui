@@ -1,0 +1,223 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Setup"
+    description="Get the monorepo running locally in a few minutes, and learn which command does what."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      Zard UI is a single Nx workspace. One
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm install</code>
+      at the root installs everything — the library, the documentation site, the CLI and the MCP server.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="requirements" id="requirements">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Requirements
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">engines</code>
+        field in
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">package.json</code>
+        requires Node 20.19.0 or newer. The CI runs Node 24, so anything in between works.
+      </p>
+    </div>
+
+    <z-code-block [data]="toolchainBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="install" id="install">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Fork &amp; Install
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Contributions come from forks. Fork
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">zard-ui/zardui</code>
+        on GitHub, then clone your copy and install the dependencies with npm — the repository ships a
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">package-lock.json</code>
+        , so npm is the supported package manager.
+      </p>
+    </div>
+
+    <z-code-block [data]="installBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="dev-server" id="dev-server">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Development Server
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm start</code>
+        runs
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">scripts/dev.mjs</code>
+        , which does three things: it pre-builds every highlighted code block, then runs two processes side by side —
+        the highlight generator in watch mode and
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">nx run web:serve --configuration=local</code>
+        .
+      </p>
+    </div>
+
+    <z-code-block [data]="startBlock" />
+
+    <div class="flex flex-col gap-4">
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The site listens on
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">http://localhost:4222</code>
+        . To change the port, copy
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">.env.example</code>
+        to
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">.env</code>
+        — the start script loads it automatically.
+      </p>
+    </div>
+
+    <z-code-block [data]="envBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="git-hooks" id="git-hooks">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Git Hooks</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Husky installs itself through the
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">prepare</code>
+        script, so the hooks are active right after
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm install</code>
+        . Two hooks run on every commit.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2 rounded-lg border p-5">
+        <span class="font-mono text-sm font-medium">pre-commit</span>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          Runs
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">lint-staged</code>
+          : ESLint with
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">--fix</code>
+          followed by Prettier on staged
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">.ts</code>
+          files, and Prettier on staged
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">.html</code>
+          files.
+        </p>
+      </div>
+      <div class="flex flex-col gap-2 rounded-lg border p-5">
+        <span class="font-mono text-sm font-medium">commit-msg</span>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          Runs commitlint against the message. A commit without the leading emoji is rejected — see the Workflow page
+          for the full table.
+        </p>
+      </div>
+    </div>
+
+    <z-callout variant="warning" title="Never bypass the hooks" icon="!">
+      Do not commit with
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">--no-verify</code>
+      . The same checks run again in the CI, so bypassing them locally only moves the failure later.
+    </z-callout>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="commands" id="commands">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Essential Commands
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Every command below is defined in the root
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">package.json</code>
+        .
+      </p>
+    </div>
+
+    <h3 class="text-lg font-medium tracking-tight">Development</h3>
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Command</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of developmentCommands; track row.command) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs whitespace-nowrap">{{ row.command }}</code>
+              </td>
+              <td class="text-muted-foreground p-4 align-middle">{{ row.description }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-medium tracking-tight">Generation</h3>
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Command</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of generationCommands; track row.command) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs whitespace-nowrap">{{ row.command }}</code>
+              </td>
+              <td class="text-muted-foreground p-4 align-middle">{{ row.description }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-medium tracking-tight">Quality</h3>
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Command</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of qualityCommands; track row.command) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs whitespace-nowrap">{{ row.command }}</code>
+              </td>
+              <td class="text-muted-foreground p-4 align-middle">{{ row.description }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="troubleshooting" id="troubleshooting">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Troubleshooting
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The four failures newcomers hit most often, and the command that fixes each.
+      </p>
+    </div>
+
+    <z-code-block [data]="troubleshootingBlock" />
+  </section>
+</z-content>

@@ -1,0 +1,197 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Workflow"
+    description="From picking an issue to a merged pull request, including the commit rules that decide whether your work is accepted."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      Zard UI follows a plain GitHub flow:
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">master</code>
+      is the only long-lived branch, every change arrives through a pull request from a fork, and merges are squashed.
+      Releases are derived from commit messages, which is why their format is enforced.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="branches" id="branches">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Branches</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Branch from an up-to-date
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">master</code>
+        and name the branch after the issue you are solving:
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">feat/#&lt;issue&gt;-&lt;short-name&gt;</code>
+        or
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">fix/#&lt;issue&gt;-&lt;short-name&gt;</code>
+        .
+      </p>
+    </div>
+
+    <z-code-block [data]="branchBlock" />
+
+    <div class="flex flex-col gap-4">
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Commit as often as you like — the squash merge collapses the branch into a single commit whose message is the
+        pull request title, so that title must follow the format below too.
+      </p>
+    </div>
+
+    <z-code-block [data]="prePushBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="commits" id="commits">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Commit Format
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The header is
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">&lt;emoji&gt; type(scope): subject</code>
+        . The scope is optional; the emoji is not. Add
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">!</code>
+        after the type — or the scope — for a breaking change, which promotes the release to a major bump.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Emoji</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Type</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Used for</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Version bump</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (commit of commitTypes; track commit.type) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle text-base">{{ commit.emoji }}</td>
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs">{{ commit.type }}</code>
+              </td>
+              <td class="text-muted-foreground p-4 align-middle">{{ commit.description }}</td>
+              <td class="text-muted-foreground p-4 align-middle">{{ commit.bump }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <z-code-block [data]="commitBlock" />
+
+    <z-callout variant="warning" title="No Co-Authored-By trailers" icon="!">
+      Do not add
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">Co-Authored-By</code>
+      trailers to commits, and never bypass the hooks with
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">--no-verify</code>
+      . If a hook fails, fix the cause.
+    </z-callout>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="rejections" id="rejections">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Why Commits Are Rejected
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        These rules come straight from
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">commitlint.config.mjs</code>
+        . The
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">commit-msg</code>
+        hook applies them locally, and the CI applies them again to every commit in the pull request.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Rejected because</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Fix</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (rejection of rejections; track rejection.reason) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle font-medium">{{ rejection.reason }}</td>
+              <td class="text-muted-foreground p-4 align-middle">{{ rejection.fix }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="pull-request" id="pull-request">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Pull Request
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Open the pull request against
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">master</code>
+        . The repository template asks what you did, for screenshots, for the linked issue, for the type of change and
+        for a browser checklist — fill all of it in.
+      </p>
+    </div>
+
+    <ul class="flex flex-col gap-2">
+      @for (item of prChecklist; track item) {
+        <li class="text-muted-foreground flex gap-3 text-sm leading-relaxed">
+          <span class="text-foreground">&#8226;</span>
+          <span>{{ item }}</span>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="ci" id="ci">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        What the CI Runs
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Five jobs, defined in
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">.github/workflows/ci.yml</code>
+        . All of them must pass before a review can be merged.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Job</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (job of ciJobs; track job.job) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs">{{ job.job }}</code>
+              </td>
+              <td class="text-muted-foreground p-4 align-middle">{{ job.command }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Once the checks are green and a maintainer approves, the pull request is squash-merged into
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">master</code>
+        . From there the release automation takes over — see the Release page.
+      </p>
+    </div>
+  </section>
+</z-content>

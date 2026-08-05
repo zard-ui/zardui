@@ -1,0 +1,174 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Contributing Blocks"
+    description="Blocks are full screens composed from Zard components — a login page, a dashboard shell — that users copy in one go."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      Each block lives in
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">libs/blocks/src/lib/&lt;name&gt;</code>
+      and is made of three files: the Angular component, its template, and a
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">block.ts</code>
+      holding the metadata the site and the CLI read. Names are conventionally suffixed with a number —
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">authentication-01</code>
+      ,
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">login-02</code>
+      — so variations of the same idea group naturally.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="generator" id="generator">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Run the Generator
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The generator creates the three files, exports them from
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">libs/blocks/src/index.ts</code>
+        and registers the block in
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">BLOCKS_REGISTRY</code>
+        . It finishes by printing the manual steps that remain.
+      </p>
+    </div>
+
+    <z-code-block [data]="generateBlock" />
+
+    <div class="flex flex-col gap-4">
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">--category</code>
+        is the registry bucket and is validated against the union below;
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">--label</code>
+        is the display label stored in
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">Block.category</code>
+        , and
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">--title</code>
+        overrides the card heading. Passing a category that does not exist fails immediately instead of silently
+        registering nothing.
+      </p>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="metadata" id="metadata">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Block Metadata
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">block.ts</code>
+        exports a single object typed as
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">Block</code>
+        , imported from
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">
+          &#64;doc/domain/components/block-container/block-container.component
+        </code>
+        .
+      </p>
+    </div>
+
+    <z-code-block [data]="blockMetadataBlock" />
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Field</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Type</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (field of metadataFields; track field.field) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs">{{ field.field }}</code>
+              </td>
+              <td class="text-muted-foreground p-4 align-middle font-mono text-xs">{{ field.type }}</td>
+              <td class="text-muted-foreground p-4 align-middle">{{ field.description }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="registry" id="registry">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Registry &amp; Categories
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">BLOCKS_REGISTRY</code>
+        is a record keyed by
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">BlockCategory</code>
+        , declared in
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">domain/services/blocks.service.ts</code>
+        . These keys are fixed:
+      </p>
+    </div>
+
+    <div class="flex flex-wrap gap-2">
+      @for (category of registryCategories; track category) {
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">{{ category }}</code>
+      }
+    </div>
+
+    <z-code-block [data]="registryBlock" />
+
+    <z-callout variant="info" title="Why blocks appear twice" icon="i">
+      The
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">/blocks</code>
+      page renders one category at a time and defaults to
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">featured</code>
+      . A block registered only under its own category would never show on the landing page, so the generator adds it to
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">featured</code>
+      as well — exactly how
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">authentication-01</code>
+      is registered today.
+    </z-callout>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="manual-steps" id="manual-steps">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        What You Must Add
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The generator stops at the scaffold. These four steps are yours.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      @for (step of manualSteps; track step.step) {
+        <div class="flex gap-4 rounded-lg border p-5">
+          <span
+            class="bg-muted text-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
+          >
+            {{ step.step }}
+          </span>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-medium">{{ step.title }}</span>
+            <p class="text-muted-foreground text-sm leading-relaxed">{{ step.description }}</p>
+          </div>
+        </div>
+      }
+    </div>
+
+    <z-code-block [data]="finishBlock" />
+
+    <z-callout variant="warning" title="The screenshots are not optional" icon="!">
+      Nothing generates
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">light.png</code>
+      and
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">dark.png</code>
+      for you. Take them yourself at a desktop viewport, in both themes, and commit them alongside the block.
+    </z-callout>
+  </section>
+</z-content>

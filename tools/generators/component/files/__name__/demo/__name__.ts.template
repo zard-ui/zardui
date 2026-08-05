@@ -1,13 +1,26 @@
+import { <%= constantName %>_DEMO_DEFAULT } from '@generated/components/<%= name %>/demo/default';
+import { <%= constantName %>_CLI_ADD } from '@generated/installation/cli/add-<%= name %>';
+import { <%= constantName %>_MANUAL_CODE } from '@generated/installation/manual/<%= name %>';
+import { <%= constantName %>_USAGE_CODE, <%= constantName %>_USAGE_IMPORT } from '@generated/usage/<%= name %>';
+
 import { ZardDemo<%= className %>DefaultComponent } from './default';
+import { <%= constantName %>_API } from '../doc/api';
 
 export const <%= constantName %> = {
   componentName: '<%= name %>',
   componentType: '<%= name %>',
-  description: '<%= description %>',
+  description: '<%= descriptionEscaped %>',
+  api: <%= constantName %>_API,
+  installData: {
+    cliAdd: <%= constantName %>_CLI_ADD,
+    manualCode: <%= constantName %>_MANUAL_CODE,
+  },
+  usage: { importBlock: <%= constantName %>_USAGE_IMPORT, codeBlock: <%= constantName %>_USAGE_CODE },
   examples: [
     {
       name: 'default',
       component: ZardDemo<%= className %>DefaultComponent,
+      codeData: <%= constantName %>_DEMO_DEFAULT,
     },
   ],
 };

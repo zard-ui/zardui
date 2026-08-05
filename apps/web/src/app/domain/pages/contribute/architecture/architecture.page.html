@@ -1,0 +1,184 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Architecture"
+    description="One Nx workspace, several projects. This page explains who owns what and how a component travels from the library to your application."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      Zard UI is an Nx 22 monorepo running Angular 21, TailwindCSS v4 and TypeScript in strict mode. Nx caches every
+      target and derives the dependency graph, so a change in
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">libs/zard</code>
+      automatically rebuilds everything that depends on it.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="projects" id="projects">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Projects</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Ten top-level pieces. Most contributions touch only one or two of them.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Path</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Project</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (project of projects; track project.path) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs whitespace-nowrap">{{ project.path }}</code>
+              </td>
+              <td class="p-4 align-middle font-medium">{{ project.name }}</td>
+              <td class="text-muted-foreground p-4 align-middle">{{ project.role }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="data-flow" id="data-flow">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        How They Connect
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The library is written once and consumed through two independent paths.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-4">
+      <div class="flex flex-col gap-2 rounded-lg border p-5">
+        <span class="text-sm font-medium">Distribution path</span>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">libs/zard</code>
+          →
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm run build:registry</code>
+          →
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">apps/web/public/r</code>
+          → consumed by
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">zard-cli</code>
+          and
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">zard-mcp</code>
+          → copied into the user's project.
+        </p>
+      </div>
+      <div class="flex flex-col gap-2 rounded-lg border p-5">
+        <span class="text-sm font-medium">Documentation path</span>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">libs/zard/**/demo</code>
+          and
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">doc/api.ts</code>
+          →
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm run generate:highlight</code>
+          →
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">apps/web/src/generated</code>
+          → rendered by the component page → prerendered → converted to Markdown under
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">apps/web/public/docs</code>
+          .
+        </p>
+      </div>
+      <div class="flex flex-col gap-2 rounded-lg border p-5">
+        <span class="text-sm font-medium">Block path</span>
+        <p class="text-muted-foreground text-sm leading-relaxed">
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">libs/blocks</code>
+          →
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm run sync:blocks</code>
+          copies the component sources into each
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">block.ts</code>
+          → the registry ships them → the
+          <code class="bg-muted rounded px-2 py-1 font-mono text-xs">/blocks</code>
+          page renders the live component next to its code.
+        </p>
+      </div>
+    </div>
+
+    <z-callout variant="info" title="The library never imports the site" icon="i">
+      Demos and API references live inside
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">libs/zard</code>
+      but are only referenced by the documentation app. That is why
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">doc/api.ts</code>
+      imports its type through
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">&#64;doc/*</code>
+      : the type is a documentation concern, never shipped to consumers.
+    </z-callout>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="decisions" id="decisions">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Architectural Decisions
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        These are conventions, not suggestions — new code is reviewed against them.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      @for (decision of decisions; track decision.title) {
+        <div class="flex flex-col gap-2 rounded-lg border p-5">
+          <span class="text-sm font-medium">{{ decision.title }}</span>
+          <p class="text-muted-foreground text-sm leading-relaxed">{{ decision.description }}</p>
+        </div>
+      }
+    </div>
+
+    <z-code-block [data]="componentPatternBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="path-aliases" id="path-aliases">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Path Aliases
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Aliases are declared per project, not globally. An alias that resolves inside
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">apps/web</code>
+        does not necessarily resolve inside
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">libs/zard</code>
+        — check the table before importing.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Alias</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Resolves to</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Declared in</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (alias of aliases; track alias.alias) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs whitespace-nowrap">{{ alias.alias }}</code>
+              </td>
+              <td class="text-muted-foreground p-4 align-middle font-mono text-xs">{{ alias.target }}</td>
+              <td class="text-muted-foreground p-4 align-middle font-mono text-xs">{{ alias.declaredIn }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <z-code-block [data]="webAliasesBlock" />
+    <z-code-block [data]="libAliasesBlock" />
+  </section>
+</z-content>
