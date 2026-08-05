@@ -72,23 +72,6 @@ export const DOCS_PATH: NavSection = {
   ],
 };
 
-export const CONTRIBUTE_PATH: NavSection = {
-  title: 'Contribute',
-  data: [
-    { name: 'Overview', path: '/docs/contribute', available: true },
-    { name: 'Setup', path: '/docs/contribute/setup', available: true },
-    { name: 'Architecture', path: '/docs/contribute/architecture', available: true },
-    { name: 'Project Structure', path: '/docs/contribute/project-structure', available: true },
-    { name: 'Components', path: '/docs/contribute/components', available: true },
-    { name: 'Blocks', path: '/docs/contribute/blocks', available: true },
-    { name: 'Documentation', path: '/docs/contribute/documentation', available: true },
-    { name: 'Testing', path: '/docs/contribute/testing', available: true },
-    { name: 'Workflow', path: '/docs/contribute/workflow', available: true },
-    { name: 'Release', path: '/docs/contribute/release', available: true },
-    { name: 'FAQ', path: '/docs/contribute/faq', available: true },
-  ],
-};
-
 export const COMPONENTS_PATH: NavSection = {
   title: 'Components',
   data: [
@@ -143,4 +126,21 @@ export const COMPONENTS_PATH: NavSection = {
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
-export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, CONTRIBUTE_PATH, COMPONENTS_PATH];
+export const CONTRIBUTE_PATH: NavSection = {
+  title: 'Contribute',
+  data: [
+    { name: 'Overview', path: '/docs/contribute', available: true },
+    { name: 'Setup', path: '/docs/contribute/setup', available: true },
+    { name: 'Architecture', path: '/docs/contribute/architecture', available: true },
+    { name: 'Project Structure', path: '/docs/contribute/project-structure', available: true },
+    { name: 'Components', path: '/docs/contribute/components', available: true },
+    { name: 'Blocks', path: '/docs/contribute/blocks', available: true },
+    { name: 'Documentation', path: '/docs/contribute/documentation', available: true },
+    { name: 'Testing', path: '/docs/contribute/testing', available: true },
+    { name: 'Workflow', path: '/docs/contribute/workflow', available: true },
+    { name: 'Release', path: '/docs/contribute/release', available: true },
+    { name: 'FAQ', path: '/docs/contribute/faq', available: true },
+  ],
+};
+
+export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, COMPONENTS_PATH, CONTRIBUTE_PATH];

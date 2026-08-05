@@ -95,10 +95,10 @@
       @for (item of moduleMap; track item.path) {
         <a
           [routerLink]="item.path"
-          class="hover:bg-accent hover:border-accent flex items-center justify-between gap-3 rounded-lg border p-4 transition-colors"
+          class="hover:bg-accent hover:border-accent flex flex-col gap-1 rounded-lg border p-4 transition-colors"
         >
           <span class="text-sm font-medium">{{ item.name }}</span>
-          <span class="text-muted-foreground font-mono text-xs">{{ item.path }}</span>
+          <span class="text-muted-foreground font-mono text-xs break-all">{{ item.path }}</span>
         </a>
       }
     </div>
