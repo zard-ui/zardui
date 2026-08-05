@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideEllipsis } from '@ng-icons/lucide';
 
-import { ZardDropdownImports } from '../../dropdown';
-import { ZardTableImports } from '../table.imports';
+import { ZardDropdownImports } from '@/shared/components/dropdown';
+import { ZardTableImports } from '@/shared/components/table/table.imports';
 
 interface Product {
   id: number;
@@ -32,7 +32,6 @@ interface Product {
             <td z-table-cell class="text-right">
               <button
                 z-button
-                z-dropdown
                 z-dropdown
                 zType="ghost"
                 zSize="icon"

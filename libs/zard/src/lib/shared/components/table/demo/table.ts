@@ -6,10 +6,10 @@ import { TABLE_MANUAL_CODE } from '@generated/installation/manual/table';
 import { TABLE_USAGE_CODE, TABLE_USAGE_IMPORT } from '@generated/usage/table';
 import type { CodeBlockData } from '@highlight/types';
 
-import { ZardDemoTableActionsComponent } from './actions';
-import { ZardDemoTableFooterComponent } from './footer';
-import { ZardDemoTablePreviewComponent } from './preview';
-import { TABLE_API } from '../doc/api';
+import { ZardDemoTableActionsComponent } from '@/shared/components/table/demo/actions';
+import { ZardDemoTableFooterComponent } from '@/shared/components/table/demo/footer';
+import { ZardDemoTablePreviewComponent } from '@/shared/components/table/demo/preview';
+import { TABLE_API } from '@/shared/components/table/doc/api';
 
 const TABLE_COMPOSITION_CODE = `z-table
 ├── caption[z-table-caption]
