@@ -1,0 +1,145 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="FAQ &amp; Troubleshooting"
+    description="The failures contributors actually hit, and the exact command that resolves each one."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      Most surprises in this repository come from the same place: a committed file that is generated rather than
+      written. If something looks stale, the answer is almost always to rerun the generator that owns it.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="commits" id="commits">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Commits</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        <strong class="text-foreground font-semibold">My commit was rejected.</strong>
+        commitlint prints the exact rule that failed. The most common cause is a missing emoji, followed by a subject
+        shorter than ten characters. Fix the message and amend — never reach for
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">--no-verify</code>
+        , because the CI runs commitlint again on every commit in the pull request.
+      </p>
+    </div>
+
+    <z-code-block [data]="amendBlock" />
+
+    <div class="flex flex-col gap-4">
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        <strong class="text-foreground font-semibold">The pre-commit hook changed my files.</strong>
+        That is lint-staged running ESLint with
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">--fix</code>
+        and Prettier. Review the changes, stage them and commit again.
+      </p>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="code-blocks" id="code-blocks">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Code Blocks
+      </h2>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      @for (item of codeBlockIssues; track item.question) {
+        <div class="flex flex-col gap-2 rounded-lg border p-5">
+          <span class="text-sm font-medium">{{ item.question }}</span>
+          <p class="text-muted-foreground text-sm leading-relaxed">{{ item.answer }}</p>
+        </div>
+      }
+    </div>
+
+    <z-code-block [data]="highlightBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="navigation" id="navigation">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Pages &amp; Navigation
+      </h2>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      @for (item of navigationIssues; track item.question) {
+        <div class="flex flex-col gap-2 rounded-lg border p-5">
+          <span class="text-sm font-medium">{{ item.question }}</span>
+          <p class="text-muted-foreground text-sm leading-relaxed">{{ item.answer }}</p>
+        </div>
+      }
+    </div>
+
+    <z-code-block [data]="routesBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="build-errors" id="build-errors">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Build Errors
+      </h2>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      @for (item of buildIssues; track item.question) {
+        <div class="flex flex-col gap-2 rounded-lg border p-5">
+          <span class="text-sm font-medium">{{ item.question }}</span>
+          <p class="text-muted-foreground text-sm leading-relaxed">{{ item.answer }}</p>
+        </div>
+      }
+    </div>
+
+    <z-code-block [data]="resetBlock" />
+
+    <z-callout variant="warning" title="The full build is slow on purpose" icon="!">
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm run build</code>
+      generates the code blocks, the component Markdown and the registry, then prerenders every route and converts the
+      result back to Markdown. Expect minutes, not seconds — and run it before pushing, since it is exactly what the CI
+      runs.
+    </z-callout>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="still-stuck" id="still-stuck">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Still Stuck?
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Open an issue with the command you ran and its full output, start a discussion if the question is about design
+        rather than a bug, or email
+        <a href="mailto:gomesluiz.dev@gmail.com" class="text-foreground font-medium underline underline-offset-4">
+          gomesluiz.dev&#64;gmail.com
+        </a>
+        . An unanswered question is a documentation bug — tell us, and this page grows.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <a
+        href="https://github.com/zard-ui/zardui/issues"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:bg-accent hover:border-accent flex flex-col gap-1 rounded-lg border p-4 transition-colors"
+      >
+        <span class="text-sm font-medium">Issues</span>
+        <span class="text-muted-foreground text-sm">Report a bug or request a feature.</span>
+      </a>
+      <a
+        href="https://github.com/zard-ui/zardui/discussions"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="hover:bg-accent hover:border-accent flex flex-col gap-1 rounded-lg border p-4 transition-colors"
+      >
+        <span class="text-sm font-medium">Discussions</span>
+        <span class="text-muted-foreground text-sm">Ask questions and discuss ideas before writing code.</span>
+      </a>
+    </div>
+  </section>
+</z-content>

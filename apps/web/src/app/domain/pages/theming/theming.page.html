@@ -1,216 +1,283 @@
 <z-content
   [navigationConfig]="navigationConfig"
-  [activeAnchor]="activeAnchor"
+  [activeAnchor]="activeAnchor()"
   scrollSpy
-  (scrollSpyChange)="activeAnchor = $event"
+  (scrollSpyChange)="activeAnchor.set($event)"
 >
   <z-doc-heading
     title="Theming"
-    description="Using CSS Variables and OKLCH colors for theming."
+    description="Design tokens in OKLCH, mapped to Tailwind utilities. One stylesheet controls every component."
     scrollSpyItem="overview"
     id="overview"
   ></z-doc-heading>
 
   <div class="flex flex-col gap-4">
-    <p class="text-muted-foreground text-sm sm:text-base">
-      You can choose between using CSS variables (recommended) or utility classes for theming.
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      A ZardUI theme is a set of CSS variables in
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/styles.css</code>
+      . Each one is mapped to a Tailwind color through
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;theme inline</code>
+      , so
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--primary</code>
+      becomes
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">bg-primary</code>
+      . Redefining the variable under
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">.dark</code>
+      — or under any container class — retints every component underneath it, with no rebuild and no per-component
+      configuration.
     </p>
+
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">There are three ways to get a theme:</p>
+
+    <ul class="text-muted-foreground flex list-disc flex-col gap-2 pl-6 text-sm leading-relaxed sm:text-base">
+      <li>
+        <strong class="text-foreground font-medium">Run the CLI.</strong>
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">zard-cli init</code>
+        writes the whole file and asks which base color you want — see
+        <a class="underline underline-offset-4" routerLink="/docs/installation">Installation</a>
+        .
+      </li>
+      <li>
+        <strong class="text-foreground font-medium">Copy the CSS.</strong>
+        The complete stylesheet is in
+        <a class="underline underline-offset-4" href="#how-it-works">How it works</a>
+        , explained line by line.
+      </li>
+      <li>
+        <strong class="text-foreground font-medium">Build your own.</strong>
+        The
+        <a class="underline underline-offset-4" routerLink="/themes">theme generator</a>
+        gives you every token with a live preview and exports finished CSS.
+      </li>
+    </ul>
   </div>
 
-  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="css-variables" id="css-variables">
+  <!-- How it works -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="how-it-works" id="how-it-works">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
-        CSS Variables
+        How it works
       </h2>
-      <z-code-block [data]="cssVarsIntroBlock" />
-      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-        ZardUI uses CSS variables for theming by default. This provides better performance and easier customization
-        compared to utility classes.
-      </p>
-    </div>
-
-    <div class="">
-      <h3 class="mb-4 text-base font-semibold sm:text-lg">TailwindCSS v4 Configuration</h3>
-      <p class="text-muted-foreground mb-4 text-xs sm:text-sm">
-        Copy and paste the following into your
+      <p class="text-muted-foreground text-base leading-relaxed">
+        This is the whole file, exactly as
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">zard-cli init</code>
+        writes it for the Neutral base color. Paste it into
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/styles.css</code>
-        file:
+        and every component is themed.
       </p>
-      <z-code-block [data]="cssVarsV4Block" />
-      <p class="text-muted-foreground my-4 text-xs sm:text-sm">
-        Update your
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">src/app/app.config.ts</code>
-        file in case CLI did not modify it:
-      </p>
-      <z-code-block [data]="appConfig" />
     </div>
-  </section>
 
-  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="utility-classes" id="utility-classes">
+    <z-code-block [data]="cssVarsV4Block" />
+
     <div class="flex flex-col gap-4">
-      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
-        Utility classes
-      </h2>
-      <z-code-block [data]="utilityClassesIntroBlock" />
-      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-        You can also use utility classes for theming if you prefer more explicit control over colors.
+      <h3 class="text-base font-semibold sm:text-lg">Line by line</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Nine parts, in the order they appear above. Each one earns its place — the last line of every entry says what
+        breaks without it.
       </p>
     </div>
+
+    <z-theme-anatomy />
+
+    <z-callout variant="info" title="Why OKLCH and not HSL or HEX?" icon="?">
+      {{ oklchReasons[0] }} {{ oklchReasons[1] }}
+    </z-callout>
   </section>
 
+  <!-- Convention -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="convention" id="convention">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Convention</h2>
-      <p class="text-muted-foreground text-base sm:text-lg">
-        We use a simple
+      <p class="text-muted-foreground text-base leading-relaxed">
+        Tokens come in pairs: a surface and the text that sits on it. The
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">background</code>
-        and
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">foreground</code>
-        convention for colors. The
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">background</code>
-        variable is used for the component background and the
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">foreground</code>
-        variable is used for the text color.
+        suffix is dropped, so
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--primary</code>
+        is the surface and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--primary-foreground</code>
+        is the text on top of it.
       </p>
-    </div>
-
-    <div class="bg-card rounded-lg border p-4 sm:p-6">
-      <div class="mb-4 flex items-center justify-between">
-        <h3 class="text-base font-semibold sm:text-lg">Background and foreground</h3>
-      </div>
-      <div class="grid gap-4 sm:grid-cols-2">
-        <div class="flex items-center gap-3">
-          <div
-            class="bg-background border-border flex h-8 w-8 items-center justify-center rounded-md border sm:h-10 sm:w-10"
-          >
-            <div class="bg-primary h-4 w-4 rounded sm:h-6 sm:w-6"></div>
-          </div>
-          <div class="flex flex-col">
-            <code class="text-xs sm:text-sm">background</code>
-            <p class="text-muted-foreground text-xs">Component background color</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-3">
-          <div class="bg-primary flex h-8 w-8 items-center justify-center rounded-md sm:h-10 sm:w-10">
-            <div class="bg-primary-foreground h-4 w-4 rounded sm:h-6 sm:w-6"></div>
-          </div>
-          <div class="flex flex-col">
-            <code class="text-xs sm:text-sm">foreground</code>
-            <p class="text-muted-foreground text-xs">Component text color</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="rounded-lg border p-4 sm:p-6">
-      <h3 class="mb-4 text-base font-semibold sm:text-lg">Given the following OKLCH variables:</h3>
       <z-code-block [data]="conventionExample" />
-      <p class="text-muted-foreground mt-4 text-xs sm:text-sm">
-        The
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">primary</code>
-        variable is the background color and the
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">primary-foreground</code>
-        variable is the text color.
-      </p>
     </div>
 
-    <div class="bg-muted/30 rounded-lg border p-4 sm:p-6">
-      <p class="text-muted-foreground text-xs sm:text-sm">
-        <strong>Note:</strong>
-        The
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">background</code>
-        suffix is omitted when the variable is used for the background color of the component.
+    <div class="flex flex-col gap-3">
+      <h3 class="text-base font-semibold sm:text-lg">Every pair, rendered</h3>
+      <p class="text-muted-foreground text-sm">
+        These are real utilities on real elements — the contrast you see is the contrast you get.
       </p>
+      <z-convention-preview />
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <h3 class="text-base font-semibold sm:text-lg">Tokens or raw utility classes?</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Prefer tokens. They react to
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">.dark</code>
+        and to scoped overrides on their own:
+      </p>
+      <z-code-block [data]="cssVarsIntroBlock" />
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Raw Tailwind colors work too, but you own every dark-mode variant by hand and lose scoped theming entirely:
+      </p>
+      <z-code-block [data]="utilityClassesIntroBlock" />
     </div>
   </section>
 
-  <!-- Variables List Section -->
-  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="variables-list" id="variables-list">
+  <!-- Token reference -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="token-reference" id="token-reference">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
-        List of variables
+        Token reference
       </h2>
-      <p class="text-muted-foreground text-base sm:text-lg">
-        Here's the list of variables available for customization:
+      <p class="text-muted-foreground text-base leading-relaxed">
+        All {{ tokenCount }} tokens, with their Neutral values in both modes. The
+        <em>Used by</em>
+        column comes from a scan of the library source, so a token marked
+        <em>not used yet</em>
+        really is unused today.
       </p>
     </div>
-    <z-code-block [data]="variablesList" />
+
+    <z-token-table />
   </section>
 
-  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="adding-new-colors" id="adding-new-colors">
+  <!-- Radius & scale -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="radius" id="radius">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
-        Adding new colors
+        Radius &amp; scale
       </h2>
-      <p class="text-muted-foreground text-base sm:text-lg">
-        To add new colors, you need to add them to your CSS file using the TailwindCSS v4
-        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;theme</code>
-        directive.
+      <p class="text-muted-foreground text-base leading-relaxed">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--radius</code>
+        is the single knob for corner rounding. The four utilities below are derived from it in
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">&#64;theme inline</code>
+        , so changing one value reshapes every component.
       </p>
     </div>
-    @for (block of addingColorsExample; track $index) {
-      <z-code-block [data]="block" />
-    }
+
+    <z-radius-preview />
   </section>
 
+  <!-- Base colors -->
   <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="base-colors" id="base-colors">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
-        Base Colors
+        Base colors
       </h2>
-      <p class="text-muted-foreground text-base sm:text-lg">
-        For reference, here's a list of the base colors that are available.
+      <p class="text-muted-foreground text-base leading-relaxed">
+        Five neutral scales ship with the CLI. They differ only in the hue mixed into the greys — pick one, then adjust
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">--primary</code>
+        to taste.
       </p>
     </div>
 
-    <div>
-      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Neutral</h1>
-      <z-code-block [data]="baseColorsNeutral" />
-    </div>
+    <z-base-color-preview [codeBlocks]="baseColorBlocks" />
+  </section>
 
-    <div>
-      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Stone</h1>
-      <z-code-block [data]="baseColorsStone" />
-    </div>
-
-    <div>
-      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Zinc</h1>
-      <z-code-block [data]="baseColorsZinc" />
-    </div>
-
-    <div>
-      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Gray</h1>
-      <z-code-block [data]="baseColorsGray" />
-    </div>
-
-    <div>
-      <h1 class="font-heading scroll-m-28 text-lg font-medium tracking-tight">Slate</h1>
-      <z-code-block [data]="baseColorsSlate" />
+  <!-- Dark mode -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="dark-mode" id="dark-mode">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Dark mode</h2>
+      <p class="text-muted-foreground text-base leading-relaxed">
+        Dark mode is the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">.dark</code>
+        block and nothing else. No component knows which mode is active: they all read the same token names, and the
+        values change underneath them.
+      </p>
+      <p class="text-muted-foreground text-base leading-relaxed">
+        Two pieces make it work —
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">
+          &#64;custom-variant dark (&amp;:is(.dark *))
+        </code>
+        binds the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">dark:</code>
+        variant to a class instead of the OS setting, and something has to put that class on
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">&lt;html&gt;</code>
+        . The
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">ZardDarkMode</code>
+        service does that, and persists the choice.
+      </p>
+      <p class="text-muted-foreground text-base leading-relaxed">
+        <a class="underline underline-offset-4" routerLink="/docs/dark-mode">Set up dark mode →</a>
+      </p>
     </div>
   </section>
 
-  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="other-formats" id="other-formats">
+  <!-- Customizing -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="customizing" id="customizing">
     <div class="flex flex-col gap-4">
       <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
-        Other color formats
+        Customizing
       </h2>
-      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-        While ZardUI primarily uses OKLCH for better color accuracy and perceptual uniformity, you can also use other
-        color formats with TailwindCSS v4:
-      </p>
-      <z-code-block [data]="otherColorFormatsBlock" />
-      <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-        See the
-        <a
-          href="https://tailwindcss.com/docs/colors"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="underline underline-offset-4"
-        >
-          TailwindCSS documentation
-        </a>
-        for more information on using different color formats.
+      <p class="text-muted-foreground text-base leading-relaxed">
+        Three things you are likely to want: a new color, a token overridden for one part of the app, and a theme that
+        follows a route.
       </p>
     </div>
+
+    <div class="flex flex-col gap-3">
+      <h3 class="text-base font-semibold sm:text-lg">Adding a new color</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Declare the raw value, override it under
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">.dark</code>
+        , then map it — the same three steps every built-in token goes through.
+      </p>
+      @for (block of addingColorsExample; track $index) {
+        <z-code-block [data]="block" />
+      }
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <h3 class="text-base font-semibold sm:text-lg">Overriding tokens in one scope</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Because
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">&#64;theme inline</code>
+        emits
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">var(--primary)</code>
+        instead of a baked-in color, any container can redefine a token for its subtree.
+      </p>
+      @for (block of scopedTokensExample; track $index) {
+        <z-code-block [data]="block" />
+      }
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <h3 class="text-base font-semibold sm:text-lg">A theme per route</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Put the override class on a layout component's host and everything rendered through its outlet inherits it.
+      </p>
+      @for (block of routeThemeExample; track $index) {
+        <z-code-block [data]="block" />
+      }
+    </div>
+
+    <div class="flex flex-col gap-3">
+      <h3 class="text-base font-semibold sm:text-lg">Other color formats</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        The raw tokens hold plain CSS colors, so RGB, HSL and HEX all work. Keep the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-xs">&#64;theme inline</code>
+        mapping as it is.
+      </p>
+      <z-code-block [data]="otherColorFormatsBlock" />
+      <p class="text-muted-foreground text-sm leading-relaxed">
+        Need the values? The
+        <a class="underline underline-offset-4" routerLink="/colors">colors page</a>
+        lists the full Tailwind palette in OKLCH, HEX, RGB and HSL.
+      </p>
+    </div>
+  </section>
+
+  <!-- Troubleshooting -->
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="troubleshooting" id="troubleshooting">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Troubleshooting
+      </h2>
+      <p class="text-muted-foreground text-base leading-relaxed">
+        Every entry below is a real failure mode of the setup on this page, with the line that causes it.
+      </p>
+    </div>
+
+    <z-troubleshooting-list />
   </section>
 </z-content>

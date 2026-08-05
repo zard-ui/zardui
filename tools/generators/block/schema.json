@@ -7,7 +7,7 @@
   "properties": {
     "name": {
       "type": "string",
-      "description": "Block name in kebab-case (e.g., 'sidebar-01')",
+      "description": "Block name in kebab-case, usually suffixed with a number (e.g., 'sidebar-01')",
       "x-prompt": "What is the block name?"
     },
     "description": {
@@ -17,9 +17,22 @@
     },
     "category": {
       "type": "string",
-      "description": "Block category (e.g., 'sidebar', 'login', 'signup')",
+      "description": "Registry category the block is listed under in BLOCKS_REGISTRY",
       "default": "featured",
-      "x-prompt": "What category does this block belong to?"
+      "enum": ["featured", "sidebar", "login", "signup", "otp", "calendar"],
+      "x-prompt": {
+        "message": "Which registry category does this block belong to?",
+        "type": "list",
+        "items": ["featured", "sidebar", "login", "signup", "otp", "calendar"]
+      }
+    },
+    "title": {
+      "type": "string",
+      "description": "Display title shown on the block card (defaults to the name without its numeric suffix)"
+    },
+    "label": {
+      "type": "string",
+      "description": "Display label stored in `Block.category`, e.g. 'Authentication' (defaults to the title)"
     }
   },
   "required": ["name", "description"]

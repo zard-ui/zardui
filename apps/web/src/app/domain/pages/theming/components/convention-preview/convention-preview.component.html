@@ -1,0 +1,43 @@
+<div class="flex flex-col gap-3">
+  <div class="grid gap-3 sm:grid-cols-2">
+    @for (pair of pairs; track pair.background) {
+      <div class="border-border flex flex-col gap-2 rounded-lg border p-3">
+        <div class="flex items-center justify-between gap-2">
+          <code class="text-xs font-medium">--{{ pair.background }}</code>
+          <code class="text-muted-foreground text-xs">--{{ pair.foreground }}</code>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          @for (sample of pair.samples; track sample.mode) {
+            <div class="flex flex-col gap-1">
+              <div
+                class="flex h-12 items-center justify-center rounded-md text-sm font-semibold"
+                [style.background]="sample.background"
+                [style.color]="sample.foreground"
+              >
+                Aa
+              </div>
+              <p class="text-muted-foreground flex items-center justify-between gap-1 text-xs">
+                <span>{{ sample.mode }}</span>
+                <span [class.text-destructive]="!sample.passesAA">
+                  {{ sample.ratio }}:1
+                  @if (!sample.passesAA) {
+                    <span class="sr-only">— below the 4.5:1 AA threshold for body text</span>
+                    <span aria-hidden="true">*</span>
+                  }
+                </span>
+              </p>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <p class="text-muted-foreground text-xs">
+    Contrast ratios are computed from the Neutral preset.
+    <span class="text-destructive">*</span>
+    marks a pair below the 4.5:1 WCAG AA threshold for body text — use it for large or secondary text, not for body
+    copy.
+  </p>
+</div>

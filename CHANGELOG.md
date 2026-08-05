@@ -1,3 +1,47 @@
+## 1.0.0-beta.91 (2026-08-05)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.90 (2026-08-05)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.89 (2026-08-03)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.88 (2026-08-03)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.87 (2026-08-03)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.86 (2026-08-03)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.85 (2026-08-03)
+
+### ✨ Features
+
+- **about:** add sponsors section and rework credits hierarchy ([#672](https://github.com/zard-ui/zardui/pull/672))
+
+### ❤️ Thank You
+
+- Luiz gomes @Luizgomess
+
+## 1.0.0-beta.84 (2026-08-02)
+
+### 🐛 Bug Fixes
+
+- **mcp:** exclude spec files from the tsc build ([b8f9600c](https://github.com/zard-ui/zardui/commit/b8f9600c))
+
+### ❤️ Thank You
+
+- Luiz Gomes
+
 ## 1.0.0-beta.83 (2026-07-21)
 
 ### 📦 Code Refactoring

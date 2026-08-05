@@ -471,6 +471,51 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'input-otp',
+    files: [
+      {
+        name: 'input-otp.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp-signal.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp-slot.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp-separator.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp.imports.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp.tokens.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp.utils.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'item',
     files: [
       {

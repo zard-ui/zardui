@@ -1,0 +1,203 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Contributing Components"
+    description="From an empty folder to a component page that renders demos, installation instructions and a typed API reference."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      A component lives entirely inside
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">libs/zard/src/lib/shared/components/&lt;name&gt;</code>
+      . Its demos and its API reference sit next to the implementation, and the documentation site reads them from there
+      — you never write a page by hand for a component.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="generator" id="generator">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Run the Generator
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Always start here. The generator creates seven files and updates four existing ones, so nothing is forgotten.
+      </p>
+    </div>
+
+    <z-code-block [data]="generateBlock" />
+
+    <h3 class="text-lg font-medium tracking-tight">Files it creates</h3>
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">File</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (file of createdFiles; track file.path) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle font-mono text-xs whitespace-nowrap">{{ file.path }}</td>
+              <td class="text-muted-foreground p-4 align-middle">{{ file.purpose }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <h3 class="text-lg font-medium tracking-tight">Files it updates</h3>
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">File</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Change</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (file of updatedFiles; track file.path) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle font-mono text-xs">{{ file.path }}</td>
+              <td class="text-muted-foreground p-4 align-middle">{{ file.purpose }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <z-callout variant="info" title="Run the highlight generator right after" icon="i">
+      The demo registry imports from
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">&#64;generated/…</code>
+      , and those files only exist once you run
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">npm run generate:highlight</code>
+      . Skipping it leaves the build failing on unresolved imports.
+    </z-callout>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="anatomy" id="anatomy">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Anatomy</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The component file declares its inputs as signals and computes the final class list once. Styling never lives in
+        the template.
+      </p>
+    </div>
+
+    <z-code-block [data]="componentBlock" />
+
+    <div class="flex flex-col gap-4">
+      <h3 class="text-lg font-medium tracking-tight">Variants</h3>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">.variants.ts</code>
+        file is the single source of truth for both the classes and the types. Deriving the types from the CVA
+        definition means a new variant key cannot be forgotten in the component signature.
+      </p>
+    </div>
+
+    <z-code-block [data]="variantsBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="conventions" id="conventions">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Conventions
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Consistency is what makes the library predictable. Reviewers check these.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      @for (convention of conventions; track convention.rule) {
+        <div class="flex flex-col gap-2 rounded-lg border p-5">
+          <span class="text-sm font-medium">{{ convention.rule }}</span>
+          <p class="text-muted-foreground text-sm leading-relaxed">{{ convention.detail }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="demos" id="demos">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Demos</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">demo/</code>
+        folder holds one standalone component per example, plus a registry named after the component. The registry is
+        what the docs page loads — a demo file that is not listed there is never rendered.
+      </p>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Each example pairs its component with a
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">codeData</code>
+        import, which is the highlighted source of that very file. Add an optional
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">preview</code>
+        entry to control the hero demo at the top of the page; without it the first example is used.
+      </p>
+    </div>
+
+    <z-code-block [data]="demoRegistryBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="api-reference" id="api-reference">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        API Reference
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The API reference is TypeScript, not Markdown. Export an
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">ApiSection[]</code>
+        from
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">doc/api.ts</code>
+        and the
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">z-api-reference</code>
+        component renders the table. One section per public selector.
+      </p>
+    </div>
+
+    <z-code-block [data]="apiBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="usage-snippet" id="usage-snippet">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Usage Snippet
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The "Usage" section of a component page comes from
+        <code class="bg-muted rounded px-2 py-1 font-mono text-xs">packages/highlight/src/generator/usage-data.ts</code>
+        , a hand-maintained record keyed by component name. The generator seeds an entry for you; replace it with the
+        smallest snippet that shows the component doing something useful.
+      </p>
+    </div>
+
+    <z-code-block [data]="usageDataBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="checklist" id="checklist">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Checklist</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Walk through this before opening the pull request.
+      </p>
+    </div>
+
+    <ul class="flex flex-col gap-2">
+      @for (item of checklist; track item) {
+        <li class="text-muted-foreground flex gap-3 text-sm leading-relaxed">
+          <span class="text-foreground">&#8226;</span>
+          <span>{{ item }}</span>
+        </li>
+      }
+    </ul>
+
+    <z-code-block [data]="verifyBlock" />
+  </section>
+</z-content>

@@ -164,6 +164,22 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   <input z-input placeholder="example.com" />
 </z-input-group>`,
   },
+  'input-otp': {
+    importCode: `import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';`,
+    templateCode: `<z-input-otp [zMaxLength]="6">
+  <z-input-otp-group>
+    <z-input-otp-slot [zIndex]="0" />
+    <z-input-otp-slot [zIndex]="1" />
+    <z-input-otp-slot [zIndex]="2" />
+  </z-input-otp-group>
+  <z-input-otp-separator />
+  <z-input-otp-group>
+    <z-input-otp-slot [zIndex]="3" />
+    <z-input-otp-slot [zIndex]="4" />
+    <z-input-otp-slot [zIndex]="5" />
+  </z-input-otp-group>
+</z-input-otp>`,
+  },
   item: {
     importCode: `import { ZardItemImports } from '@/shared/components/item/item.imports';`,
     templateCode: `<z-item zVariant="outline">

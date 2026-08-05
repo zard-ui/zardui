@@ -68,8 +68,16 @@ export const appRoutes: Route[] = [
         loadComponent: () => import('./domain/pages/cli/cli.page').then(c => c.CliPage),
       },
       {
+        path: 'registry',
+        loadComponent: () => import('./domain/pages/registry/registry.page').then(c => c.RegistryPage),
+      },
+      {
         path: 'components',
         loadChildren: async () => (await import('./domain/pages/component/component.routes')).COMPONENTS_ROUTES,
+      },
+      {
+        path: 'contribute',
+        loadChildren: async () => (await import('./domain/pages/contribute/contribute.routes')).CONTRIBUTE_ROUTES,
       },
       {
         path: 'version-support',
@@ -96,6 +104,10 @@ export const appRoutes: Route[] = [
       {
         path: 'changelog',
         loadComponent: async () => import('./domain/pages/change-log/change-log.page').then(c => c.ChangeLogPage),
+      },
+      {
+        path: 'featured',
+        loadChildren: async () => (await import('./domain/pages/featured/featured.routes')).FEATURED_ROUTES,
       },
     ],
   },

@@ -34,7 +34,7 @@ import { ZardAccordionItemComponent } from '@/shared/components/accordion/accord
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 @Component({
-  selector: 'z-accordion',
+  selector: 'z-accordion, [z-accordion]',
   template: `
     <ng-content />
   `,
@@ -276,7 +276,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-basic',
   imports: [ZardAccordionImports],
   template: `
-    <z-accordion zDefaultValue="item-1" zType="single" class="max-w-sm">
+    <div z-accordion zDefaultValue="item-1" zType="single" class="max-w-sm">
       <z-accordion-item zValue="item-1" zTitle="How do I reset my password?">
         Click on 'Forgot Password' on the login page, enter your email address, and we'll send you a link to reset your
         password. The link will expire in 24 hours.
@@ -291,7 +291,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
         We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely through our
         payment partners.
       </z-accordion-item>
-    </z-accordion>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -311,7 +311,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-multiple',
   imports: [ZardAccordionImports],
   template: `
-    <z-accordion zType="multiple" class="max-w-sm">
+    <div z-accordion zType="multiple" class="max-w-sm">
       <z-accordion-item zValue="notifications" zTitle="Notification Settings">
         Manage how you receive notifications. You can enable email alerts for updates or push notifications for mobile
         devices.
@@ -327,7 +327,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
         View your current plan, payment history, and upcoming invoices. Update your payment method, change your
         subscription tier, or cancel your subscription.
       </z-accordion-item>
-    </z-accordion>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -347,7 +347,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-disabled',
   imports: [ZardAccordionImports],
   template: `
-    <z-accordion zType="single" class="max-w-sm">
+    <div z-accordion zType="single" class="max-w-sm">
       <z-accordion-item zValue="item-1" zTitle="Can I access my account history?">
         Click on 'Forgot Password' on the login page, enter your email address, and we'll send you a link to reset your
         password. The link will expire in 24 hours.
@@ -362,7 +362,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
         We accept all major credit cards, PayPal, and bank transfers. All payments are processed securely through our
         payment partners.
       </z-accordion-item>
-    </z-accordion>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -382,7 +382,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
   selector: 'z-demo-accordion-borders',
   imports: [ZardAccordionImports],
   template: `
-    <z-accordion zDefaultValue="billing" zType="single" class="max-w-sm rounded-lg border">
+    <div z-accordion zDefaultValue="billing" zType="single" class="max-w-sm rounded-lg border">
       <z-accordion-item zValue="billing" zTitle="How does billing work?" class="px-4">
         We offer monthly and annual subscription plans. Billing is charged at the beginning of each cycle, and you can
         cancel anytime. All plans include automatic backups, 24/7 support, and unlimited team members.
@@ -397,7 +397,7 @@ import { ZardAccordionImports } from '@/shared/components/accordion/accordion.im
         We integrate with 500+ popular tools including Slack, Zapier, Salesforce, HubSpot, and more. You can also build
         custom integrations using our REST API and webhooks.
       </z-accordion-item>
-    </z-accordion>
+    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -412,33 +412,39 @@ Wrap the `Accordion` in a `Card` component.
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { ZardAccordionImports } from '@/shared/components/accordion/accordion.imports';
-import { ZardCardComponent } from '@/shared/components/card';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
 
 @Component({
   selector: 'z-demo-accordion-card',
-  imports: [ZardAccordionImports, ZardCardComponent],
+  imports: [ZardAccordionImports, ZardCardImports],
   template: `
     <z-card
       zTitle="Subscription & Billing"
       zDescription="Common questions about your account, plans, payments and cancellations."
       class="w-full max-w-sm"
     >
-      <z-accordion zDefaultValue="plans" zType="single">
-        <z-accordion-item zValue="plans" zTitle="What subscription plans do you offer?">
-          We offer three subscription tiers: Starter ($9/month), Professional ($29/month), and Enterprise ($99/month).
-          Each plan includes increasing storage limits, API access, priority support, and team collaboration features.
-        </z-accordion-item>
+      <div z-card-header>
+        <z-card-title zTitle="Subscription & Billing" />
+        <z-card-description zDescription="Common questions about your account, plans, payments and cancellations." />
+      </div>
+      <div z-card-content>
+        <z-accordion zDefaultValue="plans" zType="single">
+          <z-accordion-item zValue="plans" zTitle="What subscription plans do you offer?">
+            We offer three subscription tiers: Starter ($9/month), Professional ($29/month), and Enterprise ($99/month).
+            Each plan includes increasing storage limits, API access, priority support, and team collaboration features.
+          </z-accordion-item>
 
-        <z-accordion-item zValue="billing" zTitle="How does billing work?">
-          Billing occurs automatically at the start of each billing cycle. We accept all major credit cards, PayPal, and
-          ACH transfers for enterprise customers. You'll receive an invoice via email after each payment.
-        </z-accordion-item>
+          <z-accordion-item zValue="billing" zTitle="How does billing work?">
+            Billing occurs automatically at the start of each billing cycle. We accept all major credit cards, PayPal,
+            and ACH transfers for enterprise customers. You'll receive an invoice via email after each payment.
+          </z-accordion-item>
 
-        <z-accordion-item zValue="cancel" zTitle="How do I cancel my subscription?">
-          You can cancel your subscription anytime from your account settings. There are no cancellation fees or
-          penalties. Your access will continue until the end of your current billing period.
-        </z-accordion-item>
-      </z-accordion>
+          <z-accordion-item zValue="cancel" zTitle="How do I cancel my subscription?">
+            You can cancel your subscription anytime from your account settings. There are no cancellation fees or
+            penalties. Your access will continue until the end of your current billing period.
+          </z-accordion-item>
+        </z-accordion>
+      </div>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,

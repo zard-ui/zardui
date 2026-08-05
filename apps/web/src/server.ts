@@ -102,11 +102,14 @@ function getDescriptionForRoute(path: string): string {
     '/docs/changelog': 'Release notes, version history, and updates.',
     '/docs/installation': 'Step-by-step guide to install Zard UI in your Angular project.',
     '/docs/components-json': 'Configuration file for customizing the CLI and component installation.',
-    '/docs/theming': 'Guide to customizing colors, typography, and design tokens with TailwindCSS v4.',
+    '/docs/theming':
+      'OKLCH design tokens, the @theme inline mapping, the five base colors, and a full token reference.',
     '/docs/pre-processors':
       'Understanding SCSS/Sass integration with Tailwind v4 - risks, limitations, and alternatives.',
     '/docs/dark-mode': 'Implementing dark mode in your Angular application.',
     '/docs/cli': 'Command-line tool for installing and managing Zard UI components.',
+    '/docs/registry':
+      'How Zard UI distributes components: the static JSON registry consumed by the CLI and MCP server.',
     '/docs/figma': 'Figma design resources and component library.',
     '/llms.txt': 'LLM-optimized documentation format for AI assistants.',
     '/docs/about': 'Credits, project information, and acknowledgments.',
