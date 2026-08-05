@@ -1,11 +1,11 @@
 ---
 title: Table
-description: Displays data in a structured table format with styling variants and semantic HTML structure.
+description: A responsive table component for displaying structured data.
 ---
 
 # Table
 
-Displays data in a structured table format with styling variants and semantic HTML structure.
+A responsive table component for displaying structured data.
 
 ## Installation
 
@@ -314,215 +314,32 @@ import { ZardTableImports } from '@/shared/components/table/table.imports';
 </table>
 ```
 
+## Composition
+
+```text
+z-table
+├── caption[z-table-caption]
+├── thead[z-table-header]
+│   └── tr[z-table-row]
+│       ├── th[z-table-head]
+│       ├── th[z-table-head]
+│       └── th[z-table-head]
+├── tbody[z-table-body]
+│   ├── tr[z-table-row]
+│   │   ├── td[z-table-cell]
+│   │   ├── td[z-table-cell]
+│   │   └── td[z-table-cell]
+│   └── tr[z-table-row]
+│       ├── td[z-table-cell]
+│       ├── td[z-table-cell]
+│       └── td[z-table-cell]
+└── tfoot[z-table-footer]
+    └── tr[z-table-row]
+        ├── td[z-table-cell]
+        └── td[z-table-cell]
+```
+
 ## Examples
-
-### Simple
-
-```angular-ts
-import { Component } from '@angular/core';
-
-import { ZardTableImports } from '../table.imports';
-
-interface Person {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
-}
-
-@Component({
-  selector: 'z-demo-table-simple',
-  imports: [ZardTableImports],
-  template: `
-    <table z-table>
-      <caption z-table-caption>A list of your recent invoices.</caption>
-      <thead z-table-header>
-        <tr z-table-row>
-          <th z-table-head>Name</th>
-          <th z-table-head>Age</th>
-          <th z-table-head>Address</th>
-        </tr>
-      </thead>
-      <tbody z-table-body>
-        @for (data of listOfData; track data.key) {
-          <tr z-table-row>
-            <td z-table-cell class="font-medium">{{ data.name }}</td>
-            <td z-table-cell>{{ data.age }}</td>
-            <td z-table-cell>{{ data.address }}</td>
-          </tr>
-        }
-      </tbody>
-    </table>
-  `,
-})
-export class ZardDemoTableSimpleComponent {
-  listOfData: Person[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-    },
-  ];
-}
-```
-
-### Payments
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCopy, lucideEye } from '@ng-icons/lucide';
-
-import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
-import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardTableImports } from '@/shared/components/table/table.imports';
-
-export interface Payment {
-  id: string;
-  amount: number;
-  status: 'pending' | 'processing' | 'success' | 'failed';
-  email: string;
-}
-
-@Component({
-  selector: 'z-demo-table-payments',
-  imports: [ZardTableImports, ZardBadgeComponent, ZardButtonComponent, NgIcon],
-  template: `
-    <div class="w-full">
-      <div class="overflow-hidden rounded-md border">
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Status</th>
-              <th z-table-head>Email</th>
-              <th z-table-head class="text-right">Amount</th>
-              <th z-table-head class="w-16">Actions</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (payment of payments; track payment.id) {
-              <tr z-table-row>
-                <td z-table-cell>
-                  <z-badge [zType]="getStatusVariant(payment.status)">
-                    {{ payment.status }}
-                  </z-badge>
-                </td>
-                <td z-table-cell>
-                  <div class="lowercase">{{ payment.email }}</div>
-                </td>
-                <td z-table-cell>
-                  <div class="text-right font-medium">{{ formatCurrency(payment.amount) }}</div>
-                </td>
-                <td z-table-cell>
-                  <div class="flex items-center gap-2">
-                    <z-button zType="ghost" (click)="copyPaymentId(payment.id)" title="Copy payment ID">
-                      <ng-icon name="lucideCopy" />
-                    </z-button>
-                    <z-button zType="ghost" (click)="viewDetails(payment)" title="View details">
-                      <ng-icon name="lucideEye" />
-                    </z-button>
-                  </div>
-                </td>
-              </tr>
-            } @empty {
-              <tr z-table-row>
-                <td z-table-cell [attr.colspan]="4" class="h-24 text-center">No results.</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideCopy, lucideEye })],
-})
-export class ZardDemoTablePaymentsComponent {
-  payments: Payment[] = [
-    {
-      id: 'm5gr84i9',
-      amount: 316,
-      status: 'success',
-      email: 'ken99@example.com',
-    },
-    {
-      id: '3u1reuv4',
-      amount: 242,
-      status: 'success',
-      email: 'Abe45@example.com',
-    },
-    {
-      id: 'derv1ws0',
-      amount: 837,
-      status: 'processing',
-      email: 'Monserrat44@example.com',
-    },
-    {
-      id: '5kma53ae',
-      amount: 874,
-      status: 'success',
-      email: 'Silas22@example.com',
-    },
-    {
-      id: 'bhqecj4p',
-      amount: 721,
-      status: 'failed',
-      email: 'carmella@example.com',
-    },
-    {
-      id: 'abc123ef',
-      amount: 456,
-      status: 'pending',
-      email: 'jane.doe@example.com',
-    },
-  ];
-
-  formatCurrency(amount: number): string {
-    return new Intl.NumberFormat('en-US', {
-      style: 'currency',
-      currency: 'USD',
-    }).format(amount);
-  }
-
-  getStatusVariant(status: Payment['status']): 'default' | 'secondary' | 'destructive' | 'outline' {
-    switch (status) {
-      case 'success':
-        return 'default';
-      case 'processing':
-        return 'secondary';
-      case 'failed':
-        return 'destructive';
-      case 'pending':
-        return 'outline';
-      default:
-        return 'secondary';
-    }
-  }
-
-  copyPaymentId(id: string): void {
-    navigator.clipboard.writeText(id);
-    console.log('Payment ID copied:', id);
-  }
-
-  viewDetails(payment: Payment): void {
-    console.log('View payment details:', payment);
-  }
-}
-```
 
 ### Footer
 
@@ -545,52 +362,48 @@ export interface Invoice {
   selector: 'z-demo-table-footer',
   imports: [ZardTableImports],
   template: `
-    <div class="w-full overflow-x-auto">
-      <div class="overflow-auto">
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Invoice</th>
-              <th z-table-head>Status</th>
-              <th z-table-head>Method</th>
-              <th z-table-head class="text-end">Amount</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (invoice of invoices(); track invoice.id) {
-              <tr z-table-row>
-                <td z-table-cell>{{ invoice.id }}</td>
-                <td z-table-cell>
-                  <div>{{ invoice.status }}</div>
-                </td>
+    <table z-table>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head>Invoice</th>
+          <th z-table-head>Status</th>
+          <th z-table-head>Method</th>
+          <th z-table-head class="text-end">Amount</th>
+        </tr>
+      </thead>
+      <tbody z-table-body>
+        @for (invoice of invoices(); track invoice.id) {
+          <tr z-table-row>
+            <td z-table-cell>{{ invoice.id }}</td>
+            <td z-table-cell>
+              <div>{{ invoice.status }}</div>
+            </td>
 
-                <td z-table-cell>
-                  {{ invoice.method }}
-                </td>
-                <td z-table-cell>
-                  <div class="text-right font-medium">{{ formatCurrency(invoice.amount) }}</div>
-                </td>
-              </tr>
-            } @empty {
-              <tr z-table-row>
-                <td z-table-cell [attr.colspan]="4" class="h-24 text-center">No results.</td>
-              </tr>
-            }
-          </tbody>
-          <tfoot z-table-footer>
-            <tr z-table-row>
-              <td z-table-cell colspan="3">Total</td>
-              <td z-table-cell class="text-right">{{ formatCurrency(total()) }}</td>
-            </tr>
-          </tfoot>
-        </table>
-      </div>
-    </div>
+            <td z-table-cell>
+              {{ invoice.method }}
+            </td>
+            <td z-table-cell>
+              <div class="text-right font-medium">{{ formatCurrency(invoice.amount) }}</div>
+            </td>
+          </tr>
+        } @empty {
+          <tr z-table-row>
+            <td z-table-cell [attr.colspan]="4" class="h-24 text-center">No results.</td>
+          </tr>
+        }
+      </tbody>
+      <tfoot z-table-footer>
+        <tr z-table-row>
+          <td z-table-cell colspan="3">Total</td>
+          <td z-table-cell class="text-right">{{ formatCurrency(total()) }}</td>
+        </tr>
+      </tfoot>
+    </table>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCopy, lucideEye })],
   host: {
-    class: 'block w-full',
+    class: 'block w-full overflow-x-auto',
   },
 })
 export class ZardDemoTableFooterComponent {
@@ -625,6 +438,64 @@ export class ZardDemoTableFooterComponent {
       currency: 'USD',
     }).format(amount);
   }
+}
+```
+
+### Actions
+
+```angular-ts
+import { Component } from '@angular/core';
+
+import { ZardTableImports } from '../table.imports';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+}
+
+@Component({
+  selector: 'z-demo-table-actions',
+  imports: [ZardTableImports],
+  template: `
+    <table z-table>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head>Product</th>
+          <th z-table-head>Price</th>
+          <th z-table-head>Actions</th>
+        </tr>
+      </thead>
+      <tbody z-table-body>
+        @for (product of products; track product.id) {
+          <tr z-table-row>
+            <td z-table-cell class="font-medium">{{ product.name }}</td>
+            <td z-table-cell>{{ product.price }}</td>
+            <td z-table-cell></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  `,
+})
+export class ZardDemoTableActionsComponent {
+  products: Product[] = [
+    {
+      id: 1,
+      name: 'Wireless Mouse',
+      price: 29.99,
+    },
+    {
+      id: 2,
+      name: 'Mechanical Keyboard',
+      price: 129.99,
+    },
+    {
+      id: 3,
+      name: 'USB-C Hub',
+      price: 49.99,
+    },
+  ];
 }
 ```
 

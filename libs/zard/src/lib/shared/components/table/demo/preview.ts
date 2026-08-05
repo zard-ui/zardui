@@ -1,8 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
-import { provideIcons } from '@ng-icons/core';
-import { lucideCopy, lucideEye } from '@ng-icons/lucide';
-
 import { ZardTableImports } from '@/shared/components/table/table.imports';
 
 export interface Invoice {
@@ -13,10 +10,10 @@ export interface Invoice {
 }
 
 @Component({
-  selector: 'z-demo-table-payments',
+  selector: 'z-demo-table-preview',
   imports: [ZardTableImports],
   template: `
-    <table z-table class="w-full overflow-x-auto">
+    <table z-table>
       <caption z-table-caption>A list of your recent invoices.</caption>
       <thead z-table-header>
         <tr z-table-row>
@@ -57,12 +54,11 @@ export interface Invoice {
     </table>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  viewProviders: [provideIcons({ lucideCopy, lucideEye })],
   host: {
-    class: 'block w-full',
+    class: 'block w-full overflow-x-auto',
   },
 })
-export class ZardDemoTableInvoicesComponent {
+export class ZardDemoTablePreviewComponent {
   readonly invoices = signal<Invoice[]>([
     {
       id: 'INV001',
