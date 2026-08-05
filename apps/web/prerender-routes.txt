@@ -5,6 +5,7 @@
 /themes
 /docs/introduction
 /docs/components
+/docs/registry
 /docs/roadmap
 /docs/changelog
 /docs/installation
@@ -17,6 +18,7 @@
 /docs/figma
 /docs/version-support
 /docs/about
+/docs/featured/youtube
 /docs/components/accordion
 /docs/components/alert
 /docs/components/alert-dialog

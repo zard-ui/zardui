@@ -34,7 +34,7 @@ export const SECTIONS: NavSection = {
     {
       name: 'Registry',
       path: '/docs/registry',
-      available: false,
+      available: true,
     },
     {
       name: 'MCP Server',
@@ -69,6 +69,14 @@ export const DOCS_PATH: NavSection = {
 
     { name: 'Version Support', path: '/docs/version-support', available: true },
     { name: 'About & Credits', path: '/docs/about', available: true },
+  ],
+};
+
+export const FEATURED_PATH: NavSection = {
+  title: 'Featured',
+  data: [
+    { name: 'YouTube', path: '/docs/featured/youtube', available: true },
+    { name: 'Articles', path: '/docs/featured/articles', available: false },
   ],
 };
 
@@ -143,4 +151,4 @@ export const CONTRIBUTE_PATH: NavSection = {
   ],
 };
 
-export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, COMPONENTS_PATH, CONTRIBUTE_PATH];
+export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, FEATURED_PATH, COMPONENTS_PATH, CONTRIBUTE_PATH];
