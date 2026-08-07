@@ -368,6 +368,7 @@ export class ZardPopoverDirective implements OnInit, OnDestroy {
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
+    'data-slot': 'popover-content',
     '[class]': 'classes()',
   },
 })
