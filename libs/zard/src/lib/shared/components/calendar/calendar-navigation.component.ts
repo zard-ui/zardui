@@ -3,11 +3,20 @@ import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncaps
 import { NgIcon, provideIcons } from '@ng-icons/core';
 import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 
-import { calendarMonths } from '@/shared/components/calendar/calendar.utils';
+import type { ZardCalendarCaptionLayout } from '@/shared/components/calendar/calendar.types';
+import { calendarMonths, makeSafeDate } from '@/shared/components/calendar/calendar.utils';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { calendarNavVariants } from './calendar.variants';
+import {
+  calendarCaptionLabelVariants,
+  calendarCaptionVariants,
+  calendarDropdownsVariants,
+  calendarDropdownVariants,
+  calendarNavButtonVariants,
+  calendarNavVariants,
+} from './calendar.variants';
 import { ZardButtonComponent } from '../button/button.component';
+import type { ZardButtonTypeVariants } from '../button/button.variants';
 import { ZardSelectItemComponent } from '../select/select-item.component';
 import { ZardSelectComponent } from '../select/select.component';
 
@@ -19,50 +28,74 @@ import { ZardSelectComponent } from '../select/select.component';
       <button
         type="button"
         z-button
-        zType="ghost"
-        zSize="sm"
+        [zType]="zButtonVariant()"
+        [class]="navButtonClasses()"
         (click)="onPreviousClick()"
-        [disabled]="isPreviousDisabled()"
+        [zDisabled]="isPreviousDisabled()"
         aria-label="Previous month"
-        class="size-7 p-0"
       >
-        <ng-icon name="lucideChevronLeft" class="size-3.5!" />
+        <ng-icon name="lucideChevronLeft" class="size-4!" />
       </button>
-
-      <!-- Month and Year Selectors -->
-      <div class="flex items-center space-x-2">
-        <!-- Month Select -->
-        <z-select [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
-          @for (month of months; track month) {
-            <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
-          }
-        </z-select>
-
-        <!-- Year Select -->
-        <z-select [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="onYearChange($event)">
-          @for (year of availableYears(); track year) {
-            <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
-          }
-        </z-select>
-      </div>
 
       <button
         type="button"
         z-button
-        zType="ghost"
-        zSize="sm"
+        [zType]="zButtonVariant()"
+        [class]="navButtonClasses()"
         (click)="onNextClick()"
-        [disabled]="isNextDisabled()"
+        [zDisabled]="isNextDisabled()"
         aria-label="Next month"
-        class="size-7 p-0"
       >
-        <ng-icon name="lucideChevronRight" class="size-3.5!" />
+        <ng-icon name="lucideChevronRight" class="size-4!" />
       </button>
+    </div>
+
+    <div data-slot="calendar-caption" [class]="captionClasses()">
+      @if (zCaptionLayout() === 'label') {
+        <span [class]="captionLabelClasses()">{{ monthYearLabel() }}</span>
+      } @else {
+        <div [class]="dropdownsClasses()">
+          @if (showMonthDropdown()) {
+            <z-select
+              [class]="dropdownClasses()"
+              [zValue]="currentMonth()"
+              [zLabel]="currentMonthName()"
+              [zDisabled]="disabled()"
+              (zSelectionChange)="onMonthChange($event)"
+            >
+              @for (month of months; track month) {
+                <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
+              }
+            </z-select>
+          } @else {
+            <span [class]="captionLabelClasses()">{{ longMonthName() }}</span>
+          }
+
+          @if (showYearDropdown()) {
+            <z-select
+              [class]="dropdownClasses()"
+              [zValue]="currentYear()"
+              [zLabel]="currentYear()"
+              [zDisabled]="disabled()"
+              (zSelectionChange)="onYearChange($event)"
+            >
+              @for (year of availableYears(); track year) {
+                <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
+              }
+            </z-select>
+          } @else {
+            <span [class]="captionLabelClasses()">{{ currentYear() }}</span>
+          }
+        </div>
+      }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   viewProviders: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
+  host: {
+    class: 'block w-full',
+  },
   exportAs: 'zCalendarNavigation',
 })
 export class ZardCalendarNavigationComponent {
@@ -72,6 +105,8 @@ export class ZardCalendarNavigationComponent {
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = input<boolean>(false);
+  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>('label');
+  readonly zButtonVariant = input<ZardButtonTypeVariants>('ghost');
 
   // Outputs
   readonly monthChange = output<string>();
@@ -81,6 +116,23 @@ export class ZardCalendarNavigationComponent {
   readonly months = calendarMonths;
 
   protected readonly navClasses = computed(() => mergeClasses(calendarNavVariants()));
+  protected readonly navButtonClasses = computed(() => mergeClasses(calendarNavButtonVariants()));
+  protected readonly captionClasses = computed(() => mergeClasses(calendarCaptionVariants()));
+  protected readonly dropdownsClasses = computed(() => mergeClasses(calendarDropdownsVariants()));
+  protected readonly dropdownClasses = computed(() => mergeClasses(calendarDropdownVariants()));
+  protected readonly captionLabelClasses = computed(() =>
+    mergeClasses(calendarCaptionLabelVariants({ layout: this.zCaptionLayout() === 'label' ? 'label' : 'dropdown' })),
+  );
+
+  protected readonly showMonthDropdown = computed(() => {
+    const layout = this.zCaptionLayout();
+    return layout === 'dropdown' || layout === 'dropdown-months';
+  });
+
+  protected readonly showYearDropdown = computed(() => {
+    const layout = this.zCaptionLayout();
+    return layout === 'dropdown' || layout === 'dropdown-years';
+  });
 
   protected readonly availableYears = computed(() => {
     const minYear = this.minDate()?.getFullYear() ?? new Date().getFullYear() - 10;
@@ -99,6 +151,18 @@ export class ZardCalendarNavigationComponent {
     }
     return this.months[new Date().getMonth()];
   });
+
+  /** Full month name, used by the `label`, `dropdown-years` and `dropdown-months` captions. */
+  protected readonly longMonthName = computed(() => {
+    const parsedMonth = Number.parseInt(this.currentMonth());
+    const month = Number.isNaN(parsedMonth) ? new Date().getMonth() : parsedMonth;
+    const parsedYear = Number.parseInt(this.currentYear());
+    const year = Number.isNaN(parsedYear) ? new Date().getFullYear() : parsedYear;
+
+    return makeSafeDate(year, month, 1).toLocaleString(undefined, { month: 'long' });
+  });
+
+  protected readonly monthYearLabel = computed(() => `${this.longMonthName()} ${this.currentYear()}`);
 
   protected readonly isPreviousDisabled = computed(() => {
     if (this.disabled()) {

@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -17,7 +18,11 @@ import { filter, map } from 'rxjs';
 
 import { ZardCalendarGridComponent } from '@/shared/components/calendar/calendar-grid.component';
 import { ZardCalendarNavigationComponent } from '@/shared/components/calendar/calendar-navigation.component';
-import type { CalendarMode, CalendarValue } from '@/shared/components/calendar/calendar.types';
+import type {
+  CalendarMode,
+  CalendarValue,
+  ZardCalendarCaptionLayout,
+} from '@/shared/components/calendar/calendar.types';
 import {
   generateCalendarDays,
   getSelectedDatesArray,
@@ -25,34 +30,41 @@ import {
   makeSafeDate,
   normalizeCalendarValue,
 } from '@/shared/components/calendar/calendar.utils';
-import { calendarVariants } from '@/shared/components/calendar/calendar.variants';
+import { calendarMonthVariants, calendarVariants } from '@/shared/components/calendar/calendar.variants';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+
+import type { ZardButtonTypeVariants } from '../button/button.variants';
 
 @Component({
   selector: 'z-calendar, [z-calendar]',
   imports: [ZardCalendarNavigationComponent, ZardCalendarGridComponent],
   template: `
-    <div [class]="classes()">
-      <z-calendar-navigation
-        [currentMonth]="currentMonthValue()"
-        [currentYear]="currentYearValue()"
-        [minDate]="minDate()"
-        [maxDate]="maxDate()"
-        [disabled]="disabled()"
-        (monthChange)="onMonthChange($event)"
-        (yearChange)="onYearChange($event)"
-        (previousMonth)="previousMonth()"
-        (nextMonth)="nextMonth()"
-      />
+    <div data-slot="calendar" [class]="classes()">
+      <div [class]="monthClasses()">
+        <z-calendar-navigation
+          [currentMonth]="currentMonthValue()"
+          [currentYear]="currentYearValue()"
+          [minDate]="minDate()"
+          [maxDate]="maxDate()"
+          [disabled]="disabled()"
+          [zCaptionLayout]="zCaptionLayout()"
+          [zButtonVariant]="zButtonVariant()"
+          (monthChange)="onMonthChange($event)"
+          (yearChange)="onYearChange($event)"
+          (previousMonth)="previousMonth()"
+          (nextMonth)="nextMonth()"
+        />
 
-      <z-calendar-grid
-        [calendarDays]="calendarDays()"
-        [disabled]="disabled()"
-        (dateSelect)="onDateSelect($event)"
-        (previousMonth)="onGridPreviousMonth($event)"
-        (nextMonth)="onGridNextMonth($event)"
-        (navigateYear)="onNavigateYear($event)"
-      />
+        <z-calendar-grid
+          [calendarDays]="calendarDays()"
+          [disabled]="disabled()"
+          [zShowOutsideDays]="zShowOutsideDays()"
+          (dateSelect)="onDateSelect($event)"
+          (previousMonth)="onGridPreviousMonth($event)"
+          (nextMonth)="onGridNextMonth($event)"
+          (navigateYear)="onNavigateYear($event)"
+        />
+      </div>
     </div>
   `,
   providers: [
@@ -87,6 +99,9 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = model<boolean>(false);
+  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>('label');
+  readonly zButtonVariant = input<ZardButtonTypeVariants>('ghost');
+  readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
 
   // Public outputs
   readonly dateChange = outputFromObservable(
@@ -126,6 +141,8 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   protected readonly currentYearValue = linkedSignal(() => this.currentDate().getFullYear().toString());
 
   protected readonly classes = computed(() => mergeClasses(calendarVariants(), this.class()));
+
+  protected readonly monthClasses = computed(() => mergeClasses(calendarMonthVariants()));
 
   protected readonly calendarDays = computed(() => {
     const currentDate = this.currentDate();
