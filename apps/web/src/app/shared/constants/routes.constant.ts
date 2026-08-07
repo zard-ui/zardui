@@ -76,7 +76,7 @@ export const FEATURED_PATH: NavSection = {
   title: 'Featured',
   data: [
     { name: 'YouTube', path: '/docs/featured/youtube', available: true },
-    { name: 'Articles', path: '/docs/featured/articles', available: false },
+    { name: 'Articles', path: '/docs/featured/articles', available: true },
   ],
 };
 

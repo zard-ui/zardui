@@ -10,4 +10,8 @@ export const FEATURED_ROUTES: Routes = [
     path: 'youtube',
     loadComponent: () => import('./youtube/youtube.page').then(c => c.YoutubePage),
   },
+  {
+    path: 'articles',
+    loadComponent: () => import('./articles/articles.page').then(c => c.ArticlesPage),
+  },
 ];
