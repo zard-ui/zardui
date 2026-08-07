@@ -10,18 +10,18 @@ const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
   imports: [ZardCalendarComponent],
   standalone: true,
   template: `
-    <div class="space-y-8">
-      <div>
-        <h3 class="mb-3 text-sm font-medium">With Min/Max Date</h3>
-        <z-calendar [minDate]="minDate" [maxDate]="maxDate" (dateChange)="onDateChange($event)" />
-        <p class="text-muted-foreground mt-2 text-sm">
+    <div class="flex flex-wrap items-start gap-8">
+      <div class="flex flex-col gap-3">
+        <h3 class="text-sm font-medium">With Min/Max Date</h3>
+        <z-calendar zMode="single" class="rounded-lg border" [minDate]="minDate" [maxDate]="maxDate" />
+        <p class="text-muted-foreground text-sm">
           Available dates: {{ minDate.toLocaleDateString() }} - {{ maxDate.toLocaleDateString() }}
         </p>
       </div>
 
-      <div>
-        <h3 class="mb-3 text-sm font-medium">Disabled</h3>
-        <z-calendar [disabled]="true" />
+      <div class="flex flex-col gap-3">
+        <h3 class="text-sm font-medium">Disabled</h3>
+        <z-calendar zMode="single" class="rounded-lg border" [disabled]="true" />
       </div>
     </div>
   `,
@@ -36,9 +36,5 @@ export class ZardDemoCalendarWithConstraintsComponent {
 
     // Set max date to 30 days from now
     this.maxDate.setHours(23, 59, 59, 999);
-  }
-
-  onDateChange(date: Date | Date[]) {
-    console.log('Selected date:', date);
   }
 }
