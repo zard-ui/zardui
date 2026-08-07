@@ -1,11 +1,11 @@
 ---
 title: Table
-description: Displays data in a structured table format with styling variants and semantic HTML structure.
+description: A responsive table component for displaying structured data.
 ---
 
 # Table
 
-Displays data in a structured table format with styling variants and semantic HTML structure.
+A responsive table component for displaying structured data.
 
 ## Installation
 
@@ -28,6 +28,7 @@ import {
   tableBodyVariants,
   tableCaptionVariants,
   tableCellVariants,
+  tableFooterVariants,
   tableHeaderVariants,
   tableHeadVariants,
   tableRowVariants,
@@ -170,13 +171,31 @@ export class ZardTableCaptionComponent {
 
   protected readonly classes = computed(() => mergeClasses(tableCaptionVariants(), this.class()));
 }
+
+@Component({
+  selector: 'tfoot[z-table-footer]',
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'classes()',
+  },
+  exportAs: 'zTableFooter',
+})
+export class ZardTableFooterComponent {
+  readonly class = input<ClassValue>('');
+
+  protected readonly classes = computed(() => mergeClasses(tableFooterVariants(), this.class()));
+}
 ```
 
 ```angular-ts
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const tableVariants = cva(
-  'w-full caption-bottom text-sm [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:text-left [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pr-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pr-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground',
+  'w-full caption-bottom text-sm [&_thead_tr]:border-b [&_tbody]:border-0 [&_tbody_tr:last-child]:border-0 [&_tbody_tr]:border-b [&_tbody_tr]:transition-colors [&_tbody_tr]:hover:bg-muted/50 [&_tbody_tr]:data-[state=selected]:bg-muted [&_th]:h-10 [&_th]:px-2 [&_th]:align-middle [&_th]:font-medium [&_th]:text-muted-foreground [&_th:has([role=checkbox])]:pr-0 [&_th>[role=checkbox]]:translate-y-0.5 [&_td]:p-2 [&_td]:align-middle [&_td:has([role=checkbox])]:pr-0 [&_td>[role=checkbox]]:translate-y-0.5 [&_caption]:mt-4 [&_caption]:text-sm [&_caption]:text-muted-foreground',
   {
     variants: {
       zType: {
@@ -207,13 +226,16 @@ export const tableBodyVariants = cva('[&_tr:last-child]:border-0', {
   defaultVariants: {},
 });
 
-export const tableRowVariants = cva('border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted', {
-  variants: {},
-  defaultVariants: {},
-});
+export const tableRowVariants = cva(
+  'border-b transition-colors hover:bg-muted/50 has-aria-expanded:bg-muted/50 data-[state=selected]:bg-muted',
+  {
+    variants: {},
+    defaultVariants: {},
+  },
+);
 
 export const tableHeadVariants = cva(
-  'h-10 px-2 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
+  'h-10 px-2 text-left align-middle font-medium text-muted-foreground has-[[role=checkbox]]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},
@@ -221,7 +243,7 @@ export const tableHeadVariants = cva(
 );
 
 export const tableCellVariants = cva(
-  'p-2 align-middle [&:has([role=checkbox])]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
+  'p-2 align-middle has-[[role=checkbox]]:pr-0 *:[[role=checkbox]]:translate-y-0.5',
   {
     variants: {},
     defaultVariants: {},
@@ -232,6 +254,8 @@ export const tableCaptionVariants = cva('mt-4 text-sm text-muted-foreground', {
   variants: {},
   defaultVariants: {},
 });
+
+export const tableFooterVariants = cva('border-t bg-muted/50 font-medium [&>tr]:last:border-b-0');
 
 export type ZardTableSizeVariants = NonNullable<VariantProps<typeof tableVariants>['zSize']>;
 export type ZardTableTypeVariants = NonNullable<VariantProps<typeof tableVariants>['zType']>;
@@ -252,6 +276,7 @@ import {
   ZardTableHeadComponent,
   ZardTableCellComponent,
   ZardTableCaptionComponent,
+  ZardTableFooterComponent,
 } from '@/shared/components/table/table.component';
 
 export const ZardTableImports = [
@@ -262,6 +287,7 @@ export const ZardTableImports = [
   ZardTableHeadComponent,
   ZardTableCellComponent,
   ZardTableCaptionComponent,
+  ZardTableFooterComponent,
 ] as const;
 ```
 
@@ -288,183 +314,123 @@ import { ZardTableImports } from '@/shared/components/table/table.imports';
 </table>
 ```
 
+## Composition
+
+```text
+z-table
+├── caption[z-table-caption]
+├── thead[z-table-header]
+│   └── tr[z-table-row]
+│       ├── th[z-table-head]
+│       ├── th[z-table-head]
+│       └── th[z-table-head]
+├── tbody[z-table-body]
+│   ├── tr[z-table-row]
+│   │   ├── td[z-table-cell]
+│   │   ├── td[z-table-cell]
+│   │   └── td[z-table-cell]
+│   └── tr[z-table-row]
+│       ├── td[z-table-cell]
+│       ├── td[z-table-cell]
+│       └── td[z-table-cell]
+└── tfoot[z-table-footer]
+    └── tr[z-table-row]
+        ├── td[z-table-cell]
+        └── td[z-table-cell]
+```
+
 ## Examples
 
-### Simple
+### Footer
 
 ```angular-ts
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
-import { ZardTableComponent } from '../table.component';
+import { provideIcons } from '@ng-icons/core';
+import { lucideCopy, lucideEye } from '@ng-icons/lucide';
 
-interface Person {
-  key: string;
-  name: string;
-  age: number;
-  address: string;
+import { ZardTableImports } from '@/shared/components/table/table.imports';
+
+export interface Invoice {
+  id: string;
+  status: string;
+  method: string;
+  amount: number;
 }
 
 @Component({
-  selector: 'z-demo-table-simple',
-  imports: [ZardTableComponent],
-  standalone: true,
+  selector: 'z-demo-table-footer',
+  imports: [ZardTableImports],
   template: `
     <table z-table>
-      <caption>A list of your recent invoices.</caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Address</th>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head>Invoice</th>
+          <th z-table-head>Status</th>
+          <th z-table-head>Method</th>
+          <th z-table-head class="text-end">Amount</th>
         </tr>
       </thead>
-      <tbody>
-        @for (data of listOfData; track data.key) {
-          <tr>
-            <td class="font-medium">{{ data.name }}</td>
-            <td>{{ data.age }}</td>
-            <td>{{ data.address }}</td>
+      <tbody z-table-body>
+        @for (invoice of invoices(); track invoice.id) {
+          <tr z-table-row>
+            <td z-table-cell>{{ invoice.id }}</td>
+            <td z-table-cell>
+              <div>{{ invoice.status }}</div>
+            </td>
+
+            <td z-table-cell>
+              {{ invoice.method }}
+            </td>
+            <td z-table-cell>
+              <div class="text-right font-medium">{{ formatCurrency(invoice.amount) }}</div>
+            </td>
+          </tr>
+        } @empty {
+          <tr z-table-row>
+            <td z-table-cell [attr.colspan]="4" class="h-24 text-center">No results.</td>
           </tr>
         }
       </tbody>
+      <tfoot z-table-footer>
+        <tr z-table-row>
+          <td z-table-cell colspan="3">Total</td>
+          <td z-table-cell class="text-right">{{ formatCurrency(total()) }}</td>
+        </tr>
+      </tfoot>
     </table>
-  `,
-})
-export class ZardDemoTableSimpleComponent {
-  listOfData: Person[] = [
-    {
-      key: '1',
-      name: 'John Brown',
-      age: 32,
-      address: 'New York No. 1 Lake Park',
-    },
-    {
-      key: '2',
-      name: 'Jim Green',
-      age: 42,
-      address: 'London No. 1 Lake Park',
-    },
-    {
-      key: '3',
-      name: 'Joe Black',
-      age: 32,
-      address: 'Sidney No. 1 Lake Park',
-    },
-  ];
-}
-```
-
-### Payments
-
-```angular-ts
-import { ChangeDetectionStrategy, Component } from '@angular/core';
-
-import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCopy, lucideEye } from '@ng-icons/lucide';
-
-import { ZardBadgeComponent } from '@/shared/components/badge/badge.component';
-import { ZardButtonComponent } from '@/shared/components/button/button.component';
-import { ZardTableImports } from '@/shared/components/table/table.imports';
-
-export interface Payment {
-  id: string;
-  amount: number;
-  status: 'pending' | 'processing' | 'success' | 'failed';
-  email: string;
-}
-
-@Component({
-  selector: 'z-demo-table-payments',
-  imports: [ZardTableImports, ZardBadgeComponent, ZardButtonComponent, NgIcon],
-  template: `
-    <div class="w-full">
-      <div class="overflow-hidden rounded-md border">
-        <table z-table>
-          <thead z-table-header>
-            <tr z-table-row>
-              <th z-table-head>Status</th>
-              <th z-table-head>Email</th>
-              <th z-table-head class="text-right">Amount</th>
-              <th z-table-head class="w-16">Actions</th>
-            </tr>
-          </thead>
-          <tbody z-table-body>
-            @for (payment of payments; track payment.id) {
-              <tr z-table-row>
-                <td z-table-cell>
-                  <z-badge [zType]="getStatusVariant(payment.status)">
-                    {{ payment.status }}
-                  </z-badge>
-                </td>
-                <td z-table-cell>
-                  <div class="lowercase">{{ payment.email }}</div>
-                </td>
-                <td z-table-cell>
-                  <div class="text-right font-medium">{{ formatCurrency(payment.amount) }}</div>
-                </td>
-                <td z-table-cell>
-                  <div class="flex items-center gap-2">
-                    <z-button zType="ghost" (click)="copyPaymentId(payment.id)" title="Copy payment ID">
-                      <ng-icon name="lucideCopy" />
-                    </z-button>
-                    <z-button zType="ghost" (click)="viewDetails(payment)" title="View details">
-                      <ng-icon name="lucideEye" />
-                    </z-button>
-                  </div>
-                </td>
-              </tr>
-            } @empty {
-              <tr z-table-row>
-                <td z-table-cell [attr.colspan]="4" class="h-24 text-center">No results.</td>
-              </tr>
-            }
-          </tbody>
-        </table>
-      </div>
-    </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [provideIcons({ lucideCopy, lucideEye })],
+  host: {
+    class: 'block w-full overflow-x-auto',
+  },
 })
-export class ZardDemoTablePaymentsComponent {
-  payments: Payment[] = [
+export class ZardDemoTableFooterComponent {
+  readonly invoices = signal<Invoice[]>([
     {
-      id: 'm5gr84i9',
-      amount: 316,
-      status: 'success',
-      email: 'ken99@example.com',
+      id: 'INV001',
+      status: 'Paid',
+      method: 'Credit Card',
+      amount: 250,
     },
     {
-      id: '3u1reuv4',
-      amount: 242,
-      status: 'success',
-      email: 'Abe45@example.com',
+      id: 'INV002',
+      status: 'Pending',
+      method: 'PayPal',
+      amount: 150,
     },
     {
-      id: 'derv1ws0',
-      amount: 837,
-      status: 'processing',
-      email: 'Monserrat44@example.com',
+      id: 'INV003',
+      status: 'Unpaid',
+      method: 'Bank Transfer',
+      amount: 350,
     },
-    {
-      id: '5kma53ae',
-      amount: 874,
-      status: 'success',
-      email: 'Silas22@example.com',
-    },
-    {
-      id: 'bhqecj4p',
-      amount: 721,
-      status: 'failed',
-      email: 'carmella@example.com',
-    },
-    {
-      id: 'abc123ef',
-      amount: 456,
-      status: 'pending',
-      email: 'jane.doe@example.com',
-    },
-  ];
+  ]);
+
+  readonly total = computed(() =>
+    this.invoices().reduce((sum: number, invoice: { amount: number }) => sum + invoice.amount, 0),
+  );
 
   formatCurrency(amount: number): string {
     return new Intl.NumberFormat('en-US', {
@@ -472,30 +438,64 @@ export class ZardDemoTablePaymentsComponent {
       currency: 'USD',
     }).format(amount);
   }
+}
+```
 
-  getStatusVariant(status: Payment['status']): 'default' | 'secondary' | 'destructive' | 'outline' {
-    switch (status) {
-      case 'success':
-        return 'default';
-      case 'processing':
-        return 'secondary';
-      case 'failed':
-        return 'destructive';
-      case 'pending':
-        return 'outline';
-      default:
-        return 'secondary';
-    }
-  }
+### Actions
 
-  copyPaymentId(id: string): void {
-    navigator.clipboard.writeText(id);
-    console.log('Payment ID copied:', id);
-  }
+```angular-ts
+import { Component } from '@angular/core';
 
-  viewDetails(payment: Payment): void {
-    console.log('View payment details:', payment);
-  }
+import { ZardTableImports } from '../table.imports';
+
+interface Product {
+  id: number;
+  name: string;
+  price: number;
+}
+
+@Component({
+  selector: 'z-demo-table-actions',
+  imports: [ZardTableImports],
+  template: `
+    <table z-table>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head>Product</th>
+          <th z-table-head>Price</th>
+          <th z-table-head>Actions</th>
+        </tr>
+      </thead>
+      <tbody z-table-body>
+        @for (product of products; track product.id) {
+          <tr z-table-row>
+            <td z-table-cell class="font-medium">{{ product.name }}</td>
+            <td z-table-cell>{{ product.price }}</td>
+            <td z-table-cell></td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  `,
+})
+export class ZardDemoTableActionsComponent {
+  products: Product[] = [
+    {
+      id: 1,
+      name: 'Wireless Mouse',
+      price: 29.99,
+    },
+    {
+      id: 2,
+      name: 'Mechanical Keyboard',
+      price: 129.99,
+    },
+    {
+      id: 3,
+      name: 'USB-C Hub',
+      price: 49.99,
+    },
+  ];
 }
 ```
 
@@ -533,6 +533,10 @@ Applies styles to table data cells.
 ### [z-table-caption]
 
 Applies styles to table captions.
+
+### [z-table-footer]
+
+Applies styles to table footer.
 
 ---
 

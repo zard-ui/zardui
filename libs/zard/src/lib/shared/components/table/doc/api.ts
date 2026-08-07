@@ -40,4 +40,9 @@ export const TABLE_API: ApiSection[] = [
     description: 'Applies styles to table captions.',
     props: [],
   },
+  {
+    selector: '[z-table-footer]',
+    description: 'Applies styles to table footer.',
+    props: [],
+  },
 ];
