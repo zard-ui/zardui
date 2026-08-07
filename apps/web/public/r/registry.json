@@ -2,7 +2,7 @@
   "$schema": "https://zardui.com/schema/registry.json",
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.91",
+  "version": "1.0.0-beta.92",
   "items": [
     {
       "name": "core",
@@ -370,6 +370,7 @@
       "name": "calendar",
       "type": "registry:component",
       "registryDependencies": [
+        "button",
         "select"
       ],
       "files": [
