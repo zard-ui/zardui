@@ -19,6 +19,7 @@
 /docs/version-support
 /docs/about
 /docs/featured/youtube
+/docs/featured/articles
 /docs/components/accordion
 /docs/components/alert
 /docs/components/alert-dialog

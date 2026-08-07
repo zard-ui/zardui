@@ -76,7 +76,7 @@ export const FEATURED_PATH: NavSection = {
   title: 'Featured',
   data: [
     { name: 'YouTube', path: '/docs/featured/youtube', available: true },
-    { name: 'Articles', path: '/docs/featured/articles', available: false },
+    { name: 'Articles', path: '/docs/featured/articles', available: true },
   ],
 };
 
@@ -151,4 +151,4 @@ export const CONTRIBUTE_PATH: NavSection = {
   ],
 };
 
-export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, FEATURED_PATH, COMPONENTS_PATH, CONTRIBUTE_PATH];
+export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, COMPONENTS_PATH, CONTRIBUTE_PATH, FEATURED_PATH];
