@@ -1,270 +1,196 @@
-import { Component } from '@angular/core';
-import { type ComponentFixture, TestBed } from '@angular/core/testing';
+import { render, screen } from '@testing-library/angular';
 
 import {
   ZardTableBodyComponent,
   ZardTableCaptionComponent,
   ZardTableCellComponent,
   ZardTableComponent,
+  ZardTableFooterComponent,
   ZardTableHeadComponent,
   ZardTableHeaderComponent,
   ZardTableRowComponent,
 } from './table.component';
 
-@Component({
-  selector: 'test-striped-table',
-  imports: [ZardTableComponent],
-  standalone: true,
-  template: `
-    <table z-table zType="striped"></table>
-  `,
-})
-class TestStripedTableComponent {}
-
-@Component({
-  selector: 'test-bordered-table',
-  imports: [ZardTableComponent],
-  standalone: true,
-  template: `
-    <table z-table zType="bordered"></table>
-  `,
-})
-class TestBorderedTableComponent {}
-
-@Component({
-  selector: 'test-compact-table',
-  imports: [ZardTableComponent],
-  standalone: true,
-  template: `
-    <table z-table zSize="compact"></table>
-  `,
-})
-class TestCompactTableComponent {}
-
-@Component({
-  selector: 'test-comfortable-table',
-  imports: [ZardTableComponent],
-  standalone: true,
-  template: `
-    <table z-table zSize="comfortable"></table>
-  `,
-})
-class TestComfortableTableComponent {}
-
 describe('TableComponents', () => {
   describe('ZardTableComponent', () => {
-    let component: ZardTableComponent;
-    let fixture: ComponentFixture<ZardTableComponent>;
+    it('renders the table', async () => {
+      await render(`<table z-table aria-label="Invoices"></table>`, {
+        imports: [ZardTableComponent],
+      });
 
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
-        imports: [
-          ZardTableComponent,
-          TestStripedTableComponent,
-          TestBorderedTableComponent,
-          TestCompactTableComponent,
-          TestComfortableTableComponent,
-        ],
-      }).compileComponents();
-
-      fixture = TestBed.createComponent(ZardTableComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+      expect(screen.getByRole('table', { name: 'Invoices' })).toBeInTheDocument();
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
+    it('applies the default variant classes', async () => {
+      await render(`<table z-table aria-label="Invoices"></table>`, {
+        imports: [ZardTableComponent],
+      });
+
+      expect(screen.getByRole('table', { name: 'Invoices' })).toHaveClass('w-full', 'caption-bottom', 'text-sm');
     });
 
-    it('should apply default variant classes', () => {
-      const compiled = fixture.nativeElement;
-      expect(compiled.getAttribute('class')).toContain('w-full');
-      expect(compiled.getAttribute('class')).toContain('caption-bottom');
-      expect(compiled.getAttribute('class')).toContain('text-sm');
+    it('applies the striped variant classes', async () => {
+      await render(`<table z-table zType="striped" aria-label="Invoices"></table>`, {
+        imports: [ZardTableComponent],
+      });
+
+      expect(screen.getByRole('table', { name: 'Invoices' })).toHaveClass('[&_tbody_tr:nth-child(odd)]:bg-muted/50');
     });
 
-    it('should apply striped variant classes', () => {
-      const stripedFixture = TestBed.createComponent(TestStripedTableComponent);
-      stripedFixture.detectChanges();
-      const compiled = stripedFixture.nativeElement.querySelector('table');
-      expect(compiled.getAttribute('class')).toContain('[&_tbody_tr:nth-child(odd)]:bg-muted/50');
+    it('applies the bordered variant classes', async () => {
+      await render(`<table z-table zType="bordered" aria-label="Invoices"></table>`, {
+        imports: [ZardTableComponent],
+      });
+
+      expect(screen.getByRole('table', { name: 'Invoices' })).toHaveClass('border', 'border-border');
     });
 
-    it('should apply bordered variant classes', () => {
-      const borderedFixture = TestBed.createComponent(TestBorderedTableComponent);
-      borderedFixture.detectChanges();
-      const compiled = borderedFixture.nativeElement.querySelector('table');
-      expect(compiled.getAttribute('class')).toContain('border');
-      expect(compiled.getAttribute('class')).toContain('border-border');
+    it('applies the compact size classes', async () => {
+      await render(`<table z-table zSize="compact" aria-label="Invoices"></table>`, {
+        imports: [ZardTableComponent],
+      });
+
+      expect(screen.getByRole('table', { name: 'Invoices' })).toHaveClass('[&_td]:py-2', '[&_th]:py-2');
     });
 
-    it('should apply compact size classes', () => {
-      const compactFixture = TestBed.createComponent(TestCompactTableComponent);
-      compactFixture.detectChanges();
-      const compiled = compactFixture.nativeElement.querySelector('table');
-      expect(compiled.getAttribute('class')).toContain('[&_td]:py-2');
-      expect(compiled.getAttribute('class')).toContain('[&_th]:py-2');
-    });
+    it('applies the comfortable size classes', async () => {
+      await render(`<table z-table zSize="comfortable" aria-label="Invoices"></table>`, {
+        imports: [ZardTableComponent],
+      });
 
-    it('should apply comfortable size classes', () => {
-      const comfortableFixture = TestBed.createComponent(TestComfortableTableComponent);
-      comfortableFixture.detectChanges();
-      const compiled = comfortableFixture.nativeElement.querySelector('table');
-      expect(compiled.getAttribute('class')).toContain('[&_td]:py-4');
-      expect(compiled.getAttribute('class')).toContain('[&_th]:py-4');
+      expect(screen.getByRole('table', { name: 'Invoices' })).toHaveClass('[&_td]:py-4', '[&_th]:py-4');
     });
   });
 
   describe('ZardTableHeaderComponent', () => {
-    let component: ZardTableHeaderComponent;
-    let fixture: ComponentFixture<ZardTableHeaderComponent>;
-
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
+    it('renders the table header', async () => {
+      await render(`<table><thead z-table-header><tr><th>Invoice</th></tr></thead></table>`, {
         imports: [ZardTableHeaderComponent],
-      }).compileComponents();
+      });
 
-      fixture = TestBed.createComponent(ZardTableHeaderComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+      expect(screen.getByRole('columnheader', { name: 'Invoice' })).toBeVisible();
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
+    it('applies the default header classes', async () => {
+      await render(`<table><thead z-table-header><tr><th>Invoice</th></tr></thead></table>`, {
+        imports: [ZardTableHeaderComponent],
+      });
 
-    it('should apply default classes', () => {
-      const compiled = fixture.nativeElement;
-      expect(compiled.getAttribute('class')).toContain('[&_tr]:border-b');
+      expect(screen.getByRole('rowgroup')).toHaveClass('[&_tr]:border-b');
     });
   });
 
   describe('ZardTableBodyComponent', () => {
-    let component: ZardTableBodyComponent;
-    let fixture: ComponentFixture<ZardTableBodyComponent>;
-
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
+    it('renders the table body', async () => {
+      await render(`<table><tbody z-table-body><tr><td>INV001</td></tr></tbody></table>`, {
         imports: [ZardTableBodyComponent],
-      }).compileComponents();
+      });
 
-      fixture = TestBed.createComponent(ZardTableBodyComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+      expect(screen.getByRole('cell', { name: 'INV001' })).toBeVisible();
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
+    it('applies the default body classes', async () => {
+      await render(`<table><tbody z-table-body><tr><td>INV001</td></tr></tbody></table>`, {
+        imports: [ZardTableBodyComponent],
+      });
 
-    it('should apply default classes', () => {
-      const compiled = fixture.nativeElement;
-      expect(compiled.getAttribute('class')).toContain('[&_tr:last-child]:border-0');
+      expect(screen.getByRole('rowgroup')).toHaveClass('[&_tr:last-child]:border-0');
     });
   });
 
   describe('ZardTableRowComponent', () => {
-    let component: ZardTableRowComponent;
-    let fixture: ComponentFixture<ZardTableRowComponent>;
-
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
+    it('renders the table row', async () => {
+      await render(`<table><tbody><tr z-table-row><td>INV001</td></tr></tbody></table>`, {
         imports: [ZardTableRowComponent],
-      }).compileComponents();
+      });
 
-      fixture = TestBed.createComponent(ZardTableRowComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+      expect(screen.getByRole('row')).toHaveTextContent('INV001');
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
+    it('applies the default row classes', async () => {
+      await render(`<table><tbody><tr z-table-row><td>INV001</td></tr></tbody></table>`, {
+        imports: [ZardTableRowComponent],
+      });
 
-    it('should apply default classes', () => {
-      const compiled = fixture.nativeElement;
-      expect(compiled.getAttribute('class')).toContain('border-b');
-      expect(compiled.getAttribute('class')).toContain('transition-colors');
-      expect(compiled.getAttribute('class')).toContain('hover:bg-muted/50');
+      expect(screen.getByRole('row')).toHaveClass('border-b', 'transition-colors', 'hover:bg-muted/50');
     });
   });
 
   describe('ZardTableHeadComponent', () => {
-    let component: ZardTableHeadComponent;
-    let fixture: ComponentFixture<ZardTableHeadComponent>;
-
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
+    it('renders the table head', async () => {
+      await render(`<table><thead><tr><th z-table-head>Invoice</th></tr></thead></table>`, {
         imports: [ZardTableHeadComponent],
-      }).compileComponents();
+      });
 
-      fixture = TestBed.createComponent(ZardTableHeadComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+      expect(screen.getByRole('columnheader', { name: 'Invoice' })).toBeVisible();
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
+    it('applies the default head classes', async () => {
+      await render(`<table><thead><tr><th z-table-head>Invoice</th></tr></thead></table>`, {
+        imports: [ZardTableHeadComponent],
+      });
 
-    it('should apply default classes', () => {
-      const compiled = fixture.nativeElement;
-      expect(compiled.getAttribute('class')).toContain('h-10');
-      expect(compiled.getAttribute('class')).toContain('px-2');
-      expect(compiled.getAttribute('class')).toContain('text-left');
-      expect(compiled.getAttribute('class')).toContain('align-middle');
-      expect(compiled.getAttribute('class')).toContain('font-medium');
+      expect(screen.getByRole('columnheader', { name: 'Invoice' })).toHaveClass(
+        'h-10',
+        'px-2',
+        'text-left',
+        'align-middle',
+        'font-medium',
+      );
     });
   });
 
   describe('ZardTableCellComponent', () => {
-    let component: ZardTableCellComponent;
-    let fixture: ComponentFixture<ZardTableCellComponent>;
-
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
+    it('renders the table cell', async () => {
+      await render(`<table><tbody><tr><td z-table-cell>INV001</td></tr></tbody></table>`, {
         imports: [ZardTableCellComponent],
-      }).compileComponents();
+      });
 
-      fixture = TestBed.createComponent(ZardTableCellComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+      expect(screen.getByRole('cell', { name: 'INV001' })).toBeVisible();
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
+    it('applies the default cell classes', async () => {
+      await render(`<table><tbody><tr><td z-table-cell>INV001</td></tr></tbody></table>`, {
+        imports: [ZardTableCellComponent],
+      });
 
-    it('should apply default classes', () => {
-      const compiled = fixture.nativeElement;
-      expect(compiled.getAttribute('class')).toContain('p-2');
-      expect(compiled.getAttribute('class')).toContain('align-middle');
+      expect(screen.getByRole('cell', { name: 'INV001' })).toHaveClass('p-2', 'align-middle');
     });
   });
 
   describe('ZardTableCaptionComponent', () => {
-    let component: ZardTableCaptionComponent;
-    let fixture: ComponentFixture<ZardTableCaptionComponent>;
-
-    beforeEach(async () => {
-      await TestBed.configureTestingModule({
+    it('renders the table caption', async () => {
+      await render(`<table><caption z-table-caption>Recent invoices</caption></table>`, {
         imports: [ZardTableCaptionComponent],
-      }).compileComponents();
+      });
 
-      fixture = TestBed.createComponent(ZardTableCaptionComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+      expect(screen.getByText('Recent invoices')).toBeVisible();
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
+    it('applies the default caption classes', async () => {
+      await render(`<table><caption z-table-caption>Recent invoices</caption></table>`, {
+        imports: [ZardTableCaptionComponent],
+      });
+
+      expect(screen.getByText('Recent invoices')).toHaveClass('mt-4', 'text-sm', 'text-muted-foreground');
+    });
+  });
+
+  describe('ZardTableFooterComponent', () => {
+    it('renders the footer content', async () => {
+      await render(`<table><tfoot z-table-footer><tr><td>Invoice total</td></tr></tfoot></table>`, {
+        imports: [ZardTableFooterComponent],
+      });
+
+      expect(screen.getByText('Invoice total')).toBeVisible();
     });
 
-    it('should apply default classes', () => {
-      const compiled = fixture.nativeElement;
-      expect(compiled.getAttribute('class')).toContain('mt-4');
-      expect(compiled.getAttribute('class')).toContain('text-sm');
-      expect(compiled.getAttribute('class')).toContain('text-muted-foreground');
+    it('applies the default footer classes', async () => {
+      await render(`<table><tfoot z-table-footer><tr><td>Total</td></tr></tfoot></table>`, {
+        imports: [ZardTableFooterComponent],
+      });
+
+      expect(screen.getByRole('rowgroup')).toHaveClass('border-t', 'bg-muted/50', 'font-medium');
     });
   });
 });
