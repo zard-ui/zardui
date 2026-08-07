@@ -40,6 +40,91 @@ describe('ZardCalendarComponent', () => {
       expect(component.minDate()).toBeNull();
       expect(component.maxDate()).toBeNull();
       expect(component.disabled()).toBe(false);
+      expect(component.zCaptionLayout()).toBe('label');
+      expect(component.zButtonVariant()).toBe('ghost');
+      expect(component.zShowOutsideDays()).toBe(true);
+    });
+  });
+
+  describe('Design contract', () => {
+    it('should render without a border and declare the cell CSS variables', () => {
+      const root = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar"]');
+
+      expect(root).toBeTruthy();
+      expect(root?.className).toContain('p-2');
+      expect(root?.className).toContain('w-fit');
+      expect(root?.className).toContain('[--cell-size:--spacing(7)]');
+      expect(root?.className).toContain('[--cell-radius:var(--radius-md)]');
+      expect(root?.className).not.toContain('border');
+    });
+
+    it('should let the class input override the cell size', () => {
+      fixture.componentRef.setInput('class', '[--cell-size:--spacing(12)] rounded-lg border');
+      fixture.detectChanges();
+
+      const root = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar"]');
+
+      expect(root?.className).toContain('[--cell-size:--spacing(12)]');
+      expect(root?.className).not.toContain('[--cell-size:--spacing(7)]');
+      expect(root?.className).toContain('border');
+    });
+
+    it('should position the navigation over a centered caption', () => {
+      const month = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar"] > div');
+      const caption = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar-caption"]');
+
+      expect(month?.className).toContain('relative');
+      expect(caption?.className).toContain('justify-center');
+      expect(caption?.className).toContain('h-(--cell-size)');
+    });
+  });
+
+  describe('Caption layout', () => {
+    const layouts = ['label', 'dropdown', 'dropdown-months', 'dropdown-years'] as const;
+
+    it.each(layouts)('should render the %s caption layout', layout => {
+      fixture.componentRef.setInput('zCaptionLayout', layout);
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const expectedComboboxes = layout === 'label' ? 0 : layout === 'dropdown' ? 2 : 1;
+
+      expect(compiled.querySelectorAll('[role="combobox"]')).toHaveLength(expectedComboboxes);
+    });
+  });
+
+  describe('Outside days', () => {
+    it('should keep outside days visible by default', () => {
+      const compiled = fixture.nativeElement as HTMLElement;
+      expect(compiled.querySelectorAll('[role="gridcell"].invisible')).toHaveLength(0);
+    });
+
+    it('should hide outside days without dropping their grid cells', () => {
+      fixture.componentRef.setInput('value', new Date(2024, 0, 15));
+      fixture.componentRef.setInput('zShowOutsideDays', false);
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const cells = compiled.querySelectorAll('[role="gridcell"]');
+      const hidden = compiled.querySelectorAll('[role="gridcell"].invisible');
+
+      expect(cells.length % 7).toBe(0);
+      expect(hidden.length).toBeGreaterThan(0);
+      expect(hidden.length).toBeLessThan(cells.length);
+    });
+  });
+
+  describe('Button variant', () => {
+    it('should forward zButtonVariant to the navigation arrows', () => {
+      fixture.componentRef.setInput('zButtonVariant', 'outline');
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const previous = compiled.querySelector('[aria-label="Previous month"]');
+      const next = compiled.querySelector('[aria-label="Next month"]');
+
+      expect(previous).toHaveAttribute('data-variant', 'outline');
+      expect(next).toHaveAttribute('data-variant', 'outline');
     });
   });
 
