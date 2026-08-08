@@ -137,16 +137,6 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   </div>
 </div>`,
   },
-  form: {
-    importCode: `import { ZardFormImports } from '@/shared/components/form/form.imports';`,
-    templateCode: `<z-form-field>
-  <z-form-label>Email</z-form-label>
-  <z-form-control>
-    <input z-input placeholder="email@example.com" />
-  </z-form-control>
-  <z-form-message>Enter your email address.</z-form-message>
-</z-form-field>`,
-  },
   input: {
     importCode: `import { ZardInputComponent } from '@/shared/components/input/input.component';`,
     templateCode: `<input z-input type="email" placeholder="Email" />`,
