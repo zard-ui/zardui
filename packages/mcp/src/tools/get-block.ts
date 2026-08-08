@@ -7,7 +7,7 @@ export function registerGetBlock(server: McpServer): void {
   server.tool(
     'get-block',
     'Get the complete source code of a Zard UI block',
-    { id: z.string().describe('Block ID (e.g., "authentication-01", "dashboard-01")') },
+    { id: z.string().describe('Block ID (e.g., "login-01", "signup-01")') },
     async ({ id }) => {
       try {
         const block = await registryService.getBlock(id);

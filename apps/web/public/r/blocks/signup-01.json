@@ -1,0 +1,20 @@
+{
+  "id": "signup-01",
+  "title": "Signup form",
+  "description": "A simple signup form.",
+  "category": "Signup",
+  "files": [
+    {
+      "name": "signup-01.component.html",
+      "path": "src/components/signup-01/signup-01.component.html",
+      "content": "<div class=\"flex min-h-svh w-full items-center justify-center p-6 md:p-10\">\n  <div class=\"w-full max-w-sm\">\n    <z-card>\n      <div z-card-header>\n        <z-card-title zTitle=\"Create an account\" />\n        <z-card-description zDescription=\"Enter your information below to create your account\" />\n      </div>\n      <div z-card-content>\n        <form [formGroup]=\"signupForm\" (ngSubmit)=\"onSubmit()\">\n          <div z-field-group>\n            <div z-field>\n              <label z-field-label for=\"name\">Full Name</label>\n              <input z-input id=\"name\" type=\"text\" placeholder=\"John Doe\" formControlName=\"name\" required />\n            </div>\n            <div z-field>\n              <label z-field-label for=\"email\">Email</label>\n              <input z-input id=\"email\" type=\"email\" placeholder=\"m@example.com\" formControlName=\"email\" required />\n              <p z-field-description>We'll use this to contact you. We will not share your email with anyone else.</p>\n            </div>\n            <div z-field>\n              <label z-field-label for=\"password\">Password</label>\n              <input z-input id=\"password\" type=\"password\" formControlName=\"password\" required />\n              <p z-field-description>Must be at least 8 characters long.</p>\n            </div>\n            <div z-field>\n              <label z-field-label for=\"confirm-password\">Confirm Password</label>\n              <input z-input id=\"confirm-password\" type=\"password\" formControlName=\"confirmPassword\" required />\n              <p z-field-description>Please confirm your password.</p>\n            </div>\n            <div z-field-group>\n              <div z-field>\n                <button z-button type=\"submit\" [zLoading]=\"isLoading()\" [zDisabled]=\"isLoading()\">\n                  Create Account\n                </button>\n                <button z-button zType=\"outline\" type=\"button\">Sign up with Google</button>\n                <p z-field-description class=\"px-6 text-center\">\n                  Already have an account?\n                  <a href=\"#\">Sign in</a>\n                </p>\n              </div>\n            </div>\n          </div>\n        </form>\n      </div>\n    </z-card>\n  </div>\n</div>\n",
+      "language": "html"
+    },
+    {
+      "name": "signup-01.component.ts",
+      "path": "src/components/signup-01/signup-01.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, signal } from '@angular/core';\nimport { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';\n\nimport { ZardButtonComponent } from '@zard/components/button/button.component';\nimport { ZardCardImports } from '@zard/components/card/card.imports';\nimport { ZardFieldImports } from '@zard/components/field/field.imports';\nimport { ZardInputComponent } from '@zard/components/input/input.component';\n\n@Component({\n  selector: 'lib-signup-01',\n  standalone: true,\n  imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputComponent, ...ZardCardImports, ...ZardFieldImports],\n  templateUrl: './signup-01.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class Signup01Component {\n  protected readonly isLoading = signal(false);\n\n  protected readonly signupForm = new FormGroup({\n    name: new FormControl('', [Validators.required]),\n    email: new FormControl('', [Validators.required, Validators.email]),\n    password: new FormControl('', [Validators.required, Validators.minLength(8)]),\n    confirmPassword: new FormControl('', [Validators.required, Validators.minLength(8)]),\n  });\n\n  protected onSubmit(): void {\n    if (this.signupForm.invalid) {\n      this.signupForm.markAllAsTouched();\n      return;\n    }\n    this.isLoading.set(true);\n  }\n}\n",
+      "language": "typescript"
+    }
+  ]
+}
