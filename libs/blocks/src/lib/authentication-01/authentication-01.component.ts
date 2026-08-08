@@ -4,11 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
-import {
-  ZardFormFieldComponent,
-  ZardFormLabelComponent,
-  ZardFormControlComponent,
-} from '@zard/components/form/form.component';
+import { ZardFieldImports } from '@zard/components/field/field.imports';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 
 @Component({
@@ -19,10 +15,8 @@ import { ZardInputComponent } from '@zard/components/input/input.component';
     ZardButtonComponent,
     ZardCardComponent,
     ZardCheckboxComponent,
+    ZardFieldImports,
     ZardInputComponent,
-    ZardFormFieldComponent,
-    ZardFormLabelComponent,
-    ZardFormControlComponent,
   ],
   templateUrl: './authentication-01.component.html',
 })

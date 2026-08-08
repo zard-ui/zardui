@@ -1,0 +1,422 @@
+<z-content
+  [navigationConfig]="navigationConfig"
+  [activeAnchor]="activeAnchor"
+  scrollSpy
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Template-driven Forms"
+    description="Build forms in Angular using Template-driven Forms and zard/ui."
+    scrollSpyItem="overview"
+    id="overview"
+  ></z-doc-heading>
+
+  <p class="leading-relaxed">
+    In this guide we will build forms with Template-driven Forms — the simplest of the three approaches. The template is
+    the source of truth:
+    <code class="bg-muted rounded px-1.5 py-0.5 text-sm">ngModel</code>
+    creates the controls and validation attributes declare the rules. We'll cover building a form with the
+    <code class="bg-muted rounded px-1.5 py-0.5 text-sm">field</code>
+    component, validation, error handling, accessibility and more.
+  </p>
+
+  <z-forms-section
+    scrollSpyItem="demo"
+    id="demo"
+    heading="Demo"
+    lead="We are going to build the following form. It has a text input and a textarea. On submit we validate the form data and display any errors."
+  >
+    <z-code-box
+      [codeData]="demos.demo.code"
+      [dynamicComponent]="demos.demo.component"
+      previewHeight="34rem"
+    ></z-code-box>
+  </z-forms-section>
+
+  <z-forms-section scrollSpyItem="approach" id="approach" heading="Approach">
+    <p class="text-muted-foreground leading-relaxed">
+      There is no form model in the component: you bind a plain object with
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">[(ngModel)]</code>
+      and Angular assembles an
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">NgForm</code>
+      behind the scenes from every named control it finds. Less setup, less control.
+    </p>
+    <ul class="ml-6 list-disc space-y-2 leading-relaxed">
+      <li>
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">name</code>
+        is what registers a control on the parent form — without it, nothing is tracked.
+      </li>
+      <li>
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">#ctrl="ngModel"</code>
+        exposes the control's state to the template so you can render errors.
+      </li>
+      <li>
+        Validation rules are HTML attributes such as
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">required / minlength / email</code>
+        on the control itself.
+      </li>
+      <li>
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">z-field</code>
+        components give you complete control over the markup and the accessibility wiring.
+      </li>
+    </ul>
+    <z-callout title="When to reach for something else" icon="i" variant="info">
+      The model is never typed by the form, and any rule the attributes cannot express costs you a custom directive. For
+      dynamic forms, complex validation or anything you want to unit test in isolation, prefer
+      <a class="text-foreground font-medium underline underline-offset-4" href="/docs/forms/reactive-forms">
+        Reactive Forms
+      </a>
+      or
+      <a class="text-foreground font-medium underline underline-offset-4" href="/docs/forms/signal-forms">
+        Signal Forms
+      </a>
+      instead
+    </z-callout>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="anatomy"
+    id="anatomy"
+    heading="Anatomy"
+    lead="Here is a single field: ngModel creates the control, the template reference exposes its state, and the field components render it."
+  >
+    <div class="overflow-hidden rounded-lg border">
+      <z-code-block [data]="snippets.anatomy" [embedded]="true" />
+    </div>
+  </z-forms-section>
+
+  <z-forms-section scrollSpyItem="form" id="form" heading="Form">
+    <z-forms-subsection heading="Define the model">
+      <p class="text-muted-foreground leading-relaxed">
+        The shape of the form is the shape of the object you bind to it.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.model" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Set up the component">
+      <p class="text-muted-foreground leading-relaxed">
+        Import
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">FormsModule</code>
+        and take the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">NgForm</code>
+        from the template on submit.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.setup" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Bind it in the template">
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.bind" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Grouping fields with ngModelGroup">
+      <p class="text-muted-foreground leading-relaxed">
+        Control names are flat by default, so a nested model and the form drift apart.
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">ngModelGroup</code>
+        nests them back: the group name becomes a key in
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">form.value</code>
+        , and the group exposes the aggregated
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">valid / touched / dirty</code>
+        of everything inside it — which is what lets you validate a whole section at once.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.modelGroup" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Done">
+      <p class="text-muted-foreground leading-relaxed">
+        That's it. You now have a fully accessible form with client-side validation. The values are already in your
+        model object — there is nothing extra to read out of the form.
+      </p>
+    </z-forms-subsection>
+  </z-forms-section>
+
+  <z-forms-section scrollSpyItem="validation" id="validation" heading="Validation">
+    <z-forms-subsection heading="Validation attributes">
+      <p class="text-muted-foreground leading-relaxed">
+        Angular maps the standard HTML validation attributes onto its own validators. Custom controls pick them up
+        through the same
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">name</code>
+        +
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">ngModel</code>
+        pairing.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.validators" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Cross-field rules">
+      <p class="text-muted-foreground leading-relaxed">
+        The attributes cannot express everything — a minimum number of selected options, a value the control offers but
+        the form must reject, or a rule that spans two fields. The quick way out is a getter next to the model, checked
+        on submit alongside
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">form.invalid</code>
+        . It costs nothing, but the rule stays invisible to the form: the control never turns invalid on its own.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.crossField" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Custom validator directives">
+      <p class="text-muted-foreground leading-relaxed">
+        A getter checked on submit is fine for one form. When the rule travels, wrap it in a directive that registers
+        itself in
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">NG_VALIDATORS</code>
+        : it becomes an attribute like
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">required</code>
+        , and the error lands on the control itself, so
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">form.invalid</code>
+        finally accounts for it.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.validatorDirective" [embedded]="true" />
+      </div>
+      <p class="text-muted-foreground leading-relaxed">
+        The
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">registerOnValidatorChange</code>
+        wiring is what makes a validator with inputs revalidate when those inputs change — leave it out and the control
+        keeps the verdict it reached with the old value.
+      </p>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Async validators">
+      <p class="text-muted-foreground leading-relaxed">
+        Same idea against
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">NG_ASYNC_VALIDATORS</code>
+        , returning a
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">Promise</code>
+        or an
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">Observable</code>
+        . Pair it with
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">
+          [ngModelOptions]="{{ '{' }} updateOn: 'blur' {{ '}' }}"
+        </code>
+        so you are not firing a request per keystroke.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.asyncValidator" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Validation modes">
+      <p class="text-muted-foreground leading-relaxed">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">updateOn</code>
+        decides when the value and the validators are recomputed. Set it per control through
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">[ngModelOptions]</code>
+        or once for the whole form through
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">[ngFormOptions]</code>
+        on the form element.
+      </p>
+      <div class="overflow-x-auto rounded-lg border">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-muted/50">
+            <tr>
+              <th class="px-4 py-3 font-medium">Mode</th>
+              <th class="px-4 py-3 font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t">
+              <td class="px-4 py-3"><code class="bg-muted rounded px-1.5 py-0.5 text-xs">'change'</code></td>
+              <td class="text-muted-foreground px-4 py-3">Validates on every change. The default.</td>
+            </tr>
+            <tr class="border-t">
+              <td class="px-4 py-3"><code class="bg-muted rounded px-1.5 py-0.5 text-xs">'blur'</code></td>
+              <td class="text-muted-foreground px-4 py-3">Validates when the control loses focus.</td>
+            </tr>
+            <tr class="border-t">
+              <td class="px-4 py-3"><code class="bg-muted rounded px-1.5 py-0.5 text-xs">'submit'</code></td>
+              <td class="text-muted-foreground px-4 py-3">Validates only when the form is submitted.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.updateOn" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="control-state"
+    id="control-state"
+    heading="Control State"
+    lead="Two attributes decide how much of the form a control takes part in."
+  >
+    <div class="overflow-hidden rounded-lg border">
+      <z-code-block [data]="snippets.disabling" [embedded]="true" />
+    </div>
+    <p class="text-muted-foreground leading-relaxed">
+      Both leave the value in your model — they only change what the
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">NgForm</code>
+      sees. That is worth remembering on submit: read the model, not
+      <code class="bg-muted rounded px-1.5 py-0.5 text-sm">form.value</code>
+      , when a disabled control still matters to you.
+    </p>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="displaying-errors"
+    id="displaying-errors"
+    heading="Displaying Errors"
+    lead="Display errors next to the field with z-field-error. For styling and accessibility:"
+  >
+    <ul class="ml-6 list-disc space-y-2 leading-relaxed">
+      <li>
+        Add
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">data-invalid</code>
+        to the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">z-field</code>
+        element.
+      </li>
+      <li>
+        Add
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">aria-invalid</code>
+        to the control itself — the input, textarea, select, checkbox, and so on.
+      </li>
+      <li>
+        Expose the control with
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">#ctrl="ngModel"</code>
+        then gate the error UI on
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">invalid &amp;&amp; touched</code>
+        and branch on
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">hasError()</code>
+        to pick the message.
+      </li>
+    </ul>
+    <div class="overflow-hidden rounded-lg border">
+      <z-code-block [data]="snippets.errors" [embedded]="true" />
+    </div>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="field-types"
+    id="field-types"
+    heading="Working with Different Field Types"
+    lead="Every zard/ui form control implements a value accessor, so name + [(ngModel)] binds to all of them the same way."
+  >
+    <z-code-box
+      scrollSpyItem="field-input"
+      id="field-input"
+      componentType="input"
+      demoDescription='For text inputs, add the validation attributes and expose the control with `#ctrl="ngModel"`.'
+      [codeData]="demos.input.code"
+      [dynamicComponent]="demos.input.component"
+      previewHeight="21rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-textarea"
+      id="field-textarea"
+      componentType="textarea"
+      demoDescription="Textareas work exactly like inputs. Add `z-field-description` for the helper copy below the control."
+      [codeData]="demos.textarea.code"
+      [dynamicComponent]="demos.textarea.component"
+      previewHeight="27rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-select"
+      id="field-select"
+      componentType="select"
+      demoDescription='`z-select` is a value accessor too, so `required` and `[(ngModel)]` behave exactly as on a native control. "Auto" is listed but rejected on submit — a value rule with no attribute equivalent, so it lives in the component.'
+      [codeData]="demos.select.code"
+      [dynamicComponent]="demos.select.component"
+      previewHeight="17rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-checkbox"
+      id="field-checkbox"
+      componentType="checkbox"
+      demoDescription="A checkbox group is one boolean per option in the model. The 'pick at least one' rule has no attribute equivalent, so it lives in the component. The first group is a single control kept checked and locked with the `disabled` attribute."
+      [codeData]="demos.checkbox.code"
+      [dynamicComponent]="demos.checkbox.component"
+      previewHeight="30rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-radio"
+      id="field-radio"
+      componentType="radio-group"
+      demoDescription="Bind `[(ngModel)]` to `z-radio-group` — the individual `z-radio` items only carry their value."
+      [codeData]="demos.radio.code"
+      [dynamicComponent]="demos.radio.component"
+      previewHeight="32rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-switch"
+      id="field-switch"
+      componentType="switch"
+      demoDescription='Switches bind to a boolean. Watch out: `required` only rejects `null` and `undefined`, never `false`, and there is no `requiredTrue` attribute — so the "must be enabled" rule lives in the component.'
+      [codeData]="demos.switch.code"
+      [dynamicComponent]="demos.switch.component"
+      previewHeight="19rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-complex"
+      id="field-complex"
+      componentType="complex-forms"
+      demoDescription="Everything above, composed into one form with fieldsets, separators and the count and value rules handled in the component, since attributes cannot express them."
+      [codeData]="demos.complex.code"
+      [dynamicComponent]="demos.complex.component"
+      previewHeight="62rem"
+      codeHeight="40rem"
+    ></z-code-box>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="resetting"
+    id="resetting"
+    heading="Resetting the Form"
+    lead="resetForm() clears the values and the pristine/touched state. Pass the initial value so the defaults come back."
+  >
+    <div class="overflow-hidden rounded-lg border">
+      <z-code-block [data]="snippets.reset" [embedded]="true" />
+    </div>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="array-fields"
+    id="array-fields"
+    heading="Array Fields"
+    lead="There is no FormArray here: loop over a plain array and give every row a unique control name."
+  >
+    <z-code-box
+      [codeData]="demos.array.code"
+      [dynamicComponent]="demos.array.component"
+      previewHeight="38rem"
+    ></z-code-box>
+
+    <z-forms-subsection heading="Array field structure">
+      <p class="text-muted-foreground leading-relaxed">
+        The control name has to be unique per row, so derive it from the index. Read the control back from
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">form.controls</code>
+        when you need its error state.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.arrayStructure" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Adding and removing items">
+      <p class="text-muted-foreground leading-relaxed">
+        Track by the item object, not by index — removing a row would otherwise shift every control name below it and
+        Angular would reuse the wrong control state.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.arrayMutate" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+  </z-forms-section>
+</z-content>

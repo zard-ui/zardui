@@ -18,6 +18,10 @@
 /docs/figma
 /docs/version-support
 /docs/about
+/docs/forms
+/docs/forms/signal-forms
+/docs/forms/reactive-forms
+/docs/forms/template-driven-forms
 /docs/featured/youtube
 /docs/featured/articles
 /docs/components/accordion
@@ -38,7 +42,6 @@
 /docs/components/separator
 /docs/components/empty
 /docs/components/field
-/docs/components/form
 /docs/components/input
 /docs/components/input-group
 /docs/components/input-otp

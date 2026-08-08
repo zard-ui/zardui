@@ -72,6 +72,16 @@ export const DOCS_PATH: NavSection = {
   ],
 };
 
+export const FORMS_PATH: NavSection = {
+  title: 'Forms',
+  data: [
+    { name: 'Overview', path: '/docs/forms', available: true },
+    { name: 'Signal Forms', path: '/docs/forms/signal-forms', available: true },
+    { name: 'Reactive Forms', path: '/docs/forms/reactive-forms', available: true },
+    { name: 'Template-driven Forms', path: '/docs/forms/template-driven-forms', available: true },
+  ],
+};
+
 export const FEATURED_PATH: NavSection = {
   title: 'Featured',
   data: [
@@ -102,7 +112,6 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Separator', path: '/docs/components/separator', available: true },
     { name: 'Empty', path: '/docs/components/empty', available: true },
     { name: 'Field', path: '/docs/components/field', available: true },
-    { name: 'Form', path: '/docs/components/form', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Input Group', path: '/docs/components/input-group', available: true },
     { name: 'Input OTP', path: '/docs/components/input-otp', available: true },
@@ -151,4 +160,11 @@ export const CONTRIBUTE_PATH: NavSection = {
   ],
 };
 
-export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, COMPONENTS_PATH, CONTRIBUTE_PATH, FEATURED_PATH];
+export const SIDEBAR_PATHS: NavSection[] = [
+  SECTIONS,
+  DOCS_PATH,
+  COMPONENTS_PATH,
+  FORMS_PATH,
+  CONTRIBUTE_PATH,
+  FEATURED_PATH,
+];

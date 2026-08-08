@@ -429,16 +429,6 @@
       ]
     },
     {
-      "name": "form",
-      "type": "registry:component",
-      "files": [
-        "form.component.ts",
-        "form.imports.ts",
-        "form.variants.ts",
-        "index.ts"
-      ]
-    },
-    {
       "name": "pagination",
       "type": "registry:component",
       "registryDependencies": [
