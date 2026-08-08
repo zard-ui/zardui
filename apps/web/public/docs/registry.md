@@ -365,16 +365,16 @@ blocks/authentication-01.json
   "category": "Authentication",
   "files": [
     {
-      "name": "authentication-01.component.ts",
-      "path": "src/components/authentication-01/authentication-01.component.ts",
-      "content": "import { ZardFormFieldComponent, ZardFormLabelComponent, ZardFormControlComponent } from '@zard/components/form/form.component';\n...",
-      "language": "typescript"
-    },
-    {
       "name": "authentication-01.component.html",
       "path": "src/components/authentication-01/authentication-01.component.html",
-      "content": "<div class=\"flex min-h-screen flex-col lg:flex-row\">\n...",
+      "content": "<div class=\"flex min-h-screen flex-col lg:flex-row\">\n  <div class=\"bg-background flex flex-1 items-center justify-center p-4 sm:p-8\">\n    <div class=\"w-full max-w-md space-y-6 sm:space-y-8\">\n      <div class=\"text-center\">\n        <h1 class=\"text-2xl font-bold sm:text-3xl\">Welcome back</h1>\n        <p class=\"text-muted-foreground mt-2 text-sm sm:text-base\">Sign in to your account to continue</p>\n      </div>\n\n      <z-card class=\"p-4 sm:p-6 lg:p-8\">\n        <form [formGroup]=\"loginForm\" class=\"space-y-4 sm:space-y-6\">\n          <div z-field>\n            <label z-field-label for=\"authentication-01-email\">Email</label>\n            <input\n              z-input\n              type=\"email\"\n              formControlName=\"email\"\n              id=\"authentication-01-email\"\n              autocomplete=\"email\"\n              placeholder=\"name@zard.com\"\n              class=\"w-full\"\n            />\n          </div>\n\n          <div z-field>\n            <div class=\"flex items-center justify-between\">\n              <label z-field-label for=\"authentication-01-password\">Password</label>\n              <a z-button zType=\"link\" class=\"p-0\">Forgot password?</a>\n            </div>\n            <input\n              z-input\n              type=\"password\"\n              formControlName=\"password\"\n              id=\"authentication-01-password\"\n              autocomplete=\"current-password\"\n              placeholder=\"••••••••\"\n              class=\"w-full\"\n            />\n          </div>\n\n          <div class=\"flex items-center gap-2\">\n            <z-checkbox id=\"remember\" formControlName=\"rememberMe\"></z-checkbox>\n            <label for=\"remember\" class=\"cursor-pointer text-sm select-none\">Remember me for 30 days</label>\n          </div>\n\n          <button type=\"submit\" z-button class=\"w-full\" [zLoading]=\"isLoading()\" [disabled]=\"isLoading()\">\n            Sign in\n          </button>\n        </form>\n      </z-card>\n\n      <p class=\"text-muted-foreground text-center text-sm\">\n        Don't have an account?\n        <a z-button zType=\"link\" href=\"#\" class=\"px-0\">Sign up</a>\n      </p>\n    </div>\n  </div>\n  <aside class=\"bg-muted hidden flex-1 items-center justify-center p-8 lg:flex\"></aside>\n</div>\n",
       "language": "html"
+    },
+    {
+      "name": "authentication-01.component.ts",
+      "path": "src/components/authentication-01/authentication-01.component.ts",
+      "content": "import { Component, signal } from '@angular/core';\r\nimport { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';\r\n\r\nimport { ZardButtonComponent } from '@zard/components/button/button.component';\r\nimport { ZardCardComponent } from '@zard/components/card/card.component';\r\nimport { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';\r\nimport { ZardFieldImports } from '@zard/components/field/field.imports';\r\nimport { ZardInputComponent } from '@zard/components/input/input.component';\r\n\r\n@Component({\r\n  selector: 'lib-authentication-01',\r\n  standalone: true,\r\n  imports: [\r\n    ReactiveFormsModule,\r\n    ZardButtonComponent,\r\n    ZardCardComponent,\r\n    ZardCheckboxComponent,\r\n    ZardFieldImports,\r\n    ZardInputComponent,\r\n  ],\r\n  templateUrl: './authentication-01.component.html',\r\n})\r\nexport class Authentication01Component {\r\n  protected readonly isLoading = signal(false);\r\n\r\n  protected readonly loginForm = new FormGroup({\r\n    email: new FormControl('', [Validators.required, Validators.email]),\r\n    password: new FormControl('', [Validators.required, Validators.minLength(6)]),\r\n    rememberMe: new FormControl(false),\r\n  });\r\n}\r\n",
+      "language": "typescript"
     }
   ]
 }

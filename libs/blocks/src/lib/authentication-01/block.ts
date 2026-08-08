@@ -16,9 +16,9 @@ export const authentication01Block: Block = {
     {
       name: 'authentication-01.component.ts',
       path: 'src/components/authentication-01/authentication-01.component.ts',
-      content: `import { ZardFormFieldComponent, ZardFormLabelComponent, ZardFormControlComponent } from '@zard/components/form/form.component';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+      content: `import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ZardCheckboxComponent } from '@zard/components/checkbox/checkbox.component';
+import { ZardFieldImports } from '@zard/components/field/field.imports';
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardInputComponent } from '@zard/components/input/input.component';
 import { ZardCardComponent } from '@zard/components/card/card.component';
@@ -32,10 +32,8 @@ import { Component, signal } from '@angular/core';
     ZardButtonComponent,
     ZardCardComponent,
     ZardCheckboxComponent,
+    ZardFieldImports,
     ZardInputComponent,
-    ZardFormFieldComponent,
-    ZardFormLabelComponent,
-    ZardFormControlComponent,
   ],
   templateUrl: './authentication-01.component.html',
 })
@@ -64,22 +62,34 @@ export class Authentication01Component {
 
       <z-card class="p-4 sm:p-6 lg:p-8">
         <form [formGroup]="loginForm" class="space-y-4 sm:space-y-6">
-          <z-form-field>
-            <z-form-label [zRequired]="true">Email</z-form-label>
-            <z-form-control>
-              <input z-input type="email" formControlName="email" placeholder="name@zard.com" class="w-full" />
-            </z-form-control>
-          </z-form-field>
+          <div z-field>
+            <label z-field-label for="authentication-01-email">Email</label>
+            <input
+              z-input
+              type="email"
+              formControlName="email"
+              id="authentication-01-email"
+              autocomplete="email"
+              placeholder="name@zard.com"
+              class="w-full"
+            />
+          </div>
 
-          <z-form-field>
+          <div z-field>
             <div class="flex items-center justify-between">
-              <z-form-label [zRequired]="true">Password</z-form-label>
+              <label z-field-label for="authentication-01-password">Password</label>
               <a z-button zType="link" class="p-0">Forgot password?</a>
             </div>
-            <z-form-control>
-              <input z-input type="password" formControlName="password" placeholder="••••••••" class="w-full" />
-            </z-form-control>
-          </z-form-field>
+            <input
+              z-input
+              type="password"
+              formControlName="password"
+              id="authentication-01-password"
+              autocomplete="current-password"
+              placeholder="••••••••"
+              class="w-full"
+            />
+          </div>
 
           <div class="flex items-center gap-2">
             <z-checkbox id="remember" formControlName="rememberMe"></z-checkbox>
