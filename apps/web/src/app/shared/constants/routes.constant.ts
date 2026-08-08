@@ -163,8 +163,8 @@ export const CONTRIBUTE_PATH: NavSection = {
 export const SIDEBAR_PATHS: NavSection[] = [
   SECTIONS,
   DOCS_PATH,
-  FORMS_PATH,
   COMPONENTS_PATH,
+  FORMS_PATH,
   CONTRIBUTE_PATH,
   FEATURED_PATH,
 ];
