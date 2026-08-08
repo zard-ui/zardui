@@ -1,3 +1,11 @@
+## 1.0.0-beta.93 (2026-08-07)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.92 (2026-08-07)
+
+This was a version bump only, there were no code changes.
+
 ## 1.0.0-beta.91 (2026-08-05)
 
 This was a version bump only, there were no code changes.
