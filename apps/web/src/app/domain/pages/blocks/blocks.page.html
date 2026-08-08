@@ -9,49 +9,53 @@
     forever.
   </p>
   <section class="flex w-full items-center justify-center gap-2 pt-2 **:data-[slot=button]:shadow-none">
-    <a z-button href="/blocks#blocks">Browse Blocks</a>
-    <a z-button zType="ghost" routerLink="/docs/blocks">Add a block</a>
+    <a z-button routerLink="/blocks/login" fragment="blocks">Browse Blocks</a>
+    <a z-button zType="ghost" routerLink="/docs/components">View Components</a>
   </section>
 </section>
 
 <z-category-tabs [tabs]="categoryTabs" browseAllRoute="/blocks/sidebar" browseAllLabel="Browse all blocks" />
 
-<section class="container mx-auto min-h-svh px-4 pt-8 pb-16">
+<section id="blocks" class="container mx-auto min-h-svh px-4 pt-8 pb-16">
   <div class="space-y-12 xl:py-8">
-    @if (blocks().length > 0) { @for (block of blocks(); track block.id) {
-    <div class="space-y-3 lg:hidden">
-      <h3 class="text-foreground text-sm font-semibold">{{ block.title }}</h3>
-      @if (block.image) {
-      <img
-        width="1440"
-        height="900"
-        loading="lazy"
-        [src]="getCurrentBlockImage(block)"
-        [alt]="block.title"
-        class="border-border h-[220px] w-full rounded-lg border shadow-sm"
-      />
+    @if (blocks().length > 0) {
+      @for (block of blocks(); track block.id) {
+        <div class="space-y-3 lg:hidden">
+          <h3 class="text-foreground text-sm font-semibold">{{ block.title }}</h3>
+          @if (block.image) {
+            <img
+              width="1440"
+              height="900"
+              loading="lazy"
+              [src]="getCurrentBlockImage(block)"
+              [alt]="block.title"
+              class="border-border h-[220px] w-full rounded-lg border shadow-sm"
+            />
+          }
+        </div>
+        <div class="hidden lg:block">
+          <z-block-container [block]="block" />
+        </div>
       }
-    </div>
-    <div class="hidden lg:block">
-      <z-block-container [block]="block" />
-    </div>
-    } } @else {
-    <div class="border-border bg-muted/20 flex min-h-svh items-center justify-center rounded-lg border">
-      <div class="space-y-2 text-center">
-        <p class="text-muted-foreground text-lg font-medium">No blocks available yet</p>
-        <p class="text-muted-foreground text-sm">Blocks will be added soon for this category</p>
+    } @else {
+      <div class="border-border bg-muted/20 flex min-h-svh items-center justify-center rounded-lg border">
+        <div class="space-y-2 text-center">
+          <p class="text-muted-foreground text-lg font-medium">No blocks available yet</p>
+          <p class="text-muted-foreground text-sm">Blocks will be added soon for this category</p>
+        </div>
       </div>
-    </div>
     }
   </div>
 </section>
 
-<div class="container flex justify-center py-6">
-  <a
-    z-button
-    class="bg-background hover:bg-accent text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs"
-    routerLink="/blocks/sidebar"
-  >
-    Browse more blocks
-  </a>
-</div>
+@if (currentCategory() === 'featured') {
+  <div class="container flex justify-center py-6">
+    <a
+      z-button
+      class="bg-background hover:bg-accent text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs"
+      routerLink="/blocks/login"
+    >
+      Browse more blocks
+    </a>
+  </div>
+}
