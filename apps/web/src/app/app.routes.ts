@@ -60,6 +60,10 @@ export const appRoutes: Route[] = [
           import('./domain/pages/blocks/block-instructions/block-instructions.page').then(c => c.BlocksInstructionPage),
       },
       {
+        path: 'forms',
+        loadChildren: async () => (await import('./domain/pages/forms/forms.routes')).FORMS_ROUTES,
+      },
+      {
         path: 'dark-mode',
         loadComponent: () => import('./domain/pages/dark-mode/dark-mode.page').then(c => c.DarkmodePage),
       },

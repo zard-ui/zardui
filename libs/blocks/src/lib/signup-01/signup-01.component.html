@@ -1,0 +1,47 @@
+<div class="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+  <div class="w-full max-w-sm">
+    <z-card>
+      <div z-card-header>
+        <z-card-title zTitle="Create an account" />
+        <z-card-description zDescription="Enter your information below to create your account" />
+      </div>
+      <div z-card-content>
+        <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+          <div z-field-group>
+            <div z-field>
+              <label z-field-label for="name">Full Name</label>
+              <input z-input id="name" type="text" placeholder="John Doe" formControlName="name" required />
+            </div>
+            <div z-field>
+              <label z-field-label for="email">Email</label>
+              <input z-input id="email" type="email" placeholder="m@example.com" formControlName="email" required />
+              <p z-field-description>We'll use this to contact you. We will not share your email with anyone else.</p>
+            </div>
+            <div z-field>
+              <label z-field-label for="password">Password</label>
+              <input z-input id="password" type="password" formControlName="password" required />
+              <p z-field-description>Must be at least 8 characters long.</p>
+            </div>
+            <div z-field>
+              <label z-field-label for="confirm-password">Confirm Password</label>
+              <input z-input id="confirm-password" type="password" formControlName="confirmPassword" required />
+              <p z-field-description>Please confirm your password.</p>
+            </div>
+            <div z-field-group>
+              <div z-field>
+                <button z-button type="submit" [zLoading]="isLoading()" [zDisabled]="isLoading()">
+                  Create Account
+                </button>
+                <button z-button zType="outline" type="button">Sign up with Google</button>
+                <p z-field-description class="px-6 text-center">
+                  Already have an account?
+                  <a href="#">Sign in</a>
+                </p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </z-card>
+  </div>
+</div>

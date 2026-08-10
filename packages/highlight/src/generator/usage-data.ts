@@ -82,8 +82,20 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-checkbox zLabel="Accept terms and conditions"></z-checkbox>`,
   },
   combobox: {
-    importCode: `import { ZardComboboxComponent } from '@/shared/components/combobox/combobox.component';`,
-    templateCode: `<z-combobox [options]="options" placeholder="Select framework..."></z-combobox>`,
+    importCode: `import { ZardComboboxImports } from '@/shared/components/combobox/combobox.imports';`,
+    templateCode: `<z-combobox [(zValue)]="value">
+  <z-combobox-input placeholder="Search framework..." />
+
+  <z-combobox-content>
+    <z-combobox-empty>No framework found.</z-combobox-empty>
+
+    <z-combobox-list>
+      @for (framework of frameworks; track framework.value) {
+        <z-combobox-item [zValue]="framework.value">{{ framework.label }}</z-combobox-item>
+      }
+    </z-combobox-list>
+  </z-combobox-content>
+</z-combobox>`,
   },
   command: {
     importCode: `import { ZardCommandImports } from '@/shared/components/command/command.imports';`,
@@ -136,16 +148,6 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     <p z-field-description>We'll never share your email.</p>
   </div>
 </div>`,
-  },
-  form: {
-    importCode: `import { ZardFormImports } from '@/shared/components/form/form.imports';`,
-    templateCode: `<z-form-field>
-  <z-form-label>Email</z-form-label>
-  <z-form-control>
-    <input z-input placeholder="email@example.com" />
-  </z-form-control>
-  <z-form-message>Enter your email address.</z-form-message>
-</z-form-field>`,
   },
   input: {
     importCode: `import { ZardInputComponent } from '@/shared/components/input/input.component';`,
