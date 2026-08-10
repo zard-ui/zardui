@@ -10,7 +10,6 @@ import { ZardComboboxImports } from '../combobox.imports';
   selector: 'zard-demo-combobox-input-group',
   imports: [NgIcon, ZardComboboxImports, ZardInputGroupAddonComponent],
   standalone: true,
-  viewProviders: [provideIcons({ lucideGlobe })],
   template: `
     <z-combobox zWidth="md" [(zValue)]="value">
       <z-combobox-input placeholder="Select a timezone">
@@ -36,6 +35,7 @@ import { ZardComboboxImports } from '../combobox.imports';
       </z-combobox-content>
     </z-combobox>
   `,
+  viewProviders: [provideIcons({ lucideGlobe })],
 })
 export class ZardDemoComboboxInputGroupComponent {
   readonly value = signal<string | string[] | null>(null);
