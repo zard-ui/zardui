@@ -747,8 +747,8 @@ const PARAGRAPHS = Array.from({ length: 10 }).map(
       <p class="mb-2 leading-relaxed">{{ paragraph }}</p>
     }
   `,
-  host: { class: 'no-scrollbar min-h-0 overflow-y-auto px-4' },
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'no-scrollbar min-h-0 overflow-y-auto px-4' },
 })
 export class ZardDemoSheetSideContentComponent {
   protected readonly paragraphs = PARAGRAPHS;
