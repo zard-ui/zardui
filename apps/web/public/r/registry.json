@@ -2,7 +2,7 @@
   "$schema": "https://zardui.com/schema/registry.json",
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.90",
+  "version": "1.0.0-beta.94",
   "items": [
     {
       "name": "core",
@@ -425,16 +425,6 @@
       "files": [
         "date-picker.component.ts",
         "date-picker.variants.ts",
-        "index.ts"
-      ]
-    },
-    {
-      "name": "form",
-      "type": "registry:component",
-      "files": [
-        "form.component.ts",
-        "form.imports.ts",
-        "form.variants.ts",
         "index.ts"
       ]
     },

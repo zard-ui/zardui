@@ -8,6 +8,7 @@ import {
   tableBodyVariants,
   tableCaptionVariants,
   tableCellVariants,
+  tableFooterVariants,
   tableHeaderVariants,
   tableHeadVariants,
   tableRowVariants,
@@ -149,4 +150,22 @@ export class ZardTableCaptionComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(tableCaptionVariants(), this.class()));
+}
+
+@Component({
+  selector: 'tfoot[z-table-footer]',
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    '[class]': 'classes()',
+  },
+  exportAs: 'zTableFooter',
+})
+export class ZardTableFooterComponent {
+  readonly class = input<ClassValue>('');
+
+  protected readonly classes = computed(() => mergeClasses(tableFooterVariants(), this.class()));
 }

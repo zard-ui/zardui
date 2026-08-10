@@ -1,0 +1,58 @@
+<div class="bg-muted flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+  <div class="flex w-full max-w-sm flex-col gap-6">
+    <a href="#" class="flex items-center gap-2 self-center font-medium">
+      <div class="bg-primary text-primary-foreground flex size-6 items-center justify-center rounded-md">
+        <ng-icon name="lucideGalleryVerticalEnd" class="size-4" />
+      </div>
+      Acme Inc.
+    </a>
+    <div class="flex flex-col gap-6">
+      <z-card>
+        <div z-card-header class="text-center">
+          <z-card-title zTitle="Create your account" class="text-xl" />
+          <z-card-description zDescription="Enter your email below to create your account" />
+        </div>
+        <div z-card-content>
+          <form [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+            <div z-field-group>
+              <div z-field>
+                <label z-field-label for="name">Full Name</label>
+                <input z-input id="name" type="text" placeholder="John Doe" formControlName="name" required />
+              </div>
+              <div z-field>
+                <label z-field-label for="email">Email</label>
+                <input z-input id="email" type="email" placeholder="m@example.com" formControlName="email" required />
+              </div>
+              <div z-field>
+                <div z-field class="grid grid-cols-2 gap-4">
+                  <div z-field>
+                    <label z-field-label for="password">Password</label>
+                    <input z-input id="password" type="password" formControlName="password" required />
+                  </div>
+                  <div z-field>
+                    <label z-field-label for="confirm-password">Confirm Password</label>
+                    <input z-input id="confirm-password" type="password" formControlName="confirmPassword" required />
+                  </div>
+                </div>
+                <p z-field-description>Must be at least 8 characters long.</p>
+              </div>
+              <div z-field>
+                <button z-button type="submit" [zLoading]="isLoading()" [zDisabled]="isLoading()">
+                  Create Account
+                </button>
+                <p z-field-description class="text-center">
+                  Already have an account?
+                  <a href="#">Sign in</a>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </z-card>
+      <!-- prettier-ignore -->
+      <p z-field-description class="px-6 text-center">
+        By clicking continue, you agree to our <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a>.
+      </p>
+    </div>
+  </div>
+</div>
