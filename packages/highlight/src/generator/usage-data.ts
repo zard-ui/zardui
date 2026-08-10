@@ -257,14 +257,8 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
 </z-select>`,
   },
   sheet: {
-    importCode: `import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';`,
-    templateCode: `<z-sheet
-  zTitle="Edit profile"
-  zDescription="Make changes to your profile here."
-  zSide="right"
->
-  <p>Sheet content goes here.</p>
-</z-sheet>`,
+    importCode: `import { ZardSheetService } from '@/shared/components/sheet/sheet.service';`,
+    templateCode: `<button type="button" z-button zType="outline" (click)="openSheet()">Open</button>`,
   },
   skeleton: {
     importCode: `import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';`,
