@@ -82,8 +82,20 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-checkbox zLabel="Accept terms and conditions"></z-checkbox>`,
   },
   combobox: {
-    importCode: `import { ZardComboboxComponent } from '@/shared/components/combobox/combobox.component';`,
-    templateCode: `<z-combobox [options]="options" placeholder="Select framework..."></z-combobox>`,
+    importCode: `import { ZardComboboxImports } from '@/shared/components/combobox/combobox.imports';`,
+    templateCode: `<z-combobox [(zValue)]="value">
+  <z-combobox-input placeholder="Search framework..." />
+
+  <z-combobox-content>
+    <z-combobox-empty>No framework found.</z-combobox-empty>
+
+    <z-combobox-list>
+      @for (framework of frameworks; track framework.value) {
+        <z-combobox-item [zValue]="framework.value">{{ framework.label }}</z-combobox-item>
+      }
+    </z-combobox-list>
+  </z-combobox-content>
+</z-combobox>`,
   },
   command: {
     importCode: `import { ZardCommandImports } from '@/shared/components/command/command.imports';`,
