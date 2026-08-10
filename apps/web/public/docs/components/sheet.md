@@ -130,7 +130,9 @@ export class ZardSheetOptions<T, U> {
         </header>
       }
 
-      <main class="flex w-full flex-col space-y-4">
+      <!-- min-h-0 lets the content area shrink below its intrinsic height, so scrollable
+           content stays inside the sheet instead of pushing the footer past the viewport. -->
+      <main class="flex min-h-0 w-full flex-1 flex-col space-y-4">
         <ng-template cdkPortalOutlet />
 
         @if (isStringContent()) {
@@ -726,46 +728,38 @@ Use the `zSide` option to set the edge of the screen where the sheet appears. Va
 
 ```angular-ts
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardInputComponent } from '@/shared/components/input';
-import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
 import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
 import type { ZardSheetVariants } from '@/shared/components/sheet/sheet.variants';
 
-@Component({
-  selector: 'zard-demo-sheet-side-form',
-  imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
-  template: `
-    <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
-      <div class="grid gap-3">
-        <label for="sheet-side-name" class="text-sm leading-none font-medium select-none">Name</label>
-        <input z-input id="sheet-side-name" formControlName="name" />
-      </div>
+type SheetSide = NonNullable<ZardSheetVariants['zSide']>;
 
-      <div class="grid gap-3">
-        <label for="sheet-side-username" class="text-sm leading-none font-medium select-none">Username</label>
-        <input z-input id="sheet-side-username" formControlName="username" />
-      </div>
-    </form>
+const PARAGRAPHS = Array.from({ length: 10 }).map(
+  () =>
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+);
+
+@Component({
+  selector: 'zard-demo-sheet-side-content',
+  template: `
+    @for (paragraph of paragraphs; track $index) {
+      <p class="mb-2 leading-relaxed">{{ paragraph }}</p>
+    }
   `,
+  host: { class: 'no-scrollbar min-h-0 overflow-y-auto px-4' },
   changeDetection: ChangeDetectionStrategy.OnPush,
-  exportAs: 'zardDemoSheetSideForm',
 })
-export class ZardDemoSheetSideFormComponent {
-  form = new FormGroup({
-    name: new FormControl('Pedro Duarte'),
-    username: new FormControl('@peduarte'),
-  });
+export class ZardDemoSheetSideContentComponent {
+  protected readonly paragraphs = PARAGRAPHS;
 }
 
 @Component({
-  imports: [ZardButtonComponent, ZardSheetImports],
+  imports: [ZardButtonComponent],
   template: `
-    <div class="grid grid-cols-2 gap-2">
+    <div class="flex flex-wrap gap-2">
       @for (side of sides; track side) {
-        <button type="button" z-button zType="outline" (click)="openSheet(side)">{{ side }}</button>
+        <button type="button" z-button zType="outline" class="capitalize" (click)="openSheet(side)">{{ side }}</button>
       }
     </div>
   `,
@@ -774,21 +768,19 @@ export class ZardDemoSheetSideFormComponent {
 export class ZardDemoSheetSideComponent {
   private readonly sheetService = inject(ZardSheetService);
 
-  protected readonly sides = ['top', 'right', 'bottom', 'left'] as const satisfies readonly NonNullable<
-    ZardSheetVariants['zSide']
-  >[];
+  protected readonly sides = ['top', 'right', 'bottom', 'left'] as const satisfies readonly SheetSide[];
 
-  openSheet(side: ZardSheetVariants['zSide']) {
+  openSheet(side: SheetSide) {
     this.sheetService.create({
       zTitle: 'Edit profile',
       zDescription: `Make changes to your profile here. Click save when you're done.`,
-      zContent: ZardDemoSheetSideFormComponent,
+      zContent: ZardDemoSheetSideContentComponent,
       zSide: side,
+      // Horizontal sheets already fill the viewport height; cap the vertical ones so the
+      // content scrolls instead of pushing the footer off-screen.
+      zCustomClasses: side === 'top' || side === 'bottom' ? 'max-h-[50vh]' : undefined,
       zOkText: 'Save changes',
-      zCancelText: 'Close',
-      zOnOk: instance => {
-        console.log('Form submitted:', instance.form.value);
-      },
+      zCancelText: 'Cancel',
     });
   }
 }
@@ -808,7 +800,7 @@ import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
   selector: 'zard-demo-sheet-no-close-button',
   imports: [ZardButtonComponent],
   template: `
-    <button type="button" z-button zType="outline" (click)="openSheet()">No Close Button</button>
+    <button type="button" z-button zType="outline" (click)="openSheet()">Open Sheet</button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -818,10 +810,9 @@ export class ZardDemoSheetNoCloseButtonComponent {
   openSheet() {
     this.sheetService.create({
       zTitle: 'No Close Button',
-      zDescription: "This sheet doesn't have a close button in the top-right corner.",
+      zDescription: "This sheet doesn't have a close button in the top-right corner. Click outside to close.",
       zClosable: false,
-      zCancelText: 'Close',
-      zOkText: null,
+      zHideFooter: true,
     });
   }
 }

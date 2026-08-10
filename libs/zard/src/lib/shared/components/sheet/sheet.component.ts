@@ -110,7 +110,9 @@ export class ZardSheetOptions<T, U> {
         </header>
       }
 
-      <main class="flex w-full flex-col space-y-4">
+      <!-- min-h-0 lets the content area shrink below its intrinsic height, so scrollable
+           content stays inside the sheet instead of pushing the footer past the viewport. -->
+      <main class="flex min-h-0 w-full flex-1 flex-col space-y-4">
         <ng-template cdkPortalOutlet />
 
         @if (isStringContent()) {
