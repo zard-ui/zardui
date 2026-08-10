@@ -4,11 +4,11 @@ import { ZardComboboxImports } from '../combobox.imports';
 import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
-  selector: 'zard-demo-combobox-default',
+  selector: 'zard-demo-combobox-auto-highlight',
   imports: [ZardComboboxImports],
   standalone: true,
   template: `
-    <z-combobox [(zValue)]="value">
+    <z-combobox zAutoHighlight [(zValue)]="value">
       <z-combobox-input placeholder="Select a framework" />
 
       <z-combobox-content>
@@ -23,7 +23,7 @@ import type { ZardComboboxOption } from '../combobox.types';
     </z-combobox>
   `,
 })
-export class ZardDemoComboboxDefaultComponent {
+export class ZardDemoComboboxAutoHighlightComponent {
   readonly value = signal<string | string[] | null>(null);
 
   frameworks: ZardComboboxOption[] = [
