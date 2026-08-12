@@ -377,4 +377,8 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
   </z-bubble-reactions>
 </z-bubble>`,
   },
+  'hover-card': {
+    importCode: `import { ZardHoverCardComponent } from '@/shared/components/hover-card/hover-card.component';`,
+    templateCode: `<z-hover-card>Hover Card</z-hover-card>`,
+  },
 };
