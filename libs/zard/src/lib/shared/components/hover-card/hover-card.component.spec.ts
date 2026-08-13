@@ -73,10 +73,12 @@ function card(): HTMLElement {
   return screen.getByText(CARD_CONTENT).closest('z-hover-card') as HTMLElement;
 }
 
-async function hoverTrigger(openDelay = 700): Promise<void> {
-  const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
+function overlayPane(): HTMLElement {
+  return card().closest('.cdk-overlay-pane') as HTMLElement;
+}
 
-  await user.hover(trigger());
+async function hoverTrigger(openDelay = 700): Promise<void> {
+  fireEvent.mouseEnter(trigger());
   jest.advanceTimersByTime(openDelay);
 }
 
@@ -133,11 +135,10 @@ describe('ZardHoverCardDirective', () => {
   });
 
   it('closes only after the configured close delay', async () => {
-    const user = userEvent.setup({ advanceTimers: jest.advanceTimersByTime });
     await setup({ openDelay: 0, closeDelay: 300 });
     await hoverTrigger(0);
 
-    await user.unhover(trigger());
+    fireEvent.mouseLeave(trigger());
     jest.advanceTimersByTime(299);
 
     expect(screen.getByText(CARD_CONTENT)).toBeVisible();
@@ -163,10 +164,10 @@ describe('ZardHoverCardDirective', () => {
   it('keeps the card open when the pointer moves from the trigger into the overlay', async () => {
     await setup({ openDelay: 0, closeDelay: 300 });
     await hoverTrigger(0);
-    const hoverCard = card();
+    const overlay = overlayPane();
 
-    fireEvent.mouseLeave(trigger(), { relatedTarget: hoverCard });
-    fireEvent.mouseEnter(hoverCard, { relatedTarget: trigger() });
+    fireEvent.mouseLeave(trigger(), { relatedTarget: overlay });
+    fireEvent.mouseEnter(overlay, { relatedTarget: trigger() });
     jest.advanceTimersByTime(300);
 
     expect(screen.getByText(CARD_CONTENT)).toBeVisible();
@@ -175,11 +176,11 @@ describe('ZardHoverCardDirective', () => {
   it('closes after the pointer leaves both the trigger and overlay', async () => {
     await setup({ openDelay: 0, closeDelay: 300 });
     await hoverTrigger(0);
-    const hoverCard = card();
+    const overlay = overlayPane();
 
-    fireEvent.mouseLeave(trigger(), { relatedTarget: hoverCard });
-    fireEvent.mouseEnter(hoverCard, { relatedTarget: trigger() });
-    fireEvent.mouseLeave(hoverCard);
+    fireEvent.mouseLeave(trigger(), { relatedTarget: overlay });
+    fireEvent.mouseEnter(overlay, { relatedTarget: trigger() });
+    fireEvent.mouseLeave(overlay);
     jest.advanceTimersByTime(300);
 
     expect(screen.queryByText(CARD_CONTENT)).not.toBeInTheDocument();
