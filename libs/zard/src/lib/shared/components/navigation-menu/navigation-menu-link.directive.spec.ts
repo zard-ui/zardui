@@ -44,9 +44,14 @@ describe('ZardNavigationMenuLinkDirective', () => {
   });
 
   it('should have correct initial attributes', () => {
-    expect(element.getAttribute('role')).toBe('menuitem');
     expect(element.getAttribute('tabindex')).toBe('0');
     expect(element.getAttribute('data-orientation')).toBe('horizontal');
+  });
+
+  it('should not claim the menuitem role outside a menu', () => {
+    // `role="menuitem"` without a menu, menubar or group parent is an `aria-required-parent`
+    // violation, which is what a link declared straight on the bar would be.
+    expect(element.getAttribute('role')).toBeNull();
   });
 
   it('should reflect disabled state', () => {

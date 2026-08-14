@@ -1,5 +1,5 @@
 import type { BooleanInput } from '@angular/cdk/coercion';
-import { CdkMenuItem } from '@angular/cdk/menu';
+import { CDK_MENU, CdkMenuItem } from '@angular/cdk/menu';
 import { booleanAttribute, computed, Directive, effect, inject, input, signal, untracked } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
@@ -19,6 +19,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
   host: {
     '[class]': 'classes()',
     'data-slot': 'navigation-menu-link',
+    '[attr.role]': 'role()',
     '[attr.data-orientation]': "'horizontal'",
     '[attr.data-state]': 'isOpenState()',
     '[attr.data-active]': "zActive() ? '' : undefined",
@@ -44,6 +45,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 })
 export class ZardNavigationMenuLinkDirective {
   private readonly cdkMenuItem = inject(CdkMenuItem, { host: true });
+  /** Only present when the link sits inside a `[z-navigation-menu-content]`, which is a `CdkMenu`. */
+  private readonly parentMenu = inject(CDK_MENU, { optional: true });
 
   readonly zDisabled = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
   readonly zInset = input<boolean, BooleanInput>(false, { transform: booleanAttribute });
@@ -52,6 +55,13 @@ export class ZardNavigationMenuLinkDirective {
   readonly class = input<ClassValue>('');
 
   private readonly isFocused = signal(false);
+
+  /**
+   * `CdkMenuItem` always stamps `role="menuitem"`, which is only valid inside a menu. A link
+   * declared straight on the bar has no such parent, so axe flags it as `aria-required-parent`;
+   * dropping the role there leaves the anchor with its own implicit `link` role.
+   */
+  protected readonly role = computed(() => (this.parentMenu ? 'menuitem' : null));
 
   protected readonly disabledState = computed(() => this.zDisabled());
 

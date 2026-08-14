@@ -181,6 +181,19 @@ describe('ZardNavigationMenuComponent', () => {
     expect(icon?.className).toContain('rotate-180');
   });
 
+  it('should only give links the menuitem role inside a menu', () => {
+    triggers[0].open();
+    fixture.detectChanges();
+
+    // Inside the content, which is a `CdkMenu`, the role is correct and expected.
+    expect(viewportContent('first-content')?.querySelector('[z-navigation-menu-link]')?.getAttribute('role')).toBe(
+      'menuitem',
+    );
+
+    // On the bar there is no menu parent, so the role would be an `aria-required-parent` violation.
+    expect(root.querySelector('[data-testid="bare-link"]')?.getAttribute('role')).toBeNull();
+  });
+
   it('should support a link declared straight on an item, with no content above it', () => {
     const links = fixture.nativeElement.querySelectorAll('[z-navigation-menu-link]');
 
