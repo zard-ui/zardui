@@ -7,7 +7,6 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
 
 @Component({
   imports: [ZardNavigationMenuIndicatorComponent],
-  providers: [ZardNavigationMenuService],
   template: `
     <div class="relative">
       <button #trigger type="button">Trigger</button>
@@ -16,6 +15,7 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
 
     <ng-template #content></ng-template>
   `,
+  providers: [ZardNavigationMenuService],
 })
 class TestComponent {
   readonly content = viewChild.required<TemplateRef<void>>('content');

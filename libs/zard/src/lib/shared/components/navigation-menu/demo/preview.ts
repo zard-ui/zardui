@@ -14,7 +14,6 @@ interface ComponentLink {
 @Component({
   selector: 'z-demo-navigation-menu-preview',
   imports: [ZardNavigationMenuImports, NgIcon],
-  viewProviders: [provideIcons({ lucideCircleAlert, lucideCircleCheck, lucideCircleDashed })],
   template: `
     <z-navigation-menu>
       <ul z-navigation-menu-list>
@@ -114,6 +113,7 @@ interface ComponentLink {
     </z-navigation-menu>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [provideIcons({ lucideCircleAlert, lucideCircleCheck, lucideCircleDashed })],
 })
 export class ZardDemoNavigationMenuPreviewComponent {
   /** A plain link styled like a trigger, so it lines up with the rest of the bar. */

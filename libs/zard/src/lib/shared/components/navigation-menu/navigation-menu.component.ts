@@ -38,10 +38,10 @@ import { ZardNavigationMenuService } from './navigation-menu.service';
       <z-navigation-menu-viewport />
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
   // The menu stack covers links declared straight on an item, with no content above them to provide it.
   providers: [ZardNavigationMenuService, PARENT_OR_NEW_MENU_STACK_PROVIDER],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
   host: {
     '[class]': 'classes()',
     'data-slot': 'navigation-menu',

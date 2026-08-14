@@ -7,6 +7,10 @@ test.describe('Navigation Menu component', () => {
   let demoPage: ComponentDemoPage;
 
   test.beforeEach(async ({ page }) => {
+    // Wide enough for the `md` breakpoint: the "Components" item is `hidden md:flex`, and the
+    // shared viewport needs room to line up with a trigger instead of being pushed by the clamp.
+    await page.setViewportSize({ width: 1280, height: 800 });
+
     demoPage = new ComponentDemoPage(page, 'navigation-menu');
     await demoPage.goto();
   });
@@ -52,13 +56,15 @@ test.describe('Navigation Menu component', () => {
     await second.hover();
     await expect(viewport(page)).toBeVisible({ timeout: 5000 });
 
+    const barBox = await demoPage.firstDemoBox.locator('[data-slot="navigation-menu"]').boundingBox();
     const triggerBox = await second.boundingBox();
     const viewportBox = await viewport(page).boundingBox();
 
-    if (!triggerBox || !viewportBox) throw new Error('trigger and viewport must both be laid out');
+    if (!barBox || !triggerBox || !viewportBox) throw new Error('bar, trigger and viewport must be laid out');
 
-    // Anchored to the active trigger, not to the start of the bar.
-    expect(Math.abs(viewportBox.x - triggerBox.x)).toBeLessThan(2);
+    // Anchored to the active trigger rather than to the start of the bar. Not an exact match: a
+    // popup that would overflow the window is pulled back from the trigger's edge to fit.
+    expect(Math.abs(viewportBox.x - triggerBox.x)).toBeLessThan(Math.abs(viewportBox.x - barBox.x));
   });
 
   test('morphs the viewport when moving to the next trigger', async ({ page }) => {
@@ -165,9 +171,7 @@ test.describe('Navigation Menu component', () => {
   test('passes accessibility checks when open', async ({ page }) => {
     const trigger = demoPage.firstDemoBox.locator('[z-navigation-menu-trigger]').first();
     await trigger.hover();
-    await demoPage.firstDemoBox
-      .locator('[data-slot="navigation-menu-viewport"]')
-      .waitFor({ state: 'visible', timeout: 5000 });
+    await viewport(page).waitFor({ state: 'visible', timeout: 5000 });
 
     await checkA11y(page, '#overview', ['button-name', 'color-contrast', 'scrollable-region-focusable']);
   });
