@@ -52,11 +52,12 @@ function parseDate(value: string): Date | null {
     return null;
   }
 
-  const date = new Date(year, month, day);
-  // The constructor remaps years below 100 to 19xx, so put the typed year back.
-  date.setFullYear(year);
+  // Set the three parts at once on a neutral date: `new Date(year, …)` would remap any year below
+  // 100 into the 1900s, and normalize against the wrong year's leap day on the way.
+  const date = new Date(2000, 0, 1);
+  date.setFullYear(year, month, day);
 
-  // Rejects overflow like "February 31, 2025", which the Date constructor would roll over.
+  // Rejects overflow like "February 31, 2025", which setFullYear rolls over instead of refusing.
   return date.getFullYear() === year && date.getMonth() === month && date.getDate() === day ? date : null;
 }
 
