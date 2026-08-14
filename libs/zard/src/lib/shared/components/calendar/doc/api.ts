@@ -41,7 +41,7 @@ export const CALENDAR_API: ApiSection[] = [
       {
         name: 'zCaptionLayout',
         description:
-          'How the month/year caption is rendered: a plain label, two dropdowns, or a dropdown for only the month or only the year',
+          'How the month/year caption is rendered: a plain label, two dropdowns, or a dropdown for only the month or only the year. The dropdowns are native `<select>` elements laid invisible over the label, so the browser owns the popup',
         type: "'label' | 'dropdown' | 'dropdown-months' | 'dropdown-years'",
         default: "'label'",
       },

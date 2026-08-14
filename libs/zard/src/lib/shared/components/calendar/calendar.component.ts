@@ -44,39 +44,37 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
   selector: 'z-calendar, [z-calendar]',
   imports: [ZardCalendarNavigationComponent, ZardCalendarGridComponent],
   template: `
-    <div data-slot="calendar" [class]="classes()">
-      <div [class]="monthsClasses()">
-        @for (month of visibleMonths(); track month.key; let i = $index, last = $last) {
-          <div [class]="monthClasses()">
-            <z-calendar-navigation
-              [currentMonth]="month.month.toString()"
-              [currentYear]="month.year.toString()"
-              [minDate]="minDate()"
-              [maxDate]="maxDate()"
-              [disabled]="disabled()"
-              [zCaptionLayout]="zCaptionLayout()"
-              [zButtonVariant]="zButtonVariant()"
-              [zShowPreviousButton]="i === 0"
-              [zShowNextButton]="last"
-              (monthChange)="onMonthChange($event, i)"
-              (yearChange)="onYearChange($event, i)"
-              (previousMonth)="previousMonth()"
-              (nextMonth)="nextMonth()"
-            />
+    <div [class]="monthsClasses()">
+      @for (month of visibleMonths(); track month.key; let i = $index, last = $last) {
+        <div [class]="monthClasses()">
+          <z-calendar-navigation
+            [currentMonth]="month.month.toString()"
+            [currentYear]="month.year.toString()"
+            [minDate]="minDate()"
+            [maxDate]="maxDate()"
+            [disabled]="disabled()"
+            [zCaptionLayout]="zCaptionLayout()"
+            [zButtonVariant]="zButtonVariant()"
+            [zShowPreviousButton]="i === 0"
+            [zShowNextButton]="last"
+            (monthChange)="onMonthChange($event, i)"
+            (yearChange)="onYearChange($event, i)"
+            (previousMonth)="previousMonth()"
+            (nextMonth)="nextMonth()"
+          />
 
-            <z-calendar-grid
-              [calendarDays]="month.days"
-              [disabled]="disabled()"
-              [zShowOutsideDays]="zShowOutsideDays()"
-              [zMonthIndex]="i"
-              (dateSelect)="onDateSelect($event)"
-              (previousMonth)="onGridPreviousMonth($event)"
-              (nextMonth)="onGridNextMonth($event)"
-              (navigateYear)="onNavigateYear($event)"
-            />
-          </div>
-        }
-      </div>
+          <z-calendar-grid
+            [calendarDays]="month.days"
+            [disabled]="disabled()"
+            [zShowOutsideDays]="zShowOutsideDays()"
+            [zMonthIndex]="i"
+            (dateSelect)="onDateSelect($event)"
+            (previousMonth)="onGridPreviousMonth($event)"
+            (nextMonth)="onGridNextMonth($event)"
+            (navigateYear)="onNavigateYear($event)"
+          />
+        </div>
+      }
     </div>
   `,
   providers: [
@@ -89,6 +87,8 @@ import type { ZardButtonTypeVariants } from '../button/button.variants';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'calendar',
+    '[class]': 'classes()',
     '[attr.tabindex]': '0',
   },
   exportAs: 'zCalendar',
@@ -220,12 +220,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
    * @param monthOffset position of the month whose caption emitted the change, so a dropdown on
    * the second rendered month moves the navigation base back by that many months.
    */
-  protected onMonthChange(monthIndex: string | string[], monthOffset = 0): void {
-    if (Array.isArray(monthIndex)) {
-      console.warn('Calendar received array for month selection, expected single value. Ignoring:', monthIndex);
-      return;
-    }
-
+  protected onMonthChange(monthIndex: string, monthOffset = 0): void {
     if (!monthIndex?.trim()) {
       console.warn('Invalid month index received:', monthIndex);
       return;
@@ -241,12 +236,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     this.rebaseNavigation(makeSafeDate(displayed.year, parsedMonth, 1), monthOffset);
   }
 
-  protected onYearChange(year: string | string[], monthOffset = 0): void {
-    if (Array.isArray(year)) {
-      console.warn('Calendar received array for year selection, expected single value. Ignoring:', year);
-      return;
-    }
-
+  protected onYearChange(year: string, monthOffset = 0): void {
     if (!year?.trim()) {
       console.warn('Invalid year received:', year);
       return;

@@ -49,30 +49,36 @@ describe('ZardCalendarComponent', () => {
   });
 
   describe('Design contract', () => {
-    it('should render without a border and declare the cell CSS variables', () => {
-      const root = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar"]');
+    it('should be the root itself, so a border is never drawn twice', () => {
+      const host = fixture.nativeElement as HTMLElement;
 
-      expect(root).toBeTruthy();
-      expect(root?.className).toContain('p-2');
-      expect(root?.className).toContain('w-fit');
-      expect(root?.className).toContain('[--cell-size:--spacing(7)]');
-      expect(root?.className).toContain('[--cell-radius:var(--radius-md)]');
-      expect(root?.className).not.toContain('border');
+      expect(host.getAttribute('data-slot')).toBe('calendar');
+      expect(host.querySelector('[data-slot="calendar"]')).toBeNull();
+    });
+
+    it('should render without a border and declare the cell CSS variables', () => {
+      const host = fixture.nativeElement as HTMLElement;
+
+      expect(host.className).toContain('p-2');
+      expect(host.className).toContain('w-fit');
+      expect(host.className).toContain('[--cell-size:--spacing(7)]');
+      expect(host.className).toContain('[--cell-radius:var(--radius-md)]');
+      expect(host.className).not.toContain('border');
     });
 
     it('should let the class input override the cell size', () => {
       fixture.componentRef.setInput('class', '[--cell-size:--spacing(12)] rounded-lg border');
       fixture.detectChanges();
 
-      const root = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar"]');
+      const host = fixture.nativeElement as HTMLElement;
 
-      expect(root?.className).toContain('[--cell-size:--spacing(12)]');
-      expect(root?.className).not.toContain('[--cell-size:--spacing(7)]');
-      expect(root?.className).toContain('border');
+      expect(host.className).toContain('[--cell-size:--spacing(12)]');
+      expect(host.className).not.toContain('[--cell-size:--spacing(7)]');
+      expect(host.className).toContain('border');
     });
 
     it('should position the navigation over a centered caption', () => {
-      const month = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar"] > div > div');
+      const month = (fixture.nativeElement as HTMLElement).querySelector(':scope > div > div');
       const caption = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar-caption"]');
 
       expect(month?.className).toContain('relative');
@@ -98,9 +104,9 @@ describe('ZardCalendarComponent', () => {
       fixture.detectChanges();
 
       const compiled = fixture.nativeElement as HTMLElement;
-      const expectedComboboxes = layout === 'label' ? 0 : layout === 'dropdown' ? 2 : 1;
+      const expectedSelects = layout === 'label' ? 0 : layout === 'dropdown' ? 2 : 1;
 
-      expect(compiled.querySelectorAll('[role="combobox"]')).toHaveLength(expectedComboboxes);
+      expect(compiled.querySelectorAll('select')).toHaveLength(expectedSelects);
     });
   });
 

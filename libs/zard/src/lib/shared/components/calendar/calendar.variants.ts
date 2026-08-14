@@ -13,7 +13,8 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
  */
 export const calendarVariants = cva(
   mergeClasses(
-    'group/calendar w-fit bg-background p-2',
+    // `block` because these classes land on the `<z-calendar>` host, which is inline by default.
+    'group/calendar block w-fit bg-background p-2',
     '[--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)]',
     'in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
   ),
@@ -45,8 +46,9 @@ export const calendarCaptionLabelVariants = cva('font-medium select-none', {
   variants: {
     layout: {
       label: 'text-sm',
-      dropdown:
-        'flex items-center gap-1 rounded-(--cell-radius) text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground',
+      // In dropdown layout this label is what the user sees of the select underneath it,
+      // so it carries the control's height and padding.
+      dropdown: 'flex h-(--cell-size) items-center gap-1 rounded-(--cell-radius) px-2 text-sm',
     },
   },
   defaultVariants: {
@@ -55,17 +57,20 @@ export const calendarCaptionLabelVariants = cva('font-medium select-none', {
 });
 
 /**
- * Classes handed to `<z-select>` through its `class` input so the caption dropdowns match shadcn.
- * The select component itself is left untouched — only its trigger is restyled from the outside.
+ * Wraps a caption dropdown. A native `<select>` is laid invisible on top of the visible label,
+ * so the browser owns the popup while the label owns the looks — the same trick shadcn uses.
+ * The focus ring therefore has to come from the select, through `has-[:focus-visible]`.
  */
-export const calendarDropdownVariants = cva(
+export const calendarDropdownRootVariants = cva(
   mergeClasses(
-    'w-auto rounded-(--cell-radius)',
-    '[&_button]:h-(--cell-size) [&_button]:w-auto [&_button]:gap-1 [&_button]:rounded-(--cell-radius)',
-    '[&_button]:px-2 [&_button]:text-sm [&_button]:font-medium [&_button]:shadow-xs',
-    '[&_button_ng-icon]:size-3.5!',
+    'relative isolate rounded-(--cell-radius) border border-input bg-background shadow-xs',
+    'has-[:focus-visible]:border-ring has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/50',
+    'has-[:disabled]:pointer-events-none has-[:disabled]:opacity-50',
   ),
 );
+
+/** The native select itself: invisible, but on top and still clickable. */
+export const calendarDropdownVariants = cva('absolute inset-0 z-10 cursor-pointer bg-popover opacity-0');
 
 export const calendarWeekdaysVariants = cva('grid w-full grid-cols-7');
 

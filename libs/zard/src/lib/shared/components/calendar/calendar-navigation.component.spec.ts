@@ -21,34 +21,67 @@ function renderNavigation(inputs: Partial<Record<string, unknown>> = {}) {
 
 describe('ZardCalendarNavigationComponent', () => {
   it('renders the month and year as a single label by default', async () => {
-    await renderNavigation();
+    const { container } = await renderNavigation();
 
     expect(screen.getByText('January 2024')).toBeInTheDocument();
-    expect(screen.queryByRole('combobox')).not.toBeInTheDocument();
+    expect(container.querySelectorAll('select')).toHaveLength(0);
   });
 
   it('renders month and year selects when captionLayout is dropdown', async () => {
-    await renderNavigation({ zCaptionLayout: 'dropdown' as ZardCalendarCaptionLayout });
+    const { container } = await renderNavigation({ zCaptionLayout: 'dropdown' as ZardCalendarCaptionLayout });
 
-    expect(screen.getByText('Jan')).toBeInTheDocument();
-    expect(screen.getByText('2024')).toBeInTheDocument();
-    expect(screen.getAllByRole('combobox')).toHaveLength(2);
+    const selects = [...container.querySelectorAll('select')];
+
+    expect(selects).toHaveLength(2);
+    expect(selects.map(select => select.value)).toEqual(['0', '2024']);
+    expect(selects.map(select => select.getAttribute('aria-label'))).toEqual(['Choose the month', 'Choose the year']);
+  });
+
+  it('lists every month and the available years as native options', async () => {
+    const { container } = await renderNavigation({ zCaptionLayout: 'dropdown' as ZardCalendarCaptionLayout });
+
+    const [monthSelect, yearSelect] = container.querySelectorAll('select');
+
+    expect(monthSelect.options).toHaveLength(12);
+    expect(monthSelect.options[0].textContent?.trim()).toBe('Jan');
+    expect(yearSelect.options.length).toBeGreaterThan(0);
   });
 
   it('renders only the month select when captionLayout is dropdown-months', async () => {
-    await renderNavigation({ zCaptionLayout: 'dropdown-months' as ZardCalendarCaptionLayout });
+    const { container } = await renderNavigation({ zCaptionLayout: 'dropdown-months' as ZardCalendarCaptionLayout });
 
-    expect(screen.getAllByRole('combobox')).toHaveLength(1);
-    expect(screen.getByText('Jan')).toBeInTheDocument();
+    expect(container.querySelectorAll('select')).toHaveLength(1);
+    expect(container.querySelector('select')?.getAttribute('aria-label')).toBe('Choose the month');
     expect(screen.getByText('2024')).toBeInTheDocument();
   });
 
   it('renders only the year select when captionLayout is dropdown-years', async () => {
-    await renderNavigation({ zCaptionLayout: 'dropdown-years' as ZardCalendarCaptionLayout });
+    const { container } = await renderNavigation({ zCaptionLayout: 'dropdown-years' as ZardCalendarCaptionLayout });
 
-    expect(screen.getAllByRole('combobox')).toHaveLength(1);
+    expect(container.querySelectorAll('select')).toHaveLength(1);
+    expect(container.querySelector('select')?.getAttribute('aria-label')).toBe('Choose the year');
     expect(screen.getByText('January')).toBeInTheDocument();
-    expect(screen.getByText('2024')).toBeInTheDocument();
+  });
+
+  it('emits the picked month when the native select changes', async () => {
+    const monthChangeSpy = jest.fn();
+    const { container, fixture } = await renderNavigation({
+      zCaptionLayout: 'dropdown' as ZardCalendarCaptionLayout,
+    });
+    fixture.componentInstance.monthChange.subscribe(monthChangeSpy);
+
+    await userEvent.selectOptions(container.querySelector('select') as HTMLSelectElement, '4');
+
+    expect(monthChangeSpy).toHaveBeenCalledWith('4');
+  });
+
+  it('disables the native selects when the calendar is disabled', async () => {
+    const { container } = await renderNavigation({
+      zCaptionLayout: 'dropdown' as ZardCalendarCaptionLayout,
+      disabled: true,
+    });
+
+    expect([...container.querySelectorAll('select')].every(select => select.disabled)).toBe(true);
   });
 
   it('navigates to previous month when previous button is clicked', async () => {

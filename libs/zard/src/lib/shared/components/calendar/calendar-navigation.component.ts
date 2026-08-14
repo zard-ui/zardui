@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
+import { lucideChevronDown, lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 
 import type { ZardCalendarCaptionLayout } from '@/shared/components/calendar/calendar.types';
 import { calendarMonths, calendarMonthsLong } from '@/shared/components/calendar/calendar.utils';
@@ -18,6 +18,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 import {
   calendarCaptionLabelVariants,
   calendarCaptionVariants,
+  calendarDropdownRootVariants,
   calendarDropdownsVariants,
   calendarDropdownVariants,
   calendarNavButtonVariants,
@@ -26,12 +27,10 @@ import {
 } from './calendar.variants';
 import { ZardButtonComponent } from '../button/button.component';
 import type { ZardButtonTypeVariants } from '../button/button.variants';
-import { ZardSelectItemComponent } from '../select/select-item.component';
-import { ZardSelectComponent } from '../select/select.component';
 
 @Component({
   selector: 'z-calendar-navigation',
-  imports: [ZardButtonComponent, NgIcon, ZardSelectComponent, ZardSelectItemComponent],
+  imports: [ZardButtonComponent, NgIcon],
   template: `
     <div [class]="navClasses()">
       @if (zShowPreviousButton()) {
@@ -73,33 +72,49 @@ import { ZardSelectComponent } from '../select/select.component';
       } @else {
         <div [class]="dropdownsClasses()">
           @if (showMonthDropdown()) {
-            <z-select
-              [class]="dropdownClasses()"
-              [zValue]="currentMonth()"
-              [zLabel]="currentMonthName()"
-              [zDisabled]="disabled()"
-              (zSelectionChange)="onMonthChange($event)"
-            >
-              @for (month of months; track month) {
-                <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
-              }
-            </z-select>
+            <!--
+              A native select sits invisible on top of the label, exactly like the shadcn
+              calendar: the browser owns the popup, the span owns the looks.
+            -->
+            <div data-slot="calendar-dropdown-root" [class]="dropdownRootClasses()">
+              <select
+                [class]="dropdownClasses()"
+                [disabled]="disabled()"
+                (change)="onMonthChange($event)"
+                aria-label="Choose the month"
+              >
+                @for (month of months; track month; let monthIndex = $index) {
+                  <option [value]="monthIndex" [selected]="monthIndex === selectedMonthIndex()">{{ month }}</option>
+                }
+              </select>
+
+              <span [class]="captionLabelClasses()" aria-hidden="true">
+                {{ currentMonthName() }}
+                <ng-icon name="lucideChevronDown" class="text-muted-foreground size-3.5!" />
+              </span>
+            </div>
           } @else {
             <span [class]="captionLabelClasses()">{{ longMonthName() }}</span>
           }
 
           @if (showYearDropdown()) {
-            <z-select
-              [class]="dropdownClasses()"
-              [zValue]="currentYear()"
-              [zLabel]="currentYear()"
-              [zDisabled]="disabled()"
-              (zSelectionChange)="onYearChange($event)"
-            >
-              @for (year of availableYears(); track year) {
-                <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
-              }
-            </z-select>
+            <div data-slot="calendar-dropdown-root" [class]="dropdownRootClasses()">
+              <select
+                [class]="dropdownClasses()"
+                [disabled]="disabled()"
+                (change)="onYearChange($event)"
+                aria-label="Choose the year"
+              >
+                @for (year of availableYears(); track year) {
+                  <option [value]="year" [selected]="year.toString() === currentYear()">{{ year }}</option>
+                }
+              </select>
+
+              <span [class]="captionLabelClasses()" aria-hidden="true">
+                {{ currentYear() }}
+                <ng-icon name="lucideChevronDown" class="text-muted-foreground size-3.5!" />
+              </span>
+            </div>
           } @else {
             <span [class]="captionLabelClasses()">{{ currentYear() }}</span>
           }
@@ -109,7 +124,7 @@ import { ZardSelectComponent } from '../select/select.component';
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
+  viewProviders: [provideIcons({ lucideChevronDown, lucideChevronLeft, lucideChevronRight })],
   host: {
     class: 'block w-full',
   },
@@ -143,6 +158,7 @@ export class ZardCalendarNavigationComponent {
   protected readonly navSpacerClasses = computed(() => mergeClasses(calendarNavSpacerVariants()));
   protected readonly captionClasses = computed(() => mergeClasses(calendarCaptionVariants()));
   protected readonly dropdownsClasses = computed(() => mergeClasses(calendarDropdownsVariants()));
+  protected readonly dropdownRootClasses = computed(() => mergeClasses(calendarDropdownRootVariants()));
   protected readonly dropdownClasses = computed(() => mergeClasses(calendarDropdownVariants()));
   protected readonly captionLabelClasses = computed(() =>
     mergeClasses(calendarCaptionLabelVariants({ layout: this.zCaptionLayout() === 'label' ? 'label' : 'dropdown' })),
@@ -168,13 +184,13 @@ export class ZardCalendarNavigationComponent {
     return years;
   });
 
-  protected readonly currentMonthName = computed(() => {
+  /** Index of the month the caption points at, falling back to the current one. */
+  protected readonly selectedMonthIndex = computed(() => {
     const selectedMonth = Number.parseInt(this.currentMonth());
-    if (!Number.isNaN(selectedMonth) && this.months[selectedMonth]) {
-      return this.months[selectedMonth];
-    }
-    return this.months[new Date().getMonth()];
+    return !Number.isNaN(selectedMonth) && this.months[selectedMonth] ? selectedMonth : new Date().getMonth();
   });
+
+  protected readonly currentMonthName = computed(() => this.months[this.selectedMonthIndex()]);
 
   /** Full month name, used by the `label`, `dropdown-years` and `dropdown-months` captions. */
   protected readonly longMonthName = computed(() => {
@@ -228,19 +244,11 @@ export class ZardCalendarNavigationComponent {
     this.nextMonth.emit();
   }
 
-  protected onMonthChange(month: string | string[]): void {
-    if (Array.isArray(month)) {
-      console.warn('Calendar navigation received array for month selection, expected single value. Ignoring:', month);
-      return;
-    }
-    this.monthChange.emit(month);
+  protected onMonthChange(event: Event): void {
+    this.monthChange.emit((event.target as HTMLSelectElement).value);
   }
 
-  protected onYearChange(year: string | string[]): void {
-    if (Array.isArray(year)) {
-      console.warn('Calendar navigation received array for year selection, expected single value. Ignoring:', year);
-      return;
-    }
-    this.yearChange.emit(year);
+  protected onYearChange(event: Event): void {
+    this.yearChange.emit((event.target as HTMLSelectElement).value);
   }
 }
