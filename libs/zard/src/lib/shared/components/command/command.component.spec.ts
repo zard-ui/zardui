@@ -219,6 +219,27 @@ describe('ZardCommandComponent', () => {
     expect(hostComponent.selectedOption?.label).toBe('Test Option');
   });
 
+  it('should focus the search input when focus() is called', () => {
+    component.focus();
+
+    const input = fixture.nativeElement.querySelector('input');
+    expect(document.activeElement).toBe(input);
+  });
+
+  it('should move the highlighted option with arrow keys while the input keeps focus', () => {
+    jest.useFakeTimers();
+    const input = fixture.nativeElement.querySelector('input');
+    component.focus();
+
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }));
+    jest.advanceTimersByTime(0);
+    fixture.detectChanges();
+
+    // Index 1 is disabled, so navigation skips to index 2.
+    expect(component.filteredOptions()[2].isSelected()).toBe(true);
+    expect((document.activeElement as HTMLElement)?.tagName).toBe('INPUT');
+  });
+
   it('should render option with icon and shortcut', () => {
     const optionElement = fixture.nativeElement.querySelector('z-command-option');
     const iconElement = optionElement.querySelector('ng-icon');
