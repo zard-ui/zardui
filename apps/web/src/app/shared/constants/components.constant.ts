@@ -139,7 +139,7 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
   },
   {
     componentName: 'date-picker',
-    description: 'A date picker component with range and presets.',
+    description: 'A button that opens a calendar in a popover to pick a date or a date range.',
     loadData: () => import('@zard/components/date-picker/demo/date-picker').then(m => m.DATE_PICKER),
   },
   {

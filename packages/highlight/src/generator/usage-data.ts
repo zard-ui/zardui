@@ -113,7 +113,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   'date-picker': {
     importCode: `import { ZardDatePickerComponent } from '@/shared/components/date-picker/date-picker.component';`,
-    templateCode: `<z-date-picker placeholder="Pick a date"></z-date-picker>`,
+    templateCode: `<z-date-picker zPlaceholder="Pick a date"></z-date-picker>`,
   },
   dialog: {
     importCode: `import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';`,
