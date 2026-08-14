@@ -9,17 +9,14 @@ const BIRTH_YEAR_FLOOR = 1950;
   imports: [ZardCalendarComponent],
   standalone: true,
   template: `
-    <div class="flex flex-col gap-3">
-      <h3 class="text-sm font-medium">Date of Birth</h3>
-      <z-calendar
-        zMode="single"
-        zCaptionLayout="dropdown"
-        class="rounded-lg border"
-        [minDate]="minDate"
-        [maxDate]="maxDate"
-        [(value)]="dateOfBirth"
-      />
-    </div>
+    <z-calendar
+      zMode="single"
+      zCaptionLayout="dropdown"
+      class="rounded-lg border"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [(value)]="dateOfBirth"
+    />
   `,
 })
 export class ZardDemoCalendarExpandYearSelectionRangeComponent {

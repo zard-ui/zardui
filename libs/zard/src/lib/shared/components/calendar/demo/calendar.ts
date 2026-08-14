@@ -1,5 +1,5 @@
 import { CALENDAR_DEMO_BASIC } from '@generated/components/calendar/demo/basic';
-import { CALENDAR_DEMO_CAPTION } from '@generated/components/calendar/demo/caption';
+import { CALENDAR_DEMO_BOOKED_DATES } from '@generated/components/calendar/demo/booked-dates';
 import { CALENDAR_DEMO_CUSTOM_CELL_SIZE } from '@generated/components/calendar/demo/custom-cell-size';
 import { CALENDAR_DEMO_EXPAND_YEAR_SELECTION_RANGE } from '@generated/components/calendar/demo/expand-year-selection-range';
 import { CALENDAR_DEMO_MULTIPLE } from '@generated/components/calendar/demo/multiple';
@@ -17,7 +17,7 @@ import { CALENDAR_MANUAL_CODE } from '@generated/installation/manual/calendar';
 import { CALENDAR_USAGE_IMPORT, CALENDAR_USAGE_CODE } from '@generated/usage/calendar';
 
 import { ZardDemoCalendarBasicComponent } from './basic';
-import { ZardDemoCalendarCaptionComponent } from './caption';
+import { ZardDemoCalendarBookedDatesComponent } from './booked-dates';
 import { ZardDemoCalendarCustomCellSizeComponent } from './custom-cell-size';
 import { ZardDemoCalendarExpandYearSelectionRangeComponent } from './expand-year-selection-range';
 import { ZardDemoCalendarMultipleComponent } from './multiple';
@@ -52,7 +52,8 @@ export const CALENDAR = {
     },
     {
       name: 'range',
-      description: 'Use `zMode="range"` to let users select a start and an end date.',
+      description:
+        'Use `zMode="range"` to let users select a start and an end date, and `zNumberOfMonths` to show more than one month at a time.',
       component: ZardDemoCalendarRangeComponent,
       codeData: CALENDAR_DEMO_RANGE,
     },
@@ -61,12 +62,6 @@ export const CALENDAR = {
       description: 'Use `zMode="multiple"` to select any number of individual dates.',
       component: ZardDemoCalendarMultipleComponent,
       codeData: CALENDAR_DEMO_MULTIPLE,
-    },
-    {
-      name: 'caption',
-      description: 'Use `zCaptionLayout="dropdown"` to render month and year selects in the caption.',
-      component: ZardDemoCalendarCaptionComponent,
-      codeData: CALENDAR_DEMO_CAPTION,
     },
     {
       name: 'presets',
@@ -81,6 +76,12 @@ export const CALENDAR = {
       codeData: CALENDAR_DEMO_WITH_TIME,
     },
     {
+      name: 'booked-dates',
+      description: 'Use `zDisabledDates` to block individual days — here they are struck through to read as booked.',
+      component: ZardDemoCalendarBookedDatesComponent,
+      codeData: CALENDAR_DEMO_BOOKED_DATES,
+    },
+    {
       name: 'custom-cell-size',
       description: 'Override the `--cell-size` CSS variable to resize the whole calendar.',
       component: ZardDemoCalendarCustomCellSizeComponent,
@@ -92,7 +93,8 @@ export const CALENDAR = {
     },
     {
       name: 'with-constraints',
-      description: 'Use `minDate` and `maxDate` to limit the selectable range, or `disabled` to turn it off.',
+      description:
+        'Use `minDate` and `maxDate` to limit the selectable range, or `disabled` to turn the whole calendar off.',
       component: ZardDemoCalendarWithConstraintsComponent,
       codeData: CALENDAR_DEMO_WITH_CONSTRAINTS,
     },
