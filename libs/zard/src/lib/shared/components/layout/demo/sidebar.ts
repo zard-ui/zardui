@@ -19,7 +19,7 @@ import { ZardAvatarComponent } from '@/shared/components/avatar';
 import { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';
 import { ZardButtonComponent } from '@/shared/components/button';
 import { LayoutImports } from '@/shared/components/layout/layout.imports';
-import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/navigation-menu.imports';
 import { ZardSeparatorComponent } from '@/shared/components/separator';
 import { ZardSkeletonComponent } from '@/shared/components/skeleton';
 import { ZardTooltipImports } from '@/shared/components/tooltip';
@@ -36,7 +36,7 @@ interface MenuItem {
     LayoutImports,
     ZardButtonComponent,
     ZardBreadcrumbImports,
-    ZardMenuImports,
+    ZardNavigationMenuImports,
     ZardSkeletonComponent,
     ZardTooltipImports,
     ZardSeparatorComponent,
@@ -86,8 +86,8 @@ interface MenuItem {
                   type="button"
                   z-button
                   zType="ghost"
-                  z-menu
-                  [zMenuTriggerFor]="submenu"
+                  z-navigation-menu-trigger
+                  [zNavigationMenuTriggerFor]="submenu"
                   zPlacement="rightTop"
                   [class]="sidebarCollapsed() ? 'justify-center' : 'justify-start'"
                   [zTooltip]="sidebarCollapsed() ? item.label : null"
@@ -101,9 +101,9 @@ interface MenuItem {
                 </button>
 
                 <ng-template #submenu>
-                  <div z-menu-content class="w-48">
+                  <div z-navigation-menu-content class="w-48">
                     @for (subitem of item.submenu; track subitem.label) {
-                      <button type="button" z-menu-item>{{ subitem.label }}</button>
+                      <button type="button" z-navigation-menu-link>{{ subitem.label }}</button>
                     }
                   </div>
                 </ng-template>
@@ -127,8 +127,8 @@ interface MenuItem {
 
           <div class="mt-auto">
             <div
-              z-menu
-              [zMenuTriggerFor]="userMenu"
+              z-navigation-menu-trigger
+              [zNavigationMenuTriggerFor]="userMenu"
               zPlacement="rightBottom"
               [class]="
                 'hover:bg-accent flex cursor-pointer items-center justify-center gap-2 rounded-md ' +
@@ -148,17 +148,17 @@ interface MenuItem {
             </div>
 
             <ng-template #userMenu>
-              <div z-menu-content class="w-48">
-                <button type="button" z-menu-item>
+              <div z-navigation-menu-content class="w-48">
+                <button type="button" z-navigation-menu-link>
                   <ng-icon name="lucideUser" class="mr-2" />
                   Profile
                 </button>
-                <button type="button" z-menu-item>
+                <button type="button" z-navigation-menu-link>
                   <ng-icon name="lucideSettings" class="mr-2" />
                   Settings
                 </button>
                 <z-separator class="my-2" />
-                <button type="button" z-menu-item>
+                <button type="button" z-navigation-menu-link>
                   <ng-icon name="lucideLogOut" class="mr-2" />
                   Logout
                 </button>

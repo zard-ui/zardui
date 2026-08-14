@@ -16,12 +16,12 @@ import {
 
 import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardButtonGroupComponent } from '@/shared/components/button-group/button-group.component';
-import { ZardMenuImports } from '@/shared/components/menu/menu.imports';
+import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/navigation-menu.imports';
 import { ZardSeparatorComponent } from '@/shared/components/separator';
 
 @Component({
   selector: 'z-demo-button-group-default',
-  imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon, ZardMenuImports, ZardSeparatorComponent],
+  imports: [ZardButtonGroupComponent, ZardButtonComponent, NgIcon, ZardNavigationMenuImports, ZardSeparatorComponent],
   template: `
     <z-button-group>
       <z-button-group class="hidden sm:flex">
@@ -37,39 +37,39 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
 
       <z-button-group>
         <button type="button" z-button zType="outline">Snooze</button>
-        <button type="button" z-button zType="outline" z-menu [zMenuTriggerFor]="menu">
+        <button type="button" z-button zType="outline" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="menu">
           <ng-icon name="lucideEllipsis" />
 
           <ng-template #menu>
-            <div z-menu-content class="w-48">
-              <button type="button" z-menu-item>
+            <div z-navigation-menu-content class="w-48">
+              <button type="button" z-navigation-menu-link>
                 <ng-icon name="lucideCheck" />
                 Mark as Read
               </button>
-              <button type="button" z-menu-item>
+              <button type="button" z-navigation-menu-link>
                 <ng-icon name="lucideArchive" />
                 Archive
               </button>
 
               <z-separator class="my-2" />
 
-              <button type="button" z-menu-item>
+              <button type="button" z-navigation-menu-link>
                 <ng-icon name="lucideClock" />
                 Snooze
               </button>
-              <button type="button" z-menu-item>
+              <button type="button" z-navigation-menu-link>
                 <ng-icon name="lucideCalendarPlus" />
                 Add to Calendar
               </button>
-              <button type="button" z-menu-item>
+              <button type="button" z-navigation-menu-link>
                 <ng-icon name="lucideListFilterPlus" />
                 Add to List
               </button>
               <button
                 type="button"
-                z-menu-item
-                z-menu
-                [zMenuTriggerFor]="subMenu"
+                z-navigation-menu-link
+                z-navigation-menu-trigger
+                [zNavigationMenuTriggerFor]="subMenu"
                 zPlacement="rightTop"
                 class="justify-between"
               >
@@ -80,17 +80,17 @@ import { ZardSeparatorComponent } from '@/shared/components/separator';
                 <ng-icon name="lucideChevronRight" />
 
                 <ng-template #subMenu>
-                  <div z-menu-content class="w-48">
-                    <button type="button" z-menu-item>Personal</button>
-                    <button type="button" z-menu-item>Work</button>
-                    <button type="button" z-menu-item>Other</button>
+                  <div z-navigation-menu-content class="w-48">
+                    <button type="button" z-navigation-menu-link>Personal</button>
+                    <button type="button" z-navigation-menu-link>Work</button>
+                    <button type="button" z-navigation-menu-link>Other</button>
                   </div>
                 </ng-template>
               </button>
 
               <z-separator class="my-2" />
 
-              <button type="button" z-menu-item class="text-red-500">
+              <button type="button" z-navigation-menu-link class="text-red-500">
                 <ng-icon name="lucideTrash" />
                 Trash
               </button>

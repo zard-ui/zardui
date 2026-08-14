@@ -16,7 +16,7 @@ import type { ClassValue } from 'clsx';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { ZardDropdownService } from './dropdown.service';
-import { dropdownItemVariants, type ZardDropdownItemTypeVariants } from './dropdown.variants';
+import { dropdownItemVariants, dropdownLabelVariants, type ZardDropdownItemTypeVariants } from './dropdown.variants';
 
 interface ZardDropdownRadioGroup {
   zValue(): string | undefined;
@@ -64,6 +64,29 @@ export class ZardDropdownMenuSeparatorComponent {
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses('bg-border -mx-1 my-1 h-px', this.class()));
+}
+
+@Component({
+  selector: 'z-dropdown-menu-label, [z-dropdown-menu-label]',
+  template: `
+    <ng-content />
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  encapsulation: ViewEncapsulation.None,
+  host: {
+    'data-slot': 'dropdown-menu-label',
+    '[class]': 'classes()',
+    '[attr.data-inset]': 'inset() || null',
+  },
+  exportAs: 'zDropdownMenuLabel',
+})
+export class ZardDropdownMenuLabelComponent {
+  readonly class = input<ClassValue>('');
+  readonly inset = input(false, { transform: booleanAttribute });
+
+  protected readonly classes = computed(() =>
+    mergeClasses(dropdownLabelVariants({ inset: this.inset() }), this.class()),
+  );
 }
 
 @Component({

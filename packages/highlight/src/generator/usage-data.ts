@@ -207,16 +207,26 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';`,
     templateCode: `<z-spinner></z-spinner>`,
   },
-  menu: {
-    importCode: `import { ZardMenuImports } from '@/shared/components/menu/menu.imports';`,
-    templateCode: `<div zardContextMenu [zMenuContent]="menuContent">
-  Right click here
-</div>
-<ng-template #menuContent>
-  <div zardMenuItem>Back</div>
-  <div zardMenuItem>Forward</div>
-  <div zardMenuItem>Reload</div>
-</ng-template>`,
+  'navigation-menu': {
+    importCode: `import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/navigation-menu.imports';`,
+    templateCode: `<z-navigation-menu>
+  <ul z-navigation-menu-list>
+    <li z-navigation-menu-item>
+      <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="gettingStarted">
+        Getting started
+      </button>
+
+      <ng-template #gettingStarted>
+        <div z-navigation-menu-content>
+          <ul class="w-64">
+            <li><a z-navigation-menu-link href="#">Introduction</a></li>
+            <li><a z-navigation-menu-link href="#">Installation</a></li>
+          </ul>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+</z-navigation-menu>`,
   },
   pagination: {
     importCode: `import { ZardPaginationImports } from '@/shared/components/pagination/pagination.imports';`,

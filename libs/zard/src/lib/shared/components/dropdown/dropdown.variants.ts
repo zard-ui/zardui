@@ -26,5 +26,20 @@ export const dropdownItemVariants = cva(
   },
 );
 
+export const dropdownLabelVariants = cva(
+  'relative flex items-center px-2 py-1.5 text-sm font-medium text-muted-foreground',
+  {
+    variants: {
+      inset: {
+        true: 'pl-8',
+        false: '',
+      },
+    },
+    defaultVariants: {
+      inset: false,
+    },
+  },
+);
+
 export type ZardDropdownItemVariants = VariantProps<typeof dropdownItemVariants>;
 export type ZardDropdownItemTypeVariants = NonNullable<ZardDropdownItemVariants['variant']>;

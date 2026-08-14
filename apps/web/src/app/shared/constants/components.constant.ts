@@ -209,9 +209,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/spinner/demo/spinner').then(m => m.SPINNER),
   },
   {
-    componentName: 'menu',
-    description: 'Displays a menu with a list of actions.',
-    loadData: () => import('@zard/components/menu/demo/menu').then(m => m.MENU),
+    componentName: 'navigation-menu',
+    description: 'A collection of links for navigating websites.',
+    loadData: () => import('@zard/components/navigation-menu/demo/navigation-menu').then(m => m.NAVIGATION_MENU),
   },
   {
     componentName: 'pagination',

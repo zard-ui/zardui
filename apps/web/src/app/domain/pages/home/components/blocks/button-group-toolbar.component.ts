@@ -16,13 +16,13 @@ import {
 
 import { ZardButtonComponent } from '@zard/components/button/button.component';
 import { ZardButtonGroupComponent } from '@zard/components/button-group/button-group.component';
-import { ZardMenuImports } from '@zard/components/menu';
+import { ZardNavigationMenuImports } from '@zard/components/navigation-menu';
 
 @Component({
   selector: 'z-block-button-group-toolbar',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ZardButtonComponent, ZardButtonGroupComponent, ...ZardMenuImports, NgIcon],
+  imports: [ZardButtonComponent, ZardButtonGroupComponent, ...ZardNavigationMenuImports, NgIcon],
   viewProviders: [
     provideIcons({
       lucideArrowLeft,
@@ -56,36 +56,36 @@ import { ZardMenuImports } from '@zard/components/menu';
           zSize="icon-sm"
           class="rounded-r-md!"
           aria-label="More Options"
-          z-menu
-          [zMenuTriggerFor]="moreOptionsMenu"
+          z-navigation-menu-trigger
+          [zNavigationMenuTriggerFor]="moreOptionsMenu"
           zPlacement="bottomRight"
         >
           <ng-icon name="lucideEllipsis" />
         </button>
         <ng-template #moreOptionsMenu>
-          <div z-menu-content class="w-48 p-1 [&_[z-menu-item]]:gap-1.5">
-            <button type="button" z-menu-item>
+          <div z-navigation-menu-content class="w-48 p-1 [&_[z-navigation-menu-link]]:gap-1.5">
+            <button type="button" z-navigation-menu-link>
               <ng-icon name="lucideMailCheck" class="size-4" />
               Mark as Read
             </button>
-            <button type="button" z-menu-item>
+            <button type="button" z-navigation-menu-link>
               <ng-icon name="lucideArchive" class="size-4" />
               Archive
             </button>
             <div class="bg-border my-1 h-px"></div>
-            <button type="button" z-menu-item>
+            <button type="button" z-navigation-menu-link>
               <ng-icon name="lucideClock" class="size-4" />
               Snooze
             </button>
-            <button type="button" z-menu-item>
+            <button type="button" z-navigation-menu-link>
               <ng-icon name="lucideCalendarPlus" class="size-4" />
               Add to Calendar
             </button>
-            <button type="button" z-menu-item>
+            <button type="button" z-navigation-menu-link>
               <ng-icon name="lucideListFilter" class="size-4" />
               Add to List
             </button>
-            <button type="button" z-menu-item class="justify-between">
+            <button type="button" z-navigation-menu-link class="justify-between">
               <div class="flex items-center gap-1.5">
                 <ng-icon name="lucideTag" class="size-4" />
                 <span>Label As...</span>
@@ -93,7 +93,7 @@ import { ZardMenuImports } from '@zard/components/menu';
               <ng-icon name="lucideChevronRight" class="size-4" />
             </button>
             <div class="bg-border my-1 h-px"></div>
-            <button type="button" z-menu-item zType="destructive">
+            <button type="button" z-navigation-menu-link zType="destructive">
               <ng-icon name="lucideTrash2" class="size-4" />
               Trash
             </button>

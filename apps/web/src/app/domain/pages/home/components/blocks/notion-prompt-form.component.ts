@@ -22,7 +22,7 @@ import { ZardCommandImports, type ZardCommandOption } from '@zard/components/com
 import { ZardDropdownImports } from '@zard/components/dropdown';
 import { ZardEmptyComponent } from '@zard/components/empty/empty.component';
 import { ZardInputGroupImports } from '@zard/components/input-group/input-group.imports';
-import { ZardMenuImports } from '@zard/components/menu';
+import { ZardNavigationMenuImports } from '@zard/components/navigation-menu';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@zard/components/popover';
 import { ZardSwitchComponent } from '@zard/components/switch/switch.component';
 import { ZardTextareaComponent } from '@zard/components/textarea/textarea.component';
@@ -78,7 +78,7 @@ const SAMPLE_DATA = {
     ...ZardCommandImports,
     ZardEmptyComponent,
     ...ZardDropdownImports,
-    ...ZardMenuImports,
+    ...ZardNavigationMenuImports,
     NgIcon,
     ...ZardInputGroupImports,
     ZardPopoverComponent,
@@ -249,14 +249,14 @@ const SAMPLE_DATA = {
                 zType="ghost"
                 zSize="sm"
                 zShape="circle"
-                z-menu
-                [zMenuTriggerFor]="sourcesMenu"
+                z-navigation-menu-trigger
+                [zNavigationMenuTriggerFor]="sourcesMenu"
               >
                 <ng-icon name="lucideGlobe" />
                 All Sources
               </button>
               <ng-template #sourcesMenu>
-                <div z-menu-content class="w-64 [--radius:1rem] [&_[z-menu-item]]:gap-2">
+                <div z-navigation-menu-content class="w-64 [--radius:1rem] [&_[z-navigation-menu-link]]:gap-2">
                   <div class="flex items-center justify-between px-2 py-1.5">
                     <label [attr.for]="z.id() + '-web-search'" class="flex items-center gap-2">
                       <ng-icon name="lucideGlobe" class="size-4" />
@@ -272,15 +272,15 @@ const SAMPLE_DATA = {
                     </label>
                     <z-switch [zId]="z.id() + '-apps'" />
                   </div>
-                  <button type="button" z-menu-item>
+                  <button type="button" z-navigation-menu-link>
                     <ng-icon name="lucideCircleDashed" class="size-4" />
                     All Sources I can access
                   </button>
                   <button
                     type="button"
-                    z-menu-item
-                    z-menu
-                    [zMenuTriggerFor]="usersSubmenu"
+                    z-navigation-menu-link
+                    z-navigation-menu-trigger
+                    [zNavigationMenuTriggerFor]="usersSubmenu"
                     zPlacement="rightTop"
                     zTrigger="hover"
                     class="justify-between"
@@ -291,12 +291,12 @@ const SAMPLE_DATA = {
                     </div>
                     <ng-icon name="lucideChevronRight" class="size-4" />
                   </button>
-                  <button type="button" z-menu-item>
+                  <button type="button" z-navigation-menu-link>
                     <ng-icon name="lucideBookOpen" class="size-4" />
                     Help Center
                   </button>
                   <div class="bg-border my-1 h-px"></div>
-                  <button type="button" z-menu-item>
+                  <button type="button" z-navigation-menu-link>
                     <ng-icon name="lucidePlus" class="size-4" />
                     Connect Apps
                   </button>
@@ -306,28 +306,28 @@ const SAMPLE_DATA = {
                 </div>
               </ng-template>
               <ng-template #usersSubmenu>
-                <div z-menu-content class="w-56">
-                  <button type="button" z-menu-item class="gap-2">
+                <div z-navigation-menu-content class="w-56">
+                  <button type="button" z-navigation-menu-link class="gap-2">
                     <z-avatar zSrc="https://github.com/Luizgomess.png" class="size-4" />
                     <span class="flex-1">Luizgomess</span>
                     <span class="text-muted-foreground text-xs">Workspace</span>
                   </button>
-                  <button type="button" z-menu-item class="gap-2">
+                  <button type="button" z-navigation-menu-link class="gap-2">
                     <z-avatar zSrc="https://github.com/srizzon.png" class="size-4" />
                     <span class="flex-1">srizzon</span>
                     <span class="text-muted-foreground text-xs">Workspace</span>
                   </button>
-                  <button type="button" z-menu-item class="gap-2">
+                  <button type="button" z-navigation-menu-link class="gap-2">
                     <z-avatar zSrc="https://github.com/ribeiromatheuss.png" class="size-4" />
                     <span class="flex-1">ribeiromatheuss</span>
                     <span class="text-muted-foreground text-xs">Workspace</span>
                   </button>
-                  <button type="button" z-menu-item class="gap-2">
+                  <button type="button" z-navigation-menu-link class="gap-2">
                     <z-avatar zSrc="https://github.com/mikij.png" class="size-4" />
                     <span class="flex-1">mikij</span>
                     <span class="text-muted-foreground text-xs">Workspace</span>
                   </button>
-                  <button type="button" z-menu-item class="gap-2">
+                  <button type="button" z-navigation-menu-link class="gap-2">
                     <z-avatar zSrc="https://github.com/neopavan.png" class="size-4" />
                     <span class="flex-1">neopavan</span>
                     <span class="text-muted-foreground text-xs">Workspace</span>

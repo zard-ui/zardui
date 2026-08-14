@@ -68,7 +68,7 @@ export const DROPDOWN = {
     },
     {
       name: 'submenu',
-      description: 'Compose with `z-menu` for nested flyout behavior.',
+      description: 'Compose with `z-navigation-menu-trigger` for nested flyout behavior.',
       component: ZardDropdownSubmenuDemoComponent,
       codeData: DROPDOWN_DEMO_SUBMENU,
     },
