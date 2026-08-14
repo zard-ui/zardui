@@ -123,7 +123,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Toggle Group', path: '/docs/components/toggle-group', available: true },
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
     { name: 'Tree', path: '/docs/components/tree', available: true },
-    { name: 'Menu', path: '/docs/components/menu', available: true },
+    { name: 'Navigation Menu', path: '/docs/components/navigation-menu', available: true },
     { name: 'Resizable', path: '/docs/components/resizable', available: true },
     { name: 'Sheet', path: '/docs/components/sheet', available: true },
     { name: 'Radio Group', path: '/docs/components/radio-group', available: true },

@@ -26,7 +26,7 @@ export * from './lib/shared/components/item';
 export * from './lib/shared/components/kbd';
 export * from './lib/shared/components/layout';
 export * from './lib/shared/components/spinner';
-export * from './lib/shared/components/menu';
+export * from './lib/shared/components/navigation-menu';
 export * from './lib/shared/components/pagination';
 export * from './lib/shared/components/popover';
 export * from './lib/shared/components/progress';

@@ -2,7 +2,7 @@
   "$schema": "https://zardui.com/schema/registry.json",
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.91",
+  "version": "1.0.0-beta.92",
   "items": [
     {
       "name": "core",
@@ -517,19 +517,25 @@
       ]
     },
     {
-      "name": "menu",
+      "name": "navigation-menu",
       "type": "registry:component",
       "files": [
-        "menu.directive.ts",
-        "menu.variants.ts",
+        "navigation-menu.component.ts",
+        "navigation-menu.service.ts",
+        "navigation-menu.variants.ts",
+        "navigation-menu.imports.ts",
+        "navigation-menu-list.directive.ts",
+        "navigation-menu-item.directive.ts",
+        "navigation-menu-trigger.directive.ts",
+        "navigation-menu-content.directive.ts",
+        "navigation-menu-link.directive.ts",
+        "navigation-menu-viewport.component.ts",
+        "navigation-menu-indicator.component.ts",
+        "navigation-menu-label.component.ts",
+        "navigation-menu-shortcut.component.ts",
+        "navigation-menu-manager.service.ts",
+        "navigation-menu-positions.ts",
         "context-menu.directive.ts",
-        "menu-content.directive.ts",
-        "menu-item.directive.ts",
-        "menu-manager.service.ts",
-        "menu.imports.ts",
-        "menu-positions.ts",
-        "menu-label.component.ts",
-        "menu-shortcut.component.ts",
         "index.ts"
       ]
     },
