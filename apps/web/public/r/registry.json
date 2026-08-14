@@ -370,8 +370,7 @@
       "name": "calendar",
       "type": "registry:component",
       "registryDependencies": [
-        "button",
-        "select"
+        "button"
       ],
       "files": [
         "calendar.component.ts",
