@@ -23,6 +23,13 @@
 - [Changelog](https://zardui.com/docs/changelog): Release notes, version history, and updates.
 - [About](https://zardui.com/docs/about): Credits, project information, and acknowledgments.
 
+## Forms
+
+- [Forms](https://zardui.com/docs/forms): Overview of the three ways to build forms in Angular with Zard UI, and how to pick one.
+- [Signal Forms](https://zardui.com/docs/forms/signal-forms): Building forms with the signal-based `@angular/forms/signals` API — schema, validation, errors, field types and array fields.
+- [Reactive Forms](https://zardui.com/docs/forms/reactive-forms): Building forms with `FormGroup`/`FormControl`/`FormArray` — typed models, validators, errors, field types and array fields.
+- [Template-driven Forms](https://zardui.com/docs/forms/template-driven-forms): Building forms with `ngModel` and validation attributes — the simplest approach, plus its limits.
+
 ## Components
 
 ### Form & Input
@@ -34,7 +41,6 @@
 - [Combobox](https://zardui.com/docs/components/combobox): Combobox component for Angular applications.
 - [Date Picker](https://zardui.com/docs/components/date-picker): Date Picker component for Angular applications.
 - [Field](https://zardui.com/docs/components/field): Field component for Angular applications.
-- [Form](https://zardui.com/docs/components/form): Form component for Angular applications.
 - [Input](https://zardui.com/docs/components/input): Input component for Angular applications.
 - [Input Group](https://zardui.com/docs/components/input-group): Input Group component for Angular applications.
 - [Radio Group](https://zardui.com/docs/components/radio-group): Radio Group component for Angular applications.

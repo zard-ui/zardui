@@ -1,21 +1,23 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
 export const sheetVariants = cva(
-  'bg-background data-[state=open]:animate-in data-[state=closed]:animate-out fixed z-50 flex flex-col gap-4 shadow-lg transition ease-in-out data-[state=closed]:duration-300 data-[state=open]:duration-500',
+  [
+    'fixed z-50 flex flex-col gap-4',
+    'bg-popover bg-clip-padding text-sm text-popover-foreground shadow-lg outline-none',
+  ].join(' '),
   {
     variants: {
       zSide: {
-        right:
-          'data-[state=closed]:slide-out-to-right data-[state=open]:slide-in-from-right inset-y-0 right-0 border-l',
-        left: 'data-[state=closed]:slide-out-to-left data-[state=open]:slide-in-from-left inset-y-0 left-0 border-r',
-        top: 'data-[state=closed]:slide-out-to-top data-[state=open]:slide-in-from-top inset-x-0 top-0 border-b',
-        bottom:
-          'data-[state=closed]:slide-out-to-bottom data-[state=open]:slide-in-from-bottom inset-x-0 bottom-0 border-t',
+        top: 'inset-x-0 top-0 h-auto border-b',
+        right: 'inset-y-0 right-0 h-full w-3/4 border-l',
+        bottom: 'inset-x-0 bottom-0 h-auto border-t',
+        left: 'inset-y-0 left-0 h-full w-3/4 border-r',
       },
       zSize: {
         default: '',
         sm: '',
         lg: '',
+        // Dimensions come from zWidth/zHeight as inline styles.
         custom: '',
       },
     },
@@ -23,22 +25,17 @@ export const sheetVariants = cva(
       {
         zSide: ['left', 'right'],
         zSize: 'default',
-        class: 'w-3/4 sm:max-w-sm h-full',
+        class: 'sm:max-w-sm',
       },
       {
         zSide: ['left', 'right'],
         zSize: 'sm',
-        class: 'w-1/2 sm:max-w-xs h-full',
+        class: 'w-1/2 sm:max-w-xs',
       },
       {
         zSide: ['left', 'right'],
         zSize: 'lg',
-        class: 'size-full sm:max-w-lg',
-      },
-      {
-        zSide: ['top', 'bottom'],
-        zSize: 'default',
-        class: 'h-auto',
+        class: 'w-full sm:max-w-lg',
       },
       {
         zSide: ['top', 'bottom'],
@@ -57,4 +54,13 @@ export const sheetVariants = cva(
     },
   },
 );
+
+export const sheetHeaderVariants = cva('flex flex-col gap-0.5 p-4');
+
+export const sheetTitleVariants = cva('text-base font-medium text-foreground');
+
+export const sheetDescriptionVariants = cva('text-sm text-muted-foreground');
+
+export const sheetFooterVariants = cva('mt-auto flex flex-col gap-2 p-4');
+
 export type ZardSheetVariants = VariantProps<typeof sheetVariants>;

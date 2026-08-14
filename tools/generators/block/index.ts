@@ -119,8 +119,8 @@ function addExportsToIndex(tree: Tree, name: string): void {
 
 /**
  * Registers the block in BLOCKS_REGISTRY. Blocks are listed in `featured` (the
- * landing bucket of /blocks) *and* in their own category, mirroring how the only
- * existing block (authentication-01) is registered — `/blocks` renders one
+ * landing bucket of /blocks) *and* in their own category, mirroring how the
+ * existing blocks (login-01, signup-01) are registered — `/blocks` renders one
  * category at a time and defaults to `featured`, so a block missing from it
  * would never show on the landing page.
  */

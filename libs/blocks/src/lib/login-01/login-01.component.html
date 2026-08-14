@@ -1,0 +1,39 @@
+<div class="flex min-h-svh w-full items-center justify-center p-6 md:p-10">
+  <div class="w-full max-w-sm">
+    <div class="flex flex-col gap-6">
+      <z-card>
+        <div z-card-header>
+          <z-card-title zTitle="Login to your account" />
+          <z-card-description zDescription="Enter your email below to login to your account" />
+        </div>
+        <div z-card-content>
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <div z-field-group>
+              <div z-field>
+                <label z-field-label for="email">Email</label>
+                <input z-input id="email" type="email" placeholder="m@example.com" formControlName="email" required />
+              </div>
+              <div z-field>
+                <div class="flex items-center">
+                  <label z-field-label for="password">Password</label>
+                  <a href="#" class="ml-auto inline-block text-sm underline-offset-4 hover:underline">
+                    Forgot your password?
+                  </a>
+                </div>
+                <input z-input id="password" type="password" formControlName="password" required />
+              </div>
+              <div z-field>
+                <button z-button type="submit" [zLoading]="isLoading()" [zDisabled]="isLoading()">Login</button>
+                <button z-button zType="outline" type="button">Login with Google</button>
+                <p z-field-description class="text-center">
+                  Don't have an account?
+                  <a href="#">Sign up</a>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </z-card>
+    </div>
+  </div>
+</div>

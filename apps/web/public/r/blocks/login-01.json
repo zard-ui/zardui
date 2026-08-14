@@ -1,0 +1,20 @@
+{
+  "id": "login-01",
+  "title": "Login form",
+  "description": "A simple login form.",
+  "category": "Login",
+  "files": [
+    {
+      "name": "login-01.component.html",
+      "path": "src/components/login-01/login-01.component.html",
+      "content": "<div class=\"flex min-h-svh w-full items-center justify-center p-6 md:p-10\">\n  <div class=\"w-full max-w-sm\">\n    <div class=\"flex flex-col gap-6\">\n      <z-card>\n        <div z-card-header>\n          <z-card-title zTitle=\"Login to your account\" />\n          <z-card-description zDescription=\"Enter your email below to login to your account\" />\n        </div>\n        <div z-card-content>\n          <form [formGroup]=\"loginForm\" (ngSubmit)=\"onSubmit()\">\n            <div z-field-group>\n              <div z-field>\n                <label z-field-label for=\"email\">Email</label>\n                <input z-input id=\"email\" type=\"email\" placeholder=\"m@example.com\" formControlName=\"email\" required />\n              </div>\n              <div z-field>\n                <div class=\"flex items-center\">\n                  <label z-field-label for=\"password\">Password</label>\n                  <a href=\"#\" class=\"ml-auto inline-block text-sm underline-offset-4 hover:underline\">\n                    Forgot your password?\n                  </a>\n                </div>\n                <input z-input id=\"password\" type=\"password\" formControlName=\"password\" required />\n              </div>\n              <div z-field>\n                <button z-button type=\"submit\" [zLoading]=\"isLoading()\" [zDisabled]=\"isLoading()\">Login</button>\n                <button z-button zType=\"outline\" type=\"button\">Login with Google</button>\n                <p z-field-description class=\"text-center\">\n                  Don't have an account?\n                  <a href=\"#\">Sign up</a>\n                </p>\n              </div>\n            </div>\n          </form>\n        </div>\n      </z-card>\n    </div>\n  </div>\n</div>\n",
+      "language": "html"
+    },
+    {
+      "name": "login-01.component.ts",
+      "path": "src/components/login-01/login-01.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, signal } from '@angular/core';\nimport { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';\n\nimport { ZardButtonComponent } from '@zard/components/button/button.component';\nimport { ZardCardImports } from '@zard/components/card/card.imports';\nimport { ZardFieldImports } from '@zard/components/field/field.imports';\nimport { ZardInputComponent } from '@zard/components/input/input.component';\n\n@Component({\n  selector: 'lib-login-01',\n  standalone: true,\n  imports: [ReactiveFormsModule, ZardButtonComponent, ZardInputComponent, ...ZardCardImports, ...ZardFieldImports],\n  templateUrl: './login-01.component.html',\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class Login01Component {\n  protected readonly isLoading = signal(false);\n\n  protected readonly loginForm = new FormGroup({\n    email: new FormControl('', [Validators.required, Validators.email]),\n    password: new FormControl('', [Validators.required, Validators.minLength(8)]),\n  });\n\n  protected onSubmit(): void {\n    if (this.loginForm.invalid) {\n      this.loginForm.markAllAsTouched();\n      return;\n    }\n    this.isLoading.set(true);\n  }\n}\n",
+      "language": "typescript"
+    }
+  ]
+}
