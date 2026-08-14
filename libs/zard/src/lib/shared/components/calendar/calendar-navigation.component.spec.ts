@@ -112,4 +112,21 @@ describe('ZardCalendarNavigationComponent', () => {
     expect(screen.getByRole('button', { name: /previous month/i })).toBeDisabled();
     expect(screen.getByRole('button', { name: /next month/i })).toBeDisabled();
   });
+
+  it('replaces a hidden arrow with a spacer so the caption stays centered', async () => {
+    const { container } = await renderNavigation({ zShowPreviousButton: false });
+
+    expect(screen.queryByRole('button', { name: /previous month/i })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /next month/i })).toBeInTheDocument();
+
+    const spacer = container.querySelector('[aria-hidden="true"]');
+    expect(spacer).toBeInTheDocument();
+    expect(spacer?.className).toContain('size-(--cell-size)');
+  });
+
+  it('names the month in English regardless of the runtime locale', async () => {
+    await renderNavigation({ currentMonth: '7' });
+
+    expect(screen.getByText('August 2024')).toBeInTheDocument();
+  });
 });

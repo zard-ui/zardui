@@ -31,4 +31,6 @@ export interface CalendarDayConfig {
   minDate: Date | null;
   maxDate: Date | null;
   disabled: boolean;
+  /** Individual days that cannot be selected, on top of the min/max range. */
+  disabledDates?: Date[];
 }

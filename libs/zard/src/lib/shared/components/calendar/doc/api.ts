@@ -59,6 +59,20 @@ export const CALENDAR_API: ApiSection[] = [
         default: 'true',
       },
       {
+        name: 'zDisabledDates',
+        description:
+          'Individual days that cannot be selected, on top of the minDate/maxDate range. Each day still keeps its grid cell and is marked with `data-disabled="true"`',
+        type: 'Date[]',
+        default: '[]',
+      },
+      {
+        name: 'zNumberOfMonths',
+        description:
+          'How many months are rendered side by side. They stack vertically below the `md` breakpoint, and only the first and the last month carry the navigation arrows',
+        type: 'number',
+        default: '1',
+      },
+      {
         name: '(dateChange)',
         description: 'Emitted when date selection changes',
         type: 'EventEmitter<Date | Date[]>',

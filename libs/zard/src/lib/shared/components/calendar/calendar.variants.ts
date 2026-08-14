@@ -19,6 +19,9 @@ export const calendarVariants = cva(
   ),
 );
 
+/** Wraps every rendered month. Stacks on small screens and sits side by side from `md` up. */
+export const calendarMonthsVariants = cva('relative flex flex-col gap-4 md:flex-row');
+
 export const calendarMonthVariants = cva('relative flex w-full flex-col gap-4');
 
 export const calendarNavVariants = cva('absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1');
@@ -28,6 +31,9 @@ export const calendarNavVariants = cva('absolute inset-x-0 top-0 flex w-full ite
  * `<button z-button [zType]="zButtonVariant()">`, so the button component supplies the base styling.
  */
 export const calendarNavButtonVariants = cva('size-(--cell-size) p-0 select-none aria-disabled:opacity-50');
+
+/** Placeholder that holds an arrow's slot on the months that do not own it. */
+export const calendarNavSpacerVariants = cva('size-(--cell-size)');
 
 export const calendarCaptionVariants = cva('flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)');
 

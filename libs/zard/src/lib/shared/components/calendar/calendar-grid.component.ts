@@ -5,6 +5,7 @@ import {
   computed,
   type ElementRef,
   input,
+  numberAttribute,
   output,
   signal,
   viewChild,
@@ -86,6 +87,8 @@ export class ZardCalendarGridComponent {
   readonly calendarDays = input.required<CalendarDay[]>();
   readonly disabled = input<boolean>(false);
   readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
+  /** Position of this grid inside a multi-month calendar. Only used to scope the day ids. */
+  readonly zMonthIndex = input(0, { transform: numberAttribute });
 
   // Outputs
   readonly dateSelect = output<{ date: Date; index: number }>();
@@ -138,16 +141,16 @@ export class ZardCalendarGridComponent {
   }
 
   protected getDayId(index: number): string {
-    return getDayId(index);
+    return getDayId(index, this.zMonthIndex());
   }
 
   protected getDayAriaLabel(day: CalendarDay): string {
     return getDayAriaLabel(day);
   }
 
-  /** Localized date exposed as `data-day`, mirroring the shadcn day button. */
+  /** Date exposed as `data-day`, mirroring the shadcn day button. */
   protected getDayLabel(day: CalendarDay): string {
-    return day.date.toLocaleDateString();
+    return day.date.toLocaleDateString('en-US');
   }
 
   protected getFocusedDayIndex(): number {
@@ -328,7 +331,9 @@ export class ZardCalendarGridComponent {
   private setFocus(index: number): void {
     this.focusedDayIndex.set(index);
     setTimeout(() => {
-      const dayElement = this.gridContainer()?.nativeElement.querySelector(`#${getDayId(index)}`) as HTMLElement;
+      const dayElement = this.gridContainer()?.nativeElement.querySelector(
+        `#${getDayId(index, this.zMonthIndex())}`,
+      ) as HTMLElement;
       dayElement?.focus();
     }, 0);
   }
