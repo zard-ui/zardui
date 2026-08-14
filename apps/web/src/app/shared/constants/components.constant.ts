@@ -109,7 +109,7 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
   },
   {
     componentName: 'calendar',
-    description: 'A date field component that allows users to enter and edit date.',
+    description: 'A calendar component that allows users to select a date or a range of dates.',
     loadData: () => import('@zard/components/calendar/demo/calendar').then(m => m.CALENDAR),
   },
   {
