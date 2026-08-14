@@ -53,9 +53,11 @@ function parseDate(value: string): Date | null {
   }
 
   const date = new Date(year, month, day);
+  // The constructor remaps years below 100 to 19xx, so put the typed year back.
+  date.setFullYear(year);
 
   // Rejects overflow like "February 31, 2025", which the Date constructor would roll over.
-  return date.getMonth() === month && date.getDate() === day ? date : null;
+  return date.getFullYear() === year && date.getMonth() === month && date.getDate() === day ? date : null;
 }
 
 @Component({
