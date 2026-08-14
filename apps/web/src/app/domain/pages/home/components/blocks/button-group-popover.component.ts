@@ -39,7 +39,7 @@ import { ZardTextareaComponent } from '@zard/components/textarea/textarea.compon
         <ng-icon name="lucideChevronDown" />
       </button>
       <ng-template #popoverContent>
-        <z-popover class="w-72 rounded-xl p-0 text-sm">
+        <z-popover class="w-72 gap-0 rounded-xl p-0 text-sm">
           <div class="px-4 py-3">
             <div class="text-sm font-medium">Agent Tasks</div>
           </div>

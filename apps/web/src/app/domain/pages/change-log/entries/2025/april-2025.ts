@@ -10,7 +10,7 @@ export const APRIL_2025: ChangelogEntry = {
   },
 
   overview:
-    'Form foundations and CLI launch! New Input and Form components with validation support. Official CLI tool released for easy project initialization and component installation.',
+    'Form foundations and CLI launch! New Input and Form components with validation support. Official CLI tool released for easy project initialization and component installation. The Form component has since been discontinued — use Field instead, which covers the same ground and is what the form guides are built on.',
 
   loadExamples: () => import('./april-2025.examples').then(m => m.APRIL_2025_EXAMPLES),
 };

@@ -1,26 +1,27 @@
 import { TestBed } from '@angular/core/testing';
-import { RouterModule } from '@angular/router';
+import { provideRouter } from '@angular/router';
 
 import { AppComponent } from './app.component';
-import { NxWelcomeComponent } from './nx-welcome.component';
 
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AppComponent, NxWelcomeComponent, RouterModule.forRoot([])],
+      imports: [AppComponent],
+      providers: [provideRouter([])],
     }).compileComponents();
   });
 
-  it('should render title', () => {
+  it('should create the app shell', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Welcome zard');
+    expect(fixture.componentInstance).toBeTruthy();
   });
 
-  it(`should have as title 'zard'`, () => {
+  it('should render the header and the footer outside preview routes', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.componentInstance;
-    expect(app.title).toEqual('zard');
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('z-header')).not.toBeNull();
+    expect(compiled.querySelector('z-footer')).not.toBeNull();
   });
 });

@@ -1,12 +1,14 @@
+import { provideRouter } from '@angular/router';
+
 import { render } from '@testing-library/angular';
 
-import { ShellLayout } from './documentation.layout';
+import { DocumentationLayout } from './documentation.layout';
 
 const setup = async () => {
-  return await render(ShellLayout);
+  return await render(DocumentationLayout, { providers: [provideRouter([])] });
 };
 
-describe('ShellLayout', () => {
+describe('DocumentationLayout', () => {
   it('should render', async () => {
     await setup();
   });

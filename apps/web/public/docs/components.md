@@ -26,7 +26,6 @@ Here you can find all the components available in the library. We are working on
 - [Dropdown](/docs/components/dropdown)
 - [Empty](/docs/components/empty)
 - [Field](/docs/components/field)
-- [Form](/docs/components/form)
 - [Input](/docs/components/input)
 - [Input Group](/docs/components/input-group)
 - [Input OTP](/docs/components/input-otp)

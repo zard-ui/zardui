@@ -1,8 +1,9 @@
 import type { OverlayRef } from '@angular/cdk/overlay';
 import { isPlatformBrowser } from '@angular/common';
-import { EventEmitter, Inject, PLATFORM_ID } from '@angular/core';
+import { EventEmitter, signal } from '@angular/core';
+import { outputToObservable } from '@angular/core/rxjs-interop';
 
-import { filter, fromEvent, Subject, takeUntil } from 'rxjs';
+import { filter, takeUntil } from 'rxjs';
 
 import type { ZardSheetComponent, ZardSheetOptions } from './sheet.component';
 
@@ -11,92 +12,119 @@ const enum eTriggerAction {
   OK = 'ok',
 }
 
-export class ZardSheetRef<T = any, R = any, U = any> {
-  private destroy$ = new Subject<void>();
-  private isClosing = false;
-  protected result?: R;
-  componentInstance: T | null = null;
+const ESCAPE_KEYS = ['Escape', 'Esc'] as const;
+
+/**
+ * Reference to a sheet opened via {@link ZardSheetService}.
+ *
+ * Exposes signals for reactive consumption (`isClosing`, `result`,
+ * `componentInstance`) and methods for closing the sheet.
+ *
+ * Multiple open sheets are tracked in a private stack so that pressing
+ * Escape only closes the topmost one.
+ */
+export class ZardSheetRef<T = unknown, R = unknown, U = unknown> {
+  /** Stack of currently open sheets. The last entry is the topmost. */
+  private static readonly stack: ZardSheetRef[] = [];
+
+  /** Element focused before the sheet opened, used to restore focus on close. */
+  private readonly previouslyFocusedElement: HTMLElement | null;
+
+  /** Animation duration (ms) used when closing. Mirrors the CSS transition. */
+  private readonly animationDuration: number;
+
+  /** Pending dispose timer; cleared if dispose runs early or twice. */
+  private disposeTimer: ReturnType<typeof setTimeout> | null = null;
+  private disposed = false;
+
+  private readonly _isClosing = signal(false);
+  private readonly _result = signal<R | undefined>(undefined);
+  private readonly _componentInstance = signal<T | null>(null);
+
+  /** True from the moment {@link close} is called until the overlay is disposed. */
+  readonly isClosing = this._isClosing.asReadonly();
+  /** Result passed to {@link close}, available after it's called. */
+  readonly result = this._result.asReadonly();
+  /** Instance of the component projected as content, or null for templates / strings. */
+  readonly componentInstance = this._componentInstance.asReadonly();
 
   constructor(
-    private overlayRef: OverlayRef,
-    private config: ZardSheetOptions<T, U>,
-    private containerInstance: ZardSheetComponent<T, U>,
-    @Inject(PLATFORM_ID) private platformId: object,
+    private readonly overlayRef: OverlayRef | null,
+    private readonly config: ZardSheetOptions<T, U>,
+    private readonly containerInstance: ZardSheetComponent<T, U> | null,
+    private readonly platformId: object,
   ) {
-    this.containerInstance.cancelTriggered.subscribe(() => this.trigger(eTriggerAction.CANCEL));
-    this.containerInstance.okTriggered.subscribe(() => this.trigger(eTriggerAction.OK));
+    this.animationDuration = config.zDuration ?? 200;
+    this.previouslyFocusedElement = isPlatformBrowser(platformId)
+      ? (document.activeElement as HTMLElement | null)
+      : null;
 
-    if ((this.config.zMaskClosable ?? true) && isPlatformBrowser(this.platformId)) {
+    if (!this.overlayRef || !this.containerInstance) return;
+
+    ZardSheetRef.stack.push(this as unknown as ZardSheetRef);
+
+    const detached$ = this.overlayRef.detachments();
+
+    // If the overlay is torn down externally (parent destroyed, app shutdown, etc.),
+    // ensure stack/focus state is cleaned up.
+    detached$.subscribe(() => this.dispose());
+
+    outputToObservable(this.containerInstance.cancelTriggered)
+      .pipe(takeUntil(detached$))
+      .subscribe(() => this.trigger(eTriggerAction.CANCEL));
+    outputToObservable(this.containerInstance.okTriggered)
+      .pipe(takeUntil(detached$))
+      .subscribe(() => this.trigger(eTriggerAction.OK));
+
+    if (config.zMaskClosable ?? true) {
       this.overlayRef
         .outsidePointerEvents()
-        .pipe(takeUntil(this.destroy$))
+        .pipe(takeUntil(detached$))
         .subscribe(() => this.close());
     }
 
-    if (isPlatformBrowser(this.platformId)) {
-      fromEvent<KeyboardEvent>(document, 'keydown')
-        .pipe(
-          filter(event => event.key === 'Escape'),
-          takeUntil(this.destroy$),
-        )
-        .subscribe(() => this.close());
-    }
+    this.overlayRef
+      .keydownEvents()
+      .pipe(
+        filter(event => ESCAPE_KEYS.includes(event.key as (typeof ESCAPE_KEYS)[number])),
+        takeUntil(detached$),
+      )
+      .subscribe(event => {
+        if (this.isTopmost()) {
+          event.preventDefault();
+          this.close();
+        }
+      });
+  }
+
+  /** Internal: set the component instance once attached. */
+  setComponentInstance(instance: T | null) {
+    this._componentInstance.set(instance);
   }
 
   close(result?: R) {
-    if (this.isClosing) {
-      return;
+    if (this._isClosing()) return;
+
+    this._isClosing.set(true);
+    this._result.set(result);
+
+    if (isPlatformBrowser(this.platformId) && this.containerInstance) {
+      const hostElement = this.containerInstance.getNativeElement();
+      hostElement.classList.add('sheet-leave');
     }
 
-    this.isClosing = true;
-    this.result = result;
-    this.containerInstance.state.set('closed');
+    this.disposeTimer = setTimeout(() => this.dispose(), this.animationDuration);
+  }
 
-    if (isPlatformBrowser(this.platformId)) {
-      const element = this.containerInstance.getNativeElement();
-      let cleanupCalled = false;
+  private dispose() {
+    if (this.disposed) return;
+    this.disposed = true;
 
-      const onAnimationEnd = () => {
-        if (cleanupCalled) {
-          return;
-        }
-
-        cleanupCalled = true;
-        element.removeEventListener('animationend', onAnimationEnd);
-        this.closeCleanup();
-      };
-
-      element.addEventListener('animationend', onAnimationEnd);
-      setTimeout(onAnimationEnd, 300); // Fallback after expected animation duration
-    } else {
-      this.closeCleanup();
+    if (this.disposeTimer !== null) {
+      clearTimeout(this.disposeTimer);
+      this.disposeTimer = null;
     }
-  }
 
-  private trigger(action: eTriggerAction) {
-    const trigger = { ok: this.config.zOnOk, cancel: this.config.zOnCancel }[action];
-
-    if (trigger instanceof EventEmitter) {
-      trigger.emit(this.getContentComponent());
-    } else if (typeof trigger === 'function') {
-      const result = trigger(this.getContentComponent()) as R;
-      this.closeWithResult(result);
-    } else {
-      this.close();
-    }
-  }
-
-  private getContentComponent(): T {
-    return this.componentInstance as T;
-  }
-
-  private closeWithResult(result: R): void {
-    if (result !== false) {
-      this.close(result);
-    }
-  }
-
-  private closeCleanup(): void {
     if (this.overlayRef) {
       if (this.overlayRef.hasAttached()) {
         this.overlayRef.detachBackdrop();
@@ -104,9 +132,30 @@ export class ZardSheetRef<T = any, R = any, U = any> {
       this.overlayRef.dispose();
     }
 
-    if (!this.destroy$.closed) {
-      this.destroy$.next();
-      this.destroy$.complete();
+    const idx = ZardSheetRef.stack.indexOf(this as unknown as ZardSheetRef);
+    if (idx >= 0) ZardSheetRef.stack.splice(idx, 1);
+
+    if (isPlatformBrowser(this.platformId) && this.previouslyFocusedElement?.isConnected) {
+      this.previouslyFocusedElement.focus();
+    }
+  }
+
+  private isTopmost(): boolean {
+    return ZardSheetRef.stack[ZardSheetRef.stack.length - 1] === (this as unknown as ZardSheetRef);
+  }
+
+  private trigger(action: eTriggerAction) {
+    const trigger = action === eTriggerAction.OK ? this.config.zOnOk : this.config.zOnCancel;
+
+    if (trigger instanceof EventEmitter) {
+      trigger.emit(this._componentInstance() as T);
+    } else if (typeof trigger === 'function') {
+      const result = trigger(this._componentInstance() as T) as R | false;
+      if (result !== false) {
+        this.close(result as R);
+      }
+    } else {
+      this.close();
     }
   }
 }

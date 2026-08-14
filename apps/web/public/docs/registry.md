@@ -344,10 +344,22 @@ blocks-registry.json
 {
   "blocks": [
     {
-      "id": "authentication-01",
-      "title": "Authentication page",
-      "description": "A modern authentication page with email/password.",
-      "category": "Authentication"
+      "id": "login-01",
+      "title": "Login form",
+      "description": "A simple login form.",
+      "category": "Login"
+    },
+    {
+      "id": "login-02",
+      "title": "Login with cover image",
+      "description": "A two column login page with a cover image.",
+      "category": "Login"
+    },
+    {
+      "id": "signup-01",
+      "title": "Signup form",
+      "description": "A simple signup form.",
+      "category": "Signup"
     }
   ]
 }
@@ -355,26 +367,26 @@ blocks-registry.json
 
 ### A block
 
-blocks/authentication-01.json
+blocks/login-01.json
 
 ```
 {
-  "id": "authentication-01",
-  "title": "Authentication page",
-  "description": "A modern authentication page with email/password.",
-  "category": "Authentication",
+  "id": "login-01",
+  "title": "Login form",
+  "description": "A simple login form.",
+  "category": "Login",
   "files": [
     {
-      "name": "authentication-01.component.ts",
-      "path": "src/components/authentication-01/authentication-01.component.ts",
-      "content": "import { ZardFormFieldComponent, ZardFormLabelComponent, ZardFormControlComponent } from '@zard/components/form/form.component';\n...",
-      "language": "typescript"
+      "name": "login-01.component.html",
+      "path": "src/components/login-01/login-01.component.html",
+      "content": "<div class=\"flex min-h-svh w-full items-center justify-center p-6 md:p-10\">\n...",
+      "language": "html"
     },
     {
-      "name": "authentication-01.component.html",
-      "path": "src/components/authentication-01/authentication-01.component.html",
-      "content": "<div class=\"flex min-h-screen flex-col lg:flex-row\">\n...",
-      "language": "html"
+      "name": "login-01.component.ts",
+      "path": "src/components/login-01/login-01.component.ts",
+      "content": "import { ChangeDetectionStrategy, Component, signal } from '@angular/core';\n...",
+      "language": "typescript"
     }
   ]
 }

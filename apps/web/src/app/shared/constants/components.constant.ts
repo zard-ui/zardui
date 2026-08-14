@@ -169,11 +169,6 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/field/demo/field').then(m => m.FIELD),
   },
   {
-    componentName: 'form',
-    description: 'Building forms with Angular reactive forms and Zard UI components.',
-    loadData: () => import('@zard/components/form/demo/form').then(m => m.FORM),
-  },
-  {
     componentName: 'input',
     description: 'Displays a form input field or a component that looks like an input field.',
     loadData: () => import('@zard/components/input/demo/input').then(m => m.INPUT),

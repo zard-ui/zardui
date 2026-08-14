@@ -861,27 +861,6 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'form',
-    files: [
-      {
-        name: 'form.component.ts',
-        content: '',
-      },
-      {
-        name: 'form.imports.ts',
-        content: '',
-      },
-      {
-        name: 'form.variants.ts',
-        content: '',
-      },
-      {
-        name: 'index.ts',
-        content: '',
-      },
-    ],
-  },
-  {
     name: 'pagination',
     registryDependencies: ['button'],
     files: [
@@ -912,6 +891,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'popover.variants.ts',
+        content: '',
+      },
+      {
+        name: 'popover.imports.ts',
         content: '',
       },
       {
