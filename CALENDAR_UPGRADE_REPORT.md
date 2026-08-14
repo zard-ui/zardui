@@ -11,32 +11,32 @@ Branch: `feat/calendar-update`. Apenas commits locais — nenhum push, PR, tag o
 
 ## 1. Tabela "antes → depois" das classes por slot
 
-| Slot                                       | Antes (zard)                                                                                                                                 | Depois                                                                                                                                                                              |
-| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **root** (`calendarVariants`)              | `bg-background p-3 w-fit rounded-lg border`                                                                                                    | `group/calendar w-fit bg-background p-2` + `[--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)]` + `in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent` |
-| **month** (`calendarMonthVariants`)        | `flex flex-col w-fit gap-4` — **não usada**                                                                                                    | `relative flex w-full flex-col gap-4` — usada no template                                                                                                                             |
-| **nav** (`calendarNavVariants`)            | `flex items-center justify-between gap-2 w-fit mb-4`                                                                                           | `absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1`                                                                                                             |
-| **nav button** (`calendarNavButtonVariants`) | CSS do botão duplicado à mão (`ring-offset-*`, `hover:bg-accent`, `size-7 bg-transparent p-0 opacity-50`)                                     | `size-(--cell-size) p-0 select-none aria-disabled:opacity-50` — o resto vem do `buttonVariants`, via `<button z-button [zType]="zButtonVariant()">`                                    |
-| **caption** (`calendarCaptionVariants`)    | — (não existia)                                                                                                                                | `flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)`                                                                                                            |
-| **dropdowns** (`calendarDropdownsVariants`) | — (não existia)                                                                                                                               | `flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium`                                                                                                 |
-| **caption label** (`calendarCaptionLabelVariants`) | — (não existia)                                                                                                                        | base `font-medium select-none`; `layout: label` → `text-sm`; `layout: dropdown` → `flex items-center gap-1 rounded-(--cell-radius) text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground` |
-| **dropdown trigger** (`calendarDropdownVariants`) | — (não existia)                                                                                                                         | `w-auto rounded-(--cell-radius)` + `[&_button]:h-(--cell-size) [&_button]:gap-1 [&_button]:rounded-(--cell-radius) [&_button]:px-2 [&_button]:text-sm [&_button]:font-medium [&_button]:shadow-xs` + `[&_button_ng-icon]:size-3.5!` |
-| **weekdays** (`calendarWeekdaysVariants`)  | `flex` — **não usada**                                                                                                                         | `grid w-full grid-cols-7` — usada no grid                                                                                                                                             |
-| **weekday** (`calendarWeekdayVariants`)    | `text-muted-foreground font-normal text-center text-[0.8rem] w-8`                                                                               | `flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none`                     |
-| **week** (`calendarWeekVariants`)          | `flex w-full mt-2` — **não usada**                                                                                                             | `mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2` — usada como container das linhas                                                                                                      |
-| **day** (`calendarDayVariants`)            | `p-0 relative focus-within:relative focus-within:z-20 flex mt-1 size-8 text-sm` — sem variantes                                                 | `group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none` + `[&:nth-child(7n+1)]:rounded-s-(--cell-radius) [&:nth-child(7n)]:rounded-e-(--cell-radius)` + variantes de range/today (abaixo) |
-| ↳ `today`                                  | (estava no botão) `bg-accent text-accent-foreground`                                                                                           | `rounded-(--cell-radius) bg-muted text-foreground`                                                                                                                                    |
-| ↳ `rangeStart`                             | (estava no botão) `rounded-r-none bg-primary`                                                                                                  | `relative isolate z-0 rounded-s-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-muted [&:nth-child(7n)]:after:hidden`                          |
-| ↳ `rangeMiddle`                            | (era `inRange`, no botão) `rounded-none bg-accent`                                                                                             | `rounded-none bg-muted`                                                                                                                                                               |
-| ↳ `rangeEnd`                               | (estava no botão) `rounded-l-none bg-primary`                                                                                                  | `relative isolate z-0 rounded-e-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-muted [&:nth-child(7n+1)]:after:hidden`                      |
-| **day button** (`calendarDayButtonVariants`) base | `p-0 font-normal flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:bg-accent hover:text-accent-foreground size-full text-sm` | `relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1 rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal transition-colors outline-none hover:bg-muted hover:text-foreground dark:hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&>span]:text-xs [&>span]:opacity-70` |
-| ↳ `selected`                               | `bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground`              | `bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground`                                                                                                   |
-| ↳ `rangeStart`                             | `rounded-r-none bg-primary text-primary-foreground`                                                                                            | `rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground`                                                 |
-| ↳ `rangeEnd`                               | `rounded-l-none bg-primary text-primary-foreground`                                                                                            | `rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground`                                                 |
-| ↳ `rangeMiddle`                            | (era `inRange`) `rounded-none bg-accent hover:bg-accent`                                                                                       | `rounded-none bg-muted text-foreground hover:bg-muted hover:text-foreground`                                                                                                          |
-| ↳ `outside`                                | `text-muted-foreground opacity-50`                                                                                                             | `text-muted-foreground aria-selected:text-muted-foreground` (**sem `opacity-50`**)                                                                                                    |
-| ↳ `disabled`                               | `text-muted-foreground opacity-50 cursor-not-allowed`                                                                                          | inalterado                                                                                                                                                                            |
-| ↳ `today`                                  | `bg-accent text-accent-foreground`                                                                                                             | **removida do botão** — o destaque de hoje passou para o wrapper `gridcell`                                                                                                           |
+| Slot                                               | Antes (zard)                                                                                                                                                                                                                                                     | Depois                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| -------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **root** (`calendarVariants`)                      | `bg-background p-3 w-fit rounded-lg border`                                                                                                                                                                                                                      | `group/calendar w-fit bg-background p-2` + `[--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)]` + `in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent`                                                                                                                                                                                                                                                                            |
+| **month** (`calendarMonthVariants`)                | `flex flex-col w-fit gap-4` — **não usada**                                                                                                                                                                                                                      | `relative flex w-full flex-col gap-4` — usada no template                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| **nav** (`calendarNavVariants`)                    | `flex items-center justify-between gap-2 w-fit mb-4`                                                                                                                                                                                                             | `absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1`                                                                                                                                                                                                                                                                                                                                                                                                        |
+| **nav button** (`calendarNavButtonVariants`)       | CSS do botão duplicado à mão (`ring-offset-*`, `hover:bg-accent`, `size-7 bg-transparent p-0 opacity-50`)                                                                                                                                                        | `size-(--cell-size) p-0 select-none aria-disabled:opacity-50` — o resto vem do `buttonVariants`, via `<button z-button [zType]="zButtonVariant()">`                                                                                                                                                                                                                                                                                                                              |
+| **caption** (`calendarCaptionVariants`)            | — (não existia)                                                                                                                                                                                                                                                  | `flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)`                                                                                                                                                                                                                                                                                                                                                                                                       |
+| **dropdowns** (`calendarDropdownsVariants`)        | — (não existia)                                                                                                                                                                                                                                                  | `flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium`                                                                                                                                                                                                                                                                                                                                                                                            |
+| **caption label** (`calendarCaptionLabelVariants`) | — (não existia)                                                                                                                                                                                                                                                  | base `font-medium select-none`; `layout: label` → `text-sm`; `layout: dropdown` → `flex items-center gap-1 rounded-(--cell-radius) text-sm [&>svg]:size-3.5 [&>svg]:text-muted-foreground`                                                                                                                                                                                                                                                                                       |
+| **dropdown trigger** (`calendarDropdownVariants`)  | — (não existia)                                                                                                                                                                                                                                                  | `w-auto rounded-(--cell-radius)` + `[&_button]:h-(--cell-size) [&_button]:gap-1 [&_button]:rounded-(--cell-radius) [&_button]:px-2 [&_button]:text-sm [&_button]:font-medium [&_button]:shadow-xs` + `[&_button_ng-icon]:size-3.5!`                                                                                                                                                                                                                                              |
+| **weekdays** (`calendarWeekdaysVariants`)          | `flex` — **não usada**                                                                                                                                                                                                                                           | `grid w-full grid-cols-7` — usada no grid                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| **weekday** (`calendarWeekdayVariants`)            | `text-muted-foreground font-normal text-center text-[0.8rem] w-8`                                                                                                                                                                                                | `flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none`                                                                                                                                                                                                                                                                                                                |
+| **week** (`calendarWeekVariants`)                  | `flex w-full mt-2` — **não usada**                                                                                                                                                                                                                               | `mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2` — usada como container das linhas                                                                                                                                                                                                                                                                                                                                                                                                 |
+| **day** (`calendarDayVariants`)                    | `p-0 relative focus-within:relative focus-within:z-20 flex mt-1 size-8 text-sm` — sem variantes                                                                                                                                                                  | `group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none` + `[&:nth-child(7n+1)]:rounded-s-(--cell-radius) [&:nth-child(7n)]:rounded-e-(--cell-radius)` + variantes de range/today (abaixo)                                                                                                                                                                                                                                           |
+| ↳ `today`                                          | (estava no botão) `bg-accent text-accent-foreground`                                                                                                                                                                                                             | `rounded-(--cell-radius) bg-muted text-foreground`                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| ↳ `rangeStart`                                     | (estava no botão) `rounded-r-none bg-primary`                                                                                                                                                                                                                    | `relative isolate z-0 rounded-s-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-muted [&:nth-child(7n)]:after:hidden`                                                                                                                                                                                                                                                                                                                     |
+| ↳ `rangeMiddle`                                    | (era `inRange`, no botão) `rounded-none bg-accent`                                                                                                                                                                                                               | `rounded-none bg-muted`                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| ↳ `rangeEnd`                                       | (estava no botão) `rounded-l-none bg-primary`                                                                                                                                                                                                                    | `relative isolate z-0 rounded-e-(--cell-radius) bg-muted after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-muted [&:nth-child(7n+1)]:after:hidden`                                                                                                                                                                                                                                                                                                                 |
+| **day button** (`calendarDayButtonVariants`) base  | `p-0 font-normal flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 hover:bg-accent hover:text-accent-foreground size-full text-sm` | `relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1 rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal transition-colors outline-none hover:bg-muted hover:text-foreground dark:hover:text-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 [&>span]:text-xs [&>span]:opacity-70` |
+| ↳ `selected`                                       | `bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground`                                                                                                                               | `bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground`                                                                                                                                                                                                                                                                                                                                                                                              |
+| ↳ `rangeStart`                                     | `rounded-r-none bg-primary text-primary-foreground`                                                                                                                                                                                                              | `rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground`                                                                                                                                                                                                                                                                                                                                            |
+| ↳ `rangeEnd`                                       | `rounded-l-none bg-primary text-primary-foreground`                                                                                                                                                                                                              | `rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground`                                                                                                                                                                                                                                                                                                                                            |
+| ↳ `rangeMiddle`                                    | (era `inRange`) `rounded-none bg-accent hover:bg-accent`                                                                                                                                                                                                         | `rounded-none bg-muted text-foreground hover:bg-muted hover:text-foreground`                                                                                                                                                                                                                                                                                                                                                                                                     |
+| ↳ `outside`                                        | `text-muted-foreground opacity-50`                                                                                                                                                                                                                               | `text-muted-foreground aria-selected:text-muted-foreground` (**sem `opacity-50`**)                                                                                                                                                                                                                                                                                                                                                                                               |
+| ↳ `disabled`                                       | `text-muted-foreground opacity-50 cursor-not-allowed`                                                                                                                                                                                                            | inalterado                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ↳ `today`                                          | `bg-accent text-accent-foreground`                                                                                                                                                                                                                               | **removida do botão** — o destaque de hoje passou para o wrapper `gridcell`                                                                                                                                                                                                                                                                                                                                                                                                      |
 
 ### Regras transversais aplicadas
 
@@ -52,42 +52,42 @@ Branch: `feat/calendar-update`. Apenas commits locais — nenhum push, PR, tag o
 
 ### Criados
 
-| Arquivo                                                                        | O quê                                              |
-| ------------------------------------------------------------------------------ | -------------------------------------------------- |
-| `libs/zard/src/lib/shared/components/calendar/demo/preview.ts`                 | demo herói (`single` + `dropdown` + borda)         |
-| `libs/zard/src/lib/shared/components/calendar/demo/basic.ts`                   | calendar mínimo                                    |
-| `libs/zard/src/lib/shared/components/calendar/demo/caption.ts`                 | seletor de mês/ano                                 |
-| `libs/zard/src/lib/shared/components/calendar/demo/presets.ts`                 | card + rodapé de presets                           |
-| `libs/zard/src/lib/shared/components/calendar/demo/with-time.ts`               | card + `z-field`/`z-input-group` + `lucideClock2`  |
-| `libs/zard/src/lib/shared/components/calendar/demo/custom-cell-size.ts`        | `--cell-size` responsivo, modo range               |
-| `libs/zard/src/lib/shared/components/calendar/doc/snippets.md`                 | snippets de "Custom Cell Size"                     |
-| `CALENDAR_UPGRADE_REPORT.md`                                                   | este relatório                                     |
+| Arquivo                                                                 | O quê                                             |
+| ----------------------------------------------------------------------- | ------------------------------------------------- |
+| `libs/zard/src/lib/shared/components/calendar/demo/preview.ts`          | demo herói (`single` + `dropdown` + borda)        |
+| `libs/zard/src/lib/shared/components/calendar/demo/basic.ts`            | calendar mínimo                                   |
+| `libs/zard/src/lib/shared/components/calendar/demo/caption.ts`          | seletor de mês/ano                                |
+| `libs/zard/src/lib/shared/components/calendar/demo/presets.ts`          | card + rodapé de presets                          |
+| `libs/zard/src/lib/shared/components/calendar/demo/with-time.ts`        | card + `z-field`/`z-input-group` + `lucideClock2` |
+| `libs/zard/src/lib/shared/components/calendar/demo/custom-cell-size.ts` | `--cell-size` responsivo, modo range              |
+| `libs/zard/src/lib/shared/components/calendar/doc/snippets.md`          | snippets de "Custom Cell Size"                    |
+| `CALENDAR_UPGRADE_REPORT.md`                                            | este relatório                                    |
 
 ### Modificados
 
-| Arquivo                                                                          | O quê                                                                     |
-| -------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `.../calendar/calendar.variants.ts`                                              | reescrito (ver tabela acima)                                              |
-| `.../calendar/calendar.types.ts`                                                 | novo tipo `ZardCalendarCaptionLayout`                                     |
-| `.../calendar/calendar.component.ts`                                             | estrutura root → month → nav/grid, 3 inputs novos, `data-slot="calendar"` |
-| `.../calendar/calendar-navigation.component.ts`                                  | nav absoluto + caption centralizado com 4 layouts                         |
-| `.../calendar/calendar-grid.component.ts`                                        | grid derivado de `--cell-size`, `data-*` de estado, `zShowOutsideDays`     |
-| `.../calendar/demo/{range,multiple,with-constraints,expand-year-selection-range}.ts` | padronizados, sem `console.log`, datas relativas ao ano corrente      |
-| `.../calendar/demo/calendar.ts`                                                  | registry no padrão `preview` + `examples[]` com `description`             |
-| `.../calendar/doc/api.ts`                                                        | inputs novos, `resetNavigation()` e as CSS vars documentados              |
-| `.../calendar/*.spec.ts` (3)                                                     | assertivas atualizadas + cobertura nova                                   |
-| `.../date-picker/date-picker.component.ts`                                       | sem `class="border-0"`, com `zCaptionLayout="dropdown"`                   |
-| `.../popover/popover.component.ts`                                               | `data-slot="popover-content"` no host                                     |
-| `apps/web/src/app/shared/constants/components.constant.ts`                       | `description` do calendar corrigida                                       |
-| `packages/cli/src/core/registry/registry-data.ts`                                | `registryDependencies: ['button', 'select']`                              |
-| `packages/highlight/src/generator/usage-data.ts`                                 | snippet de uso com `zMode` e a borda opcional                             |
+| Arquivo                                                                              | O quê                                                                     |
+| ------------------------------------------------------------------------------------ | ------------------------------------------------------------------------- |
+| `.../calendar/calendar.variants.ts`                                                  | reescrito (ver tabela acima)                                              |
+| `.../calendar/calendar.types.ts`                                                     | novo tipo `ZardCalendarCaptionLayout`                                     |
+| `.../calendar/calendar.component.ts`                                                 | estrutura root → month → nav/grid, 3 inputs novos, `data-slot="calendar"` |
+| `.../calendar/calendar-navigation.component.ts`                                      | nav absoluto + caption centralizado com 4 layouts                         |
+| `.../calendar/calendar-grid.component.ts`                                            | grid derivado de `--cell-size`, `data-*` de estado, `zShowOutsideDays`    |
+| `.../calendar/demo/{range,multiple,with-constraints,expand-year-selection-range}.ts` | padronizados, sem `console.log`, datas relativas ao ano corrente          |
+| `.../calendar/demo/calendar.ts`                                                      | registry no padrão `preview` + `examples[]` com `description`             |
+| `.../calendar/doc/api.ts`                                                            | inputs novos, `resetNavigation()` e as CSS vars documentados              |
+| `.../calendar/*.spec.ts` (3)                                                         | assertivas atualizadas + cobertura nova                                   |
+| `.../date-picker/date-picker.component.ts`                                           | sem `class="border-0"`, com `zCaptionLayout="dropdown"`                   |
+| `.../popover/popover.component.ts`                                                   | `data-slot="popover-content"` no host                                     |
+| `apps/web/src/app/shared/constants/components.constant.ts`                           | `description` do calendar corrigida                                       |
+| `packages/cli/src/core/registry/registry-data.ts`                                    | `registryDependencies: ['button', 'select']`                              |
+| `packages/highlight/src/generator/usage-data.ts`                                     | snippet de uso com `zMode` e a borda opcional                             |
 
 ### Removidos
 
-| Arquivo                                                            | Motivo                                          |
-| ------------------------------------------------------------------ | ----------------------------------------------- |
-| `libs/zard/src/lib/shared/components/calendar/demo/default.ts`     | substituído por `preview.ts` + `basic.ts`       |
-| `apps/web/src/generated/components/calendar/demo/default.ts`       | órfão limpo automaticamente pelo `demo-writer`  |
+| Arquivo                                                        | Motivo                                         |
+| -------------------------------------------------------------- | ---------------------------------------------- |
+| `libs/zard/src/lib/shared/components/calendar/demo/default.ts` | substituído por `preview.ts` + `basic.ts`      |
+| `apps/web/src/generated/components/calendar/demo/default.ts`   | órfão limpo automaticamente pelo `demo-writer` |
 
 ### Gerados (produzidos pelos comandos, nunca editados à mão)
 
@@ -97,20 +97,20 @@ Branch: `feat/calendar-update`. Apenas commits locais — nenhum push, PR, tag o
 
 ## 3. Inputs novos e seus defaults
 
-| Input               | Tipo                                                            | Default   | Efeito                                                                                            |
-| ------------------- | --------------------------------------------------------------- | --------- | ------------------------------------------------------------------------------------------------- |
-| `zCaptionLayout`    | `'label' \| 'dropdown' \| 'dropdown-months' \| 'dropdown-years'` | `'label'` | Como o caption de mês/ano é renderizado                                                            |
-| `zButtonVariant`    | `ZardButtonTypeVariants`                                        | `'ghost'` | Variante dos botões de navegação                                                                   |
-| `zShowOutsideDays`  | `boolean` (`booleanAttribute`)                                  | `true`    | Quando `false`, os dias fora do mês ficam `invisible` — a célula continua no grid, o layout não pula |
+| Input              | Tipo                                                             | Default   | Efeito                                                                                               |
+| ------------------ | ---------------------------------------------------------------- | --------- | ---------------------------------------------------------------------------------------------------- |
+| `zCaptionLayout`   | `'label' \| 'dropdown' \| 'dropdown-months' \| 'dropdown-years'` | `'label'` | Como o caption de mês/ano é renderizado                                                              |
+| `zButtonVariant`   | `ZardButtonTypeVariants`                                         | `'ghost'` | Variante dos botões de navegação                                                                     |
+| `zShowOutsideDays` | `boolean` (`booleanAttribute`)                                   | `true`    | Quando `false`, os dias fora do mês ficam `invisible` — a célula continua no grid, o layout não pula |
 
 Nenhum input, output, método ou `exportAs` existente foi removido ou renomeado. `zMode`, `value`, `minDate`, `maxDate`, `disabled`, `class`, `(dateChange)`, `resetNavigation()`, `zCalendar`, `zCalendarGrid` e `zCalendarNavigation` continuam com a mesma semântica.
 
 ### Contrato de CSS vars (novo, público)
 
-| Variável        | Default            | Uso                                                     |
-| --------------- | ------------------ | ------------------------------------------------------- |
-| `--cell-size`   | `--spacing(7)`     | largura/altura da célula — escala o calendar inteiro     |
-| `--cell-radius` | `var(--radius-md)` | raio da célula                                          |
+| Variável        | Default            | Uso                                                  |
+| --------------- | ------------------ | ---------------------------------------------------- |
+| `--cell-size`   | `--spacing(7)`     | largura/altura da célula — escala o calendar inteiro |
+| `--cell-radius` | `var(--radius-md)` | raio da célula                                       |
 
 Ex.: `<z-calendar class="[--cell-size:--spacing(12)]" />`.
 
@@ -174,21 +174,21 @@ Consequências diretas, todas previstas pelo próprio prompt:
 
 ## 7. Saída dos comandos de verificação
 
-| Comando                                            | Resultado                                                            |
-| -------------------------------------------------- | -------------------------------------------------------------------- |
-| `npx nx test zard` (baseline, antes)                | ✅ 77 suites, 1118 testes                                             |
-| `npx nx test zard` (depois)                         | ✅ 77 suites, **1141** testes (23 novos), 0 falhas                    |
-| `npx nx build zard`                                 | ✅ `Successfully ran target build for project zard`                   |
-| `npx nx run web:build --configuration=production`    | ✅ bundle completo, **79 rotas prerenderizadas** — os demos compilam   |
-| `npm run generate:highlight`                        | ✅ 12 demo files, 2 installation files, 1 snippet file                 |
-| `npm run build:registry`                            | ✅ 50 componentes, 0 falhas                                           |
-| `npx nx lint zard`                                  | ⚠️ ver abaixo                                                         |
+| Comando                                           | Resultado                                                            |
+| ------------------------------------------------- | -------------------------------------------------------------------- |
+| `npx nx test zard` (baseline, antes)              | ✅ 77 suites, 1118 testes                                            |
+| `npx nx test zard` (depois)                       | ✅ 77 suites, **1141** testes (23 novos), 0 falhas                   |
+| `npx nx build zard`                               | ✅ `Successfully ran target build for project zard`                  |
+| `npx nx run web:build --configuration=production` | ✅ bundle completo, **79 rotas prerenderizadas** — os demos compilam |
+| `npm run generate:highlight`                      | ✅ 12 demo files, 2 installation files, 1 snippet file               |
+| `npm run build:registry`                          | ✅ 50 componentes, 0 falhas                                          |
+| `npx nx lint zard`                                | ⚠️ ver abaixo                                                        |
 
 ### Sobre o lint
 
 `npx nx lint zard` **falha neste ambiente, e já falhava antes de qualquer alteração**: o clone está com `core.autocrlf=true` e sem `.gitattributes`, então todo arquivo do working tree tem CRLF, e a regra `prettier/prettier` reporta `Delete \`␍\`` em cada linha de cada arquivo — 52.779 erros na baseline, nenhum deles relacionado a código. No CI (Linux, LF) isso não ocorre.
 
-Para verificar de fato o código, rodei o ESLint com saída JSON filtrando exclusivamente as mensagens `Delete \`␍\`` / `Insert \`␍\`` da regra `prettier/prettier`:
+Para verificar de fato o código, rodei o ESLint com saída JSON filtrando exclusivamente as mensagens `Delete \`␍\``/`Insert \`␍\``da regra`prettier/prettier`:
 
 - **Baseline:** 2 warnings — `@typescript-eslint/no-explicit-any` em `calendar-navigation.component.spec.ts:34` e `:55`.
 - **Depois:** **0 problemas** nos arquivos do calendar, date-picker, popover e nos três registros. Os dois `any` foram eliminados na reescrita do spec. Restam 2 warnings idênticos em `popover.component.spec.ts`, arquivo que não foi tocado.
@@ -201,16 +201,16 @@ O dev server (`npx nx run web:serve --configuration=local`) subiu normalmente em
 
 Como o risco técnico concreto de um redesign feito com utilities arbitrárias é o Tailwind **não gerar** a classe, verifiquei isso diretamente no bundle CSS de produção (`dist/apps/web/browser/styles-*.css`, 211 KB):
 
-| Utility                                        | Regra gerada                                                                                   |
-| ---------------------------------------------- | ---------------------------------------------------------------------------------------------- |
-| `size-(--cell-size)`                           | `width:var(--cell-size);height:var(--cell-size)`                                                |
-| `h-(--cell-size)`                              | `height:var(--cell-size)`                                                                       |
-| `min-w-(--cell-size)`                          | `min-width:var(--cell-size)`                                                                    |
-| `px-(--cell-size)`                             | `padding-inline:var(--cell-size)`                                                               |
-| `rounded-(--cell-radius)`                      | `border-radius:var(--cell-radius)`                                                              |
-| `[&:nth-child(7n+1)]:rounded-s-(--cell-radius)` | `…:nth-child(7n+1){border-start-start-radius:var(--cell-radius);border-end-start-radius:…}`     |
-| `[&:nth-child(7n)]:after:hidden`               | `…:nth-child(7n):after{content:var(--tw-content);display:none}`                                 |
-| `in-data-[slot=popover-content]:bg-transparent` | `…[data-slot=popover-content]) .in-data-…\:bg-transparent{background-color:#0000}`              |
+| Utility                                         | Regra gerada                                                                                |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| `size-(--cell-size)`                            | `width:var(--cell-size);height:var(--cell-size)`                                            |
+| `h-(--cell-size)`                               | `height:var(--cell-size)`                                                                   |
+| `min-w-(--cell-size)`                           | `min-width:var(--cell-size)`                                                                |
+| `px-(--cell-size)`                              | `padding-inline:var(--cell-size)`                                                           |
+| `rounded-(--cell-radius)`                       | `border-radius:var(--cell-radius)`                                                          |
+| `[&:nth-child(7n+1)]:rounded-s-(--cell-radius)` | `…:nth-child(7n+1){border-start-start-radius:var(--cell-radius);border-end-start-radius:…}` |
+| `[&:nth-child(7n)]:after:hidden`                | `…:nth-child(7n):after{content:var(--tw-content);display:none}`                             |
+| `in-data-[slot=popover-content]:bg-transparent` | `…[data-slot=popover-content]) .in-data-…\:bg-transparent{background-color:#0000}`          |
 
 Também conferi a ordem de cascata que sustenta o trilho de range (índices no bundle): `.rounded-(--cell-radius)` (37299) → `.rounded-none` (37952) → `.rounded-s-(--cell-radius)` (38128) / `.rounded-e-(--cell-radius)` (38245) → regras `:nth-child(7n±)` (188287, e com especificidade maior). Ou seja: `rounded-none` do range-middle zera o raio base, os lados lógicos do range-start/end vencem depois, e o arredondamento das pontas de semana vence por último — exatamente o comportamento pretendido.
 
@@ -349,10 +349,10 @@ passou para o campo `description` do registry, que é onde a página já renderi
 
 Dois itens do escopo opcional foram implementados para fechar as duas lacunas mais visíveis:
 
-| Input novo | Tipo | Default | O que habilita |
-| ---------- | ---- | ------- | -------------- |
-| `zDisabledDates` | `Date[]` | `[]` | Dias bloqueados individualmente, além do intervalo `minDate`/`maxDate`. Cada um mantém a célula no grid e recebe `data-disabled="true"` — o demo `booked-dates` usa esse seletor para riscá-los, como o shadcn faz com `modifiersClassNames` |
-| `zNumberOfMonths` | `number` | `1` | N meses lado a lado (`months: relative flex flex-col gap-4 md:flex-row`). O demo `range` passou a mostrar dois meses, como o exemplo do shadcn |
+| Input novo        | Tipo     | Default | O que habilita                                                                                                                                                                                                                               |
+| ----------------- | -------- | ------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `zDisabledDates`  | `Date[]` | `[]`    | Dias bloqueados individualmente, além do intervalo `minDate`/`maxDate`. Cada um mantém a célula no grid e recebe `data-disabled="true"` — o demo `booked-dates` usa esse seletor para riscá-los, como o shadcn faz com `modifiersClassNames` |
+| `zNumberOfMonths` | `number` | `1`     | N meses lado a lado (`months: relative flex flex-col gap-4 md:flex-row`). O demo `range` passou a mostrar dois meses, como o exemplo do shadcn                                                                                               |
 
 Detalhes de implementação:
 
@@ -372,30 +372,106 @@ Detalhes de implementação:
 
 ### 11.6 Conjunto final de exemplos
 
-| Exemplo | Equivalente na página do shadcn |
-| ------- | -------------------------------- |
-| `preview` (herói) | Demo |
-| `basic` | Basic |
-| `range` (2 meses) | Range Calendar |
-| `multiple` | — (exclusivo do zard) |
-| `presets` | Presets |
-| `with-time` | Date and Time Picker |
-| `booked-dates` | Booked dates |
-| `custom-cell-size` | Custom Cell Size |
-| `with-constraints` | — (exclusivo do zard) |
-| `expand-year-selection-range` | — (exclusivo do zard) |
+| Exemplo                       | Equivalente na página do shadcn |
+| ----------------------------- | ------------------------------- |
+| `preview` (herói)             | Demo                            |
+| `basic`                       | Basic                           |
+| `range` (2 meses)             | Range Calendar                  |
+| `multiple`                    | — (exclusivo do zard)           |
+| `presets`                     | Presets                         |
+| `with-time`                   | Date and Time Picker            |
+| `booked-dates`                | Booked dates                    |
+| `custom-cell-size`            | Custom Cell Size                |
+| `with-constraints`            | — (exclusivo do zard)           |
+| `expand-year-selection-range` | — (exclusivo do zard)           |
 
 Sem equivalente no zard: **Week Numbers** e **RTL**.
 
 ### 11.7 Verificação da segunda passada
 
-| Comando | Resultado |
-| ------- | --------- |
-| `npx nx test zard` | ✅ 77 suites, **1152** testes (11 novos), 0 falhas |
-| `npx nx build zard` | ✅ `Successfully ran target build for project zard` |
-| `npx eslint` nos arquivos do calendar | ✅ 0 problemas (filtrando o ruído de CRLF descrito na §7) |
-| `npm run generate:highlight` | ✅ 5 demos + 1 installation; `caption.ts` gerado removido, `booked-dates.ts` criado |
-| `npm run build:registry` | ✅ 50 componentes; após normalizar CRLF, só `calendar.json` mudou |
-| Inspeção visual em light e dark | ✅ feita — herói, basic, range (2 meses), multiple, presets, with-time, booked-dates, custom-cell-size, with-constraints, expand-year, e o calendar dentro do popover do date-picker |
+| Comando                               | Resultado                                                                                                                                                                            |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `npx nx test zard`                    | ✅ 77 suites, **1152** testes (11 novos), 0 falhas                                                                                                                                   |
+| `npx nx build zard`                   | ✅ `Successfully ran target build for project zard`                                                                                                                                  |
+| `npx eslint` nos arquivos do calendar | ✅ 0 problemas (filtrando o ruído de CRLF descrito na §7)                                                                                                                            |
+| `npm run generate:highlight`          | ✅ 5 demos + 1 installation; `caption.ts` gerado removido, `booked-dates.ts` criado                                                                                                  |
+| `npm run build:registry`              | ✅ 50 componentes; após normalizar CRLF, só `calendar.json` mudou                                                                                                                    |
+| Inspeção visual em light e dark       | ✅ feita — herói, basic, range (2 meses), multiple, presets, with-time, booked-dates, custom-cell-size, with-constraints, expand-year, e o calendar dentro do popover do date-picker |
 
-Com isso, o único item aberto da checklist da §10 (*"Light e dark conferidos visualmente"*) está fechado.
+Com isso, o único item aberto da checklist da §10 (_"Light e dark conferidos visualmente"_) está fechado.
+
+---
+
+## 12. Terceira passada — borda dupla e saída do `z-select`
+
+### 12.1 A borda era desenhada duas vezes
+
+`<z-calendar class="rounded-lg border" />` produzia **duas bordas de 1px**: o atributo `class` estático fica no host
+`<z-calendar>` (comportamento normal do DOM) e o mesmo valor era lido pelo `input class` e reaplicado ao
+`div[data-slot="calendar"]` interno. No `basic` as duas larguras coincidiam e o resultado era uma linha grossa; no
+`with-constraints`, onde o host esticava com o container flex, a borda externa aparecia claramente maior que o grid.
+
+**Correção:** o host virou o root, como no shadcn — cujo componente `Root` é o próprio `div[data-slot="calendar"]`.
+O wrapper interno deixou de existir:
+
+```
+antes:  <z-calendar class="…">        ← borda do atributo estático
+          <div data-slot="calendar" class="…">   ← borda de novo, via input class
+            <div class="months">…
+
+depois: <z-calendar data-slot="calendar" class="…">   ← um elemento só
+          <div class="months">…
+```
+
+`calendarVariants` ganhou `block` porque um custom element é `display: inline` por padrão, e sem isso `w-fit`, `p-2` e
+a borda não se comportam como no `div` do shadcn. Um teste garante que não existe mais nenhum `[data-slot="calendar"]`
+descendente do host.
+
+### 12.2 O caption abandonou o `z-select`
+
+Os dropdowns de mês e ano usavam `<z-select>`, um componente com overlay CDK próprio. O shadcn usa um `<select>`
+**nativo** invisível (`absolute inset-0 opacity-0`) sobreposto ao label visível — o browser fornece o popup, o
+`<span>` fornece o visual. A estrutura passou a ser a mesma:
+
+```html
+<div data-slot="calendar-dropdown-root">
+  <!-- relative, borda, sombra, has-[:focus-visible]:ring -->
+  <select class="bg-popover absolute inset-0 z-10 cursor-pointer opacity-0">
+    …
+  </select>
+  <span aria-hidden="true">
+    Aug
+    <ng-icon name="lucideChevronDown" />
+  </span>
+</div>
+```
+
+Consequências:
+
+- `registryDependencies` do calendar caiu de `['button', 'select']` para `['button']` — quem instala o calendar pelo
+  CLI não leva mais o `select` junto.
+- `calendarDropdownVariants` deixou de estilizar o trigger de outro componente por fora e passou a descrever o próprio
+  select; entrou `calendarDropdownRootVariants` para o wrapper.
+- O `<select>` é o controle acessível (com `aria-label="Choose the month"` / `"Choose the year"`), o `<span>` é
+  decorativo. Em telas pequenas o usuário ganha o seletor nativo do sistema.
+- `monthChange` / `yearChange` agora emitem a partir do evento `change` do select. Como o `z-select` era a única fonte
+  capaz de emitir array, as guardas `Array.isArray` de `onMonthChange` / `onYearChange` viraram código morto e saíram.
+
+### 12.3 Um falso positivo que vale registrar
+
+Durante a verificação, o calendar dentro do popover do date-picker apareceu no browser sem `data-slot` e sem classes,
+com as células colapsadas. **Não era um defeito do código:** o dev server estava servindo um bundle incremental
+defasado — o template novo já tinha sido aplicado, mas os metadados de host do componente, não. Um teste novo no
+`date-picker.component.spec.ts` abre o popover e verifica `data-slot="calendar"`, `[--cell-size:--spacing(7)]`, `p-2`
+e os dois `<select>`; ele passa. O sintoma sumiu depois de derrubar o processo do dev server (que sobrevivera a um
+`Ctrl+C`, mantendo a porta 4200) e subir um novo.
+
+### 12.4 Verificação da terceira passada
+
+| Comando                                                 | Resultado                                                                                                                           |
+| ------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `npx nx test zard`                                      | ✅ 77 suites, **1157** testes, 0 falhas                                                                                             |
+| `npx nx build zard`                                     | ✅                                                                                                                                  |
+| `npx eslint` nos arquivos tocados                       | ✅ 0 problemas reais                                                                                                                |
+| `npm run generate:highlight` + `npm run build:registry` | ✅ diff restrito a `calendar.json` e `registry.json` (perda da dep `select`)                                                        |
+| Inspeção visual                                         | ✅ uma borda só no `basic`, `with-constraints` e demais; caption nativo funcionando; calendar transparente dentro de card e popover |
