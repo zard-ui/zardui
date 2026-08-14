@@ -3,6 +3,10 @@
 Alinhamento visual do `Calendar` do zard/ui com o `Calendar` atual do shadcn/ui, conforme `PROMPT.md`.
 Branch: `feat/calendar-update`. Apenas commits locais — nenhum push, PR, tag ou release.
 
+> **Segunda passada (revisão visual).** As seções 1–10 descrevem o update original. A
+> [seção 11](#11-segunda-passada--o-que-a-revisão-visual-encontrou-e-corrigiu) registra o que a inspeção visual —
+> que ficara pendente — encontrou depois, e o que foi feito a respeito.
+
 ---
 
 ## 1. Tabela "antes → depois" das classes por slot
@@ -297,3 +301,101 @@ Conforme a regra de decisão, apenas anotados:
 - [x] Nenhum arquivo gerado editado à mão
 - [x] Commits locais no padrão emoji+conventional; **nenhum push**
 - [x] `CALENDAR_UPGRADE_REPORT.md` escrito
+
+---
+
+## 11. Segunda passada — o que a revisão visual encontrou (e corrigiu)
+
+A inspeção em browser, listada como pendente na §7, foi feita depois com o dev server em
+`http://localhost:4200/docs/components/calendar`, em light e dark. Três defeitos apareceram, além de duas lacunas de
+conteúdo.
+
+### 11.1 Idioma do header seguia o locale do navegador
+
+`calendar-navigation.component.ts` montava o nome do mês com `toLocaleString(undefined, { month: 'long' })`, ou seja,
+o locale do navegador. Num navegador `pt-BR` o caption saía **"agosto 2026"** — em português e minúsculo — ao lado dos
+weekdays (`Su Mo Tu …`) e dos dropdowns (`Jan`, `Feb`, …), que são arrays hardcoded em inglês. O calendar exibia duas
+línguas ao mesmo tempo.
+
+**Por que os testes não pegaram:** o jsdom roda em `en-US`, então `toLocaleString` devolvia "August" e a assertiva
+`getByText('January 2024')` passava. O defeito só existia fora do ambiente de teste.
+
+**Correção:** novo `calendarMonthsLong` em `calendar.utils.ts`, ao lado de `calendarMonths` e `calendarWeekdays`, e o
+caption passou a lê-lo. Pelo mesmo motivo, o `data-day` do botão de dia fixou `'en-US'` (o `aria-label` já fixava).
+Agora todas as strings do componente vêm da mesma fonte. Um teste novo cobre o caption independentemente do locale.
+
+> **Consequência assumida:** o calendar é monolíngue em inglês, como o resto do design system. Localização de verdade
+> (input de `locale`) continua no escopo opcional — a diferença é que antes ela estava meio implementada e
+> inconsistente, e agora está coerentemente ausente.
+
+### 11.2 Data em formato local no demo `with-constraints`
+
+O demo imprimia `Available dates: {{ minDate.toLocaleDateString() }} …`, que num navegador `pt-BR` virava
+`13/08/2026 - 12/09/2026` dentro de uma frase em inglês. O parágrafo foi removido junto com a reforma do demo (11.4).
+
+### 11.3 `preview` e `caption` eram o mesmo exemplo
+
+Ambos os demos eram `zMode="single" zCaptionLayout="dropdown" class="rounded-lg border"`. O exemplo "Caption" não
+mostrava nada que o herói do topo já não mostrasse. `demo/caption.ts` foi removido; o herói continua sendo a vitrine
+do `zCaptionLayout="dropdown"` e o `basic` mostra o default `label` — agora visualmente distintos.
+
+### 11.4 Demos exclusivos do zard fora do padrão da página
+
+`with-constraints` e `expand-year-selection-range` traziam `<h3>` e parágrafos que nenhum outro exemplo do repo usa, e
+`range` exibia um card "From/To" que não existe no shadcn. Os três foram reduzidos ao calendar em si; a explicação
+passou para o campo `description` do registry, que é onde a página já renderiza texto.
+
+### 11.5 Exemplos que faltavam da página do shadcn
+
+Dois itens do escopo opcional foram implementados para fechar as duas lacunas mais visíveis:
+
+| Input novo | Tipo | Default | O que habilita |
+| ---------- | ---- | ------- | -------------- |
+| `zDisabledDates` | `Date[]` | `[]` | Dias bloqueados individualmente, além do intervalo `minDate`/`maxDate`. Cada um mantém a célula no grid e recebe `data-disabled="true"` — o demo `booked-dates` usa esse seletor para riscá-los, como o shadcn faz com `modifiersClassNames` |
+| `zNumberOfMonths` | `number` | `1` | N meses lado a lado (`months: relative flex flex-col gap-4 md:flex-row`). O demo `range` passou a mostrar dois meses, como o exemplo do shadcn |
+
+Detalhes de implementação:
+
+- `generateCalendarDays` ganhou `disabledDates` opcional; `isDateDisabled` compara por dia, ignorando a hora.
+- Cada mês renderiza seu próprio `z-calendar-navigation` + `z-calendar-grid`. Só o primeiro mês carrega a seta
+  "previous" e só o último a "next" (`zShowPreviousButton` / `zShowNextButton`); o lado escondido vira um spacer
+  `size-(--cell-size)` com `aria-hidden`, para o caption continuar centralizado.
+- `getDayId` recebeu um `monthIndex` opcional, então os ids dos dias continuam únicos no documento com vários grids.
+  Com um mês só, o id continua sendo exatamente `calendar-day-N`.
+- Os dropdowns de um mês posterior reposicionam a navegação: escolher "Maio" no segundo caption puxa o primeiro mês
+  para abril (`rebaseNavigation`).
+- O foco roving continua vivendo no primeiro grid; `onKeyDown`, `navigate`, `findEnabledInRange`, `setFocus`,
+  `getFocusedDayIndex`, `setFocusedDayIndex` e `resetFocus` não foram tocados.
+
+**Continuam de fora do escopo opcional:** `zShowWeekNumber` (exemplo "Week Numbers"), template customizável de dia,
+`zFixedWeeks` e locale/RTL (exemplo "RTL").
+
+### 11.6 Conjunto final de exemplos
+
+| Exemplo | Equivalente na página do shadcn |
+| ------- | -------------------------------- |
+| `preview` (herói) | Demo |
+| `basic` | Basic |
+| `range` (2 meses) | Range Calendar |
+| `multiple` | — (exclusivo do zard) |
+| `presets` | Presets |
+| `with-time` | Date and Time Picker |
+| `booked-dates` | Booked dates |
+| `custom-cell-size` | Custom Cell Size |
+| `with-constraints` | — (exclusivo do zard) |
+| `expand-year-selection-range` | — (exclusivo do zard) |
+
+Sem equivalente no zard: **Week Numbers** e **RTL**.
+
+### 11.7 Verificação da segunda passada
+
+| Comando | Resultado |
+| ------- | --------- |
+| `npx nx test zard` | ✅ 77 suites, **1152** testes (11 novos), 0 falhas |
+| `npx nx build zard` | ✅ `Successfully ran target build for project zard` |
+| `npx eslint` nos arquivos do calendar | ✅ 0 problemas (filtrando o ruído de CRLF descrito na §7) |
+| `npm run generate:highlight` | ✅ 5 demos + 1 installation; `caption.ts` gerado removido, `booked-dates.ts` criado |
+| `npm run build:registry` | ✅ 50 componentes; após normalizar CRLF, só `calendar.json` mudou |
+| Inspeção visual em light e dark | ✅ feita — herói, basic, range (2 meses), multiple, presets, with-time, booked-dates, custom-cell-size, with-constraints, expand-year, e o calendar dentro do popover do date-picker |
+
+Com isso, o único item aberto da checklist da §10 (*"Light e dark conferidos visualmente"*) está fechado.
