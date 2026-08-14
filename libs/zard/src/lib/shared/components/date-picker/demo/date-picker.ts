@@ -24,7 +24,7 @@ export const DATE_PICKER = {
   api: DATE_PICKER_API,
   componentName: 'date-picker',
   componentType: 'date-picker',
-  description: 'A button that opens a calendar in a popover to pick a date or a date range.',
+  description: 'A button that opens a calendar in a popover to pick one date, several dates, or a date range.',
   installData: {
     cliAdd: DATE_PICKER_CLI_ADD,
     manualCode: DATE_PICKER_MANUAL_CODE,

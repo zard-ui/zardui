@@ -10,12 +10,52 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
 import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/popover';
 
+const MONTHS = [
+  'january',
+  'february',
+  'march',
+  'april',
+  'may',
+  'june',
+  'july',
+  'august',
+  'september',
+  'october',
+  'november',
+  'december',
+];
+
 function formatDate(date: Date | null): string {
   if (!date) {
     return '';
   }
 
   return date.toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' });
+}
+
+/**
+ * Parses the one format this demo documents — `June 01, 2025` — as a local date.
+ * `new Date(value)` is not an option: it reads date-only ISO strings as UTC, so west of UTC the
+ * calendar would land a day earlier than what was typed.
+ */
+function parseDate(value: string): Date | null {
+  const match = /^\s*([a-zA-Z]+)\s+(\d{1,2}),?\s+(\d{4})\s*$/.exec(value);
+  if (!match) {
+    return null;
+  }
+
+  const month = MONTHS.indexOf(match[1].toLowerCase());
+  const day = Number(match[2]);
+  const year = Number(match[3]);
+
+  if (month < 0) {
+    return null;
+  }
+
+  const date = new Date(year, month, day);
+
+  // Rejects overflow like "February 31, 2025", which the Date constructor would roll over.
+  return date.getMonth() === month && date.getDate() === day ? date : null;
 }
 
 @Component({
@@ -78,8 +118,8 @@ export class ZardDemoDatePickerWithInputComponent {
     const typed = (event.target as HTMLInputElement).value;
     this.inputValue.set(typed);
 
-    const parsed = new Date(typed);
-    if (!Number.isNaN(parsed.getTime())) {
+    const parsed = parseDate(typed);
+    if (parsed) {
       this.selectedDate.set(parsed);
     }
   }

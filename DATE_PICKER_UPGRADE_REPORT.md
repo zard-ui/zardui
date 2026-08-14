@@ -131,6 +131,13 @@ N dates degrades fast, and shadcn does not show one.
    its `data-*` state.
 7. **`aria-label` dropped when `zId` is set.** An `aria-label` beats an associated `<label>` for assistive tech, so
    keeping both would have hidden the visible label from screen readers.
+8. **Open/closed asserted through `aria-expanded`, not through the overlay node.** The popover flips `aria-expanded`
+   synchronously but detaches the overlay only when its close animation ends, so asserting on the DOM node passed
+   locally and failed on CI. `aria-expanded` is both deterministic and the thing users of assistive tech actually get.
+9. **`(dateChange)` documented as `EventEmitter<CalendarValue>`.** It is really an `OutputEmitterRef`, but all 15 output
+   rows across the other `doc/api.ts` files say `EventEmitter`. Fixing one file would just make the docs inconsistent.
+10. **The typed-date example parses one documented format by hand.** `new Date(value)` reads date-only ISO strings as
+    UTC, so west of UTC the calendar lands a day earlier than what was typed. shadcn's own example has this bug.
 
 ---
 

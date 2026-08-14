@@ -14,6 +14,12 @@ describe('ZardDatePickerComponent', () => {
   const triggerText = () => trigger().textContent?.trim();
   const host = () => fixture.nativeElement as HTMLElement;
 
+  /**
+   * The popover flips `aria-expanded` synchronously but only detaches the overlay once its close
+   * animation ends, so the DOM node is not a reliable answer to "is it open".
+   */
+  const isOpen = () => trigger().getAttribute('aria-expanded') === 'true';
+
   /** The popover renders into the overlay container, outside the fixture. */
   const openPopover = async () => {
     trigger().click();
@@ -271,7 +277,7 @@ describe('ZardDatePickerComponent', () => {
 
       expect(component.value()).toEqual(new Date(2024, 0, 15));
       expect(emitted).toEqual([new Date(2024, 0, 15)]);
-      expect(document.querySelector('.cdk-overlay-container z-calendar')).toBeNull();
+      expect(isOpen()).toBe(false);
     });
 
     it('should keep the popover open until both ends of a range are set', async () => {
@@ -281,11 +287,11 @@ describe('ZardDatePickerComponent', () => {
       await openPopover();
       await clickDay('10');
 
-      expect(document.querySelector('.cdk-overlay-container z-calendar')).toBeTruthy();
+      expect(isOpen()).toBe(true);
 
       await clickDay('20');
 
-      expect(document.querySelector('.cdk-overlay-container z-calendar')).toBeNull();
+      expect(isOpen()).toBe(false);
       expect((component.value() as Date[]).map(date => date.getDate())).toEqual([10, 20]);
     });
 
@@ -297,7 +303,7 @@ describe('ZardDatePickerComponent', () => {
       await clickDay('10');
       await clickDay('20');
 
-      expect(document.querySelector('.cdk-overlay-container z-calendar')).toBeTruthy();
+      expect(isOpen()).toBe(true);
       expect((component.value() as Date[]).map(date => date.getDate())).toEqual([10, 20]);
     });
   });
