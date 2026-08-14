@@ -447,6 +447,7 @@
       "files": [
         "popover.component.ts",
         "popover.variants.ts",
+        "popover.imports.ts",
         "index.ts"
       ]
     },

@@ -4,22 +4,22 @@ import { ZardButtonComponent } from '@/shared/components/button/button.component
 import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-hover-demo',
+  selector: 'z-popover-basic-demo',
   imports: [ZardButtonComponent, ...ZardPopoverImports],
   template: `
-    <button type="button" z-button zPopover zTrigger="hover" zType="outline" [zContent]="popoverContent">
-      Hover me
+    <button type="button" z-button zPopover zAlign="start" zType="outline" class="w-fit" [zContent]="popoverContent">
+      Open Popover
     </button>
 
     <ng-template #popoverContent>
       <z-popover>
         <div z-popover-header>
-          <h4 z-popover-title>Hover content</h4>
-          <p z-popover-description>This popover appears when you hover over the button.</p>
+          <h4 z-popover-title>Dimensions</h4>
+          <p z-popover-description>Set the dimensions for the layer.</p>
         </div>
       </z-popover>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoPopoverHoverComponent {}
+export class ZardDemoPopoverBasicComponent {}

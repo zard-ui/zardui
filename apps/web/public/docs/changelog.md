@@ -1235,28 +1235,51 @@ Floating content container that appears on trigger with customizable positioning
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-default-demo',
-  imports: [ZardButtonComponent, ZardPopoverComponent, ZardPopoverDirective],
-  standalone: true,
+  selector: 'z-popover-preview-demo',
+  imports: [ZardButtonComponent, ZardInputComponent, ...ZardPopoverImports],
   template: `
-    <button type="button" z-button zPopover [zContent]="popoverContent" zType="outline">Open popover</button>
+    <button type="button" z-button zPopover zType="outline" [zContent]="popoverContent">Open popover</button>
 
     <ng-template #popoverContent>
-      <z-popover>
-        <div class="space-y-2">
-          <h4 class="leading-none font-medium">Dimensions</h4>
-          <p class="text-muted-foreground text-sm">Set the dimensions for the layer.</p>
+      <z-popover class="w-80">
+        <div z-popover-header>
+          <h4 z-popover-title>Dimensions</h4>
+          <p z-popover-description>Set the dimensions for the layer.</p>
+        </div>
+
+        <div class="grid gap-2">
+          @for (dimension of dimensions; track dimension.id) {
+            <div class="grid grid-cols-3 items-center gap-4">
+              <label class="text-sm" [attr.for]="dimension.id">{{ dimension.label }}</label>
+              <input
+                z-input
+                type="text"
+                class="col-span-2 h-8"
+                [id]="dimension.id"
+                [value]="dimension.value"
+                [attr.aria-label]="dimension.label"
+              />
+            </div>
+          }
         </div>
       </z-popover>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoPopoverDefaultComponent {}
+export class ZardDemoPopoverPreviewComponent {
+  readonly dimensions = [
+    { id: 'width', label: 'Width', value: '100%' },
+    { id: 'maxWidth', label: 'Max. width', value: '300px' },
+    { id: 'height', label: 'Height', value: '25px' },
+    { id: 'maxHeight', label: 'Max. height', value: 'none' },
+  ];
+}
 ```
 
 #### alert-dialog
@@ -1845,7 +1868,7 @@ Data table component with sorting, filtering, pagination, and customizable colum
 ```
 import { Component } from '@angular/core';
 
-import { ZardTableComponent } from '../table.component';
+import { ZardTableImports } from '../table.imports';
 
 interface Person {
   key: string;
@@ -1856,24 +1879,23 @@ interface Person {
 
 @Component({
   selector: 'z-demo-table-simple',
-  imports: [ZardTableComponent],
-  standalone: true,
+  imports: [ZardTableImports],
   template: `
     <table z-table>
-      <caption>A list of your recent invoices.</caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Address</th>
+      <caption z-table-caption>A list of your recent invoices.</caption>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head>Name</th>
+          <th z-table-head>Age</th>
+          <th z-table-head>Address</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody z-table-body>
         @for (data of listOfData; track data.key) {
-          <tr>
-            <td class="font-medium">{{ data.name }}</td>
-            <td>{{ data.age }}</td>
-            <td>{{ data.address }}</td>
+          <tr z-table-row>
+            <td z-table-cell class="font-medium">{{ data.name }}</td>
+            <td z-table-cell>{{ data.age }}</td>
+            <td z-table-cell>{{ data.address }}</td>
           </tr>
         }
       </tbody>
