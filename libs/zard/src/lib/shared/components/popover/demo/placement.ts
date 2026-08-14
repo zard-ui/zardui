@@ -1,29 +1,34 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
   selector: 'z-popover-placement-demo',
-  imports: [ZardButtonComponent, ZardPopoverComponent, ZardPopoverDirective],
-  standalone: true,
+  imports: [ZardButtonComponent, ...ZardPopoverImports],
   template: `
     <div class="flex flex-col space-y-2">
-      <button z-button zPopover [zContent]="popoverContent" zPlacement="top" zType="outline">Top</button>
+      <button type="button" z-button zPopover zPlacement="top" zType="outline" [zContent]="popoverContent">Top</button>
 
       <div class="flex space-x-2">
-        <button z-button zPopover [zContent]="popoverContent" zPlacement="left" zType="outline">Left</button>
-        <button z-button zPopover [zContent]="popoverContent" zPlacement="right" zType="outline">Right</button>
+        <button type="button" z-button zPopover zPlacement="left" zType="outline" [zContent]="popoverContent">
+          Left
+        </button>
+        <button type="button" z-button zPopover zPlacement="right" zType="outline" [zContent]="popoverContent">
+          Right
+        </button>
       </div>
 
-      <button z-button zPopover [zContent]="popoverContent" zPlacement="bottom" zType="outline">Bottom</button>
+      <button type="button" z-button zPopover zPlacement="bottom" zType="outline" [zContent]="popoverContent">
+        Bottom
+      </button>
     </div>
 
     <ng-template #popoverContent>
-      <z-popover>
-        <div class="space-y-2">
-          <h4 class="leading-none font-medium">Popover content</h4>
-          <p class="text-muted-foreground text-sm">This is the popover content.</p>
+      <z-popover class="w-64">
+        <div z-popover-header>
+          <h4 z-popover-title>Placement</h4>
+          <p z-popover-description>The popover flips automatically when it does not fit.</p>
         </div>
       </z-popover>
     </ng-template>

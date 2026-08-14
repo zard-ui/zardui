@@ -9,10 +9,11 @@ Contribute components to the blocks library.
 
 Building blocks for your apps. Blocks are pre-built components that you can use to build your apps faster. They are built with TailwindCSS and Angular, and are fully customizable.
 
-- [View on GitHub](https://github.com/zard-ui/zardui)
-- [Browse all blocks](/blocks)
+[View on GitHub](https://github.com/zard-ui/zardui)
 
-1
+[Browse all blocks](/blocks)
+
+10
 
 Available Blocks
 
@@ -28,7 +29,8 @@ Open Source
 
 Hand-picked collection of our best blocks
 
-- [Authentication page](/blocks#authentication-01)
+- [Login form](/blocks#login-01)
+- [Signup form](/blocks#signup-01)
 
 ## All Blocks
 
@@ -36,15 +38,30 @@ Browse blocks by category
 
 ### Featured
 
-1
+2
 
-- [Authentication page](/blocks#authentication-01)
+- [Login form](/blocks#login-01)
+- [Signup form](/blocks#signup-01)
 
 ### Login
 
-1
+5
 
-- [Authentication page](/blocks#authentication-01)
+- [Login form](/blocks#login-01)
+- [Login with cover image](/blocks#login-02)
+- [Login with muted background](/blocks#login-03)
+- [Login with form and image](/blocks#login-04)
+- [Email-only login](/blocks#login-05)
+
+### Signup
+
+5
+
+- [Signup form](/blocks#signup-01)
+- [Signup with cover image](/blocks#signup-02)
+- [Signup with muted background](/blocks#signup-03)
+- [Signup with form and image](/blocks#signup-04)
+- [Signup with social providers](/blocks#signup-05)
 
 ## How to use blocks
 
@@ -74,5 +91,6 @@ We're working on adding blocks support to the ZardUI CLI. Soon you'll be able to
 
 Blocks are open source. If you have a block you'd like to share, we'd love to see it! Check out our [contribution guidelines](https://github.com/zard-ui/zardui/tree/master/libs/blocks) to get started.
 
-- [Contribute on GitHub](https://github.com/zard-ui/zardui/tree/master/libs/blocks)
-- [View CLI documentation](/docs/cli)
+[Contribute on GitHub](https://github.com/zard-ui/zardui/tree/master/libs/blocks)
+
+[View CLI documentation](/docs/cli)

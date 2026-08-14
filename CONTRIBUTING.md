@@ -84,7 +84,7 @@ ZardUI is a **monorepo** managed by [Nx](https://nx.dev/):
 | Path                  | What it is                                                                                       |
 | --------------------- | ------------------------------------------------------------------------------------------------ |
 | `libs/zard/`          | The publishable component library — components, variants, demos, API references                  |
-| `libs/blocks/`        | Composed screens (e.g. `authentication-01`) with their metadata                                  |
+| `libs/blocks/`        | Composed screens (e.g. `login-01`) with their metadata                                           |
 | `apps/web/`           | The documentation site (Angular + SSR/prerender)                                                 |
 | `apps/web-e2e/`       | Playwright E2E specs, including accessibility checks                                             |
 | `packages/highlight/` | Shiki generators plus `z-code-block`, `z-code-tabs`, `z-code-display`                            |
