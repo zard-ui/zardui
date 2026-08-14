@@ -915,6 +915,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'popover.imports.ts',
+        content: '',
+      },
+      {
         name: 'index.ts',
         content: '',
       },

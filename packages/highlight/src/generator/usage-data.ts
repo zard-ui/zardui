@@ -221,10 +221,15 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-pagination [zTotal]="100" [zPageSize]="10"></z-pagination>`,
   },
   popover: {
-    importCode: `import { ZardPopoverDirective } from '@/shared/components/popover/popover.component';`,
-    templateCode: `<button z-button [zPopover]="popoverContent">Open popover</button>
+    importCode: `import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';`,
+    templateCode: `<button z-button zType="outline" zPopover [zContent]="popoverContent">Open popover</button>
 <ng-template #popoverContent>
-  <p>Place content for the popover here.</p>
+  <z-popover>
+    <div z-popover-header>
+      <h4 z-popover-title>Title</h4>
+      <p z-popover-description>Description text here.</p>
+    </div>
+  </z-popover>
 </ng-template>`,
   },
   progress: {

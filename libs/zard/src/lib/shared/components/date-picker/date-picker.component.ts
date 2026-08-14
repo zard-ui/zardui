@@ -59,8 +59,6 @@ const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
       [zContent]="calendarTemplate"
       zTrigger="click"
       (zVisibleChange)="onPopoverVisibilityChange($event)"
-      [attr.aria-expanded]="false"
-      [attr.aria-haspopup]="true"
       aria-label="Choose date"
     >
       <ng-icon name="lucideCalendar" class="size-4!" />
@@ -70,7 +68,7 @@ const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
     </button>
 
     <ng-template #calendarTemplate>
-      <z-popover [class]="popoverClasses()">
+      <z-popover aria-label="Choose date" [class]="popoverClasses()">
         <z-calendar
           #calendar
           class="border-0"

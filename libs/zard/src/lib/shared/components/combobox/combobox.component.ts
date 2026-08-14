@@ -75,9 +75,6 @@ export interface ZardComboboxGroup {
       [zType]="buttonVariant()"
       [class]="buttonClasses()"
       [zDisabled]="disabledState()"
-      [attr.aria-expanded]="open()"
-      [attr.aria-haspopup]="'listbox'"
-      [attr.aria-controls]="'combobox-listbox'"
       [attr.aria-label]="ariaLabel() || 'Select option'"
       [attr.aria-describedby]="ariaDescribedBy()"
       [attr.aria-autocomplete]="searchable() ? 'list' : 'none'"
@@ -92,7 +89,7 @@ export interface ZardComboboxGroup {
     </button>
 
     <ng-template #popoverContent>
-      <z-popover [class]="popoverClasses()">
+      <z-popover [attr.aria-label]="ariaLabel() || 'Select option'" [class]="popoverClasses()">
         <z-command class="min-h-auto" (zCommandSelected)="handleSelect($event)" #commandRef>
           @if (searchable()) {
             <z-command-input [placeholder]="searchPlaceholder()" #commandInputRef />
