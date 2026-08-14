@@ -1,9 +1,11 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
   type ElementRef,
   input,
+  numberAttribute,
   output,
   signal,
   viewChild,
@@ -14,14 +16,20 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import type { CalendarDay } from './calendar.types';
 import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
-import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
+import {
+  calendarDayButtonVariants,
+  calendarDayVariants,
+  calendarWeekdaysVariants,
+  calendarWeekdayVariants,
+  calendarWeekVariants,
+} from './calendar.variants';
 
 @Component({
   selector: 'z-calendar-grid',
   template: `
-    <div #gridContainer>
+    <div #gridContainer class="w-full">
       <!-- Weekdays Header -->
-      <div class="grid w-fit grid-cols-7 text-center" role="row">
+      <div [class]="weekdaysClasses()" role="row">
         @for (weekday of weekdays; track weekday) {
           <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
@@ -30,15 +38,26 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants
       </div>
 
       <!-- Calendar Days Grid -->
-      <div class="mt-2 grid w-fit auto-rows-min grid-cols-7 gap-0" role="rowgroup">
+      <div [class]="weekClasses()" role="rowgroup">
         @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
-          <div [class]="dayContainerClasses()" role="gridcell">
+          <div
+            role="gridcell"
+            [class]="dayContainerClasses(day)"
+            [attr.data-selected]="day.isSelected ? 'true' : null"
+            [attr.data-today]="day.isToday ? 'true' : null"
+            [attr.data-outside]="day.isCurrentMonth ? null : 'true'"
+            [attr.data-disabled]="day.isDisabled ? 'true' : null"
+            [attr.data-range-start]="day.isRangeStart ? 'true' : null"
+            [attr.data-range-middle]="day.isInRange ? 'true' : null"
+            [attr.data-range-end]="day.isRangeEnd ? 'true' : null"
+          >
             <button
               type="button"
               [id]="getDayId(i)"
               [class]="dayButtonClasses(day)"
               (click)="onDayClick(day.date, i)"
               [disabled]="day.isDisabled"
+              [attr.data-day]="getDayLabel(day)"
               [attr.aria-selected]="day.isSelected"
               [attr.aria-label]="getDayAriaLabel(day)"
               [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
@@ -54,7 +73,7 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    class: 'flex justify-center',
+    class: 'w-full',
     '[attr.role]': '"grid"',
     '(keydown.{arrowleft,arrowright,arrowup,arrowdown,home,end,pageup,pagedown,enter,space}.prevent)':
       'onKeyDown($event)',
@@ -67,6 +86,9 @@ export class ZardCalendarGridComponent {
   // Inputs
   readonly calendarDays = input.required<CalendarDay[]>();
   readonly disabled = input<boolean>(false);
+  readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
+  /** Position of this grid inside a multi-month calendar. Only used to scope the day ids. */
+  readonly zMonthIndex = input(0, { transform: numberAttribute });
 
   // Outputs
   readonly dateSelect = output<{ date: Date; index: number }>();
@@ -78,20 +100,34 @@ export class ZardCalendarGridComponent {
 
   private readonly focusedDayIndex = signal<number>(-1);
 
+  protected readonly weekdaysClasses = computed(() => mergeClasses(calendarWeekdaysVariants()));
+
   protected readonly weekdayClasses = computed(() => mergeClasses(calendarWeekdayVariants()));
 
-  protected readonly dayContainerClasses = computed(() => mergeClasses(calendarDayVariants()));
+  protected readonly weekClasses = computed(() => mergeClasses(calendarWeekVariants()));
+
+  protected dayContainerClasses(day: CalendarDay): string {
+    return mergeClasses(
+      calendarDayVariants({
+        selected: day.isSelected,
+        today: day.isToday,
+        rangeStart: day.isRangeStart ?? false,
+        rangeMiddle: day.isInRange ?? false,
+        rangeEnd: day.isRangeEnd ?? false,
+      }),
+      !day.isCurrentMonth && !this.zShowOutsideDays() && 'invisible',
+    );
+  }
 
   protected dayButtonClasses(day: CalendarDay): string {
     return mergeClasses(
       calendarDayButtonVariants({
         selected: day.isSelected,
-        today: day.isToday,
         outside: !day.isCurrentMonth,
         disabled: day.isDisabled,
         rangeStart: day.isRangeStart ?? false,
         rangeEnd: day.isRangeEnd ?? false,
-        inRange: day.isInRange ?? false,
+        rangeMiddle: day.isInRange ?? false,
       }),
     );
   }
@@ -105,11 +141,16 @@ export class ZardCalendarGridComponent {
   }
 
   protected getDayId(index: number): string {
-    return getDayId(index);
+    return getDayId(index, this.zMonthIndex());
   }
 
   protected getDayAriaLabel(day: CalendarDay): string {
     return getDayAriaLabel(day);
+  }
+
+  /** Date exposed as `data-day`, mirroring the shadcn day button. */
+  protected getDayLabel(day: CalendarDay): string {
+    return day.date.toLocaleDateString('en-US');
   }
 
   protected getFocusedDayIndex(): number {
@@ -290,7 +331,9 @@ export class ZardCalendarGridComponent {
   private setFocus(index: number): void {
     this.focusedDayIndex.set(index);
     setTimeout(() => {
-      const dayElement = this.gridContainer()?.nativeElement.querySelector(`#${getDayId(index)}`) as HTMLElement;
+      const dayElement = this.gridContainer()?.nativeElement.querySelector(
+        `#${getDayId(index, this.zMonthIndex())}`,
+      ) as HTMLElement;
       dayElement?.focus();
     }, 0);
   }

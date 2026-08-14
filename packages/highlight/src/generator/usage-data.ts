@@ -59,7 +59,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   calendar: {
     importCode: `import { ZardCalendarComponent } from '@/shared/components/calendar/calendar.component';`,
-    templateCode: `<z-calendar></z-calendar>`,
+    templateCode: `<z-calendar zMode="single" class="rounded-lg border"></z-calendar>`,
   },
   card: {
     importCode: `import { ZardCardComponent } from '@/shared/components/card/card.component';`,

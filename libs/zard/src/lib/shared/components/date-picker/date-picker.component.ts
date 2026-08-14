@@ -69,9 +69,10 @@ const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
 
     <ng-template #calendarTemplate>
       <z-popover aria-label="Choose date" [class]="popoverClasses()">
+        <!-- The popover content is p-0, so the calendar's own p-2 provides the padding. -->
         <z-calendar
           #calendar
-          class="border-0"
+          zCaptionLayout="dropdown"
           [value]="value()"
           [minDate]="minDate()"
           [maxDate]="maxDate()"

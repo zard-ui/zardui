@@ -46,6 +46,22 @@ describe('ZardDatePickerComponent', () => {
     expect(button?.textContent?.trim()).toContain('January 15, 2024');
   });
 
+  it('should render the calendar inside the popover with its own root styling', async () => {
+    const trigger = (fixture.nativeElement as HTMLElement).querySelector('button') as HTMLButtonElement;
+    trigger.click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const calendar = document.querySelector('z-calendar');
+
+    expect(calendar).toBeTruthy();
+    expect(calendar?.getAttribute('data-slot')).toBe('calendar');
+    // Without these the cell sizing collapses inside the popover.
+    expect(calendar?.className).toContain('[--cell-size:--spacing(7)]');
+    expect(calendar?.className).toContain('p-2');
+    expect(calendar?.querySelectorAll('select')).toHaveLength(2);
+  });
+
   it('should emit dateChange when calendar date is selected', () => {
     const testDate = new Date(2024, 0, 15);
     let emittedDate: Date | null = null;
