@@ -1,4 +1,30 @@
-import { sectionOf } from './docs.service.js';
+import { docsService, sectionOf } from './docs.service.js';
+
+/**
+ * O nome do componente vira caminho da página, então corre o mesmo risco do
+ * registry: sem validação, `../../algo` sai de /docs/components e traz outra
+ * coisa de volta para o modelo.
+ */
+describe('docsService path safety', () => {
+  const fetchMock = jest.fn();
+
+  beforeEach(() => {
+    fetchMock.mockReset();
+    globalThis.fetch = fetchMock as unknown as typeof fetch;
+  });
+
+  it.each([['../../../etc/passwd'], ['/absolute'], ['button?raw=1'], ['//evil.example.com/x']])(
+    'refuses "%s" without any request',
+    async name => {
+      await expect(docsService.getComponentMarkdown(name)).rejects.toThrow(/Invalid component name/);
+      expect(fetchMock).not.toHaveBeenCalled();
+    },
+  );
+
+  it('keeps a clean name inside the components directory', () => {
+    expect(docsService.urlFor('data-table')).toBe('https://zardui.com/docs/components/data-table');
+  });
+});
 
 /**
  * A página de um componente é um documento só, com instalação, uso, exemplos e

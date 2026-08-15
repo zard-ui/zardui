@@ -13,6 +13,8 @@
  * o site oficial é o padrão.
  */
 
+import { assertRegistryId } from '../utils/identifiers.js';
+
 const DOCS_TTL = 5 * 60 * 1000;
 const FETCH_TIMEOUT = 10_000;
 
@@ -24,11 +26,15 @@ class DocsService {
   }
 
   urlFor(name: string): string {
-    return `${this.baseUrl}/docs/components/${name}`;
+    // O nome vira caminho, então passa pela mesma validação do registry: sem
+    // isto, `../../algo` sairia de /docs/components e traria outra página.
+    return `${this.baseUrl}/docs/components/${assertRegistryId(name, 'component')}`;
   }
 
   /** O markdown da página, ou null quando ela não existe. */
   async getComponentMarkdown(name: string): Promise<string | null> {
+    const url = `${this.urlFor(name)}.md`;
+
     const cached = this.cache.get(name);
     if (cached && Date.now() - cached.timestamp < DOCS_TTL) return cached.text;
 
@@ -36,7 +42,7 @@ class DocsService {
     const timeout = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
 
     try {
-      const response = await fetch(`${this.urlFor(name)}.md`, {
+      const response = await fetch(url, {
         signal: controller.signal,
         headers: { 'User-Agent': 'zard-mcp' },
       });

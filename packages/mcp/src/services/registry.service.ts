@@ -1,4 +1,5 @@
 import type { BlockData, BlocksRegistry, ComponentData, RegistryIndex, RegistryItem } from '../types/registry.types.js';
+import { assertRegistryId } from '../utils/identifiers.js';
 
 const REGISTRY_TTL = 5 * 60 * 1000; // 5 minutes
 const FETCH_TIMEOUT = 10_000; // 10 seconds
@@ -71,6 +72,9 @@ class RegistryService {
   }
 
   async getComponent(name: string): Promise<ComponentData> {
+    // Validado aqui, antes do cache e da URL: é o nome que vira caminho.
+    assertRegistryId(name, 'component');
+
     const cached = this.componentCache.get(name);
     if (cached) return cached;
 
@@ -90,6 +94,8 @@ class RegistryService {
   }
 
   async getBlock(id: string): Promise<BlockData> {
+    assertRegistryId(id, 'block');
+
     const cached = this.blockCache.get(id);
     if (cached) return cached;
 
