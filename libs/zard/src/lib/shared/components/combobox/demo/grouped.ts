@@ -1,53 +1,73 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
-import { ZardComboboxComponent, type ZardComboboxGroup, type ZardComboboxOption } from '../combobox.component';
+import { ZardComboboxImports } from '../combobox.imports';
 
 @Component({
   selector: 'zard-demo-combobox-grouped',
-  imports: [ZardComboboxComponent],
+  imports: [ZardComboboxImports],
   standalone: true,
   template: `
-    <z-combobox
-      [groups]="techGroups"
-      placeholder="Select technology..."
-      searchPlaceholder="Search technology..."
-      emptyText="No technology found."
-      (zComboSelected)="onSelect($event)"
-    />
+    <z-combobox zWidth="md" [(zValue)]="value">
+      <z-combobox-input placeholder="Select a timezone" />
+
+      <z-combobox-content>
+        <z-combobox-empty>No timezones found.</z-combobox-empty>
+
+        <z-combobox-list>
+          @for (group of timezones; track group.label; let last = $last) {
+            <z-combobox-group>
+              <z-combobox-label>{{ group.label }}</z-combobox-label>
+
+              @for (zone of group.options; track zone) {
+                <z-combobox-item [zValue]="zone">{{ zone }}</z-combobox-item>
+              }
+
+              @if (!last) {
+                <z-combobox-separator />
+              }
+            </z-combobox-group>
+          }
+        </z-combobox-list>
+      </z-combobox-content>
+    </z-combobox>
   `,
 })
 export class ZardDemoComboboxGroupedComponent {
-  techGroups: ZardComboboxGroup[] = [
+  readonly value = signal<string | string[] | null>(null);
+
+  readonly timezones = [
     {
-      label: 'Frontend Frameworks',
+      label: 'Americas',
       options: [
-        { value: 'angular', label: 'Angular' },
-        { value: 'react', label: 'React' },
-        { value: 'vue', label: 'Vue.js' },
-        { value: 'svelte', label: 'Svelte' },
+        '(GMT-5) New York',
+        '(GMT-8) Los Angeles',
+        '(GMT-6) Chicago',
+        '(GMT-5) Toronto',
+        '(GMT-8) Vancouver',
+        '(GMT-3) São Paulo',
       ],
     },
     {
-      label: 'Backend Frameworks',
+      label: 'Europe',
       options: [
-        { value: 'nestjs', label: 'NestJS' },
-        { value: 'express', label: 'Express' },
-        { value: 'fastify', label: 'Fastify' },
-        { value: 'koa', label: 'Koa' },
+        '(GMT+0) London',
+        '(GMT+1) Paris',
+        '(GMT+1) Berlin',
+        '(GMT+1) Rome',
+        '(GMT+1) Madrid',
+        '(GMT+1) Amsterdam',
       ],
     },
     {
-      label: 'Full-Stack Frameworks',
+      label: 'Asia/Pacific',
       options: [
-        { value: 'nextjs', label: 'Next.js' },
-        { value: 'nuxtjs', label: 'Nuxt.js' },
-        { value: 'remix', label: 'Remix' },
-        { value: 'sveltekit', label: 'SvelteKit' },
+        '(GMT+9) Tokyo',
+        '(GMT+8) Shanghai',
+        '(GMT+8) Singapore',
+        '(GMT+4) Dubai',
+        '(GMT+11) Sydney',
+        '(GMT+9) Seoul',
       ],
     },
   ];
-
-  onSelect(option: ZardComboboxOption) {
-    console.log('Selected:', option);
-  }
 }

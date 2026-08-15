@@ -1,4 +1,15 @@
-import { authentication01Block } from '@blocks';
+import {
+  login01Block,
+  login02Block,
+  login03Block,
+  login04Block,
+  login05Block,
+  signup01Block,
+  signup02Block,
+  signup03Block,
+  signup04Block,
+  signup05Block,
+} from '@blocks';
 
 import type { BlockCategory } from '../services/blocks.service';
 
@@ -7,10 +18,10 @@ import type { BlockCategory } from '../services/blocks.service';
  * Import new blocks here and add them to their respective category
  */
 export const BLOCKS_REGISTRY: Record<BlockCategory, any[]> = {
-  featured: [authentication01Block],
+  featured: [login01Block, signup01Block],
   sidebar: [],
-  login: [authentication01Block],
-  signup: [],
+  login: [login01Block, login02Block, login03Block, login04Block, login05Block],
+  signup: [signup01Block, signup02Block, signup03Block, signup04Block, signup05Block],
   otp: [],
   calendar: [],
 };

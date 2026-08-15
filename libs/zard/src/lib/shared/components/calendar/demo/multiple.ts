@@ -7,23 +7,13 @@ import { ZardCalendarComponent } from '../calendar.component';
   imports: [ZardCalendarComponent],
   standalone: true,
   template: `
-    <div class="space-y-4">
-      <z-calendar zMode="multiple" [(value)]="selectedDates" (dateChange)="onDateChange($event)" />
+    <div class="flex flex-col gap-4">
+      <z-calendar zMode="multiple" class="rounded-lg border" [(value)]="selectedDates" />
 
-      <div class="text-muted-foreground mt-2 text-sm">
-        <p class="font-medium">Selected ({{ selectedDates()?.length ?? 0 }}) date(s).</p>
-      </div>
+      <p class="text-muted-foreground text-sm font-medium">Selected ({{ selectedDates()?.length ?? 0 }}) date(s).</p>
     </div>
   `,
 })
 export class ZardDemoCalendarMultipleComponent {
   readonly selectedDates = signal<Date[] | null>(null);
-
-  onDateChange(dates: Date | Date[]) {
-    console.log('Selected dates:', dates);
-  }
-
-  formatDate(date: Date): string {
-    return date.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
-  }
 }

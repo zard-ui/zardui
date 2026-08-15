@@ -1,4 +1,5 @@
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -6,7 +7,8 @@ import {
   input,
   linkedSignal,
   model,
-  viewChild,
+  numberAttribute,
+  viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
@@ -17,7 +19,11 @@ import { filter, map } from 'rxjs';
 
 import { ZardCalendarGridComponent } from '@/shared/components/calendar/calendar-grid.component';
 import { ZardCalendarNavigationComponent } from '@/shared/components/calendar/calendar-navigation.component';
-import type { CalendarMode, CalendarValue } from '@/shared/components/calendar/calendar.types';
+import type {
+  CalendarMode,
+  CalendarValue,
+  ZardCalendarCaptionLayout,
+} from '@/shared/components/calendar/calendar.types';
 import {
   generateCalendarDays,
   getSelectedDatesArray,
@@ -25,34 +31,50 @@ import {
   makeSafeDate,
   normalizeCalendarValue,
 } from '@/shared/components/calendar/calendar.utils';
-import { calendarVariants } from '@/shared/components/calendar/calendar.variants';
+import {
+  calendarMonthsVariants,
+  calendarMonthVariants,
+  calendarVariants,
+} from '@/shared/components/calendar/calendar.variants';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+
+import type { ZardButtonTypeVariants } from '../button/button.variants';
 
 @Component({
   selector: 'z-calendar, [z-calendar]',
   imports: [ZardCalendarNavigationComponent, ZardCalendarGridComponent],
   template: `
-    <div [class]="classes()">
-      <z-calendar-navigation
-        [currentMonth]="currentMonthValue()"
-        [currentYear]="currentYearValue()"
-        [minDate]="minDate()"
-        [maxDate]="maxDate()"
-        [disabled]="disabled()"
-        (monthChange)="onMonthChange($event)"
-        (yearChange)="onYearChange($event)"
-        (previousMonth)="previousMonth()"
-        (nextMonth)="nextMonth()"
-      />
+    <div [class]="monthsClasses()">
+      @for (month of visibleMonths(); track month.key; let i = $index, last = $last) {
+        <div [class]="monthClasses()">
+          <z-calendar-navigation
+            [currentMonth]="month.month.toString()"
+            [currentYear]="month.year.toString()"
+            [minDate]="minDate()"
+            [maxDate]="maxDate()"
+            [disabled]="disabled()"
+            [zCaptionLayout]="zCaptionLayout()"
+            [zButtonVariant]="zButtonVariant()"
+            [zShowPreviousButton]="i === 0"
+            [zShowNextButton]="last"
+            (monthChange)="onMonthChange($event, i)"
+            (yearChange)="onYearChange($event, i)"
+            (previousMonth)="previousMonth()"
+            (nextMonth)="nextMonth()"
+          />
 
-      <z-calendar-grid
-        [calendarDays]="calendarDays()"
-        [disabled]="disabled()"
-        (dateSelect)="onDateSelect($event)"
-        (previousMonth)="onGridPreviousMonth($event)"
-        (nextMonth)="onGridNextMonth($event)"
-        (navigateYear)="onNavigateYear($event)"
-      />
+          <z-calendar-grid
+            [calendarDays]="month.days"
+            [disabled]="disabled()"
+            [zShowOutsideDays]="zShowOutsideDays()"
+            [zMonthIndex]="i"
+            (dateSelect)="onDateSelect($event)"
+            (previousMonth)="onGridPreviousMonth($event)"
+            (nextMonth)="onGridNextMonth($event)"
+            (navigateYear)="onNavigateYear($event)"
+          />
+        </div>
+      }
     </div>
   `,
   providers: [
@@ -65,19 +87,32 @@ import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'calendar',
+    '[class]': 'classes()',
     '[attr.tabindex]': '0',
   },
   exportAs: 'zCalendar',
 })
 export class ZardCalendarComponent implements ControlValueAccessor {
-  private readonly gridRef = viewChild.required(ZardCalendarGridComponent);
+  private readonly gridRefs = viewChildren(ZardCalendarGridComponent);
+
+  /** The grid that owns the roving focus — always the first rendered month. */
+  private gridRef(): ZardCalendarGridComponent | undefined {
+    return this.gridRefs()[0];
+  }
+
+  private clearFocus(): void {
+    for (const grid of this.gridRefs()) {
+      grid.setFocusedDayIndex(-1);
+    }
+  }
 
   // Public method to reset navigation (useful for date-picker)
   resetNavigation(): void {
     const value = this.currentDate();
     this.currentMonthValue.set(value.getMonth().toString());
     this.currentYearValue.set(value.getFullYear().toString());
-    this.gridRef().setFocusedDayIndex(-1);
+    this.clearFocus();
   }
 
   // Public inputs
@@ -87,6 +122,11 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = model<boolean>(false);
+  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>('label');
+  readonly zButtonVariant = input<ZardButtonTypeVariants>('ghost');
+  readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
+  readonly zDisabledDates = input<Date[]>([]);
+  readonly zNumberOfMonths = input(1, { transform: numberAttribute });
 
   // Public outputs
   readonly dateChange = outputFromObservable(
@@ -127,32 +167,60 @@ export class ZardCalendarComponent implements ControlValueAccessor {
 
   protected readonly classes = computed(() => mergeClasses(calendarVariants(), this.class()));
 
-  protected readonly calendarDays = computed(() => {
+  protected readonly monthsClasses = computed(() => mergeClasses(calendarMonthsVariants()));
+
+  protected readonly monthClasses = computed(() => mergeClasses(calendarMonthVariants()));
+
+  /** First day of the month the navigation currently points at. */
+  private readonly navigationDate = computed(() => {
     const currentDate = this.currentDate();
     const navigationDate = makeSafeDate(
       Number.parseInt(this.currentYearValue()),
       Number.parseInt(this.currentMonthValue()),
       currentDate.getDate(),
     );
-    const selectedDate = Number.isNaN(navigationDate.getTime()) ? currentDate : navigationDate;
 
-    return generateCalendarDays({
-      year: selectedDate.getFullYear(),
-      month: selectedDate.getMonth(),
-      mode: this.zMode(),
-      selectedDates: getSelectedDatesArray(this.normalizedValue(), this.zMode()),
-      minDate: this.minDate(),
-      maxDate: this.maxDate(),
-      disabled: this.disabled(),
+    return Number.isNaN(navigationDate.getTime()) ? currentDate : navigationDate;
+  });
+
+  /** One entry per rendered month, starting at the navigation date. */
+  protected readonly visibleMonths = computed(() => {
+    const base = this.navigationDate();
+    const mode = this.zMode();
+    const selectedDates = getSelectedDatesArray(this.normalizedValue(), mode);
+    const total = Math.max(1, this.zNumberOfMonths());
+
+    return Array.from({ length: total }, (_, offset) => {
+      const monthDate = makeSafeDate(base.getFullYear(), base.getMonth() + offset, 1);
+      const year = monthDate.getFullYear();
+      const month = monthDate.getMonth();
+
+      return {
+        key: `${year}-${month}`,
+        year,
+        month,
+        days: generateCalendarDays({
+          year,
+          month,
+          mode,
+          selectedDates,
+          minDate: this.minDate(),
+          maxDate: this.maxDate(),
+          disabled: this.disabled(),
+          disabledDates: this.zDisabledDates(),
+        }),
+      };
     });
   });
 
-  protected onMonthChange(monthIndex: string | string[]): void {
-    if (Array.isArray(monthIndex)) {
-      console.warn('Calendar received array for month selection, expected single value. Ignoring:', monthIndex);
-      return;
-    }
+  /** Days of the first rendered month — the one the roving focus lives in. */
+  protected readonly calendarDays = computed(() => this.visibleMonths()[0].days);
 
+  /**
+   * @param monthOffset position of the month whose caption emitted the change, so a dropdown on
+   * the second rendered month moves the navigation base back by that many months.
+   */
+  protected onMonthChange(monthIndex: string, monthOffset = 0): void {
     if (!monthIndex?.trim()) {
       console.warn('Invalid month index received:', monthIndex);
       return;
@@ -164,19 +232,11 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       return;
     }
 
-    const currentDate = this.currentDate();
-    const selectedYear = Number.parseInt(this.currentYearValue());
-    const newDate = makeSafeDate(Number.isNaN(selectedYear) ? currentDate.getFullYear() : selectedYear, parsedMonth, 1);
-    this.currentMonthValue.set(newDate.getMonth().toString());
-    this.gridRef().setFocusedDayIndex(-1);
+    const displayed = this.displayedMonth(monthOffset);
+    this.rebaseNavigation(makeSafeDate(displayed.year, parsedMonth, 1), monthOffset);
   }
 
-  protected onYearChange(year: string | string[]): void {
-    if (Array.isArray(year)) {
-      console.warn('Calendar received array for year selection, expected single value. Ignoring:', year);
-      return;
-    }
-
+  protected onYearChange(year: string, monthOffset = 0): void {
     if (!year?.trim()) {
       console.warn('Invalid year received:', year);
       return;
@@ -188,11 +248,25 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       return;
     }
 
-    const currentDate = this.currentDate();
-    const selectedMonth = Number.parseInt(this.currentMonthValue());
-    const newDate = makeSafeDate(parsedYear, Number.isNaN(selectedMonth) ? currentDate.getMonth() : selectedMonth, 1);
-    this.currentYearValue.set(newDate.getFullYear().toString());
-    this.gridRef().setFocusedDayIndex(-1);
+    const displayed = this.displayedMonth(monthOffset);
+    this.rebaseNavigation(makeSafeDate(parsedYear, displayed.month, 1), monthOffset);
+  }
+
+  /** The month currently rendered at `monthOffset`, falling back to the first one. */
+  private displayedMonth(monthOffset: number): { year: number; month: number } {
+    const months = this.visibleMonths();
+    return months[monthOffset] ?? months[0];
+  }
+
+  /**
+   * Moves the navigation so that `target` is what the month at `monthOffset` renders.
+   * With a single month this is just "go to target".
+   */
+  private rebaseNavigation(target: Date, monthOffset: number): void {
+    const base = makeSafeDate(target.getFullYear(), target.getMonth() - monthOffset, 1);
+    this.currentMonthValue.set(base.getMonth().toString());
+    this.currentYearValue.set(base.getFullYear().toString());
+    this.clearFocus();
   }
 
   protected previousMonth(): void {
@@ -204,7 +278,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     this.currentMonthValue.set(date.getMonth().toString());
     this.currentYearValue.set(date.getFullYear().toString());
 
-    this.gridRef().setFocusedDayIndex(-1);
+    this.clearFocus();
   }
 
   protected nextMonth(): void {
@@ -216,7 +290,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     this.currentMonthValue.set(date.getMonth().toString());
     this.currentYearValue.set(date.getFullYear().toString());
 
-    this.gridRef().setFocusedDayIndex(-1);
+    this.clearFocus();
   }
 
   protected onNavigateYear(direction: number): void {
@@ -227,7 +301,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     const baseMonth = Number.isNaN(month) ? current.getMonth() : month;
     const newDate = makeSafeDate(baseYear + direction, baseMonth, 1);
     this.currentYearValue.set(newDate.getFullYear().toString());
-    setTimeout(() => this.gridRef().resetFocus(), 0);
+    setTimeout(() => this.gridRef()?.resetFocus(), 0);
   }
 
   protected onGridPreviousMonth(event: { position: string; dayOfWeek: number }): void {
@@ -341,7 +415,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     }
 
     if (targetIndex >= 0) {
-      this.gridRef().setFocusedDayIndex(targetIndex);
+      this.gridRef()?.setFocusedDayIndex(targetIndex);
     }
   }
 

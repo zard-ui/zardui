@@ -1,0 +1,20 @@
+<ol class="border-border flex flex-col rounded-lg border">
+  @for (part of parts; track part.id; let last = $last) {
+    <li class="flex flex-col gap-2 p-4 sm:p-6" [class.border-b]="!last">
+      <!-- textContent instead of interpolation: the formatter would otherwise pad the snippet. -->
+      <code
+        class="bg-muted text-foreground w-fit max-w-full overflow-x-auto rounded px-2 py-1 font-mono text-xs whitespace-nowrap sm:text-sm"
+        [textContent]="part.snippet"
+      ></code>
+
+      <div class="flex flex-col gap-1.5">
+        <h3 class="text-sm font-semibold sm:text-base">{{ part.title }}</h3>
+        <p class="text-muted-foreground text-xs leading-relaxed sm:text-sm" [innerHTML]="part.reason | inlineCode"></p>
+        <dl class="flex gap-2 text-xs leading-relaxed">
+          <dt class="text-destructive shrink-0 font-medium">Without it</dt>
+          <dd class="text-muted-foreground" [innerHTML]="part.breaksWhenMissing | inlineCode"></dd>
+        </dl>
+      </div>
+    </li>
+  }
+</ol>

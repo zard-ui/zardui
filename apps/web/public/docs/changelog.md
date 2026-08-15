@@ -7,6 +7,378 @@ description: Latest updates, new components, and improvements to ZardUI.
 
 Latest updates, new components, and improvements to ZardUI.
 
+## August 2026
+
+One-time passwords land this month. We added the Input OTP component, with grouped slots, separators, pattern validation, and paste support out of the box.
+
+### New Components
+
+#### input-otp
+
+## Run the CLI
+
+Use the CLI to add input-otp to your project.
+
+```
+npx zard-cli@latest add input-otp
+```
+
+Accessible one-time password input with grouped slots, custom separators, and copy-paste support.
+
+```
+import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';
+
+@Component({
+  selector: 'z-demo-input-otp-preview',
+  imports: [ZardInputOtpImports, FormsModule],
+  template: `
+    <z-input-otp [zMaxLength]="6" [(ngModel)]="value">
+      <z-input-otp-group>
+        <z-input-otp-slot [zIndex]="0" />
+        <z-input-otp-slot [zIndex]="1" />
+        <z-input-otp-slot [zIndex]="2" />
+        <z-input-otp-slot [zIndex]="3" />
+        <z-input-otp-slot [zIndex]="4" />
+        <z-input-otp-slot [zIndex]="5" />
+      </z-input-otp-group>
+    </z-input-otp>
+  `,
+})
+export class ZardDemoInputOtpPreviewComponent {
+  value = '123456';
+}
+```
+
+## July 2026
+
+Four new components this month — Field, Item, Textarea, and Sonner — and a reorganisation that moved every demo and API doc next to the component it documents.
+
+### Highlights
+
+#### Toast is now Sonner
+
+The `toast` component has been replaced by `sonner`. Swap `z-toast` / `z-toaster` for `z-sonner`, import `ZardSonnerService` instead of the toast service, and reinstall under the new name. The old component no longer ships.
+
+npx zard-cli@latest add sonner
+
+#### Demos and docs live with the components
+
+Every demo, API reference, and overview moved from the documentation site into `libs/zard/.../components/<name>/`. Nothing changes for you as a consumer — the CLI and the registry are unaffected — but contributing a component is now a single folder.
+
+### New Components
+
+#### field
+
+## Run the CLI
+
+Use the CLI to add field to your project.
+
+```
+npx zard-cli@latest add field
+```
+
+Composable building blocks for accessible forms, pairing a control with its label, description, and error message.
+
+Payment Method
+
+All transactions are secure and encrypted.
+
+Name on Card
+
+Card Number
+
+Enter your 16-digit card number.
+
+Month
+
+Year
+
+CVV
+
+Billing Address
+
+The billing address associated with your payment method.
+
+Same as shipping address
+
+Comments
+
+```
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardSelectImports } from '@/shared/components/select/select.imports';
+import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
+
+@Component({
+  selector: 'z-demo-field-default',
+  imports: [
+    ...ZardFieldImports,
+    ZardButtonComponent,
+    ZardCheckboxComponent,
+    ZardInputComponent,
+    ZardTextareaComponent,
+    ZardSelectImports,
+    FormsModule,
+  ],
+  template: `
+    <div class="w-full min-w-md">
+      <form>
+        <div z-field-group>
+          <fieldset z-field-set>
+            <legend z-field-legend>Payment Method</legend>
+            <p z-field-description>All transactions are secure and encrypted.</p>
+
+            <div z-field-group>
+              <div z-field>
+                <label z-field-label for="checkout-card-name">Name on Card</label>
+                <input z-input id="checkout-card-name" placeholder="Evil Rabbit" zSize="sm" required />
+              </div>
+
+              <div z-field>
+                <label z-field-label for="checkout-card-number">Card Number</label>
+                <input z-input id="checkout-card-number" placeholder="1234 5678 9012 3456" zSize="sm" required />
+                <p z-field-description>Enter your 16-digit card number.</p>
+              </div>
+
+              <div class="grid grid-cols-3 gap-4">
+                <div z-field>
+                  <label z-field-label for="checkout-exp-month" class="w-fit">Month</label>
+                  <z-select id="checkout-exp-month" zPlaceholder="MM" zSize="sm">
+                    <z-select-item zValue="01">01</z-select-item>
+                    <z-select-item zValue="02">02</z-select-item>
+                    <z-select-item zValue="03">03</z-select-item>
+                    <z-select-item zValue="04">04</z-select-item>
+                    <z-select-item zValue="05">05</z-select-item>
+                    <z-select-item zValue="06">06</z-select-item>
+                    <z-select-item zValue="07">07</z-select-item>
+                    <z-select-item zValue="08">08</z-select-item>
+                    <z-select-item zValue="09">09</z-select-item>
+                    <z-select-item zValue="10">10</z-select-item>
+                    <z-select-item zValue="11">11</z-select-item>
+                    <z-select-item zValue="12">12</z-select-item>
+                  </z-select>
+                </div>
+                <div z-field>
+                  <label z-field-label for="checkout-exp-year">Year</label>
+                  <z-select id="checkout-exp-year" zPlaceholder="YYYY" zSize="sm">
+                    <z-select-item zValue="2024">2024</z-select-item>
+                    <z-select-item zValue="2025">2025</z-select-item>
+                    <z-select-item zValue="2026">2026</z-select-item>
+                    <z-select-item zValue="2027">2027</z-select-item>
+                    <z-select-item zValue="2028">2028</z-select-item>
+                    <z-select-item zValue="2029">2029</z-select-item>
+                  </z-select>
+                </div>
+                <div z-field>
+                  <label z-field-label for="checkout-cvv">CVV</label>
+                  <input z-input id="checkout-cvv" placeholder="123" zSize="sm" required />
+                </div>
+              </div>
+            </div>
+          </fieldset>
+
+          <z-field-separator />
+
+          <fieldset z-field-set>
+            <legend z-field-legend>Billing Address</legend>
+            <p z-field-description>The billing address associated with your payment method.</p>
+
+            <div z-field-group>
+              <div z-field zOrientation="horizontal">
+                <span
+                  z-checkbox
+                  zId="checkout-same-as-shipping"
+                  [(ngModel)]="sameAsShipping"
+                  name="sameAsShipping"
+                ></span>
+                <label z-field-label for="checkout-same-as-shipping" class="font-normal">
+                  Same as shipping address
+                </label>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset z-field-set>
+            <div z-field-group>
+              <div z-field>
+                <label z-field-label for="checkout-comments">Comments</label>
+                <textarea
+                  z-textarea
+                  id="checkout-comments"
+                  placeholder="Add any additional comments"
+                  class="resize-none"
+                ></textarea>
+              </div>
+            </div>
+          </fieldset>
+
+          <div z-field zOrientation="horizontal">
+            <button z-button type="submit">Submit</button>
+            <button z-button zType="outline" type="button">Cancel</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoFieldDefaultComponent {
+  protected sameAsShipping = true;
+}
+```
+
+#### item
+
+## Run the CLI
+
+Use the CLI to add item to your project.
+
+```
+npx zard-cli@latest add item
+```
+
+A versatile row for displaying media, a title, a description, and actions side by side.
+
+Basic Item
+
+A simple item with title and description.
+
+Your profile has been verified.
+
+```
+import { Component } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideBadgeCheck, lucideChevronRight } from '@ng-icons/lucide';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardItemImports } from '@/shared/components/item/item.imports';
+
+@Component({
+  selector: 'z-demo-item-default',
+  imports: [ZardButtonComponent, NgIcon, ...ZardItemImports],
+  template: `
+    <div class="flex w-full min-w-md flex-col gap-6">
+      <z-item zVariant="outline">
+        <z-item-content>
+          <z-item-title>Basic Item</z-item-title>
+          <z-item-description>A simple item with title and description.</z-item-description>
+        </z-item-content>
+        <z-item-actions>
+          <button type="button" z-button zType="outline" zSize="sm">Action</button>
+        </z-item-actions>
+      </z-item>
+
+      <a z-item href="#" zVariant="outline" zSize="sm">
+        <z-item-media>
+          <ng-icon name="lucideBadgeCheck" size="1.25rem" />
+        </z-item-media>
+        <z-item-content>
+          <z-item-title>Your profile has been verified.</z-item-title>
+        </z-item-content>
+        <z-item-actions>
+          <ng-icon name="lucideChevronRight" size="1rem" />
+        </z-item-actions>
+      </a>
+    </div>
+  `,
+  viewProviders: [provideIcons({ lucideBadgeCheck, lucideChevronRight })],
+})
+export class ZardDemoItemDefaultComponent {}
+```
+
+#### textarea
+
+## Run the CLI
+
+Use the CLI to add textarea to your project.
+
+```
+npx zard-cli@latest add textarea
+```
+
+Multi-line text input with the same variants, sizes, and validation states as the single-line input.
+
+```
+import { Component } from '@angular/core';
+
+import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';
+
+@Component({
+  selector: 'z-demo-textarea-default',
+  imports: [ZardTextareaComponent],
+  template: `
+    <textarea z-textarea placeholder="Type your message here." class="w-72"></textarea>
+  `,
+})
+export class ZardDemoTextareaDefaultComponent {}
+```
+
+#### sonner
+
+## Run the CLI
+
+Use the CLI to add sonner to your project.
+
+```
+npx zard-cli@latest add sonner
+```
+
+An opinionated toast component with stacking, positioning, and per-type styling. Replaces the old toast.
+
+```
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardSonnerService } from '@/shared/components/sonner/sonner.service';
+
+@Component({
+  selector: 'zard-demo-sonner-default',
+  imports: [ZardButtonComponent],
+  template: `
+    <button type="button" z-button zType="outline" (click)="show()">Show Toast</button>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ZardDemoSonnerDefaultComponent {
+  private readonly sonner = inject(ZardSonnerService);
+
+  show() {
+    this.sonner.show('Event has been created', {
+      description: 'Sunday, December 03, 2023 at 9:00 AM',
+      action: {
+        label: 'Undo',
+        onClick: () => console.log('Undo'),
+      },
+    });
+  }
+}
+```
+
+## May 2026
+
+A quieter month focused on form correctness. We taught the input directive to speak numbers, and we changed one dialog default that had been surprising people.
+
+### Highlights
+
+#### Numeric inputs keep their type
+
+The input directive now reads and writes real numbers for `type="number"` and `type="range"`, so a signal or reactive form typed as `number` stays a number instead of being turned into a string. An empty field resolves to `null`.
+
+#### Alert Dialog no longer closes on the backdrop
+
+`zMaskClosable` now defaults to `false` on Alert Dialog. A confirmation is meant to be answered, not dismissed by a stray click. If you relied on the old behaviour, opt back in explicitly.
+
+zMaskClosable: true
+
 ## March 2026
 
 Complete icon system migration! We replaced the custom `ZardIconComponent` with `@ng-icons/lucide`, bringing better tree-shaking, a wider icon selection, and a simpler API across all components.
@@ -65,8 +437,6 @@ Use the CLI to add carousel to your project.
 npx zard-cli@latest add carousel
 ```
 
-### default
-
 A slideshow component for cycling through elements with support for mouse drag, touch swipe, and automatic playback.
 
 1
@@ -123,8 +493,6 @@ Use the CLI to add kbd to your project.
 npx zard-cli@latest add kbd
 ```
 
-### default
-
 Display keyboard keys and shortcuts in a visually consistent way.
 
 Ctrl
@@ -174,8 +542,6 @@ Use the CLI to add sheet to your project.
 ```
 npx zard-cli@latest add sheet
 ```
-
-### basic
 
 A versatile sheet component for side panels and overlays with customizable positioning and smooth transitions.
 
@@ -286,8 +652,6 @@ Use the CLI to add empty to your project.
 npx zard-cli@latest add empty
 ```
 
-### preview
-
 Clean empty state component for "no data" scenarios with customizable messages and icons.
 
 No Projects Yet
@@ -356,8 +720,6 @@ Use the CLI to add progress to your project.
 npx zard-cli@latest add progress
 ```
 
-### preview
-
 Visual progress indicator showing the completion progress of a task.
 
 ```
@@ -394,8 +756,6 @@ Use the CLI to add skeleton to your project.
 npx zard-cli@latest add skeleton
 ```
 
-### default
-
 Loading placeholder component for better perceived performance during content loading with pulse animation.
 
 ```
@@ -429,8 +789,6 @@ Use the CLI to add spinner to your project.
 ```
 npx zard-cli@latest add spinner
 ```
-
-### customization
 
 Animated loading spinner customizable via the [zIcon] template input for swapping the underlying icon.
 
@@ -489,11 +847,7 @@ Use the CLI to add avatar to your project.
 npx zard-cli@latest add avatar
 ```
 
-### basic
-
 User profile image component with automatic fallback to initials and multiple size variants.
-
-ZA
 
 ```
 import { Component } from '@angular/core';
@@ -522,8 +876,6 @@ Use the CLI to add separator to your project.
 ```
 npx zard-cli@latest add separator
 ```
-
-### preview
 
 Visual separator component for separating content sections with horizontal and vertical orientations.
 
@@ -565,8 +917,6 @@ Use the CLI to add breadcrumb to your project.
 ```
 npx zard-cli@latest add breadcrumb
 ```
-
-### default
 
 Navigation breadcrumb trail showing the current page location within a hierarchical structure.
 
@@ -610,8 +960,6 @@ Use the CLI to add tabs to your project.
 ```
 npx zard-cli@latest add tabs
 ```
-
-### default
 
 Tabbed interface component for organizing content into separate views with smooth transitions and keyboard navigation.
 
@@ -711,8 +1059,6 @@ Use the CLI to add accordion to your project.
 npx zard-cli@latest add accordion
 ```
 
-### basic
-
 Collapsible content panels for organizing information in a compact space with expand/collapse animations.
 
 Click on 'Forgot Password' on the login page, enter your email address, and we'll send you a link to reset your password. The link will expire in 24 hours.
@@ -762,8 +1108,6 @@ Use the CLI to add tooltip to your project.
 npx zard-cli@latest add tooltip
 ```
 
-### hover
-
 Contextual information overlay displayed on hover with customizable positioning and delay settings.
 
 ```
@@ -797,8 +1141,6 @@ Use the CLI to add dialog to your project.
 ```
 npx zard-cli@latest add dialog
 ```
-
-### basic
 
 Modal dialog component for displaying important content that requires user attention with backdrop overlay.
 
@@ -888,35 +1230,56 @@ Use the CLI to add popover to your project.
 npx zard-cli@latest add popover
 ```
 
-### default
-
 Floating content container that appears on trigger with customizable positioning and close behavior.
 
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-default-demo',
-  imports: [ZardButtonComponent, ZardPopoverComponent, ZardPopoverDirective],
-  standalone: true,
+  selector: 'z-popover-preview-demo',
+  imports: [ZardButtonComponent, ZardInputComponent, ...ZardPopoverImports],
   template: `
-    <button type="button" z-button zPopover [zContent]="popoverContent" zType="outline">Open popover</button>
+    <button type="button" z-button zPopover zType="outline" [zContent]="popoverContent">Open popover</button>
 
     <ng-template #popoverContent>
-      <z-popover>
-        <div class="space-y-2">
-          <h4 class="leading-none font-medium">Dimensions</h4>
-          <p class="text-muted-foreground text-sm">Set the dimensions for the layer.</p>
+      <z-popover class="w-80">
+        <div z-popover-header>
+          <h4 z-popover-title>Dimensions</h4>
+          <p z-popover-description>Set the dimensions for the layer.</p>
+        </div>
+
+        <div class="grid gap-2">
+          @for (dimension of dimensions; track dimension.id) {
+            <div class="grid grid-cols-3 items-center gap-4">
+              <label class="text-sm" [attr.for]="dimension.id">{{ dimension.label }}</label>
+              <input
+                z-input
+                type="text"
+                class="col-span-2 h-8"
+                [id]="dimension.id"
+                [value]="dimension.value"
+                [attr.aria-label]="dimension.label"
+              />
+            </div>
+          }
         </div>
       </z-popover>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoPopoverDefaultComponent {}
+export class ZardDemoPopoverPreviewComponent {
+  readonly dimensions = [
+    { id: 'width', label: 'Width', value: '100%' },
+    { id: 'maxWidth', label: 'Max. width', value: '300px' },
+    { id: 'height', label: 'Height', value: '25px' },
+    { id: 'maxHeight', label: 'Max. height', value: 'none' },
+  ];
+}
 ```
 
 #### alert-dialog
@@ -928,8 +1291,6 @@ Use the CLI to add alert-dialog to your project.
 ```
 npx zard-cli@latest add alert-dialog
 ```
-
-### default
 
 Confirmation dialog for critical actions requiring explicit user confirmation with cancel and confirm options.
 
@@ -970,8 +1331,6 @@ Use the CLI to add dropdown to your project.
 ```
 npx zard-cli@latest add dropdown
 ```
-
-### default
 
 Context menu with hierarchical actions, keyboard navigation, and support for nested submenus.
 
@@ -1018,8 +1377,6 @@ Use the CLI to add select to your project.
 npx zard-cli@latest add select
 ```
 
-### default
-
 Dropdown select with grouped options, multi-select support, keyboard navigation, and custom item rendering.
 
 ```
@@ -1056,8 +1413,6 @@ Use the CLI to add checkbox to your project.
 ```
 npx zard-cli@latest add checkbox
 ```
-
-### default
 
 Checkbox input component with indeterminate state support and full accessibility features.
 
@@ -1125,8 +1480,6 @@ Use the CLI to add radio-group to your project.
 npx zard-cli@latest add radio-group
 ```
 
-### default
-
 Radio button group for mutually exclusive options with customizable layouts and orientation.
 
 Default
@@ -1177,8 +1530,6 @@ Use the CLI to add switch to your project.
 npx zard-cli@latest add switch
 ```
 
-### default
-
 Toggle switch component for boolean settings with smooth animation transitions.
 
 Airplane Mode
@@ -1208,8 +1559,6 @@ Use the CLI to add slider to your project.
 npx zard-cli@latest add slider
 ```
 
-### default
-
 Range slider for numeric value selection with min/max bounds, step support, and value display.
 
 ```
@@ -1231,7 +1580,7 @@ export class ZardDemoSliderDefaultComponent {}
 
 ## April 2025
 
-Form foundations and CLI launch! New Input and Form components with validation support. Official CLI tool released for easy project initialization and component installation.
+Form foundations and CLI launch! New Input and Form components with validation support. Official CLI tool released for easy project initialization and component installation. The Form component has since been discontinued — use Field instead, which covers the same ground and is what the form guides are built on.
 
 ### New Components
 
@@ -1244,8 +1593,6 @@ Use the CLI to add input to your project.
 ```
 npx zard-cli@latest add input
 ```
-
-### default
 
 Text input field component with multiple variants, sizes, and built-in validation state indicators.
 
@@ -1273,98 +1620,6 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
 export class ZardDemoInputDefaultComponent {}
 ```
 
-#### form
-
-## Run the CLI
-
-Use the CLI to add form to your project.
-
-```
-npx zard-cli@latest add form
-```
-
-### default
-
-Complete form component with field management, validation, error handling, and submission control.
-
-Full Name
-
-This is your display name.
-
-Email
-
-We'll never share your email with anyone else.
-
-Bio
-
-Optional: Brief description about yourself.
-
-```
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
-import { ZardIdDirective } from '@/shared/core';
-
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputComponent } from '../../input/input.component';
-import { ZardFormImports } from '../form.imports';
-
-@Component({
-  selector: 'zard-demo-form-default',
-  imports: [FormsModule, ZardButtonComponent, ZardInputComponent, ZardFormImports, ZardIdDirective],
-  template: `
-    <form class="max-w-sm space-y-6">
-      <z-form-field zardId="fullName" #f="zardId">
-        <label z-form-label zRequired [for]="f.id()">Full Name</label>
-        <z-form-control>
-          <input
-            z-input
-            type="text"
-            [id]="f.id()"
-            placeholder="Enter your full name"
-            [(ngModel)]="fullName"
-            name="fullName"
-          />
-        </z-form-control>
-        <z-form-message>This is your display name.</z-form-message>
-      </z-form-field>
-
-      <z-form-field zardId="email" #e="zardId">
-        <label z-form-label zRequired [for]="e.id()">Email</label>
-        <z-form-control>
-          <input z-input type="email" [id]="e.id()" placeholder="Enter your email" [(ngModel)]="email" name="email" />
-        </z-form-control>
-        <z-form-message>We'll never share your email with anyone else.</z-form-message>
-      </z-form-field>
-
-      <z-form-field zardId="bio" #b="zardId">
-        <label z-form-label [for]="b.id()">Bio</label>
-        <z-form-control>
-          <textarea
-            z-input
-            [id]="b.id()"
-            placeholder="Tell us about yourself"
-            rows="3"
-            [(ngModel)]="bio"
-            name="bio"
-          ></textarea>
-        </z-form-control>
-        <z-form-message>Optional: Brief description about yourself.</z-form-message>
-      </z-form-field>
-
-      <button z-button zType="default" type="submit">Submit</button>
-    </form>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-})
-export class ZardDemoFormDefaultComponent {
-  fullName = '';
-  email = '';
-  bio = '';
-}
-```
-
 ## March 2025
 
 🎉 Initial release of ZardUI! An Angular component library built with TailwindCSS v4, featuring standalone components, signal-based reactivity, and modern Angular architecture. Core components including Button, Card, Badge, Alert, and Table.
@@ -1380,8 +1635,6 @@ Use the CLI to add button to your project.
 ```
 npx zard-cli@latest add button
 ```
-
-### default
 
 Versatile button component with multiple variants (primary, secondary, outline, ghost), sizes, and loading states.
 
@@ -1410,8 +1663,6 @@ Use the CLI to add card to your project.
 ```
 npx zard-cli@latest add card
 ```
-
-### default
 
 Container component for grouping related content with optional header, footer, and customizable padding.
 
@@ -1509,8 +1760,6 @@ Use the CLI to add badge to your project.
 npx zard-cli@latest add badge
 ```
 
-### default
-
 Small label component for displaying status, categories, counts, or tags with various color variants.
 
 Badge
@@ -1555,8 +1804,6 @@ Use the CLI to add alert to your project.
 ```
 npx zard-cli@latest add alert
 ```
-
-### basic
 
 Notification component for displaying important information to users with different severity levels.
 
@@ -1610,8 +1857,6 @@ Use the CLI to add table to your project.
 npx zard-cli@latest add table
 ```
 
-### simple
-
 Data table component with sorting, filtering, pagination, and customizable column rendering.
 
 | Name | Age | Address |
@@ -1623,7 +1868,7 @@ Data table component with sorting, filtering, pagination, and customizable colum
 ```
 import { Component } from '@angular/core';
 
-import { ZardTableComponent } from '../table.component';
+import { ZardTableImports } from '../table.imports';
 
 interface Person {
   key: string;
@@ -1634,24 +1879,23 @@ interface Person {
 
 @Component({
   selector: 'z-demo-table-simple',
-  imports: [ZardTableComponent],
-  standalone: true,
+  imports: [ZardTableImports],
   template: `
     <table z-table>
-      <caption>A list of your recent invoices.</caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Address</th>
+      <caption z-table-caption>A list of your recent invoices.</caption>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head>Name</th>
+          <th z-table-head>Age</th>
+          <th z-table-head>Address</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody z-table-body>
         @for (data of listOfData; track data.key) {
-          <tr>
-            <td class="font-medium">{{ data.name }}</td>
-            <td>{{ data.age }}</td>
-            <td>{{ data.address }}</td>
+          <tr z-table-row>
+            <td z-table-cell class="font-medium">{{ data.name }}</td>
+            <td z-table-cell>{{ data.age }}</td>
+            <td z-table-cell>{{ data.address }}</td>
           </tr>
         }
       </tbody>

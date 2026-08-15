@@ -34,7 +34,7 @@ export const SECTIONS: NavSection = {
     {
       name: 'Registry',
       path: '/docs/registry',
-      available: false,
+      available: true,
     },
     {
       name: 'MCP Server',
@@ -72,6 +72,24 @@ export const DOCS_PATH: NavSection = {
   ],
 };
 
+export const FORMS_PATH: NavSection = {
+  title: 'Forms',
+  data: [
+    { name: 'Overview', path: '/docs/forms', available: true },
+    { name: 'Signal Forms', path: '/docs/forms/signal-forms', available: true },
+    { name: 'Reactive Forms', path: '/docs/forms/reactive-forms', available: true },
+    { name: 'Template-driven Forms', path: '/docs/forms/template-driven-forms', available: true },
+  ],
+};
+
+export const FEATURED_PATH: NavSection = {
+  title: 'Featured',
+  data: [
+    { name: 'YouTube', path: '/docs/featured/youtube', available: true },
+    { name: 'Articles', path: '/docs/featured/articles', available: true },
+  ],
+};
+
 export const COMPONENTS_PATH: NavSection = {
   title: 'Components',
   data: [
@@ -94,9 +112,9 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Separator', path: '/docs/components/separator', available: true },
     { name: 'Empty', path: '/docs/components/empty', available: true },
     { name: 'Field', path: '/docs/components/field', available: true },
-    { name: 'Form', path: '/docs/components/form', available: true },
     { name: 'Input', path: '/docs/components/input', available: true },
     { name: 'Input Group', path: '/docs/components/input-group', available: true },
+    { name: 'Input OTP', path: '/docs/components/input-otp', available: true },
     { name: 'Item', path: '/docs/components/item', available: true },
     { name: 'Layout', path: '/docs/components/layout', available: true },
     { name: 'Dialog', path: '/docs/components/dialog', available: true },
@@ -114,7 +132,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Toggle Group', path: '/docs/components/toggle-group', available: true },
     { name: 'Tooltip', path: '/docs/components/tooltip', available: true },
     { name: 'Tree', path: '/docs/components/tree', available: true },
-    { name: 'Menu', path: '/docs/components/menu', available: true },
+    { name: 'Navigation Menu', path: '/docs/components/navigation-menu', available: true },
     { name: 'Resizable', path: '/docs/components/resizable', available: true },
     { name: 'Sheet', path: '/docs/components/sheet', available: true },
     { name: 'Radio Group', path: '/docs/components/radio-group', available: true },
@@ -125,4 +143,28 @@ export const COMPONENTS_PATH: NavSection = {
   ].sort((a, b) => a.name.localeCompare(b.name)),
 };
 
-export const SIDEBAR_PATHS: NavSection[] = [SECTIONS, DOCS_PATH, COMPONENTS_PATH];
+export const CONTRIBUTE_PATH: NavSection = {
+  title: 'Contribute',
+  data: [
+    { name: 'Overview', path: '/docs/contribute', available: true },
+    { name: 'Setup', path: '/docs/contribute/setup', available: true },
+    { name: 'Architecture', path: '/docs/contribute/architecture', available: true },
+    { name: 'Project Structure', path: '/docs/contribute/project-structure', available: true },
+    { name: 'Components', path: '/docs/contribute/components', available: true },
+    { name: 'Blocks', path: '/docs/contribute/blocks', available: true },
+    { name: 'Documentation', path: '/docs/contribute/documentation', available: true },
+    { name: 'Testing', path: '/docs/contribute/testing', available: true },
+    { name: 'Workflow', path: '/docs/contribute/workflow', available: true },
+    { name: 'Release', path: '/docs/contribute/release', available: true },
+    { name: 'FAQ', path: '/docs/contribute/faq', available: true },
+  ],
+};
+
+export const SIDEBAR_PATHS: NavSection[] = [
+  SECTIONS,
+  DOCS_PATH,
+  COMPONENTS_PATH,
+  FORMS_PATH,
+  CONTRIBUTE_PATH,
+  FEATURED_PATH,
+];

@@ -1,0 +1,123 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Project Structure"
+    description="Where everything lives, and which committed files you must never edit by hand."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      The repository mixes hand-written source with committed build artifacts. Knowing which is which saves you from
+      editing a file that the next build will overwrite.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="tree" id="tree">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Directory Tree
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        The directories a contributor actually touches, annotated.
+      </p>
+    </div>
+
+    <z-code-block [data]="repoTreeBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="component-folder" id="component-folder">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        A Component Folder
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Every component follows the same shape. The generator creates all of it except the extra demos.
+      </p>
+    </div>
+
+    <z-code-block [data]="componentTreeBlock" />
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="where-do-i-go" id="where-do-i-go">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Where Do I Go?
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Find your task on the left, open the path on the right.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">I want to…</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Edit</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Notes</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (task of tasks; track task.goal) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle font-medium">{{ task.goal }}</td>
+              <td class="text-muted-foreground p-4 align-middle font-mono text-xs">{{ task.location }}</td>
+              <td class="text-muted-foreground p-4 align-middle">{{ task.note }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="generated-files" id="generated-files">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Generated Files
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        These paths are committed to git — the site serves them and the CLI reads them — but they are produced by a
+        command. Change the source, rerun the command, commit the result.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto rounded-md border">
+      <table class="w-full caption-bottom text-sm">
+        <thead class="bg-muted/50">
+          <tr class="border-b">
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Committed path</th>
+            <th scope="col" class="h-11 px-4 text-left align-middle font-medium">Produced by</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (artifact of artifacts; track artifact.path) {
+            <tr class="hover:bg-muted/50 border-b transition-colors last:border-0">
+              <td class="p-4 align-middle font-mono text-xs">{{ artifact.path }}</td>
+              <td class="p-4 align-middle">
+                <code class="bg-muted rounded px-2 py-1 font-mono text-xs">{{ artifact.producedBy }}</code>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <z-callout variant="warning" title="Never hand-edit a generated file" icon="!">
+      Editing
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">apps/web/src/generated</code>
+      ,
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">apps/web/public/docs</code>
+      ,
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">prerender-routes.txt</code>
+      or a block's
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">files[]</code>
+      array looks like it works until the next build silently reverts it. Edit the source and rerun the generator.
+    </z-callout>
+  </section>
+</z-content>

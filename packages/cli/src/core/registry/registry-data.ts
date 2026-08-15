@@ -474,6 +474,51 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'input-otp',
+    files: [
+      {
+        name: 'input-otp.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp-signal.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp-slot.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp-group.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp-separator.component.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp.imports.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp.tokens.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp.utils.ts',
+        content: '',
+      },
+      {
+        name: 'input-otp.variants.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'item',
     files: [
       {
@@ -709,7 +754,7 @@ export const registry: ComponentRegistry[] = [
   },
   {
     name: 'calendar',
-    registryDependencies: ['select'],
+    registryDependencies: ['button'],
     files: [
       {
         name: 'calendar.component.ts',
@@ -820,27 +865,6 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'form',
-    files: [
-      {
-        name: 'form.component.ts',
-        content: '',
-      },
-      {
-        name: 'form.imports.ts',
-        content: '',
-      },
-      {
-        name: 'form.variants.ts',
-        content: '',
-      },
-      {
-        name: 'index.ts',
-        content: '',
-      },
-    ],
-  },
-  {
     name: 'pagination',
     registryDependencies: ['button'],
     files: [
@@ -871,6 +895,10 @@ export const registry: ComponentRegistry[] = [
       },
       {
         name: 'popover.variants.ts',
+        content: '',
+      },
+      {
+        name: 'popover.imports.ts',
         content: '',
       },
       {
@@ -987,46 +1015,70 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
-    name: 'menu',
+    name: 'navigation-menu',
     files: [
       {
-        name: 'menu.directive.ts',
+        name: 'navigation-menu.component.ts',
         content: '',
       },
       {
-        name: 'menu.variants.ts',
+        name: 'navigation-menu.service.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu.variants.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu.imports.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-list.directive.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-item.directive.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-trigger.directive.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-content.directive.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-link.directive.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-viewport.component.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-indicator.component.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-label.component.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-shortcut.component.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-manager.service.ts',
+        content: '',
+      },
+      {
+        name: 'navigation-menu-positions.ts',
         content: '',
       },
       {
         name: 'context-menu.directive.ts',
-        content: '',
-      },
-      {
-        name: 'menu-content.directive.ts',
-        content: '',
-      },
-      {
-        name: 'menu-item.directive.ts',
-        content: '',
-      },
-      {
-        name: 'menu-manager.service.ts',
-        content: '',
-      },
-      {
-        name: 'menu.imports.ts',
-        content: '',
-      },
-      {
-        name: 'menu-positions.ts',
-        content: '',
-      },
-      {
-        name: 'menu-label.component.ts',
-        content: '',
-      },
-      {
-        name: 'menu-shortcut.component.ts',
         content: '',
       },
       {

@@ -1,0 +1,139 @@
+<z-content
+  scrollSpy
+  [activeAnchor]="activeAnchor"
+  [navigationConfig]="navigationConfig"
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Contribute"
+    description="Everything you need to land your first pull request on Zard UI — where each thing lives, which command generates what, and what the CI expects."
+    scrollSpyItem="overview"
+    id="overview"
+  />
+
+  <div class="flex flex-col gap-4">
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      Zard UI is an open source Angular component library built on TailwindCSS v4 and Class Variance Authority, and
+      inspired by shadcn/ui. Everything lives in a single Nx monorepo: the library, the composed blocks, the
+      documentation site you are reading, the CLI and the MCP server.
+    </p>
+    <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+      This module is the navigable version of
+      <code class="bg-muted rounded px-2 py-1 font-mono text-xs">CONTRIBUTING.md</code>
+      . Every command and path on these pages is checked against the repository, so you can copy them without guessing.
+    </p>
+  </div>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="ways-to-contribute" id="ways-to-contribute">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Ways to Contribute
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Code is only one of them. Every item below is a valid, welcome pull request.
+      </p>
+    </div>
+
+    <div class="grid gap-4 sm:grid-cols-2">
+      @for (type of contributionTypes; track type.title) {
+        <z-card class="border-border/50 h-full p-5">
+          <div class="flex flex-col gap-3">
+            <div class="flex items-center gap-2">
+              <ng-icon [name]="type.icon" class="text-muted-foreground size-4!" />
+              <span class="text-sm font-medium">{{ type.title }}</span>
+            </div>
+            <p class="text-muted-foreground text-sm leading-relaxed">{{ type.description }}</p>
+          </div>
+        </z-card>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="quick-start" id="quick-start">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Quick Start
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Five steps from a fresh clone to an open pull request. Each one links to the page that covers it in depth.
+      </p>
+    </div>
+
+    <z-code-block [data]="quickStartBlock" />
+
+    <div class="flex flex-col gap-4">
+      @for (step of quickStartSteps; track step.step) {
+        <div class="flex gap-4 rounded-lg border p-5">
+          <span
+            class="bg-muted text-foreground flex size-8 shrink-0 items-center justify-center rounded-full text-sm font-semibold"
+          >
+            {{ step.step }}
+          </span>
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-medium">{{ step.title }}</span>
+            <p class="text-muted-foreground text-sm leading-relaxed">{{ step.description }}</p>
+            @if (step.link; as link) {
+              <a [routerLink]="link.path" class="text-primary w-fit text-sm font-medium underline underline-offset-4">
+                {{ link.label }}
+              </a>
+            }
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="guide-map" id="guide-map">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Guide Map</h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Every page in this section, in reading order.
+      </p>
+    </div>
+
+    <div class="grid gap-3 sm:grid-cols-2">
+      @for (item of moduleMap; track item.path) {
+        <a
+          [routerLink]="item.path"
+          class="hover:bg-accent hover:border-accent flex flex-col gap-1 rounded-lg border p-4 transition-colors"
+        >
+          <span class="text-sm font-medium">{{ item.name }}</span>
+          <span class="text-muted-foreground font-mono text-xs break-all">{{ item.path }}</span>
+        </a>
+      }
+    </div>
+  </section>
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="getting-help" id="getting-help">
+    <div class="flex flex-col gap-4">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        Getting Help
+      </h2>
+      <p class="text-muted-foreground text-sm leading-relaxed sm:text-base">
+        Stuck, or unsure whether an idea fits the project? Ask before you build — it saves everyone time.
+      </p>
+    </div>
+
+    <div class="flex flex-col gap-3">
+      @for (channel of helpChannels; track channel.title) {
+        <a
+          [href]="channel.href"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="hover:bg-accent hover:border-accent flex items-start gap-3 rounded-lg border p-4 transition-colors"
+        >
+          <ng-icon [name]="channel.icon" class="text-muted-foreground mt-0.5 size-4!" />
+          <div class="flex flex-col gap-1">
+            <span class="text-sm font-medium">{{ channel.title }}</span>
+            <span class="text-muted-foreground text-sm leading-relaxed">{{ channel.description }}</span>
+          </div>
+        </a>
+      }
+    </div>
+
+    <z-callout variant="info" title="Before opening a pull request" icon="i">
+      Read the Workflow page. Commits without the leading emoji are rejected by commitlint, and the CI runs lint, build,
+      unit tests and E2E on every pull request.
+    </z-callout>
+  </section>
+</z-content>

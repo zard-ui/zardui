@@ -109,7 +109,7 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
   },
   {
     componentName: 'calendar',
-    description: 'A date field component that allows users to enter and edit date.',
+    description: 'A calendar component that allows users to select a date or a range of dates.',
     loadData: () => import('@zard/components/calendar/demo/calendar').then(m => m.CALENDAR),
   },
   {
@@ -139,7 +139,7 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
   },
   {
     componentName: 'date-picker',
-    description: 'A date picker component with range and presets.',
+    description: 'A button that opens a calendar in a popover to pick one date, several dates, or a date range.',
     loadData: () => import('@zard/components/date-picker/demo/date-picker').then(m => m.DATE_PICKER),
   },
   {
@@ -169,11 +169,6 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/field/demo/field').then(m => m.FIELD),
   },
   {
-    componentName: 'form',
-    description: 'Building forms with Angular reactive forms and Zard UI components.',
-    loadData: () => import('@zard/components/form/demo/form').then(m => m.FORM),
-  },
-  {
     componentName: 'input',
     description: 'Displays a form input field or a component that looks like an input field.',
     loadData: () => import('@zard/components/input/demo/input').then(m => m.INPUT),
@@ -182,6 +177,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     componentName: 'input-group',
     description: 'Groups input elements together with addons.',
     loadData: () => import('@zard/components/input-group/demo/input-group').then(m => m.INPUT_GROUP),
+  },
+  {
+    componentName: 'input-otp',
+    description: 'Accessible one-time password component with copy-paste functionality.',
+    loadData: () => import('@zard/components/input-otp/demo/input-otp').then(m => m.INPUT_OTP),
   },
   {
     componentName: 'item',
@@ -209,9 +209,9 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/spinner/demo/spinner').then(m => m.SPINNER),
   },
   {
-    componentName: 'menu',
-    description: 'Displays a menu with a list of actions.',
-    loadData: () => import('@zard/components/menu/demo/menu').then(m => m.MENU),
+    componentName: 'navigation-menu',
+    description: 'A collection of links for navigating websites.',
+    loadData: () => import('@zard/components/navigation-menu/demo/navigation-menu').then(m => m.NAVIGATION_MENU),
   },
   {
     componentName: 'pagination',

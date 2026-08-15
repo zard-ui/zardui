@@ -1,115 +1,57 @@
-import { ChangeDetectionStrategy, Component, inject, signal, type AfterViewInit } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
 import { ZardButtonComponent } from '@/shared/components/button';
-import { ZardInputComponent } from '@/shared/components/input';
-import { ZardRadioGroupImports } from '@/shared/components/radio-group';
-import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';
-import { Z_SHEET_DATA, ZardSheetService } from '@/shared/components/sheet/sheet.service';
+import { ZardSheetService } from '@/shared/components/sheet/sheet.service';
+import type { ZardSheetVariants } from '@/shared/components/sheet/sheet.variants';
 
-interface iSheetData {
-  name: string;
-  username: string;
-}
+type SheetSide = NonNullable<ZardSheetVariants['zSide']>;
+
+const PARAGRAPHS = Array.from({ length: 10 }).map(
+  () =>
+    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+);
 
 @Component({
-  selector: 'zard-demo-sheet-side',
-  imports: [FormsModule, ReactiveFormsModule, ZardInputComponent],
+  selector: 'zard-demo-sheet-side-content',
   template: `
-    <form [formGroup]="form" class="grid flex-1 auto-rows-min gap-6 px-4">
-      <div class="grid gap-3">
-        <label
-          for="name"
-          class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-        >
-          Name
-        </label>
-        <input
-          z-input
-          formControlName="name"
-          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-        />
-      </div>
-
-      <div class="grid gap-3">
-        <label
-          for="username"
-          class="flex items-center gap-2 text-sm leading-none font-medium select-none group-data-[disabled=true]:pointer-events-none group-data-[disabled=true]:opacity-50 peer-disabled:cursor-not-allowed peer-disabled:opacity-50"
-        >
-          Username
-        </label>
-        <input
-          z-input
-          formControlName="username"
-          class="file:text-foreground placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground dark:bg-input/30 border-input focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive flex h-9 w-full min-w-0 rounded-md border bg-transparent px-3 py-1 text-base shadow-xs transition-[color,box-shadow] outline-none file:inline-flex file:h-7 file:border-0 file:bg-transparent file:text-sm file:font-medium focus-visible:ring-[3px] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
-        />
-      </div>
-    </form>
+    @for (paragraph of paragraphs; track $index) {
+      <p class="mb-2 leading-relaxed">{{ paragraph }}</p>
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  exportAs: 'zardDemoSheetSide',
+  host: { class: 'no-scrollbar min-h-0 overflow-y-auto px-4' },
 })
-export class ZardDemoSheetSideInputComponent implements AfterViewInit {
-  private zData: iSheetData = inject(Z_SHEET_DATA);
-
-  form = new FormGroup({
-    name: new FormControl(''),
-    username: new FormControl(''),
-  });
-
-  ngAfterViewInit() {
-    if (this.zData) {
-      this.form.patchValue(this.zData);
-    }
-  }
+export class ZardDemoSheetSideContentComponent {
+  protected readonly paragraphs = PARAGRAPHS;
 }
 
 @Component({
-  imports: [...ZardRadioGroupImports, FormsModule, ZardSheetImports, ZardButtonComponent],
+  imports: [ZardButtonComponent],
   template: `
-    <div class="flex flex-col justify-center space-y-6">
-      <z-radio-group class="flex flex-row gap-4" [(ngModel)]="placement">
-        <label class="flex items-center gap-2 text-sm">
-          <z-radio value="top" />
-          top
-        </label>
-        <label class="flex items-center gap-2 text-sm">
-          <z-radio value="bottom" />
-          bottom
-        </label>
-        <label class="flex items-center gap-2 text-sm">
-          <z-radio value="left" />
-          left
-        </label>
-        <label class="flex items-center gap-2 text-sm">
-          <z-radio value="right" />
-          right
-        </label>
-      </z-radio-group>
-      <button type="button" z-button zType="outline" class="m-auto" (click)="openSheet()">Edit profile</button>
+    <div class="flex flex-wrap gap-2">
+      @for (side of sides; track side) {
+        <button type="button" z-button zType="outline" class="capitalize" (click)="openSheet(side)">{{ side }}</button>
+      }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoSheetSideComponent {
-  protected readonly placement = signal<'right' | 'left' | 'top' | 'bottom' | null | undefined>('right');
+  private readonly sheetService = inject(ZardSheetService);
 
-  private sheetService = inject(ZardSheetService);
+  protected readonly sides = ['top', 'right', 'bottom', 'left'] as const satisfies readonly SheetSide[];
 
-  openSheet() {
+  openSheet(side: SheetSide) {
     this.sheetService.create({
       zTitle: 'Edit profile',
       zDescription: `Make changes to your profile here. Click save when you're done.`,
-      zContent: ZardDemoSheetSideInputComponent,
-      zData: {
-        name: 'Matheus Ribeiro',
-        username: '@ribeiromatheus.dev',
-      },
+      zContent: ZardDemoSheetSideContentComponent,
+      zSide: side,
+      // Horizontal sheets already fill the viewport height; cap the vertical ones so the
+      // content scrolls instead of pushing the footer off-screen.
+      zCustomClasses: side === 'top' || side === 'bottom' ? 'max-h-[50vh]' : undefined,
       zOkText: 'Save changes',
-      zOnOk: instance => {
-        console.log('Form submitted:', instance.form.value);
-      },
-      zSide: this.placement(),
+      zCancelText: 'Cancel',
     });
   }
 }

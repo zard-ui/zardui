@@ -40,6 +40,199 @@ describe('ZardCalendarComponent', () => {
       expect(component.minDate()).toBeNull();
       expect(component.maxDate()).toBeNull();
       expect(component.disabled()).toBe(false);
+      expect(component.zCaptionLayout()).toBe('label');
+      expect(component.zButtonVariant()).toBe('ghost');
+      expect(component.zShowOutsideDays()).toBe(true);
+      expect(component.zDisabledDates()).toEqual([]);
+      expect(component.zNumberOfMonths()).toBe(1);
+    });
+  });
+
+  describe('Design contract', () => {
+    it('should be the root itself, so a border is never drawn twice', () => {
+      const host = fixture.nativeElement as HTMLElement;
+
+      expect(host.getAttribute('data-slot')).toBe('calendar');
+      expect(host.querySelector('[data-slot="calendar"]')).toBeNull();
+    });
+
+    it('should render without a border and declare the cell CSS variables', () => {
+      const host = fixture.nativeElement as HTMLElement;
+
+      expect(host.className).toContain('p-2');
+      expect(host.className).toContain('w-fit');
+      expect(host.className).toContain('[--cell-size:--spacing(7)]');
+      expect(host.className).toContain('[--cell-radius:var(--radius-md)]');
+      expect(host.className).not.toContain('border');
+    });
+
+    it('should let the class input override the cell size', () => {
+      fixture.componentRef.setInput('class', '[--cell-size:--spacing(12)] rounded-lg border');
+      fixture.detectChanges();
+
+      const host = fixture.nativeElement as HTMLElement;
+
+      expect(host.className).toContain('[--cell-size:--spacing(12)]');
+      expect(host.className).not.toContain('[--cell-size:--spacing(7)]');
+      expect(host.className).toContain('border');
+    });
+
+    it('should position the navigation over a centered caption', () => {
+      const month = (fixture.nativeElement as HTMLElement).querySelector(':scope > div > div');
+      const caption = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar-caption"]');
+
+      expect(month?.className).toContain('relative');
+      expect(caption?.className).toContain('justify-center');
+      expect(caption?.className).toContain('h-(--cell-size)');
+    });
+
+    it('should render the caption in English regardless of the browser locale', () => {
+      fixture.componentRef.setInput('value', new Date(2024, 7, 15));
+      fixture.detectChanges();
+
+      const caption = (fixture.nativeElement as HTMLElement).querySelector('[data-slot="calendar-caption"]');
+
+      expect(caption?.textContent?.trim()).toBe('August 2024');
+    });
+  });
+
+  describe('Caption layout', () => {
+    const layouts = ['label', 'dropdown', 'dropdown-months', 'dropdown-years'] as const;
+
+    it.each(layouts)('should render the %s caption layout', layout => {
+      fixture.componentRef.setInput('zCaptionLayout', layout);
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const expectedSelects = layout === 'label' ? 0 : layout === 'dropdown' ? 2 : 1;
+
+      expect(compiled.querySelectorAll('select')).toHaveLength(expectedSelects);
+    });
+  });
+
+  describe('Outside days', () => {
+    it('should keep outside days visible by default', () => {
+      const compiled = fixture.nativeElement as HTMLElement;
+      expect(compiled.querySelectorAll('[role="gridcell"].invisible')).toHaveLength(0);
+    });
+
+    it('should hide outside days without dropping their grid cells', () => {
+      fixture.componentRef.setInput('value', new Date(2024, 0, 15));
+      fixture.componentRef.setInput('zShowOutsideDays', false);
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const cells = compiled.querySelectorAll('[role="gridcell"]');
+      const hidden = compiled.querySelectorAll('[role="gridcell"].invisible');
+
+      expect(cells.length % 7).toBe(0);
+      expect(hidden.length).toBeGreaterThan(0);
+      expect(hidden.length).toBeLessThan(cells.length);
+    });
+  });
+
+  describe('Disabled dates', () => {
+    it('should disable the individual days listed in zDisabledDates', () => {
+      fixture.componentRef.setInput('value', new Date(2024, 0, 15));
+      fixture.componentRef.setInput('zDisabledDates', [new Date(2024, 0, 10), new Date(2024, 0, 11)]);
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const disabled = [...compiled.querySelectorAll('[role="gridcell"][data-disabled="true"]')];
+
+      expect(disabled).toHaveLength(2);
+      expect(disabled.map(cell => cell.querySelector('button')?.textContent?.trim())).toEqual(['10', '11']);
+      expect(disabled.every(cell => cell.querySelector('button')?.hasAttribute('disabled'))).toBe(true);
+    });
+
+    it('should keep the disabled days in the grid', () => {
+      fixture.componentRef.setInput('value', new Date(2024, 0, 15));
+      fixture.detectChanges();
+      const before = (fixture.nativeElement as HTMLElement).querySelectorAll('[role="gridcell"]').length;
+
+      fixture.componentRef.setInput('zDisabledDates', [new Date(2024, 0, 10)]);
+      fixture.detectChanges();
+      const after = (fixture.nativeElement as HTMLElement).querySelectorAll('[role="gridcell"]').length;
+
+      expect(after).toBe(before);
+    });
+  });
+
+  describe('Multiple months', () => {
+    it('should render one grid per month', () => {
+      fixture.componentRef.setInput('value', new Date(2024, 0, 15));
+      fixture.componentRef.setInput('zNumberOfMonths', 2);
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const captions = [...compiled.querySelectorAll('[data-slot="calendar-caption"]')];
+
+      expect(compiled.querySelectorAll('[role="grid"]')).toHaveLength(2);
+      expect(captions.map(caption => caption.textContent?.trim())).toEqual(['January 2024', 'February 2024']);
+    });
+
+    it('should keep the day ids unique across months', () => {
+      fixture.componentRef.setInput('zNumberOfMonths', 2);
+      fixture.detectChanges();
+
+      const ids = [...(fixture.nativeElement as HTMLElement).querySelectorAll('[role="gridcell"] button')].map(
+        button => button.id,
+      );
+
+      expect(new Set(ids).size).toBe(ids.length);
+    });
+
+    it('should give the first month the previous arrow and the last one the next arrow', () => {
+      fixture.componentRef.setInput('zNumberOfMonths', 2);
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+
+      expect(compiled.querySelectorAll('[aria-label="Previous month"]')).toHaveLength(1);
+      expect(compiled.querySelectorAll('[aria-label="Next month"]')).toHaveLength(1);
+    });
+
+    it('should rebase the navigation when the caption of a later month changes', () => {
+      fixture.componentRef.setInput('value', new Date(2024, 0, 15));
+      fixture.componentRef.setInput('zNumberOfMonths', 2);
+      fixture.detectChanges();
+
+      // Picking May on the second caption must pull the first month back to April.
+      component['onMonthChange']('4', 1);
+      fixture.detectChanges();
+
+      const captions = [...(fixture.nativeElement as HTMLElement).querySelectorAll('[data-slot="calendar-caption"]')];
+
+      expect(component['currentMonthValue']()).toBe('3');
+      expect(captions.map(caption => caption.textContent?.trim())).toEqual(['April 2024', 'May 2024']);
+    });
+
+    it('should rebase the year the same way', () => {
+      fixture.componentRef.setInput('value', new Date(2024, 11, 15));
+      fixture.componentRef.setInput('zNumberOfMonths', 2);
+      fixture.detectChanges();
+
+      // The second caption reads "January 2025"; moving it to 2026 keeps December before it.
+      component['onYearChange']('2026', 1);
+      fixture.detectChanges();
+
+      const captions = [...(fixture.nativeElement as HTMLElement).querySelectorAll('[data-slot="calendar-caption"]')];
+
+      expect(captions.map(caption => caption.textContent?.trim())).toEqual(['December 2025', 'January 2026']);
+    });
+  });
+
+  describe('Button variant', () => {
+    it('should forward zButtonVariant to the navigation arrows', () => {
+      fixture.componentRef.setInput('zButtonVariant', 'outline');
+      fixture.detectChanges();
+
+      const compiled = fixture.nativeElement as HTMLElement;
+      const previous = compiled.querySelector('[aria-label="Previous month"]');
+      const next = compiled.querySelector('[aria-label="Next month"]');
+
+      expect(previous).toHaveAttribute('data-variant', 'outline');
+      expect(next).toHaveAttribute('data-variant', 'outline');
     });
   });
 
@@ -222,6 +415,14 @@ describe('Calendar Utility Functions', () => {
       expect(isDateDisabled(testDate1, minDate, maxDate)).toBe(true);
       expect(isDateDisabled(testDate2, minDate, maxDate)).toBe(false);
       expect(isDateDisabled(testDate3, minDate, maxDate)).toBe(true);
+    });
+
+    it('should disable the days listed in disabledDates, ignoring their time', () => {
+      const disabledDates = [new Date(2024, 0, 15, 8, 30)];
+
+      expect(isDateDisabled(new Date(2024, 0, 15), null, null, disabledDates)).toBe(true);
+      expect(isDateDisabled(new Date(2024, 0, 16), null, null, disabledDates)).toBe(false);
+      expect(isDateDisabled(new Date(2024, 0, 15), null, null, [])).toBe(false);
     });
 
     it('should handle null min/max dates', () => {

@@ -1,7 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  type ElementRef,
+  ElementRef,
   forwardRef,
   inject,
   input,
@@ -66,7 +66,8 @@ import { ZardInputGroupImports } from '@/shared/components/input-group/input-gro
 })
 export class ZardCommandInputComponent implements ControlValueAccessor {
   private readonly commandComponent = inject(ZardCommandComponent, { optional: true });
-  readonly searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
+  // `#searchInput` sits on an `input[z-input]` component, so read the element explicitly.
+  readonly searchInput = viewChild<unknown, ElementRef<HTMLInputElement>>('searchInput', { read: ElementRef });
 
   readonly placeholder = input<string>('Type a command or search...');
 

@@ -1,0 +1,445 @@
+<z-content
+  [navigationConfig]="navigationConfig"
+  [activeAnchor]="activeAnchor"
+  scrollSpy
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Reactive Forms"
+    description="Build forms in Angular using Reactive Forms and zard/ui."
+    scrollSpyItem="overview"
+    id="overview"
+  ></z-doc-heading>
+
+  <p class="leading-relaxed">
+    In this guide we will build forms with Reactive Forms — the explicit, strongly typed forms API that has shipped with
+    Angular for years. We'll cover building a form with the
+    <code class="bg-muted rounded px-1.5 py-0.5 text-sm">field</code>
+    component, validation, error handling, accessibility and more.
+  </p>
+
+  <z-forms-section
+    scrollSpyItem="demo"
+    id="demo"
+    heading="Demo"
+    lead="We are going to build the following form. It has a text input and a textarea. On submit we validate the form data and display any errors."
+  >
+    <z-code-box
+      [codeData]="demos.demo.code"
+      [dynamicComponent]="demos.demo.component"
+      previewHeight="34rem"
+    ></z-code-box>
+  </z-forms-section>
+
+  <z-forms-section scrollSpyItem="approach" id="approach" heading="Approach">
+    <p class="text-muted-foreground leading-relaxed">
+      A reactive form is a tree of control objects you build in the component class. The template does not create the
+      form, it only connects existing controls to the DOM — which makes the model easy to test, easy to reshape at
+      runtime and fully typed.
+    </p>
+    <ul class="ml-6 list-disc space-y-2 leading-relaxed">
+      <li>
+        The
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">FormGroup / FormControl / FormArray</code>
+        classes hold the value and the validation state.
+      </li>
+      <li>
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">[formGroup]</code>
+        and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">formControlName</code>
+        bind them to controls in the template.
+      </li>
+      <li>
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">z-field</code>
+        components give you complete control over the markup and the accessibility wiring.
+      </li>
+      <li>
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">nonNullable: true</code>
+        keeps the control type free of
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">null</code>
+        and makes
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">reset()</code>
+        restore the initial value.
+      </li>
+    </ul>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="anatomy"
+    id="anatomy"
+    heading="Anatomy"
+    lead="Here is a single field: the control provides the state, formControlName binds it, and the field components render it."
+  >
+    <div class="overflow-hidden rounded-lg border">
+      <z-code-block [data]="snippets.anatomy" [embedded]="true" />
+    </div>
+  </z-forms-section>
+
+  <z-forms-section scrollSpyItem="form" id="form" heading="Form">
+    <z-forms-subsection heading="Create the form model">
+      <p class="text-muted-foreground leading-relaxed">
+        Describe the shape of the form with controls and attach the validators each one needs.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.schema" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Or build it with FormBuilder">
+      <p class="text-muted-foreground leading-relaxed">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">FormBuilder</code>
+        is the same model with less ceremony: an array is read as
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">[initialValue, validators]</code>
+        . Both styles produce identical, equally typed controls — pick one and stay with it.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.formBuilder" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Set up the component">
+      <p class="text-muted-foreground leading-relaxed">
+        Import
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">ReactiveFormsModule</code>
+        and handle the submit. Angular does not mark controls as touched on submit, so call
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">markAllAsTouched()</code>
+        yourself to reveal the errors of fields the user never focused.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.setup" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Bind it in the template">
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.bind" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Done">
+      <p class="text-muted-foreground leading-relaxed">
+        That's it. You now have a fully accessible form with client-side validation. Read the values with
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">getRawValue()</code>
+        which — unlike
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">value</code>
+        — includes disabled controls and keeps the exact type of your model.
+      </p>
+    </z-forms-subsection>
+  </z-forms-section>
+
+  <z-forms-section scrollSpyItem="validation" id="validation" heading="Validation">
+    <z-forms-subsection heading="Built-in validators">
+      <p class="text-muted-foreground leading-relaxed">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">Validators</code>
+        covers the common rules. Pass one, or an array, to the control options.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.validators" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Custom and cross-field validators">
+      <p class="text-muted-foreground leading-relaxed">
+        A validator is a function from a control to an error map, or to
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">null</code>
+        when the value is valid. Attach cross-field rules to the group that owns both controls — not to the individual
+        controls.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.customValidator" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Async validators">
+      <p class="text-muted-foreground leading-relaxed">
+        An async validator returns a
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">Promise</code>
+        or an
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">Observable</code>
+        of the same error map, and goes in
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">asyncValidators</code>
+        . Angular only runs them once every synchronous validator passes, and while the request is in flight the control
+        reports
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">status === 'PENDING'</code>
+        — neither valid nor invalid, which is what a submit button should wait on.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.asyncValidator" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Validation modes">
+      <p class="text-muted-foreground leading-relaxed">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">updateOn</code>
+        decides when the value and the validators are recomputed.
+      </p>
+      <div class="overflow-x-auto rounded-lg border">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-muted/50">
+            <tr>
+              <th class="px-4 py-3 font-medium">Mode</th>
+              <th class="px-4 py-3 font-medium">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-t">
+              <td class="px-4 py-3"><code class="bg-muted rounded px-1.5 py-0.5 text-xs">'change'</code></td>
+              <td class="text-muted-foreground px-4 py-3">Validates on every change. The default.</td>
+            </tr>
+            <tr class="border-t">
+              <td class="px-4 py-3"><code class="bg-muted rounded px-1.5 py-0.5 text-xs">'blur'</code></td>
+              <td class="text-muted-foreground px-4 py-3">Validates when the control loses focus.</td>
+            </tr>
+            <tr class="border-t">
+              <td class="px-4 py-3"><code class="bg-muted rounded px-1.5 py-0.5 text-xs">'submit'</code></td>
+              <td class="text-muted-foreground px-4 py-3">Validates only when the parent form is submitted.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.updateOn" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="control-state"
+    id="control-state"
+    heading="Control State"
+    lead="The control object is not read-only: you can disable it, write to it and listen to it at runtime."
+  >
+    <z-forms-subsection heading="Disabling controls">
+      <p class="text-muted-foreground leading-relaxed">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">disable()</code>
+        and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">enable()</code>
+        flip a control at runtime, and the boxed
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">{{ '{' }} value, disabled {{ '}' }}</code>
+        object starts it out disabled. Either way the control stops being validated and drops out of
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">value</code>
+        — which is the whole reason
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">getRawValue()</code>
+        exists.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.disabling" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Updating values programmatically">
+      <p class="text-muted-foreground leading-relaxed">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">setValue()</code>
+        is the strict one and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">patchValue()</code>
+        the forgiving one. Reach for
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">setValue()</code>
+        when the whole shape is at hand — it turns a renamed field into a compile error instead of a silent no-op.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.updating" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Changing validators at runtime">
+      <p class="text-muted-foreground leading-relaxed">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">addValidators()</code>
+        ,
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">removeValidators()</code>
+        and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">setValidators()</code>
+        rewrite the rules of a control after the fact. The catch is that none of them revalidates by itself — without
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">updateValueAndValidity()</code>
+        the control keeps the status it had before.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.runtimeValidators" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Reacting to changes">
+      <p class="text-muted-foreground leading-relaxed">
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">valueChanges</code>
+        and
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">statusChanges</code>
+        are the classic streams;
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">events</code>
+        carries all of them — value, status, pristine, touched, submit and reset — in one place. Bridge either into a
+        signal with
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">toSignal()</code>
+        so the template stays free of subscriptions.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.changes" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="displaying-errors"
+    id="displaying-errors"
+    heading="Displaying Errors"
+    lead="Display errors next to the field with z-field-error. For styling and accessibility:"
+  >
+    <ul class="ml-6 list-disc space-y-2 leading-relaxed">
+      <li>
+        Add
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">data-invalid</code>
+        to the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">z-field</code>
+        element.
+      </li>
+      <li>
+        Add
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">aria-invalid</code>
+        to the control itself — the input, textarea, select, checkbox, and so on.
+      </li>
+      <li>
+        Gate both on
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">invalid &amp;&amp; touched</code>
+        so an untouched field never shows an error, and branch on
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">hasError()</code>
+        to pick the message.
+      </li>
+    </ul>
+    <div class="overflow-hidden rounded-lg border">
+      <z-code-block [data]="snippets.errors" [embedded]="true" />
+    </div>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="field-types"
+    id="field-types"
+    heading="Working with Different Field Types"
+    lead="Every zard/ui form control implements a value accessor, so formControlName binds to all of them the same way."
+  >
+    <z-code-box
+      scrollSpyItem="field-input"
+      id="field-input"
+      componentType="input"
+      demoDescription="For text inputs, bind `formControlName` and mirror the control's invalid state with `aria-invalid`."
+      [codeData]="demos.input.code"
+      [dynamicComponent]="demos.input.component"
+      previewHeight="21rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-textarea"
+      id="field-textarea"
+      componentType="textarea"
+      demoDescription="Textareas work exactly like inputs. Add `z-field-description` for the helper copy below the control."
+      [codeData]="demos.textarea.code"
+      [dynamicComponent]="demos.textarea.component"
+      previewHeight="27rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-select"
+      id="field-select"
+      componentType="select"
+      demoDescription='`z-select` is a value accessor too. Use `zOrientation="responsive"` with `z-field-content` to put the label and the control side by side on wider screens. "Auto" is listed but rejected by a custom validator — a value rule, not a presence one.'
+      [codeData]="demos.select.code"
+      [dynamicComponent]="demos.select.component"
+      previewHeight="17rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-checkbox"
+      id="field-checkbox"
+      componentType="checkbox"
+      demoDescription="A checkbox group maps cleanly to a `FormArray` of booleans: one control per option, plus a group-level validator for the 'pick at least one' rule. The first group holds a single disabled control that ships checked — `getRawValue()` is what reads it back. Remember `data-slot=&quot;checkbox-group&quot;` on the `z-field-group`."
+      [codeData]="demos.checkbox.code"
+      [dynamicComponent]="demos.checkbox.component"
+      previewHeight="30rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-radio"
+      id="field-radio"
+      componentType="radio-group"
+      demoDescription="Bind `formControlName` to `z-radio-group` — the individual `z-radio` items only carry their value."
+      [codeData]="demos.radio.code"
+      [dynamicComponent]="demos.radio.component"
+      previewHeight="32rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-switch"
+      id="field-switch"
+      componentType="switch"
+      demoDescription='Switches bind to a boolean control. `Validators.requiredTrue` is the rule for "must be enabled".'
+      [codeData]="demos.switch.code"
+      [dynamicComponent]="demos.switch.component"
+      previewHeight="19rem"
+    ></z-code-box>
+
+    <z-code-box
+      scrollSpyItem="field-complex"
+      id="field-complex"
+      componentType="complex-forms"
+      demoDescription="Everything above, composed into one form with fieldsets, separators, a validator that rejects unknown plan values and count rules on the add-ons array."
+      [codeData]="demos.complex.code"
+      [dynamicComponent]="demos.complex.component"
+      previewHeight="62rem"
+      codeHeight="40rem"
+    ></z-code-box>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="resetting"
+    id="resetting"
+    heading="Resetting the Form"
+    lead="reset() restores the values and clears the pristine/touched state, so the errors disappear until the user interacts again."
+  >
+    <div class="overflow-hidden rounded-lg border">
+      <z-code-block [data]="snippets.reset" [embedded]="true" />
+    </div>
+  </z-forms-section>
+
+  <z-forms-section
+    scrollSpyItem="array-fields"
+    id="array-fields"
+    heading="Array Fields"
+    lead="FormArray manages a list of controls you can grow and shrink at runtime — one group per row keeps each item independently validated."
+  >
+    <z-code-box
+      [codeData]="demos.array.code"
+      [dynamicComponent]="demos.array.component"
+      previewHeight="38rem"
+    ></z-code-box>
+
+    <z-forms-subsection heading="Setting up the FormArray">
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.arraySetup" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Array field structure">
+      <p class="text-muted-foreground leading-relaxed">
+        Wrap the items in a
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">z-field-set</code>
+        with a legend and a description. Inside a
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">formArrayName</code>
+        block, each row is addressed by its index through the
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">[formGroupName]</code>
+        directive.
+      </p>
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.arrayStructure" [embedded]="true" />
+      </div>
+    </z-forms-subsection>
+
+    <z-forms-subsection heading="Adding and removing items">
+      <div class="overflow-hidden rounded-lg border">
+        <z-code-block [data]="snippets.arrayMutate" [embedded]="true" />
+      </div>
+      <p class="text-muted-foreground leading-relaxed">
+        When the collection is keyed rather than ordered — a translation map, a set of feature flags —
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">FormRecord</code>
+        is the counterpart of
+        <code class="bg-muted rounded px-1.5 py-0.5 text-sm">FormArray</code>
+        : a group whose keys are added and removed at runtime, with every control sharing one type.
+      </p>
+    </z-forms-subsection>
+  </z-forms-section>
+</z-content>

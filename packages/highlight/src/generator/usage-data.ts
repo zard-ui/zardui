@@ -59,7 +59,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   calendar: {
     importCode: `import { ZardCalendarComponent } from '@/shared/components/calendar/calendar.component';`,
-    templateCode: `<z-calendar></z-calendar>`,
+    templateCode: `<z-calendar zMode="single" class="rounded-lg border"></z-calendar>`,
   },
   card: {
     importCode: `import { ZardCardComponent } from '@/shared/components/card/card.component';`,
@@ -82,8 +82,20 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     templateCode: `<z-checkbox zLabel="Accept terms and conditions"></z-checkbox>`,
   },
   combobox: {
-    importCode: `import { ZardComboboxComponent } from '@/shared/components/combobox/combobox.component';`,
-    templateCode: `<z-combobox [options]="options" placeholder="Select framework..."></z-combobox>`,
+    importCode: `import { ZardComboboxImports } from '@/shared/components/combobox/combobox.imports';`,
+    templateCode: `<z-combobox [(zValue)]="value">
+  <z-combobox-input placeholder="Search framework..." />
+
+  <z-combobox-content>
+    <z-combobox-empty>No framework found.</z-combobox-empty>
+
+    <z-combobox-list>
+      @for (framework of frameworks; track framework.value) {
+        <z-combobox-item [zValue]="framework.value">{{ framework.label }}</z-combobox-item>
+      }
+    </z-combobox-list>
+  </z-combobox-content>
+</z-combobox>`,
   },
   command: {
     importCode: `import { ZardCommandImports } from '@/shared/components/command/command.imports';`,
@@ -101,7 +113,7 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   },
   'date-picker': {
     importCode: `import { ZardDatePickerComponent } from '@/shared/components/date-picker/date-picker.component';`,
-    templateCode: `<z-date-picker placeholder="Pick a date"></z-date-picker>`,
+    templateCode: `<z-date-picker zPlaceholder="Pick a date"></z-date-picker>`,
   },
   dialog: {
     importCode: `import { ZardDialogImports } from '@/shared/components/dialog/dialog.imports';`,
@@ -137,16 +149,6 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   </div>
 </div>`,
   },
-  form: {
-    importCode: `import { ZardFormImports } from '@/shared/components/form/form.imports';`,
-    templateCode: `<z-form-field>
-  <z-form-label>Email</z-form-label>
-  <z-form-control>
-    <input z-input placeholder="email@example.com" />
-  </z-form-control>
-  <z-form-message>Enter your email address.</z-form-message>
-</z-form-field>`,
-  },
   input: {
     importCode: `import { ZardInputComponent } from '@/shared/components/input/input.component';`,
     templateCode: `<input z-input type="email" placeholder="Email" />`,
@@ -163,6 +165,22 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   </z-input-group-addon>
   <input z-input placeholder="example.com" />
 </z-input-group>`,
+  },
+  'input-otp': {
+    importCode: `import { ZardInputOtpImports } from '@/shared/components/input-otp/input-otp.imports';`,
+    templateCode: `<z-input-otp [zMaxLength]="6">
+  <z-input-otp-group>
+    <z-input-otp-slot [zIndex]="0" />
+    <z-input-otp-slot [zIndex]="1" />
+    <z-input-otp-slot [zIndex]="2" />
+  </z-input-otp-group>
+  <z-input-otp-separator />
+  <z-input-otp-group>
+    <z-input-otp-slot [zIndex]="3" />
+    <z-input-otp-slot [zIndex]="4" />
+    <z-input-otp-slot [zIndex]="5" />
+  </z-input-otp-group>
+</z-input-otp>`,
   },
   item: {
     importCode: `import { ZardItemImports } from '@/shared/components/item/item.imports';`,
@@ -189,26 +207,41 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
     importCode: `import { ZardSpinnerComponent } from '@/shared/components/spinner/spinner.component';`,
     templateCode: `<z-spinner></z-spinner>`,
   },
-  menu: {
-    importCode: `import { ZardMenuImports } from '@/shared/components/menu/menu.imports';`,
-    templateCode: `<div zardContextMenu [zMenuContent]="menuContent">
-  Right click here
-</div>
-<ng-template #menuContent>
-  <div zardMenuItem>Back</div>
-  <div zardMenuItem>Forward</div>
-  <div zardMenuItem>Reload</div>
-</ng-template>`,
+  'navigation-menu': {
+    importCode: `import { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/navigation-menu.imports';`,
+    templateCode: `<z-navigation-menu>
+  <ul z-navigation-menu-list>
+    <li z-navigation-menu-item>
+      <button type="button" z-navigation-menu-trigger [zNavigationMenuTriggerFor]="gettingStarted">
+        Getting started
+      </button>
+
+      <ng-template #gettingStarted>
+        <div z-navigation-menu-content>
+          <ul class="w-64">
+            <li><a z-navigation-menu-link href="#">Introduction</a></li>
+            <li><a z-navigation-menu-link href="#">Installation</a></li>
+          </ul>
+        </div>
+      </ng-template>
+    </li>
+  </ul>
+</z-navigation-menu>`,
   },
   pagination: {
     importCode: `import { ZardPaginationImports } from '@/shared/components/pagination/pagination.imports';`,
     templateCode: `<z-pagination [zTotal]="100" [zPageSize]="10"></z-pagination>`,
   },
   popover: {
-    importCode: `import { ZardPopoverDirective } from '@/shared/components/popover/popover.component';`,
-    templateCode: `<button z-button [zPopover]="popoverContent">Open popover</button>
+    importCode: `import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';`,
+    templateCode: `<button z-button zType="outline" zPopover [zContent]="popoverContent">Open popover</button>
 <ng-template #popoverContent>
-  <p>Place content for the popover here.</p>
+  <z-popover>
+    <div z-popover-header>
+      <h4 z-popover-title>Title</h4>
+      <p z-popover-description>Description text here.</p>
+    </div>
+  </z-popover>
 </ng-template>`,
   },
   progress: {
@@ -239,14 +272,8 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
 </z-select>`,
   },
   sheet: {
-    importCode: `import { ZardSheetImports } from '@/shared/components/sheet/sheet.imports';`,
-    templateCode: `<z-sheet
-  zTitle="Edit profile"
-  zDescription="Make changes to your profile here."
-  zSide="right"
->
-  <p>Sheet content goes here.</p>
-</z-sheet>`,
+    importCode: `import { ZardSheetService } from '@/shared/components/sheet/sheet.service';`,
+    templateCode: `<button type="button" z-button zType="outline" (click)="openSheet()">Open</button>`,
   },
   skeleton: {
     importCode: `import { ZardSkeletonComponent } from '@/shared/components/skeleton/skeleton.component';`,

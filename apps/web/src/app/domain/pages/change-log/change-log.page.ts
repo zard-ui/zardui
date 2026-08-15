@@ -1,98 +1,114 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, OnInit, PendingTasks, PLATFORM_ID, signal } from '@angular/core';
+
+import { IconName, NgIcon, provideIcons } from '@ng-icons/core';
+import {
+  lucideCode,
+  lucideMoon,
+  lucidePackage,
+  lucideRocket,
+  lucideSettings,
+  lucideShield,
+  lucideTerminal,
+  lucideZap,
+} from '@ng-icons/lucide';
 
 import { DocContentComponent } from '@doc/domain/components/doc-content/doc-content.component';
 import { DocHeadingComponent } from '@doc/domain/components/doc-heading/doc-heading.component';
 import { NavigationConfig } from '@doc/domain/components/dynamic-anchor/dynamic-anchor.component';
-import { StepsComponent } from '@doc/domain/components/steps/steps.component';
-import { COMPONENTS_REGISTRY } from '@doc/shared/constants/components.constant';
-import { Step } from '@doc/shared/constants/install.constant';
-import { DynamicInstallationService } from '@doc/shared/services/dynamic-installation.service';
 import { SeoService } from '@doc/shared/services/seo.service';
-import { ZardCodeBoxComponent } from '@doc/widget/components/zard-code-box/zard-code-box.component';
 
 import { ZardAlertComponent } from '@zard/components/alert/alert.component';
 
-import { type ChangelogEntryConfig } from './entries/changelog-entry.interface';
+import { ChangelogExamplesComponent } from './components/changelog-examples.component';
+import { type ChangelogEntry, type ChangelogHighlightIcon } from './entries/changelog-entry.interface';
 import { ChangelogService } from './services/changelog.service';
 import { ScrollSpyItemDirective } from '../../directives/scroll-spy-item.directive';
 import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
+import { ViewportEnterDirective } from '../../directives/viewport-enter.directive';
+
+const HIGHLIGHT_ICONS: Record<ChangelogHighlightIcon, IconName> = {
+  zap: 'lucideZap',
+  terminal: 'lucideTerminal',
+  moon: 'lucideMoon',
+  package: 'lucidePackage',
+  rocket: 'lucideRocket',
+  shield: 'lucideShield',
+  code: 'lucideCode',
+  settings: 'lucideSettings',
+};
 
 @Component({
   selector: 'z-changelog',
   standalone: true,
   imports: [
+    ChangelogExamplesComponent,
     DocContentComponent,
     DocHeadingComponent,
+    NgIcon,
     ScrollSpyDirective,
     ScrollSpyItemDirective,
+    ViewportEnterDirective,
     ZardAlertComponent,
-    StepsComponent,
-    ZardCodeBoxComponent,
   ],
   templateUrl: './change-log.page.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [
+    provideIcons({
+      lucideCode,
+      lucideMoon,
+      lucidePackage,
+      lucideRocket,
+      lucideSettings,
+      lucideShield,
+      lucideTerminal,
+      lucideZap,
+    }),
+  ],
 })
 export class ChangeLogPage implements OnInit {
   private readonly changelogService = inject(ChangelogService);
-  private readonly dynamicInstallationService = inject(DynamicInstallationService);
   private readonly seoService = inject(SeoService);
+  private readonly pendingTasks = inject(PendingTasks);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   readonly title = 'Changelog - zard/ui';
-  activeAnchor?: string;
+  readonly activeAnchor = signal<string | undefined>(undefined);
 
-  readonly entries = signal<ChangelogEntryConfig[]>([]);
-  readonly installSteps = signal<Record<string, Step[]>>({});
+  readonly entries = this.changelogService.entries;
 
-  readonly navigationConfig = computed<NavigationConfig>(() => {
-    const items = [{ id: 'overview', label: 'Overview', type: 'core' as const }];
-
-    const entryItems = this.entries().map(entry => ({
-      id: entry.id,
-      label: entry.meta.month,
-      type: 'core' as const,
-    }));
-
-    return { items: [...items, ...entryItems] };
-  });
+  readonly navigationConfig: NavigationConfig = {
+    items: [
+      { id: 'overview', label: 'Overview', type: 'core' },
+      ...this.changelogService.entries.map(entry => ({
+        id: entry.meta.id,
+        label: entry.meta.month,
+        type: 'core' as const,
+      })),
+    ],
+  };
 
   ngOnInit() {
     this.seoService.setDocsSeo('Changelog', 'Latest updates and announcements.', '/docs/changelog', 'og-changelog.jpg');
-    this.loadAllEntries();
+
+    // This route is prerendered and `generate-docs-markdown.mjs` reads that HTML,
+    // so the server has to emit every demo. The browser instead loads a month's
+    // payload only once the month approaches the viewport (see onEntryApproaching).
+    if (!this.isBrowser) {
+      const done = this.pendingTasks.add();
+      this.changelogService.loadAll().finally(done);
+    }
   }
 
-  private loadAllEntries() {
-    const allEntries = this.changelogService.getAllEntries();
-    this.entries.set(allEntries);
-    void this.loadInstallSteps(allEntries);
+  iconOf(icon: ChangelogHighlightIcon): IconName {
+    return HIGHLIGHT_ICONS[icon];
   }
 
-  trackByEntry(_: number, entry: ChangelogEntryConfig): string {
-    return entry.id;
+  examplesOf(id: string) {
+    return this.changelogService.examplesOf(id);
   }
 
-  async onAnchorClick(anchorId: string) {
-    return;
-  }
-
-  /**
-   * Os comandos de instalação de cada componente citado nas entradas.
-   *
-   * Vêm dos mesmos dados que a página do componente usa — já destacados em
-   * tempo de build. Buscá-los por HTTP como markdown obrigava a mostrar um
-   * spinner antes de cada bloco, e aqui há um bloco por componente lançado.
-   */
-  private async loadInstallSteps(entries: ChangelogEntryConfig[]): Promise<void> {
-    const names = [...new Set(entries.flatMap(entry => entry.examples?.map(example => example.componentName) ?? []))];
-
-    const loaded = await Promise.all(
-      names.map(async name => {
-        const registryEntry = COMPONENTS_REGISTRY.find(candidate => candidate.componentName === name);
-        const component = await registryEntry?.loadData();
-        const steps = this.dynamicInstallationService.generateInstallationSteps(name, component?.installData?.cliAdd);
-
-        return [name, steps.cli] as const;
-      }),
-    );
-
-    this.installSteps.set(Object.fromEntries(loaded));
+  onEntryApproaching(entry: ChangelogEntry) {
+    void this.changelogService.load(entry);
   }
 }

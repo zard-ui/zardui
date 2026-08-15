@@ -15,6 +15,7 @@ import { makeSafeDate } from './calendar.utils';
     <z-calendar-grid
       [calendarDays]="calendarDays"
       [disabled]="disabled"
+      [zShowOutsideDays]="showOutsideDays"
       (dateSelect)="onDateSelect($event)"
       (previousMonth)="onPreviousMonth($event)"
       (nextMonth)="onNextMonth($event)"
@@ -25,6 +26,7 @@ import { makeSafeDate } from './calendar.utils';
 class TestHostComponent {
   calendarDays: CalendarDay[] = [];
   disabled = false;
+  showOutsideDays = true;
   onDateSelect = jest.fn();
   onPreviousMonth = jest.fn();
   onNextMonth = jest.fn();
@@ -279,21 +281,111 @@ describe('ZardCalendarGridComponent', () => {
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
-    expect(buttons[0].nativeElement).toHaveClass('opacity-50');
+    // Outside days are muted but keep full opacity, unlike disabled ones.
+    expect(buttons[0].nativeElement).toHaveClass('text-muted-foreground');
+    expect(buttons[0].nativeElement).not.toHaveClass('opacity-50');
+  });
+
+  it('hides outside days when zShowOutsideDays is false', () => {
+    const days = createMockDays(35);
+    days[0].isCurrentMonth = false;
+    host.calendarDays = days;
+    host.showOutsideDays = false;
+    fixture.detectChanges();
+
+    const cells = fixture.debugElement.queryAll(By.css('[role="gridcell"]'));
+    expect(cells).toHaveLength(35);
+    expect(cells[0].nativeElement).toHaveClass('invisible');
+    expect(cells[1].nativeElement).not.toHaveClass('invisible');
+  });
+
+  it('keeps outside days visible by default', () => {
+    const days = createMockDays(35);
+    days[0].isCurrentMonth = false;
+    host.calendarDays = days;
+    fixture.detectChanges();
+
+    const cells = fixture.debugElement.queryAll(By.css('[role="gridcell"]'));
+    expect(cells[0].nativeElement).not.toHaveClass('invisible');
   });
 
   it('applies range styles when day is in range', () => {
     const days = createMockDays(35);
     days[5].isRangeStart = true;
+    days[5].isSelected = true;
     days[10].isInRange = true;
     days[15].isRangeEnd = true;
+    days[15].isSelected = true;
     host.calendarDays = days;
     fixture.detectChanges();
 
     const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
-    expect(buttons[5].nativeElement).toHaveClass('rounded-r-none');
+    expect(buttons[5].nativeElement).toHaveClass('rounded-s-(--cell-radius)');
+    expect(buttons[5].nativeElement).toHaveClass('bg-primary');
     expect(buttons[10].nativeElement).toHaveClass('rounded-none');
-    expect(buttons[15].nativeElement).toHaveClass('rounded-l-none');
+    expect(buttons[10].nativeElement).toHaveClass('bg-muted');
+    expect(buttons[15].nativeElement).toHaveClass('rounded-e-(--cell-radius)');
+    expect(buttons[15].nativeElement).toHaveClass('bg-primary');
+
+    const cells = fixture.debugElement.queryAll(By.css('[role="gridcell"]'));
+    // The rail lives on the gridcell wrapper, bridged by the ::after pseudo element.
+    expect(cells[5].nativeElement).toHaveClass('bg-muted');
+    expect(cells[10].nativeElement).toHaveClass('bg-muted');
+    expect(cells[15].nativeElement).toHaveClass('bg-muted');
+  });
+
+  it('renders a one-day range as a plain selected day', () => {
+    const days = createMockDays(35);
+    days[5].isRangeStart = true;
+    days[5].isRangeEnd = true;
+    days[5].isSelected = true;
+    host.calendarDays = days;
+    fixture.detectChanges();
+
+    const cells = fixture.debugElement.queryAll(By.css('[role="gridcell"]'));
+    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+
+    expect(cells[5].nativeElement).toHaveClass('bg-transparent');
+    expect(cells[5].nativeElement).toHaveClass('after:hidden');
+    expect(buttons[5].nativeElement).toHaveClass('rounded-(--cell-radius)');
+    expect(buttons[5].nativeElement).toHaveClass('bg-primary');
+    expect(buttons[5].nativeElement).not.toHaveClass('rounded-none');
+  });
+
+  it('exposes the day state as data attributes on the gridcell', () => {
+    const days = createMockDays(35);
+    days[5].isRangeStart = true;
+    days[5].isSelected = true;
+    days[10].isInRange = true;
+    days[15].isRangeEnd = true;
+    days[15].isSelected = true;
+    days[20].isCurrentMonth = false;
+    days[25].isDisabled = true;
+    host.calendarDays = days;
+    fixture.detectChanges();
+
+    const cells = fixture.debugElement.queryAll(By.css('[role="gridcell"]'));
+
+    expect(cells[0].nativeElement).toHaveAttribute('data-today', 'true');
+    expect(cells[5].nativeElement).toHaveAttribute('data-range-start', 'true');
+    expect(cells[5].nativeElement).toHaveAttribute('data-selected', 'true');
+    expect(cells[10].nativeElement).toHaveAttribute('data-range-middle', 'true');
+    expect(cells[15].nativeElement).toHaveAttribute('data-range-end', 'true');
+    expect(cells[20].nativeElement).toHaveAttribute('data-outside', 'true');
+    expect(cells[25].nativeElement).toHaveAttribute('data-disabled', 'true');
+
+    expect(cells[1].nativeElement).not.toHaveAttribute('data-selected');
+    expect(cells[1].nativeElement).not.toHaveAttribute('data-today');
+    expect(cells[1].nativeElement).not.toHaveAttribute('data-range-start');
+  });
+
+  it('exposes the localized date as data-day on the day button', () => {
+    const days = createMockDays(35);
+    host.calendarDays = days;
+    fixture.detectChanges();
+
+    const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
+    expect(buttons[0].nativeElement).toHaveAttribute('data-day', days[0].date.toLocaleDateString());
   });
 
   it('sets aria-selected attribute correctly', () => {
@@ -385,8 +477,24 @@ describe('ZardCalendarGridComponent', () => {
     host.calendarDays = createMockDays(35);
     fixture.detectChanges();
 
+    // Today is highlighted on the gridcell wrapper, so a selected today can override it.
+    const cells = fixture.debugElement.queryAll(By.css('[role="gridcell"]'));
+    expect(cells[0].nativeElement).toHaveClass('bg-muted');
+    expect(cells[0].nativeElement).toHaveClass('text-foreground');
+  });
+
+  it('lets a selected today be owned by the day button', () => {
+    const days = createMockDays(35);
+    days[0].isSelected = true;
+    host.calendarDays = days;
+    fixture.detectChanges();
+
+    const cells = fixture.debugElement.queryAll(By.css('[role="gridcell"]'));
     const buttons = fixture.debugElement.queryAll(By.css('[role="button"]'));
-    expect(buttons[0].nativeElement).toHaveClass('bg-accent');
+
+    expect(cells[0].nativeElement).toHaveClass('bg-transparent');
+    expect(cells[0].nativeElement).not.toHaveClass('bg-muted');
+    expect(buttons[0].nativeElement).toHaveClass('bg-primary');
   });
 
   it('has public methods setFocusedDayIndex and resetFocus', () => {

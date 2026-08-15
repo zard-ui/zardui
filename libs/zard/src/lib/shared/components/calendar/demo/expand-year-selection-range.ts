@@ -1,25 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import { ZardCalendarComponent } from '../calendar.component';
+
+const BIRTH_YEAR_FLOOR = 1950;
 
 @Component({
   selector: 'z-demo-calendar-expand-year-selection-range',
   imports: [ZardCalendarComponent],
   standalone: true,
   template: `
-    <div class="space-y-8">
-      <div>
-        <h3 class="mb-3 text-sm font-medium">Date of Birth</h3>
-        <z-calendar [minDate]="minDate" [maxDate]="maxDate" (dateChange)="onDateChange($event)" />
-      </div>
-    </div>
+    <z-calendar
+      zMode="single"
+      zCaptionLayout="dropdown"
+      class="rounded-lg border"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [(value)]="dateOfBirth"
+    />
   `,
 })
 export class ZardDemoCalendarExpandYearSelectionRangeComponent {
-  minDate = new Date(1950, 1, 1);
-  maxDate = new Date();
-
-  onDateChange(date: Date | Date[]) {
-    console.log('Selected date:', date);
-  }
+  readonly minDate = new Date(BIRTH_YEAR_FLOOR, 0, 1);
+  readonly maxDate = new Date();
+  readonly dateOfBirth = signal<Date | null>(null);
 }

@@ -23,6 +23,13 @@
 - [Changelog](https://zardui.com/docs/changelog): Release notes, version history, and updates.
 - [About](https://zardui.com/docs/about): Credits, project information, and acknowledgments.
 
+## Forms
+
+- [Forms](https://zardui.com/docs/forms): Overview of the three ways to build forms in Angular with Zard UI, and how to pick one.
+- [Signal Forms](https://zardui.com/docs/forms/signal-forms): Building forms with the signal-based `@angular/forms/signals` API — schema, validation, errors, field types and array fields.
+- [Reactive Forms](https://zardui.com/docs/forms/reactive-forms): Building forms with `FormGroup`/`FormControl`/`FormArray` — typed models, validators, errors, field types and array fields.
+- [Template-driven Forms](https://zardui.com/docs/forms/template-driven-forms): Building forms with `ngModel` and validation attributes — the simplest approach, plus its limits.
+
 ## Components
 
 ### Form & Input
@@ -34,7 +41,6 @@
 - [Combobox](https://zardui.com/docs/components/combobox): Combobox component for Angular applications.
 - [Date Picker](https://zardui.com/docs/components/date-picker): Date Picker component for Angular applications.
 - [Field](https://zardui.com/docs/components/field): Field component for Angular applications.
-- [Form](https://zardui.com/docs/components/form): Form component for Angular applications.
 - [Input](https://zardui.com/docs/components/input): Input component for Angular applications.
 - [Input Group](https://zardui.com/docs/components/input-group): Input Group component for Angular applications.
 - [Radio Group](https://zardui.com/docs/components/radio-group): Radio Group component for Angular applications.
@@ -88,6 +94,20 @@
 - [Kbd](https://zardui.com/docs/components/kbd): Kbd component for Angular applications.
 - [Toggle](https://zardui.com/docs/components/toggle): Toggle component for Angular applications.
 - [Toggle Group](https://zardui.com/docs/components/toggle-group): Toggle Group component for Angular applications.
+
+## Contribute
+
+- [Overview](https://zardui.com/docs/contribute): Why and how to contribute to Zard UI, with a quick start and a map of the guide.
+- [Setup](https://zardui.com/docs/contribute/setup): Requirements, fork and clone, the dev server on port 4222, git hooks and essential commands.
+- [Architecture](https://zardui.com/docs/contribute/architecture): What each project in the monorepo owns, how they connect, and every path alias.
+- [Project Structure](https://zardui.com/docs/contribute/project-structure): Commented directory tree, a task-to-directory lookup, and which committed files are generated.
+- [Components](https://zardui.com/docs/contribute/components): The component generator, the CVA pattern, demos, the API reference and the pre-PR checklist.
+- [Blocks](https://zardui.com/docs/contribute/blocks): Scaffolding, syncing and registering a block, including screenshots and registry categories.
+- [Documentation System](https://zardui.com/docs/contribute/documentation): The six Shiki generators, code fence metadata, page anatomy and the post-build Markdown pipeline.
+- [Testing](https://zardui.com/docs/contribute/testing): Jest unit tests, Playwright E2E specs with accessibility checks, and the E2E governance rules.
+- [Workflow](https://zardui.com/docs/contribute/workflow): Branch naming, the mandatory emoji commit format, the PR checklist and the CI jobs.
+- [Release](https://zardui.com/docs/contribute/release): The automated release pipeline, version bump rules and the published packages.
+- [FAQ & Troubleshooting](https://zardui.com/docs/contribute/faq): Rejected commits, empty code blocks, missing routes, alias errors and Nx cache issues.
 
 ## Installation
 

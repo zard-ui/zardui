@@ -1,6 +1,21 @@
 # 🤝 Contributing to ZardUI
 
-Thank you for your interest in contributing to ZardUI! This guide will help you understand how the project is structured and how you can contribute effectively.
+Thank you for your interest in contributing to ZardUI! This guide gets you from a fresh clone to a merged pull request.
+
+> 📚 **The full guide lives on the website: [zardui.com/docs/contribute](https://zardui.com/docs/contribute).**
+> It is the canonical, navigable version of this file — with runnable code blocks and a page per topic:
+> [Setup](https://zardui.com/docs/contribute/setup) ·
+> [Architecture](https://zardui.com/docs/contribute/architecture) ·
+> [Project Structure](https://zardui.com/docs/contribute/project-structure) ·
+> [Components](https://zardui.com/docs/contribute/components) ·
+> [Blocks](https://zardui.com/docs/contribute/blocks) ·
+> [Documentation System](https://zardui.com/docs/contribute/documentation) ·
+> [Testing](https://zardui.com/docs/contribute/testing) ·
+> [Workflow](https://zardui.com/docs/contribute/workflow) ·
+> [Release](https://zardui.com/docs/contribute/release) ·
+> [FAQ](https://zardui.com/docs/contribute/faq)
+>
+> This file is the short version. When the two disagree, the website is right.
 
 ## 📋 Table of Contents
 
@@ -16,20 +31,20 @@ Thank you for your interest in contributing to ZardUI! This guide will help you 
 - [🔄 Contribution Workflow](#-contribution-workflow)
 - [📋 Commit Patterns](#-commit-patterns)
 - [🔧 Essential Commands](#-essential-commands)
+- [🚀 Automatic Release System](#-automatic-release-system)
 
 ## ✅ Requirements
 
-- **Node.js** version `>=20.19.0` (specified in `engines`)
-- **npm** (included with Node.js)
-- **Git** for version control
-
+- **Node.js** `>=20.19.0` (enforced by `engines` in `package.json`; CI runs Node 24)
+- **npm** — the repository ships a `package-lock.json`
+- **Git**
 
 ## 🚀 Initial Setup
 
 1. **Fork and clone the repository**:
 
    ```bash
-   git clone https://github.com/[your-username]/zardui.git
+   git clone https://github.com/<your-username>/zardui.git
    cd zardui
    ```
 
@@ -39,128 +54,112 @@ Thank you for your interest in contributing to ZardUI! This guide will help you 
    npm install
    ```
 
+   Husky installs itself through the `prepare` script, so the git hooks are active immediately.
+
 3. **Start the development environment**:
 
    ```bash
    npm start
    ```
 
-   The project will run at `http://localhost:4222`
+   `scripts/dev.mjs` pre-builds the highlighted code blocks, then runs the highlight generator in watch mode next to
+   `nx run web:serve --configuration=local`. The site listens on `http://localhost:4222` — copy `.env.example` to
+   `.env` to change the port.
+
+📖 More detail: [Setup](https://zardui.com/docs/contribute/setup)
 
 ## 🏗️ Project Architecture
 
-### Monorepo with Nx
+ZardUI is a **monorepo** managed by [Nx](https://nx.dev/):
 
-ZardUI is a **monorepo** managed by [Nx](https://nx.dev/) with the following characteristics:
-
-- **Nx 22** with intelligent caching and dependency graph
-- **Angular 21** with signal-based architecture
-- **TailwindCSS v4** with PostCSS integration
-- **TypeScript 5.9** with strict mode
-- **Conventional commits** for automated releases
-- **Path aliases**: `@/*` inside `libs/zard/` maps to `src/lib/*`
-- **Optimized builds** with Angular CLI + esbuild
+- **Nx 22** with cached targets and a derived dependency graph
+- **Angular 21** — standalone components, signal inputs, OnPush everywhere
+- **TailwindCSS v4** via `@tailwindcss/postcss` (there is **no** `tailwind.config.js`)
+- **TypeScript 5.9** in strict mode, with `strictTemplates`
+- **CVA** (`class-variance-authority`) for typed variants, merged through `mergeClasses()`
+- **SSR + prerendering** driven by `apps/web/prerender-routes.txt`
 
 ### Main Projects
 
-#### 📚 `libs/zard/` - Component Library
+| Path                  | What it is                                                                                       |
+| --------------------- | ------------------------------------------------------------------------------------------------ |
+| `libs/zard/`          | The publishable component library — components, variants, demos, API references                  |
+| `libs/blocks/`        | Composed screens (e.g. `login-01`) with their metadata                                           |
+| `apps/web/`           | The documentation site (Angular + SSR/prerender)                                                 |
+| `apps/web-e2e/`       | Playwright E2E specs, including accessibility checks                                             |
+| `packages/highlight/` | Shiki generators plus `z-code-block`, `z-code-tabs`, `z-code-display`                            |
+| `packages/cli/`       | `zard-cli`, built with Commander.js                                                              |
+| `packages/mcp/`       | `zard-mcp`, an MCP server exposing components, docs and blocks                                   |
+| `tools/generators/`   | The local Nx plugin `@zardui/generators` (`component`, `block`)                                  |
+| `scripts/`            | `dev.mjs`, `build-registry.cts`, `serve-registry.cts`, `sync-blocks.ts`, `normalize-commits.cts` |
+| `api/og.ts`           | Vercel edge function rendering the dynamic OG images                                             |
 
-- **Standalone** and **publishable** Angular library
-- Components with **signal-based inputs** (`input()`)
-- **CVA (Class Variance Authority)** for typed variants
-- **OnPush change detection** for performance
-- **ViewEncapsulation.None** for styling flexibility
-- **Host binding** for dynamic classes
+### Path Aliases
 
-#### 🧱 `libs/blocks/` - Block Library
+Aliases are declared **per project**, not globally.
 
-- Pre-built, composable UI blocks (e.g., authentication pages)
-- Each block is an Angular component with metadata
-- Includes file contents for CLI installation
+| Alias           | Resolves to                  | Declared in                                         |
+| --------------- | ---------------------------- | --------------------------------------------------- |
+| `@zard/*`       | `libs/zard/src/lib/shared/*` | `apps/web/tsconfig.json`                            |
+| `@blocks`       | `libs/blocks/src/index.ts`   | `apps/web/tsconfig.json`                            |
+| `@doc/domain/*` | `apps/web/src/app/domain/*`  | `apps/web/tsconfig.json`                            |
+| `@doc/shared/*` | `apps/web/src/app/shared/*`  | `apps/web/tsconfig.json`                            |
+| `@doc/*`        | `apps/web/src/app/*`         | `libs/zard/tsconfig.json`                           |
+| `@/*`           | `libs/zard/src/lib/*`        | `apps/web/tsconfig.json`, `libs/zard/tsconfig.json` |
+| `@highlight/*`  | `packages/highlight/src/*`   | `apps/web/tsconfig.json`, `libs/zard/tsconfig.json` |
+| `@generated/*`  | `apps/web/src/generated/*`   | `apps/web/tsconfig.json`, `libs/zard/tsconfig.json` |
 
-#### 🌐 `apps/web/` - Documentation Site
-
-- Angular application with SSR/SSG (Express + Vercel)
-- Interactive documentation with live demos
-- Automatic file synchronization system
-
-#### ⚡ `packages/cli/` - CLI Tool
-
-- `zard-cli` built with Commander.js
-- Installs components and blocks from a registry
-
-#### 🤖 `packages/mcp/` - MCP Server
-
-- `zard-mcp` built with `@modelcontextprotocol/sdk`
-- AI-powered tools for component discovery, documentation, and installation
-- 9 tools: list/search/get components, get docs/examples/dependencies, list/get blocks, install components
-- Fetches from the Zard registry with caching (5-minute TTL)
-- Configurable via `ZARD_REGISTRY_URL` environment variable
-
-#### 🔨 `tools/generators/` - Nx Generators
-
-- Local Nx plugin `@zardui/generators`
-- Scaffolds new components and blocks with all required files
+📖 More detail: [Architecture](https://zardui.com/docs/contribute/architecture)
 
 ## 📁 Folder Structure
 
 ```
 zardui/
-├── libs/zard/                                # 📦 Main library
-│   ├── src/lib/shared/components/           # 🧩 Components
-│   │   └── [component-name]/                # 📂 Component folder
-│   │       ├── [component].component.ts     # 🎯 Main component
-│   │       ├── [component].variants.ts      # 🎨 CVA variants
-│   │       ├── [component].component.spec.ts # 🧪 Unit tests
-│   │       ├── index.ts                     # 📤 Barrel export
-│   │       ├── demo/                        # 📋 Demos for docs
-│   │       │   ├── [component].ts           # 📤 Demo registry
-│   │       │   ├── default.ts               # 🏠 Default example
-│   │       │   └── [variant].ts             # 🔀 Variant examples
-│   │       └── doc/                         # 📖 Documentation
-│   │           ├── overview.md              # 📝 Overview
-│   │           └── api.md                   # 🔧 API reference
-│   └── src/lib/shared/utils/               # 🛠️ Shared utilities
-├── libs/blocks/                             # 🧱 Block library
-│   └── src/lib/[block-name]/               # 📂 Block folder
-│       ├── block.ts                         # 📋 Block metadata
-│       ├── [block].component.ts             # 🎯 Angular component
-│       └── [block].component.html           # 📄 Template
-├── apps/web/                                # 🌐 Documentation site
-│   ├── src/app/                             # 📱 Angular application
-│   └── public/components/                   # 📁 Synced demo/doc files
-├── apps/web-e2e/                            # 🎭 E2E tests (Playwright)
-│   └── src/components/                      # 🧪 Component E2E specs
-├── tools/generators/                        # 🔨 Nx generators
-│   └── component/                           # 🧩 Component generator
-├── packages/cli/                            # ⚡ CLI tool
-│   └── src/
-│       ├── index.ts                         # 🎯 CLI entry point
-│       ├── commands/                        # 📦 CLI commands (add, init, etc.)
-│       ├── config/                          # ⚙️ Configuration management
-│       ├── constants/                       # 📋 Shared constants
-│       ├── core/                            # 🔧 Core logic (registry, installer)
-│       └── utils/                           # 🛠️ Utility functions
-├── packages/mcp/                            # 🤖 MCP Server
-│   └── src/
-│       ├── index.ts                         # 🎯 Server entry point
-│       ├── services/                        # 🔄 Registry service (caching)
-│       ├── tools/                           # 🧰 9 MCP tool implementations
-│       └── types/                           # 📋 Registry type definitions
-├── scripts/                                 # 🤖 Automation scripts
-│   ├── generate-files.cts                   # 🔄 Demo/docs sync
-│   ├── generate-installation-guides.cts     # 📋 Installation guides
-│   ├── build-registry.cts                   # 📦 Registry build
-│   └── sync-blocks.ts                       # 🔄 Block sync
-└── api/                                     # ☁️ Vercel Edge Functions
-    └── og.ts                                # 🖼️ Dynamic OG image generation
+├── libs/zard/src/lib/shared/components/     # 🧩 The component library
+│   └── [component]/
+│       ├── [component].component.ts         # 🎯 Component
+│       ├── [component].variants.ts          # 🎨 CVA variants + derived types
+│       ├── [component].component.spec.ts    # 🧪 Jest unit tests
+│       ├── index.ts                         # 📤 Barrel export
+│       ├── demo/
+│       │   ├── [component].ts               # 📤 Demo registry read by the docs page
+│       │   └── [example].ts                 # 🔀 One file per example
+│       └── doc/
+│           ├── api.ts                       # 🔧 API reference — ApiSection[]
+│           └── snippets.md                  # ✂️ Optional extra code snippets
+├── libs/blocks/src/lib/[block]/             # 🧱 Blocks
+│   ├── block.ts                             # 📋 Metadata (files[] is generated)
+│   ├── [block].component.ts
+│   └── [block].component.html
+├── apps/web/
+│   ├── src/app/domain/                      # 📱 Doc components, pages, services
+│   ├── src/app/shared/constants/            # 🧭 routes.constant.ts, components.constant.ts
+│   ├── src/generated/                       # ⚙️ GENERATED highlighted code (committed)
+│   ├── public/documentation/                # 📝 Markdown sources for page code blocks
+│   ├── public/docs/                         # ⚙️ GENERATED page Markdown (committed)
+│   ├── public/blocks/[block]/               # 🖼️ light.png + dark.png per block
+│   ├── public/r/                            # ⚙️ GENERATED registry served to the CLI
+│   ├── prerender-routes.txt                 # ⚙️ GENERATED by update-routes.mjs
+│   ├── update-routes.mjs                    # 🔄 Rewrites prerender-routes.txt
+│   └── generate-docs-markdown.mjs           # 🔄 Prerendered HTML → public/docs/**.md
+├── apps/web-e2e/src/                        # 🎭 Playwright specs + utils
+├── packages/highlight/src/generator/        # ⚙️ The six Shiki writers
+├── packages/cli/src/                        # ⚡ commands/, config/, core/, utils/
+├── packages/mcp/src/                        # 🤖 services/, tools/, types/
+├── tools/generators/{component,block}/      # 🔨 Nx generators
+├── scripts/                                 # 🤖 dev, registry, block sync, commit tooling
+└── api/og.ts                                # ☁️ OG image edge function
 ```
+
+> ⚠️ **Never hand-edit a generated path.** `apps/web/src/generated/`, `apps/web/public/docs/`, `apps/web/public/r/`,
+> `apps/web/prerender-routes.txt` and a block's `files[]` array are committed **build artifacts**. Change the source,
+> rerun the command, commit the result.
+
+📖 More detail: [Project Structure](https://zardui.com/docs/contribute/project-structure)
 
 ## 🧩 Developing Components
 
 ### Using the Generator
-
-The easiest way to create a new component is using the Nx generator:
 
 ```bash
 npm run generate:component
@@ -168,7 +167,18 @@ npm run generate:component
 npx nx generate @zardui/generators:component --name=my-component --description="My component description"
 ```
 
-This creates 8 files and auto-updates 3 existing files (barrel export, component registry, sidebar routes).
+It **creates 7 files** — `[name].component.ts`, `[name].variants.ts`, `[name].component.spec.ts`, `index.ts`,
+`demo/default.ts`, `demo/[name].ts`, `doc/api.ts` — and **updates 4 existing ones**:
+
+| File                                                       | Change                                                      |
+| ---------------------------------------------------------- | ----------------------------------------------------------- |
+| `libs/zard/src/index.ts`                                   | Adds the barrel export, in alphabetical order               |
+| `apps/web/src/app/shared/constants/components.constant.ts` | Appends the `COMPONENTS_REGISTRY` entry                     |
+| `apps/web/src/app/shared/constants/routes.constant.ts`     | Appends the sidebar item to `COMPONENTS_PATH`               |
+| `packages/highlight/src/generator/usage-data.ts`           | Seeds the usage snippet so `@generated/usage/<name>` exists |
+
+**Then run `npm run generate:highlight`.** The demo registry imports from `@generated/…`, and those files only exist
+after the highlight generator runs.
 
 ### Component Template
 
@@ -179,57 +189,49 @@ import {
   computed,
   input,
   ViewEncapsulation,
+  booleanAttribute,
 } from '@angular/core';
-import { mergeClasses } from '@/shared/utils/merge-classes';
-import {
-  myComponentVariants,
-  type ZardMyComponentTypeVariants,
-  type ZardMyComponentSizeVariants,
-} from './my-component.variants';
+
 import type { ClassValue } from 'clsx';
+
+import { mergeClasses } from '@/shared/utils/merge-classes';
+
+import { myComponentVariants, type ZardMyComponentTypeVariants } from './my-component.variants';
 
 @Component({
   selector: 'z-my-component, [z-my-component]',
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: { '[class]': 'classes()' },
-  template: `<ng-content />`,
+  exportAs: 'zMyComponent',
+  template: `
+    <ng-content />
+  `,
 })
 export class ZardMyComponentComponent {
   readonly zType = input<ZardMyComponentTypeVariants>('default');
-  readonly zSize = input<ZardMyComponentSizeVariants>('default');
+  readonly zDisabled = input(false, { transform: booleanAttribute });
   readonly class = input<ClassValue>('');
 
-  protected readonly classes = computed(() =>
-    mergeClasses(
-      myComponentVariants({
-        zType: this.zType(),
-        zSize: this.zSize(),
-      }),
-      this.class(),
-    ),
-  );
+  protected readonly classes = computed(() => mergeClasses(myComponentVariants({ zType: this.zType() }), this.class()));
 }
 ```
 
 ### Key Conventions
 
-- **Input prefix**: Use `z` prefix for component-specific inputs (`zType`, `zSize`, `zDisabled`, etc.)
-- **Boolean inputs**: Use `booleanAttribute` transform:
-  ```typescript
-  readonly zDisabled = input(false, { transform: booleanAttribute });
-  ```
-- **Class input**: Always accept `ClassValue` from `clsx` for class merging
-- **Selectors**: Support both element and attribute usage: `z-name, [z-name]`
-- **Encapsulation**: Always use `ViewEncapsulation.None`
-- **Change detection**: Always use `ChangeDetectionStrategy.OnPush`
-- **Path aliases**: Use `@/` prefix for imports within the library (e.g., `@/shared/utils/merge-classes`)
+- **Input prefix**: `z` for component-specific inputs (`zType`, `zSize`, `zDisabled`)
+- **Boolean inputs**: `input(false, { transform: booleanAttribute })`
+- **Class input**: always `ClassValue` from `clsx`, merged **last** so consumers can override
+- **Selectors**: support element and attribute usage — `z-name, [z-name]`
+- **Encapsulation**: always `ViewEncapsulation.None`
+- **Change detection**: always `ChangeDetectionStrategy.OnPush`
+- **Path aliases**: inside the library, import through `@/` (e.g. `@/shared/utils/merge-classes`)
 
 ### Variants File (CVA)
 
 ```typescript
 import { cva, type VariantProps } from 'class-variance-authority';
+
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
 export const myComponentVariants = cva(mergeClasses('base-classes-here'), {
@@ -238,57 +240,59 @@ export const myComponentVariants = cva(mergeClasses('base-classes-here'), {
       default: 'default-classes',
       outline: 'outline-classes',
     },
-    zSize: {
-      default: 'size-default-classes',
-      sm: 'size-sm-classes',
-      lg: 'size-lg-classes',
-    },
   },
   defaultVariants: {
     zType: 'default',
-    zSize: 'default',
   },
 });
 
-type MyComponentVariants = VariantProps<typeof myComponentVariants>;
-export type ZardMyComponentTypeVariants = NonNullable<MyComponentVariants['zType']>;
-export type ZardMyComponentSizeVariants = NonNullable<MyComponentVariants['zSize']>;
+export type ZardMyComponentTypeVariants = NonNullable<VariantProps<typeof myComponentVariants>['zType']>;
 ```
+
+### Demos and API Reference
+
+- `demo/[example].ts` — one standalone component per example.
+- `demo/[component].ts` — the **registry** the docs page loads. Each example pairs its component with a `codeData`
+  import from `@generated/components/<name>/demo/<example>`. The registry also wires `api`, `installData` and `usage`.
+  A demo file that is not listed there is never rendered.
+- `doc/api.ts` — the API reference, exported as a typed `ApiSection[]` and rendered by `z-api-reference`. One section
+  per public selector. See `libs/zard/src/lib/shared/components/button/doc/api.ts`.
 
 ### Development Workflow
 
-1. **Scaffold component** with `npm run generate:component`
-2. **Implement variants** with CVA in `[component].variants.ts`
-3. **Build the component** in `[component].component.ts`
-4. **Write tests** in `[component].component.spec.ts`
-5. **Create demos** in the `demo/` folder following existing patterns
-6. **Write documentation** in `doc/overview.md` and `doc/api.md`
-7. **Watch system automatically syncs** demos and docs to the website
+1. Scaffold with `npm run generate:component`
+2. Implement the variants in `[component].variants.ts`
+3. Build the component in `[component].component.ts`
+4. Write tests in `[component].component.spec.ts`
+5. Add demos under `demo/` and register them in `demo/[component].ts`
+6. Document every public input in `doc/api.ts`
+7. Run `npm run generate:highlight` and commit `apps/web/src/generated/`
 
-### Styling Patterns
-
-- **TailwindCSS v4** with `@tailwindcss/postcss` (no `tailwind.config.js`)
-- **Class merging** with `tailwind-merge` + `clsx` via `mergeClasses()` utility
-- **Utility-first** approach for consistency
-- **Design tokens** through CSS custom properties
+📖 More detail: [Components](https://zardui.com/docs/contribute/components)
 
 ## 🧱 Developing Blocks
-
-### Using the Generator
 
 ```bash
 npm run generate:block
 # or
-npx nx generate @zardui/generators:block --name=my-block
+npx nx generate @zardui/generators:block \
+  --name=login-02 \
+  --description="Split login screen" \
+  --category=login \
+  --label=Authentication
 ```
+
+`--category` is the **registry bucket** and is validated against `featured | sidebar | login | signup | otp | calendar`
+(the keys of `BLOCKS_REGISTRY`, typed by `BlockCategory` in `domain/services/blocks.service.ts`). `--label` is the
+**display label** stored in `Block.category`, and `--title` overrides the card heading. Blocks are registered in
+`featured` as well as their own category, because `/blocks` renders one category at a time and defaults to `featured`.
 
 ### Block Structure
 
-Blocks are pre-built UI compositions that combine multiple Zard components:
-
 ```typescript
 // block.ts
-import type { Block } from '@/shared/types';
+import type { Block } from '@doc/domain/components/block-container/block-container.component';
+
 import { MyBlockComponent } from './my-block.component';
 
 export const myBlock: Block = {
@@ -296,225 +300,187 @@ export const myBlock: Block = {
   title: 'My Block',
   description: 'Description of the block.',
   component: MyBlockComponent,
-  category: 'Category',
-  image: { light: 'path/to/light.png', dark: 'path/to/dark.png' },
-  files: [
-    { name: 'my-block.component.ts', path: '...', content: '...', language: 'typescript' },
-  ],
+  category: 'Authentication',
+  image: {
+    light: '/blocks/my-block-01/light.png',
+    dark: '/blocks/my-block-01/dark.png',
+  },
+  // Generated by `npm run sync:blocks` — do not edit by hand.
+  files: [],
 };
 ```
+
+After scaffolding you must:
+
+1. Build the screen from existing Zard components.
+2. Run `npm run sync:blocks` — it rewrites `files[]` from every `.ts`/`.html` in the folder except `block.ts`.
+3. Add `light.png` and `dark.png` under `apps/web/public/blocks/<name>/`. **Nothing generates them for you**; without
+   them the block card renders a broken image.
+4. Run `npm run build:registry` so the CLI can install the block.
+
+📖 More detail: [Blocks](https://zardui.com/docs/contribute/blocks)
 
 ## 📝 Documentation System
 
-### Automatic Synchronization
+Every code block on the site is generated at build time — no runtime highlighter, and every snippet is reviewable in a
+diff. `npm run generate:highlight` runs `packages/highlight/src/generator/index.ts`, which executes six writers:
 
-The `scripts/generate-files.cts` script monitors changes in:
+| Writer                | Reads                                          | Writes                                                 |
+| --------------------- | ---------------------------------------------- | ------------------------------------------------------ |
+| `demo-writer`         | `libs/zard/**/demo/*.ts`                       | `apps/web/src/generated/components/<name>/demo/*.ts`   |
+| `installation-writer` | every component folder in `libs/zard`          | `apps/web/src/generated/installation/**`               |
+| `docs-writer`         | `apps/web/public/documentation/<section>/*.md` | `apps/web/src/generated/documentation/<section>/*.ts`  |
+| `page-data-writer`    | `apps/web/public/documentation/<section>/*.md` | `apps/web/src/generated/pages/<section>/*.ts`          |
+| `usage-writer`        | the `USAGE_DATA` record in `usage-data.ts`     | `apps/web/src/generated/usage/<name>.ts`               |
+| `snippet-writer`      | `libs/zard/**/doc/snippets.md`                 | `apps/web/src/generated/components/<name>/snippets.ts` |
 
-- `libs/zard/src/lib/shared/components/*/demo/` → `apps/web/public/components/*/demo/`
-- `libs/zard/src/lib/shared/components/*/doc/` → `apps/web/public/components/*/doc/`
+Page exports are numbered by order of appearance (`BLOCK_0`, `TABS_0`, `BLOCK_1`…), so inserting a fence in the middle
+of a Markdown file renumbers everything after it. Import with an alias and rerun the generator after every edit.
 
-Demo `.ts` files are automatically converted to `.md` for display on the docs site.
+Code fence metadata parsed by `meta-parser.ts`: `title="…"`, `tab="…"`, `id="…"`, `showLineNumbers`, `copyButton`,
+`expandable="true"`, `expandableTitle="…"` and line ranges such as `{1,3-5}`.
 
-### Demo Structure
+After the build, `npm run generate:md` (components) and `npm run generate:md:docs` (static pages, from the prerendered
+HTML) write `apps/web/public/docs/**.md` — the files behind the "Copy Page as Markdown" button and `llms.txt`.
 
-Each component has a demo registry file and individual demo components:
+### Adding a documentation page
 
-```typescript
-// demo/button.ts - Demo registry
-import { ZardDemoButtonDefaultComponent } from './default';
-import { ZardDemoButtonTypeComponent } from './type';
+1. Write the Markdown sources under `apps/web/public/documentation/<section>/`
+2. Run `npm run generate:highlight` and note the `BLOCK_n` / `TABS_n` exports
+3. Create the standalone `*.page.ts` (OnPush, `z-` prefixed selector, `NavigationConfig` starting with `overview`,
+   `SeoService.setDocsSeo(...)` in `ngOnInit`)
+4. Register the lazy route in `apps/web/src/app/app.routes.ts`
+5. Add the item to the matching `NavSection` in `routes.constant.ts` — that one array feeds the sidebar, the mobile
+   menu and the ⌘K command palette
+6. Run `node apps/web/update-routes.mjs` and commit `prerender-routes.txt`
+7. Run `npm run build`, then commit the generated `apps/web/public/docs/**.md`
 
-export const BUTTON = {
-  componentName: 'button',
-  componentType: 'button',
-  description: 'Displays a button or a component that looks like a button.',
-  examples: [
-    { name: 'default', component: ZardDemoButtonDefaultComponent },
-    { name: 'type', component: ZardDemoButtonTypeComponent },
-  ],
-};
-```
-
-```typescript
-// demo/default.ts - Demo component
-import { Component } from '@angular/core';
-import { ZardButtonComponent } from '../button.component';
-
-@Component({
-  selector: 'z-demo-button-default',
-  standalone: true,
-  imports: [ZardButtonComponent],
-  template: `
-    <button z-button>Default</button>
-    <button z-button zType="outline">Outline</button>
-  `,
-})
-export class ZardDemoButtonDefaultComponent {}
-```
-
-### Documentation Files
-
-- **overview.md**: Overview, use cases, basic examples
-- **api.md**: Complete API reference, props, events, methods
+📖 More detail: [Documentation System](https://zardui.com/docs/contribute/documentation)
 
 ## 🧪 Testing
 
 ### Unit Tests
 
-- **Jest 30** with `happy-dom` environment
-- **@testing-library/angular** with `render()` and `screen` API
-- **Co-located tests** next to components (`[component].component.spec.ts`)
-
-### E2E Tests
-
-- **Playwright** with `@nx/playwright` integration
-- **Tests location**: `apps/web-e2e/src/components/`
-- **Test target**: Component demos at `http://localhost:4222/docs/components/:name`
-- **Accessibility**: `@axe-core/playwright` for WCAG 2.1 AA compliance checks
-
-### Commands
-
-```bash
-# Unit tests
-npm test                                      # Run all unit tests
-npm run test:watch                            # Unit tests in watch mode
-
-# E2E tests
-npm run e2e                                   # Run E2E tests (auto-starts dev server)
-npm run e2e:ui                                # Run E2E with Playwright UI (interactive)
-npx nx e2e web-e2e -- --grep "Button"         # Run specific E2E test
-```
-
-### Unit Test Example
+- **Jest 30** with the `happy-dom` environment
+- **@testing-library/angular** — `render()` and `screen`
+- Co-located as `[component].component.spec.ts`
+- `npm test` expands to `nx run-many --target=test --p=libs/*`
 
 ```typescript
+import '@testing-library/jest-dom';
 import { render, screen } from '@testing-library/angular';
+
 import { ZardButtonComponent } from './button.component';
 
 describe('ZardButtonComponent', () => {
-  it('should render with default variant', async () => {
-    await render('<button z-button>Click me</button>', {
-      imports: [ZardButtonComponent],
-    });
+  it('creates successfully', async () => {
+    await render('<button z-button>Test</button>', { imports: [ZardButtonComponent] });
 
-    const button = screen.getByRole('button', { name: /click me/i });
-    expect(button).toBeInTheDocument();
-  });
-
-  it('should apply disabled state', async () => {
-    await render('<button z-button zDisabled>Disabled</button>', {
-      imports: [ZardButtonComponent],
-    });
-
-    const button = screen.getByRole('button');
-    expect(button).toHaveAttribute('disabled');
+    expect(screen.getByRole('button')).toBeVisible();
   });
 });
 ```
 
-### E2E Test Example
+### E2E Tests
+
+- **Playwright** (Chromium) in `apps/web-e2e/src/components/`
+- The `ComponentDemoPage` helper (`src/utils/component-page.ts`) navigates to `/docs/components/:name` and waits for
+  hydration
+- `checkA11y` (`src/utils/axe-helper.ts`) runs axe against WCAG 2.1 A/AA
 
 ```typescript
 import { test, expect } from '@playwright/test';
-import { ComponentDemoPage } from '../utils/component-page';
-import { checkA11y } from '../utils/axe-helper';
 
-test.describe('MyComponent', () => {
+import { checkA11y } from '../utils/axe-helper';
+import { ComponentDemoPage } from '../utils/component-page';
+
+test.describe('Button component', () => {
   let demoPage: ComponentDemoPage;
 
   test.beforeEach(async ({ page }) => {
-    demoPage = new ComponentDemoPage(page, 'my-component');
+    demoPage = new ComponentDemoPage(page, 'button');
     await demoPage.goto();
   });
 
-  test('renders default demo', async () => {
-    await expect(demoPage.firstDemoCard).toBeVisible();
+  test('button is clickable and remains interactive', async () => {
+    const button = demoPage.firstDemoBox.locator('button[z-button]').first();
+    await expect(button).toBeEnabled();
+    await button.click();
+    await expect(button).toBeVisible();
   });
 
-  test('passes a11y checks', async ({ page }) => {
-    await checkA11y(page, '#overview');
+  test('passes accessibility checks', async ({ page }) => {
+    await checkA11y(page, '#overview', ['button-name', 'color-contrast']);
   });
 });
 ```
 
 ### E2E Governance Rules
 
-Since E2E tests run against component demo pages, follow these rules to prevent false failures:
+1. **Test behaviour, not content** — assert on interactions and ARIA state, not demo copy or element counts
+2. **The first demo is the fixture** — the hero example of each component page is the E2E target; keep it stable
+3. **Same-PR updates** — if your change touches a component or its first demo, update the spec in the same PR
+4. **Stable selectors** — prefer `z-button`, `[z-input]` and roles over text or CSS classes
 
-1. **Test behavior, not content** — assert on interactions and ARIA state, not demo text or element counts
-2. **First demo is the test fixture** — the first example per component is the primary E2E target; keep it stable
-3. **Same-PR updates** — if your change modifies a component or its first demo, update the E2E test in the same PR
-4. **Stable selectors** — use component selectors (`z-button`), directives (`[z-input]`), and ARIA attributes (`[role="dialog"]`) over text or CSS classes
+📖 More detail: [Testing](https://zardui.com/docs/contribute/testing)
 
 ## 🌿 Branch Strategy
 
-### Simple GitHub Flow
-
-#### Main Branch
-
-- **`master`** - Single main branch
-  - Receives direct PRs
-  - Automatic squash merge
-  - Automatic release via tags
-  - Continuous deployment to production
-
-#### Feature Branches
-
-Naming convention:
+`master` is the only long-lived branch. It receives pull requests from forks, merges are squashed, and a merge
+triggers the release automation.
 
 ```bash
-feat/#<issue-number>-<descriptive-name>
-# Example: feat/#42-button-loading
-fix/#<issue-number>-<descriptive-name>
-# Example: fix/#43-input-focus-bug
+feat/#<issue-number>-<descriptive-name>   # feat/#42-button-loading
+fix/#<issue-number>-<descriptive-name>    # fix/#43-input-focus-bug
 ```
 
 ## 🔄 Contribution Workflow
 
 1. **📋 Fork the repository**
-2. **🌿 Create branch** directly from `master`:
+2. **🌿 Create a branch** from an up-to-date `master`:
    ```bash
    git checkout master
    git pull origin master
    git checkout -b feat/#123-new-feature
    ```
-3. **💻 Develop** with as many commits as you want
-4. **🧪 Run tests**:
+3. **💻 Develop** with as many commits as you like — the squash merge collapses them
+4. **🧪 Verify locally**:
    ```bash
+   npx nx run-many --target=lint --p=zard,blocks --parallel
    npm test
-   npm run test:watch  # during development
+   npm run build
    ```
-5. **🚀 Open PR to `master`**
-6. **👁️ Review + Merge** = Automatic release
-7. **✅ Automatic squash merge** transforms multiple commits into 1 clean commit
+5. **🚀 Open a PR against `master`**
+6. **👁️ Review + squash merge** = automatic release
 
 ### PR Checklist
 
-- [ ] **Unit tests passing** - `npm test`
-- [ ] **E2E tests passing** - `npm run e2e` (if component or first demo changed)
-- [ ] **E2E test updated/added** if component behavior changed
+- [ ] **Unit tests passing** — `npm test`
+- [ ] **Full build passing** — `npm run build` (what the CI runs)
+- [ ] **E2E updated** if a component or its first demo changed
+- [ ] **Generated files committed** (`apps/web/src/generated/`, `public/docs/`, `prerender-routes.txt` when affected)
 - [ ] **Code follows project patterns**
-- [ ] **Documentation updated** (if necessary)
-- [ ] **Demos working correctly**
-- [ ] **No lint/typecheck warnings**
 - [ ] **Related issue linked**
-- [ ] **Conventional commit** in PR title
-- [ ] **Squash merge** will be applied automatically
+- [ ] **Conventional commit** (emoji + type) in the PR title
+
+### What the CI runs
+
+`.github/workflows/ci.yml` has five jobs: `commitlint` (fails on warnings), `lint`
+(`nx run-many --target=lint --p=zard,blocks`), `build` (`npm run build`), `test` (`npm test`) and `e2e`
+(`nx e2e web-e2e`, uploading the Playwright report).
+
+📖 More detail: [Workflow](https://zardui.com/docs/contribute/workflow)
 
 ## 📋 Commit Patterns
 
-### Conventional Commits for Automated Releases
-
-We use **Conventional Commits with Emojis** for better visual feedback and automated releases.
-
-#### 🎯 Making Commits
+### 🎯 Making Commits
 
 ```bash
 git add .
 git commit -m "✨ feat(button): add new variant"
 ```
 
-#### 📝 Commit Types and Versioning
+### 📝 Commit Types and Versioning
 
 | Emoji | Type       | Description              | Version Bump      |
 | ----- | ---------- | ------------------------ | ----------------- |
@@ -530,78 +496,73 @@ git commit -m "✨ feat(button): add new variant"
 | 🏗️    | `build`    | Build system             | No release        |
 | 🚧    | `chore`    | Maintenance              | No release        |
 
-**Breaking Changes**: Add `!` after the type for a **Major** version bump:
+**Breaking Changes**: add `!` after the type for a **Major** bump:
 
 ```bash
-✨ feat(button)!: redesign button API  # Major: 1.0.0 → 2.0.0
+✨ feat(button)!: redesign button API   # 1.0.0 → 2.0.0
 ```
 
-#### ✅ Commit Validation
+### ✅ Commit Validation
 
-We use Husky + commitlint to validate commits automatically:
-
-- ✅ **Before commit**: lint-staged runs ESLint and Prettier
-- ✅ **On commit message**: commitlint validates format
-- ❌ Invalid format → commit rejected with helpful error
+Husky runs two hooks: `pre-commit` executes lint-staged (ESLint `--fix` + Prettier on staged `.ts`, Prettier on staged
+`.html`), and `commit-msg` runs commitlint. The CI validates every commit in the PR again.
 
 #### 🎨 Commit Format
 
 ```
-emoji type(scope): description
+emoji type(scope): subject
 
 [optional body]
 
 [optional footer]
 ```
 
+A commit is **rejected** when it:
+
+- has no emoji at the start of the header
+- uses a type outside the allowed list, or a non-lowercase type
+- has a subject shorter than 10 or longer than 72 characters
+- has a subject ending with a period
+- has a header longer than 100 characters, or a body line longer than 100 characters
+
 **Examples:**
 
 ```bash
-✨ feat(button): add loading state
-🐛 fix(input): resolve focus bug
-📦 refactor(dialog): improve animation performance
-🧪 test(form): add validation tests
-📝 docs(readme): update installation guide
+✅ ✨ feat(button): add loading state
+✅ 🐛 fix: resolve focus bug on Safari
+✅ 📦 refactor(core): improve class merging
+
+❌ feat(button): add loading state          # missing emoji — REJECTED
+❌ ✨ feat(button): fix                     # subject too short — REJECTED
+❌ ✨ feat(button): add loading state.      # trailing period — REJECTED
 ```
 
-**Important - Emoji is REQUIRED**:
-
-1. **Emoji at the start** (MANDATORY - commit will be rejected without it)
-2. **Type** (feat, fix, etc)
-3. **Scope** in parentheses (optional)
-4. **Colon and space**
-5. **Clear, imperative description**
-
-**Do NOT add `Co-Authored-By` trailers to commits.**
-
-**Examples of valid commits:**
-
-```bash
-✅ ✨ feat(button): add variant
-✅ 🐛 fix: resolve bug
-✅ 📦 refactor(core): improve performance
-
-❌ feat(button): missing emoji - WILL BE REJECTED
-❌ feat: missing emoji - WILL BE REJECTED
-```
+**Do NOT add `Co-Authored-By` trailers**, and never bypass the hooks with `--no-verify`. If a hook fails, fix the
+cause.
 
 ## 🔧 Essential Commands
 
 ### Development
 
 ```bash
-npm start                    # 🚀 Start dev server (port 4222)
-npm run watch:files          # 👀 Monitor changes in demos/docs
-npm run build                # 🏗️ Production build
-npm run convert:demos        # 🔄 Convert demos to markdown
-npm run serve:ssr            # 🌐 Serve SSR server locally
+npm start                    # 🚀 Dev server on port 4222 (highlight watcher + nx serve)
+npm run build                # 🏗️ Full production pipeline — what the CI runs
+npm run serve:ssr            # 🌐 Serve the built SSR server from dist/apps/web
 ```
+
+`npm run build` chains: `generate:highlight` → `generate:md` → `build:registry` → `update-routes.mjs` →
+`nx run web:build --configuration=production` → `generate:md:docs`.
 
 ### Code Generation
 
 ```bash
-npm run generate:component   # Scaffold a new component
-npm run generate:block       # Scaffold a new block
+npm run generate:component   # Scaffold a component
+npm run generate:block       # Scaffold a block
+npm run generate:highlight   # Regenerate apps/web/src/generated/**
+npm run generate:md          # Component Markdown → apps/web/public/docs/components/
+npm run generate:md:docs     # Prerendered pages → apps/web/public/docs/ (after the build)
+npm run sync:blocks          # Rewrite files[] in every block.ts
+npm run build:registry       # Build the registry served to the CLI and MCP
 ```
 
 ### Testing
@@ -609,131 +570,53 @@ npm run generate:block       # Scaffold a new block
 ```bash
 npm test                     # 🧪 All unit tests
 npm run test:watch           # 👁️ Unit tests in watch mode
-npm run e2e                  # 🎭 E2E tests (auto-starts dev server)
-npm run e2e:ui               # 🖥️ E2E with Playwright UI
+npm run e2e                  # 🎭 E2E tests (boots the dev server)
+npm run e2e:ui               # 🖥️ E2E with the Playwright UI
 ```
 
-### CLI, MCP & Registry
+### CLI, MCP & Release
 
 ```bash
 npm run build:cli            # Build the CLI
 npm run build:mcp            # Build the MCP server
-npm run dev:mcp              # Build MCP in dev mode (with npm link)
-npm run build:registry       # Build the component registry
-npm run serve:registry       # Serve registry locally
-npm run sync:blocks          # Sync blocks configuration
-```
-
-### Release
-
-```bash
-npm run release:dry-run      # Preview release
-npm run release              # Create release
-npm run release:cli          # Release CLI package
-npm run publish:cli          # Publish CLI to npm
-npm run publish:mcp          # Publish MCP to npm
+npm run dev:mcp              # Build the MCP in dev mode
+npm run serve:registry       # Serve the registry locally
+npm run release:dry-run      # Preview a release
+npm run release              # Create a release
 ```
 
 ## 🚀 Automatic Release System
 
-### ✨ How It Works (100% Automated)
+Releases are automated — you do not need to do anything beyond committing correctly.
 
-Our release system is **fully automated** - you don't need to do anything special:
+1. **You merge a PR into `master`.** The deploy workflow triggers on every push to `master` unless the message
+   contains `[skip ci]`.
+2. **The workflow builds and tests**, then refreshes the registry with `npm run build:registry` and commits any change
+   as a `[skip ci]` chore.
+3. **`nx release version` computes the bump** from the commit types (mapped in `nx.json`), and `nx release changelog`
+   updates `CHANGELOG.md`. `scripts/normalize-commits.cts` runs first so the emoji prefix does not confuse the
+   conventional-commit parser.
+4. **The workflow commits, tags and publishes**: `🔖 chore(release): publish v<version> [skip ci]`, tag `v<version>`,
+   then `npm publish --provenance` for `zard-cli` under the `latest` or `beta` tag.
+5. **A GitHub release is created** with generated notes, and a Discord webhook announces it.
 
-#### 1. 🔀 You Merge a PR to `master`
+The default bump is a `prerelease` with the `beta` preid, so day-to-day merges publish under the `beta` npm tag. A
+stable release is triggered manually by a maintainer through `workflow_dispatch`. The MCP server has its own manual
+workflow (`release-mcp.yml`) and is tagged `mcp-v<version>`.
 
-```bash
-# Example PR with commits:
-✨ feat(button): add loading variant
-🐛 fix(input): resolve focus issue
-📦 refactor(dialog): improve performance
-```
+**What you need to do: nothing.** Do not bump versions, edit `CHANGELOG.md` or create tags — the automation owns all
+three.
 
-#### 2. 🤖 GitHub Actions Detects Changes
-
-The auto-release workflow automatically:
-
-- ✅ Analyzes commits since last release
-- ✅ Determines version bump (major/minor/patch)
-- ✅ Skips if only docs/chore commits
-
-#### 3. 📝 Nx Release Creates the Release
-
-If release is needed, it automatically:
-
-- ✅ Bumps version in `package.json`
-- ✅ Generates/updates `CHANGELOG.md`
-- ✅ Creates git commit: `🔖 chore(release): publish X.Y.Z`
-- ✅ Creates git tag: `zard@X.Y.Z`
-- ✅ Pushes to GitHub
-
-#### 4. 📦 NPM Publishing (Triggered by Tag)
-
-The tag push triggers the publish workflow:
-
-- ✅ Builds packages
-- ✅ Publishes to npm
-- ✅ Creates GitHub Release with notes
-
-### 📊 Version Bump Logic
-
-| Commits in PR             | Version Bump | Example            |
-| ------------------------- | ------------ | ------------------ |
-| Only `feat`               | **Minor**    | `1.2.3` → `1.3.0` |
-| Only `fix`                | **Patch**    | `1.2.3` → `1.2.4` |
-| `feat` + `fix`            | **Minor**    | `1.2.3` → `1.3.0` |
-| Any with `!`              | **Major**    | `1.2.3` → `2.0.0` |
-| Only `docs`, `chore`, etc | **None**     | No release         |
-
-### 🎯 What You Need to Do
-
-**Nothing!** Just:
-
-1. ✅ Use proper commit format (emoji + type)
-2. ✅ Get your PR reviewed and approved
-3. ✅ Squash & merge to master
-4. ✅ Automation handles the rest!
-
-### 🔍 Monitoring Releases
-
-- 📊 **GitHub Actions**: Check the "Actions" tab for release status
-- 📝 **CHANGELOG.md**: Auto-updated with each release
-- 🏷️ **GitHub Releases**: Created automatically with notes
-- 📦 **npm**: Published automatically
-
-### 🛠️ Manual Release (Emergency)
-
-If you need to create a release manually:
-
-```bash
-# Dry run (preview)
-npm run release:dry-run
-
-# Create release
-npm run release
-
-# Create specific version
-npx nx release version 1.2.3
-```
-
-### 📅 Release Frequency
-
-- **Automatic**: Every merge to master (if needed)
-- **No schedule**: Releases happen when features/fixes are ready
-- **Fast**: Release created within ~2 minutes of merge
-
-### 🔖 Version Support
-
-- **Current**: Angular 21 actively supported
-- **Previous**: Angular 20 actively supported
-- **LTS**: Angular 19 with bug fixes only
-- **Migration**: Documented in CHANGELOG when dropping support
+📖 More detail: [Release](https://zardui.com/docs/contribute/release)
 
 ## 🤝 Community and Support
 
-- **Issues**: Report bugs or request features
-- **Discussions**: General discussions and questions
-- **Email**: For specific questions → **gomesluiz.dev@gmail.com**
+- **Issues**: report bugs or request features
+- **Discussions**: general questions and proposals
+- **Email**: **gomesluiz.dev@gmail.com**
+
+Stuck on something this file does not cover? Check
+[FAQ & Troubleshooting](https://zardui.com/docs/contribute/faq).
 
 ## 📚 Useful Resources
 

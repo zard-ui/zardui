@@ -1,0 +1,21 @@
+import type { CodeBlockData } from '@highlight/types';
+
+export const THEMING_SCOPED_TOKENS: CodeBlockData[] = [
+  {
+    "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\">.theme-brand</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\"> {</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#FFAB70;--shiki-light:#E36209\">  --primary</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">: </span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">oklch</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">(</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">0.55</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> 0.22</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> 264</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">);</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#FFAB70;--shiki-light:#E36209\">  --primary-foreground</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">: </span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">oklch</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">(</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">0.98</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> 0.01</span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\"> 264</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">);</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#FFAB70;--shiki-light:#E36209\">  --radius</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">: </span><span style=\"--shiki-dark:#79B8FF;--shiki-light:#005CC5\">1</span><span style=\"--shiki-dark:#F97583;--shiki-light:#D73A49\">rem</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">;</span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">}</span></span></code></pre>",
+    "code": ".theme-brand {\n  --primary: oklch(0.55 0.22 264);\n  --primary-foreground: oklch(0.98 0.01 264);\n  --radius: 1rem;\n}",
+    "language": "css",
+    "title": "src/styles.css",
+    "showLineNumbers": false,
+    "copyButton": true,
+    "expandable": false
+  },
+  {
+    "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">&#x3C;</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">section</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> class</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">=</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"theme-brand\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">></span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#6A737D;--shiki-light:#6A737D\">  &#x3C;!-- Every ZardUI component in here picks up the scoped values. --></span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">  &#x3C;</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">button</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> z-button</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">>Brand button&#x3C;/</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">button</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">></span></span>\n<span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">&#x3C;/</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">section</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">></span></span></code></pre>",
+    "code": "<section class=\"theme-brand\">\n  <!-- Every ZardUI component in here picks up the scoped values. -->\n  <button z-button>Brand button</button>\n</section>",
+    "language": "html",
+    "showLineNumbers": false,
+    "copyButton": false,
+    "expandable": false
+  }
+];

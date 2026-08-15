@@ -22,10 +22,16 @@ export const getHeaderOffset = (isBrowser: boolean): number => {
   return headerHeight;
 };
 
+interface SectionPosition {
+  id: string | undefined;
+  top: number;
+}
+
 @Directive({
   selector: '[scrollSpy]',
   host: {
     '(window:scroll)': 'onScroll()',
+    '(window:resize)': 'invalidatePositions()',
   },
 })
 export class ScrollSpyDirective {
@@ -39,6 +45,8 @@ export class ScrollSpyDirective {
 
   private currentSection?: string;
   private ticking = false;
+  private positions?: SectionPosition[];
+  private positionsScrollHeight = -1;
 
   onScroll() {
     if (!this.ticking) {
@@ -50,6 +58,35 @@ export class ScrollSpyDirective {
     }
   }
 
+  /** Drops the cached offsets so the next scroll frame measures the page again. */
+  invalidatePositions() {
+    this.positions = undefined;
+  }
+
+  /**
+   * Section offsets, measured once and reused across scroll frames. Reading
+   * `offsetTop` for every item on every frame is one layout read per section,
+   * and pages like the changelog gain a section every month — so measure only
+   * when the page actually changed, which its total scroll height reveals.
+   */
+  private sectionPositions(scrollingElement: HTMLElement): SectionPosition[] {
+    const items = this.items();
+    const scrollHeight = scrollingElement.scrollHeight;
+
+    if (this.positions && this.positions.length === items.length && this.positionsScrollHeight === scrollHeight) {
+      return this.positions;
+    }
+
+    const parentOffset = scrollingElement.offsetTop;
+    this.positions = items.map(item => ({
+      id: item.scrollSpyItem(),
+      top: (item.elementRef.nativeElement as HTMLElement).offsetTop - parentOffset,
+    }));
+    this.positionsScrollHeight = scrollHeight;
+
+    return this.positions;
+  }
+
   private handleScroll() {
     const scrollingElement = this.document.scrollingElement as HTMLElement;
     if (!scrollingElement) {
@@ -57,17 +94,15 @@ export class ScrollSpyDirective {
     }
 
     const scrollTop = scrollingElement.scrollTop;
-    const parentOffset = scrollingElement.offsetTop;
     let offset = this.headerOffset();
     if (!offset) {
       offset = getHeaderOffset(this.isBrowser);
     }
 
     let currentSection: string | undefined;
-    for (const item of this.items()) {
-      const element = item.elementRef.nativeElement as HTMLElement;
-      if (element.offsetTop - parentOffset <= scrollTop + offset) {
-        currentSection = item.scrollSpyItem();
+    for (const position of this.sectionPositions(scrollingElement)) {
+      if (position.top <= scrollTop + offset) {
+        currentSection = position.id;
       }
     }
 
