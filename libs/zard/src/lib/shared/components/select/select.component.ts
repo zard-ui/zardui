@@ -1,11 +1,13 @@
 import {
   type ConnectedPosition,
+  type FlexibleConnectedPositionStrategy,
   Overlay,
   OverlayModule,
   OverlayPositionBuilder,
   type OverlayRef,
 } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
+import { ViewportRuler } from '@angular/cdk/scrolling';
 import { isPlatformBrowser } from '@angular/common';
 import {
   afterNextRender,
@@ -60,6 +62,8 @@ type OnTouchedType = () => void;
 type OnChangeType = (value: string | string[]) => void;
 
 const COMPACT_MODE_WIDTH_THRESHOLD = 100;
+const MAX_CONTENT_HEIGHT = 384; // max-h-96 equivalent
+const VIEWPORT_MARGIN = 8;
 let nextSelectId = 0;
 
 @Component({
@@ -193,6 +197,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
   private readonly overlayPositionBuilder = inject(OverlayPositionBuilder);
   private readonly viewContainerRef = inject(ViewContainerRef);
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly viewportRuler = inject(ViewportRuler);
 
   readonly dropdownTemplate = viewChild.required<TemplateRef<void>>('dropdownTemplate');
   readonly optionsViewport = viewChild<ElementRef<HTMLElement>>('optionsViewport');
@@ -580,7 +585,10 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
     this.portal = new TemplatePortal(this.dropdownTemplate(), this.viewContainerRef);
 
     this.overlayRef.attach(this.portal);
-    this.overlayRef.updateSize(this.zPosition() === 'popper' ? { minWidth: hostWidth } : { width: hostWidth });
+    this.overlayRef.updateSize({
+      ...(this.zPosition() === 'popper' ? { minWidth: hostWidth } : { width: hostWidth }),
+      maxHeight: this.getAvailableContentHeight(),
+    });
     this.isOpen.set(true);
     this.updateFocusWhenNormalMode();
 
@@ -687,12 +695,9 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       return;
     }
 
-    const itemAlignedOffset = this.getItemAlignedOffset();
-    if (!itemAlignedOffset) {
-      return;
-    }
-
-    this.overlayRef.updatePositionStrategy(this.createPositionStrategy(itemAlignedOffset));
+    // A null offset means the selected item cannot sit over the trigger without pushing the
+    // dropdown off screen, so the anchored placement is used instead and flips above the trigger.
+    this.overlayRef.updatePositionStrategy(this.createPositionStrategy(this.getItemAlignedOffset() ?? undefined));
   }
 
   private getItemAlignedOffset(): { bottom: number; top: number } | null {
@@ -708,22 +713,53 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
       return null;
     }
 
-    const triggerHeight = trigger.offsetHeight || trigger.getBoundingClientRect().height || this.triggerHeight();
+    const triggerRect = trigger.getBoundingClientRect();
+    const triggerHeight = trigger.offsetHeight || triggerRect.height || this.triggerHeight();
     const itemHeight = selectedItem.offsetHeight || selectedItem.getBoundingClientRect().height || triggerHeight;
     const contentHeight = content.offsetHeight || content.getBoundingClientRect().height;
     const selectedItemOffsetTop = selectedItem.offsetTop;
     const itemCenterOffset = (triggerHeight - itemHeight) / 2;
+
     const bottom = Math.round(-triggerHeight - selectedItemOffsetTop + itemCenterOffset);
     const top = Math.round(contentHeight - selectedItemOffsetTop + itemCenterOffset);
+
+    // Item alignment only holds while the whole dropdown stays on screen; otherwise it would
+    // cover the trigger against the viewport edge instead of opening next to it.
+    const viewportHeight = this.viewportRuler.getViewportSize().height;
+    const contentTop = triggerRect.bottom + bottom;
+    if (contentTop < VIEWPORT_MARGIN || contentTop + contentHeight > viewportHeight - VIEWPORT_MARGIN) {
+      return null;
+    }
 
     return { bottom, top };
   }
 
   private createPositionStrategy(itemAlignedOffset?: { bottom: number; top: number }) {
-    return this.overlayPositionBuilder
+    const positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(this.elementRef)
       .withPositions(this.connectedPositions(itemAlignedOffset))
-      .withPush(false);
+      // Without this the CDK shrinks the dropdown to whatever space is left below the
+      // trigger instead of flipping it, collapsing it to a sliver near the viewport edge.
+      .withFlexibleDimensions(false)
+      .withViewportMargin(VIEWPORT_MARGIN)
+      // Last resort for viewports too short for either side: nudge on screen instead of clipping.
+      .withPush(true);
+
+    this.trackOverlaySide(positionStrategy);
+
+    return positionStrategy;
+  }
+
+  private trackOverlaySide(positionStrategy: FlexibleConnectedPositionStrategy): void {
+    positionStrategy.positionChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(change => {
+      this.overlaySide.set(change.connectionPair.overlayY === 'bottom' ? 'top' : 'bottom');
+    });
+  }
+
+  /** Height the dropdown may occupy without overflowing the viewport. */
+  private getAvailableContentHeight(): number {
+    const viewportHeight = this.viewportRuler.getViewportSize().height;
+    return Math.max(Math.min(MAX_CONTENT_HEIGHT, viewportHeight - VIEWPORT_MARGIN * 2), 0);
   }
 
   private connectedPositions(itemAlignedOffset?: { bottom: number; top: number }): ConnectedPosition[] {
@@ -763,7 +799,7 @@ export class ZardSelectComponent implements ControlValueAccessor, OnDestroy {
           positionStrategy,
           hasBackdrop: false,
           scrollStrategy: this.overlay.scrollStrategies.reposition(),
-          maxHeight: 384, // max-h-96 equivalent
+          maxHeight: MAX_CONTENT_HEIGHT,
         });
         this.overlayRef
           .outsidePointerEvents()

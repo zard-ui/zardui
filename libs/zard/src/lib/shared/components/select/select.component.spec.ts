@@ -472,7 +472,8 @@ describe('ZardSelectComponent', () => {
       expect(overlayPane.style.minWidth).toBe('220px');
     }));
 
-    it('offsets item-aligned content so the selected option sits over the trigger', fakeAsync(() => {
+    /** Opens an item-aligned select with a trigger stubbed at `triggerTop` in the viewport. */
+    function openItemAlignedAt(triggerTop: number): { content: HTMLElement; offsets: Array<number | undefined> } {
       hostComponent.value.set('banana');
       hostFixture.detectChanges();
       const selectElement = hostFixture.debugElement.query(By.directive(ZardSelectComponent))
@@ -480,6 +481,8 @@ describe('ZardSelectComponent', () => {
       Object.defineProperty(selectElement, 'offsetWidth', { configurable: true, value: 220 });
       const trigger = hostFixture.nativeElement.querySelector('[data-slot="select-trigger"]') as HTMLButtonElement;
       Object.defineProperty(trigger, 'offsetHeight', { configurable: true, value: 36 });
+      trigger.getBoundingClientRect = () =>
+        ({ top: triggerTop, bottom: triggerTop + 36, height: 36 }) as unknown as DOMRect;
 
       trigger.click();
       const content = document.querySelector('[data-slot="select-content"]') as HTMLElement;
@@ -494,11 +497,24 @@ describe('ZardSelectComponent', () => {
       const overlayRef = selectComponent['overlayRef'] as unknown as {
         _positionStrategy: { positions: Array<{ offsetY?: number }> };
       };
-      const positionStrategy = overlayRef._positionStrategy;
+      return { content, offsets: overlayRef._positionStrategy.positions.map(position => position.offsetY) };
+    }
+
+    it('offsets item-aligned content so the selected option sits over the trigger', fakeAsync(() => {
+      const { content, offsets } = openItemAlignedAt(200);
+
       expect(content).toHaveAttribute('data-position', 'item-aligned');
       expect(content).toHaveAttribute('data-align-trigger', 'true');
-      expect(positionStrategy.positions[0].offsetY).toBe(-70);
-      expect(positionStrategy.positions[1].offsetY).toBe(62);
+      expect(offsets[0]).toBe(-70);
+      expect(offsets[1]).toBe(62);
+    }));
+
+    it('falls back to anchored positioning when item alignment would leave the viewport', fakeAsync(() => {
+      // Aligning the item would put the content bottom past the viewport, covering the trigger.
+      const { offsets } = openItemAlignedAt(window.innerHeight - 40);
+
+      expect(offsets[0]).toBe(4);
+      expect(offsets[1]).toBe(-4);
     }));
 
     it('emits zSelectionChange with the selected value', () => {
