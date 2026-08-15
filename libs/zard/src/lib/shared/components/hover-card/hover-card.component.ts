@@ -387,7 +387,9 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   private updateContentSide(side: ZardHoverCardPlacement): void {
-    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>('z-hover-card');
+    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>(
+      '[data-slot="hover-card-content"]',
+    );
 
     if (!content) {
       return;
@@ -407,7 +409,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
 }
 
 @Component({
-  selector: 'z-hover-card',
+  selector: 'z-hover-card, [z-hover-card]',
   template: `
     <ng-content />
   `,
