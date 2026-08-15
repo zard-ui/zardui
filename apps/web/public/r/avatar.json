@@ -19,18 +19,17 @@
       "content": "export * from './avatar.component';\nexport * from './avatar-group.component';\nexport * from './avatar.variants';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "badge.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { provideIcons } from '@ng-icons/core';\nimport { lucidePlus } from '@ng-icons/lucide';\n\nimport { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';\n\n@Component({\n  selector: 'z-demo-avatar-badge',\n  imports: [ZardAvatarComponent],\n  template: `\n    <div class=\"flex gap-3\">\n      <z-avatar\n        [zShowBadge]=\"true\"\n        zSrc=\"/images/avatar/imgs/avatar_image.jpg\"\n        zAlt=\"Image\"\n        zBadgeClass=\"bg-green-600 dark:bg-green-800\"\n      />\n      <z-avatar\n        class=\"grayscale\"\n        [zShowBadge]=\"true\"\n        zSrc=\"/images/avatar/imgs/avatar_image.jpg\"\n        zAlt=\"Image\"\n        zBadgeIcon=\"lucidePlus\"\n      />\n    </div>\n  `,\n  viewProviders: [provideIcons({ lucidePlus })],\n})\nexport class ZardDemoAvatarBadgeComponent {}\n"
-    },
-    {
-      "name": "basic.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';\n\n@Component({\n  selector: 'z-demo-avatar-basic',\n  imports: [ZardAvatarComponent],\n  template: `\n    <div class=\"mb-4 flex gap-3\">\n      <z-avatar zSrc=\"/images/avatar/imgs/avatar_image.jpg\" zFallback=\"ZA\" />\n      <z-avatar zSrc=\"error-image.png\" zFallback=\"ZA\" />\n    </div>\n  `,\n})\nexport class ZardDemoAvatarBasicComponent {}\n"
-    },
-    {
-      "name": "group.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardAvatarGroupComponent } from '@/shared/components/avatar/avatar-group.component';\nimport { ZardAvatarComponent } from '@/shared/components/avatar/avatar.component';\n\n@Component({\n  selector: 'z-demo-avatar-group',\n  imports: [ZardAvatarComponent, ZardAvatarGroupComponent],\n  template: `\n    <div class=\"flex flex-col gap-4\">\n      <z-avatar-group class=\"grayscale\">\n        <z-avatar zSrc=\"/images/avatar/imgs/avatar_image.jpg\" zFallback=\"JD\" />\n        <z-avatar zSrc=\"https://github.com/srizzon.png\" zFallback=\"SA\" />\n        <z-avatar zSrc=\"https://github.com/Luizgomess.png\" zFallback=\"LU\" />\n      </z-avatar-group>\n\n      <z-avatar-group zOrientation=\"vertical\" class=\"grayscale\">\n        <z-avatar zSrc=\"/images/avatar/imgs/avatar_image.jpg\" zFallback=\"JD\" />\n        <z-avatar zSrc=\"https://github.com/srizzon.png\" zFallback=\"SA\" />\n        <z-avatar zSrc=\"https://github.com/Luizgomess.png\" zFallback=\"LU\" />\n      </z-avatar-group>\n    </div>\n  `,\n})\nexport class ZardDemoAvatarGroupComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [
+        "lucidePlus"
+      ],
+      "tokens": [
+        "plus"
+      ]
     }
-  ]
+  }
 }

@@ -19,26 +19,25 @@
       "content": "export * from '@/shared/components/breadcrumb/breadcrumb.component';\nexport * from '@/shared/components/breadcrumb/breadcrumb.variants';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardBreadcrumbImports } from '../breadcrumb.imports';\n\n@Component({\n  selector: 'z-demo-breadcrumb-default',\n  imports: [ZardBreadcrumbImports],\n  template: `\n    <z-breadcrumb zLabel=\"Default breadcrumb\">\n      <z-breadcrumb-item>\n        <a z-breadcrumb-link [routerLink]=\"['/']\">Home</a>\n      </z-breadcrumb-item>\n      <z-breadcrumb-item>\n        <a z-breadcrumb-link [routerLink]=\"['/docs/components']\">Components</a>\n      </z-breadcrumb-item>\n      <z-breadcrumb-item>\n        <span z-breadcrumb-page>Breadcrumb</span>\n      </z-breadcrumb-item>\n    </z-breadcrumb>\n  `,\n})\nexport class ZardDemoBreadcrumbDefaultComponent {}\n"
-    },
-    {
-      "name": "dropdown.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideChevronDown } from '@ng-icons/lucide';\n\nimport { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';\nimport { ZardNavigationMenuImports } from '@/shared/components/navigation-menu/navigation-menu.imports';\n\n@Component({\n  selector: 'z-demo-breadcrumb-dropdown',\n  imports: [ZardBreadcrumbImports, ZardNavigationMenuImports, NgIcon],\n  template: `\n    <z-breadcrumb zLabel=\"Breadcrumb with dropdown\">\n      <z-breadcrumb-item>\n        <a z-breadcrumb-link [routerLink]=\"['/']\">Home</a>\n      </z-breadcrumb-item>\n      <z-breadcrumb-item>\n        <button\n          z-breadcrumb-link\n          type=\"button\"\n          class=\"flex items-center gap-1.5 border-0 bg-transparent p-0 text-inherit\"\n          z-navigation-menu-trigger\n          [zNavigationMenuTriggerFor]=\"componentsMenu\"\n        >\n          Components\n          <ng-icon name=\"lucideChevronDown\" class=\"size-3.5!\" aria-hidden=\"true\" />\n        </button>\n\n        <ng-template #componentsMenu>\n          <div z-navigation-menu-content class=\"w-48\">\n            <button type=\"button\" z-navigation-menu-link>Documentation</button>\n            <button type=\"button\" z-navigation-menu-link>Themes</button>\n            <button type=\"button\" z-navigation-menu-link>Blocks</button>\n          </div>\n        </ng-template>\n      </z-breadcrumb-item>\n      <z-breadcrumb-item>\n        <span z-breadcrumb-page>Breadcrumb</span>\n      </z-breadcrumb-item>\n    </z-breadcrumb>\n  `,\n  viewProviders: [provideIcons({ lucideChevronDown })],\n})\nexport class ZardDemoBreadcrumbDropdownComponent {}\n"
-    },
-    {
-      "name": "ellipsis.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';\n\n@Component({\n  selector: 'z-demo-breadcrumb-ellipsis',\n  imports: [ZardBreadcrumbImports],\n  template: `\n    <z-breadcrumb zLabel=\"Collapsed breadcrumb\">\n      <z-breadcrumb-item>\n        <a z-breadcrumb-link [routerLink]=\"['/']\">Home</a>\n      </z-breadcrumb-item>\n      <z-breadcrumb-item>\n        <z-breadcrumb-ellipsis />\n      </z-breadcrumb-item>\n      <z-breadcrumb-item>\n        <a z-breadcrumb-link [routerLink]=\"['/docs/components']\">Components</a>\n      </z-breadcrumb-item>\n      <z-breadcrumb-item>\n        <span z-breadcrumb-page>Breadcrumb</span>\n      </z-breadcrumb-item>\n    </z-breadcrumb>\n  `,\n})\nexport class ZardDemoBreadcrumbEllipsisComponent {}\n"
-    },
-    {
-      "name": "link.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';\n\n@Component({\n  selector: 'z-demo-breadcrumb-link',\n  imports: [ZardBreadcrumbImports],\n  template: `\n    <z-breadcrumb zLabel=\"Router breadcrumb\">\n      <z-breadcrumb-item>\n        <a z-breadcrumb-link routerLink=\"/\">Home</a>\n      </z-breadcrumb-item>\n      <z-breadcrumb-item>\n        <a z-breadcrumb-link routerLink=\"/docs/components\">Components</a>\n      </z-breadcrumb-item>\n      <z-breadcrumb-item>\n        <span z-breadcrumb-page>Breadcrumb</span>\n      </z-breadcrumb-item>\n    </z-breadcrumb>\n  `,\n})\nexport class ZardDemoBreadcrumbLinkComponent {}\n"
-    },
-    {
-      "name": "separator.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideDot } from '@ng-icons/lucide';\n\nimport { ZardBreadcrumbImports } from '@/shared/components/breadcrumb/breadcrumb.imports';\n\n@Component({\n  selector: 'z-demo-breadcrumb-separator',\n  imports: [ZardBreadcrumbImports, NgIcon],\n  template: `\n    <z-breadcrumb zLabel=\"Breadcrumb with custom separator\">\n      <z-breadcrumb-item>\n        <a z-breadcrumb-link [routerLink]=\"['/']\">Home</a>\n      </z-breadcrumb-item>\n      <li z-breadcrumb-separator>\n        <ng-icon name=\"lucideDot\" />\n      </li>\n      <z-breadcrumb-item>\n        <a z-breadcrumb-link [routerLink]=\"['/docs/components']\">Components</a>\n      </z-breadcrumb-item>\n      <li z-breadcrumb-separator>\n        <ng-icon name=\"lucideDot\" />\n      </li>\n      <z-breadcrumb-item>\n        <span z-breadcrumb-page>Breadcrumb</span>\n      </z-breadcrumb-item>\n    </z-breadcrumb>\n  `,\n  viewProviders: [provideIcons({ lucideDot })],\n})\nexport class ZardDemoBreadcrumbSeparatorComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [
+      "lucideChevronRight",
+      "lucideEllipsis"
+    ],
+    "tokens": [
+      "chevron-right",
+      "ellipsis"
+    ],
+    "demos": {
+      "symbols": [
+        "lucideChevronDown",
+        "lucideDot"
+      ],
+      "tokens": [
+        "chevron-down",
+        "dot"
+      ]
     }
-  ]
+  }
 }

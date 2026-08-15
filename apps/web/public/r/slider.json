@@ -15,30 +15,13 @@
       "content": "export * from './slider.component';\nexport * from './slider.variants';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "controlled.ts",
-      "content": "import { Component, signal } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-controlled',\n  imports: [ZardSliderComponent, ...ZardFieldImports],\n  template: `\n    <div class=\"flex min-h-50 w-full flex-col items-center justify-center gap-2 p-10\">\n      <div class=\"mx-auto flex w-full max-w-xs justify-between\">\n        <label z-field-label for=\"slider-demo-temperature\">Temperature</label>\n        <span class=\"text-muted-foreground text-sm\">{{ value().join(', ') }}</span>\n      </div>\n      <z-slider\n        id=\"slider-demo-temperature\"\n        class=\"mx-auto w-full max-w-xs\"\n        zMin=\"0\"\n        zMax=\"1\"\n        zStep=\"0.1\"\n        [zValue]=\"value()\"\n        (zSlideIndexChange)=\"onSlide($event)\"\n      />\n    </div>\n  `,\n})\nexport class ZardDemoSliderControlledComponent {\n  readonly value = signal([0.3, 0.7]);\n\n  onSlide(value: number[]) {\n    this.value.set(value.map(v => Math.round(v * 10) / 10));\n  }\n}\n"
-    },
-    {
-      "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-default',\n  imports: [ZardSliderComponent],\n  template: `\n    <div class=\"flex min-h-50 w-full items-center p-10\">\n      <z-slider class=\"mx-auto w-full max-w-xs\" [zDefault]=\"[75]\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderDefaultComponent {}\n"
-    },
-    {
-      "name": "disabled.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-disabled',\n  imports: [ZardSliderComponent],\n  template: `\n    <div class=\"flex min-h-50 w-full items-center p-10\">\n      <z-slider class=\"mx-auto w-full max-w-xs\" [zDefault]=\"[50]\" zDisabled />\n    </div>\n  `,\n})\nexport class ZardDemoSliderDisabledComponent {}\n"
-    },
-    {
-      "name": "multiple.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-multiple',\n  imports: [ZardSliderComponent],\n  template: `\n    <div class=\"flex min-h-50 w-full items-center justify-center p-10\">\n      <z-slider class=\"mx-auto w-full max-w-xs\" [zDefault]=\"[10, 20, 70]\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderMultipleComponent {}\n"
-    },
-    {
-      "name": "range.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-range',\n  imports: [ZardSliderComponent],\n  template: `\n    <div class=\"flex min-h-50 w-full items-center p-10\">\n      <z-slider class=\"mx-auto w-full max-w-xs\" [zDefault]=\"[25, 50]\" />\n    </div>\n  `,\n})\nexport class ZardDemoSliderRangeComponent {}\n"
-    },
-    {
-      "name": "vertical.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardSliderComponent } from '../slider.component';\n\n@Component({\n  selector: 'z-demo-slider-vertical',\n  imports: [ZardSliderComponent],\n  template: `\n    <div class=\"flex h-50 w-full items-center justify-center\">\n      <div class=\"flex h-full w-20 justify-center gap-6\">\n        <z-slider [zDefault]=\"[50]\" zOrientation=\"vertical\" />\n        <z-slider [zDefault]=\"[25]\" zOrientation=\"vertical\" />\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoSliderVerticalComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
     }
-  ]
+  }
 }

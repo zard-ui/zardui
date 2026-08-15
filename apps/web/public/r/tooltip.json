@@ -23,30 +23,17 @@
       "content": "export * from './tooltip';\nexport * from './tooltip.variants';\nexport * from './tooltip-positions';\nexport * from './tooltip.imports';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "click.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';\n\n@Component({\n  selector: 'z-demo-tooltip-click',\n  imports: [ZardButtonComponent, ZardTooltipImports],\n  template: `\n    <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" zTrigger=\"click\">Click</button>\n  `,\n})\nexport class ZardDemoTooltipClickComponent {}\n"
-    },
-    {
-      "name": "disabled.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';\n\n@Component({\n  selector: 'z-demo-tooltip-disabled-button',\n  imports: [ZardButtonComponent, ZardTooltipImports],\n  template: `\n    <span zTooltip=\"This feature is currently unavailable\" class=\"block\" tabindex=\"0\">\n      <button type=\"button\" z-button zType=\"outline\" [zDisabled]=\"true\">Disabled</button>\n    </span>\n  `,\n})\nexport class ZardDemoTooltipDisabledButtonComponent {}\n"
-    },
-    {
-      "name": "events.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';\n\n@Component({\n  selector: 'z-demo-tooltip-events',\n  imports: [ZardButtonComponent, ZardTooltipImports],\n  template: `\n    <div class=\"flex w-25 flex-col gap-4\">\n      <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" (zShow)=\"onShow()\" (zHide)=\"onHide()\">\n        Events\n      </button>\n\n      <span class=\"text-sm\">Event: {{ event }}</span>\n    </div>\n  `,\n})\nexport class ZardDemoTooltipEventsComponent {\n  protected event = 'none';\n\n  protected onShow() {\n    this.event = '(zShow)';\n  }\n\n  protected onHide() {\n    this.event = '(zHide)';\n  }\n}\n"
-    },
-    {
-      "name": "hover.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';\n\n@Component({\n  selector: 'z-demo-tooltip-hover',\n  imports: [ZardButtonComponent, ZardTooltipImports],\n  template: `\n    <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\">Hover</button>\n  `,\n})\nexport class ZardDemoTooltipHoverComponent {}\n"
-    },
-    {
-      "name": "position.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardTooltipImports } from '@/shared/components/tooltip/tooltip.imports';\n\n@Component({\n  selector: 'z-demo-tooltip-position',\n  imports: [ZardButtonComponent, ZardTooltipImports],\n  template: `\n    <div class=\"flex flex-col space-y-2\">\n      <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" zPosition=\"top\">Top</button>\n\n      <div class=\"flex space-x-2\">\n        <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" zPosition=\"left\">Left</button>\n        <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" zPosition=\"right\">Right</button>\n      </div>\n\n      <button type=\"button\" z-button zType=\"outline\" zTooltip=\"Tooltip content\" zPosition=\"bottom\">Bottom</button>\n    </div>\n  `,\n})\nexport class ZardDemoTooltipPositionComponent {}\n"
-    },
-    {
-      "name": "with-kbd.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideSave } from '@ng-icons/lucide';\n\nimport { ZardButtonComponent } from '@/shared/components/button';\nimport { ZardKbdComponent } from '@/shared/components/kbd';\nimport { ZardTooltipDirective } from '@/shared/components/tooltip/tooltip';\n\n@Component({\n  selector: 'z-demo-kbd-tooltip',\n  imports: [NgIcon, ZardButtonComponent, ZardTooltipDirective, ZardKbdComponent],\n  template: `\n    <button type=\"button\" z-button [zTooltip]=\"shortcutTip\" zType=\"outline\" zSize=\"icon-sm\">\n      <ng-icon name=\"lucideSave\" />\n    </button>\n\n    <ng-template #shortcutTip>\n      Save changes\n      <z-kbd>S</z-kbd>\n    </ng-template>\n  `,\n  viewProviders: [provideIcons({ lucideSave })],\n})\nexport class ZardDemoTooltipWithKbdComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [
+        "lucideSave"
+      ],
+      "tokens": [
+        "save"
+      ]
     }
-  ]
+  }
 }

@@ -19,5 +19,14 @@
   "dependencies": [
     "tailwind-merge",
     "clsx"
-  ]
+  ],
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
+    }
+  }
 }

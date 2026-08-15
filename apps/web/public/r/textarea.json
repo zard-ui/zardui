@@ -18,26 +18,13 @@
   "registryDependencies": [
     "input-group"
   ],
-  "demos": [
-    {
-      "name": "button.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardButtonComponent } from '@/shared/components/button/button.component';\nimport { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';\n\n@Component({\n  selector: 'z-demo-textarea-button',\n  imports: [ZardTextareaComponent, ZardButtonComponent],\n  template: `\n    <div class=\"grid w-72 gap-2\">\n      <textarea z-textarea placeholder=\"Type your message here.\"></textarea>\n      <button z-button>Send message</button>\n    </div>\n  `,\n})\nexport class ZardDemoTextareaButtonComponent {}\n"
-    },
-    {
-      "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';\n\n@Component({\n  selector: 'z-demo-textarea-default',\n  imports: [ZardTextareaComponent],\n  template: `\n    <textarea z-textarea placeholder=\"Type your message here.\" class=\"w-72\"></textarea>\n  `,\n})\nexport class ZardDemoTextareaDefaultComponent {}\n"
-    },
-    {
-      "name": "disabled.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field/field.imports';\nimport { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';\n\n@Component({\n  selector: 'z-demo-textarea-disabled',\n  imports: [ZardTextareaComponent, ...ZardFieldImports],\n  template: `\n    <div z-field class=\"w-72\" data-disabled=\"true\">\n      <label z-field-label for=\"textarea-disabled\">Message</label>\n      <textarea z-textarea id=\"textarea-disabled\" placeholder=\"Type your message here.\" disabled></textarea>\n    </div>\n  `,\n})\nexport class ZardDemoTextareaDisabledComponent {}\n"
-    },
-    {
-      "name": "field.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field/field.imports';\nimport { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';\n\n@Component({\n  selector: 'z-demo-textarea-field',\n  imports: [ZardTextareaComponent, ...ZardFieldImports],\n  template: `\n    <div z-field class=\"w-72\">\n      <label z-field-label for=\"textarea-message\">Message</label>\n      <p z-field-description>Enter your message below.</p>\n      <textarea z-textarea id=\"textarea-message\" placeholder=\"Type your message here.\"></textarea>\n    </div>\n  `,\n})\nexport class ZardDemoTextareaFieldComponent {}\n"
-    },
-    {
-      "name": "invalid.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field/field.imports';\nimport { ZardTextareaComponent } from '@/shared/components/textarea/textarea.component';\n\n@Component({\n  selector: 'z-demo-textarea-invalid',\n  imports: [ZardTextareaComponent, ...ZardFieldImports],\n  template: `\n    <div z-field class=\"w-72\" data-invalid=\"true\">\n      <label z-field-label for=\"textarea-invalid\">Message</label>\n      <textarea z-textarea id=\"textarea-invalid\" placeholder=\"Type your message here.\" aria-invalid=\"true\"></textarea>\n      <p z-field-description>Please enter a valid message.</p>\n    </div>\n  `,\n})\nexport class ZardDemoTextareaInvalidComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [],
+      "tokens": []
     }
-  ]
+  }
 }

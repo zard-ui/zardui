@@ -22,18 +22,21 @@
   "registryDependencies": [
     "button"
   ],
-  "demos": [
-    {
-      "name": "iconsonly.ts",
-      "content": "import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';\n\nimport { ZardFieldImports } from '@/shared/components/field';\nimport { ZardPaginationImports } from '@/shared/components/pagination';\nimport { ZardSelectImports } from '@/shared/components/select';\n\n@Component({\n  selector: 'z-demo-pagination-iconsonly',\n  imports: [ZardPaginationImports, ZardFieldImports, ZardSelectImports],\n  template: `\n    <div class=\"flex w-full justify-around\">\n      <div class=\"flex w-fit gap-4\">\n        <div z-field class=\"flex-row items-center\">\n          <label z-field-label for=\"select-rows-per-page\" class=\"min-w-max\">Rows Per Page</label>\n          <z-select id=\"select-rows-per-page\" zSize=\"sm\" [(zValue)]=\"perPage\" class=\"min-w-20\">\n            <z-select-item zValue=\"10\">10</z-select-item>\n            <z-select-item zValue=\"25\">25</z-select-item>\n            <z-select-item zValue=\"50\">50</z-select-item>\n            <z-select-item zValue=\"100\">100</z-select-item>\n          </z-select>\n        </div>\n        <z-pagination [zTotal]=\"totalPages()\" [(zPageIndex)]=\"currentPage\" [zContent]=\"content\" />\n      </div>\n    </div>\n\n    <ng-template #content>\n      <ul z-pagination-content>\n        <li z-pagination-item>\n          <z-pagination-previous (click)=\"goToPrevious()\" [zDisabled]=\"currentPage() === 1\" />\n        </li>\n\n        <li z-pagination-item>\n          <z-pagination-next (click)=\"goToNext()\" [zDisabled]=\"currentPage() === totalPages()\" />\n        </li>\n      </ul>\n    </ng-template>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoPaginationIconsOnlyComponent {\n  private totalItems = 350;\n\n  readonly currentPage = signal(1);\n  readonly perPage = signal('25');\n  readonly totalPages = computed(() => Math.ceil(this.totalItems / parseInt(this.perPage())));\n\n  goToPrevious() {\n    if (this.currentPage() > 1) {\n      this.currentPage.update(p => p - 1);\n    }\n  }\n\n  goToNext() {\n    if (this.currentPage() < this.totalPages()) {\n      this.currentPage.update(p => p + 1);\n    }\n  }\n}\n"
-    },
-    {
-      "name": "preview.ts",
-      "content": "import { ChangeDetectionStrategy, Component, signal } from '@angular/core';\n\nimport { ZardPaginationImports } from '../pagination.imports';\n\n@Component({\n  selector: 'z-demo-pagination-preview',\n  imports: [ZardPaginationImports],\n  template: `\n    <z-pagination [zTotal]=\"totalPages\" [(zPageIndex)]=\"currentPage\" [zContent]=\"content\" />\n\n    <ng-template #content>\n      <ul z-pagination-content>\n        <li z-pagination-item>\n          <z-pagination-previous (click)=\"goToPrevious()\" [zDisabled]=\"currentPage() === 1\" />\n        </li>\n\n        @for (page of pages(); track page) {\n          <li z-pagination-item>\n            <button type=\"button\" z-pagination-button [zActive]=\"page === currentPage()\" (click)=\"goToPage(page)\">\n              <span class=\"sr-only\">To page</span>\n              {{ page }}\n            </button>\n          </li>\n        }\n\n        <li z-pagination-item>\n          <z-pagination-ellipsis />\n        </li>\n\n        <li z-pagination-item>\n          <z-pagination-next (click)=\"goToNext()\" [zDisabled]=\"currentPage() === totalPages\" />\n        </li>\n      </ul>\n    </ng-template>\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoPaginationPreviewComponent {\n  readonly totalPages = 3;\n  readonly currentPage = signal(2);\n\n  readonly pages = signal<number[]>(Array.from({ length: this.totalPages }, (_, i) => i + 1));\n\n  goToPage(page: number) {\n    this.currentPage.set(page);\n  }\n\n  goToPrevious() {\n    if (this.currentPage() > 1) {\n      this.currentPage.update(p => p - 1);\n    }\n  }\n\n  goToNext() {\n    if (this.currentPage() < this.totalPages) {\n      this.currentPage.update(p => p + 1);\n    }\n  }\n}\n"
-    },
-    {
-      "name": "simple.ts",
-      "content": "import { ChangeDetectionStrategy, Component } from '@angular/core';\n\nimport { ZardPaginationImports } from '../pagination.imports';\n\n@Component({\n  selector: 'z-demo-pagination-simple',\n  imports: [ZardPaginationImports],\n  template: `\n    <z-pagination [zTotal]=\"5\" [(zPageIndex)]=\"currentPage\" zSimple />\n  `,\n  changeDetection: ChangeDetectionStrategy.OnPush,\n})\nexport class ZardDemoPaginationSimpleComponent {\n  protected currentPage = 2;\n}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [
+      "lucideChevronLeft",
+      "lucideChevronRight",
+      "lucideEllipsis"
+    ],
+    "tokens": [
+      "chevron-left",
+      "chevron-right",
+      "ellipsis"
+    ],
+    "demos": {
+      "symbols": [],
+      "tokens": []
     }
-  ]
+  }
 }

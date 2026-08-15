@@ -15,22 +15,21 @@
       "content": "export * from './badge.component';\nexport * from './badge.variants';\n"
     }
   ],
-  "demos": [
-    {
-      "name": "custom-colors.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardBadgeComponent } from '../badge.component';\n\n@Component({\n  selector: 'z-demo-badge-custom-colors',\n  imports: [ZardBadgeComponent],\n  template: `\n    <div class=\"flex flex-col items-center gap-2\">\n      <div class=\"flex w-full flex-wrap gap-2\">\n        <z-badge class=\"bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300\">Blue</z-badge>\n        <z-badge class=\"bg-green-50 text-green-700 dark:bg-green-950 dark:text-green-300\">Green</z-badge>\n        <z-badge class=\"bg-sky-50 text-sky-700 dark:bg-sky-950 dark:text-sky-300\">Sky</z-badge>\n        <z-badge class=\"bg-purple-50 text-purple-700 dark:bg-purple-950 dark:text-purple-300\">Purple</z-badge>\n        <z-badge class=\"bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300\">Red</z-badge>\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoBadgeCustomColorsComponent {}\n"
-    },
-    {
-      "name": "default.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { ZardBadgeComponent } from '../badge.component';\n\n@Component({\n  selector: 'z-demo-badge-default',\n  imports: [ZardBadgeComponent],\n  template: `\n    <div class=\"flex flex-col items-center gap-2\">\n      <div class=\"flex w-full flex-wrap gap-2\">\n        <z-badge>Badge</z-badge>\n        <z-badge zType=\"secondary\">Secondary</z-badge>\n        <z-badge zType=\"destructive\">Destructive</z-badge>\n        <z-badge zType=\"outline\">Outline</z-badge>\n        <z-badge zType=\"ghost\">Ghost</z-badge>\n      </div>\n    </div>\n  `,\n})\nexport class ZardDemoBadgeDefaultComponent {}\n"
-    },
-    {
-      "name": "link.ts",
-      "content": "import { Component } from '@angular/core';\nimport { RouterLink } from '@angular/router';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideArrowUpRight } from '@ng-icons/lucide';\n\nimport { ZardBadgeComponent } from '../badge.component';\n\n@Component({\n  selector: 'z-demo-badge-link',\n  imports: [ZardBadgeComponent, NgIcon, RouterLink],\n  template: `\n    <div class=\"flex w-full flex-wrap gap-2\">\n      <a z-badge [routerLink]=\"[]\" fragment=\"link\">\n        <span class=\"flex items-center\">\n          Open Link\n          <ng-icon name=\"lucideArrowUpRight\" />\n        </span>\n      </a>\n    </div>\n  `,\n  viewProviders: [provideIcons({ lucideArrowUpRight })],\n})\nexport class ZardDemoBadgeLinkComponent {}\n"
-    },
-    {
-      "name": "with-icon.ts",
-      "content": "import { Component } from '@angular/core';\n\nimport { NgIcon, provideIcons } from '@ng-icons/core';\nimport { lucideBadgeCheck, lucideBookmark } from '@ng-icons/lucide';\n\nimport { ZardBadgeComponent } from '../badge.component';\n\n@Component({\n  selector: 'z-demo-badge-with-icons',\n  imports: [ZardBadgeComponent, NgIcon],\n  template: `\n    <div class=\"flex w-full flex-wrap gap-2\">\n      <z-badge zType=\"secondary\">\n        <ng-icon name=\"lucideBadgeCheck\" />\n        Verified\n      </z-badge>\n      <z-badge zType=\"outline\">\n        Bookmark\n        <ng-icon name=\"lucideBookmark\" />\n      </z-badge>\n    </div>\n  `,\n  viewProviders: [provideIcons({ lucideBadgeCheck, lucideBookmark })],\n})\nexport class ZardDemoBadgeWithIconsComponent {}\n"
+  "icons": {
+    "family": "lucide",
+    "symbols": [],
+    "tokens": [],
+    "demos": {
+      "symbols": [
+        "lucideArrowUpRight",
+        "lucideBadgeCheck",
+        "lucideBookmark"
+      ],
+      "tokens": [
+        "arrow-up-right",
+        "badge-check",
+        "bookmark"
+      ]
     }
-  ]
+  }
 }

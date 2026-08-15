@@ -1,6 +1,14 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { ICON_FAMILIES, ICON_MAP, collectIcons, type ComponentIcons } from '../packages/cli/src/core/icons/index';
 import { registry, type ComponentRegistry } from '../packages/cli/src/core/registry/registry-data';
+
+/**
+ * A forma dos arquivos publicados. Sobe quando a mudança quebra quem lê — campo
+ * removido, significado alterado —, e é o que permite a uma CLI antiga dizer
+ * "atualize" em vez de ler errado em silêncio. Ver `utils/schema-version.ts`.
+ */
+const SCHEMA_VERSION = 1;
 
 const LIB_PATH = path.resolve(__dirname, '../libs/zard/src/lib/shared');
 const OUTPUT_PATH = path.resolve(__dirname, '../apps/web/public/r');
@@ -20,13 +28,13 @@ interface RegistryItem {
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
+  icons?: ComponentIcons;
   files: RegistryFile[];
-  docs?: { overview: string; api: string };
-  demos?: RegistryFile[];
 }
 
 interface RegistryIndex {
   $schema: string;
+  schemaVersion: number;
   name: string;
   homepage: string;
   version: string;
@@ -37,6 +45,7 @@ interface RegistryIndex {
     dependencies?: string[];
     devDependencies?: string[];
     registryDependencies?: string[];
+    icons?: ComponentIcons;
     files: string[];
   }>;
 }
@@ -86,21 +95,14 @@ function readComponentFile(componentName: string, basePath: string, fileName: st
   }
 }
 
-function readComponentDocs(componentName: string, basePath: string): { overview: string; api: string } | null {
-  const sourcePath = getSourcePath(componentName, basePath);
-  const docPath = path.join(sourcePath, 'doc');
-
-  if (!fs.existsSync(docPath)) return null;
-
-  const overviewPath = path.join(docPath, 'overview.md');
-  const apiPath = path.join(docPath, 'api.md');
-
-  const overview = fs.existsSync(overviewPath) ? readText(overviewPath) : '';
-  const api = fs.existsSync(apiPath) ? readText(apiPath) : '';
-
-  if (!overview && !api) return null;
-  return { overview, api };
-}
+/*
+ * O campo `docs` do registry foi removido, e não é perda: ele procurava
+ * `doc/overview.md` e `doc/api.md`, que a biblioteca abandonou em favor de
+ * `doc/api.ts`. Dos 49 itens publicados, exatamente um ainda tinha os arquivos
+ * antigos — os outros 45 componentes documentados saíam sem documentação
+ * nenhuma, e o MCP respondia "sem docs" para praticamente tudo. Quem responde
+ * agora é o `.md` da página, que é completo e existe para os 46.
+ */
 
 function readComponentDemos(componentName: string, basePath: string): RegistryFile[] {
   const sourcePath = getSourcePath(componentName, basePath);
@@ -162,22 +164,44 @@ function buildComponentJson(component: ComponentRegistry): RegistryItem | null {
     item.registryDependencies = component.registryDependencies;
   }
 
-  const docs = readComponentDocs(component.name, basePath);
-  if (docs) {
-    item.docs = docs;
-  }
-
+  // Os demos são lidos, mas não publicados: quem os consumia era o MCP, que
+  // agora lê o `.md` da página — um documento com instalação, uso, exemplos e
+  // API de uma vez, em vez de fragmentos de código soltos. Aqui eles servem
+  // só para o mapeamento de ícones, porque metade dos componentes que usam
+  // ícone só o usa nos exemplos.
   const demos = readComponentDemos(component.name, basePath);
-  if (demos.length > 0) {
-    item.demos = demos;
-  }
+
+  // Lidos do próprio código, nunca declarados à mão: uma lista escrita no
+  // registry-data envelheceria em silêncio no primeiro ícone trocado, e o campo
+  // existe justamente para dizer o que o componente desenha de verdade.
+  item.icons = collectIcons(
+    files.map(file => file.content),
+    demos.map(demo => demo.content),
+  );
 
   return item;
+}
+
+/**
+ * `icons.json` — as famílias suportadas e a tabela que traduz entre elas.
+ *
+ * Publicar isto é o que faz uma família nova valer para quem já tem a CLI
+ * instalada: ela lê daqui em vez da cópia embutida, então acrescentar uma coluna
+ * é um deploy do site, e não um release do pacote.
+ */
+function buildIconCatalog(): { $schema: string; schemaVersion: number; families: unknown; icons: unknown } {
+  return {
+    $schema: 'https://zardui.com/schema/icons.json',
+    schemaVersion: SCHEMA_VERSION,
+    families: ICON_FAMILIES,
+    icons: ICON_MAP,
+  };
 }
 
 function buildRegistryIndex(items: RegistryItem[]): RegistryIndex {
   return {
     $schema: 'https://zardui.com/schema/registry.json',
+    schemaVersion: SCHEMA_VERSION,
     name: '@zard',
     homepage: 'https://zardui.com',
     version: getCliVersion(),
@@ -188,6 +212,11 @@ function buildRegistryIndex(items: RegistryItem[]): RegistryIndex {
       ...(item.dependencies?.length && { dependencies: item.dependencies }),
       ...(item.devDependencies?.length && { devDependencies: item.devDependencies }),
       ...(item.registryDependencies?.length && { registryDependencies: item.registryDependencies }),
+      // O índice carrega só o que o `add` instala: os ícones dos demos não
+      // influenciam dependência nenhuma e o índice é baixado a cada comando.
+      ...(item.icons && {
+        icons: { family: item.icons.family, symbols: item.icons.symbols, tokens: item.icons.tokens },
+      }),
       files: item.files.map(f => f.name),
     })),
   };
@@ -227,6 +256,12 @@ async function main() {
   const registryIndex = buildRegistryIndex(items);
   const indexFile = path.join(OUTPUT_PATH, 'registry.json');
   fs.writeJsonSync(indexFile, registryIndex, { spaces: 2 });
+
+  const iconsFile = path.join(OUTPUT_PATH, 'icons.json');
+  fs.writeJsonSync(iconsFile, buildIconCatalog(), { spaces: 2 });
+  console.log(
+    `   🎨 Icon catalog: ${Object.keys(ICON_FAMILIES).length} family(ies), ${Object.keys(ICON_MAP).length} icons`,
+  );
 
   console.log('\n' + '='.repeat(50));
   console.log(`✅ Registry built successfully!`);
