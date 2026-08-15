@@ -17,6 +17,7 @@ import {
   effect,
   inject,
   input,
+  type InputSignal,
   numberAttribute,
   type OnDestroy,
   type OnInit,
@@ -235,12 +236,18 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
       }),
       this.renderer.listen(overlayElement, 'keydown', (event: KeyboardEvent) => {
         if (event.key === 'Escape') {
-          this.closeNow();
+          this.onEscape();
         }
       }),
       this.renderer.listen('document', 'keydown', (event: KeyboardEvent) => {
-        if (event.key === 'Escape') {
-          this.closeNow();
+        if (
+          event.key === 'Escape' &&
+          this.isOpen() &&
+          event.target instanceof Node &&
+          (this.elementRef.nativeElement.contains(event.target) ||
+            this.overlayRef?.overlayElement.contains(event.target))
+        ) {
+          this.onEscape();
         }
       }),
     );
@@ -286,7 +293,11 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   protected onEscape(): void {
+    const restoreFocus = this.isOpen() && this.overlayRef?.overlayElement.contains(document.activeElement);
     this.closeNow();
+    if (restoreFocus) {
+      this.elementRef.nativeElement.focus();
+    }
   }
 
   private getPositions(): ConnectedPosition[] {
@@ -344,6 +355,8 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     }
 
     this.overlayRef?.detach();
+    this.pointerOverOverlay = false;
+    this.focusWithinOverlay = false;
     this.isOpen.set(false);
     this.zVisibleChange.emit(false);
   }
@@ -359,6 +372,10 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   private scheduleClose(): void {
+    if (this.pointerOverTrigger || this.pointerOverOverlay || this.focusWithinTrigger || this.focusWithinOverlay) {
+      this.cancelClose();
+      return;
+    }
     this.cancelOpen();
     this.cancelClose();
 
@@ -404,9 +421,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 
   private updateContentSide(side: ZardHoverCardPlacement): void {
-    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>(
-      '[data-slot="hover-card-content"]',
-    );
+    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>('[data-slot="hover-card-content"]');
 
     if (!content) {
       return;
@@ -441,7 +456,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
 })
 export class ZardHoverCardComponent {
   /** Additional CSS classes merged with the default hover card styles. */
-  readonly class = input<ClassValue>('');
+  readonly class: InputSignal<ClassValue> = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(hoverCardVariants(), this.class()));
 }
