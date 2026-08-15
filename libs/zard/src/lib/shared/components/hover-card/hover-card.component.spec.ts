@@ -337,13 +337,14 @@ describe('ZardHoverCardDirective', () => {
   });
 
   it('associates the open trigger with the overlay', async () => {
-    await setup({ openDelay: 0 });
+    const { fixture } = await setup({ openDelay: 0 });
     const hoverCardTrigger = trigger();
 
     expect(hoverCardTrigger).toHaveAttribute('aria-expanded', 'false');
     expect(hoverCardTrigger).not.toHaveAttribute('aria-controls');
 
     await hoverTrigger(0);
+    fixture.detectChanges();
 
     const controlledId = hoverCardTrigger.getAttribute('aria-controls');
 
