@@ -1,36 +1,30 @@
 import type { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 
-import { registryService } from '../services/registry.service.js';
+import { docsService } from '../services/docs.service.js';
 
 export function registerGetComponentDocs(server: McpServer): void {
   server.tool(
     'get-component-docs',
-    'Get the documentation (overview and API reference) for a Zard UI component',
+    'Get the full documentation page for a Zard UI component: installation, usage, examples and API reference',
     { name: z.string().describe('Component name (e.g., "button", "card", "dialog")') },
     async ({ name }) => {
-      const component = await registryService.getComponent(name);
+      const markdown = await docsService.getComponentMarkdown(name);
 
-      if (!component.docs) {
+      if (markdown === null) {
         return {
           content: [
             {
               type: 'text' as const,
-              text: `No embedded docs found for "${name}". Visit https://zardui.com/docs/components/${name} for documentation.`,
+              text: `No documentation page for "${name}". Check the component name with list-components.`,
             },
           ],
         };
       }
 
-      const output = {
-        name: component.name,
-        overview: component.docs.overview,
-        api: component.docs.api,
-      };
-
-      return {
-        content: [{ type: 'text' as const, text: JSON.stringify(output, null, 2) }],
-      };
+      // O markdown vai cru, e não embrulhado em JSON: ele já é o formato que o
+      // modelo lê melhor, e escapá-lo dentro de uma string só atrapalharia.
+      return { content: [{ type: 'text' as const, text: markdown }] };
     },
   );
 }

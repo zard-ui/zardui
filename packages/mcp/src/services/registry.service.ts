@@ -3,6 +3,15 @@ import type { BlockData, BlocksRegistry, ComponentData, RegistryIndex, RegistryI
 const REGISTRY_TTL = 5 * 60 * 1000; // 5 minutes
 const FETCH_TIMEOUT = 10_000; // 10 seconds
 
+/**
+ * A forma do registry que este servidor sabe ler.
+ *
+ * Um registry mais novo pode ter reorganizado o item, e ler `files` dele às
+ * cegas devolveria código errado a quem confia na resposta. Ausente é v1, de
+ * antes do campo existir.
+ */
+const SUPPORTED_SCHEMA_VERSION = 1;
+
 interface CacheEntry<T> {
   data: T;
   timestamp: number;
@@ -44,6 +53,14 @@ class RegistryService {
     }
 
     const data = await this.fetchJson<RegistryIndex>(`${this.baseUrl}/registry.json`);
+
+    if ((data.schemaVersion ?? 1) > SUPPORTED_SCHEMA_VERSION) {
+      throw new Error(
+        `This registry publishes format v${data.schemaVersion}, and this MCP server reads up to ` +
+          `v${SUPPORTED_SCHEMA_VERSION}. Update zard-mcp.`,
+      );
+    }
+
     this.registryCache = { data, timestamp: Date.now() };
     return data;
   }

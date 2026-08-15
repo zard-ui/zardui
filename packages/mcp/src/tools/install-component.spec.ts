@@ -3,9 +3,11 @@ import { execFile } from 'node:child_process';
 import { registerInstallComponent } from './install-component';
 
 jest.mock('node:child_process', () => ({
-  execFile: jest.fn((_file: string, _args: string[], _opts: unknown, cb: (e: Error | null, o: string, s: string) => void) => {
-    cb(null, 'ok', '');
-  }),
+  execFile: jest.fn(
+    (_file: string, _args: string[], _opts: unknown, cb: (e: Error | null, o: string, s: string) => void) => {
+      cb(null, 'ok', '');
+    },
+  ),
 }));
 
 interface CapturedTool {
