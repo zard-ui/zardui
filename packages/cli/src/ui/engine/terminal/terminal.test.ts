@@ -1,4 +1,4 @@
-import { createTerminal } from './index.js';
+import { createTerminal, detectColorLevel } from './index.js';
 
 function fakeStreams() {
   const stdin = {
@@ -57,6 +57,53 @@ describe('terminal raw mode', () => {
     terminal.restore();
 
     expect(stdin.pause).toHaveBeenCalledTimes(1);
+  });
+});
+
+/**
+ * O alvo destes casos é a uniformidade: os terminais que as pessoas realmente
+ * usam para rodar a CLI precisam chegar ao mesmo nível de cor, senão o mesmo
+ * wizard sai com três aparências dependendo de quem o abriu.
+ */
+describe('color level detection', () => {
+  const detect = (env: NodeJS.ProcessEnv, platform: NodeJS.Platform = 'linux'): string =>
+    detectColorLevel(env, true, undefined, platform);
+
+  it.each([
+    ['Windows Terminal', { WT_SESSION: '...' }, 'win32'],
+    ['Windows console', {}, 'win32'],
+    ['VS Code', { TERM: 'xterm-256color', TERM_PROGRAM: 'vscode' }, 'darwin'],
+    ['iTerm2', { TERM: 'xterm-256color', TERM_PROGRAM: 'iTerm.app' }, 'darwin'],
+    ['GNOME Terminal', { TERM: 'xterm-256color', COLORTERM: 'truecolor' }, 'linux'],
+    ['kitty', { TERM: 'xterm-kitty' }, 'linux'],
+    ['ConEmu', { ConEmuANSI: 'ON' }, 'win32'],
+  ] as const)('gives %s the full palette', (_name, env, platform) => {
+    expect(detect(env, platform)).toBe('truecolor');
+  });
+
+  it('does not promise 24 bits to Terminal.app, which does not do them', () => {
+    expect(detect({ TERM: 'xterm-256color', TERM_PROGRAM: 'Apple_Terminal' }, 'darwin')).toBe('ansi256');
+  });
+
+  it('obeys NO_COLOR over everything the terminal claims', () => {
+    expect(detect({ NO_COLOR: '1', COLORTERM: 'truecolor', WT_SESSION: '...' }, 'win32')).toBe('none');
+  });
+
+  it('lets FORCE_COLOR override a terminal that was detected wrong', () => {
+    expect(detect({ TERM: 'dumb', FORCE_COLOR: '3' })).toBe('truecolor');
+    expect(detect({ COLORTERM: 'truecolor', FORCE_COLOR: '0' })).toBe('none');
+  });
+
+  it('writes no escape codes when the output is redirected', () => {
+    expect(detectColorLevel({ COLORTERM: 'truecolor' }, false, undefined, 'linux')).toBe('none');
+  });
+
+  it('falls back to 16 colours on a terminal it does not recognise', () => {
+    expect(detect({ TERM: 'xterm' })).toBe('ansi16');
+  });
+
+  it('takes TERM=dumb at its word', () => {
+    expect(detect({ TERM: 'dumb' }, 'win32')).toBe('none');
   });
 });
 

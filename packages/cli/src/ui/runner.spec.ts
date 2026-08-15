@@ -1,4 +1,4 @@
-import { screen, text } from './engine/index.js';
+import { resolveTerminalStreams, screen, text, type TerminalStreams } from './engine/index.js';
 import { createGate } from './gate.js';
 import { beginCapture, capture, endCapture, isCapturing } from './log-sink.js';
 import { isInteractive, NonInteractiveError, runWizard, WizardCancelledError } from './runner.js';
@@ -55,11 +55,62 @@ describe('log sink', () => {
   });
 });
 
+/**
+ * Achar o terminal é o que decide entre a tela cheia e a saída em texto — e foi
+ * exatamente aqui que `npx zard-cli init` degradava no macOS e no Linux: o npm
+ * executa o binário por um shell, o stdin chega como pipe, e exigir que ele
+ * fosse um TTY descartava um terminal que estava logo ali.
+ */
+describe('resolveTerminalStreams', () => {
+  const fakeStream = (isTTY: boolean): NodeJS.ReadStream & NodeJS.WriteStream =>
+    ({ isTTY }) as unknown as NodeJS.ReadStream & NodeJS.WriteStream;
+
+  const controlling = {
+    input: fakeStream(true),
+    output: fakeStream(true),
+    fromControllingTerminal: true,
+    close: jest.fn(),
+  } as unknown as TerminalStreams;
+
+  it('uses the inherited descriptors when both are already a terminal', () => {
+    const streams = resolveTerminalStreams(fakeStream(true), fakeStream(true), () => controlling);
+
+    expect(streams?.fromControllingTerminal).toBe(false);
+  });
+
+  it('falls back to the controlling terminal when stdin arrives as a pipe', () => {
+    const streams = resolveTerminalStreams(fakeStream(false), fakeStream(true), () => controlling);
+
+    expect(streams?.fromControllingTerminal).toBe(true);
+  });
+
+  it('falls back when stdout is redirected too', () => {
+    const streams = resolveTerminalStreams(fakeStream(true), fakeStream(false), () => controlling);
+
+    expect(streams?.fromControllingTerminal).toBe(true);
+  });
+
+  it('gives up when there is no terminal at all — CI stays headless', () => {
+    expect(resolveTerminalStreams(fakeStream(false), fakeStream(false), () => null)).toBeNull();
+  });
+});
+
 describe('runWizard', () => {
-  it('refuses to mount without a TTY', async () => {
-    // O ambiente de teste do Jest não é um TTY.
-    expect(isInteractive()).toBe(false);
-    await expect(runWizard({ view: () => screen(text('hi')) })).rejects.toBeInstanceOf(NonInteractiveError);
+  it('refuses to mount when there is no terminal to mount on', async () => {
+    expect(isInteractive(() => null)).toBe(false);
+    await expect(runWizard({ view: () => screen(text('hi')), resolveStreams: () => null })).rejects.toBeInstanceOf(
+      NonInteractiveError,
+    );
+  });
+
+  it('is interactive when a terminal is reachable', () => {
+    const tty = fakeTty();
+
+    try {
+      expect(isInteractive()).toBe(true);
+    } finally {
+      tty.restore();
+    }
   });
 
   it('resolves with the value passed to done and restores the terminal', async () => {

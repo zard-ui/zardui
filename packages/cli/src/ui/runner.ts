@@ -15,7 +15,15 @@
  *      reemitido depois, para não rasgar o frame.
  */
 
-import { createScreen, type KeyEvent, type Node, type Screen } from './engine/index.js';
+import {
+  createScreen,
+  createTerminal,
+  resolveTerminalStreams,
+  type KeyEvent,
+  type Node,
+  type Screen,
+  type TerminalStreams,
+} from './engine/index.js';
 import { beginCapture, endCapture, type LogRecord } from './log-sink.js';
 import { flushRecords } from './output.js';
 import { zardTheme } from './theme.js';
@@ -58,6 +66,8 @@ export interface WizardOptions<T> {
    */
   run?: (ctx: WizardContext<T>) => Promise<void> | void;
   fps?: number;
+  /** Como achar o terminal. Injetável para teste; o padrão resolve sozinho. */
+  resolveStreams?: () => TerminalStreams | null;
 }
 
 export interface WizardResult<T> {
@@ -66,17 +76,30 @@ export interface WizardResult<T> {
   readonly logs: readonly LogRecord[];
 }
 
-/** true quando dá para montar a tela interativa (entrada e saída são um TTY). */
-export function isInteractive(): boolean {
-  return Boolean(process.stdout.isTTY && process.stdin.isTTY);
+/**
+ * true quando existe um terminal onde montar a tela.
+ *
+ * Não basta olhar `process.stdout.isTTY && process.stdin.isTTY`: era isso que
+ * fazia `npx zard-cli init` sair em modo texto no macOS e no Linux, onde o npm
+ * executa o binário por um shell e entrega o stdin como pipe. O terminal de
+ * controle continua alcançável, e é ele que decide.
+ */
+export function isInteractive(resolve: () => TerminalStreams | null = resolveTerminalStreams): boolean {
+  const streams = resolve();
+  if (!streams) return false;
+
+  streams.close();
+  return true;
 }
 
 export async function runWizard<T>(options: WizardOptions<T>): Promise<WizardResult<T>> {
-  if (!isInteractive()) throw new NonInteractiveError();
+  const streams = (options.resolveStreams ?? resolveTerminalStreams)();
+  if (!streams) throw new NonInteractiveError();
 
   const screen = createScreen({
     theme: zardTheme,
     fps: options.fps ?? 30,
+    terminal: createTerminal({ stdin: streams.input, stdout: streams.output }),
     // O teardown é nosso: interceptamos Ctrl+C para encerrar o wizard com uma
     // mensagem, em vez de matar o processo direto de dentro da engine.
     handleExitSignals: false,
@@ -89,6 +112,9 @@ export async function runWizard<T>(options: WizardOptions<T>): Promise<WizardRes
     if (teardownDone) return;
     teardownDone = true;
     screen.unmount();
+    // Depois do unmount: é ele que devolve o terminal ao estado normal, e
+    // fechar os streams antes deixaria o alt-screen e o raw mode ligados.
+    streams.close();
     process.off('exit', teardown);
     process.off('SIGINT', onSignal);
     process.off('SIGTERM', onSignal);
