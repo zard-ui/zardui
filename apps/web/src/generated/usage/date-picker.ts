@@ -10,8 +10,8 @@ export const DATE_PICKER_USAGE_IMPORT: CodeBlockData = {
 };
 
 export const DATE_PICKER_USAGE_CODE: CodeBlockData = {
-  "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">&#x3C;</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">z-date-picker</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> placeholder</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">=</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"Pick a date\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">>&#x3C;/</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">z-date-picker</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">></span></span></code></pre>",
-  "code": "<z-date-picker placeholder=\"Pick a date\"></z-date-picker>",
+  "html": "<pre class=\"shiki shiki-themes github-dark github-light\" style=\"--shiki-dark:#e1e4e8;--shiki-light:#24292e;--shiki-dark-bg:#24292e;--shiki-light-bg:#fff\" tabindex=\"0\"><code><span class=\"line\"><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">&#x3C;</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">z-date-picker</span><span style=\"--shiki-dark:#B392F0;--shiki-light:#6F42C1\"> zPlaceholder</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">=</span><span style=\"--shiki-dark:#9ECBFF;--shiki-light:#032F62\">\"Pick a date\"</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">>&#x3C;/</span><span style=\"--shiki-dark:#85E89D;--shiki-light:#22863A\">z-date-picker</span><span style=\"--shiki-dark:#E1E4E8;--shiki-light:#24292E\">></span></span></code></pre>",
+  "code": "<z-date-picker zPlaceholder=\"Pick a date\"></z-date-picker>",
   "language": "angular-html",
   "showLineNumbers": true,
   "copyButton": true,

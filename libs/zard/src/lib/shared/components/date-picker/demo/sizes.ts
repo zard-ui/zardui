@@ -1,63 +1,39 @@
 import { ChangeDetectionStrategy, Component, signal } from '@angular/core';
 
+import type { CalendarValue } from '@/shared/components/calendar/calendar.types';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+
 import { ZardDatePickerComponent } from '../date-picker.component';
 
 @Component({
-  selector: 'zard-demo-date-picker-sizes',
-  imports: [ZardDatePickerComponent],
+  selector: 'z-demo-date-picker-sizes',
+  imports: [ZardDatePickerComponent, ZardFieldImports],
   standalone: true,
   template: `
-    <div class="flex flex-col gap-4">
-      <div class="space-y-2">
-        <h4 class="text-sm font-medium">Small</h4>
-        <z-date-picker
-          zSize="sm"
-          [value]="selectedDateSm()"
-          placeholder="Pick a date"
-          (dateChange)="onDateChangeSm($event)"
-        />
+    <div z-field-group class="mx-auto w-60">
+      <div z-field>
+        <label z-field-label for="date-picker-size-xs">Extra small</label>
+        <z-date-picker zId="date-picker-size-xs" zSize="xs" [(value)]="selectedDate" />
       </div>
 
-      <div class="space-y-2">
-        <h4 class="text-sm font-medium">Default</h4>
-        <z-date-picker
-          zSize="default"
-          [value]="selectedDateDefault()"
-          placeholder="Pick a date"
-          (dateChange)="onDateChangeDefault($event)"
-        />
+      <div z-field>
+        <label z-field-label for="date-picker-size-sm">Small</label>
+        <z-date-picker zId="date-picker-size-sm" zSize="sm" [(value)]="selectedDate" />
       </div>
 
-      <div class="space-y-2">
-        <h4 class="text-sm font-medium">Large</h4>
-        <z-date-picker
-          zSize="lg"
-          [value]="selectedDateLg()"
-          placeholder="Pick a date"
-          (dateChange)="onDateChangeLg($event)"
-        />
+      <div z-field>
+        <label z-field-label for="date-picker-size-default">Default</label>
+        <z-date-picker zId="date-picker-size-default" [(value)]="selectedDate" />
+      </div>
+
+      <div z-field>
+        <label z-field-label for="date-picker-size-lg">Large</label>
+        <z-date-picker zId="date-picker-size-lg" zSize="lg" [(value)]="selectedDate" />
       </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoDatePickerSizesComponent {
-  readonly selectedDateSm = signal<Date | null>(null);
-  readonly selectedDateDefault = signal<Date | null>(null);
-  readonly selectedDateLg = signal<Date | null>(null);
-
-  onDateChangeSm(date: Date | null) {
-    this.selectedDateSm.set(date);
-    console.log('Selected date (sm):', date);
-  }
-
-  onDateChangeDefault(date: Date | null) {
-    this.selectedDateDefault.set(date);
-    console.log('Selected date (default):', date);
-  }
-
-  onDateChangeLg(date: Date | null) {
-    this.selectedDateLg.set(date);
-    console.log('Selected date (lg):', date);
-  }
+  readonly selectedDate = signal<CalendarValue>(new Date());
 }

@@ -1,6 +1,7 @@
 import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { EVENT_MANAGER_PLUGINS } from '@angular/platform-browser';
 
+import type { CalendarValue } from '@/shared/components/calendar/calendar.types';
 import { ZardEventManagerPlugin } from '@/shared/core/provider/event-manager-plugins/zard-event-manager-plugin';
 
 import { ZardDatePickerComponent } from './date-picker.component';
@@ -8,6 +9,44 @@ import { ZardDatePickerComponent } from './date-picker.component';
 describe('ZardDatePickerComponent', () => {
   let component: ZardDatePickerComponent;
   let fixture: ComponentFixture<ZardDatePickerComponent>;
+
+  const trigger = () => (fixture.nativeElement as HTMLElement).querySelector('button') as HTMLButtonElement;
+  const triggerText = () => trigger().textContent?.trim();
+  const host = () => fixture.nativeElement as HTMLElement;
+
+  /**
+   * The popover flips `aria-expanded` synchronously but only detaches the overlay once its close
+   * animation ends, so the DOM node is not a reliable answer to "is it open".
+   */
+  const isOpen = () => trigger().getAttribute('aria-expanded') === 'true';
+
+  /** The popover renders into the overlay container, outside the fixture. */
+  const openPopover = async () => {
+    trigger().click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    return document.querySelector('.cdk-overlay-container z-calendar') as HTMLElement | null;
+  };
+
+  const dayButton = (day: string) => {
+    const cells = Array.from(
+      document.querySelectorAll('.cdk-overlay-container [role="gridcell"]:not([data-outside]) button'),
+    ) as HTMLButtonElement[];
+
+    return cells.find(cell => cell.textContent?.trim() === day) as HTMLButtonElement;
+  };
+
+  const clickDay = async (day: string) => {
+    dayButton(day).click();
+    fixture.detectChanges();
+    await fixture.whenStable();
+  };
+
+  const setValue = (value: CalendarValue) => {
+    fixture.componentRef.setInput('value', value);
+    fixture.detectChanges();
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -30,90 +69,269 @@ describe('ZardDatePickerComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display placeholder when no date is selected', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button');
-    expect(button?.textContent?.trim()).toContain('Pick a date');
-  });
-
-  it('should format and display selected date', () => {
-    const testDate = new Date(2024, 0, 15); // January 15, 2024
-    fixture.componentRef.setInput('value', testDate);
-    fixture.detectChanges();
-
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button');
-    expect(button?.textContent?.trim()).toContain('January 15, 2024');
-  });
-
-  it('should render the calendar inside the popover with its own root styling', async () => {
-    const trigger = (fixture.nativeElement as HTMLElement).querySelector('button') as HTMLButtonElement;
-    trigger.click();
-    fixture.detectChanges();
-    await fixture.whenStable();
-
-    const calendar = document.querySelector('z-calendar');
-
-    expect(calendar).toBeTruthy();
-    expect(calendar?.getAttribute('data-slot')).toBe('calendar');
-    // Without these the cell sizing collapses inside the popover.
-    expect(calendar?.className).toContain('[--cell-size:--spacing(7)]');
-    expect(calendar?.className).toContain('p-2');
-    expect(calendar?.querySelectorAll('select')).toHaveLength(2);
-  });
-
-  it('should emit dateChange when calendar date is selected', () => {
-    const testDate = new Date(2024, 0, 15);
-    let emittedDate: Date | null = null;
-
-    component.dateChange.subscribe(date => {
-      emittedDate = date;
+  describe('trigger label', () => {
+    it('should display the placeholder when no date is selected', () => {
+      expect(triggerText()).toContain('Pick a date');
     });
 
-    component['onDateChange'](testDate);
+    it('should display a custom zPlaceholder', () => {
+      fixture.componentRef.setInput('zPlaceholder', 'Select date');
+      fixture.detectChanges();
 
-    expect(emittedDate).toEqual(testDate);
+      expect(triggerText()).toContain('Select date');
+    });
+
+    it('should mark itself empty while nothing is selected', () => {
+      expect(host().getAttribute('data-empty')).toBe('true');
+      expect(trigger().getAttribute('data-empty')).toBe('true');
+    });
+
+    it('should drop the empty flag once a date is selected', () => {
+      setValue(new Date(2024, 0, 15));
+
+      expect(host().getAttribute('data-empty')).toBeNull();
+      expect(trigger().getAttribute('data-empty')).toBeNull();
+    });
+
+    it('should format the selected date', () => {
+      setValue(new Date(2024, 0, 15));
+
+      expect(triggerText()).toContain('January 15, 2024');
+    });
+
+    it.each([
+      ['MM/dd/yyyy', '01/15/2024'],
+      ['dd-MM-yyyy', '15-01-2024'],
+      ['yyyy-MM-dd', '2024-01-15'],
+      ['EEE, MMM d', 'Mon, Jan 15'],
+    ])('should format the selected date with %s', (format, expected) => {
+      setValue(new Date(2024, 0, 15));
+      fixture.componentRef.setInput('zFormat', format);
+      fixture.detectChanges();
+
+      expect(triggerText()).toContain(expected);
+    });
+
+    it('should ignore an invalid date', () => {
+      setValue(new Date('nope'));
+
+      expect(triggerText()).toContain('Pick a date');
+      expect(host().getAttribute('data-empty')).toBe('true');
+    });
+
+    it('should join both ends of a range', () => {
+      fixture.componentRef.setInput('zMode', 'range');
+      fixture.componentRef.setInput('zFormat', 'MMM dd, y');
+      setValue([new Date(2024, 0, 20), new Date(2024, 1, 9)]);
+
+      expect(triggerText()).toBe('Jan 20, 2024 - Feb 09, 2024');
+    });
+
+    it('should show only the start of an incomplete range', () => {
+      fixture.componentRef.setInput('zMode', 'range');
+      fixture.componentRef.setInput('zFormat', 'MMM dd, y');
+      setValue([new Date(2024, 0, 20)]);
+
+      expect(triggerText()).toBe('Jan 20, 2024');
+    });
+
+    it('should join every date selected in multiple mode', () => {
+      fixture.componentRef.setInput('zMode', 'multiple');
+      fixture.componentRef.setInput('zFormat', 'MMM d');
+      setValue([new Date(2024, 0, 20), new Date(2024, 0, 22)]);
+
+      expect(triggerText()).toBe('Jan 20, Jan 22');
+    });
   });
 
-  it('should apply disabled state', () => {
-    fixture.componentRef.setInput('disabled', true);
-    fixture.detectChanges();
+  describe('trigger styling', () => {
+    it('should own the width on the host, so a single class resizes it', () => {
+      expect(host().className).toContain('w-[212px]');
 
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button');
-    expect(button?.disabled).toBe(true);
+      fixture.componentRef.setInput('class', 'w-44');
+      fixture.detectChanges();
+
+      expect(host().className).toContain('w-44');
+      expect(host().className).not.toContain('w-[212px]');
+    });
+
+    it('should render a trailing chevron by default', () => {
+      const icon = trigger().querySelector('ng-icon');
+
+      expect(icon?.getAttribute('data-icon')).toBe('inline-end');
+      expect(trigger().className).toContain('justify-between');
+    });
+
+    it('should render a leading calendar icon when asked', () => {
+      fixture.componentRef.setInput('zIcon', 'calendar');
+      fixture.detectChanges();
+
+      const icon = trigger().querySelector('ng-icon');
+
+      expect(icon?.getAttribute('data-icon')).toBe('inline-start');
+      expect(trigger().className).toContain('justify-start');
+    });
+
+    it('should render no icon at all when asked', () => {
+      fixture.componentRef.setInput('zIcon', 'none');
+      fixture.detectChanges();
+
+      expect(trigger().querySelector('ng-icon')).toBeNull();
+      expect(trigger().className).toContain('justify-start');
+    });
+
+    it('should follow the button size scale', () => {
+      expect(trigger().getAttribute('data-size')).toBe('default');
+
+      fixture.componentRef.setInput('zSize', 'lg');
+      fixture.detectChanges();
+
+      expect(trigger().getAttribute('data-size')).toBe('lg');
+      expect(trigger().className).toContain('h-9');
+    });
+
+    it('should apply the disabled state', () => {
+      fixture.componentRef.setInput('disabled', true);
+      fixture.detectChanges();
+
+      expect(trigger().disabled).toBe(true);
+    });
   });
 
-  it('should format date using custom zFormat', () => {
-    const testDate = new Date(2024, 0, 15); // January 15, 2024
-    fixture.componentRef.setInput('value', testDate);
-    fixture.componentRef.setInput('zFormat', 'MM/dd/yyyy');
-    fixture.detectChanges();
+  describe('labelling', () => {
+    it('should label itself when there is no external label', () => {
+      expect(trigger().getAttribute('aria-label')).toBe('Choose date');
+    });
 
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button');
-    expect(button?.textContent?.trim()).toContain('01/15/2024');
+    it('should step aside once zId points a label at the trigger', () => {
+      fixture.componentRef.setInput('zId', 'date-picker');
+      fixture.detectChanges();
+
+      expect(trigger().id).toBe('date-picker');
+      expect(trigger().getAttribute('aria-label')).toBeNull();
+    });
   });
 
-  it('should format date using European format', () => {
-    const testDate = new Date(2024, 0, 15); // January 15, 2024
-    fixture.componentRef.setInput('value', testDate);
-    fixture.componentRef.setInput('zFormat', 'dd-MM-yyyy');
-    fixture.detectChanges();
+  describe('popover', () => {
+    it('should render the calendar with its own root styling', async () => {
+      const calendar = await openPopover();
 
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button');
-    expect(button?.textContent?.trim()).toContain('15-01-2024');
+      expect(calendar).toBeTruthy();
+      expect(calendar?.getAttribute('data-slot')).toBe('calendar');
+      // Without these the cell sizing collapses inside the popover.
+      expect(calendar?.className).toContain('[--cell-size:--spacing(7)]');
+      expect(calendar?.className).toContain('p-2');
+    });
+
+    it('should render a plain caption by default', async () => {
+      const calendar = await openPopover();
+
+      expect(calendar?.querySelectorAll('select')).toHaveLength(0);
+    });
+
+    it('should forward zCaptionLayout to the calendar', async () => {
+      fixture.componentRef.setInput('zCaptionLayout', 'dropdown');
+      fixture.detectChanges();
+
+      const calendar = await openPopover();
+
+      expect(calendar?.querySelectorAll('select')).toHaveLength(2);
+    });
+
+    it('should forward zNumberOfMonths to the calendar', async () => {
+      fixture.componentRef.setInput('zNumberOfMonths', 2);
+      fixture.detectChanges();
+
+      const calendar = await openPopover();
+
+      expect(calendar?.querySelectorAll('z-calendar-grid')).toHaveLength(2);
+    });
+
+    it('should open on the month of the selected value', async () => {
+      setValue(new Date(2020, 4, 10));
+
+      const calendar = await openPopover();
+
+      expect(calendar?.textContent).toContain('May 2020');
+    });
+
+    it('should forward zDisabledDates to the calendar', async () => {
+      setValue(new Date(2024, 0, 15));
+      fixture.componentRef.setInput('zDisabledDates', [new Date(2024, 0, 20)]);
+      fixture.detectChanges();
+
+      await openPopover();
+
+      expect(dayButton('20').disabled).toBe(true);
+    });
   });
 
-  it('should format date with day names', () => {
-    const testDate = new Date(2024, 0, 15); // January 15, 2024 (Monday)
-    fixture.componentRef.setInput('value', testDate);
-    fixture.componentRef.setInput('zFormat', 'EEE, MMM d');
-    fixture.detectChanges();
+  describe('selection', () => {
+    it('should select a date, emit it and close the popover', async () => {
+      const emitted: CalendarValue[] = [];
+      component.dateChange.subscribe(value => emitted.push(value));
 
-    const compiled = fixture.nativeElement as HTMLElement;
-    const button = compiled.querySelector('button');
-    expect(button?.textContent?.trim()).toContain('Mon, Jan 15');
+      setValue(new Date(2024, 0, 1));
+      await openPopover();
+      await clickDay('15');
+
+      expect(component.value()).toEqual(new Date(2024, 0, 15));
+      expect(emitted).toEqual([new Date(2024, 0, 15)]);
+      expect(isOpen()).toBe(false);
+    });
+
+    it('should keep the popover open until both ends of a range are set', async () => {
+      fixture.componentRef.setInput('zMode', 'range');
+      setValue(null);
+
+      await openPopover();
+      await clickDay('10');
+
+      expect(isOpen()).toBe(true);
+
+      await clickDay('20');
+
+      expect(isOpen()).toBe(false);
+      expect((component.value() as Date[]).map(date => date.getDate())).toEqual([10, 20]);
+    });
+
+    it('should stay open in multiple mode', async () => {
+      fixture.componentRef.setInput('zMode', 'multiple');
+      setValue(null);
+
+      await openPopover();
+      await clickDay('10');
+      await clickDay('20');
+
+      expect(isOpen()).toBe(true);
+      expect((component.value() as Date[]).map(date => date.getDate())).toEqual([10, 20]);
+    });
+  });
+
+  describe('control value accessor', () => {
+    it('should write and report the value', async () => {
+      const onChange = jest.fn();
+      const onTouched = jest.fn();
+      component.registerOnChange(onChange);
+      component.registerOnTouched(onTouched);
+
+      component.writeValue(new Date(2024, 0, 1));
+      fixture.detectChanges();
+
+      expect(triggerText()).toContain('January 1, 2024');
+
+      await openPopover();
+      await clickDay('15');
+
+      expect(onChange).toHaveBeenCalledWith(new Date(2024, 0, 15));
+      expect(onTouched).toHaveBeenCalled();
+    });
+
+    it('should apply the disabled state coming from the form control', () => {
+      component.setDisabledState(true);
+      fixture.detectChanges();
+
+      expect(trigger().disabled).toBe(true);
+    });
   });
 });
