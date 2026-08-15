@@ -578,6 +578,30 @@
       ]
     },
     {
+      "name": "chart",
+      "type": "registry:component",
+      "dependencies": [
+        "ngx-echarts",
+        "echarts"
+      ],
+      "files": [
+        "chart.component.ts",
+        "chart.variants.ts",
+        "chart.types.ts",
+        "chart-context.ts",
+        "chart-colors.util.ts",
+        "chart-option.builder.ts",
+        "chart-echarts.provider.ts",
+        "chart-echarts.registry.ts",
+        "chart-ssr.util.ts",
+        "chart-tooltip.component.ts",
+        "chart-tooltip.formatter.ts",
+        "chart-legend.component.ts",
+        "chart.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
       "name": "tree",
       "type": "registry:component",
       "registryDependencies": [

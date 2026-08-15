@@ -1,0 +1,44 @@
+<section class="container flex flex-col items-center gap-2 py-8 text-center md:py-16 lg:py-20 xl:gap-4">
+  <h1
+    class="text-primary leading-tighter max-w-2xl text-4xl font-semibold tracking-tight text-balance lg:leading-[1.1] lg:font-semibold xl:text-5xl xl:tracking-tighter"
+  >
+    Beautiful Charts for the Web
+  </h1>
+  <p class="text-foreground max-w-3xl text-base text-balance sm:text-lg">
+    Ready-made charts built with Apache ECharts. Copy and paste into your apps. Works with all Angular Ecosystem. Open
+    Source. Free forever.
+  </p>
+  <section class="flex w-full items-center justify-center gap-2 pt-2 **:data-[slot=button]:shadow-none">
+    <a z-button href="/charts#charts">Browse Charts</a>
+    <a z-button zType="ghost" routerLink="/docs/components/chart">Chart docs</a>
+  </section>
+</section>
+
+<z-category-tabs [tabs]="categoryTabs" browseAllRoute="/docs/components/chart" browseAllLabel="Read the docs" />
+
+<section id="charts" class="container mx-auto min-h-svh px-4 pt-8 pb-16">
+  @if (charts().length > 0) {
+    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+      @for (chart of charts(); track chart.id) {
+        <z-chart-card [chart]="chart" />
+      }
+    </div>
+  } @else {
+    <div class="border-border bg-muted/20 flex min-h-svh items-center justify-center rounded-lg border">
+      <div class="space-y-2 text-center">
+        <p class="text-muted-foreground text-lg font-medium">No charts available yet</p>
+        <p class="text-muted-foreground text-sm">Charts will be added soon for this category</p>
+      </div>
+    </div>
+  }
+</section>
+
+<div class="container flex justify-center py-6">
+  <a
+    z-button
+    class="bg-background hover:bg-accent text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs"
+    routerLink="/docs/components/chart"
+  >
+    Read the chart docs
+  </a>
+</div>

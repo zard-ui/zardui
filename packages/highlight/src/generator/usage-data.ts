@@ -77,6 +77,20 @@ export const USAGE_DATA: Record<string, RawUsageData> = {
   </z-carousel-content>
 </z-carousel>`,
   },
+  chart: {
+    importCode: `import { ZardChartImports } from '@/shared/components/chart/chart.imports';`,
+    templateCode: `<z-chart
+  [zConfig]="chartConfig"
+  [zData]="chartData"
+  zType="bar"
+  [zSeries]="['desktop', 'mobile']"
+  zXAxisKey="month"
+  class="h-[250px] w-full"
+>
+  <z-chart-tooltip zIndicator="dot" />
+  <z-chart-legend />
+</z-chart>`,
+  },
   checkbox: {
     importCode: `import { ZardCheckboxComponent } from '@/shared/components/checkbox/checkbox.component';`,
     templateCode: `<z-checkbox zLabel="Accept terms and conditions"></z-checkbox>`,

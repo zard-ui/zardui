@@ -30,6 +30,16 @@ export const appRoutes: Route[] = [
     ],
   },
   {
+    path: 'charts',
+    component: ShellLayout,
+    children: [
+      {
+        path: '',
+        loadChildren: async () => (await import('./domain/pages/charts/charts.routes')).CHARTS_ROUTES,
+      },
+    ],
+  },
+  {
     path: 'docs',
     component: DocumentationLayout,
     children: [

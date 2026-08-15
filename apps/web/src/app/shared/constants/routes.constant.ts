@@ -18,7 +18,7 @@ export const HEADER_PATHS: NavItem[] = [
   { name: 'Docs', path: '/docs', available: true },
   { name: 'Components', path: '/docs/components', available: true },
   { name: 'Blocks', path: '/blocks', available: true },
-  { name: 'Charts', path: '/charts', available: false },
+  { name: 'Charts', path: '/charts', available: true },
   { name: 'Themes', path: '/themes', available: true },
 ];
 
@@ -94,7 +94,7 @@ export const COMPONENTS_PATH: NavSection = {
     { name: 'Calendar', path: '/docs/components/calendar', available: true },
     { name: 'Card', path: '/docs/components/card', available: true },
     { name: 'Carousel', path: '/docs/components/carousel', available: true },
-    { name: 'Chart', path: '/docs/components/chart', available: false },
+    { name: 'Chart', path: '/docs/components/chart', available: true },
     { name: 'Checkbox', path: '/docs/components/checkbox', available: true },
     { name: 'Combobox', path: '/docs/components/combobox', available: true },
     { name: 'Command', path: '/docs/components/command', available: true },

@@ -9,6 +9,7 @@ export * from './lib/shared/components/button-group';
 export * from './lib/shared/components/calendar';
 export * from './lib/shared/components/card';
 export * from './lib/shared/components/carousel';
+export * from './lib/shared/components/chart';
 export * from './lib/shared/components/checkbox';
 export * from './lib/shared/components/combobox';
 export * from './lib/shared/components/command';
