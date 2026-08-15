@@ -6,6 +6,7 @@
 /docs/introduction
 /docs/components
 /docs/registry
+/docs/mcp
 /docs/roadmap
 /docs/changelog
 /docs/installation

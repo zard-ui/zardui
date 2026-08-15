@@ -111,9 +111,10 @@ registry.json
 ```
 {
   "$schema": "https://zardui.com/schema/registry.json",
+  "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.83",
+  "version": "1.0.0-beta.102",
   "items": [
     {
       "name": "core",
@@ -126,19 +127,22 @@ registry.json
         "provider/providezard.ts",
         "css/tailwind.css",
         "index.ts"
-      ]
+      ],
+      "icons": { "family": "lucide", "symbols": [], "tokens": [] }
     },
     {
       "name": "utils",
       "type": "registry:component",
       "basePath": "utils",
       "dependencies": ["tailwind-merge", "clsx"],
-      "files": ["index.ts", "merge-classes.ts", "number.ts"]
+      "files": ["index.ts", "merge-classes.ts", "number.ts"],
+      "icons": { "family": "lucide", "symbols": [], "tokens": [] }
     },
     {
       "name": "button",
       "type": "registry:component",
-      "files": ["button.component.ts", "button.variants.ts", "index.ts"]
+      "files": ["button.component.ts", "button.variants.ts", "index.ts"],
+      "icons": { "family": "lucide", "symbols": ["lucideLoaderCircle"], "tokens": ["loader-circle"] }
     }
   ]
 }
@@ -151,7 +155,8 @@ registry.json
 | `$schema` | `string` | Identifier of the registry format, always `https://zardui.com/schema/registry.json` . |
 | `name` | `string` | Registry namespace — `@zard` . |
 | `homepage` | `string` | `https://zardui.com` . |
-| `version` | `string` | Version of the `zard-cli` package at the moment the registry was built. |
+| `schemaVersion` | `number` | The shape of the file — not the version of the package, which is the field below. It rises when a change breaks readers, so a client that only understands an older format can refuse the registry and say so instead of misreading it. A new optional field does not raise it. Absent means `1` , from before the field existed. |
+| `version` | `string` | Version of the `zard-cli` package at the moment the registry was built. Informational — use `schemaVersion` to decide whether you can read it. |
 | `items` | `array` | One summary per item, without the file contents. |
 
 ### Fields of an item summary
@@ -183,7 +188,16 @@ button.json
       "name": "index.ts",
       "content": "export * from './button.component';\nexport * from './button.variants';\n"
     }
-  ]
+  ],
+  "icons": {
+    "family": "lucide",
+    "symbols": ["lucideLoaderCircle"],
+    "tokens": ["loader-circle"],
+    "demos": {
+      "symbols": ["lucideArchive", "lucideArrowLeft"],
+      "tokens": ["archive", "arrow-left"]
+    }
+  }
 }
 ```
 
@@ -196,8 +210,9 @@ button.json
 | `dependencies` | `string[]?` | npm packages installed along with the item. |
 | `devDependencies` | `string[]?` | npm dev dependencies of the item. |
 | `registryDependencies` | `string[]?` | Other registry items this one requires. |
-| `docs` | `{ overview, api }?` | Markdown documentation of the component, consumed by the MCP server. |
-| `demos` | `{ name, content }[]?` | Demo components, also consumed by the MCP server. |
+| `icons` | `{ family, symbols, tokens, demos }` | The icons the component draws and the set they are written in. `symbols` are the identifiers as the code writes them, `tokens` the same icons by the set-neutral key of `icons.json` , and `demos` the ones that only appear in the examples. Present on every item, with empty lists for a component that draws none. |
+
+Documentation and examples are not in the item. They live in the page of each component, served as markdown at `/docs/components/<name>.md` — one document with installation, usage, examples and API reference, which is what the MCP server reads. Keeping them out of the item is also what makes installing one download the code and nothing else.
 
 ### Where the files land
 
@@ -215,6 +230,35 @@ npx zard-cli add button --path src/app/ui
 ```
 
 Whichever route is taken, the CLI checks that the resolved destination stays inside the project directory and refuses to write outside of it. Writing the files of an item is also transactional: if any file of an item fails to be written, every file already written for that same item is removed before the error is reported.
+
+## Icon catalogue (icons.json)
+
+`icons.json` declares the icon sets a registry supports and the table that translates between them. The CLI reads it at run time rather than relying on the copy it was built with, so a set added here works for the CLIs that are already installed.
+
+icons.json
+
+```
+{
+  "$schema": "https://zardui.com/schema/icons.json",
+  "schemaVersion": 1,
+  "families": {
+    "lucide": {
+      "value": "lucide",
+      "label": "Lucide",
+      "package": "@ng-icons/lucide",
+      "prefix": "lucide"
+    }
+  },
+  "icons": {
+    "check": { "lucide": "lucideCheck" },
+    "chevron-down": { "lucide": "lucideChevronDown" }
+  }
+}
+```
+
+`families` is keyed by the value that goes in `icons` in your components.json. Two things separate one set from another: the npm package the project needs and the prefix its symbols carry — everything else about installing a component is identical.
+
+`icons` is one row per icon, keyed by what it means rather than by what any set calls it. Items are published in one set, and a client installing with another rewrites the symbols through this table: the import, the `provideIcons` call and the `name` in the template are the same word. A row with no entry for the target set means that set has no equivalent — the symbol is left alone and reported, never guessed.
 
 ## Dependencies
 

@@ -57,7 +57,7 @@ components.json
 }
 ```
 
-Lucide is the only set supported today, so this is the only value the CLI accepts — writing anything else makes `add` reject the file. The property exists ahead of the sets that will follow: the registry already publishes, for every component, which icons it draws, so supporting another one is a matter of translating names rather than rewriting components.
+Lucide is the only set supported today, so this is the only value the CLI accepts — writing anything else makes `add` reject the file. The property exists ahead of the sets that will follow: every entry in the registry already carries the icons it draws, in the component and in its examples, so supporting another one is a matter of translating names rather than rewriting components.
 
 A `components.json` written before this property existed is read as `lucide` .
 
