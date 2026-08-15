@@ -1,4 +1,4 @@
-import { type ConnectedPosition, OverlayModule } from '@angular/cdk/overlay';
+import { type FlexibleConnectedPositionStrategy, OverlayModule, type OverlayRef } from '@angular/cdk/overlay';
 import { PLATFORM_ID, signal, type WritableSignal } from '@angular/core';
 import { By } from '@angular/platform-browser';
 
@@ -315,13 +315,18 @@ describe('ZardHoverCardDirective', () => {
       fallback: { originX: 'start', originY: 'center', overlayX: 'end', overlayY: 'center' },
     },
   ] as const)('places $placement first and provides a fallback position', async ({ placement, primary, fallback }) => {
-    const { fixture } = await setup({ placement });
+    const { fixture } = await setup({ openDelay: 0, placement });
     const directive = fixture.debugElement
       .query(By.directive(ZardHoverCardDirective))
       .injector.get(ZardHoverCardDirective);
-    const positionAwareDirective = directive as unknown as { getPositions(): ConnectedPosition[] };
-    const positions = positionAwareDirective.getPositions();
 
+    await hoverTrigger(0);
+
+    const overlayRef = (directive as unknown as { overlayRef: OverlayRef }).overlayRef;
+    const positionStrategy = overlayRef.getConfig().positionStrategy as FlexibleConnectedPositionStrategy;
+    const positions = positionStrategy.positions;
+
+    expect(overlayRef.hasAttached()).toBe(true);
     expect(positions.length).toBeGreaterThan(1);
     expect(positions[0]).toMatchObject(primary);
     expect(positions[1]).toMatchObject(fallback);

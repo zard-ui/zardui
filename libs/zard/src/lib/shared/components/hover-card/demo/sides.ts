@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.component';
 
+/** Demonstrates every supported hover card placement. */
 @Component({
   selector: 'z-demo-hover-card-placements',
   imports: [ZardButtonComponent, ZardHoverCardComponent, ZardHoverCardDirective],

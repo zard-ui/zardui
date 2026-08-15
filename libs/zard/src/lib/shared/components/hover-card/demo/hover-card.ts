@@ -26,6 +26,7 @@ const HOVER_CARD_COMPOSITION: CodeBlockData = {
   expandable: false,
 };
 
+/** Documentation, installation, usage, and demo metadata for the Hover Card page. */
 export const HOVER_CARD = {
   componentName: 'hover-card',
   componentType: 'hover-card',

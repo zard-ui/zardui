@@ -1,5 +1,6 @@
 import type { ApiSection } from '@doc/domain/components/api-reference/api-reference.types';
 
+/** Public API reference displayed on the Hover Card documentation page. */
 export const HOVER_CARD_API: ApiSection[] = [
   {
     selector: '[zHoverCard]',

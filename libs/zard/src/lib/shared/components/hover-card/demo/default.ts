@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ZardButtonComponent } from '../../button/button.component';
 import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.component';
 
+/** Demonstrates the default hover card behavior and content composition. */
 @Component({
   selector: 'z-demo-hover-card-default',
   imports: [ZardButtonComponent, ZardHoverCardComponent, ZardHoverCardDirective],

@@ -1,5 +1,6 @@
 import { cva, type VariantProps } from 'class-variance-authority';
 
+/** Base visual styles and placement-aware animations for hover card content. */
 export const hoverCardVariants = cva(
   [
     'z-50 w-64 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none',
@@ -11,4 +12,6 @@ export const hoverCardVariants = cva(
     'data-[side=top]:slide-in-from-bottom-2',
   ].join(' '),
 );
+
+/** Variant properties accepted by the hover card style generator. */
 export type ZardHoverCardVariants = VariantProps<typeof hoverCardVariants>;

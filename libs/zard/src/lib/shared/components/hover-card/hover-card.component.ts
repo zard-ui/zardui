@@ -36,6 +36,7 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { hoverCardVariants } from './hover-card.variants';
 
+/** Supported positions for a hover card relative to its trigger. */
 export type ZardHoverCardPlacement = 'top' | 'bottom' | 'left' | 'right';
 
 const HOVER_CARD_POSITIONS: Record<ZardHoverCardPlacement, ConnectedPosition> = {
@@ -78,6 +79,12 @@ const HOVER_CARD_FALLBACKS: Record<ZardHoverCardPlacement, readonly ZardHoverCar
 
 let nextHoverCardId = 0;
 
+/**
+ * Attaches a delayed, focus-accessible hover card overlay to a trigger element.
+ *
+ * The supplied template remains open while the pointer or focus moves between
+ * the trigger and its overlay content.
+ */
 @Directive({
   selector: '[zHoverCard]',
   host: {
@@ -92,18 +99,24 @@ let nextHoverCardId = 0;
   exportAs: 'zHoverCard',
 })
 export class ZardHoverCardDirective implements OnInit, OnDestroy {
+  /** Template rendered inside the hover card overlay. */
   readonly zContent = input.required<TemplateRef<void>>({
     alias: 'zHoverCard',
   });
 
+  /** Preferred placement relative to the trigger. */
   readonly zPlacement = input<ZardHoverCardPlacement>('bottom');
 
+  /** Delay in milliseconds before the hover card opens. */
   readonly zOpenDelay = input(700, { transform: numberAttribute });
 
+  /** Delay in milliseconds before the hover card closes. */
   readonly zCloseDelay = input(300, { transform: numberAttribute });
 
+  /** Controls the hover card visibility programmatically. */
   readonly zVisible = input(false, { transform: booleanAttribute });
 
+  /** Emits whenever the effective hover card visibility changes. */
   readonly zVisibleChange = output<boolean>();
 
   protected readonly isOpen = signal(false);
@@ -167,6 +180,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     });
   }
 
+  /** Creates the browser overlay and applies the initial controlled visibility. */
   ngOnInit(): void {
     this.createOverlay();
 
@@ -175,6 +189,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     }
   }
 
+  /** Clears timers, event listeners, subscriptions, and the overlay. */
   ngOnDestroy(): void {
     this.cancelOpen();
     this.cancelClose();
@@ -410,6 +425,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   }
 }
 
+/** Styled content container rendered inside a hover card overlay. */
 @Component({
   selector: 'z-hover-card, [z-hover-card]',
   template: `
@@ -424,6 +440,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   exportAs: 'zHoverCard',
 })
 export class ZardHoverCardComponent {
+  /** Additional CSS classes merged with the default hover card styles. */
   readonly class = input<ClassValue>('');
 
   protected readonly classes = computed(() => mergeClasses(hoverCardVariants(), this.class()));
