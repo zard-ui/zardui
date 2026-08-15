@@ -1,6 +1,8 @@
 import { bundlerFor, isLibraryKind } from '@cli/commands/init/project-kind.js';
+import { iconPackagesFor } from '@cli/core/icons/index.js';
 import { type Config } from '@cli/utils/config.js';
 import { getProjectInfo, type ProjectInfo } from '@cli/utils/get-project-info.js';
+import { iconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger } from '@cli/utils/logger.js';
 import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/package-manager.js';
 
@@ -8,7 +10,16 @@ export async function installDependencies(cwd: string, config: Config, projectIn
   const info = projectInfo || (await getProjectInfo(cwd));
 
   const cdkVersion = getCdkVersion(info.angularVersion);
-  const deps = [cdkVersion, 'class-variance-authority', 'clsx', 'tailwind-merge', '@ng-icons/core', '@ng-icons/lucide'];
+  // O pacote de ícones sai da família escolhida em `components.json`, e não de
+  // uma lista fixa: é o que faz `"icons"` valer alguma coisa no dia em que
+  // houver mais de uma família.
+  const deps = [
+    cdkVersion,
+    'class-variance-authority',
+    'clsx',
+    'tailwind-merge',
+    ...iconPackagesFor(config.icons, iconCatalog()),
+  ];
   const devDeps = tailwindPackages(config.projectType);
 
   if (info.hasTailwind) {

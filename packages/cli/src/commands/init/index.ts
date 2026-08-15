@@ -12,8 +12,10 @@ import { isInteractive, printReport, WizardCancelledError, type LogRecord } from
 import { type Config } from '@cli/utils/config.js';
 import { CliError } from '@cli/utils/errors.js';
 import { getProjectInfo, type ProjectInfo } from '@cli/utils/get-project-info.js';
+import { loadIconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { detectPackageManager, suggestedRunner } from '@cli/utils/package-manager.js';
+import { getRegistryUrl } from '@cli/utils/registry.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
@@ -39,9 +41,14 @@ export const init = new Command()
     const isReInitializing = existsSync(path.resolve(cwd, 'components.json'));
     const packageManager = await detectPackageManager(cwd);
 
+    // Antes de qualquer etapa: é o catálogo que diz qual pacote de ícones
+    // instalar, e ele vem do registry para não depender da versão da CLI.
+    await loadIconCatalog(getRegistryUrl());
+
     const buildSteps = (config: Config): InitStep[] => buildInitSteps(cwd, config, projectInfo, isReInitializing);
 
     if (!isInteractive()) {
+      logHeadlessReason();
       await runHeadless({
         cwd,
         projectInfo,
@@ -80,6 +87,21 @@ export const init = new Command()
       throw error;
     }
   });
+
+/**
+ * Por que a tela cheia não foi montada.
+ *
+ * A CLI sair em modo texto é indistinguível, para quem está olhando, de a
+ * interface não existir — foi assim que a degradação no macOS e no Linux passou
+ * despercebida até virar relato de que "não apareceu". Com `--debug`, a resposta
+ * vem do próprio comando.
+ */
+function logHeadlessReason(): void {
+  logger.debug(
+    `No terminal to draw on (stdin TTY: ${Boolean(process.stdin.isTTY)}, ` +
+      `stdout TTY: ${Boolean(process.stdout.isTTY)}, controlling terminal: unreachable) — running headless.`,
+  );
+}
 
 function validateWorkingDirectory(cwd: string): void {
   if (!existsSync(cwd)) {

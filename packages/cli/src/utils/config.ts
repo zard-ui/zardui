@@ -1,3 +1,4 @@
+import { SOURCE_ICON_FAMILY } from '@cli/core/icons/index.js';
 import { ConfigError } from '@cli/utils/errors.js';
 import { access, readFile } from 'node:fs/promises';
 import * as path from 'node:path';
@@ -21,6 +22,18 @@ const configSchema = z.object({
   $schema: z.string().optional(),
   appConfigFile: z.string().default('src/app/app.config.ts'),
   style: z.enum(['css']).default('css'),
+  // A família de ícones em que os componentes são gravados. Ausente nos
+  // arquivos escritos antes da propriedade — e lucide é o que eles usam.
+  //
+  // Não é um enum: as famílias válidas são as que o registry publica no momento
+  // da execução, e não as que existiam quando esta CLI foi compilada. Fechar a
+  // lista aqui faria uma família nova ser recusada por uma CLI velha, que é
+  // exatamente o que o catálogo remoto veio evitar. Quem valida o valor é
+  // `assertIconFamily`, contra o catálogo, e com uma mensagem que diz quais são.
+  icons: z.string().default(SOURCE_ICON_FAMILY),
+  // Direção do layout. Ainda não muda o que é instalado: existe para o projeto
+  // declarar a intenção, e para quem lê o arquivo saber que o campo é nosso.
+  rtl: z.boolean().default(false),
   // Ausente nos components.json escritos antes do menu de tipo de projeto;
   // aplicação Angular é o que eles descrevem.
   projectType: z.enum(['angular', 'angular-library', 'nx', 'nx-library', 'analog']).default('angular'),
@@ -52,6 +65,8 @@ export type Config = z.infer<typeof configSchema>;
 
 export const DEFAULT_CONFIG: Config = {
   style: 'css',
+  icons: SOURCE_ICON_FAMILY,
+  rtl: false,
   projectType: 'angular',
   appConfigFile: 'src/app/app.config.ts',
   packageManager: 'npm',

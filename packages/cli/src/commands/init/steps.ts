@@ -5,8 +5,10 @@ import { applyThemeToStyles, createPostCssConfig } from '@cli/commands/init/tail
 import { updateTsConfig } from '@cli/commands/init/tsconfig-updater.js';
 import { updateAngularConfig } from '@cli/commands/init/update-angular-config.js';
 import { setupVitePlugin } from '@cli/commands/init/vite-setup.js';
+import { iconFamily } from '@cli/core/icons/index.js';
 import { resolveConfigPaths, type Config } from '@cli/utils/config.js';
 import { type ProjectInfo } from '@cli/utils/get-project-info.js';
+import { iconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger } from '@cli/utils/logger.js';
 import { existsSync } from 'node:fs';
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
@@ -46,7 +48,7 @@ export function buildInitSteps(
     },
     {
       label: 'dependencies',
-      note: 'CDK, CVA, tailwind-merge, ng-icons',
+      note: `CDK, CVA, tailwind-merge, ng-icons (${iconFamily(config.icons, iconCatalog())?.label ?? config.icons})`,
       run: () => installDependencies(cwd, config, projectInfo),
     },
   ];

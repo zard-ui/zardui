@@ -1,11 +1,30 @@
 import { DEFAULT_REGISTRY_URL as BUILD_REGISTRY_URL } from '@cli/config/registry-config.js';
+import { isIconFamily, retargetIcons, SOURCE_ICON_FAMILY, type IconFamily } from '@cli/core/icons/index.js';
 import type { Config } from '@cli/utils/config.js';
 import { ConfigError } from '@cli/utils/errors.js';
 import { fetchJson } from '@cli/utils/http-client.js';
+import { iconCatalog } from '@cli/utils/icon-catalog.js';
+import { logger } from '@cli/utils/logger.js';
+import { assertSupportedSchema } from '@cli/utils/schema-version.js';
 
 export const DEFAULT_REGISTRY_URL =
   process.env['ZARD_REGISTRY_URL'] ||
   (BUILD_REGISTRY_URL !== '__REGISTRY_URL__' ? BUILD_REGISTRY_URL : 'https://zardui.com/r');
+
+/**
+ * Os ícones que um componente desenha, como o registry os publica.
+ *
+ * `family` é a família em que os arquivos estão escritos — quem instala com
+ * outra família em `components.json` sabe, por este campo, que precisa
+ * reescrevê-los. Ausente nos itens publicados antes desta propriedade.
+ */
+export interface RegistryIcons {
+  family: string;
+  symbols: string[];
+  tokens: string[];
+  /** Os ícones que só aparecem nos demos. Ausente no índice, que não os carrega. */
+  demos?: { symbols: string[]; tokens: string[] };
+}
 
 export interface RegistryItem {
   name: string;
@@ -18,10 +37,13 @@ export interface RegistryItem {
   dependencies?: string[];
   devDependencies?: string[];
   registryDependencies?: string[];
+  icons?: RegistryIcons;
 }
 
 export interface RegistryIndex {
   $schema: string;
+  /** A forma do arquivo. Ausente nos registries anteriores ao campo. */
+  schemaVersion?: number;
   name: string;
   homepage: string;
   version: string;
@@ -32,8 +54,21 @@ export interface RegistryIndex {
     dependencies?: string[];
     devDependencies?: string[];
     registryDependencies?: string[];
+    icons?: RegistryIcons;
     files: string[];
   }>;
+}
+
+/**
+ * A família em que os arquivos do item estão escritos.
+ *
+ * Um item sem `icons` — publicado antes da propriedade — está em lucide, que
+ * era a única possibilidade. Um valor desconhecido também: preferir o palpite
+ * certo a recusar a instalação por causa de um campo novo.
+ */
+export function sourceFamilyOf(item: Pick<RegistryItem, 'icons'>): IconFamily {
+  const family = item.icons?.family;
+  return family !== undefined && isIconFamily(family, iconCatalog()) ? family : SOURCE_ICON_FAMILY;
 }
 
 export function getRegistryUrl(config?: Config): string {
@@ -67,6 +102,8 @@ export async function fetchRegistryIndex(registryUrl?: string): Promise<Registry
 
   const url = `${baseUrl}/registry.json`;
   const data = await fetchJson<RegistryIndex>(url);
+
+  assertSupportedSchema(data.schemaVersion, 'registry.json');
 
   registryIndexCache = { data, timestamp: Date.now() };
   return data;
@@ -169,10 +206,30 @@ export async function fetchComponent(
     throw new ConfigError(`Component "${componentName}" has no files in the registry`);
   }
 
-  const transformedFiles = item.files.map(file => ({
-    name: file.name,
-    content: transformContent(file.content, config, options),
-  }));
+  const sourceFamily = sourceFamilyOf(item);
+  const missing = new Set<string>();
+
+  const transformedFiles = item.files.map(file => {
+    const retargeted = retargetIcons(
+      transformContent(file.content, config, options),
+      sourceFamily,
+      config.icons,
+      iconCatalog(),
+    );
+    for (const symbol of retargeted.missing) missing.add(symbol);
+
+    return { name: file.name, content: retargeted.content };
+  });
+
+  // Um ícone sem equivalente na família escolhida fica no símbolo original, e o
+  // import dele não resolve mais. Falhar a instalação inteira por causa disso
+  // seria pior: o resto do componente está correto e o conserto é uma linha.
+  if (missing.size > 0) {
+    logger.warn(
+      `"${componentName}" uses icons that ${config.icons} does not provide: ${[...missing].sort().join(', ')}. ` +
+        'They were left untouched — replace them by hand.',
+    );
+  }
 
   return {
     ...item,

@@ -7,6 +7,7 @@ import {
   libraryStylesPath,
   type ProjectKind,
 } from '@cli/commands/init/project-kind.js';
+import { SOURCE_ICON_FAMILY } from '@cli/core/icons/index.js';
 import { type Config } from '@cli/utils/config.js';
 import { type ProjectInfo, type WorkspaceProject } from '@cli/utils/get-project-info.js';
 import { existsSync } from 'node:fs';
@@ -19,6 +20,8 @@ export const SCHEMA_URL = 'https://zardui.com/schema.json';
 export const configSchema = z.object({
   $schema: z.string(),
   style: z.enum(['css']),
+  icons: z.string(),
+  rtl: z.boolean(),
   projectType: z.enum(['angular', 'angular-library', 'nx', 'nx-library', 'analog']),
   appConfigFile: z.string(),
   packageManager: z.enum(['npm', 'yarn', 'pnpm', 'bun']),
@@ -128,6 +131,11 @@ export function buildConfig(answers: InitAnswers, packageManager: 'npm' | 'yarn'
   return configSchema.parse({
     $schema: SCHEMA_URL,
     style: 'css',
+    // Nenhuma das duas é perguntada no wizard: hoje só existe uma família de
+    // ícones, e o RTL não altera o que o init escreve. Ficam no arquivo com o
+    // padrão para serem editadas depois, que é o que as torna configuráveis.
+    icons: SOURCE_ICON_FAMILY,
+    rtl: false,
     projectType: answers.kind,
     appConfigFile: answers.appConfig,
     packageManager,

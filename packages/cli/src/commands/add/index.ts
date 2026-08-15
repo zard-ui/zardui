@@ -14,8 +14,10 @@ import { isInteractive, printReport, WizardCancelledError, type LogRecord } from
 import { getConfig, resolveConfigPaths, type Config } from '@cli/utils/config.js';
 import { CliError } from '@cli/utils/errors.js';
 import { getProjectInfo } from '@cli/utils/get-project-info.js';
+import { assertIconFamily, loadIconCatalog } from '@cli/utils/icon-catalog.js';
 import { logger, spinner } from '@cli/utils/logger.js';
 import { filterInstalledPackages, installPackagesWithRetry } from '@cli/utils/package-manager.js';
+import { getRegistryUrl } from '@cli/utils/registry.js';
 import { Command } from 'commander';
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
@@ -52,6 +54,11 @@ export const add = new Command()
     const projectInfo = await validateProject(cwd);
     const resolvedConfig: ResolvedConfig = await resolveConfigPaths(cwd, config);
 
+    // O catálogo decide se `icons` é um valor válido e como traduzir os símbolos
+    // na instalação, então vem antes de resolver componente nenhum.
+    await loadIconCatalog(getRegistryUrl(config));
+    assertIconFamily(config.icons);
+
     const preselected = await selectComponents(components, options.all);
 
     warnOnPrereleaseAngular(projectInfo.angularVersionRaw);
@@ -83,6 +90,12 @@ export const add = new Command()
     };
 
     if (!isInteractive()) {
+      // Ver a nota em `init`: sem isto, sair em modo texto é indistinguível de
+      // a interface não existir.
+      logger.debug(
+        `No terminal to draw on (stdin TTY: ${Boolean(process.stdin.isTTY)}, ` +
+          `stdout TTY: ${Boolean(process.stdout.isTTY)}, controlling terminal: unreachable) — running headless.`,
+      );
       await runHeadless(preselected, options, actions);
       return;
     }
