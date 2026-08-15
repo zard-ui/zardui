@@ -93,4 +93,4 @@ import { ZardHoverCardComponent, ZardHoverCardDirective } from '../hover-card.co
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoHoverCardPlacementsComponent {}
+export class ZardDemoHoverCardSidesComponent {}
