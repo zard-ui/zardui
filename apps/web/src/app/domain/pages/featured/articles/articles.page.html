@@ -1,0 +1,90 @@
+<z-content
+  [navigationConfig]="navigationConfig()"
+  [activeAnchor]="activeAnchor"
+  scrollSpy
+  (scrollSpyChange)="activeAnchor = $event"
+>
+  <z-doc-heading
+    title="Articles"
+    description="Blog posts, tutorials and write-ups the community published about Zard UI, gathered in one place."
+    scrollSpyItem="overview"
+    id="overview"
+  ></z-doc-heading>
+
+  <z-alert
+    zTitle="Made by the community"
+    zDescription="Every article below was written by someone outside the core team. Each card opens the original post on the platform where it was published, so the author keeps the traffic and the credit."
+  />
+
+  @for (group of groups(); track group.id) {
+    <section class="flex flex-col gap-6 sm:gap-8" [scrollSpyItem]="group.id" [id]="group.id">
+      <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">
+        {{ group.label }}
+      </h2>
+
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
+        @for (article of group.articles; track article.id) {
+          <a
+            [href]="article.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="group focus-visible:ring-ring focus-visible:ring-offset-background flex flex-col gap-3 rounded-lg outline-hidden focus-visible:ring-2 focus-visible:ring-offset-2"
+          >
+            <div class="bg-muted relative aspect-video overflow-hidden rounded-lg border">
+              @if (article.coverFailed) {
+                <div class="flex h-full w-full flex-col items-center justify-center gap-3 px-6">
+                  <img src="/images/zard.svg" alt="" aria-hidden="true" class="h-10 w-auto opacity-40 dark:invert" />
+                  <p class="text-muted-foreground line-clamp-2 text-center text-sm font-medium">{{ article.title }}</p>
+                </div>
+              } @else {
+                <img
+                  [src]="article.cover"
+                  [alt]="'Cover image: ' + article.title"
+                  loading="lazy"
+                  decoding="async"
+                  class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  (error)="onCoverError(article.id)"
+                />
+              }
+
+              <div
+                class="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-focus-visible:opacity-100"
+              >
+                <span
+                  class="bg-foreground text-background flex h-14 w-14 items-center justify-center rounded-full shadow-lg transition-transform duration-300 group-hover:scale-110"
+                >
+                  <ng-icon name="lucideArrowUpRight" class="size-6!" aria-hidden="true" />
+                </span>
+              </div>
+
+              <z-badge zType="secondary" class="absolute top-3 right-3">{{ article.source }}</z-badge>
+            </div>
+
+            <div class="flex flex-col gap-1">
+              <h3 class="line-clamp-2 text-sm leading-snug font-medium text-balance">{{ article.title }}</h3>
+              <p class="text-muted-foreground text-xs">
+                {{ article.author }} · {{ article.publishedAt | date: 'MMM d, y' : 'UTC' }} ·
+                {{ article.readingTime }} min read
+              </p>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+  }
+
+  <section class="flex flex-col gap-6 sm:gap-8" scrollSpyItem="contribute" id="contribute">
+    <h2 class="font-heading mt-12 scroll-m-28 text-2xl font-medium tracking-tight first:mt-0 lg:mt-20">Contribute</h2>
+
+    <z-alert zTitle="Wrote an article about Zard UI?" [zDescription]="contributeDescription" />
+
+    <ng-template #contributeDescription>
+      <p>
+        Send the link to
+        <a href="mailto:hello@luizgomes.dev?subject=Zard%20UI%20article%20submission">hello&#64;luizgomes.dev</a>
+        and we will add it to this page. Submissions go through a review before being published, so it may take a while
+        until your article shows up here. Content in any language is welcome.
+      </p>
+    </ng-template>
+  </section>
+</z-content>

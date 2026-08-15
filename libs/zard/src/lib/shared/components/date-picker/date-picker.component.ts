@@ -1,5 +1,6 @@
 import { DatePipe } from '@angular/common';
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -7,6 +8,7 @@ import {
   inject,
   input,
   model,
+  numberAttribute,
   output,
   viewChild,
   ViewEncapsulation,
@@ -15,33 +17,28 @@ import {
 import { NG_VALUE_ACCESSOR, type ControlValueAccessor } from '@angular/forms';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideCalendar } from '@ng-icons/lucide';
+import { lucideCalendar, lucideChevronDown } from '@ng-icons/lucide';
 import type { ClassValue } from 'clsx';
 
 import { ZardButtonComponent, type ZardButtonTypeVariants } from '@/shared/components/button';
 import { ZardCalendarComponent } from '@/shared/components/calendar';
-import type { ZardDatePickerSizeVariants } from '@/shared/components/date-picker/date-picker.variants';
-import { ZardPopoverComponent, ZardPopoverDirective } from '@/shared/components/popover';
+import type {
+  CalendarMode,
+  CalendarValue,
+  ZardCalendarCaptionLayout,
+} from '@/shared/components/calendar/calendar.types';
+import { normalizeCalendarValue } from '@/shared/components/calendar/calendar.utils';
+import {
+  datePickerTriggerVariants,
+  datePickerVariants,
+  type ZardDatePickerIconVariants,
+  type ZardDatePickerSizeVariants,
+} from '@/shared/components/date-picker/date-picker.variants';
+import { ZardPopoverComponent, ZardPopoverDirective, type ZardPopoverAlign } from '@/shared/components/popover';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
 
-/**
- * Height overrides for date-picker sizes.
- *
- * These heights intentionally differ from button size variants to accommodate
- * the date-picker UI:
- * - default: h-9 (vs button h-8)
- * - lg: h-11 (vs button h-9)
- *
- * The `mergeClasses` utility (tailwind-merge) resolves class conflicts,
- * allowing these values to override the base button heights defined in
- * `ZardDatePickerSizeVariants`.
- */
-const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
-  xs: 'h-7',
-  sm: 'h-8',
-  default: 'h-9',
-  lg: 'h-11',
-};
+/** Separates the two ends of a range in the trigger label. */
+const RANGE_SEPARATOR = ' - ';
 
 @Component({
   selector: 'z-date-picker, [z-date-picker]',
@@ -50,35 +47,44 @@ const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
     <button
       z-button
       type="button"
+      [attr.id]="zId() || null"
       [zType]="zType()"
       [zSize]="zSize()"
-      [disabled]="disabled()"
-      [class]="buttonClasses()"
+      [zDisabled]="disabled()"
+      [class]="triggerClasses()"
+      [attr.data-empty]="isEmpty() ? 'true' : null"
+      [attr.aria-label]="zId() ? null : 'Choose date'"
       zPopover
       #popoverDirective="zPopover"
       [zContent]="calendarTemplate"
       zTrigger="click"
+      [zAlign]="zAlign()"
       (zVisibleChange)="onPopoverVisibilityChange($event)"
-      [attr.aria-expanded]="false"
-      [attr.aria-haspopup]="true"
-      aria-label="Choose date"
     >
-      <ng-icon name="lucideCalendar" class="size-4!" />
-      <span [class]="textClasses()">
-        {{ displayText() }}
-      </span>
+      @if (zIcon() === 'calendar') {
+        <ng-icon name="lucideCalendar" class="size-4!" data-icon="inline-start" />
+      }
+      <span class="min-w-0 truncate">{{ displayText() }}</span>
+      @if (zIcon() === 'chevron') {
+        <ng-icon name="lucideChevronDown" class="size-4!" data-icon="inline-end" />
+      }
     </button>
 
     <ng-template #calendarTemplate>
-      <z-popover [class]="popoverClasses()">
+      <z-popover aria-label="Choose date" class="w-auto overflow-hidden p-0">
+        <!-- The popover content is p-0, so the calendar's own p-2 provides the padding. -->
         <z-calendar
           #calendar
-          class="border-0"
+          [zMode]="zMode()"
+          [zCaptionLayout]="zCaptionLayout()"
+          [zNumberOfMonths]="zNumberOfMonths()"
+          [zDisabledDates]="zDisabledDates()"
+          [zShowOutsideDays]="zShowOutsideDays()"
           [value]="value()"
           [minDate]="minDate()"
           [maxDate]="maxDate()"
           [disabled]="disabled()"
-          (dateChange)="onDateChange($event)"
+          (valueChange)="onCalendarValueChange($event)"
         />
       </z-popover>
     </ng-template>
@@ -93,9 +99,11 @@ const HEIGHT_BY_SIZE: Record<ZardDatePickerSizeVariants, string> = {
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ lucideCalendar })],
+  viewProviders: [provideIcons({ lucideCalendar, lucideChevronDown })],
   host: {
-    '[class]': 'class()',
+    'data-slot': 'date-picker',
+    '[class]': 'classes()',
+    '[attr.data-empty]': "isEmpty() ? 'true' : null",
   },
   exportAs: 'zDatePicker',
 })
@@ -104,80 +112,106 @@ export class ZardDatePickerComponent implements ControlValueAccessor {
 
   readonly calendarTemplate = viewChild.required<TemplateRef<unknown>>('calendarTemplate');
   readonly popoverDirective = viewChild.required<ZardPopoverDirective>('popoverDirective');
-  readonly calendar = viewChild.required<ZardCalendarComponent>('calendar');
+  /** Only resolves while the popover is open — the calendar lives in a lazily rendered template. */
+  readonly calendar = viewChild<ZardCalendarComponent>('calendar');
 
   readonly class = input<ClassValue>('');
+  /** Applied to the trigger button, so a `<label for="…">` points at something focusable. */
+  readonly zId = input<string>('');
   readonly zType = input<ZardButtonTypeVariants>('outline');
   readonly zSize = input<ZardDatePickerSizeVariants>('default');
-  readonly value = model<Date | null>(null);
-  readonly placeholder = input<string>('Pick a date');
+  readonly zIcon = input<ZardDatePickerIconVariants>('chevron');
+  readonly value = model<CalendarValue>(null);
+  readonly zPlaceholder = input<string>('Pick a date');
   readonly zFormat = input<string>('MMMM d, yyyy');
+  readonly zMode = input<CalendarMode>('single');
+  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>('label');
+  readonly zNumberOfMonths = input(1, { transform: numberAttribute });
+  readonly zDisabledDates = input<Date[]>([]);
+  readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
+  readonly zAlign = input<ZardPopoverAlign>('start');
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = model<boolean>(false);
 
-  readonly dateChange = output<Date | null>();
+  readonly dateChange = output<CalendarValue>();
 
-  private onChange: (value: Date | null) => void = noopFn;
+  private onChange: (value: CalendarValue) => void = noopFn;
   private onTouched: () => void = noopFn;
 
-  protected readonly buttonClasses = computed(() => {
-    const hasValue = !!this.value();
-    const size = this.zSize();
-    const height = HEIGHT_BY_SIZE[size];
-    return mergeClasses(
-      'justify-start text-left font-normal',
-      !hasValue && 'text-muted-foreground',
-      height,
-      'min-w-[240px]',
-    );
+  protected readonly classes = computed(() => mergeClasses(datePickerVariants(), this.class()));
+
+  protected readonly triggerClasses = computed(() => datePickerTriggerVariants({ zIcon: this.zIcon() }));
+
+  /** The value flattened to a list, whatever the mode — empty when nothing is selected. */
+  private readonly selectedDates = computed(() => {
+    const value = normalizeCalendarValue(this.value());
+    if (!value) {
+      return [];
+    }
+    return Array.isArray(value) ? value : [value];
   });
 
-  protected readonly textClasses = computed(() => {
-    const hasValue = !!this.value();
-    return mergeClasses(!hasValue && 'text-muted-foreground');
-  });
-
-  protected readonly popoverClasses = computed(() => mergeClasses('w-auto p-0'));
+  protected readonly isEmpty = computed(() => this.selectedDates().length === 0);
 
   protected readonly displayText = computed(() => {
-    const date = this.value();
-    if (!date) {
-      return this.placeholder();
+    const dates = this.selectedDates();
+    if (!dates.length) {
+      return this.zPlaceholder();
     }
-    return this.formatDate(date, this.zFormat());
+
+    const format = this.zFormat();
+    if (this.zMode() === 'range') {
+      const [from, to] = dates;
+      return to
+        ? `${this.formatDate(from, format)}${RANGE_SEPARATOR}${this.formatDate(to, format)}`
+        : this.formatDate(from, format);
+    }
+
+    return dates.map(date => this.formatDate(date, format)).join(', ');
   });
 
-  protected onDateChange(date: Date | Date[]): void {
-    // Date picker always uses single mode, so we can safely cast
-    const singleDate = Array.isArray(date) ? (date[0] ?? null) : date;
-    this.value.set(singleDate);
-    this.onChange(singleDate);
+  protected onCalendarValueChange(value: CalendarValue): void {
+    this.value.set(value);
+    this.onChange(value);
     this.onTouched();
-    this.dateChange.emit(singleDate);
+    this.dateChange.emit(value);
 
-    this.popoverDirective().hide();
+    if (this.shouldCloseOnSelect(value)) {
+      this.popoverDirective().hide();
+    }
+  }
+
+  /** Single mode closes on pick, range once both ends are set, multiple stays open. */
+  private shouldCloseOnSelect(value: CalendarValue): boolean {
+    switch (this.zMode()) {
+      case 'single':
+        return value !== null;
+      case 'range':
+        return Array.isArray(value) && value.length >= 2;
+      default:
+        return false;
+    }
   }
 
   protected onPopoverVisibilityChange(visible: boolean): void {
-    if (visible) {
-      setTimeout(() => {
-        if (this.calendar()) {
-          this.calendar().resetNavigation();
-        }
-      });
+    if (!visible) {
+      return;
     }
+
+    // The calendar is only created once the popover renders, hence the deferral.
+    setTimeout(() => this.calendar()?.resetNavigation());
   }
 
   private formatDate(date: Date, format: string): string {
     return this.datePipe.transform(date, format) ?? '';
   }
 
-  writeValue(value: Date | null): void {
+  writeValue(value: CalendarValue): void {
     this.value.set(value);
   }
 
-  registerOnChange(fn: (value: Date | null) => void): void {
+  registerOnChange(fn: (value: CalendarValue) => void): void {
     this.onChange = fn;
   }
 

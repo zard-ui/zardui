@@ -135,9 +135,11 @@ export class ZardCommandOptionComponent {
     this.isSelected.set(selected);
   }
 
-  focus() {
-    const element = this.elementRef.nativeElement;
-    element.focus();
-    element.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  /**
+   * Brings this option into view. Focus intentionally stays on the search
+   * input while navigating, so typing keeps filtering the list.
+   */
+  scrollIntoView() {
+    this.elementRef.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
   }
 }

@@ -1,3 +1,53 @@
+## 1.0.0-beta.102 (2026-08-15)
+
+### 🐛 Bug Fixes
+
+- **command:** focus input and show highlight on keyboard nav ([#690](https://github.com/zard-ui/zardui/pull/690))
+
+### ❤️ Thank You
+
+- Samuel Rizzon
+
+## 1.0.0-beta.101 (2026-08-15)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.100 (2026-08-14)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.99 (2026-08-14)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.98 (2026-08-14)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.97 (2026-08-10)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.96 (2026-08-10)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.95 (2026-08-08)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.94 (2026-08-08)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.93 (2026-08-07)
+
+This was a version bump only, there were no code changes.
+
+## 1.0.0-beta.92 (2026-08-07)
+
+This was a version bump only, there were no code changes.
+
 ## 1.0.0-beta.91 (2026-08-05)
 
 This was a version bump only, there were no code changes.

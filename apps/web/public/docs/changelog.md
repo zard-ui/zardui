@@ -1235,28 +1235,51 @@ Floating content container that appears on trigger with customizable positioning
 ```
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardPopoverComponent, ZardPopoverDirective } from '../popover.component';
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardPopoverImports } from '@/shared/components/popover/popover.imports';
 
 @Component({
-  selector: 'z-popover-default-demo',
-  imports: [ZardButtonComponent, ZardPopoverComponent, ZardPopoverDirective],
-  standalone: true,
+  selector: 'z-popover-preview-demo',
+  imports: [ZardButtonComponent, ZardInputComponent, ...ZardPopoverImports],
   template: `
-    <button type="button" z-button zPopover [zContent]="popoverContent" zType="outline">Open popover</button>
+    <button type="button" z-button zPopover zType="outline" [zContent]="popoverContent">Open popover</button>
 
     <ng-template #popoverContent>
-      <z-popover>
-        <div class="space-y-2">
-          <h4 class="leading-none font-medium">Dimensions</h4>
-          <p class="text-muted-foreground text-sm">Set the dimensions for the layer.</p>
+      <z-popover class="w-80">
+        <div z-popover-header>
+          <h4 z-popover-title>Dimensions</h4>
+          <p z-popover-description>Set the dimensions for the layer.</p>
+        </div>
+
+        <div class="grid gap-2">
+          @for (dimension of dimensions; track dimension.id) {
+            <div class="grid grid-cols-3 items-center gap-4">
+              <label class="text-sm" [attr.for]="dimension.id">{{ dimension.label }}</label>
+              <input
+                z-input
+                type="text"
+                class="col-span-2 h-8"
+                [id]="dimension.id"
+                [value]="dimension.value"
+                [attr.aria-label]="dimension.label"
+              />
+            </div>
+          }
         </div>
       </z-popover>
     </ng-template>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ZardDemoPopoverDefaultComponent {}
+export class ZardDemoPopoverPreviewComponent {
+  readonly dimensions = [
+    { id: 'width', label: 'Width', value: '100%' },
+    { id: 'maxWidth', label: 'Max. width', value: '300px' },
+    { id: 'height', label: 'Height', value: '25px' },
+    { id: 'maxHeight', label: 'Max. height', value: 'none' },
+  ];
+}
 ```
 
 #### alert-dialog
@@ -1557,7 +1580,7 @@ export class ZardDemoSliderDefaultComponent {}
 
 ## April 2025
 
-Form foundations and CLI launch! New Input and Form components with validation support. Official CLI tool released for easy project initialization and component installation.
+Form foundations and CLI launch! New Input and Form components with validation support. Official CLI tool released for easy project initialization and component installation. The Form component has since been discontinued — use Field instead, which covers the same ground and is what the form guides are built on.
 
 ### New Components
 
@@ -1595,96 +1618,6 @@ import { ZardInputComponent } from '@/shared/components/input/input.component';
   `,
 })
 export class ZardDemoInputDefaultComponent {}
-```
-
-#### form
-
-## Run the CLI
-
-Use the CLI to add form to your project.
-
-```
-npx zard-cli@latest add form
-```
-
-Complete form component with field management, validation, error handling, and submission control.
-
-Full Name
-
-This is your display name.
-
-Email
-
-We'll never share your email with anyone else.
-
-Bio
-
-Optional: Brief description about yourself.
-
-```
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
-import { FormsModule } from '@angular/forms';
-
-import { ZardIdDirective } from '@/shared/core';
-
-import { ZardButtonComponent } from '../../button/button.component';
-import { ZardInputComponent } from '../../input/input.component';
-import { ZardFormImports } from '../form.imports';
-
-@Component({
-  selector: 'zard-demo-form-default',
-  imports: [FormsModule, ZardButtonComponent, ZardInputComponent, ZardFormImports, ZardIdDirective],
-  template: `
-    <form class="max-w-sm space-y-6">
-      <z-form-field zardId="fullName" #f="zardId">
-        <label z-form-label zRequired [for]="f.id()">Full Name</label>
-        <z-form-control>
-          <input
-            z-input
-            type="text"
-            [id]="f.id()"
-            placeholder="Enter your full name"
-            [(ngModel)]="fullName"
-            name="fullName"
-          />
-        </z-form-control>
-        <z-form-message>This is your display name.</z-form-message>
-      </z-form-field>
-
-      <z-form-field zardId="email" #e="zardId">
-        <label z-form-label zRequired [for]="e.id()">Email</label>
-        <z-form-control>
-          <input z-input type="email" [id]="e.id()" placeholder="Enter your email" [(ngModel)]="email" name="email" />
-        </z-form-control>
-        <z-form-message>We'll never share your email with anyone else.</z-form-message>
-      </z-form-field>
-
-      <z-form-field zardId="bio" #b="zardId">
-        <label z-form-label [for]="b.id()">Bio</label>
-        <z-form-control>
-          <textarea
-            z-input
-            [id]="b.id()"
-            placeholder="Tell us about yourself"
-            rows="3"
-            [(ngModel)]="bio"
-            name="bio"
-          ></textarea>
-        </z-form-control>
-        <z-form-message>Optional: Brief description about yourself.</z-form-message>
-      </z-form-field>
-
-      <button z-button zType="default" type="submit">Submit</button>
-    </form>
-  `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
-})
-export class ZardDemoFormDefaultComponent {
-  fullName = '';
-  email = '';
-  bio = '';
-}
 ```
 
 ## March 2025
@@ -1935,7 +1868,7 @@ Data table component with sorting, filtering, pagination, and customizable colum
 ```
 import { Component } from '@angular/core';
 
-import { ZardTableComponent } from '../table.component';
+import { ZardTableImports } from '../table.imports';
 
 interface Person {
   key: string;
@@ -1946,24 +1879,23 @@ interface Person {
 
 @Component({
   selector: 'z-demo-table-simple',
-  imports: [ZardTableComponent],
-  standalone: true,
+  imports: [ZardTableImports],
   template: `
     <table z-table>
-      <caption>A list of your recent invoices.</caption>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Age</th>
-          <th>Address</th>
+      <caption z-table-caption>A list of your recent invoices.</caption>
+      <thead z-table-header>
+        <tr z-table-row>
+          <th z-table-head>Name</th>
+          <th z-table-head>Age</th>
+          <th z-table-head>Address</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody z-table-body>
         @for (data of listOfData; track data.key) {
-          <tr>
-            <td class="font-medium">{{ data.name }}</td>
-            <td>{{ data.age }}</td>
-            <td>{{ data.address }}</td>
+          <tr z-table-row>
+            <td z-table-cell class="font-medium">{{ data.name }}</td>
+            <td z-table-cell>{{ data.age }}</td>
+            <td z-table-cell>{{ data.address }}</td>
           </tr>
         }
       </tbody>

@@ -1,7 +1,7 @@
 import { ALERT_DIALOG_DEMO_DEFAULT } from '@generated/components/alert-dialog/demo/default';
 import { DIALOG_DEMO_BASIC } from '@generated/components/dialog/demo/basic';
 import { DROPDOWN_DEMO_DEFAULT } from '@generated/components/dropdown/demo/default';
-import { POPOVER_DEMO_DEFAULT } from '@generated/components/popover/demo/default';
+import { POPOVER_DEMO_PREVIEW } from '@generated/components/popover/demo/preview';
 import { ALERT_DIALOG_CLI_ADD } from '@generated/installation/cli/add-alert-dialog';
 import { DIALOG_CLI_ADD } from '@generated/installation/cli/add-dialog';
 import { DROPDOWN_CLI_ADD } from '@generated/installation/cli/add-dropdown';
@@ -10,7 +10,7 @@ import { POPOVER_CLI_ADD } from '@generated/installation/cli/add-popover';
 import { ZardDemoAlertDialogDefaultComponent } from '@zard/components/alert-dialog/demo/default';
 import { ZardDemoDialogBasicComponent } from '@zard/components/dialog/demo/basic';
 import { ZardDropdownDemoComponent } from '@zard/components/dropdown/demo/default';
-import { ZardDemoPopoverDefaultComponent } from '@zard/components/popover/demo/default';
+import { ZardDemoPopoverPreviewComponent } from '@zard/components/popover/demo/preview';
 
 import { type ChangelogExample } from '../changelog-entry.interface';
 
@@ -25,11 +25,11 @@ export const JUNE_2025_EXAMPLES: ChangelogExample[] = [
     cliAdd: DIALOG_CLI_ADD,
   },
   {
-    name: 'default',
+    name: 'preview',
     description: 'Floating content container that appears on trigger with customizable positioning and close behavior.',
-    component: ZardDemoPopoverDefaultComponent,
+    component: ZardDemoPopoverPreviewComponent,
     componentName: 'popover',
-    codeData: POPOVER_DEMO_DEFAULT,
+    codeData: POPOVER_DEMO_PREVIEW,
     cliAdd: POPOVER_CLI_ADD,
   },
   {

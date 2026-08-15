@@ -15,6 +15,26 @@ export const calendarMonths = [
   'Dec',
 ] as const;
 
+/**
+ * Full month names used by the `label` caption. Hardcoded like `calendarMonths` and
+ * `calendarWeekdays` so every string the calendar renders comes from the same language —
+ * `toLocaleString` would follow the browser locale and mix languages inside the header.
+ */
+export const calendarMonthsLong = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+] as const;
+
 export const calendarWeekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'] as const;
 
 /**
@@ -29,20 +49,27 @@ export function isSameDay(date1: Date, date2: Date): boolean {
 }
 
 /**
- * Checks if a date is disabled based on min/max constraints
+ * Checks if a date is disabled based on min/max constraints and on the
+ * individually disabled days
  */
-export function isDateDisabled(date: Date, minDate: Date | null, maxDate: Date | null): boolean {
+export function isDateDisabled(
+  date: Date,
+  minDate: Date | null,
+  maxDate: Date | null,
+  disabledDates?: Date[],
+): boolean {
   if ((minDate && date < minDate) || (maxDate && date > maxDate)) {
     return true;
   }
-  return false;
+
+  return !!disabledDates?.some(disabledDate => isSameDay(date, disabledDate));
 }
 
 /**
  * Generates calendar days for a given month with all selection states
  */
 export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
-  const { year, month, mode, selectedDates, minDate, maxDate, disabled } = config;
+  const { year, month, mode, selectedDates, minDate, maxDate, disabled, disabledDates } = config;
 
   const today = new Date();
 
@@ -74,7 +101,7 @@ export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
     const date = new Date(currentWeekDate);
     const isCurrentMonth = date.getMonth() === month;
     const isToday = isSameDay(date, today);
-    const isDisabledDate = disabled || isDateDisabled(date, minDate, maxDate);
+    const isDisabledDate = disabled || isDateDisabled(date, minDate, maxDate, disabledDates);
 
     // Determine if date is selected
     let isSelected = false;
@@ -141,10 +168,11 @@ export function getSelectedDatesArray(value: CalendarValue, mode: CalendarMode):
 }
 
 /**
- * Generates a unique ID for a calendar day
+ * Generates a unique ID for a calendar day. `monthIndex` scopes the id when more than one
+ * month is rendered, so the ids stay unique across the grids of a multi-month calendar.
  */
-export function getDayId(index: number): string {
-  return `calendar-day-${index}`;
+export function getDayId(index: number, monthIndex = 0): string {
+  return monthIndex > 0 ? `calendar-m${monthIndex}-day-${index}` : `calendar-day-${index}`;
 }
 
 /**

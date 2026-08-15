@@ -3,6 +3,7 @@ import { ZardDropdownMenuContentComponent } from '@/shared/components/dropdown/d
 import {
   ZardDropdownMenuCheckboxItemComponent,
   ZardDropdownMenuGroupComponent,
+  ZardDropdownMenuLabelComponent,
   ZardDropdownMenuRadioGroupComponent,
   ZardDropdownMenuRadioItemComponent,
   ZardDropdownMenuSeparatorComponent,
@@ -10,8 +11,6 @@ import {
 } from '@/shared/components/dropdown/dropdown-primitives.component';
 import { ZardDropdownDirective } from '@/shared/components/dropdown/dropdown-trigger.directive';
 import { ZardDropdownMenuComponent } from '@/shared/components/dropdown/dropdown.component';
-import { ZardMenuLabelComponent } from '@/shared/components/menu/menu-label.component';
-import { ZardMenuShortcutComponent } from '@/shared/components/menu/menu-shortcut.component';
 
 export const ZardDropdownImports = [
   ZardDropdownMenuComponent,
@@ -23,7 +22,6 @@ export const ZardDropdownImports = [
   ZardDropdownMenuCheckboxItemComponent,
   ZardDropdownMenuRadioGroupComponent,
   ZardDropdownMenuRadioItemComponent,
-  ZardMenuLabelComponent,
-  ZardMenuShortcutComponent,
+  ZardDropdownMenuLabelComponent,
   ZardDropdownDirective,
 ] as const;

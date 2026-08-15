@@ -1,22 +1,31 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
-import { ZardComboboxComponent, type ZardComboboxOption } from '../combobox.component';
+import { ZardComboboxImports } from '../combobox.imports';
+import type { ZardComboboxOption } from '../combobox.types';
 
 @Component({
   selector: 'zard-demo-combobox-default',
-  imports: [ZardComboboxComponent],
+  imports: [ZardComboboxImports],
   standalone: true,
   template: `
-    <z-combobox
-      [options]="frameworks"
-      placeholder="Select framework..."
-      searchPlaceholder="Search framework..."
-      emptyText="No framework found."
-      (zComboSelected)="onSelect($event)"
-    />
+    <z-combobox [(zValue)]="value">
+      <z-combobox-input placeholder="Select a framework" />
+
+      <z-combobox-content>
+        <z-combobox-empty>No items found.</z-combobox-empty>
+
+        <z-combobox-list>
+          @for (framework of frameworks; track framework.value) {
+            <z-combobox-item [zValue]="framework.value">{{ framework.label }}</z-combobox-item>
+          }
+        </z-combobox-list>
+      </z-combobox-content>
+    </z-combobox>
   `,
 })
 export class ZardDemoComboboxDefaultComponent {
+  readonly value = signal<string | string[] | null>(null);
+
   frameworks: ZardComboboxOption[] = [
     { value: 'angular', label: 'Angular' },
     { value: 'react', label: 'React' },
@@ -25,8 +34,4 @@ export class ZardDemoComboboxDefaultComponent {
     { value: 'ember', label: 'Ember.js' },
     { value: 'nextjs', label: 'Next.js' },
   ];
-
-  onSelect(option: ZardComboboxOption) {
-    console.log('Selected:', option);
-  }
 }

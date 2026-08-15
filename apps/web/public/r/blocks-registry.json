@@ -1,10 +1,64 @@
 {
   "blocks": [
     {
-      "id": "authentication-01",
-      "title": "Authentication page",
-      "description": "A modern authentication page with email/password.",
-      "category": "Authentication"
+      "id": "login-01",
+      "title": "Login form",
+      "description": "A simple login form.",
+      "category": "Login"
+    },
+    {
+      "id": "login-02",
+      "title": "Login with cover image",
+      "description": "A two column login page with a cover image.",
+      "category": "Login"
+    },
+    {
+      "id": "login-03",
+      "title": "Login with muted background",
+      "description": "A login page with a muted background color.",
+      "category": "Login"
+    },
+    {
+      "id": "login-04",
+      "title": "Login with form and image",
+      "description": "A login page with form and image.",
+      "category": "Login"
+    },
+    {
+      "id": "login-05",
+      "title": "Email-only login",
+      "description": "A simple email-only login page.",
+      "category": "Login"
+    },
+    {
+      "id": "signup-01",
+      "title": "Signup form",
+      "description": "A simple signup form.",
+      "category": "Signup"
+    },
+    {
+      "id": "signup-02",
+      "title": "Signup with cover image",
+      "description": "A two column signup page with a cover image.",
+      "category": "Signup"
+    },
+    {
+      "id": "signup-03",
+      "title": "Signup with muted background",
+      "description": "A signup page with a muted background color.",
+      "category": "Signup"
+    },
+    {
+      "id": "signup-04",
+      "title": "Signup with form and image",
+      "description": "A signup page with form and image.",
+      "category": "Signup"
+    },
+    {
+      "id": "signup-05",
+      "title": "Signup with social providers",
+      "description": "A simple signup form with social providers.",
+      "category": "Signup"
     }
   ]
 }

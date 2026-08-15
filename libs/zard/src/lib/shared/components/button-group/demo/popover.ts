@@ -39,7 +39,7 @@ import { ZardTextareaComponent } from '@/shared/components/textarea/textarea.com
         <ng-icon name="lucideChevronDown" />
       </button>
       <ng-template #popoverContent>
-        <z-popover class="w-80 rounded-xl p-0 text-sm">
+        <z-popover class="w-80 gap-0 rounded-xl p-0 text-sm">
           <div class="border-b px-4 py-3">
             <p class="font-medium">Start a new task with Copilot</p>
             <p class="text-muted-foreground text-sm">Describe your task in natural language.</p>

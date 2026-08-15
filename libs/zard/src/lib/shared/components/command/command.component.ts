@@ -262,7 +262,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
         const nextIndex = this.findEnabledIndex(currentIndex, 1, filteredOptions);
         if (nextIndex >= 0) {
           this.selectedIndex.set(nextIndex);
-          filteredOptions[nextIndex].focus();
+          filteredOptions[nextIndex].scrollIntoView();
         }
         break;
       }
@@ -270,7 +270,7 @@ export class ZardCommandComponent implements ControlValueAccessor, ZardCommand {
         const prevIndex = this.findEnabledIndex(currentIndex, -1, filteredOptions);
         if (prevIndex >= 0) {
           this.selectedIndex.set(prevIndex);
-          filteredOptions[prevIndex].focus();
+          filteredOptions[prevIndex].scrollIntoView();
         }
         break;
       }
