@@ -206,14 +206,16 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
       this.renderer.listen(overlayElement, 'focusout', (event: FocusEvent) => {
         const nextTarget = event.relatedTarget;
 
-        if (
-          nextTarget instanceof Node &&
-          (overlayElement.contains(nextTarget) || this.elementRef.nativeElement.contains(nextTarget))
-        ) {
+        if (nextTarget instanceof Node && overlayElement.contains(nextTarget)) {
           return;
         }
 
         this.focusWithinOverlay = false;
+
+        if (nextTarget instanceof Node && this.elementRef.nativeElement.contains(nextTarget)) {
+          return;
+        }
+
         this.scheduleClose();
       }),
       this.renderer.listen(overlayElement, 'keydown', (event: KeyboardEvent) => {
