@@ -7,7 +7,7 @@ import userEvent from '@testing-library/user-event';
 
 import { ZardHoverCardComponent, ZardHoverCardDirective } from './hover-card.component';
 
-const CARD_CONTENT = 'The React Framework – created and maintained by @vercel.';
+const CARD_CONTENT = 'The React Framework - created and maintained by @vercel.';
 
 interface SetupOptions {
   closeDelay?: number;
@@ -334,5 +334,21 @@ describe('ZardHoverCardDirective', () => {
     jest.advanceTimersByTime(0);
 
     expect(screen.queryByText(CARD_CONTENT)).not.toBeInTheDocument();
+  });
+
+  it('associates the open trigger with the overlay', async () => {
+    await setup({ openDelay: 0 });
+    const hoverCardTrigger = trigger();
+
+    expect(hoverCardTrigger).toHaveAttribute('aria-expanded', 'false');
+    expect(hoverCardTrigger).not.toHaveAttribute('aria-controls');
+
+    await hoverTrigger(0);
+
+    const controlledId = hoverCardTrigger.getAttribute('aria-controls');
+
+    expect(hoverCardTrigger).toHaveAttribute('aria-expanded', 'true');
+    expect(controlledId).toBeTruthy();
+    expect(document.getElementById(controlledId!)).toBeInTheDocument();
   });
 });

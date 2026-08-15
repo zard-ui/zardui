@@ -30,6 +30,7 @@ import {
 } from '@angular/core';
 
 import type { ClassValue } from 'clsx';
+import type { Subscription } from 'rxjs';
 
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
@@ -108,6 +109,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   protected readonly isOpen = signal(false);
   protected readonly contentId = `z-hover-card-${nextHoverCardId++}`;
 
+  private readonly overlayReady = signal(false);
   private positionStrategy?: FlexibleConnectedPositionStrategy;
   private readonly viewContainerRef: ViewContainerRef = inject(ViewContainerRef);
   private readonly overlay = inject(Overlay);
@@ -117,6 +119,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   private readonly renderer = inject(Renderer2);
 
   private overlayRef?: OverlayRef;
+  private positionChangesSubscription?: Subscription;
   private openTimer?: ReturnType<typeof setTimeout>;
   private closeTimer?: ReturnType<typeof setTimeout>;
   private overlayListeners: Array<() => void> = [];
@@ -129,20 +132,30 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
 
   constructor() {
     effect(() => {
-      this.zPlacement();
+      const placement = this.zPlacement();
 
-      if (!this.positionStrategy) {
+      if (!this.overlayReady() || !this.positionStrategy) {
         return;
       }
 
-      this.positionStrategy.withPositions(this.getPositions());
+      this.positionStrategy.withPositions(
+        HOVER_CARD_FALLBACKS[placement].map(fallback => HOVER_CARD_POSITIONS[fallback]),
+      );
 
-      this.overlayRef?.updatePosition();
+      if (this.overlayRef?.hasAttached()) {
+        this.overlayRef.updatePosition();
+      }
+    });
 
+    effect(() => {
       const visible = this.zVisible();
 
       if (!this.hasObservedInitialVisible) {
         this.hasObservedInitialVisible = true;
+        return;
+      }
+
+      if (!this.overlayReady()) {
         return;
       }
 
@@ -166,6 +179,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
     this.cancelOpen();
     this.cancelClose();
     this.removeOverlayListeners();
+    this.positionChangesSubscription?.unsubscribe();
     this.overlayRef?.dispose();
   }
 
@@ -267,7 +281,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
       return;
     }
 
-    const positionStrategy = this.overlayPositionBuilder
+    this.positionStrategy = this.overlayPositionBuilder
       .flexibleConnectedTo(this.elementRef)
       .withPositions(this.getPositions())
       .withPush(false)
@@ -275,12 +289,16 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
       .withViewportMargin(8);
 
     this.overlayRef = this.overlay.create({
-      positionStrategy,
+      positionStrategy: this.positionStrategy,
       hasBackdrop: false,
       scrollStrategy: this.overlay.scrollStrategies.reposition(),
     });
 
     this.overlayRef.overlayElement.id = this.contentId;
+    this.positionChangesSubscription = this.positionStrategy.positionChanges.subscribe(change => {
+      this.updateContentSide(this.getSideFromPosition(change.connectionPair));
+    });
+    this.overlayReady.set(true);
   }
 
   private openNow(): void {
@@ -295,6 +313,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
 
     this.overlayRef.attach(portal);
     this.setupOverlayListeners();
+    this.updateContentSide(this.zPlacement());
     this.isOpen.set(true);
     this.zVisibleChange.emit(true);
   }
@@ -350,6 +369,41 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
       this.closeTimer = undefined;
     }
   }
+
+  private getSideFromPosition(position: ConnectedPosition): ZardHoverCardPlacement {
+    if (position.originY === 'bottom' && position.overlayY === 'top') {
+      return 'bottom';
+    }
+
+    if (position.originY === 'top' && position.overlayY === 'bottom') {
+      return 'top';
+    }
+
+    if (position.originX === 'end' && position.overlayX === 'start') {
+      return 'right';
+    }
+
+    return 'left';
+  }
+
+  private updateContentSide(side: ZardHoverCardPlacement): void {
+    const content = this.overlayRef?.overlayElement.querySelector<HTMLElement>('z-hover-card');
+
+    if (!content) {
+      return;
+    }
+
+    const transformOrigins: Record<ZardHoverCardPlacement, string> = {
+      top: 'bottom center',
+      bottom: 'top center',
+      left: 'right center',
+      right: 'left center',
+    };
+
+    content.dataset['state'] = 'open';
+    content.dataset['side'] = side;
+    content.style.setProperty('--z-hover-card-transform-origin', transformOrigins[side]);
+  }
 }
 
 @Component({
@@ -360,6 +414,7 @@ export class ZardHoverCardDirective implements OnInit, OnDestroy {
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'hover-card-content',
     '[class]': 'classes()',
   },
   exportAs: 'zHoverCard',

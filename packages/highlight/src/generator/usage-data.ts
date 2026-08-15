@@ -378,7 +378,15 @@ import { ZardTabGroupComponent } from '@/shared/components/tabs/tabs.component';
 </z-bubble>`,
   },
   'hover-card': {
-    importCode: `import { ZardHoverCardComponent } from '@/shared/components/hover-card/hover-card.component';`,
-    templateCode: `<z-hover-card>Hover Card</z-hover-card>`,
+    importCode: `import { ZardHoverCardComponent, ZardHoverCardDirective } from '@/shared/components/hover-card/hover-card.component';`,
+    templateCode: `<button [zHoverCard]="content">
+  Hover Here
+</button>
+
+<ng-template #content>
+  <z-hover-card>
+    The React Framework - created and maintained by @vercel.
+  </z-hover-card>
+</ng-template>`,
   },
 };
