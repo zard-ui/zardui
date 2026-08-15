@@ -11,6 +11,7 @@ import { RegistryContributingSection } from './sections/contributing.component';
 import { RegistryCustomRegistrySection } from './sections/custom-registry.component';
 import { RegistryDependenciesSection } from './sections/dependencies.component';
 import { RegistryHowItWorksSection } from './sections/how-it-works.component';
+import { RegistryIconCatalogSection } from './sections/icon-catalog.component';
 import { RegistryItemSchemaSection } from './sections/item-schema.component';
 import { RegistryLocalDevelopmentSection } from './sections/local-development.component';
 import { RegistryOverviewSection } from './sections/overview.component';
@@ -30,6 +31,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
     RegistryHowItWorksSection,
     RegistryRegistryJsonSection,
     RegistryItemSchemaSection,
+    RegistryIconCatalogSection,
     RegistryDependenciesSection,
     RegistryConsumingSection,
     RegistryBlocksSection,
@@ -55,6 +57,7 @@ import { ScrollSpyDirective } from '../../directives/scroll-spy.directive';
       <registry-how-it-works-section scrollSpyItem="how-it-works" id="how-it-works"></registry-how-it-works-section>
       <registry-registry-json-section scrollSpyItem="registry-json" id="registry-json"></registry-registry-json-section>
       <registry-item-schema-section scrollSpyItem="item-schema" id="item-schema"></registry-item-schema-section>
+      <registry-icon-catalog-section scrollSpyItem="icon-catalog" id="icon-catalog"></registry-icon-catalog-section>
       <registry-dependencies-section scrollSpyItem="dependencies" id="dependencies"></registry-dependencies-section>
       <registry-consuming-section scrollSpyItem="consuming" id="consuming"></registry-consuming-section>
       <registry-blocks-section scrollSpyItem="blocks" id="blocks"></registry-blocks-section>
@@ -81,6 +84,7 @@ export class RegistryPage implements OnInit {
       { id: 'how-it-works', label: 'How it works', type: 'custom' },
       { id: 'registry-json', label: 'registry.json', type: 'custom' },
       { id: 'item-schema', label: 'Item schema', type: 'custom' },
+      { id: 'icon-catalog', label: 'icons.json', type: 'custom' },
       { id: 'dependencies', label: 'Dependencies', type: 'custom' },
       { id: 'consuming', label: 'Consuming the registry', type: 'custom' },
       { id: 'blocks', label: 'Blocks registry', type: 'custom' },

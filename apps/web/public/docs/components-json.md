@@ -43,6 +43,38 @@ The style for your components. Currently, **Zard/ui only supports the "css" styl
 }
 ```
 
+## Icons
+
+The `icons` property names the icon set the components are written against. Every component draws through `ng-icons` , which stays the dependency either way — this picks which of its packages comes along ( `@ng-icons/lucide` ) and which names the components import.
+
+**Supported values:**`lucide`
+
+components.json
+
+```
+{
+  "icons": "lucide"
+}
+```
+
+Lucide is the only set supported today, so this is the only value the CLI accepts — writing anything else makes `add` reject the file. The property exists ahead of the sets that will follow: the registry already publishes, for every component, which icons it draws, so supporting another one is a matter of translating names rather than rewriting components.
+
+A `components.json` written before this property existed is read as `lucide` .
+
+## RTL
+
+The `rtl` property declares that the project reads right to left. It defaults to `false` .
+
+components.json
+
+```
+{
+  "rtl": false
+}
+```
+
+Turning it on does not change what the CLI installs yet — the components are the same either way. It is the place where that preference will live once they ship right-to-left variants, and it is in the file now so that a project can record the intent before then.
+
 ## Project Type
 
 The `projectType` property records the kind of project you chose when running init. The CLI uses it to know where the components live and how the build is wired: which file holds the TypeScript paths, whether Tailwind goes through PostCSS or a Vite plugin, and whether there is an application to register providers in.
@@ -191,6 +223,8 @@ components.json
 {
   "$schema": "https://zardui.com/schema.json",
   "style": "css",
+  "icons": "lucide",
+  "rtl": false,
   "projectType": "angular",
   "appConfigFile": "src/app/app.config.ts",
   "packageManager": "npm",

@@ -2,6 +2,8 @@
 {
   "$schema": "https://zardui.com/schema.json",
   "style": "css",
+  "icons": "lucide",
+  "rtl": false,
   "projectType": "analog",
   "appConfigFile": "src/app/app.config.ts",
   "packageManager": "npm",

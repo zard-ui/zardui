@@ -44,7 +44,7 @@ bunx zard-cli@latest init
 ✔  Writing configuration…
 
    ✔  components.json                 —  component & utils aliases
-   ✔  dependencies                    —  CDK, CVA, tailwind-merge, ng-icons
+   ✔  dependencies                    —  CDK, CVA, tailwind-merge, ng-icons (Lucide)
    ✔  apps/web/src/app/app.config.ts  —  zard/ui providers
    ✔  apps/web/.postcssrc.json        —  Tailwind PostCSS plugin
    ✔  apps/web/src/styles.css         —  theme tokens (neutral)

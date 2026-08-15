@@ -1,0 +1,92 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zardui.com/schema/registry.json",
+  "title": "zard/ui registry index",
+  "description": "The index a registry publishes at /r/registry.json. It carries what is needed to resolve an install, never the source code, which lives in the individual item files at /r/<name>.json.",
+  "type": "object",
+  "required": ["name", "homepage", "version", "items"],
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": {
+      "type": "integer",
+      "minimum": 1,
+      "default": 1,
+      "description": "The shape of this file, not the version of the package — that is `version`. It rises when a change breaks readers (a field removed, a meaning changed); a new optional field does not raise it. A client that reads up to a lower version should refuse the registry and say so, instead of misreading it. Absent means 1, from before the field existed."
+    },
+    "name": { "type": "string", "description": "The registry's name." },
+    "homepage": { "type": "string", "format": "uri" },
+    "version": {
+      "type": "string",
+      "description": "The release the content was built from. Informational: use schemaVersion to decide whether you can read it."
+    },
+    "items": {
+      "type": "array",
+      "items": { "$ref": "#/definitions/item" }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "item": {
+      "type": "object",
+      "required": ["name", "type", "files"],
+      "properties": {
+        "name": { "type": "string" },
+        "type": { "type": "string", "examples": ["registry:component"] },
+        "basePath": {
+          "type": "string",
+          "description": "The directory the files are written into, when it differs from the item's name."
+        },
+        "dependencies": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "npm packages the item needs at runtime."
+        },
+        "devDependencies": { "type": "array", "items": { "type": "string" } },
+        "registryDependencies": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Other items of this registry that must be installed alongside."
+        },
+        "icons": { "$ref": "#/definitions/icons" },
+        "files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "The file names of the item. The contents are in /r/<name>.json."
+        }
+      },
+      "additionalProperties": false
+    },
+    "icons": {
+      "type": "object",
+      "required": ["family", "symbols", "tokens"],
+      "description": "The icons the component draws, and the set they are written in. Present on every item; the lists come back empty for a component that draws none, which is how 'uses no icons' is told apart from 'published before this field existed'.",
+      "properties": {
+        "family": {
+          "type": "string",
+          "description": "The icon set the published files are written in. A client installing with another set translates the symbols using /r/icons.json."
+        },
+        "symbols": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "The identifiers as they appear in the code (lucideCheck)."
+        },
+        "tokens": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "The same icons by the set-neutral key of the translation table (check)."
+        },
+        "demos": {
+          "type": "object",
+          "description": "The icons that only appear in the documentation examples. Present in the item file, left out of the index, which is fetched on every command and does not need them.",
+          "required": ["symbols", "tokens"],
+          "properties": {
+            "symbols": { "type": "array", "items": { "type": "string" } },
+            "tokens": { "type": "array", "items": { "type": "string" } }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

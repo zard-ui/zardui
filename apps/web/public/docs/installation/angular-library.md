@@ -676,6 +676,8 @@ components.json
 {
   "$schema": "https://zardui.com/schema.json",
   "style": "css",
+  "icons": "lucide",
+  "rtl": false,
   "projectType": "angular-library",
   "appConfigFile": "",
   "packageManager": "npm",

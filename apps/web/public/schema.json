@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://zardui.com/schema.json",
+  "title": "components.json",
+  "description": "Configuration for a project using zard/ui. Written by `zard-cli init` and read by every other command.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "This file's schema. Keeping it lets your editor validate and complete the fields below."
+    },
+    "style": {
+      "type": "string",
+      "enum": ["css"],
+      "default": "css",
+      "description": "How the components are styled. CSS is the only option today."
+    },
+    "icons": {
+      "type": "string",
+      "default": "lucide",
+      "examples": ["lucide"],
+      "description": "The icon set the components are written against. Every component draws through ng-icons, which stays the dependency either way; this picks which of its packages comes along. The valid values are the ones the registry publishes in icons.json — `lucide` is the only one today, and the CLI lists the others if you write something it does not know."
+    },
+    "rtl": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the project reads right to left. Does not change what the CLI installs yet; it records the intent for when the components ship right-to-left variants."
+    },
+    "projectType": {
+      "type": "string",
+      "enum": ["angular", "angular-library", "nx", "nx-library", "analog"],
+      "default": "angular",
+      "description": "The kind of project. Decides which tsconfig holds the paths, whether Tailwind goes through PostCSS or a Vite plugin, and whether there is an application to register providers in."
+    },
+    "appConfigFile": {
+      "type": "string",
+      "default": "src/app/app.config.ts",
+      "description": "The file that holds the application providers, where provideZard() is registered. Empty in a library, which has no application config."
+    },
+    "packageManager": {
+      "type": "string",
+      "enum": ["npm", "yarn", "pnpm", "bun"],
+      "default": "npm",
+      "description": "The package manager used to install dependencies."
+    },
+    "registryUrl": {
+      "type": "string",
+      "format": "uri",
+      "description": "A registry other than the official one, for teams publishing their own component set. Must be HTTPS, or localhost during development."
+    },
+    "tailwind": {
+      "type": "object",
+      "description": "Where the theme tokens live.",
+      "properties": {
+        "css": {
+          "type": "string",
+          "default": "src/styles.css",
+          "description": "The global stylesheet the init command writes the theme tokens into."
+        },
+        "baseColor": {
+          "type": "string",
+          "default": "slate",
+          "description": "The base colour of the generated theme."
+        }
+      },
+      "additionalProperties": false
+    },
+    "baseUrl": {
+      "type": "string",
+      "default": "src/app",
+      "description": "The root the aliases below resolve from — the directory that holds the application code."
+    },
+    "aliases": {
+      "type": "object",
+      "description": "The import paths components are written with. The CLI maps them in your tsconfig.",
+      "properties": {
+        "components": { "type": "string", "default": "@/shared/components" },
+        "utils": { "type": "string", "default": "@/shared/utils" },
+        "core": { "type": "string", "default": "@/shared/core" },
+        "services": { "type": "string", "default": "@/shared/services" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

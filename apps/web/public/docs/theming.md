@@ -426,7 +426,7 @@ Destructive
 
 Muted copy, for the text that supports the rest.
 
-- [Build your own theme →](/themes)
+[Build your own theme →](/themes)
 
 src/styles.css
 
