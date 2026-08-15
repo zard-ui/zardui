@@ -1,11 +1,11 @@
 ---
 title: Calendar
-description: A flexible and accessible calendar component for selecting dates. Built with modern Angular patterns and full keyboard navigation support.
+description: A calendar component that allows users to select a date or a range of dates.
 ---
 
 # Calendar
 
-A flexible and accessible calendar component for selecting dates. Built with modern Angular patterns and full keyboard navigation support.
+A calendar component that allows users to select a date or a range of dates.
 
 ## Installation
 
@@ -19,6 +19,7 @@ npx zard-cli@latest add calendar
 
 ```angular-ts
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
@@ -26,7 +27,8 @@ import {
   input,
   linkedSignal,
   model,
-  viewChild,
+  numberAttribute,
+  viewChildren,
   ViewEncapsulation,
 } from '@angular/core';
 import { outputFromObservable, outputToObservable } from '@angular/core/rxjs-interop';
@@ -37,7 +39,11 @@ import { filter, map } from 'rxjs';
 
 import { ZardCalendarGridComponent } from '@/shared/components/calendar/calendar-grid.component';
 import { ZardCalendarNavigationComponent } from '@/shared/components/calendar/calendar-navigation.component';
-import type { CalendarMode, CalendarValue } from '@/shared/components/calendar/calendar.types';
+import type {
+  CalendarMode,
+  CalendarValue,
+  ZardCalendarCaptionLayout,
+} from '@/shared/components/calendar/calendar.types';
 import {
   generateCalendarDays,
   getSelectedDatesArray,
@@ -45,34 +51,50 @@ import {
   makeSafeDate,
   normalizeCalendarValue,
 } from '@/shared/components/calendar/calendar.utils';
-import { calendarVariants } from '@/shared/components/calendar/calendar.variants';
+import {
+  calendarMonthsVariants,
+  calendarMonthVariants,
+  calendarVariants,
+} from '@/shared/components/calendar/calendar.variants';
 import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
+
+import type { ZardButtonTypeVariants } from '../button/button.variants';
 
 @Component({
   selector: 'z-calendar, [z-calendar]',
   imports: [ZardCalendarNavigationComponent, ZardCalendarGridComponent],
   template: `
-    <div [class]="classes()">
-      <z-calendar-navigation
-        [currentMonth]="currentMonthValue()"
-        [currentYear]="currentYearValue()"
-        [minDate]="minDate()"
-        [maxDate]="maxDate()"
-        [disabled]="disabled()"
-        (monthChange)="onMonthChange($event)"
-        (yearChange)="onYearChange($event)"
-        (previousMonth)="previousMonth()"
-        (nextMonth)="nextMonth()"
-      />
+    <div [class]="monthsClasses()">
+      @for (month of visibleMonths(); track month.key; let i = $index, last = $last) {
+        <div [class]="monthClasses()">
+          <z-calendar-navigation
+            [currentMonth]="month.month.toString()"
+            [currentYear]="month.year.toString()"
+            [minDate]="minDate()"
+            [maxDate]="maxDate()"
+            [disabled]="disabled()"
+            [zCaptionLayout]="zCaptionLayout()"
+            [zButtonVariant]="zButtonVariant()"
+            [zShowPreviousButton]="i === 0"
+            [zShowNextButton]="last"
+            (monthChange)="onMonthChange($event, i)"
+            (yearChange)="onYearChange($event, i)"
+            (previousMonth)="previousMonth()"
+            (nextMonth)="nextMonth()"
+          />
 
-      <z-calendar-grid
-        [calendarDays]="calendarDays()"
-        [disabled]="disabled()"
-        (dateSelect)="onDateSelect($event)"
-        (previousMonth)="onGridPreviousMonth($event)"
-        (nextMonth)="onGridNextMonth($event)"
-        (navigateYear)="onNavigateYear($event)"
-      />
+          <z-calendar-grid
+            [calendarDays]="month.days"
+            [disabled]="disabled()"
+            [zShowOutsideDays]="zShowOutsideDays()"
+            [zMonthIndex]="i"
+            (dateSelect)="onDateSelect($event)"
+            (previousMonth)="onGridPreviousMonth($event)"
+            (nextMonth)="onGridNextMonth($event)"
+            (navigateYear)="onNavigateYear($event)"
+          />
+        </div>
+      }
     </div>
   `,
   providers: [
@@ -85,19 +107,32 @@ import { mergeClasses, noopFn } from '@/shared/utils/merge-classes';
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
+    'data-slot': 'calendar',
+    '[class]': 'classes()',
     '[attr.tabindex]': '0',
   },
   exportAs: 'zCalendar',
 })
 export class ZardCalendarComponent implements ControlValueAccessor {
-  private readonly gridRef = viewChild.required(ZardCalendarGridComponent);
+  private readonly gridRefs = viewChildren(ZardCalendarGridComponent);
+
+  /** The grid that owns the roving focus — always the first rendered month. */
+  private gridRef(): ZardCalendarGridComponent | undefined {
+    return this.gridRefs()[0];
+  }
+
+  private clearFocus(): void {
+    for (const grid of this.gridRefs()) {
+      grid.setFocusedDayIndex(-1);
+    }
+  }
 
   // Public method to reset navigation (useful for date-picker)
   resetNavigation(): void {
     const value = this.currentDate();
     this.currentMonthValue.set(value.getMonth().toString());
     this.currentYearValue.set(value.getFullYear().toString());
-    this.gridRef().setFocusedDayIndex(-1);
+    this.clearFocus();
   }
 
   // Public inputs
@@ -107,6 +142,11 @@ export class ZardCalendarComponent implements ControlValueAccessor {
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = model<boolean>(false);
+  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>('label');
+  readonly zButtonVariant = input<ZardButtonTypeVariants>('ghost');
+  readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
+  readonly zDisabledDates = input<Date[]>([]);
+  readonly zNumberOfMonths = input(1, { transform: numberAttribute });
 
   // Public outputs
   readonly dateChange = outputFromObservable(
@@ -147,32 +187,60 @@ export class ZardCalendarComponent implements ControlValueAccessor {
 
   protected readonly classes = computed(() => mergeClasses(calendarVariants(), this.class()));
 
-  protected readonly calendarDays = computed(() => {
+  protected readonly monthsClasses = computed(() => mergeClasses(calendarMonthsVariants()));
+
+  protected readonly monthClasses = computed(() => mergeClasses(calendarMonthVariants()));
+
+  /** First day of the month the navigation currently points at. */
+  private readonly navigationDate = computed(() => {
     const currentDate = this.currentDate();
     const navigationDate = makeSafeDate(
       Number.parseInt(this.currentYearValue()),
       Number.parseInt(this.currentMonthValue()),
       currentDate.getDate(),
     );
-    const selectedDate = Number.isNaN(navigationDate.getTime()) ? currentDate : navigationDate;
 
-    return generateCalendarDays({
-      year: selectedDate.getFullYear(),
-      month: selectedDate.getMonth(),
-      mode: this.zMode(),
-      selectedDates: getSelectedDatesArray(this.normalizedValue(), this.zMode()),
-      minDate: this.minDate(),
-      maxDate: this.maxDate(),
-      disabled: this.disabled(),
+    return Number.isNaN(navigationDate.getTime()) ? currentDate : navigationDate;
+  });
+
+  /** One entry per rendered month, starting at the navigation date. */
+  protected readonly visibleMonths = computed(() => {
+    const base = this.navigationDate();
+    const mode = this.zMode();
+    const selectedDates = getSelectedDatesArray(this.normalizedValue(), mode);
+    const total = Math.max(1, this.zNumberOfMonths());
+
+    return Array.from({ length: total }, (_, offset) => {
+      const monthDate = makeSafeDate(base.getFullYear(), base.getMonth() + offset, 1);
+      const year = monthDate.getFullYear();
+      const month = monthDate.getMonth();
+
+      return {
+        key: `${year}-${month}`,
+        year,
+        month,
+        days: generateCalendarDays({
+          year,
+          month,
+          mode,
+          selectedDates,
+          minDate: this.minDate(),
+          maxDate: this.maxDate(),
+          disabled: this.disabled(),
+          disabledDates: this.zDisabledDates(),
+        }),
+      };
     });
   });
 
-  protected onMonthChange(monthIndex: string | string[]): void {
-    if (Array.isArray(monthIndex)) {
-      console.warn('Calendar received array for month selection, expected single value. Ignoring:', monthIndex);
-      return;
-    }
+  /** Days of the first rendered month — the one the roving focus lives in. */
+  protected readonly calendarDays = computed(() => this.visibleMonths()[0].days);
 
+  /**
+   * @param monthOffset position of the month whose caption emitted the change, so a dropdown on
+   * the second rendered month moves the navigation base back by that many months.
+   */
+  protected onMonthChange(monthIndex: string, monthOffset = 0): void {
     if (!monthIndex?.trim()) {
       console.warn('Invalid month index received:', monthIndex);
       return;
@@ -184,19 +252,11 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       return;
     }
 
-    const currentDate = this.currentDate();
-    const selectedYear = Number.parseInt(this.currentYearValue());
-    const newDate = makeSafeDate(Number.isNaN(selectedYear) ? currentDate.getFullYear() : selectedYear, parsedMonth, 1);
-    this.currentMonthValue.set(newDate.getMonth().toString());
-    this.gridRef().setFocusedDayIndex(-1);
+    const displayed = this.displayedMonth(monthOffset);
+    this.rebaseNavigation(makeSafeDate(displayed.year, parsedMonth, 1), monthOffset);
   }
 
-  protected onYearChange(year: string | string[]): void {
-    if (Array.isArray(year)) {
-      console.warn('Calendar received array for year selection, expected single value. Ignoring:', year);
-      return;
-    }
-
+  protected onYearChange(year: string, monthOffset = 0): void {
     if (!year?.trim()) {
       console.warn('Invalid year received:', year);
       return;
@@ -208,11 +268,25 @@ export class ZardCalendarComponent implements ControlValueAccessor {
       return;
     }
 
-    const currentDate = this.currentDate();
-    const selectedMonth = Number.parseInt(this.currentMonthValue());
-    const newDate = makeSafeDate(parsedYear, Number.isNaN(selectedMonth) ? currentDate.getMonth() : selectedMonth, 1);
-    this.currentYearValue.set(newDate.getFullYear().toString());
-    this.gridRef().setFocusedDayIndex(-1);
+    const displayed = this.displayedMonth(monthOffset);
+    this.rebaseNavigation(makeSafeDate(parsedYear, displayed.month, 1), monthOffset);
+  }
+
+  /** The month currently rendered at `monthOffset`, falling back to the first one. */
+  private displayedMonth(monthOffset: number): { year: number; month: number } {
+    const months = this.visibleMonths();
+    return months[monthOffset] ?? months[0];
+  }
+
+  /**
+   * Moves the navigation so that `target` is what the month at `monthOffset` renders.
+   * With a single month this is just "go to target".
+   */
+  private rebaseNavigation(target: Date, monthOffset: number): void {
+    const base = makeSafeDate(target.getFullYear(), target.getMonth() - monthOffset, 1);
+    this.currentMonthValue.set(base.getMonth().toString());
+    this.currentYearValue.set(base.getFullYear().toString());
+    this.clearFocus();
   }
 
   protected previousMonth(): void {
@@ -224,7 +298,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     this.currentMonthValue.set(date.getMonth().toString());
     this.currentYearValue.set(date.getFullYear().toString());
 
-    this.gridRef().setFocusedDayIndex(-1);
+    this.clearFocus();
   }
 
   protected nextMonth(): void {
@@ -236,7 +310,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     this.currentMonthValue.set(date.getMonth().toString());
     this.currentYearValue.set(date.getFullYear().toString());
 
-    this.gridRef().setFocusedDayIndex(-1);
+    this.clearFocus();
   }
 
   protected onNavigateYear(direction: number): void {
@@ -247,7 +321,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     const baseMonth = Number.isNaN(month) ? current.getMonth() : month;
     const newDate = makeSafeDate(baseYear + direction, baseMonth, 1);
     this.currentYearValue.set(newDate.getFullYear().toString());
-    setTimeout(() => this.gridRef().resetFocus(), 0);
+    setTimeout(() => this.gridRef()?.resetFocus(), 0);
   }
 
   protected onGridPreviousMonth(event: { position: string; dayOfWeek: number }): void {
@@ -361,7 +435,7 @@ export class ZardCalendarComponent implements ControlValueAccessor {
     }
 
     if (targetIndex >= 0) {
-      this.gridRef().setFocusedDayIndex(targetIndex);
+      this.gridRef()?.setFocusedDayIndex(targetIndex);
     }
   }
 
@@ -404,99 +478,225 @@ export class ZardCalendarComponent implements ControlValueAccessor {
 ```
 
 ```angular-ts
-import { cva } from 'class-variance-authority';
+import { cva, type VariantProps } from 'class-variance-authority';
 
-export const calendarVariants = cva('bg-background p-3 w-fit rounded-lg border');
+import { mergeClasses } from '@/shared/utils/merge-classes';
 
-export const calendarMonthVariants = cva('flex flex-col w-fit gap-4');
-
-export const calendarNavVariants = cva('flex items-center justify-between gap-2 w-fit mb-4');
-
-export const calendarNavButtonVariants = cva(
-  'inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground size-7 bg-transparent p-0 opacity-50 hover:opacity-100',
+/**
+ * Every measurement of the calendar derives from two CSS variables declared on the root:
+ *
+ * - `--cell-size`: the width/height of a single day cell (default `--spacing(7)`)
+ * - `--cell-radius`: the corner radius of a day cell (default `var(--radius-md)`)
+ *
+ * Overriding them through the `class` input rescales the whole calendar, e.g.
+ * `class="[--cell-size:--spacing(12)]"`.
+ */
+export const calendarVariants = cva(
+  mergeClasses(
+    // `block` because these classes land on the `<z-calendar>` host, which is inline by default.
+    'group/calendar block w-fit bg-background p-2',
+    '[--cell-radius:var(--radius-md)] [--cell-size:--spacing(7)]',
+    'in-data-[slot=card-content]:bg-transparent in-data-[slot=popover-content]:bg-transparent',
+  ),
 );
 
-export const calendarWeekdaysVariants = cva('flex');
+/** Wraps every rendered month. Stacks on small screens and sits side by side from `md` up. */
+export const calendarMonthsVariants = cva('relative flex flex-col gap-4 md:flex-row');
 
-export const calendarWeekdayVariants = cva('text-muted-foreground font-normal text-center text-[0.8rem] w-8');
+export const calendarMonthVariants = cva('relative flex w-full flex-col gap-4');
 
-export const calendarWeekVariants = cva('flex w-full mt-2');
+export const calendarNavVariants = cva('absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1');
 
-export const calendarDayVariants = cva('p-0 relative focus-within:relative focus-within:z-20 flex mt-1 size-8 text-sm');
+/**
+ * Extra classes layered on top of `buttonVariants` — the navigation arrows are rendered with
+ * `<button z-button [zType]="zButtonVariant()">`, so the button component supplies the base styling.
+ */
+export const calendarNavButtonVariants = cva('size-(--cell-size) p-0 select-none aria-disabled:opacity-50');
 
-export const calendarDayButtonVariants = cva(
-  'p-0 font-normal flex items-center justify-center whitespace-nowrap rounded-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-accent hover:text-accent-foreground size-full text-sm',
+/** Placeholder that holds an arrow's slot on the months that do not own it. */
+export const calendarNavSpacerVariants = cva('size-(--cell-size)');
+
+export const calendarCaptionVariants = cva('flex h-(--cell-size) w-full items-center justify-center px-(--cell-size)');
+
+export const calendarDropdownsVariants = cva(
+  'flex h-(--cell-size) w-full items-center justify-center gap-1.5 text-sm font-medium',
+);
+
+export const calendarCaptionLabelVariants = cva('font-medium select-none', {
+  variants: {
+    layout: {
+      label: 'text-sm',
+      // In dropdown layout this label is what the user sees of the select underneath it,
+      // so it carries the control's height and padding.
+      dropdown: 'flex h-(--cell-size) items-center gap-1 rounded-(--cell-radius) px-2 text-sm',
+    },
+  },
+  defaultVariants: {
+    layout: 'label',
+  },
+});
+
+/**
+ * Wraps a caption dropdown. A native `<select>` is laid invisible on top of the visible label,
+ * so the browser owns the popup while the label owns the looks — the same trick shadcn uses.
+ * The focus ring therefore has to come from the select, through `has-[:focus-visible]`.
+ */
+export const calendarDropdownRootVariants = cva(
+  mergeClasses(
+    'relative isolate rounded-(--cell-radius) border border-input bg-background shadow-xs',
+    'has-[:focus-visible]:border-ring has-[:focus-visible]:ring-3 has-[:focus-visible]:ring-ring/50',
+    'has-[:disabled]:pointer-events-none has-[:disabled]:opacity-50',
+  ),
+);
+
+/** The native select itself: invisible, but on top and still clickable. */
+export const calendarDropdownVariants = cva('absolute inset-0 z-10 cursor-pointer bg-popover opacity-0');
+
+export const calendarWeekdaysVariants = cva('grid w-full grid-cols-7');
+
+export const calendarWeekdayVariants = cva(
+  mergeClasses(
+    'flex h-(--cell-size) w-full min-w-(--cell-size) items-center justify-center',
+    'rounded-(--cell-radius) text-[0.8rem] font-normal text-muted-foreground select-none',
+  ),
+);
+
+/** The day rows. `gap-y-2` reproduces the `week: mt-2` of shadcn; `gap-x-0` keeps the range rail continuous. */
+export const calendarWeekVariants = cva('mt-2 grid w-full grid-cols-7 gap-x-0 gap-y-2');
+
+export const calendarDayVariants = cva(
+  mergeClasses(
+    'group/day relative aspect-square h-full w-full rounded-(--cell-radius) p-0 text-center select-none',
+    // Round the range rail at both ends of every week.
+    '[&:nth-child(7n+1)]:rounded-s-(--cell-radius) [&:nth-child(7n)]:rounded-e-(--cell-radius)',
+  ),
   {
     variants: {
       selected: {
-        true: 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground focus:bg-primary focus:text-primary-foreground',
+        true: '',
         false: '',
       },
       today: {
-        true: 'bg-accent text-accent-foreground',
+        true: 'rounded-(--cell-radius) bg-muted text-foreground',
+        false: '',
+      },
+      rangeStart: {
+        true: mergeClasses(
+          'relative isolate z-0 rounded-s-(--cell-radius) bg-muted',
+          'after:absolute after:inset-y-0 after:end-0 after:w-4 after:bg-muted',
+          // No neighbour to bridge to at the end of a week — do not bleed outside the grid.
+          '[&:nth-child(7n)]:after:hidden',
+        ),
+        false: '',
+      },
+      rangeMiddle: {
+        true: 'rounded-none bg-muted',
+        false: '',
+      },
+      rangeEnd: {
+        true: mergeClasses(
+          'relative isolate z-0 rounded-e-(--cell-radius) bg-muted',
+          'after:absolute after:inset-y-0 after:start-0 after:w-4 after:bg-muted',
+          '[&:nth-child(7n+1)]:after:hidden',
+        ),
+        false: '',
+      },
+    },
+    compoundVariants: [
+      {
+        // A one-day range is a plain selected day: full radius, no rail.
+        rangeStart: true,
+        rangeEnd: true,
+        className: 'rounded-(--cell-radius) bg-transparent after:hidden',
+      },
+      {
+        // Today + selected outside of a range: the day button owns the highlight.
+        today: true,
+        selected: true,
+        rangeStart: false,
+        rangeMiddle: false,
+        rangeEnd: false,
+        className: 'bg-transparent',
+      },
+    ],
+    defaultVariants: {
+      selected: false,
+      today: false,
+      rangeStart: false,
+      rangeMiddle: false,
+      rangeEnd: false,
+    },
+  },
+);
+
+export const calendarDayButtonVariants = cva(
+  mergeClasses(
+    'relative isolate z-10 flex aspect-square size-auto w-full min-w-(--cell-size) flex-col items-center justify-center gap-1',
+    'rounded-(--cell-radius) border border-transparent p-0 text-sm leading-none font-normal',
+    'transition-colors outline-none',
+    'hover:bg-muted hover:text-foreground dark:hover:text-foreground',
+    'focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50',
+    'disabled:pointer-events-none disabled:opacity-50',
+    '[&>span]:text-xs [&>span]:opacity-70',
+  ),
+  {
+    variants: {
+      selected: {
+        true: 'bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+        false: '',
+      },
+      rangeStart: {
+        true: 'rounded-(--cell-radius) rounded-s-(--cell-radius) bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+        false: '',
+      },
+      rangeEnd: {
+        true: 'rounded-(--cell-radius) rounded-e-(--cell-radius) bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground',
+        false: '',
+      },
+      rangeMiddle: {
+        true: 'rounded-none bg-muted text-foreground hover:bg-muted hover:text-foreground',
         false: '',
       },
       outside: {
-        true: 'text-muted-foreground opacity-50',
+        true: 'text-muted-foreground aria-selected:text-muted-foreground',
         false: '',
       },
       disabled: {
         true: 'text-muted-foreground opacity-50 cursor-not-allowed',
         false: '',
       },
-      rangeStart: {
-        true: 'rounded-r-none bg-primary text-primary-foreground',
-        false: '',
-      },
-      rangeEnd: {
-        true: 'rounded-l-none bg-primary text-primary-foreground',
-        false: '',
-      },
-      inRange: {
-        true: 'rounded-none bg-accent hover:bg-accent',
-        false: '',
-      },
     },
     compoundVariants: [
       {
-        today: true,
-        selected: false,
-        rangeStart: false,
-        rangeEnd: false,
-        inRange: false,
-        className: 'bg-accent text-accent-foreground',
-      },
-      {
-        today: true,
-        selected: true,
-        className: 'bg-primary text-primary-foreground',
-      },
-      {
+        // A one-day range renders as a regular selected day.
         rangeStart: true,
         rangeEnd: true,
-        className: 'rounded-md bg-primary text-primary-foreground',
+        className: 'rounded-(--cell-radius) bg-primary text-primary-foreground',
       },
     ],
     defaultVariants: {
       selected: false,
-      today: false,
-      outside: false,
-      disabled: false,
       rangeStart: false,
       rangeEnd: false,
-      inRange: false,
+      rangeMiddle: false,
+      outside: false,
+      disabled: false,
     },
   },
 );
+
+export type ZardCalendarCaptionLabelVariants = NonNullable<VariantProps<typeof calendarCaptionLabelVariants>['layout']>;
 ```
 
 ```angular-ts
 import {
+  booleanAttribute,
   ChangeDetectionStrategy,
   Component,
   computed,
   type ElementRef,
   input,
+  numberAttribute,
   output,
   signal,
   viewChild,
@@ -507,14 +707,20 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import type { CalendarDay } from './calendar.types';
 import { calendarWeekdays, getDayAriaLabel, getDayId } from './calendar.utils';
-import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants } from './calendar.variants';
+import {
+  calendarDayButtonVariants,
+  calendarDayVariants,
+  calendarWeekdaysVariants,
+  calendarWeekdayVariants,
+  calendarWeekVariants,
+} from './calendar.variants';
 
 @Component({
   selector: 'z-calendar-grid',
   template: `
-    <div #gridContainer>
+    <div #gridContainer class="w-full">
       <!-- Weekdays Header -->
-      <div class="grid w-fit grid-cols-7 text-center" role="row">
+      <div [class]="weekdaysClasses()" role="row">
         @for (weekday of weekdays; track weekday) {
           <div [class]="weekdayClasses()" role="columnheader">
             {{ weekday }}
@@ -523,15 +729,26 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants
       </div>
 
       <!-- Calendar Days Grid -->
-      <div class="mt-2 grid w-fit auto-rows-min grid-cols-7 gap-0" role="rowgroup">
+      <div [class]="weekClasses()" role="rowgroup">
         @for (day of calendarDays(); track day.date.getTime(); let i = $index) {
-          <div [class]="dayContainerClasses()" role="gridcell">
+          <div
+            role="gridcell"
+            [class]="dayContainerClasses(day)"
+            [attr.data-selected]="day.isSelected ? 'true' : null"
+            [attr.data-today]="day.isToday ? 'true' : null"
+            [attr.data-outside]="day.isCurrentMonth ? null : 'true'"
+            [attr.data-disabled]="day.isDisabled ? 'true' : null"
+            [attr.data-range-start]="day.isRangeStart ? 'true' : null"
+            [attr.data-range-middle]="day.isInRange ? 'true' : null"
+            [attr.data-range-end]="day.isRangeEnd ? 'true' : null"
+          >
             <button
               type="button"
               [id]="getDayId(i)"
               [class]="dayButtonClasses(day)"
               (click)="onDayClick(day.date, i)"
               [disabled]="day.isDisabled"
+              [attr.data-day]="getDayLabel(day)"
               [attr.aria-selected]="day.isSelected"
               [attr.aria-label]="getDayAriaLabel(day)"
               [attr.tabindex]="getFocusedDayIndex() === i ? 0 : -1"
@@ -547,7 +764,7 @@ import { calendarDayButtonVariants, calendarDayVariants, calendarWeekdayVariants
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
   host: {
-    class: 'flex justify-center',
+    class: 'w-full',
     '[attr.role]': '"grid"',
     '(keydown.{arrowleft,arrowright,arrowup,arrowdown,home,end,pageup,pagedown,enter,space}.prevent)':
       'onKeyDown($event)',
@@ -560,6 +777,9 @@ export class ZardCalendarGridComponent {
   // Inputs
   readonly calendarDays = input.required<CalendarDay[]>();
   readonly disabled = input<boolean>(false);
+  readonly zShowOutsideDays = input(true, { transform: booleanAttribute });
+  /** Position of this grid inside a multi-month calendar. Only used to scope the day ids. */
+  readonly zMonthIndex = input(0, { transform: numberAttribute });
 
   // Outputs
   readonly dateSelect = output<{ date: Date; index: number }>();
@@ -571,20 +791,34 @@ export class ZardCalendarGridComponent {
 
   private readonly focusedDayIndex = signal<number>(-1);
 
+  protected readonly weekdaysClasses = computed(() => mergeClasses(calendarWeekdaysVariants()));
+
   protected readonly weekdayClasses = computed(() => mergeClasses(calendarWeekdayVariants()));
 
-  protected readonly dayContainerClasses = computed(() => mergeClasses(calendarDayVariants()));
+  protected readonly weekClasses = computed(() => mergeClasses(calendarWeekVariants()));
+
+  protected dayContainerClasses(day: CalendarDay): string {
+    return mergeClasses(
+      calendarDayVariants({
+        selected: day.isSelected,
+        today: day.isToday,
+        rangeStart: day.isRangeStart ?? false,
+        rangeMiddle: day.isInRange ?? false,
+        rangeEnd: day.isRangeEnd ?? false,
+      }),
+      !day.isCurrentMonth && !this.zShowOutsideDays() && 'invisible',
+    );
+  }
 
   protected dayButtonClasses(day: CalendarDay): string {
     return mergeClasses(
       calendarDayButtonVariants({
         selected: day.isSelected,
-        today: day.isToday,
         outside: !day.isCurrentMonth,
         disabled: day.isDisabled,
         rangeStart: day.isRangeStart ?? false,
         rangeEnd: day.isRangeEnd ?? false,
-        inRange: day.isInRange ?? false,
+        rangeMiddle: day.isInRange ?? false,
       }),
     );
   }
@@ -598,11 +832,16 @@ export class ZardCalendarGridComponent {
   }
 
   protected getDayId(index: number): string {
-    return getDayId(index);
+    return getDayId(index, this.zMonthIndex());
   }
 
   protected getDayAriaLabel(day: CalendarDay): string {
     return getDayAriaLabel(day);
+  }
+
+  /** Date exposed as `data-day`, mirroring the shadcn day button. */
+  protected getDayLabel(day: CalendarDay): string {
+    return day.date.toLocaleDateString('en-US');
   }
 
   protected getFocusedDayIndex(): number {
@@ -783,7 +1022,9 @@ export class ZardCalendarGridComponent {
   private setFocus(index: number): void {
     this.focusedDayIndex.set(index);
     setTimeout(() => {
-      const dayElement = this.gridContainer()?.nativeElement.querySelector(`#${getDayId(index)}`) as HTMLElement;
+      const dayElement = this.gridContainer()?.nativeElement.querySelector(
+        `#${getDayId(index, this.zMonthIndex())}`,
+      ) as HTMLElement;
       dayElement?.focus();
     }, 0);
   }
@@ -791,71 +1032,136 @@ export class ZardCalendarGridComponent {
 ```
 
 ```angular-ts
-import { ChangeDetectionStrategy, Component, computed, input, output, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  output,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import { NgIcon, provideIcons } from '@ng-icons/core';
-import { lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
+import { lucideChevronDown, lucideChevronLeft, lucideChevronRight } from '@ng-icons/lucide';
 
-import { calendarMonths } from '@/shared/components/calendar/calendar.utils';
+import type { ZardCalendarCaptionLayout } from '@/shared/components/calendar/calendar.types';
+import { calendarMonths, calendarMonthsLong } from '@/shared/components/calendar/calendar.utils';
 import { mergeClasses } from '@/shared/utils/merge-classes';
 
-import { calendarNavVariants } from './calendar.variants';
+import {
+  calendarCaptionLabelVariants,
+  calendarCaptionVariants,
+  calendarDropdownRootVariants,
+  calendarDropdownsVariants,
+  calendarDropdownVariants,
+  calendarNavButtonVariants,
+  calendarNavSpacerVariants,
+  calendarNavVariants,
+} from './calendar.variants';
 import { ZardButtonComponent } from '../button/button.component';
-import { ZardSelectItemComponent } from '../select/select-item.component';
-import { ZardSelectComponent } from '../select/select.component';
+import type { ZardButtonTypeVariants } from '../button/button.variants';
 
 @Component({
   selector: 'z-calendar-navigation',
-  imports: [ZardButtonComponent, NgIcon, ZardSelectComponent, ZardSelectItemComponent],
+  imports: [ZardButtonComponent, NgIcon],
   template: `
     <div [class]="navClasses()">
-      <button
-        type="button"
-        z-button
-        zType="ghost"
-        zSize="sm"
-        (click)="onPreviousClick()"
-        [disabled]="isPreviousDisabled()"
-        aria-label="Previous month"
-        class="size-7 p-0"
-      >
-        <ng-icon name="lucideChevronLeft" class="size-3.5!" />
-      </button>
+      @if (zShowPreviousButton()) {
+        <button
+          type="button"
+          z-button
+          [zType]="zButtonVariant()"
+          [class]="navButtonClasses()"
+          (click)="onPreviousClick()"
+          [zDisabled]="isPreviousDisabled()"
+          aria-label="Previous month"
+        >
+          <ng-icon name="lucideChevronLeft" class="size-4!" />
+        </button>
+      } @else {
+        <div [class]="navSpacerClasses()" aria-hidden="true"></div>
+      }
 
-      <!-- Month and Year Selectors -->
-      <div class="flex items-center space-x-2">
-        <!-- Month Select -->
-        <z-select [zValue]="currentMonth()" [zLabel]="currentMonthName()" (zSelectionChange)="onMonthChange($event)">
-          @for (month of months; track month) {
-            <z-select-item [zValue]="$index.toString()">{{ month }}</z-select-item>
+      @if (zShowNextButton()) {
+        <button
+          type="button"
+          z-button
+          [zType]="zButtonVariant()"
+          [class]="navButtonClasses()"
+          (click)="onNextClick()"
+          [zDisabled]="isNextDisabled()"
+          aria-label="Next month"
+        >
+          <ng-icon name="lucideChevronRight" class="size-4!" />
+        </button>
+      } @else {
+        <div [class]="navSpacerClasses()" aria-hidden="true"></div>
+      }
+    </div>
+
+    <div data-slot="calendar-caption" [class]="captionClasses()">
+      @if (zCaptionLayout() === 'label') {
+        <span [class]="captionLabelClasses()">{{ monthYearLabel() }}</span>
+      } @else {
+        <div [class]="dropdownsClasses()">
+          @if (showMonthDropdown()) {
+            <!--
+              A native select sits invisible on top of the label, exactly like the shadcn
+              calendar: the browser owns the popup, the span owns the looks.
+            -->
+            <div data-slot="calendar-dropdown-root" [class]="dropdownRootClasses()">
+              <select
+                [class]="dropdownClasses()"
+                [disabled]="disabled()"
+                (change)="onMonthChange($event)"
+                aria-label="Choose the month"
+              >
+                @for (month of months; track month; let monthIndex = $index) {
+                  <option [value]="monthIndex" [selected]="monthIndex === selectedMonthIndex()">{{ month }}</option>
+                }
+              </select>
+
+              <span [class]="captionLabelClasses()" aria-hidden="true">
+                {{ currentMonthName() }}
+                <ng-icon name="lucideChevronDown" class="text-muted-foreground size-3.5!" />
+              </span>
+            </div>
+          } @else {
+            <span [class]="captionLabelClasses()">{{ longMonthName() }}</span>
           }
-        </z-select>
 
-        <!-- Year Select -->
-        <z-select [zValue]="currentYear()" [zLabel]="currentYear()" (zSelectionChange)="onYearChange($event)">
-          @for (year of availableYears(); track year) {
-            <z-select-item [zValue]="year.toString()">{{ year }}</z-select-item>
+          @if (showYearDropdown()) {
+            <div data-slot="calendar-dropdown-root" [class]="dropdownRootClasses()">
+              <select
+                [class]="dropdownClasses()"
+                [disabled]="disabled()"
+                (change)="onYearChange($event)"
+                aria-label="Choose the year"
+              >
+                @for (year of availableYears(); track year) {
+                  <option [value]="year" [selected]="year.toString() === currentYear()">{{ year }}</option>
+                }
+              </select>
+
+              <span [class]="captionLabelClasses()" aria-hidden="true">
+                {{ currentYear() }}
+                <ng-icon name="lucideChevronDown" class="text-muted-foreground size-3.5!" />
+              </span>
+            </div>
+          } @else {
+            <span [class]="captionLabelClasses()">{{ currentYear() }}</span>
           }
-        </z-select>
-      </div>
-
-      <button
-        type="button"
-        z-button
-        zType="ghost"
-        zSize="sm"
-        (click)="onNextClick()"
-        [disabled]="isNextDisabled()"
-        aria-label="Next month"
-        class="size-7 p-0"
-      >
-        <ng-icon name="lucideChevronRight" class="size-3.5!" />
-      </button>
+        </div>
+      }
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
-  viewProviders: [provideIcons({ lucideChevronLeft, lucideChevronRight })],
+  viewProviders: [provideIcons({ lucideChevronDown, lucideChevronLeft, lucideChevronRight })],
+  host: {
+    class: 'block w-full',
+  },
   exportAs: 'zCalendarNavigation',
 })
 export class ZardCalendarNavigationComponent {
@@ -865,6 +1171,14 @@ export class ZardCalendarNavigationComponent {
   readonly minDate = input<Date | null>(null);
   readonly maxDate = input<Date | null>(null);
   readonly disabled = input<boolean>(false);
+  readonly zCaptionLayout = input<ZardCalendarCaptionLayout>('label');
+  readonly zButtonVariant = input<ZardButtonTypeVariants>('ghost');
+  /**
+   * In a multi-month calendar only the first month owns the previous arrow and only the last
+   * one owns the next arrow. The hidden side keeps a spacer so the caption stays centered.
+   */
+  readonly zShowPreviousButton = input(true, { transform: booleanAttribute });
+  readonly zShowNextButton = input(true, { transform: booleanAttribute });
 
   // Outputs
   readonly monthChange = output<string>();
@@ -874,6 +1188,25 @@ export class ZardCalendarNavigationComponent {
   readonly months = calendarMonths;
 
   protected readonly navClasses = computed(() => mergeClasses(calendarNavVariants()));
+  protected readonly navButtonClasses = computed(() => mergeClasses(calendarNavButtonVariants()));
+  protected readonly navSpacerClasses = computed(() => mergeClasses(calendarNavSpacerVariants()));
+  protected readonly captionClasses = computed(() => mergeClasses(calendarCaptionVariants()));
+  protected readonly dropdownsClasses = computed(() => mergeClasses(calendarDropdownsVariants()));
+  protected readonly dropdownRootClasses = computed(() => mergeClasses(calendarDropdownRootVariants()));
+  protected readonly dropdownClasses = computed(() => mergeClasses(calendarDropdownVariants()));
+  protected readonly captionLabelClasses = computed(() =>
+    mergeClasses(calendarCaptionLabelVariants({ layout: this.zCaptionLayout() === 'label' ? 'label' : 'dropdown' })),
+  );
+
+  protected readonly showMonthDropdown = computed(() => {
+    const layout = this.zCaptionLayout();
+    return layout === 'dropdown' || layout === 'dropdown-months';
+  });
+
+  protected readonly showYearDropdown = computed(() => {
+    const layout = this.zCaptionLayout();
+    return layout === 'dropdown' || layout === 'dropdown-years';
+  });
 
   protected readonly availableYears = computed(() => {
     const minYear = this.minDate()?.getFullYear() ?? new Date().getFullYear() - 10;
@@ -885,13 +1218,23 @@ export class ZardCalendarNavigationComponent {
     return years;
   });
 
-  protected readonly currentMonthName = computed(() => {
+  /** Index of the month the caption points at, falling back to the current one. */
+  protected readonly selectedMonthIndex = computed(() => {
     const selectedMonth = Number.parseInt(this.currentMonth());
-    if (!Number.isNaN(selectedMonth) && this.months[selectedMonth]) {
-      return this.months[selectedMonth];
-    }
-    return this.months[new Date().getMonth()];
+    return !Number.isNaN(selectedMonth) && this.months[selectedMonth] ? selectedMonth : new Date().getMonth();
   });
+
+  protected readonly currentMonthName = computed(() => this.months[this.selectedMonthIndex()]);
+
+  /** Full month name, used by the `label`, `dropdown-years` and `dropdown-months` captions. */
+  protected readonly longMonthName = computed(() => {
+    const parsedMonth = Number.parseInt(this.currentMonth());
+    const month = Number.isNaN(parsedMonth) ? new Date().getMonth() : parsedMonth;
+
+    return calendarMonthsLong[month] ?? calendarMonthsLong[new Date().getMonth()];
+  });
+
+  protected readonly monthYearLabel = computed(() => `${this.longMonthName()} ${this.currentYear()}`);
 
   protected readonly isPreviousDisabled = computed(() => {
     if (this.disabled()) {
@@ -935,20 +1278,12 @@ export class ZardCalendarNavigationComponent {
     this.nextMonth.emit();
   }
 
-  protected onMonthChange(month: string | string[]): void {
-    if (Array.isArray(month)) {
-      console.warn('Calendar navigation received array for month selection, expected single value. Ignoring:', month);
-      return;
-    }
-    this.monthChange.emit(month);
+  protected onMonthChange(event: Event): void {
+    this.monthChange.emit((event.target as HTMLSelectElement).value);
   }
 
-  protected onYearChange(year: string | string[]): void {
-    if (Array.isArray(year)) {
-      console.warn('Calendar navigation received array for year selection, expected single value. Ignoring:', year);
-      return;
-    }
-    this.yearChange.emit(year);
+  protected onYearChange(event: Event): void {
+    this.yearChange.emit((event.target as HTMLSelectElement).value);
   }
 }
 ```
@@ -956,6 +1291,16 @@ export class ZardCalendarNavigationComponent {
 ```angular-ts
 export type CalendarMode = 'single' | 'multiple' | 'range';
 export type CalendarValue = Date | Date[] | null;
+
+/**
+ * How the month/year caption is rendered:
+ *
+ * - `label` — a single `"{Month} {Year}"` text
+ * - `dropdown` — a month select plus a year select
+ * - `dropdown-months` — a month select, year as text
+ * - `dropdown-years` — month as text, a year select
+ */
+export type ZardCalendarCaptionLayout = 'label' | 'dropdown' | 'dropdown-months' | 'dropdown-years';
 
 export interface CalendarDay {
   date: Date;
@@ -977,6 +1322,8 @@ export interface CalendarDayConfig {
   minDate: Date | null;
   maxDate: Date | null;
   disabled: boolean;
+  /** Individual days that cannot be selected, on top of the min/max range. */
+  disabledDates?: Date[];
 }
 ```
 
@@ -998,6 +1345,26 @@ export const calendarMonths = [
   'Dec',
 ] as const;
 
+/**
+ * Full month names used by the `label` caption. Hardcoded like `calendarMonths` and
+ * `calendarWeekdays` so every string the calendar renders comes from the same language —
+ * `toLocaleString` would follow the browser locale and mix languages inside the header.
+ */
+export const calendarMonthsLong = [
+  'January',
+  'February',
+  'March',
+  'April',
+  'May',
+  'June',
+  'July',
+  'August',
+  'September',
+  'October',
+  'November',
+  'December',
+] as const;
+
 export const calendarWeekdays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'] as const;
 
 /**
@@ -1012,20 +1379,27 @@ export function isSameDay(date1: Date, date2: Date): boolean {
 }
 
 /**
- * Checks if a date is disabled based on min/max constraints
+ * Checks if a date is disabled based on min/max constraints and on the
+ * individually disabled days
  */
-export function isDateDisabled(date: Date, minDate: Date | null, maxDate: Date | null): boolean {
+export function isDateDisabled(
+  date: Date,
+  minDate: Date | null,
+  maxDate: Date | null,
+  disabledDates?: Date[],
+): boolean {
   if ((minDate && date < minDate) || (maxDate && date > maxDate)) {
     return true;
   }
-  return false;
+
+  return !!disabledDates?.some(disabledDate => isSameDay(date, disabledDate));
 }
 
 /**
  * Generates calendar days for a given month with all selection states
  */
 export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
-  const { year, month, mode, selectedDates, minDate, maxDate, disabled } = config;
+  const { year, month, mode, selectedDates, minDate, maxDate, disabled, disabledDates } = config;
 
   const today = new Date();
 
@@ -1057,7 +1431,7 @@ export function generateCalendarDays(config: CalendarDayConfig): CalendarDay[] {
     const date = new Date(currentWeekDate);
     const isCurrentMonth = date.getMonth() === month;
     const isToday = isSameDay(date, today);
-    const isDisabledDate = disabled || isDateDisabled(date, minDate, maxDate);
+    const isDisabledDate = disabled || isDateDisabled(date, minDate, maxDate, disabledDates);
 
     // Determine if date is selected
     let isSelected = false;
@@ -1124,10 +1498,11 @@ export function getSelectedDatesArray(value: CalendarValue, mode: CalendarMode):
 }
 
 /**
- * Generates a unique ID for a calendar day
+ * Generates a unique ID for a calendar day. `monthIndex` scopes the id when more than one
+ * month is rendered, so the ids stay unique across the grids of a multi-month calendar.
  */
-export function getDayId(index: number): string {
-  return `calendar-day-${index}`;
+export function getDayId(index: number, monthIndex = 0): string {
+  return monthIndex > 0 ? `calendar-m${monthIndex}-day-${index}` : `calendar-day-${index}`;
 }
 
 /**
@@ -1248,12 +1623,14 @@ import { ZardCalendarComponent } from '@/shared/components/calendar/calendar.com
 ```
 
 ```angular-html
-<z-calendar></z-calendar>
+<z-calendar zMode="single" class="rounded-lg border"></z-calendar>
 ```
 
 ## Examples
 
-### Default
+### Basic
+
+The calendar renders without a border by default — add `class="rounded-lg border"` to frame it.
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -1261,21 +1638,53 @@ import { Component } from '@angular/core';
 import { ZardCalendarComponent } from '../calendar.component';
 
 @Component({
-  selector: 'z-demo-calendar-default',
+  selector: 'z-demo-calendar-basic',
   imports: [ZardCalendarComponent],
   standalone: true,
   template: `
-    <z-calendar (dateChange)="onDateChange($event)" />
+    <z-calendar zMode="single" class="rounded-lg border" />
   `,
 })
-export class ZardDemoCalendarDefaultComponent {
-  onDateChange(date: Date | Date[]) {
-    console.log('Selected date:', date);
-  }
+export class ZardDemoCalendarBasicComponent {}
+```
+
+### Range
+
+Use `zMode="range"` to let users select a start and an end date, and `zNumberOfMonths` to show more than one month at a time.
+
+```angular-ts
+import { Component, signal } from '@angular/core';
+
+import { ZardCalendarComponent } from '../calendar.component';
+
+const RANGE_LENGTH_IN_DAYS = 30;
+
+function startOfRange(): Date {
+  return new Date(new Date().getFullYear(), 0, 12);
+}
+
+function addDays(date: Date, days: number): Date {
+  const result = new Date(date);
+  result.setDate(result.getDate() + days);
+  return result;
+}
+
+@Component({
+  selector: 'z-demo-calendar-range',
+  imports: [ZardCalendarComponent],
+  standalone: true,
+  template: `
+    <z-calendar zMode="range" zNumberOfMonths="2" class="rounded-lg border" [(value)]="dateRange" />
+  `,
+})
+export class ZardDemoCalendarRangeComponent {
+  readonly dateRange = signal<Date[] | null>([startOfRange(), addDays(startOfRange(), RANGE_LENGTH_IN_DAYS)]);
 }
 ```
 
 ### Multiple
+
+Use `zMode="multiple"` to select any number of individual dates.
 
 ```angular-ts
 import { Component, signal } from '@angular/core';
@@ -1287,87 +1696,239 @@ import { ZardCalendarComponent } from '../calendar.component';
   imports: [ZardCalendarComponent],
   standalone: true,
   template: `
-    <div class="space-y-4">
-      <z-calendar zMode="multiple" [(value)]="selectedDates" (dateChange)="onDateChange($event)" />
+    <div class="flex flex-col gap-4">
+      <z-calendar zMode="multiple" class="rounded-lg border" [(value)]="selectedDates" />
 
-      <div class="text-muted-foreground mt-2 text-sm">
-        <p class="font-medium">Selected ({{ selectedDates()?.length ?? 0 }}) date(s).</p>
-      </div>
+      <p class="text-muted-foreground text-sm font-medium">Selected ({{ selectedDates()?.length ?? 0 }}) date(s).</p>
     </div>
   `,
 })
 export class ZardDemoCalendarMultipleComponent {
   readonly selectedDates = signal<Date[] | null>(null);
+}
+```
 
-  onDateChange(dates: Date | Date[]) {
-    console.log('Selected dates:', dates);
-  }
+### Presets
 
-  formatDate(date: Date): string {
-    return date.toLocaleDateString('en-US', { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' });
+Compose the calendar with a `<z-card />` footer to offer quick date presets.
+
+```angular-ts
+import { Component, signal } from '@angular/core';
+
+import { ZardButtonComponent } from '@/shared/components/button/button.component';
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+
+import { ZardCalendarComponent } from '../calendar.component';
+
+interface CalendarPreset {
+  label: string;
+  days: number;
+}
+
+const PRESETS: CalendarPreset[] = [
+  { label: 'Today', days: 0 },
+  { label: 'Tomorrow', days: 1 },
+  { label: 'In 3 days', days: 3 },
+  { label: 'In a week', days: 7 },
+  { label: 'In 2 weeks', days: 14 },
+];
+
+@Component({
+  selector: 'z-demo-calendar-presets',
+  imports: [ZardCalendarComponent, ZardButtonComponent, ZardCardImports],
+  standalone: true,
+  template: `
+    <z-card zSize="sm" class="mx-auto w-fit max-w-[300px]">
+      <z-card-content>
+        <z-calendar zMode="single" class="p-0 [--cell-size:--spacing(9.5)]" [(value)]="selectedDate" />
+      </z-card-content>
+      <z-card-footer zFooterBorder class="flex flex-wrap gap-2">
+        @for (preset of presets; track preset.days) {
+          <button z-button type="button" zType="outline" zSize="sm" class="flex-1" (click)="selectPreset(preset)">
+            {{ preset.label }}
+          </button>
+        }
+      </z-card-footer>
+    </z-card>
+  `,
+})
+export class ZardDemoCalendarPresetsComponent {
+  readonly presets = PRESETS;
+  readonly selectedDate = signal<Date | null>(new Date());
+
+  selectPreset(preset: CalendarPreset): void {
+    const date = new Date();
+    date.setDate(date.getDate() + preset.days);
+    this.selectedDate.set(date);
   }
 }
 ```
 
-### Range
+### With Time
+
+Pair the calendar with time inputs to build a date and time picker.
+
+```angular-ts
+import { Component, signal } from '@angular/core';
+
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideClock2 } from '@ng-icons/lucide';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+import { ZardFieldImports } from '@/shared/components/field/field.imports';
+import { ZardInputComponent } from '@/shared/components/input/input.component';
+import { ZardInputGroupImports } from '@/shared/components/input-group/input-group.imports';
+
+import { ZardCalendarComponent } from '../calendar.component';
+
+@Component({
+  selector: 'z-demo-calendar-with-time',
+  imports: [
+    ZardCalendarComponent,
+    ZardCardImports,
+    ZardFieldImports,
+    ZardInputGroupImports,
+    ZardInputComponent,
+    NgIcon,
+  ],
+  standalone: true,
+  template: `
+    <z-card zSize="sm" class="mx-auto w-fit">
+      <z-card-content>
+        <z-calendar zMode="single" class="p-0" [(value)]="selectedDate" />
+      </z-card-content>
+      <z-card-footer zFooterBorder>
+        <div z-field-group>
+          <div z-field>
+            <label z-field-label for="calendar-time-from">Start Time</label>
+            <z-input-group>
+              <input
+                z-input
+                id="calendar-time-from"
+                type="time"
+                step="1"
+                value="10:30:00"
+                class="appearance-none [&::-webkit-calendar-picker-indicator]:hidden"
+              />
+              <z-input-group-addon>
+                <ng-icon name="lucideClock2" class="text-muted-foreground" />
+              </z-input-group-addon>
+            </z-input-group>
+          </div>
+
+          <div z-field>
+            <label z-field-label for="calendar-time-to">End Time</label>
+            <z-input-group>
+              <input
+                z-input
+                id="calendar-time-to"
+                type="time"
+                step="1"
+                value="12:30:00"
+                class="appearance-none [&::-webkit-calendar-picker-indicator]:hidden"
+              />
+              <z-input-group-addon>
+                <ng-icon name="lucideClock2" class="text-muted-foreground" />
+              </z-input-group-addon>
+            </z-input-group>
+          </div>
+        </div>
+      </z-card-footer>
+    </z-card>
+  `,
+  viewProviders: [provideIcons({ lucideClock2 })],
+})
+export class ZardDemoCalendarWithTimeComponent {
+  readonly selectedDate = signal<Date | null>(new Date());
+}
+```
+
+### Booked Dates
+
+Use `zDisabledDates` to block individual days — here they are struck through to read as booked.
 
 ```angular-ts
 import { Component, signal } from '@angular/core';
 
 import { ZardCalendarComponent } from '../calendar.component';
 
+const FIRST_BOOKED_DAY = 8;
+const BOOKED_DAYS_COUNT = 12;
+
+function bookedDatesOfCurrentMonth(): Date[] {
+  const today = new Date();
+
+  return Array.from(
+    { length: BOOKED_DAYS_COUNT },
+    (_, index) => new Date(today.getFullYear(), today.getMonth(), FIRST_BOOKED_DAY + index),
+  );
+}
+
 @Component({
-  selector: 'z-demo-calendar-range',
+  selector: 'z-demo-calendar-booked-dates',
   imports: [ZardCalendarComponent],
   standalone: true,
   template: `
-    <div class="space-y-4">
-      <z-calendar zMode="range" [(value)]="dateRange" (dateChange)="onDateChange($event)" />
-
-      <div class="bg-muted/50 mt-4 rounded-lg border p-4">
-        <div class="space-y-1 text-sm">
-          <div class="flex items-center gap-2">
-            <span class="text-muted-foreground min-w-12">From:</span>
-            <span class="font-medium">{{ formatDate(dateRange(), 'start') }}</span>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <span class="text-muted-foreground min-w-12">To:</span>
-            <span class="font-medium">{{ formatDate(dateRange(), 'end') }}</span>
-          </div>
-        </div>
-      </div>
-    </div>
+    <z-calendar
+      zMode="single"
+      class="rounded-lg border shadow-sm [&_[data-disabled=true]_button]:line-through [&_[data-disabled=true]_button]:opacity-100"
+      [zDisabledDates]="bookedDates"
+      [(value)]="selectedDate"
+    />
   `,
 })
-export class ZardDemoCalendarRangeComponent {
-  readonly dateRange = signal<Date[] | null>(null);
-
-  onDateChange(dates: Date | Date[]) {
-    console.log('Selected range:', dates);
-  }
-
-  formatDate(date?: Date[] | null, label: 'start' | 'end' = 'start'): string {
-    if (!date || date?.length === 0) {
-      return 'N/A';
-    }
-
-    const targetDate = label === 'start' ? date[0] : date[1];
-    if (!targetDate) {
-      return 'N/A';
-    }
-
-    return targetDate.toLocaleDateString('en-US', {
-      weekday: 'short',
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    });
-  }
+export class ZardDemoCalendarBookedDatesComponent {
+  readonly bookedDates = bookedDatesOfCurrentMonth();
+  readonly selectedDate = signal<Date | null>(null);
 }
 ```
 
+### Custom Cell Size
+
+Override the `--cell-size` CSS variable to resize the whole calendar.
+
+```angular-ts
+import { Component, signal } from '@angular/core';
+
+import { ZardCardImports } from '@/shared/components/card/card.imports';
+
+import { ZardCalendarComponent } from '../calendar.component';
+
+@Component({
+  selector: 'z-demo-calendar-custom-cell-size',
+  imports: [ZardCalendarComponent, ZardCardImports],
+  standalone: true,
+  template: `
+    <z-card zSize="sm" class="mx-auto w-fit">
+      <z-card-content>
+        <z-calendar
+          zMode="range"
+          zCaptionLayout="dropdown"
+          class="p-0 [--cell-size:--spacing(10)] md:[--cell-size:--spacing(12)]"
+          [(value)]="dateRange"
+        />
+      </z-card-content>
+    </z-card>
+  `,
+})
+export class ZardDemoCalendarCustomCellSizeComponent {
+  readonly dateRange = signal<Date[] | null>(null);
+}
+```
+
+```angular-html
+<!-- Scale every measurement with the Tailwind spacing scale. -->
+<z-calendar class="rounded-lg border [--cell-size:--spacing(11)] md:[--cell-size:--spacing(12)]" />
+```
+
+```angular-html
+<!-- Or use fixed values. -->
+<z-calendar class="rounded-lg border [--cell-size:2.75rem] md:[--cell-size:3rem]" />
+```
+
 ### With Constraints
+
+Use `minDate` and `maxDate` to limit the selectable range, or `disabled` to turn the whole calendar off.
 
 ```angular-ts
 import { Component } from '@angular/core';
@@ -1382,67 +1943,54 @@ const MILLISECONDS_PER_DAY = 24 * 60 * 60 * 1000;
   imports: [ZardCalendarComponent],
   standalone: true,
   template: `
-    <div class="space-y-8">
-      <div>
-        <h3 class="mb-3 text-sm font-medium">With Min/Max Date</h3>
-        <z-calendar [minDate]="minDate" [maxDate]="maxDate" (dateChange)="onDateChange($event)" />
-        <p class="text-muted-foreground mt-2 text-sm">
-          Available dates: {{ minDate.toLocaleDateString() }} - {{ maxDate.toLocaleDateString() }}
-        </p>
-      </div>
+    <div class="flex flex-wrap items-start justify-center gap-6">
+      <z-calendar zMode="single" class="rounded-lg border" [minDate]="minDate" [maxDate]="maxDate" />
 
-      <div>
-        <h3 class="mb-3 text-sm font-medium">Disabled</h3>
-        <z-calendar [disabled]="true" />
-      </div>
+      <z-calendar zMode="single" class="rounded-lg border" [disabled]="true" />
     </div>
   `,
 })
 export class ZardDemoCalendarWithConstraintsComponent {
-  minDate = new Date();
-  maxDate = new Date(Date.now() + DAYS_IN_FUTURE * MILLISECONDS_PER_DAY);
+  readonly minDate = new Date();
+  readonly maxDate = new Date(Date.now() + DAYS_IN_FUTURE * MILLISECONDS_PER_DAY);
 
   constructor() {
-    // Set min date to today
     this.minDate.setHours(0, 0, 0, 0);
-
-    // Set max date to 30 days from now
     this.maxDate.setHours(23, 59, 59, 999);
-  }
-
-  onDateChange(date: Date | Date[]) {
-    console.log('Selected date:', date);
   }
 }
 ```
 
 ### Expand Year Selection Range
 
+`minDate` and `maxDate` also expand the year dropdown — useful for a date of birth picker.
+
 ```angular-ts
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 
 import { ZardCalendarComponent } from '../calendar.component';
+
+const BIRTH_YEAR_FLOOR = 1950;
 
 @Component({
   selector: 'z-demo-calendar-expand-year-selection-range',
   imports: [ZardCalendarComponent],
   standalone: true,
   template: `
-    <div class="space-y-8">
-      <div>
-        <h3 class="mb-3 text-sm font-medium">Date of Birth</h3>
-        <z-calendar [minDate]="minDate" [maxDate]="maxDate" (dateChange)="onDateChange($event)" />
-      </div>
-    </div>
+    <z-calendar
+      zMode="single"
+      zCaptionLayout="dropdown"
+      class="rounded-lg border"
+      [minDate]="minDate"
+      [maxDate]="maxDate"
+      [(value)]="dateOfBirth"
+    />
   `,
 })
 export class ZardDemoCalendarExpandYearSelectionRangeComponent {
-  minDate = new Date(1950, 1, 1);
-  maxDate = new Date();
-
-  onDateChange(date: Date | Date[]) {
-    console.log('Selected date:', date);
-  }
+  readonly minDate = new Date(BIRTH_YEAR_FLOOR, 0, 1);
+  readonly maxDate = new Date();
+  readonly dateOfBirth = signal<Date | null>(null);
 }
 ```
 
@@ -1450,17 +1998,25 @@ export class ZardDemoCalendarExpandYearSelectionRangeComponent {
 
 ### z-calendar
 
-A flexible and accessible calendar component for selecting dates with full keyboard navigation support.
+A calendar component that allows users to select a date or a range of dates, with full keyboard navigation support. Every measurement derives from the --cell-size and --cell-radius CSS variables listed at the end of the table, so overriding them through the class input rescales the whole calendar.
 
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
-| `class` | Additional CSS classes to apply to the calendar | `ClassValue` | `''` |
+| `class` | Additional CSS classes. Also where a border is opted into (`rounded-lg border`) and where the CSS variables below are overridden | `ClassValue` | `''` |
 | `zMode` | Selection mode of the calendar | `'single' \| 'multiple' \| 'range'` | `'single'` |
 | `value` | Currently selected date(s) - type depends on mode | `CalendarValue` | `null` |
 | `minDate` | Minimum selectable date. Also used to expand the year picker range | `Date \| null` | `null` |
 | `maxDate` | Maximum selectable date. Also used to expand the year picker range | `Date \| null` | `null` |
 | `disabled` | Whether the calendar is disabled | `boolean` | `false` |
+| `zCaptionLayout` | How the month/year caption is rendered: a plain label, two dropdowns, or a dropdown for only the month or only the year. The dropdowns are native `<select>` elements laid invisible over the label, so the browser owns the popup | `'label' \| 'dropdown' \| 'dropdown-months' \| 'dropdown-years'` | `'label'` |
+| `zButtonVariant` | Button variant used by the previous/next month arrows | `ZardButtonTypeVariants` | `'ghost'` |
+| `zShowOutsideDays` | Whether the days of the surrounding months are visible. When false they are hidden but keep their grid cell, so the layout never shifts | `boolean` | `true` |
+| `zDisabledDates` | Individual days that cannot be selected, on top of the minDate/maxDate range. Each day still keeps its grid cell and is marked with `data-disabled="true"` | `Date[]` | `[]` |
+| `zNumberOfMonths` | How many months are rendered side by side. They stack vertically below the `md` breakpoint, and only the first and the last month carry the navigation arrows | `number` | `1` |
 | `(dateChange)` | Emitted when date selection changes | `EventEmitter<Date \| Date[]>` | `-` |
+| `resetNavigation()` | Public method that moves the visible month back to the selected value and clears the roving focus | `() => void` | `-` |
+| `--cell-size` | CSS variable: width and height of a day cell, e.g. `class="[--cell-size:--spacing(12)]"` | `length` | `--spacing(7)` |
+| `--cell-radius` | CSS variable: corner radius of a day cell, e.g. `class="[--cell-radius:var(--radius-lg)]"` | `length` | `var(--radius-md)` |
 
 ---
 

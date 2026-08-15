@@ -13,7 +13,7 @@ Get zard/ui up and running in your project with these steps.
 
 ### Step 1: Initialize your project
 
-Run the init command to set up zard/ui. It installs the dependencies, writes the theme tokens, wires Tailwind into your build and configures the import aliases.
+Run the init command to set up zard/ui. It installs the dependencies, writes the theme tokens and configures the import aliases — and, in an application, wires Tailwind into the build. What runs follows from the project type you pick in the first question.
 
 ```
 npx zard-cli@latest init
@@ -151,10 +151,12 @@ npx zard-cli init
 - writes `components.json` with your answers
 - installs the runtime dependencies and the Tailwind packages your project type needs
 - registers `provideZard()` in your app config (applications only)
-- wires Tailwind into the build — PostCSS or the Vite plugin, depending on the type
-- writes the theme tokens into your global CSS
+- wires Tailwind into the build — PostCSS or the Vite plugin, depending on the type (applications only)
+- writes the theme tokens into the stylesheet you pointed it at
 - maps the import alias in the right `tsconfig`
 - copies the shared `core` and `utils` helpers every component depends on
+
+In a library there is no build to wire and no app config to register providers in, so those two steps are skipped and one is added: the theme stylesheet is declared as an asset of the package, so it ships with it. Wiring Tailwind and calling `provideZard()` then belong to the application that consumes the library — the CLI says so at the end of the run.
 
 Running it again on a configured project asks for confirmation first, and then overwrites what it wrote before.
 

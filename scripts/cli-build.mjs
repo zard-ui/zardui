@@ -39,7 +39,33 @@ function parseArgs(argv) {
 
   if (!args.registry) throw new Error('Missing --registry <url>');
   if (!args.package) throw new Error('Missing --package <file>');
+
+  args.registry = validateRegistry(args.registry);
   return args;
+}
+
+/**
+ * A URL do registry entra no artefato publicado, então é validada antes.
+ *
+ * Duas coisas que um erro de digitação no comando de build produziria em
+ * silêncio: um valor que não é URL nenhuma, que só falharia na máquina de quem
+ * instalasse; e uma aspa no meio, que quebraria o arquivo `.js` gerado, já que
+ * o placeholder vive dentro de um literal de string.
+ */
+function validateRegistry(value) {
+  let url;
+  try {
+    url = new URL(value);
+  } catch {
+    throw new Error(`--registry must be a URL, got: ${value}`);
+  }
+
+  if (url.protocol !== 'https:' && url.hostname !== 'localhost' && url.hostname !== '127.0.0.1') {
+    throw new Error(`--registry must use https (or localhost for development), got: ${value}`);
+  }
+
+  // Sem a barra final: o código monta `${base}/registry.json`.
+  return url.href.replace(/\/+$/, '');
 }
 
 /** Caminho do entrypoint declarado em `bin` — evita depender dos shims .cmd. */

@@ -30,12 +30,23 @@ import type { CodeBlockData } from '@highlight/types';
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">icons</code>
       is one row per icon, keyed by what it means rather than by what any set calls it. Items are published in one set,
-      and a client installing with another rewrites the symbols through this table: the import, the
+      and a client installing with another rewrites the symbols through this table. A row with no entry for the target
+      set means that set has no equivalent — the symbol is left alone and reported, never guessed.
+    </p>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      What makes the rewrite tractable is that the components write the symbol identically everywhere: the import, the
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">provideIcons</code>
       call and the
       <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">name</code>
-      in the template are the same word. A row with no entry for the target set means that set has no equivalent — the
-      symbol is left alone and reported, never guessed.
+      in the template are the same word, so replacing it is one substitution. Note that ng-icons also accepts the
+      hyphenated form and converts it — a
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">name</code>
+      of
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">lucide-arrow-left</code>
+      resolves to the
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">lucideArrowLeft</code>
+      you provided. Nothing published here uses that form, and a custom registry that does should expect the rewrite to
+      leave it alone.
     </p>
   `,
 })

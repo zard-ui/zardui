@@ -69,8 +69,8 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">provideZard()</code>
         in your app config (applications only)
       </li>
-      <li>wires Tailwind into the build — PostCSS or the Vite plugin, depending on the type</li>
-      <li>writes the theme tokens into your global CSS</li>
+      <li>wires Tailwind into the build — PostCSS or the Vite plugin, depending on the type (applications only)</li>
+      <li>writes the theme tokens into the stylesheet you pointed it at</li>
       <li>
         maps the import alias in the right
         <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">tsconfig</code>
@@ -83,6 +83,13 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
         helpers every component depends on
       </li>
     </ul>
+    <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
+      In a library there is no build to wire and no app config to register providers in, so those two steps are skipped
+      and one is added: the theme stylesheet is declared as an asset of the package, so it ships with it. Wiring
+      Tailwind and calling
+      <code class="bg-muted rounded px-1.5 py-0.5 text-xs sm:text-sm">provideZard()</code>
+      then belong to the application that consumes the library — the CLI says so at the end of the run.
+    </p>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
       Running it again on a configured project asks for confirmation first, and then overwrites what it wrote before.
     </p>

@@ -74,19 +74,10 @@
           "type": "array",
           "items": { "type": "string" },
           "description": "The same icons by the set-neutral key of the translation table (check)."
-        },
-        "demos": {
-          "type": "object",
-          "description": "The icons that only appear in the documentation examples. Present in the item file, left out of the index, which is fetched on every command and does not need them.",
-          "required": ["symbols", "tokens"],
-          "properties": {
-            "symbols": { "type": "array", "items": { "type": "string" } },
-            "tokens": { "type": "array", "items": { "type": "string" } }
-          },
-          "additionalProperties": false
         }
       },
-      "additionalProperties": false
+      "additionalProperties": false,
+      "$comment": "The index carries only these three. The icons of the demos are in the item file, described by registry-item.json — the index is fetched on every command and does not need them."
     }
   }
 }

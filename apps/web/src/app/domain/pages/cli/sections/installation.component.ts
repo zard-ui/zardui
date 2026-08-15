@@ -18,8 +18,9 @@ import type { CodeBlockData, CodeTabData } from '@highlight/types';
 
     <h3 class="mt-8 scroll-m-20 text-lg font-semibold tracking-tight">Step 1: Initialize your project</h3>
     <p class="text-muted-foreground text-base leading-relaxed [&:not(:first-child)]:mt-4">
-      Run the init command to set up zard/ui. It installs the dependencies, writes the theme tokens, wires Tailwind into
-      your build and configures the import aliases.
+      Run the init command to set up zard/ui. It installs the dependencies, writes the theme tokens and configures the
+      import aliases — and, in an application, wires Tailwind into the build. What runs follows from the project type
+      you pick in the first question.
     </p>
     <z-code-tabs [data]="initTabs" />
 

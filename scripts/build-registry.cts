@@ -22,6 +22,7 @@ interface RegistryFile {
 }
 
 interface RegistryItem {
+  $schema: string;
   name: string;
   type: 'registry:component';
   basePath?: string;
@@ -143,6 +144,9 @@ function buildComponentJson(component: ComponentRegistry): RegistryItem | null {
   }
 
   const item: RegistryItem = {
+    // O item tem forma própria — arquivos com conteúdo, e os ícones dos demos
+    // que o índice não carrega —, então tem schema próprio para apontar.
+    $schema: 'https://zardui.com/schema/registry-item.json',
     name: component.name,
     type: 'registry:component',
     files,

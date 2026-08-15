@@ -1,4 +1,5 @@
 {
+  "$schema": "https://zardui.com/schema/registry-item.json",
   "name": "tooltip",
   "type": "registry:component",
   "files": [

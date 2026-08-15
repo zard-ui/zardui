@@ -258,7 +258,9 @@ icons.json
 
 `families` is keyed by the value that goes in `icons` in your components.json. Two things separate one set from another: the npm package the project needs and the prefix its symbols carry — everything else about installing a component is identical.
 
-`icons` is one row per icon, keyed by what it means rather than by what any set calls it. Items are published in one set, and a client installing with another rewrites the symbols through this table: the import, the `provideIcons` call and the `name` in the template are the same word. A row with no entry for the target set means that set has no equivalent — the symbol is left alone and reported, never guessed.
+`icons` is one row per icon, keyed by what it means rather than by what any set calls it. Items are published in one set, and a client installing with another rewrites the symbols through this table. A row with no entry for the target set means that set has no equivalent — the symbol is left alone and reported, never guessed.
+
+What makes the rewrite tractable is that the components write the symbol identically everywhere: the import, the `provideIcons` call and the `name` in the template are the same word, so replacing it is one substitution. Note that ng-icons also accepts the hyphenated form and converts it — a `name` of `lucide-arrow-left` resolves to the `lucideArrowLeft` you provided. Nothing published here uses that form, and a custom registry that does should expect the rewrite to leave it alone.
 
 ## Dependencies
 

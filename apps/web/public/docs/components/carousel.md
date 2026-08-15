@@ -357,6 +357,8 @@ export class ZardCarouselItemComponent {
 ```angular-ts
 import { Injectable } from '@angular/core';
 
+// Do pacote base, não do wrapper Angular: ele re-exportava esses tipos na v21 e
+// parou na v22. Por isso `embla-carousel` é dependência declarada do componente.
 import type { EmblaPluginType } from 'embla-carousel';
 
 /**
