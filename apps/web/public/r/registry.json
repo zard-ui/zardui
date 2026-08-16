@@ -3,7 +3,7 @@
   "schemaVersion": 1,
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.103",
+  "version": "1.0.0-beta.104",
   "items": [
     {
       "name": "core",
@@ -919,6 +919,36 @@
         "carousel-item.component.ts",
         "carousel-plugins.service.ts",
         "carousel.imports.ts",
+        "index.ts"
+      ]
+    },
+    {
+      "name": "chart",
+      "type": "registry:component",
+      "dependencies": [
+        "ngx-echarts",
+        "echarts"
+      ],
+      "icons": {
+        "family": "lucide",
+        "symbols": [],
+        "tokens": []
+      },
+      "files": [
+        "chart.component.ts",
+        "chart.variants.ts",
+        "chart.types.ts",
+        "chart-context.ts",
+        "chart-colors.util.ts",
+        "chart-arc-label.util.ts",
+        "chart-option.builder.ts",
+        "chart-echarts.provider.ts",
+        "chart-echarts.registry.ts",
+        "chart-ssr.util.ts",
+        "chart-tooltip.component.ts",
+        "chart-tooltip.formatter.ts",
+        "chart-legend.component.ts",
+        "chart.imports.ts",
         "index.ts"
       ]
     },

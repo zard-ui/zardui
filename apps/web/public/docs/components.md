@@ -18,6 +18,7 @@ Here you can find all the components available in the library. We are working on
 - [Calendar](/docs/components/calendar)
 - [Card](/docs/components/card)
 - [Carousel](/docs/components/carousel)
+- [Chart](/docs/components/chart)
 - [Checkbox](/docs/components/checkbox)
 - [Combobox](/docs/components/combobox)
 - [Command](/docs/components/command)

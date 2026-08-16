@@ -1171,6 +1171,72 @@ export const registry: ComponentRegistry[] = [
     ],
   },
   {
+    name: 'chart',
+    dependencies: ['ngx-echarts', 'echarts'],
+    files: [
+      {
+        name: 'chart.component.ts',
+        content: '',
+      },
+      {
+        name: 'chart.variants.ts',
+        content: '',
+      },
+      {
+        name: 'chart.types.ts',
+        content: '',
+      },
+      {
+        name: 'chart-context.ts',
+        content: '',
+      },
+      {
+        name: 'chart-colors.util.ts',
+        content: '',
+      },
+      {
+        name: 'chart-arc-label.util.ts',
+        content: '',
+      },
+      {
+        name: 'chart-option.builder.ts',
+        content: '',
+      },
+      {
+        name: 'chart-echarts.provider.ts',
+        content: '',
+      },
+      {
+        name: 'chart-echarts.registry.ts',
+        content: '',
+      },
+      {
+        name: 'chart-ssr.util.ts',
+        content: '',
+      },
+      {
+        name: 'chart-tooltip.component.ts',
+        content: '',
+      },
+      {
+        name: 'chart-tooltip.formatter.ts',
+        content: '',
+      },
+      {
+        name: 'chart-legend.component.ts',
+        content: '',
+      },
+      {
+        name: 'chart.imports.ts',
+        content: '',
+      },
+      {
+        name: 'index.ts',
+        content: '',
+      },
+    ],
+  },
+  {
     name: 'tree',
     registryDependencies: ['checkbox'],
     files: [

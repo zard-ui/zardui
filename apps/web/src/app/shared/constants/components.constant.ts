@@ -123,6 +123,11 @@ export const COMPONENTS_REGISTRY: ComponentRegistryEntry[] = [
     loadData: () => import('@zard/components/carousel/demo/carousel').then(m => m.CAROUSEL),
   },
   {
+    componentName: 'chart',
+    description: 'Beautiful charts built with Apache ECharts. Copy and paste into your apps.',
+    loadData: () => import('@zard/components/chart/demo/chart').then(m => m.CHART),
+  },
+  {
     componentName: 'checkbox',
     description: 'A control that allows the user to toggle between checked and not checked.',
     loadData: () => import('@zard/components/checkbox/demo/checkbox').then(m => m.CHECKBOX),
