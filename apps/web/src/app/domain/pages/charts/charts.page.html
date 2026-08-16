@@ -14,13 +14,17 @@
   </section>
 </section>
 
-<z-category-tabs [tabs]="categoryTabs" browseAllRoute="/docs/components/chart" browseAllLabel="Read the docs" />
+<z-category-tabs [tabs]="categoryTabs" />
 
 <section id="charts" class="container mx-auto min-h-svh px-4 pt-8 pb-16">
   @if (charts().length > 0) {
-    <div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+    <div class="grid grid-cols-1 items-stretch gap-10 md:grid-cols-2 md:gap-6 lg:grid-cols-3 xl:gap-10">
       @for (chart of charts(); track chart.id) {
-        <z-chart-card [chart]="chart" />
+        <z-chart-card
+          [chart]="chart"
+          [category]="currentCategory()"
+          [class]="chart.fullWidth ? 'md:col-span-2 lg:col-span-3' : ''"
+        />
       }
     </div>
   } @else {
@@ -32,13 +36,3 @@
     </div>
   }
 </section>
-
-<div class="container flex justify-center py-6">
-  <a
-    z-button
-    class="bg-background hover:bg-accent text-accent-foreground dark:bg-input/30 dark:border-input dark:hover:bg-input/50 border shadow-xs"
-    routerLink="/docs/components/chart"
-  >
-    Read the chart docs
-  </a>
-</div>

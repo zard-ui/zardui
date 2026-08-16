@@ -48,7 +48,6 @@ export class ZardChartLegendComponent {
   private readonly chart = inject(ZARD_CHART, { optional: true });
 
   readonly class = input<ClassValue>('');
-  readonly zNameKey = input<string>();
   readonly zVerticalAlign = input<ZardChartLegendAlignVariants>('bottom');
 
   protected readonly entries = computed<ZardChartLegendEntry[]>(() => this.chart?.legendEntries() ?? []);

@@ -19,6 +19,9 @@ import { DynamicInstallationService } from '@doc/shared/services/dynamic-install
 import { SeoService } from '@doc/shared/services/seo.service';
 import { ZardCodeBoxComponent } from '@doc/widget/components/zard-code-box/zard-code-box.component';
 
+/** Components whose demos are only readable at the full width of the preview. */
+const FULL_WIDTH_PREVIEWS = ['slider', 'chart'];
+
 @Component({
   selector: 'z-component',
   templateUrl: './component.page.html',
@@ -37,6 +40,8 @@ import { ZardCodeBoxComponent } from '@doc/widget/components/zard-code-box/zard-
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ComponentPage implements OnInit {
+  protected readonly fillsContainer = (componentName: string) => FULL_WIDTH_PREVIEWS.includes(componentName);
+
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly destroyRef = inject(DestroyRef);
   private readonly dynamicInstallationService = inject(DynamicInstallationService);

@@ -24,8 +24,6 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           zXAxisKey="browser"
           [zXAxisFormatter]="browserLabel"
           zHorizontal
-          [zXAxis]="false"
-          zYAxis
           [zGrid]="false"
           class="w-full"
         >

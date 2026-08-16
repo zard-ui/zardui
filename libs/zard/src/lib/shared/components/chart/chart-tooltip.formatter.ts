@@ -31,6 +31,11 @@ export interface ZardChartTooltipContext {
   config: ZardChartConfig;
   /** Series colors resolved by the parent chart, keyed by the name ECharts uses. */
   colors: Record<string, string>;
+  /**
+   * Radar only: the indicator names, in the order ECharts lays them out. A radar hands the whole
+   * web over in a single param, so the rows are read off the value array against these names.
+   */
+  indicators?: readonly string[];
 }
 
 const CONTAINER_CLASSES =
@@ -89,6 +94,50 @@ function formatValue(value: number | null, name: string, ctx: ZardChartTooltipCo
   return value.toLocaleString();
 }
 
+/** One line of the tooltip: a swatch, a name and a value. */
+interface TooltipRow {
+  name: string;
+  color: string;
+  value: string;
+}
+
+function colorOf(param: ZardChartTooltipParam, ctx: ZardChartTooltipContext): string {
+  return ctx.colors[param.seriesName ?? ''] ?? ctx.colors[param.name ?? ''] ?? param.color ?? '';
+}
+
+/** True when the params are a radar's, which arrive as one param holding every indicator. */
+function isRadar(items: ZardChartTooltipParam[], ctx: ZardChartTooltipContext): boolean {
+  return !!ctx.indicators?.length && items.every(param => Array.isArray(param.value));
+}
+
+/**
+ * A radar's rows: one per indicator, the way ECharts' own tooltip reads a web. Taking a single
+ * number off the array instead would show the same value at every vertex.
+ */
+function radarRows(items: ZardChartTooltipParam[], ctx: ZardChartTooltipContext): TooltipRow[] {
+  const indicators = ctx.indicators ?? [];
+
+  return items.flatMap(param => {
+    const color = colorOf(param, ctx);
+    const values = Array.isArray(param.value) ? param.value : [];
+
+    return values.flatMap((raw, index) => {
+      const parsed = toNumber(raw);
+      if (parsed === null) return [];
+
+      const name = indicators[index] ?? '';
+      const label = ctx.config[name]?.label ?? name;
+      return [{ name: label, color, value: formatValue(parsed, label, ctx) }];
+    });
+  });
+}
+
+/** One param, one row: everything that is not a radar. */
+function rowOf(param: ZardChartTooltipParam, ctx: ZardChartTooltipContext): TooltipRow {
+  const name = itemLabel(param, ctx);
+  return { name, color: colorOf(param, ctx), value: formatValue(readValue(param), name, ctx) };
+}
+
 function itemLabel(param: ZardChartTooltipParam, ctx: ZardChartTooltipContext): string {
   const key = ctx.nameKey ?? (ctx.trigger === 'item' ? (param.name ?? '') : (param.seriesName ?? ''));
   return ctx.config[key]?.label ?? (ctx.trigger === 'item' ? (param.name ?? '') : (param.seriesName ?? ''));
@@ -134,15 +183,18 @@ export function buildTooltipHtml(
   const items = (Array.isArray(params) ? params : [params]).filter(Boolean);
   if (items.length === 0) return '';
 
-  const label = headerLabel(items, ctx);
-  const nestLabel = items.length === 1 && ctx.indicator !== 'dot';
+  const radar = isRadar(items, ctx);
+  const entries: TooltipRow[] = radar ? radarRows(items, ctx) : items.map(param => rowOf(param, ctx));
+
+  if (entries.length === 0) return '';
+
+  // A radar is headed by the series it belongs to; everything else by its category.
+  const label = radar ? (items[0]?.seriesName ?? '') : headerLabel(items, ctx);
+  const nestLabel = entries.length === 1 && ctx.indicator !== 'dot';
   const showHeader = !ctx.hideLabel && !nestLabel && label !== '';
 
-  const rows = items
-    .map(param => {
-      const name = itemLabel(param, ctx);
-      const color = ctx.colors[param.seriesName ?? ''] ?? ctx.colors[param.name ?? ''] ?? param.color ?? '';
-      const value = formatValue(readValue(param), name, ctx);
+  const rows = entries
+    .map(({ name, color, value }) => {
       const rowClasses = mergeClasses(ROW_CLASSES, ctx.indicator === 'dot' ? 'items-center' : '');
       const innerAlign = nestLabel ? 'items-end' : 'items-center';
       const nestedLabel =

@@ -26,20 +26,13 @@ export const chartConfig: ZardChartConfig = {
 /* Recommended: declare the palette once, as CSS variables, and let every chart pick it up.
    The chart resolves `var(--token)` to a computed value before handing it to ECharts and
    re-resolves it whenever the theme changes. */
-:root {
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-}
-
+:root,
 .dark {
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
 }
 
 /* Hex, rgb(), hsl() and oklch() literals are accepted too — anywhere a color is expected. */
@@ -123,60 +116,9 @@ export const override: ZardChartOptionOverride = {
 ```
 
 ```angular-html id="height" title="height.html" copyButton
-<!-- The container must resolve to a real height. Without one, ECharts initialises at
-     zero pixels and nothing is drawn. `z-chart` defaults to `aspect-video`, so this is
-     only a problem when you override the aspect ratio without giving a height. -->
-<z-chart class="h-[250px] w-full" ...>...</z-chart>
-<z-chart class="aspect-square h-[250px]" ...>...</z-chart>
-```
+<z-chart zType="bar" [zData]="chartData" [zSeries]="series" />
 
-```text id="limitations" title="Limitations" copyButton
-Where ECharts and Recharts disagree, the chart delivers the closest equivalent. Every
-known divergence from shadcn/ui is listed here.
+<z-chart class="h-[250px] w-full" zType="bar" [zData]="chartData" />
 
-1. minTickGap — Recharts drops ticks whose gap falls below a pixel threshold. ECharts has
-   no numeric equivalent, so the chart sets `axisLabel.hideOverlap = true`. Labels stop
-   colliding, but you cannot tune the threshold.
-
-2. Curve interpolation — Recharts distinguishes `natural`, `monotone` and `basis`.
-   ECharts has a single `smooth` flag, so all three map to `smooth: true`. Pass a number
-   between 0 and 1 to `ZardChartSeries.smooth` for finer control.
-
-3. stackOffset="expand" — ECharts has no stack normalisation. `zStackOffset="expand"`
-   normalises the rows to 0-1 before they reach ECharts, and the value axis is clamped to
-   [0, 1]; format it with `[zYAxisFormatter]`.
-
-4. Rounded stacked bars — only the outermost bar of a stack is rounded, matching Recharts.
-   On negative bars ECharts still rounds the top corners rather than the outward end.
-
-5. Radial charts — Recharts' RadialBarChart has no single ECharts counterpart. Two paths
-   are exposed through `zRadialVariant`: `'bar'` (polar bars, best for simple, label,
-   grid and stacked layouts) and `'gauge'` (best for shape and centred-text layouts).
-
-6. Native legend — the ECharts legend cannot reproduce the shadcn markup, so the option
-   keeps `legend: { show: false }` and `z-chart-legend` renders real HTML instead. The
-   legend component must stay registered for series toggling to work.
-
-7. Donut centre text — shadcn nests a `<Label content={…} />` inside `<Pie>`. ECharts has
-   no such slot, so `zCenterValue` and `zCenterLabel` draw `graphic` text nodes instead.
-   They are plain text: rich inline markup is not supported.
-
-8. Tooltip cursor — shadcn passes `cursor={false}` on most charts. ECharts always draws an
-   `axisPointer` for axis-triggered tooltips; it is styled with the `--border` token to
-   stay unobtrusive. Set `[zOption]="{ tooltip: { axisPointer: { type: 'none' } } }"` to
-   remove it.
-
-9. Radar radius axis — Recharts draws `<PolarRadiusAxis>` on a single spoke. ECharts has no
-   per-spoke option and repeats the scale on every axis, so a low `splitNumber` is needed to
-   keep it readable.
-
-10. `[zOption]` colors — the escape hatch is swept for `var(--token)` references and they are
-    resolved before ECharts sees them, exactly like the colors the component generates itself.
-    ECharts cannot parse `var()` and would silently paint black otherwise.
-
-11. Server-side rendering — the server paints a static SVG through `renderToSVGString()`
-   and the host carries `ngSkipHydration`, so the browser replaces it with the live chart.
-   Colors cannot be read from the DOM on the server, so the SVG uses the light palette
-   and the browser corrects it on hydration. Set `[zSsrWidth]` and `[zSsrHeight]` to match
-   your layout; the SVG scales through a `viewBox`.
+<z-chart class="mx-auto aspect-square h-[250px]" zType="pie" [zData]="chartData" />
 ```

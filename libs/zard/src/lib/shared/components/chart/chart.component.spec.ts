@@ -429,6 +429,62 @@ describe('chart-option.builder', () => {
     expect((option['yAxis'] as OptionRecord)['inverse']).toBe(true);
   });
 
+  it('keeps zXAxis on the category axis and zYAxis on the value axis when horizontal', () => {
+    const option = buildChartOption(context({ horizontal: true, xAxis: true, yAxis: false })) as OptionRecord;
+
+    // The categories moved to Y, and `zXAxis` follows them there — it names what it shows,
+    // not where it sits, the same pairing `[zXAxisFormatter]` already had.
+    const category = option['yAxis'] as OptionRecord;
+    const value = option['xAxis'] as OptionRecord;
+
+    expect((category['axisLabel'] as OptionRecord)['show']).toBe(true);
+    expect((value['axisLabel'] as OptionRecord)['show']).toBe(false);
+  });
+
+  it('keeps the ring labels when the radial chart also carries centre text', () => {
+    // The arc labels are laid out a glyph at a time against a canvas ruler, which happy-dom
+    // does not provide; without one there would be no label to lose.
+    const ruler = {
+      font: '',
+      measureText: () => ({ width: 6 }),
+      clearRect: () => undefined,
+      fillRect: () => undefined,
+      getImageData: () => ({ data: [0, 0, 0, 0] }),
+    };
+    const getContext = jest
+      .spyOn(HTMLCanvasElement.prototype, 'getContext')
+      .mockReturnValue(ruler as unknown as CanvasRenderingContext2D);
+
+    const option = buildChartOption(
+      context({
+        type: 'radial',
+        series: ['desktop'],
+        nameKey: 'month',
+        radialLabel: true,
+        size: { width: 300, height: 300 },
+        centerValue: '491',
+      }),
+    ) as OptionRecord;
+
+    const graphic = option['graphic'] as OptionRecord[];
+    // The arc glyphs come first, the centred group is appended — neither replaces the other.
+    expect(graphic.length).toBeGreaterThan(1);
+    expect(graphic[graphic.length - 1]['type']).toBe('group');
+    expect(graphic.some(node => node['type'] === 'text')).toBe(true);
+
+    getContext.mockRestore();
+  });
+
+  it('opens the toolbox with a brush feature so zBrush is reachable', () => {
+    const option = buildChartOption(context({ brush: true })) as OptionRecord;
+    const feature = (option['toolbox'] as OptionRecord)['feature'] as OptionRecord;
+
+    expect(option['brush']).toBeDefined();
+    expect(feature['brush']).toBeDefined();
+    // Asking for a brush alone does not drag the rest of the toolbox in.
+    expect(feature['saveAsImage']).toBeUndefined();
+  });
+
   it('declares a hidden legend so legendToggleSelect has something to act on', () => {
     const withLegend = buildChartOption(context({ hasLegend: true })) as OptionRecord;
     expect(withLegend['legend']).toEqual({ show: false, data: ['Desktop', 'Mobile'] });
@@ -507,5 +563,21 @@ describe('chart-tooltip.formatter', () => {
     const html = buildTooltipHtml(params, tooltipContext({ valueFormatter: value => `${value} visits` }));
 
     expect(html).toContain('186 visits');
+  });
+
+  it('reads a radar param as one row per indicator', () => {
+    // A radar arrives as a single param holding the whole web; taking one number off the array
+    // would print the same value at every vertex.
+    const html = buildTooltipHtml([{ seriesName: 'Desktop', value: [186, 305] }], {
+      ...tooltipContext({ trigger: 'item' }),
+      indicators: ['January', 'February'],
+    });
+
+    expect(html).toContain('January');
+    expect(html).toContain('186');
+    expect(html).toContain('February');
+    expect(html).toContain('305');
+    // The series it belongs to heads the tooltip.
+    expect(html).toContain('Desktop');
   });
 });

@@ -1187,6 +1187,10 @@ export const registry: ComponentRegistry[] = [
         content: '',
       },
       {
+        name: 'chart-arc-label.util.ts',
+        content: '',
+      },
+      {
         name: 'chart-option.builder.ts',
         content: '',
       },

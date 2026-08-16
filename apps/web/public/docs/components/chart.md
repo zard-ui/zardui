@@ -31,6 +31,7 @@ import {
   Component,
   computed,
   contentChild,
+  DestroyRef,
   effect,
   ElementRef,
   forwardRef,
@@ -38,6 +39,7 @@ import {
   input,
   numberAttribute,
   output,
+  PendingTasks,
   PLATFORM_ID,
   signal,
   ViewEncapsulation,
@@ -54,7 +56,6 @@ import { mergeClasses } from '@/shared/utils/merge-classes';
 
 import { resolveChartChrome, resolveChartColors, resolveCssColor } from './chart-colors.util';
 import { ZARD_CHART, type ZardChartHost } from './chart-context';
-import { zardEcharts } from './chart-echarts.registry';
 import { ZardChartLegendComponent } from './chart-legend.component';
 import {
   buildChartOption,
@@ -81,13 +82,33 @@ import type {
 } from './chart.types';
 import { chartCanvasVariants, chartVariants } from './chart.variants';
 
+/**
+ * `numberAttribute` answers `NaN` for anything it cannot read — `undefined`, `null`, or a
+ * valueless attribute — and ECharts draws nothing at all once a `NaN` reaches an angle. An
+ * unreadable value means "not set", which is what the builder already has a default for.
+ */
+function optionalNumberAttribute(value: unknown): number | undefined {
+  const parsed = numberAttribute(value);
+  return Number.isNaN(parsed) ? undefined : parsed;
+}
+
+/** Same guard, for the inputs that must always end up with a number. */
+function numberAttributeOr(fallback: number): (value: unknown) => number {
+  return value => numberAttribute(value, fallback);
+}
+
+/** The canvas is measured on every resize; only a real change should redraw the chart. */
+function sameSize(a: { width: number; height: number }, b: { width: number; height: number }): boolean {
+  return a.width === b.width && a.height === b.height;
+}
+
 @Component({
   selector: 'z-chart',
   imports: [NgxEchartsDirective],
   template: `
     @if (ssrSvg(); as svg) {
       <div [class]="canvasClasses()" [attr.role]="hostRole()" [attr.aria-label]="ariaLabel()" [innerHTML]="svg"></div>
-    } @else {
+    } @else if (onScreen()) {
       <div
         echarts
         [class]="canvasClasses()"
@@ -118,6 +139,8 @@ export class ZardChartComponent implements ZardChartHost {
   private readonly sanitizer = inject(DomSanitizer);
   private readonly darkMode = inject(ZardDarkMode);
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly pendingTasks = inject(PendingTasks);
 
   readonly class = input<ClassValue>('');
   readonly zConfig = input<ZardChartConfig>({});
@@ -137,10 +160,19 @@ export class ZardChartComponent implements ZardChartHost {
   readonly zInnerRadius = input<string | number>();
   readonly zOuterRadius = input<string | number>();
   readonly zRadialVariant = input<ZardChartRadialVariant>('bar');
+  readonly zTrack = input(true, { transform: booleanAttribute });
+  /** Radial only: writes each category's name along its own ring, like Recharts' `<LabelList>`. */
+  readonly zRadialLabel = input(false, { transform: booleanAttribute });
+  /**
+   * Waits for the chart to scroll into view before drawing it, so its entry animation plays
+   * where someone can see it. Turn off to draw as soon as the component is created.
+   */
+  readonly zLazyRender = input(true, { transform: booleanAttribute });
   readonly zRadarShape = input<ZardChartRadarShape>('polygon');
-  readonly zStartAngle = input<number | undefined>(undefined, { transform: numberAttribute });
-  readonly zEndAngle = input<number | undefined>(undefined, { transform: numberAttribute });
-  readonly zPadAngle = input(0, { transform: numberAttribute });
+  readonly zRadarRadialLines = input(true, { transform: booleanAttribute });
+  readonly zStartAngle = input<number | undefined>(undefined, { transform: optionalNumberAttribute });
+  readonly zEndAngle = input<number | undefined>(undefined, { transform: optionalNumberAttribute });
+  readonly zPadAngle = input(0, { transform: numberAttributeOr(0) });
   readonly zGradient = input(false, { transform: booleanAttribute });
   readonly zLabel = input(false, { transform: booleanAttribute });
   readonly zCenterValue = input<string>();
@@ -151,8 +183,8 @@ export class ZardChartComponent implements ZardChartHost {
   readonly zBrush = input(false, { transform: booleanAttribute });
   readonly zToolbox = input(false, { transform: booleanAttribute });
   readonly zRenderer = input<ZardChartRenderer>('canvas');
-  readonly zSsrWidth = input(600, { transform: numberAttribute });
-  readonly zSsrHeight = input(300, { transform: numberAttribute });
+  readonly zSsrWidth = input(600, { transform: numberAttributeOr(600) });
+  readonly zSsrHeight = input(300, { transform: numberAttributeOr(300) });
   readonly zOption = input<ZardChartOptionOverride>({});
 
   readonly zChartInit = output<EChartsType>();
@@ -164,12 +196,30 @@ export class ZardChartComponent implements ZardChartHost {
   private readonly legendRef = contentChild(ZardChartLegendComponent);
 
   private readonly chartInstance = signal<EChartsType | null>(null);
+  /** Bars growing out of the axis is movement; someone who asked for less of it gets none. */
+  private readonly reducedMotion = signal(false);
+  /**
+   * The drawing surface, watched so anything positioned in pixels follows a resize. Compared by
+   * value: a new object on every observer callback would rebuild the option, and ngx-echarts
+   * re-applies it with `notMerge`, which replays the entry animation and clears the legend
+   * selection the HTML legend is holding.
+   */
+  private readonly canvasSize = signal({ width: 0, height: 0 }, { equal: sameSize });
+  private readonly coarsePointer = signal(false);
+  /** Flips once, the first time the chart is scrolled into view. */
+  private readonly seen = signal(false);
   /** Bumped one frame after a theme switch, once the `.dark` class is on the document. */
   private readonly colorRevision = signal(0);
 
   readonly hiddenSeries = signal<ReadonlySet<string>>(new Set<string>());
 
   constructor() {
+    this.watchMotionPreference();
+    this.watchPointerType();
+    this.watchCanvasSize();
+    this.watchVisibility();
+    this.renderOnServer();
+
     if (this.isBrowser) {
       effect(() => {
         this.darkMode.themeMode();
@@ -178,6 +228,73 @@ export class ZardChartComponent implements ZardChartHost {
         this.scheduleColorRefresh();
       });
     }
+  }
+
+  /** The chart inherits the page's typeface, so the arc labels have to measure with it too. */
+  private hostFontFamily(): string {
+    if (!this.isBrowser || typeof globalThis.getComputedStyle !== 'function') return 'sans-serif';
+
+    try {
+      return globalThis.getComputedStyle(this.elementRef.nativeElement as HTMLElement).fontFamily || 'sans-serif';
+    } catch {
+      return 'sans-serif';
+    }
+  }
+
+  private watchCanvasSize(): void {
+    if (!this.isBrowser || typeof globalThis.ResizeObserver !== 'function') return;
+
+    const host = this.elementRef.nativeElement as HTMLElement;
+    const observer = new globalThis.ResizeObserver(() =>
+      this.canvasSize.set({ width: host.clientWidth, height: host.clientHeight }),
+    );
+    observer.observe(host);
+    this.destroyRef.onDestroy(() => observer.disconnect());
+  }
+
+  // The live chart is a browser affair: on the server the SVG below is all there is, and
+  // instantiating the ngx-echarts directive there would ask for a ResizeObserver that is absent.
+  protected readonly onScreen = computed(() => this.isBrowser && (this.seen() || !this.zLazyRender()));
+
+  private watchVisibility(): void {
+    const host = this.elementRef.nativeElement as HTMLElement;
+
+    if (!this.isBrowser || typeof globalThis.IntersectionObserver !== 'function') {
+      this.seen.set(true);
+      return;
+    }
+
+    const observer = new globalThis.IntersectionObserver(
+      entries => {
+        if (!entries.some(entry => entry.isIntersecting)) return;
+        this.seen.set(true);
+        observer.disconnect();
+      },
+      // A sliver on screen is enough: the chart should be drawing as it comes up, not after.
+      { threshold: 0.1 },
+    );
+
+    observer.observe(host);
+    this.destroyRef.onDestroy(() => observer.disconnect());
+  }
+
+  private watchPointerType(): void {
+    this.watchMedia('(pointer: coarse)', matches => this.coarsePointer.set(matches));
+  }
+
+  private watchMotionPreference(): void {
+    this.watchMedia('(prefers-reduced-motion: reduce)', matches => this.reducedMotion.set(matches));
+  }
+
+  private watchMedia(query: string, apply: (matches: boolean) => void): void {
+    if (!this.isBrowser || typeof globalThis.matchMedia !== 'function') return;
+
+    const media = globalThis.matchMedia(query);
+    apply(media.matches);
+
+    const listener = (event: MediaQueryListEvent) => apply(event.matches);
+    media.addEventListener('change', listener);
+    this.destroyRef.onDestroy(() => media.removeEventListener('change', listener));
   }
 
   private scheduleColorRefresh(): void {
@@ -207,6 +324,7 @@ export class ZardChartComponent implements ZardChartHost {
       valueFormatter: tooltip.zValueFormatter(),
       class: mergeClasses(tooltip.class()),
       labelClass: mergeClasses(tooltip.zLabelClass()),
+      cursor: tooltip.zCursor(),
     };
   });
 
@@ -235,7 +353,13 @@ export class ZardChartComponent implements ZardChartHost {
       innerRadius: this.zInnerRadius(),
       outerRadius: this.zOuterRadius(),
       radialVariant: this.zRadialVariant(),
+      track: this.zTrack(),
+      radialLabel: this.zRadialLabel(),
+      size: this.canvasSize(),
+      fontFamily: this.hostFontFamily(),
+      coarsePointer: this.coarsePointer(),
       radarShape: this.zRadarShape(),
+      radarRadialLines: this.zRadarRadialLines(),
       startAngle: this.zStartAngle(),
       endAngle: this.zEndAngle(),
       padAngle: this.zPadAngle(),
@@ -244,7 +368,7 @@ export class ZardChartComponent implements ZardChartHost {
       centerValue: this.zCenterValue(),
       centerLabel: this.zCenterLabel(),
       accessibility: this.zAccessibility(),
-      animation: this.zAnimation(),
+      animation: this.zAnimation() && !this.reducedMotion(),
       dataZoom: this.zDataZoom(),
       brush: this.zBrush(),
       toolbox: this.zToolbox(),
@@ -266,13 +390,26 @@ export class ZardChartComponent implements ZardChartHost {
 
   protected readonly initOpts = computed(() => ({ renderer: this.zRenderer() }));
 
-  protected readonly ssrSvg = computed<SafeHtml | null>(() => {
-    if (this.isBrowser) return null;
+  /** The static picture the server paints. Always null in the browser. */
+  protected readonly ssrSvg = signal<SafeHtml | null>(null);
 
-    const api = zardEcharts as unknown as ZardEchartsSsrApi;
-    const svg = renderChartToSvg(api, this.option(), this.zSsrWidth(), this.zSsrHeight());
-    return svg ? this.sanitizer.bypassSecurityTrustHtml(svg) : null;
-  });
+  /**
+   * Paints the server-side SVG.
+   *
+   * The engine is imported here, and only here, so that the browser bundle never carries it on
+   * the component's account — `provideZardCharts()` is what loads it on the client, lazily.
+   * Angular waits on the pending task before serialising the page.
+   */
+  private renderOnServer(): void {
+    if (this.isBrowser) return;
+
+    this.pendingTasks.run(async () => {
+      const { zardEcharts } = await import('./chart-echarts.registry');
+      const api = zardEcharts as unknown as ZardEchartsSsrApi;
+      const svg = renderChartToSvg(api, this.option(), this.zSsrWidth(), this.zSsrHeight());
+      this.ssrSvg.set(svg ? this.sanitizer.bypassSecurityTrustHtml(svg) : null);
+    });
+  }
 
   protected readonly hostRole = computed(() => (this.zAccessibility() ? 'img' : null));
 
@@ -294,7 +431,19 @@ export class ZardChartComponent implements ZardChartHost {
   protected onChartInit(instance: EChartsType): void {
     this.chartInstance.set(instance);
     this.hiddenSeries.set(new Set<string>());
+    this.showDefaultTooltip(instance);
     this.zChartInit.emit(instance);
+  }
+
+  /** `z-chart-tooltip[zDefaultIndex]` opens the tooltip on that point without a pointer. */
+  private showDefaultTooltip(instance: EChartsType): void {
+    const dataIndex = this.tooltipRef()?.zDefaultIndex();
+    if (dataIndex === undefined || Number.isNaN(dataIndex)) return;
+
+    // Cleared on destroy: the chart can be torn down in the same tick it was created — a route
+    // change, a category switch — and ECharts throws when an action reaches a disposed instance.
+    const timer = setTimeout(() => instance.dispatchAction({ type: 'showTip', seriesIndex: 0, dataIndex }));
+    this.destroyRef.onDestroy(() => clearTimeout(timer));
   }
 
   toggleSeries(name: string): void {
@@ -372,6 +521,105 @@ export const chartLegendSwatchVariants = cva('h-2 w-2 shrink-0 rounded-[2px]');
 ```
 
 ```angular-ts
+/**
+ * Labels that ride a radial bar's ring.
+ *
+ * Recharts draws these with an SVG `<textPath>` on a circular arc, so every glyph sits on the
+ * ring and leans with it. Canvas has no such thing, and ECharts' own polar label turns the whole
+ * word to face the centre — a straight line of text across a curve, whose ends fall inside the
+ * band. Placing one glyph at a time along the arc is the canvas equivalent.
+ */
+
+/** Where the text starts, past the beginning of the bar. Recharts' `<LabelList offset>`. */
+const START_OFFSET_DEGREES = 5;
+
+export interface ZardArcLabelGeometry {
+  /** Centre of the polar system, in canvas pixels. */
+  cx: number;
+  cy: number;
+  /** Radius of each ring, outermost last, matching the order of `texts`. */
+  radii: readonly number[];
+  /** Where the bars begin, in ECharts degrees: 0 is three o'clock, positive counter-clockwise. */
+  startAngle: number;
+  /** Whether the bars sweep towards a larger angle. */
+  ascending: boolean;
+  font: string;
+  fontSize: number;
+  fill: string;
+}
+
+type TextElement = Record<string, unknown>;
+
+let ruler: CanvasRenderingContext2D | null | undefined;
+
+function measureContext(): CanvasRenderingContext2D | null {
+  if (ruler !== undefined) return ruler;
+
+  try {
+    ruler = globalThis.document?.createElement('canvas').getContext('2d') ?? null;
+  } catch {
+    ruler = null;
+  }
+
+  return ruler;
+}
+
+/** Lays one label along one ring, a glyph at a time. */
+function glyphsOf(text: string, radius: number, geometry: ZardArcLabelGeometry): TextElement[] {
+  const context = measureContext();
+  if (!context || radius <= 0) return [];
+
+  context.font = geometry.font;
+  const sign = geometry.ascending ? 1 : -1;
+  const characters = [...text];
+
+  let travelled = (START_OFFSET_DEGREES * Math.PI * radius) / 180;
+
+  return characters.map(character => {
+    const width = context.measureText(character).width;
+    const angle = geometry.startAngle + ((sign * (travelled + width / 2)) / radius) * (180 / Math.PI);
+    const radians = (angle * Math.PI) / 180;
+    travelled += width;
+
+    // The tangent, pointing the way the text reads.
+    const tangentX = -Math.sin(radians) * sign;
+    const tangentY = -Math.cos(radians) * sign;
+
+    return {
+      type: 'text',
+      x: geometry.cx + Math.cos(radians) * radius,
+      y: geometry.cy - Math.sin(radians) * radius,
+      rotation: -Math.atan2(tangentY, tangentX),
+      z: 100,
+      silent: true,
+      style: {
+        text: character,
+        fill: geometry.fill,
+        font: geometry.font,
+        align: 'center',
+        verticalAlign: 'middle',
+      },
+    };
+  });
+}
+
+/** Every glyph of every label, ready to hand to ECharts as `graphic` elements. */
+export function buildArcLabels(texts: readonly string[], geometry: ZardArcLabelGeometry): TextElement[] {
+  return texts.flatMap((text, index) => glyphsOf(text, geometry.radii[index] ?? 0, geometry));
+}
+
+/** ECharts sizes a polar radius against half the shorter side; percentages resolve the same way. */
+export function resolveRadius(value: string | number | undefined, base: number, fallback: number): number {
+  if (typeof value === 'number') return value;
+  if (typeof value === 'string' && value.endsWith('%')) {
+    const percent = Number.parseFloat(value);
+    return Number.isFinite(percent) ? (percent / 100) * base : fallback;
+  }
+  return fallback;
+}
+```
+
+```angular-ts
 import type { ZardChartChromeColors, ZardChartConfig } from './chart.types';
 
 /** How many `--chart-*` tokens the default palette cycles through. */
@@ -400,14 +648,68 @@ const SSR_TOKEN_COLORS: Record<string, string> = {
   '--background': '#ffffff',
   '--border': '#e5e5e5',
   '--card': '#ffffff',
-  '--chart-1': '#e76e50',
-  '--chart-2': '#2a9d90',
-  '--chart-3': '#274754',
-  '--chart-4': '#e8c468',
-  '--chart-5': '#f4a462',
+  '--chart-1': '#8ec5ff',
+  '--chart-2': '#2b7fff',
+  '--chart-3': '#155dfc',
+  '--chart-4': '#1447e6',
+  '--chart-5': '#193cb8',
   '--foreground': '#0a0a0a',
   '--muted-foreground': '#737373',
 };
+
+let normalizer: CanvasRenderingContext2D | null | undefined;
+const normalizedColors = new Map<string, string>();
+
+function normalizerContext(): CanvasRenderingContext2D | null {
+  if (normalizer !== undefined) return normalizer;
+
+  try {
+    const canvas = globalThis.document?.createElement('canvas');
+    if (canvas) canvas.width = canvas.height = 1;
+    normalizer = canvas?.getContext('2d', { willReadFrequently: true }) ?? null;
+  } catch {
+    normalizer = null;
+  }
+
+  return normalizer;
+}
+
+/**
+ * Rewrites a CSS colour into sRGB.
+ *
+ * ECharts parses colours itself to derive the hover and blur shades of a series, and its parser
+ * predates `oklch()` — which is what every shadcn theme token is written in. It paints the
+ * untouched chart fine, because the browser resolves the string, but the moment a tooltip
+ * highlights a point every unparsed colour comes back transparent and the series vanishes.
+ * Painting one pixel and reading it back converts anything the browser understands.
+ */
+export function toCanvasColor(value: string): string {
+  const raw = (value ?? '').trim();
+  if (!raw || raw.startsWith('#') || raw.startsWith('rgb')) return raw;
+
+  const cached = normalizedColors.get(raw);
+  if (cached !== undefined) return cached;
+
+  const context = normalizerContext();
+  if (!context) return raw;
+
+  context.clearRect(0, 0, 1, 1);
+  // An unparseable colour leaves `fillStyle` on the transparent sentinel, painting nothing.
+  context.fillStyle = 'rgba(0, 0, 0, 0)';
+  context.fillStyle = raw;
+  context.fillRect(0, 0, 1, 1);
+
+  const [red, green, blue, alpha] = context.getImageData(0, 0, 1, 1).data;
+  const resolved =
+    alpha === 0
+      ? raw
+      : alpha === 255
+        ? `rgb(${red}, ${green}, ${blue})`
+        : `rgba(${red}, ${green}, ${blue}, ${alpha / 255})`;
+
+  normalizedColors.set(raw, resolved);
+  return resolved;
+}
 
 function readCssVariable(host: HTMLElement | null | undefined, token: string): string {
   if (!host || typeof globalThis.getComputedStyle !== 'function') {
@@ -421,11 +723,7 @@ function readCssVariable(host: HTMLElement | null | undefined, token: string): s
   }
 }
 
-/**
- * Resolves a CSS color that may be a `var(--token)` reference into a literal value
- * ECharts can consume. Falls back to the var()'s own fallback, then to the raw input.
- */
-export function resolveCssColor(host: HTMLElement | null | undefined, value: string, depth = 0): string {
+function readCssColor(host: HTMLElement | null | undefined, value: string, depth: number): string {
   const raw = (value ?? '').trim();
   if (!raw || depth >= MAX_VAR_DEPTH) return raw;
 
@@ -434,10 +732,18 @@ export function resolveCssColor(host: HTMLElement | null | undefined, value: str
 
   const [, token, fallback] = match;
   const computed = readCssVariable(host, token);
-  if (computed) return resolveCssColor(host, computed, depth + 1);
-  if (fallback) return resolveCssColor(host, fallback, depth + 1);
+  if (computed) return readCssColor(host, computed, depth + 1);
+  if (fallback) return readCssColor(host, fallback, depth + 1);
 
   return raw;
+}
+
+/**
+ * Resolves a CSS color that may be a `var(--token)` reference into a literal value
+ * ECharts can consume. Falls back to the var()'s own fallback, then to the raw input.
+ */
+export function resolveCssColor(host: HTMLElement | null | undefined, value: string, depth = 0): string {
+  return toCanvasColor(readCssColor(host, value, depth));
 }
 
 function hexWithAlpha(digits: string, alpha: number): string {
@@ -451,6 +757,10 @@ function hexWithAlpha(digits: string, alpha: number): string {
 
 /** Applies alpha to any CSS color, preferring oklch's native slash syntax. */
 export function withAlpha(color: string, alpha: number): string {
+  return toCanvasColor(applyAlpha(color, alpha));
+}
+
+function applyAlpha(color: string, alpha: number): string {
   const raw = (color ?? '').trim();
   if (!raw) return raw;
 
@@ -675,7 +985,6 @@ export class ZardChartLegendComponent {
   private readonly chart = inject(ZARD_CHART, { optional: true });
 
   readonly class = input<ClassValue>('');
-  readonly zNameKey = input<string>();
   readonly zVerticalAlign = input<ZardChartLegendAlignVariants>('bottom');
 
   protected readonly entries = computed<ZardChartLegendEntry[]>(() => this.chart?.legendEntries() ?? []);
@@ -700,6 +1009,7 @@ export class ZardChartLegendComponent {
 ```angular-ts
 import type { EChartsOption } from 'echarts';
 
+import { buildArcLabels, resolveRadius } from './chart-arc-label.util';
 import { paletteColor, withAlpha } from './chart-colors.util';
 import { buildTooltipHtml, type ZardChartTooltipContext, type ZardChartTooltipParam } from './chart-tooltip.formatter';
 import type {
@@ -719,9 +1029,29 @@ import type {
 /** Bars keep shadcn's default corner radius unless a series overrides it. */
 const DEFAULT_BAR_RADIUS = 4;
 const DEFAULT_SYMBOL_SIZE = 8;
+/**
+ * Horizontal breathing room for the plot area, in pixels. Lines and areas sit flush against the
+ * axis ends (`boundaryGap: false`), so without it the first and last point are drawn half outside
+ * the canvas — the same reason every shadcn area/line chart passes `margin={{ left: 12, right: 12 }}`.
+ */
+const CURVE_GRID_INSET = 12;
+/** Keeps the donut's centre reading above anything a chart paints behind its ring. */
+const CENTER_TEXT_Z = 100;
 const DEFAULT_AREA_OPACITY = 0.4;
 const DEFAULT_RADAR_OPACITY = 0.6;
+const DEFAULT_RADAR_STROKE = 1;
+const DEFAULT_RADAR_RADIUS = '72%';
 const IMPLICIT_STACK_ID = 'zard-stack';
+
+/**
+ * Entry motion. A chart is watched once, when it appears, so it can afford to be explanatory —
+ * but Recharts' 1.5s `ease` reads as sluggish across a grid of them. This is the same gesture,
+ * shortened, on a strong ease-out: fast off the mark, settling at the end, where the eye is.
+ */
+const ENTRY_DURATION = 700;
+const ENTRY_EASING = 'quinticOut';
+/** Re-drawing after a toggle is movement on screen, not an entrance: quicker, and eased both ends. */
+const UPDATE_DURATION = 250;
 
 /** Everything the builder needs. Pure data plus one color resolver, so it stays testable. */
 export interface ZardChartBuildContext {
@@ -742,7 +1072,16 @@ export interface ZardChartBuildContext {
   innerRadius?: string | number;
   outerRadius?: string | number;
   radialVariant: ZardChartRadialVariant;
+  /** Radial only: the muted ring drawn behind each bar. */
+  track: boolean;
+  /** Radial only: writes each category's name along its own ring. */
+  radialLabel: boolean;
+  /** The canvas, in pixels. Zero until the chart has been laid out. */
+  size: { width: number; height: number };
+  fontFamily: string;
   radarShape: ZardChartRadarShape;
+  /** Radar only: the spokes running from the centre to each indicator. */
+  radarRadialLines: boolean;
   startAngle?: number;
   endAngle?: number;
   padAngle: number;
@@ -758,8 +1097,10 @@ export interface ZardChartBuildContext {
   /** Series colors already resolved from `zConfig` for the active theme, keyed by data key. */
   colors: Record<string, string>;
   chrome: ZardChartChromeColors;
-  tooltip: Omit<ZardChartTooltipContext, 'colors' | 'config'> | null;
+  tooltip: (Omit<ZardChartTooltipContext, 'colors' | 'config'> & { cursor: boolean }) | null;
   hasLegend: boolean;
+  /** True on touch, where a tooltip has to survive the finger lifting. */
+  coarsePointer: boolean;
   /** Turns `var(--token)` into a literal ECharts can paint with. */
   resolveColor: (value: string) => string;
 }
@@ -811,8 +1152,27 @@ function expandRow(row: ZardChartDatum, keys: string[]): Record<string, number |
   return normalized;
 }
 
-/** A cartesian data point: a bare number, or an object when the row carries its own `fill`. */
-type CartesianPoint = number | null | { value: number | null; itemStyle: { color: string } };
+/** A cartesian data point: a bare number, or an object when the row styles itself. */
+type CartesianPoint = number | null | OptionRecord;
+
+/**
+ * Per-point overrides a row may carry, mirroring what Recharts expresses with `<Cell>`:
+ * `fill` for the color, plus `itemStyle` and `label` for anything else about that one point.
+ */
+function pointStyleOf(ctx: ZardChartBuildContext, row: ZardChartDatum): OptionRecord | undefined {
+  const fill = typeof row['fill'] === 'string' ? ctx.resolveColor(row['fill'] as string) : undefined;
+  const declared = isPlainObject(row['itemStyle']) ? row['itemStyle'] : undefined;
+  const label = isPlainObject(row['label']) ? row['label'] : undefined;
+
+  if (!fill && !declared && !label) return undefined;
+
+  const itemStyle = { ...(fill ? { color: fill } : {}), ...(declared ?? {}) };
+
+  return {
+    ...(Object.keys(itemStyle).length > 0 ? { itemStyle } : {}),
+    ...(label ? { label } : {}),
+  };
+}
 
 function seriesValues(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]): Map<string, CartesianPoint[]> {
   const keys = definitions.map(definition => definition.dataKey);
@@ -820,12 +1180,11 @@ function seriesValues(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]
 
   for (const row of ctx.data) {
     const source = ctx.stackOffset === 'expand' ? expandRow(row, keys) : row;
-    // shadcn drives per-point colors from a `fill` field on the row; honour it here too.
-    const fill = typeof row['fill'] === 'string' ? ctx.resolveColor(row['fill'] as string) : undefined;
+    const style = pointStyleOf(ctx, row);
 
     for (const key of keys) {
       const value = toNumber(source[key]);
-      values.get(key)?.push(fill ? { value, itemStyle: { color: fill } } : value);
+      values.get(key)?.push(style ? { value, ...style } : value);
     }
   }
 
@@ -899,9 +1258,13 @@ function buildAxes(ctx: ZardChartBuildContext, definitions: ZardChartSeries[], c
     boundaryGap: hasBars,
     axisLine: { show: false },
     axisTick: { show: false },
-    splitLine: { show: false, lineStyle: { color: ctx.chrome.border } },
+    // `border/50`, like shadcn's `[&_.recharts-cartesian-grid_line]:stroke-border/50`. `opacity`
+    // multiplies the token's own alpha instead of replacing it, which `--border` already carries.
+    splitLine: { show: false, lineStyle: { color: ctx.chrome.border, opacity: 0.5 } },
     axisLabel: {
-      show: ctx.horizontal ? ctx.yAxis : ctx.xAxis,
+      // `zXAxis` and `zXAxisFormatter` both address the category axis, whichever way the chart is
+      // turned — the same pairing shadcn gets from `<XAxis dataKey>` plus its `tickFormatter`.
+      show: ctx.xAxis,
       margin: 8,
       hideOverlap: true,
       color: ctx.chrome.mutedForeground,
@@ -914,9 +1277,12 @@ function buildAxes(ctx: ZardChartBuildContext, definitions: ZardChartSeries[], c
     type: 'value',
     axisLine: { show: false },
     axisTick: { show: false },
-    splitLine: { show: false, lineStyle: { color: ctx.chrome.border } },
+    // `border/50`, like shadcn's `[&_.recharts-cartesian-grid_line]:stroke-border/50`. `opacity`
+    // multiplies the token's own alpha instead of replacing it, which `--border` already carries.
+    splitLine: { show: false, lineStyle: { color: ctx.chrome.border, opacity: 0.5 } },
     axisLabel: {
-      show: ctx.horizontal ? ctx.xAxis : ctx.yAxis,
+      // Likewise `zYAxis` and `zYAxisFormatter` always address the value axis.
+      show: ctx.yAxis,
       margin: 8,
       color: ctx.chrome.mutedForeground,
       fontSize: 12,
@@ -960,6 +1326,8 @@ function buildCartesianSeries(ctx: ZardChartBuildContext, definitions: ZardChart
       type: isBar ? 'bar' : 'line',
       data: values.get(definition.dataKey) ?? [],
       itemStyle: { color, ...(isBar ? { borderRadius: barRadius(ctx, definition, isStackTop) } : {}) },
+      // Recharts sets a hair of space between the bars of a group; ECharts leaves a third of a bar.
+      ...(isBar ? { emphasis: { disabled: true }, barGap: '5%' } : {}),
       label: seriesLabelOption(ctx, definition),
       animation: ctx.animation,
       ...(stack ? { stack } : {}),
@@ -967,24 +1335,43 @@ function buildCartesianSeries(ctx: ZardChartBuildContext, definitions: ZardChart
     };
 
     if (!isBar) {
-      series['lineStyle'] = { color, width: 2 };
+      const area = isArea ? areaFill(ctx, color, definition) : undefined;
+
+      series['lineStyle'] = { color, width: definition.strokeWidth ?? 2 };
       series['smooth'] = definition.smooth ?? false;
       series['showSymbol'] = definition.showSymbol ?? false;
       series['symbol'] = 'circle';
       series['symbolSize'] = definition.symbolSize ?? DEFAULT_SYMBOL_SIZE;
       series['emphasis'] = { focus: 'none' };
+      // An axis tooltip highlights one point, which fades the rest of the line to nothing.
+      // Recharts only adds an active dot, so pin the blur state to the normal one.
+      series['blur'] = {
+        lineStyle: { opacity: 1 },
+        itemStyle: { opacity: 1 },
+        ...(area ? { areaStyle: { opacity: (area['opacity'] as number) ?? 1 } } : {}),
+      };
       if (definition.step) series['step'] = definition.step;
-      if (isArea) series['areaStyle'] = areaFill(ctx, color, definition);
+      if (area) series['areaStyle'] = area;
     }
 
     return series;
   });
 }
 
+/**
+ * ECharts lays radar indicators out counter-clockwise from the top; Recharts goes clockwise.
+ * Keeping the first row at twelve o'clock and reversing the rest flips the direction without
+ * moving the starting point.
+ */
+function clockwise<T>(items: readonly T[]): T[] {
+  const [first, ...rest] = items;
+  return first === undefined ? [] : [first, ...rest.reverse()];
+}
+
 function buildRadar(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]): OptionRecord {
   const lines = gridVisibility(ctx.grid);
   const gridVisible = lines.horizontal || lines.vertical;
-  const indicators = ctx.data.map(row => ({ name: categoryOf(ctx, row) }));
+  const indicators = clockwise(ctx.data.map(row => ({ name: categoryOf(ctx, row) })));
 
   const data = definitions.map((definition, index) => {
     const color = colorFor(ctx, definition.dataKey, index, definition.color);
@@ -992,9 +1379,9 @@ function buildRadar(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]):
 
     return {
       name: labelFor(ctx.config, definition.dataKey),
-      value: ctx.data.map(row => toNumber(row[definition.dataKey])),
+      value: clockwise(ctx.data.map(row => toNumber(row[definition.dataKey]))),
       itemStyle: { color },
-      lineStyle: { color, width: 2 },
+      lineStyle: { color, width: definition.strokeWidth ?? DEFAULT_RADAR_STROKE },
       symbol: (definition.showSymbol ?? false) ? 'circle' : 'none',
       symbolSize: definition.symbolSize ?? DEFAULT_SYMBOL_SIZE,
       ...(opacity > 0 ? { areaStyle: { color, opacity } } : {}),
@@ -1007,10 +1394,11 @@ function buildRadar(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]):
       indicator: indicators,
       shape: ctx.radarShape,
       axisName: { color: ctx.chrome.mutedForeground, fontSize: 12 },
-      axisLine: { show: gridVisible, lineStyle: { color: ctx.chrome.border } },
+      axisLine: { show: gridVisible && ctx.radarRadialLines, lineStyle: { color: ctx.chrome.border } },
       splitLine: { show: gridVisible, lineStyle: { color: ctx.chrome.border } },
       splitArea: { show: false },
-      ...(ctx.outerRadius === undefined ? {} : { radius: ctx.outerRadius }),
+      // Recharts sizes the web off the container, not off however much room the names leave.
+      radius: ctx.outerRadius ?? DEFAULT_RADAR_RADIUS,
     },
     series: [{ type: 'radar', data, animation: ctx.animation }],
   };
@@ -1025,7 +1413,7 @@ function buildPie(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]): O
     const declared = typeof row['fill'] === 'string' ? (row['fill'] as string) : undefined;
 
     return {
-      name,
+      name: labelFor(ctx.config, name),
       value: toNumber(row[valueKey]) ?? 0,
       itemStyle: { color: colorFor(ctx, name, index, declared ?? definition?.color) },
     };
@@ -1038,21 +1426,48 @@ function buildPie(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]): O
         radius: [ctx.innerRadius ?? 0, ctx.outerRadius ?? '80%'],
         center: ['50%', '50%'],
         padAngle: ctx.padAngle,
+        // Recharts walks a pie counter-clockwise from twelve o'clock; ECharts goes the other way.
+        clockwise: ctx.startAngle !== undefined && ctx.endAngle !== undefined ? ctx.endAngle < ctx.startAngle : false,
         avoidLabelOverlap: true,
         animation: ctx.animation,
-        itemStyle: { borderColor: ctx.chrome.background, borderWidth: 2 },
+        itemStyle: { borderColor: ctx.chrome.background, borderWidth: definitions[0]?.strokeWidth ?? 0 },
         label: {
           show: ctx.label,
           color: ctx.chrome.foreground,
           fontSize: 12,
+          formatter: '{c}',
         },
         labelLine: { show: ctx.label, lineStyle: { color: ctx.chrome.border } },
         data,
-        ...(ctx.startAngle === undefined ? {} : { startAngle: ctx.startAngle }),
+        // Recharts starts a pie at three o'clock, not twelve.
+        startAngle: ctx.startAngle ?? 0,
         ...(ctx.endAngle === undefined ? {} : { endAngle: ctx.endAngle }),
       },
     ],
   };
+}
+
+/** Reproduces the polar layout ECharts is about to compute, so the labels can ride the rings. */
+function arcLabels(ctx: ZardChartBuildContext, names: string[]): OptionRecord[] {
+  const { width, height } = ctx.size;
+  if (width <= 0 || height <= 0 || names.length === 0) return [];
+
+  const base = Math.min(width, height) / 2;
+  const inner = resolveRadius(ctx.innerRadius, base, base * 0.3);
+  const outer = resolveRadius(ctx.outerRadius, base, base * 0.9);
+  const band = (outer - inner) / names.length;
+  const fontSize = 11;
+
+  return buildArcLabels(names, {
+    cx: width / 2,
+    cy: height / 2,
+    radii: names.map((_, index) => inner + band * (index + 0.5)),
+    startAngle: ctx.startAngle ?? 90,
+    ascending: (ctx.endAngle ?? 360) >= (ctx.startAngle ?? 90),
+    font: `${fontSize}px ${ctx.fontFamily}`,
+    fontSize,
+    fill: '#fff',
+  });
 }
 
 function buildRadialBar(ctx: ZardChartBuildContext, definitions: ZardChartSeries[]): OptionRecord {
@@ -1060,7 +1475,7 @@ function buildRadialBar(ctx: ZardChartBuildContext, definitions: ZardChartSeries
   const stacked = definitions.length > 1;
   const names = stacked
     ? definitions.map(item => labelFor(ctx.config, item.dataKey))
-    : ctx.data.map(row => categoryOf(ctx, row));
+    : ctx.data.map(row => labelFor(ctx.config, categoryOf(ctx, row)));
 
   const rowValues = stacked
     ? definitions.map(item => toNumber(ctx.data[0]?.[item.dataKey]) ?? 0)
@@ -1101,7 +1516,9 @@ function buildRadialBar(ctx: ZardChartBuildContext, definitions: ZardChartSeries
       coordinateSystem: 'polar',
       name: labelFor(ctx.config, definition?.dataKey ?? ''),
       roundCap: true,
-      showBackground: true,
+      // Recharts leaves barely a hair between the rings; ECharts' default gap is four times that.
+      barCategoryGap: '10%',
+      showBackground: ctx.track,
       backgroundStyle: { color: track },
       animation: ctx.animation,
       data,
@@ -1109,6 +1526,7 @@ function buildRadialBar(ctx: ZardChartBuildContext, definitions: ZardChartSeries
   }
 
   return {
+    ...(ctx.radialLabel && !stacked ? { graphic: arcLabels(ctx, names) } : {}),
     polar: {
       radius: [ctx.innerRadius ?? '30%', ctx.outerRadius ?? '90%'],
       center: ['50%', '50%'],
@@ -1118,6 +1536,11 @@ function buildRadialBar(ctx: ZardChartBuildContext, definitions: ZardChartSeries
       min: 0,
       max: stacked ? rowValues.reduce((sum, value) => sum + value, 0) || 1 : max,
       show: false,
+      // Recharts reads the two angles as a direction: 180 → 0 sweeps clockwise, -90 → 380
+      // counter-clockwise. ECharts needs that spelled out.
+      ...(ctx.startAngle === undefined || ctx.endAngle === undefined
+        ? {}
+        : { clockwise: ctx.endAngle < ctx.startAngle }),
       ...(ctx.startAngle === undefined ? {} : { startAngle: ctx.startAngle }),
       ...(ctx.endAngle === undefined ? {} : { endAngle: ctx.endAngle }),
     },
@@ -1181,11 +1604,12 @@ function buildCenterText(ctx: ZardChartBuildContext): OptionRecord[] {
     children.push({
       type: 'text',
       x: 0,
-      y: hasBoth ? -12 : 0,
+      y: 0,
+      z: CENTER_TEXT_Z,
       style: {
         text: ctx.centerValue,
         fill: ctx.chrome.foreground,
-        fontSize: 28,
+        fontSize: 36,
         fontWeight: 700,
         align: 'center',
         verticalAlign: 'middle',
@@ -1199,7 +1623,8 @@ function buildCenterText(ctx: ZardChartBuildContext): OptionRecord[] {
     children.push({
       type: 'text',
       x: 0,
-      y: hasBoth ? 14 : 0,
+      y: hasBoth ? 24 : 0,
+      z: CENTER_TEXT_Z,
       style: {
         text: ctx.centerLabel,
         fill: ctx.chrome.mutedForeground,
@@ -1223,14 +1648,31 @@ function buildTooltip(ctx: ZardChartBuildContext, legendEntries: ZardChartLegend
     colors[entry.name] = entry.color;
   }
 
-  const context: ZardChartTooltipContext = { ...ctx.tooltip, config: ctx.config, colors };
+  // A radar arrives as one param holding every indicator, so the tooltip needs their names.
+  const indicators =
+    ctx.type === 'radar' ? clockwise(ctx.data.map(row => labelFor(ctx.config, categoryOf(ctx, row)))) : undefined;
+
+  const context: ZardChartTooltipContext = { ...ctx.tooltip, config: ctx.config, colors, indicators };
+
+  const hasBars = normalizeSeries(ctx.series).some(definition => (definition.type ?? ctx.type) === 'bar');
+  const cursor = ctx.tooltip.cursor
+    ? hasBars
+      ? { type: 'shadow', shadowStyle: { color: withAlpha(ctx.chrome.mutedForeground, 0.15) } }
+      : { type: 'line', lineStyle: { color: ctx.chrome.border, width: 1 } }
+    : { type: 'none' };
 
   return {
     trigger: ctx.tooltip.trigger,
-    axisPointer: { type: 'line', lineStyle: { color: ctx.chrome.border, width: 1 } },
+    // A tap is a hover that ends immediately, so on touch the tooltip would flash and vanish.
+    // Binding it to the click alone keeps it up until the next tap, the way Recharts behaves.
+    triggerOn: ctx.coarsePointer ? 'click' : 'mousemove|click',
+    axisPointer: cursor,
     backgroundColor: 'transparent',
     borderWidth: 0,
     padding: 0,
+    // Recharts keeps its tooltip inside the responsive container; ECharts would let it
+    // spill over whatever sits next to the chart.
+    confine: true,
     extraCssText: 'box-shadow:none;',
     appendToBody: false,
     formatter: (params: ZardChartTooltipParam | ZardChartTooltipParam[]) => buildTooltipHtml(params, context),
@@ -1248,7 +1690,7 @@ export function buildLegendEntries(ctx: ZardChartBuildContext): ZardChartLegendE
       const declared = typeof row['fill'] === 'string' ? (row['fill'] as string) : undefined;
 
       return {
-        name,
+        name: labelFor(ctx.config, name),
         dataKey: name,
         label: labelFor(ctx.config, name),
         color: colorFor(ctx, name, index, declared),
@@ -1331,6 +1773,10 @@ export function buildChartOption(ctx: ZardChartBuildContext): EChartsOption {
 
   const option: OptionRecord = {
     animation: ctx.animation,
+    animationDuration: ENTRY_DURATION,
+    animationEasing: ENTRY_EASING,
+    animationDurationUpdate: UPDATE_DURATION,
+    animationEasingUpdate: 'cubicInOut',
     aria: { enabled: ctx.accessibility },
     color: legendEntries.map(entry => entry.color),
     textStyle: { fontFamily: 'inherit' },
@@ -1339,9 +1785,11 @@ export function buildChartOption(ctx: ZardChartBuildContext): EChartsOption {
   if (isCartesian) {
     const categories = ctx.data.map(row => String(row[ctx.xAxisKey ?? ''] ?? ''));
     Object.assign(option, buildAxes(ctx, definitions, categories));
+    const inset =
+      ctx.horizontal || definitions.some(definition => (definition.type ?? ctx.type) === 'bar') ? 0 : CURVE_GRID_INSET;
     option['grid'] = {
-      left: 0,
-      right: 0,
+      left: inset,
+      right: inset,
       top: 12,
       bottom: 0,
       outerBoundsMode: 'same',
@@ -1370,7 +1818,9 @@ export function buildChartOption(ctx: ZardChartBuildContext): EChartsOption {
 
   const centerText = buildCenterText(ctx);
   if (centerText.length > 0) {
-    option['graphic'] = [{ type: 'group', left: 'center', top: 'center', children: centerText }];
+    // A radial chart may already have put its ring labels here; the centre joins them.
+    const existing = Array.isArray(option['graphic']) ? (option['graphic'] as OptionRecord[]) : [];
+    option['graphic'] = [...existing, { type: 'group', left: 'center', top: 'center', children: centerText }];
   }
 
   if (ctx.dataZoom && isCartesian) {
@@ -1394,12 +1844,16 @@ export function buildChartOption(ctx: ZardChartBuildContext): EChartsOption {
     option['brush'] = { toolbox: ['rect', 'polygon', 'clear'], xAxisIndex: 0 };
   }
 
-  if (ctx.toolbox) {
+  // The brush is only reachable through the toolbox, so asking for one brings the other along.
+  if (ctx.toolbox || ctx.brush) {
     option['toolbox'] = {
       right: 0,
       top: 0,
       iconStyle: { borderColor: ctx.chrome.mutedForeground },
-      feature: { dataZoom: { yAxisIndex: 'none' }, restore: {}, saveAsImage: {} },
+      feature: {
+        ...(ctx.brush ? { brush: {} } : {}),
+        ...(ctx.toolbox ? { dataZoom: { yAxisIndex: 'none' }, restore: {}, saveAsImage: {} } : {}),
+      },
     };
   }
 
@@ -1467,7 +1921,14 @@ export function renderChartToSvg(
 ```
 
 ```angular-ts
-import { booleanAttribute, ChangeDetectionStrategy, Component, input, ViewEncapsulation } from '@angular/core';
+import {
+  booleanAttribute,
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  numberAttribute,
+  ViewEncapsulation,
+} from '@angular/core';
 
 import type { ClassValue } from 'clsx';
 
@@ -1499,6 +1960,13 @@ export class ZardChartTooltipComponent {
   readonly zValueFormatter = input<(value: number, name: string) => string>();
   readonly zTrigger = input<ZardChartTooltipTrigger>('axis');
   readonly zLabelClass = input<ClassValue>('');
+  /**
+   * Draws the axis pointer under the tooltip — a line on curves, a band on bars.
+   * Off by default, like shadcn's `<ChartTooltip cursor={false} />`.
+   */
+  readonly zCursor = input(false, { transform: booleanAttribute });
+  /** Opens the tooltip on this data index as soon as the chart draws, like shadcn's `defaultIndex`. */
+  readonly zDefaultIndex = input<number | undefined>(undefined, { transform: numberAttribute });
 }
 ```
 
@@ -1536,6 +2004,11 @@ export interface ZardChartTooltipContext {
   config: ZardChartConfig;
   /** Series colors resolved by the parent chart, keyed by the name ECharts uses. */
   colors: Record<string, string>;
+  /**
+   * Radar only: the indicator names, in the order ECharts lays them out. A radar hands the whole
+   * web over in a single param, so the rows are read off the value array against these names.
+   */
+  indicators?: readonly string[];
 }
 
 const CONTAINER_CLASSES =
@@ -1594,6 +2067,50 @@ function formatValue(value: number | null, name: string, ctx: ZardChartTooltipCo
   return value.toLocaleString();
 }
 
+/** One line of the tooltip: a swatch, a name and a value. */
+interface TooltipRow {
+  name: string;
+  color: string;
+  value: string;
+}
+
+function colorOf(param: ZardChartTooltipParam, ctx: ZardChartTooltipContext): string {
+  return ctx.colors[param.seriesName ?? ''] ?? ctx.colors[param.name ?? ''] ?? param.color ?? '';
+}
+
+/** True when the params are a radar's, which arrive as one param holding every indicator. */
+function isRadar(items: ZardChartTooltipParam[], ctx: ZardChartTooltipContext): boolean {
+  return !!ctx.indicators?.length && items.every(param => Array.isArray(param.value));
+}
+
+/**
+ * A radar's rows: one per indicator, the way ECharts' own tooltip reads a web. Taking a single
+ * number off the array instead would show the same value at every vertex.
+ */
+function radarRows(items: ZardChartTooltipParam[], ctx: ZardChartTooltipContext): TooltipRow[] {
+  const indicators = ctx.indicators ?? [];
+
+  return items.flatMap(param => {
+    const color = colorOf(param, ctx);
+    const values = Array.isArray(param.value) ? param.value : [];
+
+    return values.flatMap((raw, index) => {
+      const parsed = toNumber(raw);
+      if (parsed === null) return [];
+
+      const name = indicators[index] ?? '';
+      const label = ctx.config[name]?.label ?? name;
+      return [{ name: label, color, value: formatValue(parsed, label, ctx) }];
+    });
+  });
+}
+
+/** One param, one row: everything that is not a radar. */
+function rowOf(param: ZardChartTooltipParam, ctx: ZardChartTooltipContext): TooltipRow {
+  const name = itemLabel(param, ctx);
+  return { name, color: colorOf(param, ctx), value: formatValue(readValue(param), name, ctx) };
+}
+
 function itemLabel(param: ZardChartTooltipParam, ctx: ZardChartTooltipContext): string {
   const key = ctx.nameKey ?? (ctx.trigger === 'item' ? (param.name ?? '') : (param.seriesName ?? ''));
   return ctx.config[key]?.label ?? (ctx.trigger === 'item' ? (param.name ?? '') : (param.seriesName ?? ''));
@@ -1639,15 +2156,18 @@ export function buildTooltipHtml(
   const items = (Array.isArray(params) ? params : [params]).filter(Boolean);
   if (items.length === 0) return '';
 
-  const label = headerLabel(items, ctx);
-  const nestLabel = items.length === 1 && ctx.indicator !== 'dot';
+  const radar = isRadar(items, ctx);
+  const entries: TooltipRow[] = radar ? radarRows(items, ctx) : items.map(param => rowOf(param, ctx));
+
+  if (entries.length === 0) return '';
+
+  // A radar is headed by the series it belongs to; everything else by its category.
+  const label = radar ? (items[0]?.seriesName ?? '') : headerLabel(items, ctx);
+  const nestLabel = entries.length === 1 && ctx.indicator !== 'dot';
   const showHeader = !ctx.hideLabel && !nestLabel && label !== '';
 
-  const rows = items
-    .map(param => {
-      const name = itemLabel(param, ctx);
-      const color = ctx.colors[param.seriesName ?? ''] ?? ctx.colors[param.name ?? ''] ?? param.color ?? '';
-      const value = formatValue(readValue(param), name, ctx);
+  const rows = entries
+    .map(({ name, color, value }) => {
       const rowClasses = mergeClasses(ROW_CLASSES, ctx.indicator === 'dot' ? 'items-center' : '');
       const innerAlign = nestLabel ? 'items-end' : 'items-center';
       const nestedLabel =
@@ -1721,6 +2241,8 @@ export interface ZardChartSeries {
   step?: 'start' | 'middle' | 'end';
   radius?: number | number[];
   showSymbol?: boolean;
+  /** Stroke width of the line, or of a radar web's outline. */
+  strokeWidth?: number;
   symbolSize?: number;
   yAxisIndex?: number;
   color?: string;
@@ -1840,20 +2362,13 @@ Colors are declared as CSS variables and resolved to computed values before ECha
 /* Recommended: declare the palette once, as CSS variables, and let every chart pick it up.
    The chart resolves `var(--token)` to a computed value before handing it to ECharts and
    re-resolves it whenever the theme changes. */
-:root {
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-}
-
+:root,
 .dark {
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
 }
 
 /* Hex, rgb(), hsl() and oklch() literals are accepted too — anywhere a color is expected. */
@@ -1861,14 +2376,14 @@ Colors are declared as CSS variables and resolved to computed values before ECha
 
 ### Height
 
-The container must resolve to a real height. `z-chart` defaults to `aspect-video`, and any explicit height wins over it.
+The container must resolve to a real height, or ECharts initialises at zero pixels and draws nothing. `z-chart` handles that on its own with `aspect-video`; pass a height class only when you want a different shape, and note that a height without an aspect ratio needs a width too.
 
 ```angular-html
-<!-- The container must resolve to a real height. Without one, ECharts initialises at
-     zero pixels and nothing is drawn. `z-chart` defaults to `aspect-video`, so this is
-     only a problem when you override the aspect ratio without giving a height. -->
-<z-chart class="h-[250px] w-full" ...>...</z-chart>
-<z-chart class="aspect-square h-[250px]" ...>...</z-chart>
+<z-chart zType="bar" [zData]="chartData" [zSeries]="series" />
+
+<z-chart class="h-[250px] w-full" zType="bar" [zData]="chartData" />
+
+<z-chart class="mx-auto aspect-square h-[250px]" zType="pie" [zData]="chartData" />
 ```
 
 ### Tree Shaking
@@ -1947,17 +2462,20 @@ Pass more than one data key to `zSeries` to draw them side by side.
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Bar Chart - Multiple" />
-        <z-card-description zDescription="Showing total visitors for the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -1967,14 +2485,22 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           [zSeries]="series"
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="dashed" />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartBarMultipleComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2004,17 +2530,20 @@ Use `zStacked` to stack every series on the same axis.
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Bar Chart - Stacked" />
-        <z-card-description zDescription="Showing total visitors for the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -2025,14 +2554,22 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
           zStacked
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="dashed" />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartBarStackedComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2062,17 +2599,20 @@ Use `zHorizontal` to swap the category and value axes.
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Bar Chart - Horizontal" />
-        <z-card-description zDescription="Showing total visitors for the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -2083,17 +2623,23 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
           zHorizontal
-          [zXAxis]="false"
           zGrid="vertical"
-          zYAxis
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="dashed" zHideLabel />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartBarHorizontalComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2122,17 +2668,20 @@ Use `zLabel` to print the value on every data point — the `LabelList` equivale
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Bar Chart - Label" />
-        <z-card-description zDescription="Showing total visitors for the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -2143,14 +2692,22 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
           zLabel
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="dashed" zHideLabel />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartBarLabelComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2179,20 +2736,34 @@ Series are plain inputs, so a `signal` is all it takes to make the chart interac
 ```angular-ts
 import { ChangeDetectionStrategy, Component, computed, signal } from '@angular/core';
 
-import { ZardButtonComponent } from '@/shared/components/button/button.component';
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
-import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
+import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports, ZardButtonComponent],
+  imports: [ZardCardImports, ZardChartImports],
   template: `
-    <z-card class="w-full">
-      <z-card-header>
-        <z-card-title zTitle="Bar Chart - Interactive" />
-        <z-card-description zDescription="Showing total visitors for the last 30 days" />
+    <z-card class="w-full py-0">
+      <z-card-header class="flex flex-col items-stretch border-b !p-0 sm:flex-row">
+        <div class="flex flex-1 flex-col justify-center gap-1 px-6 pt-4 pb-3 sm:!py-0">
+          <z-card-title zTitle="Bar Chart - Interactive" />
+          <z-card-description zDescription="Showing total visitors for the last 3 months" />
+        </div>
+        <div class="flex">
+          @for (option of options; track option.key) {
+            <button
+              type="button"
+              [attr.data-active]="active() === option.key"
+              class="data-[active=true]:bg-muted/50 relative z-30 flex flex-1 flex-col justify-center gap-1 border-t px-6 py-4 text-left even:border-l sm:border-t-0 sm:border-l sm:px-8 sm:py-6"
+              (click)="select(option.key)"
+            >
+              <span class="text-muted-foreground text-xs">{{ option.label }}</span>
+              <span class="text-lg leading-none font-bold sm:text-3xl">{{ totals()[option.key] }}</span>
+            </button>
+          }
+        </div>
       </z-card-header>
-      <z-card-content>
+      <z-card-content class="px-2 sm:p-6">
         <z-chart
           zType="bar"
           [zConfig]="chartConfig"
@@ -2200,35 +2771,84 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           [zSeries]="series()"
           zXAxisKey="date"
           [zXAxisFormatter]="shortDate"
-          class="h-[250px] w-full"
+          class="aspect-auto h-[250px] w-full"
         >
-          <z-chart-tooltip zIndicator="dashed" />
+          <z-chart-tooltip zIndicator="dot" zNameKey="views" class="w-[150px]" [zLabelFormatter]="longDate" zCursor />
         </z-chart>
       </z-card-content>
-      <z-card-footer class="gap-2">
-        @for (option of options; track option.key) {
-          <button
-            z-button
-            type="button"
-            [zType]="active() === option.key ? 'default' : 'outline'"
-            zSize="sm"
-            (click)="select(option.key)"
-          >
-            {{ option.label }} · {{ total(option.key) }}
-          </button>
-        }
-      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ZardDemoChartBarInteractiveComponent {
   protected readonly chartConfig: ZardChartConfig = {
-    desktop: { label: 'Desktop', color: 'var(--chart-1)' },
-    mobile: { label: 'Mobile', color: 'var(--chart-2)' },
+    views: { label: 'Page Views' },
+    desktop: { label: 'Desktop', color: 'var(--chart-2)' },
+    mobile: { label: 'Mobile', color: 'var(--chart-1)' },
   };
 
   protected readonly chartData = [
+    { date: '2024-04-01', desktop: 222, mobile: 150 },
+    { date: '2024-04-02', desktop: 97, mobile: 180 },
+    { date: '2024-04-03', desktop: 167, mobile: 120 },
+    { date: '2024-04-04', desktop: 242, mobile: 260 },
+    { date: '2024-04-05', desktop: 373, mobile: 290 },
+    { date: '2024-04-06', desktop: 301, mobile: 340 },
+    { date: '2024-04-07', desktop: 245, mobile: 180 },
+    { date: '2024-04-08', desktop: 409, mobile: 320 },
+    { date: '2024-04-09', desktop: 59, mobile: 110 },
+    { date: '2024-04-10', desktop: 261, mobile: 190 },
+    { date: '2024-04-11', desktop: 327, mobile: 350 },
+    { date: '2024-04-12', desktop: 292, mobile: 210 },
+    { date: '2024-04-13', desktop: 342, mobile: 380 },
+    { date: '2024-04-14', desktop: 137, mobile: 220 },
+    { date: '2024-04-15', desktop: 120, mobile: 170 },
+    { date: '2024-04-16', desktop: 138, mobile: 190 },
+    { date: '2024-04-17', desktop: 446, mobile: 360 },
+    { date: '2024-04-18', desktop: 364, mobile: 410 },
+    { date: '2024-04-19', desktop: 243, mobile: 180 },
+    { date: '2024-04-20', desktop: 89, mobile: 150 },
+    { date: '2024-04-21', desktop: 137, mobile: 200 },
+    { date: '2024-04-22', desktop: 224, mobile: 170 },
+    { date: '2024-04-23', desktop: 138, mobile: 230 },
+    { date: '2024-04-24', desktop: 387, mobile: 290 },
+    { date: '2024-04-25', desktop: 215, mobile: 250 },
+    { date: '2024-04-26', desktop: 75, mobile: 130 },
+    { date: '2024-04-27', desktop: 383, mobile: 420 },
+    { date: '2024-04-28', desktop: 122, mobile: 180 },
+    { date: '2024-04-29', desktop: 315, mobile: 240 },
+    { date: '2024-04-30', desktop: 454, mobile: 380 },
+    { date: '2024-05-01', desktop: 165, mobile: 220 },
+    { date: '2024-05-02', desktop: 293, mobile: 310 },
+    { date: '2024-05-03', desktop: 247, mobile: 190 },
+    { date: '2024-05-04', desktop: 385, mobile: 420 },
+    { date: '2024-05-05', desktop: 481, mobile: 390 },
+    { date: '2024-05-06', desktop: 498, mobile: 520 },
+    { date: '2024-05-07', desktop: 388, mobile: 300 },
+    { date: '2024-05-08', desktop: 149, mobile: 210 },
+    { date: '2024-05-09', desktop: 227, mobile: 180 },
+    { date: '2024-05-10', desktop: 293, mobile: 330 },
+    { date: '2024-05-11', desktop: 335, mobile: 270 },
+    { date: '2024-05-12', desktop: 197, mobile: 240 },
+    { date: '2024-05-13', desktop: 197, mobile: 160 },
+    { date: '2024-05-14', desktop: 448, mobile: 490 },
+    { date: '2024-05-15', desktop: 473, mobile: 380 },
+    { date: '2024-05-16', desktop: 338, mobile: 400 },
+    { date: '2024-05-17', desktop: 499, mobile: 420 },
+    { date: '2024-05-18', desktop: 315, mobile: 350 },
+    { date: '2024-05-19', desktop: 235, mobile: 180 },
+    { date: '2024-05-20', desktop: 177, mobile: 230 },
+    { date: '2024-05-21', desktop: 82, mobile: 140 },
+    { date: '2024-05-22', desktop: 81, mobile: 120 },
+    { date: '2024-05-23', desktop: 252, mobile: 290 },
+    { date: '2024-05-24', desktop: 294, mobile: 220 },
+    { date: '2024-05-25', desktop: 201, mobile: 250 },
+    { date: '2024-05-26', desktop: 213, mobile: 170 },
+    { date: '2024-05-27', desktop: 420, mobile: 460 },
+    { date: '2024-05-28', desktop: 233, mobile: 190 },
+    { date: '2024-05-29', desktop: 78, mobile: 130 },
+    { date: '2024-05-30', desktop: 340, mobile: 280 },
+    { date: '2024-05-31', desktop: 178, mobile: 230 },
     { date: '2024-06-01', desktop: 178, mobile: 200 },
     { date: '2024-06-02', desktop: 470, mobile: 410 },
     { date: '2024-06-03', desktop: 103, mobile: 160 },
@@ -2268,18 +2888,25 @@ export class ZardDemoChartBarInteractiveComponent {
 
   protected readonly active = signal('desktop');
 
-  protected readonly series = computed(() => [this.active()]);
+  protected readonly totals = computed<Record<string, string>>(() => ({
+    desktop: this.sum('desktop'),
+    mobile: this.sum('mobile'),
+  }));
+
+  protected readonly series = computed<ZardChartSeries[]>(() => [{ dataKey: this.active() }]);
 
   protected readonly shortDate = (value: string) =>
     new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 
-  protected total(key: string): string {
-    const sum = this.chartData.reduce((acc, row) => acc + (key === 'desktop' ? row.desktop : row.mobile), 0);
-    return sum.toLocaleString();
-  }
+  protected readonly longDate = (value: string) =>
+    new Date(value).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
   protected select(key: string): void {
     this.active.set(key);
+  }
+
+  private sum(key: 'desktop' | 'mobile'): string {
+    return this.chartData.reduce((total, row) => total + row[key], 0).toLocaleString();
   }
 }
 ```
@@ -2291,12 +2918,15 @@ Use `zType="area"` and set `smooth` on the series for shadcn's natural curve.
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
@@ -2311,14 +2941,22 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
           [zSeries]="series"
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="line" />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">January - June 2024</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartAreaDefaultComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2345,12 +2983,15 @@ export class ZardDemoChartAreaDefaultComponent {
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
@@ -2366,14 +3007,22 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
           zStacked
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="dot" />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">January - June 2024</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartAreaStackedComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2406,12 +3055,15 @@ Use `zGradient` to fill the band with a vertical gradient instead of a flat tint
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
@@ -2428,14 +3080,22 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
           [zXAxisFormatter]="shortMonth"
           zStacked
           zGradient
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="dot" />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">January - June 2024</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartAreaGradientComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2466,17 +3126,20 @@ export class ZardDemoChartAreaGradientComponent {
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Line Chart" />
-        <z-card-description zDescription="Showing total visitors for the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -2486,14 +3149,22 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
           [zSeries]="series"
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="line" />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartLineDefaultComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2522,17 +3193,20 @@ Set `showSymbol` on the series to draw a dot on every data point.
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Line Chart - Dots" />
-        <z-card-description zDescription="Showing total visitors for the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -2542,14 +3216,22 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
           [zSeries]="series"
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="line" />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartLineDotsComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2578,17 +3260,20 @@ Set `step` to `'start'`, `'middle'` or `'end'` for a stepped line.
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Line Chart - Step" />
-        <z-card-description zDescription="Showing total visitors for the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -2598,14 +3283,22 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
           [zSeries]="series"
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="line" />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col items-start gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartLineStepComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2632,17 +3325,20 @@ export class ZardDemoChartLineStepComponent {
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Pie Chart - Label" />
-        <z-card-description zDescription="Visitors by browser over the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -2657,9 +3353,17 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           <z-chart-tooltip zTrigger="item" zIndicator="dot" zHideLabel />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartPieLabelComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2690,17 +3394,20 @@ Use `zInnerRadius` for the donut and `zCenterValue` / `zCenterLabel` for the tex
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Pie Chart - Donut with Text" />
-        <z-card-description zDescription="Visitors by browser over the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -2709,7 +3416,7 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           [zData]="chartData"
           [zSeries]="series"
           zNameKey="browser"
-          zInnerRadius="60%"
+          zInnerRadius="48%"
           zCenterValue="925"
           zCenterLabel="Visitors"
           class="mx-auto aspect-square h-[250px]"
@@ -2717,9 +3424,17 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           <z-chart-tooltip zTrigger="item" zIndicator="dot" zHideLabel />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartPieDonutTextComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2748,12 +3463,15 @@ export class ZardDemoChartPieDonutTextComponent {
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
@@ -2772,9 +3490,17 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           <z-chart-tooltip zTrigger="item" zIndicator="dot" zHideLabel />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">January - June 2024</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartRadarDefaultComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2799,17 +3525,20 @@ export class ZardDemoChartRadarDefaultComponent {
 ```angular-ts
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 
+import { NgIcon, provideIcons } from '@ng-icons/core';
+import { lucideTrendingUp } from '@ng-icons/lucide';
+
 import { ZardCardImports } from '@/shared/components/card/card.imports';
 import { ZardChartImports } from '@/shared/components/chart/chart.imports';
 import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
 
 @Component({
-  imports: [ZardCardImports, ZardChartImports],
+  imports: [ZardCardImports, ZardChartImports, NgIcon],
   template: `
     <z-card class="w-full">
       <z-card-header>
         <z-card-title zTitle="Radial Chart" />
-        <z-card-description zDescription="Visitors by browser over the last 6 months" />
+        <z-card-description zDescription="January - June 2024" />
       </z-card-header>
       <z-card-content>
         <z-chart
@@ -2818,16 +3547,24 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           [zData]="chartData"
           [zSeries]="series"
           zNameKey="browser"
-          zInnerRadius="30%"
-          zOuterRadius="95%"
+          zInnerRadius="24%"
+          zOuterRadius="88%"
           class="mx-auto aspect-square h-[250px]"
         >
           <z-chart-tooltip zTrigger="item" zIndicator="dot" zHideLabel />
         </z-chart>
       </z-card-content>
+      <z-card-footer class="flex-col gap-2 bg-transparent px-4 pt-0 pb-4 text-sm">
+        <div class="flex items-center gap-2 leading-none font-medium">
+          Trending up by 5.2% this month
+          <ng-icon name="lucideTrendingUp" class="h-4 w-4" />
+        </div>
+        <div class="text-muted-foreground leading-none">Showing total visitors for the last 6 months</div>
+      </z-card-footer>
     </z-card>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [provideIcons({ lucideTrendingUp })],
 })
 export class ZardDemoChartRadialSimpleComponent {
   protected readonly chartConfig: ZardChartConfig = {
@@ -2873,17 +3610,20 @@ import type { ZardChartConfig, ZardChartTooltipIndicator } from '@/shared/compon
       <z-card-content>
         <div class="grid gap-6 md:grid-cols-3">
           @for (indicator of indicators; track indicator) {
-            <z-chart
-              zType="bar"
-              [zConfig]="chartConfig"
-              [zData]="chartData"
-              [zSeries]="series"
-              zXAxisKey="month"
-              [zXAxisFormatter]="shortMonth"
-              class="h-[180px] w-full"
-            >
-              <z-chart-tooltip [zIndicator]="indicator" />
-            </z-chart>
+            <div class="flex flex-col gap-2">
+              <p class="text-muted-foreground text-xs">zIndicator="{{ indicator }}"</p>
+              <z-chart
+                zType="bar"
+                [zConfig]="chartConfig"
+                [zData]="chartData"
+                [zSeries]="series"
+                zXAxisKey="month"
+                [zXAxisFormatter]="shortMonth"
+                class="h-[180px] w-full"
+              >
+                <z-chart-tooltip [zIndicator]="indicator" [zDefaultIndex]="1" />
+              </z-chart>
+            </div>
           }
         </div>
       </z-card-content>
@@ -2914,7 +3654,7 @@ export class ZardDemoChartTooltipIndicatorsComponent {
 }
 ```
 
-### Echarts Extras
+### Opt In features
 
 ECharts features Recharts has no counterpart for are opt-in, so the default chart stays visually identical to shadcn/ui.
 
@@ -2943,7 +3683,7 @@ import type { ZardChartConfig, ZardChartSeries } from '@/shared/components/chart
           [zXAxisFormatter]="shortDate"
           zDataZoom
           zToolbox
-          class="h-[250px] w-full"
+          class="w-full"
         >
           <z-chart-tooltip zIndicator="dot" />
         </z-chart>
@@ -3019,58 +3759,15 @@ export const override: ZardChartOptionOverride = {
 
 ### Limitations
 
-Every known divergence between this component and shadcn/ui Charts, and how it was worked around.
+Where ECharts and Recharts disagree, the chart delivers the closest equivalent. These are the differences worth knowing about.
 
-```text
-Where ECharts and Recharts disagree, the chart delivers the closest equivalent. Every
-known divergence from shadcn/ui is listed here.
-
-1. minTickGap — Recharts drops ticks whose gap falls below a pixel threshold. ECharts has
-   no numeric equivalent, so the chart sets `axisLabel.hideOverlap = true`. Labels stop
-   colliding, but you cannot tune the threshold.
-
-2. Curve interpolation — Recharts distinguishes `natural`, `monotone` and `basis`.
-   ECharts has a single `smooth` flag, so all three map to `smooth: true`. Pass a number
-   between 0 and 1 to `ZardChartSeries.smooth` for finer control.
-
-3. stackOffset="expand" — ECharts has no stack normalisation. `zStackOffset="expand"`
-   normalises the rows to 0-1 before they reach ECharts, and the value axis is clamped to
-   [0, 1]; format it with `[zYAxisFormatter]`.
-
-4. Rounded stacked bars — only the outermost bar of a stack is rounded, matching Recharts.
-   On negative bars ECharts still rounds the top corners rather than the outward end.
-
-5. Radial charts — Recharts' RadialBarChart has no single ECharts counterpart. Two paths
-   are exposed through `zRadialVariant`: `'bar'` (polar bars, best for simple, label,
-   grid and stacked layouts) and `'gauge'` (best for shape and centred-text layouts).
-
-6. Native legend — the ECharts legend cannot reproduce the shadcn markup, so the option
-   keeps `legend: { show: false }` and `z-chart-legend` renders real HTML instead. The
-   legend component must stay registered for series toggling to work.
-
-7. Donut centre text — shadcn nests a `<Label content={…} />` inside `<Pie>`. ECharts has
-   no such slot, so `zCenterValue` and `zCenterLabel` draw `graphic` text nodes instead.
-   They are plain text: rich inline markup is not supported.
-
-8. Tooltip cursor — shadcn passes `cursor={false}` on most charts. ECharts always draws an
-   `axisPointer` for axis-triggered tooltips; it is styled with the `--border` token to
-   stay unobtrusive. Set `[zOption]="{ tooltip: { axisPointer: { type: 'none' } } }"` to
-   remove it.
-
-9. Radar radius axis — Recharts draws `<PolarRadiusAxis>` on a single spoke. ECharts has no
-   per-spoke option and repeats the scale on every axis, so a low `splitNumber` is needed to
-   keep it readable.
-
-10. `[zOption]` colors — the escape hatch is swept for `var(--token)` references and they are
-    resolved before ECharts sees them, exactly like the colors the component generates itself.
-    ECharts cannot parse `var()` and would silently paint black otherwise.
-
-11. Server-side rendering — the server paints a static SVG through `renderToSVGString()`
-   and the host carries `ngSkipHydration`, so the browser replaces it with the live chart.
-   Colors cannot be read from the DOM on the server, so the SVG uses the light palette
-   and the browser corrects it on hydration. Set `[zSsrWidth]` and `[zSsrHeight]` to match
-   your layout; the SVG scales through a `viewBox`.
-```
+- **Curve interpolation** — Recharts distinguishes `natural`, `monotone` and `basis`; ECharts has a single `smooth` flag, so all three map to it. Pass a number between 0 and 1 to a series' `smooth` for finer control.
+- **Stack normalisation** — ECharts has none, so `zStackOffset="expand"` normalises the rows to 0-1 before they reach it and clamps the value axis. Format the ticks with `[zYAxisFormatter]`.
+- **Tick spacing** — Recharts drops ticks whose gap falls below a pixel threshold. The chart sets `axisLabel.hideOverlap` instead: labels stop colliding, but the threshold is not tunable.
+- **Legend** — the ECharts legend cannot reproduce the shadcn markup, so `z-chart-legend` renders real HTML. The native legend stays registered but hidden, because it is what toggles a series.
+- **Centre text and radial labels** — Recharts nests SVG inside the chart for both. Here they are drawn as `graphic` text, so `zCenterValue` and `zCenterLabel` are plain strings, and `zRadialLabel` lays a ring name out one glyph at a time.
+- **Rounded stacked bars** — only the outermost bar of a stack is rounded, matching Recharts. On negative bars ECharts still rounds the top corners rather than the outward end.
+- **Server-side rendering** — the server paints a static SVG and the browser swaps in the live chart on hydration. It cannot read CSS variables, so the SVG uses the light palette; set `[zSsrWidth]` and `[zSsrHeight]` to match your layout.
 
 ## API Reference
 
@@ -3091,13 +3788,16 @@ A chart container built on Apache ECharts through ngx-echarts.
 | `[zStackOffset]` | 'expand' normalises the stack to 0-1, the Recharts stackOffset equivalent | `'none' \| 'expand'` | `'none'` |
 | `[zHorizontal]` | Swaps the category and value axes | `boolean` | `false` |
 | `[zGrid]` | Grid lines to draw, by direction. Equivalent to CartesianGrid | `boolean \| 'horizontal' \| 'vertical'` | `'horizontal'` |
-| `[zXAxis]` | Shows the category axis labels | `boolean` | `true` |
-| `[zYAxis]` | Shows the value axis labels | `boolean` | `false` |
+| `[zXAxis]` | Shows the category axis labels, whichever side `zHorizontal` puts them on | `boolean` | `true` |
+| `[zYAxis]` | Shows the value axis labels, whichever side `zHorizontal` puts them on | `boolean` | `false` |
 | `[zXAxisFormatter]` | Formats every category tick. Equivalent to tickFormatter | `(value: string) => string` | `-` |
 | `[zYAxisFormatter]` | Formats every value tick | `(value: number) => string` | `-` |
 | `[zInnerRadius]` | Inner radius of pie, donut and radial charts | `string \| number` | `-` |
 | `[zOuterRadius]` | Outer radius of pie, donut, radar and radial charts | `string \| number` | `-` |
 | `[zRadialVariant]` | How a radial chart is drawn: polar bars or a gauge | `'bar' \| 'gauge'` | `'bar'` |
+| `[zTrack]` | Radial only: the muted ring drawn behind each bar. Equivalent to RadialBar background | `boolean` | `true` |
+| `[zRadialLabel]` | Radial only: writes each category's name along its own ring. Equivalent to LabelList | `boolean` | `false` |
+| `[zRadarRadialLines]` | Radar only: the spokes running from the centre to each indicator | `boolean` | `true` |
 | `[zRadarShape]` | Shape of the radar grid. Equivalent to PolarGrid gridType | `'polygon' \| 'circle'` | `'polygon'` |
 | `[zStartAngle]` | Start angle of pie and radial charts | `number` | `-` |
 | `[zEndAngle]` | End angle of pie and radial charts | `number` | `-` |
@@ -3108,6 +3808,7 @@ A chart container built on Apache ECharts through ngx-echarts.
 | `[zCenterLabel]` | Caption under zCenterValue | `string` | `-` |
 | `[zAccessibility]` | Enables ECharts' aria description plus role and aria-label on the canvas | `boolean` | `true` |
 | `[zAnimation]` | Animates the chart on data changes | `boolean` | `true` |
+| `[zLazyRender]` | Waits for the chart to scroll into view before drawing it, so the entry animation plays where it can be seen | `boolean` | `true` |
 | `[zDataZoom]` | ECharts extra, opt-in: adds inside and slider zooming | `boolean` | `false` |
 | `[zBrush]` | ECharts extra, opt-in: adds the brush selection toolbox | `boolean` | `false` |
 | `[zToolbox]` | ECharts extra, opt-in: adds the zoom, restore and export toolbox | `boolean` | `false` |
@@ -3128,6 +3829,8 @@ Declares the tooltip the parent chart should build. Renders no DOM of its own.
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes on the tooltip container | `ClassValue` | `''` |
 | `[zIndicator]` | Shape of the color indicator on each row | `'dot' \| 'line' \| 'dashed'` | `'dot'` |
+| `[zCursor]` | Draws the axis pointer under the tooltip: a line on curves, a band on bars | `boolean` | `false` |
+| `[zDefaultIndex]` | Opens the tooltip on this data index as soon as the chart draws | `number` | `-` |
 | `[zHideLabel]` | Hides the tooltip heading | `boolean` | `false` |
 | `[zHideIndicator]` | Hides the color indicator | `boolean` | `false` |
 | `[zLabelKey]` | Config key used for the heading | `string` | `-` |
@@ -3144,7 +3847,6 @@ Renders the shadcn legend markup below (or above) the chart and toggles series o
 | Prop | Description | Type | Default |
 | --- | --- | --- | --- |
 | `[class]` | Additional CSS classes | `ClassValue` | `''` |
-| `[zNameKey]` | Config key used for each entry name | `string` | `-` |
 | `[zVerticalAlign]` | Places the legend above or below the chart | `'top' \| 'bottom'` | `'bottom'` |
 
 ---

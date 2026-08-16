@@ -253,7 +253,9 @@ function buildAxes(ctx: ZardChartBuildContext, definitions: ZardChartSeries[], c
     // multiplies the token's own alpha instead of replacing it, which `--border` already carries.
     splitLine: { show: false, lineStyle: { color: ctx.chrome.border, opacity: 0.5 } },
     axisLabel: {
-      show: ctx.horizontal ? ctx.yAxis : ctx.xAxis,
+      // `zXAxis` and `zXAxisFormatter` both address the category axis, whichever way the chart is
+      // turned — the same pairing shadcn gets from `<XAxis dataKey>` plus its `tickFormatter`.
+      show: ctx.xAxis,
       margin: 8,
       hideOverlap: true,
       color: ctx.chrome.mutedForeground,
@@ -270,7 +272,8 @@ function buildAxes(ctx: ZardChartBuildContext, definitions: ZardChartSeries[], c
     // multiplies the token's own alpha instead of replacing it, which `--border` already carries.
     splitLine: { show: false, lineStyle: { color: ctx.chrome.border, opacity: 0.5 } },
     axisLabel: {
-      show: ctx.horizontal ? ctx.xAxis : ctx.yAxis,
+      // Likewise `zYAxis` and `zYAxisFormatter` always address the value axis.
+      show: ctx.yAxis,
       margin: 8,
       color: ctx.chrome.mutedForeground,
       fontSize: 12,
@@ -636,7 +639,11 @@ function buildTooltip(ctx: ZardChartBuildContext, legendEntries: ZardChartLegend
     colors[entry.name] = entry.color;
   }
 
-  const context: ZardChartTooltipContext = { ...ctx.tooltip, config: ctx.config, colors };
+  // A radar arrives as one param holding every indicator, so the tooltip needs their names.
+  const indicators =
+    ctx.type === 'radar' ? clockwise(ctx.data.map(row => labelFor(ctx.config, categoryOf(ctx, row)))) : undefined;
+
+  const context: ZardChartTooltipContext = { ...ctx.tooltip, config: ctx.config, colors, indicators };
 
   const hasBars = normalizeSeries(ctx.series).some(definition => (definition.type ?? ctx.type) === 'bar');
   const cursor = ctx.tooltip.cursor
@@ -802,7 +809,9 @@ export function buildChartOption(ctx: ZardChartBuildContext): EChartsOption {
 
   const centerText = buildCenterText(ctx);
   if (centerText.length > 0) {
-    option['graphic'] = [{ type: 'group', left: 'center', top: 'center', children: centerText }];
+    // A radial chart may already have put its ring labels here; the centre joins them.
+    const existing = Array.isArray(option['graphic']) ? (option['graphic'] as OptionRecord[]) : [];
+    option['graphic'] = [...existing, { type: 'group', left: 'center', top: 'center', children: centerText }];
   }
 
   if (ctx.dataZoom && isCartesian) {
@@ -826,12 +835,16 @@ export function buildChartOption(ctx: ZardChartBuildContext): EChartsOption {
     option['brush'] = { toolbox: ['rect', 'polygon', 'clear'], xAxisIndex: 0 };
   }
 
-  if (ctx.toolbox) {
+  // The brush is only reachable through the toolbox, so asking for one brings the other along.
+  if (ctx.toolbox || ctx.brush) {
     option['toolbox'] = {
       right: 0,
       top: 0,
       iconStyle: { borderColor: ctx.chrome.mutedForeground },
-      feature: { dataZoom: { yAxisIndex: 'none' }, restore: {}, saveAsImage: {} },
+      feature: {
+        ...(ctx.brush ? { brush: {} } : {}),
+        ...(ctx.toolbox ? { dataZoom: { yAxisIndex: 'none' }, restore: {}, saveAsImage: {} } : {}),
+      },
     };
   }
 

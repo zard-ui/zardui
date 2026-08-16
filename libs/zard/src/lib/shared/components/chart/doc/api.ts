@@ -46,8 +46,18 @@ export const CHART_API: ApiSection[] = [
         type: "boolean | 'horizontal' | 'vertical'",
         default: "'horizontal'",
       },
-      { name: '[zXAxis]', description: 'Shows the category axis labels', type: 'boolean', default: 'true' },
-      { name: '[zYAxis]', description: 'Shows the value axis labels', type: 'boolean', default: 'false' },
+      {
+        name: '[zXAxis]',
+        description: 'Shows the category axis labels, whichever side `zHorizontal` puts them on',
+        type: 'boolean',
+        default: 'true',
+      },
+      {
+        name: '[zYAxis]',
+        description: 'Shows the value axis labels, whichever side `zHorizontal` puts them on',
+        type: 'boolean',
+        default: 'false',
+      },
       {
         name: '[zXAxisFormatter]',
         description: 'Formats every category tick. Equivalent to tickFormatter',
@@ -77,6 +87,24 @@ export const CHART_API: ApiSection[] = [
         description: 'How a radial chart is drawn: polar bars or a gauge',
         type: "'bar' | 'gauge'",
         default: "'bar'",
+      },
+      {
+        name: '[zTrack]',
+        description: 'Radial only: the muted ring drawn behind each bar. Equivalent to RadialBar background',
+        type: 'boolean',
+        default: 'true',
+      },
+      {
+        name: '[zRadialLabel]',
+        description: "Radial only: writes each category's name along its own ring. Equivalent to LabelList",
+        type: 'boolean',
+        default: 'false',
+      },
+      {
+        name: '[zRadarRadialLines]',
+        description: 'Radar only: the spokes running from the centre to each indicator',
+        type: 'boolean',
+        default: 'true',
       },
       {
         name: '[zRadarShape]',
@@ -118,6 +146,13 @@ export const CHART_API: ApiSection[] = [
         default: 'true',
       },
       { name: '[zAnimation]', description: 'Animates the chart on data changes', type: 'boolean', default: 'true' },
+      {
+        name: '[zLazyRender]',
+        description:
+          'Waits for the chart to scroll into view before drawing it, so the entry animation plays where it can be seen',
+        type: 'boolean',
+        default: 'true',
+      },
       {
         name: '[zDataZoom]',
         description: 'ECharts extra, opt-in: adds inside and slider zooming',
@@ -192,6 +227,18 @@ export const CHART_API: ApiSection[] = [
         type: "'dot' | 'line' | 'dashed'",
         default: "'dot'",
       },
+      {
+        name: '[zCursor]',
+        description: 'Draws the axis pointer under the tooltip: a line on curves, a band on bars',
+        type: 'boolean',
+        default: 'false',
+      },
+      {
+        name: '[zDefaultIndex]',
+        description: 'Opens the tooltip on this data index as soon as the chart draws',
+        type: 'number',
+        default: '-',
+      },
       { name: '[zHideLabel]', description: 'Hides the tooltip heading', type: 'boolean', default: 'false' },
       { name: '[zHideIndicator]', description: 'Hides the color indicator', type: 'boolean', default: 'false' },
       { name: '[zLabelKey]', description: 'Config key used for the heading', type: 'string', default: '-' },
@@ -227,7 +274,6 @@ export const CHART_API: ApiSection[] = [
     description: 'Renders the shadcn legend markup below (or above) the chart and toggles series on click.',
     props: [
       { name: '[class]', description: 'Additional CSS classes', type: 'ClassValue', default: "''" },
-      { name: '[zNameKey]', description: 'Config key used for each entry name', type: 'string', default: '-' },
       {
         name: '[zVerticalAlign]',
         description: 'Places the legend above or below the chart',

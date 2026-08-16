@@ -13,6 +13,7 @@ import {
   input,
   numberAttribute,
   output,
+  PendingTasks,
   PLATFORM_ID,
   signal,
   ViewEncapsulation,
@@ -191,6 +192,7 @@ export class ZardChartComponent implements ZardChartHost {
     this.watchPointerType();
     this.watchCanvasSize();
     this.watchVisibility();
+    this.renderOnServer();
 
     if (this.isBrowser) {
       effect(() => {
@@ -224,7 +226,9 @@ export class ZardChartComponent implements ZardChartHost {
     this.destroyRef.onDestroy(() => observer.disconnect());
   }
 
-  protected readonly onScreen = computed(() => this.seen() || !this.zLazyRender());
+  // The live chart is a browser affair: on the server the SVG below is all there is, and
+  // instantiating the ngx-echarts directive there would ask for a ResizeObserver that is absent.
+  protected readonly onScreen = computed(() => this.isBrowser && (this.seen() || !this.zLazyRender()));
 
   private watchVisibility(): void {
     const host = this.elementRef.nativeElement as HTMLElement;
@@ -261,7 +265,10 @@ export class ZardChartComponent implements ZardChartHost {
 
     const media = globalThis.matchMedia(query);
     apply(media.matches);
-    media.addEventListener('change', event => apply(event.matches));
+
+    const listener = (event: MediaQueryListEvent) => apply(event.matches);
+    media.addEventListener('change', listener);
+    this.destroyRef.onDestroy(() => media.removeEventListener('change', listener));
   }
 
   private scheduleColorRefresh(): void {
@@ -357,13 +364,26 @@ export class ZardChartComponent implements ZardChartHost {
 
   protected readonly initOpts = computed(() => ({ renderer: this.zRenderer() }));
 
-  protected readonly ssrSvg = computed<SafeHtml | null>(() => {
-    if (this.isBrowser) return null;
+  /** The static picture the server paints. Always null in the browser. */
+  protected readonly ssrSvg = signal<SafeHtml | null>(null);
 
-    const api = zardEcharts as unknown as ZardEchartsSsrApi;
-    const svg = renderChartToSvg(api, this.option(), this.zSsrWidth(), this.zSsrHeight());
-    return svg ? this.sanitizer.bypassSecurityTrustHtml(svg) : null;
-  });
+  /**
+   * Paints the server-side SVG.
+   *
+   * The engine is imported here, and only here, so that the browser bundle never carries it on
+   * the component's account — `provideZardCharts()` is what loads it on the client, lazily.
+   * Angular waits on the pending task before serialising the page.
+   */
+  private renderOnServer(): void {
+    if (this.isBrowser) return;
+
+    this.pendingTasks.run(async () => {
+      const { zardEcharts } = await import('./chart-echarts.registry');
+      const api = zardEcharts as unknown as ZardEchartsSsrApi;
+      const svg = renderChartToSvg(api, this.option(), this.zSsrWidth(), this.zSsrHeight());
+      this.ssrSvg.set(svg ? this.sanitizer.bypassSecurityTrustHtml(svg) : null);
+    });
+  }
 
   protected readonly hostRole = computed(() => (this.zAccessibility() ? 'img' : null));
 
@@ -394,7 +414,10 @@ export class ZardChartComponent implements ZardChartHost {
     const dataIndex = this.tooltipRef()?.zDefaultIndex();
     if (dataIndex === undefined || Number.isNaN(dataIndex)) return;
 
-    setTimeout(() => instance.dispatchAction({ type: 'showTip', seriesIndex: 0, dataIndex }));
+    // Cleared on destroy: the chart can be torn down in the same tick it was created — a route
+    // change, a category switch — and ECharts throws when an action reaches a disposed instance.
+    const timer = setTimeout(() => instance.dispatchAction({ type: 'showTip', seriesIndex: 0, dataIndex }));
+    this.destroyRef.onDestroy(() => clearTimeout(timer));
   }
 
   toggleSeries(name: string): void {

@@ -62,10 +62,9 @@ export class ZardDemoChartPieDonutActiveComponent {
 
   protected readonly series = ['visitors'];
 
-  /** ECharts escape hatch: grow the hovered slice, the way shadcn's activeIndex does. */
   /**
-   * ECharts sizes a pie per series, not per slice, so the highlighted browser is a second
-   * pie holding only that slice, drawn 10px wider over the first.
+   * ECharts sizes a pie per series, not per slice, so the highlighted browser — shadcn's
+   * `activeIndex` — is a second pie holding only that slice, drawn wider over the first.
    */
   protected readonly activeSlice: ZardChartOptionOverride = {
     series: [

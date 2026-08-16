@@ -21,7 +21,6 @@ import {
   CHART_SNIPPET_ESCAPE_HATCH,
   CHART_SNIPPET_HEIGHT,
   CHART_SNIPPET_LAZY_PROVIDER,
-  CHART_SNIPPET_LIMITATIONS,
   CHART_SNIPPET_THEMING,
   CHART_SNIPPET_TREE_SHAKING,
 } from '@generated/components/chart/snippets';
@@ -90,7 +89,7 @@ export const CHART = {
     {
       name: 'height',
       description:
-        'The container must resolve to a real height. `z-chart` defaults to `aspect-video`, and any explicit height wins over it.',
+        'The container must resolve to a real height, or ECharts initialises at zero pixels and draws nothing. `z-chart` handles that on its own with `aspect-video`; pass a height class only when you want a different shape, and note that a height without an aspect ratio needs a width too.',
       codeData: CHART_SNIPPET_HEIGHT,
     },
     {
@@ -194,7 +193,7 @@ export const CHART = {
       column: true,
     },
     {
-      name: 'echarts-extras',
+      name: 'opt-in features',
       description:
         'ECharts features Recharts has no counterpart for are opt-in, so the default chart stays visually identical to shadcn/ui.',
       component: ZardDemoChartEchartsDatazoomComponent,
@@ -207,8 +206,17 @@ export const CHART = {
     },
     {
       name: 'limitations',
-      description: 'Every known divergence between this component and shadcn/ui Charts, and how it was worked around.',
-      codeData: CHART_SNIPPET_LIMITATIONS,
+      description: [
+        'Where ECharts and Recharts disagree, the chart delivers the closest equivalent. These are the differences worth knowing about.',
+        '',
+        "- **Curve interpolation** — Recharts distinguishes `natural`, `monotone` and `basis`; ECharts has a single `smooth` flag, so all three map to it. Pass a number between 0 and 1 to a series' `smooth` for finer control.",
+        `- **Stack normalisation** — ECharts has none, so \`zStackOffset="expand"\` normalises the rows to 0-1 before they reach it and clamps the value axis. Format the ticks with \`[zYAxisFormatter]\`.`,
+        '- **Tick spacing** — Recharts drops ticks whose gap falls below a pixel threshold. The chart sets `axisLabel.hideOverlap` instead: labels stop colliding, but the threshold is not tunable.',
+        '- **Legend** — the ECharts legend cannot reproduce the shadcn markup, so `z-chart-legend` renders real HTML. The native legend stays registered but hidden, because it is what toggles a series.',
+        '- **Centre text and radial labels** — Recharts nests SVG inside the chart for both. Here they are drawn as `graphic` text, so `zCenterValue` and `zCenterLabel` are plain strings, and `zRadialLabel` lays a ring name out one glyph at a time.',
+        '- **Rounded stacked bars** — only the outermost bar of a stack is rounded, matching Recharts. On negative bars ECharts still rounds the top corners rather than the outward end.',
+        '- **Server-side rendering** — the server paints a static SVG and the browser swaps in the live chart on hydration. It cannot read CSS variables, so the SVG uses the light palette; set `[zSsrWidth]` and `[zSsrHeight]` to match your layout.',
+      ].join('\n'),
     },
   ],
 };

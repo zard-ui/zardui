@@ -9,7 +9,7 @@
     </h3>
   }
   @if (demoDescription()) {
-    <p class="my-4 leading-relaxed text-pretty first-letter:uppercase" [prose]="demoDescription()"></p>
+    <div class="my-4 leading-relaxed text-pretty first-letter:uppercase" [prose]="demoDescription()"></div>
   }
 
   @if (codeBeforeList().length) {
@@ -22,7 +22,7 @@
             </h4>
           }
           @if (before.description) {
-            <p class="leading-relaxed text-pretty first-letter:uppercase" [prose]="before.description"></p>
+            <div class="leading-relaxed text-pretty first-letter:uppercase" [prose]="before.description"></div>
           }
           <div class="overflow-hidden rounded-lg border">
             <z-code-block [data]="before.codeData" [embedded]="true" />
@@ -117,7 +117,7 @@
             </h4>
           }
           @if (after.description) {
-            <p class="leading-relaxed text-pretty first-letter:uppercase" [prose]="after.description"></p>
+            <div class="leading-relaxed text-pretty first-letter:uppercase" [prose]="after.description"></div>
           }
           <div class="overflow-hidden rounded-lg border">
             <z-code-block [data]="after.codeData" [embedded]="true" />

@@ -31,12 +31,13 @@ export class ChartsPage implements OnInit {
   protected readonly currentCategory = signal<ChartCategory>(DEFAULT_CATEGORY);
 
   protected readonly categoryTabs: CategoryTab[] = [
-    { label: 'Area', route: '/charts' },
-    { label: 'Bar', route: '/charts/bar' },
-    { label: 'Line', route: '/charts/line' },
-    { label: 'Pie', route: '/charts/pie' },
-    { label: 'Radar', route: '/charts/radar' },
-    { label: 'Radial', route: '/charts/radial' },
+    { label: 'Area Charts', route: '/charts' },
+    { label: 'Bar Charts', route: '/charts/bar' },
+    { label: 'Line Charts', route: '/charts/line' },
+    { label: 'Pie Charts', route: '/charts/pie' },
+    { label: 'Radar Charts', route: '/charts/radar' },
+    { label: 'Radial Charts', route: '/charts/radial' },
+    { label: 'Tooltips', route: '/charts/tooltip' },
   ];
 
   ngOnInit(): void {

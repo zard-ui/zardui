@@ -24,9 +24,7 @@ import type { ZardChartConfig } from '@/shared/components/chart/chart.types';
           zXAxisKey="month"
           [zXAxisFormatter]="shortMonth"
           zHorizontal
-          [zXAxis]="false"
           zGrid="vertical"
-          zYAxis
           class="w-full"
         >
           <z-chart-tooltip zIndicator="dashed" zHideLabel />

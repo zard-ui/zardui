@@ -2,7 +2,7 @@
   "$schema": "https://zardui.com/schema/registry.json",
   "name": "@zard",
   "homepage": "https://zardui.com",
-  "version": "1.0.0-beta.101",
+  "version": "1.0.0-beta.102",
   "items": [
     {
       "name": "core",
@@ -587,6 +587,7 @@
         "chart.types.ts",
         "chart-context.ts",
         "chart-colors.util.ts",
+        "chart-arc-label.util.ts",
         "chart-option.builder.ts",
         "chart-echarts.provider.ts",
         "chart-echarts.registry.ts",
