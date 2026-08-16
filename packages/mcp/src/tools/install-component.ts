@@ -9,10 +9,10 @@ import { assertRegistryId, InvalidIdentifierError } from '../utils/identifiers.j
 
 function execFileAsync(file: string, args: string[], cwd: string): Promise<{ stdout: string; stderr: string }> {
   return new Promise((resolve, reject) => {
-    // `execFile`, e nunca `exec`: o primeiro chama o programa direto, com os
-    // argumentos como vetor, então um `;` no nome do componente é um caractere
-    // do argumento e não o começo de outro comando. `shell` fica desligado (o
-    // padrão) — ligá-lo desfaria tudo isto de uma vez.
+    // `execFile`, never `exec`: the former calls the program directly, with the
+    // arguments as a vector, so a `;` in the component name is a character of
+    // that argument and not the start of another command. `shell` stays off
+    // (the default) — turning it on would undo all of this at once.
     execFile(file, args, { cwd, timeout: 60_000, shell: false }, (error, stdout, stderr) => {
       if (error) {
         reject(new Error(`Command failed: ${error.message}\n${stderr}`));
@@ -24,12 +24,12 @@ function execFileAsync(file: string, args: string[], cwd: string): Promise<{ std
 }
 
 /**
- * O diretório onde o comando vai rodar.
+ * The directory the command will run in.
  *
- * Precisa existir e ser um diretório: sem a checagem, o erro que chega é o do
- * `spawn`, que não diz qual dos dois problemas ocorreu. E o diretório importa
- * mais do que parece — é dele que sai a zard-cli executada, então apontá-lo
- * para um lugar arbitrário é escolher qual binário roda.
+ * It has to exist and be a directory: without the check, the error that comes
+ * back is `spawn`'s, which does not say which of the two problems occurred. And
+ * the directory matters more than it looks — the zard-cli that runs comes from
+ * it, so pointing it anywhere is choosing which binary executes.
  */
 function assertWorkingDirectory(cwd: string): string {
   const resolved = path.resolve(cwd);

@@ -1,6 +1,6 @@
 {
   "name": "zard-mcp",
-  "version": "1.0.0-alpha.2",
+  "version": "1.0.0",
   "description": "MCP Server for Zard UI - AI-powered tools for Angular component discovery and installation",
   "type": "module",
   "main": "./index.js",

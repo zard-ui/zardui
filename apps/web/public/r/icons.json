@@ -154,11 +154,11 @@
     "folder-code": {
       "lucide": "lucideFolderCode"
     },
-    "footprints": {
-      "lucide": "lucideFootprints"
-    },
     "folder-plus": {
       "lucide": "lucideFolderPlus"
+    },
+    "footprints": {
+      "lucide": "lucideFootprints"
     },
     "git-branch": {
       "lucide": "lucideGitBranch"

@@ -1,8 +1,8 @@
 export interface RegistryIndex {
   $schema: string;
   /**
-   * A forma do arquivo, não a versão do pacote (que é `version`). Ausente nos
-   * registries anteriores ao campo, que por definição são a v1.
+   * The shape of the file, not the version of the package (that is `version`).
+   * Absent in registries that predate the field, which are v1 by definition.
    */
   schemaVersion?: number;
   name: string;
@@ -14,9 +14,9 @@ export interface RegistryIndex {
 /**
  * Os ícones que o componente desenha e a família em que eles estão escritos.
  *
- * `symbols`/`tokens` são os do componente em si; `demos`, os que só aparecem
- * nos exemplos. As listas vêm vazias quando não há ícone nenhum — o campo está
- * sempre presente.
+ * `symbols`/`tokens` are the component's own; `demos` are the ones that only
+ * appear in the examples. The lists come back empty when there are no icons at
+ * all — the field is always present.
  */
 export interface RegistryIcons {
   family: string;
@@ -44,8 +44,8 @@ export interface ComponentFile {
 /**
  * O item completo do registry: o que o componente instala.
  *
- * Documentação e exemplos não estão aqui — vêm do `.md` da página, via
- * `docs.service`. Ver a nota naquele arquivo sobre por que saíram daqui.
+ * Documentation and examples are not here — they come from the page markdown,
+ * through `docs.service`. See the note in that file on why they left.
  */
 export interface ComponentData {
   name: string;

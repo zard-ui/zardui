@@ -8,10 +8,11 @@ describe('assertRegistryId', () => {
   });
 
   /**
-   * O nome vira caminho de URL. `../../admin/secret` leva
-   * `https://zardui.com/r/button.json` a `https://zardui.com/admin/secret.json`
-   * — contra um registryUrl interno, é o servidor buscando endereços da rede da
-   * empresa a pedido de quem escreveu o prompt.
+   * The name becomes a URL path. `../../admin/secret` turns
+   * `https://zardui.com/r/button.json` into
+   * `https://zardui.com/admin/secret.json` — against a private registryUrl,
+   * that is the server fetching addresses on the company network on behalf of
+   * whoever wrote the prompt.
    */
   it.each([
     ['path traversal', '../../admin/secret'],

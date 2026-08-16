@@ -44,8 +44,8 @@ describe('install-component tool (CWE-78 regression)', () => {
     expect(execFileMock).toHaveBeenCalledTimes(1);
 
     const [file, args, options] = execFileMock.mock.calls[0];
-    // Vetor de argumentos, nunca uma string montada — e sem shell, que é o que
-    // torna um `;` no nome apenas um caractere.
+    // An argument vector, never a built string — and no shell, which is what
+    // makes a `;` in the name just a character.
     expect(args).toContain('button');
     expect(args[args.length - 2]).toBe('button');
     expect(options.shell).toBe(false);
@@ -53,8 +53,8 @@ describe('install-component tool (CWE-78 regression)', () => {
   });
 
   /**
-   * O payload exato do relato: `button; printf … > marker; #`. Com `exec` e uma
-   * string de comando, o `;` iniciava um segundo comando no shell.
+   * The exact payload from the report: `button; printf … > marker; #`. With
+   * `exec` and a command string, the `;` started a second command in the shell.
    */
   it('rejects the reported payload without executing anything', async () => {
     const tool = registerAndCapture();

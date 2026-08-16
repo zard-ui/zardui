@@ -1,9 +1,9 @@
 import { registryService } from './registry.service';
 
 /**
- * A validação mora no serviço, e não em cada tool, porque é o serviço que monta
- * a URL — uma tool nova pode esquecer de validar, o serviço não. Estes casos
- * garantem que ninguém consegue chegar ao `fetch` com um nome que vira caminho.
+ * Validation lives in the service, not in each tool, because the service is
+ * what builds the URL — a new tool can forget to call it, the service cannot.
+ * These cases make sure nothing reaches `fetch` with a name that is a path.
  */
 describe('registryService path safety', () => {
   const fetchMock = jest.fn();

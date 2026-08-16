@@ -1,40 +1,40 @@
 /**
- * Como invocar a zard-cli sem passar por um shell.
+ * How to invoke zard-cli without going through a shell.
  *
- * `execFile('npx', …)` parece resolver, e resolve no POSIX. No Windows não:
- * `npx` ali é `npx.cmd`, e desde a correção do CVE-2024-27980 o Node se recusa
- * a executar um `.cmd` sem `shell: true` — a chamada morre em ENOENT. A saída
- * tentadora é ligar o shell, que é exatamente o que reabriria a injeção que
- * este comando já sofreu uma vez.
+ * `execFile('npx', …)` looks like it settles this, and it does on POSIX. Not on
+ * Windows: `npx` there is `npx.cmd`, and since the CVE-2024-27980 fix Node
+ * refuses to run a `.cmd` without `shell: true` — the call dies with ENOENT.
+ * The tempting way out is to turn the shell on, which is exactly what would
+ * reopen the injection this command has already suffered once.
  *
- * A saída certa é não precisar de shell em lugar nenhum: tudo aqui roda com o
- * próprio Node (`process.execPath`) sobre um arquivo `.js`, que é a mesma
- * abordagem que o build da CLI usa pelo mesmo motivo.
+ * The real way out is to never need a shell: everything here runs through Node
+ * itself (`process.execPath`) over a `.js` file, the same approach the CLI's
+ * own build takes, for the same reason.
  *
- * A ordem também é uma decisão de segurança: a cópia instalada no projeto vem
- * antes do `npx`, que baixaria e executaria um pacote da rede.
+ * The order is a security decision too: the copy installed in the project comes
+ * before `npx`, which would download and execute a package from the network.
  */
 
 import { existsSync } from 'node:fs';
 import * as path from 'node:path';
 
 export interface CliInvocation {
-  /** O programa. Nunca um `.cmd`, nunca uma string de shell. */
+  /** The program. Never a `.cmd`, never a shell string. */
   readonly file: string;
-  /** Os argumentos que precedem os do comando. */
+  /** The arguments that come before the command's own. */
   readonly prefix: string[];
-  /** De onde ele saiu, para a mensagem de erro dizer o que foi tentado. */
+  /** Where it came from, so the error message can say what was tried. */
   readonly source: 'local' | 'npx-cli' | 'npx';
 }
 
-/** O entrypoint do npm que acompanha este Node, se der para localizá-lo. */
+/** The entrypoint of the npm that ships with this Node, if it can be located. */
 function bundledNpx(): string | null {
   const nodeDir = path.dirname(process.execPath);
 
   const candidates = [
-    // Windows: o npm fica ao lado do executável.
+    // Windows: npm sits next to the executable.
     path.join(nodeDir, 'node_modules', 'npm', 'bin', 'npx-cli.js'),
-    // POSIX: <prefix>/bin/node e <prefix>/lib/node_modules.
+    // POSIX: <prefix>/bin/node and <prefix>/lib/node_modules.
     path.join(nodeDir, '..', 'lib', 'node_modules', 'npm', 'bin', 'npx-cli.js'),
   ];
 
@@ -42,10 +42,10 @@ function bundledNpx(): string | null {
 }
 
 /**
- * O que executar para rodar a zard-cli a partir de `cwd`.
+ * What to execute in order to run zard-cli from `cwd`.
  *
- * A cópia do projeto é preferida: além de dispensar a rede, é a versão que
- * aquele projeto escolheu. O `npx` só entra quando ela não existe.
+ * The project's own copy wins: besides needing no network, it is the version
+ * that project settled on. `npx` only steps in when that copy is absent.
  */
 export function resolveCliInvocation(cwd: string): CliInvocation {
   const local = path.join(cwd, 'node_modules', 'zard-cli', 'index.js');
@@ -58,7 +58,7 @@ export function resolveCliInvocation(cwd: string): CliInvocation {
     return { file: process.execPath, prefix: [npxCli, '--yes', 'zard-cli'], source: 'npx-cli' };
   }
 
-  // Último recurso: o `npx` do PATH. Funciona no POSIX; no Windows falha em
-  // ENOENT, e a mensagem de erro do comando diz o que instalar.
+  // Last resort: the `npx` on PATH. Works on POSIX; on Windows it fails with
+  // ENOENT, and the command's error message says what to install.
   return { file: 'npx', prefix: ['zard-cli'], source: 'npx' };
 }
