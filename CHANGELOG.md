@@ -1,3 +1,14 @@
+## 1.0.0-beta.105 (2026-08-16)
+
+### ✨ Features
+
+- **chart:** chart component built on Apache ECharts ([#695](https://github.com/zard-ui/zardui/pull/695))
+
+### ❤️ Thank You
+
+- Luiz Gomes
+- Samuel Rizzon
+
 ## 1.0.0-beta.104 (2026-08-16)
 
 This was a version bump only, there were no code changes.
