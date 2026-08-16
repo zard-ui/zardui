@@ -22,9 +22,10 @@ export function registerGetComponentExamples(server: McpServer): void {
         };
       }
 
-      // A página inteira responderia à pergunta, mas devolver instalação e API a
-      // quem pediu exemplos gasta contexto de quem chamou. Sem a seção — um
-      // componente sem exemplos —, o documento é a melhor resposta que existe.
+      // The whole page would answer the question, but handing installation and
+      // API back to someone who asked for examples spends the caller's context.
+      // With no such section — a component without examples — the document is
+      // the best answer there is.
       const examples = sectionOf(markdown, 'Examples') ?? sectionOf(markdown, 'Usage') ?? markdown;
 
       return { content: [{ type: 'text' as const, text: examples }] };

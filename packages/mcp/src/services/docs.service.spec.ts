@@ -1,9 +1,9 @@
 import { docsService, sectionOf } from './docs.service.js';
 
 /**
- * O nome do componente vira caminho da página, então corre o mesmo risco do
- * registry: sem validação, `../../algo` sai de /docs/components e traz outra
- * coisa de volta para o modelo.
+ * The component name becomes the page's path, so it carries the same risk as
+ * the registry: without validation, `../../something` leaves /docs/components
+ * and brings back a different page to the model.
  */
 describe('docsService path safety', () => {
   const fetchMock = jest.fn();
@@ -27,10 +27,10 @@ describe('docsService path safety', () => {
 });
 
 /**
- * O site é uma SPA: um caminho inexistente responde 200 com o HTML do próprio
- * site, e não 404. Tratar isso como sucesso entregava cinquenta kB de markup ao
- * modelo no lugar de uma resposta — encontrado rodando o servidor contra
- * produção antes de publicá-lo.
+ * The site is a single-page app: a path that does not exist answers 200 with
+ * the site's own HTML, not 404. Treating that as success handed fifty kB of
+ * markup to the model instead of an answer — found by running the server
+ * against production before publishing it.
  */
 describe('docsService when the page does not exist', () => {
   const fetchMock = jest.fn();
@@ -76,8 +76,8 @@ describe('docsService when the page does not exist', () => {
 });
 
 /**
- * A página de um componente é um documento só, com instalação, uso, exemplos e
- * API. Quem pede exemplos deve receber exemplos, e não o documento inteiro.
+ * A component's page is a single document, with installation, usage, examples
+ * and API. Whoever asks for examples should get examples, not the whole thing.
  */
 describe('sectionOf', () => {
   const page = [

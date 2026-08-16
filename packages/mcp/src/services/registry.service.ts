@@ -7,9 +7,9 @@ const FETCH_TIMEOUT = 10_000; // 10 seconds
 /**
  * A forma do registry que este servidor sabe ler.
  *
- * Um registry mais novo pode ter reorganizado o item, e ler `files` dele às
- * cegas devolveria código errado a quem confia na resposta. Ausente é v1, de
- * antes do campo existir.
+ * A newer registry may have reorganised the item, and reading its `files`
+ * blindly would hand wrong code to whoever trusts the answer. Absent means v1,
+ * from before the field existed.
  */
 const SUPPORTED_SCHEMA_VERSION = 1;
 
@@ -72,7 +72,7 @@ class RegistryService {
   }
 
   async getComponent(name: string): Promise<ComponentData> {
-    // Validado aqui, antes do cache e da URL: é o nome que vira caminho.
+    // Validated here, before the cache and the URL: the name is what becomes a path.
     assertRegistryId(name, 'component');
 
     const cached = this.componentCache.get(name);

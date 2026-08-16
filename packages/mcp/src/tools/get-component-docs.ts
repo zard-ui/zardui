@@ -22,8 +22,9 @@ export function registerGetComponentDocs(server: McpServer): void {
         };
       }
 
-      // O markdown vai cru, e não embrulhado em JSON: ele já é o formato que o
-      // modelo lê melhor, e escapá-lo dentro de uma string só atrapalharia.
+      // The markdown goes back raw, not wrapped in JSON: it already is the
+      // format a model reads best, and escaping it into a string would only
+      // get in the way.
       return { content: [{ type: 'text' as const, text: markdown }] };
     },
   );

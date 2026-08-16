@@ -16,8 +16,8 @@ export function registerGetComponent(server: McpServer): void {
         type: component.type,
         registryDependencies: component.registryDependencies ?? [],
         dependencies: component.dependencies ?? [],
-        // Quem for gerar código a partir daqui precisa saber que ícones o
-        // componente registra, e de que família eles vêm.
+        // Whoever generates code from this needs to know which icons the
+        // component registers, and which set they come from.
         icons: component.icons ?? null,
         files: component.files.map(f => ({
           name: f.name,

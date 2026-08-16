@@ -1,16 +1,17 @@
 /**
- * A documentação de um componente, lida da página publicada.
+ * A component's documentation, read from its published page.
  *
- * O registry carregava `docs` e `demos` dentro do JSON de cada componente. Isso
- * saiu por dois motivos. O primeiro é que `docs` estava morto: procurava
- * `overview.md`/`api.md`, que a biblioteca trocou por `api.ts`, e de 46
- * componentes documentados apenas um ainda tinha os arquivos antigos — para o
- * resto, este servidor respondia "sem documentação". O segundo é que o `.md` da
- * página é melhor: instalação, uso, exemplos com código e referência de API num
- * documento coerente, que é como um modelo lê bem, em vez de fragmentos soltos.
+ * The registry used to carry `docs` and `demos` inside each component's JSON.
+ * Both are gone, for two reasons. The first is that `docs` was dead: it looked
+ * for `overview.md`/`api.md`, which the library replaced with `api.ts`, and of
+ * 46 documented components exactly one still had the old files — for the rest,
+ * this server answered "no documentation". The second is that the page markdown
+ * is simply better: installation, usage, examples with their code and the API
+ * reference in one coherent document, which is how a model reads well, instead
+ * of fragments of source in a JSON envelope.
  *
- * A base é configurável porque um registry de terceiros não tem essas páginas;
- * o site oficial é o padrão.
+ * The base URL is configurable because a third-party registry has no such
+ * pages; the official site is the default.
  */
 
 import { assertRegistryId } from '../utils/identifiers.js';
@@ -26,12 +27,13 @@ class DocsService {
   }
 
   urlFor(name: string): string {
-    // O nome vira caminho, então passa pela mesma validação do registry: sem
-    // isto, `../../algo` sairia de /docs/components e traria outra página.
+    // The name becomes a path, so it goes through the same validation as the
+    // registry: without it, `../../something` would leave /docs/components and
+    // bring back a different page.
     return `${this.baseUrl}/docs/components/${assertRegistryId(name, 'component')}`;
   }
 
-  /** O markdown da página, ou null quando ela não existe. */
+  /** The page markdown, or null when the page does not exist. */
   async getComponentMarkdown(name: string): Promise<string | null> {
     const url = `${this.urlFor(name)}.md`;
 
@@ -52,10 +54,11 @@ class DocsService {
 
       const text = await response.text();
 
-      // O site é uma SPA: um caminho que não existe volta 200 com o HTML do
-      // próprio site, não 404. Sem esta checagem, pedir a documentação de um
-      // componente inexistente entregava cinquenta kB de markup ao modelo, que
-      // é pior do que não responder — ele gasta contexto e não diz o que houve.
+      // The site is a single-page app: a path that does not exist answers 200
+      // with the site's own shell, not 404. Without this check, asking for the
+      // docs of a component that is not there handed fifty kB of markup to the
+      // model — worse than no answer, since it burns context and explains
+      // nothing.
       if (!isMarkdown(response, text)) return null;
 
       this.cache.set(name, { text, timestamp: Date.now() });
@@ -67,12 +70,12 @@ class DocsService {
 }
 
 /**
- * Se a resposta é mesmo a página em markdown.
+ * Whether the response really is the page in markdown.
  *
- * O content-type decide quando existe — o site serve `text/markdown` para os
- * `.md` e `text/html` para a SPA. Quando não vem, o começo do corpo desempata:
- * a página gerada abre com o front matter ou com um cabeçalho, nunca com uma
- * tag.
+ * The content-type decides when it is there — the site serves `text/markdown`
+ * for the `.md` files and `text/html` for the app shell. When it is missing,
+ * the start of the body breaks the tie: the generated page opens with front
+ * matter or a heading, never with a tag.
  */
 function isMarkdown(response: Response, body: string): boolean {
   const type = response.headers.get('content-type') ?? '';
@@ -84,10 +87,10 @@ function isMarkdown(response: Response, body: string): boolean {
 }
 
 /**
- * Recorta uma seção de nível 2 do markdown, com as subseções dela.
+ * Cuts a level-two section out of the markdown, with its subsections.
  *
- * Vai até o próximo `## ` ou até o fim. Serve para entregar só os exemplos a
- * quem pediu exemplos, sem mandar o documento inteiro de volta.
+ * Runs to the next `## ` or to the end. It exists so that asking for examples
+ * returns examples, rather than the whole document.
  */
 export function sectionOf(markdown: string, heading: string): string | null {
   const lines = markdown.split('\n');
