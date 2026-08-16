@@ -2259,6 +2259,24 @@ function headerLabel(params: ZardChartTooltipParam[], ctx: ZardChartTooltipConte
   return ctx.labelFormatter ? ctx.labelFormatter(configured) : configured;
 }
 
+/**
+ * The shape of a CSS color: a hex literal, a bare keyword, or one function call.
+ *
+ * A color ends up inside an inline `style`, where escaping is not enough — `;` closes the
+ * declaration and whatever follows becomes a second one, `background-image: url(…)` included.
+ * `zConfig` and a row's `fill` are application data, so they are checked before they are written.
+ */
+const CSS_COLOR_PATTERN = /^#[0-9a-f]{3,8}$|^[a-z-]+(\([0-9a-z.,%\s/+-]*\))?$/i;
+
+function safeCssColor(value: string): string {
+  const raw = (value ?? '').trim();
+  if (!raw || raw.toLowerCase().includes('url(')) {
+    return '';
+  }
+
+  return CSS_COLOR_PATTERN.test(raw) ? raw : '';
+}
+
 function indicatorHtml(color: string, ctx: ZardChartTooltipContext, nestLabel: boolean): string {
   if (ctx.hideIndicator) {
     return '';
@@ -2269,11 +2287,16 @@ function indicatorHtml(color: string, ctx: ZardChartTooltipContext, nestLabel: b
     INDICATOR_CLASSES[ctx.indicator],
     nestLabel && ctx.indicator === 'dashed' ? 'my-0.5' : '',
   );
-  // The two custom properties the classes above read the swatch color from.
-  const swatch = escapeHtml(color);
+  // The two custom properties the classes above read the swatch color from. A color that does
+  // not look like one loses the swatch instead of reaching the style attribute.
+  const swatch = safeCssColor(color);
+  if (!swatch) {
+    return `<div class="${escapeHtml(classes)}"></div>`;
+  }
+
   const declarations = [`--color-bg: ${swatch}`, `--color-border: ${swatch}`].join('; ');
 
-  return `<div class="${classes}" style="${declarations};"></div>`;
+  return `<div class="${escapeHtml(classes)}" style="${escapeHtml(declarations)};"></div>`;
 }
 
 /**

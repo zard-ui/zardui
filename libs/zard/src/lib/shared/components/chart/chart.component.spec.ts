@@ -549,6 +549,27 @@ describe('chart-tooltip.formatter', () => {
     expect(buildTooltipHtml(single, tooltipContext({ indicator: 'dot' }))).toContain('items-center');
   });
 
+  it('keeps a smuggled CSS declaration out of the swatch style', () => {
+    // `escapeHtml` alone would let the `;` close the declaration and add a second one.
+    const html = buildTooltipHtml([{ axisValue: 'January', seriesName: 'Desktop', value: 1 }], {
+      ...tooltipContext(),
+      colors: { Desktop: 'rgb(0 0 0);background-image:url(https://example.com/pixel.png)' },
+    });
+
+    expect(html).not.toContain('background-image');
+    // The swatch is dropped altogether: no inline style is written at all.
+    expect(html).not.toContain('style=');
+  });
+
+  it('writes a well-formed color into the swatch style', () => {
+    const html = buildTooltipHtml([{ axisValue: 'January', seriesName: 'Desktop', value: 1 }], {
+      ...tooltipContext(),
+      colors: { Desktop: 'oklch(0.62 0.21 260)' },
+    });
+
+    expect(html).toContain('--color-bg: oklch(0.62 0.21 260)');
+  });
+
   it('escapes data before it reaches innerHTML', () => {
     const html = buildTooltipHtml(
       [{ axisValue: '<img src=x onerror=alert(1)>', seriesName: 'Desktop', value: 1 }],
